@@ -5,8 +5,7 @@
 // 
 // type DoubleTupleTrouble<T> = [T, T];
 // 
-// export let y: DoubleTupleTrouble<number> = [1, 2];
-// 
+// --- (line: 6) skipped ---
 
 
 
@@ -15,7 +14,28 @@
 // 
 // export let x: [number, number] = [1, 2];
 // 
-// type DoubleTupleTrouble<T> = [T, T];
+// <|type [|DoubleTupleTrouble|]<T> = [T, T];|>
 // 
 // export let y/*GOTO TYPE*/: DoubleTupleTrouble<number> = [1, 2];
+// 
+// type SpanMapping = [
+//     virtualStart: number,
+// --- (line: 10) skipped ---
+
+
+
+// === goToType ===
+// === /goToTypeWithTupleTypes1.ts ===
+// --- (line: 4) skipped ---
+// 
+// export let y: DoubleTupleTrouble<number> = [1, 2];
+// 
+// <|type [|SpanMapping|] = [
+//     virtualStart: number,
+//     virtualLength: number,
+//     originalStart: number,
+//     originalLength: number,
+// ];|>
+// 
+// export let mapping/*GOTO TYPE*/: SpanMapping;
 // 
