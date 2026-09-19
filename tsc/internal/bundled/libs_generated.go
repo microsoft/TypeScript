@@ -105,6 +105,7 @@ var LibNames = []string{
 	"lib.esnext.error.d.ts",
 	"lib.esnext.full.d.ts",
 	"lib.esnext.intl.d.ts",
+	"lib.esnext.promise.d.ts",
 	"lib.esnext.sharedmemory.d.ts",
 	"lib.esnext.temporal.d.ts",
 	"lib.esnext.typedarrays.d.ts",
