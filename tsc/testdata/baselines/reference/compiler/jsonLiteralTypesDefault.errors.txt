@@ -1,0 +1,39 @@
+main.ts(10,7): error TS2322: Type 'string' is not assignable to type '"string literal"'.
+main.ts(11,7): error TS2322: Type 'number' is not assignable to type '123'.
+main.ts(12,7): error TS2322: Type 'boolean' is not assignable to type 'true'.
+main.ts(13,7): error TS2322: Type 'string[]' is not assignable to type 'readonly ["a", "b"]'.
+  Target requires 2 element(s) but source may have fewer.
+
+
+==== data.json (0 errors) ====
+    {
+        "s": "string literal",
+        "n": 123,
+        "b": true,
+        "arr": ["a", "b"]
+    }
+    
+==== main.ts (4 errors) ====
+    import data from "./data.json";
+    
+    // Without importJsonAsConst, JSON properties have widened types.
+    const s: string = data.s;
+    const n: number = data.n;
+    const b: boolean = data.b;
+    const arr: string[] = data.arr;
+    
+    // Assigning them to literal types therefore errors.
+    const literalS: "string literal" = data.s;
+          ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type '"string literal"'.
+    const literalN: 123 = data.n;
+          ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type '123'.
+    const literalB: true = data.b;
+          ~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'true'.
+    const literalArr: readonly ["a", "b"] = data.arr;
+          ~~~~~~~~~~
+!!! error TS2322: Type 'string[]' is not assignable to type 'readonly ["a", "b"]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+    

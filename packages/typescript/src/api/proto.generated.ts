@@ -1454,6 +1454,7 @@ export interface CompilerOptions {
     ignoreConfig?: boolean | undefined;
     ignoreDeprecations?: string | undefined;
     importHelpers?: boolean | undefined;
+    importJsonAsConst?: boolean | undefined;
     inlineSourceMap?: boolean | undefined;
     inlineSources?: boolean | undefined;
     init?: boolean | undefined;

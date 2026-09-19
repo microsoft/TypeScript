@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/jsonLiteralTypes.ts] ////
+
+=== data.json ===
+{
+>{    "s": "string literal",    "n": 123,    "b": true,    "arr": ["a", "b"]} : { readonly s: "string literal"; readonly n: 123; readonly b: true; readonly arr: readonly ["a", "b"]; }
+
+    "s": "string literal",
+>"s" : "string literal"
+>"string literal" : "string literal"
+
+    "n": 123,
+>"n" : 123
+>123 : 123
+
+    "b": true,
+>"b" : true
+>true : true
+
+    "arr": ["a", "b"]
+>"arr" : readonly ["a", "b"]
+>["a", "b"] : readonly ["a", "b"]
+>"a" : "a"
+>"b" : "b"
+}
+
+=== main.ts ===
+import data from "./data.json";
+>data : { readonly s: "string literal"; readonly n: 123; readonly b: true; readonly arr: readonly ["a", "b"]; }
+
+const s: "string literal" = data.s;
+>s : "string literal"
+>data.s : "string literal"
+>data : { readonly s: "string literal"; readonly n: 123; readonly b: true; readonly arr: readonly ["a", "b"]; }
+>s : "string literal"
+
+const n: 123 = data.n;
+>n : 123
+>data.n : 123
+>data : { readonly s: "string literal"; readonly n: 123; readonly b: true; readonly arr: readonly ["a", "b"]; }
+>n : 123
+
+const b: true = data.b;
+>b : true
+>true : true
+>data.b : true
+>data : { readonly s: "string literal"; readonly n: 123; readonly b: true; readonly arr: readonly ["a", "b"]; }
+>b : true
+
+const arr: readonly ["a", "b"] = data.arr;
+>arr : readonly ["a", "b"]
+>data.arr : readonly ["a", "b"]
+>data : { readonly s: "string literal"; readonly n: 123; readonly b: true; readonly arr: readonly ["a", "b"]; }
+>arr : readonly ["a", "b"]
+
