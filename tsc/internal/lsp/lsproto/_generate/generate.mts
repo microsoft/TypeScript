@@ -477,7 +477,7 @@ const customStructures: Structure[] = [
         name: "SetContentMapperContributionsParams",
         properties: [
             { name: "contributions", type: { kind: "array", element: { kind: "reference", name: "ContentMapperContribution" } }, documentation: "Complete replacement set of active extension contributions." },
-            { name: "openDocuments", type: { kind: "array", element: { kind: "reference", name: "TextDocumentIdentifier" } }, documentation: "Currently open documents matching contributed extensions." },
+            { name: "openDocuments", type: { kind: "array", element: { kind: "reference", name: "TextDocumentIdentifier" } }, documentation: "Currently open candidate documents used to discover the configured projects that declare their content mappers." },
         ],
         documentation: "Parameters for the custom/setContentMapperContributions request.",
     },

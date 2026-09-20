@@ -9175,7 +9175,7 @@ type SetContentMapperContributionsParams struct {
 	// Complete replacement set of active extension contributions.
 	Contributions []*ContentMapperContribution `json:"contributions" lsp:"required"`
 
-	// Currently open documents matching contributed extensions.
+	// Currently open candidate documents used to discover the configured projects that declare their content mappers.
 	OpenDocuments []TextDocumentIdentifier `json:"openDocuments" lsp:"required"`
 }
 

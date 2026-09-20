@@ -246,3 +246,97 @@ export const title = "Profile";
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 }
+
+func TestSetContentMapperCandidatesDiscoverConfiguredProject(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const component = `<component name="ProfileCard">
+<template><h1>{{ title }}</h1></template>
+<script lang="ts">
+export const title = "Profile";
+</script>`
+	files := map[string]string{
+		"/home/project/tsconfig.json": `{
+			"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true },
+			"contentMappers": [ { "package": "mapper", "extensions": [".vue"] } ]
+		}`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.ComponentMapper),
+		"/home/project/ProfileCard.vue":                  component,
+	}
+
+	var mu sync.Mutex
+	var didOpenRegistration *lsproto.Registration
+	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
+		switch req.Method {
+		case lsproto.MethodWorkspaceConfiguration:
+			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: []any{nil, nil, nil, nil}}
+		case lsproto.MethodClientRegisterCapability:
+			params, err := req.UnmarshalParams[*lsproto.RegistrationParams]()
+			assert.NilError(t, err)
+			mu.Lock()
+			defer mu.Unlock()
+			for _, registration := range params.Registrations {
+				if registration.Id == "content-mapper-did-open" {
+					didOpenRegistration = registration
+				}
+			}
+			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: lsproto.Null{}}
+		default:
+			return nil
+		}
+	}
+
+	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
+		Err:                io.Discard,
+		Cwd:                "/home/project",
+		FS:                 fs,
+		DefaultLibraryPath: bundled.LibPath(),
+		Spawn:              contentmappertest.NewSpawner().Spawn,
+	}, onServerRequest)
+	t.Cleanup(func() { _ = closeClient() })
+
+	caps := &lsproto.ClientCapabilities{
+		TextDocument: &lsproto.TextDocumentClientCapabilities{
+			Synchronization: &lsproto.TextDocumentSyncClientCapabilities{DynamicRegistration: new(true)},
+		},
+	}
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
+		Capabilities: caps,
+		InitializationOptions: &lsproto.InitializationOptionsOrNull{InitializationOptions: &lsproto.InitializationOptions{
+			RunExternalCode: new(true),
+		}},
+	})
+	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "initialize failed")
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	<-client.Server.InitComplete()
+
+	uri := lsproto.DocumentUri("file:///home/project/ProfileCard.vue")
+	msg, _, ok := client.SendRequest(t, lsproto.CustomSetContentMapperContributionsInfo, &lsproto.SetContentMapperContributionsParams{
+		Contributions: []*lsproto.ContentMapperContribution{},
+		OpenDocuments: []lsproto.TextDocumentIdentifier{{Uri: uri}},
+	})
+	assert.Assert(t, ok && msg.AsResponse().Error == nil)
+
+	mu.Lock()
+	registration := didOpenRegistration
+	mu.Unlock()
+	assert.Assert(t, registration != nil, "expected content-mapper-did-open registration for tsconfig-declared mapper")
+	assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentDidOpen != nil)
+	selector := registration.RegisterOptions.TextDocumentDidOpen.DocumentSelector.DocumentSelector
+	assert.Assert(t, selector != nil && len(*selector) == 1)
+	assert.Equal(t, *(*selector)[0].Pattern.Pattern.Pattern, "**/*.vue")
+
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "vue", Version: 1, Text: component},
+	})
+	hoverMsg, hover, ok := client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+		Position:     lsproto.Position{Line: 3, Character: 15},
+	})
+	assert.Assert(t, ok && hoverMsg.AsResponse().Error == nil)
+	assert.Assert(t, hover.Hover != nil, "expected hover for mapped-only file without opening a TS file")
+}
