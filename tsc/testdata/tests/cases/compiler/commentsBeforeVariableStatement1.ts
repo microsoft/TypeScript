@@ -1,5 +1,5 @@
 // @target: es2015
-// @module: amd
+// @module: commonjs
 // @removeComments: false
 /** b's comment*/
 export var b: number;

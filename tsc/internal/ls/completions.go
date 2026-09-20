@@ -22,7 +22,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
@@ -47,7 +46,7 @@ func (l *LanguageService) ProvideCompletion(
 		triggerCharacter = context.TriggerCharacter
 	}
 	ctx = format.WithFormatCodeSettings(ctx, l.FormatOptions(), l.FormatOptions().NewLineCharacter)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, LSPPosition, spanmap.FeatureCompletion)
+	positions := l.converters.FromLSPPositionForSourceFile(file, LSPPosition, spanmap.FeatureCompletion)
 	if len(positions) == 0 || !positions[0].Fidelity.IsExact() {
 		// In a content-mapped file the cursor is outside a verbatim span, so any completion committed here
 		// could not be applied to the original text. Offer nothing rather than edits at a bogus location.
@@ -1243,7 +1242,7 @@ func (l *LanguageService) getCompletionData(
 			}
 		}
 
-		view, err := l.getPreparedAutoImportView(file)
+		view, err := l.getPreparedAutoImportView(file, typeChecker)
 		if err != nil {
 			return err
 		}
@@ -1251,7 +1250,7 @@ func (l *LanguageService) getCompletionData(
 			return nil
 		}
 
-		autoImports = view.GetCompletions(ctx, lowerCaseTokenText, usagePosition, isRightOfOpenTag, isTypeOnlyLocation)
+		autoImports = view.GetCompletions(lowerCaseTokenText, usagePosition, isRightOfOpenTag, isTypeOnlyLocation)
 		return nil
 	}
 
@@ -2853,7 +2852,7 @@ func (l *LanguageService) createImportAdder(ctx context.Context, typeChecker *ch
 	if tspath.IsDynamicFileName(file.FileName()) {
 		return nil, nil
 	}
-	view, err := l.getPreparedAutoImportView(file)
+	view, err := l.getPreparedAutoImportView(file, typeChecker)
 	if err != nil {
 		return nil, err
 	}
@@ -3361,6 +3360,8 @@ func isContextTokenTypeLocation(contextToken *ast.Node) bool {
 			return parentKind == ast.KindTypeParameter
 		case ast.KindSatisfiesKeyword:
 			return parentKind == ast.KindSatisfiesExpression
+		case ast.KindOpenBracketToken, ast.KindCommaToken:
+			return parentKind == ast.KindTupleType
 		}
 	}
 	return false
@@ -6578,7 +6579,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
 		if !tspath.IsDynamicFileName(file.FileName()) {
-			view, err := l.getPreparedAutoImportView(file)
+			view, err := l.getPreparedAutoImportView(file, c)
 			if err != nil {
 				return nil, err
 			}

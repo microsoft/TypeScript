@@ -1,4 +1,18 @@
-import { getPathComponents } from "./path.ts";
+import getExePath from "#getExePath";
+import { dirname } from "node:path";
+import {
+    getPathComponents,
+    normalizePath,
+} from "./path.ts";
+import type {
+    RequestDirectoryEntries,
+    RequestFileSystem,
+    RequestSymlink,
+} from "./proto.generated.ts";
+import {
+    type DocumentIdentifier,
+    resolveFileName,
+} from "./proto.ts";
 
 export interface FileSystemEntries {
     files: string[];
@@ -6,23 +20,157 @@ export interface FileSystemEntries {
 }
 
 export interface FileSystem {
-    directoryExists?: (directoryName: string) => boolean | undefined;
-    fileExists?: (fileName: string) => boolean | undefined;
-    getAccessibleEntries?: (directoryName: string) => FileSystemEntries | undefined;
+    directoryExists?: ((directoryName: string) => boolean | undefined) | undefined;
+    fileExists?: ((fileName: string) => boolean | undefined) | undefined;
+    getAccessibleEntries?: ((directoryName: string) => FileSystemEntries | undefined) | undefined;
     /**
      * Read a file's content.
      * - Return the file content as a `string` (including `""` for empty files).
      * - Return `null` to indicate the file does not exist (without falling back to the real FS).
      * - Return `undefined` to fall back to the real filesystem.
      */
-    readFile?: (fileName: string) => string | null | undefined;
-    realpath?: (path: string) => string | undefined;
-    writeFile?: (path: string, content: string) => void;
-    removeFile?: (path: string) => void;
+    readFile?: ((fileName: string) => string | null | undefined) | undefined;
+    realpath?: ((path: string) => string | undefined) | undefined;
+    writeFile?: ((path: string, content: string) => void) | undefined;
+    removeFile?: ((path: string) => void) | undefined;
 }
 
 /** The callback names supported by the Go server for virtual FS delegation. */
 export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile"] as const;
+
+export interface CreateFileSystemOptions {
+    /** Complete directory listings. Full filesystems derive these from `files` when omitted. */
+    directories?: Record<string, RequestDirectoryEntries> | undefined;
+    symlinks?: Record<string, RequestSymlink> | undefined;
+    /** Files or directory trees hidden from an underlying snapshot or host filesystem. */
+    removedPaths?: readonly string[] | undefined;
+}
+
+export interface CreateFileSystemWithLibOptions extends CreateFileSystemOptions {
+    /** Default library directory used by a custom or non-embedded compiler executable. */
+    defaultLibraryPath?: string | undefined;
+}
+
+/**
+ * Files supplied to a request filesystem. String identifiers are file names;
+ * use `{ uri }` when supplying a document URI so it can be decoded correctly.
+ */
+export type RequestFileEntries = readonly (readonly [id: DocumentIdentifier, content: string])[];
+
+/** Creates a full request filesystem, deriving directory listings when omitted. */
+export function createFileSystem(
+    files: RequestFileEntries,
+    options: CreateFileSystemOptions = {},
+): RequestFileSystem {
+    return createRequestFileSystem("full", files, options);
+}
+
+/**
+ * Creates a full request filesystem with the compiler's default library
+ * directory mounted read-only through the host filesystem.
+ */
+export function createFileSystemWithLib(
+    files: RequestFileEntries,
+    options: CreateFileSystemWithLibOptions = {},
+): RequestFileSystem {
+    const defaultLibraryPaths = options.defaultLibraryPath
+        ? [normalizePath(options.defaultLibraryPath)]
+        : [normalizePath("bundled:///libs")];
+    if (!options.defaultLibraryPath) {
+        try {
+            defaultLibraryPaths.push(normalizePath(dirname(getExePath())));
+        }
+        catch {
+            // A socket-connected embedded server can provide bundled libs without
+            // a locally installed compiler executable.
+        }
+    }
+    const symlinks = { ...options.symlinks };
+    for (const defaultLibraryPath of defaultLibraryPaths) {
+        symlinks[defaultLibraryPath] ??= { target: defaultLibraryPath, host: true };
+    }
+    return createRequestFileSystem("full", files, {
+        symlinks,
+        directories: options.directories,
+        removedPaths: options.removedPaths?.length ? options.removedPaths : undefined,
+    });
+}
+
+/** Creates a request filesystem layer, merging base directory listings when omitted. */
+export function createFileSystemLayer(
+    files: RequestFileEntries,
+    options: CreateFileSystemOptions = {},
+): RequestFileSystem {
+    return createRequestFileSystem("layer", files, options);
+}
+
+function createRequestFileSystem(
+    kind: RequestFileSystem["kind"],
+    files: RequestFileEntries,
+    options: CreateFileSystemOptions,
+): RequestFileSystem {
+    const normalizedFiles = new Map<string, string>();
+    for (const [id, content] of files) {
+        const fileName = normalizePath(resolveFileName(id));
+        if (normalizedFiles.has(fileName)) {
+            throw new Error(`Duplicate request filesystem path: ${fileName}`);
+        }
+        normalizedFiles.set(fileName, content);
+    }
+    const fileRecord = Object.fromEntries(normalizedFiles);
+    const directories = options.directories ?? (kind === "full" ? deriveDirectoryListings(fileRecord) : undefined);
+    return {
+        kind,
+        files: fileRecord,
+        directories,
+        symlinks: options.symlinks,
+        removedPaths: options.removedPaths?.length ? [...options.removedPaths] : undefined,
+    };
+}
+
+function deriveDirectoryListings(files: Record<string, string>): Record<string, RequestDirectoryEntries> {
+    const listings = new Map<string, { files: Set<string>; directories: Set<string>; }>();
+    const getListing = (directory: string) => {
+        let listing = listings.get(directory);
+        if (!listing) {
+            listing = { files: new Set(), directories: new Set() };
+            listings.set(directory, listing);
+        }
+        return listing;
+    };
+
+    for (const inputPath of Object.keys(files)) {
+        const filePath = normalizePath(inputPath);
+        const fileName = getBaseName(filePath);
+        let directory = getDirectory(filePath);
+        getListing(directory).files.add(fileName);
+
+        let parent = getDirectory(directory);
+        while (parent !== directory) {
+            getListing(parent).directories.add(getBaseName(directory));
+            directory = parent;
+            parent = getDirectory(directory);
+        }
+    }
+
+    return Object.fromEntries([...listings].map(([directory, listing]) => [directory, {
+        files: [...listing.files],
+        directories: [...listing.directories],
+    }]));
+}
+
+function getDirectory(path: string): string {
+    const components = getPathComponents(path);
+    if (components.length <= 1) return components[0] ?? "";
+    components.pop();
+    const root = components.shift()!;
+    return root + components.join("/");
+}
+
+function getBaseName(path: string): string {
+    const components = getPathComponents(path);
+    return components.at(-1) ?? "";
+}
 
 interface VDirectory {
     type: "directory";

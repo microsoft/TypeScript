@@ -1130,8 +1130,8 @@ func ForEachAncestorDirectory[T any](directory string, callback func(directory s
 	}
 }
 
-func ForEachAncestorDirectoryPath[T any](directory Path, callback func(directory Path) (result T, stop bool)) (result T, ok bool) {
-	return ForEachAncestorDirectory(string(directory), func(directory string) (T, bool) {
+func (p Path) ForEachAncestorDirectory[T any](callback func(directory Path) (result T, stop bool)) (result T, ok bool) {
+	return ForEachAncestorDirectory(string(p), func(directory string) (T, bool) {
 		return callback(Path(directory))
 	})
 }

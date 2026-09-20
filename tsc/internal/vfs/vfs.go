@@ -40,10 +40,6 @@ type FS interface {
 
 	Stat(path string) FileInfo
 
-	// WalkDir walks the file tree rooted at root, calling walkFn for each file or directory in the tree.
-	// It is has the same behavior as [fs.WalkDir], but with paths as [string].
-	WalkDir(root string, walkFn WalkDirFunc) error
-
 	// Realpath returns the "real path" of the specified path,
 	// following symlinks and correcting filename casing.
 	Realpath(path string) string
@@ -74,15 +70,4 @@ var (
 	ErrExist      = fs.ErrExist      // "file already exists"
 	ErrNotExist   = fs.ErrNotExist   // "file does not exist"
 	ErrClosed     = fs.ErrClosed     // "file already closed"
-)
-
-// WalkDirFunc is [fs.WalkDirFunc].
-type WalkDirFunc = fs.WalkDirFunc
-
-var (
-	// SkipAll is [fs.SkipAll].
-	SkipAll = fs.SkipAll //nolint:errname
-
-	// SkipDir is [fs.SkipDir].
-	SkipDir = fs.SkipDir //nolint:errname
 )

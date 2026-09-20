@@ -2120,6 +2120,19 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 	return false
 }
 
+func (c *Checker) checkGrammarImportAttributeValues(node *ast.ImportAttributes) bool {
+	hasError := false
+	for _, attribute := range node.Attributes.Nodes {
+		value := attribute.AsImportAttribute().Value
+		if ast.IsStringLiteral(value) {
+			continue
+		}
+		hasError = true
+		c.error(value, diagnostics.Import_attribute_values_must_be_string_literal_expressions)
+	}
+	return hasError
+}
+
 func (c *Checker) checkGrammarTypeOnlyNamedImportsOrExports(namedBindings *ast.Node) bool {
 	nodeList := namedBindings.ElementList()
 	for _, specifier := range nodeList.Nodes {
@@ -2194,6 +2207,13 @@ func (c *Checker) checkGrammarImportAttributesType(attributes *ast.TypeLiteralNo
 			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_type_may_only_contain_property_signatures)
 		}
 		propertySignature := member.AsPropertySignatureDeclaration()
+		if modifiers := propertySignature.Modifiers(); modifiers != nil {
+			for _, modifier := range modifiers.Nodes {
+				if modifier.Kind == ast.KindReadonlyKeyword {
+					return c.grammarErrorOnNode(modifier, diagnostics.An_import_attributes_property_cannot_have_a_readonly_modifier)
+				}
+			}
+		}
 		if propertySignature.Type == nil {
 			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_property_must_have_a_type_annotation)
 		}

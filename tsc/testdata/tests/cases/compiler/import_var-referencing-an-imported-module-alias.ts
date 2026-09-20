@@ -3,7 +3,7 @@
 export class Host { }
 
 // @Filename: consumer.ts
-// @module: amd
+// @module: commonjs
 
 import host = require("host");
 var hostVar = host;

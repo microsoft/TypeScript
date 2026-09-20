@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 export class FilterManager {
     private _filterProviders: { index: IFilterProvider; };
     private _filterProviders2: { [index: number]: IFilterProvider; };

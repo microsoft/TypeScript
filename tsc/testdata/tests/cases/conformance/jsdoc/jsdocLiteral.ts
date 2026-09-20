@@ -1,7 +1,7 @@
 // @target: es2015
 // @allowJs: true
 // @filename: in.js
-// @outFile: out.js
+// @outDir: out
 /**
  * @param {'literal'} p1
  * @param {"literal"} p2

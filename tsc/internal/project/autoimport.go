@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -34,23 +35,16 @@ func (a *autoImportBuilderFS) GetFile(fileName string) FileHandle {
 func (a *autoImportBuilderFS) GetFileByPath(fileName string, path tspath.Path) FileHandle {
 	// We want to avoid long-term caching of files referenced only by auto-imports, so we
 	// override GetFileByPath to avoid collecting more files into the snapshotFSBuilder's
-	// diskFiles. (Note the reason we can't just use the finalized SnapshotFS is that changed
+	// cacheFiles. (Note the reason we can't just use the finalized SnapshotFS is that changed
 	// files not read during other parts of the snapshot clone will be marked as dirty, but
-	// not yet refreshed from disk.)
-	if overlay, ok := a.snapshotFSBuilder.overlays[path]; ok {
-		return overlay
-	}
-	if diskFile, ok := a.snapshotFSBuilder.diskFiles.Load(path); ok {
-		return a.snapshotFSBuilder.reloadEntryIfNeeded(diskFile)
+	// not yet refreshed from the source filesystem.)
+	if cachedFile, ok := a.snapshotFSBuilder.cacheFiles.Load(path); ok {
+		return a.snapshotFSBuilder.reloadEntryIfNeeded(cachedFile)
 	}
 	if fh, ok := a.untrackedFiles.Load(path); ok {
 		return fh
 	}
-	var fh FileHandle
-	content, ok := a.snapshotFSBuilder.fs.ReadFile(fileName)
-	if ok {
-		fh = newDiskFile(fileName, content)
-	}
+	fh := a.snapshotFSBuilder.fs.GetFileByPath(fileName, path)
 	fh, _ = a.untrackedFiles.LoadOrStore(path, fh)
 	return fh
 }
@@ -102,12 +96,12 @@ func (a *autoImportRegistryCloneHost) GetCurrentDirectory() string {
 }
 
 // GetDefaultProject implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetDefaultProject(path tspath.Path) (tspath.Path, *compiler.Program) {
+func (a *autoImportRegistryCloneHost) GetDefaultProject(path tspath.Path) (autoimport.ProjectID, *compiler.Program) {
 	project := a.projectCollection.GetDefaultProject(path)
 	if project == nil {
-		return "", nil
+		return nil, nil
 	}
-	return project.configFilePath, project.GetProgram()
+	return project.ID(), project.GetProgram()
 }
 
 // GetPackageJson implements autoimport.RegistryCloneHost.
@@ -142,8 +136,12 @@ func (a *autoImportRegistryCloneHost) GetPackageJson(fileName string) *packagejs
 }
 
 // GetProgramForProject implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetProgramForProject(projectPath tspath.Path) *compiler.Program {
-	project := a.projectCollection.GetProjectByPath(projectPath)
+func (a *autoImportRegistryCloneHost) GetProgramForProject(projectID autoimport.ProjectID) *compiler.Program {
+	id, ok := projectID.(ID)
+	if !ok {
+		panic(fmt.Sprintf("unexpected project ID type %T", projectID))
+	}
+	project := a.projectCollection.GetProject(id)
 	if project == nil {
 		return nil
 	}

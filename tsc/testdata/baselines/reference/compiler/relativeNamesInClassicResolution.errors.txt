@@ -1,0 +1,10 @@
+somefolder/a.ts(1,17): error TS2307: Cannot find module './b' or its corresponding type declarations.
+
+
+==== somefolder/a.ts (1 errors) ====
+    import {x} from "./b"
+                    ~~~~~
+!!! error TS2307: Cannot find module './b' or its corresponding type declarations.
+    
+==== b.ts (0 errors) ====
+    export let x = 1;
