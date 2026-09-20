@@ -32,7 +32,9 @@
         "onLanguage:javascript",
         "onLanguage:javascriptreact",
         "onLanguage:typescript",
-        "onLanguage:typescriptreact"
+        "onLanguage:typescriptreact",
+        "workspaceContains:**/tsconfig.json",
+        "workspaceContains:**/jsconfig.json"
     ],
     "contributes": {
         "configuration": [

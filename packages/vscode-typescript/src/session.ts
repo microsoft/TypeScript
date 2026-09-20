@@ -8,6 +8,7 @@ import {
 } from "./commands";
 import {
     type ContentMapperContribution,
+    documentIsContentMapperCandidate,
     documentMatchesContentMapperContributions,
     serializeContentMapperContributions,
     validateContentMapperRegistration,
@@ -16,6 +17,7 @@ import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
 import {
+    contentMappersEnabled,
     getDefaultExePath,
     getExe,
     getWorkspaceTsdkConfigValue,
@@ -60,7 +62,7 @@ export class SessionManager implements vscode.Disposable {
             }
         }));
         this.disposables.push(vscode.workspace.onDidOpenTextDocument(document => {
-            if (documentMatchesContentMapperContributions(document, this.contentMapperRegistrations)) {
+            if (this.shouldSyncForDocument(document)) {
                 void this.syncContentMapperContributions();
             }
         }));
@@ -136,11 +138,18 @@ export class SessionManager implements vscode.Disposable {
         return operation;
     }
 
+    private shouldSyncForDocument(document: vscode.TextDocument): boolean {
+        if (documentMatchesContentMapperContributions(document, this.contentMapperRegistrations)) {
+            return true;
+        }
+        return contentMappersEnabled() && documentIsContentMapperCandidate(document);
+    }
+
     private async syncContentMapperContributionsNow(): Promise<void> {
         try {
             if (!this.currentSession?.client.isInitialized) return;
             const openDocuments = vscode.workspace.textDocuments
-                .filter(document => documentMatchesContentMapperContributions(document, this.contentMapperRegistrations))
+                .filter(document => this.shouldSyncForDocument(document))
                 .map(document => document.uri);
             await this.currentSession.client.setContentMapperContributions(
                 serializeContentMapperContributions(this.contentMapperRegistrations),

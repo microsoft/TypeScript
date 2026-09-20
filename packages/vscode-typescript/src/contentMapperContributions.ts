@@ -1,5 +1,12 @@
 import * as vscode from "vscode";
 
+export const jsTsLanguageModes = [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+];
+
 export interface ContentMapperManifest {
     readonly name: string;
     readonly version?: string;
@@ -91,4 +98,12 @@ export function documentMatchesContentMapperContributions(
         }
     }
     return false;
+}
+
+const candidateSchemes = new Set(["file", "untitled"]);
+
+export function documentIsContentMapperCandidate(
+    document: { readonly uri: { readonly scheme: string; }; readonly languageId: string; },
+): boolean {
+    return candidateSchemes.has(document.uri.scheme) && !jsTsLanguageModes.includes(document.languageId);
 }
