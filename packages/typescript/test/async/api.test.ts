@@ -537,6 +537,46 @@ declare module "augmentation" {}`,
         await program.dispose();
     });
 
+    test("Program resolved modules preserve the import phase", async () => {
+        await using api = spawnAPI({
+            "/src/source.ts": `import source wasm from "pkg";
+import.source("pkg");
+import.source("missing");`,
+            "/src/mixed.ts": `import "pkg";
+import source wasm from "pkg";
+import("pkg");
+import.source("pkg");`,
+            "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", exports: { types: "./index.d.ts", default: "./module.wasm" } }),
+            "/node_modules/pkg/index.d.ts": `export {};`,
+            "/node_modules/pkg/module.wasm": "\0asm\x01\0\0\0",
+        });
+
+        const expectedResolutions = {
+            "/src/source.ts": ["/node_modules/pkg/module.wasm", "/node_modules/pkg/module.wasm", undefined],
+            "/src/mixed.ts": ["/node_modules/pkg/index.d.ts", "/node_modules/pkg/module.wasm", "/node_modules/pkg/index.d.ts", "/node_modules/pkg/module.wasm"],
+        };
+        const program = await api.createProgram(
+            Object.keys(expectedResolutions),
+            { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
+        );
+        for (const [fileName, expected] of Object.entries(expectedResolutions)) {
+            const sourceFile = await program.getSourceFile(fileName);
+            assert.ok(sourceFile);
+            for (const [index, statement] of sourceFile.statements.entries()) {
+                const specifier = cast(
+                    isImportDeclaration(statement)
+                        ? statement.moduleSpecifier
+                        : cast(cast(statement, isExpressionStatement).expression, isCallExpression).arguments[0],
+                    isStringLiteral,
+                );
+                const resolution = await program.getResolvedModuleFromModuleSpecifier(specifier);
+                assert.equal(resolution?.resolvedFileName, expected[index], `${fileName}, statement ${index}`);
+                const resolutionWithSourceFile = await program.getResolvedModuleFromModuleSpecifier(specifier, fileName);
+                assert.deepEqual(resolutionWithSourceFile, resolution);
+            }
+        }
+    });
+
     test("createProgram ignores an on-disk tsconfig", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({

@@ -103,8 +103,10 @@ func TestEvaluationPhaseWasmUsesContentMapper(t *testing.T) {
 	}, false /*useCaseSensitiveFileNames*/)
 	fs = bundled.WrapFS(fs)
 	mapper := &contentmapper.Mapper{
-		Definition: contentmapper.Definition{Package: "wasm", Extensions: []string{".wasm"}},
-		Manifest:   contentmapper.Manifest{Name: "wasm-mapper", Version: "1.0.0"},
+		Package:    "wasm",
+		Extensions: []string{".wasm"},
+		Name:       "wasm-mapper",
+		Version:    "1.0.0",
 	}
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: &tsoptions.ParsedCommandLine{
