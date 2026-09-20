@@ -205,7 +205,10 @@ func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[stri
 			watchDir = parent
 			watchRecursive = false // ancestor fallbacks are always non-recursive
 		}
-		if !wm.dirExists(watchDir) || !CanWatchDirectory(watchDir) {
+		// CanWatchDirectory only guards against falling back to an ancestor that is too generic to watch
+		// (/, /home, ...). A directory that exists and was asked for is watched at any depth, otherwise a
+		// project that lives near the filesystem root (say /app or /srv/app) would never be watched.
+		if !wm.dirExists(watchDir) || (watchDir != dir && !CanWatchDirectory(watchDir)) {
 			if wm.DebugLog != nil {
 				fmt.Fprintf(wm.DebugLog, "[watch] no watchable ancestor for %s\n", dir)
 			}

@@ -1,6 +1,7 @@
 package watchmanager
 
 import (
+	"io"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -134,4 +135,51 @@ func TestDirWatchSetDirs(t *testing.T) {
 	assert.Equal(t, len(dirs), 2)
 	assert.Equal(t, dirs["/repo/a"], false)
 	assert.Equal(t, dirs["/repo/b"], true)
+}
+
+// TestResolveDesiredDirsShallowProject verifies that a directory that exists and was asked for is watched at any
+// depth. A project close to the filesystem root (/app, /srv/app, a Docker WORKDIR) must not be silently ignored.
+func TestResolveDesiredDirsShallowProject(t *testing.T) {
+	t.Parallel()
+
+	existing := map[string]bool{
+		"/": true, "/app": true, "/app/src": true, "/srv": true, "/srv/app": true,
+		"/home": true, "/home/user": true, "/home/user/project": true,
+	}
+	wm := NewWatchManager(io.Discard, func(dir string) bool { return existing[dir] })
+
+	resolved := wm.ResolveDesiredDirs(map[string]bool{
+		"/app":               true,
+		"/app/src":           false,
+		"/srv/app":           true,
+		"/home/user/project": true,
+	})
+
+	assert.DeepEqual(t, resolved, map[string]bool{
+		"/app":               true,
+		"/app/src":           false,
+		"/srv/app":           true,
+		"/home/user/project": true,
+	})
+}
+
+// TestResolveDesiredDirsAncestorFallback verifies that the depth check still guards the fallback to an ancestor,
+// so a missing directory never turns into a watch on something too generic like /, /home or /home/user.
+func TestResolveDesiredDirsAncestorFallback(t *testing.T) {
+	t.Parallel()
+
+	existing := map[string]bool{
+		"/": true, "/app": true, "/home": true, "/home/user": true,
+		"/repo": true, "/repo/a": true, "/repo/a/b": true, "/repo/a/b/c": true,
+	}
+	wm := NewWatchManager(io.Discard, func(dir string) bool { return existing[dir] })
+
+	resolved := wm.ResolveDesiredDirs(map[string]bool{
+		"/app/missing":              true, // ancestor /app is too shallow
+		"/home/user/missing":        true, // ancestor /home/user is too shallow
+		"/repo/a/b/c/missing/deep":  true, // ancestor /repo/a/b/c is deep enough, and is never recursive
+		"/nothing/exists/anywhere/": true, // no existing ancestor except /
+	})
+
+	assert.DeepEqual(t, resolved, map[string]bool{"/repo/a/b/c": false})
 }
