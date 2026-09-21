@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "allowJs": true,
         "module": "nodenext",
         "lib": ["esnext"],
         "noEmit": true,

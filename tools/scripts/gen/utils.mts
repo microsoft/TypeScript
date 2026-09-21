@@ -11,6 +11,30 @@ import {
 
 export const repoRoot = path.resolve(import.meta.dirname, "../../..");
 
+export interface RunOptions {
+    captureOutput?: boolean;
+    cwd?: string;
+    env?: NodeJS.ProcessEnv;
+    signal?: AbortSignal;
+}
+
+function formatCommandArg(arg: string) {
+    return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
+}
+
+export function run(command: string, args: readonly string[] = [], options: RunOptions = {}) {
+    console.log("$ " + [command, ...args].map(formatCommandArg).join(" "));
+    return x(command, args, {
+        throwOnError: true,
+        ...(options.signal ? { signal: options.signal } : {}),
+        nodeOptions: {
+            cwd: options.cwd,
+            env: options.env ? { ...process.env, ...options.env } : undefined,
+            stdio: options.captureOutput ? "pipe" : "inherit",
+        },
+    });
+}
+
 export function globInputs(patterns: string[], exclude: string[] = []): string[] {
     return fs.globSync(patterns, { cwd: repoRoot, exclude }).map(file => path.join(repoRoot, file));
 }

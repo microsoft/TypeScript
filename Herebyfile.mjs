@@ -14,10 +14,8 @@ import {
     styleText,
 } from "node:util";
 import * as tar from "tar";
-import {
-    x,
-    xSync,
-} from "tinyexec";
+import { xSync } from "tinyexec";
+import { run } from "./tools/scripts/gen/utils.mts";
 
 if (process.platform === "win32") {
     process.chdir(fs.realpathSync.native(process.cwd()));
@@ -30,39 +28,7 @@ const isCI = !!process.env.CI || !!process.env.TF_BUILD;
 const stableThreeComponentVersionPatternSource = String.raw`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$`;
 const stableThreeComponentVersionPattern = new RegExp(stableThreeComponentVersionPatternSource);
 
-/**
- * @typedef {{
- *   captureOutput?: boolean;
- *   cwd?: string;
- *   env?: NodeJS.ProcessEnv;
- *   signal?: AbortSignal;
- * }} RunOptions
- */
-
-/**
- * @param {string} arg
- */
-function formatCommandArg(arg) {
-    return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
-}
-
-/**
- * @param {string} command
- * @param {readonly string[]} [args]
- * @param {RunOptions} [options]
- */
-export function run(command, args = [], options = {}) {
-    console.log("$ " + [command, ...args].map(formatCommandArg).join(" "));
-    return x(command, args, {
-        throwOnError: true,
-        ...(options.signal ? { signal: options.signal } : {}),
-        nodeOptions: {
-            cwd: options.cwd,
-            env: options.env ? { ...process.env, ...options.env } : undefined,
-            stdio: options.captureOutput ? "pipe" : "inherit",
-        },
-    });
-}
+/** @typedef {import("./tools/scripts/gen/utils.mts").RunOptions} RunOptions */
 
 /**
  * @param {string} command

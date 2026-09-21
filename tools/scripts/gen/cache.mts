@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import path from "node:path";
-import { run } from "../../../Herebyfile.mjs";
 import { GeneratedFile } from "./generatedFile.mts";
 import {
     goInputs,
     repoRoot,
+    run,
 } from "./utils.mts";
 
 export interface CacheOptions {
