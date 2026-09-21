@@ -6972,6 +6972,42 @@ describe("Program - diagnostics", () => {
 });
 
 describe("getDefaultProjectForFile", () => {
+    test("snapshot opens reject unreadable virtual files without panicking", async () => {
+        const fileName = "/src/App.vue.ts";
+        const source = `export const component = 1;`;
+        const fs = createVirtualFileSystem({
+            "/tsconfig.json": JSON.stringify({ files: ["/src/index.ts"] }),
+            "/src/index.ts": `export const x = 1;`,
+            "/src/App.vue": source,
+        });
+        let virtualFileAvailable = false;
+        await using api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: {
+                ...fs,
+                readFile: path => virtualFileAvailable && path === fileName ? source : fs.readFile!(path),
+                fileExists: path => virtualFileAvailable && path === fileName ? true : fs.fileExists!(path),
+            },
+        });
+        const snapshot = await api.createSnapshot({
+            openProjects: ["/tsconfig.json"],
+            openFiles: ["/src/index.ts"],
+        });
+
+        const expectedError = /client error: failed to .*snapshot: could not read opened file: \/src\/App\.vue\.ts/;
+        await assert.rejects(snapshot.update({ openFiles: [fileName] }), expectedError); // @sync: assert.throws(() => snapshot.update({ openFiles: [fileName] }), expectedError);
+        await assert.rejects(api.createSnapshot({ openFiles: [fileName] }), expectedError); // @sync: assert.throws(() => api.createSnapshot({ openFiles: [fileName] }), expectedError);
+
+        virtualFileAvailable = true;
+        const updated = await snapshot.update({ openFiles: [fileName] });
+        const project = await updated.getDefaultProjectForFile(fileName);
+        assert.ok(project);
+        assert.equal(project.configFileName, "");
+        assert.equal((await project.program.getSourceFile(fileName))?.text, source);
+        assert.equal(await snapshot.getDefaultProjectForFile(fileName), undefined);
+        assert.ok(await updated.getConfiguredProject("/tsconfig.json"));
+    });
+
     test("finds inferred project for d.ts in node_modules after openFiles", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
