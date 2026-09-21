@@ -711,6 +711,11 @@ func (t *Type) ObjectFlags() ObjectFlags {
 	return t.objectFlags
 }
 
+type ReducedTypeLinks struct {
+	target *Type
+	origin *Type
+}
+
 // Casts for concrete struct types
 
 func (t *Type) AsIntrinsicType() *IntrinsicType           { return t.data.(*IntrinsicType) }
@@ -1166,7 +1171,7 @@ type UnionType struct {
 	UnionOrIntersectionType
 	resolvedReducedType *Type
 	regularType         *Type
-	origin              *Type           // Denormalized union, intersection, or index type in which union originates
+	origin              *Type
 	keyPropertyName     string          // Property with unique unit type that exists in every object/intersection in union type
 	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
 }

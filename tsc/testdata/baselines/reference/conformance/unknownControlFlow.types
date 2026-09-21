@@ -2,7 +2,7 @@
 
 === unknownControlFlow.ts ===
 type T01 = {} & string;  // {} & string
->T01 : T01
+>T01 : string
 
 type T02 = {} & 'a';  // 'a'
 >T02 : "a"
@@ -24,13 +24,13 @@ type T07 = undefined & void;  // undefined
 >T07 : undefined
 
 type T10 = string & {};  // Specially preserved
->T10 : T10
+>T10 : string
 
 type T11 = number & {};  // Specially preserved
->T11 : T11
+>T11 : number
 
 type T12 = bigint & {};  // Specially preserved
->T12 : T12
+>T12 : bigint
 
 type ThisNode = {};
 >ThisNode : ThisNode

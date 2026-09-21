@@ -425,6 +425,7 @@ type symbolDisplayInfo struct {
 // When vsCapability is false, it still builds the plain text string but skips classification runs.
 func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, vc *checker.VerbosityContext, vsCapability bool, meaning ast.SemanticMeaning) symbolDisplayInfo {
 	container := getContainerNode(node)
+	includeLiteralOrigin := vc != nil
 	if vc == nil {
 		vc = &checker.VerbosityContext{}
 	}
@@ -441,7 +442,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 
 	// writeTypeClassified writes a type to dpw with proper classification (punctuation, symbols, keywords).
 	// Falls back to flat text when vsCapability is false or when TypeToTypeNode fails.
-	writeTypeClassified := func(t *checker.Type, enclosing *ast.Node, flags checker.TypeFormatFlags) {
+	writeTypeClassifiedWorker := func(t *checker.Type, enclosing *ast.Node, flags checker.TypeFormatFlags) {
 		flags |= checker.TypeFormatFlagsMultilineObjectLiterals
 		if !vsCapability {
 			dpw.Write(c.TypeToStringEx(t, enclosing, flags, vc))
@@ -461,6 +462,19 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		tempDpw := newDisplayPartsWriter(true)
 		p.Write(typeNode, sourceFile, tempDpw, nil)
 		dpw.WriteFrom(tempDpw)
+	}
+
+	writeTypeClassified := func(t *checker.Type, enclosing *ast.Node, flags checker.TypeFormatFlags) {
+		writeTypeClassifiedWorker(t, enclosing, flags)
+		if includeLiteralOrigin && !vc.Truncated {
+			if origin := c.GetLiteralTypeOrigin(t); origin != nil {
+				dpw.WritePunctuation(" (")
+				dpw.Write("origin")
+				dpw.WritePunctuation(": ")
+				writeTypeClassifiedWorker(origin, enclosing, flags)
+				dpw.WritePunctuation(")")
+			}
+		}
 	}
 
 	// writeSignatureClassified writes a signature to dpw with proper classification.

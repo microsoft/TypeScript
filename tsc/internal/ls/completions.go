@@ -1749,11 +1749,17 @@ func (l *LanguageService) getCompletionData(
 	isLiteralExpected := !(previousToken != nil && ast.IsStringLiteralLike(previousToken)) && !isJsxIdentifierExpected
 	var literals []literalValue
 	if isLiteralExpected {
+		literalType := contextualTypeOrConstraint
+		if literalType != nil {
+			if origin := typeChecker.GetLiteralTypeOrigin(literalType); origin != nil {
+				literalType = origin
+			}
+		}
 		var types []*checker.Type
-		if contextualTypeOrConstraint != nil && contextualTypeOrConstraint.IsUnion() {
-			types = contextualTypeOrConstraint.Types()
-		} else if contextualTypeOrConstraint != nil {
-			types = []*checker.Type{contextualTypeOrConstraint}
+		if literalType != nil && literalType.IsUnion() {
+			types = literalType.Types()
+		} else if literalType != nil {
+			types = []*checker.Type{literalType}
 		}
 		literals = core.MapNonNil(types, func(t *checker.Type) literalValue {
 			if isLiteral(t) && !t.IsEnumLiteral() {
@@ -2377,8 +2383,7 @@ func (l *LanguageService) createCompletionItem(
 					core.Every(
 						t.Types(),
 						func(t *checker.Type) bool {
-							return t.Flags()&(checker.TypeFlagsStringLike|checker.TypeFlagsUndefined) != 0 ||
-								isStringAndEmptyAnonymousObjectIntersection(typeChecker, t)
+							return t.Flags()&(checker.TypeFlagsStringLike|checker.TypeFlagsUndefined) != 0
 						},
 					) {
 				// If type is string-like or undefined, use quotes.
@@ -3707,23 +3712,6 @@ func quotePropertyName(file *ast.SourceFile, preferences lsutil.UserPreferences,
 		return name
 	}
 	return quote(file, preferences, name)
-}
-
-// Checks whether type is `string & {}`, which is semantically equivalent to string but
-// is not reduced by the checker as a special case used for supporting string literal completions
-// for string type.
-func isStringAndEmptyAnonymousObjectIntersection(typeChecker *checker.Checker, t *checker.Type) bool {
-	if !t.IsIntersection() {
-		return false
-	}
-
-	return len(t.Types()) == 2 &&
-		(areIntersectedTypesAvoidingStringReduction(typeChecker, t.Types()[0], t.Types()[1]) ||
-			areIntersectedTypesAvoidingStringReduction(typeChecker, t.Types()[1], t.Types()[0]))
-}
-
-func areIntersectedTypesAvoidingStringReduction(typeChecker *checker.Checker, t1 *checker.Type, t2 *checker.Type) bool {
-	return t1.IsString() && typeChecker.IsEmptyAnonymousObjectType(t2)
 }
 
 func escapeSnippetText(text string) string {
