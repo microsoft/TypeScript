@@ -10,7 +10,12 @@ import (
 func TestDocumentSymbolTopLevelImports(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `import DefaultComponent from "./component";
+	const content = `/** @typedef {number} ImportedType */
+import DefaultComponent from "./component";
+/** @callback ImportedCallback
+ * @param {string} value
+ * @returns {number}
+ */
 import * as utils from "./utils";
 import { value, original as renamed } from "./values";
 import type { Options } from "./types";

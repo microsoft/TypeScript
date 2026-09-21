@@ -147,9 +147,6 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		if ctx.Err() != nil {
 			return true
 		}
-		if node.Parent.Kind == ast.KindSourceFile && ast.IsImportOrImportEqualsDeclaration(node) {
-			return false
-		}
 		if node.Flags&ast.NodeFlagsReparsed == 0 {
 			if jsdocs := node.JSDoc(file); len(jsdocs) > 0 {
 				for _, jsdoc := range jsdocs {
@@ -162,6 +159,9 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 					}
 				}
 			}
+		}
+		if node.Parent.Kind == ast.KindSourceFile && ast.IsImportOrImportEqualsDeclaration(node) {
+			return false
 		}
 		switch node.Kind {
 		case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration:
