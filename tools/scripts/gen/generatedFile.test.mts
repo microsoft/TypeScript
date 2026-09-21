@@ -11,7 +11,7 @@ import ts from "typescript";
 import cache from "./cache.mts";
 import { GeneratedFile } from "./generatedFile.mts";
 
-test("validate generates before building and reuses generate:all", async () => {
+test("validate generates before building and selects the generation scope", async () => {
     const fileName = path.resolve(import.meta.dirname, "../../../Herebyfile.mjs");
     const source = ts.createSourceFile(fileName, fs.readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     const declaration = source.statements.filter(ts.isVariableStatement)
@@ -24,19 +24,19 @@ test("validate generates before building and reuses generate:all", async () => {
             calls.push(name);
         };
         const generate = { run: action("generate") };
-        const generateAll = { run: action("generate:all") };
+        const generateGo = { run: action("generate:go") };
         const build = { run: action("build") };
         const validation = runInNewContext(declaration.initializer.getText(source), {
             task: (spec: unknown) => spec,
             options,
             generate,
-            generateAll,
+            generateGo,
             build,
             builtLocal: "./built/local",
             generateLibs: action("lib"),
             buildTsc: action("build"),
             getReleaseBuildFlags: () => [],
-            runGenerate: action("generate"),
+            runGenerateGo: action("generate:go"),
             runGenerateEnums: action("generate:enums"),
             runGenerateAPI: action("generate:api"),
             runGenerateExtension: action("generate:extension"),
@@ -56,13 +56,13 @@ test("validate generates before building and reuses generate:all", async () => {
         }) as { dependencies: { run: () => Promise<void>; }[]; run: () => Promise<void>; };
         await Promise.all(validation.dependencies.map(dependency => dependency.run()));
         await validation.run();
-        assert.equal(calls[0], "all" in options ? "generate:all" : "generate");
+        assert.equal(calls[0], "all" in options ? "generate" : "generate:go");
         assert.ok(calls.indexOf("build") > 0);
         assert.ok(calls.indexOf("build") < calls.indexOf("test:tsc"));
         assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
         assert.equal(calls.includes("test:tools"), "all" in options);
         if ("all" in options) {
-            assert.deepEqual(calls.filter(name => name.startsWith("generate")), ["generate:all"]);
+            assert.deepEqual(calls.filter(name => name.startsWith("generate")), ["generate"]);
         }
     }
 });
@@ -193,9 +193,9 @@ test("generated files track each output independently", context => {
     assert.equal(files[1].isCurrent(), false);
 });
 
-test("Hereby generation runs Go generators directly and shares caches with Go fallback", async () => {
+test("generate:go runs Go generators directly and shares caches with Go fallback", async () => {
     const root = path.resolve(import.meta.dirname, "../../..");
-    const generate = () => x("npx", ["hereby", "generate"], { throwOnError: true, nodeOptions: { cwd: root } });
+    const generate = () => x("npx", ["hereby", "generate:go"], { throwOnError: true, nodeOptions: { cwd: root } });
     const first = await generate();
     assert.doesNotMatch(first.stdout, /\$ go generate|npm run --silent cache|\$ node .*generate-unicode-data/);
     const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/proto.generated.ts"], { cwd: root });
@@ -210,16 +210,16 @@ test("Hereby generation runs Go generators directly and shares caches with Go fa
     assert.equal(nested.stdout.match(/Codegen outputs are up to date/g)?.length, 2);
 });
 
-test("generate:all includes standalone generators without Go traversal", async () => {
+test("generate includes standalone generators without Go traversal", async () => {
     const root = path.resolve(import.meta.dirname, "../../..");
-    const { stdout } = await x("npx", ["hereby", "generate:all"], { throwOnError: true, nodeOptions: { cwd: root } });
+    const { stdout } = await x("npx", ["hereby", "generate"], { throwOnError: true, nodeOptions: { cwd: root } });
     const log = stripVTControlCharacters(stdout);
     const eventIndex = (event: string) => {
         const index = log.indexOf(event);
         assert.ok(index >= 0, `Missing task event: ${event}`);
         return index;
     };
-    const compilerStart = eventIndex("Starting generate:all:compiler");
+    const compilerStart = eventIndex("Starting generate:compiler");
     assert.ok(eventIndex("Finished generate:ast ") < compilerStart);
     assert.ok(eventIndex("Finished generate:lsp ") < compilerStart);
     assert.ok(eventIndex("Starting generate:sync") < compilerStart);

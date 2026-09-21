@@ -103,8 +103,8 @@ npx hereby build         # Build the native compiler into built/local/tsc
 npx hereby test          # Run compiler and language-service Go tests
 npx hereby test:all      # Also run benchmarks, tools, and API tests
 npx hereby lint          # Run custom golangci-lint for both Go modules
-npx hereby generate      # Regenerate compiler sources and bundled assets
-npx hereby generate:all  # Also regenerate AST, LSP, APIs, localization, and vendored files
+npx hereby generate:go   # Run the generators also exposed through go generate
+npx hereby generate      # Regenerate all sources, assets, localization, and vendored files
 npx hereby format        # Format Go, TypeScript, JSON, and YAML
 npx hereby check:format  # Check formatting without changing files
 npx hereby tidy          # Tidy both modules and synchronize go.work
@@ -113,8 +113,9 @@ npx hereby tidy          # Tidy both modules and synchronize go.work
 Generation is owned by `Herebyfile.mjs`; Go directives forward to the same
 `generate:*` tasks for compatibility. Use a subtask such as
 `npx hereby generate:diagnostics` to run one generator group, and pass `--force`
-to bypass incremental caches. `generate:all` fetches the pinned LSP model when
-its local cache is missing or stale.
+to bypass incremental caches. `generate` includes every generator and fetches
+the pinned LSP model when its local cache is missing or stale. Use
+`generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
 
 Package-specific commands:
 

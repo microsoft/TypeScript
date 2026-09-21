@@ -372,16 +372,16 @@ export const cleanBuilt = task({
 /** @type {(() => Promise<void>)[]} */
 const goGenerateActions = [];
 
-async function runGenerate() {
+async function runGenerateGo() {
     for (const generate of goGenerateActions) {
         await generate();
     }
 }
 
-export const generate = task({
-    name: "generate",
+export const generateGo = task({
+    name: "generate:go",
     description: "Runs the project's Go code generators directly. Pass --force to regenerate unchanged files.",
-    run: runGenerate,
+    run: runGenerateGo,
 });
 
 const getGoGenerateEnvironment = memoize(async () => {
@@ -1292,20 +1292,20 @@ export const generateVendor = task({
     run: runGenerateVendor,
 });
 
-const generateAllCompiler = task({
-    name: "generate:all:compiler",
+const generateCompiler = task({
+    name: "generate:compiler",
     hiddenFromTaskList: true,
     dependencies: [generateAST, generateLSP],
     run: async () => {
-        await runGenerate();
+        await runGenerateGo();
         await runGenerateEnums();
     },
 });
 
-export const generateAll = task({
-    name: "generate:all",
+export const generate = task({
+    name: "generate",
     description: "Runs all code generation, including AST, LSP, APIs, extension localization, and vendored dependencies.",
-    dependencies: [generateAllCompiler, generateSync, generateExtensionTest, generateVendor],
+    dependencies: [generateCompiler, generateSync, generateExtensionTest, generateVendor],
 });
 
 const coverageDir = path.join(__dirname, "coverage");
@@ -1718,7 +1718,7 @@ async function runFormat() {
 export const validate = task({
     name: "validate",
     description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all code generation and ancillary repository tests Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
-    dependencies: [options.all ? generateAll : generate],
+    dependencies: [options.all ? generate : generateGo],
     run: async () => {
         await generateLibs(builtLocal);
         await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });

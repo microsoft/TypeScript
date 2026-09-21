@@ -293,7 +293,7 @@ jobs:
           node-version: '>=22.18.0'
       - uses: ./.github/actions/setup-go
       - run: npm ci
-      - run: npx hereby generate
+      - run: npx hereby generate:go
       - run: npx hereby generate:enums
       - run: npx hereby generate:ast
       - run: npx hereby generate:vendor
