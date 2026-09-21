@@ -4,19 +4,19 @@
 // repro from #52475#issuecomment-1411215277
 
 type MyType = {} | null | undefined;
->MyType : MyType
+>MyType : unknown
 
 const myVar: MyType = null as MyType;
->myVar : MyType
->null as MyType : MyType
+>myVar : unknown
+>null as MyType : unknown
 
 myVar?.toLocaleString;
 >myVar?.toLocaleString : (() => string) | undefined
->myVar : MyType
+>myVar : unknown
 >toLocaleString : (() => string) | undefined
 
 myVar;
->myVar : MyType
+>myVar : unknown
 
 async function myUnusedFunction() {
 >myUnusedFunction : () => Promise<void>

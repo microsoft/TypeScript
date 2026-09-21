@@ -2,7 +2,7 @@
 
 === freshNegatedIntersectionReduction.ts ===
 export function narrowedArray<Value extends unknown[] | undefined>(value: Value) {
->narrowedArray : <Value extends unknown[] | undefined>(value: Value) => (Value & {})[number][]
+>narrowedArray : <Value extends unknown[] | undefined>(value: Value) => (Value & not undefined)[number][]
 >value : Value
 
     if (typeof value !== "undefined") {
@@ -13,12 +13,12 @@ export function narrowedArray<Value extends unknown[] | undefined>(value: Value)
 
         for (const element of value) {}
 >element : unknown
->value : Value & {}
+>value : Value & not undefined
 
         return [...value];
->[...value] : (Value & {})[number][]
+>[...value] : (Value & not undefined)[number][]
 >...value : unknown
->value : Value & {}
+>value : Value & not undefined
     }
     return [];
 >[] : never[]

@@ -1,0 +1,79 @@
+emptyObjectAsNonNullishUnknown.ts(14,7): error TS2322: Type 'null' is not assignable to type '{}'.
+  Type 'null' is not assignable to type 'not null'.
+emptyObjectAsNonNullishUnknown.ts(15,7): error TS2322: Type 'undefined' is not assignable to type '{}'.
+  Type 'undefined' is not assignable to type 'not undefined'.
+emptyObjectAsNonNullishUnknown.ts(16,7): error TS2322: Type '{}' is not assignable to type 'object'.
+emptyObjectAsNonNullishUnknown.ts(17,7): error TS2322: Type '{}' is not assignable to type '{ [key: string]: number; }'.
+  Index signature for type 'string' is missing in type '{}'.
+emptyObjectAsNonNullishUnknown.ts(55,14): error TS2322: Type '"missing"' is not assignable to type 'never'.
+
+
+==== emptyObjectAsNonNullishUnknown.ts (5 errors) ====
+    type NonNullish = unknown & not null & not undefined;
+    type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+        (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+    const equivalent: Equal<{}, NonNullish> = true;
+    const reversed: Equal<{}, not undefined & not null> = true;
+    const coversUnknown: Equal<{} | null | undefined, unknown> = true;
+    declare const unknownValue: unknown;
+    const covered: {} | null | undefined = unknownValue;
+    
+    declare const nonNullish: NonNullish;
+    const empty: {} = nonNullish;
+    const roundTrip: NonNullish = empty;
+    const primitive: {} = 0;
+    const nullValue: {} = null;
+          ~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '{}'.
+!!! error TS2322:   Type 'null' is not assignable to type 'not null'.
+    const undefinedValue: {} = undefined;
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type '{}'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'not undefined'.
+    const objectValue: object = empty;
+          ~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'object'.
+    const indexedValue: { [key: string]: number } = empty;
+          ~~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type '{ [key: string]: number; }'.
+!!! error TS2322:   Index signature for type 'string' is missing in type '{}'.
+    
+    type Base = { first: string } & { second: number } & {};
+    interface Derived extends Base {
+        third: boolean;
+    }
+    
+    export function withoutNull(value: unknown) {
+        if (value !== null) return value;
+        throw new Error();
+    }
+    
+    export function withoutUndefined(value: unknown) {
+        if (value !== undefined) return value;
+        throw new Error();
+    }
+    
+    export function withoutNullish(value: unknown) {
+        if (value != null) return value;
+        throw new Error();
+    }
+    
+    export function onlyNullish(value: unknown) {
+        if (value == null) return value;
+        throw new Error();
+    }
+    
+    export function genericWithoutNullish<Value>(value: Value) {
+        if (value != null) return value;
+        throw new Error();
+    }
+    
+    declare const optionalObject: { value: number } | undefined;
+    declare const possiblyEmpty: { value: number } | {};
+    export const optionalSpread = { ...optionalObject };
+    export const emptySpread = { ...possiblyEmpty };
+    export const emptySpreadValue = emptySpread.value;
+    export const emptyLiteral = {};
+    export const emptyKeys: keyof {} = "missing";
+                 ~~~~~~~~~
+!!! error TS2322: Type '"missing"' is not assignable to type 'never'.

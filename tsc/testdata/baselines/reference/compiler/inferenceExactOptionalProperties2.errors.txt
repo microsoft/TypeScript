@@ -1,7 +1,9 @@
+inferenceExactOptionalProperties2.ts(45,55): error TS2344: Type '{}' does not satisfy the constraint 'Record<string, UnknownActorLogic>'.
+  Index signature for type 'string' is missing in type '{}'.
 inferenceExactOptionalProperties2.ts(64,11): error TS2345: Argument of type '"alarm"' is not assignable to parameter of type '"counter"'.
 
 
-==== inferenceExactOptionalProperties2.ts (1 errors) ====
+==== inferenceExactOptionalProperties2.ts (2 errors) ====
     type Values<T> = T[keyof T];
     
     type EventObject = {
@@ -47,6 +49,9 @@ inferenceExactOptionalProperties2.ts(64,11): error TS2345: Argument of type '"al
     
     declare function setup<
       TActors extends Record<string, UnknownActorLogic> = {},
+                                                          ~~
+!!! error TS2344: Type '{}' does not satisfy the constraint 'Record<string, UnknownActorLogic>'.
+!!! error TS2344:   Index signature for type 'string' is missing in type '{}'.
     >(implementations?: {
       actors?: { [K in keyof TActors]: TActors[K] };
     }): {

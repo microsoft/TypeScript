@@ -270,10 +270,6 @@ func (c *Checker) isSimpleTypeRelatedTo(source *Type, target *Type, relation *Re
 		if s&TypeFlagsNumberLiteral != 0 && s&TypeFlagsEnumLiteral == 0 && (t&TypeFlagsEnum != 0 || t&TypeFlagsNumberLiteral != 0 && t&TypeFlagsEnumLiteral != 0 && source.AsLiteralType().value == target.AsLiteralType().value) {
 			return true
 		}
-		// Anything is assignable to a union containing undefined, null, and {}
-		if c.isUnknownLikeUnionType(target) {
-			return true
-		}
 	}
 	return false
 }
@@ -2657,6 +2653,12 @@ func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recu
 		return TernaryTrue
 	}
 	if r.relation == r.c.identityRelation {
+		if r.c.isNonNullishUnknownType(source) && target.flags&TypeFlagsObject != 0 {
+			source = r.c.emptyObjectType
+		}
+		if r.c.isNonNullishUnknownType(target) && source.flags&TypeFlagsObject != 0 {
+			target = r.c.emptyObjectType
+		}
 		if source.flags != target.flags {
 			return TernaryFalse
 		}
@@ -3760,7 +3762,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		// 'not S' is related to a non-negated type T only via its base constraint (unknown),
 		// i.e. essentially only when T is 'unknown' or 'any'.
 		constraint := r.c.getBaseConstraintOfType(source)
-		if constraint == nil {
+		if constraint == nil || constraint == source {
 			constraint = r.c.unknownType
 		}
 		result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
@@ -5082,7 +5084,7 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 		})
 	case source.flags&TypeFlagsInstantiableNonPrimitive != 0:
 		constraint := c.getBaseConstraintOfType(source)
-		if constraint == nil {
+		if constraint == nil || constraint == source {
 			constraint = c.unknownType
 		}
 		return c.isTypeDerivedFrom(constraint, target)

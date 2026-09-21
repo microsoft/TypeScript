@@ -217,11 +217,56 @@ func (c *Checker) checkForUnsatisfiedNegatedType(typeSet []*Type) bool {
 		return t.AsNegatedType().baseType
 	}))
 	for _, nonNegatedType := range nonNegatedSet {
+		if everyType(negatedBounds, func(bound *Type) bool { return bound.flags&TypeFlagsNullable != 0 }) {
+			if nonNegatedType.flags&TypeFlagsNullable != 0 && someType(negatedBounds, func(bound *Type) bool { return bound.flags&nonNegatedType.flags&TypeFlagsNullable != 0 }) {
+				return true
+			}
+			continue
+		}
 		if c.isTypeSubtypeOf(nonNegatedType, negatedBounds) {
 			return true
 		}
 	}
 	return false
+}
+
+func (c *Checker) reduceNullishComplements(types []*Type) []*Type {
+	for index, member := range types {
+		if member.flags&TypeFlagsIntersection == 0 || !core.Some(member.Types(), isNullishNegation) {
+			continue
+		}
+		factors := core.Filter(member.Types(), func(factor *Type) bool { return !isNullishNegation(factor) })
+		for _, negation := range member.Types() {
+			if !isNullishNegation(negation) {
+				continue
+			}
+			nullableFlags := negation.AsNegatedType().baseType.flags & TypeFlagsNullable
+			for otherIndex, other := range types {
+				if otherIndex == index {
+					continue
+				}
+				coversFactors := other.flags&nullableFlags != 0
+				matchesFactors := coversFactors && len(factors) == 0
+				if other.flags&TypeFlagsIntersection != 0 && len(other.Types()) == len(factors)+1 {
+					matchesFactors = core.Some(other.Types(), func(factor *Type) bool { return factor.flags&nullableFlags != 0 }) &&
+						core.Every(factors, func(factor *Type) bool { return slices.Contains(other.Types(), factor) })
+				}
+				if !coversFactors && !matchesFactors {
+					continue
+				}
+				remaining := core.Filter(member.Types(), func(factor *Type) bool {
+					return !isNullishNegation(factor) || factor.AsNegatedType().baseType.flags&nullableFlags == 0
+				})
+				reduced := slices.Clone(types)
+				reduced[index] = c.getIntersectionType(remaining)
+				if matchesFactors {
+					reduced = slices.Delete(reduced, otherIndex, otherIndex+1)
+				}
+				return reduced
+			}
+		}
+	}
+	return types
 }
 
 // checkForSaturatedNegatedType returns true if the union in typeSet covers every value (i.e. is the
@@ -231,13 +276,27 @@ func (c *Checker) checkForUnsatisfiedNegatedType(typeSet []*Type) bool {
 // else, so the union is unknown. For example, 'T | not T' reduces to unknown, and 'string | not "w"'
 // reduces to unknown because '"w"' is a subtype of 'string'.
 func (c *Checker) checkForSaturatedNegatedType(typeSet []*Type) bool {
-	nonNegatedSet := core.Filter(typeSet, func(t *Type) bool { return t.flags&TypeFlagsNegated == 0 })
+	isComplement := func(t *Type) bool {
+		return isNegatedType(t) || t.flags&TypeFlagsIntersection != 0 && core.Every(t.Types(), isNegatedType)
+	}
+	complements := core.Filter(typeSet, isComplement)
+	if len(complements) == 0 {
+		return false
+	}
+	nonNegatedSet := core.Filter(typeSet, func(t *Type) bool { return !isComplement(t) })
 	if len(nonNegatedSet) == 0 {
 		return false
 	}
-	nonNegatedUnion := c.getUnionType(nonNegatedSet)
-	for _, negatedType := range core.Filter(typeSet, isNegatedType) {
-		if c.isTypeSubtypeOf(negatedType.AsNegatedType().baseType, nonNegatedUnion) {
+	for _, complement := range complements {
+		if complement.flags&TypeFlagsIntersection != 0 {
+			if core.Every(complement.Types(), func(member *Type) bool {
+				return slices.Contains(nonNegatedSet, member.AsNegatedType().baseType)
+			}) {
+				return true
+			}
+			continue
+		}
+		if c.isTypeSubtypeOf(complement.AsNegatedType().baseType, c.getUnionType(nonNegatedSet)) {
 			return true
 		}
 	}
@@ -267,6 +326,26 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 			continue
 		}
 		negatedBase := types[i].AsNegatedType().baseType
+		if negatedBase.flags&TypeFlagsNullable != 0 {
+			if nonNegativePart.flags&TypeFlagsDefinitelyNonNullable != 0 || nonNegativePart.flags&TypeFlagsIntersection != 0 && core.Some(nonNegativePart.Types(), func(member *Type) bool {
+				return member.flags&TypeFlagsDefinitelyNonNullable != 0
+			}) {
+				types = slices.Delete(types, i, i+1)
+				continue
+			}
+			if nonNegativePart.flags&TypeFlagsTypeVariable != 0 {
+				constraint := c.getBaseConstraintOfType(nonNegativePart)
+				if constraint != nil && everyType(constraint, func(member *Type) bool {
+					return member.flags&TypeFlagsDefinitelyNonNullable != 0
+				}) {
+					types = slices.Delete(types, i, i+1)
+					continue
+				}
+			}
+			if nonNegativePart.flags&TypeFlagsStructuredOrInstantiable != 0 {
+				continue
+			}
+		}
 		if c.isTypeSubtypeOf(nonNegativePart, types[i]) || isFreshNegatedType(types[i]) && c.typesAreInDisjointDomainsIncludingObjects(nonNegativePart, negatedBase) || c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) {
 			types = slices.Delete(types, i, i+1)
 		}

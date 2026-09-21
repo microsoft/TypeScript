@@ -3528,6 +3528,10 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		t = t.AsUnionType().origin
 	}
 	if t.flags&(TypeFlagsUnion|TypeFlagsIntersection) != 0 {
+		if b.ch.isNonNullishUnknownType(t) {
+			b.ctx.approximateLength += 2
+			return b.f.NewTypeLiteralNode(b.f.NewNodeList(nil))
+		}
 		var types []*Type
 		if t.flags&TypeFlagsUnion != 0 {
 			types = b.ch.formatUnionTypes(t.AsUnionType().types, expandingEnum)

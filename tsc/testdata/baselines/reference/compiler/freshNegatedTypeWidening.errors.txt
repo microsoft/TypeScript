@@ -1,6 +1,6 @@
 freshNegatedTypeWidening.ts(19,1): error TS2352: Conversion of type 'BaseNode & not WrappedNode' to type 'WrappedNode' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'expression' is missing in type 'BaseNode' but required in type 'WrappedNode'.
-freshNegatedTypeWidening.ts(62,1): error TS2352: Conversion of type '{} & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+freshNegatedTypeWidening.ts(62,1): error TS2352: Conversion of type 'not null & not undefined & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
 ==== freshNegatedTypeWidening.ts (2 errors) ====
@@ -71,7 +71,7 @@ freshNegatedTypeWidening.ts(62,1): error TS2352: Conversion of type '{} & not st
     declare const explicitlyNotString: {} & not string;
     explicitlyNotString as string;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Conversion of type '{} & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352: Conversion of type 'not null & not undefined & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     
     function skipStrings(value: string): string;
     function skipStrings(value: {}): {};

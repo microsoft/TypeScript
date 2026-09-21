@@ -14,6 +14,7 @@ export function stringUnion(value: "literal" | (string & {})) { return value; }
 export function numberUnion(value: 1 | (number & {})) { return value; }
 export function bigintUnion(value: 1n | (bigint & {})) { return value; }
 export function templateUnion(value: "prefixValue" | (`prefix${string}` & {})) { return value; }
+export function explicitExclusions(value: string & not null & not undefined) { return value; }
 
 type Choice = "a" | "b" | string;
 type OtherChoice = "c" | string;
@@ -51,6 +52,7 @@ export function stringUnion(value) { return value; }
 export function numberUnion(value) { return value; }
 export function bigintUnion(value) { return value; }
 export function templateUnion(value) { return value; }
+export function explicitExclusions(value) { return value; }
 const stringIdentity = true;
 const numberIdentity = true;
 const bigintIdentity = true;
@@ -78,6 +80,7 @@ export declare function stringUnion(value: "literal" | (string & {})): string;
 export declare function numberUnion(value: 1 | (number & {})): number;
 export declare function bigintUnion(value: 1n | (bigint & {})): bigint;
 export declare function templateUnion(value: "prefixValue" | (`prefix${string}` & {})): `prefix${string}`;
+export declare function explicitExclusions(value: string & not null & not undefined): string;
 type Choice = "a" | "b" | string;
 type OtherChoice = "c" | string;
 export declare function mergedChoices(value: Choice | OtherChoice | string): string;

@@ -43,8 +43,6 @@ export enum ObjectFlags {
     IsGenericIndexType = 1 << 24,
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
     ContainsIntersections = 1 << 25,
-    IsUnknownLikeUnionComputed = 1 << 26,
-    IsUnknownLikeUnion = 1 << 27,
     IsUniformEnumComputed = 1 << 28,
     IsUniformEnum = 1 << 29,
     IsNeverIntersectionComputed = 1 << 25,

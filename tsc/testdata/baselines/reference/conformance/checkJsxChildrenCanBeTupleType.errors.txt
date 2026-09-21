@@ -1,9 +1,6 @@
-checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2769: No overload matches this call.
+checkJsxChildrenCanBeTupleType.tsx(20,3): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
-      Types of property 'children' are incompatible.
-        Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
-          Source has 3 element(s) but target allows only 2.
+    Type 'Element' is not assignable to type 'undefined'.
 
 
 ==== checkJsxChildrenCanBeTupleType.tsx (1 errors) ====
@@ -24,15 +21,12 @@ checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2769: No overload matches thi
     </ResizablePanel>
     
     const testErr = <ResizablePanel>
-                     ~~~~~~~~~~~~~~
+      <div />
+      <div />
+      <div />
+      ~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
-!!! error TS2769:     Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
-!!! error TS2769:       Types of property 'children' are incompatible.
-!!! error TS2769:         Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
-!!! error TS2769:           Source has 3 element(s) but target allows only 2.
+!!! error TS2769:     Type 'Element' is not assignable to type 'undefined'.
 !!! related TS2771 react16.d.ts:357:13: The last overload is declared here.
-      <div />
-      <div />
-      <div />
     </ResizablePanel>

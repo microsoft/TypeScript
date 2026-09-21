@@ -16,6 +16,7 @@ export function stringUnion(value: "literal" | (string & {})) { return value; }
 export function numberUnion(value: 1 | (number & {})) { return value; }
 export function bigintUnion(value: 1n | (bigint & {})) { return value; }
 export function templateUnion(value: "prefixValue" | (`prefix${string}` & {})) { return value; }
+export function explicitExclusions(value: string & not null & not undefined) { return value; }
 
 type Choice = "a" | "b" | string;
 type OtherChoice = "c" | string;

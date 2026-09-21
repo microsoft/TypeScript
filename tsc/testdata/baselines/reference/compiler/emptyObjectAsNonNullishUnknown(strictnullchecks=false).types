@@ -1,0 +1,176 @@
+//// [tests/cases/compiler/emptyObjectAsNonNullishUnknown.ts] ////
+
+=== emptyObjectAsNonNullishUnknown.ts ===
+type NonNullish = unknown & not null & not undefined;
+>NonNullish : NonNullish
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Equal<Left, Right>
+
+    (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>true : true
+>false : false
+
+const equivalent: Equal<{}, NonNullish> = true;
+>equivalent : true
+>true : true
+
+const reversed: Equal<{}, not undefined & not null> = true;
+>reversed : true
+>true : true
+
+const coversUnknown: Equal<{} | null | undefined, unknown> = true;
+>coversUnknown : false
+>true : true
+
+declare const unknownValue: unknown;
+>unknownValue : unknown
+
+const covered: {} | null | undefined = unknownValue;
+>covered : {}
+>unknownValue : unknown
+
+declare const nonNullish: NonNullish;
+>nonNullish : NonNullish
+
+const empty: {} = nonNullish;
+>empty : {}
+>nonNullish : NonNullish
+
+const roundTrip: NonNullish = empty;
+>roundTrip : NonNullish
+>empty : {}
+
+const primitive: {} = 0;
+>primitive : {}
+>0 : 0
+
+const nullValue: {} = null;
+>nullValue : {}
+
+const undefinedValue: {} = undefined;
+>undefinedValue : {}
+>undefined : undefined
+
+const objectValue: object = empty;
+>objectValue : object
+>empty : {}
+
+const indexedValue: { [key: string]: number } = empty;
+>indexedValue : { [key: string]: number; }
+>key : string
+>empty : {}
+
+type Base = { first: string } & { second: number } & {};
+>Base : Base
+>first : string
+>second : number
+
+interface Derived extends Base {
+    third: boolean;
+>third : boolean
+}
+
+export function withoutNull(value: unknown) {
+>withoutNull : (value: unknown) => unknown
+>value : unknown
+
+    if (value !== null) return value;
+>value !== null : boolean
+>value : unknown
+>value : unknown
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function withoutUndefined(value: unknown) {
+>withoutUndefined : (value: unknown) => unknown
+>value : unknown
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : unknown
+>undefined : undefined
+>value : unknown
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function withoutNullish(value: unknown) {
+>withoutNullish : (value: unknown) => unknown
+>value : unknown
+
+    if (value != null) return value;
+>value != null : boolean
+>value : unknown
+>value : unknown
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function onlyNullish(value: unknown) {
+>onlyNullish : (value: unknown) => unknown
+>value : unknown
+
+    if (value == null) return value;
+>value == null : boolean
+>value : unknown
+>value : unknown
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function genericWithoutNullish<Value>(value: Value) {
+>genericWithoutNullish : <Value>(value: Value) => Value
+>value : Value
+
+    if (value != null) return value;
+>value != null : boolean
+>value : Value
+>value : Value
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+declare const optionalObject: { value: number } | undefined;
+>optionalObject : { value: number; }
+>value : number
+
+declare const possiblyEmpty: { value: number } | {};
+>possiblyEmpty : { value: number; } | {}
+>value : number
+
+export const optionalSpread = { ...optionalObject };
+>optionalSpread : { value: number; }
+>{ ...optionalObject } : { value: number; }
+>optionalObject : { value: number; }
+
+export const emptySpread = { ...possiblyEmpty };
+>emptySpread : { value?: number; }
+>{ ...possiblyEmpty } : { value?: number; }
+>possiblyEmpty : { value: number; } | {}
+
+export const emptySpreadValue = emptySpread.value;
+>emptySpreadValue : number
+>emptySpread.value : number
+>emptySpread : { value?: number; }
+>value : number
+
+export const emptyLiteral = {};
+>emptyLiteral : {}
+>{} : {}
+
+export const emptyKeys: keyof {} = "missing";
+>emptyKeys : never
+>"missing" : "missing"
+
