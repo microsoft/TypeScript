@@ -2,12 +2,10 @@ package osvfs
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
-	"sync"
 	"time"
 	"unicode"
 
@@ -114,41 +112,6 @@ func (vfs *osFS) GetAccessibleEntries(path string) vfs.Entries {
 func (vfs *osFS) Stat(path string) vfs.FileInfo {
 	defer blockingOpSema.Acquire()()
 	return vfs.common.Stat(path)
-}
-
-var limitedWalkDirFuncPool = sync.Pool{
-	New: func() any {
-		w := &limitedWalkDirFunc{}
-		w.walk = w.walker
-		return w
-	},
-}
-
-func getLimitedWalkDirFunc(walkFn vfs.WalkDirFunc) *limitedWalkDirFunc {
-	w := limitedWalkDirFuncPool.Get().(*limitedWalkDirFunc)
-	w.inner = walkFn
-	return w
-}
-
-func putLimitedWalkDirFunc(w *limitedWalkDirFunc) {
-	w.inner = nil
-	limitedWalkDirFuncPool.Put(w)
-}
-
-type limitedWalkDirFunc struct {
-	inner vfs.WalkDirFunc
-	walk  vfs.WalkDirFunc
-}
-
-func (w *limitedWalkDirFunc) walker(path string, d fs.DirEntry, err error) error {
-	defer blockingOpSema.Acquire()()
-	return w.inner(path, d, err)
-}
-
-func (vfs *osFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	walker := getLimitedWalkDirFunc(walkFn)
-	defer putLimitedWalkDirFunc(walker)
-	return vfs.common.WalkDir(root, walker.walk)
 }
 
 func (vfs *osFS) Realpath(path string) string {

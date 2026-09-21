@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
@@ -34,7 +35,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot := session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uri).Name(), "/src/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(uri).ConfigFileName(), "/src/tsconfig.json")
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSFalse)
 
 		prefs := lsutil.NewDefaultUserPreferences()
@@ -45,7 +46,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uri).Name(), "/src/tsconfig.all.json")
+		assert.Equal(t, snapshot.GetDefaultProject(uri).ConfigFileName(), "/src/tsconfig.all.json")
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSTrue)
 	})
 
@@ -63,7 +64,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot := session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uri).Name(), "/src/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(uri).ConfigFileName(), "/src/tsconfig.json")
 	})
 
 	t.Run("falls back to tsconfig.json when custom config missing", func(t *testing.T) {
@@ -79,7 +80,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot := session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uri).Name(), "/src/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(uri).ConfigFileName(), "/src/tsconfig.json")
 	})
 
 	t.Run("reverts to tsconfig.json when custom config preference is cleared", func(t *testing.T) {
@@ -92,7 +93,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot := session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uri).Name(), "/src/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(uri).ConfigFileName(), "/src/tsconfig.json")
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSFalse)
 
 		// Step 2: Switch to custom config (strict: true)
@@ -104,7 +105,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uri).Name(), "/src/tsconfig.all.json")
+		assert.Equal(t, snapshot.GetDefaultProject(uri).ConfigFileName(), "/src/tsconfig.all.json")
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSTrue)
 
 		// Step 3: Clear custom config preference, should revert to tsconfig.json (strict: false)
@@ -116,7 +117,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uri).Name(), "/src/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(uri).ConfigFileName(), "/src/tsconfig.json")
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSFalse)
 	})
 
@@ -210,8 +211,8 @@ func TestCustomConfigFileName(t *testing.T) {
 
 		// Without any config, the file should be in the inferred project only.
 		snapshot := session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uriLocal).Name(), "/dev/null/inferred")
-		projects := snapshot.GetProjectsContainingFile(uriLocal)
+		assert.Equal(t, snapshot.GetDefaultProject(uriLocal).ID(), project.ID("/dev/null/inferred"))
+		projects := snapshot.GetLanguageServiceProjectsContainingFile(uriLocal)
 		assert.Equal(t, len(projects), 1, "expected file to be in exactly 1 project before config change, got %d", len(projects))
 
 		// Now set custom config to pick up tsconfig.all.json
@@ -224,8 +225,8 @@ func TestCustomConfigFileName(t *testing.T) {
 
 		// File should now be in the configured project only, not duplicated in inferred.
 		snapshot = session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(uriLocal).Name(), "/src/tsconfig.all.json")
-		projects = snapshot.GetProjectsContainingFile(uriLocal)
+		assert.Equal(t, snapshot.GetDefaultProject(uriLocal).ConfigFileName(), "/src/tsconfig.all.json")
+		projects = snapshot.GetLanguageServiceProjectsContainingFile(uriLocal)
 		assert.Equal(t, len(projects), 1, "expected file to be in exactly 1 project after config change, got %d", len(projects))
 	})
 }

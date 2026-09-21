@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/comparisonBigIntLiterals.ts] ////
+
+=== comparisonBigIntLiterals.ts ===
+export const descending = [100000000000000000000n, 100n, 10n, 2n, 1n, 0n, -1n, -2n, -10n, -100n, -100000000000000000000n] as const;
+>descending : Symbol(descending, Decl(comparisonBigIntLiterals.ts, 0, 12))
+>const : Symbol(const)
+
+export const ascending = [-100000000000000000000n, -100n, -10n, -2n, -1n, 0n, 1n, 2n, 10n, 100n, 100000000000000000000n] as const;
+>ascending : Symbol(ascending, Decl(comparisonBigIntLiterals.ts, 1, 12))
+>const : Symbol(const)
+
+export const values = [...descending, ...ascending];
+>values : Symbol(values, Decl(comparisonBigIntLiterals.ts, 2, 12))
+>descending : Symbol(descending, Decl(comparisonBigIntLiterals.ts, 0, 12))
+>ascending : Symbol(ascending, Decl(comparisonBigIntLiterals.ts, 1, 12))
+

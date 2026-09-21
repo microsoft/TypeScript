@@ -7,6 +7,10 @@ import (
 
 const excessiveChangeThreshold = 1000
 
+type FileChangeExpander interface {
+	ExpandFileChanges(summary FileChangeSummary) FileChangeSummary
+}
+
 type FileChangeKind int
 
 const (
@@ -49,6 +53,14 @@ type FileChangeSummary struct {
 	IncludesWatchChangeOutsideNodeModules bool
 	// InvalidateAll indicates that all cached file state should be discarded.
 	InvalidateAll bool
+}
+
+func (f FileChangeSummary) Clone() FileChangeSummary {
+	f.Closed = *f.Closed.Clone()
+	f.Changed = *f.Changed.Clone()
+	f.Created = *f.Created.Clone()
+	f.Deleted = *f.Deleted.Clone()
+	return f
 }
 
 func (f FileChangeSummary) IsEmpty() bool {

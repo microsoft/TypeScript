@@ -44,6 +44,7 @@ type configFileRegistryBuilder struct {
 func newConfigFileRegistryBuilder(
 	hasRelativePatternCapability bool,
 	fs *snapshotFSBuilder,
+	isOpenFile func(tspath.Path) bool,
 	oldConfigFileRegistry *ConfigFileRegistry,
 	extendedConfigCache *ExtendedConfigCache,
 	snapshotID uint64,
@@ -54,7 +55,7 @@ func newConfigFileRegistryBuilder(
 	return &configFileRegistryBuilder{
 		hasRelativePatternCapability: hasRelativePatternCapability,
 		fs:                           newSourceFS(false, fs, fs.toPath),
-		isOpenFile:                   fs.isOpenFile,
+		isOpenFile:                   isOpenFile,
 		base:                         oldConfigFileRegistry,
 		sessionOptions:               sessionOptions,
 		extendedConfigCache:          extendedConfigCache,
@@ -285,16 +286,16 @@ func (c *configFileRegistryBuilder) acquireConfigForProject(fileName string, pat
 	var contentMappersChanged bool
 	entry.ChangeIf(
 		func(config *configFileEntry) bool {
-			_, alreadyRetaining := config.retainingProjects[project.configFilePath]
+			_, alreadyRetaining := config.retainingProjects[project.ID()]
 			needsRetainProject = !alreadyRetaining
 			return needsRetainProject || config.pendingReload != PendingReloadNone
 		},
 		func(config *configFileEntry) {
 			if needsRetainProject {
 				if config.retainingProjects == nil {
-					config.retainingProjects = make(map[tspath.Path]struct{})
+					config.retainingProjects = make(map[ID]struct{})
 				}
-				config.retainingProjects[project.configFilePath] = struct{}{}
+				config.retainingProjects[project.ID()] = struct{}{}
 			}
 			contentMappersChanged = c.reloadIfNeeded(config, fileName, path, logger)
 		},
@@ -339,32 +340,32 @@ func (c *configFileRegistryBuilder) acquireConfigForFile(configFileName string, 
 
 // releaseConfigForProject removes the project from the config entry. Once no projects
 // or files are associated with the config entry, it will be removed on the next call to `cleanup`.
-func (c *configFileRegistryBuilder) releaseConfigForProject(configFilePath tspath.Path, projectPath tspath.Path) {
+func (c *configFileRegistryBuilder) releaseConfigForProject(configFilePath tspath.Path, projectID ID) {
 	if entry, ok := c.configs.Load(configFilePath); ok {
 		entry.ChangeIf(
 			func(config *configFileEntry) bool {
-				_, exists := config.retainingProjects[projectPath]
+				_, exists := config.retainingProjects[projectID]
 				return exists
 			},
 			func(config *configFileEntry) {
-				delete(config.retainingProjects, projectPath)
+				delete(config.retainingProjects, projectID)
 			},
 		)
 	}
 }
 
-func (c *configFileRegistryBuilder) retainConfigForProject(configFilePath tspath.Path, projectPath tspath.Path) {
+func (c *configFileRegistryBuilder) retainConfigForProject(configFilePath tspath.Path, projectID ID) {
 	if entry, ok := c.configs.Load(configFilePath); ok {
 		entry.ChangeIf(
 			func(config *configFileEntry) bool {
-				_, exists := config.retainingProjects[projectPath]
+				_, exists := config.retainingProjects[projectID]
 				return !exists
 			},
 			func(config *configFileEntry) {
 				if config.retainingProjects == nil {
-					config.retainingProjects = make(map[tspath.Path]struct{})
+					config.retainingProjects = make(map[ID]struct{})
 				}
-				config.retainingProjects[projectPath] = struct{}{}
+				config.retainingProjects[projectID] = struct{}{}
 			},
 		)
 	}
@@ -392,7 +393,7 @@ func (c *configFileRegistryBuilder) didCloseFile(path tspath.Path) {
 }
 
 type changeFileResult struct {
-	affectedProjects map[tspath.Path]struct{}
+	affectedProjects map[ID]struct{}
 	affectedFiles    map[tspath.Path]struct{}
 }
 
@@ -410,7 +411,7 @@ func (c *configFileRegistryBuilder) DidChangeCustomConfigFileName(logger *loggin
 }
 
 func (c *configFileRegistryBuilder) invalidateCache(logger *logging.LogTree) changeFileResult {
-	var affectedProjects map[tspath.Path]struct{}
+	var affectedProjects map[ID]struct{}
 	var affectedFiles map[tspath.Path]struct{}
 
 	logger.Log("Too many files changed; marking all configs for reload")
@@ -453,7 +454,7 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 	if summary.InvalidateAll {
 		return c.invalidateCache(logger)
 	}
-	var affectedProjects map[tspath.Path]struct{}
+	var affectedProjects map[ID]struct{}
 	var affectedFiles map[tspath.Path]struct{}
 	var shouldInvalidateCache bool
 
@@ -580,7 +581,7 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 				func(config *configFileEntry) {
 					config.pendingReload = PendingReloadFileNames
 					if affectedProjects == nil {
-						affectedProjects = make(map[tspath.Path]struct{})
+						affectedProjects = make(map[ID]struct{})
 					}
 					maps.Copy(affectedProjects, config.retainingProjects)
 					logger.Logf("Root files for config %s changed", entry.Key())
@@ -618,7 +619,7 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 				func(config *configFileEntry) {
 					config.pendingReload = PendingReloadFileNames
 					if affectedProjects == nil {
-						affectedProjects = make(map[tspath.Path]struct{})
+						affectedProjects = make(map[ID]struct{})
 					}
 					maps.Copy(affectedProjects, config.retainingProjects)
 					logger.Logf("Root files for config %s changed", entry.Key())
@@ -638,8 +639,8 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 	}
 }
 
-func (c *configFileRegistryBuilder) handleConfigChange(entry *dirty.SyncMapEntry[tspath.Path, *configFileEntry], logger *logging.LogTree) map[tspath.Path]struct{} {
-	var affectedProjects map[tspath.Path]struct{}
+func (c *configFileRegistryBuilder) handleConfigChange(entry *dirty.SyncMapEntry[tspath.Path, *configFileEntry], logger *logging.LogTree) map[ID]struct{} {
+	var affectedProjects map[ID]struct{}
 	changed := entry.ChangeIf(
 		func(config *configFileEntry) bool { return config.pendingReload != PendingReloadFull },
 		func(config *configFileEntry) { config.pendingReload = PendingReloadFull },
