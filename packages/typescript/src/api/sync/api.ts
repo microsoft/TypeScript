@@ -639,6 +639,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     snapshot: baseSnapshot.id,
                     changes: toCreateSnapshotRequest(params),
                 });
+                if (data.snapshot === baseSnapshot.id) {
+                    return baseSnapshot;
+                }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,
@@ -666,6 +669,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     snapshot: baseSnapshot.id,
                     changes: toCreateSnapshotRequest(params),
                 });
+                if (data.snapshot === baseSnapshot.id) {
+                    return baseSnapshot;
+                }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,

@@ -389,6 +389,22 @@ describe("API", () => {
         assert.equal("openedFiles" in empty.operation, false);
     });
 
+    test("snapshot.update preserves identity when the server returns the same snapshot", () => {
+        using api = spawnAPI();
+        const snapshot = api.createSnapshot();
+        const client = (api as unknown as {
+            client: { apiRequest(method: string, params: unknown): unknown; };
+        }).client;
+        const apiRequest = client.apiRequest.bind(client);
+        client.apiRequest = (method, params) => {
+            const response = apiRequest(method, params);
+            if (method !== "updateSnapshot" || typeof response !== "object" || response === null) return response;
+            return { ...response, snapshot: snapshot.id };
+        };
+
+        assert.strictEqual(snapshot.update({}), snapshot);
+    });
+
     test("snapshot.update reconfigures a synthetic program", () => {
         using api = spawnAPI({
             "/src/a.ts": `export const a = 1;`,

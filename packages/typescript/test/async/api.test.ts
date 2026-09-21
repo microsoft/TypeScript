@@ -400,6 +400,22 @@ describe("API", () => {
         assert.equal("openedFiles" in empty.operation, false);
     });
 
+    test("snapshot.update preserves identity when the server returns the same snapshot", async () => {
+        await using api = spawnAPI();
+        const snapshot = await api.createSnapshot();
+        const client = (api as unknown as {
+            client: { apiRequest(method: string, params: unknown): Promise<unknown>; };
+        }).client;
+        const apiRequest = client.apiRequest.bind(client);
+        client.apiRequest = async (method, params) => {
+            const response = await apiRequest(method, params);
+            if (method !== "updateSnapshot" || typeof response !== "object" || response === null) return response;
+            return { ...response, snapshot: snapshot.id };
+        };
+
+        assert.strictEqual(await snapshot.update({}), snapshot);
+    });
+
     test("snapshot.update reconfigures a synthetic program", async () => {
         await using api = spawnAPI({
             "/src/a.ts": `export const a = 1;`,
