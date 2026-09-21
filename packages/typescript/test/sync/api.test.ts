@@ -134,6 +134,8 @@ describe("API", () => {
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: {}, options: { projectReferences: [{ path: "/tsconfig.json" }] } }] });
+
             // @ts-expect-error Snapshot parameters are excess-property checked.
             void standalone.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
             // @ts-expect-error Synthetic program parameters are contextually typed and excess-property checked.
