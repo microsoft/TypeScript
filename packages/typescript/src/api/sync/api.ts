@@ -640,6 +640,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     changes: toCreateSnapshotRequest(params),
                 });
                 if (data.snapshot === baseSnapshot.id) {
+                    owner.client.apiRequest("release", { snapshot: data.snapshot });
                     return baseSnapshot;
                 }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -670,6 +671,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     changes: toCreateSnapshotRequest(params),
                 });
                 if (data.snapshot === baseSnapshot.id) {
+                    yield* apiRequest("release", { snapshot: data.snapshot });
                     return baseSnapshot;
                 }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);

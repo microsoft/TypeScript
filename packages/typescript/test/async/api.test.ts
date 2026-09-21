@@ -407,13 +407,29 @@ describe("API", () => {
             client: { apiRequest(method: string, params: unknown): Promise<unknown>; };
         }).client;
         const apiRequest = client.apiRequest.bind(client);
+        let duplicateReference = false;
         client.apiRequest = async (method, params) => {
+            if (
+                method === "release"
+                && typeof params === "object"
+                && params !== null
+                && "snapshot" in params
+                && params.snapshot === snapshot.id
+                && duplicateReference
+            ) {
+                duplicateReference = false;
+                return true;
+            }
             const response = await apiRequest(method, params);
             if (method !== "updateSnapshot" || typeof response !== "object" || response === null) return response;
+            if (!("snapshot" in response) || typeof response.snapshot !== "number") return response;
+            await apiRequest("release", { snapshot: response.snapshot });
+            duplicateReference = true;
             return { ...response, snapshot: snapshot.id };
         };
 
         assert.strictEqual(await snapshot.update({}), snapshot);
+        assert.equal(duplicateReference, false);
     });
 
     test("snapshot.update reconfigures a synthetic program", async () => {
