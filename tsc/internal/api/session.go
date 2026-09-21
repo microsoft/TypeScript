@@ -68,9 +68,9 @@ type snapshotData struct {
 	// a project context (e.g. member/export ordering, node handle resolution) but don't
 	// receive one from the caller default to this canonical project. First-writer wins so
 	// the choice is stable. Guarded by symbolRegistryMu.
-	symbolCanonicalProjects map[SymbolID]ProjectID
+	symbolCanonicalProjects map[SymbolID]project.ID
 
-	projectRegistries   map[ProjectID]*projectRegistryData
+	projectRegistries   map[project.ID]*projectRegistryData
 	projectRegistriesMu sync.RWMutex
 }
 
@@ -87,7 +87,7 @@ type projectRegistryData struct {
 }
 
 // getProgram looks up a program from a project handle within this snapshot.
-func (sd *snapshotData) getProgram(projectHandle ProjectID) (*compiler.Program, error) {
+func (sd *snapshotData) getProgram(projectHandle project.ID) (*compiler.Program, error) {
 	proj, err := sd.getProject(projectHandle)
 	if err != nil {
 		return nil, err
@@ -102,11 +102,10 @@ func (sd *snapshotData) getProgram(projectHandle ProjectID) (*compiler.Program, 
 }
 
 // getProject looks up a project from a project handle within this snapshot.
-func (sd *snapshotData) getProject(projectHandle ProjectID) (*project.Project, error) {
-	projectName := tspath.Path(projectHandle)
-	proj := sd.snapshot.ProjectCollection.GetProjectByPath(projectName)
+func (sd *snapshotData) getProject(projectHandle project.ID) (*project.Project, error) {
+	proj := sd.snapshot.ProjectCollection.GetProject(projectHandle)
 	if proj == nil {
-		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectName)
+		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectHandle)
 	}
 	return proj, nil
 }
@@ -122,7 +121,7 @@ func (sd *snapshotData) nodeHandleFrom(node *ast.Node) NodeHandle {
 }
 
 // getOrCreateProjectRegistry returns the registry for the given project, creating it if needed.
-func (sd *snapshotData) getOrCreateProjectRegistry(projectID ProjectID) *projectRegistryData {
+func (sd *snapshotData) getOrCreateProjectRegistry(projectID project.ID) *projectRegistryData {
 	if projectID == "" {
 		panic("getOrCreateProjectRegistry: empty project ID")
 	}
@@ -149,7 +148,7 @@ func (sd *snapshotData) getOrCreateProjectRegistry(projectID ProjectID) *project
 // canonicalProject is the project the symbol was observed in and must be non-empty; it is recorded
 // as the symbol's canonical project (first writer wins) and returned to the client so it can default
 // project-scoped follow-up lookups (members/exports, node resolution) to it.
-func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject ProjectID) *SymbolResponse {
+func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject project.ID) *SymbolResponse {
 	if symbol == nil {
 		return nil
 	}
@@ -190,9 +189,9 @@ func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject P
 // (first writer wins for stability) and is always non-empty: every symbol handed to a client must
 // carry a project so that project-scoped follow-up lookups (members/exports, parent, node
 // resolution) have a default context. Callers must supply a non-empty project.
-func (sd *snapshotData) registerSymbol(symbol *ast.Symbol, canonicalProject ProjectID) (SymbolID, ProjectID) {
+func (sd *snapshotData) registerSymbol(symbol *ast.Symbol, canonicalProject project.ID) (SymbolID, project.ID) {
 	if symbol == nil {
-		return 0, ""
+		return 0, project.ID("")
 	}
 	if canonicalProject == "" {
 		panic("registerSymbol requires a non-empty canonical project")
@@ -217,7 +216,7 @@ func (sd *snapshotData) registerSymbol(symbol *ast.Symbol, canonicalProject Proj
 }
 
 // newTypeResponse registers a type in the project's registry and returns the response.
-func (sd *snapshotData) newTypeResponse(projectID ProjectID, t *checker.Type) *TypeResponse {
+func (sd *snapshotData) newTypeResponse(projectID project.ID, t *checker.Type) *TypeResponse {
 	if t == nil {
 		return nil
 	}
@@ -236,7 +235,7 @@ func (sd *snapshotData) newTypeResponse(projectID ProjectID, t *checker.Type) *T
 	return resp
 }
 
-func (sd *snapshotData) registerType(projectID ProjectID, t *checker.Type) TypeID {
+func (sd *snapshotData) registerType(projectID project.ID, t *checker.Type) TypeID {
 	if t == nil {
 		return 0
 	}
@@ -274,7 +273,7 @@ func (sd *snapshotData) resolveSymbolHandle(handle SymbolID) (*ast.Symbol, error
 }
 
 // resolveTypeHandle resolves a type handle within the project's registry.
-func (sd *snapshotData) resolveTypeHandle(projectID ProjectID, handle TypeID) (*checker.Type, error) {
+func (sd *snapshotData) resolveTypeHandle(projectID project.ID, handle TypeID) (*checker.Type, error) {
 	if handle == 0 {
 		return nil, fmt.Errorf("%w: empty type handle", ErrClientError)
 	}
@@ -302,7 +301,7 @@ func (sd *snapshotData) resolveTypeHandle(projectID ProjectID, handle TypeID) (*
 }
 
 // resolveSignatureHandle resolves a signature handle within the project's registry.
-func (sd *snapshotData) resolveSignatureHandle(projectID ProjectID, handle SignatureID) (*checker.Signature, error) {
+func (sd *snapshotData) resolveSignatureHandle(projectID project.ID, handle SignatureID) (*checker.Signature, error) {
 	if handle == 0 {
 		return nil, fmt.Errorf("%w: empty signature handle", ErrClientError)
 	}
@@ -330,7 +329,7 @@ func (sd *snapshotData) resolveSignatureHandle(projectID ProjectID, handle Signa
 }
 
 // newSignatureResponse registers a signature in the project's registry and returns the response.
-func (sd *snapshotData) newSignatureResponse(projectID ProjectID, sig *checker.Signature) *SignatureResponse {
+func (sd *snapshotData) newSignatureResponse(projectID project.ID, sig *checker.Signature) *SignatureResponse {
 	if sig == nil {
 		return nil
 	}
@@ -362,7 +361,7 @@ func (sd *snapshotData) newSignatureResponse(projectID ProjectID, sig *checker.S
 	return resp
 }
 
-func (sd *snapshotData) registerSignature(projectID ProjectID, sig *checker.Signature) SignatureID {
+func (sd *snapshotData) registerSignature(projectID project.ID, sig *checker.Signature) SignatureID {
 	if sig == nil {
 		return 0
 	}
@@ -418,7 +417,7 @@ type Session struct {
 	// owned by this API client. Guarded by languageServerUpdateMu.
 	openProjects    collections.Set[tspath.Path]
 	openFiles       collections.Set[tspath.Path]
-	createdPrograms collections.Set[int]
+	createdPrograms collections.Set[project.SyntheticProjectID]
 
 	languageServerUpdateMu sync.Mutex
 
@@ -548,7 +547,7 @@ type checkerSetup struct {
 	program   *compiler.Program
 	checker   *checker.Checker
 	done      func()
-	projectID ProjectID
+	projectID project.ID
 }
 
 func (setup checkerSetup) newTypeResponse(t *checker.Type) *TypeResponse {
@@ -608,7 +607,7 @@ func (setup checkerSetup) resolveLocation(handle NodeHandle, file *DocumentIdent
 
 // setupChecker resolves snapshot, program, and type checker for a project.
 // Callers must defer setup.done() to release the checker.
-func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, projectHandle ProjectID) (checkerSetup, error) {
+func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, projectHandle project.ID) (checkerSetup, error) {
 	sd, err := s.getSnapshotData(snapshot)
 	if err != nil {
 		return checkerSetup{}, err
@@ -640,11 +639,10 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 // are produced on the persistent API checker and stay resolvable. Only safe when the
 // LS operation acquires a checker exactly once; nested acquisitions (e.g. find-all-
 // references) would deadlock on the single-slot persistent checker.
-func (s *Session) setupLanguageService(snapshot *project.Snapshot, program *compiler.Program, projectHandle ProjectID, activeFile string) (*ls.LanguageService, error) {
-	projectName := parseProjectHandle(projectHandle)
-	proj := snapshot.ProjectCollection.GetProjectByPath(projectName)
+func (s *Session) setupLanguageService(snapshot *project.Snapshot, program *compiler.Program, projectHandle project.ID, activeFile string) (*ls.LanguageService, error) {
+	proj := snapshot.ProjectCollection.GetProject(projectHandle)
 	if proj == nil {
-		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectName)
+		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectHandle)
 	}
 	return ls.NewLanguageService(proj.ID(), program, snapshot, activeFile), nil
 }
@@ -1236,10 +1234,14 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 
 	for _, p := range changes.OpenProjects {
 		configFileName := p.ToAbsoluteFileName(s.currentDirectory())
-		if apiRequest.EnsurePrograms == nil {
-			apiRequest.EnsurePrograms = collections.NewSetWithSizeHint[tspath.Path](len(changes.OpenProjects))
+		configuredProjectID, ok := project.ParseConfiguredProjectID(s.toPath(configFileName))
+		if !ok {
+			return nil, fmt.Errorf("%w: invalid configured project ID: %s", ErrClientError, configFileName)
 		}
-		apiRequest.EnsurePrograms.Add(s.toPath(configFileName))
+		if apiRequest.EnsurePrograms == nil {
+			apiRequest.EnsurePrograms = collections.NewSetWithSizeHint[project.ID](len(changes.OpenProjects))
+		}
+		apiRequest.EnsurePrograms.Add(configuredProjectID.AsID())
 		if apiRequest.OpenProjects == nil {
 			apiRequest.OpenProjects = collections.NewSetWithSizeHint[string](len(changes.OpenProjects))
 		}
@@ -1283,59 +1285,61 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		for j, rootFile := range programParams.RootFiles {
 			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
 		}
-		apiRequest.CreatePrograms[i] = &project.APICreateProgramRequest{
-			RootFileNames:                rootFileNames,
-			CompilerOptions:              &programParams.Options.CompilerOptions,
-			ProjectReferences:            programParams.Options.ProjectReferences,
-			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		request := &project.APICreateProgramRequest{
+			RootFileNames:   rootFileNames,
+			CompilerOptions: &programParams.CompilerOptions,
 		}
+		if programParams.Options != nil {
+			request.ProjectReferences = programParams.Options.ProjectReferences
+			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+		}
+		apiRequest.CreatePrograms[i] = request
 	}
 	apiRequest.ReconfigurePrograms = make([]*project.APIReconfigureProgramRequest, len(changes.ReconfigurePrograms))
-	reconfiguredProgramIDs := collections.Set[int]{}
+	reconfiguredProgramIDs := collections.Set[project.SyntheticProjectID]{}
 	for i, programParams := range changes.ReconfigurePrograms {
 		if programParams == nil {
 			return nil, fmt.Errorf("%w: reconfigurePrograms[%d] must not be null", ErrClientError, i)
 		}
-		programID, ok := project.SyntheticProgramID(tspath.Path(programParams.Id))
+		programID, ok := project.ParseSyntheticProjectID(string(programParams.Id))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, programParams.Id)
 		}
 		if reconfiguredProgramIDs.Has(programID) {
-			return nil, fmt.Errorf("%w: synthetic program reconfigured more than once: %d", ErrClientError, programID)
+			return nil, fmt.Errorf("%w: synthetic program reconfigured more than once: %s", ErrClientError, programID)
 		}
 		reconfiguredProgramIDs.Add(programID)
 		rootFileNames := make([]string, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
 			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
 		}
-		apiRequest.ReconfigurePrograms[i] = &project.APIReconfigureProgramRequest{
-			ProgramID:                    programID,
-			RootFileNames:                rootFileNames,
-			CompilerOptions:              &programParams.Options.CompilerOptions,
-			ProjectReferences:            programParams.Options.ProjectReferences,
-			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		request := &project.APIReconfigureProgramRequest{
+			ProgramID:       programID,
+			RootFileNames:   rootFileNames,
+			CompilerOptions: &programParams.CompilerOptions,
 		}
+		if programParams.Options != nil {
+			request.ProjectReferences = programParams.Options.ProjectReferences
+			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+		}
+		apiRequest.ReconfigurePrograms[i] = request
 	}
 	if len(changes.RemovePrograms) > 0 {
-		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[int](len(changes.RemovePrograms))
+		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[project.SyntheticProjectID](len(changes.RemovePrograms))
 	}
-	for _, program := range changes.RemovePrograms {
-		programID, ok := project.SyntheticProgramID(tspath.Path(program))
-		if !ok {
-			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, program)
-		}
+	for _, programID := range changes.RemovePrograms {
 		if reconfiguredProgramIDs.Has(programID) {
-			return nil, fmt.Errorf("%w: synthetic program cannot be reconfigured and removed: %d", ErrClientError, programID)
+			return nil, fmt.Errorf("%w: synthetic program cannot be reconfigured and removed: %s", ErrClientError, programID)
 		}
 		apiRequest.RemovePrograms.Add(programID)
 	}
 	if changes.EnsurePrograms != nil {
 		apiRequest.EnsureAllPrograms = changes.EnsurePrograms.All
 		if len(changes.EnsurePrograms.Projects) > 0 && apiRequest.EnsurePrograms == nil {
-			apiRequest.EnsurePrograms = collections.NewSetWithSizeHint[tspath.Path](len(changes.EnsurePrograms.Projects))
+			apiRequest.EnsurePrograms = collections.NewSetWithSizeHint[project.ID](len(changes.EnsurePrograms.Projects))
 		}
 		for _, program := range changes.EnsurePrograms.Projects {
-			apiRequest.EnsurePrograms.Add(parseProjectHandle(program))
+			apiRequest.EnsurePrograms.Add(program)
 		}
 	}
 	return apiRequest, nil
@@ -1366,7 +1370,7 @@ func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChanges
 	}
 	for _, reconfigure := range apiRequest.ReconfigurePrograms {
 		if !s.createdPrograms.Has(reconfigure.ProgramID) {
-			return nil, fmt.Errorf("%w: synthetic program is not owned by this API session: %d", ErrClientError, reconfigure.ProgramID)
+			return nil, fmt.Errorf("%w: synthetic program is not owned by this API session: %s", ErrClientError, reconfigure.ProgramID)
 		}
 	}
 	return update, nil
@@ -1379,9 +1383,9 @@ func (u *languageServerSnapshotUpdate) commit(s *Session, snapshot *project.Snap
 		s.createdPrograms.Delete(programID)
 	}
 	for _, program := range snapshot.CreatedPrograms() {
-		programID, ok := project.SyntheticProgramID(program.ID())
+		programID, ok := program.ID().Synthetic()
 		if !ok {
-			panic(fmt.Sprintf("created program has invalid synthetic project path: %s", program.ID()))
+			panic(fmt.Sprintf("created program has non-synthetic project ID: %s", program.ID()))
 		}
 		s.createdPrograms.Add(programID)
 	}
@@ -1449,8 +1453,8 @@ func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapsho
 			openProjects:            *openState.openProjects.Clone(),
 			openFiles:               *openState.openFiles.Clone(),
 			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
+			symbolCanonicalProjects: make(map[SymbolID]project.ID),
+			projectRegistries:       make(map[project.ID]*projectRegistryData),
 		}
 		s.snapshots[handle] = sd
 	}
@@ -2555,7 +2559,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		return nil, err
 	}
 
-	projectPath := parseProjectHandle(params.Project)
+	projectID := params.Project
 	workingSnapshot := sd.snapshot
 	program, err := sd.getProgram(params.Project)
 	if err != nil {
@@ -2568,7 +2572,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
-		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectPath, userPreferences) {
+		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectID, userPreferences) {
 		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
@@ -2576,9 +2580,9 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		defer preparedSnapshot.Deref()
 
 		workingSnapshot = preparedSnapshot
-		proj := workingSnapshot.ProjectCollection.GetProjectByPath(projectPath)
+		proj := workingSnapshot.ProjectCollection.GetProject(projectID)
 		if proj == nil {
-			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectPath)
+			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectID)
 		}
 		program = proj.GetProgram()
 		if program == nil {
@@ -2602,7 +2606,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	view := autoimport.NewView(
 		registry,
 		sourceFile,
-		projectPath,
+		projectID,
 		program,
 		ch,
 		userPreferences.ModuleSpecifierPreferences(),
@@ -3391,7 +3395,7 @@ func (s *Session) getEmitOptions(params *EmitParams) (*compiler.Program, compile
 	}, nil
 }
 
-func (s *Session) getEmitProgram(snapshot SnapshotID, projectID ProjectID) (*compiler.Program, error) {
+func (s *Session) getEmitProgram(snapshot SnapshotID, projectID project.ID) (*compiler.Program, error) {
 	sd, err := s.getSnapshotData(snapshot)
 	if err != nil {
 		return nil, err
@@ -4277,21 +4281,21 @@ func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle Node
 // two snapshots. It uses DiffOrderedMaps on projects to find changed/removed projects,
 // then DiffMaps on FilesByPath for each changed project to collect file-level changes.
 func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *SnapshotChanges {
-	prevProjects := prev.ProjectCollection.ProjectsByPath()
-	nextProjects := next.ProjectCollection.ProjectsByPath()
+	prevProjects := prev.ProjectCollection.ProjectsByID()
+	nextProjects := next.ProjectCollection.ProjectsByID()
 
 	var changes SnapshotChanges
 
 	collections.DiffOrderedMaps(
 		prevProjects, nextProjects,
 		// onAdded: new project — nothing to retain from previous snapshot.
-		func(_ tspath.Path, _ *project.Project) {},
+		func(_ project.ID, _ *project.Project) {},
 		// onRemoved: project removed entirely.
-		func(_ tspath.Path, oldProj *project.Project) {
-			changes.RemovedProjects = append(changes.RemovedProjects, ProjectHandle(oldProj))
+		func(_ project.ID, oldProj *project.Project) {
+			changes.RemovedProjects = append(changes.RemovedProjects, oldProj.ID())
 		},
 		// onModified: project changed, diff its files.
-		func(_ tspath.Path, oldProj *project.Project, newProj *project.Project) {
+		func(_ project.ID, oldProj *project.Project, newProj *project.Project) {
 			if oldProj.GetProgram() == newProj.GetProgram() {
 				return
 			}
@@ -4315,9 +4319,9 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 			)
 			if len(projectChanges.ChangedFiles) > 0 || len(projectChanges.DeletedFiles) > 0 {
 				if changes.ChangedProjects == nil {
-					changes.ChangedProjects = make(map[ProjectID]*ProjectFileChanges)
+					changes.ChangedProjects = make(map[project.ID]*ProjectFileChanges)
 				}
-				changes.ChangedProjects[ProjectHandle(newProj)] = &projectChanges
+				changes.ChangedProjects[newProj.ID()] = &projectChanges
 			}
 		},
 	)
@@ -4340,14 +4344,14 @@ func (s *Session) createSnapshotResponse(snapshot *project.Snapshot, base *proje
 
 	projectResponses := make([]*ProjectResponse, 0)
 	collections.DiffOrderedMaps(
-		base.ProjectCollection.ProjectsByPath(), snapshot.ProjectCollection.ProjectsByPath(),
-		func(_ tspath.Path, proj *project.Project) {
+		base.ProjectCollection.ProjectsByID(), snapshot.ProjectCollection.ProjectsByID(),
+		func(_ project.ID, proj *project.Project) {
 			if proj.CommandLine != nil {
 				projectResponses = append(projectResponses, NewProjectResponse(proj))
 			}
 		},
-		func(_ tspath.Path, _ *project.Project) {},
-		func(_ tspath.Path, oldProj *project.Project, newProj *project.Project) {
+		func(_ project.ID, _ *project.Project) {},
+		func(_ project.ID, oldProj *project.Project, newProj *project.Project) {
 			if oldProj != newProj && newProj.CommandLine != nil {
 				projectResponses = append(projectResponses, NewProjectResponse(newProj))
 			}
@@ -4369,9 +4373,16 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 
 	if request.CreatePrograms != nil {
 		createdPrograms := snapshot.CreatedPrograms()
-		results := make([]SyntheticProjectID, len(createdPrograms))
+		if len(createdPrograms) != len(request.CreatePrograms) {
+			panic("created program result count does not match request")
+		}
+		results := make([]project.SyntheticProjectID, len(createdPrograms))
 		for i, createdProgram := range createdPrograms {
-			results[i] = SyntheticProjectHandle(createdProgram)
+			programID, ok := createdProgram.ID().Synthetic()
+			if !ok {
+				panic("created program has non-synthetic project ID")
+			}
+			results[i] = programID
 		}
 		operation.CreatedPrograms = &results
 	}
@@ -4383,7 +4394,7 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 			if project == nil {
 				panic("no project found for opened file " + file.ToAbsoluteFileName(s.currentDirectory()))
 			}
-			results[i] = &OpenedFileOperationResult{Project: ProjectHandle(project)}
+			results[i] = &OpenedFileOperationResult{Project: project.ID()}
 		}
 		operation.OpenedFiles = &results
 	}
@@ -4433,7 +4444,7 @@ func (s *Session) releaseLanguageServerRefs() {
 		apiRequest.CloseFiles = s.openFiles.Clone()
 	}
 	if s.createdPrograms.Len() > 0 {
-		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[int](s.createdPrograms.Len())
+		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[project.SyntheticProjectID](s.createdPrograms.Len())
 		for programID := range s.createdPrograms.Keys() {
 			apiRequest.RemovePrograms.Add(programID)
 		}
@@ -4730,10 +4741,10 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 		if err = ctx.Err(); err != nil {
 			return nil, err
 		}
-		projectPath := parseProjectHandle(params.Project)
-		proj := preparedSnapshot.ProjectCollection.GetProjectByPath(projectPath)
+		projectID := params.Project
+		proj := preparedSnapshot.ProjectCollection.GetProject(projectID)
 		if proj == nil {
-			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectPath)
+			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectID)
 		}
 		program = proj.GetProgram()
 		if program == nil {

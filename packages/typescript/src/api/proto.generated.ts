@@ -1339,6 +1339,7 @@ export interface SnapshotRequestChangesParams {
      * tsconfig that contains it; if found, that configured project is loaded and
      * becomes the file's default project. Otherwise the file is loaded into the
      * inferred project (e.g. a node_modules d.ts not in any project's import graph).
+     * If a file cannot be loaded into any project, the request fails.
      */
     openFiles?: readonly DocumentIdentifier[] | undefined;
     /**
@@ -1596,13 +1597,15 @@ export interface EmitOutputFile {
 
 export interface CreateSnapshotProgramParams {
     rootFiles: readonly DocumentIdentifier[] | null;
-    options: CreateProgramOptions;
+    compilerOptions: CompilerOptions;
+    options?: CreateProgramOptions | undefined;
 }
 
 export interface ReconfigureSnapshotProgramParams {
     id: SyntheticProjectId;
     rootFiles: readonly DocumentIdentifier[] | null;
-    options: CreateProgramOptions;
+    compilerOptions: CompilerOptions;
+    options?: CreateProgramOptions | undefined;
 }
 
 /**
@@ -1647,7 +1650,6 @@ export interface CompletionEntryLabelDetailsResponse {
 }
 
 export interface CreateProgramOptions {
-    compilerOptions: CompilerOptions;
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
 }
