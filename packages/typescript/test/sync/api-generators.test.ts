@@ -413,7 +413,7 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
     assert.deepEqual(missing, [], `Uncovered public generator getters: ${missing.join(", ")}`);
 }
 
-describe("API - generator batching", () => {
+describe("API - generator batching", { concurrency: true }, () => {
     test("batches source file requests", context => {
         const api = spawnAPI(parityFiles);
         context.after(() => api.close());

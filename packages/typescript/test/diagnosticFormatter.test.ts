@@ -10,7 +10,7 @@ import {
     test,
 } from "node:test";
 
-describe("diagnosticFormatter", () => {
+describe("diagnosticFormatter", { concurrency: true }, () => {
     test("formats diagnostics with a configured program host", async () => {
         const source = `const x: number = "oops";\n`;
         const api = spawnAPI({

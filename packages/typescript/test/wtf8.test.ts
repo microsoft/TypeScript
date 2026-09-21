@@ -12,7 +12,7 @@ import {
     Wtf8Decoder,
 } from "../src/api/node/wtf8.ts";
 
-describe("encodeWtf8", () => {
+describe("encodeWtf8", { concurrency: true }, () => {
     test("matches UTF-8 for scalar values", () => {
         assert.deepEqual(encodeWtf8("hello 🦀"), new TextEncoder().encode("hello 🦀"));
     });
@@ -48,7 +48,7 @@ describe("encodeWtf8", () => {
     });
 });
 
-describe("Wtf8Decoder", () => {
+describe("Wtf8Decoder", { concurrency: true }, () => {
     test("decodes standard UTF-8", () => {
         const decoder = new Wtf8Decoder();
         assert.strictEqual(decoder.decode(new TextEncoder().encode("hello 🦀")), "hello 🦀");
@@ -86,7 +86,7 @@ describe("Wtf8Decoder", () => {
     });
 });
 
-describe("Msgpack strings", () => {
+describe("Msgpack strings", { concurrency: true }, () => {
     test("round-trip lone surrogates", () => {
         const text = `high:${String.fromCharCode(0xD800)} low:${String.fromCharCode(0xDFFF)}`;
         const writer = new MsgpackWriter();

@@ -71,7 +71,7 @@ function collectKinds(node: Node): SyntaxKind[] {
     return kinds;
 }
 
-describe("NodeObject + childrenIter", () => {
+describe("NodeObject + childrenIter", { concurrency: true }, () => {
     test("skips absent optional child lists", () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
@@ -86,7 +86,7 @@ test("Benchmarks", async () => {
 // cloneNode
 // ---------------------------------------------------------------------------
 
-describe("cloneNode", () => {
+describe("cloneNode", { concurrency: true }, () => {
     test("clones an identifier", () => {
         const id = createIdentifier("hello");
         const clone = cloneNode(id);
@@ -156,7 +156,7 @@ describe("cloneNode", () => {
 // visitNode / visitNodes
 // ---------------------------------------------------------------------------
 
-describe("visitNode", () => {
+describe("visitNode", { concurrency: true }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: Node | undefined = undefined;
         const result = visitNode(nothing, () => undefined);
@@ -177,7 +177,7 @@ describe("visitNode", () => {
     });
 });
 
-describe("visitNodes", () => {
+describe("visitNodes", { concurrency: true }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: NodeArray<Node> | undefined = undefined;
         const result = visitNodes(nothing, () => undefined);
@@ -222,7 +222,7 @@ describe("visitNodes", () => {
 // visitEachChild
 // ---------------------------------------------------------------------------
 
-describe("visitEachChild", () => {
+describe("visitEachChild", { concurrency: true }, () => {
     test("returns same node if nothing changed (identity visitor)", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
@@ -307,7 +307,7 @@ describe("visitEachChild", () => {
 // getSynthesizedDeepClone
 // ---------------------------------------------------------------------------
 
-describe("getSynthesizedDeepClone", () => {
+describe("getSynthesizedDeepClone", { concurrency: true }, () => {
     test("deeply clones identifier", () => {
         const id = createIdentifier("hello");
         const clone = getSynthesizedDeepClone(id);
@@ -440,7 +440,7 @@ describe("getSynthesizedDeepClone", () => {
 // getSynthesizedDeepClones (NodeArray)
 // ---------------------------------------------------------------------------
 
-describe("getSynthesizedDeepClones", () => {
+describe("getSynthesizedDeepClones", { concurrency: true }, () => {
     test("deeply clones a NodeArray", () => {
         const a = createIdentifier("a");
         const b = createIdentifier("b");
@@ -475,7 +475,7 @@ describe("getSynthesizedDeepClones", () => {
 // Type-only import use sites
 // ---------------------------------------------------------------------------
 
-describe("isValidTypeOnlyAliasUseSite", () => {
+describe("isValidTypeOnlyAliasUseSite", { concurrency: true }, () => {
     test("classifies syntactic type-only import use sites", () => {
         const source = `
 type TypeUse = TypeOnlyName;
@@ -527,7 +527,7 @@ class JSDocAugmentsUse {}
 // Integration: visitor transformation
 // ---------------------------------------------------------------------------
 
-describe("visitor transformation", () => {
+describe("visitor transformation", { concurrency: true }, () => {
     test("rename all identifiers via recursive visitor", () => {
         const a = createIdentifier("oldName");
         const b = createIdentifier("oldName");
@@ -602,7 +602,7 @@ function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
     return getRemoteSourceFileAndChecker(api, configPath, filePath)[0];
 }
 
-describe("RemoteNode + cloneNode", () => {
+describe("RemoteNode + cloneNode", { concurrency: true }, () => {
     test("does not read a sibling as an invalid JSDoc link name", () => {
         const api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -718,7 +718,7 @@ interface I extends Parent<boolean> {}
     });
 });
 
-describe("RemoteNode + visitEachChild", () => {
+describe("RemoteNode + visitEachChild", { concurrency: true }, () => {
     test("identity visitor returns same remote node", () => {
         const api = spawnAPI();
         try {
@@ -760,7 +760,7 @@ describe("RemoteNode + visitEachChild", () => {
     });
 });
 
-describe("RemoteNodeList inherited array methods", () => {
+describe("RemoteNodeList inherited array methods", { concurrency: true }, () => {
     test("filter/map/slice return plain arrays without throwing", () => {
         const api = spawnAPI();
         try {
@@ -793,7 +793,7 @@ describe("RemoteNodeList inherited array methods", () => {
     });
 });
 
-describe("RemoteNode + getSynthesizedDeepClone", () => {
+describe("RemoteNode + getSynthesizedDeepClone", { concurrency: true }, () => {
     test("deep clones a remote import declaration", () => {
         const api = spawnAPI();
         try {
@@ -907,7 +907,7 @@ function assertGetterInvariants(node: Node, sf: SourceFile) {
     });
 }
 
-describe("RemoteNode + position/text getters", () => {
+describe("RemoteNode + position/text getters", { concurrency: true }, () => {
     const source = "/* lead */ const value = 123;";
     const files = {
         "/tsconfig.json": "{}",
@@ -1060,7 +1060,7 @@ describe("RemoteNode + position/text getters", () => {
 // RemoteNode: child/token getters
 // ---------------------------------------------------------------------------
 
-describe("RemoteNode + child/token getters", () => {
+describe("RemoteNode + child/token getters", { concurrency: true }, () => {
     function withFirstStatement(source: string, fn: (stmt: Node, sf: SourceFile) => void) {
         const api = spawnAPI({ "/tsconfig.json": "{}", "/src/children.ts": source });
         try {

@@ -81,7 +81,7 @@ const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav")
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("astnav", () => {
+describe("astnav", { concurrency: true }, () => {
     let fileText: string;
 
     try {

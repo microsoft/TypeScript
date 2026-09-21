@@ -57,7 +57,7 @@ function decode(data: Uint8Array): RemoteSourceFile {
     return new RemoteSourceFile(data, new Wtf8Decoder());
 }
 
-describe("Encoder", () => {
+describe("Encoder", { concurrency: true }, () => {
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 
@@ -348,7 +348,7 @@ describe("Encoder", () => {
     });
 });
 
-describe("UTF-8 vs UTF-16 position encoding", () => {
+describe("UTF-8 vs UTF-16 position encoding", { concurrency: true }, () => {
     // Positions in the encoded AST must be UTF-16 code unit offsets so that
     // file.text.slice(node.pos, node.end) works correctly on JS strings.
     // This is the same convention TypeScript uses.
@@ -409,7 +409,7 @@ describe("UTF-8 vs UTF-16 position encoding", () => {
     });
 });
 
-describe("Line and character mapping", () => {
+describe("Line and character mapping", { concurrency: true }, () => {
     function makeSourceFile(text: string): RemoteSourceFile {
         return decode(encodeSourceFile(makeSF(text, "/test.ts", [])));
     }
