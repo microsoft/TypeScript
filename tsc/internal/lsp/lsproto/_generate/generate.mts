@@ -3665,7 +3665,7 @@ function getLocationUriProperty(structure: Structure) {
 /**
  * Main function
  */
-async function main() {
+export default async function generate() {
     collectTypeDefinitions();
     const generatedCode = generateCode();
     fs.writeFileSync(out, generatedCode);
@@ -3678,7 +3678,6 @@ async function main() {
     console.log(`Successfully generated ${out}`);
 }
 
-main().catch(e => {
-    console.error(e);
-    process.exit(1);
-});
+if (process.argv[1] === __filename) {
+    await generate();
+}
