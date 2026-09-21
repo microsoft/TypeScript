@@ -586,8 +586,6 @@ export const generateLSP = task({
     run: runGenerateLSP,
 });
 
-// ── Enum generation from Go source ──────────────────────────────
-
 async function runGenerateEnums() {
     const { default: generate } = await import("./tools/scripts/tsc/generate-enums.ts");
     await generate(!!options.force);
@@ -646,8 +644,6 @@ async function runGenerateAPI() {
 }
 
 export const generateAPI = goGenerateTask("generate:api", runGenerateAPI);
-
-// ── Vendored npm dependencies ───────────────────────────────────
 
 const vendorJsonrpcDir = "packages/typescript/vendor/vscode-jsonrpc";
 const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
