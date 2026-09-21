@@ -64,7 +64,6 @@ const (
 	TypeSystemPropertyNameWriteType
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
-	TypeSystemPropertyNameMembers
 )
 
 type TypeResolution struct {
@@ -19147,8 +19146,6 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).writeType != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
-	case TypeSystemPropertyNameMembers:
-		return r.target.(*Type).objectFlags&ObjectFlagsMembersResolved != 0
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
