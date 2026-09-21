@@ -86,6 +86,34 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	}
 }
 
+func TestCreateSnapshotPreservesWindowsRootDriveLetterCase(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "D:/repo/index.ts"
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		fileName: "export const value = 1;",
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	init.Options.CurrentDirectory = "D:/repo"
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles: []DocumentIdentifier{{URI: "file:///D%3A/repo/index.ts"}},
+			Options: CreateProgramOptions{
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			},
+		}},
+	})
+	assert.NilError(t, err)
+
+	snapshot, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	program, err := snapshot.getProgram(response.Projects[0].Id)
+	assert.NilError(t, err)
+	assert.Equal(t, program.GetSourceFile(fileName).FileName(), fileName)
+}
+
 func TestSnapshotOperationResponseOmitsUnrequestedFields(t *testing.T) {
 	t.Parallel()
 

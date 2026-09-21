@@ -56,8 +56,8 @@ func (uri DocumentUri) Path(useCaseSensitiveFileNames bool) tspath.Path {
 
 func fixWindowsURIPath(path string) string {
 	if rest, ok := strings.CutPrefix(path, "/"); ok {
-		if volume, rest, ok := tspath.SplitVolumePath(rest); ok {
-			return volume + rest
+		if len(rest) >= 2 && tspath.IsVolumeCharacter(rest[0]) && rest[1] == ':' {
+			return rest
 		}
 	}
 	return path
