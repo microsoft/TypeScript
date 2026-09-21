@@ -80,7 +80,7 @@ type Orchestrator struct {
 
 	// fswatch event-based watching
 	wm *watchmanager.WatchManager
-	// order sorted by dependency depth, so builders rarely block on upstream projects
+	// order sorted by dependency depth, to reduce how often builders block on upstream projects
 	scheduleOrder []string
 }
 
@@ -114,23 +114,33 @@ func (o *Orchestrator) ScheduleOrder() []string {
 // upstream first, then their dependents, and so on). Builders take projects from this
 // order and block until upstream projects are done, so with the plain depth-first order
 // a builder that picks the root of a long chain sits idle while another builder works
-// through the chain, even when unrelated projects are ready to build. Depth order avoids
-// that blocking: when a builder takes a project, every shallower project has already been
-// picked up. A pure chain still serializes, since nothing else is buildable. The stable
+// through the chain, even when unrelated projects are ready to build. Depth order reduces
+// that avoidable blocking but does not eliminate it: a shallower project that has been
+// picked up may not be done yet, so a builder can take a dependent of a slow project and
+// wait on that project while a later project's upstream has already finished. The stable
 // sort preserves the original order within a depth, and reporting still follows Order().
 func (o *Orchestrator) computeScheduleOrder() []string {
-	depth := make(map[*BuildTask]int, len(o.order))
-	for _, config := range o.order {
-		task := o.getTask(o.toPath(config))
-		for _, upstream := range task.upStream {
-			depth[task] = max(depth[task], depth[upstream.task]+1)
-		}
+	type scheduleEntry struct {
+		config string
+		depth  int
 	}
-	scheduleOrder := slices.Clone(o.order)
-	slices.SortStableFunc(scheduleOrder, func(a, b string) int {
-		return depth[o.getTask(o.toPath(a))] - depth[o.getTask(o.toPath(b))]
+	entries := make([]scheduleEntry, len(o.order))
+	depths := make(map[*BuildTask]int, len(o.order))
+	for i, config := range o.order {
+		task := o.getTask(o.toPath(config))
+		depth := 0
+		for _, upstream := range task.upStream {
+			depth = max(depth, depths[upstream.task]+1)
+		}
+		depths[task] = depth
+		entries[i] = scheduleEntry{config: config, depth: depth}
+	}
+	slices.SortStableFunc(entries, func(a, b scheduleEntry) int {
+		return a.depth - b.depth
 	})
-	return scheduleOrder
+	return core.Map(entries, func(entry scheduleEntry) string {
+		return entry.config
+	})
 }
 
 func (o *Orchestrator) Upstream(configName string) []string {
@@ -696,7 +706,7 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 	var buildResult orchestratorResult
 	if len(o.errors) == 0 {
 		buildResult.statistics.Projects = len(o.Order())
-		// Builders run in scheduleOrder; results are reported in build order as they become available
+		// Builders pick up projects in scheduleOrder; results are reported in Order(), waiting for each project to finish
 		reported := make(chan struct{})
 		go func() {
 			defer close(reported)
