@@ -113,8 +113,6 @@ jobs:
                   Where-Object { $_.Name -notmatch '\.qps-[^.]+\.json$' -and !$manifestDestinations.Contains($_.FullName) } |
                   Remove-Item -Force
           }
-          Get-ChildItem -LiteralPath (Join-Path $sourceRoot "tsc/internal/diagnostics/loc") -Filter "*.json.gz" -File |
-              Remove-Item -Force
 
           for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
               $source = [IO.Path]::GetFullPath($generatedFiles[$i])

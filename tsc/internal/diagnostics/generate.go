@@ -247,6 +247,16 @@ func generateLocalizations(knownKeys map[string]bool, locDir string, localeNames
 	buf.WriteString("\t\"github.com/microsoft/TypeScript/tsc/internal/json\"\n")
 	buf.WriteString(")\n")
 
+	existingArchives, err := filepath.Glob(filepath.Join(locDir, "*.json.gz"))
+	if err != nil {
+		log.Fatalf("failed to find existing locale archives: %v", err)
+	}
+	for _, archive := range existingArchives {
+		if err := os.Remove(archive); err != nil {
+			log.Fatalf("failed to remove existing locale archive %s: %v", archive, err)
+		}
+	}
+
 	type localeInfo struct {
 		varName  string
 		tgtCul   string
