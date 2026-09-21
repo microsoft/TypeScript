@@ -51,7 +51,7 @@ function formatCommandArg(arg) {
  * @param {readonly string[]} [args]
  * @param {RunOptions} [options]
  */
-function run(command, args = [], options = {}) {
+export function run(command, args = [], options = {}) {
     console.log("$ " + [command, ...args].map(formatCommandArg).join(" "));
     return x(command, args, {
         throwOnError: true,

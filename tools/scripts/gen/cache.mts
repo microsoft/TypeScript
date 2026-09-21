@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import path from "node:path";
-import { x } from "tinyexec";
+import { run } from "../../../Herebyfile.mjs";
 import { GeneratedFile } from "./generatedFile.mts";
 import {
     goInputs,
@@ -91,13 +91,11 @@ export default async function cache({
 
     for (const file of previous) file.invalidate();
     for (const [command, ...args] of commands) {
-        await x(command, args, { throwOnError: true, nodeOptions: { cwd, env: environment, stdio: "inherit" } });
+        await run(command, args, { cwd, env: environment });
     }
     if (!complete()) throw new Error(`Generation did not produce all declared outputs: ${outputs.join(", ")}`);
-    const generatedFiles = outputFiles();
     if (snapshotInputs().hash === before.hash) {
-        for (const file of artifacts(generatedFiles)) file.markCurrent();
+        for (const file of artifacts(outputFiles())) file.markCurrent();
     }
-    console.log(`exec ${commandText}:\n  Outputs:\n    ${generatedFiles.join("\n    ")}`);
     return false;
 }
