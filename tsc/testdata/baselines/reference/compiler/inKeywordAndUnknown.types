@@ -27,14 +27,14 @@ function f(x: {}, y: unknown) {
         return;
     }
     y;  // {}
->y : {}
+>y : NonNullable<unknown>
 
     if (!("a" in y)) {
 >!("a" in y) : boolean
 >("a" in y) : boolean
 >"a" in y : boolean
 >"a" : "a"
->y : {}
+>y : NonNullable<unknown>
 
         return;
     }
@@ -55,7 +55,7 @@ function isHTMLTable(table: unknown): boolean {
 >!table : boolean
 >table : unknown
 >table instanceof Object : boolean
->table : {}
+>table : NonNullable<unknown>
 >Object : ObjectConstructor
 >'html' in table : boolean
 >'html' : "html"
@@ -71,7 +71,7 @@ function f1(x: unknown) {
 >x && x instanceof Object : unknown
 >x : unknown
 >x instanceof Object : boolean
->x : {}
+>x : NonNullable<unknown>
 >Object : ObjectConstructor
 >'a' in x : boolean
 >'a' : "a"
@@ -109,7 +109,7 @@ function f3(x: {}) {
 }
 
 function f4<T extends {}>(x: T) {
->f4 : <T extends {}>(x: T) => x is T & Object & Record<"a", unknown>
+>f4 : <T extends {}>(x: T) => x is T & Record<"a", unknown>
 >x : T
 
     return x instanceof Object && 'a' in x;
@@ -119,17 +119,17 @@ function f4<T extends {}>(x: T) {
 >Object : ObjectConstructor
 >'a' in x : boolean
 >'a' : "a"
->x : T & Object
+>x : T
 }
 
 function f5<T>(x: T & {}) {
 >f5 : <T>(x: T & {}) => x is T & Object & Record<"a", unknown>
->x : T & {}
+>x : T & not null & not undefined
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
 >x instanceof Object : boolean
->x : T & {}
+>x : T & not null & not undefined
 >Object : ObjectConstructor
 >'a' in x : boolean
 >'a' : "a"
@@ -137,17 +137,17 @@ function f5<T>(x: T & {}) {
 }
 
 function f6<T extends {}>(x: T & {}) {
->f6 : <T extends {}>(x: T & {}) => x is T & Object & Record<"a", unknown>
->x : T
+>f6 : <T extends {}>(x: T & {}) => x is T & Record<"a", unknown>
+>x : T & not null & not undefined
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
 >x instanceof Object : boolean
->x : T
+>x : T & not null & not undefined
 >Object : ObjectConstructor
 >'a' in x : boolean
 >'a' : "a"
->x : T & Object
+>x : T & not null & not undefined
 }
 
 function f7<T extends object>(x: T & {}) {

@@ -53,7 +53,7 @@ function complementFlow(value: Full, condition: boolean) {
 
         const nonNull: {} = value;
 >nonNull : {}
->value : {}
+>value : NonNullable<unknown>
     }
     if (typeof value === "string") {
 >typeof value === "string" : boolean
@@ -159,7 +159,7 @@ function unknownFlow(value: unknown, condition: boolean) {
 
         const nonNull: {} = value;
 >nonNull : {}
->value : {}
+>value : NonNullable<unknown>
     }
     if (typeof value === "string") {
 >typeof value === "string" : boolean

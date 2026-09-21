@@ -36,8 +36,8 @@ function f3(x: unknown) {
 >x : unknown
 
     let y = x!;  // {}
->y : {}
->x! : {}
+>y : NonNullable<unknown>
+>x! : NonNullable<unknown>
 >x : unknown
 }
 

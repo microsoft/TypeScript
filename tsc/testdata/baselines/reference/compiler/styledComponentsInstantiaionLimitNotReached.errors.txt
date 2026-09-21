@@ -1,9 +1,13 @@
+styledComponentsInstantiaionLimitNotReached.ts(50,9): error TS2344: Type '{}' does not satisfy the constraint '{ [key: string]: true; }'.
+  Index signature for type 'string' is missing in type '{}'.
+styledComponentsInstantiaionLimitNotReached.ts(66,24): error TS2344: Type '{}' does not satisfy the constraint 'object'.
+styledComponentsInstantiaionLimitNotReached.ts(158,24): error TS2344: Type '{}' does not satisfy the constraint 'object'.
 styledComponentsInstantiaionLimitNotReached.ts(172,39): error TS2344: Type 'WithC' does not satisfy the constraint 'ComponentType<any>'.
   Type 'AnyStyledComponent' is not assignable to type 'ComponentType<any>'.
     Type 'StyledComponent<any, any, any, any>' is not assignable to type 'ComponentType<any>'.
       Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
         Types of property 'propTypes' are incompatible.
-          Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+          Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: unknown; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
               'string' index signatures are incompatible.
                 Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.
@@ -12,7 +16,7 @@ styledComponentsInstantiaionLimitNotReached.ts(172,39): error TS2344: Type 'With
                       Type 'AnyStyledComponent' is not assignable to type 'StatelessComponent<any>'.
                         Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
                           Types of property 'propTypes' are incompatible.
-                            Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+                            Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: unknown; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
                               Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
                                 'string' index signatures are incompatible.
                                   Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.
@@ -22,7 +26,7 @@ styledComponentsInstantiaionLimitNotReached.ts(195,65): error TS2344: Type 'AnyS
     Type 'string & StyledComponentBase<any, any, any, any> & NonReactStatics<any, {}> & C' is not assignable to type 'StatelessComponent<any>'.
 
 
-==== styledComponentsInstantiaionLimitNotReached.ts (2 errors) ====
+==== styledComponentsInstantiaionLimitNotReached.ts (5 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -73,6 +77,9 @@ styledComponentsInstantiaionLimitNotReached.ts(195,65): error TS2344: Type 'AnyS
         C extends {
             [key: string]: true
         } = {}
+            ~~
+!!! error TS2344: Type '{}' does not satisfy the constraint '{ [key: string]: true; }'.
+!!! error TS2344:   Index signature for type 'string' is missing in type '{}'.
         > = {
             [key in Exclude<
                 keyof S,
@@ -89,6 +96,8 @@ styledComponentsInstantiaionLimitNotReached.ts(195,65): error TS2344: Type 'AnyS
         C extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
         T extends object,
         O extends object = {},
+                           ~~
+!!! error TS2344: Type '{}' does not satisfy the constraint 'object'.
         A extends keyof any = never
         > = // the "string" allows this to be used as an object key
         // I really want to avoid this if possible but it's the only way to use nesting with object styles...
@@ -181,6 +190,8 @@ styledComponentsInstantiaionLimitNotReached.ts(195,65): error TS2344: Type 'AnyS
         C extends string | React.ComponentType<any>,
         T extends object,
         O extends object = {},
+                           ~~
+!!! error TS2344: Type '{}' does not satisfy the constraint 'object'.
         A extends keyof any = never
         > extends ForwardRefExoticBase<StyledComponentProps<C, T, O, A>> {
         // add our own fake call signature to implement the polymorphic 'as' prop
@@ -201,7 +212,7 @@ styledComponentsInstantiaionLimitNotReached.ts(195,65): error TS2344: Type 'AnyS
 !!! error TS2344:     Type 'StyledComponent<any, any, any, any>' is not assignable to type 'ComponentType<any>'.
 !!! error TS2344:       Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
 !!! error TS2344:         Types of property 'propTypes' are incompatible.
-!!! error TS2344:           Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+!!! error TS2344:           Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: unknown; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
 !!! error TS2344:             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
 !!! error TS2344:               'string' index signatures are incompatible.
 !!! error TS2344:                 Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.
@@ -210,7 +221,7 @@ styledComponentsInstantiaionLimitNotReached.ts(195,65): error TS2344: Type 'AnyS
 !!! error TS2344:                       Type 'AnyStyledComponent' is not assignable to type 'StatelessComponent<any>'.
 !!! error TS2344:                         Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
 !!! error TS2344:                           Types of property 'propTypes' are incompatible.
-!!! error TS2344:                             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+!!! error TS2344:                             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: unknown; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
 !!! error TS2344:                               Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
 !!! error TS2344:                                 'string' index signatures are incompatible.
 !!! error TS2344:                                   Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.

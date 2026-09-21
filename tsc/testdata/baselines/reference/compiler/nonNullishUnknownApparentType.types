@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/nonNullishUnknownApparentType.ts] ////
+
+=== nonNullishUnknownApparentType.ts ===
+declare function acceptsRecord(value: Record<string, string>): void;
+>acceptsRecord : (value: Record<string, string>) => void
+>value : Record<string, string>
+
+declare const value: unknown;
+>value : unknown
+
+declare const nonNullish: {};
+>nonNullish : {}
+
+declare const explicit: unknown & not null & not undefined;
+>explicit : {}
+
+acceptsRecord(value || {});
+>acceptsRecord(value || {}) : void
+>acceptsRecord : (value: Record<string, string>) => void
+>value || {} : NonNullable<unknown>
+>value : unknown
+>{} : {}
+
+acceptsRecord(nonNullish);
+>acceptsRecord(nonNullish) : void
+>acceptsRecord : (value: Record<string, string>) => void
+>nonNullish : {}
+
+acceptsRecord(explicit);
+>acceptsRecord(explicit) : void
+>acceptsRecord : (value: Record<string, string>) => void
+>explicit : {}
+
+acceptsRecord({});
+>acceptsRecord({}) : void
+>acceptsRecord : (value: Record<string, string>) => void
+>{} : {}
+
+acceptsRecord({ name: "value" });
+>acceptsRecord({ name: "value" }) : void
+>acceptsRecord : (value: Record<string, string>) => void
+>{ name: "value" } : { name: string; }
+>name : string
+>"value" : "value"
+
+export function narrowed(value: unknown) {
+>narrowed : (value: unknown) => { text: string; own: boolean; object: Object; } | undefined
+>value : unknown
+
+    if (value != null) {
+>value != null : boolean
+>value : unknown
+
+        acceptsRecord(value);
+>acceptsRecord(value) : void
+>acceptsRecord : (value: Record<string, string>) => void
+>value : NonNullable<unknown>
+
+        const text: string = value.toString();
+>text : string
+>value.toString() : string
+>value.toString : () => string
+>value : NonNullable<unknown>
+>toString : () => string
+
+        const own: boolean = value.hasOwnProperty("name");
+>own : boolean
+>value.hasOwnProperty("name") : boolean
+>value.hasOwnProperty : (v: PropertyKey) => boolean
+>value : NonNullable<unknown>
+>hasOwnProperty : (v: PropertyKey) => boolean
+>"name" : "name"
+
+        const object: Object = value;
+>object : Object
+>value : NonNullable<unknown>
+
+        return { text, own, object };
+>{ text, own, object } : { text: string; own: boolean; object: Object; }
+>text : string
+>own : boolean
+>object : Object
+    }
+}
+
+export function constrained<Value extends {}>(value: Value) {
+>constrained : <Value extends {}>(value: Value) => string
+>value : Value
+
+    acceptsRecord(value);
+>acceptsRecord(value) : void
+>acceptsRecord : (value: Record<string, string>) => void
+>value : Value
+
+    return value.toString();
+>value.toString() : string
+>value.toString : () => string
+>value : Value
+>toString : () => string
+}
+
+export const toStringMethod = nonNullish.toString;
+>toStringMethod : () => string
+>nonNullish.toString : () => string
+>nonNullish : {}
+>toString : () => string
+
+export const valueOfMethod = explicit.valueOf;
+>valueOfMethod : () => Object
+>explicit.valueOf : () => Object
+>explicit : {}
+>valueOf : () => Object
+
+export const literal = {};
+>literal : {}
+>{} : {}
+
+export const spread = { ...nonNullish, own: true };
+>spread : { own: boolean; }
+>{ ...nonNullish, own: true } : { own: boolean; }
+>nonNullish : {}
+>own : boolean
+>true : true
+
+export type EmptyKeys = keyof {};
+>EmptyKeys : never
+
+const emptyKey: EmptyKeys = "toString";
+>emptyKey : never
+>"toString" : "toString"
+

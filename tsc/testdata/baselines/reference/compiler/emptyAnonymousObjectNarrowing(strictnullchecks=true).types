@@ -14,7 +14,7 @@ if (nonNull === "foo") {
 }
 else {
   nonNull;
->nonNull : {} & not "foo"
+>nonNull : not null & not undefined & not "foo"
 }
 
 declare let obj: { a: string };
@@ -140,7 +140,7 @@ const foo = (value: unknown): string => {
   }
   if (value === 'xyz') {
 >value === 'xyz' : boolean
->value : {}
+>value : NonNullable<unknown>
 >'xyz' : "xyz"
 
       return value; // Type '{}' is not assignable to type 'string'.

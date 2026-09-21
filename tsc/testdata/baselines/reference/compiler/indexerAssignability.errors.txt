@@ -1,9 +1,13 @@
 indexerAssignability.ts(5,5): error TS2454: Variable 'b' is used before being assigned.
+indexerAssignability.ts(6,1): error TS2322: Type '{}' is not assignable to type '{ [s: string]: string; }'.
+  Index signature for type 'string' is missing in type '{}'.
 indexerAssignability.ts(6,5): error TS2454: Variable 'c' is used before being assigned.
+indexerAssignability.ts(8,1): error TS2322: Type '{}' is not assignable to type '{ [n: number]: string; }'.
+  Index signature for type 'number' is missing in type '{}'.
 indexerAssignability.ts(8,5): error TS2454: Variable 'c' is used before being assigned.
 
 
-==== indexerAssignability.ts (3 errors) ====
+==== indexerAssignability.ts (5 errors) ====
     var a: { [s: string]: string; };
     var b: { [n: number]: string; };
     var c: {};
@@ -12,10 +16,16 @@ indexerAssignability.ts(8,5): error TS2454: Variable 'c' is used before being as
         ~
 !!! error TS2454: Variable 'b' is used before being assigned.
     a = c;
+    ~
+!!! error TS2322: Type '{}' is not assignable to type '{ [s: string]: string; }'.
+!!! error TS2322:   Index signature for type 'string' is missing in type '{}'.
         ~
 !!! error TS2454: Variable 'c' is used before being assigned.
     b = a;
     b = c;
+    ~
+!!! error TS2322: Type '{}' is not assignable to type '{ [n: number]: string; }'.
+!!! error TS2322:   Index signature for type 'number' is missing in type '{}'.
         ~
 !!! error TS2454: Variable 'c' is used before being assigned.
     c = a;

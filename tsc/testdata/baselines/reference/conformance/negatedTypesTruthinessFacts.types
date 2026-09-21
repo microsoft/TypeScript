@@ -63,7 +63,7 @@ if (u) {
 >u : not null
 
     u; // not null
->u : not null
+>u : NonNullable<not null>
 
 } else {
     u; // not null (still falsy-capable, so not never)

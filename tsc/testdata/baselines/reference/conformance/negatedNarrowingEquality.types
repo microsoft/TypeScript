@@ -56,23 +56,23 @@ if (c === "foo") {
 
 } else {
     c; // "bar" | {}
->c : "bar" | ({} & not "foo")
+>c : "bar" | (not null & not undefined & not "foo")
 }
 
 // `== null` (double equals) removes both null and undefined.
 declare const d: {} | null | undefined;
->d : {} | null | undefined
+>d : unknown
 
 if (d == null) {
 >d == null : boolean
->d : {} | null | undefined
+>d : unknown
 
     d; // null | undefined
 >d : null | undefined
 
 } else {
     d; // {}
->d : {}
+>d : NonNullable<unknown>
 }
 
 // Numeric literal comparison on a `{}` base leaves `{}` unrefined in the else branch.
@@ -89,6 +89,6 @@ if (e === 0) {
 
 } else {
     e; // {}
->e : {} & not 0
+>e : not null & not undefined & not 0
 }
 

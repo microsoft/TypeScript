@@ -800,8 +800,8 @@ type Checker struct {
 	emptyJsxObjectType                          *Type
 	emptyFreshJsxObjectType                     *Type
 	emptyTypeLiteralType                        *Type
-	unknownEmptyObjectType                      *Type
-	unknownUnionType                            *Type
+	nonNullishUnknownType                       *Type
+	nonNullishUnknownApparentType               *Type
 	emptyGenericType                            *Type
 	anyFunctionType                             *Type
 	noConstraintType                            *Type
@@ -1085,8 +1085,8 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.emptyJsxObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyFreshJsxObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyTypeLiteralType = c.newAnonymousType(c.newSymbol(ast.SymbolFlagsTypeLiteral, ast.InternalSymbolNameType), nil, nil, nil, nil)
-	c.unknownEmptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
-	c.unknownUnionType = c.createUnknownUnionType()
+	c.nonNullishUnknownType = c.getIntersectionType([]*Type{c.unknownType, c.getNegatedType(c.nullType), c.getNegatedType(c.undefinedType)})
+	c.nonNullishUnknownApparentType = c.newAnonymousType(nil, nil, nil, nil, nil)
 	c.emptyGenericType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyGenericType.AsObjectType().instantiations = make(map[CacheHashKey]*Type)
 	c.anyFunctionType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
@@ -13388,7 +13388,7 @@ func (c *Checker) checkInExpression(left *ast.Expression, right *ast.Expression,
 
 func (c *Checker) hasEmptyObjectIntersection(t *Type) bool {
 	return someType(t, func(t *Type) bool {
-		return t == c.unknownEmptyObjectType || t.flags&TypeFlagsIntersection != 0 && c.IsEmptyAnonymousObjectType(c.getBaseConstraintOrType(t))
+		return t == c.nonNullishUnknownType || t.flags&TypeFlagsIntersection != 0 && c.IsEmptyAnonymousObjectType(c.getBaseConstraintOrType(t))
 	})
 }
 
@@ -20150,6 +20150,9 @@ func (c *Checker) reportCircularBaseType(node *ast.Node, t *Type) {
 
 // A valid base type is `any`, an object type or intersection of object types.
 func (c *Checker) isValidBaseType(t *Type) bool {
+	if c.isNonNullishUnknownType(t) {
+		return true
+	}
 	if t.flags&TypeFlagsTypeParameter != 0 {
 		constraint := c.getBaseConstraintOfType(t)
 		if constraint != nil {
@@ -22456,6 +22459,9 @@ func (c *Checker) getResolvedApparentTypeOfMappedType(t *Type) *Type {
 }
 
 func (c *Checker) getApparentTypeOfIntersectionType(t *Type, thisArgument *Type) *Type {
+	if c.isNonNullishUnknownType(t) {
+		return c.nonNullishUnknownApparentType
+	}
 	if t == thisArgument {
 		d := t.AsIntersectionType()
 		if d.resolvedApparentType == nil {
@@ -22561,7 +22567,7 @@ func (c *Checker) getReducedUnionType(unionType *Type) *Type {
 	if !core.Same(reducedTypes, unionType.Types()) {
 		reducedTypes, _ = c.addTypesToUnion(reducedTypes, nil)
 	}
-	if core.Some(reducedTypes, isNegatedType) && c.checkForSaturatedNegatedType(reducedTypes) {
+	if core.Some(reducedTypes, func(t *Type) bool { return t.flags&(TypeFlagsNegated|TypeFlagsIntersection) != 0 }) && c.checkForSaturatedNegatedType(reducedTypes) {
 		return c.unknownType
 	}
 	reducedTypes = c.removeComplementaryNegatedTypes(reducedTypes)
@@ -23698,7 +23704,9 @@ func (c *Checker) getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node *as
 	if links.resolvedType == nil {
 		// Deferred resolution of members is handled by resolveObjectTypeMembers
 		alias := c.getAliasForTypeNode(node)
-		if sym := node.Symbol(); sym == nil || c.getMembersOfSymbol(sym).Len() == 0 && alias == nil {
+		if c.strictNullChecks && ast.IsTypeLiteralNode(node) && len(node.AsTypeLiteralNode().Members.Nodes) == 0 {
+			links.resolvedType = c.getIntersectionTypeEx(c.nonNullishUnknownType.Types(), IntersectionFlagsNone, alias)
+		} else if sym := node.Symbol(); sym == nil || c.getMembersOfSymbol(sym).Len() == 0 && alias == nil {
 			links.resolvedType = c.emptyTypeLiteralType
 		} else {
 			t := c.newObjectType(ObjectFlagsAnonymous, node.Symbol())
@@ -25838,13 +25846,6 @@ func (c *Checker) createWideningType(nonWideningType *Type) *Type {
 	return t
 }
 
-func (c *Checker) createUnknownUnionType() *Type {
-	if c.strictNullChecks {
-		return c.getUnionType([]*Type{c.undefinedType, c.nullType, c.unknownEmptyObjectType})
-	}
-	return c.unknownType
-}
-
 func (c *Checker) newLiteralType(flags TypeFlags, value any, regularType *Type) *Type {
 	data := c.literalTypeArena.New()
 	data.value = value
@@ -26945,7 +26946,7 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 							continue
 						}
 					}
-					if (source == c.emptyObjectType || source == c.unknownEmptyObjectType) && target.symbol != nil && c.IsEmptyAnonymousObjectType(target) {
+					if source == c.emptyObjectType && target.symbol != nil && c.IsEmptyAnonymousObjectType(target) {
 						continue
 					}
 					if c.isTypeRelatedTo(source, target, c.strictSubtypeRelation) && (c.getTargetType(source).objectFlags&ObjectFlagsClass == 0 ||
@@ -27060,7 +27061,9 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 	if includes&TypeFlagsIncludesMissingType != 0 {
 		typeSet[slices.Index(typeSet, c.undefinedType)] = c.missingType
 	}
-	if includes&TypeFlagsUnion == 0 && core.Some(typeSet, isNegatedType) {
+	if core.Some(typeSet, isNegatedType) && (includes&TypeFlagsUnion == 0 || core.Every(typeSet, func(member *Type) bool {
+		return !isNegatedType(member) || isNullishNegation(member)
+	})) {
 		if c.checkForUnsatisfiedNegatedType(typeSet, flags) {
 			return c.neverType
 		}
@@ -27439,11 +27442,23 @@ func (c *Checker) IsEmptyAnonymousObjectType(t *Type) bool {
 		t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsTypeLiteral != 0 && c.getMembersOfSymbol(t.symbol).Len() == 0)
 }
 
+func (c *Checker) isNonNullishUnknownType(t *Type) bool {
+	return t.flags&TypeFlagsIntersection != 0 && len(t.Types()) == 2 && core.Every(t.Types(), isNullishNegation) &&
+		slices.Contains(t.Types(), c.getNegatedType(c.nullType)) && slices.Contains(t.Types(), c.getNegatedType(c.undefinedType))
+}
+
+func isNullishNegation(t *Type) bool {
+	return t.flags&TypeFlagsNegated != 0 && t.AsNegatedType().baseType.flags&TypeFlagsNullable != 0
+}
+
 func (c *Checker) isEmptyResolvedType(t *StructuredType) bool {
-	return t.AsType() != c.anyFunctionType && !t.hasProperties() && len(t.getSignatures()) == 0 && len(t.getIndexInfos()) == 0
+	return t.AsType() != c.anyFunctionType && t.AsType() != c.nonNullishUnknownApparentType && !t.hasProperties() && len(t.getSignatures()) == 0 && len(t.getIndexInfos()) == 0
 }
 
 func (c *Checker) isEmptyObjectType(t *Type) bool {
+	if c.isNonNullishUnknownType(t) {
+		return true
+	}
 	switch {
 	case t.flags&TypeFlagsObject != 0:
 		return !c.isGenericMappedType(t) && c.isEmptyResolvedType(c.resolveStructuredTypeMembers(t))
@@ -27804,7 +27819,9 @@ func (c *Checker) shouldDeferIndexType(t *Type, indexFlags IndexFlags) bool {
 		c.isGenericTupleType(t) ||
 		c.isGenericMappedType(t) && c.getNameTypeFromMappedType(t) != nil ||
 		t.flags&TypeFlagsUnion != 0 && indexFlags&IndexFlagsNoReducibleCheck == 0 && c.isGenericReducibleType(t) ||
-		t.flags&TypeFlagsIntersection != 0 && c.maybeTypeOfKind(t, TypeFlagsInstantiable) && core.Some(t.Types(), c.IsEmptyAnonymousObjectType)
+		t.flags&TypeFlagsIntersection != 0 && c.maybeTypeOfKind(t, TypeFlagsInstantiable&^TypeFlagsNegated) && core.Some(t.Types(), func(member *Type) bool {
+			return c.IsEmptyAnonymousObjectType(member) || isNullishNegation(member)
+		})
 }
 
 func (c *Checker) getMappedTypeNameTypeKind(t *Type) MappedTypeNameTypeKind {
@@ -28536,6 +28553,9 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 		c.conditionalConstraintDepth--
 		return c.getNextBaseConstraint(constraint, stack)
 	case t.flags&TypeFlagsNegated != 0:
+		if t.AsNegatedType().baseType.flags&TypeFlagsNullable != 0 {
+			return t
+		}
 		return c.unknownType
 	case t.flags&TypeFlagsSubstitution != 0:
 		return c.getNextBaseConstraint(c.getSubstitutionIntersection(t), stack)
@@ -28770,20 +28790,6 @@ func getNameFromIndexInfo(info *IndexInfo) string {
 	return "x"
 }
 
-func (c *Checker) isUnknownLikeUnionType(t *Type) bool {
-	if c.strictNullChecks && t.flags&TypeFlagsUnion != 0 {
-		if t.objectFlags&ObjectFlagsIsUnknownLikeUnionComputed == 0 {
-			t.objectFlags |= ObjectFlagsIsUnknownLikeUnionComputed
-			types := t.Types()
-			if len(types) >= 3 && types[0].flags&TypeFlagsUndefined != 0 && types[1].flags&TypeFlagsNull != 0 && core.Some(types, c.IsEmptyAnonymousObjectType) {
-				t.objectFlags |= ObjectFlagsIsUnknownLikeUnion
-			}
-		}
-		return t.objectFlags&ObjectFlagsIsUnknownLikeUnion != 0
-	}
-	return false
-}
-
 // Return true the given type is a primitive union type where no two literal type constituents are
 // comparable. Specifically, that means (a) the union doesn't contain literals from different enum
 // types, and (b) the union doesn't contain both enum literals and string or number literals.
@@ -28822,10 +28828,10 @@ func (c *Checker) computeIsUniformUnionType(types []*Type) bool {
 }
 
 func (c *Checker) containsUndefinedType(t *Type) bool {
-	if t.flags&TypeFlagsUnion != 0 {
-		t = t.Types()[0]
-	}
-	return t.flags&TypeFlagsUndefined != 0
+	// Complement reduction can rewrite '{} | undefined' as 'not null'.
+	return someType(t, func(t *Type) bool {
+		return t.flags&TypeFlagsUndefined != 0 || isNullishNegation(t) && t.AsNegatedType().baseType.flags&TypeFlagsNull != 0
+	})
 }
 
 func (c *Checker) typeHasCallOrConstructSignatures(t *Type) bool {
@@ -29032,6 +29038,11 @@ func (c *Checker) getNormalizedUnionOrIntersectionType(t *Type, writing bool) *T
 	if reduced := c.getReducedType(t); reduced != t {
 		return reduced
 	}
+	if t.flags&TypeFlagsUnion != 0 {
+		if reduced := c.reduceNullishComplements(t.Types()); !core.Same(reduced, t.Types()) {
+			return c.getUnionType(reduced)
+		}
+	}
 	if t.flags&TypeFlagsIntersection != 0 && c.shouldNormalizeIntersection(t) {
 		// Normalization handles cases like
 		// Partial<T>[K] & ({} | null) ==>
@@ -29053,7 +29064,7 @@ func (c *Checker) shouldNormalizeIntersection(t *Type) bool {
 	hasNullableOrEmpty := false
 	for _, t := range t.Types() {
 		hasInstantiable = hasInstantiable || t.flags&TypeFlagsInstantiable != 0
-		hasNullableOrEmpty = hasNullableOrEmpty || t.flags&TypeFlagsNullable != 0 || c.IsEmptyAnonymousObjectType(t)
+		hasNullableOrEmpty = hasNullableOrEmpty || t.flags&TypeFlagsNullable != 0 || c.IsEmptyAnonymousObjectType(t) || isNullishNegation(t)
 		if hasInstantiable && hasNullableOrEmpty {
 			return true
 		}
@@ -32001,9 +32012,9 @@ func (c *Checker) getNegatedTypeFactsWorker(t *Type) TypeFacts {
 	flags := t.flags
 	switch {
 	case flags&TypeFlagsNull != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsEQNull | TypeFactsEQUndefinedOrNull)
+		return TypeFactsUnknownFacts & ^TypeFactsEQNull
 	case flags&TypeFlagsUndefined != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsEQUndefined | TypeFactsEQUndefinedOrNull)
+		return TypeFactsUnknownFacts & ^TypeFactsEQUndefined
 	case flags&TypeFlagsString != 0:
 		return TypeFactsUnknownFacts & ^(TypeFactsTypeofEQString | TypeFactsCouldBeEmptyString)
 	case flags&TypeFlagsNumber != 0:
@@ -32201,6 +32212,9 @@ func (c *Checker) getIntersectionTypeFacts(t *Type, callerOnlyNeeds TypeFacts) T
 		}
 	}
 	result := oredFacts&TypeFactsOrFactsMask | andedFacts&TypeFactsAndFactsMask
+	if result&(TypeFactsEQUndefined|TypeFactsEQNull) == 0 {
+		result &^= TypeFactsEQUndefinedOrNull
+	}
 	// The per-falsy-value "could be" facts are AND-combined above (a value is in the intersection only if
 	// it is in every constituent). If none survive then no value in the intersection is falsy, so a Falsy
 	// fact that lingered only because each constituent was independently falsy-capable is spurious and gets
@@ -32232,16 +32246,13 @@ func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {
 	})
 }
 
-// This function is similar to getTypeWithFacts, except that in strictNullChecks mode it replaces type
-// unknown with the union {} | null | undefined (and reduces that accordingly), and it intersects remaining
-// instantiable types with {}, {} | null, or {} | undefined in order to remove null and/or undefined.
 func (c *Checker) getAdjustedTypeWithFacts(t *Type, facts TypeFacts) *Type {
-	reduced := c.recombineUnknownType(c.getTypeWithFacts(core.IfElse(c.strictNullChecks && t.flags&TypeFlagsUnknown != 0, c.unknownUnionType, t), facts))
+	reduced := c.getTypeWithFacts(t, facts)
 	if c.strictNullChecks {
 		switch facts {
 		case TypeFactsEQUndefined, TypeFactsEQNull, TypeFactsEQUndefinedOrNull:
 			return c.mapType(reduced, func(t *Type) *Type {
-				if containsNegatedType(t) {
+				if t.flags&TypeFlagsUnknown != 0 || containsNegatedType(t) {
 					var nullableType *Type
 					switch facts {
 					case TypeFactsEQUndefined:
@@ -32256,9 +32267,9 @@ func (c *Checker) getAdjustedTypeWithFacts(t *Type, facts TypeFacts) *Type {
 				return t
 			})
 		case TypeFactsNEUndefined:
-			return c.removeNullableByIntersection(reduced, TypeFactsEQUndefined, TypeFactsEQNull, TypeFactsIsNull, c.nullType)
+			return c.getIntersectionType([]*Type{reduced, c.getNegatedType(c.undefinedType)})
 		case TypeFactsNENull:
-			return c.removeNullableByIntersection(reduced, TypeFactsEQNull, TypeFactsEQUndefined, TypeFactsIsUndefined, c.undefinedType)
+			return c.getIntersectionType([]*Type{reduced, c.getNegatedType(c.nullType)})
 		case TypeFactsNEUndefinedOrNull, TypeFactsTruthy:
 			return c.mapType(reduced, func(t *Type) *Type {
 				if c.hasTypeFacts(t, TypeFactsEQUndefinedOrNull) {
@@ -32271,41 +32282,12 @@ func (c *Checker) getAdjustedTypeWithFacts(t *Type, facts TypeFacts) *Type {
 	return reduced
 }
 
-func (c *Checker) removeNullableByIntersection(t *Type, targetFacts TypeFacts, otherFacts TypeFacts, otherIncludesFacts TypeFacts, otherType *Type) *Type {
-	facts := c.getTypeFacts(t, TypeFactsEQUndefined|TypeFactsEQNull|TypeFactsIsUndefined|TypeFactsIsNull)
-	// Simply return the type if it never compares equal to the target nullable.
-	if facts&targetFacts == 0 {
-		return t
-	}
-	// By default we intersect with a union of {} and the opposite nullable.
-	emptyAndOtherUnion := c.getUnionType([]*Type{c.emptyObjectType, otherType})
-	// For each constituent type that can compare equal to the target nullable, intersect with the above union
-	// if the type doesn't already include the opposite nullable and the constituent can compare equal to the
-	// opposite nullable; otherwise, just intersect with {}.
-	return c.mapType(t, func(t *Type) *Type {
-		if c.hasTypeFacts(t, targetFacts) {
-			if facts&otherIncludesFacts == 0 && c.hasTypeFacts(t, otherFacts) {
-				return c.getIntersectionType([]*Type{t, emptyAndOtherUnion})
-			}
-			return c.getIntersectionType([]*Type{t, c.emptyObjectType})
-		}
-		return t
-	})
-}
-
-func (c *Checker) recombineUnknownType(t *Type) *Type {
-	if t == c.unknownUnionType {
-		return c.unknownType
-	}
-	return t
-}
-
 func (c *Checker) getGlobalNonNullableTypeInstantiation(t *Type) *Type {
 	alias := c.getGlobalNonNullableTypeAliasOrNil()
 	if alias != nil {
 		return c.getTypeAliasInstantiation(alias, []*Type{t}, nil)
 	}
-	return c.getIntersectionType([]*Type{t, c.emptyObjectType})
+	return c.getIntersectionType([]*Type{t, c.nonNullishUnknownType})
 }
 
 func (c *Checker) convertAutoToAny(t *Type) *Type {
