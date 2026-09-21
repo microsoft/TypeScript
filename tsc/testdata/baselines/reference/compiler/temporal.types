@@ -9126,3 +9126,31 @@
 >plainDateTimeISO : (timeZone?: Temporal.TimeZoneLike) => Temporal.PlainDateTime
 }
 
+{
+    // Refused through a widened variable too, not only in an object literal.
+    const zdt = Temporal.ZonedDateTime.from("2019-12-01T12:00+01:00[Europe/Berlin]");
+>zdt : Temporal.ZonedDateTime
+>Temporal.ZonedDateTime.from("2019-12-01T12:00+01:00[Europe/Berlin]") : Temporal.ZonedDateTime
+>Temporal.ZonedDateTime.from : (item: Temporal.ZonedDateTimeLike, options?: Temporal.ZonedDateTimeFromOptions) => Temporal.ZonedDateTime
+>Temporal.ZonedDateTime : Temporal.ZonedDateTimeConstructor
+>Temporal : typeof Temporal
+>ZonedDateTime : Temporal.ZonedDateTimeConstructor
+>from : (item: Temporal.ZonedDateTimeLike, options?: Temporal.ZonedDateTimeFromOptions) => Temporal.ZonedDateTime
+>"2019-12-01T12:00+01:00[Europe/Berlin]" : "2019-12-01T12:00+01:00[Europe/Berlin]"
+
+    const widened: Intl.DateTimeFormatOptions = { timeZone: "Pacific/Auckland" };
+>widened : Intl.DateTimeFormatOptions
+>Intl : any
+>{ timeZone: "Pacific/Auckland" } : { timeZone: string; }
+>timeZone : string
+>"Pacific/Auckland" : "Pacific/Auckland"
+
+    /* WRONG */ zdt.toLocaleString("de-DE", widened);
+>zdt.toLocaleString("de-DE", widened) : string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt : Temporal.ZonedDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>"de-DE" : "de-DE"
+>widened : Intl.DateTimeFormatOptions
+}
+

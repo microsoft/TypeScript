@@ -1822,3 +1822,10 @@
     Temporal.Now.plainTimeISO(); // get the current wall-clock time in the system time zone and ISO-8601 calendar
     Temporal.Now.plainDateTimeISO(); // same as above, but return the DateTime in the ISO-8601 calendar
 }
+
+{
+    // Refused through a widened variable too, not only in an object literal.
+    const zdt = Temporal.ZonedDateTime.from("2019-12-01T12:00+01:00[Europe/Berlin]");
+    const widened: Intl.DateTimeFormatOptions = { timeZone: "Pacific/Auckland" };
+    /* WRONG */ zdt.toLocaleString("de-DE", widened);
+}

@@ -272,7 +272,9 @@ declare namespace Temporal {
         timeZoneName?: "auto" | "never" | "critical" | undefined;
     }
 
-    interface ZonedDateTimeToLocaleStringOptions extends Omit<Intl.DateTimeFormatOptions, "timeZone"> {}
+    interface ZonedDateTimeToLocaleStringOptions extends Intl.DateTimeFormatOptions {
+        timeZone?: never;
+    }
 
     interface ZonedDateTimeFromOptions extends OverflowOptions, DisambiguationOptions {
         offset?: "use" | "ignore" | "prefer" | "reject" | undefined;
