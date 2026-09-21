@@ -114,7 +114,9 @@ import {
     spawnAPI,
 } from "./api.testUtils.ts";
 
-describe("API", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+const concurrency = process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
+
+describe("API", { concurrency }, () => {
     test("getCurrentLanguageServerSnapshot is LSP-only", () => {
         if (!!false) {
             const standalone = new API();
@@ -707,7 +709,7 @@ declare module "augmentation" {}`,
 });
 
 // @sync-skip-block-start
-describe("API - automatic batching", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("API - automatic batching", { concurrency }, () => {
     test("initializes only once for concurrent first requests", async () => {
         await using api = spawnAPI();
         const client = (api as unknown as {
@@ -750,7 +752,7 @@ describe("API - automatic batching", { concurrency: process.execArgv.some(arg =>
     });
 });
 
-describe("API - batchContext", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("API - batchContext", { concurrency }, () => {
     test("transparently paginates batch responses", async () => {
         const api = spawnAPI({ ...defaultFiles }, { maxResponseBytesPerPage: 1 });
         try {
@@ -827,7 +829,7 @@ describe("API - batchContext", { concurrency: process.execArgv.some(arg => arg =
 });
 // @sync-skip-block-end
 
-describe("Checker - getImmediateAliasedSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getImmediateAliasedSymbol", { concurrency }, () => {
     test("resolves one level of alias indirection", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -846,7 +848,7 @@ describe("Checker - getImmediateAliasedSymbol", { concurrency: process.execArgv.
     });
 });
 
-describe("Checker - getTargetSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getTargetSymbol", { concurrency }, () => {
     test("gets the target symbol of instantiated symbol", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -884,7 +886,7 @@ test<Bravo>();
     });
 });
 
-describe("Snapshot", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Snapshot", { concurrency }, () => {
     test("createSnapshot returns snapshot with projects", async () => {
         await using api = spawnAPI();
 
@@ -1038,7 +1040,7 @@ describe("Snapshot", { concurrency: process.execArgv.some(arg => arg === "--test
     });
 });
 
-describe("LanguageService - imports", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("LanguageService - imports", { concurrency }, () => {
     test("getImportEditsForSymbols adds a named import", async () => {
         const source = `const value = foo;\n`;
         await using api = spawnAPI({
@@ -1139,7 +1141,7 @@ describe("LanguageService - imports", { concurrency: process.execArgv.some(arg =
     });
 });
 
-describe("LanguageService - getCompletionsAtPosition", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("LanguageService - getCompletionsAtPosition", { concurrency }, () => {
     test("returns member completions after a dot", async () => {
         const src = `\nconst obj = { name: "hello", age: 42 };\nobj.\n`;
         await using api = spawnAPI({
@@ -1206,7 +1208,7 @@ describe("LanguageService - getCompletionsAtPosition", { concurrency: process.ex
     });
 });
 
-describe("LanguageService - getReferencedSymbolsForNode", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("LanguageService - getReferencedSymbolsForNode", { concurrency }, () => {
     test("getReferencedSymbolsForNode", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -1228,7 +1230,7 @@ describe("LanguageService - getReferencedSymbolsForNode", { concurrency: process
     });
 });
 
-describe("LanguageService - getSignatureUsage", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("LanguageService - getSignatureUsage", { concurrency }, () => {
     test("getSignatureUsage", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -1248,7 +1250,7 @@ describe("LanguageService - getSignatureUsage", { concurrency: process.execArgv.
     });
 });
 
-describe("Checker - getApparentType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getApparentType", { concurrency }, () => {
     test("returns the apparent type of a literal type", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -1271,7 +1273,7 @@ describe("Checker - getApparentType", { concurrency: process.execArgv.some(arg =
     });
 });
 
-describe("Checker - getReducedType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getReducedType", { concurrency }, () => {
     test("returns the reduced type", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -1308,7 +1310,7 @@ export type Result = RateLimitError | (RateLimitError & QuotaExceededError);`,
     });
 });
 
-describe("Checker - getMemberInModuleExports", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getMemberInModuleExports", { concurrency }, () => {
     test("returns a named export when present", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -1329,7 +1331,7 @@ describe("Checker - getMemberInModuleExports", { concurrency: process.execArgv.s
     });
 });
 
-describe("SourceFile", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("SourceFile", { concurrency }, () => {
     test("getSourceFile rejects invalid document identifiers", async () => {
         await using api = spawnAPI();
 
@@ -1519,7 +1521,7 @@ describe("SourceFile", { concurrency: process.execArgv.some(arg => arg === "--te
     });
 });
 
-describe("NodeArray", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("NodeArray", { concurrency }, () => {
     test("hasTrailingComma", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -1538,7 +1540,7 @@ describe("NodeArray", { concurrency: process.execArgv.some(arg => arg === "--tes
     });
 });
 
-describe("API objects", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("API objects", { concurrency }, () => {
     test("unicode escapes", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -1631,7 +1633,7 @@ describe("API objects", { concurrency: process.execArgv.some(arg => arg === "--t
     });
 });
 
-describe("Multiple snapshots", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Multiple snapshots", { concurrency }, () => {
     test("two snapshots work independently", async () => {
         await using api = spawnAPI();
 
@@ -1837,7 +1839,7 @@ describe("Multiple snapshots", { concurrency: process.execArgv.some(arg => arg =
     });
 });
 
-describe("Source file caching", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Source file caching", { concurrency }, () => {
     test("same file from same snapshot returns cached object", async () => {
         await using api = spawnAPI();
 
@@ -2005,7 +2007,7 @@ describe("Source file caching", { concurrency: process.execArgv.some(arg => arg 
     });
 });
 
-describe("Snapshot disposal", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Snapshot disposal", { concurrency }, () => {
     test("dispose is idempotent", async () => {
         await using api = spawnAPI();
 
@@ -2044,7 +2046,7 @@ describe("Snapshot disposal", { concurrency: process.execArgv.some(arg => arg ==
     });
 });
 
-describe("Source file cache keying across projects", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Source file cache keying across projects", { concurrency }, () => {
     // Three projects share the same file (/src/shared.ts).
     // The file sits inside a package.json scope with "type": "module".
     //
@@ -2123,7 +2125,7 @@ describe("Source file cache keying across projects", { concurrency: process.exec
     });
 });
 
-describe("Checker - symbol identity across projects", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - symbol identity across projects", { concurrency }, () => {
     const sharedSymbolFiles = {
         "/projectA/tsconfig.json": JSON.stringify({ files: ["../src/shared.ts"] }),
         "/projectB/tsconfig.json": JSON.stringify({ files: ["../src/shared.ts"] }),
@@ -2177,7 +2179,7 @@ describe("Checker - symbol identity across projects", { concurrency: process.exe
     });
 });
 
-describe("Checker - types and signatures", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - types and signatures", { concurrency }, () => {
     const checkerFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `
@@ -2605,7 +2607,7 @@ export class Cache {
     });
 });
 
-describe("Symbol - parent, members, exports", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Symbol - parent, members, exports", { concurrency }, () => {
     const symbolFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/mod.ts": `
@@ -2676,7 +2678,7 @@ export const value = 1;
     });
 });
 
-describe("Type - getSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Type - getSymbol", { concurrency }, () => {
     test("getSymbol returns the symbol of a type", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -2702,7 +2704,7 @@ export const instance: Foo = new Foo();
     });
 });
 
-describe("Type - sub-property fetchers", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Type - sub-property fetchers", { concurrency }, () => {
     const typeFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, target: "esnext" } }),
         "/src/types.ts": `
@@ -3004,7 +3006,7 @@ export function gh1449<T extends [foo: any, bar?: any]>(a: T): T {
     });
 });
 
-describe("Checker - intrinsic type getters", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - intrinsic type getters", { concurrency }, () => {
     const intrinsicFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `export const x = 1;`,
@@ -3131,7 +3133,7 @@ describe("Checker - intrinsic type getters", { concurrency: process.execArgv.som
     });
 });
 
-describe("Checker - multi-project type ID uniqueness", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - multi-project type ID uniqueness", { concurrency }, () => {
     test("intrinsic types from 3 projects in the same snapshot have non-colliding IDs", async () => {
         await using api = spawnAPI({
             "/proj1/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3237,7 +3239,7 @@ describe("Checker - multi-project type ID uniqueness", { concurrency: process.ex
     });
 });
 
-describe("Checker - getBaseTypeOfLiteralType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getBaseTypeOfLiteralType", { concurrency }, () => {
     test("number literal widens to number", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3279,7 +3281,7 @@ describe("Checker - getBaseTypeOfLiteralType", { concurrency: process.execArgv.s
     });
 });
 
-describe("Checker - getContextualType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getContextualType", { concurrency }, () => {
     test("contextual type from function parameter", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3314,7 +3316,7 @@ foo(42);
     });
 });
 
-describe("Checker - getTypeOfSymbolAtLocation", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getTypeOfSymbolAtLocation", { concurrency }, () => {
     test("narrowed type via typeof check", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3369,7 +3371,7 @@ export function check(x: string | number) {
     });
 });
 
-describe("Checker - getShorthandAssignmentValueSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getShorthandAssignmentValueSymbol", { concurrency }, () => {
     test("shorthand property symbol resolves to variable", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3401,7 +3403,7 @@ export const obj = { name };
     });
 });
 
-describe("readFile callback semantics", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("readFile callback semantics", { concurrency }, () => {
     test("readFile: string returns content, null blocks fallback, undefined falls through to real FS", async () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3451,7 +3453,7 @@ describe("readFile callback semantics", { concurrency: process.execArgv.some(arg
     });
 });
 
-describe("updateSnapshot file systems", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("updateSnapshot file systems", { concurrency }, () => {
     test("request filesystem factories derive directory listings", () => {
         const memory = createFileSystem([
             ["/src/index.ts", "posix"],
@@ -4070,7 +4072,7 @@ describe("updateSnapshot file systems", { concurrency: process.execArgv.some(arg
     // do not model modification times.
 });
 
-describe("Checker - isArrayType / isTupleType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - isArrayType / isTupleType", { concurrency }, () => {
     test("number[] is array, not tuple", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4180,7 +4182,7 @@ describe("Checker - isArrayType / isTupleType", { concurrency: process.execArgv.
     });
 });
 
-describe("Checker - isReadonlySymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - isReadonlySymbol", { concurrency }, () => {
     test("properties with a 'readonly' modifier", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4271,7 +4273,7 @@ export type B = InstanceType<typeof Bravo>;
     });
 });
 
-describe("Checker - getReturnTypeOfSignature", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getReturnTypeOfSignature", { concurrency }, () => {
     test("returns the return type of a function signature", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4294,7 +4296,7 @@ describe("Checker - getReturnTypeOfSignature", { concurrency: process.execArgv.s
     });
 });
 
-describe("Checker - getRestTypeOfSignature", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getRestTypeOfSignature", { concurrency }, () => {
     test("returns the rest type of a signature with rest parameter", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4317,7 +4319,7 @@ describe("Checker - getRestTypeOfSignature", { concurrency: process.execArgv.som
     });
 });
 
-describe("Checker - getTypePredicateOfSignature", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getTypePredicateOfSignature", { concurrency }, () => {
     test("returns type predicate for 'x is T' guard", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4417,7 +4419,7 @@ export class Dog extends Animal {
     });
 });
 
-describe("Checker - getBaseTypes", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getBaseTypes", { concurrency }, () => {
     test("returns base types of a class", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4500,7 +4502,7 @@ export type BoxOfString = Box<string>;
     });
 });
 
-describe("Type - getBaseTypes", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Type - getBaseTypes", { concurrency }, () => {
     test("returns base types for a class type and undefined for a non-class/interface", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4538,7 +4540,7 @@ export const n: number = 0;
     });
 });
 
-describe("Type - isErrorType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Type - isErrorType", { concurrency }, () => {
     test("identifies the error type from an unresolvable annotation", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4568,7 +4570,7 @@ declare const bad: ThisTypeDoesNotExist;
     });
 });
 
-describe("Checker - well-known symbols", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - well-known symbols", { concurrency }, () => {
     test("isUnknownSymbol identifies the aliased unknown symbol", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4590,7 +4592,7 @@ export type Alias = typeof value;
     });
 });
 
-describe("Checker - well-known signatures", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - well-known signatures", { concurrency }, () => {
     test("isUnknownSignature identifies an unresolvable call", async () => {
         const src = `
 const ok = (x: number) => x;
@@ -4624,7 +4626,7 @@ notCallable();
     });
 });
 
-describe("Symbol - escaped names and tables", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Symbol - escaped names and tables", { concurrency }, () => {
     test("getExports/getMembers return a cached Map keyed by escaped name", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4723,7 +4725,7 @@ export { x as '${maliciousName}' };
     });
 });
 
-describe("ast - escapeLeadingUnderscores", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("ast - escapeLeadingUnderscores", { concurrency }, () => {
     test("round-trips display and escaped names", () => {
         assert.equal(escapeLeadingUnderscores("foo"), "foo");
         assert.equal(escapeLeadingUnderscores("_foo"), "_foo");
@@ -4734,7 +4736,7 @@ describe("ast - escapeLeadingUnderscores", { concurrency: process.execArgv.some(
     });
 });
 
-describe("ast - tryGetAmbientModuleNameFromSymbolName", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("ast - tryGetAmbientModuleNameFromSymbolName", { concurrency }, () => {
     test("gets ambient module names from escaped symbol names", () => {
         assert.equal(tryGetAmbientModuleNameFromSymbolName('"pkg"' as __String), "pkg");
         assert.equal(tryGetAmbientModuleNameFromSymbolName('__"*.css"pattern@1234' as __String), "*.css");
@@ -4744,7 +4746,7 @@ describe("ast - tryGetAmbientModuleNameFromSymbolName", { concurrency: process.e
     });
 });
 
-describe("ast - getJSDocTags", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("ast - getJSDocTags", { concurrency }, () => {
     test("returns a node's own tags, and inherited @param / @template tags", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4886,7 +4888,7 @@ const cast = /** @type {number} */ (someValue);
     });
 });
 
-describe("Checker - getPropertiesOfType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getPropertiesOfType", { concurrency }, () => {
     test("returns properties of an object type", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4917,7 +4919,7 @@ export declare const p: Person;
     });
 });
 
-describe("Checker - getIndexInfosOfType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getIndexInfosOfType", { concurrency }, () => {
     test("returns index signatures of an indexed type", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4972,7 +4974,7 @@ export declare const m: ReadonlyMap;
     });
 });
 
-describe("Checker - TypeScript API parity", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - TypeScript API parity", { concurrency }, () => {
     const files = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `
@@ -5061,7 +5063,7 @@ export type Exported = number;
     });
 });
 
-describe("Checker - getConstraintOfTypeParameter", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getConstraintOfTypeParameter", { concurrency }, () => {
     test("returns constraint of a type parameter", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5086,7 +5088,7 @@ describe("Checker - getConstraintOfTypeParameter", { concurrency: process.execAr
     });
 });
 
-describe("Checker - TypeParameter getters", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - TypeParameter getters", { concurrency }, () => {
     test("getConstraint() and getDefault() return the constraint and default types", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5141,7 +5143,7 @@ describe("Checker - TypeParameter getters", { concurrency: process.execArgv.some
     });
 });
 
-describe("Checker - getTypeArguments", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getTypeArguments", { concurrency }, () => {
     test("returns type arguments of a generic instantiation", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5190,7 +5192,7 @@ describe("Checker - getTypeArguments", { concurrency: process.execArgv.some(arg 
     });
 });
 
-describe("Checker - getBaseConstraintOfType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getBaseConstraintOfType", { concurrency }, () => {
     test("returns the base constraint of a type parameter", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5231,7 +5233,7 @@ describe("Checker - getBaseConstraintOfType", { concurrency: process.execArgv.so
     });
 });
 
-describe("Checker - getPropertyOfType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getPropertyOfType", { concurrency }, () => {
     test("returns a named property symbol of a type", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5260,7 +5262,7 @@ export declare const p: Person;
     });
 });
 
-describe("Checker - getConstantValue", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getConstantValue", { concurrency }, () => {
     test("returns numeric value of an enum member", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5339,7 +5341,7 @@ describe("Checker - getConstantValue", { concurrency: process.execArgv.some(arg 
     });
 });
 
-describe("Checker - getSignatureFromDeclaration", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getSignatureFromDeclaration", { concurrency }, () => {
     test("returns the signature of a function declaration", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5365,7 +5367,7 @@ describe("Checker - getSignatureFromDeclaration", { concurrency: process.execArg
     });
 });
 
-describe("Checker - getExportSpecifierLocalTargetSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getExportSpecifierLocalTargetSymbol", { concurrency }, () => {
     test("resolves the local target of an export specifier", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5391,7 +5393,7 @@ export { value as renamed };
     });
 });
 
-describe("Checker - getAliasedSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getAliasedSymbol", { concurrency }, () => {
     test("resolves an import alias to its target symbol", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5412,7 +5414,7 @@ describe("Checker - getAliasedSymbol", { concurrency: process.execArgv.some(arg 
     });
 });
 
-describe("Checker - getFullyQualifiedName", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getFullyQualifiedName", { concurrency }, () => {
     test("returns module-qualified names for exported symbols and dotted names for members", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5442,7 +5444,7 @@ export class Standalone {}
     });
 });
 
-describe("Checker - getExportsOfModule", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getExportsOfModule", { concurrency }, () => {
     test("returns all exports including re-exports via 'export *'", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5466,7 +5468,7 @@ export * from "./inner";
     });
 });
 
-describe("Checker - getSymbolsInScope", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getSymbolsInScope", { concurrency }, () => {
     const scopeFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `
@@ -5527,7 +5529,7 @@ function f() {
     });
 });
 
-describe("Symbol - getDocumentationComment and getJsDocTags", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Symbol - getDocumentationComment and getJsDocTags", { concurrency }, () => {
     const docFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `
@@ -5571,7 +5573,7 @@ export function add(a: number, b: number): number { return a + b; }
     });
 });
 
-describe("TypeParameter - isThisType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("TypeParameter - isThisType", { concurrency }, () => {
     test("isThisType is true for the polymorphic 'this' type in a class method", async () => {
         const src = `\nexport class Builder {\n    setName(name: string): this { return this; }\n}\n`;
         await using api = spawnAPI({
@@ -5611,7 +5613,7 @@ describe("TypeParameter - isThisType", { concurrency: process.execArgv.some(arg 
     });
 });
 
-describe("Type - getAliasTypeArguments", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Type - getAliasTypeArguments", { concurrency }, () => {
     test("returns the type arguments of a single-param generic type alias", async () => {
         const src = `\ntype Box<T> = { value: T };\nexport const x: Box<string> = { value: "hi" };\n`;
         await using api = spawnAPI({
@@ -5670,7 +5672,7 @@ describe("Type - getAliasTypeArguments", { concurrency: process.execArgv.some(ar
     });
 });
 
-describe("Type - getAliasSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Type - getAliasSymbol", { concurrency }, () => {
     test("returns the symbol for a non-generic type alias", async () => {
         // Object-type aliases preserve aliasSymbol; primitive aliases (type Foo = string) do not.
         const src = `\ntype Point = { x: number; y: number };\nexport const p: Point = { x: 1, y: 2 };\n`;
@@ -5729,7 +5731,7 @@ describe("Type - getAliasSymbol", { concurrency: process.execArgv.some(arg => ar
     });
 });
 
-describe("IntrinsicType - intrinsicName", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("IntrinsicType - intrinsicName", { concurrency }, () => {
     test("intrinsicName matches the primitive type name", async () => {
         const src = `\nexport const x: string = "hello";\n`;
         await using api = spawnAPI({
@@ -5755,7 +5757,7 @@ describe("IntrinsicType - intrinsicName", { concurrency: process.execArgv.some(a
     });
 });
 
-describe("FreshableType - getFreshType and getRegularType", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("FreshableType - getFreshType and getRegularType", { concurrency }, () => {
     test("LiteralType.value is empty string for the empty-string literal type", async () => {
         const src = `\nexport const empty: "" = "";\n`;
         await using api = spawnAPI({
@@ -5938,7 +5940,7 @@ describe("FreshableType - getFreshType and getRegularType", { concurrency: proce
     });
 });
 
-describe("Checker - isContextSensitive", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - isContextSensitive", { concurrency }, () => {
     test("arrow function with no type annotation is context sensitive", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5963,7 +5965,7 @@ describe("Checker - isContextSensitive", { concurrency: process.execArgv.some(ar
     });
 });
 
-describe("Checker - isTypeAssignableTo", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - isTypeAssignableTo", { concurrency }, () => {
     test("returns true when source is assignable to target", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -6016,7 +6018,7 @@ describe("Checker - isTypeAssignableTo", { concurrency: process.execArgv.some(ar
     });
 });
 
-describe("Printer", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Printer", { concurrency }, () => {
     const emitterFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `
@@ -6259,7 +6261,7 @@ export const obj = { m: 1, s: "hi", b: true };
     });
 });
 
-describe("Program - selected file emit", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Program - selected file emit", { concurrency }, () => {
     const files = {
         "/tsconfig.json": JSON.stringify({
             compilerOptions: {
@@ -6321,7 +6323,7 @@ describe("Program - selected file emit", { concurrency: process.execArgv.some(ar
     });
 });
 
-describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => {
     test("formats a synthesized statement with correct indentation for insertion inside a function body", async () => {
         const files = {
             "/tsconfig.json": "{}",
@@ -6399,7 +6401,7 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency: process.
     });
 });
 
-describe("modifierFlags", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("modifierFlags", { concurrency }, () => {
     test("export async function has Export | Async flags", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -6447,7 +6449,7 @@ describe("modifierFlags", { concurrency: process.execArgv.some(arg => arg === "-
     });
 });
 
-describe("Checker - getResolvedSymbol", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Checker - getResolvedSymbol", { concurrency }, () => {
     test("resolves variable reference to its declaration symbol", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -6476,7 +6478,7 @@ describe("Checker - getResolvedSymbol", { concurrency: process.execArgv.some(arg
     });
 });
 
-describe("VariableDeclarationList - BlockScoped flags", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("VariableDeclarationList - BlockScoped flags", { concurrency }, () => {
     test("let declaration has Let flag", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -6522,7 +6524,7 @@ describe("VariableDeclarationList - BlockScoped flags", { concurrency: process.e
     });
 });
 
-describe("AST roundtrips", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("AST roundtrips", { concurrency }, () => {
     test("TypeOperator operator kind", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -6678,7 +6680,7 @@ doThing();
     });
 });
 
-describe("Program - diagnostics", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Program - diagnostics", { concurrency }, () => {
     test("getSyntacticDiagnostics", async () => {
         const source = `const x: = 1;`;
         await using api = spawnAPI({
@@ -7008,7 +7010,7 @@ describe("Program - diagnostics", { concurrency: process.execArgv.some(arg => ar
     });
 });
 
-describe("getDefaultProjectForFile", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("getDefaultProjectForFile", { concurrency }, () => {
     test("snapshot opens reject unreadable virtual files without panicking", async () => {
         const fileName = "/src/App.vue.ts";
         const source = `export const component = 1;`;
@@ -7190,7 +7192,7 @@ describe("getDefaultProjectForFile", { concurrency: process.execArgv.some(arg =>
     });
 });
 
-describe("Program - emit", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Program - emit", { concurrency }, () => {
     const files = {
         "/tsconfig.json": `{
                 "compilerOptions": {
@@ -7450,7 +7452,7 @@ describe("Program - emit", { concurrency: process.execArgv.some(arg => arg === "
     // @sync-skip-block-end
 });
 
-describe("Timing", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Timing", { concurrency }, () => {
     test("collects combined client, server, and transport timing info", async () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
@@ -7586,7 +7588,7 @@ describe("Timing", { concurrency: process.execArgv.some(arg => arg === "--test-n
     });
 });
 
-describe("runWithTemporaryFileUpdate", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("runWithTemporaryFileUpdate", { concurrency }, () => {
     test("temporary file update is visible in the callback and reverted afterward", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

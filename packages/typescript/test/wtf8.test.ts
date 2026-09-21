@@ -12,7 +12,9 @@ import {
     Wtf8Decoder,
 } from "../src/api/node/wtf8.ts";
 
-describe("encodeWtf8", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+const concurrency = process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
+
+describe("encodeWtf8", { concurrency }, () => {
     test("matches UTF-8 for scalar values", () => {
         assert.deepEqual(encodeWtf8("hello 🦀"), new TextEncoder().encode("hello 🦀"));
     });
@@ -48,7 +50,7 @@ describe("encodeWtf8", { concurrency: process.execArgv.some(arg => arg === "--te
     });
 });
 
-describe("Wtf8Decoder", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Wtf8Decoder", { concurrency }, () => {
     test("decodes standard UTF-8", () => {
         const decoder = new Wtf8Decoder();
         assert.strictEqual(decoder.decode(new TextEncoder().encode("hello 🦀")), "hello 🦀");
@@ -86,7 +88,7 @@ describe("Wtf8Decoder", { concurrency: process.execArgv.some(arg => arg === "--t
     });
 });
 
-describe("Msgpack strings", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Msgpack strings", { concurrency }, () => {
     test("round-trip lone surrogates", () => {
         const text = `high:${String.fromCharCode(0xD800)} low:${String.fromCharCode(0xDFFF)}`;
         const writer = new MsgpackWriter();

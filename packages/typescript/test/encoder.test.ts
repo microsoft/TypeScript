@@ -48,6 +48,8 @@ import {
 } from "../src/api/node/protocol.ts";
 import { Wtf8Decoder } from "../src/api/node/wtf8.ts";
 
+const concurrency = process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
+
 function makeSF(text: string, fileName: string, statements: readonly Statement[]): SourceFile {
     const endOfFileToken = createToken(SyntaxKind.EndOfFile);
     return createSourceFile(statements, endOfFileToken, text, fileName, fileName as Path);
@@ -57,7 +59,7 @@ function decode(data: Uint8Array): RemoteSourceFile {
     return new RemoteSourceFile(data, new Wtf8Decoder());
 }
 
-describe("Encoder", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Encoder", { concurrency }, () => {
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 
@@ -348,7 +350,7 @@ describe("Encoder", { concurrency: process.execArgv.some(arg => arg === "--test-
     });
 });
 
-describe("UTF-8 vs UTF-16 position encoding", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("UTF-8 vs UTF-16 position encoding", { concurrency }, () => {
     // Positions in the encoded AST must be UTF-16 code unit offsets so that
     // file.text.slice(node.pos, node.end) works correctly on JS strings.
     // This is the same convention TypeScript uses.
@@ -409,7 +411,7 @@ describe("UTF-8 vs UTF-16 position encoding", { concurrency: process.execArgv.so
     });
 });
 
-describe("Line and character mapping", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("Line and character mapping", { concurrency }, () => {
     function makeSourceFile(text: string): RemoteSourceFile {
         return decode(encodeSourceFile(makeSF(text, "/test.ts", [])));
     }
