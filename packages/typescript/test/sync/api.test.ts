@@ -439,6 +439,38 @@ describe("API", () => {
         assert.equal(empty.operation.openedFiles, undefined);
     });
 
+    test("snapshot.update preserves identity when the server returns the same snapshot", () => {
+        using api = spawnAPI();
+        const snapshot = api.createSnapshot();
+        const client = (api as unknown as {
+            client: { apiRequest(method: string, params: unknown): unknown; };
+        }).client;
+        const apiRequest = client.apiRequest.bind(client);
+        let duplicateReference = false;
+        client.apiRequest = (method, params) => {
+            if (
+                method === "release"
+                && typeof params === "object"
+                && params !== null
+                && "snapshot" in params
+                && params.snapshot === snapshot.id
+                && duplicateReference
+            ) {
+                duplicateReference = false;
+                return true;
+            }
+            const response = apiRequest(method, params);
+            if (method !== "updateSnapshot" || typeof response !== "object" || response === null) return response;
+            if (!("snapshot" in response) || typeof response.snapshot !== "number") return response;
+            apiRequest("release", { snapshot: response.snapshot });
+            duplicateReference = true;
+            return { ...response, snapshot: snapshot.id };
+        };
+
+        assert.strictEqual(snapshot.update({}), snapshot);
+        assert.equal(duplicateReference, false);
+    });
+
     test("snapshot.update reconfigures a synthetic program", () => {
         using api = spawnAPI({
             "/src/a.ts": `export const a = 1;`,
