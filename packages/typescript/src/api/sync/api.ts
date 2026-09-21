@@ -250,9 +250,9 @@ export type {
 };
 
 export interface TranspileOptions {
-    compilerOptions?: CompilerOptions;
-    fileName?: string;
-    reportDiagnostics?: boolean;
+    compilerOptions?: CompilerOptions | undefined;
+    fileName?: string | undefined;
+    reportDiagnostics?: boolean | undefined;
 }
 
 export interface TranspileOutput {
@@ -700,6 +700,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     snapshot: baseSnapshot.id,
                     changes: toCreateSnapshotRequest(params),
                 });
+                if (data.snapshot === baseSnapshot.id) {
+                    owner.client.apiRequest("release", { snapshot: data.snapshot });
+                    return baseSnapshot;
+                }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,
@@ -727,6 +731,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     snapshot: baseSnapshot.id,
                     changes: toCreateSnapshotRequest(params),
                 });
+                if (data.snapshot === baseSnapshot.id) {
+                    yield* apiRequest("release", { snapshot: data.snapshot });
+                    return baseSnapshot;
+                }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,
@@ -787,8 +795,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", {
-                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes } : {}),
+                baseSnapshot: baseSnapshot?.id,
+                changes,
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -823,8 +831,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
-                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes } : {}),
+                baseSnapshot: baseSnapshot?.id,
+                changes,
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -992,18 +1000,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     /** Creates a program from current filesystem state. */
     get createProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
+            function (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program {
                 owner.ensureInitialized();
 
                 const snapshot = owner.createSnapshot({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
                 const program = snapshot.operation.createdPrograms[0];
                 if (!program) {
@@ -1013,11 +1021,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 program.setOwnedSnapshot(snapshot);
                 return program;
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
                 const snapshot = yield* owner.createSnapshot.gen({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
                 const program = snapshot.operation.createdPrograms[0];
                 if (!program) {
@@ -1108,27 +1116,47 @@ export class InternalAPI {
 type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
 
 export interface SnapshotOperation {
-    readonly createdPrograms?: readonly Program<SyntheticProjectId>[];
-    readonly openedFiles?: readonly SnapshotOpenedFileOperation[];
+    readonly createdPrograms?: readonly Program<SyntheticProjectId>[] | undefined;
+    readonly openedFiles?: readonly SnapshotOpenedFileOperation[] | undefined;
 }
 
 export interface SnapshotOpenedFileOperation {
     readonly project: Project;
 }
 
+/** Replaces every element of a tuple while preserving its length and index structure. */
 type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
+/**
+ * Keeps `Tuple` as an inference target while contextually typing each element from
+ * `Elements`. The mapped intersection supplies nested completions and excess-property
+ * checks without widening an inferred tuple to an array.
+ */
+type ContextualizeTuple<
+    Tuple extends readonly unknown[] | undefined,
+    Elements extends readonly unknown[] | undefined,
+> =
+    & Tuple
+    & {
+        readonly [Index in keyof Tuple]: NonNullable<Elements>[number];
+    };
+
+/** Substitutes the operation arrays with contextually typed, tuple-preserving versions. */
 type SnapshotOperationParams<
     Params extends CreateSnapshotParams,
     CreatePrograms extends Params["createPrograms"],
     OpenFiles extends Params["openFiles"],
 > = Omit<Params, "createPrograms" | "openFiles"> & {
-    createPrograms?: CreatePrograms;
-    openFiles?: OpenFiles;
+    createPrograms?: ContextualizeTuple<CreatePrograms, Params["createPrograms"]> | undefined;
+    openFiles?: ContextualizeTuple<OpenFiles, Params["openFiles"]> | undefined;
 };
 
+/**
+ * Refines a snapshot's operation results to required tuples when the corresponding
+ * operation arrays were supplied, preserving their lengths for indexed access.
+ */
 type SnapshotForOperationResults<
     CreatePrograms extends CreateSnapshotParams["createPrograms"],
     OpenFiles extends CreateSnapshotParams["openFiles"],
@@ -1139,6 +1167,7 @@ type SnapshotForOperationResults<
         & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
 };
 
+/** Derives the refined snapshot result type from a complete operation parameter type. */
 export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
     Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
     Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined
@@ -1190,8 +1219,8 @@ export class Snapshot {
         }
 
         this.operation = {
-            ...(data.operation.createdPrograms ? { createdPrograms: data.operation.createdPrograms.map(projectId => this.requireProject(projectId).program) } : {}),
-            ...(data.operation.openedFiles ? { openedFiles: data.operation.openedFiles.map(result => ({ project: this.requireProject(result.project) })) } : {}),
+            createdPrograms: data.operation.createdPrograms?.map(projectId => this.requireProject(projectId).program),
+            openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
         };
 
         this.internal = new SnapshotInternalAPI(this.id, client);
@@ -3146,7 +3175,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
-                    ...(fileSystem ? { fileSystem } : {}),
+                    fileSystem,
                 };
             },
             function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]> {
@@ -3165,7 +3194,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
-                    ...(fileSystem ? { fileSystem } : {}),
+                    fileSystem,
                 };
             },
         );

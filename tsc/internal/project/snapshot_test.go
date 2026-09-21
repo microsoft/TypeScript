@@ -69,9 +69,12 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, len(createdPrograms), 2)
 		firstProject := createdPrograms[0]
 		secondProject := createdPrograms[1]
+		assert.Equal(t, firstProject.configFilePath, tspath.Path(""))
+		assert.Equal(t, secondProject.configFilePath, tspath.Path(""))
 
-		firstProgramID, ok := SyntheticProgramID(firstProject.ID())
+		firstProgramID, ok := firstProject.ID().Synthetic()
 		assert.Assert(t, ok)
+		assert.Equal(t, string(firstProgramID), "/dev/null/synthetic/1")
 		removeRequest := &APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(firstProgramID)}
 		removedSnapshot, err := session.CloneSnapshot(
 			ctx,
@@ -92,7 +95,7 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, len(createdSnapshot.ProjectCollection.LanguageServiceProjects()), 0)
 		assert.Equal(t, len(createdSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 0)
 		assert.Assert(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")) == nil)
-		assert.Equal(t, createdSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
+		assert.Equal(t, createdSnapshot.ProjectCollection.GetProject(firstProject.ID()), firstProject)
 
 		openedSnapshot, err := session.CloneSnapshot(
 			ctx,
@@ -102,14 +105,18 @@ func TestSnapshot(t *testing.T) {
 		)
 		assert.NilError(t, err)
 		defer openedSnapshot.Deref()
-		assert.Assert(t, openedSnapshot.ProjectCollection.InferredProject() != nil)
+		inferredProject := openedSnapshot.ProjectCollection.InferredProject()
+		assert.Assert(t, inferredProject != nil)
+		_, ok = inferredProject.ID().Inferred()
+		assert.Assert(t, ok)
+		assert.Equal(t, inferredProject.configFilePath, tspath.Path(""))
 		assert.Equal(t, len(openedSnapshot.ProjectCollection.LanguageServiceProjects()), 1)
 		assert.Equal(t, len(openedSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 1)
 		assert.Equal(t, openedSnapshot.ProjectCollection.GetDefaultProject(openedSnapshot.toPath("/a.ts")), openedSnapshot.ProjectCollection.InferredProject())
-		assert.Equal(t, openedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetProject(firstProject.ID()), firstProject)
 
-		assert.Assert(t, removedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()) == nil)
-		assert.Equal(t, removedSnapshot.ProjectCollection.GetProjectByPath(secondProject.ID()), secondProject)
+		assert.Assert(t, removedSnapshot.ProjectCollection.GetProject(firstProject.ID()) == nil)
+		assert.Equal(t, removedSnapshot.ProjectCollection.GetProject(secondProject.ID()), secondProject)
 		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
 	})
 
@@ -125,7 +132,7 @@ func TestSnapshot(t *testing.T) {
 			context.Background(),
 			baseSnapshot,
 			FileChangeSummary{},
-			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(1)},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(NewSyntheticProjectID(1))},
 		)
 		defer failedSnapshot.Deref()
 
@@ -159,7 +166,7 @@ func TestSnapshot(t *testing.T) {
 		failedSnapshot, err := session.APIUpdate(
 			context.Background(),
 			FileChangeSummary{},
-			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(1)},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(NewSyntheticProjectID(1))},
 		)
 
 		assert.ErrorContains(t, err, "synthetic program not found for removal")
@@ -417,6 +424,45 @@ func TestSnapshot(t *testing.T) {
 		programChanged := session.Snapshot().ProjectCollection.ConfiguredProject(configPath).Program
 		assert.Assert(t, programBefore != programChanged, "real watch change should rebuild the program")
 	})
+}
+
+func TestProjectIDNarrowing(t *testing.T) {
+	t.Parallel()
+
+	configured := ID("/project/tsconfig.json")
+	configuredID, ok := configured.Configured()
+	assert.Assert(t, ok)
+	assert.Equal(t, configuredID, ConfiguredProjectID("/project/tsconfig.json"))
+	_, ok = configured.Inferred()
+	assert.Assert(t, !ok)
+	_, ok = configured.Synthetic()
+	assert.Assert(t, !ok)
+
+	inferred := inferredProjectID.AsID()
+	inferredID, ok := inferred.Inferred()
+	assert.Assert(t, ok)
+	assert.Equal(t, inferredID, inferredProjectID)
+	_, ok = inferred.Configured()
+	assert.Assert(t, !ok)
+
+	synthetic := NewSyntheticProjectID(1).AsID()
+	syntheticID, ok := synthetic.Synthetic()
+	assert.Assert(t, ok)
+	assert.Equal(t, syntheticID, NewSyntheticProjectID(1))
+	_, ok = synthetic.Configured()
+	assert.Assert(t, !ok)
+
+	canonicalSyntheticID, ok := ID("/dev/null/synthetic/01").Synthetic()
+	assert.Assert(t, ok)
+	assert.Equal(t, canonicalSyntheticID, NewSyntheticProjectID(1))
+
+	_, ok = ID("/dev/null/synthetic/invalid").Configured()
+	assert.Assert(t, ok)
+
+	_, ok = ParseConfiguredProjectID(inferredProjectName)
+	assert.Assert(t, !ok)
+	_, ok = ParseConfiguredProjectID(tspath.Path(NewSyntheticProjectID(1)))
+	assert.Assert(t, !ok)
 }
 
 func BenchmarkSnapshotCloneRefCost(b *testing.B) {

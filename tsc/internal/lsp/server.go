@@ -2440,7 +2440,7 @@ func (s *Server) handleProjectInfo(ctx context.Context, params *lsproto.ProjectI
 	}
 	configFilePath := ""
 	if defaultProject != nil && defaultProject.Kind == project.KindConfigured {
-		configFilePath = defaultProject.Name()
+		configFilePath = defaultProject.ConfigFileName()
 	}
 	return &lsproto.ProjectInfoResult{
 		ConfigFilePath: configFilePath,

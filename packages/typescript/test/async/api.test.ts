@@ -109,7 +109,6 @@ import {
 } from "node:test";
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
-import { runBenchmarks } from "./api.bench.ts";
 import {
     defaultFiles,
     spawnAPI,
@@ -127,9 +126,12 @@ describe("API", () => {
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
-            const api = new API();
             // @ts-expect-error Snapshot parameters are excess-property checked.
-            void api.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+            void standalone.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+            // @ts-expect-error Synthetic program parameters are contextually typed and excess-property checked.
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: {}, unexpected: true }] });
+            // @ts-expect-error Compiler options in synthetic program parameters are contextually typed and excess-property checked.
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: { unexpected: true } }] });
             // @ts-expect-error Snapshot update parameters are excess-property checked.
             void baseSnapshot.update({ fileChanges: { changed: ["/index.ts"] } });
             // @ts-expect-error Snapshot updates require an explicit changes object.
@@ -410,7 +412,7 @@ describe("API", () => {
             "/src/index.ts": `export const value: string = 1;`,
         });
 
-        const program = await api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
+        const program = await api.createProgram(["/src/index.ts"], { noLib: true, strict: true });
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
         assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
@@ -428,8 +430,8 @@ describe("API", () => {
 
         const snapshot = await api.createSnapshot({
             createPrograms: [
-                { rootFiles: ["/src/a.ts"], options: { compilerOptions: { noLib: true } } },
-                { rootFiles: ["/src/b.ts"], options: { compilerOptions: { noLib: true, strict: true } } },
+                { rootFiles: ["/src/a.ts"], compilerOptions: { noLib: true } },
+                { rootFiles: ["/src/b.ts"], compilerOptions: { noLib: true, strict: true } },
             ],
         });
         assert.equal(snapshot.getProjects().length, 2);
@@ -444,8 +446,40 @@ describe("API", () => {
 
         const empty = await api.createSnapshot();
         assert.deepEqual(empty.getProjects(), []);
-        assert.equal("createdPrograms" in empty.operation, false);
-        assert.equal("openedFiles" in empty.operation, false);
+        assert.equal(empty.operation.createdPrograms, undefined);
+        assert.equal(empty.operation.openedFiles, undefined);
+    });
+
+    test("snapshot.update preserves identity when the server returns the same snapshot", async () => {
+        await using api = spawnAPI();
+        const snapshot = await api.createSnapshot();
+        const client = (api as unknown as {
+            client: { apiRequest(method: string, params: unknown): Promise<unknown>; };
+        }).client;
+        const apiRequest = client.apiRequest.bind(client);
+        let duplicateReference = false;
+        client.apiRequest = async (method, params) => {
+            if (
+                method === "release"
+                && typeof params === "object"
+                && params !== null
+                && "snapshot" in params
+                && params.snapshot === snapshot.id
+                && duplicateReference
+            ) {
+                duplicateReference = false;
+                return true;
+            }
+            const response = await apiRequest(method, params);
+            if (method !== "updateSnapshot" || typeof response !== "object" || response === null) return response;
+            if (!("snapshot" in response) || typeof response.snapshot !== "number") return response;
+            await apiRequest("release", { snapshot: response.snapshot });
+            duplicateReference = true;
+            return { ...response, snapshot: snapshot.id };
+        };
+
+        assert.strictEqual(await snapshot.update({}), snapshot);
+        assert.equal(duplicateReference, false);
     });
 
     test("snapshot.update reconfigures a synthetic program", async () => {
@@ -456,7 +490,7 @@ describe("API", () => {
         const snapshot = await api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/a.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         const originalProgram = snapshot.operation.createdPrograms[0];
@@ -465,7 +499,7 @@ describe("API", () => {
             reconfigurePrograms: [{
                 id: originalProgram.id,
                 rootFiles: ["/src/b.ts"],
-                options: { compilerOptions: { noLib: true, strict: true } },
+                compilerOptions: { noLib: true, strict: true },
             }],
         });
         const reconfiguredProgram = updated.getProgram(originalProgram.id);
@@ -489,9 +523,10 @@ declare module "augmentation" {}`,
             "/node_modules/@types/pkg-types/index.d.ts": `export {};`,
         });
 
-        const program = await api.createProgram(["/src/index.ts"], {
-            compilerOptions: { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
-        });
+        const program = await api.createProgram(
+            ["/src/index.ts"],
+            { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
+        );
         const sourceFile = await program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
@@ -545,7 +580,7 @@ declare module "augmentation" {}`,
 
         const program = await api.createProgram(
             ["/src/index.ts"],
-            { compilerOptions: { noLib: true, strict: true } },
+            { noLib: true, strict: true },
         );
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
@@ -565,7 +600,8 @@ declare module "augmentation" {}`,
 
         const program = await api.createProgram(
             ["/src/index.ts"],
-            { compilerOptions: { noLib: true }, projectReferences: [reference] },
+            { noLib: true },
+            { projectReferences: [reference] },
         );
         assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
         await program.dispose();
@@ -583,8 +619,8 @@ declare module "augmentation" {}`,
 
         const program = await api.createProgram(
             ["/src/index.ts"],
+            { noLib: true },
             {
-                compilerOptions: { noLib: true },
                 configFileParsingDiagnostics: [diagnostic],
             },
         );
@@ -599,7 +635,7 @@ declare module "augmentation" {}`,
             "/src/dependency.ts": `export const dependency = 1;`,
         });
 
-        const program = await api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
+        const program = await api.createProgram(["/src/main.ts"], { noLib: true });
         assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
 
         await program.dispose();
@@ -1756,7 +1792,7 @@ describe("Multiple snapshots", () => {
             openFiles: ["/inferred.ts", "/configured/index.ts"],
             createPrograms: [{
                 rootFiles: ["/synthetic.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         assert.equal(created.getProjects().length, 3);
@@ -1783,7 +1819,7 @@ describe("Multiple snapshots", () => {
             openFiles: ["/inferred.ts"],
             createPrograms: [{
                 rootFiles: ["/synthetic.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         const openedProject: Project = withOperationResults.operation.openedFiles[0].project;
@@ -2122,8 +2158,8 @@ describe("Checker - symbol identity across projects", () => {
         });
         const snapshot = await api.createSnapshot({
             createPrograms: [
-                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
-                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
+                { rootFiles: ["/src/shared.ts"], compilerOptions: { noLib: true } },
+                { rootFiles: ["/src/shared.ts"], compilerOptions: { noLib: true } },
             ],
         });
         const [programA, programB] = snapshot.operation.createdPrograms;
@@ -3463,6 +3499,8 @@ describe("updateSnapshot file systems", () => {
                 "vscode-notebook-cell://authority/workspace": { files: [], directories: ["notebook.ipynb"] },
                 "vscode-notebook-cell://authority/": { files: [], directories: ["workspace"] },
             },
+            symlinks: undefined,
+            removedPaths: undefined,
         });
 
         const directories = { "/explicit": { files: ["provided.ts"], directories: [] } };
@@ -7137,6 +7175,7 @@ describe("Program - emit", () => {
                 "/dist/src/testing.js",
                 "/dist/src/testing.d.ts",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7167,6 +7206,7 @@ describe("Program - emit", () => {
                 "/dist/src/index.d.ts",
                 "/dist/src/testing.d.ts",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7197,6 +7237,7 @@ describe("Program - emit", () => {
                 "/dist/src/index.js",
                 "/dist/src/testing.js",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7307,6 +7348,7 @@ describe("Program - emit", () => {
             diagnostics: [],
             emitSkipped: false,
             emittedFiles: [],
+            fileSystem: undefined,
         });
         assert.deepEqual(await project.program.emitToString(), {
             diagnostics: [],
@@ -7359,10 +7401,6 @@ describe("Program - emit", () => {
         assert.ok(result.diagnostics.some(d => d.text.includes("write failed")));
     });
     // @sync-skip-block-end
-});
-
-test("Benchmarks", async () => {
-    await runBenchmarks({ singleIteration: true });
 });
 
 describe("Timing", () => {
@@ -7569,7 +7607,7 @@ describe("runWithTemporaryFileUpdate", () => {
         const snapshot = await api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/index.ts"],
-                options: { compilerOptions: { noLib: true, strict: true } },
+                compilerOptions: { noLib: true, strict: true },
             }],
         });
         const originalProgram = snapshot.operation.createdPrograms[0];

@@ -89,7 +89,7 @@ export interface CreateSnapshotParams extends CoreCreateSnapshotParams {
      * @deprecated Use {@link openProjects} instead.
      * Path to a tsconfig.json file to open in the new snapshot.
      */
-    openProject?: string;
+    openProject?: string | undefined;
 }
 
 /**
@@ -104,6 +104,6 @@ export function toCreateSnapshotRequest(params?: CreateSnapshotParams): CreateSn
         : openProjects;
     return {
         ...rest,
-        ...(mergedOpenProjects !== undefined ? { openProjects: mergedOpenProjects } : {}),
+        openProjects: mergedOpenProjects,
     };
 }
