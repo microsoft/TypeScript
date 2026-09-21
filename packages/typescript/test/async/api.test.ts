@@ -3535,6 +3535,19 @@ describe("updateSnapshot file systems", () => {
         );
     });
 
+    test("request filesystem factories derive directory listings case-sensitively", () => {
+        const memory = createFileSystem([
+            ["C:/Repo/upper.ts", "upper"],
+            ["c:/repo/lower.ts", "lower"],
+        ]);
+        assert.deepEqual(memory.directories, {
+            "C:/Repo": { files: ["upper.ts"], directories: [] },
+            "C:/": { files: [], directories: ["Repo"] },
+            "c:/repo": { files: ["lower.ts"], directories: [] },
+            "c:/": { files: [], directories: ["repo"] },
+        });
+    });
+
     test("full file system is total and does not invoke host callbacks", async () => {
         const callbackCalls: string[] = [];
         const host = createVirtualFileSystem({

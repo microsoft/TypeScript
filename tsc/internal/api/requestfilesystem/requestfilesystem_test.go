@@ -1807,7 +1807,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.DeepEqual(t, layered.GetAccessibleEntries("/link").Files, []string{"host.ts"})
 	})
 
-	t.Run("canonical path collisions are rejected", func(t *testing.T) {
+	t.Run("canonical path collisions respect entry semantics", func(t *testing.T) {
 		t.Parallel()
 		base := vfstest.FromMap(map[string]string{}, false)
 
@@ -1820,15 +1820,26 @@ func TestRequestFileSystem(t *testing.T) {
 		}, base, `C:\Workspace`)
 		assert.ErrorContains(t, err, "duplicate request filesystem file path")
 
-		_, err = newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindFull,
-			Files: map[string]string{},
-			Directories: map[string]RequestDirectoryEntries{
-				`C:\Repo`:   {},
-				`c:/repo/.`: {},
+		directoryParams := &RequestFileSystem{
+			Kind: KindFull,
+			Files: map[string]string{
+				`C:\Repo\upper.ts`: "upper",
+				`c:/repo/lower.ts`: "lower",
 			},
-		}, base, `C:\Workspace`)
-		assert.ErrorContains(t, err, "duplicate request filesystem directory path")
+			Directories: map[string]RequestDirectoryEntries{
+				`C:\Repo`: {Files: []string{"upper.ts"}},
+				`c:/repo`: {Files: []string{"lower.ts"}},
+			},
+		}
+		fileSystem, err := newRequestFileSystem(directoryParams, base, `C:\Workspace`)
+		assert.NilError(t, err)
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(`C:\REPO`).Files, []string{"lower.ts", "upper.ts"})
+
+		caseSensitive := vfstest.FromMap(map[string]string{}, true)
+		fileSystem, err = newRequestFileSystem(directoryParams, caseSensitive, `C:\Workspace`)
+		assert.NilError(t, err)
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(`C:\Repo`).Files, []string{"upper.ts"})
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(`c:\repo`).Files, []string{"lower.ts"})
 
 		_, err = newRequestFileSystem(&RequestFileSystem{
 			Kind:  KindFull,

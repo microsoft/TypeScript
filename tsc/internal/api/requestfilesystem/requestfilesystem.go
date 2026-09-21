@@ -141,23 +141,30 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		node.entry = &requestFile{fileName: absoluteFileName, content: content}
 		result.registerDirectory(tspath.GetDirectoryPath(absoluteFileName))
 	}
-	seenDirectories := make(map[tspath.Path]struct{}, len(params.Directories))
+	directoryNames := make([]string, 0, len(params.Directories))
+	for directoryName := range params.Directories {
+		directoryNames = append(directoryNames, directoryName)
+	}
+	slices.Sort(directoryNames)
 	var listedDirectories []string
-	for directoryName, entries := range params.Directories {
+	for _, directoryName := range directoryNames {
+		entries := params.Directories[directoryName]
 		absoluteDirectoryName := result.toAbsolutePath(directoryName)
 		path := result.toPath(absoluteDirectoryName)
 		node := result.paths.ensure(path)
-		if _, ok := seenDirectories[path]; ok {
-			return nil, fmt.Errorf("duplicate request filesystem directory path %q", absoluteDirectoryName)
-		}
-		seenDirectories[path] = struct{}{}
 		if _, isFile := node.entry.(*requestFile); !isFile {
-			node.entry = &requestDirectory{
-				directoryName: absoluteDirectoryName,
-				listing: &vfs.Entries{
-					Files:       slices.Clone(entries.Files),
-					Directories: slices.Clone(entries.Directories),
-				},
+			listing := vfs.Entries{
+				Files:       slices.Clone(entries.Files),
+				Directories: slices.Clone(entries.Directories),
+			}
+			if directory, ok := node.entry.(*requestDirectory); ok && directory.listing != nil {
+				listing = mergeEntries(*directory.listing, listing, result.equalEntryNames)
+				directory.listing = &listing
+			} else {
+				node.entry = &requestDirectory{
+					directoryName: absoluteDirectoryName,
+					listing:       &listing,
+				}
 			}
 		}
 		result.registerDirectory(tspath.GetDirectoryPath(absoluteDirectoryName))
