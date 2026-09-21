@@ -1216,7 +1216,7 @@ async function runTestBenchmarks() {
 
 export const testBenchmarks = task({
     name: "test:benchmarks",
-    description: "Runs all benchmarks.",
+    description: "Runs Go benchmarks once; excluded from validate.",
     run: runTestBenchmarks,
 });
 
@@ -1227,6 +1227,12 @@ async function runTestTools() {
 async function runTestAPI() {
     // Running the package script doesn't work on Windows; some path escaping isn't done correctly and the test runner runs no tests.
     await run("node", ["--conditions", "@typescript/source", "--test", "./test/**/*.test.ts"], { cwd: "./packages/typescript" });
+}
+
+async function runTestAPIBenchmarks() {
+    for (const variant of ["async", "sync", "generators"]) {
+        await run("node", ["--conditions", "@typescript/source", `./test/${variant}/api.bench.ts`, "--singleIteration"], { cwd: "./packages/typescript" });
+    }
 }
 
 export const testTools = task({
@@ -1262,6 +1268,13 @@ export const testAPI = task({
     run: runTestAPI,
 });
 
+export const testAPIBenchmarks = task({
+    name: "test:benchmarks:api",
+    description: "Runs async, sync, and generator API benchmarks once; excluded from validate.",
+    dependencies: [tsgo, buildAPITests],
+    run: runTestAPIBenchmarks,
+});
+
 export const testAll = task({
     name: "test:all",
     description: "Runs ALL tests in the repo, including benchmarks, tools, and the API tests.",
@@ -1273,6 +1286,7 @@ export const testAll = task({
         await runTestBenchmarks();
         await runTestTools();
         await runTestAPI();
+        await runTestAPIBenchmarks();
     },
 });
 
@@ -1401,7 +1415,7 @@ async function runFormat() {
 
 export const validate = task({
     name: "validate",
-    description: "Builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all ancilliary repository tests.",
+    description: "Builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include ancillary repository tests. Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
     dependencies: [build],
     run: async () => {
         /** @type {{ name: string; error: unknown }[]} */
@@ -1429,7 +1443,6 @@ export const validate = task({
         if (options.all) {
             await runGenerateExtension();
             await runGenerateVendor();
-            await runValidation("test:benchmarks", runTestBenchmarks);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }

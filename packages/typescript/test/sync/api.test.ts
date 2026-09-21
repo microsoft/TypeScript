@@ -117,7 +117,6 @@ import {
 } from "node:test";
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
-import { runBenchmarks } from "./api.bench.ts";
 import {
     defaultFiles,
     spawnAPI,
@@ -7219,10 +7218,6 @@ describe("Program - emit", () => {
         }
         assert.match(String(error), /invalid emitOnly value/);
     });
-});
-
-test("Benchmarks", () => {
-    runBenchmarks({ singleIteration: true });
 });
 
 describe("Timing", () => {

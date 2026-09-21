@@ -224,6 +224,7 @@ jobs:
       - run: npx hereby test:extension
       - run: npx hereby test:tools
       - run: npx hereby test:api
+      - run: npx hereby test:benchmarks:api
       - run: git add .
       - uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
