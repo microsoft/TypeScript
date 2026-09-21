@@ -2059,7 +2059,9 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 				preferences,
 				isSnippet,
 			)
-			filterText = autoImport.Fix.Name
+			// The edit range covers the whole import statement typed so far, and clients match that text against the
+			// filter text, so it has to be the statement being inserted (as in Strada), not just the bare name.
+			filterText = insertText
 			sortText = SortTextLocationPriority
 		}
 
