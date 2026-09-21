@@ -1,0 +1,614 @@
+// === VSQuickInfo ===
+=== /a.ts ===
+// type Choice = "a" | "b" | string;
+// /** Available choice. */
+// export declare let value: Choice;
+//                    ^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x6D3 }
+// |     ClassifiedTextElement
+// |       [keyword] "let "
+// |       [local name] "value"
+// |       [punctuation] ": "
+// |       [keyword] "string"
+// |       [punctuation] " ("
+// |       [text] "origin"
+// |       [punctuation] ": "
+// |       [keyword] "string"
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [string] "\"a\""
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [string] "\"b\""
+// |       [punctuation] ")"
+// |   ClassifiedTextElement
+// |     [text] "Available choice."
+// | ----------------------------------------------------------------------
+// export declare const holder: {
+//     /** Available choice. */
+//     member: Choice | undefined;
+// };
+=== /b.ts ===
+// import { value, holder } from "./a";
+// value;
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x6D3 }
+// |     ClassifiedTextElement
+// |       [punctuation] "("
+// |       [text] "alias"
+// |       [punctuation] ") "
+// |       [keyword] "let "
+// |       [local name] "value"
+// |       [punctuation] ": "
+// |       [keyword] "string"
+// |       [punctuation] " ("
+// |       [text] "origin"
+// |       [punctuation] ": "
+// |       [keyword] "string"
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [string] "\"a\""
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [string] "\"b\""
+// |       [punctuation] ")"
+// |   ClassifiedTextElement
+// |     [text] "Available choice."
+// | ----------------------------------------------------------------------
+// holder.member;
+//        ^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x984 }
+// |     ClassifiedTextElement
+// |       [punctuation] "("
+// |       [text] "property"
+// |       [punctuation] ") "
+// |       [property name] "member"
+// |       [punctuation] ": "
+// |       [keyword] "string"
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [keyword] "undefined"
+// |       [punctuation] " ("
+// |       [text] "origin"
+// |       [punctuation] ": "
+// |       [keyword] "string"
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [string] "\"a\""
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [string] "\"b\""
+// |       [whitespace] " "
+// |       [punctuation] "|"
+// |       [whitespace] " "
+// |       [keyword] "undefined"
+// |       [punctuation] ")"
+// |   ClassifiedTextElement
+// |     [text] "Available choice."
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 83,
+      "LSPosition": {
+        "line": 2,
+        "character": 24
+      },
+      "Name": "declaration",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nlet value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 19
+        },
+        "end": {
+          "line": 2,
+          "character": 24
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 1747,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "let ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "local name",
+                    "Text": "value",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": " (",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "text",
+                    "Text": "origin",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "\"a\"",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "\"b\"",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ")",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Available choice.",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 42,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "imported",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) let value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 5
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 1747,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "text",
+                    "Text": "alias",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ") ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "let ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "local name",
+                    "Text": "value",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": " (",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "text",
+                    "Text": "origin",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "\"a\"",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "\"b\"",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ")",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Available choice.",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 2,
+        "character": 13
+      },
+      "Name": "property",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) member: string | undefined (origin: string | \"a\" | \"b\" | undefined)\n```\nAvailable choice."
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 7
+        },
+        "end": {
+          "line": 2,
+          "character": 13
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 2436,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "text",
+                    "Text": "property",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ") ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "property name",
+                    "Text": "member",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "undefined",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": " (",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "text",
+                    "Text": "origin",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "\"a\"",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "\"b\"",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "|",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "undefined",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ")",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Available choice.",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  }
+]
