@@ -76,7 +76,7 @@ const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav")
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("astnav", { concurrency: true }, () => {
+describe("astnav", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     let fileText: string;
 
     try {

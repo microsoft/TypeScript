@@ -57,7 +57,7 @@ function decode(data: Uint8Array): RemoteSourceFile {
     return new RemoteSourceFile(data, new Wtf8Decoder());
 }
 
-describe("Encoder", { concurrency: true }, () => {
+describe("Encoder", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 
@@ -348,7 +348,7 @@ describe("Encoder", { concurrency: true }, () => {
     });
 });
 
-describe("UTF-8 vs UTF-16 position encoding", { concurrency: true }, () => {
+describe("UTF-8 vs UTF-16 position encoding", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     // Positions in the encoded AST must be UTF-16 code unit offsets so that
     // file.text.slice(node.pos, node.end) works correctly on JS strings.
     // This is the same convention TypeScript uses.
@@ -409,7 +409,7 @@ describe("UTF-8 vs UTF-16 position encoding", { concurrency: true }, () => {
     });
 });
 
-describe("Line and character mapping", { concurrency: true }, () => {
+describe("Line and character mapping", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     function makeSourceFile(text: string): RemoteSourceFile {
         return decode(encodeSourceFile(makeSF(text, "/test.ts", [])));
     }

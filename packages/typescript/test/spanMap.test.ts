@@ -10,7 +10,7 @@ import {
     test,
 } from "node:test";
 
-describe("SpanMap", { concurrency: true }, () => {
+describe("SpanMap", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     const map = new SpanMap([
         { virtualStart: 2, virtualEnd: 6, originalStart: 10, originalEnd: 14, kind: SpanMapKind.Verbatim },
         { virtualStart: 8, virtualEnd: 11, originalStart: 20, originalEnd: 27, kind: SpanMapKind.Atom },

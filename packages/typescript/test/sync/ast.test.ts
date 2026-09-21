@@ -71,7 +71,7 @@ function collectKinds(node: Node): SyntaxKind[] {
     return kinds;
 }
 
-describe("NodeObject + childrenIter", { concurrency: true }, () => {
+describe("NodeObject + childrenIter", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("skips absent optional child lists", () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
@@ -86,7 +86,7 @@ test("Benchmarks", async () => {
 // cloneNode
 // ---------------------------------------------------------------------------
 
-describe("cloneNode", { concurrency: true }, () => {
+describe("cloneNode", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("clones an identifier", () => {
         const id = createIdentifier("hello");
         const clone = cloneNode(id);
@@ -156,7 +156,7 @@ describe("cloneNode", { concurrency: true }, () => {
 // visitNode / visitNodes
 // ---------------------------------------------------------------------------
 
-describe("visitNode", { concurrency: true }, () => {
+describe("visitNode", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: Node | undefined = undefined;
         const result = visitNode(nothing, () => undefined);
@@ -177,7 +177,7 @@ describe("visitNode", { concurrency: true }, () => {
     });
 });
 
-describe("visitNodes", { concurrency: true }, () => {
+describe("visitNodes", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: NodeArray<Node> | undefined = undefined;
         const result = visitNodes(nothing, () => undefined);
@@ -222,7 +222,7 @@ describe("visitNodes", { concurrency: true }, () => {
 // visitEachChild
 // ---------------------------------------------------------------------------
 
-describe("visitEachChild", { concurrency: true }, () => {
+describe("visitEachChild", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("returns same node if nothing changed (identity visitor)", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
@@ -307,7 +307,7 @@ describe("visitEachChild", { concurrency: true }, () => {
 // getSynthesizedDeepClone
 // ---------------------------------------------------------------------------
 
-describe("getSynthesizedDeepClone", { concurrency: true }, () => {
+describe("getSynthesizedDeepClone", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("deeply clones identifier", () => {
         const id = createIdentifier("hello");
         const clone = getSynthesizedDeepClone(id);
@@ -440,7 +440,7 @@ describe("getSynthesizedDeepClone", { concurrency: true }, () => {
 // getSynthesizedDeepClones (NodeArray)
 // ---------------------------------------------------------------------------
 
-describe("getSynthesizedDeepClones", { concurrency: true }, () => {
+describe("getSynthesizedDeepClones", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("deeply clones a NodeArray", () => {
         const a = createIdentifier("a");
         const b = createIdentifier("b");
@@ -475,7 +475,7 @@ describe("getSynthesizedDeepClones", { concurrency: true }, () => {
 // Type-only import use sites
 // ---------------------------------------------------------------------------
 
-describe("isValidTypeOnlyAliasUseSite", { concurrency: true }, () => {
+describe("isValidTypeOnlyAliasUseSite", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("classifies syntactic type-only import use sites", () => {
         const source = `
 type TypeUse = TypeOnlyName;
@@ -527,7 +527,7 @@ class JSDocAugmentsUse {}
 // Integration: visitor transformation
 // ---------------------------------------------------------------------------
 
-describe("visitor transformation", { concurrency: true }, () => {
+describe("visitor transformation", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("rename all identifiers via recursive visitor", () => {
         const a = createIdentifier("oldName");
         const b = createIdentifier("oldName");
@@ -602,7 +602,7 @@ function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
     return getRemoteSourceFileAndChecker(api, configPath, filePath)[0];
 }
 
-describe("RemoteNode + cloneNode", { concurrency: true }, () => {
+describe("RemoteNode + cloneNode", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("does not read a sibling as an invalid JSDoc link name", () => {
         const api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -718,7 +718,7 @@ interface I extends Parent<boolean> {}
     });
 });
 
-describe("RemoteNode + visitEachChild", { concurrency: true }, () => {
+describe("RemoteNode + visitEachChild", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("identity visitor returns same remote node", () => {
         const api = spawnAPI();
         try {
@@ -760,7 +760,7 @@ describe("RemoteNode + visitEachChild", { concurrency: true }, () => {
     });
 });
 
-describe("RemoteNodeList inherited array methods", { concurrency: true }, () => {
+describe("RemoteNodeList inherited array methods", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("filter/map/slice return plain arrays without throwing", () => {
         const api = spawnAPI();
         try {
@@ -793,7 +793,7 @@ describe("RemoteNodeList inherited array methods", { concurrency: true }, () => 
     });
 });
 
-describe("RemoteNode + getSynthesizedDeepClone", { concurrency: true }, () => {
+describe("RemoteNode + getSynthesizedDeepClone", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("deep clones a remote import declaration", () => {
         const api = spawnAPI();
         try {
@@ -907,7 +907,7 @@ function assertGetterInvariants(node: Node, sf: SourceFile) {
     });
 }
 
-describe("RemoteNode + position/text getters", { concurrency: true }, () => {
+describe("RemoteNode + position/text getters", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     const source = "/* lead */ const value = 123;";
     const files = {
         "/tsconfig.json": "{}",
@@ -1060,7 +1060,7 @@ describe("RemoteNode + position/text getters", { concurrency: true }, () => {
 // RemoteNode: child/token getters
 // ---------------------------------------------------------------------------
 
-describe("RemoteNode + child/token getters", { concurrency: true }, () => {
+describe("RemoteNode + child/token getters", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     function withFirstStatement(source: string, fn: (stmt: Node, sf: SourceFile) => void) {
         const api = spawnAPI({ "/tsconfig.json": "{}", "/src/children.ts": source });
         try {

@@ -10,7 +10,7 @@ import {
     test,
 } from "node:test";
 
-describe("diagnosticFormatter", { concurrency: true }, () => {
+describe("diagnosticFormatter", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
     test("formats diagnostics with a configured program host", async () => {
         const source = `const x: number = "oops";\n`;
         const api = spawnAPI({
