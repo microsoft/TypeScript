@@ -1,0 +1,206 @@
+//// [tests/cases/compiler/numericLiteralOrigins.ts] ////
+
+=== numericLiteralOrigins.ts ===
+type Numeric = 1 | 2 | number;
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+
+type Big = 1n | 2n | bigint;
+>Big : Symbol(Big, Decl(numericLiteralOrigins.ts, 0, 30))
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Symbol(Equal, Decl(numericLiteralOrigins.ts, 1, 28))
+>Left : Symbol(Left, Decl(numericLiteralOrigins.ts, 2, 11))
+>Right : Symbol(Right, Decl(numericLiteralOrigins.ts, 2, 16))
+>Value : Symbol(Value, Decl(numericLiteralOrigins.ts, 2, 28))
+>Value : Symbol(Value, Decl(numericLiteralOrigins.ts, 2, 28))
+>Left : Symbol(Left, Decl(numericLiteralOrigins.ts, 2, 11))
+
+    (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>Value : Symbol(Value, Decl(numericLiteralOrigins.ts, 3, 6))
+>Value : Symbol(Value, Decl(numericLiteralOrigins.ts, 3, 6))
+>Right : Symbol(Right, Decl(numericLiteralOrigins.ts, 2, 16))
+
+const numericIdentity: Equal<Numeric, number> = true;
+>numericIdentity : Symbol(numericIdentity, Decl(numericLiteralOrigins.ts, 4, 5))
+>Equal : Symbol(Equal, Decl(numericLiteralOrigins.ts, 1, 28))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+
+const bigintIdentity: Equal<Big, bigint> = true;
+>bigintIdentity : Symbol(bigintIdentity, Decl(numericLiteralOrigins.ts, 5, 5))
+>Equal : Symbol(Equal, Decl(numericLiteralOrigins.ts, 1, 28))
+>Big : Symbol(Big, Decl(numericLiteralOrigins.ts, 0, 30))
+
+const mergedIdentity: Equal<Numeric | number, number> = true;
+>mergedIdentity : Symbol(mergedIdentity, Decl(numericLiteralOrigins.ts, 6, 5))
+>Equal : Symbol(Equal, Decl(numericLiteralOrigins.ts, 1, 28))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+
+const mergedBigIdentity: Equal<Big | bigint, bigint> = true;
+>mergedBigIdentity : Symbol(mergedBigIdentity, Decl(numericLiteralOrigins.ts, 7, 5))
+>Equal : Symbol(Equal, Decl(numericLiteralOrigins.ts, 1, 28))
+>Big : Symbol(Big, Decl(numericLiteralOrigins.ts, 0, 30))
+
+const intersectionIdentity: Equal<Numeric & {}, number> = true;
+>intersectionIdentity : Symbol(intersectionIdentity, Decl(numericLiteralOrigins.ts, 8, 5))
+>Equal : Symbol(Equal, Decl(numericLiteralOrigins.ts, 1, 28))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+
+const bigIntersectionIdentity: Equal<Big & {}, bigint> = true;
+>bigIntersectionIdentity : Symbol(bigIntersectionIdentity, Decl(numericLiteralOrigins.ts, 9, 5))
+>Equal : Symbol(Equal, Decl(numericLiteralOrigins.ts, 1, 28))
+>Big : Symbol(Big, Decl(numericLiteralOrigins.ts, 0, 30))
+
+declare const values: Record<Numeric, number>;
+>values : Symbol(values, Decl(numericLiteralOrigins.ts, 11, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+
+export const known = values[1];
+>known : Symbol(known, Decl(numericLiteralOrigins.ts, 12, 12))
+>values : Symbol(values, Decl(numericLiteralOrigins.ts, 11, 13))
+>1 : Symbol(1)
+
+export const other = values[3];
+>other : Symbol(other, Decl(numericLiteralOrigins.ts, 13, 12))
+>values : Symbol(values, Decl(numericLiteralOrigins.ts, 11, 13))
+
+const missing: Record<Numeric, number> = {};
+>missing : Symbol(missing, Decl(numericLiteralOrigins.ts, 14, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+
+const present: Record<Numeric, number> = { 1: 1, 2: 2 };
+>present : Symbol(present, Decl(numericLiteralOrigins.ts, 15, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+>1 : Symbol(1, Decl(numericLiteralOrigins.ts, 15, 42))
+>2 : Symbol(2, Decl(numericLiteralOrigins.ts, 15, 48))
+
+const plain: Record<number, number> = {};
+>plain : Symbol(plain, Decl(numericLiteralOrigins.ts, 16, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare const keyValues: { [Key in Numeric]: Key };
+>keyValues : Symbol(keyValues, Decl(numericLiteralOrigins.ts, 17, 13))
+>Key : Symbol(Key, Decl(numericLiteralOrigins.ts, 17, 28))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+>Key : Symbol(Key, Decl(numericLiteralOrigins.ts, 17, 28))
+
+export const literalValue = keyValues[1];
+>literalValue : Symbol(literalValue, Decl(numericLiteralOrigins.ts, 18, 12))
+>keyValues : Symbol(keyValues, Decl(numericLiteralOrigins.ts, 17, 13))
+>1 : Symbol(1)
+
+export const indexValue = keyValues[3];
+>indexValue : Symbol(indexValue, Decl(numericLiteralOrigins.ts, 19, 12))
+>keyValues : Symbol(keyValues, Decl(numericLiteralOrigins.ts, 17, 13))
+
+declare const remapped: { [Key in Big as `${Key}`]: Key };
+>remapped : Symbol(remapped, Decl(numericLiteralOrigins.ts, 21, 13))
+>Key : Symbol(Key, Decl(numericLiteralOrigins.ts, 21, 27))
+>Big : Symbol(Big, Decl(numericLiteralOrigins.ts, 0, 30))
+>Key : Symbol(Key, Decl(numericLiteralOrigins.ts, 21, 27))
+>Key : Symbol(Key, Decl(numericLiteralOrigins.ts, 21, 27))
+
+export const bigKnown = remapped["1"];
+>bigKnown : Symbol(bigKnown, Decl(numericLiteralOrigins.ts, 22, 12))
+>remapped : Symbol(remapped, Decl(numericLiteralOrigins.ts, 21, 13))
+>"1" : Symbol(1)
+
+export const bigOther = remapped["3"];
+>bigOther : Symbol(bigOther, Decl(numericLiteralOrigins.ts, 23, 12))
+>remapped : Symbol(remapped, Decl(numericLiteralOrigins.ts, 21, 13))
+
+type GenericNumeric<Key extends number> = Record<Key | number, string>;
+>GenericNumeric : Symbol(GenericNumeric, Decl(numericLiteralOrigins.ts, 23, 38))
+>Key : Symbol(Key, Decl(numericLiteralOrigins.ts, 24, 20))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Key : Symbol(Key, Decl(numericLiteralOrigins.ts, 24, 20))
+
+declare const generic: GenericNumeric<1 | 2>;
+>generic : Symbol(generic, Decl(numericLiteralOrigins.ts, 25, 13))
+>GenericNumeric : Symbol(GenericNumeric, Decl(numericLiteralOrigins.ts, 23, 38))
+
+export const genericKnown = generic[1];
+>genericKnown : Symbol(genericKnown, Decl(numericLiteralOrigins.ts, 26, 12))
+>generic : Symbol(generic, Decl(numericLiteralOrigins.ts, 25, 13))
+>1 : Symbol(1)
+
+export const genericOther = generic[3];
+>genericOther : Symbol(genericOther, Decl(numericLiteralOrigins.ts, 27, 12))
+>generic : Symbol(generic, Decl(numericLiteralOrigins.ts, 25, 13))
+
+interface NumericIndex { [key: Numeric]: string }
+>NumericIndex : Symbol(NumericIndex, Decl(numericLiteralOrigins.ts, 27, 39))
+>key : Symbol(key, Decl(numericLiteralOrigins.ts, 29, 26))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+
+declare const indexed: NumericIndex;
+>indexed : Symbol(indexed, Decl(numericLiteralOrigins.ts, 30, 13))
+>NumericIndex : Symbol(NumericIndex, Decl(numericLiteralOrigins.ts, 27, 39))
+
+export const numericAccess = indexed[0];
+>numericAccess : Symbol(numericAccess, Decl(numericLiteralOrigins.ts, 31, 12))
+>indexed : Symbol(indexed, Decl(numericLiteralOrigins.ts, 30, 13))
+
+export const numericStringAccess = indexed["0"];
+>numericStringAccess : Symbol(numericStringAccess, Decl(numericLiteralOrigins.ts, 32, 12))
+>indexed : Symbol(indexed, Decl(numericLiteralOrigins.ts, 30, 13))
+
+export const key: keyof NumericIndex = 0;
+>key : Symbol(key, Decl(numericLiteralOrigins.ts, 33, 12))
+>NumericIndex : Symbol(NumericIndex, Decl(numericLiteralOrigins.ts, 27, 39))
+
+export const invalidKey: keyof NumericIndex = "invalid";
+>invalidKey : Symbol(invalidKey, Decl(numericLiteralOrigins.ts, 34, 12))
+>NumericIndex : Symbol(NumericIndex, Decl(numericLiteralOrigins.ts, 27, 39))
+
+declare function inferValue<Value>(value: { [key: number]: Value }): Value;
+>inferValue : Symbol(inferValue, Decl(numericLiteralOrigins.ts, 34, 56))
+>Value : Symbol(Value, Decl(numericLiteralOrigins.ts, 36, 28))
+>value : Symbol(value, Decl(numericLiteralOrigins.ts, 36, 35))
+>key : Symbol(key, Decl(numericLiteralOrigins.ts, 36, 45))
+>Value : Symbol(Value, Decl(numericLiteralOrigins.ts, 36, 28))
+>Value : Symbol(Value, Decl(numericLiteralOrigins.ts, 36, 28))
+
+export const inferred = inferValue(indexed);
+>inferred : Symbol(inferred, Decl(numericLiteralOrigins.ts, 37, 12))
+>inferValue : Symbol(inferValue, Decl(numericLiteralOrigins.ts, 34, 56))
+>indexed : Symbol(indexed, Decl(numericLiteralOrigins.ts, 30, 13))
+
+declare const intersection: { [key: Numeric]: { first: number } } & { [key: 3 | number]: { second: string } };
+>intersection : Symbol(intersection, Decl(numericLiteralOrigins.ts, 38, 13))
+>key : Symbol(key, Decl(numericLiteralOrigins.ts, 38, 31))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+>first : Symbol(first, Decl(numericLiteralOrigins.ts, 38, 47))
+>key : Symbol(key, Decl(numericLiteralOrigins.ts, 38, 71))
+>second : Symbol(second, Decl(numericLiteralOrigins.ts, 38, 90))
+
+export const combined = intersection[0]!;
+>combined : Symbol(combined, Decl(numericLiteralOrigins.ts, 39, 12))
+>intersection : Symbol(intersection, Decl(numericLiteralOrigins.ts, 38, 13))
+
+export const first = combined.first;
+>first : Symbol(first, Decl(numericLiteralOrigins.ts, 40, 12))
+>combined.first : Symbol(first, Decl(numericLiteralOrigins.ts, 38, 47))
+>combined : Symbol(combined, Decl(numericLiteralOrigins.ts, 39, 12))
+>first : Symbol(first, Decl(numericLiteralOrigins.ts, 38, 47))
+
+export const second = combined.second;
+>second : Symbol(second, Decl(numericLiteralOrigins.ts, 41, 12))
+>combined.second : Symbol(second, Decl(numericLiteralOrigins.ts, 38, 90))
+>combined : Symbol(combined, Decl(numericLiteralOrigins.ts, 39, 12))
+>second : Symbol(second, Decl(numericLiteralOrigins.ts, 38, 90))
+
+export function widenNumeric(value: Numeric) { return value; }
+>widenNumeric : Symbol(widenNumeric, Decl(numericLiteralOrigins.ts, 41, 38))
+>value : Symbol(value, Decl(numericLiteralOrigins.ts, 43, 29))
+>Numeric : Symbol(Numeric, Decl(numericLiteralOrigins.ts, 0, 0))
+>value : Symbol(value, Decl(numericLiteralOrigins.ts, 43, 29))
+
+export function widenBigint(value: Big) { return value; }
+>widenBigint : Symbol(widenBigint, Decl(numericLiteralOrigins.ts, 43, 62))
+>value : Symbol(value, Decl(numericLiteralOrigins.ts, 44, 28))
+>Big : Symbol(Big, Decl(numericLiteralOrigins.ts, 0, 30))
+>value : Symbol(value, Decl(numericLiteralOrigins.ts, 44, 28))
+

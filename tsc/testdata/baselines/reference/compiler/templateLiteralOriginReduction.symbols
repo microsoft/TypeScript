@@ -1,0 +1,168 @@
+//// [tests/cases/compiler/templateLiteralOriginReduction.ts] ////
+
+=== templateLiteralOriginReduction.ts ===
+type Pattern = `${string}Downcast`;
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+type Choice = "dataDowncast" | "editingDowncast" | Pattern;
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+type OtherChoice = "otherDowncast" | Pattern;
+>OtherChoice : Symbol(OtherChoice, Decl(templateLiteralOriginReduction.ts, 1, 59))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+type MappedChoice = "DATADOWNCAST" | "EDITINGDOWNCAST" | Uppercase<Pattern>;
+>MappedChoice : Symbol(MappedChoice, Decl(templateLiteralOriginReduction.ts, 2, 45))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+type UppercaseChoice = "DATA" | "EDITING" | Uppercase<string>;
+>UppercaseChoice : Symbol(UppercaseChoice, Decl(templateLiteralOriginReduction.ts, 3, 76))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Symbol(Equal, Decl(templateLiteralOriginReduction.ts, 4, 62))
+>Left : Symbol(Left, Decl(templateLiteralOriginReduction.ts, 5, 11))
+>Right : Symbol(Right, Decl(templateLiteralOriginReduction.ts, 5, 16))
+>Value : Symbol(Value, Decl(templateLiteralOriginReduction.ts, 5, 28))
+>Value : Symbol(Value, Decl(templateLiteralOriginReduction.ts, 5, 28))
+>Left : Symbol(Left, Decl(templateLiteralOriginReduction.ts, 5, 11))
+
+    (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>Value : Symbol(Value, Decl(templateLiteralOriginReduction.ts, 6, 6))
+>Value : Symbol(Value, Decl(templateLiteralOriginReduction.ts, 6, 6))
+>Right : Symbol(Right, Decl(templateLiteralOriginReduction.ts, 5, 16))
+
+const identity: Equal<Choice, Pattern> = true;
+>identity : Symbol(identity, Decl(templateLiteralOriginReduction.ts, 7, 5))
+>Equal : Symbol(Equal, Decl(templateLiteralOriginReduction.ts, 4, 62))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+const mergedIdentity: Equal<Choice | OtherChoice | Pattern, Pattern> = true;
+>mergedIdentity : Symbol(mergedIdentity, Decl(templateLiteralOriginReduction.ts, 8, 5))
+>Equal : Symbol(Equal, Decl(templateLiteralOriginReduction.ts, 4, 62))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+>OtherChoice : Symbol(OtherChoice, Decl(templateLiteralOriginReduction.ts, 1, 59))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+const mappedIdentity: Equal<MappedChoice, Uppercase<Pattern>> = true;
+>mappedIdentity : Symbol(mappedIdentity, Decl(templateLiteralOriginReduction.ts, 9, 5))
+>Equal : Symbol(Equal, Decl(templateLiteralOriginReduction.ts, 4, 62))
+>MappedChoice : Symbol(MappedChoice, Decl(templateLiteralOriginReduction.ts, 2, 45))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+const intersectionIdentity: Equal<Choice & {}, Pattern> = true;
+>intersectionIdentity : Symbol(intersectionIdentity, Decl(templateLiteralOriginReduction.ts, 10, 5))
+>Equal : Symbol(Equal, Decl(templateLiteralOriginReduction.ts, 4, 62))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+const uppercaseIdentity: Equal<UppercaseChoice, Uppercase<string>> = true;
+>uppercaseIdentity : Symbol(uppercaseIdentity, Decl(templateLiteralOriginReduction.ts, 11, 5))
+>Equal : Symbol(Equal, Decl(templateLiteralOriginReduction.ts, 4, 62))
+>UppercaseChoice : Symbol(UppercaseChoice, Decl(templateLiteralOriginReduction.ts, 3, 76))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+export function choose(value: Choice) { return value; }
+>choose : Symbol(choose, Decl(templateLiteralOriginReduction.ts, 11, 74))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 12, 23))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 12, 23))
+
+export function merge(value: Choice | OtherChoice | Pattern) { return value; }
+>merge : Symbol(merge, Decl(templateLiteralOriginReduction.ts, 12, 55))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 13, 22))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+>OtherChoice : Symbol(OtherChoice, Decl(templateLiteralOriginReduction.ts, 1, 59))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 13, 22))
+
+export function withExtra(value: "downcast" | Choice) { return value; }
+>withExtra : Symbol(withExtra, Decl(templateLiteralOriginReduction.ts, 13, 78))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 14, 26))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 14, 26))
+
+export function mapped(value: MappedChoice) { return value; }
+>mapped : Symbol(mapped, Decl(templateLiteralOriginReduction.ts, 14, 71))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 15, 23))
+>MappedChoice : Symbol(MappedChoice, Decl(templateLiteralOriginReduction.ts, 2, 45))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 15, 23))
+
+export function uppercase(value: UppercaseChoice) { return value; }
+>uppercase : Symbol(uppercase, Decl(templateLiteralOriginReduction.ts, 15, 61))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 16, 26))
+>UppercaseChoice : Symbol(UppercaseChoice, Decl(templateLiteralOriginReduction.ts, 3, 76))
+>value : Symbol(value, Decl(templateLiteralOriginReduction.ts, 16, 26))
+
+const invalid: Choice = "downcast";
+>invalid : Symbol(invalid, Decl(templateLiteralOriginReduction.ts, 17, 5))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+
+const invalidUppercase: UppercaseChoice = "lowercase";
+>invalidUppercase : Symbol(invalidUppercase, Decl(templateLiteralOriginReduction.ts, 18, 5))
+>UppercaseChoice : Symbol(UppercaseChoice, Decl(templateLiteralOriginReduction.ts, 3, 76))
+
+declare const values: Record<Choice, number>;
+>values : Symbol(values, Decl(templateLiteralOriginReduction.ts, 20, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Choice : Symbol(Choice, Decl(templateLiteralOriginReduction.ts, 0, 35))
+
+export const known = values.dataDowncast;
+>known : Symbol(known, Decl(templateLiteralOriginReduction.ts, 21, 12))
+>values.dataDowncast : Symbol(dataDowncast)
+>values : Symbol(values, Decl(templateLiteralOriginReduction.ts, 20, 13))
+>dataDowncast : Symbol(dataDowncast)
+
+export const arbitrary = values.otherDowncast;
+>arbitrary : Symbol(arbitrary, Decl(templateLiteralOriginReduction.ts, 22, 12))
+>values : Symbol(values, Decl(templateLiteralOriginReduction.ts, 20, 13))
+
+declare const plain: Record<Pattern, number>;
+>plain : Symbol(plain, Decl(templateLiteralOriginReduction.ts, 23, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+export const plainLiteral = plain.dataDowncast;
+>plainLiteral : Symbol(plainLiteral, Decl(templateLiteralOriginReduction.ts, 24, 12))
+>plain : Symbol(plain, Decl(templateLiteralOriginReduction.ts, 23, 13))
+
+type Generic<Value extends string> = Value | Pattern;
+>Generic : Symbol(Generic, Decl(templateLiteralOriginReduction.ts, 24, 47))
+>Value : Symbol(Value, Decl(templateLiteralOriginReduction.ts, 26, 13))
+>Value : Symbol(Value, Decl(templateLiteralOriginReduction.ts, 26, 13))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+declare const generic: Generic<"dataDowncast">;
+>generic : Symbol(generic, Decl(templateLiteralOriginReduction.ts, 27, 13))
+>Generic : Symbol(Generic, Decl(templateLiteralOriginReduction.ts, 24, 47))
+
+const genericIdentity: Equal<typeof generic, Pattern> = true;
+>genericIdentity : Symbol(genericIdentity, Decl(templateLiteralOriginReduction.ts, 28, 5))
+>Equal : Symbol(Equal, Decl(templateLiteralOriginReduction.ts, 4, 62))
+>generic : Symbol(generic, Decl(templateLiteralOriginReduction.ts, 27, 13))
+>Pattern : Symbol(Pattern, Decl(templateLiteralOriginReduction.ts, 0, 0))
+
+export const genericValue = generic;
+>genericValue : Symbol(genericValue, Decl(templateLiteralOriginReduction.ts, 29, 12))
+>generic : Symbol(generic, Decl(templateLiteralOriginReduction.ts, 27, 13))
+
+declare const upper: Record<UppercaseChoice, number>;
+>upper : Symbol(upper, Decl(templateLiteralOriginReduction.ts, 31, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>UppercaseChoice : Symbol(UppercaseChoice, Decl(templateLiteralOriginReduction.ts, 3, 76))
+
+export const uppercaseKnown = upper.DATA;
+>uppercaseKnown : Symbol(uppercaseKnown, Decl(templateLiteralOriginReduction.ts, 32, 12))
+>upper.DATA : Symbol(DATA)
+>upper : Symbol(upper, Decl(templateLiteralOriginReduction.ts, 31, 13))
+>DATA : Symbol(DATA)
+
+export const uppercaseOther = upper.OTHER;
+>uppercaseOther : Symbol(uppercaseOther, Decl(templateLiteralOriginReduction.ts, 33, 12))
+>upper : Symbol(upper, Decl(templateLiteralOriginReduction.ts, 31, 13))
+

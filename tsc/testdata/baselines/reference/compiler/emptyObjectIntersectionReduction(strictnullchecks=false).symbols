@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/emptyObjectIntersectionReduction.ts] ////
+
+=== emptyObjectIntersectionReduction.ts ===
+export function stringRight(value: string & {}) { return value; }
+>stringRight : Symbol(stringRight, Decl(emptyObjectIntersectionReduction.ts, 0, 0))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 0, 28))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 0, 28))
+
+export function stringLeft(value: {} & string) { return value; }
+>stringLeft : Symbol(stringLeft, Decl(emptyObjectIntersectionReduction.ts, 0, 65))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 1, 27))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 1, 27))
+
+export function numberRight(value: number & {}) { return value; }
+>numberRight : Symbol(numberRight, Decl(emptyObjectIntersectionReduction.ts, 1, 64))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 2, 28))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 2, 28))
+
+export function numberLeft(value: {} & number) { return value; }
+>numberLeft : Symbol(numberLeft, Decl(emptyObjectIntersectionReduction.ts, 2, 65))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 3, 27))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 3, 27))
+
+export function bigintRight(value: bigint & {}) { return value; }
+>bigintRight : Symbol(bigintRight, Decl(emptyObjectIntersectionReduction.ts, 3, 64))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 4, 28))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 4, 28))
+
+export function bigintLeft(value: {} & bigint) { return value; }
+>bigintLeft : Symbol(bigintLeft, Decl(emptyObjectIntersectionReduction.ts, 4, 65))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 5, 27))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 5, 27))
+
+export function templateRight(value: `prefix${string}` & {}) { return value; }
+>templateRight : Symbol(templateRight, Decl(emptyObjectIntersectionReduction.ts, 5, 64))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 6, 30))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 6, 30))
+
+export function templateLeft(value: {} & `prefix${string}`) { return value; }
+>templateLeft : Symbol(templateLeft, Decl(emptyObjectIntersectionReduction.ts, 6, 78))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 7, 29))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 7, 29))
+
+export function stringUnion(value: "literal" | (string & {})) { return value; }
+>stringUnion : Symbol(stringUnion, Decl(emptyObjectIntersectionReduction.ts, 7, 77))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 9, 28))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 9, 28))
+
+export function numberUnion(value: 1 | (number & {})) { return value; }
+>numberUnion : Symbol(numberUnion, Decl(emptyObjectIntersectionReduction.ts, 9, 79))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 10, 28))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 10, 28))
+
+export function bigintUnion(value: 1n | (bigint & {})) { return value; }
+>bigintUnion : Symbol(bigintUnion, Decl(emptyObjectIntersectionReduction.ts, 10, 71))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 11, 28))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 11, 28))
+
+export function templateUnion(value: "prefixValue" | (`prefix${string}` & {})) { return value; }
+>templateUnion : Symbol(templateUnion, Decl(emptyObjectIntersectionReduction.ts, 11, 72))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 12, 30))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 12, 30))
+
+type Choice = "a" | "b" | string;
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+
+type OtherChoice = "c" | string;
+>OtherChoice : Symbol(OtherChoice, Decl(emptyObjectIntersectionReduction.ts, 14, 33))
+
+type NumericChoice = 1 | 2 | number;
+>NumericChoice : Symbol(NumericChoice, Decl(emptyObjectIntersectionReduction.ts, 15, 32))
+
+type BigIntChoice = 1n | 2n | bigint;
+>BigIntChoice : Symbol(BigIntChoice, Decl(emptyObjectIntersectionReduction.ts, 16, 36))
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Symbol(Equal, Decl(emptyObjectIntersectionReduction.ts, 17, 37))
+>Left : Symbol(Left, Decl(emptyObjectIntersectionReduction.ts, 18, 11))
+>Right : Symbol(Right, Decl(emptyObjectIntersectionReduction.ts, 18, 16))
+>Value : Symbol(Value, Decl(emptyObjectIntersectionReduction.ts, 18, 28))
+>Value : Symbol(Value, Decl(emptyObjectIntersectionReduction.ts, 18, 28))
+>Left : Symbol(Left, Decl(emptyObjectIntersectionReduction.ts, 18, 11))
+
+	(<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>Value : Symbol(Value, Decl(emptyObjectIntersectionReduction.ts, 19, 3))
+>Value : Symbol(Value, Decl(emptyObjectIntersectionReduction.ts, 19, 3))
+>Right : Symbol(Right, Decl(emptyObjectIntersectionReduction.ts, 18, 16))
+
+const stringIdentity: Equal<Choice, string> = true;
+>stringIdentity : Symbol(stringIdentity, Decl(emptyObjectIntersectionReduction.ts, 20, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectIntersectionReduction.ts, 17, 37))
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+
+const numberIdentity: Equal<NumericChoice, number> = true;
+>numberIdentity : Symbol(numberIdentity, Decl(emptyObjectIntersectionReduction.ts, 21, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectIntersectionReduction.ts, 17, 37))
+>NumericChoice : Symbol(NumericChoice, Decl(emptyObjectIntersectionReduction.ts, 15, 32))
+
+const bigintIdentity: Equal<BigIntChoice, bigint> = true;
+>bigintIdentity : Symbol(bigintIdentity, Decl(emptyObjectIntersectionReduction.ts, 22, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectIntersectionReduction.ts, 17, 37))
+>BigIntChoice : Symbol(BigIntChoice, Decl(emptyObjectIntersectionReduction.ts, 16, 36))
+
+const mergedIdentity: Equal<Choice | OtherChoice | string, string> = true;
+>mergedIdentity : Symbol(mergedIdentity, Decl(emptyObjectIntersectionReduction.ts, 23, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectIntersectionReduction.ts, 17, 37))
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+>OtherChoice : Symbol(OtherChoice, Decl(emptyObjectIntersectionReduction.ts, 14, 33))
+
+const mixedIdentity: Equal<Choice | number, string | number> = true;
+>mixedIdentity : Symbol(mixedIdentity, Decl(emptyObjectIntersectionReduction.ts, 24, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectIntersectionReduction.ts, 17, 37))
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+
+const intersectionIdentity: Equal<Choice & {}, string> = true;
+>intersectionIdentity : Symbol(intersectionIdentity, Decl(emptyObjectIntersectionReduction.ts, 25, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectIntersectionReduction.ts, 17, 37))
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+
+export function mergedChoices(value: Choice | OtherChoice | string) { return value; }
+>mergedChoices : Symbol(mergedChoices, Decl(emptyObjectIntersectionReduction.ts, 25, 62))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 26, 30))
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+>OtherChoice : Symbol(OtherChoice, Decl(emptyObjectIntersectionReduction.ts, 14, 33))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 26, 30))
+
+export function mixedChoices(value: Choice | number) { return value; }
+>mixedChoices : Symbol(mixedChoices, Decl(emptyObjectIntersectionReduction.ts, 26, 85))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 27, 29))
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 27, 29))
+
+type GenericChoice<Value> = "a" | "b" | string;
+>GenericChoice : Symbol(GenericChoice, Decl(emptyObjectIntersectionReduction.ts, 27, 70))
+>Value : Symbol(Value, Decl(emptyObjectIntersectionReduction.ts, 29, 19))
+
+export function genericChoice<Value>(value: GenericChoice<Value>) { return value; }
+>genericChoice : Symbol(genericChoice, Decl(emptyObjectIntersectionReduction.ts, 29, 47))
+>Value : Symbol(Value, Decl(emptyObjectIntersectionReduction.ts, 30, 30))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 30, 37))
+>GenericChoice : Symbol(GenericChoice, Decl(emptyObjectIntersectionReduction.ts, 27, 70))
+>Value : Symbol(Value, Decl(emptyObjectIntersectionReduction.ts, 30, 30))
+>value : Symbol(value, Decl(emptyObjectIntersectionReduction.ts, 30, 37))
+
+export const instantiatedChoice = genericChoice<number>("other");
+>instantiatedChoice : Symbol(instantiatedChoice, Decl(emptyObjectIntersectionReduction.ts, 31, 12))
+>genericChoice : Symbol(genericChoice, Decl(emptyObjectIntersectionReduction.ts, 29, 47))
+
+type ChoiceMap = { [key in Choice]: number };
+>ChoiceMap : Symbol(ChoiceMap, Decl(emptyObjectIntersectionReduction.ts, 31, 65))
+>key : Symbol(key, Decl(emptyObjectIntersectionReduction.ts, 32, 20))
+>Choice : Symbol(Choice, Decl(emptyObjectIntersectionReduction.ts, 12, 96))
+
+declare const choiceMap: ChoiceMap;
+>choiceMap : Symbol(choiceMap, Decl(emptyObjectIntersectionReduction.ts, 33, 13))
+>ChoiceMap : Symbol(ChoiceMap, Decl(emptyObjectIntersectionReduction.ts, 31, 65))
+
+export const numericIndex = choiceMap[0];
+>numericIndex : Symbol(numericIndex, Decl(emptyObjectIntersectionReduction.ts, 34, 12))
+>choiceMap : Symbol(choiceMap, Decl(emptyObjectIntersectionReduction.ts, 33, 13))
+
+export const stringIndex = choiceMap["other"];
+>stringIndex : Symbol(stringIndex, Decl(emptyObjectIntersectionReduction.ts, 35, 12))
+>choiceMap : Symbol(choiceMap, Decl(emptyObjectIntersectionReduction.ts, 33, 13))
+
