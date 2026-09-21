@@ -319,6 +319,10 @@
         "category": "Error",
         "code": 1110
     },
+    "Expression or type is too deeply nested. Simplify or split it into smaller parts.": {
+        "category": "Error",
+        "code": 1700
+    },
     "Private field '{0}' must be declared in an enclosing class.": {
         "category": "Error",
         "code": 1111

@@ -83,6 +83,8 @@ type Parser struct {
 	statementHasAwaitIdentifier bool
 	hasDeprecatedTag            bool
 	hasParseError               bool
+	nestingDepth                int
+	nestingLimitHit             bool
 
 	identifierCount            int
 	notParenthesizedArrow      collections.Set[int]
@@ -108,6 +110,51 @@ func newParser() *Parser {
 }
 
 var viableKeywordSuggestions = scanner.GetViableKeywordSuggestions()
+
+// maxNestingDepth bounds recursive-descent nesting (expressions and types) so that
+// pathologically nested input (e.g. hundreds of thousands of nested "(", "[", or "A<")
+// is reported as a diagnostic instead of overflowing the goroutine stack with a fatal,
+// unrecoverable runtime error. The limit is far above any human-authored or realistic
+// machine-generated source, yet well below the depth that exhausts the stack.
+const maxNestingDepth = 40000
+
+// enterNesting increments the recursion-depth counter and reports whether the caller is
+// still allowed to descend. Callers that receive false must not recurse further and
+// should return a missing node so parsing can unwind cleanly. Every successful
+// enterNesting (returning true) must be paired with a leaveNesting.
+//
+// The first time the limit is reached it records a single diagnostic, then fast-forwards
+// the scanner to end-of-file via skipToEndOfFile. Positioning at EOF makes every enclosing
+// construct terminate (isListTerminator and parseExpected both stop at EOF), so the parser
+// unwinds and finishes in time linear in the nesting depth. This deliberately abandons the
+// remainder of the file: it avoids pathological O(n^2) error recovery that would otherwise
+// occur, for example, when a long chain of unterminated "A<" is re-scanned as a generic
+// call in expression position. The parser is pooled and fully reset in putParser, so the
+// nestingLimitHit flag never leaks across source files.
+func (p *Parser) enterNesting() bool {
+	if p.nestingDepth >= maxNestingDepth {
+		if !p.nestingLimitHit {
+			p.parseErrorAtCurrentToken(diagnostics.Expression_or_type_is_too_deeply_nested_Simplify_or_split_it_into_smaller_parts)
+			p.nestingLimitHit = true
+			p.skipToEndOfFile()
+		}
+		return false
+	}
+	p.nestingDepth++
+	return true
+}
+
+func (p *Parser) leaveNesting() {
+	p.nestingDepth--
+}
+
+// skipToEndOfFile advances the scanner to the end of the source and sets the current token
+// to EOF. It is used only for error recovery after maxNestingDepth is exceeded, to unwind
+// the recursive descent quickly instead of re-parsing the pathological remainder.
+func (p *Parser) skipToEndOfFile() {
+	p.scanner.ResetPos(len(p.sourceText))
+	p.token = p.scanner.Scan()
+}
 
 // missingListNodes is a sentinel backing array used to distinguish "missing" node lists
 // (where the expected opening token was not found) from ordinary empty node lists.
@@ -2657,6 +2704,10 @@ func (p *Parser) parseExportSpecifier() *ast.Node {
 // TYPES
 
 func (p *Parser) parseType() *ast.TypeNode {
+	if !p.enterNesting() {
+		return p.createMissingTypeNode()
+	}
+	defer p.leaveNesting()
 	saveContextFlags := p.contextFlags
 	p.setContextFlags(ast.NodeFlagsTypeExcludesFlags, false)
 	var typeNode *ast.TypeNode
@@ -3028,6 +3079,11 @@ func (p *Parser) newIdentifier(text string) *ast.Node {
 
 func (p *Parser) createMissingIdentifier() *ast.Node {
 	return p.finishNode(p.newIdentifier(""), p.nodePos())
+}
+
+func (p *Parser) createMissingTypeNode() *ast.TypeNode {
+	pos := p.nodePos()
+	return p.finishNode(p.factory.NewTypeReferenceNode(p.createMissingIdentifier(), nil), pos)
 }
 
 func (p *Parser) parsePrivateIdentifier() *ast.Node {
@@ -4128,6 +4184,10 @@ func (p *Parser) parseExpressionAllowIn() *ast.Expression {
 }
 
 func (p *Parser) parseAssignmentExpressionOrHigher() *ast.Expression {
+	if !p.enterNesting() {
+		return p.createMissingIdentifier()
+	}
+	defer p.leaveNesting()
 	return p.parseAssignmentExpressionOrHigherWorker(true /*allowReturnTypeInArrowFunction*/)
 }
 

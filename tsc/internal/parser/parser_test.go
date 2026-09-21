@@ -155,6 +155,67 @@ func FuzzParser(f *testing.F) {
 	})
 }
 
+// TestDeeplyNestedInputDoesNotOverflow verifies that pathologically nested input is
+// reported as a recoverable diagnostic (TS1700) instead of aborting the process with a
+// fatal "stack overflow" runtime error. Reaching the end of ParseSourceFile at all is the
+// core assertion: a stack overflow is a fatal, unrecoverable runtime error that would
+// terminate the test binary rather than fail this test. See microsoft/TypeScript#64370.
+func TestDeeplyNestedInputDoesNotOverflow(t *testing.T) {
+	t.Parallel()
+
+	// A depth comfortably beyond the parser's nesting cap so recovery is exercised, but
+	// small enough that the test stays fast.
+	const depth = 60000
+
+	tests := []struct {
+		name   string
+		source string
+	}{
+		{name: "parenthesized expressions", source: strings.Repeat("(", depth)},
+		{name: "array literals", source: strings.Repeat("[", depth)},
+		{name: "type arguments", source: "type T = " + strings.Repeat("A<", depth)},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			opts := ast.SourceFileParseOptions{
+				FileName: "/index.ts",
+				Path:     "/index.ts",
+			}
+			file := parser.ParseSourceFile(opts, test.source, core.ScriptKindTS)
+
+			const tooDeeplyNestedCode = 1700
+			found := false
+			for _, d := range file.Diagnostics() {
+				if d.Code() == tooDeeplyNestedCode {
+					found = true
+					break
+				}
+			}
+			assert.Assert(t, found, "expected a 'too deeply nested' (TS1700) diagnostic")
+		})
+	}
+}
+
+// TestModeratelyNestedInputIsAccepted guards against false positives: nesting well under
+// the cap must parse without emitting the "too deeply nested" diagnostic.
+func TestModeratelyNestedInputIsAccepted(t *testing.T) {
+	t.Parallel()
+
+	const depth = 1000
+	sourceText := "const x = " + strings.Repeat("(", depth) + "1" + strings.Repeat(")", depth) + ";"
+	opts := ast.SourceFileParseOptions{
+		FileName: "/index.ts",
+		Path:     "/index.ts",
+	}
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindTS)
+
+	for _, d := range file.Diagnostics() {
+		assert.Assert(t, d.Code() != 1700, "unexpected 'too deeply nested' diagnostic on valid input")
+	}
+}
+
 func TestHeritageClauseElementKinds(t *testing.T) {
 	t.Parallel()
 	sourceText := `
