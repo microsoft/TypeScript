@@ -23,9 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
-//go:generate npm run --silent cache -- --input $GOFILE --input ../../project/client.go --output clientmock_generated.go --command go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out clientmock_generated.go ../../project Client --command dprint fmt clientmock_generated.go
-
-//go:generate npm run --silent cache -- --input $GOFILE --input ../../project/ata/ata.go --output npmexecutormock_generated.go --command go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out npmexecutormock_generated.go ../../project/ata NpmExecutor --command dprint fmt npmexecutormock_generated.go
+//go:generate npx hereby generate:projecttestutil
 
 const (
 	TestTypingsLocation = "/home/src/Library/Caches/typescript"

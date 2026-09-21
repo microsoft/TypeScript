@@ -2,7 +2,7 @@
 
 package ast
 
-//go:generate npm run --silent cache -- --input $GOFILE --output kind_stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=Kind -output=kind_stringer_generated.go --command dprint fmt kind_stringer_generated.go
+//go:generate npx hereby generate:ast-stringer
 
 type Kind int16
 

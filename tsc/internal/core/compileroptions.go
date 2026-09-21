@@ -9,8 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-//go:generate npm run --silent cache -- --input $GOFILE --output modulekind_stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=ModuleKind -trimprefix=ModuleKind -output=modulekind_stringer_generated.go --command dprint fmt modulekind_stringer_generated.go
-//go:generate npm run --silent cache -- --input $GOFILE --output scripttarget_stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=ScriptTarget -trimprefix=ScriptTarget -output=scripttarget_stringer_generated.go --command dprint fmt scripttarget_stringer_generated.go
+//go:generate npx hereby generate:compileroptions
 
 // CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {

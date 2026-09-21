@@ -5,7 +5,6 @@ import { x } from "tinyexec";
 import { GeneratedFile } from "./generatedFile.mts";
 import {
     goInputs,
-    parseGeneratorArgs,
     repoRoot,
 } from "./utils.mts";
 
@@ -16,6 +15,7 @@ export interface CacheOptions {
     cwd?: string;
     exclude?: string[];
     envInputs?: string[];
+    env?: NodeJS.ProcessEnv;
     force?: boolean;
 }
 
@@ -30,12 +30,14 @@ export default async function cache({
     cwd = process.cwd(),
     exclude = [],
     envInputs = ["GOOS", "GOARCH", "GOFLAGS", "GOTOOLCHAIN", "GOEXPERIMENT", "CGO_ENABLED", "GOWORK"],
+    env,
     force = false,
 }: CacheOptions): Promise<boolean> {
     if (!outputs.length || !commands.length || commands.some(command => !command.length)) {
         throw new Error("Cached generation requires outputs and nonempty commands.");
     }
     cwd = path.resolve(cwd);
+    const environment = { ...process.env, ...env };
     const snapshotInputs = () => {
         const entries = [
             ...new Set([
@@ -76,7 +78,7 @@ export default async function cache({
                 exclude,
                 inputHash: before.hash,
                 outputFiles: files,
-                environment: envInputs.map(name => [name, process.env[name]]),
+                environment: envInputs.map(name => [name, environment[name]]),
             })
         );
     const previous = artifacts(outputFiles());
@@ -88,7 +90,7 @@ export default async function cache({
 
     for (const file of previous) file.invalidate();
     for (const [command, ...args] of commands) {
-        await x(command, args, { throwOnError: true, nodeOptions: { cwd, stdio: "inherit" } });
+        await x(command, args, { throwOnError: true, nodeOptions: { cwd, env: environment, stdio: "inherit" } });
     }
     if (!complete()) throw new Error(`Generation did not produce all declared outputs: ${outputs.join(", ")}`);
     if (snapshotInputs().hash === before.hash) {
@@ -96,25 +98,4 @@ export default async function cache({
     }
     console.log("Generated codegen outputs.");
     return false;
-}
-
-if (process.argv[1] === import.meta.filename) {
-    const args = process.argv.slice(2);
-    const cwd = process.env.npm_lifecycle_event === "cache" ? process.env.INIT_CWD ?? process.cwd() : process.cwd();
-    const commandStart = args.indexOf("--command");
-    const { values, force } = parseGeneratorArgs({
-        input: { type: "string", multiple: true },
-        output: { type: "string", multiple: true },
-        exclude: { type: "string", multiple: true },
-        env: { type: "string", multiple: true },
-        cwd: { type: "string" },
-    }, commandStart < 0 ? args : args.slice(0, commandStart));
-    const commands: string[][] = [];
-    if (commandStart >= 0) {
-        for (const arg of args.slice(commandStart)) {
-            if (arg === "--command") commands.push([]);
-            else commands[commands.length - 1].push(arg);
-        }
-    }
-    await cache({ inputs: values.input ?? [], outputs: values.output ?? [], commands, cwd: path.resolve(cwd, values.cwd ?? "."), exclude: values.exclude, envInputs: values.env, force });
 }

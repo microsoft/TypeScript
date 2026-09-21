@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//go:generate npm run --silent cache -- --input $GOFILE --output vfsmock/mock_generated.go --command go tool github.com/matryer/moq -fmt goimports -out vfsmock/mock_generated.go -pkg vfsmock . FS --command dprint fmt vfsmock/mock_generated.go
+//go:generate npx hereby generate:vfs
 
 // FS is a file system abstraction.
 type FS interface {
