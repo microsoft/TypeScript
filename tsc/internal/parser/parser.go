@@ -123,14 +123,24 @@ const maxNestingDepth = 40000
 // should return a missing node so parsing can unwind cleanly. Every successful
 // enterNesting (returning true) must be paired with a leaveNesting.
 //
+// The guard is applied at the recursive-descent entry points that can otherwise grow the
+// stack without bound: parseType and parseTypeOperatorOrHigher for types, and
+// parseAssignmentExpressionOrHigher, parseSimpleUnaryExpression and parsePrimaryExpression
+// for expressions (covering e.g. "(((", "[[[", "!!!", "typeof typeof", "keyof keyof" and
+// "new new" chains).
+//
 // The first time the limit is reached it records a single diagnostic, then fast-forwards
 // the scanner to end-of-file via skipToEndOfFile. Positioning at EOF makes every enclosing
 // construct terminate (isListTerminator and parseExpected both stop at EOF), so the parser
 // unwinds and finishes in time linear in the nesting depth. This deliberately abandons the
 // remainder of the file: it avoids pathological O(n^2) error recovery that would otherwise
 // occur, for example, when a long chain of unterminated "A<" is re-scanned as a generic
-// call in expression position. The parser is pooled and fully reset in putParser, so the
-// nestingLimitHit flag never leaks across source files.
+// call in expression position.
+//
+// nestingDepth and nestingLimitHit are part of ParserState (see mark/rewind), so a limit
+// reached inside a discarded speculative lookahead is rolled back together with the scanner
+// and diagnostics; the committed parse then re-hits the limit and reports it exactly once.
+// The parser is also fully reset in putParser, so neither field leaks across source files.
 func (p *Parser) enterNesting() bool {
 	if p.nestingDepth >= maxNestingDepth {
 		if !p.nestingLimitHit {
@@ -394,6 +404,8 @@ type ParserState struct {
 	reparsedClonesLen           int
 	statementHasAwaitIdentifier bool
 	hasParseError               bool
+	nestingDepth                int
+	nestingLimitHit             bool
 }
 
 func (p *Parser) mark() ParserState {
@@ -406,6 +418,8 @@ func (p *Parser) mark() ParserState {
 		reparsedClonesLen:           len(p.reparsedClones),
 		statementHasAwaitIdentifier: p.statementHasAwaitIdentifier,
 		hasParseError:               p.hasParseError,
+		nestingDepth:                p.nestingDepth,
+		nestingLimitHit:             p.nestingLimitHit,
 	}
 }
 
@@ -419,6 +433,8 @@ func (p *Parser) rewind(state ParserState) {
 	p.reparsedClones = p.reparsedClones[0:state.reparsedClonesLen]
 	p.statementHasAwaitIdentifier = state.statementHasAwaitIdentifier
 	p.hasParseError = state.hasParseError
+	p.nestingDepth = state.nestingDepth
+	p.nestingLimitHit = state.nestingLimitHit
 }
 
 func (p *Parser) lookAhead(callback func(p *Parser) bool) bool {
@@ -2774,6 +2790,10 @@ func (p *Parser) createUnionOrIntersectionTypeNode(operator ast.Kind, types *ast
 }
 
 func (p *Parser) parseTypeOperatorOrHigher() *ast.TypeNode {
+	if !p.enterNesting() {
+		return p.createMissingTypeNode()
+	}
+	defer p.leaveNesting()
 	operator := p.token
 	switch operator {
 	case ast.KindKeyOfKeyword, ast.KindUniqueKeyword, ast.KindReadonlyKeyword:
@@ -5175,6 +5195,10 @@ func (p *Parser) parseJsxClosingFragment(inExpressionContext bool) *ast.Node {
 }
 
 func (p *Parser) parseSimpleUnaryExpression() *ast.Expression {
+	if !p.enterNesting() {
+		return p.createMissingIdentifier()
+	}
+	defer p.leaveNesting()
 	switch p.token {
 	case ast.KindPlusToken, ast.KindMinusToken, ast.KindTildeToken, ast.KindExclamationToken:
 		return p.parsePrefixUnaryExpression()
@@ -5664,6 +5688,10 @@ func (p *Parser) parseTemplateSpan(isTaggedTemplate bool) *ast.Node {
 }
 
 func (p *Parser) parsePrimaryExpression() *ast.Expression {
+	if !p.enterNesting() {
+		return p.createMissingIdentifier()
+	}
+	defer p.leaveNesting()
 	switch p.token {
 	case ast.KindNoSubstitutionTemplateLiteral:
 		if p.scanner.TokenFlags()&ast.TokenFlagsIsInvalid != 0 {

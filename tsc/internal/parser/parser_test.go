@@ -174,6 +174,10 @@ func TestDeeplyNestedInputDoesNotOverflow(t *testing.T) {
 		{name: "parenthesized expressions", source: strings.Repeat("(", depth)},
 		{name: "array literals", source: strings.Repeat("[", depth)},
 		{name: "type arguments", source: "type T = " + strings.Repeat("A<", depth)},
+		{name: "type operators", source: "type T = " + strings.Repeat("keyof ", depth) + "X"},
+		{name: "prefix unary operators", source: "const x = " + strings.Repeat("!", depth) + "y"},
+		{name: "typeof operators", source: "const x = " + strings.Repeat("typeof ", depth) + "y"},
+		{name: "new expressions", source: "const x = " + strings.Repeat("new ", depth) + "C"},
 	}
 
 	for _, test := range tests {
