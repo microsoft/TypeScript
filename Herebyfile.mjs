@@ -589,7 +589,7 @@ export const generateLSP = task({
 // ── Enum generation from Go source ──────────────────────────────
 
 async function runGenerateEnums() {
-    const { default: generate } = await import("./tools/scripts/generate-enums.mjs");
+    const { default: generate } = await import("./tools/scripts/tsc/generate-enums.ts");
     await generate(!!options.force);
 }
 

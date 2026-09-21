@@ -1,34 +1,30 @@
-// @ts-check
-
 import assert from "node:assert";
 import fs from "node:fs";
 import path from "node:path";
-import url from "node:url";
-import { run } from "./gen/utils.mts";
+import { fileURLToPath } from "node:url";
+import { GeneratedFile } from "../gen/generatedFile.mts";
+import {
+    formatFiles,
+    goInputs,
+    parseGeneratorArgs,
+    repoRoot as ROOT,
+    run,
+} from "../gen/utils.mts";
 
-const __filename = url.fileURLToPath(new URL(import.meta.url));
-
-/**
- * @param {string} command
- * @param {readonly string[]} [args]
- */
-function runOutput(command, args) {
-    return run(command, args, { captureOutput: true });
+function runOutput(command: string, args: readonly string[]) {
+    return run(command, args, { captureOutput: true, cwd: ROOT });
 }
 
-/**
- * @typedef {{
- *   name: string;
- *   goPrefix: string;
- *   goFile: string;
- *   outDir: string;
- *   stringEnum?: boolean;
- *   excludeMembers?: readonly string[];
- *   valueReplacements?: Record<string, string>;
- * }} EnumDef
- */
+interface EnumDef {
+    name: string;
+    goPrefix: string;
+    goFile: string;
+    outDir: string;
+    stringEnum?: boolean | undefined;
+    excludeMembers?: readonly string[] | undefined;
+    valueReplacements?: Record<string, string> | undefined;
+}
 
-/** @type {EnumDef[]} */
 const enumDefs = [
     { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "tsc/internal/ast/symbolflags.go", outDir: "packages/typescript/src/enums" },
     { name: "CheckFlags", goPrefix: "CheckFlags", goFile: "tsc/internal/ast/checkflags.go", outDir: "packages/typescript/src/enums" },
@@ -62,18 +58,13 @@ const enumDefs = [
     // String enum: Go stores internal names with a "\xFE" sentinel prefix, but the escaped
     // form sent over the wire uses "__" (see EscapeSymbolName), so map the sentinel accordingly.
     { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "tsc/internal/ast/symbol.go", outDir: "packages/typescript/src/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
-];
+] satisfies EnumDef[];
 
-/**
- * @param {string} block
- * @param {EnumDef} def
- * @returns {EnumMember[]}
- */
-function parseGoConstBlock(block, def) {
+function parseGoConstBlock(block: string, def: EnumDef): EnumMember[] {
     const prefix = def.goPrefix;
-    const members = [];
+    const members: EnumMember[] = [];
     let iotaCounter = 0;
-    let iotaExpression;
+    let iotaExpression: string | undefined;
 
     const lines = block.split("\n");
     let i = 0;
@@ -99,7 +90,7 @@ function parseGoConstBlock(block, def) {
             continue;
         }
 
-        const goName = fullMatch ? fullMatch[1] : /** @type {RegExpMatchArray} */ (bareMatch)[1];
+        const goName = fullMatch ? fullMatch[1] : bareMatch![1];
         let goValue = fullMatch ? fullMatch[2].trim() : "";
         const memberName = goName.slice(prefix.length);
 
@@ -116,7 +107,7 @@ function parseGoConstBlock(block, def) {
             i++;
         }
 
-        let tsValue;
+        let tsValue: string;
         if (def.stringEnum) {
             tsValue = parseGoStringValue(goValue, def.valueReplacements ?? {});
         }
@@ -182,20 +173,17 @@ const tsBinaryPrecedence = new Map([
     ["%", 13],
 ]);
 
-/**
- * @typedef {{ kind: "token"; text: string }
- *   | { kind: "unary"; operator: string; operand: GoExpression }
- *   | { kind: "binary"; operator: string; left: GoExpression; right: GoExpression }
- *   | { kind: "parenthesized"; expression: GoExpression }} GoExpression
- */
+type GoExpression =
+    | { kind: "token"; text: string; }
+    | { kind: "unary"; operator: string; operand: GoExpression; }
+    | { kind: "binary"; operator: string; left: GoExpression; right: GoExpression; }
+    | { kind: "parenthesized"; expression: GoExpression; };
 
 /**
  * Parse with Go's precedence and print with TypeScript's precedence, adding parentheses where
  * copying the expression verbatim would change its meaning.
- * @param {string} expression
- * @param {string} prefix
  */
-function translateGoNumericExpression(expression, prefix) {
+function translateGoNumericExpression(expression: string, prefix: string): string {
     const tokens = expression.match(/<<|>>|&\^|\|\||&&|==|!=|<=|>=|[()+\-*/%&|^<>]|(?:0[xX][\dA-Fa-f_]+|0[bB][01_]+|0[oO][0-7_]+|\d[\d_]*)|[A-Za-z_]\w*/g) ?? [];
     const withoutWhitespace = expression.replace(/\s/g, "");
     if (tokens.join("") !== withoutWhitespace) {
@@ -204,8 +192,7 @@ function translateGoNumericExpression(expression, prefix) {
 
     let tokenIndex = 0;
 
-    /** @returns {GoExpression} */
-    function parseUnary() {
+    function parseUnary(): GoExpression {
         const token = tokens[tokenIndex];
         if (token === "+" || token === "-" || token === "^") {
             tokenIndex++;
@@ -227,11 +214,7 @@ function translateGoNumericExpression(expression, prefix) {
         return { kind: "token", text: token.replace(new RegExp(`^${prefix}`), "") };
     }
 
-    /**
-     * @param {number} minimumPrecedence
-     * @returns {GoExpression}
-     */
-    function parseBinary(minimumPrecedence) {
+    function parseBinary(minimumPrecedence: number): GoExpression {
         let left = parseUnary();
         while (true) {
             const operator = tokens[tokenIndex];
@@ -249,12 +232,7 @@ function translateGoNumericExpression(expression, prefix) {
         throw new Error(`Unexpected token '${tokens[tokenIndex]}' in numeric enum value: ${expression}`);
     }
 
-    /**
-     * @param {GoExpression} node
-     * @param {number} minimumPrecedence
-     * @returns {string}
-     */
-    function print(node, minimumPrecedence) {
+    function print(node: GoExpression, minimumPrecedence: number): string {
         if (node.kind === "token") return node.text;
         if (node.kind === "parenthesized") return `(${print(node.expression, 0)})`;
         if (node.kind === "unary") {
@@ -279,11 +257,8 @@ function translateGoNumericExpression(expression, prefix) {
  * Resolve a Go string-constant expression (e.g. `Prefix + "call"` or `"export="`)
  * into a quoted, JS-escaped TypeScript string literal. `replacements` maps bare
  * Go identifiers (such as a sentinel-prefix constant) to their literal value.
- * @param {string} goValue
- * @param {Record<string, string>} replacements
- * @returns {string}
  */
-function parseGoStringValue(goValue, replacements) {
+function parseGoStringValue(goValue: string, replacements: Record<string, string>): string {
     let result = "";
     for (const part of goValue.split("+").map(p => p.trim())) {
         if (Object.prototype.hasOwnProperty.call(replacements, part)) {
@@ -300,19 +275,13 @@ function parseGoStringValue(goValue, replacements) {
     return JSON.stringify(result);
 }
 
-/**
- * @typedef {{
- *   name: string;
- *   value: string;
- * }} EnumMember
- */
+interface EnumMember {
+    name: string;
+    value: string;
+}
 
-/**
- * @param {EnumDef} def
- * @returns {EnumMember[]}
- */
-function parseGoEnum(def) {
-    const source = fs.readFileSync(def.goFile, "utf-8");
+function parseGoEnum(def: EnumDef): EnumMember[] {
+    const source = fs.readFileSync(path.join(ROOT, def.goFile), "utf-8");
     const constBlockRegex = /const\s*\(([\s\S]*?)\n\)/g;
 
     for (const match of source.matchAll(constBlockRegex)) {
@@ -326,16 +295,12 @@ function parseGoEnum(def) {
 /**
  * Topologically sort enum members so composite members appear after
  * all members they reference (Go allows forward references, TS does not).
- * @param {EnumMember[]} members
- * @returns {EnumMember[]}
  */
-function topoSortMembers(members) {
+function topoSortMembers(members: EnumMember[]): EnumMember[] {
     const nameSet = new Set(members.map(m => m.name));
-    /** @type {Map<string, Set<string>>} */
-    const deps = new Map();
+    const deps = new Map<string, Set<string>>();
     for (const m of members) {
-        /** @type {Set<string>} */
-        const refs = new Set();
+        const refs = new Set<string>();
         // Find all identifier references in the value that are other member names
         for (const [ref] of m.value.matchAll(/\b([A-Za-z_]\w*)\b/g)) {
             if (ref !== m.name && nameSet.has(ref)) refs.add(ref);
@@ -343,12 +308,11 @@ function topoSortMembers(members) {
         deps.set(m.name, refs);
     }
 
-    const sorted = /** @type {EnumMember[]} */ ([]);
-    const visited = new Set();
-    const visiting = new Set();
+    const sorted: EnumMember[] = [];
+    const visited = new Set<string>();
+    const visiting = new Set<string>();
 
-    /** @param {string} name */
-    function visit(name) {
+    function visit(name: string) {
         if (visited.has(name)) return;
         if (visiting.has(name)) return; // cycle — keep original order
         visiting.add(name);
@@ -357,7 +321,9 @@ function topoSortMembers(members) {
         }
         visiting.delete(name);
         visited.add(name);
-        sorted.push(/** @type {EnumMember} */ (members.find(m => m.name === name)));
+        const member = members.find(m => m.name === name);
+        assert(member);
+        sorted.push(member);
     }
 
     for (const m of members) {
@@ -366,28 +332,21 @@ function topoSortMembers(members) {
     return sorted;
 }
 
-/**
- * @param {EnumDef} def
- * @param {EnumMember[]} members
- * @returns {string}
- */
-function renderEnumTS(def, members) {
-    const header = `// Code generated by tools/scripts/generate-enums.mjs from ${def.goFile}. DO NOT EDIT.\n\n`;
+function renderEnumTS(def: EnumDef, members: EnumMember[]): string {
+    const header = `// Code generated by tools/scripts/tsc/generate-enums.ts from ${def.goFile}. DO NOT EDIT.\n\n`;
 
     const lines = members.map(m => `    ${m.name} = ${m.value},`);
     return `${header}export enum ${def.name} {\n${lines.join("\n")}\n}\n`;
 }
 
-const enumValuesGeneratedGoPath = "tsc/internal/api/enum_values_generated.go";
+const enumValuesGeneratedGoPath = path.join(ROOT, "tsc/internal/api/enum_values_generated.go");
 
-/**
- * @typedef {{
- *   def: EnumDef
- *   code: string,
- *   fileNames: string[]
- *   members: EnumMember[]
- * }} GeneratedEnum
- */
+interface GeneratedEnum {
+    def: EnumDef;
+    code: string;
+    fileNames: string[];
+    members: EnumMember[];
+}
 
 /**
  * Ask the Go compiler what it actually thinks each numeric member's value is, so that
@@ -399,19 +358,13 @@ const enumValuesGeneratedGoPath = "tsc/internal/api/enum_values_generated.go";
  * (not by re-deriving it from the parsed TS text), so Go itself — not this script — computes
  * the ground-truth value, then prints them as JSON. `internal/api` is used as the host package
  * because it already imports (nearly) every package enums are sourced from.
- *
- * @param {GeneratedEnum[]} generatedEnums
- * @param {import("./gen/generatedFile.mts").GeneratedFile} generatedGoFile
- * @returns {Promise<Record<string, Record<string, number>>>} enum def name -> (memberName -> Go value)
  */
-async function computeGoGroundTruth(generatedEnums, generatedGoFile) {
-    /** @type {Map<string, {importPath: string, pkgName: string}>} */
-    const packagesByDir = new Map();
-    /**
-     * @param {EnumDef} def
-     * @returns {string}
-     */
-    function getPackageName(def) {
+async function computeGoGroundTruth(
+    generatedEnums: GeneratedEnum[],
+    generatedGoFile: GeneratedFile,
+): Promise<Record<string, Record<string, number>>> {
+    const packagesByDir = new Map<string, { importPath: string; pkgName: string; }>();
+    function getPackageName(def: EnumDef): string {
         const dir = path.dirname(def.goFile);
         const importPath = `github.com/microsoft/TypeScript/tsc/${dir.replace(/^tsc[\\/]/, "")}`.replace(/\\/g, "/");
         let info = packagesByDir.get(dir);
@@ -422,14 +375,12 @@ async function computeGoGroundTruth(generatedEnums, generatedGoFile) {
         return info.pkgName;
     }
 
-    /** @type {string[]} */
-    const entries = [];
+    const entries: string[] = [];
     for (const { def, members } of generatedEnums) {
         if (def.stringEnum) continue;
         const pkgName = getPackageName(def);
 
-        /** @type {string[]} */
-        const memberEntries = members.map(m => {
+        const memberEntries: string[] = members.map(m => {
             return `\t\t\t${JSON.stringify(m.name)}: toInt32(${pkgName}.${def.goPrefix}${m.name}),`;
         });
         entries.push(
@@ -443,7 +394,7 @@ async function computeGoGroundTruth(generatedEnums, generatedGoFile) {
 
     const goSource = `//go:build ignore
 
-// Code generated by tools/scripts/generate-enums.mjs. DO NOT EDIT.
+// Code generated by tools/scripts/tsc/generate-enums.ts. DO NOT EDIT.
 // Running this program prints the real Go-evaluated value of every generated enum member as
 // JSON, so generate:enums can validate that the TypeScript it emits agrees with Go's own
 // arithmetic (catching, e.g., operator-precedence mistakes introduced by copying Go expression
@@ -477,57 +428,46 @@ func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32](v T)
 `;
 
     generatedGoFile.write(goSource);
-    await run("dprint", ["fmt", enumValuesGeneratedGoPath]);
+    await formatFiles([enumValuesGeneratedGoPath]);
 
     const { stdout } = await runOutput("go", ["run", enumValuesGeneratedGoPath]);
-    /** @type {Record<string, Record<string, number>>} */
-    const parsed = JSON.parse(stdout);
+    const parsed = JSON.parse(stdout) as Record<string, Record<string, number>>;
     return parsed;
 }
 
 /**
  * Evaluate the generated IIFE in a sandbox and return each member's actual runtime value, so
  * validation checks what TS really computes rather than re-deriving it from the source text.
- * @param {string} enumSource
- * @param {string} enumName
- * @returns {Promise<Record<string, number | string>>}
  */
-async function evaluateEnumMembers(enumSource, enumName) {
+async function evaluateEnumMembers(enumSource: string, enumName: string): Promise<Record<string, number | string>> {
     const enumModule = await import(`data:text/javascript;charset=utf-8,${encodeURIComponent(enumSource)}`);
-    /** @type {Record<string, number | string>} */
-    const enumObj = enumModule[enumName];
+    const enumObj = enumModule[enumName] as Record<string, number | string>;
     return enumObj;
 }
 
 export default async function generateEnums(force = false) {
-    const { GeneratedFile } = await import("./gen/generatedFile.mts");
     const inputs = [
-        __filename,
-        ...fs.globSync(["go.work", "go.work.sum", "{tsc,tools}/go.{mod,sum}"]),
+        import.meta.filename,
+        ...goInputs(),
     ];
     const enumFiles = enumDefs.map(def => {
         const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
         return {
             def,
             camelName,
-            typeFile: new GeneratedFile(path.join(def.outDir, `${camelName}.enum.ts`), [...inputs, def.goFile]),
-            runtimeFile: new GeneratedFile(path.join(def.outDir, `${camelName}.ts`), [...inputs, def.goFile]),
+            typeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.enum.ts`), [...inputs, path.join(ROOT, def.goFile)]),
+            runtimeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.ts`), [...inputs, path.join(ROOT, def.goFile)]),
         };
     });
-    const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => def.goFile)]);
+    const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => path.join(ROOT, def.goFile))]);
     const generatedFiles = [generatedGoFile, ...enumFiles.flatMap(({ typeFile, runtimeFile }) => [typeFile, runtimeFile])];
     if (generatedFiles.every(file => file.isCurrent(force))) {
         console.log("Enums are up to date.");
         return;
     }
-    const ts = /** @type {typeof import("typescript")} */ (await import("typescript"));
+    const ts = await import("typescript");
 
-    /**
-     * @param {string} enumSource
-     * @param {string} enumName
-     * @returns {string}
-     */
-    function transpile(enumSource, enumName) {
+    function transpile(enumSource: string): string {
         return ts.transpileModule(enumSource, {
             compilerOptions: {
                 module: ts.ModuleKind.ESNext,
@@ -535,12 +475,7 @@ export default async function generateEnums(force = false) {
             },
         }).outputText;
     }
-    /**
-     * @param {string} enumSource
-     * @param {string} enumName
-     * @returns {string}
-     */
-    function convertEnumToTs(enumSource, enumName) {
+    function convertEnumToTs(enumSource: string, enumName: string): string {
         return enumSource.replace(
             `export var ${enumName};`,
             `export var ${enumName}: any;`,
@@ -548,8 +483,7 @@ export default async function generateEnums(force = false) {
     }
 
     console.log("Generating enums from Go source...");
-    /** @type {Array<GeneratedEnum>} */
-    const generatedEnums = [];
+    const generatedEnums: GeneratedEnum[] = [];
     for (const { def, camelName, typeFile, runtimeFile } of enumFiles) {
         const members = parseGoEnum(def);
 
@@ -558,7 +492,7 @@ export default async function generateEnums(force = false) {
         typeFile.write(enumTS);
 
         // Generate .ts (IIFE — used at runtime)
-        const enumJsCode = transpile(enumTS, def.name);
+        const enumJsCode = transpile(enumTS);
         const iifeSource = convertEnumToTs(enumJsCode, def.name);
         runtimeFile.write(iifeSource);
         generatedEnums.push({
@@ -573,8 +507,7 @@ export default async function generateEnums(force = false) {
 
     console.log("Getting values from go");
     const goValuesByEnum = await computeGoGroundTruth(generatedEnums, generatedGoFile);
-    /** @type {string[]} */
-    const mismatches = [];
+    const mismatches: string[] = [];
     for (const { def, members, code } of generatedEnums) {
         if (def.stringEnum) continue;
         const goValues = goValuesByEnum[def.name];
@@ -599,7 +532,11 @@ export default async function generateEnums(force = false) {
     }
     console.log("All generated values match Go.");
 
-    await run("dprint", ["fmt", ...generatedEnums.flatMap(e => e.fileNames)]);
+    await formatFiles(generatedEnums.flatMap(e => e.fileNames));
     for (const file of generatedFiles) file.markCurrent();
     console.log("Done.");
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    await generateEnums(parseGeneratorArgs({}).force);
 }
