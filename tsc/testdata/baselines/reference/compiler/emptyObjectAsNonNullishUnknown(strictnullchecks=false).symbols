@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/emptyObjectAsNonNullishUnknown.ts] ////
+
+=== emptyObjectAsNonNullishUnknown.ts ===
+type NonNullish = unknown & not null & not undefined;
+>NonNullish : Symbol(NonNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 0))
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Symbol(Equal, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 53))
+>Left : Symbol(Left, Decl(emptyObjectAsNonNullishUnknown.ts, 1, 11))
+>Right : Symbol(Right, Decl(emptyObjectAsNonNullishUnknown.ts, 1, 16))
+>Value : Symbol(Value, Decl(emptyObjectAsNonNullishUnknown.ts, 1, 28))
+>Value : Symbol(Value, Decl(emptyObjectAsNonNullishUnknown.ts, 1, 28))
+>Left : Symbol(Left, Decl(emptyObjectAsNonNullishUnknown.ts, 1, 11))
+
+    (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>Value : Symbol(Value, Decl(emptyObjectAsNonNullishUnknown.ts, 2, 6))
+>Value : Symbol(Value, Decl(emptyObjectAsNonNullishUnknown.ts, 2, 6))
+>Right : Symbol(Right, Decl(emptyObjectAsNonNullishUnknown.ts, 1, 16))
+
+const equivalent: Equal<{}, NonNullish> = true;
+>equivalent : Symbol(equivalent, Decl(emptyObjectAsNonNullishUnknown.ts, 3, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 53))
+>NonNullish : Symbol(NonNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 0))
+
+const reversed: Equal<{}, not undefined & not null> = true;
+>reversed : Symbol(reversed, Decl(emptyObjectAsNonNullishUnknown.ts, 4, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 53))
+
+const coversUnknown: Equal<{} | null | undefined, unknown> = true;
+>coversUnknown : Symbol(coversUnknown, Decl(emptyObjectAsNonNullishUnknown.ts, 5, 5))
+>Equal : Symbol(Equal, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 53))
+
+declare const unknownValue: unknown;
+>unknownValue : Symbol(unknownValue, Decl(emptyObjectAsNonNullishUnknown.ts, 6, 13))
+
+const covered: {} | null | undefined = unknownValue;
+>covered : Symbol(covered, Decl(emptyObjectAsNonNullishUnknown.ts, 7, 5))
+>unknownValue : Symbol(unknownValue, Decl(emptyObjectAsNonNullishUnknown.ts, 6, 13))
+
+declare const nonNullish: NonNullish;
+>nonNullish : Symbol(nonNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 9, 13))
+>NonNullish : Symbol(NonNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 0))
+
+const empty: {} = nonNullish;
+>empty : Symbol(empty, Decl(emptyObjectAsNonNullishUnknown.ts, 10, 5))
+>nonNullish : Symbol(nonNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 9, 13))
+
+const roundTrip: NonNullish = empty;
+>roundTrip : Symbol(roundTrip, Decl(emptyObjectAsNonNullishUnknown.ts, 11, 5))
+>NonNullish : Symbol(NonNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 0, 0))
+>empty : Symbol(empty, Decl(emptyObjectAsNonNullishUnknown.ts, 10, 5))
+
+const primitive: {} = 0;
+>primitive : Symbol(primitive, Decl(emptyObjectAsNonNullishUnknown.ts, 12, 5))
+
+const nullValue: {} = null;
+>nullValue : Symbol(nullValue, Decl(emptyObjectAsNonNullishUnknown.ts, 13, 5))
+
+const undefinedValue: {} = undefined;
+>undefinedValue : Symbol(undefinedValue, Decl(emptyObjectAsNonNullishUnknown.ts, 14, 5))
+>undefined : Symbol(undefined)
+
+const objectValue: object = empty;
+>objectValue : Symbol(objectValue, Decl(emptyObjectAsNonNullishUnknown.ts, 15, 5))
+>empty : Symbol(empty, Decl(emptyObjectAsNonNullishUnknown.ts, 10, 5))
+
+const indexedValue: { [key: string]: number } = empty;
+>indexedValue : Symbol(indexedValue, Decl(emptyObjectAsNonNullishUnknown.ts, 16, 5))
+>key : Symbol(key, Decl(emptyObjectAsNonNullishUnknown.ts, 16, 23))
+>empty : Symbol(empty, Decl(emptyObjectAsNonNullishUnknown.ts, 10, 5))
+
+type Base = { first: string } & { second: number } & {};
+>Base : Symbol(Base, Decl(emptyObjectAsNonNullishUnknown.ts, 16, 54))
+>first : Symbol(first, Decl(emptyObjectAsNonNullishUnknown.ts, 18, 13))
+>second : Symbol(second, Decl(emptyObjectAsNonNullishUnknown.ts, 18, 33))
+
+interface Derived extends Base {
+>Derived : Symbol(Derived, Decl(emptyObjectAsNonNullishUnknown.ts, 18, 56))
+>Base : Symbol(Base, Decl(emptyObjectAsNonNullishUnknown.ts, 16, 54))
+
+    third: boolean;
+>third : Symbol(Derived.third, Decl(emptyObjectAsNonNullishUnknown.ts, 19, 32))
+}
+
+export function withoutNull(value: unknown) {
+>withoutNull : Symbol(withoutNull, Decl(emptyObjectAsNonNullishUnknown.ts, 21, 1))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 23, 28))
+
+    if (value !== null) return value;
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 23, 28))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 23, 28))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function withoutUndefined(value: unknown) {
+>withoutUndefined : Symbol(withoutUndefined, Decl(emptyObjectAsNonNullishUnknown.ts, 26, 1))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 28, 33))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 28, 33))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 28, 33))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function withoutNullish(value: unknown) {
+>withoutNullish : Symbol(withoutNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 31, 1))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 33, 31))
+
+    if (value != null) return value;
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 33, 31))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 33, 31))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function onlyNullish(value: unknown) {
+>onlyNullish : Symbol(onlyNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 36, 1))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 38, 28))
+
+    if (value == null) return value;
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 38, 28))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 38, 28))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function genericWithoutNullish<Value>(value: Value) {
+>genericWithoutNullish : Symbol(genericWithoutNullish, Decl(emptyObjectAsNonNullishUnknown.ts, 41, 1))
+>Value : Symbol(Value, Decl(emptyObjectAsNonNullishUnknown.ts, 43, 38))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 43, 45))
+>Value : Symbol(Value, Decl(emptyObjectAsNonNullishUnknown.ts, 43, 38))
+
+    if (value != null) return value;
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 43, 45))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 43, 45))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+declare const optionalObject: { value: number } | undefined;
+>optionalObject : Symbol(optionalObject, Decl(emptyObjectAsNonNullishUnknown.ts, 48, 13))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 48, 31))
+
+declare const possiblyEmpty: { value: number } | {};
+>possiblyEmpty : Symbol(possiblyEmpty, Decl(emptyObjectAsNonNullishUnknown.ts, 49, 13))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 49, 30))
+
+export const optionalSpread = { ...optionalObject };
+>optionalSpread : Symbol(optionalSpread, Decl(emptyObjectAsNonNullishUnknown.ts, 50, 12))
+>optionalObject : Symbol(optionalObject, Decl(emptyObjectAsNonNullishUnknown.ts, 48, 13))
+
+export const emptySpread = { ...possiblyEmpty };
+>emptySpread : Symbol(emptySpread, Decl(emptyObjectAsNonNullishUnknown.ts, 51, 12))
+>possiblyEmpty : Symbol(possiblyEmpty, Decl(emptyObjectAsNonNullishUnknown.ts, 49, 13))
+
+export const emptySpreadValue = emptySpread.value;
+>emptySpreadValue : Symbol(emptySpreadValue, Decl(emptyObjectAsNonNullishUnknown.ts, 52, 12))
+>emptySpread.value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 49, 30))
+>emptySpread : Symbol(emptySpread, Decl(emptyObjectAsNonNullishUnknown.ts, 51, 12))
+>value : Symbol(value, Decl(emptyObjectAsNonNullishUnknown.ts, 49, 30))
+
+export const emptyLiteral = {};
+>emptyLiteral : Symbol(emptyLiteral, Decl(emptyObjectAsNonNullishUnknown.ts, 53, 12))
+
+export const emptyKeys: keyof {} = "missing";
+>emptyKeys : Symbol(emptyKeys, Decl(emptyObjectAsNonNullishUnknown.ts, 54, 12))
+

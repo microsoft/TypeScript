@@ -61,6 +61,11 @@ export function templateUnion(value: "prefixValue" | (`prefix${string}` & {})) {
 >value : `prefix${string}`
 >value : `prefix${string}`
 
+export function explicitExclusions(value: string & not null & not undefined) { return value; }
+>explicitExclusions : (value: string & not null & not undefined) => string
+>value : string
+>value : string
+
 type Choice = "a" | "b" | string;
 >Choice : string
 

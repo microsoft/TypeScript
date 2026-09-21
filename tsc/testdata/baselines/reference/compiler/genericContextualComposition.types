@@ -25,7 +25,7 @@ declare const instrument: Enhancer<{ extra: unknown }>, persist: Enhancer;
 
 const enhancer: Enhancer = compose(instrument, persist);
 >enhancer : Enhancer<{}>
->compose(instrument, persist) : (...args: any[]) => Next
+>compose(instrument, persist) : (...args: any[]) => Next & not null & not undefined
 >compose : { <A, Args extends any[], Result>(first: (value: A) => Result, second: (...args: Args) => A): (...args: Args) => Result; <Result>(...functions: Function[]): (...args: any[]) => Result; }
 >instrument : Enhancer<{ extra: unknown; }>
 >persist : Enhancer<{}>

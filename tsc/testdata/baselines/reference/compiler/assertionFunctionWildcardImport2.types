@@ -11,7 +11,7 @@ function isNonNullable<T>(obj: T): asserts obj is NonNullable<T> {
 >obj : T
 >undefined : undefined
 >obj === null : boolean
->obj : T & ({} | null)
+>obj : T & not undefined
 
         throw new Error("Must not be a nullable value");
 >new Error("Must not be a nullable value") : Error

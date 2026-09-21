@@ -8,7 +8,7 @@ import React from 'react'
 
 interface ResizablePanelProps {
   children: [React.ReactNode, React.ReactNode]
->children : [React.ReactNode, React.ReactNode]
+>children : [unknown, unknown]
 >React : any
 >React : any
 }

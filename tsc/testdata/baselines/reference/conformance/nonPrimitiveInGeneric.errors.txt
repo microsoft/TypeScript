@@ -3,14 +3,17 @@ nonPrimitiveInGeneric.ts(9,17): error TS2345: Argument of type 'number' is not a
 nonPrimitiveInGeneric.ts(10,17): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
 nonPrimitiveInGeneric.ts(18,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
 nonPrimitiveInGeneric.ts(19,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
+nonPrimitiveInGeneric.ts(23,8): error TS2344: Type '{}' does not satisfy the constraint 'object'.
 nonPrimitiveInGeneric.ts(25,8): error TS2344: Type 'number' does not satisfy the constraint 'object'.
 nonPrimitiveInGeneric.ts(26,8): error TS2344: Type 'string' does not satisfy the constraint 'object'.
+nonPrimitiveInGeneric.ts(29,9): error TS2322: Type 'T' is not assignable to type 'object'.
+  Type '{}' is not assignable to type 'object'.
 nonPrimitiveInGeneric.ts(34,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
 nonPrimitiveInGeneric.ts(35,14): error TS2344: Type 'null' does not satisfy the constraint 'object'.
 nonPrimitiveInGeneric.ts(36,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
 
 
-==== nonPrimitiveInGeneric.ts (10 errors) ====
+==== nonPrimitiveInGeneric.ts (12 errors) ====
     function generic<T>(t: T) {
         var o: object = t; // expect error
             ~
@@ -45,6 +48,8 @@ nonPrimitiveInGeneric.ts(36,14): error TS2344: Type 'undefined' does not satisfy
     function bound2<T extends object>() {}
     
     bound2<{}>();
+           ~~
+!!! error TS2344: Type '{}' does not satisfy the constraint 'object'.
     bound2<Object>();
     bound2<number>(); // expect error
            ~~~~~~
@@ -55,6 +60,9 @@ nonPrimitiveInGeneric.ts(36,14): error TS2344: Type 'undefined' does not satisfy
     
     function bound3<T extends {}>(t: T) {
         var o: object = t; // ok
+            ~
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! error TS2322:   Type '{}' is not assignable to type 'object'.
     }
     
     interface Proxy<T extends object> {}
