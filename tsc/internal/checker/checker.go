@@ -234,9 +234,9 @@ type IterationTypesKey struct {
 // PropertiesTypesKey
 
 type PropertiesTypesKey struct {
-	typeId            TypeId
-	include           TypeFlags
-	includeOrigin     bool
+	typeId        TypeId
+	include       TypeFlags
+	includeOrigin bool
 }
 
 // NonExistentPropertyKey
