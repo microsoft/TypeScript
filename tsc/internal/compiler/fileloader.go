@@ -46,8 +46,7 @@ type sourceFileFromReferenceDiagnostic struct {
 
 type fileLoader struct {
 	opts                                           ProgramOptions
-	resolver                                       *module.Resolver
-	resolutionProvider                             module.ResolutionProvider
+	resolver                                       module.Resolver
 	defaultLibraryPath                             string
 	comparePathsOptions                            tspath.ComparePathsOptions
 	supportedExtensions                            [][]string
@@ -112,7 +111,7 @@ func (r *redirectsFile) Path() tspath.Path {
 }
 
 type processedFiles struct {
-	resolver *module.Resolver
+	resolver module.Resolver
 	files    []*ast.SourceFile
 	// duplicateSourceFiles tracks parsed files loaded during program construction
 	// that were later dropped from the final program, such as losing filename
@@ -180,14 +179,12 @@ func processAllProgramFiles(
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
 	resolverCompilerOptions := compilerOptions
-	if opts.ResolutionProviderFactory != nil {
-		resolverCompilerOptions = opts.ResolutionProviderFactory.CompilerOptions()
+	if opts.ModuleResolverCompilerOptions != nil {
+		resolverCompilerOptions = opts.ModuleResolverCompilerOptions
 	}
 	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, resolverCompilerOptions, opts.TypingsLocation, opts.ProjectName, opts.Config.ContentMapperExtensions())
-	if opts.ResolutionProviderFactory != nil {
-		var cleanup func()
-		loader.resolutionProvider, cleanup = opts.ResolutionProviderFactory.NewProvider(loader.resolver)
-		defer cleanup()
+	if opts.CreateModuleResolver != nil {
+		loader.resolver = opts.CreateModuleResolver(loader.resolver)
 	}
 	if opts.Tracing != nil {
 		defer opts.Tracing.Push(tracing.PhaseProgram, "processRootFiles", map[string]any{"count": len(rootFiles)}, false)()
@@ -887,23 +884,15 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
 			var resolvedModule *module.ResolvedModule
 			var trace []module.DiagAndArgs
-			if p.resolutionProvider != nil {
-				var err error
-				resolvedModule, trace, err = p.resolutionProvider.ResolveModuleName(
-					moduleName,
-					tspath.GetDirectoryPath(fileName),
-					mode,
-				)
-				if err != nil {
-					p.moduleResolutionErrorOnce.Do(func() {
-						p.moduleResolutionError = err
-					})
-				}
-				if resolvedModule == nil {
-					resolvedModule = &module.ResolvedModule{}
-				}
-			} else {
-				resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+			var err error
+			resolvedModule, trace, err = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+			if err != nil {
+				p.moduleResolutionErrorOnce.Do(func() {
+					p.moduleResolutionError = err
+				})
+			}
+			if resolvedModule == nil {
+				resolvedModule = &module.ResolvedModule{}
 			}
 			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = resolvedModule
 			resolutionsTrace = append(resolutionsTrace, trace...)
@@ -995,7 +984,8 @@ func (p *fileLoader) resolveLibrary(libraryName, resolveFrom string) (*module.Re
 	if tr := p.opts.Tracing; tr != nil {
 		defer tr.Push(tracing.PhaseProgram, "resolveLibrary", map[string]any{"resolveFrom": resolveFrom}, false)()
 	}
-	return p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
+	resolved, trace, _ := p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
+	return resolved, trace
 }
 
 func getLibraryNameFromLibFileName(libFileName string) string {

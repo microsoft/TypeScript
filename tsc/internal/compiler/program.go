@@ -35,15 +35,16 @@ import (
 )
 
 type ProgramOptions struct {
-	Host                        CompilerHost
-	Config                      *tsoptions.ParsedCommandLine
-	UseSourceOfProjectReference bool
-	SingleThreaded              core.Tristate
-	CreateCheckerPool           func(*Program) CheckerPool
-	TypingsLocation             string
-	ProjectName                 string
-	Tracing                     *tracing.Tracing
-	ResolutionProviderFactory   module.ResolutionProviderFactory
+	Host                          CompilerHost
+	Config                        *tsoptions.ParsedCommandLine
+	UseSourceOfProjectReference   bool
+	SingleThreaded                core.Tristate
+	CreateCheckerPool             func(*Program) CheckerPool
+	TypingsLocation               string
+	ProjectName                   string
+	Tracing                       *tracing.Tracing
+	CreateModuleResolver          func(fallback module.Resolver) module.Resolver
+	ModuleResolverCompilerOptions *core.CompilerOptions
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
@@ -302,14 +303,22 @@ func NewProgram(opts ProgramOptions) *Program {
 // only if the host cannot locate the file (e.g. it was deleted). Callers that manage
 // host-side parse caches must release this exact pointer when the old program could not be
 // reused, since it was acquired speculatively before that decision was made.
-func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
-	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool); reused {
+func (p *Program) UpdateProgram(
+	changedFilePath tspath.Path,
+	newHost CompilerHost,
+	createCheckerPool func(*Program) CheckerPool,
+	createModuleResolver func(module.Resolver) module.Resolver,
+) (*Program, *ast.SourceFile, bool) {
+	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool, createModuleResolver); reused {
 		return result, newFile, true
 	} else {
 		newOpts := p.opts
 		newOpts.Host = newHost
 		if createCheckerPool != nil {
 			newOpts.CreateCheckerPool = createCheckerPool
+		}
+		if createModuleResolver != nil {
+			newOpts.CreateModuleResolver = createModuleResolver
 		}
 		return NewProgram(newOpts), newFile, false
 	}
@@ -321,16 +330,20 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 // file cannot be replaced in place. Unlike UpdateProgram, it never constructs a
 // full fallback program, so callers that build their own fallback (e.g. with a
 // different host) do not pay for a discarded program build.
-func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
+func (p *Program) ReuseProgram(
+	changedFilePath tspath.Path,
+	newHost CompilerHost,
+	createCheckerPool func(*Program) CheckerPool,
+	createModuleResolver func(module.Resolver) module.Resolver,
+) (*Program, *ast.SourceFile, bool) {
 	newOpts := p.opts
 	newOpts.Host = newHost
 	if createCheckerPool != nil {
 		newOpts.CreateCheckerPool = createCheckerPool
 	}
-	if resolutionProviderFactoryIdentity(p.opts.ResolutionProviderFactory) != resolutionProviderFactoryIdentity(newOpts.ResolutionProviderFactory) {
-		return nil, nil, false
+	if createModuleResolver != nil {
+		newOpts.CreateModuleResolver = createModuleResolver
 	}
-
 	oldFile := p.filesByPath[changedFilePath]
 	var newFile *ast.SourceFile
 	var oldSupplementalFiles []*ast.SourceFile
@@ -418,13 +431,6 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 	}
 	updateFileIncludeProcessor(result)
 	return result, newFile, true
-}
-
-func resolutionProviderFactoryIdentity(factory module.ResolutionProviderFactory) uint64 {
-	if factory == nil {
-		return 0
-	}
-	return factory.Identity()
 }
 
 func (p *Program) initCheckerPool() {
@@ -2309,7 +2315,7 @@ func (p *Program) GetSymlinkCache() *symlinks.KnownSymlinks {
 }
 
 func (p *Program) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
-	resolved, _ := p.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
+	resolved, _, _ := p.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
 	return resolved
 }
 

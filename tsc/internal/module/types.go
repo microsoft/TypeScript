@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -16,18 +17,32 @@ type ResolutionHost interface {
 	GetCurrentDirectory() string
 }
 
-type ResolutionProviderFactory interface {
-	Identity() uint64
-	CompilerOptions() *core.CompilerOptions
-	NewProvider(fallback *Resolver) (ResolutionProvider, func())
-}
-
-type ResolutionProvider interface {
+type Resolver interface {
 	ResolveModuleName(
+		moduleName string,
+		containingFile string,
+		resolutionMode core.ResolutionMode,
+		redirectedReference ResolvedProjectReference,
+	) (*ResolvedModule, []DiagAndArgs, error)
+	ResolveModuleNameFromDirectory(
 		moduleName string,
 		containingDirectory string,
 		resolutionMode core.ResolutionMode,
 	) (*ResolvedModule, []DiagAndArgs, error)
+	ResolveTypeReferenceDirective(
+		typeReferenceDirectiveName string,
+		containingFile string,
+		resolutionMode core.ResolutionMode,
+		redirectedReference ResolvedProjectReference,
+	) (*ResolvedTypeReferenceDirective, []DiagAndArgs)
+	GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry
+	PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool)
+	ResolvePackageDirectory(
+		moduleName string,
+		containingFile string,
+		resolutionMode core.ResolutionMode,
+		redirectedReference ResolvedProjectReference,
+	) *ResolvedModule
 }
 
 type ModeAwareCacheKey struct {

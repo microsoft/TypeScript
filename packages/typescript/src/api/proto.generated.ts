@@ -1687,7 +1687,7 @@ export interface ModuleResolutionEntry {
     moduleName: string;
     containingDirectory?: DocumentIdentifier | undefined;
     resolutionMode?: ResolutionMode | undefined;
-    result: ProvidedModuleResolution;
+    result: StaticModuleResolution;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */
@@ -1702,7 +1702,7 @@ export interface CreateProgramOptions {
     moduleResolver?: number | undefined;
 }
 
-export interface ProvidedModuleResolution {
+export interface StaticModuleResolution {
     resolvedFileName?: DocumentIdentifier | undefined;
     originalPath?: DocumentIdentifier | undefined;
     packageId?: PackageId | undefined;

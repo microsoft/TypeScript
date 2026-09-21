@@ -324,7 +324,13 @@ type APICreateProgramRequest struct {
 	CompilerOptions              *core.CompilerOptions
 	ProjectReferences            []*core.ProjectReference
 	ConfigFileParsingDiagnostics []*ast.Diagnostic
-	ResolutionProviderFactory    module.ResolutionProviderFactory
+	ModuleResolverFactory        ModuleResolverFactory
+	ModuleResolverID             uint64
+}
+
+type ModuleResolverFactory interface {
+	CompilerOptions() *core.CompilerOptions
+	NewResolver(fallback module.Resolver) (module.Resolver, func())
 }
 
 type APIReconfigureProgramRequest struct {

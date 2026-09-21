@@ -82,7 +82,6 @@ import type {
     ProjectId,
     ProjectReference,
     ProjectResponse,
-    ProvidedModuleResolution,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
     ResolutionMode,
@@ -92,6 +91,7 @@ import type {
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
+    StaticModuleResolution,
     SymbolPropertyMethod,
     SymbolResponse,
     SymbolsPropertyMethod,
@@ -211,7 +211,6 @@ export type {
     ParsedCommandLine,
     ProjectId,
     ProjectReference,
-    ProvidedModuleResolution,
     ReadConfigFileResponse,
     RequestTiming,
     ResolutionMode,
@@ -219,6 +218,7 @@ export type {
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
     SourceFileMetadata,
+    StaticModuleResolution,
     StringLiteralType,
     StringMappingType,
     StructuredType,
@@ -253,7 +253,7 @@ export interface ResolveModuleNameCallbackOptions {
 declare const inProgressSnapshotBrand: unique symbol;
 export type InProgressSnapshot = number & { readonly [inProgressSnapshotBrand]: never; };
 
-export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined | Promise<ProvidedModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined;
+export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => StaticModuleResolution | undefined | Promise<StaticModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => StaticModuleResolution | undefined;
 
 export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
     moduleResolver?: ModuleResolver | undefined;

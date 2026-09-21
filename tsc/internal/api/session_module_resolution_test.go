@@ -63,7 +63,7 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 	assert.Assert(t, len(result.Trace) > 0)
 }
 
-func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
+func TestStaticModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	t.Parallel()
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{
@@ -83,10 +83,10 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	spec := ModuleResolutionSpec{
 		Fallback: ModuleResolutionFallbackUnresolved,
 		Entries: []*ModuleResolutionEntry{
-			providedResolutionEntry("pkg", "", nil, "/home/projects/p/global.d.ts"),
-			providedResolutionEntry("pkg", "", &esm, "/home/projects/p/mode.d.ts"),
-			providedResolutionEntry("pkg", "/home/projects/p/src", nil, "/home/projects/p/dir.d.ts"),
-			providedResolutionEntry("pkg", "/home/projects/p/src", &esm, "/home/projects/p/exact.d.ts"),
+			staticResolutionEntry("pkg", "", nil, "/home/projects/p/global.d.ts"),
+			staticResolutionEntry("pkg", "", &esm, "/home/projects/p/mode.d.ts"),
+			staticResolutionEntry("pkg", "/home/projects/p/src", nil, "/home/projects/p/dir.d.ts"),
+			staticResolutionEntry("pkg", "/home/projects/p/src", &esm, "/home/projects/p/exact.d.ts"),
 		},
 	}
 	resolverID, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
@@ -126,7 +126,7 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	assertResolution("/home/projects/p/src", core.ModuleKindESNext, "/home/projects/p/exact.d.ts")
 }
 
-func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
+func TestCreateProgramUsesStaticModuleResolutions(t *testing.T) {
 	t.Parallel()
 
 	const root = "/home/projects/p/src/index.ts"
@@ -147,7 +147,7 @@ func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
 		ModuleResolutions: &ModuleResolutionSpec{
 			Fallback: ModuleResolutionFallbackUnresolved,
 			Entries: []*ModuleResolutionEntry{
-				providedResolutionEntry("pkg", "", nil, provided),
+				staticResolutionEntry("pkg", "", nil, provided),
 			},
 		},
 	})
@@ -178,7 +178,7 @@ func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
 	assert.DeepEqual(t, fileNames, []string{provided, root})
 }
 
-func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
+func TestStaticModuleResolutionPreservesStaticIdentity(t *testing.T) {
 	t.Parallel()
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
@@ -195,7 +195,7 @@ func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
 			Entries: []*ModuleResolutionEntry{
 				{
 					ModuleName: "pkg",
-					Result: &ProvidedModuleResolution{
+					Result: &StaticModuleResolution{
 						ResolvedFileName: &DocumentIdentifier{FileName: "/store/pkg/index.d.ts"},
 						OriginalPath:     &DocumentIdentifier{FileName: "/node_modules/pkg/index.d.ts"},
 						PackageID: &PackageId{
@@ -234,16 +234,16 @@ func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 		id:                        1,
 		resolveModuleNameCallback: "resolveModuleName/1",
 	}
-	factory := &moduleResolutionProviderFactory{
+	factory := &moduleResolverFactory{
 		registration:     registration,
 		session:          session,
 		conn:             conn,
 		ctx:              context.Background(),
 		currentDirectory: "/",
 	}
-	provider, cleanup := factory.NewProvider(module.NewResolver(session, core.EmptyCompilerOptions, "", "", nil))
+	provider, cleanup := factory.NewResolver(module.NewResolver(session, core.EmptyCompilerOptions, "", "", nil))
 	for range 2 {
-		_, _, err := provider.ResolveModuleName("pkg", "/src", core.ResolutionModeESM)
+		_, _, err := provider.ResolveModuleNameFromDirectory("pkg", "/src", core.ResolutionModeESM)
 		assert.ErrorContains(t, err, "callback error")
 	}
 	assert.Equal(t, conn.calls, 2)
@@ -291,10 +291,10 @@ func TestModuleResolutionCallbackErrorRejectsLanguageServerUpdate(t *testing.T) 
 	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
 }
 
-func providedResolutionEntry(moduleName string, directory string, mode *core.ModuleKind, fileName string) *ModuleResolutionEntry {
+func staticResolutionEntry(moduleName string, directory string, mode *core.ModuleKind, fileName string) *ModuleResolutionEntry {
 	entry := &ModuleResolutionEntry{
 		ModuleName: moduleName,
-		Result: &ProvidedModuleResolution{
+		Result: &StaticModuleResolution{
 			ResolvedFileName: &DocumentIdentifier{FileName: fileName},
 		},
 	}

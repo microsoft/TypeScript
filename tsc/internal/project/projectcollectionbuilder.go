@@ -17,7 +17,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
-	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -316,7 +315,8 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
-			request.ResolutionProviderFactory,
+			request.ModuleResolverFactory,
+			request.ModuleResolverID,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -330,7 +330,8 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
-			request.ResolutionProviderFactory,
+			request.ModuleResolverFactory,
+			request.ModuleResolverID,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -1285,7 +1286,8 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
-	resolutionProviderFactory module.ResolutionProviderFactory,
+	moduleResolverFactory ModuleResolverFactory,
+	moduleResolverID uint64,
 	contentMappers []*contentmapper.Mapper,
 	logger *logging.LogTree,
 ) *dirty.SyncMapEntry[SyntheticProjectID, *Project] {
@@ -1293,7 +1295,8 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	if !loaded {
 		syntheticProject := newSyntheticProject(projectID, b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
 		syntheticProject.CommandLine.Errors = configFileParsingDiagnostics
-		syntheticProject.resolutionProviderFactory = resolutionProviderFactory
+		syntheticProject.moduleResolverFactory = moduleResolverFactory
+		syntheticProject.moduleResolverID = moduleResolverID
 		project, _ = b.syntheticProjects.LoadOrStore(projectID, syntheticProject)
 		return project
 	}
@@ -1314,14 +1317,15 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
 				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers()) ||
-				resolutionProviderFactoryIdentity(p.resolutionProviderFactory) != resolutionProviderFactoryIdentity(resolutionProviderFactory)
+				p.moduleResolverID != moduleResolverID
 		},
 		func(p *Project) {
 			if logger != nil {
 				logger.Log(fmt.Sprintf("Updating synthetic project config with %d root files", len(rootFileNames)))
 			}
 			p.SetCommandLine(newCommandLine)
-			p.resolutionProviderFactory = resolutionProviderFactory
+			p.moduleResolverFactory = moduleResolverFactory
+			p.moduleResolverID = moduleResolverID
 		},
 	)
 	return project

@@ -42,7 +42,7 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 	resolver := module.NewResolver(host, opts, "", "", nil)
 
 	for _, name := range []string{"pkg", "pkg/"} {
-		r, _ := resolver.ResolveModuleName(name, "/repo/src/file.ts", core.ModuleKindESNext, nil)
+		r, _, _ := resolver.ResolveModuleName(name, "/repo/src/file.ts", core.ModuleKindESNext, nil)
 		if !r.IsResolved() {
 			t.Errorf("%q failed to resolve", name)
 		}
@@ -182,7 +182,7 @@ func TestResolveModuleNameTrailingSlashRace(t *testing.T) {
 			containingFile = "/repo/src/b/file.ts"
 		}
 		wg.Go(func() {
-			r, _ := resolver.ResolveModuleName(name, containingFile, core.ModuleKindESNext, nil)
+			r, _, _ := resolver.ResolveModuleName(name, containingFile, core.ModuleKindESNext, nil)
 			results <- resolutionResult{name, r.IsResolved()}
 		})
 	}
@@ -260,7 +260,7 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 				}
 				results <- resolutionResult{containingFile: containingFile, resolved: resolved}
 			}()
-			r, _ := resolver.ResolveModuleName("pkg/sub", containingFile, core.ModuleKindESNext, nil)
+			r, _, _ := resolver.ResolveModuleName("pkg/sub", containingFile, core.ModuleKindESNext, nil)
 			resolved = r.IsResolved()
 		})
 	}
@@ -381,7 +381,7 @@ func TestResolvePeerDependencyNilContentsRace(t *testing.T) {
 				}
 				results <- resolutionResult{containingFile: containingFile, resolved: resolved}
 			}()
-			r, _ := resolver.ResolveModuleName("pkg", containingFile, core.ModuleKindESNext, nil)
+			r, _, _ := resolver.ResolveModuleName("pkg", containingFile, core.ModuleKindESNext, nil)
 			resolved = r.IsResolved()
 		})
 	}

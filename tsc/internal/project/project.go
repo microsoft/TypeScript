@@ -166,7 +166,8 @@ type Project struct {
 
 	checkerPool *checkerPool
 
-	resolutionProviderFactory module.ResolutionProviderFactory
+	moduleResolverFactory ModuleResolverFactory
+	moduleResolverID      uint64
 
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
@@ -176,13 +177,6 @@ type Project struct {
 }
 
 var _ ls.Project = (*Project)(nil)
-
-func resolutionProviderFactoryIdentity(factory module.ResolutionProviderFactory) uint64 {
-	if factory == nil {
-		return 0
-	}
-	return factory.Identity()
-}
 
 func NewConfiguredProject(
 	configFileName string,
@@ -422,7 +416,8 @@ func (p *Project) Clone() *Project {
 
 		checkerPool: p.checkerPool,
 
-		resolutionProviderFactory: p.resolutionProviderFactory,
+		moduleResolverFactory: p.moduleResolverFactory,
+		moduleResolverID:      p.moduleResolverID,
 
 		installedTypingsInfo: p.installedTypingsInfo,
 		typingsFiles:         p.typingsFiles,
@@ -514,12 +509,26 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
 		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
 	}
+	var cleanupModuleResolver func()
+	createModuleResolver := func(fallback module.Resolver) module.Resolver {
+		if p.moduleResolverFactory == nil {
+			return fallback
+		}
+		resolver, cleanup := p.moduleResolverFactory.NewResolver(fallback)
+		cleanupModuleResolver = cleanup
+		return resolver
+	}
+	defer func() {
+		if cleanupModuleResolver != nil {
+			cleanupModuleResolver()
+		}
+	}()
 
 	// Create the command line, potentially augmented with typing files
 	commandLine := p.getCommandLineWithTypingsFiles()
 	if p.dirtyFilePath != "" && p.Program != nil && p.Program.CommandLine() == commandLine {
 		var dirtyFile *ast.SourceFile
-		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool)
+		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool, createModuleResolver)
 		if programCloned {
 			updateKind = ProgramUpdateKindCloned
 			for _, file := range newProgram.SourceFiles() {
@@ -558,14 +567,19 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		if p.GetTypeAcquisition().Enable.IsTrue() {
 			typingsLocation = p.host.sessionOptions.TypingsLocation
 		}
+		var moduleResolverCompilerOptions *core.CompilerOptions
+		if p.moduleResolverFactory != nil {
+			moduleResolverCompilerOptions = p.moduleResolverFactory.CompilerOptions()
+		}
 		newProgram = compiler.NewProgram(
 			compiler.ProgramOptions{
-				Host:                        p.host,
-				Config:                      commandLine,
-				UseSourceOfProjectReference: true,
-				TypingsLocation:             typingsLocation,
-				CreateCheckerPool:           createCheckerPool,
-				ResolutionProviderFactory:   p.resolutionProviderFactory,
+				Host:                          p.host,
+				Config:                        commandLine,
+				UseSourceOfProjectReference:   true,
+				TypingsLocation:               typingsLocation,
+				CreateCheckerPool:             createCheckerPool,
+				CreateModuleResolver:          createModuleResolver,
+				ModuleResolverCompilerOptions: moduleResolverCompilerOptions,
 			},
 		)
 	}

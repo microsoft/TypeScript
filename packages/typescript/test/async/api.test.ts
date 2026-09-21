@@ -700,13 +700,15 @@ describe("API", () => {
 
     test("program module resolution uses the resolver compiler options", async () => {
         await using api = spawnAPI({
-            "/src/index.ts": `import "pkg/feature";`,
+            "/src/index.ts": `/// <reference types="resolver-types" />
+import "pkg/feature";`,
             "/node_modules/pkg/package.json": JSON.stringify({
                 name: "pkg",
                 version: "1.0.0",
                 exports: { "./feature": { resolver: "./dist/feature.d.ts" } },
             }),
             "/node_modules/pkg/dist/feature.d.ts": `export {};`,
+            "/node_modules/@types/resolver-types/index.d.ts": `export {};`,
         });
         const resolver = await api.createModuleResolver({
             module: ModuleKind.ESNext,
@@ -727,7 +729,7 @@ describe("API", () => {
 
         assert.deepEqual(
             [...await snapshot.operation.createdPrograms![0].getSourceFileNames()].sort(),
-            ["/node_modules/pkg/dist/feature.d.ts", "/src/index.ts"],
+            ["/node_modules/@types/resolver-types/index.d.ts", "/node_modules/pkg/dist/feature.d.ts", "/src/index.ts"],
         );
     });
 
@@ -769,7 +771,7 @@ describe("API", () => {
         assert.equal(callbackSnapshots[1], undefined);
     });
 
-    test("provided resolutions do not report native resolution provenance diagnostics", async () => {
+    test("static resolutions do not report native resolution provenance diagnostics", async () => {
         await using api = spawnAPI({
             "/src/index.ts": `import { value } from "./value.ts"; export { value };`,
             "/value.ts": `export const value = 1;`,

@@ -135,7 +135,7 @@ type sourceDefResolver struct {
 	options       *core.CompilerOptions
 	getSourceFile func(string) *ast.SourceFile
 	resolveFrom   string
-	resolver      *module.Resolver
+	resolver      *module.DynamicResolver
 	parsedFiles   map[string]*ast.SourceFile
 }
 
@@ -422,7 +422,7 @@ func (r *sourceDefResolver) resolveImplementationFrom(
 	}
 
 	for _, mode := range modes {
-		resolved, _ := r.resolver.ResolveModuleName(moduleName, resolveFromFile, mode, nil)
+		resolved, _, _ := r.resolver.ResolveModuleName(moduleName, resolveFromFile, mode, nil)
 		if resolved != nil && resolved.IsResolved() && !tspath.IsDeclarationFileName(resolved.ResolvedFileName) {
 			return resolved.ResolvedFileName
 		}

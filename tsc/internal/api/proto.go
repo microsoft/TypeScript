@@ -459,13 +459,13 @@ type ModuleResolutionSpec struct {
 }
 
 type ModuleResolutionEntry struct {
-	ModuleName          string                    `json:"moduleName"`
-	ContainingDirectory *DocumentIdentifier       `json:"containingDirectory,omitempty"`
-	ResolutionMode      *ResolutionMode           `json:"resolutionMode,omitempty"`
-	Result              *ProvidedModuleResolution `json:"result" nonnil:"true"`
+	ModuleName          string                  `json:"moduleName"`
+	ContainingDirectory *DocumentIdentifier     `json:"containingDirectory,omitempty"`
+	ResolutionMode      *ResolutionMode         `json:"resolutionMode,omitempty"`
+	Result              *StaticModuleResolution `json:"result" nonnil:"true"`
 }
 
-type ProvidedModuleResolution struct {
+type StaticModuleResolution struct {
 	ResolvedFileName *DocumentIdentifier `json:"resolvedFileName,omitempty"`
 	OriginalPath     *DocumentIdentifier `json:"originalPath,omitempty"`
 	PackageID        *PackageId          `json:"packageId,omitempty"`
