@@ -9,12 +9,12 @@ declare let a: unknown, b: unknown;
 >b : unknown
 
 const p = (a ? b ?? null : null) ?? 0;
->p : {}
->(a ? b ?? null : null) ?? 0 : {}
->(a ? b ?? null : null) : {} | null
->a ? b ?? null : null : {} | null
+>p : 0 | NonNullable<unknown>
+>(a ? b ?? null : null) ?? 0 : 0 | NonNullable<unknown>
+>(a ? b ?? null : null) : NonNullable<unknown> | null
+>a ? b ?? null : null : NonNullable<unknown> | null
 >a : unknown
->b ?? null : {} | null
+>b ?? null : NonNullable<unknown> | null
 >b : unknown
 >0 : 0
 

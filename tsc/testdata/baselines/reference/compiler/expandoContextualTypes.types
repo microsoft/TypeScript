@@ -19,7 +19,7 @@ export type Page<P = NonNullable<unknown>> = ComponentType<P> & {
 }
 
 export const FooPage: Page = () => {
->FooPage : Page<{}>
+>FooPage : Page<NonNullable<unknown>>
 >() => {    return (        <div>            <p>Foo</p>        </div>    )} : { (): JSX.Element; getLayout: () => JSX.Element; }
 
     return (
@@ -43,7 +43,7 @@ export const FooPage: Page = () => {
 FooPage.getLayout = () => {
 >FooPage.getLayout = () => {    return <></>} : () => JSX.Element
 >FooPage.getLayout : ((component: JSX.Element) => JSX.Element) | undefined
->FooPage : import("react").StatelessComponent<{}> & { getLayout?: (component: JSX.Element) => JSX.Element; }
+>FooPage : import("react").StatelessComponent<NonNullable<unknown>> & { getLayout?: (component: JSX.Element) => JSX.Element; }
 >getLayout : ((component: JSX.Element) => JSX.Element) | undefined
 >() => {    return <></>} : () => JSX.Element
 

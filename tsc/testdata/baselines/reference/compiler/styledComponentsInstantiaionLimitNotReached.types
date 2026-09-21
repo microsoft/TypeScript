@@ -248,7 +248,7 @@ type WithChildrenIfReactComponentClass<C extends string | React.ComponentType<an
     any
 >
     ? { children?: React.ReactNode }
->children : React.ReactNode
+>children : unknown
 >React : any
 
     : {};

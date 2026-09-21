@@ -18,7 +18,7 @@ function f() {
   acceptsRecord(v || {});
 >acceptsRecord(v || {}) : void
 >acceptsRecord : (record: Record<string, string>) => void
->v || {} : {}
+>v || {} : NonNullable<unknown>
 >v : unknown
 >{} : {}
 }

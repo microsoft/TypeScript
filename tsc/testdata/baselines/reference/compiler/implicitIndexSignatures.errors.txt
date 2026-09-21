@@ -1,3 +1,5 @@
+implicitIndexSignatures.ts(10,1): error TS2322: Type '{}' is not assignable to type 'StringMap'.
+  Index signature for type 'string' is missing in type '{}'.
 implicitIndexSignatures.ts(10,7): error TS2454: Variable 'empty2' is used before being assigned.
 implicitIndexSignatures.ts(12,7): error TS2454: Variable 'names2' is used before being assigned.
 implicitIndexSignatures.ts(21,36): error TS2454: Variable 'o2' is used before being assigned.
@@ -7,7 +9,7 @@ implicitIndexSignatures.ts(42,36): error TS2454: Variable 'o2' is used before be
 implicitIndexSignatures.ts(44,36): error TS2454: Variable 'o2' is used before being assigned.
 
 
-==== implicitIndexSignatures.ts (7 errors) ====
+==== implicitIndexSignatures.ts (8 errors) ====
     type StringMap = { [x: string]: string };
     
     const empty1 = {};
@@ -18,6 +20,9 @@ implicitIndexSignatures.ts(44,36): error TS2454: Variable 'o2' is used before be
     map = { x: "xxx", y: "yyy" };
     map = empty1;
     map = empty2;
+    ~~~
+!!! error TS2322: Type '{}' is not assignable to type 'StringMap'.
+!!! error TS2322:   Index signature for type 'string' is missing in type '{}'.
           ~~~~~~
 !!! error TS2454: Variable 'empty2' is used before being assigned.
     map = names1;

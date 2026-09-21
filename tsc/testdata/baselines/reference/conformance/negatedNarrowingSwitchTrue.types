@@ -85,7 +85,7 @@ switch (true) {
         break;
     default:
         y; // {} & not string & not number
->y : {} & not string & not number
+>y : not null & not undefined & not string & not number
 }
 
 // A guard-based switch(true).

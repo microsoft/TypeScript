@@ -31,7 +31,7 @@ switch (typeof a) {
         break;
     default:
         a; // {} & not string & not number (default excludes handled primitives)
->a : {} & not string & not number
+>a : not null & not undefined & not string & not number
 }
 
 // A single handled case: default excludes just that primitive.
@@ -51,12 +51,12 @@ switch (typeof b) {
         break;
     default:
         b; // {} & not string
->b : {} & not string
+>b : not null & not undefined & not string
 
         wantsNotStr(b);
 >wantsNotStr(b) : void
 >wantsNotStr : (x: not string) => void
->b : {} & not string
+>b : not null & not undefined & not string
 }
 
 // Disjoint union: default reduces to the unhandled constituents with no lingering negation.

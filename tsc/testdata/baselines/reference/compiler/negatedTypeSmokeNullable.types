@@ -90,10 +90,10 @@ export function selected(value: unknown): "read" | "write" | undefined {
     if (value === "read" || value === "write") return value;
 >value === "read" || value === "write" : boolean
 >value === "read" : boolean
->value : {} | null
+>value : not undefined
 >"read" : "read"
 >value === "write" : boolean
->value : ({} & not "read") | null
+>value : not undefined & not "read"
 >"write" : "write"
 >value : "read" | "write"
 
@@ -112,17 +112,17 @@ export function phase(value: unknown): "read" | "write" {
 >value : unknown
 >undefined : undefined
 >value === false : boolean
->value : {} | null
+>value : not undefined
 >false : false
 >"read" : "read"
 
     if (value === "read" || value === "write") return value;
 >value === "read" || value === "write" : boolean
 >value === "read" : boolean
->value : ({} & not false) | null
+>value : not undefined & not false
 >"read" : "read"
 >value === "write" : boolean
->value : ({} & not false & not "read") | null
+>value : not undefined & not false & not "read"
 >"write" : "write"
 >value : "read" | "write"
 

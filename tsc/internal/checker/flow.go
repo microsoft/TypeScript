@@ -978,12 +978,18 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 			})
 		}
 		if t.flags&TypeFlagsUnknown != 0 {
-			t = c.unknownUnionType
+			if everyType(candidate, func(candidate *Type) bool { return candidate.flags&TypeFlagsNullable != 0 }) {
+				return c.getNegatedType(candidate)
+			}
+			if c.isNonNullishUnknownType(candidate) {
+				return c.getUnionType([]*Type{c.nullType, c.undefinedType})
+			}
+			return t
 		}
 		trueType := c.getNarrowedType(t, candidate, true /*assumeTrue*/, false /*checkDerived*/)
-		return c.recombineUnknownType(c.filterType(t, func(t *Type) bool {
+		return c.filterType(t, func(t *Type) bool {
 			return !c.isTypeSubsetOf(t, trueType)
-		}))
+		})
 	}
 	if t.flags&TypeFlagsAnyOrUnknown != 0 {
 		return candidate
@@ -1437,7 +1443,7 @@ func (c *Checker) getUnionOrEvolvingArrayType(f *FlowState, types []*Type, union
 	if isEvolvingArrayTypeList(types) {
 		return c.getEvolvingArrayType(c.getUnionType(core.Map(types, c.getElementTypeOfEvolvingArrayType)))
 	}
-	result := c.recombineUnknownType(c.getReducedType(c.getUnionTypeEx(core.SameMap(types, c.finalizeEvolvingArrayType), unionReduction, nil, nil)))
+	result := c.getReducedType(c.getUnionTypeEx(core.SameMap(types, c.finalizeEvolvingArrayType), unionReduction, nil, nil))
 	if result != f.declaredType && result.flags&f.declaredType.flags&TypeFlagsUnion != 0 && slices.Equal(result.AsUnionType().types, f.declaredType.AsUnionType().types) {
 		return f.declaredType
 	}

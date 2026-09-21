@@ -143,18 +143,18 @@ function assertString(value: {}) {
 
         return value as string;
 >value as string : string
->value : {} & not string
+>value : not null & not undefined & not string
     }
     return value;
 >value : string
 }
 
 declare const explicitlyNotString: {} & not string;
->explicitlyNotString : {} & not string
+>explicitlyNotString : not null & not undefined & not string
 
 explicitlyNotString as string;
 >explicitlyNotString as string : string
->explicitlyNotString : {} & not string
+>explicitlyNotString : not null & not undefined & not string
 
 function skipStrings(value: string): string;
 >skipStrings : { (value: string): string; (value: {}): {}; }
@@ -180,7 +180,7 @@ function skipStrings(value: {}) {
 >{} : {}
     }
     return value;
->value : {} & not string
+>value : not null & not undefined & not string
 }
 
 function isNotString(value: {}) {

@@ -152,7 +152,7 @@ function f01(x: unknown) {
 >undefined : undefined
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {} | null
+>x : not undefined
 >"string" : "string"
 
         x;  // string | undefined
@@ -726,7 +726,7 @@ class TestPropertyDeclaration2 {
 >x : unknown
 
     x;
->x : {}
+>x : NonNullable<unknown>
   }
 }
 
@@ -753,7 +753,7 @@ class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclarati
 >x : unknown
 
     x;
->x : {}
+>x : NonNullable<unknown>
   }
 }
 
@@ -800,7 +800,7 @@ function testFunctionThisParameter1(
 >x : unknown
 
   x;
->x : {}
+>x : NonNullable<unknown>
 }
 
 interface TestMethodSignature {
@@ -846,6 +846,6 @@ function testFunctionThisParameter2(
 >x : unknown
 
   x;
->x : {}
+>x : NonNullable<unknown>
 }
 

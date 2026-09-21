@@ -169,7 +169,7 @@ function isNonNullVar(x: number | null) {
 }
 
 function isNonNullGeneric<T>(x: T) {
->isNonNullGeneric : <T>(x: T) => x is T & ({} | undefined)
+>isNonNullGeneric : <T>(x: T) => x is T & not null
 >x : T
 
   return x !== null;

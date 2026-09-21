@@ -11,15 +11,15 @@ function f1<T extends Record<string, any>, K extends keyof T>(x: T[K] | undefine
 >undefined : undefined
 
     x;  // T[K] & ({} | null)
->x : T[K] & ({} | null)
+>x : T[K] & not undefined
 
     if (x === undefined) return;
 >x === undefined : boolean
->x : T[K] & ({} | null)
+>x : T[K] & not undefined
 >undefined : undefined
 
     x;  // T[K] & ({} | null)
->x : T[K] & ({} | null)
+>x : T[K] & not undefined
 }
 
 function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
@@ -31,26 +31,26 @@ function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
 >x : T[K] | null
 
     x;  // T[K] & ({} | undefined)
->x : T[K] & ({} | undefined)
+>x : T[K] & not null
 
     if (x === null) return;
 >x === null : boolean
->x : T[K] & ({} | undefined)
+>x : T[K] & not null
 
     x;  // T[K] & ({} | undefined)
->x : T[K] & ({} | undefined)
+>x : T[K] & not null
 }
 
 function f3<T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) {
 >f3 : <T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) => void
 >t : T[K]
->p1 : Partial<T>[K] & {}
+>p1 : Partial<T>[K] & not null & not undefined
 >p2 : Partial<T>[K] & ({} | null)
 
     t = p1;
->t = p1 : Partial<T>[K] & {}
+>t = p1 : Partial<T>[K] & not null & not undefined
 >t : T[K]
->p1 : Partial<T>[K] & {}
+>p1 : Partial<T>[K] & not null & not undefined
 
     t = p2;
 >t = p2 : Partial<T>[K] & ({} | null)
@@ -118,11 +118,11 @@ export function syncStoreProp<
 >store : Store<S>
 >setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
 >key : K
->value : P[K] & ({} | null)
+>value : P[K] & not undefined
 
     if (value === undefined) return;
 >value === undefined : boolean
->value : P[K] & ({} | null)
+>value : P[K] & not undefined
 >undefined : undefined
 
     store.setState(key, value);
@@ -131,6 +131,6 @@ export function syncStoreProp<
 >store : Store<S>
 >setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
 >key : K
->value : P[K] & ({} | null)
+>value : P[K] & not undefined
 }
 

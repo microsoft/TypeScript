@@ -168,7 +168,7 @@ export function declaredLiteral(value: "first" | "second" | "third") {
 }
 
 export function explicitBounds(value: not string) {
->explicitBounds : (value: not string) => (not string & {}) | null | undefined
+>explicitBounds : (value: not string) => (not string & not null & not undefined) | null | undefined
 >value : not string
 
     if (value === null) {
@@ -184,7 +184,7 @@ export function explicitBounds(value: not string) {
     }
     if (value === undefined) {
 >value === undefined : boolean
->value : (not string & {}) | undefined
+>value : not string & not null
 >undefined : undefined
 
         const result: undefined = value;
@@ -197,7 +197,7 @@ export function explicitBounds(value: not string) {
     if (typeof value === "string") {
 >typeof value === "string" : boolean
 >typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->value : not string & {}
+>value : not string & not null & not undefined
 >"string" : "string"
 
         const result: never = value;
@@ -208,7 +208,7 @@ export function explicitBounds(value: not string) {
 >result : never
     }
     return value;
->value : not string & {}
+>value : not string & not null & not undefined
 }
 
 export function symbolValue(value: unknown): symbol | undefined {
@@ -253,10 +253,10 @@ export function permission(input: { mode: unknown }): { mode?: "read" | "write" 
 >mode : unknown
 >undefined : undefined
 >mode !== "read" : boolean
->mode : {} | null
+>mode : not undefined
 >"read" : "read"
 >mode !== "write" : boolean
->mode : ({} & not "read") | null
+>mode : not undefined & not "read"
 >"write" : "write"
 >new Error() : Error
 >Error : ErrorConstructor
@@ -351,10 +351,10 @@ export function matchingLiteral(value: unknown): "read" | "write" {
     if (value === "read" || value === "write") return value;
 >value === "read" || value === "write" : boolean
 >value === "read" : boolean
->value : {} | null
+>value : not undefined
 >"read" : "read"
 >value === "write" : boolean
->value : ({} & not "read") | null
+>value : not undefined & not "read"
 >"write" : "write"
 >value : "read" | "write"
 

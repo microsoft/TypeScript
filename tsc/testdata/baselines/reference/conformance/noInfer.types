@@ -22,7 +22,7 @@ type T05 = NoInfer<`foo${string}` & `${string}bar`>;
 >T05 : `foo${string}` & `${string}bar`
 
 type T06 = NoInfer<{}>;
->T06 : {}
+>T06 : NoInfer<{}>
 
 // NoInfer<T> is preserved for object types
 

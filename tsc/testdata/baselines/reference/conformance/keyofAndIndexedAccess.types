@@ -1291,21 +1291,21 @@ function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
 >z : T[K]
 
     let a: {} | null | undefined;
->a : {} | null | undefined
+>a : unknown
 
     a = x;
 >a = x : T
->a : {} | null | undefined
+>a : unknown
 >x : T
 
     a = y;
 >a = y : T[keyof T]
->a : {} | null | undefined
+>a : unknown
 >y : T[keyof T]
 
     a = z;
 >a = z : T[K]
->a : {} | null | undefined
+>a : unknown
 >z : T[K]
 }
 
@@ -2086,7 +2086,7 @@ class Unbounded<T> {
 >x : T[keyof T]
 
         let y: {} | undefined | null = x;
->y : {} | null | undefined
+>y : unknown
 >x : T[keyof T]
     }
 }

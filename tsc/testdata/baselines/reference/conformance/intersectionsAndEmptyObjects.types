@@ -37,7 +37,7 @@ let x07: C;
 >x07 : C
 
 let x08: C & {};
->x08 : C
+>x08 : {}
 
 let x09: {} & A & {} & B & {} & C & {};
 >x09 : A & B
@@ -226,7 +226,7 @@ declare function mock<M>(_: Promise<M>): {} & M;
 >_ : Promise<M>
 
 mock(import('./ex'))
->mock(import('./ex')) : {}
+>mock(import('./ex')) : { default: typeof import("./ex"); }
 >mock : <M>(_: Promise<M>) => {} & M
 >import('./ex') : Promise<{ default: typeof import("./ex"); }>
 >'./ex' : "./ex"

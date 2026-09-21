@@ -44,16 +44,16 @@ type T33<K extends "a" | "b"> = ("a" | "b") & K;
 >T33 : K
 
 type T40<K extends {}> = K & undefined;
->T40 : never
+>T40 : T40<K>
 
 type T41<K extends {}> = K & null;
->T41 : never
+>T41 : T41<K>
 
 type T42<K extends {}> = K & object;
 >T42 : T42<K>
 
 type T43<K extends {}> = K & {};
->T43 : K
+>T43 : T43<K>
 
 type T50<K extends "a" | 0> = K & "a";
 >T50 : T50<K>

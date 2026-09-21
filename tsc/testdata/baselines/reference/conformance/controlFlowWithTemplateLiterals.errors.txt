@@ -1,0 +1,18 @@
+controlFlowWithTemplateLiterals.ts(7,15): error TS2322: Type '{ test: string; } | {}' is not assignable to type 'object'.
+  Type '{}' is not assignable to type 'object'.
+
+
+==== controlFlowWithTemplateLiterals.ts (1 errors) ====
+    declare const envVar: string | undefined;
+    if (typeof envVar === `string`) {
+      envVar.slice(0)
+    }
+    
+    declare const obj: {test: string} | {}
+    if (`test` in obj) {
+                  ~~~
+!!! error TS2322: Type '{ test: string; } | {}' is not assignable to type 'object'.
+!!! error TS2322:   Type '{}' is not assignable to type 'object'.
+      obj.test.slice(0)
+    }
+    

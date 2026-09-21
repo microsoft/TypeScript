@@ -766,7 +766,7 @@ declare function f1<T>(a: Iterable<T>): {
     c: [T][];
 };
 declare const a54: [Iterable<number>, ...Iterable<number>[]];
-declare const a55: [number, ...(number | undefined)[]][];
+declare const a55: [number, ...number[]][];
 declare const a56: (number | undefined)[][];
 declare const a57: number[][];
 declare const a58: Record<string, Iterable<number>>;
@@ -777,8 +777,8 @@ declare const a60: Record<string, number | undefined>[];
 declare const a61: Record<string, number>[];
 declare const a62: Record<string, number>;
 declare const a63: ({
-    a: number | undefined;
-    b: number | undefined;
+    a: number;
+    b: number;
 } & {})[];
 declare const a64: {
     a: number | undefined;
@@ -875,7 +875,7 @@ declare const a97: Record<string, number> & {
 };
 declare const a98: ({
     a: number;
-    b: number | undefined;
+    b: number;
 } & {})[];
 declare const a99: {
     a: number;
@@ -1022,9 +1022,9 @@ declare const a165: {
 }[];
 declare const a166: Record<number, boolean>;
 declare const a167: ({
-    NaN: number | boolean | undefined;
-    Infinity: number | boolean | undefined;
-    "-Infinity": number | boolean | undefined;
+    NaN: number | boolean;
+    Infinity: number | boolean;
+    "-Infinity": number | boolean;
 } & {})[];
 declare const a168: {
     NaN: number | boolean | undefined;

@@ -31,7 +31,7 @@ function isNotNull<A>(x: A): x is NonNullable<A> {
 >x !== null : boolean
 >x : A
 >x !== undefined : boolean
->x : A & ({} | undefined)
+>x : A & not null
 >undefined : undefined
 }
 // function which I want to call in the result of the expression

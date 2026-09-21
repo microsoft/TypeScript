@@ -4273,7 +4273,7 @@ export function convertCompilerOptionsForTelemetry(opts: CompilerOptions): Compi
     return out;
 }
 
-function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): {} | undefined {
+function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): CompilerOptionsValue {
     if (value === undefined) return value;
     switch (option.type) {
         case "object": // "paths". Can't get any useful information from the value since we blank out strings, so just return "".
@@ -4289,7 +4289,7 @@ function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): 
             // fall through to list
         case "list":
             const elementType = option.element;
-            return isArray(value) ? mapDefined(value, v => getOptionValueWithEmptyStrings(v, elementType)) : "";
+            return isArray(value) ? mapDefined(value, v => getOptionValueWithEmptyStrings(v, elementType)) as CompilerOptionsValue : "";
         default:
             return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
                 if (optionEnumValue === value) {

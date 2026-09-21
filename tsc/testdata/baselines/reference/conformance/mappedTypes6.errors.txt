@@ -17,10 +17,10 @@ mappedTypes6.ts(37,5): error TS2322: Type 'Required<T>' is not assignable to typ
                         'string | number | symbol' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
                           Type 'string' is not assignable to type 'P'.
                             'string' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
-                              Type 'T[P]' is not assignable to type '{}'.
-                                Type 'T[keyof T]' is not assignable to type '{}'.
-                                  Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
-                                    Type 'T[string]' is not assignable to type '{}'.
+                              Type 'T[P]' is not assignable to type 'not null'.
+                                Type 'T[keyof T]' is not assignable to type 'not null'.
+                                  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+                                    Type 'T[string]' is not assignable to type 'not null'.
 mappedTypes6.ts(38,5): error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
 mappedTypes6.ts(39,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Denullified<T>'.
 mappedTypes6.ts(42,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
@@ -102,10 +102,10 @@ mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-
 !!! error TS2322:                         'string | number | symbol' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
 !!! error TS2322:                           Type 'string' is not assignable to type 'P'.
 !!! error TS2322:                             'string' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
-!!! error TS2322:                               Type 'T[P]' is not assignable to type '{}'.
-!!! error TS2322:                                 Type 'T[keyof T]' is not assignable to type '{}'.
-!!! error TS2322:                                   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
-!!! error TS2322:                                     Type 'T[string]' is not assignable to type '{}'.
+!!! error TS2322:                               Type 'T[P]' is not assignable to type 'not null'.
+!!! error TS2322:                                 Type 'T[keyof T]' is not assignable to type 'not null'.
+!!! error TS2322:                                   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+!!! error TS2322:                                     Type 'T[string]' is not assignable to type 'not null'.
         w = y;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.

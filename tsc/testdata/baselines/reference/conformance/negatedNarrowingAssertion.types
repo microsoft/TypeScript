@@ -52,12 +52,12 @@ assertNotCat(b);
 >b : {}
 
 b; // {} & not Cat
->b : {} & not Cat
+>b : not null & not undefined & not Cat
 
 wantsNotCat(b);
 >wantsNotCat(b) : void
 >wantsNotCat : (x: not Cat) => void
->b : {} & not Cat
+>b : not null & not undefined & not Cat
 
 // `asserts x is NonNullable<T>` removes null/undefined without introducing a negation.
 declare const c: string | undefined;

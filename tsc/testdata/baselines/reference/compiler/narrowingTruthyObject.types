@@ -37,7 +37,7 @@ function foo(x: unknown, b: boolean) {
 >x : unknown
 >typeof x === 'object' : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >'object' : "object"
 
         x.toString();
@@ -53,7 +53,7 @@ function foo(x: unknown, b: boolean) {
 >x : unknown
 >typeof x === 'object' : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >'object' : "object"
 
         x.toString();
@@ -69,7 +69,7 @@ function foo(x: unknown, b: boolean) {
 >b : boolean
 >typeof x === 'object' : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >'object' : "object"
 
         x.toString();
@@ -87,7 +87,7 @@ function foo(x: unknown, b: boolean) {
 >b : true
 >typeof x === 'object' : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >'object' : "object"
 
         x.toString();
@@ -109,7 +109,7 @@ function foo(x: unknown, b: boolean) {
 >b : true
 >typeof x === 'object' : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >'object' : "object"
 
         x.toString();
@@ -132,7 +132,7 @@ function f1(x: unknown): any {
 >x : unknown
 >typeof x === 'object' : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >'object' : "object"
 >x.hasOwnProperty('x') : boolean
 >x.hasOwnProperty : (v: PropertyKey) => boolean

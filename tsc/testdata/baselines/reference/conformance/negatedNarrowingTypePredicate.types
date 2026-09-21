@@ -96,12 +96,12 @@ if (isNotCat(c)) {
 >c : {}
 
     c; // {} & not Cat
->c : {} & not Cat
+>c : not null & not undefined & not Cat
 
     wantsNotCat(c);
 >wantsNotCat(c) : void
 >wantsNotCat : (x: not Cat) => void
->c : {} & not Cat
+>c : not null & not undefined & not Cat
 
 } else {
     c; // {}

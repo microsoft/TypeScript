@@ -135,7 +135,7 @@ export function nullableString(value: unknown): string | null {
 >value : unknown
 >typeof value === "string" : boolean
 >typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->value : {} | undefined
+>value : not null
 >"string" : "string"
 >value : string | null
 
