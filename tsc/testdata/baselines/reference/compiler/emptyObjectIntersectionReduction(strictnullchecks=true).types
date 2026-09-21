@@ -1,0 +1,148 @@
+//// [tests/cases/compiler/emptyObjectIntersectionReduction.ts] ////
+
+=== emptyObjectIntersectionReduction.ts ===
+export function stringRight(value: string & {}) { return value; }
+>stringRight : (value: string & {}) => string
+>value : string
+>value : string
+
+export function stringLeft(value: {} & string) { return value; }
+>stringLeft : (value: {} & string) => string
+>value : string
+>value : string
+
+export function numberRight(value: number & {}) { return value; }
+>numberRight : (value: number & {}) => number
+>value : number
+>value : number
+
+export function numberLeft(value: {} & number) { return value; }
+>numberLeft : (value: {} & number) => number
+>value : number
+>value : number
+
+export function bigintRight(value: bigint & {}) { return value; }
+>bigintRight : (value: bigint & {}) => bigint
+>value : bigint
+>value : bigint
+
+export function bigintLeft(value: {} & bigint) { return value; }
+>bigintLeft : (value: {} & bigint) => bigint
+>value : bigint
+>value : bigint
+
+export function templateRight(value: `prefix${string}` & {}) { return value; }
+>templateRight : (value: `prefix${string}` & {}) => `prefix${string}`
+>value : `prefix${string}`
+>value : `prefix${string}`
+
+export function templateLeft(value: {} & `prefix${string}`) { return value; }
+>templateLeft : (value: {} & `prefix${string}`) => `prefix${string}`
+>value : `prefix${string}`
+>value : `prefix${string}`
+
+export function stringUnion(value: "literal" | (string & {})) { return value; }
+>stringUnion : (value: "literal" | (string & {})) => string
+>value : string
+>value : string
+
+export function numberUnion(value: 1 | (number & {})) { return value; }
+>numberUnion : (value: 1 | (number & {})) => number
+>value : number
+>value : number
+
+export function bigintUnion(value: 1n | (bigint & {})) { return value; }
+>bigintUnion : (value: 1n | (bigint & {})) => bigint
+>value : bigint
+>value : bigint
+
+export function templateUnion(value: "prefixValue" | (`prefix${string}` & {})) { return value; }
+>templateUnion : (value: "prefixValue" | (`prefix${string}` & {})) => `prefix${string}`
+>value : `prefix${string}`
+>value : `prefix${string}`
+
+type Choice = "a" | "b" | string;
+>Choice : string
+
+type OtherChoice = "c" | string;
+>OtherChoice : string
+
+type NumericChoice = 1 | 2 | number;
+>NumericChoice : number
+
+type BigIntChoice = 1n | 2n | bigint;
+>BigIntChoice : bigint
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Equal<Left, Right>
+
+	(<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>true : true
+>false : false
+
+const stringIdentity: Equal<Choice, string> = true;
+>stringIdentity : true
+>true : true
+
+const numberIdentity: Equal<NumericChoice, number> = true;
+>numberIdentity : true
+>true : true
+
+const bigintIdentity: Equal<BigIntChoice, bigint> = true;
+>bigintIdentity : true
+>true : true
+
+const mergedIdentity: Equal<Choice | OtherChoice | string, string> = true;
+>mergedIdentity : true
+>true : true
+
+const mixedIdentity: Equal<Choice | number, string | number> = true;
+>mixedIdentity : true
+>true : true
+
+const intersectionIdentity: Equal<Choice & {}, string> = true;
+>intersectionIdentity : true
+>true : true
+
+export function mergedChoices(value: Choice | OtherChoice | string) { return value; }
+>mergedChoices : (value: Choice | OtherChoice | string) => string
+>value : string
+>value : string
+
+export function mixedChoices(value: Choice | number) { return value; }
+>mixedChoices : (value: Choice | number) => string | number
+>value : string | number
+>value : string | number
+
+type GenericChoice<Value> = "a" | "b" | string;
+>GenericChoice : string
+
+export function genericChoice<Value>(value: GenericChoice<Value>) { return value; }
+>genericChoice : <Value>(value: GenericChoice<Value>) => string
+>value : string
+>value : string
+
+export const instantiatedChoice = genericChoice<number>("other");
+>instantiatedChoice : string
+>genericChoice<number>("other") : string
+>genericChoice : <Value>(value: GenericChoice<Value>) => string
+>"other" : "other"
+
+type ChoiceMap = { [key in Choice]: number };
+>ChoiceMap : ChoiceMap
+
+declare const choiceMap: ChoiceMap;
+>choiceMap : ChoiceMap
+
+export const numericIndex = choiceMap[0];
+>numericIndex : number
+>choiceMap[0] : number
+>choiceMap : ChoiceMap
+>0 : 0
+
+export const stringIndex = choiceMap["other"];
+>stringIndex : number
+>choiceMap["other"] : number
+>choiceMap : ChoiceMap
+>"other" : "other"
+

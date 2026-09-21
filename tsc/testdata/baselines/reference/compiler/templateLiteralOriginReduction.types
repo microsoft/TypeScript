@@ -1,0 +1,132 @@
+//// [tests/cases/compiler/templateLiteralOriginReduction.ts] ////
+
+=== templateLiteralOriginReduction.ts ===
+type Pattern = `${string}Downcast`;
+>Pattern : `${string}Downcast`
+
+type Choice = "dataDowncast" | "editingDowncast" | Pattern;
+>Choice : Choice
+
+type OtherChoice = "otherDowncast" | Pattern;
+>OtherChoice : OtherChoice
+
+type MappedChoice = "DATADOWNCAST" | "EDITINGDOWNCAST" | Uppercase<Pattern>;
+>MappedChoice : MappedChoice
+
+type UppercaseChoice = "DATA" | "EDITING" | Uppercase<string>;
+>UppercaseChoice : UppercaseChoice
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Equal<Left, Right>
+
+    (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>true : true
+>false : false
+
+const identity: Equal<Choice, Pattern> = true;
+>identity : true
+>true : true
+
+const mergedIdentity: Equal<Choice | OtherChoice | Pattern, Pattern> = true;
+>mergedIdentity : true
+>true : true
+
+const mappedIdentity: Equal<MappedChoice, Uppercase<Pattern>> = true;
+>mappedIdentity : true
+>true : true
+
+const intersectionIdentity: Equal<Choice & {}, Pattern> = true;
+>intersectionIdentity : true
+>true : true
+
+const uppercaseIdentity: Equal<UppercaseChoice, Uppercase<string>> = true;
+>uppercaseIdentity : true
+>true : true
+
+export function choose(value: Choice) { return value; }
+>choose : (value: Choice) => Choice
+>value : Choice
+>value : Choice
+
+export function merge(value: Choice | OtherChoice | Pattern) { return value; }
+>merge : (value: Choice | OtherChoice | Pattern) => `${string}Downcast`
+>value : `${string}Downcast`
+>value : `${string}Downcast`
+
+export function withExtra(value: "downcast" | Choice) { return value; }
+>withExtra : (value: "downcast" | Choice) => "downcast" | `${string}Downcast`
+>value : "downcast" | `${string}Downcast`
+>value : "downcast" | `${string}Downcast`
+
+export function mapped(value: MappedChoice) { return value; }
+>mapped : (value: MappedChoice) => MappedChoice
+>value : MappedChoice
+>value : MappedChoice
+
+export function uppercase(value: UppercaseChoice) { return value; }
+>uppercase : (value: UppercaseChoice) => UppercaseChoice
+>value : UppercaseChoice
+>value : UppercaseChoice
+
+const invalid: Choice = "downcast";
+>invalid : Choice
+>"downcast" : "downcast"
+
+const invalidUppercase: UppercaseChoice = "lowercase";
+>invalidUppercase : UppercaseChoice
+>"lowercase" : "lowercase"
+
+declare const values: Record<Choice, number>;
+>values : Record<Choice, number>
+
+export const known = values.dataDowncast;
+>known : number
+>values.dataDowncast : number
+>values : Record<Choice, number>
+>dataDowncast : number
+
+export const arbitrary = values.otherDowncast;
+>arbitrary : number | undefined
+>values.otherDowncast : number | undefined
+>values : Record<Choice, number>
+>otherDowncast : number | undefined
+
+declare const plain: Record<Pattern, number>;
+>plain : Record<`${string}Downcast`, number>
+
+export const plainLiteral = plain.dataDowncast;
+>plainLiteral : number | undefined
+>plain.dataDowncast : number | undefined
+>plain : Record<`${string}Downcast`, number>
+>dataDowncast : number | undefined
+
+type Generic<Value extends string> = Value | Pattern;
+>Generic : Generic<Value>
+
+declare const generic: Generic<"dataDowncast">;
+>generic : Generic<"dataDowncast">
+
+const genericIdentity: Equal<typeof generic, Pattern> = true;
+>genericIdentity : true
+>generic : Generic<"dataDowncast">
+>true : true
+
+export const genericValue = generic;
+>genericValue : Generic<"dataDowncast">
+>generic : Generic<"dataDowncast">
+
+declare const upper: Record<UppercaseChoice, number>;
+>upper : Record<UppercaseChoice, number>
+
+export const uppercaseKnown = upper.DATA;
+>uppercaseKnown : number
+>upper.DATA : number
+>upper : Record<UppercaseChoice, number>
+>DATA : number
+
+export const uppercaseOther = upper.OTHER;
+>uppercaseOther : number | undefined
+>upper.OTHER : number | undefined
+>upper : Record<UppercaseChoice, number>
+>OTHER : number | undefined
+

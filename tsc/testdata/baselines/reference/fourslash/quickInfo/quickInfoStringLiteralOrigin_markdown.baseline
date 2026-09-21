@@ -1,0 +1,119 @@
+// === QuickInfo ===
+=== /a.ts ===
+// type Choice = "a" | "b" | string;
+// /** Available choice. */
+// export declare let value: Choice;
+//                    ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | let value: string (origin: string | "a" | "b")
+// | ```
+// | Available choice.
+// | ----------------------------------------------------------------------
+// export declare const holder: {
+//     /** Available choice. */
+//     member: Choice | undefined;
+// };
+=== /b.ts ===
+// import { value, holder } from "./a";
+// value;
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) let value: string (origin: string | "a" | "b")
+// | ```
+// | Available choice.
+// | ----------------------------------------------------------------------
+// holder.member;
+//        ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) member: string | undefined (origin: string | "a" | "b" | undefined)
+// | ```
+// | Available choice.
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 83,
+      "LSPosition": {
+        "line": 2,
+        "character": 24
+      },
+      "Name": "declaration",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nlet value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 19
+        },
+        "end": {
+          "line": 2,
+          "character": 24
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 42,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "imported",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) let value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 2,
+        "character": 13
+      },
+      "Name": "property",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) member: string | undefined (origin: string | \"a\" | \"b\" | undefined)\n```\nAvailable choice."
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 7
+        },
+        "end": {
+          "line": 2,
+          "character": 13
+        }
+      }
+    }
+  }
+]

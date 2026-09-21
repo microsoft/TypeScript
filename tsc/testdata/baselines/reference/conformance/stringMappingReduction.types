@@ -2,10 +2,10 @@
 
 === stringMappingReduction.ts ===
 type T00 = "prop" | `p${Lowercase<string>}p`;  // `p${Lowercase<string>}p`
->T00 : `p${Lowercase<string>}p`
+>T00 : T00
 
 type T01 = "prop" | Lowercase<string>;  // Lowercase<string>
->T01 : Lowercase<string>
+>T01 : T01
 
 type T02 = "PROP" | Lowercase<string>;  // "PROP" | Lowercase<string>
 >T02 : T02
@@ -23,10 +23,10 @@ type T20 = "prop" | Capitalize<string>;  // "prop" | Capitalize<string>
 >T20 : T20
 
 type T21 = "Prop" | Capitalize<string>;  // Capitalize<string>
->T21 : Capitalize<string>
+>T21 : T21
 
 type T22 = "PROP" | Capitalize<string>;  // Capitalize<string>
->T22 : Capitalize<string>
+>T22 : T22
 
 type T30 = "prop" & Capitalize<string>;  // never
 >T30 : never
