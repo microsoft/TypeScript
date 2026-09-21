@@ -18,7 +18,7 @@ export interface RunOptions {
     signal?: AbortSignal;
 }
 
-function formatCommandArg(arg: string) {
+export function formatCommandArg(arg: string) {
     return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
 }
 

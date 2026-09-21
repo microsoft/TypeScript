@@ -3,6 +3,7 @@ import * as fs from "node:fs";
 import path from "node:path";
 import { GeneratedFile } from "./generatedFile.mts";
 import {
+    formatCommandArg,
     goInputs,
     repoRoot,
     run,
@@ -83,7 +84,7 @@ export default async function cache({
         );
     const previous = artifacts(outputFiles());
     const complete = () => outputs.every(pattern => expand([pattern], cwd).some(file => fs.statSync(file).isFile()));
-    const commandText = commands.map(command => command.join(" ")).join("; ");
+    const commandText = commands.map(command => command.map(formatCommandArg).join(" ")).join("; ");
     if (complete() && previous.every(file => file.isCurrent(force))) {
         console.log(`skipped ${commandText}: codegen outputs are already up to date`);
         return true;
