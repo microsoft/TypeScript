@@ -1,0 +1,43 @@
+templateLiteralOriginReduction.ts(18,7): error TS2322: Type '"downcast"' is not assignable to type 'Choice'.
+templateLiteralOriginReduction.ts(19,7): error TS2322: Type 'string' is not assignable to type 'UppercaseChoice'.
+
+
+==== templateLiteralOriginReduction.ts (2 errors) ====
+    type Pattern = `${string}Downcast`;
+    type Choice = "dataDowncast" | "editingDowncast" | Pattern;
+    type OtherChoice = "otherDowncast" | Pattern;
+    type MappedChoice = "DATADOWNCAST" | "EDITINGDOWNCAST" | Uppercase<Pattern>;
+    type UppercaseChoice = "DATA" | "EDITING" | Uppercase<string>;
+    type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+        (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+    const identity: Equal<Choice, Pattern> = true;
+    const mergedIdentity: Equal<Choice | OtherChoice | Pattern, Pattern> = true;
+    const mappedIdentity: Equal<MappedChoice, Uppercase<Pattern>> = true;
+    const intersectionIdentity: Equal<Choice & {}, Pattern> = true;
+    const uppercaseIdentity: Equal<UppercaseChoice, Uppercase<string>> = true;
+    export function choose(value: Choice) { return value; }
+    export function merge(value: Choice | OtherChoice | Pattern) { return value; }
+    export function withExtra(value: "downcast" | Choice) { return value; }
+    export function mapped(value: MappedChoice) { return value; }
+    export function uppercase(value: UppercaseChoice) { return value; }
+    const invalid: Choice = "downcast";
+          ~~~~~~~
+!!! error TS2322: Type '"downcast"' is not assignable to type 'Choice'.
+    const invalidUppercase: UppercaseChoice = "lowercase";
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'UppercaseChoice'.
+    
+    declare const values: Record<Choice, number>;
+    export const known = values.dataDowncast;
+    export const arbitrary = values.otherDowncast;
+    declare const plain: Record<Pattern, number>;
+    export const plainLiteral = plain.dataDowncast;
+    
+    type Generic<Value extends string> = Value | Pattern;
+    declare const generic: Generic<"dataDowncast">;
+    const genericIdentity: Equal<typeof generic, Pattern> = true;
+    export const genericValue = generic;
+    
+    declare const upper: Record<UppercaseChoice, number>;
+    export const uppercaseKnown = upper.DATA;
+    export const uppercaseOther = upper.OTHER;
