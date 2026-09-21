@@ -1,6 +1,6 @@
 ---
 name: restack
-description: Only invoke when explicitly instructed to "restack" something using that exact word
+description: Only read this when explicitly instructed to "restack" something using that exact word
 ---
 
 You need to "re-stack" your commits to match the following format:
