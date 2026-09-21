@@ -23918,8 +23918,8 @@ func (c *Checker) isArrayLikeType(t *Type) bool {
 
 func (c *Checker) isMutableArrayLikeType(t *Type) bool {
 	// A type is mutable-array-like if it is a reference to the global Array type, or if it is not the
-	// any, undefined or null type and if it is assignable to Array<any>
-	return c.isMutableArrayOrTuple(t) || t.flags&(TypeFlagsAny|TypeFlagsNullable) == 0 && c.isTypeAssignableTo(t, c.anyArrayType)
+	// any, undefined, null or never type and if it is assignable to Array<any>
+	return c.isMutableArrayOrTuple(t) || t.flags&(TypeFlagsAny|TypeFlagsNullable|TypeFlagsNever) == 0 && c.isTypeAssignableTo(t, c.anyArrayType)
 }
 
 func (c *Checker) isEmptyArrayLiteralType(t *Type) bool {
