@@ -352,6 +352,9 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	b.createdPrograms = createdPrograms
 	for uri := range apiRequest.EnsureFiles.Keys() {
 		b.DidRequestFile(uri, false /*configuredProjectsOnly*/, logger)
+		if b.findDefaultProject(uri.FileName(), b.toPath(uri.FileName())) == nil {
+			return fmt.Errorf("no project found for opened file: %s", uri.FileName())
+		}
 	}
 	for projectID := range apiRequest.EnsurePrograms.Keys() {
 		b.DidRequestProject(projectID, logger)

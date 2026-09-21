@@ -356,6 +356,7 @@ type SnapshotRequestChangesParams struct {
 	// tsconfig that contains it; if found, that configured project is loaded and
 	// becomes the file's default project. Otherwise the file is loaded into the
 	// inferred project (e.g. a node_modules d.ts not in any project's import graph).
+	// If a file cannot be loaded into any project, the request fails.
 	OpenFiles []DocumentIdentifier `json:"openFiles,omitempty"`
 	// CloseFiles lists files to release in the new snapshot. A file is only fully
 	// closed once every API client that opened it closes it.
