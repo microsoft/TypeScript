@@ -6862,7 +6862,7 @@ describe("getDefaultProjectForFile", () => {
             openFiles: ["/src/index.ts"],
         });
 
-        const expectedError = /client error: failed to .*snapshot: could not read opened file: \/src\/App\.vue\.ts/;
+        const expectedError = /client error: failed to .*snapshot: no project found for opened file: \/src\/App\.vue\.ts/;
         assert.throws(() => snapshot.update({ openFiles: [fileName] }), expectedError);
         assert.throws(() => api.createSnapshot({ openFiles: [fileName] }), expectedError);
 
@@ -6874,6 +6874,11 @@ describe("getDefaultProjectForFile", () => {
         assert.equal((project.program.getSourceFile(fileName))?.text, source);
         assert.equal(snapshot.getDefaultProjectForFile(fileName), undefined);
         assert.ok(updated.getConfiguredProject("/tsconfig.json"));
+
+        virtualFileAvailable = false;
+        const reopen = { openFiles: [fileName], fileNotifications: { deleted: [fileName] } };
+        assert.throws(() => updated.update(reopen), expectedError);
+        assert.equal((project.program.getSourceFile(fileName))?.text, source);
     });
 
     test("finds inferred project for d.ts in node_modules after openFiles", () => {
