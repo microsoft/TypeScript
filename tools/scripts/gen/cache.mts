@@ -83,8 +83,9 @@ export default async function cache({
         );
     const previous = artifacts(outputFiles());
     const complete = () => outputs.every(pattern => expand([pattern], cwd).some(file => fs.statSync(file).isFile()));
+    const commandText = commands.map(command => command.join(" ")).join("; ");
     if (complete() && previous.every(file => file.isCurrent(force))) {
-        console.log("Codegen outputs are up to date.");
+        console.log(`skipped ${commandText}: codegen outputs are already up to date`);
         return true;
     }
 
@@ -93,9 +94,10 @@ export default async function cache({
         await x(command, args, { throwOnError: true, nodeOptions: { cwd, env: environment, stdio: "inherit" } });
     }
     if (!complete()) throw new Error(`Generation did not produce all declared outputs: ${outputs.join(", ")}`);
+    const generatedFiles = outputFiles();
     if (snapshotInputs().hash === before.hash) {
-        for (const file of artifacts(outputFiles())) file.markCurrent();
+        for (const file of artifacts(generatedFiles)) file.markCurrent();
     }
-    console.log("Generated codegen outputs.");
+    console.log(`exec ${commandText}:\n  Outputs:\n    ${generatedFiles.join("\n    ")}`);
     return false;
 }

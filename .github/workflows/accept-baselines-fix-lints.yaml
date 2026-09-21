@@ -30,7 +30,7 @@ jobs:
           git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
           git config user.name "typescript-automation[bot]"
           npm ci
-          npx hereby generate:go
+          npx hereby generate
           npx hereby test || true
           npx hereby baseline-accept
           npx hereby lint --fix
