@@ -855,7 +855,7 @@ func (c *CompilationResult) getOutputPath(path string, ext string) string {
 		}
 	}
 	if ext == tspath.GetDeclarationEmitExtensionForPath(path) {
-		return outputpaths.ChangeToDeclarationExtension(path, c.Program.Program())
+		return outputpaths.ChangeToDeclarationExtension(path, c.Program.Program().Options(), c.Program.Program())
 	}
 	return tspath.ChangeExtension(path, ext)
 }

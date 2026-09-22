@@ -1,0 +1,462 @@
+===================================================================
+JsFile: helper.d.ts
+mapUrl: helper.d.ts.map
+sourceRoot: 
+sources: helper.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/helper.d.ts
+sourceFile:helper.ts
+-------------------------------------------------------------------
+>>>export declare const helper: string;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^
+5 >              ^
+6 >               ^^^^^^
+7 >                     ^^^^^^
+8 >                           ^^
+9 >                             ^^^^^^
+10>                                   ^
+1 >
+2 >export
+3 >       
+4 >       declare
+5 >               
+6 >               const 
+7 >                     helper
+8 >                           : 
+9 >                             string
+10>                                   ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+5 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+6 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+7 >Emitted(1, 28) Source(1, 28) + SourceIndex(0)
+8 >Emitted(1, 30) Source(1, 30) + SourceIndex(0)
+9 >Emitted(1, 36) Source(1, 36) + SourceIndex(0)
+10>Emitted(1, 37) Source(1, 37) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=helper.d.ts.map===================================================================
+JsFile: other.d.ts
+mapUrl: other.d.ts.map
+sourceRoot: 
+sources: other.p
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/other.d.ts
+sourceFile:other.p
+-------------------------------------------------------------------
+>>>export declare const other: number;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^
+5 >              ^
+6 >               ^^^^^^
+7 >                     ^^^^^
+8 >                          ^^
+9 >                            ^^^^^^
+10>                                  ^
+1 >
+2 >export
+3 >       
+4 >       declare
+5 >               
+6 >               const 
+7 >                     other
+8 >                          : 
+9 >                            number
+10>                                  ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+5 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+6 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+7 >Emitted(1, 27) Source(1, 27) + SourceIndex(0)
+8 >Emitted(1, 29) Source(1, 29) + SourceIndex(0)
+9 >Emitted(1, 35) Source(1, 35) + SourceIndex(0)
+10>Emitted(1, 36) Source(1, 36) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=other.d.ts.map===================================================================
+JsFile: component.d.ts
+mapUrl: component.d.ts.map
+sourceRoot: 
+sources: component.y.z
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/component.d.ts
+sourceFile:component.y.z
+-------------------------------------------------------------------
+>>>import { helper } from "./helper.js";
+1 >
+2 >^^^^^^^
+3 >       ^^
+4 >         ^^^^^^
+5 >               ^^
+6 >                 ^^^^^^
+7 >                       ^^^^^^^^^^^^^
+8 >                                    ^
+1 >
+2 >import 
+3 >       { 
+4 >         helper
+5 >                }
+6 >                  from 
+7 >                       "./helper.ts"
+8 >                                    ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+4 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+7 >Emitted(1, 37) Source(1, 37) + SourceIndex(0)
+8 >Emitted(1, 38) Source(1, 38) + SourceIndex(0)
+---
+>>>import { other } from "./other.js";
+1 >
+2 >^^^^^^^
+3 >       ^^
+4 >         ^^^^^
+5 >              ^^
+6 >                ^^^^^^
+7 >                      ^^^^^^^^^^^^
+8 >                                  ^
+1 >
+  >
+2 >import 
+3 >       { 
+4 >         other
+5 >               }
+6 >                 from 
+7 >                      "./other.p"
+8 >                                  ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+4 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 23) Source(2, 23) + SourceIndex(0)
+7 >Emitted(2, 35) Source(2, 34) + SourceIndex(0)
+8 >Emitted(2, 36) Source(2, 35) + SourceIndex(0)
+---
+>>>export interface ComponentProps {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^^^^^
+4 >                 ^^^^^^^^^^^^^^
+1 >
+  >
+2 >export
+3 >       interface 
+4 >                 ComponentProps
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
+4 >Emitted(3, 32) Source(3, 32) + SourceIndex(0)
+---
+>>>    label: typeof helper;
+1 >^^^^
+2 >    ^^^^^
+3 >         ^^
+4 >           ^^^^^^^
+5 >                  ^^^^^^
+6 >                        ^
+1 > {
+  >    
+2 >    label
+3 >         : 
+4 >           typeof 
+5 >                  helper
+6 >                        ;
+1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(4, 10) Source(4, 10) + SourceIndex(0)
+3 >Emitted(4, 12) Source(4, 12) + SourceIndex(0)
+4 >Emitted(4, 19) Source(4, 19) + SourceIndex(0)
+5 >Emitted(4, 25) Source(4, 25) + SourceIndex(0)
+6 >Emitted(4, 26) Source(4, 26) + SourceIndex(0)
+---
+>>>    count: typeof other;
+1 >^^^^
+2 >    ^^^^^
+3 >         ^^
+4 >           ^^^^^^^
+5 >                  ^^^^^
+6 >                       ^
+1 >
+  >    
+2 >    count
+3 >         : 
+4 >           typeof 
+5 >                  other
+6 >                       ;
+1 >Emitted(5, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(5, 10) Source(5, 10) + SourceIndex(0)
+3 >Emitted(5, 12) Source(5, 12) + SourceIndex(0)
+4 >Emitted(5, 19) Source(5, 19) + SourceIndex(0)
+5 >Emitted(5, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(5, 25) Source(5, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(6, 2) Source(6, 2) + SourceIndex(0)
+---
+>>>export declare const component: ComponentProps;
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^
+5 >              ^
+6 >               ^^^^^^
+7 >                     ^^^^^^^^^
+8 >                              ^^
+9 >                                ^^^^^^^^^^^^^^
+10>                                              ^
+1->
+  >
+2 >export
+3 >       
+4 >       declare
+5 >               
+6 >               const 
+7 >                     component
+8 >                              : 
+9 >                                ComponentProps
+10>                                              ;
+1->Emitted(7, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(7, 7) Source(7, 7) + SourceIndex(0)
+3 >Emitted(7, 8) Source(7, 8) + SourceIndex(0)
+4 >Emitted(7, 15) Source(7, 15) + SourceIndex(0)
+5 >Emitted(7, 16) Source(7, 16) + SourceIndex(0)
+6 >Emitted(7, 22) Source(7, 22) + SourceIndex(0)
+7 >Emitted(7, 31) Source(7, 31) + SourceIndex(0)
+8 >Emitted(7, 33) Source(7, 33) + SourceIndex(0)
+9 >Emitted(7, 47) Source(7, 47) + SourceIndex(0)
+10>Emitted(7, 48) Source(7, 48) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=component.d.ts.map===================================================================
+JsFile: main.d.ts
+mapUrl: main.d.ts.map
+sourceRoot: 
+sources: main.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/main.d.ts
+sourceFile:main.ts
+-------------------------------------------------------------------
+>>>export { component } from "./component.js";
+1 >
+2 >^^^^^^^
+3 >       ^^
+4 >         ^^^^^^^^^
+5 >                  ^^
+6 >                    ^^^^^^
+7 >                          ^^^^^^^^^^^^^^^^
+8 >                                          ^
+9 >                                           ^^^^^^^^^^^->
+1 >
+2 >export 
+3 >       { 
+4 >         component
+5 >                   }
+6 >                     from 
+7 >                          "./component.y.z"
+8 >                                          ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+4 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+5 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+6 >Emitted(1, 27) Source(1, 27) + SourceIndex(0)
+7 >Emitted(1, 43) Source(1, 44) + SourceIndex(0)
+8 >Emitted(1, 44) Source(1, 45) + SourceIndex(0)
+---
+>>>export type { ComponentProps } from "./component.js";
+1->
+2 >^^^^^^^^^^^^
+3 >            ^^
+4 >              ^^^^^^^^^^^^^^
+5 >                            ^^
+6 >                              ^^^^^^
+7 >                                    ^^^^^^^^^^^^^^^^
+8 >                                                    ^
+9 >                                                     ^^^^^^^^->
+1->
+  >
+2 >export type 
+3 >            { 
+4 >              ComponentProps
+5 >                             }
+6 >                               from 
+7 >                                    "./component.y.z"
+8 >                                                    ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+3 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+4 >Emitted(2, 29) Source(2, 29) + SourceIndex(0)
+5 >Emitted(2, 31) Source(2, 31) + SourceIndex(0)
+6 >Emitted(2, 37) Source(2, 37) + SourceIndex(0)
+7 >Emitted(2, 53) Source(2, 54) + SourceIndex(0)
+8 >Emitted(2, 54) Source(2, 55) + SourceIndex(0)
+---
+>>>export type Props = import("./component.js").ComponentProps;
+1->
+2 >^^^^^^
+3 >      ^^^^^^
+4 >            ^^^^^
+5 >                 ^^^
+6 >                    ^^^^^^^
+7 >                           ^^^^^^^^^^^^^^^^
+8 >                                           ^^
+9 >                                             ^^^^^^^^^^^^^^
+10>                                                           ^
+1->
+  >
+2 >export
+3 >       type 
+4 >            Props
+5 >                  = 
+6 >                    import(
+7 >                           "./component.y.z"
+8 >                                           ).
+9 >                                             ComponentProps
+10>                                                           ;
+1->Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+3 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
+4 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
+5 >Emitted(3, 21) Source(3, 21) + SourceIndex(0)
+6 >Emitted(3, 28) Source(3, 28) + SourceIndex(0)
+7 >Emitted(3, 44) Source(3, 45) + SourceIndex(0)
+8 >Emitted(3, 46) Source(3, 47) + SourceIndex(0)
+9 >Emitted(3, 60) Source(3, 61) + SourceIndex(0)
+10>Emitted(3, 61) Source(3, 62) + SourceIndex(0)
+---
+>>>export * as other from "./other.js";
+1 >
+2 >^^^^^^^
+3 >       ^^^^^
+4 >            ^^^^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^^^^^^^
+7 >                                   ^
+8 >                                    ^^->
+1 >
+  >
+2 >export 
+3 >       * as 
+4 >            other
+5 >                  from 
+6 >                       "./other.p"
+7 >                                   ;
+1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 8) Source(4, 8) + SourceIndex(0)
+3 >Emitted(4, 13) Source(4, 13) + SourceIndex(0)
+4 >Emitted(4, 18) Source(4, 18) + SourceIndex(0)
+5 >Emitted(4, 24) Source(4, 24) + SourceIndex(0)
+6 >Emitted(4, 36) Source(4, 35) + SourceIndex(0)
+7 >Emitted(4, 37) Source(4, 36) + SourceIndex(0)
+---
+>>>export { helper } from "./helper.js";
+1->
+2 >^^^^^^^
+3 >       ^^
+4 >         ^^^^^^
+5 >               ^^
+6 >                 ^^^^^^
+7 >                       ^^^^^^^^^^^^^
+8 >                                    ^
+9 >                                     ^^^^^^^^^^^^^->
+1->
+  >
+2 >export 
+3 >       { 
+4 >         helper
+5 >                }
+6 >                  from 
+7 >                       "./helper.ts"
+8 >                                    ;
+1->Emitted(5, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(5, 8) Source(5, 8) + SourceIndex(0)
+3 >Emitted(5, 10) Source(5, 10) + SourceIndex(0)
+4 >Emitted(5, 16) Source(5, 16) + SourceIndex(0)
+5 >Emitted(5, 18) Source(5, 18) + SourceIndex(0)
+6 >Emitted(5, 24) Source(5, 24) + SourceIndex(0)
+7 >Emitted(5, 37) Source(5, 37) + SourceIndex(0)
+8 >Emitted(5, 38) Source(5, 38) + SourceIndex(0)
+---
+>>>export { helper as helperJs } from "./helper.js";
+1->
+2 >^^^^^^^
+3 >       ^^
+4 >         ^^^^^^
+5 >               ^^^^
+6 >                   ^^^^^^^^
+7 >                           ^^
+8 >                             ^^^^^^
+9 >                                   ^^^^^^^^^^^^^
+10>                                                ^
+1->
+  >
+2 >export 
+3 >       { 
+4 >         helper
+5 >                as 
+6 >                   helperJs
+7 >                            }
+8 >                              from 
+9 >                                   "./helper.js"
+10>                                                ;
+1->Emitted(6, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(6, 8) Source(6, 8) + SourceIndex(0)
+3 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
+4 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
+5 >Emitted(6, 20) Source(6, 20) + SourceIndex(0)
+6 >Emitted(6, 28) Source(6, 28) + SourceIndex(0)
+7 >Emitted(6, 30) Source(6, 30) + SourceIndex(0)
+8 >Emitted(6, 36) Source(6, 36) + SourceIndex(0)
+9 >Emitted(6, 49) Source(6, 49) + SourceIndex(0)
+10>Emitted(6, 50) Source(6, 50) + SourceIndex(0)
+---
+>>>export { helper as helperBare } from "./helper";
+1 >
+2 >^^^^^^^
+3 >       ^^
+4 >         ^^^^^^
+5 >               ^^^^
+6 >                   ^^^^^^^^^^
+7 >                             ^^
+8 >                               ^^^^^^
+9 >                                     ^^^^^^^^^^
+10>                                               ^
+1 >
+  >
+2 >export 
+3 >       { 
+4 >         helper
+5 >                as 
+6 >                   helperBare
+7 >                              }
+8 >                                from 
+9 >                                     "./helper"
+10>                                               ;
+1 >Emitted(7, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(7, 8) Source(7, 8) + SourceIndex(0)
+3 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
+4 >Emitted(7, 16) Source(7, 16) + SourceIndex(0)
+5 >Emitted(7, 20) Source(7, 20) + SourceIndex(0)
+6 >Emitted(7, 30) Source(7, 30) + SourceIndex(0)
+7 >Emitted(7, 32) Source(7, 32) + SourceIndex(0)
+8 >Emitted(7, 38) Source(7, 38) + SourceIndex(0)
+9 >Emitted(7, 48) Source(7, 48) + SourceIndex(0)
+10>Emitted(7, 49) Source(7, 49) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=main.d.ts.map
