@@ -1,14 +1,14 @@
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
+import { once } from "node:events";
 import fs from "node:fs";
 import { syncBuiltinESMExports } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import { stripVTControlCharacters } from "node:util";
-import { runInNewContext } from "node:vm";
 import { x } from "tinyexec";
-import ts from "typescript";
 import cache from "./cache.mts";
 import {
     defaultCacheDirectory,
@@ -21,59 +21,63 @@ import {
     run,
 } from "./utils.mts";
 
-test("validate generates before building and selects the generation scope", async () => {
-    const fileName = path.resolve(import.meta.dirname, "../../../Herebyfile.mjs");
-    const source = ts.createSourceFile(fileName, fs.readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-    const declaration = source.statements.filter(ts.isVariableStatement)
-        .flatMap(statement => statement.declarationList.declarations)
-        .find(declaration => declaration.name.getText(source) === "validate");
-    assert.ok(declaration?.initializer);
-    for (const options of [{}, { api: true }, { all: true }]) {
-        const calls: string[] = [];
-        const action = (name: string) => async () => {
-            calls.push(name);
-        };
-        const generate = { run: action("generate") };
-        const generateGo = { run: action("generate:go") };
-        const build = { run: action("build") };
-        const validation = runInNewContext(declaration.initializer.getText(source), {
-            task: (spec: unknown) => spec,
-            options,
-            generate,
-            generateGo,
-            build,
-            builtLocal: "./built/local",
-            generateLibs: action("lib"),
-            buildTsc: action("build"),
-            getReleaseBuildFlags: () => [],
-            runGenerateGo: action("generate:go"),
-            runGenerateEnums: action("generate:enums"),
-            runGenerateAPI: action("generate:api"),
-            runGenerateExtension: action("generate:extension"),
-            runGenerateVendor: action("generate:vendor"),
-            runBuildAPITests: async (generate = true) => {
-                if (generate) calls.push("generate:sync");
-                calls.push("build:api:test");
-            },
-            runTests: action("test:tsc"),
-            runTestExtension: action("test:extension"),
-            runTestAPI: action("test:api"),
-            runTestBenchmarks: action("test:benchmarks"),
-            runTestTools: action("test:tools"),
-            runSmokeTest: action("test:smoke"),
-            runLint: action("lint"),
-            runFormat: action("format"),
-        }) as { dependencies: { run: () => Promise<void>; }[]; run: () => Promise<void>; };
-        await Promise.all(validation.dependencies.map(dependency => dependency.run()));
-        await validation.run();
-        assert.equal(calls[0], "all" in options ? "generate" : "generate:go");
-        assert.ok(calls.indexOf("build") > 0);
-        assert.ok(calls.indexOf("build") < calls.indexOf("test:tsc"));
-        assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
-        assert.equal(calls.includes("test:tools"), "all" in options);
-        if ("all" in options) {
-            assert.deepEqual(calls.filter(name => name.startsWith("generate")), ["generate"]);
+test("build watch reloads schema edits without generated-output restarts", async context => {
+    const root = path.resolve(import.meta.dirname, "../../..");
+    const schema = path.join(root, "tools/scripts/tsc/ast.json");
+    const original = fs.readFileSync(schema);
+    const kindOutput = path.join(root, "tsc/internal/ast/kind_generated.go");
+    const originalKindOutput = fs.readFileSync(kindOutput);
+    const script = `process.argv = [process.execPath, ${JSON.stringify(path.join(root, "node_modules/hereby/bin/hereby.js"))}, "build:watch"];
+        process.once("message", () => { process.emit("SIGINT"); process.disconnect(); });
+        await import("./node_modules/hereby/bin/hereby.js");`;
+    const child = spawn(process.execPath, ["--input-type=module", "-e", script], { cwd: root, stdio: ["ignore", "pipe", "pipe", "ipc"] });
+    const exited = once(child, "close");
+    let output = "";
+    let remaining = "";
+    let idle = Promise.withResolvers<string>();
+    const collect = (data: Buffer) => {
+        const text = stripVTControlCharacters(data.toString());
+        output += text;
+        remaining += text;
+        const marker = "[build:watch] run complete, waiting for changes...";
+        const index = remaining.indexOf(marker);
+        if (index >= 0) {
+            idle.resolve(remaining.slice(0, index));
+            remaining = remaining.slice(index + marker.length);
         }
+    };
+    assert.ok(child.stdout && child.stderr);
+    child.stdout.on("data", collect);
+    child.stderr.on("data", collect);
+    const deadline = Promise.withResolvers<never>();
+    const timer = setTimeout(() => deadline.reject(new Error(`Watch did not complete:\n${output.slice(-8000)}`)), 300_000);
+    const unexpectedExit = exited.then(() => {
+        throw new Error(`Watcher exited unexpectedly:\n${output.slice(-8000)}`);
+    });
+    context.after(async () => {
+        clearTimeout(timer);
+        if (child.exitCode === null && child.signalCode === null) {
+            child.send("stop");
+            await exited;
+        }
+        fs.writeFileSync(schema, original);
+        fs.writeFileSync(kindOutput, originalKindOutput);
+    });
+    const initial = await Promise.race([idle.promise, deadline.promise, unexpectedExit]);
+    assert.match(initial, /\$ go build/);
+    for (const comment of ["First watch schema edit", "Second watch schema edit"]) {
+        timer.refresh();
+        idle = Promise.withResolvers<string>();
+        const updated = JSON.parse(original.toString());
+        updated.kinds.elements.unshift({ comment });
+        fs.writeFileSync(schema, JSON.stringify(updated, undefined, 4) + "\n");
+        const rebuilt = await Promise.race([idle.promise, deadline.promise, unexpectedExit]);
+        assert.match(rebuilt, /changed due to .*ast\.json/);
+        assert.match(rebuilt, /Wrote .*ast_generated\.go/);
+        assert.match(rebuilt, /\$ go build/);
+        assert.doesNotMatch(rebuilt, /changed due to .*_generated\.go|aborting in-progress run|Error in /);
+        assert.ok(rebuilt.indexOf("Wrote ") < rebuilt.indexOf("$ go build"));
+        assert.ok(fs.readFileSync(kindOutput, "utf8").includes(comment));
     }
 });
 
@@ -370,12 +374,8 @@ test("generate includes standalone generators without Go traversal", async () =>
         assert.ok(index >= 0, `Missing task event: ${event}`);
         return index;
     };
-    const compilerStart = eventIndex("Starting generate:compiler");
-    assert.ok(eventIndex("Finished generate:ast ") < compilerStart);
-    assert.ok(eventIndex("Finished generate:lsp ") < compilerStart);
-    assert.ok(eventIndex("Starting generate:sync") < compilerStart);
-    assert.ok(eventIndex("Starting generate:vendor") < compilerStart);
-    assert.ok(eventIndex("Finished generate:extension ") < eventIndex("Starting generate:extension-test"));
+    assert.ok(eventIndex("Starting generate") < eventIndex("Finished generate"));
+    assert.ok(eventIndex("generateLocBundle") < eventIndex("generateLocTest"));
     assert.doesNotMatch(stdout, /\$ go generate|npm run --silent cache/);
     assert.match(stdout, /Unicode tables/);
     assert.match(stdout, /Enums are up to date|All generated values match Go/);

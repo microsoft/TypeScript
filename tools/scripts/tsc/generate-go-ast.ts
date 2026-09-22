@@ -1092,13 +1092,15 @@ function writeAndFormat(filePath: string, generateContent: () => string, force: 
     console.log(`Wrote ${filePath}`);
 }
 
+export const outputs = ["tsc/internal/ast/ast_generated.go", "tsc/internal/ast/kind_generated.go"] as const;
+
 export default function main(force = false) {
     console.log("Generating Go AST code...");
 
-    const outPath = path.join(ROOT, "tsc/internal/ast/ast_generated.go");
+    const outPath = path.join(ROOT, outputs[0]);
     writeAndFormat(outPath, () => generate() + "\n", force);
 
-    const kindOutPath = path.join(ROOT, "tsc/internal/ast/kind_generated.go");
+    const kindOutPath = path.join(ROOT, outputs[1]);
     writeAndFormat(kindOutPath, () => generateKind() + "\n", force);
 }
 

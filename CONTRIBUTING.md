@@ -117,6 +117,13 @@ to bypass incremental caches. `generate` includes every generator and fetches
 the pinned LSP model when its local cache is missing or stale. Use
 `generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
 
+`npx hereby build` runs `generate` before compiling; a separate generation step
+is not needed. The API and package build tasks share this prerequisite, and
+`build:watch` runs the full incremental generation suite before every rebuild.
+Each watch pass clears cached input fingerprints and runs generation in-process.
+Restart the watcher after editing generator implementations. Generator-owned outputs are
+excluded from watch events to avoid regeneration loops.
+
 Package-specific commands:
 
 ```bash
@@ -142,7 +149,6 @@ go -C ./tsc test -run='TestLocal/<test name>' ./internal/testrunner
 Run:
 
 ```bash
-npx hereby generate
 npx hereby build
 npx hereby test
 npx hereby test:all
