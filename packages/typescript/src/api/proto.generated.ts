@@ -153,6 +153,7 @@ export interface APIMethodInfo {
     printNode: APIMethod<PrintNodeParams, string>;
     formatNodeForInsertion: APIMethod<FormatNodeForInsertionParams, string>;
     emit: APIMethod<EmitParams, EmitResponse>;
+    getBuildInfoEmit: APIMethod<GetProjectDiagnosticsParams, string>;
     emitToString: APIMethod<EmitParams, EmitOutputResponse>;
     getJavaScriptEmit: APIMethod<SelectedFilesEmitParams, EmitOutputResponse>;
     getDeclarationEmit: APIMethod<SelectedFilesEmitParams, EmitOutputResponse>;
@@ -304,6 +305,7 @@ export interface ProjectResponse {
     configFileName: string;
     currentDirectory: string;
     dirty: boolean;
+    incremental: boolean;
     parsedCommandLine: ConfigFileResponse;
     /** @deprecated Use parsedCommandLine.fileNames. */
     rootFiles: string[];
@@ -1002,6 +1004,7 @@ export interface BatchRequest {
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
+        | "getBuildInfoEmit"
         | "getCheckTypeOfType"
         | "getCompletionsAtPosition"
         | "getConfigFileNames"
@@ -1162,6 +1165,7 @@ export interface BatchResponse {
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
+        | "getBuildInfoEmit"
         | "getCheckTypeOfType"
         | "getCompletionsAtPosition"
         | "getConfigFileNames"
@@ -1338,6 +1342,8 @@ export interface SnapshotRequestChangesParams {
      * or all contained projects when true.
      */
     ensurePrograms?: EnsurePrograms | undefined;
+    /** IncrementalOperations advances incremental program state while constructing the snapshot. */
+    incrementalOperations?: readonly IncrementalOperationParams[] | undefined;
 }
 
 /**
@@ -1393,6 +1399,7 @@ export interface SnapshotChanges {
 export interface SnapshotOperationResponse {
     createdPrograms?: SyntheticProjectId[] | undefined;
     openedFiles?: OpenedFileOperationResult[] | undefined;
+    incrementalOperations?: IncrementalOperationResultResponse[] | undefined;
 }
 
 /**
@@ -1584,6 +1591,12 @@ export interface ReconfigureSnapshotProgramParams {
     options: CreateProgramOptions;
 }
 
+export interface IncrementalOperationParams {
+    program: SyntheticProjectId;
+    kind: "emit" | "emitBuildInfo";
+    emitOnly?: number | undefined;
+}
+
 /**
  * RequestDirectoryEntries is a cached directory listing. Entry names are
  * relative to the directory, matching vfs.GetAccessibleEntries.
@@ -1617,6 +1630,11 @@ export interface ProjectFileChanges {
 
 export interface OpenedFileOperationResult {
     project: ProjectId;
+}
+
+export interface IncrementalOperationResultResponse {
+    program: ProjectId;
+    result: EmitResponse;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */

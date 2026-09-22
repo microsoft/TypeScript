@@ -220,6 +220,7 @@ const (
 	MethodPrintNode              Method = "printNode"
 	MethodFormatNodeForInsertion Method = "formatNodeForInsertion"
 	MethodEmit                   Method = "emit"
+	MethodGetBuildInfoEmit       Method = "getBuildInfoEmit"
 	MethodEmitToString           Method = "emitToString"
 	MethodGetJavaScriptEmit      Method = "getJavaScriptEmit"
 	MethodGetDeclarationEmit     Method = "getDeclarationEmit"
@@ -381,6 +382,21 @@ type SnapshotRequestChangesParams struct {
 	// EnsurePrograms identifies projects whose programs should be updated if dirty,
 	// or all contained projects when true.
 	EnsurePrograms *EnsurePrograms `json:"ensurePrograms,omitempty"`
+	// IncrementalOperations advances incremental program state while constructing the snapshot.
+	IncrementalOperations []*IncrementalOperationParams `json:"incrementalOperations,omitempty"`
+}
+
+type IncrementalOperationKind string
+
+const (
+	IncrementalOperationKindEmit          IncrementalOperationKind = "emit"
+	IncrementalOperationKindEmitBuildInfo IncrementalOperationKind = "emitBuildInfo"
+)
+
+type IncrementalOperationParams struct {
+	Program  SyntheticProjectID       `json:"program"`
+	Kind     IncrementalOperationKind `json:"kind"`
+	EmitOnly *uint32                  `json:"emitOnly,omitempty"`
 }
 
 type EnsurePrograms struct {
@@ -485,8 +501,14 @@ type CreateSnapshotResponse struct {
 }
 
 type SnapshotOperationResponse struct {
-	CreatedPrograms *[]SyntheticProjectID         `json:"createdPrograms,omitzero"`
-	OpenedFiles     *[]*OpenedFileOperationResult `json:"openedFiles,omitzero"`
+	CreatedPrograms       *[]SyntheticProjectID                  `json:"createdPrograms,omitzero"`
+	OpenedFiles           *[]*OpenedFileOperationResult          `json:"openedFiles,omitzero"`
+	IncrementalOperations *[]*IncrementalOperationResultResponse `json:"incrementalOperations,omitzero"`
+}
+
+type IncrementalOperationResultResponse struct {
+	Program ProjectID     `json:"program"`
+	Result  *EmitResponse `json:"result" nonnil:"true"`
 }
 
 type OpenedFileOperationResult struct {
@@ -625,6 +647,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodFormatNodeForInsertion:            unmarshallerFor[FormatNodeForInsertionParams],
 	MethodEmit:                              unmarshallerFor[EmitParams],
+	MethodGetBuildInfoEmit:                  unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodEmitToString:                      unmarshallerFor[EmitParams],
 	MethodGetJavaScriptEmit:                 unmarshallerFor[SelectedFilesEmitParams],
 	MethodGetDeclarationEmit:                unmarshallerFor[SelectedFilesEmitParams],
@@ -820,6 +843,7 @@ type ProjectResponse struct {
 	ConfigFileName    string              `json:"configFileName"`
 	CurrentDirectory  string              `json:"currentDirectory"`
 	Dirty             bool                `json:"dirty"`
+	Incremental       bool                `json:"incremental"`
 	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.fileNames.
 	RootFiles []string `json:"rootFiles" nonnil:"true"`
@@ -889,6 +913,7 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 		ConfigFileName:    p.Name(),
 		CurrentDirectory:  p.CurrentDirectory(),
 		Dirty:             p.IsDirty(),
+		Incremental:       p.IsIncremental(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
 		RootFiles:         p.CommandLine.FileNames(),
 		CompilerOptions:   p.CommandLine.CompilerOptions(),

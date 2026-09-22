@@ -68,8 +68,10 @@ import type {
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
+    EmitResponse,
     FileNotifications,
     ImportAdderAction,
+    IncrementalOperationParams,
     InferredProjectId,
     IntrinsicTypeMethod,
     LanguageServerSnapshotChanges,
@@ -372,7 +374,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     createSnapshot<
         const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
         const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
-    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
+        const IncrementalOperations extends CreateSnapshotParams["incrementalOperations"] = undefined,
+    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles, IncrementalOperations>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles, IncrementalOperations>>;
     createSnapshot(): Promise<Snapshot>;
     async createSnapshot(params?: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
@@ -442,10 +445,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     getCurrentLanguageServerSnapshot<
         const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined,
         const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined,
+        const IncrementalOperations extends LanguageServerSnapshotChanges["incrementalOperations"] = undefined,
     >(
-        ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+        ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles, IncrementalOperations>, baseSnapshot?: Snapshot]
             : [changes: never, baseSnapshot?: never]
-    ): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
+    ): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles, IncrementalOperations>>;
     getCurrentLanguageServerSnapshot(
         ...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]
     ): Promise<Snapshot>;
@@ -567,16 +571,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     async createIncrementalProgram(
         rootFiles: readonly DocumentIdentifier[],
         createProgramOptions: CreateProgramOptions,
-    ): Promise<Program> {
+    ): Promise<IncrementalProgram> {
         await this.ensureInitialized();
 
         const snapshot = await this.createSnapshot({
             createPrograms: [{ rootFiles, options: createProgramOptions, incremental: true }],
         });
-        return this.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
+        const program = this.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
+        if (!(program instanceof IncrementalProgram)) {
+            await snapshot.dispose();
+            throw new Error("createIncrementalProgram did not return an incremental program");
+        }
+        return program;
     }
 
-    private getOwnedCreatedProgram(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Program {
+    private getOwnedCreatedProgram(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined, undefined>, method: "createProgram" | "createIncrementalProgram"): Program {
         const program = snapshot.operation.createdPrograms[0];
         if (!program) {
             void snapshot.dispose();
@@ -622,6 +631,12 @@ type SnapshotUpdater = (params: CreateSnapshotParams) => Promise<Snapshot>; // @
 export interface SnapshotOperation {
     readonly createdPrograms?: readonly Program<SyntheticProjectId>[];
     readonly openedFiles?: readonly SnapshotOpenedFileOperation[];
+    readonly incrementalOperations?: readonly IncrementalOperationResult[];
+}
+
+export interface IncrementalOperationResult {
+    readonly program: IncrementalProgram;
+    readonly result: EmitResult;
 }
 
 export interface SnapshotOpenedFileOperation {
@@ -636,24 +651,29 @@ type SnapshotOperationParams<
     Params extends CreateSnapshotParams,
     CreatePrograms extends Params["createPrograms"],
     OpenFiles extends Params["openFiles"],
-> = Omit<Params, "createPrograms" | "openFiles"> & {
+    IncrementalOperations extends Params["incrementalOperations"],
+> = Omit<Params, "createPrograms" | "openFiles" | "incrementalOperations"> & {
     createPrograms?: CreatePrograms;
     openFiles?: OpenFiles;
+    incrementalOperations?: IncrementalOperations;
 };
 
 type SnapshotForOperationResults<
     CreatePrograms extends CreateSnapshotParams["createPrograms"],
     OpenFiles extends CreateSnapshotParams["openFiles"],
+    IncrementalOperations extends CreateSnapshotParams["incrementalOperations"],
 > = Snapshot & {
     readonly operation:
         & SnapshotOperation
         & (CreatePrograms extends readonly unknown[] ? { readonly createdPrograms: MapTupleTo<CreatePrograms, Program<SyntheticProjectId>>; } : unknown)
-        & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
+        & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown)
+        & (IncrementalOperations extends readonly unknown[] ? { readonly incrementalOperations: MapTupleTo<IncrementalOperations, IncrementalOperationResult>; } : unknown);
 };
 
 export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
     Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
-    Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined
+    Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined,
+    Params extends { incrementalOperations: infer IncrementalOperations extends readonly unknown[]; } ? IncrementalOperations : undefined
 >;
 
 export class Snapshot {
@@ -697,13 +717,24 @@ export class Snapshot {
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of this.projectDataMap.values()) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
+            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry, this.updateSnapshot);
             this.projectMap.set(projData.id, project);
         }
 
         this.operation = {
             ...(data.operation.createdPrograms ? { createdPrograms: data.operation.createdPrograms.map(projectId => this.requireProject(projectId).program) } : {}),
             ...(data.operation.openedFiles ? { openedFiles: data.operation.openedFiles.map(result => ({ project: this.requireProject(result.project) })) } : {}),
+            ...(data.operation.incrementalOperations
+                ? {
+                    incrementalOperations: data.operation.incrementalOperations.map(operation => {
+                        const program = this.requireProject(operation.program).program;
+                        if (!(program instanceof IncrementalProgram)) {
+                            throw new Error(`Snapshot operation returned non-incremental program '${operation.program}'`);
+                        }
+                        return { program, result: toEmitResult(operation.result) };
+                    }),
+                }
+                : {}),
         };
 
         this.internal = new SnapshotInternalAPI(this.id, client);
@@ -731,7 +762,8 @@ export class Snapshot {
     update<
         const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
         const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
-    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
+        const IncrementalOperations extends CreateSnapshotParams["incrementalOperations"] = undefined,
+    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles, IncrementalOperations>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles, IncrementalOperations>>;
     update(params: CreateSnapshotParams): Promise<Snapshot>;
     update(params: CreateSnapshotParams): Promise<Snapshot> {
         this.ensureNotDisposed();
@@ -1100,6 +1132,7 @@ export class Project<Id extends ProjectId = ProjectId> {
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
+        updateSnapshot: SnapshotUpdater,
     ) {
         this.id = data.id as Id;
         this.configFileName = data.configFileName;
@@ -1113,13 +1146,14 @@ export class Project<Id extends ProjectId = ProjectId> {
         this.rootFiles = this.parsedCommandLine.fileNames;
         this.client = client;
         this.snapshotId = snapshotId;
-        this.program = new Program(
+        this.program = new (data.incremental ? IncrementalProgram : Program)(
             snapshotId,
             this,
             client,
             sourceFileCache,
             toPath,
             formatDiagnosticsHost,
+            updateSnapshot,
         );
         const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
         this.checker = new Checker(
@@ -1261,10 +1295,11 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     readonly snapshotId: number;
     readonly id: Id;
     private readonly project: Project<Id>;
-    private readonly client: Client;
+    protected readonly client: Client;
     private readonly sourceFileCache: SourceFileCache;
     private readonly toPath: (fileName: string) => Path;
     private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
+    protected readonly updateSnapshot: SnapshotUpdater;
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
@@ -1277,6 +1312,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
+        updateSnapshot: SnapshotUpdater,
     ) {
         this.snapshotId = snapshotId;
         this.id = project.id;
@@ -1285,6 +1321,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         this.sourceFileCache = sourceFileCache;
         this.toPath = toPath;
         this.formatDiagnosticsHost = formatDiagnosticsHost;
+        this.updateSnapshot = updateSnapshot;
     }
 
     getCurrentDirectory(): string {
@@ -1640,18 +1677,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             project: this.project.id,
             emitOnly,
         });
-        const fileSystem = response.emittedFilesContents.length
-            ? {
-                kind: "layer" as const,
-                files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
-            }
-            : undefined;
-        return {
-            emitSkipped: response.emitSkipped,
-            diagnostics: response.diagnostics,
-            emittedFiles: response.emittedFiles,
-            ...(fileSystem ? { fileSystem } : {}),
-        };
+        return toEmitResult(response);
     }
 
     /**
@@ -1693,6 +1719,76 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     getProject(): Project<Id> {
         return this.project;
     }
+}
+
+export class IncrementalProgram<Id extends ProjectId = ProjectId> extends Program<Id> {
+    /**
+     * Emits pending files and returns the new snapshot containing the advanced incremental state.
+     */
+    override async emit(emitOnly?: EmitOnly): Promise<IncrementalEmitResult> {
+        return this.runIncrementalOperation({
+            program: this.id as SyntheticProjectId,
+            kind: "emit",
+            emitOnly,
+        });
+    }
+
+    /**
+     * Writes the current incremental build information and returns the new snapshot
+     * containing the advanced incremental state.
+     */
+    async emitBuildInfo(): Promise<IncrementalEmitResult> {
+        return this.runIncrementalOperation({
+            program: this.id as SyntheticProjectId,
+            kind: "emitBuildInfo",
+        });
+    }
+
+    /**
+     * Returns the current serialized incremental build information without writing it.
+     */
+    async getBuildInfoEmit(): Promise<string> {
+        return this.client.apiRequest("getBuildInfoEmit", {
+            snapshot: this.snapshotId,
+            project: this.id,
+        });
+    }
+
+    private async runIncrementalOperation(operation: IncrementalOperationParams): Promise<IncrementalEmitResult> {
+        const snapshot = await this.updateSnapshot({
+            incrementalOperations: [operation],
+        });
+        const result = snapshot.operation.incrementalOperations?.[0];
+        if (!result) {
+            await snapshot.dispose();
+            throw new Error("Snapshot update did not return an incremental operation result");
+        }
+        return {
+            ...result.result,
+            snapshot,
+            program: result.program,
+        };
+    }
+}
+
+export interface IncrementalEmitResult extends EmitResult {
+    readonly snapshot: Snapshot;
+    readonly program: IncrementalProgram;
+}
+
+function toEmitResult(response: EmitResponse): EmitResult {
+    const fileSystem = response.emittedFilesContents.length
+        ? {
+            kind: "layer" as const,
+            files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+        }
+        : undefined;
+    return {
+        emitSkipped: response.emitSkipped,
+        diagnostics: response.diagnostics,
+        emittedFiles: response.emittedFiles,
+        ...(fileSystem ? { fileSystem } : {}),
+    };
 }
 
 function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {

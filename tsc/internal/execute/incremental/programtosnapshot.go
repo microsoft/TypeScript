@@ -17,6 +17,10 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if oldProgram != nil && oldProgram.program == program {
 		return oldProgram.snapshot
 	}
+	return createProgramSnapshot(program, oldProgram, hashWithText)
+}
+
+func createProgramSnapshot(program *compiler.Program, oldProgram *Program, hashWithText bool) *snapshot {
 	snapshot := &snapshot{
 		options:      program.Options(),
 		hashWithText: hashWithText,

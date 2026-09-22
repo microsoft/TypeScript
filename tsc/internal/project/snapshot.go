@@ -11,6 +11,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
@@ -310,6 +311,7 @@ type APICreateProgramRequest struct {
 	CompilerOptions              *core.CompilerOptions
 	ProjectReferences            []*core.ProjectReference
 	ConfigFileParsingDiagnostics []*ast.Diagnostic
+	Incremental                  bool
 }
 
 type APIReconfigureProgramRequest struct {
@@ -317,18 +319,35 @@ type APIReconfigureProgramRequest struct {
 	APICreateProgramRequest
 }
 
+type APIIncrementalOperationKind string
+
+const (
+	APIIncrementalOperationKindEmit          APIIncrementalOperationKind = "emit"
+	APIIncrementalOperationKindEmitBuildInfo APIIncrementalOperationKind = "emitBuildInfo"
+)
+
+type APIIncrementalOperationRequest struct {
+	ProgramID            int
+	Kind                 APIIncrementalOperationKind
+	EmitOnly             compiler.EmitOnly
+	WriteFile            func(fileName string, text string, data *compiler.WriteFileData) error
+	Result               *compiler.EmitResult
+	EmittedFilesContents map[string]string
+}
+
 type APISnapshotRequest struct {
-	OpenProjects        *collections.Set[string]
-	CloseProjects       *collections.Set[tspath.Path]
-	OpenFiles           *collections.Set[lsproto.DocumentUri]
-	CloseFiles          *collections.Set[tspath.Path]
-	CreatePrograms      []*APICreateProgramRequest
-	ReconfigurePrograms []*APIReconfigureProgramRequest
-	RemovePrograms      *collections.Set[int]
-	EnsurePrograms      *collections.Set[tspath.Path]
-	EnsureAllPrograms   bool
-	EnsureFiles         *collections.Set[lsproto.DocumentUri]
-	FileSystem          vfs.FS
+	OpenProjects          *collections.Set[string]
+	CloseProjects         *collections.Set[tspath.Path]
+	OpenFiles             *collections.Set[lsproto.DocumentUri]
+	CloseFiles            *collections.Set[tspath.Path]
+	CreatePrograms        []*APICreateProgramRequest
+	ReconfigurePrograms   []*APIReconfigureProgramRequest
+	RemovePrograms        *collections.Set[int]
+	EnsurePrograms        *collections.Set[tspath.Path]
+	EnsureAllPrograms     bool
+	EnsureFiles           *collections.Set[lsproto.DocumentUri]
+	IncrementalOperations []*APIIncrementalOperationRequest
+	FileSystem            vfs.FS
 	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
 	// per-path file changes instead of invalidating all inherited state.
 	ReplaceFileSystem bool

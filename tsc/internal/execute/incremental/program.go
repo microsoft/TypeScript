@@ -2,6 +2,7 @@ package incremental
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"slices"
 	"strings"
@@ -64,6 +65,15 @@ func NewProgram(program *compiler.Program, oldProgram *Program, host Host, neste
 		incrementalProgram.testingData.UpdatedSignatureKinds = make(map[tspath.Path]SignatureUpdateKind)
 	}
 	return incrementalProgram
+}
+
+func (p *Program) Fork() *Program {
+	return &Program{
+		snapshot:      createProgramSnapshot(p.program, p, p.snapshot.hashWithText),
+		program:       p.program,
+		host:          p.host,
+		nestedEmitNow: p.nestedEmitNow,
+	}
 }
 
 type TestingData struct {
@@ -330,6 +340,57 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 	if buildInfoFileName == "" || p.program.IsEmitBlocked(buildInfoFileName) {
 		return nil
 	}
+	text, buildInfo, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
+	if err != nil {
+		return &compiler.EmitResult{
+			EmitSkipped: true,
+			Diagnostics: []*ast.Diagnostic{
+				compiler.ContentMapperProjectDiagnostic(err),
+			},
+		}
+	}
+	if !p.snapshot.buildInfoEmitPending.Load() {
+		return nil
+	}
+	return p.writeBuildInfo(buildInfoFileName, text, buildInfo, options)
+}
+
+func (p *Program) GetBuildInfoEmit(ctx context.Context) (string, error) {
+	buildInfoFileName := outputpaths.GetBuildInfoFileName(p.snapshot.options, tspath.ComparePathsOptions{
+		CurrentDirectory:          p.program.GetCurrentDirectory(),
+		UseCaseSensitiveFileNames: p.program.UseCaseSensitiveFileNames(),
+	})
+	if buildInfoFileName == "" {
+		return "", errors.New("build info emit is not configured")
+	}
+	if p.program.IsEmitBlocked(buildInfoFileName) {
+		return "", fmt.Errorf("build info emit is blocked for %s", buildInfoFileName)
+	}
+	text, _, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
+	return text, err
+}
+
+func (p *Program) EmitBuildInfo(ctx context.Context, options compiler.EmitOptions) *compiler.EmitResult {
+	buildInfoFileName := outputpaths.GetBuildInfoFileName(p.snapshot.options, tspath.ComparePathsOptions{
+		CurrentDirectory:          p.program.GetCurrentDirectory(),
+		UseCaseSensitiveFileNames: p.program.UseCaseSensitiveFileNames(),
+	})
+	if buildInfoFileName == "" || p.program.IsEmitBlocked(buildInfoFileName) {
+		return &compiler.EmitResult{EmitSkipped: true}
+	}
+	text, buildInfo, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
+	if err != nil {
+		return &compiler.EmitResult{
+			EmitSkipped: true,
+			Diagnostics: []*ast.Diagnostic{
+				compiler.ContentMapperProjectDiagnostic(err),
+			},
+		}
+	}
+	return p.writeBuildInfo(buildInfoFileName, text, buildInfo, options)
+}
+
+func (p *Program) getBuildInfoEmit(ctx context.Context, buildInfoFileName string) (string, *BuildInfo, error) {
 	if p.snapshot.hasErrors == core.TSUnknown {
 		p.ensureHasErrorsForState(ctx, p.program)
 		if p.snapshot.hasErrors != p.snapshot.hasErrorsFromOldState || p.snapshot.hasSemanticErrors != p.snapshot.hasSemanticErrorsFromOldState {
@@ -343,31 +404,28 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 			p.snapshot.buildInfoEmitPending.Store(true)
 		}
 	}
-	if !p.snapshot.buildInfoEmitPending.Load() {
-		return nil
-	}
-	if ctx.Err() != nil {
-		return nil
+	if err := ctx.Err(); err != nil {
+		return "", nil, err
 	}
 	buildInfo, err := snapshotToBuildInfo(p.snapshot, p.program, buildInfoFileName)
 	if err != nil {
-		return &compiler.EmitResult{
-			EmitSkipped: true,
-			Diagnostics: []*ast.Diagnostic{
-				compiler.ContentMapperProjectDiagnostic(err),
-			},
-		}
+		return "", nil, err
 	}
 	text, err := json.Marshal(buildInfo)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to marshal build info: %v", err))
 	}
+	return string(text), buildInfo, nil
+}
+
+func (p *Program) writeBuildInfo(buildInfoFileName string, text string, buildInfo *BuildInfo, options compiler.EmitOptions) *compiler.EmitResult {
+	var err error
 	if options.WriteFile != nil {
-		err = options.WriteFile(buildInfoFileName, string(text), &compiler.WriteFileData{
+		err = options.WriteFile(buildInfoFileName, text, &compiler.WriteFileData{
 			BuildInfo: buildInfo,
 		})
 	} else {
-		err = p.program.Host().FS().WriteFile(buildInfoFileName, string(text))
+		err = p.program.Host().FS().WriteFile(buildInfoFileName, text)
 	}
 	if err != nil {
 		return &compiler.EmitResult{

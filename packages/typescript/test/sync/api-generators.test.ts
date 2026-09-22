@@ -1368,6 +1368,7 @@ describe("API - generator batching", () => {
             using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             const project = snapshot.getConfiguredProject("/tsconfig.json")!;
             const { checker, emitter, languageService, program } = project;
+            const incrementalProgram = api.createIncrementalProgram([], { compilerOptions: { incremental: true, noLib: true, tsBuildInfoFile: "/build.tsbuildinfo" } });
             const indexFile = program.getSourceFile("/src/index.ts")!;
             const modelsFile = program.getSourceFile("/src/models.ts")!;
 
@@ -1559,6 +1560,7 @@ describe("API - generator batching", () => {
                 parityCase("Program", "emitToString", program.emitToString, assertDeepEquivalent),
                 parityCase("Program", "getJavaScriptEmit", program.getJavaScriptEmit, assertDeepEquivalent, ["/src/index.ts"]),
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
+                parityCase("IncrementalProgram", "getBuildInfoEmit", incrementalProgram.getBuildInfoEmit, assertDeepEquivalent),
 
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
@@ -1705,6 +1707,23 @@ describe("API - generator batching", () => {
 
             runParityBatch(api, cases);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
+
+            for (
+                const [methodName, method] of [
+                    ["emit", incrementalProgram.emit],
+                    ["emitBuildInfo", incrementalProgram.emitBuildInfo],
+                ] as const
+            ) {
+                const generated = api.batch(method.gen())[0];
+                const direct = method();
+                assert.deepEqual(generated.emittedFiles, direct.emittedFiles);
+                assert.deepEqual(generated.diagnostics, direct.diagnostics);
+                assert.deepEqual(generated.fileSystem, direct.fileSystem);
+                assertProgramsEquivalent(generated.program, direct.program);
+                generated.snapshot.dispose();
+                direct.snapshot.dispose();
+                exercisedMethods.add(`IncrementalProgram.${methodName}`);
+            }
 
             const snapshotGeneratorAPI = spawnAPI(parityFiles);
             const snapshotSyncAPI = spawnAPI(parityFiles);

@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
@@ -84,6 +85,8 @@ type Project struct {
 	commandLineWithTypingsFiles     *tsoptions.ParsedCommandLine
 	commandLineWithTypingsFilesOnce sync.Once
 	Program                         *compiler.Program
+	incrementalProgram              *incremental.Program
+	incremental                     bool
 	// The kind of update that was performed on the program last time it was updated.
 	ProgramUpdateKind ProgramUpdateKind
 	// The ID of the snapshot that created the program stored in this project.
@@ -283,9 +286,22 @@ func (p *Project) GetProgram() *compiler.Program {
 	return p.Program
 }
 
-// CompilerHost returns the frozen host associated with the current program.
-func (p *Project) CompilerHost() compiler.CompilerHost {
-	return p.host
+func (p *Project) GetProgramLike() compiler.ProgramLike {
+	if p.incrementalProgram != nil {
+		return p.incrementalProgram.Fork()
+	}
+	return p.Program
+}
+
+func (p *Project) GetIncrementalProgram() *incremental.Program {
+	if p.incrementalProgram == nil {
+		return nil
+	}
+	return p.incrementalProgram.Fork()
+}
+
+func (p *Project) IsIncremental() bool {
+	return p.incremental
 }
 
 func (p *Project) IsDirty() bool {
@@ -333,6 +349,8 @@ func (p *Project) Clone() *Project {
 		CommandLine:                 p.CommandLine,
 		commandLineWithTypingsFiles: p.commandLineWithTypingsFiles,
 		Program:                     p.Program,
+		incrementalProgram:          p.incrementalProgram,
+		incremental:                 p.incremental,
 		ProgramUpdateKind:           ProgramUpdateKindNone,
 		ProgramLastUpdate:           p.ProgramLastUpdate,
 		potentialProjectReferences:  p.potentialProjectReferences,
@@ -437,6 +455,10 @@ func (p *Project) CreateProgram() CreateProgramResult {
 
 	// Create the command line, potentially augmented with typing files
 	commandLine := p.getCommandLineWithTypingsFiles()
+	oldIncrementalProgram := p.incrementalProgram
+	if p.incremental && oldIncrementalProgram == nil {
+		oldIncrementalProgram = incremental.ReadBuildInfoProgram(commandLine, incremental.NewBuildInfoReader(p.host), p.host)
+	}
 	if p.dirtyFilePath != "" && p.Program != nil && p.Program.CommandLine() == commandLine {
 		var dirtyFile *ast.SourceFile
 		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool)
@@ -494,6 +516,9 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	}
 
 	newProgram.BindSourceFiles()
+	if p.incremental {
+		p.incrementalProgram = incremental.NewProgram(newProgram, oldIncrementalProgram, incremental.CreateHost(p.host), nil, false)
+	}
 
 	return CreateProgramResult{
 		Program:    newProgram,

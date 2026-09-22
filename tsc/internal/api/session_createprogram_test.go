@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -188,13 +189,47 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	programID := (*created.Operation.CreatedPrograms)[0]
+	buildInfoText, err := session.handleGetBuildInfoEmit(ctx, &GetProjectDiagnosticsParams{Snapshot: created.Snapshot, Project: ProjectID(programID)})
+	assert.NilError(t, err)
+	assert.Assert(t, len(buildInfoText) > 0)
+	_, buildInfoExists := sessionUtils.FS().ReadFile(buildInfoFile)
+	assert.Assert(t, !buildInfoExists)
+	emittedBuildInfoSnapshot, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes: &CreateSnapshotParams{
+			IncrementalOperations: []*IncrementalOperationParams{{
+				Program: programID,
+				Kind:    IncrementalOperationKindEmitBuildInfo,
+			}},
+		},
+	})
+	assert.NilError(t, err)
+	buildInfoEmit := (*emittedBuildInfoSnapshot.Operation.IncrementalOperations)[0].Result
+	assert.DeepEqual(t, buildInfoEmit.EmittedFiles, []string{buildInfoFile})
+	writtenBuildInfo, ok := sessionUtils.FS().ReadFile(buildInfoFile)
+	assert.Assert(t, ok)
+	assert.Equal(t, writtenBuildInfo, buildInfoText)
+
 	firstEmit, err := session.handleEmit(ctx, &EmitParams{Snapshot: created.Snapshot, Project: ProjectID(programID)})
 	assert.NilError(t, err)
 	assert.Assert(t, slices.Contains(firstEmit.EmittedFiles, buildInfoFile))
+	buildInfoAfterEmit, err := session.handleGetBuildInfoEmit(ctx, &GetProjectDiagnosticsParams{Snapshot: created.Snapshot, Project: ProjectID(programID)})
+	assert.NilError(t, err)
+	assert.Equal(t, buildInfoAfterEmit, buildInfoText)
+
+	restored, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:   []DocumentIdentifier{{FileName: mainFile}},
+			Options:     options(),
+			Incremental: true,
+		}},
+	})
+	assert.NilError(t, err)
+	restoredProgramID := (*restored.Operation.CreatedPrograms)[0]
 
 	assert.NilError(t, sessionUtils.FS().WriteFile(dependencyFile, `export function value() { return 2; }`))
 	dirty, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
-		Snapshot: created.Snapshot,
+		Snapshot: restored.Snapshot,
 		Changes: &CreateSnapshotParams{
 			FileNotifications: &FileNotifications{Changed: []DocumentIdentifier{{FileName: dependencyFile}}},
 		},
@@ -202,28 +237,31 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	assert.NilError(t, err)
 	dirtySnapshot, err := session.getSnapshotData(dirty.Snapshot)
 	assert.NilError(t, err)
-	assert.Assert(t, dirtySnapshot.incrementalPrograms[ProjectID(programID)] != nil)
-	dirtyProject, err := dirtySnapshot.getProject(ProjectID(programID))
+	dirtyProject, err := dirtySnapshot.getProject(ProjectID(restoredProgramID))
 	assert.NilError(t, err)
+	_, isIncremental := dirtyProject.GetProgramLike().(*incremental.Program)
+	assert.Assert(t, isIncremental)
 	assert.Assert(t, dirtyProject.IsDirty())
 
-	ensured, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+	emittedSnapshot, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: dirty.Snapshot,
 		Changes: &CreateSnapshotParams{
-			EnsurePrograms: &EnsurePrograms{Projects: []ProjectID{ProjectID(programID)}},
+			IncrementalOperations: []*IncrementalOperationParams{{
+				Program: restoredProgramID,
+				Kind:    IncrementalOperationKindEmit,
+			}},
 		},
 	})
 	assert.NilError(t, err)
-	emitted, err := session.handleEmit(ctx, &EmitParams{Snapshot: ensured.Snapshot, Project: ProjectID(programID)})
-	assert.NilError(t, err)
+	emitted := (*emittedSnapshot.Operation.IncrementalOperations)[0].Result
 	assert.Assert(t, !slices.Contains(emitted.EmittedFiles, "/home/projects/p/out/main.js"), "unexpected emitted files: %v", emitted.EmittedFiles)
 	assert.Assert(t, slices.Contains(emitted.EmittedFiles, "/home/projects/p/out/dependency.js"))
 
 	reconfigured, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
-		Snapshot: ensured.Snapshot,
+		Snapshot: emittedSnapshot.Snapshot,
 		Changes: &CreateSnapshotParams{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
-				Id:        programID,
+				Id:        restoredProgramID,
 				RootFiles: []DocumentIdentifier{{FileName: mainFile}},
 				Options:   options(),
 			}},
@@ -232,7 +270,10 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	assert.NilError(t, err)
 	reconfiguredSnapshot, err := session.getSnapshotData(reconfigured.Snapshot)
 	assert.NilError(t, err)
-	assert.Assert(t, reconfiguredSnapshot.incrementalPrograms[ProjectID(programID)] != nil)
+	reconfiguredProject, err := reconfiguredSnapshot.getProject(ProjectID(restoredProgramID))
+	assert.NilError(t, err)
+	_, isIncremental = reconfiguredProject.GetProgramLike().(*incremental.Program)
+	assert.Assert(t, isIncremental)
 }
 
 func TestReconfigureSyntheticProgramValidation(t *testing.T) {

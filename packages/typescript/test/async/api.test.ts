@@ -60,6 +60,7 @@ import {
     EmitOnly,
     type FreshableType,
     type ImportAdderAction,
+    IncrementalProgram,
     type IndexedAccessType,
     IndexKind,
     type IndexType,
@@ -528,20 +529,77 @@ declare module "augmentation" {}`,
         };
 
         const firstProgram = await api.createIncrementalProgram(["/src/main.ts"], options);
+        const buildInfoText = await firstProgram.getBuildInfoEmit();
+        assert.equal(typeof JSON.parse(buildInfoText).version, "string");
+        assert.equal(fs.readFile!("/out/build.tsbuildinfo"), undefined);
+        const buildInfoEmit = await firstProgram.emitBuildInfo();
+        using buildInfoSnapshot = buildInfoEmit.snapshot;
+        assert.deepEqual(buildInfoEmit.emittedFiles, ["/out/build.tsbuildinfo"]);
+        assert.equal(buildInfoEmit.emitSkipped, false);
+        assert.deepEqual(buildInfoEmit.diagnostics, []);
+        assert.equal(fs.readFile!("/out/build.tsbuildinfo"), buildInfoText);
+
         const firstEmit = await firstProgram.emit();
+        using firstEmitSnapshot = firstEmit.snapshot;
         assert.ok(firstEmit.emittedFiles.includes("/out/main.js"));
         assert.ok(firstEmit.emittedFiles.includes("/out/dependency.js"));
         assert.ok(firstEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
         assert.ok(fs.readFile!("/out/build.tsbuildinfo"));
+        const repeatedEmit = await firstEmit.program.emit();
+        using repeatedEmitSnapshot = repeatedEmit.snapshot;
+        assert.deepEqual(repeatedEmit.emittedFiles, []);
         await firstProgram.dispose();
 
         fs.writeFile!("/src/dependency.ts", `export function value() { return 2; }`);
         const secondProgram = await api.createIncrementalProgram(["/src/main.ts"], options);
         const secondEmit = await secondProgram.emit();
+        using secondEmitSnapshot = secondEmit.snapshot;
         assert.ok(!secondEmit.emittedFiles.includes("/out/main.js"), JSON.stringify(secondEmit.emittedFiles));
         assert.ok(secondEmit.emittedFiles.includes("/out/dependency.js"));
         assert.ok(secondEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
         await secondProgram.dispose();
+    });
+
+    test("emitBuildInfo returns a filesystem layer for a full filesystem", async () => {
+        const hostWrites: string[] = [];
+        await using api = new API({
+            cwd: "/",
+            fs: {
+                writeFile: path => {
+                    hostWrites.push(path);
+                },
+            },
+        });
+        using snapshot = await api.createSnapshot({
+            fileSystem: createFileSystem(Object.entries({
+                "/src/index.ts": `export const value = 1;`,
+            })),
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                options: {
+                    compilerOptions: {
+                        incremental: true,
+                        noLib: true,
+                        tsBuildInfoFile: "/out/build.tsbuildinfo",
+                    },
+                },
+                incremental: true,
+            }],
+        });
+        const program = snapshot.operation.createdPrograms[0];
+        assert.ok(program instanceof IncrementalProgram);
+
+        const buildInfoText = await program.getBuildInfoEmit();
+        const result = await program.emitBuildInfo();
+        using emittedSnapshot = result.snapshot;
+        assert.deepEqual(result.emittedFiles, ["/out/build.tsbuildinfo"]);
+        assert.deepEqual(result.fileSystem, {
+            kind: "layer",
+            files: {
+                "/out/build.tsbuildinfo": buildInfoText,
+            },
+        });
+        assert.deepEqual(hostWrites, []);
     });
 
     test("createProgram includes project references", async () => {

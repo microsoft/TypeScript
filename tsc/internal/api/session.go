@@ -48,10 +48,9 @@ var sessionIDCounter atomic.Uint64
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
-	snapshot            *project.Snapshot
-	fileSystem          vfs.FS
-	incrementalPrograms map[ProjectID]*incremental.Program
-	refCount            int
+	snapshot   *project.Snapshot
+	fileSystem vfs.FS
+	refCount   int
 
 	openProjects collections.Set[tspath.Path]
 	openFiles    collections.Set[tspath.Path]
@@ -103,10 +102,23 @@ func (sd *snapshotData) getProgram(projectHandle ProjectID) (*compiler.Program, 
 }
 
 func (sd *snapshotData) getProgramLike(projectHandle ProjectID) (compiler.ProgramLike, error) {
-	if program := sd.incrementalPrograms[projectHandle]; program != nil {
-		return program, nil
+	proj, err := sd.getProject(projectHandle)
+	if err != nil {
+		return nil, err
 	}
-	return sd.getProgram(projectHandle)
+	return proj.GetProgramLike(), nil
+}
+
+func (sd *snapshotData) getIncrementalProgram(projectHandle ProjectID) (*incremental.Program, error) {
+	proj, err := sd.getProject(projectHandle)
+	if err != nil {
+		return nil, err
+	}
+	program := proj.GetIncrementalProgram()
+	if program == nil {
+		return nil, fmt.Errorf("%w: project %s is not incremental", ErrClientError, projectHandle)
+	}
+	return program, nil
 }
 
 // getProject looks up a project from a project handle within this snapshot.
@@ -860,6 +872,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	case string(MethodEmit):
 		return s.handleEmit(ctx, parsed.(*EmitParams))
+	case string(MethodGetBuildInfoEmit):
+		return s.handleGetBuildInfoEmit(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodEmitToString):
 		return s.handleEmitToString(ctx, parsed.(*EmitParams))
 	case string(MethodGetJavaScriptEmit):
@@ -1157,6 +1171,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 		apiRequest.FileSystem = fileSystem
 		apiRequest.ReplaceFileSystem = params.FileSystem.Kind == requestfilesystem.KindFull
 	}
+	s.configureIncrementalOperations(apiRequest, snapshotFileSystem)
 	root := s.snapshotHost.NewRootSnapshot()
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, fileChanges, apiRequest)
 	root.Deref()
@@ -1165,8 +1180,8 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 		return nil, fmt.Errorf("%w: failed to create snapshot: %w", ErrClientError, err)
 	}
 
-	response := s.createSnapshotResponse(snapshot, nil, &params.SnapshotRequestChangesParams)
-	s.registerSnapshot(snapshot, openState, snapshotFileSystem, nil, &params.SnapshotRequestChangesParams)
+	response := s.createSnapshotResponse(snapshot, nil, &params.SnapshotRequestChangesParams, apiRequest)
+	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
 }
 
@@ -1203,14 +1218,15 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		apiRequest.FileSystem = snapshotFileSystem
 		apiRequest.ReplaceFileSystem = changes.FileSystem != nil && changes.FileSystem.Kind == requestfilesystem.KindFull
 	}
+	s.configureIncrementalOperations(apiRequest, snapshotFileSystem)
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, fileChanges, apiRequest)
 	if err != nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
 	}
 
-	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
-	s.registerSnapshot(snapshot, openState, snapshotFileSystem, baseSD, &changes.SnapshotRequestChangesParams)
+	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams, apiRequest)
+	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
 }
 
@@ -1271,6 +1287,7 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 			CompilerOptions:              &programParams.Options.CompilerOptions,
 			ProjectReferences:            programParams.Options.ProjectReferences,
 			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+			Incremental:                  programParams.Incremental,
 		}
 	}
 	apiRequest.ReconfigurePrograms = make([]*project.APIReconfigureProgramRequest, len(changes.ReconfigurePrograms))
@@ -1321,7 +1338,45 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 			apiRequest.EnsurePrograms.Add(parseProjectHandle(program))
 		}
 	}
+	apiRequest.IncrementalOperations = make([]*project.APIIncrementalOperationRequest, len(changes.IncrementalOperations))
+	for i, operation := range changes.IncrementalOperations {
+		if operation == nil {
+			return nil, fmt.Errorf("%w: incrementalOperations[%d] must not be null", ErrClientError, i)
+		}
+		programID, ok := project.SyntheticProgramID(tspath.Path(operation.Program))
+		if !ok {
+			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, operation.Program)
+		}
+		emitOnly, err := getEmitOnly(operation.EmitOnly)
+		if err != nil {
+			return nil, err
+		}
+		apiRequest.IncrementalOperations[i] = &project.APIIncrementalOperationRequest{
+			ProgramID: programID,
+			Kind:      project.APIIncrementalOperationKind(operation.Kind),
+			EmitOnly:  emitOnly,
+		}
+	}
 	return apiRequest, nil
+}
+
+func (s *Session) configureIncrementalOperations(apiRequest *project.APISnapshotRequest, fileSystem vfs.FS) {
+	for _, operation := range apiRequest.IncrementalOperations {
+		if requestfilesystem.HasFullFileSystem(fileSystem) {
+			var outputMu sync.Mutex
+			operation.EmittedFilesContents = make(map[string]string)
+			operation.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+				outputMu.Lock()
+				operation.EmittedFilesContents[fileName] = text
+				outputMu.Unlock()
+				return nil
+			}
+		} else {
+			operation.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+				return s.snapshotHost.FS().WriteFile(fileName, text)
+			}
+		}
+	}
 }
 
 type languageServerSnapshotUpdate struct {
@@ -1350,6 +1405,11 @@ func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChanges
 	for _, reconfigure := range apiRequest.ReconfigurePrograms {
 		if !s.createdPrograms.Has(reconfigure.ProgramID) {
 			return nil, fmt.Errorf("%w: synthetic program is not owned by this API session: %d", ErrClientError, reconfigure.ProgramID)
+		}
+	}
+	for _, operation := range apiRequest.IncrementalOperations {
+		if !s.createdPrograms.Has(operation.ProgramID) {
+			return nil, fmt.Errorf("%w: incremental program is not owned by this API session: %d", ErrClientError, operation.ProgramID)
 		}
 	}
 	return update, nil
@@ -1413,13 +1473,7 @@ func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest,
 	return state
 }
 
-func (s *Session) registerSnapshot(
-	snapshot *project.Snapshot,
-	openState snapshotOpenState,
-	fileSystem vfs.FS,
-	baseSD *snapshotData,
-	request *SnapshotRequestChangesParams,
-) {
+func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapshotOpenState, fileSystem vfs.FS) {
 	// If the same snapshot ID is returned (no changes), we increment the ref count
 	// so each client-side Snapshot can be disposed independently.
 	handle := snapshotHandle(snapshot)
@@ -1434,7 +1488,6 @@ func (s *Session) registerSnapshot(
 		sd = &snapshotData{
 			snapshot:                snapshot,
 			fileSystem:              fileSystem,
-			incrementalPrograms:     s.createIncrementalPrograms(snapshot, baseSD, request),
 			refCount:                1,
 			openProjects:            *openState.openProjects.Clone(),
 			openFiles:               *openState.openFiles.Clone(),
@@ -1447,45 +1500,13 @@ func (s *Session) registerSnapshot(
 	s.snapshotsMu.Unlock()
 }
 
-func (s *Session) createIncrementalPrograms(
-	snapshot *project.Snapshot,
-	baseSD *snapshotData,
-	request *SnapshotRequestChangesParams,
-) map[ProjectID]*incremental.Program {
-	programs := make(map[ProjectID]*incremental.Program)
-	if baseSD != nil {
-		for id, oldProgram := range baseSD.incrementalPrograms {
-			proj := snapshot.ProjectCollection.GetProjectByPath(parseProjectHandle(id))
-			if proj != nil && proj.Program != nil {
-				host := proj.CompilerHost()
-				programs[id] = incremental.NewProgram(proj.Program, oldProgram, incremental.CreateHost(host), nil, false)
-			}
-		}
-	}
-	if request != nil {
-		createdPrograms := snapshot.CreatedPrograms()
-		for i, create := range request.CreatePrograms {
-			if !create.Incremental {
-				continue
-			}
-			proj := createdPrograms[i]
-			host := proj.CompilerHost()
-			oldProgram := incremental.ReadBuildInfoProgram(proj.CommandLine, incremental.NewBuildInfoReader(host), host)
-			programs[ProjectHandle(proj)] = incremental.NewProgram(proj.Program, oldProgram, incremental.CreateHost(host), nil, false)
-		}
-	}
-	return programs
-}
-
 func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, params *GetCurrentLanguageServerSnapshotParams) (*CreateSnapshotResponse, error) {
 	if s.projectSession == nil {
 		return nil, fmt.Errorf("%w: getCurrentLanguageServerSnapshot requires an LSP-connected API session", ErrClientError)
 	}
 	var baseSnapshot *project.Snapshot
-	var baseSD *snapshotData
 	if params.BaseSnapshot != 0 {
-		var err error
-		baseSD, err = s.retainSnapshotData(params.BaseSnapshot)
+		baseSD, err := s.retainSnapshotData(params.BaseSnapshot)
 		if err != nil {
 			return nil, err
 		}
@@ -1504,6 +1525,7 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 	if err != nil {
 		return nil, err
 	}
+	s.configureIncrementalOperations(update.request, nil)
 
 	snapshot, err := s.projectSession.APIUpdate(ctx, project.FileChangeSummary{}, update.request)
 	if err != nil {
@@ -1511,8 +1533,8 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 	}
 
 	update.commit(s, snapshot)
-	response := s.createSnapshotResponse(snapshot, baseSnapshot, &changes.SnapshotRequestChangesParams)
-	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles}, nil, baseSD, &changes.SnapshotRequestChangesParams)
+	response := s.createSnapshotResponse(snapshot, baseSnapshot, &changes.SnapshotRequestChangesParams, update.request)
+	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles}, nil)
 	return response, nil
 }
 
@@ -1657,8 +1679,8 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 		output = transpile.TranspileModule(ctx, input, transpileOptions)
 	}
 	if output == nil {
-		if err := ctx.Err(); err != nil {
-			return nil, err
+		if contextErr := ctx.Err(); contextErr != nil {
+			return nil, contextErr
 		}
 		return nil, errors.New("transpilation produced no output")
 	}
@@ -3235,8 +3257,31 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	var outputFiles map[string]string
+	return s.handleEmitWorker(ctx, params.Snapshot, options, func(options compiler.EmitOptions) (*compiler.EmitResult, error) {
+		return emitProgram(ctx, program, options)
+	})
+}
+
+func (s *Session) handleGetBuildInfoEmit(ctx context.Context, params *GetProjectDiagnosticsParams) (string, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return "", err
+	}
+	program, err := sd.getIncrementalProgram(params.Project)
+	if err != nil {
+		return "", err
+	}
+	return program.GetBuildInfoEmit(ctx)
+}
+
+func (s *Session) handleEmitWorker(
+	ctx context.Context,
+	snapshot SnapshotID,
+	options compiler.EmitOptions,
+	emit func(options compiler.EmitOptions) (*compiler.EmitResult, error),
+) (*EmitResponse, error) {
+	var outputFiles map[string]string
+	sd, err := s.getSnapshotData(snapshot)
 	if err != nil {
 		return nil, err
 	}
@@ -3254,10 +3299,14 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 			return s.snapshotHost.FS().WriteFile(fileName, text)
 		}
 	}
-	result, err := emitProgram(ctx, program, options)
+	result, err := emit(options)
 	if err != nil {
 		return nil, err
 	}
+	return newEmitResponse(result, outputFiles), nil
+}
+
+func newEmitResponse(result *compiler.EmitResult, outputFiles map[string]string) *EmitResponse {
 	emittedFiles := slices.Clone(result.EmittedFiles)
 	if emittedFiles == nil {
 		emittedFiles = []string{}
@@ -3274,7 +3323,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 		Diagnostics:          nonNilDiagnostics(result.Diagnostics),
 		EmittedFiles:         emittedFiles,
 		EmittedFilesContents: emittedFilesContents,
-	}, nil
+	}
 }
 
 func (s *Session) handleEmitToString(ctx context.Context, params *EmitParams) (*EmitOutputResponse, error) {
@@ -4293,8 +4342,13 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 	return &changes
 }
 
-func (s *Session) createSnapshotResponse(snapshot *project.Snapshot, base *project.Snapshot, request *SnapshotRequestChangesParams) *CreateSnapshotResponse {
-	operation := s.createSnapshotOperationResponse(snapshot, request)
+func (s *Session) createSnapshotResponse(
+	snapshot *project.Snapshot,
+	base *project.Snapshot,
+	request *SnapshotRequestChangesParams,
+	apiRequest *project.APISnapshotRequest,
+) *CreateSnapshotResponse {
+	operation := s.createSnapshotOperationResponse(snapshot, request, apiRequest)
 	if base == nil {
 		projects := snapshot.ProjectCollection.Projects()
 		projectResponses := make([]*ProjectResponse, 0, len(projects))
@@ -4329,7 +4383,11 @@ func (s *Session) createSnapshotResponse(snapshot *project.Snapshot, base *proje
 	}
 }
 
-func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, request *SnapshotRequestChangesParams) *SnapshotOperationResponse {
+func (s *Session) createSnapshotOperationResponse(
+	snapshot *project.Snapshot,
+	request *SnapshotRequestChangesParams,
+	apiRequest *project.APISnapshotRequest,
+) *SnapshotOperationResponse {
 	operation := &SnapshotOperationResponse{}
 	if request == nil {
 		return operation
@@ -4354,6 +4412,16 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 			results[i] = &OpenedFileOperationResult{Project: ProjectHandle(project)}
 		}
 		operation.OpenedFiles = &results
+	}
+	if request.IncrementalOperations != nil {
+		results := make([]*IncrementalOperationResultResponse, len(apiRequest.IncrementalOperations))
+		for i, result := range apiRequest.IncrementalOperations {
+			results[i] = &IncrementalOperationResultResponse{
+				Program: ProjectID(request.IncrementalOperations[i].Program),
+				Result:  newEmitResponse(result.Result, result.EmittedFilesContents),
+			}
+		}
+		operation.IncrementalOperations = &results
 	}
 	return operation
 }
