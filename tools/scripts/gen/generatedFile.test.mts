@@ -10,10 +10,14 @@ import { runInNewContext } from "node:vm";
 import { x } from "tinyexec";
 import ts from "typescript";
 import cache from "./cache.mts";
-import { GeneratedFile } from "./generatedFile.mts";
+import {
+    defaultCacheDirectory,
+    GeneratedFile,
+} from "./generatedFile.mts";
 import {
     enableFileFingerprintCache,
     getFileFingerprint,
+    repoRoot,
     run,
 } from "./utils.mts";
 
@@ -251,11 +255,12 @@ test("changing inputs during generation does not mark stale output current", con
     assert.equal(new GeneratedFile(output, [input], cache).isCurrent(), false);
 });
 
-test("default metadata has a stable path in the OS temporary directory", context => {
+test("default metadata is isolated by repository worktree", context => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-codegen-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const output = path.join(directory, "output.ts");
-    const cacheFile = path.join(os.tmpdir(), "typescript-codegen", createHash("sha256").update(output).digest("hex") + ".json");
+    assert.equal(path.basename(defaultCacheDirectory), createHash("sha256").update(repoRoot).digest("hex"));
+    const cacheFile = path.join(defaultCacheDirectory, createHash("sha256").update(output).digest("hex") + ".json");
     context.after(() => fs.rmSync(cacheFile, { force: true }));
     const file = new GeneratedFile(output, []);
     file.write("generated");
@@ -667,7 +672,7 @@ test("Unicode generation repairs outputs and supports force", async context => {
         assert.match((await generate()).stdout, /Generated Unicode tables\./);
         assert.deepEqual(fs.readFileSync(file), originals[index]);
     }
-    const cacheFile = path.join(os.tmpdir(), "typescript-codegen", createHash("sha256").update(files[0]).digest("hex") + ".json");
+    const cacheFile = path.join(defaultCacheDirectory, createHash("sha256").update(files[0]).digest("hex") + ".json");
     context.after(() => fs.rmSync(cacheFile, { force: true }));
     fs.rmSync(cacheFile);
     assert.match((await generate()).stdout, /Generated Unicode tables\./);
@@ -702,7 +707,7 @@ test("enum generation skips unchanged outputs and Go verification", async () => 
     assert.match(forced.stdout, /All generated values match Go\./);
     assert.match((await generate()).stdout, /Enums are up to date\./);
     const verifier = path.join(root, "tsc/internal/api/enum_values_generated.go");
-    const cacheFile = path.join(os.tmpdir(), "typescript-codegen", createHash("sha256").update(verifier).digest("hex") + ".json");
+    const cacheFile = path.join(defaultCacheDirectory, createHash("sha256").update(verifier).digest("hex") + ".json");
     fs.rmSync(cacheFile);
     const regenerated = await generate();
     assert.match(regenerated.stdout, /All generated values match Go\./);
