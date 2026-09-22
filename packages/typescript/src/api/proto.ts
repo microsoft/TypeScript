@@ -4,12 +4,12 @@ import {
 } from "./path.ts";
 import type {
     APIMethodInfo,
+    CreateSnapshotParams as CoreCreateSnapshotParams,
     DocumentIdentifier,
     SignatureResponse,
     SourceFileResponse,
     SymbolResponse,
     TypeResponse,
-    UpdateSnapshotParams as CoreUpdateSnapshotParams,
 } from "./proto.generated.ts";
 export type { ConfigFileResponse as ParsedCommandLine, DiagnosticResponse as Diagnostic } from "./proto.generated.ts";
 
@@ -81,41 +81,29 @@ export function resolveDocumentURI(identifier: DocumentIdentifier): string {
     return identifier.uri;
 }
 
-export interface LSPUpdateSnapshotParams extends Omit<CoreUpdateSnapshotParams, "snapshot"> {
-    /**
-     * @deprecated Use {@link openProjects} instead.
-     * Path to a tsconfig.json file to open in the new snapshot.
-     */
-    openProject?: string;
-
-    /** FileChanges are not supplied by the LSP */
-    fileChanges?: never;
-}
-
 /**
- * Parameters for updateSnapshot, including deprecated members handled by `toUpdateSnapshotRequest`
+ * Parameters for createSnapshot, including deprecated members handled by `toCreateSnapshotRequest`
  */
-export interface UpdateSnapshotParams extends Omit<CoreUpdateSnapshotParams, "snapshot"> {
+export interface CreateSnapshotParams extends CoreCreateSnapshotParams {
     /**
      * @deprecated Use {@link openProjects} instead.
      * Path to a tsconfig.json file to open in the new snapshot.
      */
-    openProject?: string;
+    openProject?: string | undefined;
 }
 
 /**
- * Builds the wire request for updateSnapshot, applying the deprecated `openProject`
+ * Builds the wire request for createSnapshot, applying the deprecated `openProject`
  * compatibility shim: a single `openProject` is folded into `openProjects` and is
  * never sent on the wire.
  */
-export function toUpdateSnapshotRequest(params?: UpdateSnapshotParams, snapshot?: number): CoreUpdateSnapshotParams {
+export function toCreateSnapshotRequest(params?: CreateSnapshotParams): CreateSnapshotParams {
     const { openProject, openProjects, ...rest } = params ?? {};
     const mergedOpenProjects = openProject !== undefined
         ? [resolveFileName(openProject), ...(openProjects ?? [])]
         : openProjects;
     return {
         ...rest,
-        snapshot,
         openProjects: mergedOpenProjects,
     };
 }

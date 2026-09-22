@@ -357,7 +357,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
     function createSyncContext(): SyncContext {
         const api = new SyncAPI({ cwd: repoRoot });
-        const snapshot = api.updateSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
+        const snapshot = api.createSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
         const project = snapshot.getProjects()[0];
         project.checker.getSymbolAtPosition("core.ts", 0);
         return { api, project };
@@ -365,7 +365,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
     async function createAsyncContext(): Promise<AsyncContext> {
         const api = new AsyncAPI({ cwd: repoRoot });
-        const snapshot = await api.updateSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
+        const snapshot = await api.createSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
         const project = snapshot.getProjects()[0];
         await project.checker.getSymbolAtPosition("core.ts", 0);
         return { api, project };
@@ -373,7 +373,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
     function createGeneratorContext(): SyncContext {
         const api = new SyncAPI({ cwd: repoRoot });
-        const [snapshot] = api.batch(api.updateSnapshot.gen({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }));
+        const [snapshot] = api.batch(api.createSnapshot.gen({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }));
         const project = snapshot.getProjects()[0];
         api.batch(project.checker.getSymbolAtPosition.gen("core.ts", 0));
         return { api, project };

@@ -1,3 +1,8 @@
+## TypeScript Security Properties
+
+Please refer to [TypeScript Security Properties](https://github.com/microsoft/TypeScript/wiki/tsc-Security-Properties) prior to submitting a security report.
+Specifically, **crashes, stack overflows, nonlinear performance, and hangs** are generally not considered vulnerabilities unless they result in arbitrary code execution, and should be reported through the [normal issue flow](https://github.com/microsoft/TypeScript/issues/new/choose) instead.
+
 <!-- BEGIN MICROSOFT SECURITY.MD V0.0.9 BLOCK -->
 
 ## Security

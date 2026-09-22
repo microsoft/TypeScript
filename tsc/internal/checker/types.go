@@ -11,8 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go
-//go:generate npx dprint fmt stringer_generated.go
+//go:generate npx hereby generate:checker
 
 // ParseFlags
 
@@ -1181,7 +1180,9 @@ type TypeParameter struct {
 	target              *Type
 	mapper              *TypeMapper
 	isThisType          bool
+	isDistributed       bool
 	resolvedDefaultType *Type
+	distributedType     *Type
 }
 
 func (t *TypeParameter) IsThisType() bool { return t.isThisType }

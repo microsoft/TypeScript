@@ -66,7 +66,7 @@ type configFileEntry struct {
 	// without releasing it. A config file entry may be acquired by a project
 	// either because it is the config for that project or because it is the
 	// config for a referenced project.
-	retainingProjects map[tspath.Path]struct{}
+	retainingProjects map[ID]struct{}
 	// retainingOpenFiles is the set of open files that caused this config to
 	// load during project collection building. This config file may or may not
 	// end up being the config for the default project for these files, but
@@ -159,7 +159,7 @@ func (c *ConfigFileRegistry) clone() *ConfigFileRegistry {
 // For testing
 type TestConfigEntry struct {
 	FileName           string
-	RetainingProjects  iter.Seq[tspath.Path]
+	RetainingProjects  iter.Seq[ID]
 	RetainingOpenFiles iter.Seq[tspath.Path]
 	RetainingConfigs   iter.Seq[tspath.Path]
 }

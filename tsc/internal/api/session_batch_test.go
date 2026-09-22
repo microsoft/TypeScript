@@ -87,7 +87,7 @@ func TestHandleGroupedBatchRequestsReacquiresCheckerAfterInterleaving(t *testing
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshot, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+	snapshot, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)
@@ -122,7 +122,7 @@ func TestBatchCheckerCacheReusesProgramAcrossSnapshots(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	base, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+	base, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)

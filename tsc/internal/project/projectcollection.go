@@ -15,15 +15,16 @@ import (
 type ProjectCollection struct {
 	toPath             func(fileName string) tspath.Path
 	configFileRegistry *ConfigFileRegistry
-	// fileDefaultProjects is a map of file paths to the config file path (the key
-	// into `configuredProjects`) of the default project for that file. If the file
-	// belongs to the inferred project, the value is `inferredProjectName`. This map
+	// fileDefaultProjects is a map of file paths to the ID of the default project
+	// for that file. This map
 	// contains quick lookups for only the associations discovered during the latest
 	// snapshot update.
-	fileDefaultProjects map[tspath.Path]tspath.Path
+	fileDefaultProjects map[tspath.Path]ID
 	// configuredProjects is the set of loaded projects associated with a tsconfig
 	// file, keyed by the config file path.
-	configuredProjects map[tspath.Path]*Project
+	configuredProjects map[ConfiguredProjectID]*Project
+	// syntheticProjects contains synthetic projects created explicitly through the API.
+	syntheticProjects map[SyntheticProjectID]*Project
 	// openFiles is the set of open file paths associated with the snapshot that owns
 	// this project collection.
 	openFiles collections.Set[tspath.Path]
@@ -35,7 +36,7 @@ type ProjectCollection struct {
 	apiState APIState
 
 	openConfiguredProjectsOnce sync.Once
-	openConfiguredProjects     *collections.Set[tspath.Path]
+	openConfiguredProjects     *collections.Set[ConfiguredProjectID]
 }
 
 // APIState tracks the projects and files that API clients have explicitly opened.
@@ -43,8 +44,7 @@ type ProjectCollection struct {
 // other, and it is carried across snapshots so API-opened resources stay loaded.
 type APIState struct {
 	// openProjects is the ref-counted set of projects to keep open for API
-	// clients, keyed by config file path. The value is the number of outstanding
-	// API opens.
+	// clients, keyed by config file path.
 	openProjects map[tspath.Path]int
 	// openFiles is the ref-counted set of files to keep open for API clients,
 	// keyed by file path. Files with no configured project are loaded into the
@@ -72,18 +72,19 @@ type apiOpenedFile struct {
 func (c *ProjectCollection) ConfigFileRegistry() *ConfigFileRegistry { return c.configFileRegistry }
 
 func (c *ProjectCollection) ConfiguredProject(path tspath.Path) *Project {
-	return c.configuredProjects[path]
+	return c.configuredProjects[ConfiguredProjectID(path)]
 }
 
-func (c *ProjectCollection) GetProjectByPath(projectPath tspath.Path) *Project {
-	if project, ok := c.configuredProjects[projectPath]; ok {
-		return project
-	}
-
-	if projectPath == inferredProjectName {
+func (c *ProjectCollection) GetProject(id ID) *Project {
+	if _, ok := id.Inferred(); ok {
 		return c.inferredProject
 	}
-
+	if syntheticID, ok := id.Synthetic(); ok {
+		return c.syntheticProjects[syntheticID]
+	}
+	if configuredID, ok := id.Configured(); ok {
+		return c.configuredProjects[configuredID]
+	}
 	return nil
 }
 
@@ -99,33 +100,59 @@ func (c *ProjectCollection) fillConfiguredProjects(projects *[]*Project) {
 		*projects = append(*projects, p)
 	}
 	slices.SortFunc(*projects, func(a, b *Project) int {
-		return cmp.Compare(a.Name(), b.Name())
+		return cmp.Compare(a.ID(), b.ID())
 	})
 }
 
-// ProjectsByPath returns an ordered map of configured projects keyed by their config file path,
-// plus the inferred project, if it exists, with the key `inferredProjectName`.
-func (c *ProjectCollection) ProjectsByPath() *collections.OrderedMap[tspath.Path, *Project] {
-	projects := collections.NewOrderedMapWithSizeHint[tspath.Path, *Project](
-		len(c.configuredProjects) + core.IfElse(c.inferredProject != nil, 1, 0),
+// SyntheticProjects returns all synthetic projects in a stable order.
+func (c *ProjectCollection) SyntheticProjects() []*Project {
+	projects := make([]*Project, 0, len(c.syntheticProjects))
+	for _, project := range c.syntheticProjects {
+		projects = append(projects, project)
+	}
+	slices.SortFunc(projects, func(a, b *Project) int {
+		return cmp.Compare(a.ID(), b.ID())
+	})
+	return projects
+}
+
+// ProjectsByID returns all projects keyed by project ID in stable order.
+func (c *ProjectCollection) ProjectsByID() *collections.OrderedMap[ID, *Project] {
+	projects := collections.NewOrderedMapWithSizeHint[ID, *Project](
+		len(c.configuredProjects) + len(c.syntheticProjects) + core.IfElse(c.inferredProject != nil, 1, 0),
 	)
 	for _, project := range c.ConfiguredProjects() {
-		projects.Set(project.configFilePath, project)
+		projects.Set(project.ID(), project)
+	}
+	for _, project := range c.SyntheticProjects() {
+		projects.Set(project.ID(), project)
 	}
 	if c.inferredProject != nil {
-		projects.Set(inferredProjectName, c.inferredProject)
+		projects.Set(c.inferredProject.ID(), c.inferredProject)
 	}
 	return projects
 }
 
-// Projects returns all projects, including the inferred project if it exists, in a stable order.
+// Projects returns all configured, synthetic, and inferred projects in a stable order.
 func (c *ProjectCollection) Projects() []*Project {
-	if c.inferredProject == nil {
-		return c.ConfiguredProjects()
-	}
-	projects := make([]*Project, 0, len(c.configuredProjects)+1)
+	projects := make([]*Project, 0, len(c.configuredProjects)+len(c.syntheticProjects)+core.IfElse(c.inferredProject != nil, 1, 0))
 	c.fillConfiguredProjects(&projects)
-	projects = append(projects, c.inferredProject)
+	projects = append(projects, c.SyntheticProjects()...)
+	if c.inferredProject != nil {
+		projects = append(projects, c.inferredProject)
+	}
+	return projects
+}
+
+// LanguageServiceProjects returns configured and inferred projects in stable order.
+// Synthetic projects are accessed explicitly through the API and do not participate
+// in cross-project language service operations.
+func (c *ProjectCollection) LanguageServiceProjects() []*Project {
+	projects := make([]*Project, 0, len(c.configuredProjects)+core.IfElse(c.inferredProject != nil, 1, 0))
+	c.fillConfiguredProjects(&projects)
+	if c.inferredProject != nil {
+		projects = append(projects, c.inferredProject)
+	}
 	return projects
 }
 
@@ -133,7 +160,9 @@ func (c *ProjectCollection) InferredProject() *Project {
 	return c.inferredProject
 }
 
-func (c *ProjectCollection) GetProjectsContainingFile(path tspath.Path) []ls.Project {
+// GetLanguageServiceProjectsContainingFile does not consider synthetic projects
+// (ones created by API via createProgram)
+func (c *ProjectCollection) GetLanguageServiceProjectsContainingFile(path tspath.Path) []ls.Project {
 	var projects []ls.Project
 	for _, project := range c.ConfiguredProjects() {
 		if project.containsFile(path) {
@@ -147,20 +176,21 @@ func (c *ProjectCollection) GetProjectsContainingFile(path tspath.Path) []ls.Pro
 }
 
 // GetOpenConfiguredProjects returns configured projects containing at least one open file.
-func (c *ProjectCollection) GetOpenConfiguredProjects() *collections.Set[tspath.Path] {
+func (c *ProjectCollection) GetOpenConfiguredProjects() *collections.Set[ConfiguredProjectID] {
 	c.openConfiguredProjectsOnce.Do(func() {
-		openProjects := collections.NewSetWithSizeHint[tspath.Path](len(c.configuredProjects))
+		openProjects := collections.NewSetWithSizeHint[ConfiguredProjectID](len(c.configuredProjects))
 		for path := range c.openFiles.Keys() {
-			if projectPath, ok := c.fileDefaultProjects[path]; ok && projectPath != inferredProjectName {
-				if _, ok := c.configuredProjects[projectPath]; ok {
-					openProjects.Add(projectPath)
+			if projectID, ok := c.fileDefaultProjects[path]; ok {
+				if configuredID, ok := projectID.Configured(); ok && c.configuredProjects[configuredID] != nil {
+					openProjects.Add(configuredID)
 					continue
 				}
 			}
 
 			for _, project := range c.configuredProjects {
 				if project.containsFile(path) {
-					openProjects.Add(project.configFilePath)
+					configuredID, _ := project.ID().Configured()
+					openProjects.Add(configuredID)
 				}
 			}
 		}
@@ -180,10 +210,11 @@ func openFilePaths(overlays map[tspath.Path]*Overlay) collections.Set[tspath.Pat
 // !!! result could be cached
 func (c *ProjectCollection) GetDefaultProject(path tspath.Path) *Project {
 	if result, ok := c.fileDefaultProjects[path]; ok {
-		if result == inferredProjectName {
+		if _, ok := result.Inferred(); ok {
 			return c.inferredProject
 		}
-		return c.configuredProjects[result]
+		configuredID, _ := result.Configured()
+		return c.configuredProjects[configuredID]
 	}
 
 	var (
@@ -240,7 +271,7 @@ func (c *ProjectCollection) findDefaultConfiguredProject(path tspath.Path) *Proj
 
 func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path, configFileName string, visited *collections.SyncSet[*Project], fallback *Project) *Project {
 	configFilePath := c.toPath(configFileName)
-	project, ok := c.configuredProjects[configFilePath]
+	project, ok := c.configuredProjects[ConfiguredProjectID(configFilePath)]
 	if !ok {
 		return nil
 	}
@@ -257,7 +288,7 @@ func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path,
 			}
 			// A referenced project may not be loaded if `disableReferencedProjectLoad` is true.
 			return core.MapNonNil(project.CommandLine.ResolvedProjectReferencePaths(), func(configFileName string) *Project {
-				return c.configuredProjects[c.toPath(configFileName)]
+				return c.configuredProjects[ConfiguredProjectID(c.toPath(configFileName))]
 			})
 		},
 		func(project *Project) (isResult bool, stop bool) {
@@ -300,6 +331,7 @@ func (c *ProjectCollection) clone() *ProjectCollection {
 		toPath:              c.toPath,
 		configFileRegistry:  c.configFileRegistry,
 		configuredProjects:  c.configuredProjects,
+		syntheticProjects:   c.syntheticProjects,
 		openFiles:           c.openFiles,
 		inferredProject:     c.inferredProject,
 		fileDefaultProjects: c.fileDefaultProjects,

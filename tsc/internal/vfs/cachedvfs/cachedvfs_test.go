@@ -3,7 +3,6 @@ package cachedvfs_test
 import (
 	"testing"
 
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/cachedvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmock"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -246,41 +245,6 @@ func TestUseCaseSensitiveFileNames(t *testing.T) {
 
 	cached.UseCaseSensitiveFileNames()
 	assert.Equal(t, 7, len(underlying.UseCaseSensitiveFileNamesCalls()))
-}
-
-func TestWalkDir(t *testing.T) {
-	t.Parallel()
-
-	underlying := createMockFS()
-	cached := cachedvfs.From(underlying)
-
-	walkFn := vfs.WalkDirFunc(func(path string, info vfs.DirEntry, err error) error {
-		return nil
-	})
-
-	_ = cached.WalkDir("/some/path", walkFn)
-	assert.Equal(t, 1, len(underlying.WalkDirCalls()))
-
-	_ = cached.WalkDir("/some/path", walkFn)
-	assert.Equal(t, 2, len(underlying.WalkDirCalls()))
-
-	cached.ClearCache()
-	_ = cached.WalkDir("/some/path", walkFn)
-	assert.Equal(t, 3, len(underlying.WalkDirCalls()))
-
-	cached.DisableAndClearCache()
-	_ = cached.WalkDir("/some/path", walkFn)
-	assert.Equal(t, 4, len(underlying.WalkDirCalls()))
-
-	_ = cached.WalkDir("/some/path", walkFn)
-	assert.Equal(t, 5, len(underlying.WalkDirCalls()))
-
-	cached.Enable()
-	_ = cached.WalkDir("/some/path", walkFn)
-	assert.Equal(t, 6, len(underlying.WalkDirCalls()))
-
-	_ = cached.WalkDir("/some/path", walkFn)
-	assert.Equal(t, 7, len(underlying.WalkDirCalls()))
 }
 
 func TestRemove(t *testing.T) {

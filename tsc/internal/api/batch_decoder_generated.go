@@ -7,11 +7,12 @@ import (
 	core "github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	packagejson "github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	project "github.com/microsoft/TypeScript/tsc/internal/project"
 )
 
 type batchColumnsCheckerNodeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 }
 
@@ -44,7 +45,7 @@ func newBatchDecoderCheckerNodeParams(base json.Value, fields json.Value, count 
 
 type batchColumnsCheckerSignatureParams struct {
 	Snapshot  []SnapshotID  `json:"snapshot,omitempty"`
-	Project   []ProjectID   `json:"project,omitempty"`
+	Project   []project.ID  `json:"project,omitempty"`
 	Signature []SignatureID `json:"signature,omitempty"`
 }
 
@@ -77,7 +78,7 @@ func newBatchDecoderCheckerSignatureParams(base json.Value, fields json.Value, c
 
 type batchColumnsCheckerSymbolParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Symbol   []SymbolID   `json:"symbol,omitempty"`
 }
 
@@ -110,7 +111,7 @@ func newBatchDecoderCheckerSymbolParams(base json.Value, fields json.Value, coun
 
 type batchColumnsCheckerTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 }
 
@@ -141,49 +142,94 @@ func newBatchDecoderCheckerTypeParams(base json.Value, fields json.Value, count 
 	})
 }
 
-type batchColumnsCreateProgramParams struct {
-	RootFiles            [][]DocumentIdentifier           `json:"rootFiles,omitempty"`
-	CreateProgramOptions []CreateProgramOptions           `json:"createProgramOptions,omitempty"`
-	OldProgram           []*CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
-	FileChanges          []*APIFileChanges                `json:"fileChanges,omitempty"`
+type batchColumnsCreateSnapshotParams struct {
+	FileNotifications []*FileNotifications                   `json:"fileNotifications,omitempty"`
+	FileSystem        []*requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 }
 
-func newBatchDecoderCreateProgramParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
-	var columns batchColumnsCreateProgramParams
+func newBatchDecoderCreateSnapshotParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsCreateSnapshotParams
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("rootFiles", len(columns.RootFiles), count); err != nil {
+	if err := validateBatchColumn("fileNotifications", len(columns.FileNotifications), count); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("createProgramOptions", len(columns.CreateProgramOptions), count); err != nil {
+	if err := validateBatchColumn("fileSystem", len(columns.FileSystem), count); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("oldProgram", len(columns.OldProgram), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("fileChanges", len(columns.FileChanges), count); err != nil {
-		return nil, err
-	}
-	return newTypedBatchRequestDecoder[CreateProgramParams](base, func(params *CreateProgramParams, index int) {
-		if columns.RootFiles != nil {
-			params.RootFiles = columns.RootFiles[index]
+	return newTypedBatchRequestDecoder[CreateSnapshotParams](base, func(params *CreateSnapshotParams, index int) {
+		if columns.FileNotifications != nil {
+			params.FileNotifications = columns.FileNotifications[index]
 		}
-		if columns.CreateProgramOptions != nil {
-			params.CreateProgramOptions = columns.CreateProgramOptions[index]
+		if columns.FileSystem != nil {
+			params.FileSystem = columns.FileSystem[index]
 		}
-		if columns.OldProgram != nil {
-			params.OldProgram = columns.OldProgram[index]
+	})
+}
+
+type batchColumnsCreateSourceFileFromFileParams struct {
+	FileName []string                  `json:"fileName,omitempty"`
+	Options  []CreateSourceFileOptions `json:"options,omitempty"`
+}
+
+func newBatchDecoderCreateSourceFileFromFileParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsCreateSourceFileFromFileParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[CreateSourceFileFromFileParams](base, func(params *CreateSourceFileFromFileParams, index int) {
+		if columns.FileName != nil {
+			params.FileName = columns.FileName[index]
 		}
-		if columns.FileChanges != nil {
-			params.FileChanges = columns.FileChanges[index]
+		if columns.Options != nil {
+			params.Options = columns.Options[index]
+		}
+	})
+}
+
+type batchColumnsCreateSourceFileParams struct {
+	FileName   []string                  `json:"fileName,omitempty"`
+	SourceText []string                  `json:"sourceText,omitempty"`
+	Options    []CreateSourceFileOptions `json:"options,omitempty"`
+}
+
+func newBatchDecoderCreateSourceFileParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsCreateSourceFileParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("sourceText", len(columns.SourceText), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[CreateSourceFileParams](base, func(params *CreateSourceFileParams, index int) {
+		if columns.FileName != nil {
+			params.FileName = columns.FileName[index]
+		}
+		if columns.SourceText != nil {
+			params.SourceText = columns.SourceText[index]
+		}
+		if columns.Options != nil {
+			params.Options = columns.Options[index]
 		}
 	})
 }
 
 type batchColumnsEmitParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	EmitOnly []*uint32    `json:"emitOnly,omitempty"`
 }
 
@@ -216,7 +262,7 @@ func newBatchDecoderEmitParams(base json.Value, fields json.Value, count int) (b
 
 type batchColumnsFormatNodeForInsertionParams struct {
 	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
-	Project  []ProjectID          `json:"project,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
 	File     []DocumentIdentifier `json:"file,omitempty"`
 	Position []uint32             `json:"position,omitempty"`
 	Data     []string             `json:"data,omitempty"`
@@ -263,7 +309,7 @@ func newBatchDecoderFormatNodeForInsertionParams(base json.Value, fields json.Va
 
 type batchColumnsGetBaseTypeOfLiteralTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 }
 
@@ -296,7 +342,7 @@ func newBatchDecoderGetBaseTypeOfLiteralTypeParams(base json.Value, fields json.
 
 type batchColumnsGetCompletionsAtPositionParams struct {
 	Snapshot         []SnapshotID         `json:"snapshot,omitempty"`
-	Project          []ProjectID          `json:"project,omitempty"`
+	Project          []project.ID         `json:"project,omitempty"`
 	File             []DocumentIdentifier `json:"file,omitempty"`
 	Position         []uint32             `json:"position,omitempty"`
 	TriggerCharacter []*string            `json:"triggerCharacter,omitempty"`
@@ -350,7 +396,7 @@ func newBatchDecoderGetCompletionsAtPositionParams(base json.Value, fields json.
 
 type batchColumnsGetContextualTypeForArgumentParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 	Index    []int32      `json:"index,omitempty"`
 }
@@ -390,7 +436,7 @@ func newBatchDecoderGetContextualTypeForArgumentParams(base json.Value, fields j
 
 type batchColumnsGetContextualTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 }
 
@@ -417,6 +463,32 @@ func newBatchDecoderGetContextualTypeParams(base json.Value, fields json.Value, 
 		}
 		if columns.Location != nil {
 			params.Location = columns.Location[index]
+		}
+	})
+}
+
+type batchColumnsGetCurrentLanguageServerSnapshotParams struct {
+	BaseSnapshot []SnapshotID                     `json:"baseSnapshot,omitempty"`
+	Changes      []*LanguageServerSnapshotChanges `json:"changes,omitempty"`
+}
+
+func newBatchDecoderGetCurrentLanguageServerSnapshotParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsGetCurrentLanguageServerSnapshotParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("baseSnapshot", len(columns.BaseSnapshot), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("changes", len(columns.Changes), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[GetCurrentLanguageServerSnapshotParams](base, func(params *GetCurrentLanguageServerSnapshotParams, index int) {
+		if columns.BaseSnapshot != nil {
+			params.BaseSnapshot = columns.BaseSnapshot[index]
+		}
+		if columns.Changes != nil {
+			params.Changes = columns.Changes[index]
 		}
 	})
 }
@@ -449,7 +521,7 @@ func newBatchDecoderGetDefaultProjectForFileParams(base json.Value, fields json.
 
 type batchColumnsGetDiagnosticsParams struct {
 	Snapshot []SnapshotID           `json:"snapshot,omitempty"`
-	Project  []ProjectID            `json:"project,omitempty"`
+	Project  []project.ID           `json:"project,omitempty"`
 	Files    [][]DocumentIdentifier `json:"files,omitempty"`
 }
 
@@ -482,7 +554,7 @@ func newBatchDecoderGetDiagnosticsParams(base json.Value, fields json.Value, cou
 
 type batchColumnsGetImportAdderEditsParams struct {
 	Snapshot []SnapshotID          `json:"snapshot,omitempty"`
-	Project  []ProjectID           `json:"project,omitempty"`
+	Project  []project.ID          `json:"project,omitempty"`
 	File     []DocumentIdentifier  `json:"file,omitempty"`
 	Actions  [][]ImportAdderAction `json:"actions,omitempty"`
 }
@@ -522,7 +594,7 @@ func newBatchDecoderGetImportAdderEditsParams(base json.Value, fields json.Value
 
 type batchColumnsGetIndexInfoOfTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 	Kind     []int32      `json:"kind,omitempty"`
 }
@@ -562,7 +634,7 @@ func newBatchDecoderGetIndexInfoOfTypeParams(base json.Value, fields json.Value,
 
 type batchColumnsGetIntrinsicTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 }
 
 func newBatchDecoderGetIntrinsicTypeParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
@@ -588,7 +660,7 @@ func newBatchDecoderGetIntrinsicTypeParams(base json.Value, fields json.Value, c
 
 type batchColumnsGetMemberInModuleExportsParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Symbol   []SymbolID   `json:"symbol,omitempty"`
 	Name     []string     `json:"name,omitempty"`
 }
@@ -626,9 +698,89 @@ func newBatchDecoderGetMemberInModuleExportsParams(base json.Value, fields json.
 	})
 }
 
+type batchColumnsGetModeForResolutionAtIndexParams struct {
+	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
+	File     []DocumentIdentifier `json:"file,omitempty"`
+	Index    []int                `json:"index,omitempty"`
+}
+
+func newBatchDecoderGetModeForResolutionAtIndexParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsGetModeForResolutionAtIndexParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[GetModeForResolutionAtIndexParams](base, func(params *GetModeForResolutionAtIndexParams, index int) {
+		if columns.Snapshot != nil {
+			params.Snapshot = columns.Snapshot[index]
+		}
+		if columns.Project != nil {
+			params.Project = columns.Project[index]
+		}
+		if columns.File != nil {
+			params.File = columns.File[index]
+		}
+		if columns.Index != nil {
+			params.Index = columns.Index[index]
+		}
+	})
+}
+
+type batchColumnsGetModeForUsageLocationParams struct {
+	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
+	File     []DocumentIdentifier `json:"file,omitempty"`
+	Usage    []NodeHandle         `json:"usage,omitempty"`
+}
+
+func newBatchDecoderGetModeForUsageLocationParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsGetModeForUsageLocationParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("usage", len(columns.Usage), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[GetModeForUsageLocationParams](base, func(params *GetModeForUsageLocationParams, index int) {
+		if columns.Snapshot != nil {
+			params.Snapshot = columns.Snapshot[index]
+		}
+		if columns.Project != nil {
+			params.Project = columns.Project[index]
+		}
+		if columns.File != nil {
+			params.File = columns.File[index]
+		}
+		if columns.Usage != nil {
+			params.Usage = columns.Usage[index]
+		}
+	})
+}
+
 type batchColumnsGetParameterTypeParams struct {
 	Snapshot  []SnapshotID  `json:"snapshot,omitempty"`
-	Project   []ProjectID   `json:"project,omitempty"`
+	Project   []project.ID  `json:"project,omitempty"`
 	Signature []SignatureID `json:"signature,omitempty"`
 	Index     []int32       `json:"index,omitempty"`
 }
@@ -668,7 +820,7 @@ func newBatchDecoderGetParameterTypeParams(base json.Value, fields json.Value, c
 
 type batchColumnsGetProjectDiagnosticsParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 }
 
 func newBatchDecoderGetProjectDiagnosticsParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
@@ -694,7 +846,7 @@ func newBatchDecoderGetProjectDiagnosticsParams(base json.Value, fields json.Val
 
 type batchColumnsGetPropertyOfTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 	Name     []string     `json:"name,omitempty"`
 }
@@ -734,7 +886,7 @@ func newBatchDecoderGetPropertyOfTypeParams(base json.Value, fields json.Value, 
 
 type batchColumnsGetReferencedSymbolsForNodeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Node     []NodeHandle `json:"node,omitempty"`
 	Position []int        `json:"position,omitempty"`
 }
@@ -774,7 +926,7 @@ func newBatchDecoderGetReferencedSymbolsForNodeParams(base json.Value, fields js
 
 type batchColumnsGetReferencesToSymbolInFileParams struct {
 	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
-	Project  []ProjectID          `json:"project,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
 	File     []DocumentIdentifier `json:"file,omitempty"`
 	Symbol   []SymbolID           `json:"symbol,omitempty"`
 }
@@ -814,7 +966,7 @@ func newBatchDecoderGetReferencesToSymbolInFileParams(base json.Value, fields js
 
 type batchColumnsGetResolvedModuleFromModuleSpecifierParams struct {
 	Snapshot        []SnapshotID          `json:"snapshot,omitempty"`
-	Project         []ProjectID           `json:"project,omitempty"`
+	Project         []project.ID          `json:"project,omitempty"`
 	ModuleSpecifier []NodeHandle          `json:"moduleSpecifier,omitempty"`
 	SourceFile      []*DocumentIdentifier `json:"sourceFile,omitempty"`
 }
@@ -854,7 +1006,7 @@ func newBatchDecoderGetResolvedModuleFromModuleSpecifierParams(base json.Value, 
 
 type batchColumnsGetResolvedModuleParams struct {
 	Snapshot   []SnapshotID          `json:"snapshot,omitempty"`
-	Project    []ProjectID           `json:"project,omitempty"`
+	Project    []project.ID          `json:"project,omitempty"`
 	File       []DocumentIdentifier  `json:"file,omitempty"`
 	ModuleName []string              `json:"moduleName,omitempty"`
 	Mode       []core.ResolutionMode `json:"mode,omitempty"`
@@ -901,7 +1053,7 @@ func newBatchDecoderGetResolvedModuleParams(base json.Value, fields json.Value, 
 
 type batchColumnsGetResolvedSignatureParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 }
 
@@ -934,7 +1086,7 @@ func newBatchDecoderGetResolvedSignatureParams(base json.Value, fields json.Valu
 
 type batchColumnsGetResolvedTypeReferenceDirectiveFromReferenceParams struct {
 	Snapshot          []SnapshotID          `json:"snapshot,omitempty"`
-	Project           []ProjectID           `json:"project,omitempty"`
+	Project           []project.ID          `json:"project,omitempty"`
 	SourceFile        []DocumentIdentifier  `json:"sourceFile,omitempty"`
 	TypeDirectiveName []string              `json:"typeDirectiveName,omitempty"`
 	ResolutionMode    []core.ResolutionMode `json:"resolutionMode,omitempty"`
@@ -981,7 +1133,7 @@ func newBatchDecoderGetResolvedTypeReferenceDirectiveFromReferenceParams(base js
 
 type batchColumnsGetResolvedTypeReferenceDirectiveParams struct {
 	Snapshot          []SnapshotID          `json:"snapshot,omitempty"`
-	Project           []ProjectID           `json:"project,omitempty"`
+	Project           []project.ID          `json:"project,omitempty"`
 	File              []DocumentIdentifier  `json:"file,omitempty"`
 	TypeDirectiveName []string              `json:"typeDirectiveName,omitempty"`
 	Mode              []core.ResolutionMode `json:"mode,omitempty"`
@@ -1028,7 +1180,7 @@ func newBatchDecoderGetResolvedTypeReferenceDirectiveParams(base json.Value, fie
 
 type batchColumnsGetSignaturePropertyParams struct {
 	Snapshot  []SnapshotID  `json:"snapshot,omitempty"`
-	Project   []ProjectID   `json:"project,omitempty"`
+	Project   []project.ID  `json:"project,omitempty"`
 	Signature []SignatureID `json:"objectId,omitempty"`
 }
 
@@ -1061,7 +1213,7 @@ func newBatchDecoderGetSignaturePropertyParams(base json.Value, fields json.Valu
 
 type batchColumnsGetSignatureUsagesParams struct {
 	Snapshot      []SnapshotID `json:"snapshot,omitempty"`
-	Project       []ProjectID  `json:"project,omitempty"`
+	Project       []project.ID `json:"project,omitempty"`
 	SignatureDecl []NodeHandle `json:"signatureDecl,omitempty"`
 }
 
@@ -1094,7 +1246,7 @@ func newBatchDecoderGetSignatureUsagesParams(base json.Value, fields json.Value,
 
 type batchColumnsGetSignaturesOfTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 	Kind     []int32      `json:"kind,omitempty"`
 }
@@ -1134,7 +1286,7 @@ func newBatchDecoderGetSignaturesOfTypeParams(base json.Value, fields json.Value
 
 type batchColumnsGetSourceFileNamesParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 }
 
 func newBatchDecoderGetSourceFileNamesParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
@@ -1160,7 +1312,7 @@ func newBatchDecoderGetSourceFileNamesParams(base json.Value, fields json.Value,
 
 type batchColumnsGetSourceFileParams struct {
 	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
-	Project  []ProjectID          `json:"project,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
 	File     []DocumentIdentifier `json:"file,omitempty"`
 }
 
@@ -1193,7 +1345,7 @@ func newBatchDecoderGetSourceFileParams(base json.Value, fields json.Value, coun
 
 type batchColumnsGetSymbolAtLocationParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 }
 
@@ -1226,7 +1378,7 @@ func newBatchDecoderGetSymbolAtLocationParams(base json.Value, fields json.Value
 
 type batchColumnsGetSymbolAtPositionParams struct {
 	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
-	Project  []ProjectID          `json:"project,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
 	File     []DocumentIdentifier `json:"file,omitempty"`
 	Position []uint32             `json:"position,omitempty"`
 }
@@ -1266,7 +1418,7 @@ func newBatchDecoderGetSymbolAtPositionParams(base json.Value, fields json.Value
 
 type batchColumnsGetSymbolOfSourceFileParams struct {
 	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
-	Project  []ProjectID          `json:"project,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
 	File     []DocumentIdentifier `json:"file,omitempty"`
 }
 
@@ -1299,7 +1451,7 @@ func newBatchDecoderGetSymbolOfSourceFileParams(base json.Value, fields json.Val
 
 type batchColumnsGetSymbolPropertyParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Symbol   []SymbolID   `json:"objectId,omitempty"`
 }
 
@@ -1332,7 +1484,7 @@ func newBatchDecoderGetSymbolPropertyParams(base json.Value, fields json.Value, 
 
 type batchColumnsGetSymbolsInScopeParams struct {
 	Snapshot []SnapshotID          `json:"snapshot,omitempty"`
-	Project  []ProjectID           `json:"project,omitempty"`
+	Project  []project.ID          `json:"project,omitempty"`
 	Location []NodeHandle          `json:"location,omitempty"`
 	File     []*DocumentIdentifier `json:"file,omitempty"`
 	Position []*uint32             `json:"position,omitempty"`
@@ -1386,7 +1538,7 @@ func newBatchDecoderGetSymbolsInScopeParams(base json.Value, fields json.Value, 
 
 type batchColumnsGetTypeAtLocationParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 }
 
@@ -1419,7 +1571,7 @@ func newBatchDecoderGetTypeAtLocationParams(base json.Value, fields json.Value, 
 
 type batchColumnsGetTypeAtPositionParams struct {
 	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
-	Project  []ProjectID          `json:"project,omitempty"`
+	Project  []project.ID         `json:"project,omitempty"`
 	File     []DocumentIdentifier `json:"file,omitempty"`
 	Position []uint32             `json:"position,omitempty"`
 }
@@ -1459,7 +1611,7 @@ func newBatchDecoderGetTypeAtPositionParams(base json.Value, fields json.Value, 
 
 type batchColumnsGetTypeFromTypeNodeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 }
 
@@ -1492,7 +1644,7 @@ func newBatchDecoderGetTypeFromTypeNodeParams(base json.Value, fields json.Value
 
 type batchColumnsGetTypeOfSymbolAtLocationParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Symbol   []SymbolID   `json:"symbol,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 }
@@ -1532,7 +1684,7 @@ func newBatchDecoderGetTypeOfSymbolAtLocationParams(base json.Value, fields json
 
 type batchColumnsGetTypeOfSymbolParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Symbol   []SymbolID   `json:"symbol,omitempty"`
 }
 
@@ -1565,7 +1717,7 @@ func newBatchDecoderGetTypeOfSymbolParams(base json.Value, fields json.Value, co
 
 type batchColumnsGetTypePropertyParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"objectId,omitempty"`
 }
 
@@ -1598,7 +1750,7 @@ func newBatchDecoderGetTypePropertyParams(base json.Value, fields json.Value, co
 
 type batchColumnsGetWidenedTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 }
 
@@ -1631,7 +1783,7 @@ func newBatchDecoderGetWidenedTypeParams(base json.Value, fields json.Value, cou
 
 type batchColumnsIsArrayLikeTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 }
 
@@ -1664,7 +1816,7 @@ func newBatchDecoderIsArrayLikeTypeParams(base json.Value, fields json.Value, co
 
 type batchColumnsIsTypeAssignableToParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Source   []TypeID     `json:"source,omitempty"`
 	Target   []TypeID     `json:"target,omitempty"`
 }
@@ -1872,7 +2024,7 @@ func newBatchDecoderReleaseParams(base json.Value, fields json.Value, count int)
 
 type batchColumnsResolveNameParams struct {
 	Snapshot       []SnapshotID          `json:"snapshot,omitempty"`
-	Project        []ProjectID           `json:"project,omitempty"`
+	Project        []project.ID          `json:"project,omitempty"`
 	Name           []string              `json:"name,omitempty"`
 	Location       []NodeHandle          `json:"location,omitempty"`
 	File           []*DocumentIdentifier `json:"file,omitempty"`
@@ -1940,7 +2092,7 @@ func newBatchDecoderResolveNameParams(base json.Value, fields json.Value, count 
 
 type batchColumnsSelectedFilesEmitParams struct {
 	Snapshot []SnapshotID           `json:"snapshot,omitempty"`
-	Project  []ProjectID            `json:"project,omitempty"`
+	Project  []project.ID           `json:"project,omitempty"`
 	Files    [][]DocumentIdentifier `json:"files,omitempty"`
 }
 
@@ -1973,7 +2125,7 @@ func newBatchDecoderSelectedFilesEmitParams(base json.Value, fields json.Value, 
 
 type batchColumnsSignatureToSignatureDeclarationParams struct {
 	Snapshot  []SnapshotID  `json:"snapshot,omitempty"`
-	Project   []ProjectID   `json:"project,omitempty"`
+	Project   []project.ID  `json:"project,omitempty"`
 	Signature []SignatureID `json:"signature,omitempty"`
 	Kind      []int32       `json:"kind,omitempty"`
 	Location  []NodeHandle  `json:"location,omitempty"`
@@ -2079,7 +2231,7 @@ func newBatchDecoderTranspileParams(base json.Value, fields json.Value, count in
 
 type batchColumnsTypeToTypeNodeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
-	Project  []ProjectID  `json:"project,omitempty"`
+	Project  []project.ID `json:"project,omitempty"`
 	Type     []TypeID     `json:"type,omitempty"`
 	Location []NodeHandle `json:"location,omitempty"`
 	Flags    []int32      `json:"flags,omitempty"`
@@ -2125,13 +2277,8 @@ func newBatchDecoderTypeToTypeNodeParams(base json.Value, fields json.Value, cou
 }
 
 type batchColumnsUpdateSnapshotParams struct {
-	Snapshot      []SnapshotID                           `json:"snapshot,omitempty"`
-	OpenProjects  [][]DocumentIdentifier                 `json:"openProjects,omitempty"`
-	CloseProjects [][]DocumentIdentifier                 `json:"closeProjects,omitempty"`
-	FileChanges   []*APIFileChanges                      `json:"fileChanges,omitempty"`
-	FileSystem    []*requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
-	OpenFiles     [][]DocumentIdentifier                 `json:"openFiles,omitempty"`
-	CloseFiles    [][]DocumentIdentifier                 `json:"closeFiles,omitempty"`
+	Snapshot []SnapshotID            `json:"snapshot,omitempty"`
+	Changes  []*CreateSnapshotParams `json:"changes,omitempty"`
 }
 
 func newBatchDecoderUpdateSnapshotParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
@@ -2142,78 +2289,15 @@ func newBatchDecoderUpdateSnapshotParams(base json.Value, fields json.Value, cou
 	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("openProjects", len(columns.OpenProjects), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("closeProjects", len(columns.CloseProjects), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("fileChanges", len(columns.FileChanges), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("fileSystem", len(columns.FileSystem), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("openFiles", len(columns.OpenFiles), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("closeFiles", len(columns.CloseFiles), count); err != nil {
+	if err := validateBatchColumn("changes", len(columns.Changes), count); err != nil {
 		return nil, err
 	}
 	return newTypedBatchRequestDecoder[UpdateSnapshotParams](base, func(params *UpdateSnapshotParams, index int) {
 		if columns.Snapshot != nil {
 			params.Snapshot = columns.Snapshot[index]
 		}
-		if columns.OpenProjects != nil {
-			params.OpenProjects = columns.OpenProjects[index]
-		}
-		if columns.CloseProjects != nil {
-			params.CloseProjects = columns.CloseProjects[index]
-		}
-		if columns.FileChanges != nil {
-			params.FileChanges = columns.FileChanges[index]
-		}
-		if columns.FileSystem != nil {
-			params.FileSystem = columns.FileSystem[index]
-		}
-		if columns.OpenFiles != nil {
-			params.OpenFiles = columns.OpenFiles[index]
-		}
-		if columns.CloseFiles != nil {
-			params.CloseFiles = columns.CloseFiles[index]
-		}
-	})
-}
-
-type batchColumnsUpdateTemporarySnapshotParams struct {
-	Snapshot []SnapshotID         `json:"snapshot,omitempty"`
-	File     []DocumentIdentifier `json:"file,omitempty"`
-	NewText  []string             `json:"newText,omitempty"`
-}
-
-func newBatchDecoderUpdateTemporarySnapshotParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
-	var columns batchColumnsUpdateTemporarySnapshotParams
-	if err := json.Unmarshal(fields, &columns); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
-	}
-	if err := validateBatchColumn("newText", len(columns.NewText), count); err != nil {
-		return nil, err
-	}
-	return newTypedBatchRequestDecoder[UpdateTemporarySnapshotParams](base, func(params *UpdateTemporarySnapshotParams, index int) {
-		if columns.Snapshot != nil {
-			params.Snapshot = columns.Snapshot[index]
-		}
-		if columns.File != nil {
-			params.File = columns.File[index]
-		}
-		if columns.NewText != nil {
-			params.NewText = columns.NewText[index]
+		if columns.Changes != nil {
+			params.Changes = columns.Changes[index]
 		}
 	})
 }
@@ -2222,12 +2306,12 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 	switch method {
 	case MethodRelease:
 		return newBatchDecoderReleaseParams(base, fields, count)
+	case MethodCreateSnapshot:
+		return newBatchDecoderCreateSnapshotParams(base, fields, count)
 	case MethodUpdateSnapshot:
 		return newBatchDecoderUpdateSnapshotParams(base, fields, count)
-	case MethodUpdateTemporarySnapshot:
-		return newBatchDecoderUpdateTemporarySnapshotParams(base, fields, count)
-	case MethodCreateProgram:
-		return newBatchDecoderCreateProgramParams(base, fields, count)
+	case MethodGetCurrentLanguageServerSnapshot:
+		return newBatchDecoderGetCurrentLanguageServerSnapshotParams(base, fields, count)
 	case MethodParseCommandLine:
 		return newBatchDecoderParseCommandLineParams(base, fields, count)
 	case MethodReadConfigFile:
@@ -2236,6 +2320,10 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 		return newBatchDecoderParseJsonConfigFileContentParams(base, fields, count)
 	case MethodParseConfigFile:
 		return newBatchDecoderParseConfigFileParams(base, fields, count)
+	case MethodCreateSourceFile:
+		return newBatchDecoderCreateSourceFileParams(base, fields, count)
+	case MethodCreateSourceFileFromFile:
+		return newBatchDecoderCreateSourceFileFromFileParams(base, fields, count)
 	case MethodTranspileModule:
 		return newBatchDecoderTranspileParams(base, fields, count)
 	case MethodTranspileModuleFromFile:
@@ -2264,6 +2352,10 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 		return newBatchDecoderGetSourceFileNamesParams(base, fields, count)
 	case MethodGetSourceFileMetadata:
 		return newBatchDecoderGetSourceFileParams(base, fields, count)
+	case MethodGetModeForUsageLocation:
+		return newBatchDecoderGetModeForUsageLocationParams(base, fields, count)
+	case MethodGetModeForResolutionAtIndex:
+		return newBatchDecoderGetModeForResolutionAtIndexParams(base, fields, count)
 	case MethodGetResolvedModule:
 		return newBatchDecoderGetResolvedModuleParams(base, fields, count)
 	case MethodGetResolvedModuleFromModuleSpecifier:
