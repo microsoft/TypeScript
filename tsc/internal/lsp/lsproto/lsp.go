@@ -14,7 +14,53 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-type DocumentUri string // !!!
+type DocumentUri string
+
+var _ json.UnmarshalerFrom = (*DocumentUri)(nil)
+
+func (uri *DocumentUri) UnmarshalJSONFrom(dec *json.Decoder) error {
+	value, err := unmarshalURI(dec)
+	if err != nil {
+		return err
+	}
+	*uri = DocumentUri(value)
+	return nil
+}
+
+func unmarshalURI(dec *json.Decoder) (string, error) {
+	var value string
+	if err := json.UnmarshalDecode(dec, &value); err != nil {
+		return "", err
+	}
+
+	parsed, err := url.Parse(value)
+	if err != nil {
+		return "", fmt.Errorf("invalid URI %q", value)
+	}
+	// Match vscode-uri's compatibility behavior, which is used by
+	// vscode-languageclient: schemeless values use the file scheme, and file
+	// URI paths are resolved against the root.
+	if parsed.Scheme == "" {
+		parsed.Scheme = "file"
+	}
+	if parsed.Scheme == "file" {
+		if parsed.Opaque != "" {
+			parsed.Path = parsed.Opaque
+			parsed.Opaque = ""
+		}
+		if parsed.Path == "" {
+			parsed.Path = "/"
+		} else if parsed.Path[0] != '/' {
+			parsed.Path = "/" + parsed.Path
+		}
+		if parsed.Host == "" && strings.HasPrefix(parsed.Path, "//") {
+			return "", fmt.Errorf("invalid URI %q: path cannot start with // without an authority", value)
+		}
+		value = parsed.String()
+	}
+
+	return value, nil
+}
 
 func (uri DocumentUri) FileName() string {
 	if bundled.IsBundled(string(uri)) {
@@ -80,7 +126,18 @@ type HasLocation interface {
 	GetLocation() Location
 }
 
-type URI string // !!!
+type URI string
+
+var _ json.UnmarshalerFrom = (*URI)(nil)
+
+func (uri *URI) UnmarshalJSONFrom(dec *json.Decoder) error {
+	value, err := unmarshalURI(dec)
+	if err != nil {
+		return err
+	}
+	*uri = URI(value)
+	return nil
+}
 
 type Method string
 

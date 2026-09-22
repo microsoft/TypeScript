@@ -2,6 +2,7 @@ package lsproto
 
 import (
 	"reflect"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -111,6 +112,54 @@ func TestUnmarshalRejectsNullForOptionalNonNullableFields(t *testing.T) {
 			assert.ErrorContains(t, err, tt.errText)
 		})
 	}
+}
+
+func TestUnmarshalURI(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		uri      string
+		expected DocumentUri
+		wantErr  bool
+	}{
+		{name: "file", uri: "file:///test.ts", expected: "file:///test.ts"},
+		{name: "untitled", uri: "untitled:Untitled-1", expected: "untitled:Untitled-1"},
+		{name: "empty file path", uri: "file://", expected: "file:///"},
+		{name: "relative file path", uri: "file:test.ts", expected: "file:///test.ts"},
+		{name: "missing scheme", uri: "/test.ts", expected: "file:///test.ts"},
+		{name: "invalid escape", uri: "file:///test%xx.ts", wantErr: true},
+		{name: "path without authority", uri: "file:////server/share", wantErr: true},
+	}
+
+	for _, tt := range tests {
+		for _, uriType := range []string{"DocumentUri", "URI"} {
+			t.Run(uriType+"/"+tt.name, func(t *testing.T) {
+				t.Parallel()
+				var target any
+				switch uriType {
+				case "DocumentUri":
+					target = new(DocumentUri)
+				case "URI":
+					target = new(URI)
+				}
+				err := json.Unmarshal([]byte(strconv.Quote(tt.uri)), target)
+				if tt.wantErr {
+					assert.ErrorContains(t, err, "invalid URI")
+				} else {
+					assert.NilError(t, err)
+					assert.Equal(t, reflect.ValueOf(target).Elem().String(), string(tt.expected))
+				}
+			})
+		}
+	}
+
+	request := &RequestMessage{
+		Params: json.Value(`{"textDocument":{"uri":"file:////server/share","languageId":"typescript","version":1,"text":""}}`),
+	}
+	_, err := request.UnmarshalParams[*DidOpenTextDocumentParams]()
+	assert.ErrorIs(t, err, ErrorCodeInvalidParams)
+	assert.ErrorContains(t, err, "invalid URI")
 }
 
 func TestUnmarshalAcceptsNullForNullableFields(t *testing.T) {
