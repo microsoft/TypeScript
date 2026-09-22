@@ -4772,6 +4772,14 @@
         "category": "Error",
         "code": 5113
     },
+    "Instantiations of type '{0}' appear infinitely circular.": {
+        "category": "Error",
+        "code": 5114
+    },
+    "Instantiations of the following types appear infinitely circular: {0}.": {
+        "category": "Error",
+        "code": 5115
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
