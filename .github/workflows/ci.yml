@@ -294,6 +294,7 @@ jobs:
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby generate
+      - run: npx hereby test:codegen
       - run: npx hereby check:scripts
       - run: git add .
       - run: git diff --staged --exit-code --stat
