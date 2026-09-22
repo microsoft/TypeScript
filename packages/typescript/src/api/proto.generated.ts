@@ -1375,6 +1375,7 @@ export interface SnapshotRequestChangesParams {
      * tsconfig that contains it; if found, that configured project is loaded and
      * becomes the file's default project. Otherwise the file is loaded into the
      * inferred project (e.g. a node_modules d.ts not in any project's import graph).
+     * If a file cannot be loaded into any project, the request fails.
      */
     openFiles?: readonly DocumentIdentifier[] | undefined;
     /**
@@ -1416,7 +1417,10 @@ export interface RequestFileSystem {
     kind: "full" | "layer";
     /** Files maps file names to their complete contents. */
     files: Record<string, string>;
-    /** Directories maps directory names to complete listing results. */
+    /**
+     * Directories maps directory names to complete listing results. Directory
+     * structure implied by Files is derived when a listing is omitted.
+     */
     directories?: Record<string, RequestDirectoryEntries> | undefined;
     /** Symlinks maps link paths to targets in this filesystem or the host filesystem. */
     symlinks?: Record<string, RequestSymlink> | undefined;
@@ -1572,9 +1576,9 @@ export interface ProjectReference {
     /** Path is a normalized path on disk. */
     path: string;
     /** OriginalPath is the path as it was originally written. */
-    originalPath: string;
+    originalPath?: string | undefined;
     /** Circular indicates that this reference is intended to form a circularity. */
-    circular: boolean;
+    circular?: boolean | undefined;
 }
 
 export interface TypeAcquisition {

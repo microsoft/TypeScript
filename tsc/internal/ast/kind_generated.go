@@ -2,8 +2,7 @@
 
 package ast
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -output=kind_stringer_generated.go
-//go:generate npx dprint fmt kind_stringer_generated.go
+//go:generate npx hereby generate:ast-stringer
 
 type Kind int16
 

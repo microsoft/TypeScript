@@ -106,8 +106,7 @@ func ParseSyntheticProjectID(value string) (SyntheticProjectID, bool) {
 	return NewSyntheticProjectID(id), true
 }
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
-//go:generate npx dprint fmt project_stringer_generated.go
+//go:generate npx hereby generate:project
 
 type Kind int
 

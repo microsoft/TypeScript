@@ -340,14 +340,14 @@ type APIReconfigureProgramRequest struct {
 type APISnapshotRequest struct {
 	OpenProjects        *collections.Set[string]
 	CloseProjects       *collections.Set[tspath.Path]
-	OpenFiles           *collections.Set[lsproto.DocumentUri]
+	OpenFiles           map[tspath.Path]string
 	CloseFiles          *collections.Set[tspath.Path]
 	CreatePrograms      []*APICreateProgramRequest
 	ReconfigurePrograms []*APIReconfigureProgramRequest
 	RemovePrograms      *collections.Set[SyntheticProjectID]
 	EnsurePrograms      *collections.Set[ID]
 	EnsureAllPrograms   bool
-	EnsureFiles         *collections.Set[lsproto.DocumentUri]
+	EnsureFiles         map[tspath.Path]string
 	FileSystem          vfs.FS
 	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
 	// per-path file changes instead of invalidating all inherited state.

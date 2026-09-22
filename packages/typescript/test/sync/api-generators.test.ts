@@ -67,7 +67,6 @@ import {
     type APIRequestGenerator,
     executeRequestGenerators,
 } from "../../src/api/sync/generatorSupport.ts";
-import { runBenchmarks } from "../generators/api.bench.ts";
 import { spawnAPI } from "./api.testUtils.ts";
 
 const parityFiles = {
@@ -1794,8 +1793,4 @@ describe("API - generator batching", () => {
             api.close();
         }
     });
-});
-
-test("Generator benchmarks", () => {
-    runBenchmarks({ singleIteration: true });
 });

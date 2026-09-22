@@ -497,6 +497,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             snapshot: baseSnapshot.id,
             changes: toCreateSnapshotRequest(this.prepareCreateSnapshotParams(params)),
         });
+        if (data.snapshot === baseSnapshot.id) {
+            await this.client.apiRequest("release", { snapshot: data.snapshot });
+            return baseSnapshot;
+        }
         this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
         const snapshot = new Snapshot(
             data,

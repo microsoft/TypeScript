@@ -1292,15 +1292,16 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 	}
 
 	for _, f := range changes.OpenFiles {
-		uri := f.ToURI(s.GetCurrentDirectory())
-		if apiRequest.EnsureFiles == nil {
-			apiRequest.EnsureFiles = collections.NewSetWithSizeHint[lsproto.DocumentUri](len(changes.OpenFiles))
-		}
-		apiRequest.EnsureFiles.Add(uri)
+		fileName := f.ToAbsoluteFileName(s.GetCurrentDirectory())
+		path := s.toPath(fileName)
 		if apiRequest.OpenFiles == nil {
-			apiRequest.OpenFiles = collections.NewSetWithSizeHint[lsproto.DocumentUri](len(changes.OpenFiles))
+			apiRequest.OpenFiles = make(map[tspath.Path]string, len(changes.OpenFiles))
+			apiRequest.EnsureFiles = make(map[tspath.Path]string, len(changes.OpenFiles))
 		}
-		apiRequest.OpenFiles.Add(uri)
+		if _, ok := apiRequest.OpenFiles[path]; !ok {
+			apiRequest.OpenFiles[path] = fileName
+			apiRequest.EnsureFiles[path] = fileName
+		}
 	}
 
 	for _, f := range changes.CloseFiles {
@@ -1470,10 +1471,9 @@ func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest,
 			apiRequest.CloseFiles.Delete(path)
 		}
 	}
-	for uri := range apiRequest.OpenFiles.Keys() {
-		path := s.toPath(uri.FileName())
+	for path := range apiRequest.OpenFiles {
 		if state.openFiles.Has(path) {
-			apiRequest.OpenFiles.Delete(uri)
+			delete(apiRequest.OpenFiles, path)
 		} else {
 			state.openFiles.Add(path)
 		}
