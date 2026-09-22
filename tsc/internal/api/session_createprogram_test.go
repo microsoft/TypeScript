@@ -99,10 +99,8 @@ func TestCreateSnapshotPreservesWindowsRootDriveLetterCase(t *testing.T) {
 
 	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{URI: "file:///D%3A/repo/index.ts"}},
-			Options: CreateProgramOptions{
-				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-			},
+			RootFiles:       []DocumentIdentifier{{URI: "file:///D%3A/repo/index.ts"}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 		}},
 	})
 	assert.NilError(t, err)
