@@ -66,6 +66,9 @@ export interface Type {
     /** Get this type with `null` and `undefined` removed. */
     getNonNullableType(): Promise<Type>;
 
+    /** Get the negation of this type. */
+    getNegatedType(): Promise<Type>;
+
     /** Get this type's string index value type, if present. */
     getStringIndexType(): Promise<Type | undefined>;
 

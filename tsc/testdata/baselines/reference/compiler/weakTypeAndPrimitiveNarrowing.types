@@ -67,7 +67,7 @@ const h = (arg: PrimitivesAndWeakTypes) => {
 
     } else {
       arg;
->arg : PrimitivesAndWeakTypes
+>arg : PrimitivesAndWeakTypes & not "A"
     }
 }
 

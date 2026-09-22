@@ -625,7 +625,7 @@ export const generateLSP = task({
 const enumDefs = [
     { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "tsc/internal/ast/symbolflags.go", outDir: "packages/typescript/src/enums" },
     { name: "CheckFlags", goPrefix: "CheckFlags", goFile: "tsc/internal/ast/checkflags.go", outDir: "packages/typescript/src/enums" },
-    { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
+    { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums", excludeMembers: ["Reserved1", "Reserved2", "Reserved3", "IncludesConstrainedTypeVariable", "IncludesError", "IncludesNegated"] },
     { name: "ObjectFlags", goPrefix: "ObjectFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
@@ -1063,7 +1063,7 @@ ${entries.join("\n")}
 // A generic function call (unlike a constant conversion) forces Go to evaluate the conversion at
 // runtime, truncating uint32-backed flags with a leading bitwise-not the same way JS's 32-bit
 // bitwise operators would, instead of rejecting "constant overflows int32" at compile time.
-func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32](v T) int32 {
+func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32 | ~uint64](v T) int32 {
 \treturn int32(v)
 }
 
@@ -1762,8 +1762,8 @@ export const validate = task({
 });
 
 async function runSmokeTest() {
-    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--singleThreaded"]);
-    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit"]);
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--composite", "false", "--incremental", "false", "--singleThreaded"]);
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--composite", "false", "--incremental", "false"]);
 }
 
 export const smokeTest = task({

@@ -1,0 +1,42 @@
+negatedTypeSmokeInference.ts(13,24): error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+negatedTypeSmokeInference.ts(15,11): error TS2322: Type 'unknown' is not assignable to type 'string'.
+
+
+==== negatedTypeSmokeInference.ts (2 errors) ====
+    declare function identity<Value>(value: Value): Value;
+    declare function consumePrimitive(value: { value: string | number }): void;
+    
+    export function nonString(value: unknown) {
+        if (typeof value === "string") return undefined;
+        Boolean(value);
+        Object.prototype.toString.call(value);
+        return identity(value);
+    }
+    
+    export function excludedLiteral(value: unknown) {
+        if (value === "missing") return undefined;
+        consumePrimitive({ value });
+                           ~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+!!! related TS6500 negatedTypeSmokeInference.ts:2:44: The expected type comes from property 'value' which is declared here on type '{ value: string | number; }'
+        const copy = value;
+        const invalid: string = copy;
+              ~~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string'.
+        return copy;
+    }
+    
+    export function operatorToken(char: string, prefix: string) {
+        if (char === "&") return char;
+        if (char === "<" || char === ">") {
+            let operator = char;
+            operator = `${prefix}${operator}`;
+            operator = "other";
+            return operator;
+        }
+        return "";
+    }
+    
+    export function explicitNegation(value: not string) {
+        return identity(value);
+    }

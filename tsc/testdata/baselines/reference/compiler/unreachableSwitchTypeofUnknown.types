@@ -43,5 +43,5 @@ const unreachable = (x: unknown): number => {
 >0 : 0
     }
     x;
->x : unknown
+>x : not string & not number & not bigint & not false & not true & not symbol & not undefined
 }

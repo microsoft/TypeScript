@@ -29,5 +29,5 @@ function foo(a: string): string | number {
     }
 
     return a;
->a : string
+>a : string & not "hello"
 }

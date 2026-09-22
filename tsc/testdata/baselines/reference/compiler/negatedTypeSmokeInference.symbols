@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/negatedTypeSmokeInference.ts] ////
+
+=== negatedTypeSmokeInference.ts ===
+declare function identity<Value>(value: Value): Value;
+>identity : Symbol(identity, Decl(negatedTypeSmokeInference.ts, 0, 0))
+>Value : Symbol(Value, Decl(negatedTypeSmokeInference.ts, 0, 26))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 0, 33))
+>Value : Symbol(Value, Decl(negatedTypeSmokeInference.ts, 0, 26))
+>Value : Symbol(Value, Decl(negatedTypeSmokeInference.ts, 0, 26))
+
+declare function consumePrimitive(value: { value: string | number }): void;
+>consumePrimitive : Symbol(consumePrimitive, Decl(negatedTypeSmokeInference.ts, 0, 54))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 1, 34))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 1, 42))
+
+export function nonString(value: unknown) {
+>nonString : Symbol(nonString, Decl(negatedTypeSmokeInference.ts, 1, 75))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 3, 26))
+
+    if (typeof value === "string") return undefined;
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 3, 26))
+>undefined : Symbol(undefined)
+
+    Boolean(value);
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 3, 26))
+
+    Object.prototype.toString.call(value);
+>Object.prototype.toString.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>Object.prototype.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 3, 26))
+
+    return identity(value);
+>identity : Symbol(identity, Decl(negatedTypeSmokeInference.ts, 0, 0))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 3, 26))
+}
+
+export function excludedLiteral(value: unknown) {
+>excludedLiteral : Symbol(excludedLiteral, Decl(negatedTypeSmokeInference.ts, 8, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 10, 32))
+
+    if (value === "missing") return undefined;
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 10, 32))
+>undefined : Symbol(undefined)
+
+    consumePrimitive({ value });
+>consumePrimitive : Symbol(consumePrimitive, Decl(negatedTypeSmokeInference.ts, 0, 54))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 12, 22))
+
+    const copy = value;
+>copy : Symbol(copy, Decl(negatedTypeSmokeInference.ts, 13, 9))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 10, 32))
+
+    const invalid: string = copy;
+>invalid : Symbol(invalid, Decl(negatedTypeSmokeInference.ts, 14, 9))
+>copy : Symbol(copy, Decl(negatedTypeSmokeInference.ts, 13, 9))
+
+    return copy;
+>copy : Symbol(copy, Decl(negatedTypeSmokeInference.ts, 13, 9))
+}
+
+export function operatorToken(char: string, prefix: string) {
+>operatorToken : Symbol(operatorToken, Decl(negatedTypeSmokeInference.ts, 16, 1))
+>char : Symbol(char, Decl(negatedTypeSmokeInference.ts, 18, 30))
+>prefix : Symbol(prefix, Decl(negatedTypeSmokeInference.ts, 18, 43))
+
+    if (char === "&") return char;
+>char : Symbol(char, Decl(negatedTypeSmokeInference.ts, 18, 30))
+>char : Symbol(char, Decl(negatedTypeSmokeInference.ts, 18, 30))
+
+    if (char === "<" || char === ">") {
+>char : Symbol(char, Decl(negatedTypeSmokeInference.ts, 18, 30))
+>char : Symbol(char, Decl(negatedTypeSmokeInference.ts, 18, 30))
+
+        let operator = char;
+>operator : Symbol(operator, Decl(negatedTypeSmokeInference.ts, 21, 11))
+>char : Symbol(char, Decl(negatedTypeSmokeInference.ts, 18, 30))
+
+        operator = `${prefix}${operator}`;
+>operator : Symbol(operator, Decl(negatedTypeSmokeInference.ts, 21, 11))
+>prefix : Symbol(prefix, Decl(negatedTypeSmokeInference.ts, 18, 43))
+>operator : Symbol(operator, Decl(negatedTypeSmokeInference.ts, 21, 11))
+
+        operator = "other";
+>operator : Symbol(operator, Decl(negatedTypeSmokeInference.ts, 21, 11))
+
+        return operator;
+>operator : Symbol(operator, Decl(negatedTypeSmokeInference.ts, 21, 11))
+    }
+    return "";
+}
+
+export function explicitNegation(value: not string) {
+>explicitNegation : Symbol(explicitNegation, Decl(negatedTypeSmokeInference.ts, 27, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 29, 33))
+
+    return identity(value);
+>identity : Symbol(identity, Decl(negatedTypeSmokeInference.ts, 0, 0))
+>value : Symbol(value, Decl(negatedTypeSmokeInference.ts, 29, 33))
+}

@@ -1,0 +1,54 @@
+negatedTypesInStringMapping.ts(4,21): error TS2344: Type 'not "bar"' does not satisfy the constraint 'string'.
+  Type 'unknown' is not assignable to type 'string'.
+negatedTypesInStringMapping.ts(5,21): error TS2344: Type 'not string' does not satisfy the constraint 'string'.
+  Type 'unknown' is not assignable to type 'string'.
+negatedTypesInStringMapping.ts(6,21): error TS2344: Type 'not "a" & not "b"' does not satisfy the constraint 'string'.
+negatedTypesInStringMapping.ts(28,1): error TS2322: Type 'string' is not assignable to type 'Uppercase<`${not "bar"}`>'.
+negatedTypesInStringMapping.ts(31,1): error TS2322: Type 'string' is not assignable to type 'not "BAR"'.
+
+
+==== negatedTypesInStringMapping.ts (5 errors) ====
+    // Negated types used with intrinsic string mapping types.
+    
+    // Uppercase applied to a negated type: `Uppercase<not T>`.
+    type U1 = Uppercase<not "bar">;
+                        ~~~~~~~~~
+!!! error TS2344: Type 'not "bar"' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'unknown' is not assignable to type 'string'.
+    type U2 = Uppercase<not string>;
+                        ~~~~~~~~~~
+!!! error TS2344: Type 'not string' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'unknown' is not assignable to type 'string'.
+    type U3 = Uppercase<not ("a" | "b")>;
+                        ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'not "a" & not "b"' does not satisfy the constraint 'string'.
+    type U4 = Uppercase<string & not "bar">;
+    
+    // Negation applied to a string mapping type: `not Uppercase<T>`.
+    type N1 = not Uppercase<"bar">;
+    type N2 = not Uppercase<string>;
+    type N3 = not Lowercase<"ABC">;
+    
+    // Generic forms.
+    type MapUpper<T extends string> = Uppercase<T & not "bar">;
+    type MapUpperString = MapUpper<string>;
+    type MapUpperLiteral = MapUpper<"baz">;
+    
+    type NegUpper<T extends string> = not Uppercase<T>;
+    type NegUpperString = NegUpper<string>;
+    type NegUpperLiteral = NegUpper<"baz">;
+    
+    // Assignability probes.
+    declare let u1: U1;
+    declare let n1: N1;
+    
+    u1 = "BAZ"; // depends on representation
+    u1 = "baz"; // depends on representation
+    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'Uppercase<`${not "bar"}`>'.
+    
+    n1 = "baz"; // depends on representation
+    n1 = "BAR"; // depends on representation
+    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'not "BAR"'.
+    

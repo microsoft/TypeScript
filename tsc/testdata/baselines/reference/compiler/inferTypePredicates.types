@@ -875,7 +875,7 @@ function isNumOrStr(x: unknown) {
 >"number" : "number"
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : unknown
+>x : not number
 >"string" : "string"
 }
 declare let unk: unknown;
