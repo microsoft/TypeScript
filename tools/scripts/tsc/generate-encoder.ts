@@ -1045,27 +1045,6 @@ function generateTSProtocol(): string {
     w.write("};");
     w.write("");
 
-    // singleChildNodePropertyNames mapping
-    w.write("export const singleChildNodePropertyNames: Readonly<Partial<Record<SyntaxKind, string>>> = {");
-    w.push();
-
-    for (const node of api.nodes()) {
-        const info = analyzeNode(node);
-        if (info.dataType === "extended") continue;
-        if (info.childProps.length !== 1) continue;
-
-        const kinds = getTSKinds(node);
-        const prop = api.uncapitalize(info.childProps[0].name);
-
-        for (const kind of kinds) {
-            w.write(`[SyntaxKind.${kind}]: "${prop}",`);
-        }
-    }
-
-    w.pop();
-    w.write("};");
-    w.write("");
-
     return w.toString();
 }
 

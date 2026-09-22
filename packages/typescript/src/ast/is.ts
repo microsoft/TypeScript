@@ -476,7 +476,7 @@ function isUnaryExpressionKind(kind: SyntaxKind): boolean {
 }
 
 /** @internal */
-export function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is OuterExpression {
+function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is OuterExpression {
     switch (node.kind) {
         case SyntaxKind.ParenthesizedExpression:
             if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node as ParenthesizedExpression)) {
@@ -499,13 +499,13 @@ export function isOuterExpression(node: Node, kinds: OuterExpressionKinds = Oute
 }
 
 /** @internal */
-export function skipOuterExpressions<T extends Expression>(node: WrappedExpression<T>): T;
+function skipOuterExpressions<T extends Expression>(node: WrappedExpression<T>): T;
 /** @internal */
-export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
+function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
 /** @internal */
-export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
+function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
 /** @internal */
-export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
+function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
     while (isOuterExpression(node, kinds)) {
         node = node.expression;
     }

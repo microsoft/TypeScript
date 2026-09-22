@@ -1,0 +1,57 @@
+{
+    "$schema": "https://unpkg.com/knip@5/schema.json",
+    "exclude": ["duplicates", "enumMembers"],
+    "tags": ["-knipignore"],
+    "includeEntryExports": false,
+    "ignoreExportsUsedInFile": {
+        "enum": true,
+        "interface": true,
+        "type": true
+    },
+    "workspaces": {
+        ".": {
+            "entry": [
+                "Herebyfile.mjs",
+                "tools/scripts/tsc/generate.ts",
+                "tsc/internal/lsp/lsproto/_generate/*.{mts,ts}",
+                "tsc/internal/stringutil/_scripts/*.mts"
+            ],
+            "project": [
+                "tools/scripts/**/*.{mjs,ts}",
+                "tsc/internal/lsp/lsproto/_generate/*.{mts,ts}",
+                "tsc/internal/stringutil/_scripts/*.mts"
+            ],
+            "ignoreDependencies": [
+                "@dprint/json",
+                "@dprint/typescript",
+                "@jakebailey/dprint-plugin-gofumpt",
+                // Loaded through a computed import in generate-unicode-data.mts.
+                "@unicode/unicode-15.1.0",
+                "dprint",
+                "dprint-plugin-yaml"
+            ]
+        },
+        "packages/typescript": {
+            "entry": [
+                "test/**/*.bench.ts"
+            ],
+            "paths": {
+                "#enums/*": ["src/enums/*.ts"]
+            },
+            "project": [
+                "scripts/**/*.ts",
+                "src/**/*.ts",
+                "test/**/*.ts"
+            ],
+            "ignore": ["src/enums/*.enum.ts"],
+            "ignoreDependencies": ["vscode-jsonrpc"]
+        },
+        "packages/vscode-typescript": {
+            "project": [
+                "src/**/*.ts",
+                "test/**/*.ts"
+            ],
+            "ignoreDependencies": ["@vscode/vsce"]
+        }
+    }
+}
