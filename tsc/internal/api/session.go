@@ -551,7 +551,16 @@ type checkerSetup struct {
 }
 
 func (setup checkerSetup) newTypeResponse(t *checker.Type) *TypeResponse {
-	return setup.sd.newTypeResponse(setup.projectID, t)
+	resp := setup.sd.newTypeResponse(setup.projectID, t)
+	if t != nil && t.ObjectFlags()&checker.ObjectFlagsMapped != 0 {
+		mapped := t.AsMappedType()
+		mapped.ResolveComponents(setup.checker, t)
+		resp.TypeParameter = setup.sd.registerType(setup.projectID, mapped.TypeParameter())
+		resp.ConstraintType = setup.sd.registerType(setup.projectID, mapped.ConstraintType())
+		resp.NameType = setup.sd.registerType(setup.projectID, mapped.NameType())
+		resp.TemplateType = setup.sd.registerType(setup.projectID, mapped.TemplateType())
+	}
+	return resp
 }
 
 func (setup checkerSetup) newSymbolResponse(sym *ast.Symbol) *SymbolResponse {
@@ -804,6 +813,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetConstraintOfType):
 		return s.handleGetConstraintOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetTypeParameterOfMappedType):
+		return s.handleGetTypeParameterOfMappedType(parsed.(*GetTypePropertyParams))
+	case string(MethodGetConstraintTypeOfMappedType):
+		return s.handleGetConstraintTypeOfMappedType(parsed.(*GetTypePropertyParams))
+	case string(MethodGetNameTypeOfMappedType):
+		return s.handleGetNameTypeOfMappedType(parsed.(*GetTypePropertyParams))
+	case string(MethodGetTemplateTypeOfMappedType):
+		return s.handleGetTemplateTypeOfMappedType(parsed.(*GetTypePropertyParams))
 	case string(MethodGetTrueTypeOfConditionalType):
 		return s.handleGetTrueTypeOfConditionalType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetFalseTypeOfConditionalType):
@@ -2531,6 +2548,23 @@ func (s *Session) handleGetBaseTypeOfType(_ context.Context, params *GetTypeProp
 // Type parameter constraints are handled by handleGetConstraintOfTypeParameter.
 func (s *Session) handleGetConstraintOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsSubstitutionType().SubstConstraint() })
+}
+
+func (s *Session) handleGetTypeParameterOfMappedType(params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsMappedType().TypeParameter() })
+}
+
+func (s *Session) handleGetConstraintTypeOfMappedType(params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsMappedType().ConstraintType() })
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetNameTypeOfMappedType(params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsMappedType().NameType() })
+}
+
+func (s *Session) handleGetTemplateTypeOfMappedType(params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsMappedType().TemplateType() })
 }
 
 // @gen-proto-nullable
