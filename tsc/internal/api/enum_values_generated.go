@@ -240,8 +240,6 @@ func main() {
 			"IsGenericIndexType":                toInt32(checker.ObjectFlagsIsGenericIndexType),
 			"IsGenericType":                     toInt32(checker.ObjectFlagsIsGenericType),
 			"ContainsIntersections":             toInt32(checker.ObjectFlagsContainsIntersections),
-			"IsUnknownLikeUnionComputed":        toInt32(checker.ObjectFlagsIsUnknownLikeUnionComputed),
-			"IsUnknownLikeUnion":                toInt32(checker.ObjectFlagsIsUnknownLikeUnion),
 			"IsUniformEnumComputed":             toInt32(checker.ObjectFlagsIsUniformEnumComputed),
 			"IsUniformEnum":                     toInt32(checker.ObjectFlagsIsUniformEnum),
 			"IsNeverIntersectionComputed":       toInt32(checker.ObjectFlagsIsNeverIntersectionComputed),

@@ -110,8 +110,8 @@ if (typeof nested === "string") {
     wantsNestedNegated({ member: nested }); // nested: {} & not string
 >wantsNestedNegated({ member: nested }) : void
 >wantsNestedNegated : (x: { member: not string; }) => void
->{ member: nested } : { member: {} & not string; }
->member : {} & not string
->nested : {} & not string
+>{ member: nested } : { member: not null & not undefined & not string; }
+>member : not null & not undefined & not string
+>nested : not null & not undefined & not string
 }
 

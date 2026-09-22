@@ -62,7 +62,7 @@ flat2(arg2);
 
 interface Column<T> {
   dataIndex?: (T | (string & {}))[]
->dataIndex : (T | (string & {}))[] | undefined
+>dataIndex : (string | T)[] | undefined
 }
 
 declare function table<T>(rows: readonly T[], columns: Column<T>[]): void

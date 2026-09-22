@@ -1,11 +1,17 @@
-inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+inKeywordAndUnknown.ts(4,18): error TS2322: Type '{}' is not assignable to type 'object'.
+inKeywordAndUnknown.ts(12,18): error TS2322: Type 'NonNullable<unknown>' is not assignable to type 'object'.
+inKeywordAndUnknown.ts(37,42): error TS2322: Type 'T' is not assignable to type 'object'.
+  Type '{}' is not assignable to type 'object'.
+inKeywordAndUnknown.ts(45,42): error TS2322: Type 'T & not null & not undefined' is not assignable to type 'object'.
 
 
-==== inKeywordAndUnknown.ts (1 errors) ====
+==== inKeywordAndUnknown.ts (4 errors) ====
     // Repro from #50531
     
     function f(x: {}, y: unknown) {
         if (!("a" in x)) {
+                     ~
+!!! error TS2322: Type '{}' is not assignable to type 'object'.
             return;
         }
         x;  // {}
@@ -15,7 +21,7 @@ inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may represent a primitive
         y;  // {}
         if (!("a" in y)) {
                      ~
-!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+!!! error TS2322: Type 'NonNullable<unknown>' is not assignable to type 'object'.
             return;
         }
         y;  // {}
@@ -41,6 +47,9 @@ inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may represent a primitive
     
     function f4<T extends {}>(x: T) {
         return x instanceof Object && 'a' in x;
+                                             ~
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! error TS2322:   Type '{}' is not assignable to type 'object'.
     }
     
     function f5<T>(x: T & {}) {
@@ -49,6 +58,8 @@ inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may represent a primitive
     
     function f6<T extends {}>(x: T & {}) {
         return x instanceof Object && 'a' in x;
+                                             ~
+!!! error TS2322: Type 'T & not null & not undefined' is not assignable to type 'object'.
     }
     
     function f7<T extends object>(x: T & {}) {

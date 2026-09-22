@@ -1,0 +1,373 @@
+//// [tests/cases/compiler/nullishComplementUnionReduction.ts] ////
+
+=== nullishComplementUnionReduction.ts ===
+declare const withoutUndefined: not undefined;
+>withoutUndefined : Symbol(withoutUndefined, Decl(nullishComplementUnionReduction.ts, 0, 13))
+
+declare const withoutNull: not null;
+>withoutNull : Symbol(withoutNull, Decl(nullishComplementUnionReduction.ts, 1, 13))
+
+const nullable: {} | null = withoutUndefined;
+>nullable : Symbol(nullable, Decl(nullishComplementUnionReduction.ts, 2, 5))
+>withoutUndefined : Symbol(withoutUndefined, Decl(nullishComplementUnionReduction.ts, 0, 13))
+
+const optional: {} | undefined = withoutNull;
+>optional : Symbol(optional, Decl(nullishComplementUnionReduction.ts, 3, 5))
+>withoutNull : Symbol(withoutNull, Decl(nullishComplementUnionReduction.ts, 1, 13))
+
+const nullableBack: not undefined = nullable;
+>nullableBack : Symbol(nullableBack, Decl(nullishComplementUnionReduction.ts, 4, 5))
+>nullable : Symbol(nullable, Decl(nullishComplementUnionReduction.ts, 2, 5))
+
+const optionalBack: not null = optional;
+>optionalBack : Symbol(optionalBack, Decl(nullishComplementUnionReduction.ts, 5, 5))
+>optional : Symbol(optional, Decl(nullishComplementUnionReduction.ts, 3, 5))
+
+export function keepDefined<Value>(value: Value | undefined): Value & ({} | null) {
+>keepDefined : Symbol(keepDefined, Decl(nullishComplementUnionReduction.ts, 5, 40))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 7, 28))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 7, 35))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 7, 28))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 7, 28))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 7, 35))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 7, 35))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function keepNotNull<Value>(value: Value | null): Value & ({} | undefined) {
+>keepNotNull : Symbol(keepNotNull, Decl(nullishComplementUnionReduction.ts, 10, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 12, 28))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 12, 35))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 12, 28))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 12, 28))
+
+    if (value !== null) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 12, 35))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 12, 35))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function keepDefinedDistributed<Value>(value: Value | undefined): (Value & {}) | (Value & null) {
+>keepDefinedDistributed : Symbol(keepDefinedDistributed, Decl(nullishComplementUnionReduction.ts, 15, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 17, 39))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 17, 46))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 17, 39))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 17, 39))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 17, 39))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 17, 46))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 17, 46))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function keepNotNullDistributed<Value>(value: Value | null): (Value & {}) | (Value & undefined) {
+>keepNotNullDistributed : Symbol(keepNotNullDistributed, Decl(nullishComplementUnionReduction.ts, 20, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 22, 39))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 22, 46))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 22, 39))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 22, 39))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 22, 39))
+
+    if (value !== null) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 22, 46))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 22, 46))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function keepDefinedWidened<Value>(value: Value | undefined): (Value & ({} | null)) | undefined {
+>keepDefinedWidened : Symbol(keepDefinedWidened, Decl(nullishComplementUnionReduction.ts, 25, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 27, 35))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 27, 42))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 27, 35))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 27, 35))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 27, 42))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 27, 42))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function keepNotNullWidened<Value>(value: Value | null): (Value & ({} | undefined)) | null {
+>keepNotNullWidened : Symbol(keepNotNullWidened, Decl(nullishComplementUnionReduction.ts, 30, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 32, 35))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 32, 42))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 32, 35))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 32, 35))
+
+    if (value !== null) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 32, 42))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 32, 42))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function keepDefinedExtra<Value>(value: Value | undefined): (Value & ({} | null)) | { kind: "extra" } {
+>keepDefinedExtra : Symbol(keepDefinedExtra, Decl(nullishComplementUnionReduction.ts, 35, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 37, 33))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 37, 40))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 37, 33))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 37, 33))
+>kind : Symbol(kind, Decl(nullishComplementUnionReduction.ts, 37, 92))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 37, 40))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 37, 40))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+type Defined<Value> = Value & ({} | null);
+>Defined : Symbol(Defined, Decl(nullishComplementUnionReduction.ts, 40, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 42, 13))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 42, 13))
+
+export function keepDefinedAlias<Value>(value: Value | undefined): Defined<Value> | undefined {
+>keepDefinedAlias : Symbol(keepDefinedAlias, Decl(nullishComplementUnionReduction.ts, 42, 42))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 43, 33))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 43, 40))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 43, 33))
+>Defined : Symbol(Defined, Decl(nullishComplementUnionReduction.ts, 40, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 43, 33))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 43, 40))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 43, 40))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function reverseDefined<Value>(value: (Value & null) | (Value & {})): Value & not undefined {
+>reverseDefined : Symbol(reverseDefined, Decl(nullishComplementUnionReduction.ts, 46, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 48, 31))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 48, 38))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 48, 31))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 48, 31))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 48, 31))
+
+    return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 48, 38))
+}
+
+export function reorderedFactors<Left, Right>(value: (Left & Right) | undefined): ({} & Left & Right) | (null & Right & Left) {
+>reorderedFactors : Symbol(reorderedFactors, Decl(nullishComplementUnionReduction.ts, 50, 1))
+>Left : Symbol(Left, Decl(nullishComplementUnionReduction.ts, 52, 33))
+>Right : Symbol(Right, Decl(nullishComplementUnionReduction.ts, 52, 38))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 52, 46))
+>Left : Symbol(Left, Decl(nullishComplementUnionReduction.ts, 52, 33))
+>Right : Symbol(Right, Decl(nullishComplementUnionReduction.ts, 52, 38))
+>Left : Symbol(Left, Decl(nullishComplementUnionReduction.ts, 52, 33))
+>Right : Symbol(Right, Decl(nullishComplementUnionReduction.ts, 52, 38))
+>Right : Symbol(Right, Decl(nullishComplementUnionReduction.ts, 52, 38))
+>Left : Symbol(Left, Decl(nullishComplementUnionReduction.ts, 52, 33))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 52, 46))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 52, 46))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function bothNullables<Value>(value: Value): (Value & {}) | (Value & null) | (Value & undefined) {
+>bothNullables : Symbol(bothNullables, Decl(nullishComplementUnionReduction.ts, 55, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 57, 30))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 57, 37))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 57, 30))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 57, 30))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 57, 30))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 57, 30))
+
+    return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 57, 37))
+}
+
+export function singleExclusion<Value>(value: Value): (Value & not null) | (Value & null) {
+>singleExclusion : Symbol(singleExclusion, Decl(nullishComplementUnionReduction.ts, 59, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 61, 32))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 61, 39))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 61, 32))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 61, 32))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 61, 32))
+
+    return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 61, 39))
+}
+
+export function bareNull<Value>(value: Value | null | undefined): (Value & {}) | null {
+>bareNull : Symbol(bareNull, Decl(nullishComplementUnionReduction.ts, 63, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 65, 25))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 65, 32))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 65, 25))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 65, 25))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 65, 32))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 65, 32))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function preserveBareNull<Value>(value: (Value & {}) | null): Value & not undefined {
+>preserveBareNull : Symbol(preserveBareNull, Decl(nullishComplementUnionReduction.ts, 68, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 70, 33))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 70, 40))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 70, 33))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 70, 33))
+
+    return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 70, 40))
+}
+
+export function preserveNullableExclusion<Value>(value: Value): (Value & {}) | (Value & null) {
+>preserveNullableExclusion : Symbol(preserveNullableExclusion, Decl(nullishComplementUnionReduction.ts, 72, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 74, 42))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 74, 49))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 74, 42))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 74, 42))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 74, 42))
+
+    return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 74, 49))
+}
+
+export function freshAndRegularExclusion<Value>(value: Value & not undefined, chooseValue: boolean): Value {
+>freshAndRegularExclusion : Symbol(freshAndRegularExclusion, Decl(nullishComplementUnionReduction.ts, 76, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 78, 41))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 78, 48))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 78, 41))
+>chooseValue : Symbol(chooseValue, Decl(nullishComplementUnionReduction.ts, 78, 77))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 78, 41))
+
+    if (typeof value !== "undefined") {
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 78, 48))
+
+        return chooseValue ? value : undefined;
+>chooseValue : Symbol(chooseValue, Decl(nullishComplementUnionReduction.ts, 78, 77))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 78, 48))
+>undefined : Symbol(undefined)
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function differentFactors<Left, Right>(value: Left | undefined): (Left & {}) | (Right & null) {
+>differentFactors : Symbol(differentFactors, Decl(nullishComplementUnionReduction.ts, 83, 1))
+>Left : Symbol(Left, Decl(nullishComplementUnionReduction.ts, 85, 33))
+>Right : Symbol(Right, Decl(nullishComplementUnionReduction.ts, 85, 38))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 85, 46))
+>Left : Symbol(Left, Decl(nullishComplementUnionReduction.ts, 85, 33))
+>Left : Symbol(Left, Decl(nullishComplementUnionReduction.ts, 85, 33))
+>Right : Symbol(Right, Decl(nullishComplementUnionReduction.ts, 85, 38))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 85, 46))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 85, 46))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function preserveExtra<Value>(value: Value | { kind: "extra" }): Value & not undefined {
+>preserveExtra : Symbol(preserveExtra, Decl(nullishComplementUnionReduction.ts, 88, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 90, 30))
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 90, 37))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 90, 30))
+>kind : Symbol(kind, Decl(nullishComplementUnionReduction.ts, 90, 53))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 90, 30))
+
+    if (value !== undefined) return value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 90, 37))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 90, 37))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function* definedValues<Value>(values: Iterable<Value | undefined>): Generator<Value & ({} | null), void, unknown> {
+>definedValues : Symbol(definedValues, Decl(nullishComplementUnionReduction.ts, 93, 1))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 95, 31))
+>values : Symbol(values, Decl(nullishComplementUnionReduction.ts, 95, 38))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 95, 31))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Value : Symbol(Value, Decl(nullishComplementUnionReduction.ts, 95, 31))
+
+    for (const value of values) {
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 96, 14))
+>values : Symbol(values, Decl(nullishComplementUnionReduction.ts, 95, 38))
+
+        if (value !== undefined) yield value;
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 96, 14))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(nullishComplementUnionReduction.ts, 96, 14))
+    }
+}
+
+declare const other: not string & not number;
+>other : Symbol(other, Decl(nullishComplementUnionReduction.ts, 101, 13))
+
+const stillNotNumber: not number = other;
+>stillNotNumber : Symbol(stillNotNumber, Decl(nullishComplementUnionReduction.ts, 102, 5))
+>other : Symbol(other, Decl(nullishComplementUnionReduction.ts, 101, 13))
+
+const notCovered: (not string & not number) | "literal" = "different";
+>notCovered : Symbol(notCovered, Decl(nullishComplementUnionReduction.ts, 103, 5))
+
+declare const allowedNull: not undefined;
+>allowedNull : Symbol(allowedNull, Decl(nullishComplementUnionReduction.ts, 105, 13))
+
+const excludedUndefined: typeof allowedNull = undefined;
+>excludedUndefined : Symbol(excludedUndefined, Decl(nullishComplementUnionReduction.ts, 106, 5))
+>allowedNull : Symbol(allowedNull, Decl(nullishComplementUnionReduction.ts, 105, 13))
+>undefined : Symbol(undefined)
+
+const includedNull: typeof allowedNull = null;
+>includedNull : Symbol(includedNull, Decl(nullishComplementUnionReduction.ts, 107, 5))
+>allowedNull : Symbol(allowedNull, Decl(nullishComplementUnionReduction.ts, 105, 13))
+
+let uninitialized: {};
+>uninitialized : Symbol(uninitialized, Decl(nullishComplementUnionReduction.ts, 109, 3))
+
+uninitialized.toString();
+>uninitialized.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>uninitialized : Symbol(uninitialized, Decl(nullishComplementUnionReduction.ts, 109, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+declare const maybeValue: {} | undefined;
+>maybeValue : Symbol(maybeValue, Decl(nullishComplementUnionReduction.ts, 112, 13))
+
+if (maybeValue !== undefined) {
+>maybeValue : Symbol(maybeValue, Decl(nullishComplementUnionReduction.ts, 112, 13))
+>undefined : Symbol(undefined)
+
+    maybeValue.toString();
+>maybeValue.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>maybeValue : Symbol(maybeValue, Decl(nullishComplementUnionReduction.ts, 112, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}

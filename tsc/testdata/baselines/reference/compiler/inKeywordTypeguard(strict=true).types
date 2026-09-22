@@ -473,7 +473,7 @@ function f1(x: unknown) {
 >x : unknown
 >"a" in x : boolean
 >"a" : "a"
->x : {}
+>x : NonNullable<unknown>
 
         x.a;
 >x.a : unknown
@@ -486,7 +486,7 @@ function f1(x: unknown) {
 >x : unknown
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -505,7 +505,7 @@ function f1(x: unknown) {
 >x : unknown
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : NonNullable<unknown>
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"

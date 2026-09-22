@@ -652,11 +652,9 @@ const (
 	ObjectFlagsIsGenericIndexType    = 1 << 24 // Union or intersection contains generic index type
 	ObjectFlagsIsGenericType         = ObjectFlagsIsGenericObjectType | ObjectFlagsIsGenericIndexType
 	// Flags that require TypeFlags.Union
-	ObjectFlagsContainsIntersections      = 1 << 25 // Union contains intersections
-	ObjectFlagsIsUnknownLikeUnionComputed = 1 << 26 // IsUnknownLikeUnion flag has been computed
-	ObjectFlagsIsUnknownLikeUnion         = 1 << 27 // Union of null, undefined, and empty object type
-	ObjectFlagsIsUniformEnumComputed      = 1 << 28 // IsUniformEnum flag has been computed
-	ObjectFlagsIsUniformEnum              = 1 << 29 // Union contains uniform literal types
+	ObjectFlagsContainsIntersections = 1 << 25 // Union contains intersections
+	ObjectFlagsIsUniformEnumComputed = 1 << 28 // IsUniformEnum flag has been computed
+	ObjectFlagsIsUniformEnum         = 1 << 29 // Union contains uniform literal types
 	// Flags that require TypeFlags.Intersection
 	ObjectFlagsIsNeverIntersectionComputed = 1 << 25 // IsNeverLike flag has been computed
 	ObjectFlagsIsNeverIntersection         = 1 << 26 // Intersection reduces to never
@@ -708,6 +706,11 @@ func (t *Type) Flags() TypeFlags {
 
 func (t *Type) ObjectFlags() ObjectFlags {
 	return t.objectFlags
+}
+
+type ReducedTypeLinks struct {
+	target *Type
+	origin *Type
 }
 
 // Casts for concrete struct types
@@ -1165,7 +1168,7 @@ type UnionType struct {
 	UnionOrIntersectionType
 	resolvedReducedType *Type
 	regularType         *Type
-	origin              *Type           // Denormalized union, intersection, or index type in which union originates
+	origin              *Type
 	keyPropertyName     string          // Property with unique unit type that exists in every object/intersection in union type
 	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
 }

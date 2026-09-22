@@ -558,7 +558,7 @@ declare const evenSquares: number[];
 declare const evenSquaresNonNull: number[];
 declare function isNonNull(x: number | null): x is number;
 declare function isNonNullVar(x: number | null): x is number;
-declare function isNonNullGeneric<T>(x: T): x is T & ({} | undefined);
+declare function isNonNullGeneric<T>(x: T): x is T & not null;
 declare const myGuard: (o: string | undefined) => o is string;
 declare const mySecondGuard: (o: string | undefined) => o is string;
 type MyObj = {

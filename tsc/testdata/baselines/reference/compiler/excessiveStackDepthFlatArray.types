@@ -29,10 +29,10 @@ declare namespace React {
 
   interface HTMLAttributes<T> {
     children?: ReactNode;
->children : ReactNode
+>children : unknown
   }
   type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
->ReactNode : ReactNode
+>ReactNode : unknown
 
   type ReactText = string | number;
 >ReactText : ReactText

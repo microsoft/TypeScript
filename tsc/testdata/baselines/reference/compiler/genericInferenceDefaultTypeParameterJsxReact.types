@@ -13,7 +13,7 @@ import React, { ComponentPropsWithRef, ElementType, ReactNode } from 'react';
 
 type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { children?: ReactNode };
 >ButtonBaseProps : ButtonBaseProps<T>
->children : ReactNode
+>children : unknown
 
 function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 >Component : <T extends ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element

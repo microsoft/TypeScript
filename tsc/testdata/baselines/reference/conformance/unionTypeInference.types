@@ -209,31 +209,31 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >deepPromised : DeepPromised<T>
 
     const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
->deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
+>deepPromisedWithIndexer : DeepPromised<{ [name: string]: unknown; }>
 >name : string
 >deepPromised : DeepPromised<T>
 
     for (const value of Object.values(deepPromisedWithIndexer)) {
->value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
->Object.values(deepPromisedWithIndexer) : (Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined)[]
+>value : unknown
+>Object.values(deepPromisedWithIndexer) : unknown[]
 >Object.values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
 >Object : ObjectConstructor
 >values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
->deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
+>deepPromisedWithIndexer : DeepPromised<{ [name: string]: unknown; }>
 
         const awaitedValue = await value;
->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
->await value : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
->value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>awaitedValue : unknown
+>await value : unknown
+>value : unknown
 
         if (awaitedValue)
->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>awaitedValue : unknown
 
             await fun(awaitedValue);
 >await fun(awaitedValue) : void
 >fun(awaitedValue) : Promise<void>
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
->awaitedValue : {} | ({ [containsPromises]?: true; } & {})
+>awaitedValue : NonNullable<unknown>
     }
 }
 

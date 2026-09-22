@@ -1,0 +1,332 @@
+//// [tests/cases/compiler/nullishComplementUnionReduction.ts] ////
+
+=== nullishComplementUnionReduction.ts ===
+declare const withoutUndefined: not undefined;
+>withoutUndefined : not undefined
+
+declare const withoutNull: not null;
+>withoutNull : not null
+
+const nullable: {} | null = withoutUndefined;
+>nullable : {} | null
+>withoutUndefined : not undefined
+
+const optional: {} | undefined = withoutNull;
+>optional : {} | undefined
+>withoutNull : not null
+
+const nullableBack: not undefined = nullable;
+>nullableBack : not undefined
+>nullable : {} | null
+
+const optionalBack: not null = optional;
+>optionalBack : not null
+>optional : {} | undefined
+
+export function keepDefined<Value>(value: Value | undefined): Value & ({} | null) {
+>keepDefined : <Value>(value: Value | undefined) => Value & ({} | null)
+>value : Value | undefined
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Value | undefined
+>undefined : undefined
+>value : Value & not undefined
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function keepNotNull<Value>(value: Value | null): Value & ({} | undefined) {
+>keepNotNull : <Value>(value: Value | null) => Value & ({} | undefined)
+>value : Value | null
+
+    if (value !== null) return value;
+>value !== null : boolean
+>value : Value | null
+>value : Value & not null
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function keepDefinedDistributed<Value>(value: Value | undefined): (Value & {}) | (Value & null) {
+>keepDefinedDistributed : <Value>(value: Value | undefined) => (Value & {}) | (Value & null)
+>value : Value | undefined
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Value | undefined
+>undefined : undefined
+>value : Value & not undefined
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function keepNotNullDistributed<Value>(value: Value | null): (Value & {}) | (Value & undefined) {
+>keepNotNullDistributed : <Value>(value: Value | null) => (Value & {}) | (Value & undefined)
+>value : Value | null
+
+    if (value !== null) return value;
+>value !== null : boolean
+>value : Value | null
+>value : Value & not null
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function keepDefinedWidened<Value>(value: Value | undefined): (Value & ({} | null)) | undefined {
+>keepDefinedWidened : <Value>(value: Value | undefined) => (Value & ({} | null)) | undefined
+>value : Value | undefined
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Value | undefined
+>undefined : undefined
+>value : Value & not undefined
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function keepNotNullWidened<Value>(value: Value | null): (Value & ({} | undefined)) | null {
+>keepNotNullWidened : <Value>(value: Value | null) => (Value & ({} | undefined)) | null
+>value : Value | null
+
+    if (value !== null) return value;
+>value !== null : boolean
+>value : Value | null
+>value : Value & not null
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function keepDefinedExtra<Value>(value: Value | undefined): (Value & ({} | null)) | { kind: "extra" } {
+>keepDefinedExtra : <Value>(value: Value | undefined) => (Value & ({} | null)) | { kind: "extra"; }
+>value : Value | undefined
+>kind : "extra"
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Value | undefined
+>undefined : undefined
+>value : Value & not undefined
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+type Defined<Value> = Value & ({} | null);
+>Defined : Defined<Value>
+
+export function keepDefinedAlias<Value>(value: Value | undefined): Defined<Value> | undefined {
+>keepDefinedAlias : <Value>(value: Value | undefined) => Defined<Value> | undefined
+>value : Value | undefined
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Value | undefined
+>undefined : undefined
+>value : Value & not undefined
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function reverseDefined<Value>(value: (Value & null) | (Value & {})): Value & not undefined {
+>reverseDefined : <Value>(value: (Value & null) | (Value & {})) => Value & not undefined
+>value : (Value & null) | (Value & not null & not undefined)
+
+    return value;
+>value : (Value & null) | (Value & not null & not undefined)
+}
+
+export function reorderedFactors<Left, Right>(value: (Left & Right) | undefined): ({} & Left & Right) | (null & Right & Left) {
+>reorderedFactors : <Left, Right>(value: (Left & Right) | undefined) => ({} & Left & Right) | (null & Right & Left)
+>value : (Left & Right) | undefined
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : (Left & Right) | undefined
+>undefined : undefined
+>value : Left & Right & not undefined
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function bothNullables<Value>(value: Value): (Value & {}) | (Value & null) | (Value & undefined) {
+>bothNullables : <Value>(value: Value) => (Value & {}) | (Value & null) | (Value & undefined)
+>value : Value
+
+    return value;
+>value : Value
+}
+
+export function singleExclusion<Value>(value: Value): (Value & not null) | (Value & null) {
+>singleExclusion : <Value>(value: Value) => (Value & not null) | (Value & null)
+>value : Value
+
+    return value;
+>value : Value
+}
+
+export function bareNull<Value>(value: Value | null | undefined): (Value & {}) | null {
+>bareNull : <Value>(value: Value | null | undefined) => (Value & {}) | null
+>value : Value | null | undefined
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Value | null | undefined
+>undefined : undefined
+>value : (Value & not undefined) | null
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function preserveBareNull<Value>(value: (Value & {}) | null): Value & not undefined {
+>preserveBareNull : <Value>(value: (Value & {}) | null) => Value & not undefined
+>value : (Value & not null & not undefined) | null
+
+    return value;
+>value : (Value & not null & not undefined) | null
+}
+
+export function preserveNullableExclusion<Value>(value: Value): (Value & {}) | (Value & null) {
+>preserveNullableExclusion : <Value>(value: Value) => (Value & {}) | (Value & null)
+>value : Value
+
+    return value;
+>value : Value
+}
+
+export function freshAndRegularExclusion<Value>(value: Value & not undefined, chooseValue: boolean): Value {
+>freshAndRegularExclusion : <Value>(value: Value & not undefined, chooseValue: boolean) => Value
+>value : Value & not undefined
+>chooseValue : boolean
+
+    if (typeof value !== "undefined") {
+>typeof value !== "undefined" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : Value & not undefined
+>"undefined" : "undefined"
+
+        return chooseValue ? value : undefined;
+>chooseValue ? value : undefined : (Value & not undefined) | undefined
+>chooseValue : boolean
+>value : Value & not undefined
+>undefined : undefined
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function differentFactors<Left, Right>(value: Left | undefined): (Left & {}) | (Right & null) {
+>differentFactors : <Left, Right>(value: Left | undefined) => (Left & {}) | (Right & null)
+>value : Left | undefined
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Left | undefined
+>undefined : undefined
+>value : Left & not undefined
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function preserveExtra<Value>(value: Value | { kind: "extra" }): Value & not undefined {
+>preserveExtra : <Value>(value: Value | { kind: "extra"; }) => Value & not undefined
+>value : Value | { kind: "extra"; }
+>kind : "extra"
+
+    if (value !== undefined) return value;
+>value !== undefined : boolean
+>value : Value | { kind: "extra"; }
+>undefined : undefined
+>value : { kind: "extra"; } | (Value & not undefined)
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function* definedValues<Value>(values: Iterable<Value | undefined>): Generator<Value & ({} | null), void, unknown> {
+>definedValues : <Value>(values: Iterable<Value | undefined>) => Generator<Value & ({} | null), void, unknown>
+>values : Iterable<Value | undefined>
+
+    for (const value of values) {
+>value : Value | undefined
+>values : Iterable<Value | undefined>
+
+        if (value !== undefined) yield value;
+>value !== undefined : boolean
+>value : Value | undefined
+>undefined : undefined
+>yield value : unknown
+>value : Value & not undefined
+    }
+}
+
+declare const other: not string & not number;
+>other : not string & not number
+
+const stillNotNumber: not number = other;
+>stillNotNumber : not number
+>other : not string & not number
+
+const notCovered: (not string & not number) | "literal" = "different";
+>notCovered : "literal" | (not string & not number)
+>"different" : "different"
+
+declare const allowedNull: not undefined;
+>allowedNull : not undefined
+
+const excludedUndefined: typeof allowedNull = undefined;
+>excludedUndefined : not undefined
+>allowedNull : not undefined
+>undefined : undefined
+
+const includedNull: typeof allowedNull = null;
+>includedNull : not undefined
+>allowedNull : not undefined
+
+let uninitialized: {};
+>uninitialized : {}
+
+uninitialized.toString();
+>uninitialized.toString() : string
+>uninitialized.toString : () => string
+>uninitialized : {}
+>toString : () => string
+
+declare const maybeValue: {} | undefined;
+>maybeValue : {} | undefined
+
+if (maybeValue !== undefined) {
+>maybeValue !== undefined : boolean
+>maybeValue : {} | undefined
+>undefined : undefined
+
+    maybeValue.toString();
+>maybeValue.toString() : string
+>maybeValue.toString : () => string
+>maybeValue : {}
+>toString : () => string
+}

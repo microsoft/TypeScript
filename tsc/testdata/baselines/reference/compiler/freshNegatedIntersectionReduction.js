@@ -110,7 +110,7 @@ export function unionRegularFirst(value, regular, choose) {
 
 
 //// [freshNegatedIntersectionReduction.d.ts]
-export declare function narrowedArray<Value extends unknown[] | undefined>(value: Value): (Value & {})[number][];
+export declare function narrowedArray<Value extends unknown[] | undefined>(value: Value): (Value & not undefined)[number][];
 export declare function explicitUndefined<Value>(value: Value & not undefined): Value & not undefined;
 export declare function explicitNull<Value>(value: Value & not null): Value & not null;
 export declare function freshOnly<Value>(value: Value): Value;

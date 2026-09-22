@@ -270,10 +270,6 @@ func (c *Checker) isSimpleTypeRelatedTo(source *Type, target *Type, relation *Re
 		if s&TypeFlagsNumberLiteral != 0 && s&TypeFlagsEnumLiteral == 0 && (t&TypeFlagsEnum != 0 || t&TypeFlagsNumberLiteral != 0 && t&TypeFlagsEnumLiteral != 0 && source.AsLiteralType().value == target.AsLiteralType().value) {
 			return true
 		}
-		// Anything is assignable to a union containing undefined, null, and {}
-		if c.isUnknownLikeUnionType(target) {
-			return true
-		}
 	}
 	return false
 }
@@ -2657,6 +2653,12 @@ func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recu
 		return TernaryTrue
 	}
 	if r.relation == r.c.identityRelation {
+		if r.c.isNonNullishUnknownType(source) && target.flags&TypeFlagsObject != 0 {
+			source = r.c.emptyObjectType
+		}
+		if r.c.isNonNullishUnknownType(target) && source.flags&TypeFlagsObject != 0 {
+			target = r.c.emptyObjectType
+		}
 		if source.flags != target.flags {
 			return TernaryFalse
 		}
@@ -3050,7 +3052,7 @@ func (r *Relater) typeRelatedToSomeType(source *Type, target *Type, reportErrors
 			case source.flags&TypeFlagsBigIntLiteral != 0:
 				primitive = r.c.bigintType
 			}
-			if primitive != nil && containsType(targetTypes, primitive) || alternateForm != nil && containsType(targetTypes, alternateForm) {
+			if primitive != nil && core.Some(targetTypes, func(member *Type) bool { return member.flags&primitive.flags != 0 }) || alternateForm != nil && containsType(targetTypes, alternateForm) {
 				return TernaryTrue
 			}
 			return TernaryFalse
@@ -3760,7 +3762,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		// 'not S' is related to a non-negated type T only via its base constraint (unknown),
 		// i.e. essentially only when T is 'unknown' or 'any'.
 		constraint := r.c.getBaseConstraintOfType(source)
-		if constraint == nil {
+		if constraint == nil || constraint == source {
 			constraint = r.c.unknownType
 		}
 		result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
@@ -4511,8 +4513,8 @@ func (r *Relater) tryElaborateArrayLikeErrors(source *Type, target *Type, report
 }
 
 func (r *Relater) tryElaborateErrorsForPrimitivesAndObjects(source *Type, target *Type) {
-	if (source == r.c.globalStringType && target == r.c.stringType) ||
-		(source == r.c.globalNumberType && target == r.c.numberType) ||
+	if (source == r.c.globalStringType && target.flags&TypeFlagsString != 0) ||
+		(source == r.c.globalNumberType && target.flags&TypeFlagsNumber != 0) ||
 		(source == r.c.globalBooleanType && target == r.c.booleanType) ||
 		(source == r.c.getGlobalESSymbolType() && target == r.c.esSymbolType) {
 		r.reportError(diagnostics.X_0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, r.c.TypeToString(target), r.c.TypeToString(source))
@@ -4685,7 +4687,7 @@ func (r *Relater) indexSignaturesRelatedTo(source *Type, target *Type, sourceIsP
 		return r.indexSignaturesIdenticalTo(source, target)
 	}
 	indexInfos := r.c.getIndexInfosOfType(target)
-	targetHasStringIndex := core.Some(indexInfos, func(info *IndexInfo) bool { return info.keyType == r.c.stringType })
+	targetHasStringIndex := core.Some(indexInfos, func(info *IndexInfo) bool { return info.keyType.flags&TypeFlagsString != 0 })
 	result := TernaryTrue
 	for _, targetInfo := range indexInfos {
 		var related Ternary
@@ -4753,7 +4755,7 @@ func (r *Relater) membersRelatedToIndexInfo(source *Type, targetInfo *IndexInfo,
 		if r.c.isApplicableIndexType(r.c.getLiteralTypeFromProperty(prop, TypeFlagsStringOrNumberLiteralOrUnique, false), keyType) {
 			propType := r.c.getNonMissingTypeOfSymbol(prop)
 			var t *Type
-			if r.c.exactOptionalPropertyTypes || propType.flags&TypeFlagsUndefined != 0 || keyType == r.c.numberType || prop.Flags&ast.SymbolFlagsOptional == 0 {
+			if r.c.exactOptionalPropertyTypes || propType.flags&TypeFlagsUndefined != 0 || keyType.flags&TypeFlagsNumber != 0 || prop.Flags&ast.SymbolFlagsOptional == 0 {
 				t = propType
 			} else {
 				t = r.c.getTypeWithFacts(propType, TypeFactsNEUndefined)
@@ -4783,7 +4785,7 @@ func (r *Relater) membersRelatedToIndexInfo(source *Type, targetInfo *IndexInfo,
 func (r *Relater) indexInfoRelatedTo(sourceInfo *IndexInfo, targetInfo *IndexInfo, reportErrors bool, intersectionState IntersectionState) Ternary {
 	related := r.isRelatedToEx(sourceInfo.valueType, targetInfo.valueType, RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
 	if related == TernaryFalse && reportErrors {
-		if sourceInfo.keyType == targetInfo.keyType {
+		if sourceInfo.keyType == targetInfo.keyType || sourceInfo.keyType.flags&targetInfo.keyType.flags&(TypeFlagsString|TypeFlagsNumber) != 0 {
 			r.reportError(diagnostics.X_0_index_signatures_are_incompatible, r.c.TypeToString(sourceInfo.keyType))
 		} else {
 			r.reportError(diagnostics.X_0_and_1_index_signatures_are_incompatible, r.c.TypeToString(sourceInfo.keyType), r.c.TypeToString(targetInfo.keyType))
@@ -5082,7 +5084,7 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 		})
 	case source.flags&TypeFlagsInstantiableNonPrimitive != 0:
 		constraint := c.getBaseConstraintOfType(source)
-		if constraint == nil {
+		if constraint == nil || constraint == source {
 			constraint = c.unknownType
 		}
 		return c.isTypeDerivedFrom(constraint, target)

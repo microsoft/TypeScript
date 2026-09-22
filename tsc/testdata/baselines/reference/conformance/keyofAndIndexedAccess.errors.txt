@@ -6,13 +6,26 @@ keyofAndIndexedAccess.ts(211,24): error TS2322: Type 'T[K]' is not assignable to
     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
       Type 'T[string]' is not assignable to type 'object'.
 keyofAndIndexedAccess.ts(316,5): error TS2322: Type 'T' is not assignable to type '{}'.
+  Type 'T' is not assignable to type 'not null'.
 keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
     Type 'T[string]' is not assignable to type '{}'.
+      Type 'T[string]' is not assignable to type 'not null'.
+        Type 'T[keyof T]' is not assignable to type 'not null'.
+          Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+            Type 'T[string]' is not assignable to type 'not null'.
 keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to type '{}'.
   Type 'T[keyof T]' is not assignable to type '{}'.
     Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
       Type 'T[string]' is not assignable to type '{}'.
+        Type 'T[string]' is not assignable to type 'not null'.
+          Type 'T[keyof T]' is not assignable to type 'not null'.
+            Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+              Type 'T[string]' is not assignable to type 'not null'.
+                Type 'T[K]' is not assignable to type 'not null'.
+                  Type 'T[keyof T]' is not assignable to type 'not null'.
+                    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+                      Type 'T[string]' is not assignable to type 'not null'.
 
 
 ==== keyofAndIndexedAccess.ts (5 errors) ====
@@ -343,18 +356,32 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         a = x;
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{}'.
+!!! error TS2322:   Type 'T' is not assignable to type 'not null'.
+!!! related TS2208 keyofAndIndexedAccess.ts:314:14: This type parameter might need an `extends not null` constraint.
 !!! related TS2208 keyofAndIndexedAccess.ts:314:14: This type parameter might need an `extends {}` constraint.
         a = y;
         ~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
 !!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
 !!! error TS2322:     Type 'T[string]' is not assignable to type '{}'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type 'not null'.
+!!! error TS2322:         Type 'T[keyof T]' is not assignable to type 'not null'.
+!!! error TS2322:           Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+!!! error TS2322:             Type 'T[string]' is not assignable to type 'not null'.
         a = z;
         ~
 !!! error TS2322: Type 'T[K]' is not assignable to type '{}'.
 !!! error TS2322:   Type 'T[keyof T]' is not assignable to type '{}'.
 !!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
 !!! error TS2322:       Type 'T[string]' is not assignable to type '{}'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'not null'.
+!!! error TS2322:           Type 'T[keyof T]' is not assignable to type 'not null'.
+!!! error TS2322:             Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+!!! error TS2322:               Type 'T[string]' is not assignable to type 'not null'.
+!!! error TS2322:                 Type 'T[K]' is not assignable to type 'not null'.
+!!! error TS2322:                   Type 'T[keyof T]' is not assignable to type 'not null'.
+!!! error TS2322:                     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'not null'.
+!!! error TS2322:                       Type 'T[string]' is not assignable to type 'not null'.
     }
     
     function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
