@@ -8,7 +8,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
@@ -160,7 +159,7 @@ func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, pos
 		fileName := sf.OriginalFileName()
 		if highlights, ok := fileHighlights[fileName]; ok {
 			result = append(result, &lsproto.MultiDocumentHighlight{
-				Uri:        lsconv.FileNameToDocumentURI(fileName),
+				Uri:        lsproto.DocumentUriFromFileName(fileName),
 				Highlights: highlights,
 			})
 		}

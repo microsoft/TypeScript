@@ -13,7 +13,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
@@ -518,7 +517,7 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	item := &lsproto.CallHierarchyItem{
 		Name:           nameText,
 		Kind:           kind,
-		Uri:            lsconv.FileNameToDocumentURI(sourceFile.OriginalFileName()),
+		Uri:            lsproto.DocumentUriFromFileName(sourceFile.OriginalFileName()),
 		Range:          span,
 		SelectionRange: selectionSpan,
 	}
@@ -615,7 +614,7 @@ func (d *incomingEntry) getSourceFile() *ast.SourceFile {
 
 func (d *incomingEntry) TextDocumentURI() lsproto.DocumentUri {
 	d.documentUriOnce.Do(func() {
-		d.documentUri = lsconv.FileNameToDocumentURI(d.getSourceFile().OriginalFileName())
+		d.documentUri = lsproto.DocumentUriFromFileName(d.getSourceFile().OriginalFileName())
 	})
 	return d.documentUri
 }

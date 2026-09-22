@@ -7,7 +7,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
@@ -81,7 +80,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -103,7 +102,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -125,7 +124,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -147,7 +146,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -169,7 +168,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -191,7 +190,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -213,7 +212,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -235,7 +234,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsconv.FileNameToDocumentURI(aTest)
+		uri := lsproto.DocumentUriFromFileName(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -254,7 +253,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		t.Parallel()
 		files, aIndex, bFile := filesForDirectorySubpathSymlinkReferences("")
 		session, _ := projecttestutil.Setup(files)
-		uri := lsconv.FileNameToDocumentURI(aIndex)
+		uri := lsproto.DocumentUriFromFileName(aIndex)
 		session.DidOpenFile(context.Background(), uri, 1, files[aIndex].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot := session.Snapshot()
@@ -273,7 +272,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		t.Parallel()
 		files, aIndex, bFile := filesForDirectorySubpathSymlinkReferences("@issue/")
 		session, _ := projecttestutil.Setup(files)
-		uri := lsconv.FileNameToDocumentURI(aIndex)
+		uri := lsproto.DocumentUriFromFileName(aIndex)
 		session.DidOpenFile(context.Background(), uri, 1, files[aIndex].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot := session.Snapshot()

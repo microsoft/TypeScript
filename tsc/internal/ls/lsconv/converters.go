@@ -104,7 +104,7 @@ func (c *Converters) ToLSPPositionForFeature(script Script, position core.TextPo
 func (c *Converters) ToLSPLocation(script Script, rng core.TextRange) (lsproto.Location, spanmap.Fidelity) {
 	lspRange, fidelity := c.ToLSPRange(script, rng)
 	return lsproto.Location{
-		Uri:   FileNameToDocumentURI(script.OriginalFileName()),
+		Uri:   lsproto.DocumentUriFromFileName(script.OriginalFileName()),
 		Range: lspRange,
 	}, fidelity
 }
@@ -115,7 +115,7 @@ func (c *Converters) ToLSPLocation(script Script, rng core.TextRange) (lsproto.L
 // [Converters.ToLSPLocation].
 func (c *Converters) ToLSPLocationForFeature(script Script, rng core.TextRange, feature spanmap.Feature) (lsproto.Location, spanmap.Fidelity) {
 	lspRange, fidelity := c.ToLSPRangeForFeature(script, rng, feature)
-	return lsproto.Location{Uri: FileNameToDocumentURI(script.OriginalFileName()), Range: lspRange}, fidelity
+	return lsproto.Location{Uri: lsproto.DocumentUriFromFileName(script.OriginalFileName()), Range: lspRange}, fidelity
 }
 
 // FromLSPRange converts an lsproto.Range to offsets in one Script. For a content-mapped script, results
@@ -301,10 +301,6 @@ func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
 	}
 }
 
-func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
-	return lsproto.DocumentUriFromFileName(fileName)
-}
-
 func (c *Converters) lineAndCharacterToPosition(script Script, lineAndCharacter lsproto.Position) core.TextPos {
 	// UTF-8/16 0-indexed line and character to UTF-8 offset
 	debug.Assert(script.SpanMap() == nil, "raw coordinate conversion requires a non-content-mapped script")
@@ -453,7 +449,7 @@ func diagnosticToLSP(ctx context.Context, converters *Converters, diagnostic *as
 			}
 			relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
 				Location: lsproto.Location{
-					Uri:   FileNameToDocumentURI(related.File().OriginalFileName()),
+					Uri:   lsproto.DocumentUriFromFileName(related.File().OriginalFileName()),
 					Range: relatedRange,
 				},
 				Message: related.Localize(locale),

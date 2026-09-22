@@ -16,7 +16,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
@@ -315,7 +314,7 @@ func (d DocumentIdentifier) ToURI(cwd string) lsproto.DocumentUri {
 	if d.URI != "" {
 		return d.URI
 	}
-	return lsconv.FileNameToDocumentURI(tspath.GetNormalizedAbsolutePath(d.FileName, cwd))
+	return lsproto.DocumentUriFromFileName(tspath.GetNormalizedAbsolutePath(d.FileName, cwd))
 }
 
 func (d DocumentIdentifier) ToAbsoluteFileName(cwd string) string {

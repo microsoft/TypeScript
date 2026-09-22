@@ -47,7 +47,7 @@ func (r *RangeMarker) GetName() *string {
 
 func (r *RangeMarker) LSLocation() lsproto.Location {
 	return lsproto.Location{
-		Uri:   lsconv.FileNameToDocumentURI(r.fileName),
+		Uri:   lsproto.DocumentUriFromFileName(r.fileName),
 		Range: r.LSRange,
 	}
 }

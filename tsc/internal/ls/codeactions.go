@@ -12,7 +12,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 )
@@ -365,7 +364,7 @@ func (l *LanguageService) createOrganizeImportsAction(
 
 	lspChanges := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
 	for fileName, edits := range changes {
-		fileURI := lsconv.FileNameToDocumentURI(fileName)
+		fileURI := lsproto.DocumentUriFromFileName(fileName)
 		lspChanges[fileURI] = edits
 	}
 

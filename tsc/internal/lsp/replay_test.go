@@ -12,7 +12,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
@@ -45,7 +44,7 @@ func TestReplay(t *testing.T) {
 	if testDir == nil || *testDir == "" {
 		t.Fatal("testDir must be specified")
 	}
-	testDirUri := lsconv.FileNameToDocumentURI(*testDir)
+	testDirUri := lsproto.DocumentUriFromFileName(*testDir)
 
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()

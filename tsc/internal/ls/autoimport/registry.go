@@ -16,7 +16,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
@@ -653,7 +652,7 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 
 	var addedNodeModulesDirs, removedNodeModulesDirs []tspath.Path
 	packageJsonChanged := func(dirName string) bool {
-		uri := lsconv.FileNameToDocumentURI(tspath.CombinePaths(dirName, "package.json"))
+		uri := lsproto.DocumentUriFromFileName(tspath.CombinePaths(dirName, "package.json"))
 		return change.Changed.Has(uri) || change.Deleted.Has(uri) || change.Created.Has(uri)
 	}
 	core.DiffMapsFunc(
