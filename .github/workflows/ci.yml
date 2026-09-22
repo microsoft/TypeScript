@@ -352,6 +352,7 @@ jobs:
     if: ${{ always() }}
     needs:
       - build
+      - codegen
       - release-build
       - extension
       - format
