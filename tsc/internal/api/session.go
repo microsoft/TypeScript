@@ -469,10 +469,10 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		withLocale = func(ctx context.Context) context.Context { return ctx }
 	}
 	s := &Session{
-		id:           formatSessionID(id),
-		snapshotHost: snapshotHost,
-		withLocale:   withLocale,
-		snapshots:    make(map[SnapshotID]*snapshotData),
+		id:                 formatSessionID(id),
+		snapshotHost:       snapshotHost,
+		withLocale:         withLocale,
+		snapshots:          make(map[SnapshotID]*snapshotData),
 		buildOrchestrators: make(map[BuildOrchestratorID]*build.Orchestrator),
 	}
 	if options != nil {

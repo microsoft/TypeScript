@@ -36,12 +36,12 @@ var (
 type Method string
 
 type (
-	SnapshotID  uint64
-	SymbolID    uint64
+	SnapshotID          uint64
+	SymbolID            uint64
 	BuildOrchestratorID uint64
-	TypeID      uint32
-	SignatureID uint64
-	NodeHandle  string
+	TypeID              uint32
+	SignatureID         uint64
+	NodeHandle          string
 )
 
 var nextBuildOrchestratorId atomic.Uint64
@@ -65,16 +65,16 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 const (
 	MethodRelease Method = "release"
 
-	MethodBatchRequests Method = "batchRequests"
+	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
-	MethodCreateBuildOrchestrator      Method = "createBuildOrchestrator"
-	MethodBuild                        Method = "build"
-	MethodBuildReferences              Method = "buildReferences"
-	MethodCleanBuild                   Method = "cleanBuild"
-	MethodCleanReferences              Method = "cleanReferences"
+	MethodCreateBuildOrchestrator                        Method = "createBuildOrchestrator"
+	MethodBuild                                          Method = "build"
+	MethodBuildReferences                                Method = "buildReferences"
+	MethodCleanBuild                                     Method = "cleanBuild"
+	MethodCleanReferences                                Method = "cleanReferences"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
@@ -501,11 +501,11 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
-	MethodCreateBuildOrchestrator:      unmarshallerFor[CreateBuildOrchestratorParams],
-	MethodBuild:                        unmarshallerFor[BuildParams],
-	MethodBuildReferences:              unmarshallerFor[BuildParams],
-	MethodCleanBuild:                   unmarshallerFor[CleanBuildParams],
-	MethodCleanReferences:              unmarshallerFor[CleanBuildParams],
+	MethodCreateBuildOrchestrator:                        unmarshallerFor[CreateBuildOrchestratorParams],
+	MethodBuild:                                          unmarshallerFor[BuildParams],
+	MethodBuildReferences:                                unmarshallerFor[BuildParams],
+	MethodCleanBuild:                                     unmarshallerFor[CleanBuildParams],
+	MethodCleanReferences:                                unmarshallerFor[CleanBuildParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -835,7 +835,7 @@ type CreateBuildOrchestratorResponse struct {
 
 type BuildParams struct {
 	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
-	Project             string           `json:"project,omitempty"`
+	Project             string              `json:"project,omitempty"`
 }
 
 type BuildResponse struct {
@@ -846,7 +846,7 @@ type BuildResponse struct {
 
 type CleanBuildParams struct {
 	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
-	Project             string           `json:"project,omitempty"`
+	Project             string              `json:"project,omitempty"`
 }
 
 type CleanBuildResponse struct {
