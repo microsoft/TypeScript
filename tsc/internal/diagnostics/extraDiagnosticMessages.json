@@ -338,5 +338,9 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 100068
+    },
+    "Calls to 'import()' are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 100069
     }
 }

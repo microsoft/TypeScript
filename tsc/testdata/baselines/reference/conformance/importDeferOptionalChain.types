@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/importDefer/importDeferOptionalChain.ts] ////
+
+=== importDeferOptionalChain.ts ===
+import.defer?.("./a");
+>import.defer?.("./a") : Promise<any>
+>defer : any
+>"./a" : "./a"
+
