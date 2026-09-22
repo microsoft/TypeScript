@@ -1,0 +1,18 @@
+superAccessProtectedInstanceProperty.ts(9,22): error TS2855: Instance property 'roots' is defined by the superclass and must be accessed through 'this', not 'super'.
+
+
+==== superAccessProtectedInstanceProperty.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55883
+    
+    export abstract class YaddaBase {
+        protected roots = "hi";
+    }
+    
+    export class DerivedYadda extends YaddaBase {
+        public get rootTests() {
+            return super.roots;
+                         ~~~~~
+!!! error TS2855: Instance property 'roots' is defined by the superclass and must be accessed through 'this', not 'super'.
+        }
+    }
+    

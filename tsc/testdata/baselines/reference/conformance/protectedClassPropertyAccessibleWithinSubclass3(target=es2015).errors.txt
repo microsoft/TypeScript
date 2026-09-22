@@ -1,5 +1,5 @@
 protectedClassPropertyAccessibleWithinSubclass3.ts(2,15): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
-protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2855: Class field 'x' defined by the parent class is not accessible in the child class via super.
+protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2855: Instance property 'x' is defined by the superclass and must be accessed through 'this', not 'super'.
 
 
 ==== protectedClassPropertyAccessibleWithinSubclass3.ts (2 errors) ====
@@ -17,6 +17,6 @@ protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2855: Class f
             this.x;            // OK, accessed within a subclass of the declaring class
             super.x;           // Error, x is not public
                   ~
-!!! error TS2855: Class field 'x' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Instance property 'x' is defined by the superclass and must be accessed through 'this', not 'super'.
         }
     }

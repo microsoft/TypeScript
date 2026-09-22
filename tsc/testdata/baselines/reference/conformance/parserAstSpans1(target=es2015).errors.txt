@@ -6,7 +6,7 @@ parserAstSpans1.ts(48,1): error TS2454: Variable 'i1_i' is used before being ass
 parserAstSpans1.ts(49,1): error TS2454: Variable 'i1_i' is used before being assigned.
 parserAstSpans1.ts(50,1): error TS2454: Variable 'i1_i' is used before being assigned.
 parserAstSpans1.ts(51,1): error TS2454: Variable 'i1_i' is used before being assigned.
-parserAstSpans1.ts(111,25): error TS2855: Class field 'c2_p1' defined by the parent class is not accessible in the child class via super.
+parserAstSpans1.ts(111,25): error TS2855: Instance property 'c2_p1' is defined by the superclass and must be accessed through 'this', not 'super'.
 parserAstSpans1.ts(182,1): error TS2454: Variable 'i2_i' is used before being assigned.
 parserAstSpans1.ts(183,1): error TS2454: Variable 'i2_i' is used before being assigned.
 parserAstSpans1.ts(184,1): error TS2454: Variable 'i2_i' is used before being assigned.
@@ -24,7 +24,7 @@ parserAstSpans1.ts(195,1): error TS2454: Variable 'i3_i' is used before being as
 parserAstSpans1.ts(196,1): error TS2454: Variable 'i3_i' is used before being assigned.
 parserAstSpans1.ts(197,1): error TS2454: Variable 'i3_i' is used before being assigned.
 parserAstSpans1.ts(199,8): error TS2454: Variable 'i3_i' is used before being assigned.
-parserAstSpans1.ts(217,24): error TS2855: Class field 'b' defined by the parent class is not accessible in the child class via super.
+parserAstSpans1.ts(217,24): error TS2855: Instance property 'b' is defined by the superclass and must be accessed through 'this', not 'super'.
 
 
 ==== parserAstSpans1.ts (27 errors) ====
@@ -156,7 +156,7 @@ parserAstSpans1.ts(217,24): error TS2855: Class field 'b' defined by the parent 
             super(10);
             this.p1 = super.c2_p1;
                             ~~~~~
-!!! error TS2855: Class field 'c2_p1' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Instance property 'c2_p1' is defined by the superclass and must be accessed through 'this', not 'super'.
         }
         /** c3 p1*/
         public p1!: number;
@@ -298,6 +298,6 @@ parserAstSpans1.ts(217,24): error TS2855: Class field 'b' defined by the parent 
             super();
             this.d = super.b;
                            ~
-!!! error TS2855: Class field 'b' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Instance property 'b' is defined by the superclass and must be accessed through 'this', not 'super'.
         }
     }
