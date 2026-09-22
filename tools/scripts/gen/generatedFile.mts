@@ -59,19 +59,10 @@ export class GeneratedFile {
         return JSON.stringify([this.inputHash, digest(output)]);
     }
 
-    currentStatus(force = false): { current: boolean; reason?: string; cacheFile: string; expected?: string; actual?: string; } {
-        if (force) return { current: false, reason: "forced", cacheFile: this.cacheFile };
-        const output = readIfExists(this.fileName);
-        if (output === undefined) return { current: false, reason: "output missing", cacheFile: this.cacheFile };
-        const expected = this.state(output);
-        const actual = readIfExists(this.cacheFile)?.toString();
-        if (actual === undefined) return { current: false, reason: "cache metadata missing", cacheFile: this.cacheFile, expected };
-        if (actual !== expected) return { current: false, reason: "cache metadata mismatch", cacheFile: this.cacheFile, expected, actual };
-        return { current: true, cacheFile: this.cacheFile };
-    }
-
     isCurrent(force = false): boolean {
-        return this.currentStatus(force).current;
+        if (force) return false;
+        const output = readIfExists(this.fileName);
+        return output !== undefined && readIfExists(this.cacheFile)?.toString() === this.state(output);
     }
 
     invalidate(): void {

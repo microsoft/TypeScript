@@ -1542,7 +1542,10 @@ export const testTools = task({
 export const testCodegen = task({
     name: "test:codegen",
     description: "Runs incremental codegen tests.",
-    run: () => run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts"]),
+    run: async () => {
+        await run("go", ["-C", "tsc", "mod", "download"]);
+        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts"]);
+    },
 });
 
 export const buildAPI = task({
