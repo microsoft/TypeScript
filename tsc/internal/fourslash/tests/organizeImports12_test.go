@@ -23,7 +23,7 @@ declare export * from "foo";`
 declare export * from "foo";
 declare export { a, b };
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

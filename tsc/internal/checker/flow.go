@@ -2672,9 +2672,6 @@ func (c *Checker) isPastLastAssignment(symbol *ast.Symbol, location *ast.Node) b
 }
 
 func (c *Checker) ensureAssignmentsMarked(symbol *ast.Symbol) {
-	if c.markedAssignmentSymbolLinks.Get(symbol).lastAssignmentPos != 0 {
-		return
-	}
 	parent := ast.FindAncestor(symbol.ValueDeclaration, ast.IsFunctionOrSourceFile)
 	if parent == nil {
 		return

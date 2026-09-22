@@ -1,0 +1,15 @@
+exportAssignmentClass_B.ts(1,20): error TS2307: Cannot find module 'exportAssignmentClass_A' or its corresponding type declarations.
+
+
+==== exportAssignmentClass_B.ts (1 errors) ====
+    import D = require("exportAssignmentClass_A");
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'exportAssignmentClass_A' or its corresponding type declarations.
+    
+    var d = new D();
+    var x = d.p;
+==== exportAssignmentClass_A.ts (0 errors) ====
+    class C { public p = 0; }
+    
+    export = C;
+    

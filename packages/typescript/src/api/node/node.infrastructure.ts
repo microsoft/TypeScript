@@ -39,9 +39,9 @@ export const NODE_EXTENDED_DATA_MASK = 0x00_ff_ff_ff;
 // source file, avoiding a direct dependency on RemoteSourceFile.
 // ═══════════════════════════════════════════════════════════════════════════
 
-// The global type is not available in earlier @types/node versions
+// The global type is not available in earlier @types/node versions.
 export interface TextDecoder {
-    decode(input?: ArrayBufferView | ArrayBufferLike): string;
+    decode(input?: Uint8Array): string;
 }
 
 export interface SourceFileInfo {

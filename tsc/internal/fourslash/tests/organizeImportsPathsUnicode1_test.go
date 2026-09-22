@@ -28,7 +28,7 @@ import * as _aB from "./_aB";
 import * as aB from "./aB";
 
 console.log(_aB, _Ab, aB, Ab);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSFalse,
 			OrganizeImportsCollation:  lsutil.OrganizeImportsCollationOrdinal,
@@ -41,7 +41,7 @@ import * as aB from "./aB";
 import * as Ab from "./Ab";
 
 console.log(_aB, _Ab, aB, Ab);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSFalse,
 			OrganizeImportsCollation:  lsutil.OrganizeImportsCollationUnicode,

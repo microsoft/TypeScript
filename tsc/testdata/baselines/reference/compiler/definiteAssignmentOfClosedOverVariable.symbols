@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/definiteAssignmentOfClosedOverVariable.ts] ////
+
+=== definiteAssignmentOfClosedOverVariable.ts ===
+// Repro for #63981
+
+export {};
+
+let count: number;
+>count : Symbol(count, Decl(definiteAssignmentOfClosedOverVariable.ts, 4, 3))
+
+function makeCallback(p: string) {
+>makeCallback : Symbol(makeCallback, Decl(definiteAssignmentOfClosedOverVariable.ts, 4, 18))
+>p : Symbol(p, Decl(definiteAssignmentOfClosedOverVariable.ts, 6, 22))
+
+    return () => {
+        count += 1;
+>count : Symbol(count, Decl(definiteAssignmentOfClosedOverVariable.ts, 4, 3))
+
+        return p;
+>p : Symbol(p, Decl(definiteAssignmentOfClosedOverVariable.ts, 6, 22))
+
+    };
+}
+
+count = 0;
+>count : Symbol(count, Decl(definiteAssignmentOfClosedOverVariable.ts, 4, 3))
+
+makeCallback('x')();
+>makeCallback : Symbol(makeCallback, Decl(definiteAssignmentOfClosedOverVariable.ts, 4, 18))
+
+let count2: number;
+>count2 : Symbol(count2, Decl(definiteAssignmentOfClosedOverVariable.ts, 16, 3))
+
+function makeCallback2(p: string) {
+>makeCallback2 : Symbol(makeCallback2, Decl(definiteAssignmentOfClosedOverVariable.ts, 16, 19))
+>p : Symbol(p, Decl(definiteAssignmentOfClosedOverVariable.ts, 18, 23))
+
+    const f = () => p;
+>f : Symbol(f, Decl(definiteAssignmentOfClosedOverVariable.ts, 19, 9))
+>p : Symbol(p, Decl(definiteAssignmentOfClosedOverVariable.ts, 18, 23))
+
+    return () => {
+        count2 += 1;
+>count2 : Symbol(count2, Decl(definiteAssignmentOfClosedOverVariable.ts, 16, 3))
+
+    };
+}
+
+count2 = 0;
+>count2 : Symbol(count2, Decl(definiteAssignmentOfClosedOverVariable.ts, 16, 3))
+
+let count3: number;
+>count3 : Symbol(count3, Decl(definiteAssignmentOfClosedOverVariable.ts, 27, 3))
+
+function makeCallback3(p: string) {
+>makeCallback3 : Symbol(makeCallback3, Decl(definiteAssignmentOfClosedOverVariable.ts, 27, 19))
+>p : Symbol(p, Decl(definiteAssignmentOfClosedOverVariable.ts, 29, 23))
+
+    return () => {
+        count3 += 1;
+>count3 : Symbol(count3, Decl(definiteAssignmentOfClosedOverVariable.ts, 27, 3))
+
+        return p;
+>p : Symbol(p, Decl(definiteAssignmentOfClosedOverVariable.ts, 29, 23))
+
+    };
+}
+

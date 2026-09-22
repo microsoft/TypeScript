@@ -2,7 +2,7 @@
  * Encoder/decoder code generator: reads tools/scripts/tsc/ast.json and produces binary
  * encoding/decoding code for Go and TypeScript.
  *
- * Usage: node --experimental-strip-types tools/scripts/tsc/generate-encoder.ts
+ * Usage: node tools/scripts/tsc/generate-encoder.ts
  *
  * Generates:
  *   - internal/api/encoder/encoder_generated.go
@@ -10,10 +10,10 @@
  *   - packages/typescript/src/api/node/protocol.generated.ts
  */
 
-import { execaSync } from "execa";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import { xSync } from "tinyexec";
 import type {
     KindType,
     MemberInfo,
@@ -1474,6 +1474,9 @@ function generateTSNodeGenerated(): string {
 
 function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`import {`);
+    w.write(`    getChildren,`);
+    w.write(`    getFirstToken,`);
+    w.write(`    getLastToken,`);
     w.write(`    getTokenPosOfNode,`);
     w.write(`    ModifierFlags,`);
     w.write(`    type Node,`);
@@ -1518,7 +1521,6 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`    }`);
     w.write(``);
     w.write(`    parent: RemoteNode;`);
-    w.write(`    hasTrailingComma?: boolean;`);
     w.write(`    transformFlags: number = 0;`);
     w.write(`    protected view: DataView;`);
     w.write(`    protected index: number;`);
@@ -1544,6 +1546,10 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(``);
     w.write(`    private get data(): number {`);
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    get hasTrailingComma(): boolean {`);
+    w.write(`        return (this.view.getUint32(this._byteIndex + NODE_OFFSET_FLAGS, true) & 1) !== 0;`);
     w.write(`    }`);
     w.write(``);
     w.write(`    private sourceFile: SourceFileInfo;`);
@@ -1756,6 +1762,26 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`        return sourceFile.text.substring(this.getStart(sourceFile), this.end);`);
     w.write(`    }`);
     w.write(``);
+    w.write(`    getChildCount(sourceFile?: SourceFile): number {`);
+    w.write(`        return this.getChildren(sourceFile).length;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildAt(index: number, sourceFile?: SourceFile): Node {`);
+    w.write(`        return this.getChildren(sourceFile)[index];`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildren(sourceFile?: SourceFile): readonly Node[] {`);
+    w.write(`        return getChildren(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getFirstToken(sourceFile?: SourceFile): Node | undefined {`);
+    w.write(`        return getFirstToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getLastToken(sourceFile?: SourceFile): Node | undefined {`);
+    w.write(`        return getLastToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    w.write(`    }`);
+    w.write(``);
     w.write(`    protected getString(index: number): string {`);
     w.write(`        const offsetStringTableOffsets = this.sourceFile._offsetStringTableOffsets;`);
     w.write(`        const start = this.view.getUint32(offsetStringTableOffsets + index * 4, true);`);
@@ -1803,6 +1829,7 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`    }`);
     w.write(``);
     w.write(`    private getChildAtOrder(order: number): RemoteNode | RemoteNodeList | undefined {`);
+    w.write(`        if (!this.hasChildren()) return undefined;`);
     w.write(`        const mask = this.childMask;`);
     w.write(`        if (!(mask & (1 << order))) {`);
     w.write(`            // Property is not present`);
@@ -1986,7 +2013,10 @@ function writeAndFormat(filePath: string, content: string, formatter: string) {
     fs.writeFileSync(filePath, content);
     try {
         const [cmd, ...args] = formatter.split(" ");
-        execaSync(cmd, [...args, filePath], { stdio: "inherit", cwd: ROOT });
+        xSync(cmd, [...args, filePath], {
+            throwOnError: true,
+            nodeOptions: { stdio: "inherit", cwd: ROOT },
+        });
     }
     catch {
         console.warn(`Warning: formatter failed for ${filePath}`);

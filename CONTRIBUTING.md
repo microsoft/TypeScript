@@ -75,7 +75,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Prerequisites
 
-- Go 1.26
+- Go 1.27
 - Node.js 24
 - npm (the version declared by `packageManager` in `package.json`)
 - Git
@@ -114,7 +114,7 @@ Package-specific commands:
 ```bash
 npm run -w @typescript/typescript build
 npm run -w @typescript/typescript test
-npm run -w vscode-typescript build
+npm run -w native-preview build
 ```
 
 ## Compiler tests
@@ -143,7 +143,7 @@ npx hereby format
 npx hereby check:format
 npm run -w @typescript/typescript build
 npm run -w @typescript/typescript test
-npm run -w vscode-typescript build
+npm run -w native-preview build
 go -C ./tsc mod tidy -diff
 go -C ./tools mod tidy -diff
 go work sync

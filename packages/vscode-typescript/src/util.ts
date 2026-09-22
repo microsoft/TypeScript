@@ -41,7 +41,6 @@ export function isJsConfigOrTsConfigFileName(fileName: string): boolean {
 export interface ExeInfo {
     path: string;
     version: string;
-    name: string;
     isLocal?: boolean;
 }
 
@@ -49,11 +48,11 @@ const packagedExeBaseNames = ["tsc", "tsgo"];
 
 export async function getBuiltinExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
     if (context.extensionMode === vscode.ExtensionMode.Development) {
-        const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
-        const exe = context.asAbsolutePath(path.join("../", "built", "local", exeName));
+        const exeName = `tsc${process.platform === "win32" ? ".exe" : ""}`;
+        const exe = context.asAbsolutePath(path.join("../../", "built", "local", exeName));
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(exe));
-            return { path: exe, version: "(local)", name: "tsgo", isLocal: true };
+            return { path: exe, version: "(local)", isLocal: true };
         }
         catch {}
     }
@@ -106,7 +105,6 @@ async function tryGetPackagedExePath(extensionUri: vscode.Uri, version: unknown)
             return {
                 path: withLongPathPrefix(exePath.fsPath),
                 version: typeof version === "string" ? version : "unknown",
-                name: baseName,
             };
         }
         catch {}
@@ -340,7 +338,7 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
             const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
             const exePath = vscode.Uri.file(resolvePackageExecutable(packageJsonPath.fsPath, platformPackage, exeName));
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown", name: expectedBinName };
+            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown" };
         }
         catch {}
     }
@@ -348,7 +346,7 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
         try {
             const exePath = vscode.Uri.joinPath(resolved, `${baseName}${process.platform === "win32" ? ".exe" : ""}`);
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: "(local)", name: baseName, isLocal: true };
+            return { path: withLongPathPrefix(exePath.fsPath), version: "(local)", isLocal: true };
         }
         catch {}
     }

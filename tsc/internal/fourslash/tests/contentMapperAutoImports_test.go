@@ -250,3 +250,68 @@ profileTi/**/
 	})
 	f.BaselineAutoImportsCompletions(t, []string{""})
 }
+
+// TestContentMapperAutoImportAtHoistedImportBoundary covers a mapper that hoists the imports of a
+// component's script above the generated render function, the way svelte2tsx does. Hoisting places the
+// script text preceding the first import *after* that import in the virtual file:
+//
+//	///<reference types="svelte" />
+//	;
+//	import { existing } from "./dep";   <- original [21, 54)
+//	function $$render() {
+//	<whitespace preceding the first import>   <- original [18, 21)
+//	  const value = help;                     <- original [54, 77)
+//
+// Original position 21 therefore has two exact virtual projections: the start of the hoisted import and
+// the end of the preceding whitespace segment. A new import sorts ahead of "./dep" and is inserted at
+// exactly that position, so the change tracker formats the same new import node once per projection.
+// Printing assigns source positions to the node, so the second print reads the module specifier back out
+// of the virtual file at those stale offsets and yields text like `import { helper } from om "./de;`,
+// which then trips a formatter assertion.
+func TestContentMapperAutoImportAtHoistedImportBoundary(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	f, done := newContentMapperFourslash(t, `// @Filename: /aaa.ts
+export const helper = 1;
+
+// @Filename: /dep.ts
+export const existing = 2;
+
+// @Filename: /App.svelte
+<script lang="ts">
+  import { existing } from "./dep";
+  const value = help/**/;
+</script>
+`, contentmappertest.HoistingMapper, ".svelte")
+	defer done()
+
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		UserPreferences: &lsutil.UserPreferences{
+			IncludeCompletionsForModuleExports:    core.TSTrue,
+			IncludeCompletionsForImportStatements: core.TSTrue,
+		},
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{Includes: []fourslash.CompletionsExpectedItem{
+			&lsproto.CompletionItem{
+				Label:               "helper",
+				SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+				Data:                &lsproto.CompletionItemData{AutoImport: &lsproto.AutoImportFix{ModuleSpecifier: "./aaa"}},
+				AdditionalTextEdits: fourslash.AnyTextEdits,
+			},
+		}},
+	})
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:        "helper",
+		Source:      "./aaa",
+		Description: `Add import from "./aaa"`,
+		NewFileContent: new(`<script lang="ts">
+  import { helper } from "./aaa";
+  import { existing } from "./dep";
+  const value = help;
+</script>
+`),
+	})
+}

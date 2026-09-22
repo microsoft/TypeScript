@@ -1,0 +1,31 @@
+/index.ts(1,25): error TS2307: Cannot find module 'databases/app.sqlite' or its corresponding type declarations.
+
+
+==== /bun-sqlite.d.ts (0 errors) ====
+    declare module "databases/*.sqlite" with { type: "sqlite", embed: "false" } {
+        const database: {
+            storage: "external";
+            filename: string;
+        };
+        export default database;
+    }
+    
+    declare module "*.sqlite" with { type: "sqlite", embed: "true" } {
+        const database: {
+            storage: "embedded";
+            contents: Uint8Array;
+        };
+        export default database;
+    }
+    
+==== /index.ts (1 errors) ====
+    import badDatabase from "databases/app.sqlite" with { type: "sqlite" };
+                            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'databases/app.sqlite' or its corresponding type declarations.
+    import embeddedDatabase from "databases/app.sqlite" with { type: "sqlite", embed: "true" };
+    
+    const expectedExternalStorage: "external" = badDatabase.storage;
+    const expectedEmbeddedStorage: "embedded" = embeddedDatabase.storage;
+    
+    badDatabase.filename;
+    embeddedDatabase.contents;

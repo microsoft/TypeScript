@@ -1,6 +1,6 @@
 // @target: es2015
 // @moduleResolution: classic
-// @module: amd
+// @module: commonjs
 // @baseUrl: c:/root
 // @traceResolution: true
 

@@ -37,8 +37,8 @@ func TestEncodeSourceFile(t *testing.T) {
 
 func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	t.Parallel()
-	if encoder.ProtocolVersion != 7 {
-		t.Fatalf("protocol version = %d, want 7", encoder.ProtocolVersion)
+	if encoder.ProtocolVersion != 8 {
+		t.Fatalf("protocol version = %d, want 8", encoder.ProtocolVersion)
 	}
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/component.vue",

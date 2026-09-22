@@ -35,3 +35,14 @@ A.X/*2*/;
 	defer done()
 	f.VerifyBaselineHover(t)
 }
+
+func TestHoverMappedTypeWithoutPropertyType(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `
+declare function uhoh/*1*/<T>(x: { [K in keyof T] }): void;
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineHover(t)
+}

@@ -42,7 +42,7 @@ import { foo } from "./a";`
 // comment 2
 
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

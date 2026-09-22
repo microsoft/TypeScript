@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 export var foo = 3;
 
 function log(n:number) { return n;}

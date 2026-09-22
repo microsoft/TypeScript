@@ -1,0 +1,1782 @@
+import {
+    cast,
+    type Identifier,
+    isCallExpression,
+    isClassDeclaration,
+    isEnumDeclaration,
+    isExportDeclaration,
+    isFunctionDeclaration,
+    isIdentifier,
+    isImportDeclaration,
+    isInterfaceDeclaration,
+    isNamedExports,
+    isNamedImports,
+    isObjectLiteralExpression,
+    isShorthandPropertyAssignment,
+    isStringLiteral,
+    isTypeAliasDeclaration,
+    isVariableDeclaration,
+    isVariableStatement,
+    type Node,
+    type SourceFile,
+    SyntaxKind,
+} from "@typescript/typescript/unstable/ast";
+import type {
+    APIRequest,
+    APIResponse,
+} from "@typescript/typescript/unstable/proto";
+import {
+    all,
+    type AllAPIRequestGenerator,
+    type AnyAPIRequestGenerator,
+    type API,
+    type ConditionalType,
+    defer,
+    type DeferredAPIRequestGenerator,
+    type IndexedAccessType,
+    type IndexInfo,
+    IndexKind,
+    type InterfaceType,
+    type LiteralType,
+    ModuleKind,
+    type NodeHandle,
+    type Program,
+    type Project,
+    type Signature,
+    SignatureKind,
+    type Snapshot,
+    type SubstitutionType,
+    type Symbol,
+    SymbolFlags,
+    type TimingInfo,
+    type Type,
+    TypeFlags,
+    type TypeParameter,
+    type TypePredicate,
+    type TypeReference,
+    type UnionOrIntersectionType,
+} from "@typescript/typescript/unstable/sync";
+import assert from "node:assert";
+import {
+    describe,
+    test,
+    type TestContext,
+} from "node:test";
+import {
+    type APIRequestGenerator,
+    executeRequestGenerators,
+} from "../../src/api/sync/generatorSupport.ts";
+import { runBenchmarks } from "../generators/api.bench.ts";
+import { spawnAPI } from "./api.testUtils.ts";
+
+const parityFiles = {
+    "/base.json": JSON.stringify({
+        compilerOptions: {
+            declaration: true,
+            module: "nodenext",
+            moduleResolution: "nodenext",
+            strict: true,
+            target: "esnext",
+            exactOptionalPropertyTypes: true,
+        },
+    }),
+    "/tsconfig.json": JSON.stringify({
+        extends: "./base.json",
+        include: ["src/**/*.ts"],
+    }),
+    "/src/models.ts": `
+export interface Box<T extends Base = Derived> {
+    value: T;
+    tuple: readonly [T, ...T[]];
+    [key: string]: unknown;
+    [index: number]: T;
+    readonly opt?: true;
+}
+export class Base { base = true; }
+export class Derived extends Base { derived = 1; }
+export type Boxed = Box<Derived>;
+export type TupleAlias = readonly [string, ...number[]];
+export type ArrayAlias = Derived[];
+export type Conditional<T extends Base = Derived> = T extends Base ? T : never;
+export type Indexed<T extends Box<Derived>> = T["value"];
+export type Keys = keyof Box<Derived>;
+export type Union = Derived | string;
+export enum Choice { First = 1, Second = "second" }
+export class Unimported { value = "extra"; }
+`,
+    "/src/index.ts": `
+/// <reference types="parity" />
+import { Base, Box, Choice, Derived } from "./models.js";
+export { Derived as RenamedDerived } from "./models.js";
+
+/** Combine a first value with the rest. @deprecated parity fixture */
+export function combine<T extends Base = Derived>(this: Box<T>, first: T, ...rest: T[]): readonly [T, ...T[]] {
+    return [first, ...rest];
+}
+
+export const derived = new Derived();
+export const box: Box<Derived> = { value: derived, tuple: [derived], derived };
+export const shorthand = { derived };
+export const called = combine.call(box, derived, derived);
+export const semanticIssue: string = 123;
+export const choice = Choice.First;
+export function isDerived(value: Base): value is Derived { return value instanceof Derived; }
+export const badCall = derived();
+export function getArguments() { return arguments; }
+import { absent } from "./absent.js";
+export const missingValue = absent;
+`,
+    "/node_modules/@types/parity/index.d.ts": `export {};`,
+    "/src/syntax.ts": `export const broken: = 1;`,
+    "/src/bind.ts": `let duplicate = 1; let duplicate = 2;`,
+    "/src/suggestions.ts": `export function suggestion() { const unused = 1; return 1; }`,
+};
+
+type GeneratorMethod<Args extends readonly unknown[], Result> = ((...args: Args) => Result) & {
+    gen(...args: Args): Generator<APIRequest, Result, APIResponse["result"]>;
+};
+
+type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?: string) => void;
+
+interface ParityCase {
+    readonly ownerName: string;
+    readonly methodName: string;
+    readonly runGenerator: () => Generator<APIRequest, void, APIResponse["result"]>;
+    readonly assertEquivalent: (message?: string) => void;
+}
+
+const exercisedMethods = new Set<string>();
+const publicGeneratorExemptions = new Map<string, string>([
+    ["API.fromLSPConnection", "requires an existing LSP API session"],
+    ["API.getCurrentLanguageServerSnapshot", "requires an existing LSP API session"],
+    ["InternalAPI.startCPUProfile", "writes a CPU profile and changes process-global profiling state"],
+    ["InternalAPI.stopCPUProfile", "requires a matching active CPU profile"],
+    ["InternalAPI.saveHeapProfile", "writes a potentially large heap profile to disk"],
+]);
+const privateGeneratorGetters = new Set([
+    "API.ensureInitialized",
+    "API.initializeWorker",
+    "API.updateSnapshot",
+    "Checker.getIntrinsicType",
+    "Checker.getWellKnownSignatures",
+    "Checker.getWellKnownSymbols",
+    "Program.disposeWorker",
+    "Program.fetchSourceFileMetadata",
+    "Snapshot.disposeWorker",
+    "Symbol.fetchSymbolTable",
+    "Type.getNumberIndexTypeWorker",
+    "Type.getStringIndexTypeWorker",
+]);
+
+function methodKey(ownerName: string, methodName: string): string {
+    return `${ownerName}.${methodName}`;
+}
+
+function parityCase<Args extends readonly unknown[], Result>(
+    ownerName: string,
+    methodName: string,
+    method: GeneratorMethod<Args, Result>,
+    assertEquivalent: EquivalenceAssertion<NoInfer<Result>>,
+    ...args: Args
+): ParityCase {
+    let generatedResult: { readonly value: Result; } | undefined;
+    return {
+        ownerName,
+        methodName,
+        runGenerator: function* () {
+            generatedResult = { value: yield* method.gen(...args) };
+        },
+        assertEquivalent: message => {
+            assert.ok(generatedResult, `${message ?? methodName}: generator did not complete`);
+            assertEquivalent(generatedResult.value, method(...args), message);
+        },
+    };
+}
+
+function selectGeneratorMethod<Args extends readonly unknown[], Result>(
+    method: GeneratorMethod<Args, Result>,
+): GeneratorMethod<Args, Result> {
+    return method;
+}
+
+function assertDeepEquivalent<T>(actual: T, expected: T, message?: string): void {
+    assert.deepEqual(actual, expected, message);
+}
+
+function assertOptionalEquivalent<T>(actual: T | undefined, expected: T | undefined, assertPresentEquivalent: EquivalenceAssertion<T>, message?: string): void {
+    if (actual === undefined || expected === undefined) {
+        assert.equal(actual, expected, message);
+        return;
+    }
+    assertPresentEquivalent(actual, expected, message);
+}
+
+function assertArrayElementsEquivalent<T>(actual: readonly T[], expected: readonly T[], assertElementEquivalent: EquivalenceAssertion<T>, message?: string): void {
+    assert.equal(actual.length, expected.length, message);
+    for (let index = 0; index < actual.length; index++) {
+        assertElementEquivalent(actual[index], expected[index], `${message ?? "value"}[${index}]`);
+    }
+}
+
+function assertSymbolsEquivalent(actual: Symbol, expected: Symbol, message?: string): void {
+    assert.strictEqual(actual, expected, message);
+    assert.equal(actual.id, expected.id, message);
+    assert.equal(actual.name, expected.name, message);
+    assert.equal(actual.flags, expected.flags, message);
+}
+
+function assertOptionalSymbolsEquivalent(actual: Symbol | undefined, expected: Symbol | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertSymbolsEquivalent, message);
+}
+
+function assertSymbolArraysEquivalent(actual: readonly Symbol[], expected: readonly Symbol[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, assertSymbolsEquivalent, message);
+}
+
+function assertUnorderedSymbolArraysEquivalent(actual: readonly Symbol[], expected: readonly Symbol[], message?: string): void {
+    const byIdentity = (left: Symbol, right: Symbol) => left.id - right.id || left.name.localeCompare(right.name);
+    const actualSymbols = [...actual].sort(byIdentity);
+    const expectedSymbols = [...expected].sort(byIdentity);
+    assertArrayElementsEquivalent(actualSymbols, expectedSymbols, assertSymbolsEquivalent, message);
+}
+
+function assertOptionalSymbolArraysEquivalent(actual: readonly (Symbol | undefined)[], expected: readonly (Symbol | undefined)[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, assertOptionalSymbolsEquivalent, message);
+}
+
+function assertTypesEquivalent(actual: Type, expected: Type, message?: string): void {
+    assert.strictEqual(actual, expected, message);
+    assert.equal(actual.id, expected.id, message);
+    assert.equal(actual.flags, expected.flags, message);
+}
+
+function assertOptionalTypesEquivalent(actual: Type | undefined, expected: Type | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertTypesEquivalent, message);
+}
+
+function assertTypeArraysEquivalent(actual: readonly Type[], expected: readonly Type[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, assertTypesEquivalent, message);
+}
+
+function assertOptionalTypeArraysEquivalent(actual: readonly (Type | undefined)[], expected: readonly (Type | undefined)[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, assertOptionalTypesEquivalent, message);
+}
+
+function assertOptionalTypeArrayEquivalent(actual: readonly Type[] | undefined, expected: readonly Type[] | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertTypeArraysEquivalent, message);
+}
+
+function assertSignaturesEquivalent(actual: Signature, expected: Signature, message?: string): void {
+    assert.strictEqual(actual, expected, message);
+    assert.equal(actual.id, expected.id, message);
+    assert.equal(actual.hasRestParameter, expected.hasRestParameter, message);
+    assert.equal(actual.isConstruct, expected.isConstruct, message);
+}
+
+function assertOptionalSignaturesEquivalent(actual: Signature | undefined, expected: Signature | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertSignaturesEquivalent, message);
+}
+
+function assertSignatureArraysEquivalent(actual: readonly Signature[], expected: readonly Signature[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, assertSignaturesEquivalent, message);
+}
+
+function assertNodeHandlesEquivalent(actual: NodeHandle, expected: NodeHandle, message?: string): void {
+    assert.equal(actual.index, expected.index, message);
+    assert.equal(actual.kind, expected.kind, message);
+    assert.equal(actual.path, expected.path, message);
+}
+
+function assertNodeHandleArraysEquivalent(actual: readonly NodeHandle[], expected: readonly NodeHandle[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, assertNodeHandlesEquivalent, message);
+}
+
+function assertOptionalNodeHandlesEquivalent(actual: NodeHandle | undefined, expected: NodeHandle | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertNodeHandlesEquivalent, message);
+}
+
+function assertNodesEquivalent(actual: Node, expected: Node, message?: string): void {
+    assert.equal(actual.kind, expected.kind, message);
+    assert.equal(actual.pos, expected.pos, message);
+    assert.equal(actual.end, expected.end, message);
+}
+
+function assertOptionalNodesEquivalent(actual: Node | undefined, expected: Node | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertNodesEquivalent, message);
+}
+
+function assertSourceFilesEquivalent(actual: SourceFile, expected: SourceFile, message?: string): void {
+    assertNodesEquivalent(actual, expected, message);
+    assert.equal(actual.fileName, expected.fileName, message);
+    assert.equal(actual.text, expected.text, message);
+}
+
+function assertOptionalSourceFilesEquivalent(actual: SourceFile | undefined, expected: SourceFile | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertSourceFilesEquivalent, message);
+}
+
+function assertProjectsEquivalent(actual: Project, expected: Project, message?: string): void {
+    assert.equal(actual.id, expected.id, message);
+    assert.equal(actual.configFileName, expected.configFileName, message);
+    assert.equal(actual.dirty, expected.dirty, message);
+    assert.deepEqual(actual.rootFiles, expected.rootFiles, message);
+}
+
+function assertOptionalProjectsEquivalent(actual: Project | undefined, expected: Project | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, assertProjectsEquivalent, message);
+}
+
+function assertProgramsEquivalent(actual: Program, expected: Program, message?: string): void {
+    assertProjectsEquivalent(actual.getProject(), expected.getProject(), message);
+}
+
+function assertSnapshotsEquivalent(actual: Snapshot, expected: Snapshot, message?: string): void {
+    const actualProjects = actual.getProjects();
+    const expectedProjects = expected.getProjects();
+    assertArrayElementsEquivalent(actualProjects, expectedProjects, assertProjectsEquivalent, message);
+    assert.deepEqual(actual.operation.createdPrograms?.map(program => program.id), expected.operation.createdPrograms?.map(program => program.id), message);
+    assert.deepEqual(actual.operation.openedFiles?.map(result => result.project.id), expected.operation.openedFiles?.map(result => result.project.id), message);
+}
+
+function assertSymbolMapsEquivalent(actual: ReadonlyMap<string, Symbol>, expected: ReadonlyMap<string, Symbol>, message?: string): void {
+    assert.deepEqual([...actual.keys()], [...expected.keys()], message);
+    for (const key of actual.keys()) {
+        assertOptionalSymbolsEquivalent(actual.get(key), expected.get(key), `${message ?? "symbol map"}[${key}]`);
+    }
+}
+
+function assertIndexInfosEquivalent(actual: readonly IndexInfo[], expected: readonly IndexInfo[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, (actualInfo, expectedInfo, elementMessage) => {
+        assertTypesEquivalent(actualInfo.keyType, expectedInfo.keyType, elementMessage);
+        assertTypesEquivalent(actualInfo.valueType, expectedInfo.valueType, elementMessage);
+        assert.equal(actualInfo.isReadonly, expectedInfo.isReadonly, elementMessage);
+        assertOptionalNodeHandlesEquivalent(actualInfo.declaration, expectedInfo.declaration, elementMessage);
+    }, message);
+}
+
+function assertOptionalTypePredicatesEquivalent(actual: TypePredicate | undefined, expected: TypePredicate | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, (actualPredicate, expectedPredicate, predicateMessage) => {
+        assert.equal(actualPredicate.kind, expectedPredicate.kind, predicateMessage);
+        assert.equal(actualPredicate.parameterName, expectedPredicate.parameterName, predicateMessage);
+        assert.equal(actualPredicate.parameterIndex, expectedPredicate.parameterIndex, predicateMessage);
+        assertOptionalTypesEquivalent(actualPredicate.type, expectedPredicate.type, predicateMessage);
+    }, message);
+}
+
+function assertDeepArraysEquivalent<T>(actual: readonly T[], expected: readonly T[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, assertDeepEquivalent, message);
+}
+
+function assertTimingInfoEquivalent(actual: TimingInfo, expected: TimingInfo, message?: string): void {
+    assert.equal(actual.enabled, expected.enabled, message);
+    assert.equal(actual.totals.requestCount, expected.totals.requestCount, message);
+    assert.equal(actual.totals.bytesSent, expected.totals.bytesSent, message);
+    assert.equal(actual.totals.bytesReceived, expected.totals.bytesReceived, message);
+    assert.deepEqual(actual.recentRequests.map(request => request.method), expected.recentRequests.map(request => request.method), message);
+}
+
+function runParityBatch(api: API, cases: readonly ParityCase[]): void {
+    api.batch(...cases.map(parity => parity.runGenerator()));
+
+    for (const { assertEquivalent, methodName, ownerName } of cases) {
+        assertEquivalent(methodKey(ownerName, methodName));
+        exercisedMethods.add(methodKey(ownerName, methodName));
+    }
+}
+
+function observeRequestBatches(
+    api: API,
+    requestBatches: string[][],
+    context: TestContext,
+): void {
+    const client = api["client"];
+    const batchRequests = client.batchRequests.bind(client);
+    context.mock.method(client, "batchRequests", (requests: readonly APIRequest[]) => {
+        requestBatches.push(requests.map(request => request.method));
+        return batchRequests(requests);
+    });
+}
+
+function assertPublicGeneratorCoverage(owners: readonly { readonly name: string; readonly value: object; readonly own?: boolean; }[]): void {
+    const missing: string[] = [];
+    for (const { name, own, value } of owners) {
+        const descriptorOwner = own ? value : Object.getPrototypeOf(value) as object;
+        for (const [methodName, descriptor] of Object.entries(Object.getOwnPropertyDescriptors(descriptorOwner))) {
+            if (!descriptor.get) continue;
+            const key = methodKey(name, methodName);
+            const result: { gen?: unknown; } | undefined = descriptor.get.call(value);
+            if (typeof result?.gen !== "function") continue;
+            if (!exercisedMethods.has(key) && !publicGeneratorExemptions.has(key) && !privateGeneratorGetters.has(key)) {
+                missing.push(key);
+            }
+        }
+    }
+    assert.deepEqual(missing, [], `Uncovered public generator getters: ${missing.join(", ")}`);
+}
+
+describe("API - generator batching", () => {
+    test("batches source file requests", context => {
+        const api = spawnAPI(parityFiles);
+        context.after(() => api.close());
+        const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
+        const [[fromText, fromFile]] = api.batch(all(
+            api.createSourceFile.gen("/generated.ts", "export const generated = true;"),
+            api.createSourceFileFromFile.gen("/src/index.ts"),
+        ));
+        assert.equal(fromText.text, "export const generated = true;");
+        assert.equal(fromFile.text, parityFiles["/src/index.ts"]);
+        assert.deepEqual(requestBatches, [
+            ["initialize"],
+            ["createSourceFile", "createSourceFileFromFile"],
+        ]);
+    });
+
+    test("all and defer yield discriminated host messages without starting children", () => {
+        let started = false;
+        function* child() {
+            started = true;
+            return "child";
+        }
+        const joined = child();
+        const deferred = child();
+        assert.deepEqual(all(joined).next(), { done: false, value: { method: "__all", generators: [joined] } });
+        assert.deepEqual(defer(deferred).next(), { done: false, value: { method: "__defer", deferred } });
+        const generators: APIRequestGenerator[] = [all(joined), defer(deferred)];
+        for (const generator of generators) {
+            const state = generator.next();
+            if (state.done || !("method" in state.value)) assert.fail("Expected a host message");
+            switch (state.value.method) {
+                case "__all":
+                    assert.deepEqual(state.value.generators, [joined]);
+                    break;
+                case "__defer":
+                    assert.strictEqual(state.value.deferred, deferred);
+                    break;
+                default: {
+                    const request: APIRequest = state.value;
+                    assert.fail(`Unexpected API request: ${request.method}`);
+                }
+            }
+        }
+        assert.equal(started, false);
+    });
+
+    test("all preserves generator protocol behavior", () => {
+        let started = false;
+        function* child() {
+            started = true;
+            return "child";
+        }
+        const generator = child();
+        const joined = all(generator);
+        assert.strictEqual(joined[globalThis.Symbol.iterator](), joined);
+        assert.deepEqual(joined.next(["ignored"]), { done: false, value: { method: "__all", generators: [generator] } });
+        const results: [string] = ["result"];
+        assert.deepEqual(joined.next(results), { done: true, value: results });
+        assert.deepEqual(joined.next(["ignored"]), { done: true, value: undefined });
+        assert.deepEqual(joined.return(results), { done: true, value: results });
+
+        for (const begin of [false, true]) {
+            const returned = all(generator);
+            const thrown = all(generator);
+            if (begin) {
+                returned.next();
+                thrown.next();
+            }
+            assert.deepEqual(returned.return(results), { done: true, value: results });
+            assert.deepEqual(returned.next(), { done: true, value: undefined });
+            const error = new Error("failed");
+            assert.throws(() => thrown.throw(error), actual => actual === error);
+            assert.deepEqual(thrown.next(), { done: true, value: undefined });
+        }
+        assert.equal(started, false);
+    });
+
+    test("defer preserves generator protocol behavior", () => {
+        let started = false;
+        function* child() {
+            started = true;
+            return "child";
+        }
+        const generator = child();
+        const deferred = defer(generator);
+        assert.strictEqual(deferred[globalThis.Symbol.iterator](), deferred);
+        assert.deepEqual(deferred.next("ignored"), { done: false, value: { method: "__defer", deferred: generator } });
+        assert.deepEqual(deferred.next("ignored"), { done: true, value: undefined });
+        assert.deepEqual(deferred.next("ignored"), { done: true, value: undefined });
+
+        for (const begin of [false, true]) {
+            const returned = defer(generator);
+            const thrown = defer(generator);
+            const disposed = defer(generator);
+            if (begin) {
+                returned.next();
+                thrown.next();
+                disposed.next();
+            }
+            assert.deepEqual(returned.return(undefined), { done: true, value: undefined });
+            assert.deepEqual(returned.next(), { done: true, value: undefined });
+            const error = new Error("failed");
+            assert.throws(() => thrown.throw(error), actual => actual === error);
+            assert.deepEqual(thrown.next(), { done: true, value: undefined });
+            assert.ok(globalThis.Symbol.dispose in disposed);
+            const dispose = disposed[globalThis.Symbol.dispose];
+            assert.ok(typeof dispose === "function");
+            dispose.call(disposed);
+            assert.deepEqual(disposed.next(), { done: true, value: undefined });
+        }
+        assert.equal(started, false);
+    });
+
+    test("retains deferred branding after completion", () => {
+        let completed = false;
+        function* child(): Generator<APIRequest, string, string> {
+            const result = yield { method: "request", params: null } as unknown as APIRequest;
+            completed = true;
+            return result;
+        }
+        const deferred = defer(child());
+        const results: [] = executeRequestGenerators([deferred] as const, requests => requests.map(request => ({ result: request.method })));
+        assert.deepEqual(results, []);
+        assert.equal(completed, true);
+        const noRequests = () => assert.fail("Unexpected request round");
+        assert.deepEqual(executeRequestGenerators([deferred], noRequests), []);
+        assert.throws(() => executeRequestGenerators([deferred, deferred], noRequests), /same generator instance more than once/);
+    });
+
+    test("joins nested, empty, and synchronously completed groups in result order", () => {
+        function* completed(value: string) {
+            return value;
+        }
+        function* request(value: string, rounds: number): Generator<APIRequest, string, string> {
+            for (let round = 0; round < rounds; round++) {
+                yield { method: value, params: null } as unknown as APIRequest;
+            }
+            return value;
+        }
+        const batches: string[][] = [];
+        const results = executeRequestGenerators([
+            all(request("slow", 2), all(), completed("sync"), all(request("fast", 1), defer(request("background", 3)))),
+        ], requests => {
+            batches.push(requests.map(request => request.method));
+            return requests.map(request => ({ result: request.method }));
+        });
+        assert.deepEqual(results, [["slow", [], "sync", ["fast"]]]);
+        assert.equal(batches.length, 3);
+        assert.deepEqual(batches.map(batch => [...batch].sort()), [["background", "fast", "slow"], ["background", "slow"], ["background"]]);
+    });
+
+    test("preserves tuple results through all and any generator types", () => {
+        function* numberResult() {
+            return 42;
+        }
+        function* stringResult() {
+            return "result";
+        }
+        const joined: AllAPIRequestGenerator<[number, [string]]> = all(numberResult(), defer(stringResult()), all(stringResult()));
+        const generator: AnyAPIRequestGenerator<[number, [string]]> = joined;
+        const results: [[number, [string]]] = executeRequestGenerators([generator] as const, () => assert.fail("Unexpected request round"));
+        assert.deepEqual(results, [[42, ["result"]]]);
+
+        const mixed: (APIRequestGenerator<number> | AllAPIRequestGenerator<[string]> | DeferredAPIRequestGenerator)[] = [
+            numberResult(),
+            all(stringResult()),
+            defer(stringResult()),
+        ];
+        const arrayResults: (number | [string])[] = executeRequestGenerators(mixed, () => assert.fail("Unexpected request round"));
+        assert.deepEqual(arrayResults, [42, ["result"]]);
+
+        const variadic: readonly [APIRequestGenerator<number>, ...AllAPIRequestGenerator<[string]>[]] = [numberResult(), all(stringResult()), all(stringResult())];
+        const variadicResults: (number | [string])[] = executeRequestGenerators(variadic, () => assert.fail("Unexpected request round"));
+        assert.deepEqual(variadicResults, [42, ["result"], ["result"]]);
+    });
+
+    test("preserves sibling order across repeated nested joins", () => {
+        function* request(method: string): Generator<APIRequest, string, string> {
+            return yield { method, params: null } as unknown as APIRequest;
+        }
+        function* foreground() {
+            for (let round = 0; round < 3; round++) {
+                yield* all(all(request("first")), request("second"));
+            }
+        }
+        function* sibling() {
+            for (let round = 0; round < 3; round++) yield* request("sibling");
+        }
+        const batches: string[][] = [];
+        executeRequestGenerators([foreground(), sibling()], requests => {
+            batches.push(requests.map(request => request.method));
+            return requests.map(request => ({ result: request.method }));
+        });
+        assert.deepEqual(batches, Array.from({ length: 3 }, () => ["first", "second", "sibling"]));
+    });
+
+    for (const failBackground of [false, true]) {
+        test(`preserves root all ordering with ${failBackground ? "failing" : "successful"} deferred work`, () => {
+            for (const depth of [1, 4]) {
+                const events: string[] = [];
+                const batches: string[][] = [];
+                function* request(method: string): Generator<APIRequest, string, string> {
+                    const result = yield { method, params: null } as unknown as APIRequest;
+                    events.push(method);
+                    return result;
+                }
+                function* foreground() {
+                    yield* defer(request("background"));
+                    return yield* request("foreground");
+                }
+                function* sibling() {
+                    try {
+                        return yield* request("sibling");
+                    }
+                    finally {
+                        events.push("sibling cleanup");
+                    }
+                }
+                let joined: APIRequestGenerator = all(foreground(), sibling());
+                let expected: unknown = ["foreground", "sibling"];
+                for (let level = 1; level < depth; level++) {
+                    joined = all(joined);
+                    expected = [expected];
+                }
+                const run = () =>
+                    executeRequestGenerators([joined], requests => {
+                        batches.push(requests.map(request => request.method));
+                        return requests.map(request =>
+                            failBackground && request.method as string === "background"
+                                ? { result: undefined, error: "background failed" }
+                                : { result: request.method }
+                        );
+                    });
+                if (failBackground) assert.throws(run, /background failed/);
+                else assert.deepEqual(run(), [expected]);
+                assert.deepEqual(batches, [["foreground", "sibling", "background"]]);
+                assert.deepEqual(
+                    events,
+                    failBackground
+                        ? ["foreground", "sibling", "sibling cleanup"]
+                        : ["foreground", "sibling", "sibling cleanup", "background"],
+                );
+            }
+        });
+    }
+
+    test("preserves singleton join continuations through requests, errors, and deferred work", () => {
+        const events: string[] = [];
+        function* request(method: string): Generator<APIRequest, string, string> {
+            return yield { method, params: null } as unknown as APIRequest;
+        }
+        function* recovering() {
+            try {
+                yield* all(all(request("bad")));
+                assert.fail("Expected the request to fail");
+            }
+            catch (error) {
+                assert.equal((error as Error).message, "failed");
+                return yield* all(request("recovered"), all(request("sibling")));
+            }
+        }
+        function* background() {
+            yield* request("background");
+            events.push("background finished");
+        }
+        function* foreground() {
+            const empty: [] = yield* all(defer(background()));
+            assert.deepEqual(empty, []);
+            const result = yield* all(all(recovering()));
+            events.push("foreground finished");
+            return result;
+        }
+        const batches: string[][] = [];
+        const results = executeRequestGenerators([foreground()], requests => {
+            batches.push(requests.map(request => request.method));
+            return requests.map(request => request.method as string === "bad" ? { result: undefined, error: "failed" } : { result: request.method });
+        });
+        assert.deepEqual(results, [[[["recovered", ["sibling"]]]]]);
+        assert.deepEqual(batches, [["bad", "background"], ["recovered", "sibling"]]);
+        assert.deepEqual(events, ["background finished", "foreground finished"]);
+    });
+
+    test("finishes joined foreground cleanup before deferred request errors", () => {
+        const events: string[] = [];
+        function* request(method: string): Generator<APIRequest, void, unknown> {
+            yield { method, params: null } as unknown as APIRequest;
+        }
+        function* foreground() {
+            try {
+                yield* defer(request("background"));
+                yield* all(request("foreground"));
+                events.push("foreground finished");
+            }
+            finally {
+                events.push("foreground cleanup");
+            }
+        }
+        assert.throws(
+            () => executeRequestGenerators([foreground()], requests => requests.map(request => request.method as string === "background" ? { result: undefined, error: "background failed" } : { result: true })),
+            /background failed/,
+        );
+        assert.deepEqual(events, ["foreground finished", "foreground cleanup"]);
+    });
+
+    test("completes root all helpers before detached work finishes", () => {
+        let joined: AllAPIRequestGenerator<[string]>;
+        function* foreground(): Generator<APIRequest, string, string> {
+            return yield { method: "foreground", params: null } as unknown as APIRequest;
+        }
+        function* background(): Generator<APIRequest, void, unknown> {
+            yield { method: "background", params: null } as unknown as APIRequest;
+            assert.deepEqual(joined.next(["unexpected"]), { done: true, value: undefined });
+        }
+        joined = all(foreground(), defer(background()));
+        assert.deepEqual(executeRequestGenerators([joined], requests => requests.map(request => ({ result: request.method }))), [["foreground"]]);
+    });
+
+    test("throws nested all failures into the waiting parent", () => {
+        const events: string[] = [];
+        function* failing(): Generator<APIRequest, void, unknown> {
+            yield { method: "bad", params: null } as unknown as APIRequest;
+        }
+        function* parent() {
+            try {
+                yield* all(all(failing()));
+            }
+            catch (error) {
+                events.push((error as Error).message);
+                return "recovered";
+            }
+            return "unexpected";
+        }
+        assert.deepEqual(executeRequestGenerators([parent()], requests => requests.map(() => ({ result: undefined, error: "failed" }))), ["recovered"]);
+        assert.deepEqual(events, ["failed"]);
+    });
+
+    test("cancels failed join siblings but finishes detached and unrelated work", () => {
+        const events: string[] = [];
+        function* request(method: string): Generator<APIRequest, string, string> {
+            const result = yield { method, params: null } as unknown as APIRequest;
+            events.push(method);
+            return result;
+        }
+        function* parent() {
+            try {
+                yield* all(defer(request("background")), request("bad"), all(request("cancelled")));
+            }
+            catch {
+                return yield* request("recovery");
+            }
+        }
+        assert.deepEqual(
+            executeRequestGenerators([parent(), request("unrelated")], requests => requests.map(request => request.method as string === "bad" ? { result: undefined, error: "failed" } : { result: request.method })),
+            ["recovery", "unrelated"],
+        );
+        assert.deepEqual(events, ["background", "unrelated", "recovery"]);
+    });
+
+    test("catches synchronous join failures including undefined", () => {
+        function* failing(): APIRequestGenerator {
+            throw undefined;
+        }
+        function* parent() {
+            try {
+                yield* all(all(failing()));
+            }
+            catch (error) {
+                assert.strictEqual(error, undefined);
+                return "recovered";
+            }
+            return "unexpected";
+        }
+        assert.deepEqual(executeRequestGenerators([parent()], () => assert.fail("Unexpected request round")), ["recovered"]);
+    });
+
+    test("does not route synchronous deferred failures through a waiting join", () => {
+        const events: string[] = [];
+        function* failing(): APIRequestGenerator {
+            throw new Error("deferred failure");
+        }
+        function* parent() {
+            try {
+                yield* all(defer(failing()));
+            }
+            catch {
+                events.push("caught by parent");
+            }
+        }
+        assert.throws(
+            () => executeRequestGenerators([parent()], () => assert.fail("Unexpected request round")),
+            /deferred failure/,
+        );
+        assert.deepEqual(events, []);
+    });
+
+    test("rejects generator reuse across joins and deferred work", () => {
+        function* request(): Generator<APIRequest, string, string> {
+            return yield { method: "request", params: null } as unknown as APIRequest;
+        }
+        for (const wrap of [all, defer]) {
+            const generator = request();
+            assert.throws(
+                () => executeRequestGenerators([all(generator), wrap(generator)], requests => requests.map(request => ({ result: request.method }))),
+                /same generator instance more than once/,
+            );
+        }
+    });
+
+    test("rejects completed generator reuse after a join finishes", () => {
+        function* request(): Generator<APIRequest, string, string> {
+            return yield { method: "request", params: null } as unknown as APIRequest;
+        }
+        for (const wrap of [all, defer]) {
+            const generator = request();
+            function* parent() {
+                yield* all(generator);
+                yield* wrap(generator);
+            }
+            let requestsExecuted = 0;
+            assert.throws(
+                () =>
+                    executeRequestGenerators([parent()], requests => {
+                        requestsExecuted += requests.length;
+                        return requests.map(request => ({ result: request.method }));
+                    }),
+                /same generator instance more than once/,
+            );
+            assert.equal(requestsExecuted, 1);
+        }
+    });
+
+    test("tracks all identity independently across executors", () => {
+        const joined = all();
+        const noRequests = () => assert.fail("Unexpected request round");
+        function* parent() {
+            assert.deepEqual(yield* all(joined), [[]]);
+            assert.deepEqual(executeRequestGenerators([joined], noRequests), [undefined]);
+            try {
+                yield* all(joined);
+                assert.fail("Expected duplicate generator rejection");
+            }
+            catch (error) {
+                assert.match((error as Error).message, /same generator instance more than once/);
+            }
+        }
+        executeRequestGenerators([parent()], noRequests);
+        assert.deepEqual(executeRequestGenerators([joined], noRequests), [undefined]);
+        assert.throws(() => executeRequestGenerators([joined, joined], noRequests), /same generator instance more than once/);
+    });
+
+    test("deduplicates initialization across nested joins", () => {
+        function* request(method: string): Generator<APIRequest, string, string> {
+            return yield { method, params: null } as unknown as APIRequest;
+        }
+        const batches: string[][] = [];
+        const results = executeRequestGenerators([all(request("initialize"), all(request("initialize"), request("other"))), request("other")], requests => {
+            batches.push(requests.map(request => request.method));
+            return requests.map((request, index) => ({ result: `${request.method}:${index}` }));
+        });
+        assert.deepEqual(batches, [["initialize", "other", "other"]]);
+        assert.deepEqual(results, [["initialize:0", ["initialize:0", "other:1"]], "other:2"]);
+    });
+
+    test("composes request generators with all", context => {
+        const api = spawnAPI(parityFiles);
+        const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
+        function* getStrictOption() {
+            const commandLine = yield* api.parseCommandLine.gen(["--strict"]);
+            const config = yield* api.readConfigFile.gen("/tsconfig.json");
+            const parsed = yield* api.parseJsonConfigFileContent.gen(config.config, { configFileName: "/tsconfig.json" });
+            return { strict: commandLine.options.strict, fileNames: parsed.fileNames };
+        }
+        function* getTranspiledText() {
+            const config = yield* api.readConfigFile.gen("/tsconfig.json");
+            const parsed = yield* api.parseJsonConfigFileContent.gen(config.config, { configFileName: "/tsconfig.json" });
+            const output = yield* api.transpileModule.gen("const value: string = 'ok';", { compilerOptions: parsed.options });
+            return output.outputText;
+        }
+
+        try {
+            const [[config, outputText]] = api.batch(all(getStrictOption(), getTranspiledText()));
+            assert.equal(config.strict, true);
+            assert.deepEqual([...config.fileNames].sort(), ["/src/bind.ts", "/src/index.ts", "/src/models.ts", "/src/suggestions.ts", "/src/syntax.ts"]);
+            assert.match(outputText, /const value = ['"]ok['"]/);
+            assert.deepEqual(requestBatches, [
+                ["initialize"],
+                ["parseCommandLine", "readConfigFile"],
+                ["readConfigFile", "parseJsonConfigFileContent"],
+                ["parseJsonConfigFileContent", "transpileModule"],
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("throws request errors into generators", () => {
+        const api = spawnAPI();
+        const events: string[] = [];
+        function* requestWithCleanup(): Generator<APIRequest, string, APIResponse["result"]> {
+            try {
+                yield { method: "unknown", params: null } as unknown as APIRequest;
+                return "unexpected";
+            }
+            catch {
+                events.push("caught");
+                return "recovered";
+            }
+            finally {
+                events.push("finally");
+            }
+        }
+
+        try {
+            assert.deepEqual(api.batch(requestWithCleanup()), ["recovered"]);
+            assert.deepEqual(events, ["caught", "finally"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("lazily caches generator-enabled methods", () => {
+        const api = spawnAPI();
+        const prototype = Object.getPrototypeOf(api);
+        try {
+            assert.equal(Object.hasOwn(api, "parseCommandLine"), false);
+            assert.equal(typeof Object.getOwnPropertyDescriptor(prototype, "parseCommandLine")?.get, "function");
+
+            const method = api.parseCommandLine;
+            assert.strictEqual(api.parseCommandLine, method);
+            assert.equal(Object.hasOwn(api, "parseCommandLine"), true);
+            assert.equal(Object.keys(api).includes("parseCommandLine"), false);
+            assert.equal(typeof method.gen, "function");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("advances generators through multiple request rounds", () => {
+        const api = spawnAPI();
+        try {
+            const [commandLine, config] = api.batch(
+                api.parseCommandLine.gen(["--strict"]),
+                api.readConfigFile.gen("/tsconfig.json"),
+            );
+
+            assert.equal(commandLine.options.strict, true);
+            assert.deepEqual(config.config, {});
+        }
+        finally {
+            api.batch(api.close.gen());
+            api.close();
+        }
+    });
+
+    test("transparently paginates batch responses", () => {
+        const api = spawnAPI(undefined, { maxResponseBytesPerPage: 1 });
+        try {
+            const [strict, config, noImplicitAny] = api.batch(
+                api.parseCommandLine.gen(["--strict"]),
+                api.readConfigFile.gen("/tsconfig.json"),
+                api.parseCommandLine.gen(["--noImplicitAny"]),
+            );
+
+            assert.equal(strict.options.strict, true);
+            assert.deepEqual(config.config, {});
+            assert.equal(noImplicitAny.options.noImplicitAny, true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("transparently paginates responses at the default batch size limit", () => {
+        const largeConfigValue = "x".repeat(5_000_000);
+        const requestCount = 64;
+        const api = spawnAPI({ "/large.json": JSON.stringify({ largeConfigValue }) }, { collectTiming: true });
+        try {
+            api.parseCommandLine([]);
+            api.resetTimingInfo();
+
+            const configs = api.batch(...Array.from({ length: requestCount }, () => api.readConfigFile.gen("/large.json")));
+            assert.equal(configs.length, requestCount);
+            for (const config of configs) {
+                assert.deepEqual(config.config, { largeConfigValue });
+            }
+
+            const timing = api.getTimingInfo();
+            assert.equal(timing.totals.requestCount, 2);
+            assert.deepEqual(timing.recentRequests.map(request => request.method), ["batchRequests", "batchRequests"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("executes deferred generators without returning their results", context => {
+        const api = spawnAPI();
+        const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
+        function* runConcurrentRequests() {
+            yield* defer(api.parseCommandLine.gen(["--strict"]));
+            yield* defer(api.readConfigFile.gen("/tsconfig.json"));
+            return yield* all(
+                api.parseCommandLine.gen(["--target", "esnext"]),
+                api.readConfigFile.gen("/base.json"),
+            );
+        }
+
+        try {
+            const [[[commandLine, config]]] = api.batch(all(runConcurrentRequests()));
+            assert.equal(commandLine.options.target, 99);
+            assert.deepEqual(config.config, {});
+            assert.deepEqual(requestBatches, [
+                ["initialize"],
+                ["parseCommandLine", "readConfigFile", "parseCommandLine", "readConfigFile"],
+            ]);
+
+            const [onlyConfig] = api.batch(
+                defer(api.parseCommandLine.gen(["--strict"])),
+                api.readConfigFile.gen("/tsconfig.json"),
+            );
+            assert.deepEqual(onlyConfig.config, {});
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("waits for deferred work spawned after a request", () => {
+        const api = spawnAPI();
+        const events: string[] = [];
+        function* backgroundWork() {
+            events.push("started");
+            yield* api.parseCommandLine.gen(["--strict"]);
+            events.push("completed");
+        }
+        function* foregroundWork() {
+            const config = yield* api.readConfigFile.gen("/tsconfig.json");
+            yield* defer(backgroundWork());
+            events.push("foreground completed");
+            return config;
+        }
+
+        try {
+            const [config] = api.batch(foregroundWork());
+            assert.deepEqual(config.config, {});
+            assert.deepEqual(events, ["started", "foreground completed", "completed"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("does not block on deferred work from a nested all", () => {
+        const api = spawnAPI();
+        const events: string[] = [];
+        function* backgroundWork() {
+            yield* api.readConfigFile.gen("/base.json");
+            yield* api.readConfigFile.gen("/tsconfig.json");
+            yield* api.readConfigFile.gen("/base.json");
+            events.push("background completed");
+        }
+        function* nestedWork() {
+            yield* defer(backgroundWork());
+            return yield* api.parseCommandLine.gen(["--strict"]);
+        }
+        function* foregroundWork() {
+            const [commandLine] = yield* all(nestedWork());
+            events.push("nested all completed");
+            const config = yield* api.readConfigFile.gen("/tsconfig.json");
+            events.push("foreground completed");
+            return { commandLine, config };
+        }
+
+        try {
+            api.parseCommandLine([]);
+            const [{ commandLine, config }] = api.batch(foregroundWork());
+            assert.equal(commandLine.options.strict, true);
+            assert.deepEqual(config.config, {});
+            assert.deepEqual(events, ["nested all completed", "foreground completed", "background completed"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("omits deferred results in any batch position", () => {
+        const api = spawnAPI();
+        let synchronousWorkCompleted = false;
+        function* synchronousWork() {
+            synchronousWorkCompleted = true;
+            return "ignored";
+        }
+
+        try {
+            const [commandLine, config] = api.batch(
+                api.parseCommandLine.gen(["--strict"]),
+                defer(api.readConfigFile.gen("/base.json")),
+                api.readConfigFile.gen("/tsconfig.json"),
+                defer(synchronousWork()),
+            );
+            assert.equal(commandLine.options.strict, true);
+            assert.deepEqual(config.config, {});
+            assert.equal(synchronousWorkCompleted, true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("throws request errors into deferred generators", () => {
+        const api = spawnAPI();
+        const events: string[] = [];
+        function* requestWithCleanup(): Generator<APIRequest, void, APIResponse["result"]> {
+            try {
+                yield { method: "unknown", params: null } as unknown as APIRequest;
+            }
+            catch {
+                events.push("caught");
+            }
+            finally {
+                events.push("finally");
+            }
+        }
+
+        try {
+            assert.deepEqual(api.batch(defer(requestWithCleanup())), []);
+            assert.deepEqual(events, ["caught", "finally"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("batch execution deduplicates only initialize requests within a round", () => {
+        const requestBatches: string[][] = [];
+        function* request(method: string): Generator<APIRequest, APIResponse["result"], APIResponse["result"]> {
+            return yield { method, params: null } as unknown as APIRequest;
+        }
+
+        const results = executeRequestGenerators(
+            [request("initialize"), request("initialize"), request("other"), request("other")],
+            requests => {
+                requestBatches.push(requests.map(request => request.method));
+                return requests.map(request => ({ result: request.method }));
+            },
+        );
+
+        assert.deepEqual(requestBatches, [["initialize", "other", "other"]]);
+        assert.deepEqual(results, ["initialize", "initialize", "other", "other"]);
+    });
+
+    test("does not execute an empty request round", () => {
+        let executions = 0;
+        function* completed(value: string) {
+            return value;
+        }
+
+        assert.deepEqual(
+            executeRequestGenerators([], () => {
+                executions++;
+                return [];
+            }),
+            [],
+        );
+        assert.deepEqual(
+            executeRequestGenerators([completed("first"), completed("second")], () => {
+                executions++;
+                return [];
+            }),
+            ["first", "second"],
+        );
+        assert.equal(executions, 0);
+    });
+
+    test("maps deduplicated responses back into request groups", () => {
+        const requestBatches: string[][] = [];
+        function* groupedRequests(): Generator<readonly APIRequest[], readonly string[], readonly { result: string; }[]> {
+            const responses = yield [
+                { method: "initialize", params: null },
+                { method: "other", params: null },
+                { method: "initialize", params: null },
+            ] as unknown as readonly APIRequest[];
+            return responses.map(response => response.result);
+        }
+        function* initializeRequest(): Generator<APIRequest, string, string> {
+            return yield { method: "initialize", params: null } as unknown as APIRequest;
+        }
+
+        const results = executeRequestGenerators([groupedRequests(), initializeRequest()], requests => {
+            requestBatches.push(requests.map(request => request.method));
+            return requests.map((request, index) => ({ result: `${request.method}:${index}` }));
+        });
+
+        assert.deepEqual(requestBatches, [["initialize", "other"]]);
+        assert.deepEqual(results, [["initialize:0", "other:1", "initialize:0"], "initialize:0"]);
+    });
+
+    test("isolates handled errors from other generators in the same round", () => {
+        const requestBatches: string[][] = [];
+        function* recoveringRequest(): Generator<APIRequest, string, string> {
+            try {
+                yield { method: "bad", params: null } as unknown as APIRequest;
+            }
+            catch {
+                return yield { method: "recovery", params: null } as unknown as APIRequest;
+            }
+            return "unexpected";
+        }
+        function* successfulRequest(): Generator<APIRequest, string, string> {
+            return yield { method: "good", params: null } as unknown as APIRequest;
+        }
+
+        const results = executeRequestGenerators([recoveringRequest(), successfulRequest()], requests => {
+            requestBatches.push(requests.map(request => request.method));
+            return requests.map(request => request.method as string === "bad" ? { result: undefined, error: "failed" } : { result: request.method });
+        });
+
+        assert.deepEqual(requestBatches, [["bad", "good"], ["recovery"]]);
+        assert.deepEqual(results, ["recovery", "good"]);
+    });
+
+    test("executes recursively deferred generators", () => {
+        const events: string[] = [];
+        function* grandchild() {
+            yield { method: "grandchild", params: null } as unknown as APIRequest;
+            events.push("grandchild completed");
+        }
+        function* child() {
+            yield* defer(grandchild());
+            yield { method: "child", params: null } as unknown as APIRequest;
+            events.push("child completed");
+        }
+        function* parent() {
+            yield* defer(child());
+            yield { method: "parent", params: null } as unknown as APIRequest;
+            events.push("parent completed");
+        }
+
+        executeRequestGenerators([parent()], requests => requests.map(request => ({ result: request.method })));
+
+        assert.deepEqual(events, ["parent completed", "child completed", "grandchild completed"]);
+    });
+
+    test("surfaces deferred errors after the parent completes", () => {
+        const events: string[] = [];
+        function* background() {
+            yield { method: "background", params: null } as unknown as APIRequest;
+        }
+        function* parent() {
+            yield* defer(background());
+            events.push("parent completed");
+        }
+
+        assert.throws(
+            () => executeRequestGenerators([parent()], requests => requests.map(() => ({ result: undefined, error: "deferred failure" }))),
+            /deferred failure/,
+        );
+        assert.deepEqual(events, ["parent completed"]);
+    });
+
+    test("appends deferred work after the parent request", () => {
+        const requestBatches: string[][] = [];
+        function* background() {
+            yield { method: "background", params: null } as unknown as APIRequest;
+        }
+        function* parent() {
+            yield* defer(background());
+            yield { method: "parent", params: null } as unknown as APIRequest;
+        }
+
+        executeRequestGenerators([parent()], requests => {
+            requestBatches.push(requests.map(request => request.method));
+            return requests.map(request => ({ result: request.method }));
+        });
+
+        assert.deepEqual(requestBatches, [["parent", "background"]]);
+    });
+
+    test("rejects repeated generator instances", () => {
+        function* request(): Generator<APIRequest, string, string> {
+            return yield { method: "request", params: null } as unknown as APIRequest;
+        }
+        const generator = request();
+
+        assert.throws(
+            () => executeRequestGenerators([generator, generator], requests => requests.map(request => ({ result: request.method }))),
+            /same generator instance more than once/,
+        );
+    });
+
+    test("yields source file metadata requests on cache misses", () => {
+        const api = spawnAPI();
+        try {
+            using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+            const sourceFile = program.getSourceFile("/src/index.ts")!;
+            const state = program.getSourceFileMetadataByPath.gen(sourceFile.path).next();
+
+            if (state.done) assert.fail("Expected getSourceFileMetadataByPath.gen() to yield a request");
+            assert.equal(state.value.method, "getSourceFileMetadata");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("uses generators attached to sync API methods", () => {
+        const api = spawnAPI();
+        try {
+            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const node = cast(
+                cast(sourceFile.statements[0], isImportDeclaration).importClause?.namedBindings,
+                isNamedImports,
+            ).elements[0].name;
+
+            const [defaultProject, sourceFileNames] = api.batch(
+                snapshot.getDefaultProjectForFile.gen("/src/index.ts"),
+                project.program.getSourceFileNames.gen(),
+            );
+            assert.strictEqual(defaultProject, project);
+            assert.ok(sourceFileNames.includes("/src/foo.ts"));
+            assert.ok(sourceFileNames.includes("/src/index.ts"));
+
+            const [symbol, type] = api.batch(
+                project.checker.getSymbolAtLocation.gen(node),
+                project.checker.getTypeAtLocation.gen(node),
+            );
+            const syncSymbol = project.checker.getSymbolAtLocation(node);
+            const syncType = project.checker.getTypeAtLocation(node);
+
+            assert.ok(symbol);
+            assert.ok(syncSymbol);
+            assert.equal(symbol.name, "foo");
+            assert.strictEqual(symbol, syncSymbol);
+            assert.strictEqual(type, syncType);
+            assert.ok(symbol.flags & SymbolFlags.Alias);
+            assert.ok(type.flags & TypeFlags.NumberLiteral);
+            assert.equal(Object.hasOwn(syncType, "getProperties"), false);
+            assert.equal(typeof Object.getOwnPropertyDescriptor(Object.getPrototypeOf(syncType), "getProperties")?.get, "function");
+
+            const [parent, properties] = api.batch(
+                syncSymbol.getParent.gen(),
+                syncType.getProperties.gen(),
+            );
+            assert.equal(parent, undefined);
+            assert.ok(properties.some(property => property.name === "toString"));
+            assert.equal(Object.hasOwn(syncType, "getProperties"), true);
+            assert.equal(Object.keys(syncType).includes("getProperties"), false);
+        }
+        finally {
+            api.batch(api.close.gen());
+            api.close();
+        }
+    });
+
+    test("keeps every publicly reachable generator-backed method in sync", () => {
+        const api = spawnAPI(parityFiles);
+        try {
+            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+            const { checker, emitter, languageService, program } = project;
+            const indexFile = program.getSourceFile("/src/index.ts")!;
+            const modelsFile = program.getSourceFile("/src/models.ts")!;
+
+            const importDeclaration = cast(indexFile.statements[0], isImportDeclaration);
+            const importSpecifier = cast(importDeclaration.moduleSpecifier, isStringLiteral);
+            const typeReferenceDirective = indexFile.typeReferenceDirectives[0];
+            const importedNames = cast(importDeclaration.importClause?.namedBindings, isNamedImports);
+            const importedDerived = importedNames.elements.find(element => element.name.text === "Derived")!.name;
+            const exportDeclaration = cast(indexFile.statements[1], isExportDeclaration);
+            const exportSpecifier = cast(exportDeclaration.exportClause, isNamedExports).elements[0];
+            const combineDeclaration = cast(indexFile.statements[2], isFunctionDeclaration);
+            const derivedDeclaration = cast(
+                cast(indexFile.statements[3], isVariableStatement).declarationList.declarations[0],
+                isVariableDeclaration,
+            );
+            const boxDeclaration = cast(
+                cast(indexFile.statements[4], isVariableStatement).declarationList.declarations[0],
+                isVariableDeclaration,
+            );
+            const shorthandDeclaration = cast(
+                cast(indexFile.statements[5], isVariableStatement).declarationList.declarations[0],
+                isVariableDeclaration,
+            );
+            const shorthand = cast(
+                cast(shorthandDeclaration.initializer, isObjectLiteralExpression).properties[0],
+                isShorthandPropertyAssignment,
+            );
+            const calledDeclaration = cast(
+                cast(indexFile.statements[6], isVariableStatement).declarationList.declarations[0],
+                isVariableDeclaration,
+            );
+            const callExpression = cast(calledDeclaration.initializer, isCallExpression);
+            const interfaceDeclaration = cast(modelsFile.statements[0], isInterfaceDeclaration);
+            const derivedClassDeclaration = cast(modelsFile.statements[2], isClassDeclaration);
+            const boxedAlias = cast(modelsFile.statements[3], isTypeAliasDeclaration);
+            const tupleAlias = cast(modelsFile.statements[4], isTypeAliasDeclaration);
+            const arrayAlias = cast(modelsFile.statements[5], isTypeAliasDeclaration);
+            const conditionalAlias = cast(modelsFile.statements[6], isTypeAliasDeclaration);
+            const indexedAlias = cast(modelsFile.statements[7], isTypeAliasDeclaration);
+            const indexAlias = cast(modelsFile.statements[8], isTypeAliasDeclaration);
+            const unionAlias = cast(modelsFile.statements[9], isTypeAliasDeclaration);
+            const enumDeclaration = cast(modelsFile.statements[10], isEnumDeclaration);
+
+            const importedDerivedSymbol = checker.getSymbolAtLocation(importedDerived)!;
+            const combineSymbol = checker.getSymbolAtLocation(combineDeclaration.name!)!;
+            const localCombineSymbol = checker.getSymbolsInScope(combineDeclaration, SymbolFlags.Function).find(symbol => symbol.name === "combine")!;
+            const derivedSymbol = checker.getSymbolAtLocation(cast(derivedDeclaration.name, isIdentifier))!;
+            const interfaceSymbol = checker.getSymbolAtLocation(interfaceDeclaration.name)!;
+            const derivedClassSymbol = checker.getSymbolAtLocation(derivedClassDeclaration.name!)!;
+            const moduleSymbol = checker.getSymbolOfSourceFile("/src/models.ts")!;
+            const unimportedSymbol = checker.getMemberInModuleExports(moduleSymbol, "Unimported")!;
+            const interfaceType = checker.getDeclaredTypeOfSymbol(interfaceSymbol) as InterfaceType;
+            const derivedType = checker.getDeclaredTypeOfSymbol(derivedClassSymbol) as InterfaceType;
+            const derivedConstructorType = checker.getTypeOfSymbol(derivedClassSymbol);
+            const boxedType = checker.getTypeFromTypeNode(boxedAlias.type) as TypeReference;
+            const boxedOptSymbol = checker.getPropertyOfType(boxedType, "opt");
+            assert.ok(boxedOptSymbol);
+            const tupleType = checker.getTypeFromTypeNode(tupleAlias.type);
+            const arrayType = checker.getTypeFromTypeNode(arrayAlias.type);
+            const conditionalType = checker.getTypeFromTypeNode(conditionalAlias.type) as ConditionalType;
+            const indexedType = checker.getTypeFromTypeNode(indexedAlias.type) as IndexedAccessType;
+            checker.getTypeFromTypeNode(indexAlias.type);
+            const unionType = checker.getTypeFromTypeNode(unionAlias.type);
+            const typeParameter = checker.getTypeAtLocation(combineDeclaration.typeParameters![0].name) as TypeParameter;
+            const literalType = checker.getTypeAtLocation(enumDeclaration.members[0].name) as LiteralType;
+            const substitutionType = conditionalType.getTrueType() as SubstitutionType;
+            const signature = checker.getSignatureFromDeclaration(combineDeclaration);
+            const predicateDeclaration = indexFile.statements.find(statement => isFunctionDeclaration(statement) && statement.name?.text === "isDerived")!;
+            const predicateSignature = checker.getSignatureFromDeclaration(predicateDeclaration);
+            const badCallDeclaration = indexFile.statements
+                .filter(isVariableStatement)
+                .flatMap(statement => [...statement.declarationList.declarations])
+                .find(declaration => isIdentifier(declaration.name) && declaration.name.text === "badCall")!;
+            const unknownSignature = checker.getResolvedSignature(cast(badCallDeclaration.initializer, isCallExpression));
+            let argumentsIdentifier: Identifier | undefined;
+            let absentIdentifier: Identifier | undefined;
+            indexFile.forEachChild(function visit(node) {
+                if (isIdentifier(node)) {
+                    if (node.text === "arguments") argumentsIdentifier = node;
+                    if (node.text === "absent" && !absentIdentifier) absentIdentifier = node;
+                }
+                node.forEachChild(visit);
+            });
+            assert.ok(argumentsIdentifier);
+            assert.ok(absentIdentifier);
+            const absentAlias = checker.getSymbolAtLocation(absentIdentifier);
+            assert.ok(absentAlias);
+            const unknownSymbol = checker.getAliasedSymbol(absentAlias);
+            const undefinedSymbol = checker.resolveName("undefined", SymbolFlags.Value, absentIdentifier);
+            const argumentsSymbol = checker.getResolvedSymbol(argumentsIdentifier);
+            assert.ok(unknownSymbol);
+            assert.ok(undefinedSymbol);
+            assert.ok(argumentsSymbol);
+            const constructSignature = derivedConstructorType.getConstructSignatures()[0];
+            const derivedMemberSymbol = derivedType.getProperty("derived")!;
+            const nodeHandle = combineSymbol.valueDeclaration ?? combineSymbol.declarations[0];
+            const completionPosition = parityFiles["/src/index.ts"].indexOf("semanticIssue");
+            const temporaryProjects: string[] = [];
+
+            const orderedArguments = Array.from({ length: 128 }, (_, index) => ["--strict", `--outDir=out-${index}`] as const);
+            const orderedGenerated = api.batch(...orderedArguments.map(args => api.parseCommandLine.gen(args)));
+            const orderedSync = orderedArguments.map(args => api.parseCommandLine(args));
+            assertDeepArraysEquivalent(orderedGenerated, orderedSync, "large parseCommandLine batch");
+            exercisedMethods.add("API.parseCommandLine");
+
+            const timingGeneratorAPI = spawnAPI(parityFiles, { collectTiming: true });
+            const timingSyncAPI = spawnAPI(parityFiles, { collectTiming: true });
+            timingGeneratorAPI.parseCommandLine(["--strict"]);
+            timingSyncAPI.parseCommandLine(["--strict"]);
+            assertTimingInfoEquivalent(
+                timingGeneratorAPI.batch(timingGeneratorAPI.getTimingInfo.gen())[0],
+                timingSyncAPI.getTimingInfo(),
+                "API.getTimingInfo",
+            );
+            timingGeneratorAPI.batch(timingGeneratorAPI.resetTimingInfo.gen());
+            timingSyncAPI.resetTimingInfo();
+            assertTimingInfoEquivalent(timingGeneratorAPI.getTimingInfo(), timingSyncAPI.getTimingInfo(), "API.resetTimingInfo");
+            exercisedMethods.add("API.getTimingInfo");
+            exercisedMethods.add("API.resetTimingInfo");
+            timingGeneratorAPI.close();
+            timingSyncAPI.close();
+
+            assert.ok(project.getImportAdderEdits("/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]).length > 0);
+            assert.ok(program.getSyntacticDiagnostics("/src/syntax.ts").length > 0);
+            assert.ok(program.getBindDiagnostics("/src/bind.ts").length > 0);
+            assert.ok(program.getSuggestionDiagnostics("/src/suggestions.ts").length > 0);
+            assert.strictEqual(derivedMemberSymbol.getParent(), derivedClassSymbol);
+            assert.ok(checker.getTypePredicateOfSignature(predicateSignature));
+            assert.equal(checker.isUnknownSymbol(unknownSymbol), true);
+            assert.equal(checker.isUndefinedSymbol(undefinedSymbol), true);
+            assert.equal(checker.isArgumentsSymbol(argumentsSymbol), true);
+            assert.equal(checker.isUnknownSignature(unknownSignature), true);
+
+            const cases: ParityCase[] = [
+                parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
+                parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
+                parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
+                parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { compilerOptions: { strict: true } }, { configDirectory: "/" }),
+                parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
+                parityCase("API", "createSourceFile", api.createSourceFile, assertSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
+                parityCase("API", "createSourceFileFromFile", api.createSourceFileFromFile, assertSourceFilesEquivalent, "/src/index.ts"),
+                parityCase("API", "transpileModule", api.transpileModule, assertDeepEquivalent, "export const value: number = 1;", { compilerOptions: { module: 99 } }),
+                parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
+                parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
+                parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
+                parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
+                parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { compilerOptions: { noLib: true } }),
+                parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
+                    temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
+                }),
+                parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
+                parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
+
+                parityCase("Project", "getImportAdderEdits", project.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
+                parityCase("Project", "getImportEditsForSymbols", project.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol]),
+
+                parityCase("LanguageService", "getImportAdderEdits", languageService.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
+                parityCase("LanguageService", "getImportEditsForSymbols", languageService.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol], { isValidTypeOnlyUseSite: true }),
+                parityCase("LanguageService", "getReferencedSymbolsForNode", languageService.getReferencedSymbolsForNode, assertDeepEquivalent, combineDeclaration.name!, combineDeclaration.name!.end),
+                parityCase("LanguageService", "getSignatureUsage", languageService.getSignatureUsage, assertDeepEquivalent, combineDeclaration),
+                parityCase("LanguageService", "getCompletionsAtPosition", languageService.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
+
+                parityCase("Program", "getSourceFile", program.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
+                parityCase("Program", "getModeForUsageLocation", program.getModeForUsageLocation, assertDeepEquivalent, "/src/index.ts", importSpecifier),
+                parityCase("Program", "getModeForResolutionAtIndex", program.getModeForResolutionAtIndex, assertDeepEquivalent, "/src/index.ts", 0),
+                parityCase("Program", "getResolvedModule", program.getResolvedModule, assertDeepEquivalent, "/src/index.ts", "./models.js", ModuleKind.CommonJS),
+                parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
+                parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
+                parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
+                parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
+                parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
+                parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),
+                parityCase("Program", "isSourceFileFromExternalLibrary", program.isSourceFileFromExternalLibrary, assertDeepEquivalent, indexFile),
+                parityCase("Program", "isSourceFileDefaultLibrary", program.isSourceFileDefaultLibrary, assertDeepEquivalent, indexFile),
+                parityCase("Program", "getConfigFileNames", program.getConfigFileNames, assertDeepEquivalent),
+                parityCase("Program", "getConfigSourceFile", program.getConfigSourceFile, assertOptionalSourceFilesEquivalent, "/base.json"),
+                parityCase("Program", "getSyntacticDiagnostics", program.getSyntacticDiagnostics, assertDeepEquivalent),
+                parityCase("Program", "getSyntacticDiagnostics", program.getSyntacticDiagnostics, assertDeepEquivalent, "/src/syntax.ts"),
+                parityCase("Program", "getSyntacticDiagnostics", program.getSyntacticDiagnostics, assertDeepEquivalent, ["/src/syntax.ts", "/src/index.ts"]),
+                parityCase("Program", "getBindDiagnostics", program.getBindDiagnostics, assertDeepEquivalent, "/src/bind.ts"),
+                parityCase("Program", "getSemanticDiagnostics", program.getSemanticDiagnostics, assertDeepEquivalent),
+                parityCase("Program", "getSemanticDiagnostics", program.getSemanticDiagnostics, assertDeepEquivalent, "/src/index.ts"),
+                parityCase("Program", "getSemanticDiagnostics", program.getSemanticDiagnostics, assertDeepEquivalent, ["/src/index.ts", "/src/models.ts"]),
+                parityCase("Program", "getSuggestionDiagnostics", program.getSuggestionDiagnostics, assertDeepEquivalent, "/src/suggestions.ts"),
+                parityCase("Program", "getDeclarationDiagnostics", program.getDeclarationDiagnostics, assertDeepEquivalent, "/src/index.ts"),
+                parityCase("Program", "getProgramDiagnostics", program.getProgramDiagnostics, assertDeepEquivalent),
+                parityCase("Program", "getGlobalDiagnostics", program.getGlobalDiagnostics, assertDeepEquivalent),
+                parityCase("Program", "getConfigFileParsingDiagnostics", program.getConfigFileParsingDiagnostics, assertDeepEquivalent),
+                parityCase("Program", "emit", program.emit, assertDeepEquivalent),
+                parityCase("Program", "emitToString", program.emitToString, assertDeepEquivalent),
+                parityCase("Program", "getJavaScriptEmit", program.getJavaScriptEmit, assertDeepEquivalent, ["/src/index.ts"]),
+                parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
+
+                parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
+                parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
+                parityCase("Checker", "getSymbolAtPosition", selectGeneratorMethod<[file: string, position: number], Symbol | undefined>(checker.getSymbolAtPosition), assertOptionalSymbolsEquivalent, "/src/index.ts", importedDerived.pos),
+                parityCase("Checker", "getSymbolAtPosition", checker.getSymbolAtPosition, assertOptionalSymbolArraysEquivalent, "/src/index.ts", [importedDerived.pos, combineDeclaration.name!.pos]),
+                parityCase("Checker", "getSymbolOfSourceFile", selectGeneratorMethod<[file: string], Symbol | undefined>(checker.getSymbolOfSourceFile), assertOptionalSymbolsEquivalent, "/src/models.ts"),
+                parityCase("Checker", "getSymbolOfSourceFile", checker.getSymbolOfSourceFile, assertOptionalSymbolArraysEquivalent, ["/src/index.ts", "/src/models.ts"]),
+                parityCase("Checker", "getTypeOfSymbol", selectGeneratorMethod<[symbol: Symbol], Type>(checker.getTypeOfSymbol), assertTypesEquivalent, derivedClassSymbol),
+                parityCase("Checker", "getTypeOfSymbol", checker.getTypeOfSymbol, assertTypeArraysEquivalent, [derivedClassSymbol, combineSymbol]),
+                parityCase("Checker", "getDeclaredTypeOfSymbol", checker.getDeclaredTypeOfSymbol, assertTypesEquivalent, interfaceSymbol),
+                parityCase("Checker", "getReferencesToSymbolInFile", checker.getReferencesToSymbolInFile, assertNodeHandleArraysEquivalent, "/src/index.ts", derivedSymbol),
+                parityCase("Checker", "getReferencedSymbolsForNode", checker.getReferencedSymbolsForNode, assertDeepEquivalent, combineDeclaration.name!, combineDeclaration.name!.end),
+                parityCase("Checker", "getSignatureUsage", checker.getSignatureUsage, assertDeepEquivalent, combineDeclaration),
+                parityCase("Checker", "getCompletionsAtPosition", checker.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
+                parityCase("Checker", "getTypeAtLocation", selectGeneratorMethod<[node: Node], Type>(checker.getTypeAtLocation), assertTypesEquivalent, boxDeclaration.name),
+                parityCase("Checker", "getTypeAtLocation", checker.getTypeAtLocation, assertTypeArraysEquivalent, [boxDeclaration.name, combineDeclaration.name!]),
+                parityCase("Checker", "getSignaturesOfType", checker.getSignaturesOfType, assertSignatureArraysEquivalent, checker.getTypeAtLocation(combineDeclaration.name!), SignatureKind.Call),
+                parityCase("Checker", "getResolvedSignature", checker.getResolvedSignature, assertOptionalSignaturesEquivalent, callExpression),
+                parityCase("Checker", "getTypeAtPosition", selectGeneratorMethod<[file: string, position: number], Type | undefined>(checker.getTypeAtPosition), assertOptionalTypesEquivalent, "/src/index.ts", boxDeclaration.name.pos),
+                parityCase("Checker", "getTypeAtPosition", checker.getTypeAtPosition, assertOptionalTypeArraysEquivalent, "/src/index.ts", [boxDeclaration.name.pos, calledDeclaration.name.pos]),
+                parityCase("Checker", "resolveName", checker.resolveName, assertOptionalSymbolsEquivalent, "Derived", SymbolFlags.Type | SymbolFlags.Value, importedDerived),
+                parityCase("Checker", "resolveName", checker.resolveName, assertOptionalSymbolsEquivalent, "Derived", SymbolFlags.Type | SymbolFlags.Value, { document: "/src/index.ts", position: importedDerived.pos }),
+                parityCase("Checker", "getSymbolsInScope", checker.getSymbolsInScope, assertUnorderedSymbolArraysEquivalent, combineDeclaration, SymbolFlags.Value | SymbolFlags.Type),
+                parityCase("Checker", "getSymbolsInScope", checker.getSymbolsInScope, assertUnorderedSymbolArraysEquivalent, { document: "/src/index.ts", position: combineDeclaration.pos }, SymbolFlags.Value),
+                parityCase("Checker", "getResolvedSymbol", checker.getResolvedSymbol, assertOptionalSymbolsEquivalent, importedDerived),
+                parityCase("Checker", "getContextualType", checker.getContextualType, assertOptionalTypesEquivalent, boxDeclaration.initializer!),
+                parityCase("Checker", "getContextualTypeForArgumentAtIndex", checker.getContextualTypeForArgumentAtIndex, assertOptionalTypesEquivalent, callExpression, 0),
+                parityCase("Checker", "getAwaitedType", checker.getAwaitedType, assertOptionalTypesEquivalent, interfaceType),
+                parityCase("Checker", "getBaseTypeOfLiteralType", checker.getBaseTypeOfLiteralType, assertTypesEquivalent, literalType),
+                parityCase("Checker", "getNonNullableType", checker.getNonNullableType, assertTypesEquivalent, interfaceType),
+                parityCase("Checker", "getTypeFromTypeNode", checker.getTypeFromTypeNode, assertTypesEquivalent, boxedAlias.type),
+                parityCase("Checker", "getWidenedType", checker.getWidenedType, assertTypesEquivalent, literalType),
+                parityCase("Checker", "getParameterType", checker.getParameterType, assertTypesEquivalent, signature, 0),
+                parityCase("Checker", "isArrayLikeType", checker.isArrayLikeType, assertDeepEquivalent, arrayType),
+                parityCase("Checker", "isTypeAssignableTo", checker.isTypeAssignableTo, assertDeepEquivalent, derivedType, interfaceType),
+                parityCase("Checker", "getShorthandAssignmentValueSymbol", checker.getShorthandAssignmentValueSymbol, assertOptionalSymbolsEquivalent, shorthand),
+                parityCase("Checker", "getTypeOfSymbolAtLocation", checker.getTypeOfSymbolAtLocation, assertTypesEquivalent, derivedSymbol, shorthand),
+                parityCase("Checker", "getAnyType", checker.getAnyType, assertTypesEquivalent),
+                parityCase("Checker", "getStringType", checker.getStringType, assertTypesEquivalent),
+                parityCase("Checker", "getNumberType", checker.getNumberType, assertTypesEquivalent),
+                parityCase("Checker", "getBooleanType", checker.getBooleanType, assertTypesEquivalent),
+                parityCase("Checker", "getVoidType", checker.getVoidType, assertTypesEquivalent),
+                parityCase("Checker", "getUndefinedType", checker.getUndefinedType, assertTypesEquivalent),
+                parityCase("Checker", "getNullType", checker.getNullType, assertTypesEquivalent),
+                parityCase("Checker", "getNeverType", checker.getNeverType, assertTypesEquivalent),
+                parityCase("Checker", "getUnknownType", checker.getUnknownType, assertTypesEquivalent),
+                parityCase("Checker", "getBigIntType", checker.getBigIntType, assertTypesEquivalent),
+                parityCase("Checker", "getESSymbolType", checker.getESSymbolType, assertTypesEquivalent),
+                parityCase("Checker", "getNonPrimitiveType", checker.getNonPrimitiveType, assertTypesEquivalent),
+                parityCase("Checker", "typeToTypeNode", checker.typeToTypeNode, assertOptionalNodesEquivalent, interfaceType, interfaceDeclaration),
+                parityCase("Checker", "signatureToSignatureDeclaration", checker.signatureToSignatureDeclaration, assertOptionalNodesEquivalent, signature, SyntaxKind.FunctionDeclaration, combineDeclaration),
+                parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),
+                parityCase("Checker", "isContextSensitive", checker.isContextSensitive, assertDeepEquivalent, boxDeclaration.initializer!),
+                parityCase("Checker", "isArrayType", checker.isArrayType, assertDeepEquivalent, arrayType),
+                parityCase("Checker", "isTupleType", checker.isTupleType, assertDeepEquivalent, tupleType),
+                parityCase("Checker", "isTupleTypeTarget", checker.isTupleTypeTarget, assertDeepEquivalent, tupleType),
+                parityCase("Checker", "getReturnTypeOfSignature", checker.getReturnTypeOfSignature, assertTypesEquivalent, signature),
+                parityCase("Checker", "getRestTypeOfSignature", checker.getRestTypeOfSignature, assertOptionalTypesEquivalent, signature),
+                parityCase("Checker", "getTypePredicateOfSignature", checker.getTypePredicateOfSignature, assertOptionalTypePredicatesEquivalent, predicateSignature),
+                parityCase("Checker", "getBaseTypes", checker.getBaseTypes, assertTypeArraysEquivalent, derivedType),
+                parityCase("Checker", "getApparentType", checker.getApparentType, assertTypesEquivalent, interfaceType),
+                parityCase("Checker", "getReducedType", checker.getReducedType, assertTypesEquivalent, unionType),
+                parityCase("Checker", "getPropertiesOfType", checker.getPropertiesOfType, assertSymbolArraysEquivalent, interfaceType),
+                parityCase("Checker", "getIndexInfosOfType", checker.getIndexInfosOfType, assertIndexInfosEquivalent, interfaceType),
+                parityCase("Checker", "getIndexInfoOfType", checker.getIndexInfoOfType, assertDeepEquivalent, interfaceType, IndexKind.String),
+                parityCase("Checker", "getIndexTypeOfType", checker.getIndexTypeOfType, assertOptionalTypesEquivalent, interfaceType, IndexKind.Number),
+                parityCase("Checker", "getConstraintOfTypeParameter", checker.getConstraintOfTypeParameter, assertOptionalTypesEquivalent, typeParameter),
+                parityCase("Checker", "getDefaultFromTypeParameter", checker.getDefaultFromTypeParameter, assertOptionalTypesEquivalent, typeParameter),
+                parityCase("Checker", "getBaseConstraintOfType", checker.getBaseConstraintOfType, assertOptionalTypesEquivalent, typeParameter),
+                parityCase("Checker", "getPropertyOfType", checker.getPropertyOfType, assertOptionalSymbolsEquivalent, interfaceType, "value"),
+                parityCase("Checker", "getTypeOfPropertyOfType", checker.getTypeOfPropertyOfType, assertOptionalTypesEquivalent, interfaceType, "value"),
+                parityCase("Checker", "getConstantValue", checker.getConstantValue, assertDeepEquivalent, enumDeclaration.members[0]),
+                parityCase("Checker", "getSignatureFromDeclaration", checker.getSignatureFromDeclaration, assertOptionalSignaturesEquivalent, combineDeclaration),
+                parityCase("Checker", "getExportSpecifierLocalTargetSymbol", checker.getExportSpecifierLocalTargetSymbol, assertOptionalSymbolsEquivalent, exportSpecifier),
+                parityCase("Checker", "getAliasedSymbol", checker.getAliasedSymbol, assertSymbolsEquivalent, importedDerivedSymbol),
+                parityCase("Checker", "getFullyQualifiedName", checker.getFullyQualifiedName, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "getImmediateAliasedSymbol", checker.getImmediateAliasedSymbol, assertOptionalSymbolsEquivalent, importedDerivedSymbol),
+                parityCase("Checker", "isUnknownSymbol", checker.isUnknownSymbol, assertDeepEquivalent, unknownSymbol),
+                parityCase("Checker", "isUndefinedSymbol", checker.isUndefinedSymbol, assertDeepEquivalent, undefinedSymbol),
+                parityCase("Checker", "isArgumentsSymbol", checker.isArgumentsSymbol, assertDeepEquivalent, argumentsSymbol),
+                parityCase("Checker", "isUnknownSignature", checker.isUnknownSignature, assertDeepEquivalent, unknownSignature),
+                parityCase("Checker", "getExportsOfModule", checker.getExportsOfModule, assertSymbolArraysEquivalent, moduleSymbol),
+                parityCase("Checker", "getMemberInModuleExports", checker.getMemberInModuleExports, assertOptionalSymbolsEquivalent, moduleSymbol, "Derived"),
+                parityCase("Checker", "getJsDocTagsOfSymbol", checker.getJsDocTagsOfSymbol, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "getDocumentationCommentOfSymbol", checker.getDocumentationCommentOfSymbol, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "getTypeArguments", checker.getTypeArguments, assertTypeArraysEquivalent, boxedType),
+                parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
+                parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),
+                parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
+                parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
+
+                parityCase("Emitter", "printNode", emitter.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
+                parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
+                parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent),
+                parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent, project),
+
+                parityCase("Symbol", "getParent", derivedMemberSymbol.getParent, assertOptionalSymbolsEquivalent),
+                parityCase("Symbol", "getMembers", derivedClassSymbol.getMembers, assertSymbolMapsEquivalent),
+                parityCase("Symbol", "getExports", moduleSymbol.getExports, assertSymbolMapsEquivalent),
+                parityCase("Symbol", "getExportSymbol", combineSymbol.getExportSymbol, assertSymbolsEquivalent),
+                parityCase("Symbol", "getJsDocTags", combineSymbol.getJsDocTags, assertDeepEquivalent, checker),
+                parityCase("Symbol", "getDocumentationComment", combineSymbol.getDocumentationComment, assertDeepEquivalent, checker),
+
+                parityCase("Type", "getSymbol", interfaceType.getSymbol, assertOptionalSymbolsEquivalent),
+                parityCase("Type", "getProperties", interfaceType.getProperties, assertSymbolArraysEquivalent),
+                parityCase("Type", "getProperty", interfaceType.getProperty, assertOptionalSymbolsEquivalent, "value"),
+                parityCase("Type", "getApparentProperties", interfaceType.getApparentProperties, assertSymbolArraysEquivalent),
+                parityCase("Type", "getCallSignatures", checker.getTypeAtLocation(combineDeclaration.name!).getCallSignatures, assertSignatureArraysEquivalent),
+                parityCase("Type", "getConstructSignatures", derivedConstructorType.getConstructSignatures, assertSignatureArraysEquivalent),
+                parityCase("Type", "getNonNullableType", interfaceType.getNonNullableType, assertTypesEquivalent),
+                parityCase("Type", "getStringIndexType", interfaceType.getStringIndexType, assertOptionalTypesEquivalent),
+                parityCase("Type", "getNumberIndexType", interfaceType.getNumberIndexType, assertOptionalTypesEquivalent),
+                parityCase("Type", "getApparentType", interfaceType.getApparentType, assertTypesEquivalent),
+                parityCase("Type", "getReducedType", unionType.getReducedType, assertTypesEquivalent),
+                parityCase("Type", "getIndexInfos", interfaceType.getIndexInfos, assertIndexInfosEquivalent),
+                parityCase("Type", "getAliasSymbol", boxedType.getAliasSymbol, assertOptionalSymbolsEquivalent),
+                parityCase("Type", "getTarget", boxedType.getTarget, assertTypesEquivalent),
+                parityCase("Type", "getFreshType", literalType.getFreshType, assertOptionalTypesEquivalent),
+                parityCase("Type", "getRegularType", literalType.getRegularType, assertOptionalTypesEquivalent),
+                parityCase("Type", "getTypes", (unionType as UnionOrIntersectionType).getTypes, assertOptionalTypeArrayEquivalent),
+                parityCase("Type", "getTypeParameters", interfaceType.getTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Type", "getOuterTypeParameters", interfaceType.getOuterTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Type", "getLocalTypeParameters", interfaceType.getLocalTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Type", "getThisType", interfaceType.getThisType, assertOptionalTypesEquivalent),
+                parityCase("Type", "getAliasTypeArguments", boxedType.getAliasTypeArguments, assertTypeArraysEquivalent),
+                parityCase("Type", "getObjectType", indexedType.getObjectType, assertTypesEquivalent),
+                parityCase("Type", "getIndexType", indexedType.getIndexType, assertTypesEquivalent),
+                parityCase("Type", "getCheckType", conditionalType.getCheckType, assertTypesEquivalent),
+                parityCase("Type", "getExtendsType", conditionalType.getExtendsType, assertTypesEquivalent),
+                parityCase("Type", "getBaseType", substitutionType.getBaseType, assertTypesEquivalent),
+                parityCase("Type", "getConstraint", typeParameter.getConstraint, assertOptionalTypesEquivalent),
+                parityCase("Type", "getDefault", typeParameter.getDefault, assertOptionalTypesEquivalent),
+                parityCase("Type", "getTrueType", conditionalType.getTrueType, assertTypesEquivalent),
+                parityCase("Type", "getFalseType", conditionalType.getFalseType, assertTypesEquivalent),
+                parityCase("Type", "getBaseTypes", derivedType.getBaseTypes, assertOptionalTypeArrayEquivalent),
+
+                parityCase("Signature", "getTypeParameters", signature.getTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Signature", "getParameters", signature.getParameters, assertSymbolArraysEquivalent),
+                parityCase("Signature", "getThisParameter", signature.getThisParameter, assertOptionalSymbolsEquivalent),
+                parityCase("Signature", "getTarget", constructSignature.getTarget, assertOptionalSignaturesEquivalent),
+                parityCase("Signature", "getReturnType", signature.getReturnType, assertTypesEquivalent),
+                parityCase("Signature", "getTypeParameterAtPosition", signature.getTypeParameterAtPosition, assertTypesEquivalent, 0),
+            ];
+
+            runParityBatch(api, cases);
+            assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
+
+            const snapshotGeneratorAPI = spawnAPI(parityFiles);
+            const snapshotSyncAPI = spawnAPI(parityFiles);
+            try {
+                const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+                const syncBase = snapshotSyncAPI.createSnapshot({ openProject: "/tsconfig.json" });
+                const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen({}))[0];
+                const syncUpdated = syncBase.update({});
+                assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
+                exercisedMethods.add("Snapshot.update");
+            }
+            finally {
+                snapshotGeneratorAPI.close();
+                snapshotSyncAPI.close();
+            }
+
+            const destructiveAPI = spawnAPI(parityFiles);
+            const disposableSnapshot = destructiveAPI.batch(destructiveAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            destructiveAPI.batch(disposableSnapshot.dispose.gen());
+            assert.equal(disposableSnapshot.isDisposed(), true);
+            assert.equal(disposableSnapshot.dispose(), undefined);
+            exercisedMethods.add("Snapshot.dispose");
+            const disposableProgram = destructiveAPI.batch(destructiveAPI.createProgram.gen(["/src/index.ts"], { compilerOptions: { noLib: true } }))[0];
+            destructiveAPI.batch(disposableProgram.dispose.gen());
+            assert.throws(() => disposableProgram.getSourceFileNames(), /snapshot .* not found/);
+            assert.equal(disposableProgram.dispose(), undefined);
+            exercisedMethods.add("Program.dispose");
+            destructiveAPI.batch(destructiveAPI.close.gen());
+            assert.equal(destructiveAPI.close(), undefined);
+            exercisedMethods.add("API.close");
+
+            assertPublicGeneratorCoverage([
+                { name: "API", value: api },
+                { name: "API", value: api.constructor as object, own: true },
+                { name: "InternalAPI", value: api.internal },
+                { name: "Snapshot", value: snapshot },
+                { name: "Project", value: project },
+                { name: "LanguageService", value: languageService },
+                { name: "Program", value: program },
+                { name: "Checker", value: checker },
+                { name: "Emitter", value: emitter },
+                { name: "SnapshotInternalAPI", value: snapshot.internal },
+                { name: "NodeHandle", value: nodeHandle },
+                { name: "Symbol", value: combineSymbol },
+                { name: "Type", value: interfaceType },
+                { name: "Signature", value: signature },
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+test("Generator benchmarks", () => {
+    runBenchmarks({ singleIteration: true });
+});

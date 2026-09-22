@@ -191,6 +191,30 @@ func NewDiagnosticFromSerialized(
 	}
 }
 
+func NewDiagnosticFromText(
+	file *SourceFile,
+	loc core.TextRange,
+	code int32,
+	category diagnostics.Category,
+	text string,
+	messageChain []*Diagnostic,
+	relatedInformation []*Diagnostic,
+	reportsUnnecessary bool,
+	reportsDeprecated bool,
+) *Diagnostic {
+	return &Diagnostic{
+		file:               file,
+		loc:                loc,
+		code:               code,
+		category:           category,
+		message:            diagnostics.NewAdHocMessage(text),
+		messageChain:       messageChain,
+		relatedInformation: relatedInformation,
+		reportsUnnecessary: reportsUnnecessary,
+		reportsDeprecated:  reportsDeprecated,
+	}
+}
+
 func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Message, args ...any) *Diagnostic {
 	return &Diagnostic{
 		file:               file,

@@ -27,7 +27,7 @@ import { C, E } from "./file" with { type: "a" };
 import { A as D, A as F } from "./file" with { type: "b" };
 
 type G = A | B | C | D | E | F;`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

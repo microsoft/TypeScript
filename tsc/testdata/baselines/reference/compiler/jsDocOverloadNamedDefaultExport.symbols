@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/jsDocOverloadNamedDefaultExport.ts] ////
+
+=== jsDocOverloadNamedDefaultExport.js ===
+/** @overload */
+export default function foo() {}
+>foo : Symbol(foo, Decl(jsDocOverloadNamedDefaultExport.js, 0, 5), Decl(jsDocOverloadNamedDefaultExport.js, 0, 0))
+

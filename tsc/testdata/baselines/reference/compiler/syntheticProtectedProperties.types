@@ -1,0 +1,318 @@
+//// [tests/cases/compiler/syntheticProtectedProperties.ts] ////
+
+=== syntheticProtectedProperties.ts ===
+// https://github.com/microsoft/TypeScript/issues/63749
+
+declare class Dummy {
+>Dummy : Dummy
+
+    a: number;
+>a : number
+}
+
+type Public = Base | Dummy;
+>Public : Public
+
+declare class Base {
+>Base : Base
+
+    protected get content(): string;
+>content : string
+
+    protected set content(value: string);
+>content : string
+>value : string
+}
+
+declare class Mock {
+>Mock : Mock
+
+    get content(): string;
+>content : string
+
+    set content(value: string);
+>content : string
+>value : string
+}
+
+declare const w: Public
+>w : Public
+
+if (w instanceof Mock) {
+>w instanceof Mock : boolean
+>w : Public
+>Mock : typeof Mock
+
+    w.content;
+>w.content : string
+>w : Public & Mock
+>content : string
+}
+declare const w2: Mock & Public
+>w2 : Mock & Public
+
+w2.content;
+>w2.content : string
+>w2 : Mock & Public
+>content : string
+
+declare const w3: Public & Mock
+>w3 : Public & Mock
+
+w3.content;
+>w3.content : string
+>w3 : Public & Mock
+>content : string
+
+// private/protected set accessors are tracked in unions and intersections
+
+declare class C1 {
+>C1 : C1
+
+    get foo(): number;
+>foo : number
+
+    set foo(value: number);
+>foo : number
+>value : number
+}
+
+declare class C2 {
+>C2 : C2
+
+    get foo(): number;
+>foo : number
+
+    protected set foo(value: number);
+>foo : number
+>value : number
+}
+
+declare class C3 {
+>C3 : C3
+
+    protected get foo(): number;
+>foo : number
+
+    protected set foo(value: number);
+>foo : number
+>value : number
+}
+
+declare class P1 {
+>P1 : P1
+
+    get foo(): number;
+>foo : number
+
+    set foo(value: number);
+>foo : number
+>value : number
+}
+
+declare class P2 {
+>P2 : P2
+
+    get foo(): number;
+>foo : number
+
+    private set foo(value: number);
+>foo : number
+>value : number
+}
+
+declare class P3 {
+>P3 : P3
+
+    private get foo(): number;
+>foo : number
+
+    private set foo(value: number);
+>foo : number
+>value : number
+}
+
+// Unions properties have most restricted accessibility
+
+declare const cu12: C1 | C2;
+>cu12 : C1 | C2
+
+cu12.foo;
+>cu12.foo : number
+>cu12 : C1 | C2
+>foo : number
+
+cu12.foo = 123;  // Error, protected
+>cu12.foo = 123 : 123
+>cu12.foo : number
+>cu12 : C1 | C2
+>foo : number
+>123 : 123
+
+declare const cu13: C1 | C3;
+>cu13 : C1 | C3
+
+cu13.foo;  // Error, no property
+>cu13.foo : any
+>cu13 : C1 | C3
+>foo : any
+
+cu13.foo = 123;  // Error, no property
+>cu13.foo = 123 : 123
+>cu13.foo : any
+>cu13 : C1 | C3
+>foo : any
+>123 : 123
+
+declare const cu23: C2 | C3;
+>cu23 : C2 | C3
+
+cu23.foo;  // Error, no property
+>cu23.foo : any
+>cu23 : C2 | C3
+>foo : any
+
+cu23.foo = 123;  // Error, no property
+>cu23.foo = 123 : 123
+>cu23.foo : any
+>cu23 : C2 | C3
+>foo : any
+>123 : 123
+
+declare const pu12: P1 | P2;
+>pu12 : P1 | P2
+
+pu12.foo;
+>pu12.foo : number
+>pu12 : P1 | P2
+>foo : number
+
+pu12.foo = 123;  // Error, private
+>pu12.foo = 123 : 123
+>pu12.foo : number
+>pu12 : P1 | P2
+>foo : number
+>123 : 123
+
+declare const pu13: P1 | P3;
+>pu13 : P1 | P3
+
+pu13.foo;  // Error, no property
+>pu13.foo : any
+>pu13 : P1 | P3
+>foo : any
+
+pu13.foo = 123;  // Error, no property
+>pu13.foo = 123 : 123
+>pu13.foo : any
+>pu13 : P1 | P3
+>foo : any
+>123 : 123
+
+declare const pu23: P2 | P3;
+>pu23 : P2 | P3
+
+pu23.foo;  // Error, no property
+>pu23.foo : any
+>pu23 : P2 | P3
+>foo : any
+
+pu23.foo = 123;  // Error, no property
+>pu23.foo = 123 : 123
+>pu23.foo : any
+>pu23 : P2 | P3
+>foo : any
+>123 : 123
+
+// Intersection properties have most permissive accessibility
+
+declare const ci12: C1 & C2;
+>ci12 : C1 & C2
+
+ci12.foo;
+>ci12.foo : number
+>ci12 : C1 & C2
+>foo : number
+
+ci12.foo = 123;
+>ci12.foo = 123 : 123
+>ci12.foo : number
+>ci12 : C1 & C2
+>foo : number
+>123 : 123
+
+declare const ci13: C1 & C3;
+>ci13 : C1 & C3
+
+ci13.foo;
+>ci13.foo : number
+>ci13 : C1 & C3
+>foo : number
+
+ci13.foo = 123;
+>ci13.foo = 123 : 123
+>ci13.foo : number
+>ci13 : C1 & C3
+>foo : number
+>123 : 123
+
+declare const ci23: C2 & C3;
+>ci23 : C2 & C3
+
+ci23.foo;
+>ci23.foo : number
+>ci23 : C2 & C3
+>foo : number
+
+ci23.foo = 123;  // Error, protected
+>ci23.foo = 123 : 123
+>ci23.foo : number
+>ci23 : C2 & C3
+>foo : number
+>123 : 123
+
+declare const pi12: P1 & P2;
+>pi12 : P1 & P2
+
+pi12.foo;
+>pi12.foo : number
+>pi12 : P1 & P2
+>foo : number
+
+pi12.foo = 123;
+>pi12.foo = 123 : 123
+>pi12.foo : number
+>pi12 : P1 & P2
+>foo : number
+>123 : 123
+
+declare const pi13: P1 & P3;
+>pi13 : never
+
+pi13.foo;  // Error, reduced to never
+>pi13.foo : any
+>pi13 : never
+>foo : any
+
+pi13.foo = 123;  // Error, reduced to never
+>pi13.foo = 123 : 123
+>pi13.foo : any
+>pi13 : never
+>foo : any
+>123 : 123
+
+declare const pi23: P2 & P3;
+>pi23 : never
+
+pi23.foo;  // Error, reduced to never
+>pi23.foo : any
+>pi23 : never
+>foo : any
+
+pi23.foo = 123;  // Error, reduced to never
+>pi23.foo = 123 : 123
+>pi23.foo : any
+>pi23 : never
+>foo : any
+>123 : 123
+

@@ -30,7 +30,7 @@ console.log(A, À, B);`
 } from './foo';
 
 console.log(A, À, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:      core.TSFalse,
 			OrganizeImportsCollation:       lsutil.OrganizeImportsCollationUnicode,
@@ -45,7 +45,7 @@ console.log(A, À, B);`,
 } from './foo';
 
 console.log(A, À, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:      core.TSFalse,
 			OrganizeImportsCollation:       lsutil.OrganizeImportsCollationUnicode,

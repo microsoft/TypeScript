@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -438,8 +437,25 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&(TypeFlagsAny|TypeFlagsUnknown|TypeFlagsString|TypeFlagsNumber|TypeFlagsBoolean|TypeFlagsBigInt|TypeFlagsESSymbol|TypeFlagsVoid|TypeFlagsUndefined|TypeFlagsNull|TypeFlagsNever|TypeFlagsNonPrimitive) != 0:
 		// Only distinguished by type IDs, handled below.
 	case t1.flags&TypeFlagsObject != 0:
-		// Order unnamed or identically named object types by symbol.
-		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
+		// Order instantiation expression types without relying on lazy symbol IDs.
+		// Order other unnamed or identically named object types by symbol.
+		if t1.objectFlags&ObjectFlagsInstantiationExpressionType != 0 && t2.objectFlags&ObjectFlagsInstantiationExpressionType != 0 {
+			var declaration1, declaration2 *ast.Node
+			if t1.symbol != nil && len(t1.symbol.Declarations) != 0 {
+				declaration1 = t1.symbol.Declarations[0]
+			}
+			if t2.symbol != nil && len(t2.symbol.Declarations) != 0 {
+				declaration2 = t2.symbol.Declarations[0]
+			}
+			// A single instantiation expression can produce multiple types for union constituents,
+			// so compare their source declarations before comparing the shared expression node.
+			if c := t1.checker.compareNodes(declaration1, declaration2); c != 0 {
+				return c
+			}
+			if c := t1.checker.compareNodes(t1.AsInstantiationExpressionType().node, t2.AsInstantiationExpressionType().node); c != 0 {
+				return c
+			}
+		} else if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
 			return c
 		}
 		// When object types have the same or no symbol, order by kind. We order type references before other kinds.
@@ -474,13 +490,36 @@ func CompareTypes(t1, t2 *Type) int {
 		} else if t2.objectFlags&ObjectFlagsReference != 0 {
 			return 1
 		} else {
-			// Order unnamed non-reference object types by kind associated type mappers. Reverse mapped types have
-			// neither symbols nor mappers so they're ultimately ordered by unstable type IDs, but given their rarity
-			// this should be fine.
+			// Order unnamed non-reference object types by kind and instantiation data.
 			if c := int(t1.objectFlags&ObjectFlagsObjectTypeKindMask) - int(t2.objectFlags&ObjectFlagsObjectTypeKindMask); c != 0 {
 				return c
 			}
-			if c := compareTypeMappers(t1.AsObjectType().mapper, t2.AsObjectType().mapper); c != 0 {
+			if t1.objectFlags&ObjectFlagsReverseMapped != 0 {
+				r1 := t1.AsReverseMappedType()
+				r2 := t2.AsReverseMappedType()
+				if c := CompareTypes(r1.source, r2.source); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.mappedType, r2.mappedType); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.constraintType, r2.constraintType); c != 0 {
+					return c
+				}
+			}
+			m1 := t1.AsObjectType().mapper
+			m2 := t2.AsObjectType().mapper
+			if t1.objectFlags&ObjectFlagsMapped != 0 {
+				// instantiateAnonymousType prepends a fresh type parameter mapping.
+				// Compare the effective instantiation, not the identity of that fresh parameter.
+				if m1 != nil {
+					m1 = m1.data.(*CompositeTypeMapper).m2
+				}
+				if m2 != nil {
+					m2 = m2.data.(*CompositeTypeMapper).m2
+				}
+			}
+			if c := compareTypeMappers(m1, m2); c != 0 {
 				return c
 			}
 		}
@@ -519,6 +558,10 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&TypeFlagsNumberLiteral != 0:
 		// Numeric literal types are ordered by their values.
 		if c := cmp.Compare(t1.AsLiteralType().value.(jsnum.Number), t2.AsLiteralType().value.(jsnum.Number)); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsBigIntLiteral != 0:
+		if c := getBigIntLiteralValue(t1).Compare(getBigIntLiteralValue(t2)); c != 0 {
 			return c
 		}
 	case t1.flags&TypeFlagsBooleanLiteral != 0:
@@ -590,10 +633,7 @@ func compareTypeNames(t1, t2 *Type) int {
 	s1 := getTypeNameSymbol(t1)
 	s2 := getTypeNameSymbol(t2)
 	if s1 == s2 {
-		if t1.alias != nil {
-			return compareTypeLists(t1.alias.typeArguments, t2.alias.typeArguments)
-		}
-		return 0
+		return compareTypeLists(t1.alias.TypeArguments(), t2.alias.TypeArguments())
 	}
 	if s1 == nil {
 		return 1
@@ -601,7 +641,11 @@ func compareTypeNames(t1, t2 *Type) int {
 	if s2 == nil {
 		return -1
 	}
-	return strings.Compare(s1.Name, s2.Name)
+	if c := strings.Compare(s1.Name, s2.Name); c != 0 {
+		return c
+	}
+	// Keep distinct same-named declarations together before comparing alias arguments or structure.
+	return t1.checker.compareSymbols(s1, s2)
 }
 
 func getTypeNameSymbol(t *Type) *ast.Symbol {
@@ -715,6 +759,21 @@ func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 }
 
 func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.ModifierFlags {
+	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+		var accessModifier ast.ModifierFlags
+		switch {
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePublic != 0:
+			accessModifier = ast.ModifierFlagsPublic
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWriteProtected != 0:
+			accessModifier = ast.ModifierFlagsProtected
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePrivate != 0:
+			accessModifier = ast.ModifierFlagsPrivate
+		}
+		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
+			return accessModifier | ast.ModifierFlagsStatic
+		}
+		return accessModifier
+	}
 	if s.ValueDeclaration != nil {
 		var declaration *ast.Node
 		if isWrite {
@@ -731,22 +790,6 @@ func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.Mo
 			return flags
 		}
 		return flags & ^ast.ModifierFlagsAccessibilityModifier
-	}
-	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
-		var accessModifier ast.ModifierFlags
-		switch {
-		case s.CheckFlags&ast.CheckFlagsContainsPrivate != 0:
-			accessModifier = ast.ModifierFlagsPrivate
-		case s.CheckFlags&ast.CheckFlagsContainsPublic != 0:
-			accessModifier = ast.ModifierFlagsPublic
-		default:
-			accessModifier = ast.ModifierFlagsProtected
-		}
-		var staticModifier ast.ModifierFlags
-		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
-			staticModifier = ast.ModifierFlagsStatic
-		}
-		return accessModifier | staticModifier
 	}
 	if s.Flags&ast.SymbolFlagsPrototype != 0 {
 		return ast.ModifierFlagsPublic | ast.ModifierFlagsStatic
@@ -1652,8 +1695,7 @@ func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
 
 // True if the symbol is for an external module, as opposed to a namespace.
 func IsExternalModuleSymbol(moduleSymbol *ast.Symbol) bool {
-	firstRune, _ := utf8.DecodeRuneInString(moduleSymbol.Name)
-	return moduleSymbol.Flags&ast.SymbolFlagsModule != 0 && firstRune == '"'
+	return moduleSymbol.IsExternalModule()
 }
 
 func (c *Checker) isCanceled() bool {

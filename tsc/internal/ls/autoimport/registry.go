@@ -839,7 +839,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 
 	// --- Collect node_modules tasks ---
 	var nodeModulesTasks []*nodeModulesBucketTask
-	tspath.ForEachAncestorDirectoryPath(change.RequestedFile, func(dirPath tspath.Path) (any, bool) {
+	change.RequestedFile.ForEachAncestorDirectory(func(dirPath tspath.Path) (any, bool) {
 		if nodeModulesBucket, ok := b.nodeModules.Get(dirPath); ok {
 			dirName := core.FirstResult(b.directories.Get(dirPath)).Value().name
 			dependencies := b.computeDependenciesForNodeModulesDirectory(change, allResolvedPackageNames, dirName, dirPath)
@@ -1171,7 +1171,7 @@ func hasSymlinkToNodeModules(filePath tspath.Path, projectRootPath tspath.Path, 
 		return false
 	}
 	found := false
-	tspath.ForEachAncestorDirectoryPath(filePath, func(dirPath tspath.Path) (any, bool) {
+	filePath.ForEachAncestorDirectory(func(dirPath tspath.Path) (any, bool) {
 		symlinkPaths, ok := directoriesByRealpath.Load(dirPath.EnsureTrailingDirectorySeparator())
 		if !ok {
 			return nil, false
@@ -1808,7 +1808,7 @@ func (b *registryBuilder) updateNodeModulesBucket(
 }
 
 func (b *registryBuilder) getNearestAncestorDirectoryWithPackageJson(filePath tspath.Path) *directory {
-	return core.FirstResult(tspath.ForEachAncestorDirectoryPath(filePath.GetDirectoryPath(), func(dirPath tspath.Path) (result *directory, stop bool) {
+	return core.FirstResult(filePath.GetDirectoryPath().ForEachAncestorDirectory(func(dirPath tspath.Path) (result *directory, stop bool) {
 		if dirEntry, ok := b.directories.Get(dirPath); ok && dirEntry.Value().packageJson.Exists() {
 			return dirEntry.Value(), true
 		}
@@ -1817,7 +1817,7 @@ func (b *registryBuilder) getNearestAncestorDirectoryWithPackageJson(filePath ts
 }
 
 func (b *registryBuilder) resolveAmbientModuleName(moduleName string, fromPath tspath.Path) []string {
-	return core.FirstResult(tspath.ForEachAncestorDirectoryPath(fromPath, func(dirPath tspath.Path) (result []string, stop bool) {
+	return core.FirstResult(fromPath.ForEachAncestorDirectory(func(dirPath tspath.Path) (result []string, stop bool) {
 		if bucket, ok := b.nodeModules.Get(dirPath); ok {
 			if fileNames, ok := bucket.Value().AmbientModuleNames[moduleName]; ok {
 				return fileNames, true

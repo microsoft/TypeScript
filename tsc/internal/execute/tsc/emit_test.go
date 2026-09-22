@@ -159,7 +159,7 @@ export const make = (): Box => ({ value: "ok" });
 		NoEmit:          core.TSTrue,
 		TsBuildInfoFile: "/project/tsconfig.tsbuildinfo",
 	}
-	config := tsoptions.NewParsedCommandLine(options, []string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, tspath.ComparePathsOptions{
+	config := tsoptions.NewParsedCommandLine(options, []string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, nil, tspath.ComparePathsOptions{
 		UseCaseSensitiveFileNames: true,
 		CurrentDirectory:          "/project",
 	})

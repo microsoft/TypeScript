@@ -232,13 +232,13 @@ func (info NotificationInfo[Params]) NewNotificationMessage(params Params) *Requ
 //
 // A [NoParams] method must be given no params; every other method must be given
 // params as an object or array. A violation returns [ErrorCodeInvalidParams].
-func UnmarshalParams[T any](req *RequestMessage) (T, error) {
+func (r *RequestMessage) UnmarshalParams[T any]() (T, error) {
 	var params T
 	var raw json.Value
-	if req.Params != nil {
-		v, ok := req.Params.(json.Value)
+	if r.Params != nil {
+		v, ok := r.Params.(json.Value)
 		if !ok {
-			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, req.Params)
+			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, r.Params)
 		}
 		raw = v
 	}
@@ -306,7 +306,16 @@ func PreferredMarkupKind(formats []MarkupKind) MarkupKind {
 	return MarkupKindPlainText
 }
 
+// Contains reports whether other is this code action kind or one of its children.
+func (kind CodeActionKind) Contains(other CodeActionKind) bool {
+	return kind == other ||
+		kind == CodeActionKindEmpty ||
+		strings.HasPrefix(string(other), string(kind)+".")
+}
+
 const (
-	CodeActionKindSourceRemoveUnusedImports CodeActionKind = "source.removeUnusedImports"
-	CodeActionKindSourceSortImports         CodeActionKind = "source.sortImports"
+	CodeActionKindSourceFixAllTs              CodeActionKind = CodeActionKindSourceFixAll + ".ts"
+	CodeActionKindSourceOrganizeImportsTs     CodeActionKind = CodeActionKindSourceOrganizeImports + ".ts"
+	CodeActionKindSourceRemoveUnusedImportsTs CodeActionKind = CodeActionKindSource + ".removeUnusedImports.ts"
+	CodeActionKindSourceSortImportsTs         CodeActionKind = CodeActionKindSource + ".sortImports.ts"
 )

@@ -9,6 +9,9 @@ import {
 } from "../options.ts";
 import type {
     APIMethodInfo,
+    APIRequest,
+    BatchRequestsParams,
+    BatchRequestsResponse,
     SourceFileResponseMethod,
 } from "../proto.ts";
 import { SyncRpcChannel } from "../syncChannel.ts";
@@ -26,6 +29,7 @@ export class Client {
     private channel: SyncRpcChannel;
     private encoder = new TextEncoder();
     private timing: TimingCollector | undefined;
+    private maxResponseBytesPerPage: number | undefined;
 
     constructor(options: ClientOptions) {
         if (!isSpawnOptions(options)) {
@@ -33,6 +37,7 @@ export class Client {
         }
 
         const args = getAPIProcessArgs(options, false);
+        this.maxResponseBytesPerPage = options.maxResponseBytesPerPage;
 
         // Enable virtual FS callbacks for each provided FS function
         const enabledCallbacks: (typeof fsCallbackNames[number])[] = [];
@@ -94,6 +99,35 @@ export class Client {
             return JSON.parse(result) as APIMethodInfo[K]["result"];
         }
         return undefined as APIMethodInfo[K]["result"];
+    }
+
+    batchRequests(requests: readonly APIRequest[]): BatchRequestsResponse {
+        const params: BatchRequestsParams = { requests };
+        if (this.maxResponseBytesPerPage !== undefined) {
+            params.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
+        }
+        const response = this.apiRequest("batchRequests", params);
+        let responses = response.responses;
+        let continuationToken = response.continuationToken;
+        while (continuationToken) {
+            const pageParams: BatchRequestsParams = {
+                requests: [],
+                continuationToken,
+            };
+            if (this.maxResponseBytesPerPage !== undefined) {
+                pageParams.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
+            }
+            const page = this.apiRequest("batchRequests", pageParams);
+            if (page.responses.length < 200) {
+                responses.push(...page.responses);
+            }
+            else {
+                // If the number of responses is approaching the max argument length, we need to concat instead of push
+                responses = responses.concat(page.responses);
+            }
+            continuationToken = page.continuationToken;
+        }
+        return { responses };
     }
 
     apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params?: APIMethodInfo[K]["params"]): Uint8Array | undefined {

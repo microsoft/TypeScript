@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -76,6 +77,7 @@ func NewParseCache(options RefCountCacheOptions) *ParseCache {
 		func(key ParseCacheKey, fh FileHandle) *ast.SourceFile {
 			file := parser.ParseSourceFile(key.SourceFileParseOptions, fh.Content(), key.ScriptKind)
 			file.Hash = fh.Hash()
+			binder.BindSourceFile(file)
 			return file
 		},
 	)

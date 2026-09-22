@@ -44,6 +44,7 @@ type configFileRegistryBuilder struct {
 func newConfigFileRegistryBuilder(
 	hasRelativePatternCapability bool,
 	fs *snapshotFSBuilder,
+	isOpenFile func(tspath.Path) bool,
 	oldConfigFileRegistry *ConfigFileRegistry,
 	extendedConfigCache *ExtendedConfigCache,
 	snapshotID uint64,
@@ -54,7 +55,7 @@ func newConfigFileRegistryBuilder(
 	return &configFileRegistryBuilder{
 		hasRelativePatternCapability: hasRelativePatternCapability,
 		fs:                           newSourceFS(false, fs, fs.toPath),
-		isOpenFile:                   fs.isOpenFile,
+		isOpenFile:                   isOpenFile,
 		base:                         oldConfigFileRegistry,
 		sessionOptions:               sessionOptions,
 		extendedConfigCache:          extendedConfigCache,
@@ -353,6 +354,23 @@ func (c *configFileRegistryBuilder) releaseConfigForProject(configFilePath tspat
 	}
 }
 
+func (c *configFileRegistryBuilder) retainConfigForProject(configFilePath tspath.Path, projectPath tspath.Path) {
+	if entry, ok := c.configs.Load(configFilePath); ok {
+		entry.ChangeIf(
+			func(config *configFileEntry) bool {
+				_, exists := config.retainingProjects[projectPath]
+				return !exists
+			},
+			func(config *configFileEntry) {
+				if config.retainingProjects == nil {
+					config.retainingProjects = make(map[tspath.Path]struct{})
+				}
+				config.retainingProjects[projectPath] = struct{}{}
+			},
+		)
+	}
+}
+
 // didCloseFile removes the open file from the config entry. Once no projects
 // or files are associated with the config entry, it will be removed on the next call to `cleanup`.
 func (c *configFileRegistryBuilder) didCloseFile(path tspath.Path) {
@@ -433,6 +451,9 @@ func (c *configFileRegistryBuilder) isConfigBaseName(baseName string) bool {
 }
 
 func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, logger *logging.LogTree) changeFileResult {
+	if summary.InvalidateAll {
+		return c.invalidateCache(logger)
+	}
 	var affectedProjects map[tspath.Path]struct{}
 	var affectedFiles map[tspath.Path]struct{}
 	var shouldInvalidateCache bool

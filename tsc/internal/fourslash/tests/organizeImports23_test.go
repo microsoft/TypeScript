@@ -30,7 +30,7 @@ console.log(abc, Abc, I, R, M);`
 import { abc, Abc, type bc, type Bc } from 'b';
 type x = bc | Bc;
 console.log(abc, Abc, I, R, M);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 	f.VerifyOrganizeImports(t,
@@ -42,7 +42,7 @@ console.log(abc, Abc, I, R, M);`,
 import { abc, Abc, type bc, type Bc } from 'b';
 type x = bc | Bc;
 console.log(abc, Abc, I, R, M);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

@@ -20,7 +20,7 @@ console.log(a, b, A, B);`
 	f.VerifyOrganizeImports(t,
 		`import { type a, type A, b, B } from "foo";
 console.log(a, b, A, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSUnknown,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderInline,
@@ -30,7 +30,7 @@ console.log(a, b, A, B);`,
 	f.VerifyOrganizeImports(t,
 		`import { type a, type A, b, B } from "foo1";
 console.log(a, b, A, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSUnknown,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderFirst,
@@ -40,7 +40,7 @@ console.log(a, b, A, B);`,
 	f.VerifyOrganizeImports(t,
 		`import { b, B, type a, type A } from "foo2";
 console.log(a, b, A, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSUnknown,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderLast,
@@ -50,7 +50,7 @@ console.log(a, b, A, B);`,
 	f.VerifyOrganizeImports(t,
 		`import { type a, type A, b, B } from "foo3";
 console.log(a, b, A, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSUnknown,
 		},
@@ -59,7 +59,7 @@ console.log(a, b, A, B);`,
 	f.VerifyOrganizeImports(t,
 		`import { type a, type A, b, B } from "foo4";
 console.log(a, b, A, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSTrue,
 		},
@@ -68,7 +68,7 @@ console.log(a, b, A, B);`,
 	f.VerifyOrganizeImports(t,
 		`import { type A, B, type a, b } from "foo5";
 console.log(a, b, A, B);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSFalse,
 		},

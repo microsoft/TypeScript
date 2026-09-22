@@ -80,6 +80,34 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindCloned)
 	})
 
+	t.Run("compiler options update inferred project", func(t *testing.T) {
+		t.Parallel()
+		const fileName = "/src/index.ts"
+		session, _ := projecttestutil.Setup(map[string]any{
+			fileName: "export const x = 1;",
+		})
+		uri := lsproto.DocumentUri("file://" + fileName)
+		session.DidOpenFile(context.Background(), uri, 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		oldProject := session.Snapshot().ProjectCollection.InferredProject()
+		assert.Assert(t, oldProject != nil)
+		oldProgram := oldProject.Program
+		assert.Equal(t, oldProgram.Options().Strict, core.TSUnknown)
+
+		session.DidChangeCompilerOptionsForInferredProjects(context.Background(), &core.CompilerOptions{
+			NoLib:  core.TSTrue,
+			Strict: core.TSTrue,
+		})
+		_, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+
+		updatedProject := session.Snapshot().ProjectCollection.InferredProject()
+		assert.Assert(t, updatedProject != nil)
+		assert.Equal(t, updatedProject.CommandLine.CompilerOptions().Strict, core.TSTrue)
+		assert.Assert(t, updatedProject.Program != oldProgram)
+		assert.Equal(t, updatedProject.Program.Options().Strict, core.TSTrue)
+		assert.Equal(t, oldProgram.Options().Strict, core.TSUnknown)
+	})
+
 	t.Run("NewFiles when import resolution mode changes", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{

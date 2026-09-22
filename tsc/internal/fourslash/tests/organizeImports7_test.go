@@ -30,7 +30,7 @@ import * as something from "path"; /**
 
 something;
 somethingElse;`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

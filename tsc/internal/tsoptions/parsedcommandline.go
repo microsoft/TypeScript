@@ -77,12 +77,14 @@ type ParsedCommandLine struct {
 func NewParsedCommandLine(
 	compilerOptions *core.CompilerOptions,
 	rootFileNames []string,
+	projectReferences []*core.ProjectReference,
 	comparePathsOptions tspath.ComparePathsOptions,
 ) *ParsedCommandLine {
 	return &ParsedCommandLine{
 		ParsedConfig: &ParsedOptions{
-			CompilerOptions: compilerOptions,
-			FileNames:       rootFileNames,
+			CompilerOptions:   compilerOptions,
+			FileNames:         rootFileNames,
+			ProjectReferences: projectReferences,
 		},
 		comparePathsOptions: comparePathsOptions,
 	}

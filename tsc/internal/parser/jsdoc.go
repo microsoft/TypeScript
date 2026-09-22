@@ -1001,6 +1001,7 @@ func (p *Parser) parseJSDocTypeNameWithNamespace(nested bool) *ast.Node {
 			nil,                      /*modifiers*/
 			ast.KindNamespaceKeyword, /*keyword*/
 			typeNameOrNamespaceName,
+			nil, /*attributes*/
 			body,
 		)
 		if nested {

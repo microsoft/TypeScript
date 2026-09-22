@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/definiteAssignmentOfClosedOverVariable.ts] ////
+
+=== definiteAssignmentOfClosedOverVariable.ts ===
+// Repro for #63981
+
+export {};
+
+let count: number;
+>count : number
+
+function makeCallback(p: string) {
+>makeCallback : (p: string) => () => string
+>p : string
+
+    return () => {
+>() => {        count += 1;        return p;    } : () => string
+
+        count += 1;
+>count += 1 : number
+>count : number
+>1 : 1
+
+        return p;
+>p : string
+
+    };
+}
+
+count = 0;
+>count = 0 : 0
+>count : number
+>0 : 0
+
+makeCallback('x')();
+>makeCallback('x')() : string
+>makeCallback('x') : () => string
+>makeCallback : (p: string) => () => string
+>'x' : "x"
+
+let count2: number;
+>count2 : number
+
+function makeCallback2(p: string) {
+>makeCallback2 : (p: string) => () => void
+>p : string
+
+    const f = () => p;
+>f : () => string
+>() => p : () => string
+>p : string
+
+    return () => {
+>() => {        count2 += 1;    } : () => void
+
+        count2 += 1;
+>count2 += 1 : number
+>count2 : number
+>1 : 1
+
+    };
+}
+
+count2 = 0;
+>count2 = 0 : 0
+>count2 : number
+>0 : 0
+
+let count3: number;
+>count3 : number
+
+function makeCallback3(p: string) {
+>makeCallback3 : (p: string) => () => string
+>p : string
+
+    return () => {
+>() => {        count3 += 1;        return p;    } : () => string
+
+        count3 += 1;
+>count3 += 1 : number
+>count3 : number
+>1 : 1
+
+        return p;
+>p : string
+
+    };
+}
+

@@ -1,12 +1,12 @@
 package autoimport
 
 import (
-	"context"
 	"slices"
 	"strings"
 	"unicode"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -23,6 +23,7 @@ type View struct {
 	importingFile     *ast.SourceFile
 	importingFilePath tspath.Path
 	program           *compiler.Program
+	checker           *checker.Checker
 	preferences       modulespecifiers.UserPreferences
 	projectKey        tspath.Path
 
@@ -33,7 +34,7 @@ type View struct {
 	shouldUseRequireForFixes         *bool
 }
 
-func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, preferences modulespecifiers.UserPreferences) *View {
+func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, typeChecker *checker.Checker, preferences modulespecifiers.UserPreferences) *View {
 	importingFilePath := importingFile.Path()
 	if canonical := importingFile.CanonicalSourceFile(); canonical != nil {
 		importingFilePath = canonical.Path()
@@ -43,6 +44,7 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
 		importingFile:     importingFile,
 		importingFilePath: importingFilePath,
 		program:           program,
+		checker:           typeChecker,
 		projectKey:        projectKey,
 		preferences:       preferences,
 		conditions: collections.NewSetFromItems(
@@ -123,7 +125,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	// plus packages that are directly imported by the project's program files.
 	// If no package.json is found, allowedPackages remains nil and all packages are allowed.
 	var allowedPackages *collections.Set[string]
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	v.importingFile.Path().GetDirectoryPath().ForEachAncestorDirectory(func(dirPath tspath.Path) (result any, stop bool) {
 		if dir, ok := v.registry.directories[dirPath]; ok {
 			if pj := dir.packageJson; pj.Exists() && pj.Contents.Parseable {
 				// Initialize to empty set if this is the first package.json we've seen
@@ -143,7 +145,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	}
 
 	excludePackages := &collections.Set[string]{}
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	v.importingFile.Path().GetDirectoryPath().ForEachAncestorDirectory(func(dirPath tspath.Path) (result any, stop bool) {
 		if nodeModulesBucket, ok := v.registry.nodeModules[dirPath]; ok {
 			exports := searchFn(nodeModulesBucket)
 			results = slices.Grow(results, len(exports))
@@ -175,7 +177,7 @@ type FixAndExport struct {
 	Export *Export
 }
 
-func (v *View) GetCompletions(ctx context.Context, prefix string, position lsproto.Position, forJSX bool, isTypeOnlyLocation bool) []*FixAndExport {
+func (v *View) GetCompletions(prefix string, position lsproto.Position, forJSX bool, isTypeOnlyLocation bool) []*FixAndExport {
 	results := v.Search(prefix, QueryKindWordPrefix)
 
 	type exportGroupKey struct {
@@ -240,7 +242,7 @@ outer:
 	for _, exps := range grouped {
 		fixesForGroup := make([]*FixAndExport, 0, len(exps))
 		for _, e := range exps {
-			for _, fix := range v.GetFixes(ctx, e, forJSX, isTypeOnlyLocation, &position) {
+			for _, fix := range v.GetFixes(e, forJSX, isTypeOnlyLocation, &position) {
 				fixesForGroup = append(fixesForGroup, &FixAndExport{
 					Fix:    fix,
 					Export: e,

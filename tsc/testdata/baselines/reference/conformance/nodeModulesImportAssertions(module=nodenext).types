@@ -14,10 +14,10 @@ const json2 = import("./package.json", { with: { type: "json" } }); // should be
 >json2 : Promise<{ default: { name: string; private: boolean; type: string; }; }>
 >import("./package.json", { with: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>
 >"./package.json" : "./package.json"
->{ with: { type: "json" } } : { with: { type: string; }; }
->with : { type: string; }
->{ type: "json" } : { type: string; }
->type : string
+>{ with: { type: "json" } } : { with: { readonly type: "json"; }; }
+>with : { readonly type: "json"; }
+>{ type: "json" } : { readonly type: "json"; }
+>type : "json"
 >"json" : "json"
 
 === package.json ===

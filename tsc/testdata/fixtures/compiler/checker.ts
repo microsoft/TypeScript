@@ -5597,7 +5597,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
         // explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
-        // likely to contain discriminating differences. See for example https://github.com/microsoft/TypeScript/tsc/issues/1968.
+        // likely to contain discriminating differences. See for example https://github.com/microsoft/typescript-go/issues/1968.
         let contained: Symbol[] | undefined;
         if (container && container.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
             members.forEach((symbol, id) => {

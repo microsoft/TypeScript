@@ -22,7 +22,7 @@ export { b };`
 const b = 1;
 export { a, b };
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

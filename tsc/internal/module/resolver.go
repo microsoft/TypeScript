@@ -5,7 +5,6 @@ import (
 	"maps"
 	"slices"
 	"strings"
-	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -89,12 +88,6 @@ type resolutionState struct {
 	candidateEndingIsFromConfig bool
 	resolvedPackageDirectory    bool
 	diagnostics                 []*ast.Diagnostic
-
-	// Similar to whats on resolver but only done if compilerOptions are for project reference redirect
-	// Cached representation for `core.CompilerOptions.paths`.
-	// Doesn't handle other path patterns like in `typesVersions`.
-	parsedPatternsForPathsOnce sync.Once
-	parsedPatternsForPaths     *ParsedPatterns
 }
 
 func newResolutionState(
@@ -1241,13 +1234,7 @@ func (r *resolutionState) tryLoadModuleUsingOptionalResolutionSettings() *resolv
 }
 
 func (r *resolutionState) getParsedPatternsForPaths() *ParsedPatterns {
-	if r.compilerOptions == r.resolver.compilerOptions {
-		return r.resolver.getParsedPatternsForPaths()
-	}
-	r.parsedPatternsForPathsOnce.Do(func() {
-		r.parsedPatternsForPaths = TryParsePatterns(r.compilerOptions.Paths)
-	})
-	return r.parsedPatternsForPaths
+	return r.resolver.getParsedPatternsForPaths(r.compilerOptions)
 }
 
 func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
@@ -2001,23 +1988,24 @@ type ParsedPatterns struct {
 	patterns           []core.Pattern
 }
 
-func (r *Resolver) getParsedPatternsForPaths() *ParsedPatterns {
-	r.parsedPatternsForPathsOnce.Do(func() {
-		r.parsedPatternsForPaths = TryParsePatterns(r.compilerOptions.Paths)
-	})
-	return r.parsedPatternsForPaths
+func (r *Resolver) getParsedPatternsForPaths(compilerOptions *core.CompilerOptions) *ParsedPatterns {
+	return r.parsedPatternsForPaths.Get(compilerOptions.Paths)
 }
 
 func TryParsePatterns(pathMappings *collections.OrderedMap[string, []string]) *ParsedPatterns {
 	paths := pathMappings.Keys()
 
 	numPatterns := 0
+	numMatchables := 0
 	for path := range paths {
-		if pattern := core.TryParsePattern(path); pattern.IsValid() && pattern.StarIndex == -1 {
-			numPatterns++
+		if pattern := core.TryParsePattern(path); pattern.IsValid() {
+			if pattern.StarIndex == -1 {
+				numMatchables++
+			} else {
+				numPatterns++
+			}
 		}
 	}
-	numMatchables := pathMappings.Size() - numPatterns
 
 	var patterns []core.Pattern
 	var matchableStringSet collections.Set[string]

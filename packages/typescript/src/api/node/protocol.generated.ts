@@ -162,7 +162,7 @@ export const childProperties: Readonly<Partial<Record<SyntaxKind, readonly (stri
     [SyntaxKind.JSDocSignature]: ["typeParameters", "parameters", "type"],
     [SyntaxKind.JSDocNameReference]: ["name"],
     [SyntaxKind.SourceFile]: ["statements", "endOfFileToken"],
-    [SyntaxKind.ModuleDeclaration]: ["modifiers", "name", "body"],
+    [SyntaxKind.ModuleDeclaration]: ["modifiers", "name", "attributes", "body"],
     [SyntaxKind.ImportEqualsDeclaration]: ["modifiers", "name", "moduleReference"],
     [SyntaxKind.ExportDeclaration]: ["modifiers", "exportClause", "moduleSpecifier", "attributes"],
     [SyntaxKind.ImportType]: ["argument", "attributes", "qualifier", "typeArguments"],

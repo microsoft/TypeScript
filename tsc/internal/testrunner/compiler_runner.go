@@ -107,18 +107,15 @@ var skippedTests = []string{
 	"mappedTypeUnionConstraintInferences.ts",
 	"lateBoundConstraintTypeChecksCorrectly.ts",
 	"keyofDoesntContainSymbols.ts",
-	"isolatedModulesOut.ts",
 	"noStrictGenericChecks.ts",
 	"noImplicitUseStrict_umd.ts",
 	"noImplicitUseStrict_system.ts",
 	"noImplicitUseStrict_es6.ts",
 	"noImplicitUseStrict_commonjs.ts",
-	"noImplicitUseStrict_amd.ts",
 	"noImplicitAnyIndexingSuppressed.ts",
 	"excessPropertyErrorsSuppressed.ts",
 	"moduleNoneDynamicImport.ts",
 	"moduleNoneErrors.ts",
-	"moduleNoneOutFile.ts",
 	"noErrorUsingImportExportModuleAugmentationInDeclarationFile1.ts",
 	"noErrorUsingImportExportModuleAugmentationInDeclarationFile2.ts",
 	"noErrorUsingImportExportModuleAugmentationInDeclarationFile3.ts",
@@ -197,7 +194,7 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 
 func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName string, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
 	t.Parallel()
-	defer testutil.RecoverAndFail(t, "Panic on compiling test "+test.filename)
+	defer testutil.RecoverAndFail(t, "Panic on compiler test "+test.filename)
 
 	payload := makeUnitsFromTest(test.content, test.filename)
 	compilerTest := newCompilerTest(t, testName, test.filename, &payload, config)

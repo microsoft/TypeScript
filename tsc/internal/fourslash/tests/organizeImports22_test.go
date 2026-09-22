@@ -28,7 +28,7 @@ console.log(abc, Abc, bc, Bc, I, R, M);`
 } from 'a';
 import { abc, Abc, bc, Bc } from 'b';
 console.log(abc, Abc, bc, Bc, I, R, M);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 	f.VerifyOrganizeImports(t,
@@ -39,7 +39,7 @@ console.log(abc, Abc, bc, Bc, I, R, M);`,
 } from 'a';
 import { abc, Abc, bc, Bc } from 'b';
 console.log(abc, Abc, bc, Bc, I, R, M);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

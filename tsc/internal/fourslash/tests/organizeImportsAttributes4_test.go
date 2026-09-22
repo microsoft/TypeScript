@@ -30,7 +30,7 @@ import { F, Z } from "./a" with { foo: "42" };
 import { Y } from "./a" with { foo: 42 };
 
 export type G = A | B | C | D | E | F | Y | Z;`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

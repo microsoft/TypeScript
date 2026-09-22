@@ -40,7 +40,7 @@ export { bFuncA } from "./A";
 export { bFuncB } from "./B";
 export { bFuncC } from "./C";
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

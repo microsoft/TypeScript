@@ -309,6 +309,11 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			if ast.IsGlobalScopeAugmentation(node) {
 				return ast.InternalSymbolNameGlobal
 			}
+			if pattern := core.TryParsePattern(moduleName); pattern.IsValid() && pattern.StarIndex >= 0 {
+				if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
+					return ast.InternalSymbolNamePrefix + "\"" + moduleName + "\"pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10)
+				}
+			}
 			return "\"" + moduleName + "\""
 		}
 		if ast.IsPrivateIdentifier(name) {
@@ -781,12 +786,15 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 			symbol := b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsValueModule, ast.SymbolFlagsValueModuleExcludes)
 
 			if ast.IsStringLiteral(name) {
+				attributes := node.AsModuleDeclaration().Attributes
 				pattern := core.TryParsePattern(name.Text())
 				if !pattern.IsValid() {
 					// An invalid pattern - must have multiple wildcards.
 					b.errorOnFirstToken(name, diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, name.Text())
 				} else if pattern.StarIndex >= 0 {
 					b.file.PatternAmbientModules = append(b.file.PatternAmbientModules, &ast.PatternAmbientModule{Pattern: pattern, Symbol: symbol})
+				} else if attributes != nil {
+					b.errorOnNode(name, diagnostics.An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character)
 				}
 			}
 		}

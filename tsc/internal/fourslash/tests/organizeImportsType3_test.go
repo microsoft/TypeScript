@@ -38,7 +38,7 @@ console.log(A, a, B, b, c, C, d, D);`
     d
 } from './foo';
 console.log(A, a, B, b, c, C, d, D);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSFalse,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderInline,

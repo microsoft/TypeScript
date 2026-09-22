@@ -1,0 +1,19 @@
+a.ts(4,9): error TS2454: Variable 'testData' is used before being assigned.
+
+
+==== a.ts (1 errors) ====
+    /// <reference path="b.ts" />
+    import ITest = require('ITest');
+    var testData: ITest[];
+    var p = testData[0].name;
+            ~~~~~~~~
+!!! error TS2454: Variable 'testData' is used before being assigned.
+     
+==== b.ts (0 errors) ====
+    declare module "ITest" {
+        interface Name {
+            name: string;
+        }
+        export = Name;
+    }
+    

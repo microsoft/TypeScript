@@ -39,7 +39,7 @@ import './';`
 	f.GoToFile(t, "test.tsx")
 	f.VerifyOrganizeImports(t,
 		`export default () => <div></div>`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

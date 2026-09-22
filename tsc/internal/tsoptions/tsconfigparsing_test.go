@@ -3,8 +3,8 @@ package tsoptions_test
 import (
 	"fmt"
 	"io"
-	"io/fs"
 	"maps"
+	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
@@ -17,12 +17,14 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions/tsoptionstest"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -140,11 +142,9 @@ func TestParseConfigFileTextToJson(t *testing.T) {
 				baselineContent.WriteString("\n")
 				baselineContent.WriteString("Errors::\n")
 				diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(errors), &diagnosticwriter.FormattingOptions{
-					NewLine: "\n",
-					ComparePathsOptions: tspath.ComparePathsOptions{
-						CurrentDirectory:          "/",
-						UseCaseSensitiveFileNames: true,
-					},
+					NewLine:                   "\n",
+					CurrentDirectory:          "/",
+					UseCaseSensitiveFileNames: true,
 				})
 				baselineContent.WriteString("\n")
 				if i != len(rec.input)-1 {
@@ -1537,11 +1537,9 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, includeCompi
 		baselineContent.WriteString("\n")
 		baselineContent.WriteString("Errors::\n")
 		diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(parsedConfigFileContent.Errors), &diagnosticwriter.FormattingOptions{
-			NewLine: "\r\n",
-			ComparePathsOptions: tspath.ComparePathsOptions{
-				CurrentDirectory:          basePath,
-				UseCaseSensitiveFileNames: true,
-			},
+			NewLine:                   "\r\n",
+			CurrentDirectory:          basePath,
+			UseCaseSensitiveFileNames: true,
 		})
 		baselineContent.WriteString("\n")
 		if i != len(input)-1 {
@@ -1652,21 +1650,96 @@ func TestParseTypeAcquisition(t *testing.T) {
 }
 
 func printFS(output io.Writer, files vfs.FS, root string) error {
-	return files.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	return vfs.WalkDir(files, root, func(path string, entry vfs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if d.Type().IsRegular() {
+		if entry.Type().IsRegular() {
 			if content, ok := files.ReadFile(path); !ok {
 				return fmt.Errorf("failed to read file %s", path)
-			} else {
-				if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
-					return err
-				}
+			} else if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
+				return err
 			}
 		}
 		return nil
 	})
+}
+
+func parseSrcCompiler(tb testing.TB) *tsoptions.ParsedCommandLine {
+	tb.Helper()
+
+	compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+	tsconfigFileName := tspath.CombinePaths(compilerDir, "tsconfig.json")
+	fs := osvfs.FS()
+	host := &tsoptionstest.VfsParseConfigHost{
+		Vfs:              fs,
+		CurrentDirectory: compilerDir,
+	}
+	jsonText, ok := fs.ReadFile(tsconfigFileName)
+	assert.Assert(tb, ok)
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		tsconfigFileName,
+		tspath.ToPath(tsconfigFileName, compilerDir, fs.UseCaseSensitiveFileNames()),
+		jsonText,
+	)
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		host,
+		host.GetCurrentDirectory(),
+		nil,
+		nil,
+		tsconfigFileName,
+		nil,
+		nil,
+	)
+	assert.Equal(tb, len(parsed.Errors), 0, "Expected no errors in parsed command line")
+	return parsed
+}
+
+func TestParseSrcCompiler(t *testing.T) {
+	t.Parallel()
+
+	parsed := parseSrcCompiler(t)
+	opts := parsed.CompilerOptions()
+	assert.DeepEqual(t, opts.Types, []string{})
+	assert.Equal(t, opts.Module, core.ModuleKindNodeNext)
+	assert.Equal(t, opts.ModuleResolution, core.ModuleResolutionKindNodeNext)
+	assert.Equal(t, opts.Target, core.ScriptTargetES2020)
+	assert.Equal(t, len(parsed.FileNames()), 79)
+	for _, file := range []string{"checker.ts", "diagnosticInformationMap.generated.ts", "node.d.ts", "program.ts"} {
+		assert.Assert(t, slices.Contains(parsed.FileNames(), tspath.CombinePaths(tspath.GetDirectoryPath(opts.ConfigFilePath), file)))
+	}
+}
+
+func BenchmarkParseSrcCompiler(b *testing.B) {
+	compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+	tsconfigFileName := tspath.CombinePaths(compilerDir, "tsconfig.json")
+	fs := osvfs.FS()
+	host := &tsoptionstest.VfsParseConfigHost{
+		Vfs:              fs,
+		CurrentDirectory: compilerDir,
+	}
+	jsonText, ok := fs.ReadFile(tsconfigFileName)
+	assert.Assert(b, ok)
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		tsconfigFileName,
+		tspath.ToPath(tsconfigFileName, compilerDir, fs.UseCaseSensitiveFileNames()),
+		jsonText,
+	)
+
+	b.ReportAllocs()
+	for b.Loop() {
+		tsoptions.ParseJsonSourceFileConfigFileContent(
+			configFile,
+			host,
+			host.GetCurrentDirectory(),
+			nil,
+			nil,
+			tsconfigFileName,
+			nil,
+			nil,
+		)
+	}
 }
 
 // memoCache is a minimal memoizing ExtendedConfigCache used by tests to simulate
