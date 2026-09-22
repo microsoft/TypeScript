@@ -149,18 +149,8 @@ go -C ./tsc test -run='TestLocal/<test name>' ./internal/testrunner
 Run:
 
 ```bash
-npx hereby build
-npx hereby test
-npx hereby test:all
-npx hereby lint
-npx hereby format
-npx hereby check:format
-npm run -w @typescript/typescript build
-npm run -w @typescript/typescript test
-npm run -w native-preview build
-go -C ./tsc mod tidy -diff
-go -C ./tools mod tidy -diff
-go work sync
+npx hereby validate --all
+npx hereby tidy
 git diff --exit-code
 ```
 
