@@ -418,28 +418,45 @@ test("localization tracks source membership and package strings", async context 
     assert.ok(Object.hasOwn(JSON.parse(fs.readFileSync(pseudoPackage, "utf8")), "cache.probe"));
 });
 
-test("vendoring tracks source membership and removes extra destinations", async context => {
+test("vendoring tracks package versions and supports force", async context => {
     const root = path.resolve(import.meta.dirname, "../../..");
     const source = path.join(root, "node_modules/vscode-jsonrpc/lib/cache-probe.txt");
     const destination = path.join(root, "packages/typescript/vendor/vscode-jsonrpc/lib/cache-probe.txt");
+    const sourceManifest = path.join(root, "node_modules/vscode-jsonrpc/package.json");
+    const destinationManifest = path.join(root, "packages/typescript/vendor/vscode-jsonrpc/package.json");
+    const originalSourceManifest = fs.readFileSync(sourceManifest);
+    const originalDestinationManifest = fs.readFileSync(destinationManifest);
     assert.equal(fs.existsSync(source), false);
     assert.equal(fs.existsSync(destination), false);
     context.after(() => {
         fs.rmSync(source, { force: true });
         fs.rmSync(destination, { force: true });
+        fs.writeFileSync(sourceManifest, originalSourceManifest);
+        fs.writeFileSync(destinationManifest, originalDestinationManifest);
     });
-    const generate = () => x("npx", ["hereby", "generate:vendor"], { throwOnError: true, nodeOptions: { cwd: root } });
-    for (const content of ["first", "changed"]) {
-        fs.writeFileSync(source, content);
-        await generate();
-        assert.equal(fs.readFileSync(destination, "utf8"), content);
-    }
+    const generate = (force = false) => x("npx", ["hereby", "generate:vendor", ...(force ? ["--force"] : [])], { throwOnError: true, nodeOptions: { cwd: root } });
+    await generate();
+    fs.writeFileSync(source, "first");
+    await generate();
+    assert.equal(fs.existsSync(destination), false);
+    const manifest = JSON.parse(originalSourceManifest.toString());
+    manifest.version += "-cache-probe";
+    fs.writeFileSync(sourceManifest, JSON.stringify(manifest));
+    await generate();
+    assert.equal(fs.readFileSync(destination, "utf8"), "first");
+    assert.equal(JSON.parse(fs.readFileSync(destinationManifest, "utf8")).version, manifest.version);
+    fs.writeFileSync(source, "changed");
+    await generate();
+    assert.equal(fs.readFileSync(destination, "utf8"), "first");
+    await generate(true);
+    assert.equal(fs.readFileSync(destination, "utf8"), "changed");
     fs.rmSync(source);
     await generate();
-    assert.equal(fs.existsSync(destination), false);
-    fs.writeFileSync(destination, "extra");
+    assert.equal(fs.readFileSync(destination, "utf8"), "changed");
+    fs.rmSync(destinationManifest);
     await generate();
     assert.equal(fs.existsSync(destination), false);
+    assert.equal(JSON.parse(fs.readFileSync(destinationManifest, "utf8")).version, manifest.version);
 });
 
 test("bundled generation skips unchanged library outputs", async () => {
