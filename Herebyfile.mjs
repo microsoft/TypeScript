@@ -15,7 +15,12 @@ import {
 } from "node:util";
 import * as tar from "tar";
 import { xSync } from "tinyexec";
-import { run } from "./tools/scripts/gen/utils.mts";
+import {
+    enableFileFingerprintCache,
+    run,
+} from "./tools/scripts/gen/utils.mts";
+
+enableFileFingerprintCache();
 
 if (process.platform === "win32") {
     process.chdir(fs.realpathSync.native(process.cwd()));
@@ -535,22 +540,38 @@ export const generateUnicode = goGenerateTask("generate:unicode", async () => {
 });
 
 async function runGenerateExtension() {
-    return await run("npm", ["run", "-w", "native-preview", "generateLocBundle"]);
+    const { default: cache } = await import("./tools/scripts/gen/cache.mts");
+    await cache({
+        cwd: __dirname,
+        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
+        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.json"],
+        commands: [["npm", "run", "-w", "native-preview", "generateLocBundle"]],
+        envInputs: [],
+        force: !!options.force,
+    });
 }
 
 export const generateExtension = task({
     name: "generate:extension",
-    description: "Generates files in the extension",
+    description: "Generates files in the extension. Pass --force to regenerate unchanged files.",
     run: runGenerateExtension,
 });
 
 async function runGenerateExtensionTest() {
-    await run("npm", ["run", "-w", "native-preview", "generateLocTest"]);
+    const { default: cache } = await import("./tools/scripts/gen/cache.mts");
+    await cache({
+        cwd: __dirname,
+        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
+        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"],
+        commands: [["npm", "run", "-w", "native-preview", "generateLocTest"]],
+        envInputs: [],
+        force: !!options.force,
+    });
 }
 
 export const generateExtensionTest = task({
     name: "generate:extension-test",
-    description: "Generates pseudo-localized extension resources.",
+    description: "Generates pseudo-localized extension resources. Pass --force to regenerate unchanged files.",
     dependencies: [generateExtension],
     run: runGenerateExtensionTest,
 });
@@ -1240,21 +1261,36 @@ const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
 const vendorJsonrpcFiles = ["package.json", "README.md", "License.txt", "lib", "typings"];
 
 async function runGenerateVendor() {
+    const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
     const src = path.join(__dirname, vendorJsonrpcSrc);
     const dest = path.join(__dirname, vendorJsonrpcDir);
     if (!fs.existsSync(src)) {
         throw new Error(`${vendorJsonrpcSrc} is not installed; run \`npm ci\` first.`);
     }
+    const entries = vendorJsonrpcFiles.flatMap(file =>
+        fs.statSync(path.join(src, file)).isDirectory()
+            ? [file, ...fs.globSync(`${file}/**/*`, { cwd: src })]
+            : [file]
+    ).sort();
+    const generatedFiles = entries.filter(file => fs.statSync(path.join(src, file)).isFile())
+        .map(file => new GeneratedFile(path.join(dest, file), [__filename, path.join(src, file)], undefined, entries));
+    const existingEntries = fs.existsSync(dest) ? fs.globSync("**/*", { cwd: dest }).sort() : [];
+    if (JSON.stringify(entries) === JSON.stringify(existingEntries) && generatedFiles.every(file => file.isCurrent(!!options.force))) {
+        console.log("Vendored vscode-jsonrpc files are up to date.");
+        return;
+    }
+    for (const file of generatedFiles) file.invalidate();
     await rimraf(dest);
     await fs.promises.mkdir(dest, { recursive: true });
     for (const file of vendorJsonrpcFiles) {
         await cpRecursive(path.join(src, file), path.join(dest, file));
     }
+    for (const file of generatedFiles) file.markCurrent();
 }
 
 export const generateVendor = task({
     name: "generate:vendor",
-    description: "Updates the vendored copy of vscode-jsonrpc from node_modules.",
+    description: "Updates the vendored copy of vscode-jsonrpc from node_modules. Pass --force to regenerate unchanged files.",
     run: runGenerateVendor,
 });
 

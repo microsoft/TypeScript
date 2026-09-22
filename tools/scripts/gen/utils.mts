@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import path from "node:path";
 import {
@@ -11,6 +12,55 @@ import {
 
 export const repoRoot = path.resolve(import.meta.dirname, "../../..");
 
+const fileFingerprints = new Map<string, { stats: fs.BigIntStats; hash: string; }>();
+let reuseFileFingerprints = false;
+let activeFingerprintWriters = 0;
+
+export function enableFileFingerprintCache(): () => void {
+    const previous = reuseFileFingerprints;
+    reuseFileFingerprints = true;
+    fileFingerprints.clear();
+    return () => {
+        reuseFileFingerprints = previous;
+        fileFingerprints.clear();
+    };
+}
+
+export function invalidateFileFingerprints(file?: string): void {
+    if (file === undefined) fileFingerprints.clear();
+    else fileFingerprints.delete(path.resolve(file));
+}
+
+function beginFileFingerprintWrite(): () => void {
+    activeFingerprintWriters++;
+    invalidateFileFingerprints();
+    return () => {
+        activeFingerprintWriters--;
+        invalidateFileFingerprints();
+    };
+}
+
+export function getFileFingerprint(file: string, fresh = false): string {
+    file = path.resolve(file);
+    fresh ||= activeFingerprintWriters > 0;
+    const previous = fileFingerprints.get(file);
+    if (!fresh && reuseFileFingerprints && previous) return previous.hash;
+    const stats = fs.statSync(file, { bigint: true });
+    if (
+        !fresh && previous
+        && previous.stats.dev === stats.dev
+        && previous.stats.ino === stats.ino
+        && previous.stats.size === stats.size
+        && previous.stats.mtimeNs === stats.mtimeNs
+        && previous.stats.ctimeNs === stats.ctimeNs
+    ) {
+        return previous.hash;
+    }
+    const hash = createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+    fileFingerprints.set(file, { stats, hash });
+    return hash;
+}
+
 export interface RunOptions {
     captureOutput?: boolean;
     cwd?: string;
@@ -22,17 +72,23 @@ export function formatCommandArg(arg: string) {
     return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
 }
 
-export function run(command: string, args: readonly string[] = [], options: RunOptions = {}) {
+export async function run(command: string, args: readonly string[] = [], options: RunOptions = {}) {
     console.log("$ " + [command, ...args].map(formatCommandArg).join(" "));
-    return x(command, args, {
-        throwOnError: true,
-        ...(options.signal ? { signal: options.signal } : {}),
-        nodeOptions: {
-            cwd: options.cwd,
-            env: options.env ? { ...process.env, ...options.env } : undefined,
-            stdio: options.captureOutput ? "pipe" : "inherit",
-        },
-    });
+    const finishWrite = beginFileFingerprintWrite();
+    try {
+        return await x(command, args, {
+            throwOnError: true,
+            ...(options.signal ? { signal: options.signal } : {}),
+            nodeOptions: {
+                cwd: options.cwd,
+                env: options.env ? { ...process.env, ...options.env } : undefined,
+                stdio: options.captureOutput ? "pipe" : "inherit",
+            },
+        });
+    }
+    finally {
+        finishWrite();
+    }
 }
 
 export function globInputs(patterns: string[], exclude: string[] = []): string[] {
@@ -57,9 +113,21 @@ export function parseGeneratorArgs<const Options extends ParseArgsOptionsConfig>
 }
 
 export async function formatFiles(files: string[]): Promise<void> {
-    await x("dprint", ["fmt", ...files], { throwOnError: true, nodeOptions: { cwd: repoRoot, stdio: "inherit" } });
+    const finishWrite = beginFileFingerprintWrite();
+    try {
+        await x("dprint", ["fmt", ...files], { throwOnError: true, nodeOptions: { cwd: repoRoot, stdio: "inherit" } });
+    }
+    finally {
+        finishWrite();
+    }
 }
 
 export function formatFilesSync(files: string[]): void {
-    xSync("dprint", ["fmt", ...files], { throwOnError: true, nodeOptions: { cwd: repoRoot, stdio: "inherit" } });
+    const finishWrite = beginFileFingerprintWrite();
+    try {
+        xSync("dprint", ["fmt", ...files], { throwOnError: true, nodeOptions: { cwd: repoRoot, stdio: "inherit" } });
+    }
+    finally {
+        finishWrite();
+    }
 }

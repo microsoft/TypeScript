@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import * as fs from "node:fs";
+import fs from "node:fs";
+import { syncBuiltinESMExports } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -10,6 +11,11 @@ import { x } from "tinyexec";
 import ts from "typescript";
 import cache from "./cache.mts";
 import { GeneratedFile } from "./generatedFile.mts";
+import {
+    enableFileFingerprintCache,
+    getFileFingerprint,
+    run,
+} from "./utils.mts";
 
 test("validate generates before building and selects the generation scope", async () => {
     const fileName = path.resolve(import.meta.dirname, "../../../Herebyfile.mjs");
@@ -121,6 +127,114 @@ test("generated files are current only while their inputs and formatted output m
     assert.throws(() => new GeneratedFile(output, [input, dependency], cache), { code: "ENOENT" });
     fs.rmSync(output);
     assert.equal(generated().isCurrent(), false);
+});
+
+test("generated files share input fingerprints and refresh changed inputs", context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+    const input = path.join(directory, "input.ts");
+    const output = path.join(directory, "output.ts");
+    const cache = path.join(directory, "cache");
+    fs.writeFileSync(input, "first");
+    const reads = context.mock.method(fs, "readFileSync");
+    syncBuiltinESMExports();
+    context.after(() => {
+        reads.mock.restore();
+        syncBuiltinESMExports();
+    });
+    const inputReads = () => reads.mock.calls.filter(call => call.arguments[0] === input).length;
+    const first = new GeneratedFile(output, [input], cache);
+    new GeneratedFile(path.join(directory, "other.ts"), [input], cache);
+    assert.equal(inputReads(), 1);
+    first.write("generated");
+    first.markCurrent();
+    const timestamp = fs.statSync(input);
+    fs.writeFileSync(input, "other");
+    fs.utimesSync(input, timestamp.atime, timestamp.mtime);
+    assert.equal(new GeneratedFile(output, [input], cache).isCurrent(), false);
+    fs.rmSync(input);
+    assert.throws(() => new GeneratedFile(output, [input], cache), { code: "ENOENT" });
+    fs.writeFileSync(input, "first");
+    assert.equal(new GeneratedFile(output, [input], cache).isCurrent(), true);
+});
+
+test("invocation fingerprints reuse metadata and invalidate writes and commands", async context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+    context.after(enableFileFingerprintCache());
+    const input = path.join(directory, "input.ts");
+    const output = path.join(directory, "output.ts");
+    const metadata = path.join(directory, "cache");
+    const inputFile = new GeneratedFile(input, [], metadata);
+    inputFile.write("first");
+    inputFile.markCurrent();
+    const reads = context.mock.method(fs, "readFileSync");
+    const stats = context.mock.method(fs, "statSync");
+    syncBuiltinESMExports();
+    context.after(() => {
+        reads.mock.restore();
+        stats.mock.restore();
+        syncBuiltinESMExports();
+    });
+    const generated = new GeneratedFile(output, [input], metadata);
+    new GeneratedFile(path.join(directory, "other.ts"), [input], metadata);
+    getFileFingerprint(path.relative(process.cwd(), input));
+    assert.equal(reads.mock.calls.filter(call => call.arguments[0] === input).length, 1);
+    assert.equal(stats.mock.calls.filter(call => call.arguments[0] === input).length, 1);
+    generated.write("generated");
+    generated.markCurrent();
+    const firstHash = getFileFingerprint(input);
+    inputFile.write("other");
+    assert.notEqual(getFileFingerprint(input), firstHash);
+    assert.equal(new GeneratedFile(output, [input], metadata).isCurrent(), false);
+    const stale = new GeneratedFile(output, [input], metadata);
+    fs.writeFileSync(input, "third");
+    stale.write("stale");
+    stale.markCurrent();
+    assert.equal(new GeneratedFile(output, [input], metadata).isCurrent(), false);
+    for (const failure of [false, true]) {
+        const before = getFileFingerprint(input);
+        const content = failure ? "failed command" : "successful command";
+        const command = run(process.execPath, ["-e", `require('node:fs').writeFileSync(process.argv[1], ${JSON.stringify(content)}); process.exit(${failure ? 1 : 0});`, input]);
+        if (failure) await assert.rejects(command);
+        else await command;
+        assert.notEqual(getFileFingerprint(input), before);
+        assert.equal(getFileFingerprint(input), createHash("sha256").update(content).digest("hex"));
+    }
+    const running = run(process.execPath, ["-e", "process.exit(0)"]);
+    try {
+        const before = getFileFingerprint(input);
+        fs.writeFileSync(input, "changed while a command is running");
+        assert.notEqual(getFileFingerprint(input), before);
+    }
+    finally {
+        await running;
+    }
+});
+
+test("command cache snapshots and generated files share invocation fingerprints", async context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+    const input = path.join(directory, "input.txt");
+    fs.writeFileSync(input, "input");
+    const options = {
+        cwd: directory,
+        inputs: ["input.txt"],
+        outputs: ["output.txt"],
+        commands: [[process.execPath, "-e", "require('node:fs').writeFileSync('output.txt', 'generated')"]],
+    };
+    assert.equal(await cache(options), false);
+    context.after(enableFileFingerprintCache());
+    const reads = context.mock.method(fs, "readFileSync");
+    syncBuiltinESMExports();
+    context.after(() => {
+        reads.mock.restore();
+        syncBuiltinESMExports();
+    });
+    assert.equal(await cache(options), true);
+    assert.equal(await cache(options), true);
+    new GeneratedFile(path.join(directory, "other.txt"), [input]);
+    assert.equal(reads.mock.calls.filter(call => call.arguments[0] === input).length, 1);
 });
 
 test("changing inputs during generation does not mark stale output current", context => {
@@ -242,6 +356,90 @@ test("generate includes standalone generators without Go traversal", async () =>
     assert.match(current.stdout, /LSP bindings are up to date/);
     assert.doesNotMatch(current.stdout, /Using vscode-languageclient/);
     assert.equal(fs.statSync(lspOutput).mtimeMs, timestamp);
+});
+
+test("localization and vendoring preserve current outputs", async context => {
+    const root = path.resolve(import.meta.dirname, "../../..");
+    const generate = (force = false) => x("npx", ["hereby", "generate:extension-test", "generate:vendor", ...(force ? ["--force"] : [])], { throwOnError: true, nodeOptions: { cwd: root } });
+    await generate();
+    const outputs = fs.globSync([
+        "packages/vscode-typescript/l10n/*.json",
+        "packages/vscode-typescript/package.nls.qps-ploc.json",
+        "packages/typescript/vendor/vscode-jsonrpc/**/*",
+    ], { cwd: root }).map(file => path.join(root, file)).filter(file => fs.statSync(file).isFile());
+    const contents = outputs.map(file => fs.readFileSync(file));
+    context.after(() => {
+        for (const [index, file] of outputs.entries()) fs.writeFileSync(file, contents[index]);
+    });
+    const oldTime = new Date("2000-01-01T00:00:00Z");
+    for (const file of outputs) fs.utimesSync(file, oldTime, oldTime);
+    const timestamps = outputs.map(file => fs.statSync(file).mtimeMs);
+    await generate();
+    assert.deepEqual(outputs.map(file => fs.statSync(file).mtimeMs), timestamps);
+    await generate(true);
+    for (const file of outputs) assert.notEqual(fs.statSync(file).mtimeMs, oldTime.getTime());
+    for (const [index, file] of outputs.entries()) {
+        if (index % 2) fs.rmSync(file);
+        else fs.writeFileSync(file, "modified");
+    }
+    await generate();
+    assert.deepEqual(outputs.map(file => fs.readFileSync(file)), contents);
+});
+
+test("localization tracks source membership and package strings", async context => {
+    const root = path.resolve(import.meta.dirname, "../../..");
+    const extension = path.join(root, "packages/vscode-typescript");
+    const source = path.join(extension, "src/cache-probe.ts");
+    const packageStrings = path.join(extension, "package.nls.json");
+    const bundle = path.join(extension, "l10n/bundle.l10n.json");
+    const pseudoBundle = path.join(extension, "l10n/bundle.l10n.qps-ploc.json");
+    const pseudoPackage = path.join(extension, "package.nls.qps-ploc.json");
+    const originals = [packageStrings, bundle, pseudoBundle, pseudoPackage].map(file => [file, fs.readFileSync(file)] as const);
+    assert.equal(fs.existsSync(source), false);
+    context.after(() => {
+        fs.rmSync(source, { force: true });
+        for (const [file, content] of originals) fs.writeFileSync(file, content);
+    });
+    const generate = () => x("npx", ["hereby", "generate:extension-test"], { throwOnError: true, nodeOptions: { cwd: root } });
+    for (const message of ["Codegen cache probe", "Updated codegen cache probe"]) {
+        fs.writeFileSync(source, `import * as vscode from "vscode";\nexport const message = vscode.l10n.t(${JSON.stringify(message)});\n`);
+        await generate();
+        assert.ok(Object.hasOwn(JSON.parse(fs.readFileSync(bundle, "utf8")), message));
+        assert.ok(Object.hasOwn(JSON.parse(fs.readFileSync(pseudoBundle, "utf8")), message));
+    }
+    fs.rmSync(source);
+    await generate();
+    assert.deepEqual(fs.readFileSync(bundle), originals[1][1]);
+    assert.deepEqual(fs.readFileSync(pseudoBundle), originals[2][1]);
+    const strings = JSON.parse(fs.readFileSync(packageStrings, "utf8"));
+    strings["cache.probe"] = "Package cache probe";
+    fs.writeFileSync(packageStrings, JSON.stringify(strings));
+    await generate();
+    assert.ok(Object.hasOwn(JSON.parse(fs.readFileSync(pseudoPackage, "utf8")), "cache.probe"));
+});
+
+test("vendoring tracks source membership and removes extra destinations", async context => {
+    const root = path.resolve(import.meta.dirname, "../../..");
+    const source = path.join(root, "node_modules/vscode-jsonrpc/lib/cache-probe.txt");
+    const destination = path.join(root, "packages/typescript/vendor/vscode-jsonrpc/lib/cache-probe.txt");
+    assert.equal(fs.existsSync(source), false);
+    assert.equal(fs.existsSync(destination), false);
+    context.after(() => {
+        fs.rmSync(source, { force: true });
+        fs.rmSync(destination, { force: true });
+    });
+    const generate = () => x("npx", ["hereby", "generate:vendor"], { throwOnError: true, nodeOptions: { cwd: root } });
+    for (const content of ["first", "changed"]) {
+        fs.writeFileSync(source, content);
+        await generate();
+        assert.equal(fs.readFileSync(destination, "utf8"), content);
+    }
+    fs.rmSync(source);
+    await generate();
+    assert.equal(fs.existsSync(destination), false);
+    fs.writeFileSync(destination, "extra");
+    await generate();
+    assert.equal(fs.existsSync(destination), false);
 });
 
 test("bundled generation skips unchanged library outputs", async () => {
