@@ -3,6 +3,8 @@ package fswatch
 import (
 	"sync"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 const (
@@ -27,7 +29,7 @@ var (
 // is called, then coalesces for minWaitTime before firing callbacks.
 type debounce struct {
 	mu        sync.Mutex
-	callbacks map[any]func()
+	callbacks debounceCallbackMap
 	lastTime  time.Time
 
 	// Latch state: waitCh is the persistent gate (closed = signalled),
@@ -38,30 +40,37 @@ type debounce struct {
 	notified  bool
 }
 
-func newDebounce() *debounce {
+type (
+	defDebounce         = *debounce                /* ref: nonnil */
+	debounceCallback    = func()                   /* ref: nonnil */
+	debounceCallbackMap = map[any]debounceCallback /* ref: nonnil */
+	signal              = struct{}
+)
+
+func newDebounce() defDebounce {
 	d := &debounce{
-		callbacks: make(map[any]func()),
+		callbacks: make(map[any]debounceCallback),
 	}
 	go d.loop()
 	return d
 }
 
 // add registers a callback under key.
-func (d *debounce) add(key any, cb func()) {
+func (d defDebounce) add(key any, cb debounceCallback) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	d.callbacks[key] = cb
 }
 
 // remove deregisters the callback for key.
-func (d *debounce) remove(key any) {
+func (d defDebounce) remove(key any) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	delete(d.callbacks, key)
 }
 
 // trigger wakes the debounce loop.
-func (d *debounce) trigger() {
+func (d defDebounce) trigger() {
 	d.latchMu.Lock()
 	defer d.latchMu.Unlock()
 	if !d.notified {
@@ -72,14 +81,14 @@ func (d *debounce) trigger() {
 	d.triggerCh = make(chan struct{})
 }
 
-func (d *debounce) loop() {
+func (d defDebounce) loop() {
 	for {
 		d.latchWait()
 		d.notifyIfReady()
 	}
 }
 
-func (d *debounce) notifyIfReady() {
+func (d defDebounce) notifyIfReady() {
 	d.mu.Lock()
 	now := time.Now()
 	gap := now.Sub(d.lastTime)
@@ -93,7 +102,7 @@ func (d *debounce) notifyIfReady() {
 	d.coalesceWait()
 }
 
-func (d *debounce) coalesceWait() {
+func (d defDebounce) coalesceWait() {
 	d.latchMu.Lock()
 	ch := d.triggerChLocked()
 	d.latchMu.Unlock()
@@ -106,10 +115,10 @@ func (d *debounce) coalesceWait() {
 }
 
 // fireCallbacks snapshots and invokes all registered callbacks.
-func (d *debounce) fireCallbacks() {
+func (d defDebounce) fireCallbacks() {
 	d.mu.Lock()
 	d.lastTime = time.Now()
-	cbs := make([]func(), 0, len(d.callbacks))
+	cbs := make([]debounceCallback, 0, len(d.callbacks))
 	for _, cb := range d.callbacks {
 		cbs = append(cbs, cb)
 	}
@@ -124,28 +133,28 @@ func (d *debounce) fireCallbacks() {
 
 // ----- latch helpers (replace signal_) ------------------------------------
 
-func (d *debounce) waitChLocked() chan struct{} {
+func (d defDebounce) waitChLocked() typeutil.DefChan[signal] {
 	if d.waitCh == nil {
 		d.waitCh = make(chan struct{})
 	}
 	return d.waitCh
 }
 
-func (d *debounce) triggerChLocked() chan struct{} {
+func (d defDebounce) triggerChLocked() typeutil.DefChan[signal] {
 	if d.triggerCh == nil {
 		d.triggerCh = make(chan struct{})
 	}
 	return d.triggerCh
 }
 
-func (d *debounce) latchWait() {
+func (d defDebounce) latchWait() {
 	d.latchMu.Lock()
 	ch := d.waitChLocked()
 	d.latchMu.Unlock()
 	<-ch
 }
 
-func (d *debounce) latchReset() {
+func (d defDebounce) latchReset() {
 	d.latchMu.Lock()
 	defer d.latchMu.Unlock()
 	if d.notified {

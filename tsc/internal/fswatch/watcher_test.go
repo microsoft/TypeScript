@@ -21,6 +21,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 // ----- helpers -----------------------------------------------------------
@@ -47,7 +49,7 @@ func kqueueFSEventsTimeout() time.Duration {
 // number. The fast-path uses the base timeout (1-2 seconds); retries
 // scale up so a single environmental hiccup gets a longer wait without
 // inflating every passing run's wall-clock.
-func watcherEventTimeout(t testingT, w Watcher) time.Duration {
+func watcherEventTimeout(t defTestingT, w DefWatcher) time.Duration {
 	base := defaultEventTimeout()
 	if w == FSEvents() || w == Kqueue() {
 		base = kqueueFSEventsTimeout()
@@ -63,7 +65,7 @@ func watcherEventTimeout(t testingT, w Watcher) time.Duration {
 // are available on the current platform, plus any test-only watcher
 // variants registered in additionalTestWatchers (see e.g.
 // fanotify_linux_test.go).
-var availableWatchers []Watcher
+var availableWatchers []DefWatcher
 
 // additionalTestWatchers is appended to by platform-specific *_test.go
 // init() functions to register test-only watcher variants (e.g. the
@@ -72,7 +74,7 @@ var availableWatchers []Watcher
 // since Go runs file inits in lexicographic file-name order and this
 // file is watcher_test.go, that ordering is satisfied for every other
 // *_test.go file in the package.
-var additionalTestWatchers []Watcher
+var additionalTestWatchers []DefWatcher
 
 func init() {
 	for _, b := range AllWatchers() {
@@ -94,12 +96,12 @@ func init() {
 // body that fails due to environmental flakes (macOS event-delivery
 // stalls under load) before propagating the failure to the real test
 // runner.
-func runForEachWatcher(t *testing.T, fn func(t testingT, watcherImpl Watcher)) {
+func runForEachWatcher(t *testing.T, fn func(t defTestingT, watcherImpl DefWatcher) /* ref: nonnil */) {
 	t.Helper()
 	for _, b := range availableWatchers {
 		t.Run(b.Name(), func(t *testing.T) {
 			t.Parallel()
-			runWithRetry(t, func(rt testingT) {
+			runWithRetry(t, func(rt defTestingT) {
 				fn(rt, b)
 			})
 		})
@@ -108,7 +110,7 @@ func runForEachWatcher(t *testing.T, fn func(t testingT, watcherImpl Watcher)) {
 
 // newTmpDir creates a fresh temp dir, resolves any symlinks in the path so
 // it matches what backends report, and registers cleanup.
-func newTmpDir(t testingT) string {
+func newTmpDir(t defTestingT) string {
 	t.Helper()
 	d := t.TempDir()
 	resolved, err := filepath.EvalSymlinks(d)
@@ -118,7 +120,7 @@ func newTmpDir(t testingT) string {
 	return resolved
 }
 
-func makeDirSymlink(t testingT, target string, link string) {
+func makeDirSymlink(t defTestingT, target string, link string) {
 	t.Helper()
 	if runtime.GOOS == "windows" {
 		if err := exec.Command("cmd", "/c", "mklink", "/J", link, target).Run(); err == nil {
@@ -147,7 +149,7 @@ func subPath(dir string) string {
 // newDirectWatcher creates a bare dirWatch for unit-testing tree/debounce
 // helpers without going through the full backend subscribe path. Each
 // test gets its own debouncer so tests don't share goroutine state.
-func newDirectWatcher(t testingT, dir string) *dirWatch {
+func newDirectWatcher(t defTestingT, dir string) defDirWatch {
 	t.Helper()
 	w := newDirWatch(dir, dir, newDebounce())
 	w.recursive = true
@@ -156,7 +158,7 @@ func newDirectWatcher(t testingT, dir string) *dirWatch {
 }
 
 // subscribeFor sets up a recorder + WatchDirectory and registers cleanup.
-func subscribeFor(t testingT, dir string, watcherImpl Watcher) (*recordingWatcher, Watch) {
+func subscribeFor(t defTestingT, dir string, watcherImpl DefWatcher) (defRecordingWatcher, DefWatch) {
 	return subscribeForOpts(t, dir, watcherImpl, WithRecursive())
 }
 
@@ -164,7 +166,7 @@ func subscribeFor(t testingT, dir string, watcherImpl Watcher) (*recordingWatche
 // backend: fsevents and kqueue need a couple of hundred ms to actually
 // arm their watches on the freshly-created tmp dir, while inotify/
 // fanotify/Windows are essentially synchronous.
-func settleSleep(w Watcher) time.Duration {
+func settleSleep(w DefWatcher) time.Duration {
 	if w == FSEvents() || w == Kqueue() {
 		return 300 * time.Millisecond
 	}
@@ -174,7 +176,7 @@ func settleSleep(w Watcher) time.Duration {
 // preSubscribeSleep gives the macOS fsevents stream timestamp enough
 // distance from any tmp-dir creation just before subscribe; without
 // it the initial event batch may include the watched dir's own create.
-func preSubscribeSleep(w Watcher) time.Duration {
+func preSubscribeSleep(w DefWatcher) time.Duration {
 	if w == FSEvents() || w == Kqueue() {
 		return 50 * time.Millisecond
 	}
@@ -182,7 +184,7 @@ func preSubscribeSleep(w Watcher) time.Duration {
 }
 
 // subscribeFileFor sets up a recorder + WatchFile and registers cleanup.
-func subscribeFileFor(t testingT, path string, watcherImpl Watcher) (*recordingWatcher, Watch) {
+func subscribeFileFor(t defTestingT, path string, watcherImpl DefWatcher) (defRecordingWatcher, DefWatch) {
 	t.Helper()
 	if d := preSubscribeSleep(watcherImpl); d > 0 {
 		time.Sleep(d)
@@ -199,7 +201,7 @@ func subscribeFileFor(t testingT, path string, watcherImpl Watcher) (*recordingW
 }
 
 // subscribeForOpts sets up a recorder + WatchDirectory with options and registers cleanup.
-func subscribeForOpts(t testingT, dir string, watcherImpl Watcher, opts ...WatchOption) (*recordingWatcher, Watch) {
+func subscribeForOpts(t defTestingT, dir string, watcherImpl DefWatcher, opts ...DefWatchOption) (defRecordingWatcher, DefWatch) {
 	t.Helper()
 	if d := preSubscribeSleep(watcherImpl); d > 0 {
 		time.Sleep(d)
@@ -218,16 +220,20 @@ func subscribeForOpts(t testingT, dir string, watcherImpl Watcher, opts ...Watch
 // ----- recordingWatcher --------------------------------------------------
 
 type recordingWatcher struct {
-	t       testingT
+	t       defTestingT
 	watcher Watcher // bound at subscribe time so expect* helpers can choose timeouts
 	mu      sync.Mutex
-	cond    *sync.Cond
+	cond    *sync.Cond // ref: nonnil
 	buf     []Event
 	errs    []error
 }
 
-func newRecorder(t testingT) *recordingWatcher {
-	r := &recordingWatcher{t: t}
+type (
+	defRecordingWatcher = *recordingWatcher /* ref: nonnil */
+)
+
+func newRecorder(t defTestingT) defRecordingWatcher {
+	r := &recordingWatcher{t: t} //ref:ignore cond is initialized immediately below before the recorder escapes
 	r.cond = sync.NewCond(&r.mu)
 	return r
 }
@@ -236,7 +242,7 @@ func newRecorder(t testingT) *recordingWatcher {
 // bound watcher backend, or the default if no watcher was attached.
 // The returned duration scales with the current retry attempt when the
 // recorder is bound to a [retryT].
-func (r *recordingWatcher) deadline() time.Duration {
+func (r defRecordingWatcher) deadline() time.Duration {
 	if r.watcher == nil {
 		return scaledDeadline(r.t, defaultEventTimeout())
 	}
@@ -246,14 +252,14 @@ func (r *recordingWatcher) deadline() time.Duration {
 // scaledDeadline multiplies base by the retry scale for t (if t is a
 // retryT), so per-event timeouts grow on retries without inflating the
 // fast path.
-func scaledDeadline(t testingT, base time.Duration) time.Duration {
+func scaledDeadline(t defTestingT, base time.Duration) time.Duration {
 	if rt, ok := t.(*retryT); ok {
 		return base * time.Duration(retryTimeoutScale(rt.attempt))
 	}
 	return base
 }
 
-func (r *recordingWatcher) callback(events []Event, err error) {
+func (r defRecordingWatcher) callback(events []Event, err error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if err != nil {
@@ -265,7 +271,7 @@ func (r *recordingWatcher) callback(events []Event, err error) {
 
 // next blocks for up to d for at least one event, then drains and returns
 // everything that has accumulated.
-func (r *recordingWatcher) next(d time.Duration) []Event {
+func (r defRecordingWatcher) next(d time.Duration) []Event {
 	r.t.Helper()
 	deadline := time.Now().Add(d)
 	r.mu.Lock()
@@ -290,7 +296,7 @@ func (r *recordingWatcher) next(d time.Duration) []Event {
 
 // drainQuiet drains any buffered events, then waits at most d to make sure
 // no further events arrive. Returns whatever shows up.
-func (r *recordingWatcher) drainQuiet(d time.Duration) []Event {
+func (r defRecordingWatcher) drainQuiet(d time.Duration) []Event {
 	r.t.Helper()
 	r.mu.Lock()
 	r.buf = nil
@@ -305,7 +311,7 @@ func (r *recordingWatcher) drainQuiet(d time.Duration) []Event {
 
 // gather waits up to `wait` for at least one event, then settles for
 // `settle` to give the rest of the debounced batch a chance to arrive.
-func (r *recordingWatcher) gather(wait, settle time.Duration) []Event {
+func (r defRecordingWatcher) gather(wait, settle time.Duration) []Event {
 	first := r.next(wait)
 	if len(first) == 0 {
 		return nil
@@ -322,7 +328,7 @@ func (r *recordingWatcher) gather(wait, settle time.Duration) []Event {
 // without seeing one, or the recorder has gone quiet for `quiet`. Useful
 // for assertions that need to observe events possibly spread across
 // multiple debounce batches (e.g. rapid-coalescing tests).
-func (r *recordingWatcher) gatherUntilQuiet(initialWait, quiet time.Duration) []Event {
+func (r defRecordingWatcher) gatherUntilQuiet(initialWait, quiet time.Duration) []Event {
 	first := r.next(initialWait)
 	if len(first) == 0 {
 		return nil
@@ -343,7 +349,7 @@ func (r *recordingWatcher) gatherUntilQuiet(initialWait, quiet time.Duration) []
 // buffer). Useful for tests where the kernel backend takes a variable
 // amount of time to install/propagate a fresh watch, instead of betting
 // on a fixed sleep that breaks under host CPU/IO contention.
-func (r *recordingWatcher) waitForEvent(d time.Duration, pred func(Event) bool) []Event {
+func (r defRecordingWatcher) waitForEvent(d time.Duration, pred func(Event) bool /* ref: nonnil */) []Event {
 	r.t.Helper()
 	deadline := time.Now().Add(d)
 	for {
@@ -382,7 +388,7 @@ func (r *recordingWatcher) waitForEvent(d time.Duration, pred func(Event) bool) 
 // might split events across multiple debounce batches or take a moment
 // to install a watch on a freshly created dir. The retry behavior makes
 // the test robust to host CPU/IO contention.
-func (r *recordingWatcher) waitForAll(d time.Duration, want []wantEvent) []Event {
+func (r defRecordingWatcher) waitForAll(d time.Duration, want []wantEvent) []Event {
 	r.t.Helper()
 	if len(want) == 0 {
 		return nil
@@ -440,7 +446,7 @@ func haveAll(got []Event, want []wantEvent) bool {
 // (ignoring order). Use everywhere the test had next/gather followed
 // by assertEventSet; it removes the timing assumption that the events
 // land in one debounce batch.
-func expectEventSet(t testingT, r *recordingWatcher, want []wantEvent) []Event {
+func expectEventSet(t defTestingT, r defRecordingWatcher, want []wantEvent) []Event {
 	t.Helper()
 	got := r.waitForAll(r.deadline(), want)
 	assertEventSet(t, got, want)
@@ -451,7 +457,7 @@ func expectEventSet(t testingT, r *recordingWatcher, want []wantEvent) []Event {
 // asserts they appear in the exact specified order (filtered to
 // wanted paths). Order-sensitive callers that previously used
 // assertEventSequence on a one-shot next/gather.
-func expectEventSequence(t testingT, r *recordingWatcher, want []wantEvent) []Event {
+func expectEventSequence(t defTestingT, r defRecordingWatcher, want []wantEvent) []Event {
 	t.Helper()
 	got := r.waitForAll(r.deadline(), want)
 	assertEventSequence(t, got, want)
@@ -462,7 +468,7 @@ func expectEventSequence(t testingT, r *recordingWatcher, want []wantEvent) []Ev
 // returns the accumulated event slice. Use for tests that don't care
 // about a specific set of events but want to verify at least one
 // specific event surfaced.
-func expectContains(t testingT, r *recordingWatcher, kind EventKind, path string) []Event {
+func expectContains(t defTestingT, r defRecordingWatcher, kind EventKind, path string) []Event {
 	t.Helper()
 	d := r.deadline()
 	got := r.waitForEvent(d, func(e Event) bool {
@@ -474,7 +480,7 @@ func expectContains(t testingT, r *recordingWatcher, kind EventKind, path string
 	return got
 }
 
-func expectNoBufferedEvents(t testingT, r *recordingWatcher, msg string) {
+func expectNoBufferedEvents(t defTestingT, r defRecordingWatcher, msg string) {
 	t.Helper()
 	r.mu.Lock()
 	got := slices.Clone(r.buf)
@@ -485,7 +491,7 @@ func expectNoBufferedEvents(t testingT, r *recordingWatcher, msg string) {
 	}
 }
 
-func assertNoEventsForPath(t testingT, got []Event, path, msg string) {
+func assertNoEventsForPath(t defTestingT, got []Event, path, msg string) {
 	t.Helper()
 	got = filterEventsForPaths(got, path)
 	if len(got) > 0 {
@@ -510,7 +516,7 @@ func toWantEvents(events []Event) []wantEvent {
 
 // assertEventSet compares two event sets ignoring order.
 // Events for paths not in want are ignored (e.g. parent-dir update noise).
-func assertEventSet(t testingT, got []Event, want []wantEvent) {
+func assertEventSet(t defTestingT, got []Event, want []wantEvent) {
 	t.Helper()
 	got = filterToWantedPaths(got, want)
 	gotW := toWantEvents(got)
@@ -529,7 +535,7 @@ func assertEventSet(t testingT, got []Event, want []wantEvent) {
 
 // assertEventSequence is like assertEventSet but order-sensitive.
 // Events for paths not in want are ignored (e.g. parent-dir update noise).
-func assertEventSequence(t testingT, got []Event, want []wantEvent) {
+func assertEventSequence(t defTestingT, got []Event, want []wantEvent) {
 	t.Helper()
 	got = filterToWantedPaths(got, want)
 	gotW := toWantEvents(got)
@@ -556,6 +562,9 @@ func filterToWantedPaths(got []Event, want []wantEvent) []Event {
 func equalWantEvents(a, b []wantEvent) bool {
 	if len(a) != len(b) {
 		return false
+	}
+	if a == nil || b == nil {
+		return true
 	}
 	for i := range a {
 		if a[i] != b[i] {
@@ -728,7 +737,7 @@ func replayEventList(events []Event) []Event {
 
 func TestWatchFileCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 
@@ -742,7 +751,7 @@ func TestWatchFileCreate(t *testing.T) {
 
 func TestWatchFileUpdate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		f := subPath(dir)
@@ -762,7 +771,7 @@ func TestWatchFileUpdate(t *testing.T) {
 
 func TestWatchFileRename(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f1 := subPath(dir)
 		f2 := subPath(dir)
@@ -782,7 +791,7 @@ func TestWatchFileRename(t *testing.T) {
 
 func TestWatchFileRenameExisting(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		// Existing file present at subscribe time.
 		f1 := subPath(dir)
@@ -803,7 +812,7 @@ func TestWatchFileRenameExisting(t *testing.T) {
 
 func TestWatchFileDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := subPath(dir)
 		if err := os.WriteFile(f, []byte("x"), 0o644); err != nil {
@@ -821,7 +830,7 @@ func TestWatchFileDelete(t *testing.T) {
 
 func TestSubscribeDirCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		f := subPath(dir)
@@ -840,7 +849,7 @@ func TestSubscribeDirCreate(t *testing.T) {
 // shared event path) silently mutating the bytes.
 func TestSubscribeNonASCIIPath(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		parent := newTmpDir(t)
 		// "café" + "résumé"; both precomposed NFC.
 		dir := filepath.Join(parent, "caf\u00e9-dir")
@@ -859,7 +868,7 @@ func TestSubscribeNonASCIIPath(t *testing.T) {
 
 func TestSubscribeDirRename(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f1 := subPath(dir)
 		if err := os.Mkdir(f1, 0o755); err != nil {
@@ -879,7 +888,7 @@ func TestSubscribeDirRename(t *testing.T) {
 
 func TestSubscribeDirDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := subPath(dir)
 		if err := os.Mkdir(f, 0o755); err != nil {
@@ -895,7 +904,7 @@ func TestSubscribeDirDelete(t *testing.T) {
 
 func TestSubscribeWatchedDirDeleted(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		if err := os.RemoveAll(dir); err != nil {
@@ -946,7 +955,7 @@ func TestSubscribeWatchedDirDeleted(t *testing.T) {
 
 func TestSubscribeSubfileCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 
@@ -969,7 +978,7 @@ func TestSubscribeSubfileCreate(t *testing.T) {
 
 func TestSubscribeSubfileUpdate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := subPath(dir)
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -992,7 +1001,7 @@ func TestSubscribeSubfileUpdate(t *testing.T) {
 
 func TestSubscribeSubfileRename(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := subPath(dir)
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -1017,7 +1026,7 @@ func TestSubscribeSubfileRename(t *testing.T) {
 
 func TestSubscribeSubfileDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := subPath(dir)
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -1042,7 +1051,7 @@ func TestSubscribeSubfileDelete(t *testing.T) {
 
 func TestSubscribeSubdirCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := subPath(dir)
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -1062,7 +1071,7 @@ func TestSubscribeSubdirCreate(t *testing.T) {
 
 func TestSubscribeSubdirDeleteWithFiles(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		subDir := subPath(dir)
 		if err := os.Mkdir(subDir, 0o755); err != nil {
@@ -1090,7 +1099,7 @@ func TestSubscribeSymlinkCreate(t *testing.T) {
 	if runtime.GOOS == "dragonfly" {
 		t.Skip("DragonFlyBSD kqueue doesn't fire NOTE_WRITE on symlink creation")
 	}
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f1 := subPath(dir)
 		if err := os.WriteFile(f1, []byte("x"), 0o644); err != nil {
@@ -1107,7 +1116,7 @@ func TestSubscribeSymlinkCreate(t *testing.T) {
 
 func TestSubscribeSymlinkDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f1 := subPath(dir)
 		f2 := subPath(dir)
@@ -1127,7 +1136,7 @@ func TestSubscribeSymlinkDelete(t *testing.T) {
 
 func TestSubscribeSymlinkedDirectoryRebasesTargetEvents(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		target := filepath.Join(dir, "target")
 		if err := os.Mkdir(target, 0o755); err != nil {
@@ -1147,7 +1156,7 @@ func TestSubscribeSymlinkedDirectoryRebasesTargetEvents(t *testing.T) {
 
 func TestRecursiveSubscribeSymlinkedDirectoryDoesNotFollowDescendantSymlink(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		if watcherImpl.HasFastRecursiveBackend() {
 			t.Skip("fast recursive backends do not use the userspace recursive walk")
 		}
@@ -1189,7 +1198,7 @@ func TestRecursiveSubscribeSymlinkedDirectoryDoesNotFollowDescendantSymlink(t *t
 
 func TestSubscribeCoalesceCreateUpdate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		f := subPath(dir)
@@ -1211,7 +1220,7 @@ func TestSubscribeCoalesceCreateUpdate(t *testing.T) {
 
 func TestSubscribeCoalesceDeleteCreateAsUpdate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		f := subPath(dir)
@@ -1234,7 +1243,7 @@ func TestSubscribeCoalesceDeleteCreateAsUpdate(t *testing.T) {
 
 func TestSubscribeCoalesceCreateThenDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		f1 := subPath(dir)
@@ -1264,7 +1273,7 @@ func TestSubscribeCoalesceCreateThenDelete(t *testing.T) {
 
 func TestSubscribeCoalesceMultipleUpdates(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		f := subPath(dir)
@@ -1285,7 +1294,7 @@ func TestSubscribeCoalesceMultipleUpdates(t *testing.T) {
 
 func TestSubscribeCoalesceUpdateDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 		f := subPath(dir)
@@ -1313,7 +1322,7 @@ func TestSubscribeCoalesceUpdateDelete(t *testing.T) {
 
 func TestSubscribeMultipleSameDir(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		// Let fseventsd register the freshly-created tmpDir before we
 		// subscribe; otherwise the dir's own creation can appear in the
@@ -1346,7 +1355,7 @@ func TestSubscribeMultipleSameDir(t *testing.T) {
 
 func TestSubscribeMultipleDifferentDirs(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir1 := newTmpDir(t)
 		dir2 := newTmpDir(t)
 
@@ -1368,7 +1377,7 @@ func TestSubscribeMultipleDifferentDirs(t *testing.T) {
 
 func TestWatchDirectoriesBatch(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir1 := newTmpDir(t)
 		dir2 := newTmpDir(t)
 		r1 := newRecorder(t)
@@ -1377,8 +1386,8 @@ func TestWatchDirectoriesBatch(t *testing.T) {
 		r2.watcher = watcherImpl
 
 		watches, err := watcherImpl.WatchDirectories([]WatchDirectoryRequest{
-			{Dir: dir1, Callback: r1.callback, Options: []WatchOption{WithRecursive()}},
-			{Dir: dir2, Callback: r2.callback, Options: []WatchOption{WithRecursive()}},
+			{Dir: dir1, Callback: r1.callback, Options: []DefWatchOption{WithRecursive()}},
+			{Dir: dir2, Callback: r2.callback, Options: []DefWatchOption{WithRecursive()}},
 		})
 		if err != nil {
 			t.Fatal(err)
@@ -1405,27 +1414,32 @@ func TestWatchDirectoriesBatch(t *testing.T) {
 
 type countingWatcherImpl struct {
 	watcherBase
-	subscribed []*dirWatch
-	closed     []*dirWatch
+	subscribed typeutil.DefSlice[defDirWatch]
+	closed     []defDirWatch
 }
 
-func newCountingWatcherImpl() *countingWatcherImpl {
-	impl := &countingWatcherImpl{}
-	impl.watcherBase.init(impl)
-	return impl
+type (
+	initializedCountingWatcherImpl = countingWatcherImpl             /* ref: struct { watcherBase initializedWatcherBase } */
+	defCountingWatcherImpl         = *initializedCountingWatcherImpl /* ref: nonnil */
+)
+
+func newCountingWatcherImpl() defCountingWatcherImpl {
+	impl := &countingWatcherImpl{subscribed: make(typeutil.DefSlice[defDirWatch], 0)}
+	impl.watcherBase.init(impl) //ref:ignore initialization establishes the embedded watcherBase contract
+	return impl                 //ref:ignore watcherBase initialization is not propagated to the enclosing fake backend
 }
 
-func (b *countingWatcherImpl) start() error {
+func (b defCountingWatcherImpl) start() error {
 	b.notifyStarted()
 	return nil
 }
 
-func (b *countingWatcherImpl) subscribe(w *dirWatch) error {
+func (b defCountingWatcherImpl) subscribe(w defDirWatch) error {
 	b.subscribed = append(b.subscribed, w)
 	return nil
 }
 
-func (b *countingWatcherImpl) closeWatch(w *dirWatch) error {
+func (b defCountingWatcherImpl) closeWatch(w defDirWatch) error {
 	b.closed = append(b.closed, w)
 	return nil
 }
@@ -1439,16 +1453,16 @@ func TestFastRecursiveWatcherConsolidatesSiblingDirectories(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var impl *countingWatcherImpl
+	impl := newCountingWatcherImpl()
 	watcherImpl := &watcher{
 		name: "fsevents",
-		factory: func() watcherImpl {
+		factory: func() defWatcherImpl {
 			impl = newCountingWatcherImpl()
 			return impl
 		},
 	}
 
-	var subs []Watch
+	var subs []DefWatch
 	for i := range recursiveConsolidateThreshold + 2 {
 		dir := filepath.Join(parent, fmt.Sprintf("pkg%d", i))
 		if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -1468,6 +1482,9 @@ func TestFastRecursiveWatcherConsolidatesSiblingDirectories(t *testing.T) {
 
 	if got := len(impl.subscribed); got != recursiveConsolidateThreshold {
 		t.Fatalf("expected %d subscriptions after consolidation, got %d", recursiveConsolidateThreshold, got)
+	}
+	if len(impl.subscribed) == 0 {
+		t.Fatal("expected a consolidated subscription")
 	}
 	consolidated := impl.subscribed[len(impl.subscribed)-1]
 	if consolidated.dir != parent || !consolidated.recursive {
@@ -1494,13 +1511,13 @@ func TestFastRecursiveWatcherDoesNotConsolidateSymlinkOutsideRoot(t *testing.T) 
 	var impl *countingWatcherImpl
 	watcherImpl := &watcher{
 		name: "fsevents",
-		factory: func() watcherImpl {
+		factory: func() defWatcherImpl {
 			impl = newCountingWatcherImpl()
 			return impl
 		},
 	}
 
-	var subs []Watch
+	var subs []DefWatch
 	for i := range recursiveConsolidateThreshold {
 		dir := filepath.Join(parent, fmt.Sprintf("pkg%d", i))
 		if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -1518,6 +1535,9 @@ func TestFastRecursiveWatcherDoesNotConsolidateSymlinkOutsideRoot(t *testing.T) 
 		}
 	})
 
+	if len(impl.subscribed) == 0 {
+		t.Fatal("expected a consolidated subscription")
+	}
 	consolidated := impl.subscribed[len(impl.subscribed)-1]
 	if consolidated.dir != parent || !consolidated.recursive {
 		t.Fatalf("expected consolidated recursive watch on %s, got dir=%s recursive=%v", parent, consolidated.dir, consolidated.recursive)
@@ -1536,7 +1556,10 @@ func TestFastRecursiveWatcherDoesNotConsolidateSymlinkOutsideRoot(t *testing.T) 
 	}
 	t.Cleanup(func() { _ = sub.Close() })
 
-	watch := sub.(*watch)
+	watch, ok := sub.(*watch)
+	if !ok || watch == nil {
+		t.Fatalf("watch = %T, want *watch", sub)
+	}
 	if watch.dw == consolidated {
 		t.Fatal("symlink outside consolidated physical root should keep its own watch")
 	}
@@ -1563,6 +1586,7 @@ func TestConsolidatedSymlinkChildMapsSharedLogicalPath(t *testing.T) {
 		physicalDir:      physicalDirFor(link),
 		watchDir:         logicalParent,
 		watchPhysicalDir: physicalDirFor(logicalParent),
+		fn:               func([]Event, error) {},
 	}
 	event := Event{Kind: EventUpdate, Path: filepath.Join(logicalParent, "target", "file.ts")}
 	got := cb.mapEvent(event)
@@ -1685,7 +1709,7 @@ func TestRecursiveWatchWithIgnoreDoesNotFilterByLogicalRoot(t *testing.T) {
 
 func TestSubscribeMissingDirError(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		bogus := filepath.Join(newTmpDir(t), "definitely-not-here")
 		_, err := watcherImpl.WatchDirectory(bogus, func([]Event, error) {})
 		if err == nil {
@@ -1696,7 +1720,7 @@ func TestSubscribeMissingDirError(t *testing.T) {
 
 func TestSubscribeNotADirError(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := subPath(dir)
 		if err := os.WriteFile(f, []byte("x"), 0o644); err != nil {
@@ -1711,7 +1735,7 @@ func TestSubscribeNotADirError(t *testing.T) {
 
 func TestSubscribeRejectsNilCallback(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		if _, err := watcherImpl.WatchDirectory(t.TempDir(), nil); err == nil {
 			t.Fatal("WatchDirectory(nil callback) should return an error")
 		}
@@ -1720,7 +1744,7 @@ func TestSubscribeRejectsNilCallback(t *testing.T) {
 
 func TestSubscribeRejectsRelativePath(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		_, err := watcherImpl.WatchDirectory("relative/path", func([]Event, error) {})
 		if err == nil {
 			t.Fatal("WatchDirectory with relative path should return an error")
@@ -1736,7 +1760,7 @@ func TestSubscribeRejectsRelativePath(t *testing.T) {
 
 func TestSubscribeUnsubscribeIdempotent(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r := newRecorder(t)
 		sub, err := watcherImpl.WatchDirectory(dir, r.callback)
@@ -1763,7 +1787,7 @@ func TestSubscribeUnsubscribeIdempotent(t *testing.T) {
 // watched dir or to install a different watcher could see flakes.
 func TestSubscribeCloseThenReSubscribe(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 
 		r1 := newRecorder(t)
@@ -1771,8 +1795,8 @@ func TestSubscribeCloseThenReSubscribe(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err = s1.Close(); err != nil {
-			t.Fatal(err)
+		if closeErr := s1.Close(); closeErr != nil {
+			t.Fatal(closeErr)
 		}
 
 		// Immediately re-watch the same directory and verify a fresh
@@ -1853,7 +1877,7 @@ func TestSubscribeNoGoroutineLeak(t *testing.T) { //nolint:paralleltest // gorou
 
 func TestSubscribeDeepNestedCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 
@@ -1883,7 +1907,7 @@ func TestSubscribeDeepNestedCreate(t *testing.T) {
 
 func TestSubscribeManyFilesAtOnce(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeFor(t, dir, watcherImpl)
 
@@ -1924,7 +1948,7 @@ func TestSubscribeManyFilesAtOnce(t *testing.T) {
 
 func TestSubscribeTruncateFile(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := subPath(dir)
 		if err := os.WriteFile(f, []byte("hello world"), 0o644); err != nil {
@@ -1941,7 +1965,7 @@ func TestSubscribeTruncateFile(t *testing.T) {
 
 func TestSubscribeConcurrentSubscribeUnsubscribe(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		done := make(chan struct{})
 		for range 8 {
@@ -1963,7 +1987,7 @@ func TestSubscribeConcurrentSubscribeUnsubscribe(t *testing.T) {
 
 func TestSubscribeRenameDir(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := filepath.Join(dir, "before")
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -1991,7 +2015,7 @@ func TestSubscribeRenameDir(t *testing.T) {
 
 func TestSubscribeReplaceFileWithDir(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		target := subPath(dir)
 		if err := os.WriteFile(target, []byte("file"), 0o644); err != nil {
@@ -2017,7 +2041,7 @@ func TestSubscribeReplaceFileWithDir(t *testing.T) {
 
 func TestSubscribeAppendToFile(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := subPath(dir)
 		if err := os.WriteFile(f, []byte("initial"), 0o644); err != nil {
@@ -2038,7 +2062,7 @@ func TestSubscribeAppendToFile(t *testing.T) {
 
 func TestSubscribeNoEventsAfterUnsubscribe(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, sub := subscribeFor(t, dir, watcherImpl)
 		if err := sub.Close(); err != nil {
@@ -2063,19 +2087,24 @@ type failingBackend struct {
 	err error
 }
 
-func newFailingBackend(err error) *failingBackend {
+type (
+	initializedFailingBackend = failingBackend             /* ref: struct { watcherBase initializedWatcherBase } */
+	defFailingBackend         = *initializedFailingBackend /* ref: nonnil */
+)
+
+func newFailingBackend(err error) defFailingBackend {
 	b := &failingBackend{err: err}
-	b.watcherBase.init(b)
-	return b
+	b.watcherBase.init(b) //ref:ignore initialization establishes the embedded watcherBase contract
+	return b              //ref:ignore watcherBase initialization is not propagated to the enclosing fake backend
 }
 
-func (b *failingBackend) start() error { return b.err }
+func (b defFailingBackend) start() error { return b.err }
 
-func (b *failingBackend) subscribe(*dirWatch) error {
+func (b defFailingBackend) subscribe(defDirWatch) error {
 	return nil
 }
 
-func (b *failingBackend) closeWatch(*dirWatch) error {
+func (b defFailingBackend) closeWatch(defDirWatch) error {
 	return nil
 }
 
@@ -2113,21 +2142,30 @@ func TestFileCallbackForwardsErrAlongsideEvents(t *testing.T) {
 
 	// Plain events: only target events pass through, sibling dropped.
 	cb([]Event{{Kind: EventUpdate, Path: target}, {Kind: EventUpdate, Path: other}}, nil)
-	if len(got) != 1 || len(got[0].events) != 1 || got[0].events[0].Path != target || got[0].err != nil {
+	if got == nil || len(got) != 1 {
+		t.Fatalf("plain delivery: got %+v", got)
+	}
+	if got[0].events == nil || len(got[0].events) != 1 || got[0].events[0].Path != target || got[0].err != nil {
 		t.Fatalf("plain delivery: got %+v", got)
 	}
 
 	// Err only, no matching events: still forwarded with empty slice.
 	got = nil
 	cb([]Event{{Kind: EventUpdate, Path: other}}, overflow)
-	if len(got) != 1 || len(got[0].events) != 0 || !errors.Is(got[0].err, overflow) {
+	if got == nil || len(got) != 1 {
+		t.Fatalf("err-only delivery: got %+v", got)
+	}
+	if len(got[0].events) != 0 || !errors.Is(got[0].err, overflow) {
 		t.Fatalf("err-only delivery: got %+v", got)
 	}
 
 	// Err with matching events: deliver both the filtered events and err.
 	got = nil
 	cb([]Event{{Kind: EventDelete, Path: target}, {Kind: EventUpdate, Path: other}}, overflow)
-	if len(got) != 1 || len(got[0].events) != 1 || got[0].events[0].Path != target ||
+	if got == nil || len(got) != 1 {
+		t.Fatalf("combined delivery: got %+v", got)
+	}
+	if got[0].events == nil || len(got[0].events) != 1 || got[0].events[0].Path != target ||
 		got[0].events[0].Kind != EventDelete || !errors.Is(got[0].err, overflow) {
 		t.Fatalf("combined delivery: got %+v", got)
 	}
@@ -2152,7 +2190,7 @@ func TestFileCallbackForwardsErrAlongsideEvents(t *testing.T) {
 // TestFanotifyNoRenameFallback/RenameDirOutDropsDescendants.
 func TestRenameDirOutOfTreeNoStaleEvents(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		watched := newTmpDir(t)
 		outside := newTmpDir(t) // separate watch root, NOT watched.
 
@@ -2246,16 +2284,17 @@ func TestUnavailableBackendReturnsError(t *testing.T) {
 	if unavailable == nil {
 		t.Skip("all watchers are available on this platform")
 	}
+	var defUnavailable DefWatcher = unavailable
 	dir := newTmpDir(t)
-	_, err := unavailable.WatchDirectory(dir, func([]Event, error) {})
+	_, err := defUnavailable.WatchDirectory(dir, func([]Event, error) {})
 	if !errors.Is(err, ErrUnavailable) {
-		t.Fatalf("expected ErrUnavailable from %s, got %v", unavailable.Name(), err)
+		t.Fatalf("expected ErrUnavailable from %s, got %v", defUnavailable.Name(), err)
 	}
 }
 
 func TestSubscribeNestedDirDeletionCleansDescendants(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := filepath.Join(dir, "parent")
 		nested := filepath.Join(sub, "child")
@@ -2281,7 +2320,7 @@ func TestSubscribeNestedDirDeletionCleansDescendants(t *testing.T) {
 
 func TestNonRecursiveFileCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeForOpts(t, dir, watcherImpl)
 
@@ -2295,7 +2334,7 @@ func TestNonRecursiveFileCreate(t *testing.T) {
 
 func TestNonRecursiveFileUpdate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeForOpts(t, dir, watcherImpl)
 
@@ -2313,7 +2352,7 @@ func TestNonRecursiveFileUpdate(t *testing.T) {
 
 func TestNonRecursiveFileDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := subPath(dir)
 		if err := os.WriteFile(f, []byte("x"), 0o644); err != nil {
@@ -2330,7 +2369,7 @@ func TestNonRecursiveFileDelete(t *testing.T) {
 
 func TestNonRecursiveDirCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeForOpts(t, dir, watcherImpl)
 
@@ -2344,7 +2383,7 @@ func TestNonRecursiveDirCreate(t *testing.T) {
 
 func TestNonRecursiveGrandchildIgnored(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := filepath.Join(dir, "child")
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -2374,7 +2413,7 @@ func TestNonRecursiveGrandchildIgnored(t *testing.T) {
 
 func TestNonRecursiveNewSubdirContentIgnored(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		r, _ := subscribeForOpts(t, dir, watcherImpl)
 
@@ -2406,7 +2445,7 @@ func TestNonRecursiveNewSubdirContentIgnored(t *testing.T) {
 
 func TestNonRecursiveAndRecursiveSameDir(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := filepath.Join(dir, "child")
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -2441,7 +2480,7 @@ func TestNonRecursiveWithDeniedSubdir(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("chmod is not meaningful on Windows")
 	}
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 
 		// Create a permission-denied subdirectory.
@@ -2469,7 +2508,7 @@ func TestNonRecursiveWithDeniedSubdir(t *testing.T) {
 
 func TestFileWatchCreate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := filepath.Join(dir, "target.txt")
 
@@ -2484,7 +2523,7 @@ func TestFileWatchCreate(t *testing.T) {
 
 func TestFileWatchUpdate(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := filepath.Join(dir, "target.txt")
 		if err := os.WriteFile(f, []byte("v1"), 0o644); err != nil {
@@ -2502,7 +2541,7 @@ func TestFileWatchUpdate(t *testing.T) {
 
 func TestFileWatchDelete(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := filepath.Join(dir, "target.txt")
 		if err := os.WriteFile(f, []byte("x"), 0o644); err != nil {
@@ -2520,7 +2559,7 @@ func TestFileWatchDelete(t *testing.T) {
 
 func TestFileWatchIgnoresSiblings(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		target := filepath.Join(dir, "target.txt")
 		sibling := filepath.Join(dir, "sibling.txt")
@@ -2542,7 +2581,7 @@ func TestFileWatchIgnoresSiblings(t *testing.T) {
 // stalls for the full FSEvents-timeout window. Running serially keeps
 // the multi-WatchFile-share path predictable.
 func TestFileWatchMultipleSameDir(t *testing.T) { //nolint:tparallel,paralleltest // see comment
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f1 := filepath.Join(dir, "a.txt")
 		f2 := filepath.Join(dir, "b.txt")
@@ -2574,7 +2613,7 @@ func TestFileWatchMultipleSameDir(t *testing.T) { //nolint:tparallel,paralleltes
 // a file inside a WatchFile target) intermittently stalls for the full
 // FSEvents-timeout window. Running serially eliminates the flake.
 func TestFileWatchDeleteAndRecreate(t *testing.T) { //nolint:tparallel,paralleltest // see comment
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := filepath.Join(dir, "config.json")
 		if err := os.WriteFile(f, []byte(`{"v":1}`), 0o644); err != nil {
@@ -2599,7 +2638,7 @@ func TestFileWatchDeleteAndRecreate(t *testing.T) { //nolint:tparallel,parallelt
 
 func TestFileWatchNonExistentTarget(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		f := filepath.Join(dir, "doesnotexist.txt")
 
@@ -2619,7 +2658,7 @@ func TestFileWatchNonExistentTarget(t *testing.T) {
 // directory tree into a recursive watch detects changes in nested subdirs.
 func TestRecursiveMoveInPrePopulated(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		outside := newTmpDir(t)
 
@@ -2670,7 +2709,7 @@ func TestRecursiveMoveInPrePopulated(t *testing.T) {
 // over target) is detected as an update, not a delete+create or nothing.
 func TestAtomicSave(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		target := filepath.Join(dir, "config.json")
 		if err := os.WriteFile(target, []byte(`{"v":1}`), 0o644); err != nil {
@@ -2700,7 +2739,7 @@ func TestAtomicSave(t *testing.T) {
 // TestAtomicSaveFileWatch verifies atomic save detection through WatchFile.
 func TestAtomicSaveFileWatch(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		target := filepath.Join(dir, "target.txt")
 		if err := os.WriteFile(target, []byte("v1"), 0o644); err != nil {
@@ -2729,7 +2768,7 @@ func TestAtomicSaveFileWatch(t *testing.T) {
 // of the same name emits appropriate events.
 func TestReplaceDirWithFile(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		child := filepath.Join(dir, "child")
 		if err := os.Mkdir(child, 0o755); err != nil {
@@ -2758,7 +2797,7 @@ func TestReplaceDirWithFile(t *testing.T) {
 // a subdirectory, changes inside it are still detected.
 func TestRecreateSubdirAndModify(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := filepath.Join(dir, "sub")
 		if err := os.Mkdir(sub, 0o755); err != nil {
@@ -2822,7 +2861,7 @@ func TestRecreateSubdirAndModify(t *testing.T) {
 // changes inside the new tree.
 func TestReplaceParentDirWithDifferent(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		sub := filepath.Join(dir, "pkg")
 		if err := os.MkdirAll(filepath.Join(sub, "old"), 0o755); err != nil {
@@ -2877,7 +2916,7 @@ func TestReplaceParentDirWithDifferent(t *testing.T) {
 // some events (coalescing may merge them).
 func TestRoundTripRename(t *testing.T) {
 	t.Parallel()
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		if watcherImpl == Kqueue() {
 			t.Skip("kqueue fd-based tracking delivers stale delete before parent NOTE_WRITE reconciles")
 		}
@@ -2919,7 +2958,7 @@ func TestRecursiveWithDeniedSubdir(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("chmod is not meaningful on Windows")
 	}
-	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+	runForEachWatcher(t, func(t defTestingT, watcherImpl DefWatcher) {
 		dir := newTmpDir(t)
 		accessible := filepath.Join(dir, "ok")
 		if err := os.Mkdir(accessible, 0o755); err != nil {

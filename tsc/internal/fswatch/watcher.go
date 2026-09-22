@@ -12,6 +12,7 @@ import (
 	"syscall"
 
 	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 var errNilCallback = errors.New("fswatch: callback must not be nil")
@@ -76,12 +77,12 @@ type Watcher interface {
 	// directories.
 	// Returns [ErrUnavailable] if the watcher is not supported on
 	// the current platform.
-	WatchDirectory(dir string, fn WatchCallback, opts ...WatchOption) (Watch, error)
+	WatchDirectory(dir string, fn WatchCallback, opts ...DefWatchOption) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */
 	// WatchDirectories watches multiple directories as a batch. It has the
 	// same semantics as calling [Watcher.WatchDirectory] for each request, but
 	// lets backends arm the underlying OS watches once for the whole batch.
 	// Returned watches are in the same order as requests.
-	WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, error)
+	WatchDirectories(requests []WatchDirectoryRequest) ([]DefWatch, error) /* ref: (watchList, nil) | (nil, defError) */
 	// WatchFile watches a single file for changes, calling fn with
 	// batched events. path must be an absolute path. The file does not
 	// need to exist at subscribe time; its creation will be reported.
@@ -99,13 +100,13 @@ type Watcher interface {
 	//
 	// Returns [ErrUnavailable] if the watcher is not supported on
 	// the current platform.
-	WatchFile(path string, fn WatchCallback) (Watch, error)
+	WatchFile(path string, fn WatchCallback) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */
 	unexported()
 }
 
 // WatchOption configures a watch.
 type WatchOption interface {
-	applyWatchOption(opts *watchOptions)
+	applyWatchOption(opts defWatchOptions)
 }
 
 // WatchDirectoryRequest describes one directory subscription in a
@@ -113,7 +114,7 @@ type WatchOption interface {
 type WatchDirectoryRequest struct {
 	Dir      string
 	Callback WatchCallback
-	Options  []WatchOption
+	Options  []DefWatchOption
 }
 
 type watchOptions struct {
@@ -125,7 +126,7 @@ type ignoreOption struct {
 	fn func(path string) bool
 }
 
-func (o ignoreOption) applyWatchOption(opts *watchOptions) {
+func (o ignoreOption) applyWatchOption(opts defWatchOptions) {
 	opts.ignore = o.fn
 }
 
@@ -133,13 +134,13 @@ func (o ignoreOption) applyWatchOption(opts *watchOptions) {
 // If the function returns true for a path, events for that path are
 // silently dropped. The filtering is per-subscriber; multiple watches
 // on the same directory may have different ignore functions.
-func WithIgnore(fn func(path string) bool) WatchOption {
+func WithIgnore(fn func(path string) bool /* ref: nonnil */) DefWatchOption {
 	return ignoreOption{fn: fn}
 }
 
 type recursiveOption struct{}
 
-func (o recursiveOption) applyWatchOption(opts *watchOptions) {
+func (o recursiveOption) applyWatchOption(opts defWatchOptions) {
 	opts.recursive = true
 }
 
@@ -152,7 +153,7 @@ func (o recursiveOption) applyWatchOption(opts *watchOptions) {
 // every subdirectory. On kqueue, an fd is opened for every entry.
 // On Windows, bWatchSubtree=TRUE is passed to ReadDirectoryChangesW.
 // On FSEvents, the kernel is inherently recursive.
-func WithRecursive() WatchOption {
+func WithRecursive() DefWatchOption {
 	return recursiveOption{}
 }
 
@@ -173,6 +174,27 @@ type Watch interface {
 // (recoverable) or [ErrWatchTerminated] (terminal).
 type WatchCallback func(events []Event, err error)
 
+type (
+	DefWatcher               = Watcher       /* ref: nonnil */
+	DefWatch                 = Watch         /* ref: nonnil */
+	DefWatchOption           = WatchOption   /* ref: nonnil */
+	DefWatchCallback         = WatchCallback /* ref: nonnil */
+	watchList                = []DefWatch
+	defFallbackWatcher       = *fallbackWatcher          /* ref: nonnil */
+	defWatcher               = *watcher                  /* ref: nonnil */
+	defWatch                 = *watch                    /* ref: nonnil */
+	defWatcherImpl           = watcherImpl               /* ref: nonnil */
+	initializedWatcherBase   = watcherBase               /* ref: struct { subscriptions defSubscriptionMap; started typeutil.DefChan[signal]; self defWatcherImpl } */
+	defWatcherBase           = *initializedWatcherBase   /* ref: nonnil */
+	defDirWatch              = *dirWatch                 /* ref: nonnil */
+	initializedDirWatchError = dirWatchError             /* ref: struct { err defError; dirWatch defDirWatch } */
+	defDirWatchError         = *initializedDirWatchError /* ref: nonnil */
+	defError                 = error                     /* ref: nonnil */
+	watcherFactory           = func() defWatcherImpl
+	defWatchOptions          = *watchOptions            /* ref: nonnil */
+	defSubscriptionMap       = map[defDirWatch]struct{} /* ref: nonnil */
+)
+
 // Package-level watcher instances. Platform init() functions set the factory.
 var (
 	inotifyWatcher          = &watcher{name: "inotify"}
@@ -189,8 +211,8 @@ var (
 // AllWatchers returns a fresh slice listing every watcher backend the package
 // knows about. Use [Watcher.Available] to check which ones work on the current
 // OS.
-func AllWatchers() []Watcher {
-	return []Watcher{
+func AllWatchers() []DefWatcher /* ref: nonnil */ {
+	return []DefWatcher{
 		inotifyWatcher,
 		fseventsWatcher,
 		kqueueWatcher,
@@ -200,23 +222,23 @@ func AllWatchers() []Watcher {
 }
 
 // Inotify returns the inotify watcher (Linux and Android).
-func Inotify() Watcher { return inotifyWatcher }
+func Inotify() DefWatcher { return inotifyWatcher }
 
 // FSEvents returns the FSEvents watcher (macOS).
-func FSEvents() Watcher { return fseventsWatcher }
+func FSEvents() DefWatcher { return fseventsWatcher }
 
 // Kqueue returns the kqueue watcher (macOS, FreeBSD, and other BSDs).
-func Kqueue() Watcher { return kqueueWatcher }
+func Kqueue() DefWatcher { return kqueueWatcher }
 
 // Windows returns the ReadDirectoryChangesW watcher (Windows).
-func Windows() Watcher { return windowsWatcher }
+func Windows() DefWatcher { return windowsWatcher }
 
 // Fanotify returns the fanotify watcher (Linux, kernel ≥ 5.13). Directories on
 // filesystems that don't support fanotify watches automatically use inotify instead.
-func Fanotify() Watcher { return fanotifyFallbackWatcher }
+func Fanotify() DefWatcher { return fanotifyFallbackWatcher }
 
 // Default returns the recommended watcher for the current OS.
-func Default() Watcher {
+func Default() DefWatcher {
 	switch runtime.GOOS {
 	case "linux":
 		if Fanotify().Available() {
@@ -242,15 +264,17 @@ func Default() Watcher {
 // fallbackWatcher keeps the primary backend for supported filesystems while
 // routing individual unsupported watches to the secondary backend.
 type fallbackWatcher struct {
-	primary   Watcher
-	secondary Watcher
+	primary   DefWatcher
+	secondary DefWatcher
 }
 
-func (w *fallbackWatcher) Name() string                  { return w.primary.Name() }
-func (w *fallbackWatcher) Available() bool               { return w.primary.Available() }
-func (w *fallbackWatcher) HasFastRecursiveBackend() bool { return w.primary.HasFastRecursiveBackend() }
+func (w defFallbackWatcher) Name() string    { return w.primary.Name() }
+func (w defFallbackWatcher) Available() bool { return w.primary.Available() }
+func (w defFallbackWatcher) HasFastRecursiveBackend() bool {
+	return w.primary.HasFastRecursiveBackend()
+}
 
-func (w *fallbackWatcher) WatchDirectory(dir string, fn WatchCallback, opts ...WatchOption) (Watch, error) {
+func (w defFallbackWatcher) WatchDirectory(dir string, fn WatchCallback, opts ...DefWatchOption) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */ {
 	watches, err := w.WatchDirectories([]WatchDirectoryRequest{{
 		Dir:      dir,
 		Callback: fn,
@@ -259,19 +283,22 @@ func (w *fallbackWatcher) WatchDirectory(dir string, fn WatchCallback, opts ...W
 	if err != nil {
 		return nil, err
 	}
-	return watches[0], nil
+	return watches[0], nil //ref:ignore one successful request produces one non-nil watch slice
 }
 
-func (w *fallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, error) {
+func (w defFallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]DefWatch, error) /* ref: (watchList, nil) | (nil, defError) */ {
 	watches, err := w.primary.WatchDirectories(requests)
-	if err == nil || !errors.Is(err, ErrFilesystemUnsupported) {
-		return watches, err
+	if err == nil {
+		return watches, nil
+	}
+	if !errors.Is(err, ErrFilesystemUnsupported) {
+		return nil, err
 	}
 
-	watches = make([]Watch, 0, len(requests))
+	fallbackWatches := make(typeutil.DefSlice[DefWatch], 0, len(requests))
 	rollback := func() {
-		for i := len(watches) - 1; i >= 0; i-- {
-			_ = watches[i].Close()
+		for i := len(fallbackWatches) - 1; i >= 0; i-- {
+			_ = fallbackWatches[i].Close()
 		}
 	}
 	for _, request := range requests {
@@ -283,20 +310,23 @@ func (w *fallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]
 			rollback()
 			return nil, fmt.Errorf("fswatch: failed to watch directory %q: %w", request.Dir, err)
 		}
-		watches = append(watches, watch)
+		fallbackWatches = append(fallbackWatches, watch) //ref:ignore successful WatchDirectory returns a non-nil watch
 	}
-	return watches, nil
+	return fallbackWatches, nil
 }
 
-func (w *fallbackWatcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
+func (w defFallbackWatcher) WatchFile(path string, fn WatchCallback) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */ {
 	watch, err := w.primary.WatchFile(path, fn)
+	if err == nil {
+		return watch, nil
+	}
 	if errors.Is(err, ErrFilesystemUnsupported) {
 		return w.secondary.WatchFile(path, fn)
 	}
-	return watch, err
+	return nil, err
 }
 
-func (w *fallbackWatcher) unexported() {}
+func (w defFallbackWatcher) unexported() {}
 
 // watcher is the concrete implementation of [Watcher]. Each platform
 // watcher is a package-level *watcher whose factory is set by the
@@ -305,21 +335,21 @@ type watcher struct {
 	name       string
 	mu         sync.Mutex
 	impl       watcherImpl
-	factory    func() watcherImpl // nil if not available on this platform
-	dirWatches map[string]*dirWatch
+	factory    watcherFactory // nil if not available on this platform
+	dirWatches map[string]defDirWatch
 	debounce   *debounce // lazily created in getOrCreateDirWatch
 	sequence   func() uint64
 }
 
 const recursiveConsolidateThreshold = 10
 
-func (w *watcher) Name() string    { return w.name }
-func (w *watcher) String() string  { return w.name }
-func (w *watcher) Available() bool { return w.factory != nil }
-func (w *watcher) unexported()     {}
+func (w defWatcher) Name() string    { return w.name }
+func (w defWatcher) String() string  { return w.name }
+func (w defWatcher) Available() bool { return w.factory != nil }
+func (w defWatcher) unexported()     {}
 
 // HasFastRecursiveBackend implements [Watcher.HasFastRecursiveBackend].
-func (w *watcher) HasFastRecursiveBackend() bool {
+func (w defWatcher) HasFastRecursiveBackend() bool {
 	switch w.name {
 	case "windows", "fsevents":
 		return true
@@ -328,13 +358,13 @@ func (w *watcher) HasFastRecursiveBackend() bool {
 	}
 }
 
-func (w *watcher) canShareRecursiveDirWatches() bool {
+func (w defWatcher) canShareRecursiveDirWatches() bool {
 	// TODO: Re-enable this for Windows once coalesced recursive watches have
 	// more real-world bake time.
 	return w.name == "fsevents"
 }
 
-func (w *watcher) getImpl() (watcherImpl, error) {
+func (w defWatcher) getImpl() (watcherImpl, error) /* ref: (defWatcherImpl, nil) | (nil, defError) */ {
 	w.mu.Lock()
 	if w.impl != nil {
 		impl := w.impl
@@ -364,14 +394,14 @@ func (w *watcher) getImpl() (watcherImpl, error) {
 	return impl, nil
 }
 
-func (w *watcher) keyForDirWatch(dir string, recursive bool) string {
+func (w defWatcher) keyForDirWatch(dir string, recursive bool) string {
 	if recursive {
 		return dir + "\x00recursive"
 	}
 	return dir
 }
 
-func (w *watcher) findCoveringRecursiveWatchLocked(dir string, physicalDir string) *dirWatch {
+func (w defWatcher) findCoveringRecursiveWatchLocked(dir string, physicalDir string) *dirWatch {
 	var best *dirWatch
 	for _, dw := range w.dirWatches {
 		if !dw.recursive || !isInDirectoryOrSelf(dw.dir, dir) || !isInDirectoryOrSelf(dw.physicalDir, physicalDir) {
@@ -384,7 +414,7 @@ func (w *watcher) findCoveringRecursiveWatchLocked(dir string, physicalDir strin
 	return best
 }
 
-func (w *watcher) findConsolidationDirLocked(dir string, physicalDir string) string {
+func (w defWatcher) findConsolidationDirLocked(dir string, physicalDir string) string {
 	if !w.canShareRecursiveDirWatches() {
 		return ""
 	}
@@ -416,11 +446,11 @@ func (w *watcher) findConsolidationDirLocked(dir string, physicalDir string) str
 	return ""
 }
 
-func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive bool) *dirWatch {
+func (w defWatcher) getOrCreateDirWatch(dir string, physicalDir string, recursive bool) defDirWatch {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	if w.dirWatches == nil {
-		w.dirWatches = make(map[string]*dirWatch)
+		w.dirWatches = make(map[string]defDirWatch)
 	}
 	if w.debounce == nil {
 		w.debounce = newDebounce()
@@ -451,7 +481,7 @@ func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive 
 	return dw
 }
 
-func (w *watcher) removeDirWatch(dw *dirWatch) {
+func (w defWatcher) removeDirWatch(dw defDirWatch) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	key := w.keyForDirWatch(dw.dir, dw.recursive)
@@ -461,7 +491,7 @@ func (w *watcher) removeDirWatch(dw *dirWatch) {
 	}
 }
 
-func (w *watcher) WatchDirectory(dir string, fn WatchCallback, opts ...WatchOption) (Watch, error) {
+func (w defWatcher) WatchDirectory(dir string, fn WatchCallback, opts ...DefWatchOption) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */ {
 	watches, err := w.WatchDirectories([]WatchDirectoryRequest{{
 		Dir:      dir,
 		Callback: fn,
@@ -470,10 +500,10 @@ func (w *watcher) WatchDirectory(dir string, fn WatchCallback, opts ...WatchOpti
 	if err != nil {
 		return nil, err
 	}
-	return watches[0], nil
+	return watches[0], nil //ref:ignore one successful request produces one non-nil watch slice
 }
 
-func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, error) {
+func (w defWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]DefWatch, error) /* ref: (watchList, nil) | (nil, defError) */ {
 	if !w.Available() {
 		return nil, ErrUnavailable
 	}
@@ -482,14 +512,14 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 	}
 
 	type preparedWatch struct {
-		dw        *dirWatch
+		dw        defDirWatch
 		id        uint64
 		recursive bool
 		dir       string
 	}
 	prepared := make([]preparedWatch, 0, len(requests))
-	uniqueDirWatches := make([]*dirWatch, 0, len(requests))
-	seenDirWatches := make(map[*dirWatch]struct{}, len(requests))
+	uniqueDirWatches := make(typeutil.DefSlice[defDirWatch], 0, len(requests))
+	seenDirWatches := make(map[defDirWatch]struct{}, len(requests))
 	rollback := func() {
 		for i := len(prepared) - 1; i >= 0; i-- {
 			p := prepared[i]
@@ -543,9 +573,9 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 		return nil, err
 	}
 
-	watches := make([]Watch, len(prepared))
-	for i, p := range prepared {
-		watches[i] = &watch{w: w, dw: p.dw, impl: impl, id: p.id}
+	watches := make(typeutil.DefSlice[DefWatch], 0, len(prepared))
+	for _, p := range prepared {
+		watches = append(watches, &watch{w: w, dw: p.dw, impl: impl, id: p.id})
 	}
 	return watches, nil
 }
@@ -561,7 +591,7 @@ func validateWatchDirectory(dir string) error {
 	return nil
 }
 
-func (w *watcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
+func (w defWatcher) WatchFile(path string, fn WatchCallback) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */ {
 	if fn == nil {
 		return nil, errNilCallback
 	}
@@ -585,7 +615,7 @@ func (w *watcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
 // specific target path. Errors are always forwarded (with any matching
 // events delivered alongside) so callers don't lose overflow signals
 // just because their target wasn't in the same batch.
-func fileCallback(target string, fn WatchCallback) WatchCallback {
+func fileCallback(target string, fn DefWatchCallback) DefWatchCallback {
 	return func(events []Event, err error) {
 		var filtered []Event
 		for _, e := range events {
@@ -601,14 +631,14 @@ func fileCallback(target string, fn WatchCallback) WatchCallback {
 
 type watch struct {
 	mu        sync.Mutex
-	w         *watcher
-	dw        *dirWatch
-	impl      watcherImpl
+	w         defWatcher
+	dw        defDirWatch
+	impl      defWatcherImpl
 	id        uint64
 	cancelled bool
 }
 
-func (s *watch) Close() error {
+func (s defWatch) Close() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.cancelled {
@@ -623,7 +653,7 @@ func (s *watch) Close() error {
 	return nil
 }
 
-func (s *watch) unexported() {}
+func (s defWatch) unexported() {}
 
 // watcherImpl is the internal interface implemented by each platform watcher.
 type watcherImpl interface {
@@ -631,33 +661,34 @@ type watcherImpl interface {
 	run() error
 	shutdown()
 
-	watchAdd(w *dirWatch) error
-	watchAddMany(watches []*dirWatch) error
-	watchRemove(w *dirWatch)
-	handleWatcherError(err *dirWatchError)
+	watchAdd(w defDirWatch) error
+	watchAddMany(watches []defDirWatch) error
+	watchRemove(w defDirWatch)
+	handleWatcherError(err defDirWatchError)
 
-	subscribe(w *dirWatch) error
-	closeWatch(w *dirWatch) error
+	subscribe(w defDirWatch) error
+	closeWatch(w defDirWatch) error
 }
 
 // watcherBase provides shared watch-tracking and lifecycle logic.
 // Concrete backends embed it and override subscribe/closeWatch/start.
 type watcherBase struct {
 	mu            sync.Mutex
-	subscriptions map[*dirWatch]struct{}
+	subscriptions map[defDirWatch]struct{}
 	started       chan struct{}
 	startErr      error
 
 	self watcherImpl // back-reference for virtual dispatch
 }
 
-func (b *watcherBase) init(self watcherImpl) {
+// ref: asserts b is defWatcherBase
+func (b *watcherBase /* ref: nonnil */) init(self defWatcherImpl) {
 	b.self = self
-	b.subscriptions = make(map[*dirWatch]struct{})
+	b.subscriptions = make(defSubscriptionMap)
 	b.started = make(chan struct{})
 }
 
-func (b *watcherBase) notifyStarted() {
+func (b defWatcherBase) notifyStarted() {
 	select {
 	case <-b.started:
 		// Do nothing; already started.
@@ -666,9 +697,9 @@ func (b *watcherBase) notifyStarted() {
 	}
 }
 
-func (b *watcherBase) shutdown() {}
+func (b defWatcherBase) shutdown() {}
 
-func (b *watcherBase) run() error {
+func (b defWatcherBase) run() error {
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -689,10 +720,10 @@ func (b *watcherBase) run() error {
 	return b.startErr
 }
 
-func (b *watcherBase) handleStartError(err error) {
+func (b defWatcherBase) handleStartError(err error) {
 	b.mu.Lock()
 	b.startErr = err
-	subs := make([]*dirWatch, 0, len(b.subscriptions))
+	subs := make([]defDirWatch, 0, len(b.subscriptions))
 	for w := range b.subscriptions {
 		subs = append(subs, w)
 	}
@@ -703,13 +734,13 @@ func (b *watcherBase) handleStartError(err error) {
 	b.notifyStarted()
 }
 
-func (b *watcherBase) watchAdd(w *dirWatch) error {
-	return b.watchAddMany([]*dirWatch{w})
+func (b defWatcherBase) watchAdd(w defDirWatch) error {
+	return b.watchAddMany([]defDirWatch{w})
 }
 
-func (b *watcherBase) watchAddMany(watches []*dirWatch) error {
+func (b defWatcherBase) watchAddMany(watches []defDirWatch) error {
 	b.mu.Lock()
-	toAdd := make([]*dirWatch, 0, len(watches))
+	toAdd := make([]defDirWatch, 0, len(watches))
 	for _, w := range watches {
 		if _, ok := b.subscriptions[w]; ok {
 			continue
@@ -722,7 +753,7 @@ func (b *watcherBase) watchAddMany(watches []*dirWatch) error {
 	}
 
 	if subscriber, ok := b.self.(interface {
-		subscribeMany(watches []*dirWatch) error
+		subscribeMany(watches []defDirWatch) error
 	}); ok {
 		if err := subscriber.subscribeMany(toAdd); err != nil {
 			b.mu.Unlock()
@@ -735,7 +766,7 @@ func (b *watcherBase) watchAddMany(watches []*dirWatch) error {
 		return nil
 	}
 
-	added := make([]*dirWatch, 0, len(toAdd))
+	added := make([]defDirWatch, 0, len(toAdd))
 	for _, w := range toAdd {
 		if err := b.self.subscribe(w); err != nil {
 			for _, addedWatch := range added {
@@ -752,7 +783,7 @@ func (b *watcherBase) watchAddMany(watches []*dirWatch) error {
 	return nil
 }
 
-func (b *watcherBase) watchRemove(w *dirWatch) {
+func (b defWatcherBase) watchRemove(w defDirWatch) {
 	b.mu.Lock()
 	if _, ok := b.subscriptions[w]; !ok {
 		b.mu.Unlock()
@@ -763,7 +794,7 @@ func (b *watcherBase) watchRemove(w *dirWatch) {
 	b.mu.Unlock()
 }
 
-func (b *watcherBase) handleWatcherError(werr *dirWatchError) {
+func (b defWatcherBase) handleWatcherError(werr defDirWatchError) {
 	b.watchRemove(werr.dirWatch)
 	werr.dirWatch.notifyError(fmt.Errorf("%w: %w", ErrWatchTerminated, werr))
 }
@@ -777,7 +808,7 @@ type callback struct {
 	watchDir         string
 	watchPhysicalDir string
 	recursive        bool
-	fn               WatchCallback
+	fn               DefWatchCallback
 	ignore           func(path string) bool
 	sinceSeq         uint64
 	terminal         error
@@ -790,8 +821,8 @@ type dirWatchError struct {
 	dirWatch *dirWatch
 }
 
-func (e *dirWatchError) Error() string { return e.err.Error() }
-func (e *dirWatchError) Unwrap() error { return e.err }
+func (e *dirWatchError) Error() string { return e.err.Error() } //ref:ignore error methods are called on non-nil values with non-nil err fields
+func (e *dirWatchError) Unwrap() error { return e.err }         //ref:ignore error methods are called on non-nil values with non-nil err fields
 
 // dirWatch holds per-directory state: pending events, registered callbacks,
 // and a reference to the shared debouncer. Each watched directory has one.
@@ -815,7 +846,7 @@ type dirWatch struct {
 	nextCBID  uint64
 }
 
-func newDirWatch(dir string, physicalDir string, db *debounce) *dirWatch {
+func newDirWatch(dir string, physicalDir string, db defDebounce) defDirWatch {
 	dw := &dirWatch{dir: dir, physicalDir: physicalDir}
 	dw.debounce = db
 	dw.debounce.add(dw, func() { dw.triggerCallbacks() })
@@ -838,12 +869,12 @@ func physicalDirFor(dir string) string {
 
 // displayPath maps a physical event path back under the caller-visible
 // watch root.
-func (dw *dirWatch) displayPath(watchPath string) string {
+func (dw defDirWatch) displayPath(watchPath string) string {
 	return rebasePath(watchPath, dw.physicalDir, dw.dir)
 }
 
 // physicalPath maps a caller-visible path to the physical watched root.
-func (dw *dirWatch) physicalPath(displayPath string) string {
+func (dw defDirWatch) physicalPath(displayPath string) string {
 	return rebasePath(displayPath, dw.dir, dw.physicalDir)
 }
 
@@ -886,7 +917,7 @@ func joinPathSuffix(root string, suffix string) string {
 	return root + string(filepath.Separator) + suffix
 }
 
-func (dw *dirWatch) destroyDebounce() {
+func (dw defDirWatch) destroyDebounce() {
 	dw.mu.Lock()
 	db := dw.debounce
 	dw.debounce = nil
@@ -896,7 +927,7 @@ func (dw *dirWatch) destroyDebounce() {
 	}
 }
 
-func (dw *dirWatch) notify() {
+func (dw defDirWatch) notify() {
 	dw.mu.Lock()
 	hasPendingCBs := slices.ContainsFunc(dw.callbacks, func(cb callback) bool {
 		return !cb.delivered
@@ -914,7 +945,7 @@ func (dw *dirWatch) notify() {
 	}
 }
 
-func (dw *dirWatch) notifyError(err error) {
+func (dw defDirWatch) notifyError(err error) {
 	dw.mu.Lock()
 	cbs := slices.Clone(dw.callbacks)
 	dw.callbacks = nil
@@ -924,7 +955,7 @@ func (dw *dirWatch) notifyError(err error) {
 	}
 }
 
-func (dw *dirWatch) triggerCallbacks() {
+func (dw defDirWatch) triggerCallbacks() {
 	dw.mu.Lock()
 	hasError := dw.events.hasError()
 	hasEvents := dw.events.size() > 0
@@ -1018,7 +1049,7 @@ func (cb callback) eventPhysicalPath(path string) string {
 	return path
 }
 
-func (dw *dirWatch) terminateCallbacksForDeletedRoot(path string, seq uint64, err error) bool {
+func (dw defDirWatch) terminateCallbacksForDeletedRoot(path string, seq uint64, err error) bool {
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
 	changed := false
@@ -1073,7 +1104,7 @@ func isDirectChild(dir, path string) bool {
 	return len(rest) > 0 && !strings.ContainsRune(rest, '/') && !strings.ContainsRune(rest, filepath.Separator)
 }
 
-func (dw *dirWatch) watch(dir string, physicalDir string, recursive bool, fn WatchCallback, ignore func(path string) bool) (uint64, bool) {
+func (dw defDirWatch) watch(dir string, physicalDir string, recursive bool, fn DefWatchCallback, ignore func(path string) bool) (uint64, bool) {
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
 	dw.nextCBID++
@@ -1086,7 +1117,7 @@ func (dw *dirWatch) watch(dir string, physicalDir string, recursive bool, fn Wat
 	return id, true
 }
 
-func (dw *dirWatch) unwatch(id uint64) bool {
+func (dw defDirWatch) unwatch(id uint64) bool {
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
 	for i, cb := range dw.callbacks {
@@ -1098,7 +1129,7 @@ func (dw *dirWatch) unwatch(id uint64) bool {
 	return false
 }
 
-func (dw *dirWatch) unref(w *watcher) {
+func (dw defDirWatch) unref(w defWatcher) {
 	dw.mu.Lock()
 	empty := len(dw.callbacks) == 0
 	dw.mu.Unlock()

@@ -10,6 +10,7 @@ import (
 	"sync/atomic"
 	"unsafe"
 
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 	"golang.org/x/sys/unix"
 )
 
@@ -150,7 +151,7 @@ func makeFanotifyHandleKey(fsid [2]int32, handleType int32, handleBytes []byte) 
 type fanotifySubscription struct {
 	path      string
 	watchPath string
-	dirWatch  *dirWatch
+	dirWatch  defDirWatch
 	key       fanotifyHandleKey
 }
 
@@ -159,6 +160,14 @@ type fanotifyDfidName struct {
 	key  fanotifyHandleKey
 	name string // child entry name, or "" for self-events on directories
 }
+
+type (
+	defFanotifySubscription    = *fanotifySubscription /* ref: nonnil */
+	defFanotifyDfidName        = *fanotifyDfidName     /* ref: nonnil */
+	fanotifySubscriptionList   = []defFanotifySubscription
+	initializedFanotifyBackend = fanotifyBackend             /* ref: struct { watcherBase initializedWatcherBase; subscriptions typeutil.DefMap[fanotifyHandleKey, fanotifySubscriptionList]; endedSignal typeutil.DefChan[signal]; readBuf typeutil.DefSlice[byte]; watchersTouched touchedDirWatchMap } */
+	defFanotifyBackend         = *initializedFanotifyBackend /* ref: nonnil */
+)
 
 // fanotifyBackend is the fanotify-based watcher backend for Linux.
 type fanotifyBackend struct {
@@ -170,18 +179,18 @@ type fanotifyBackend struct {
 	markMask    uint64 // fanotifyMarkMaskRename or fanotifyMarkMaskMovedFromTo; 0 until first subscribe
 	noRename    bool   // when true, skip FAN_RENAME probe (for testing fallback path)
 
-	subscriptions map[fanotifyHandleKey][]*fanotifySubscription
-	endedSignal   chan struct{}
+	subscriptions typeutil.DefMap[fanotifyHandleKey, fanotifySubscriptionList]
+	endedSignal   typeutil.DefChan[signal]
 
 	// Persistent buffers reused across handleEvents calls. Only accessed
 	// from the start goroutine, so no synchronization needed.
-	readBuf         []byte
-	watchersTouched map[*dirWatch]struct{}
+	readBuf         typeutil.DefSlice[byte]
+	watchersTouched touchedDirWatchMap
 }
 
 func init() {
 	if fanotifyAvailable() {
-		fanotifyWatcher.factory = func() watcherImpl { return newFanotifyBackend(false) }
+		fanotifyWatcher.factory = func() defWatcherImpl { return newFanotifyBackend(false) }
 	}
 }
 
@@ -203,22 +212,22 @@ func fanotifyAvailable() bool {
 // backend skips the FAN_RENAME probe and forces the FAN_MOVED_FROM/FAN_MOVED_TO
 // fallback path; this is only used by the fanotify-no-rename test watcher to
 // exercise the fallback path on kernels that natively support FAN_RENAME.
-func newFanotifyBackend(noRename bool) *fanotifyBackend {
+func newFanotifyBackend(noRename bool) defFanotifyBackend {
 	b := &fanotifyBackend{
 		pipeFDs:         [2]int{-1, -1},
 		fanotifyFD:      -1,
 		noRename:        noRename,
-		subscriptions:   map[fanotifyHandleKey][]*fanotifySubscription{},
+		subscriptions:   typeutil.DefMap[fanotifyHandleKey, fanotifySubscriptionList]{},
 		endedSignal:     make(chan struct{}),
 		readBuf:         make([]byte, fanotifyBufferSize),
-		watchersTouched: make(map[*dirWatch]struct{}),
+		watchersTouched: make(touchedDirWatchMap),
 	}
 	b.pipeWriteFD.Store(-1)
-	b.watcherBase.init(b)
-	return b
+	b.watcherBase.init(b) //ref:ignore initialization establishes the embedded watcherBase contract
+	return b              //ref:ignore watcherBase initialization is not propagated to the enclosing backend
 }
 
-func (b *fanotifyBackend) start() error {
+func (b defFanotifyBackend) start() error {
 	if err := unix.Pipe2(b.pipeFDs[:], unix.O_CLOEXEC|unix.O_NONBLOCK); err != nil {
 		return fmt.Errorf("unable to open pipe: %w", err)
 	}
@@ -262,7 +271,7 @@ func (b *fanotifyBackend) start() error {
 	return nil
 }
 
-func (b *fanotifyBackend) closeFDs() {
+func (b defFanotifyBackend) closeFDs() {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 	if b.pipeFDs[0] >= 0 {
@@ -279,7 +288,7 @@ func (b *fanotifyBackend) closeFDs() {
 	}
 }
 
-func (b *fanotifyBackend) shutdown() {
+func (b defFanotifyBackend) shutdown() {
 	fd := b.pipeWriteFD.Load()
 	if fd < 0 {
 		return
@@ -288,7 +297,7 @@ func (b *fanotifyBackend) shutdown() {
 	<-b.endedSignal
 }
 
-func (b *fanotifyBackend) subscribe(w *dirWatch) error {
+func (b defFanotifyBackend) subscribe(w defDirWatch) error {
 	// Probe FAN_RENAME on the first subscribe using the actual watch
 	// directory. FAN_RENAME (Linux 5.17+) yields a single paired event
 	// for renames; when unavailable we fall back to FAN_MOVED_FROM/
@@ -348,7 +357,7 @@ func (b *fanotifyBackend) subscribe(w *dirWatch) error {
 	return nil
 }
 
-func (b *fanotifyBackend) markDir(w *dirWatch, path string, markPath string) error {
+func (b defFanotifyBackend) markDir(w defDirWatch, path string, markPath string) error {
 	if err := unix.FanotifyMark(b.fanotifyFD, fanotifyMarkAddFlags, b.markMask, unix.AT_FDCWD, markPath); err != nil {
 		return maybeWrapUnsupportedFilesystem(err)
 	}
@@ -377,7 +386,7 @@ func maybeWrapUnsupportedFilesystem(err error) error {
 }
 
 // handleEvents reads and dispatches fanotify events from the fd.
-func (b *fanotifyBackend) handleEvents() error {
+func (b defFanotifyBackend) handleEvents() error {
 	buf := b.readBuf
 	watchersTouched := b.watchersTouched
 
@@ -396,7 +405,7 @@ func (b *fanotifyBackend) handleEvents() error {
 		metaSize := int(unsafe.Sizeof(unix.FanotifyEventMetadata{}))
 		data := buf[:n]
 		for len(data) >= metaSize {
-			meta := (*unix.FanotifyEventMetadata)(unsafe.Pointer(&data[0]))
+			meta := typeutil.NonNil((*unix.FanotifyEventMetadata)(unsafe.Pointer(&data[0])))
 			if meta.Vers != unix.FANOTIFY_METADATA_VERSION {
 				return fmt.Errorf("unsupported fanotify metadata version: %d", meta.Vers)
 			}
@@ -436,10 +445,10 @@ func (b *fanotifyBackend) handleEvents() error {
 	return nil
 }
 
-func (b *fanotifyBackend) handleOverflow(touched map[*dirWatch]struct{}) {
+func (b defFanotifyBackend) handleOverflow(touched touchedDirWatchMap) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	seen := map[*dirWatch]struct{}{}
+	seen := touchedDirWatchMap{}
 	for _, subs := range b.subscriptions {
 		for _, s := range subs {
 			if _, ok := seen[s.dirWatch]; ok {
@@ -452,7 +461,7 @@ func (b *fanotifyBackend) handleOverflow(touched map[*dirWatch]struct{}) {
 	}
 }
 
-func (b *fanotifyBackend) handleRenameEvent(mask uint64, dfidOld *fanotifyDfidName, dfidNew *fanotifyDfidName, touched map[*dirWatch]struct{}) {
+func (b defFanotifyBackend) handleRenameEvent(mask uint64, dfidOld *fanotifyDfidName, dfidNew *fanotifyDfidName, touched touchedDirWatchMap) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
@@ -494,7 +503,7 @@ func (b *fanotifyBackend) handleRenameEvent(mask uint64, dfidOld *fanotifyDfidNa
 	}
 }
 
-func (b *fanotifyBackend) handleParsedEvent(mask uint64, dfid *fanotifyDfidName, touched map[*dirWatch]struct{}) {
+func (b defFanotifyBackend) handleParsedEvent(mask uint64, dfid defFanotifyDfidName, touched touchedDirWatchMap) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
@@ -508,7 +517,7 @@ func (b *fanotifyBackend) handleParsedEvent(mask uint64, dfid *fanotifyDfidName,
 	}
 }
 
-func (b *fanotifyBackend) handleSubscription(mask uint64, dfid *fanotifyDfidName, sub *fanotifySubscription) bool {
+func (b defFanotifyBackend) handleSubscription(mask uint64, dfid defFanotifyDfidName, sub defFanotifySubscription) bool {
 	w := sub.dirWatch
 
 	// Compute full path. Self-events (name empty or ".") use the
@@ -599,7 +608,7 @@ func (b *fanotifyBackend) handleSubscription(mask uint64, dfid *fanotifyDfidName
 // parseFanotifyDfidNames extracts DFID_NAME info records from the event's
 // info record area. Returns a primary record (DFID_NAME or OLD_DFID_NAME)
 // and an optional second record (NEW_DFID_NAME, for FAN_RENAME events).
-func parseFanotifyDfidNames(data []byte) (primary *fanotifyDfidName, rename *fanotifyDfidName) {
+func parseFanotifyDfidNames(data typeutil.DefSlice[byte]) (primary *fanotifyDfidName, rename *fanotifyDfidName) {
 	const (
 		infoHdrSize = 4 // fanotify_event_info_header
 		fsidSize    = 8 // __kernel_fsid_t
@@ -646,7 +655,7 @@ func parseFanotifyDfidNames(data []byte) (primary *fanotifyDfidName, rename *fan
 }
 
 // parseFanotifyFidRecord parses a single fanotify_event_info_fid record.
-func parseFanotifyFidRecord(data []byte, hasName bool) *fanotifyDfidName {
+func parseFanotifyFidRecord(data typeutil.DefSlice[byte], hasName bool) *fanotifyDfidName {
 	const (
 		infoHdrSize = 4
 		fsidSize    = 8
@@ -693,7 +702,7 @@ func parseFanotifyFidRecord(data []byte, hasName bool) *fanotifyDfidName {
 // dropSubsForPathLocked removes every subscription whose s.path equals
 // path, regardless of which fanotify handle key it lives under. Must be
 // called with b.mu held.
-func (b *fanotifyBackend) dropSubsForPathLocked(path string) {
+func (b defFanotifyBackend) dropSubsForPathLocked(path string) {
 	for key, list := range b.subscriptions {
 		kept := list[:0]
 		for _, s := range list {
@@ -716,7 +725,7 @@ func (b *fanotifyBackend) dropSubsForPathLocked(path string) {
 // path-independent unmark) but dropping the bookkeeping prevents later
 // events from being reported against the no-longer-valid path.
 // Must be called with b.mu held.
-func (b *fanotifyBackend) dropSubsForPathAndDescendantsLocked(path string) {
+func (b defFanotifyBackend) dropSubsForPathAndDescendantsLocked(path string) {
 	for key, list := range b.subscriptions {
 		kept := list[:0]
 		for _, s := range list {
@@ -733,7 +742,7 @@ func (b *fanotifyBackend) dropSubsForPathAndDescendantsLocked(path string) {
 	}
 }
 
-func (b *fanotifyBackend) closeWatch(w *dirWatch) error {
+func (b defFanotifyBackend) closeWatch(w defDirWatch) error {
 	for key, list := range b.subscriptions {
 		kept := list[:0]
 		removedAny := false

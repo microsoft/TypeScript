@@ -19,7 +19,7 @@ import "testing"
 // wrapper.
 type testingT interface {
 	Helper()
-	Cleanup(fn func())
+	Cleanup(fn func() /* ref: nonnil */)
 	TempDir() string
 	Name() string
 
@@ -38,8 +38,15 @@ type testingT interface {
 	Failed() bool
 }
 
+type (
+	defTestingT = testingT /* ref: nonnil */
+	defRetryT   = *retryT  /* ref: nonnil */
+)
+
 // Compile-time assertion that *testing.T satisfies testingT.
-var _ testingT = (*testing.T)(nil)
+func assertTestingT(t *testing.T) {
+	var _ defTestingT = t
+}
 
 // retryAttempts is the number of times runForEachWatcher will re-run a
 // failing per-backend test body before propagating the failure to the
@@ -91,59 +98,59 @@ type retryT struct {
 // state to decide whether to retry, surface a skip, or accept success.
 type retryBail struct{}
 
-func newRetryT(t *testing.T, attempt int) *retryT {
+func newRetryT(t *testing.T, attempt int) defRetryT {
 	return &retryT{t: t, attempt: attempt}
 }
 
-func (r *retryT) Helper()                         { r.t.Helper() }
-func (r *retryT) Cleanup(fn func())               { r.t.Cleanup(fn) }
-func (r *retryT) TempDir() string                 { return r.t.TempDir() }
-func (r *retryT) Name() string                    { return r.t.Name() }
-func (r *retryT) Log(args ...any)                 { r.t.Helper(); r.t.Log(args...) }
-func (r *retryT) Logf(format string, args ...any) { r.t.Helper(); r.t.Logf(format, args...) }
-func (r *retryT) Failed() bool                    { return r.failed }
+func (r defRetryT) Helper()                             { r.t.Helper() }
+func (r defRetryT) Cleanup(fn func() /* ref: nonnil */) { r.t.Cleanup(fn) }
+func (r defRetryT) TempDir() string                     { return r.t.TempDir() }
+func (r defRetryT) Name() string                        { return r.t.Name() }
+func (r defRetryT) Log(args ...any)                     { r.t.Helper(); r.t.Log(args...) }
+func (r defRetryT) Logf(format string, args ...any)     { r.t.Helper(); r.t.Logf(format, args...) }
+func (r defRetryT) Failed() bool                        { return r.failed }
 
-func (r *retryT) Error(args ...any) {
+func (r defRetryT) Error(args ...any) {
 	r.t.Helper()
 	r.failed = true
 	r.t.Log(args...)
 }
 
-func (r *retryT) Errorf(format string, args ...any) {
+func (r defRetryT) Errorf(format string, args ...any) {
 	r.t.Helper()
 	r.failed = true
 	r.t.Logf(format, args...)
 }
 
-func (r *retryT) Fatal(args ...any) {
+func (r defRetryT) Fatal(args ...any) {
 	r.t.Helper()
 	r.failed = true
 	r.t.Log(args...)
 	panic(retryBail{})
 }
 
-func (r *retryT) Fatalf(format string, args ...any) {
+func (r defRetryT) Fatalf(format string, args ...any) {
 	r.t.Helper()
 	r.failed = true
 	r.t.Logf(format, args...)
 	panic(retryBail{})
 }
 
-func (r *retryT) Skip(args ...any) {
+func (r defRetryT) Skip(args ...any) {
 	r.t.Helper()
 	r.skipped = true
 	r.t.Log(args...)
 	panic(retryBail{})
 }
 
-func (r *retryT) Skipf(format string, args ...any) {
+func (r defRetryT) Skipf(format string, args ...any) {
 	r.t.Helper()
 	r.skipped = true
 	r.t.Logf(format, args...)
 	panic(retryBail{})
 }
 
-func (r *retryT) SkipNow() {
+func (r defRetryT) SkipNow() {
 	r.skipped = true
 	panic(retryBail{})
 }
@@ -158,7 +165,7 @@ func (r *retryT) SkipNow() {
 //
 // On the fast-path (body passes first try), this is one call with
 // negligible overhead over a direct invocation.
-func runWithRetry(t *testing.T, body func(testingT)) {
+func runWithRetry(t *testing.T, body func(defTestingT) /* ref: nonnil */) {
 	t.Helper()
 	for attempt := 1; attempt <= retryAttempts; attempt++ {
 		r := newRetryT(t, attempt)

@@ -8,6 +8,7 @@ import (
 	"sync/atomic"
 	"unsafe"
 
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 	"golang.org/x/sys/unix"
 )
 
@@ -91,9 +92,17 @@ const (
 type inotifySubscription struct {
 	path      string
 	watchPath string
-	dirWatch  *dirWatch
+	dirWatch  defDirWatch
 	wd        int
 }
+
+type (
+	defInotifySubscription    = *inotifySubscription /* ref: nonnil */
+	inotifySubscriptionList   = []defInotifySubscription
+	touchedDirWatchMap        = typeutil.DefMap[defDirWatch, struct{}]
+	initializedInotifyBackend = inotifyBackend             /* ref: struct { watcherBase initializedWatcherBase; subscriptions typeutil.DefMap[int, inotifySubscriptionList]; endedSignal typeutil.DefChan[signal]; readBuf typeutil.DefSlice[byte]; watchersTouched touchedDirWatchMap } */
+	defInotifyBackend         = *initializedInotifyBackend /* ref: nonnil */
+)
 
 // inotifyBackend.
 type inotifyBackend struct {
@@ -105,35 +114,35 @@ type inotifyBackend struct {
 	// Sentinel -1 once closed.
 	pipeWriteFD   atomic.Int32
 	inotify       int
-	subscriptions map[int][]*inotifySubscription // multimap<wd, sub>
-	endedSignal   chan struct{}
+	subscriptions typeutil.DefMap[int, inotifySubscriptionList] // multimap<wd, sub>
+	endedSignal   typeutil.DefChan[signal]
 
 	// Persistent buffers reused across handleEvents calls. Only accessed
 	// from the start goroutine, so no synchronization needed.
-	readBuf         []byte
-	watchersTouched map[*dirWatch]struct{}
+	readBuf         typeutil.DefSlice[byte]
+	watchersTouched touchedDirWatchMap
 }
 
 func init() {
-	inotifyWatcher.factory = func() watcherImpl { return newInotifyBackend() }
+	inotifyWatcher.factory = func() defWatcherImpl { return newInotifyBackend() }
 }
 
-func newInotifyBackend() *inotifyBackend {
+func newInotifyBackend() defInotifyBackend {
 	b := &inotifyBackend{
 		pipeFDs:         [2]int{-1, -1},
 		inotify:         -1,
-		subscriptions:   map[int][]*inotifySubscription{},
+		subscriptions:   typeutil.DefMap[int, inotifySubscriptionList]{},
 		endedSignal:     make(chan struct{}),
 		readBuf:         make([]byte, inotifyBufferSize),
-		watchersTouched: make(map[*dirWatch]struct{}),
+		watchersTouched: make(touchedDirWatchMap),
 	}
 	b.pipeWriteFD.Store(-1)
-	b.watcherBase.init(b)
-	return b
+	b.watcherBase.init(b) //ref:ignore initialization establishes the embedded watcherBase contract
+	return b              //ref:ignore watcherBase initialization is not propagated to the enclosing backend
 }
 
 // start mirrors `inotifyBackend::start`.
-func (b *inotifyBackend) start() error {
+func (b defInotifyBackend) start() error {
 	// Create a pipe so we can wake the poll(2) loop on shutdown.
 	if err := unix.Pipe2(b.pipeFDs[:], unix.O_CLOEXEC|unix.O_NONBLOCK); err != nil {
 		return fmt.Errorf("unable to open pipe: %w", err)
@@ -180,7 +189,7 @@ func (b *inotifyBackend) start() error {
 // closeFDs runs in the start goroutine after the poll loop exits. Takes
 // b.mu so the writes to b.inotify / b.pipeFDs synchronize-against the
 // reads in closeWatch / subscribe (both of which run under b.mu).
-func (b *inotifyBackend) closeFDs() {
+func (b defInotifyBackend) closeFDs() {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 	if b.pipeFDs[0] >= 0 {
@@ -201,7 +210,7 @@ func (b *inotifyBackend) closeFDs() {
 // Called by removeSharedBackend when the last watch drops. Reads
 // the pipe write fd via atomic so it's safe to race against the start
 // goroutine's deferred closeFDs.
-func (b *inotifyBackend) shutdown() {
+func (b defInotifyBackend) shutdown() {
 	fd := b.pipeWriteFD.Load()
 	if fd < 0 {
 		return
@@ -212,7 +221,7 @@ func (b *inotifyBackend) shutdown() {
 
 // subscribe mirrors `inotifyBackend::subscribe`. Called via the watcherBase
 // virtual dispatch under b.mu (so it's serialized against handleEvent).
-func (b *inotifyBackend) subscribe(w *dirWatch) error {
+func (b defInotifyBackend) subscribe(w defDirWatch) error {
 	if !w.recursive {
 		if _, err := b.watchDir(w, w.dir, w.physicalDir); err != nil {
 			return &dirWatchError{
@@ -243,7 +252,7 @@ func (b *inotifyBackend) subscribe(w *dirWatch) error {
 
 // watchDir registers an inotify watch on path and records the resulting
 // subscription. Returns the kernel watch descriptor on success.
-func (b *inotifyBackend) watchDir(w *dirWatch, path string, watchPath string) (int, error) {
+func (b defInotifyBackend) watchDir(w defDirWatch, path string, watchPath string) (int, error) {
 	wd, err := unix.InotifyAddWatch(b.inotify, watchPath, inotifyMask)
 	if err != nil {
 		return 0, err
@@ -254,7 +263,7 @@ func (b *inotifyBackend) watchDir(w *dirWatch, path string, watchPath string) (i
 }
 
 // handleEvents mirrors `inotifyBackend::handleEvents`.
-func (b *inotifyBackend) handleEvents() error {
+func (b defInotifyBackend) handleEvents() error {
 	buf := b.readBuf
 	watchersTouched := b.watchersTouched
 
@@ -271,7 +280,7 @@ func (b *inotifyBackend) handleEvents() error {
 		}
 		// Walk the buffer.
 		for offset := 0; offset < n; {
-			ev := (*unix.InotifyEvent)(unsafe.Pointer(&buf[offset]))
+			ev := typeutil.NonNil((*unix.InotifyEvent)(unsafe.Pointer(&buf[offset])))
 			recordSize := unix.SizeofInotifyEvent + int(ev.Len)
 			var name string
 			if ev.Len > 0 {
@@ -311,7 +320,7 @@ func (b *inotifyBackend) handleEvents() error {
 }
 
 // handleEvent mirrors `inotifyBackend::handleEvent`.
-func (b *inotifyBackend) handleEvent(ev *unix.InotifyEvent, name string, touched map[*dirWatch]struct{}) {
+func (b defInotifyBackend) handleEvent(ev *unix.InotifyEvent /* ref: nonnil */, name string, touched touchedDirWatchMap) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
@@ -327,7 +336,7 @@ func (b *inotifyBackend) handleEvent(ev *unix.InotifyEvent, name string, touched
 }
 
 // handleSubscription mirrors `inotifyBackend::handleSubscription`.
-func (b *inotifyBackend) handleSubscription(ev *unix.InotifyEvent, name string, sub *inotifySubscription) bool {
+func (b defInotifyBackend) handleSubscription(ev *unix.InotifyEvent /* ref: nonnil */, name string, sub defInotifySubscription) bool {
 	w := sub.dirWatch
 	path := sub.path
 	watchPath := sub.watchPath
@@ -396,7 +405,7 @@ func (b *inotifyBackend) handleSubscription(ev *unix.InotifyEvent, name string, 
 // InotifyRmWatch fails we keep processing remaining wds and return the
 // first error encountered; bailing early would leave the internal state
 // half-cleaned and the caller's dirWatch hanging off other wds.
-func (b *inotifyBackend) closeWatch(w *dirWatch) error {
+func (b defInotifyBackend) closeWatch(w defDirWatch) error {
 	var firstErr error
 	for wd, list := range b.subscriptions {
 		kept := list[:0]

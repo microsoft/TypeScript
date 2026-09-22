@@ -22,7 +22,7 @@ var fanotifyNoRenameWatcher = &watcher{name: "fanotify-no-rename"}
 
 func init() {
 	if fanotifyAvailable() {
-		fanotifyNoRenameWatcher.factory = func() watcherImpl { return newFanotifyBackend(true) }
+		fanotifyNoRenameWatcher.factory = func() defWatcherImpl { return newFanotifyBackend(true) }
 		additionalTestWatchers = append(additionalTestWatchers, fanotifyNoRenameWatcher)
 	}
 }
@@ -54,7 +54,7 @@ func TestLinuxFanotifySubscribeCleansUpAfterMarkFailure(t *testing.T) {
 
 	err := b.subscribe(w)
 	var werr *dirWatchError
-	if !errors.As(err, &werr) {
+	if !errors.As(err, &werr) || werr == nil {
 		t.Fatalf("subscribe error = %v, want *dirWatchError", err)
 	}
 	if werr.dirWatch != w {

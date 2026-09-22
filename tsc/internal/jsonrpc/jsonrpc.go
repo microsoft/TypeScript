@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 // JSONRPCVersion represents the JSON-RPC version field, always "2.0".
@@ -34,8 +35,15 @@ type ID struct {
 	int int32
 }
 
+type (
+	DefID              = *ID /* ref: nonnil */
+	defInteger         = typeutil.DefPtr[int32]
+	defString          = typeutil.DefPtr[string]
+	DefIntegerOrString = IntegerOrString /* ref: struct { Integer defInteger; String nil } | struct { Integer nil; String defString } */
+)
+
 // NewID creates an ID from an IntegerOrString value.
-func NewID(rawValue IntegerOrString) *ID {
+func NewID(rawValue DefIntegerOrString) DefID {
 	if rawValue.String != nil {
 		return &ID{str: *rawValue.String}
 	}
@@ -43,30 +51,30 @@ func NewID(rawValue IntegerOrString) *ID {
 }
 
 // NewIDString creates a string ID.
-func NewIDString(str string) *ID {
+func NewIDString(str string) DefID {
 	return &ID{str: str}
 }
 
 // NewIDInt creates an integer ID.
-func NewIDInt(i int32) *ID {
+func NewIDInt(i int32) DefID {
 	return &ID{int: i}
 }
 
-func (id *ID) String() string {
+func (id DefID) String() string {
 	if id.str != "" {
 		return id.str
 	}
 	return strconv.Itoa(int(id.int))
 }
 
-func (id *ID) MarshalJSON() ([]byte, error) {
+func (id DefID) MarshalJSON() ([]byte, error) {
 	if id.str != "" {
 		return json.Marshal(id.str)
 	}
 	return json.Marshal(id.int)
 }
 
-func (id *ID) UnmarshalJSON(data []byte) error {
+func (id DefID) UnmarshalJSON(data []byte) error {
 	*id = ID{}
 	if len(data) > 0 && data[0] == '"' {
 		return json.Unmarshal(data, &id.str)
@@ -81,7 +89,7 @@ func (id *ID) TryInt() (int32, bool) {
 	return id.int, true
 }
 
-func (id *ID) MustInt() int32 {
+func (id DefID) MustInt() int32 {
 	if id.str != "" {
 		panic("ID is not an integer")
 	}
@@ -145,8 +153,10 @@ type Message struct {
 	Error   *ResponseError `json:"error,omitzero"`
 }
 
+type DefMessage = *Message /* ref: nonnil */
+
 // Kind returns the kind of message this is.
-func (m *Message) Kind() MessageKind {
+func (m DefMessage) Kind() MessageKind {
 	if m.ID != nil && m.Method == "" {
 		return MessageKindResponse
 	}
@@ -157,17 +167,17 @@ func (m *Message) Kind() MessageKind {
 }
 
 // IsRequest returns true if this message is a request (has ID and method).
-func (m *Message) IsRequest() bool {
+func (m DefMessage) IsRequest() bool {
 	return m.ID != nil && m.Method != ""
 }
 
 // IsNotification returns true if this message is a notification (has method but no ID).
-func (m *Message) IsNotification() bool {
+func (m DefMessage) IsNotification() bool {
 	return m.ID == nil && m.Method != ""
 }
 
 // IsResponse returns true if this message is a response (has ID but no method).
-func (m *Message) IsResponse() bool {
+func (m DefMessage) IsResponse() bool {
 	return m.ID != nil && m.Method == ""
 }
 

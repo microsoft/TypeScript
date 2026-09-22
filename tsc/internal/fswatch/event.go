@@ -1,6 +1,10 @@
 package fswatch
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
+)
 
 // EventKind classifies a filesystem change.
 type EventKind int
@@ -41,29 +45,35 @@ type eventEntry struct {
 //   - getEvents skips entries that were both created and deleted
 type eventList struct {
 	mu      sync.Mutex
-	entries map[string]*eventEntry
+	entries eventEntryMap
 	err     error
 	seq     uint64
 }
 
+type (
+	defEventList  = *eventList  /* ref: nonnil */
+	defEventEntry = *eventEntry /* ref: nonnil */
+	eventEntryMap = map[string]defEventEntry
+)
+
 // create records a new-file event for path. Both create and update
 // produce EventUpdate externally; sequence state tracks coalescing
 // (create+delete within a batch cancels out).
-func (el *eventList) create(path string) {
+func (el defEventList) create(path string) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	seq := el.nextSeqLocked()
 	el.createLocked(path, seq)
 }
 
-func (el *eventList) createAt(path string, seq uint64) {
+func (el defEventList) createAt(path string, seq uint64) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	el.advanceSeqLocked(seq)
 	el.createLocked(path, seq)
 }
 
-func (el *eventList) createLocked(path string, seq uint64) {
+func (el defEventList) createLocked(path string, seq uint64) {
 	entry := el.getOrCreate(path)
 	if entry.isDeleted() {
 		// Rapid delete+recreate: clear both flags so the entry
@@ -78,21 +88,21 @@ func (el *eventList) createLocked(path string, seq uint64) {
 }
 
 // update records an update event for path.
-func (el *eventList) update(path string) {
+func (el defEventList) update(path string) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	seq := el.nextSeqLocked()
 	el.updateLocked(path, seq)
 }
 
-func (el *eventList) updateAt(path string, seq uint64) {
+func (el defEventList) updateAt(path string, seq uint64) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	el.advanceSeqLocked(seq)
 	el.updateLocked(path, seq)
 }
 
-func (el *eventList) updateWatchRootAt(path string, seq uint64) {
+func (el defEventList) updateWatchRootAt(path string, seq uint64) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	el.advanceSeqLocked(seq)
@@ -100,19 +110,19 @@ func (el *eventList) updateWatchRootAt(path string, seq uint64) {
 	el.getOrCreate(path).includedWatchRoot = true
 }
 
-func (el *eventList) updateLocked(path string, seq uint64) {
+func (el defEventList) updateLocked(path string, seq uint64) {
 	el.getOrCreate(path).updatedSeq = seq
 }
 
 // remove records a delete event for path.
-func (el *eventList) remove(path string) {
+func (el defEventList) remove(path string) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	seq := el.nextSeqLocked()
 	el.removeLocked(path, seq)
 }
 
-func (el *eventList) removeAndGetSequence(path string) uint64 {
+func (el defEventList) removeAndGetSequence(path string) uint64 {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	seq := el.nextSeqLocked()
@@ -120,14 +130,14 @@ func (el *eventList) removeAndGetSequence(path string) uint64 {
 	return seq
 }
 
-func (el *eventList) removeAt(path string, seq uint64) {
+func (el defEventList) removeAt(path string, seq uint64) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	el.advanceSeqLocked(seq)
 	el.removeLocked(path, seq)
 }
 
-func (el *eventList) removeWatchRootAt(path string, seq uint64) {
+func (el defEventList) removeWatchRootAt(path string, seq uint64) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	el.advanceSeqLocked(seq)
@@ -135,14 +145,14 @@ func (el *eventList) removeWatchRootAt(path string, seq uint64) {
 	el.getOrCreate(path).includedWatchRoot = true
 }
 
-func (el *eventList) removeLocked(path string, seq uint64) {
+func (el defEventList) removeLocked(path string, seq uint64) {
 	entry := el.getOrCreate(path)
 	entry.deletedSeq = seq
 }
 
 // size returns the number of tracked entries (including ones that may
 // cancel out in getEvents).
-func (el *eventList) size() int {
+func (el defEventList) size() int {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	return len(el.entries)
@@ -150,11 +160,11 @@ func (el *eventList) size() int {
 
 // snapshotLocked returns the current set of pending events with
 // create+delete pairs filtered out. Caller must hold el.mu.
-func (el *eventList) snapshotLocked() []Event {
+func (el defEventList) snapshotLocked() []Event {
 	return el.snapshotSinceLocked(0)
 }
 
-func (el *eventList) snapshotSinceLocked(startSeq uint64) []Event {
+func (el defEventList) snapshotSinceLocked(startSeq uint64) []Event {
 	out := make([]Event, 0, len(el.entries))
 	for path, e := range el.entries {
 		kind, ok := e.kindSince(startSeq)
@@ -168,7 +178,7 @@ func (el *eventList) snapshotSinceLocked(startSeq uint64) []Event {
 
 // getEvents returns a snapshot of events, skipping entries that were both
 // created and deleted. Order is not guaranteed.
-func (el *eventList) getEvents() []Event {
+func (el defEventList) getEvents() []Event {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	return el.snapshotLocked()
@@ -177,7 +187,7 @@ func (el *eventList) getEvents() []Event {
 // drain atomically snapshots all pending events and the stored error,
 // then clears the list. This prevents events added between a separate
 // getEvents+clear from being silently dropped.
-func (el *eventList) drain() ([]Event, error) {
+func (el defEventList) drain() ([]Event, error) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	out := el.snapshotLocked()
@@ -187,7 +197,7 @@ func (el *eventList) drain() ([]Event, error) {
 	return out, err
 }
 
-func (el *eventList) drainForSequences(startSeqs []uint64) ([][]Event, error) {
+func (el defEventList) drainForSequences(startSeqs []uint64) (typeutil.DefSlice[[]Event], error) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	out := make([][]Event, len(startSeqs))
@@ -201,7 +211,7 @@ func (el *eventList) drainForSequences(startSeqs []uint64) ([][]Event, error) {
 }
 
 // setError stores the first error encountered (later errors are ignored).
-func (el *eventList) setError(err error) {
+func (el defEventList) setError(err error) {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	if el.err == nil {
@@ -210,22 +220,22 @@ func (el *eventList) setError(err error) {
 }
 
 // hasError reports whether an error has been recorded.
-func (el *eventList) hasError() bool {
+func (el defEventList) hasError() bool {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	return el.err != nil
 }
 
 // getError returns the stored error (or nil if none).
-func (el *eventList) getError() error {
+func (el defEventList) getError() error {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	return el.err
 }
 
-func (el *eventList) getOrCreate(path string) *eventEntry {
+func (el defEventList) getOrCreate(path string) defEventEntry {
 	if el.entries == nil {
-		el.entries = make(map[string]*eventEntry)
+		el.entries = make(eventEntryMap)
 	}
 	if e, ok := el.entries[path]; ok {
 		return e
@@ -235,28 +245,28 @@ func (el *eventList) getOrCreate(path string) *eventEntry {
 	return e
 }
 
-func (el *eventList) sequence() uint64 {
+func (el defEventList) sequence() uint64 {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	return el.seq
 }
 
-func (el *eventList) nextSeqLocked() uint64 {
+func (el defEventList) nextSeqLocked() uint64 {
 	el.seq++
 	return el.seq
 }
 
-func (el *eventList) advanceSeqLocked(seq uint64) {
+func (el defEventList) advanceSeqLocked(seq uint64) {
 	if seq > el.seq {
 		el.seq = seq
 	}
 }
 
-func (e *eventEntry) isDeleted() bool {
+func (e defEventEntry) isDeleted() bool {
 	return e.deletedSeq > e.createdSeq && e.deletedSeq > e.updatedSeq
 }
 
-func (e *eventEntry) kindSince(startSeq uint64) (EventKind, bool) {
+func (e defEventEntry) kindSince(startSeq uint64) (EventKind, bool) {
 	if e.deletedSeq > startSeq {
 		if e.createdSeq > startSeq && e.createdSeq < e.deletedSeq && e.updatedSeq < e.deletedSeq {
 			return 0, false

@@ -7,21 +7,28 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 type fakeFallbackWatch struct {
-	watcher *fakeFallbackWatcher
+	watcher defFakeFallbackWatcher
 	dir     string
 }
 
-func (w *fakeFallbackWatch) Close() error {
+type (
+	defFakeFallbackWatch   = *fakeFallbackWatch   /* ref: nonnil */
+	defFakeFallbackWatcher = *fakeFallbackWatcher /* ref: nonnil */
+)
+
+func (w defFakeFallbackWatch) Close() error {
 	w.watcher.mu.Lock()
 	defer w.watcher.mu.Unlock()
 	w.watcher.closed = append(w.watcher.closed, w.dir)
 	return nil
 }
 
-func (w *fakeFallbackWatch) unexported() {}
+func (w defFakeFallbackWatch) unexported() {}
 
 type fakeFallbackWatcher struct {
 	mu       sync.Mutex
@@ -32,15 +39,15 @@ type fakeFallbackWatcher struct {
 	closed   []string
 }
 
-func (w *fakeFallbackWatcher) Name() string                  { return w.name }
-func (w *fakeFallbackWatcher) Available() bool               { return true }
-func (w *fakeFallbackWatcher) HasFastRecursiveBackend() bool { return false }
+func (w defFakeFallbackWatcher) Name() string                  { return w.name }
+func (w defFakeFallbackWatcher) Available() bool               { return true }
+func (w defFakeFallbackWatcher) HasFastRecursiveBackend() bool { return false }
 
-func (w *fakeFallbackWatcher) shouldFail(dir string) bool {
+func (w defFakeFallbackWatcher) shouldFail(dir string) bool {
 	return w.failWith != nil && (w.failDir == nil || w.failDir(dir))
 }
 
-func (w *fakeFallbackWatcher) WatchDirectory(dir string, _ WatchCallback, _ ...WatchOption) (Watch, error) {
+func (w defFakeFallbackWatcher) WatchDirectory(dir string, _ WatchCallback, _ ...DefWatchOption) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */ {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	if w.shouldFail(dir) {
@@ -50,7 +57,7 @@ func (w *fakeFallbackWatcher) WatchDirectory(dir string, _ WatchCallback, _ ...W
 	return &fakeFallbackWatch{watcher: w, dir: dir}, nil
 }
 
-func (w *fakeFallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, error) {
+func (w defFakeFallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]DefWatch, error) /* ref: (watchList, nil) | (nil, defError) */ {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	for _, request := range requests {
@@ -58,21 +65,21 @@ func (w *fakeFallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest)
 			return nil, fmt.Errorf("%s: %w", w.name, w.failWith)
 		}
 	}
-	watches := make([]Watch, len(requests))
-	for i, request := range requests {
+	watches := make(typeutil.DefSlice[DefWatch], 0, len(requests))
+	for _, request := range requests {
 		w.watched = append(w.watched, request.Dir)
-		watches[i] = &fakeFallbackWatch{watcher: w, dir: request.Dir}
+		watches = append(watches, &fakeFallbackWatch{watcher: w, dir: request.Dir})
 	}
 	return watches, nil
 }
 
-func (w *fakeFallbackWatcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
+func (w defFakeFallbackWatcher) WatchFile(path string, fn WatchCallback) (Watch, error) /* ref: (DefWatch, nil) | (nil, defError) */ {
 	return w.WatchDirectory(path, fn)
 }
 
-func (w *fakeFallbackWatcher) unexported() {}
+func (w defFakeFallbackWatcher) unexported() {}
 
-func (w *fakeFallbackWatcher) watchedDirs() []string {
+func (w defFakeFallbackWatcher) watchedDirs() []string {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	dirs := append([]string(nil), w.watched...)
@@ -80,7 +87,7 @@ func (w *fakeFallbackWatcher) watchedDirs() []string {
 	return dirs
 }
 
-func (w *fakeFallbackWatcher) closedDirs() []string {
+func (w defFakeFallbackWatcher) closedDirs() []string {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	dirs := append([]string(nil), w.closed...)
@@ -198,7 +205,7 @@ func TestFanotifyUsesInternalInotifyFallback(t *testing.T) {
 	t.Parallel()
 
 	fallback, ok := Fanotify().(*fallbackWatcher)
-	if !ok {
+	if !ok || fallback == nil {
 		t.Fatalf("Fanotify() = %T, want *fallbackWatcher", Fanotify())
 	}
 	if fallback.primary != fanotifyWatcher {
@@ -212,6 +219,9 @@ func TestFanotifyUsesInternalInotifyFallback(t *testing.T) {
 func equalStringSlices(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
+	}
+	if a == nil || b == nil {
+		return true
 	}
 	for i := range a {
 		if a[i] != b[i] {

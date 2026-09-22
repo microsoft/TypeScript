@@ -23,15 +23,17 @@ type Reader struct {
 	r *bufio.Reader
 }
 
+type DefReader = *Reader /* ref: nonnil */
+
 // NewReader creates a new Reader.
-func NewReader(r io.Reader) *Reader {
+func NewReader(r io.Reader) DefReader {
 	return &Reader{
 		r: bufio.NewReader(r),
 	}
 }
 
 // Read reads the next message payload.
-func (r *Reader) Read() ([]byte, error) {
+func (r DefReader) Read() ([]byte, error) {
 	var contentLength int64
 
 	for {
@@ -80,15 +82,17 @@ type Writer struct {
 	w *bufio.Writer
 }
 
+type DefWriter = *Writer /* ref: nonnil */
+
 // NewWriter creates a new Writer.
-func NewWriter(w io.Writer) *Writer {
+func NewWriter(w io.Writer) DefWriter {
 	return &Writer{
 		w: bufio.NewWriter(w),
 	}
 }
 
 // Write writes a message payload with Content-Length header.
-func (w *Writer) Write(data []byte) error {
+func (w DefWriter) Write(data []byte) error {
 	if _, err := fmt.Fprintf(w.w, "Content-Length: %d\r\n\r\n", len(data)); err != nil {
 		return err
 	}

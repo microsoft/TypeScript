@@ -9,7 +9,7 @@ import (
 
 // clear is only used by tests; live code drains via drain() so the
 // snapshot and the reset happen atomically.
-func (el *eventList) clear() {
+func (el defEventList) clear() {
 	el.mu.Lock()
 	defer el.mu.Unlock()
 	el.entries = nil
@@ -35,7 +35,7 @@ func TestEventListDeleteThenCreate(t *testing.T) {
 	el.remove("a")
 	el.create("a")
 	got := el.getEvents()
-	if len(got) != 1 {
+	if got == nil || len(got) != 1 {
 		t.Fatalf("expected 1 event, got %d", len(got))
 	}
 	// "Assume update event when rapidly removed and created".
@@ -51,7 +51,7 @@ func TestEventListCreateDeleteCreate(t *testing.T) {
 	el.remove("a")
 	el.create("a")
 	got := el.getEvents()
-	if len(got) != 1 {
+	if got == nil || len(got) != 1 {
 		t.Fatalf("expected 1 event, got %d", len(got))
 	}
 	if got[0].Kind != EventUpdate {
@@ -138,10 +138,11 @@ func TestEventListDrainForSequences(t *testing.T) {
 	if len(eventsByCallback[0]) != 0 {
 		t.Fatalf("create+delete should cancel for original callback, got %v", eventsByCallback[0])
 	}
-	if len(eventsByCallback[1]) != 1 {
-		t.Fatalf("expected delete for later callback, got %v", eventsByCallback[1])
+	laterEvents := eventsByCallback[1]
+	if laterEvents == nil || len(laterEvents) != 1 {
+		t.Fatalf("expected delete for later callback, got %v", laterEvents)
 	}
-	if got := eventsByCallback[1][0]; got.Kind != EventDelete || got.Path != "file.txt" {
+	if got := laterEvents[0]; got.Kind != EventDelete || got.Path != "file.txt" {
 		t.Fatalf("expected delete for file.txt, got %v", got)
 	}
 }

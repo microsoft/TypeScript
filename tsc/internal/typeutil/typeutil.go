@@ -4,6 +4,7 @@ type (
 	DefPtr[T any]               = *T      // ref: nonnil
 	DefSlice[T any]             = []T     // ref: nonnil
 	DefMap[K comparable, V any] = map[K]V // ref: nonnil
+	DefChan[T any]              = chan T  // ref: nonnil
 	Never                       = any     // ref: never
 	DefAny                      = any     // ref: nonnil
 	DefError                    = error   // ref: nonnil

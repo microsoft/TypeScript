@@ -8,7 +8,10 @@ import (
 
 type contextKey int
 
-type Locale language.Tag
+type (
+	Locale     language.Tag
+	DefContext = context.Context // ref: nonnil
+)
 
 var Default Locale
 
@@ -19,16 +22,17 @@ func (l Locale) String() string {
 	return language.Tag(l).String()
 }
 
-func WithLocale(ctx context.Context, locale Locale) context.Context {
+func WithLocale(ctx DefContext, locale Locale) context.Context {
+	// TODO: context.WithValue should be typed as returning a non-nil context.Context.
 	return context.WithValue(ctx, contextKey(0), locale)
 }
 
-func FromContext(ctx context.Context) Locale {
+func FromContext(ctx DefContext) Locale {
 	locale, _ := ctx.Value(contextKey(0)).(Locale)
 	return locale
 }
 
-func HasLocale(ctx context.Context) bool {
+func HasLocale(ctx DefContext) bool {
 	_, ok := ctx.Value(contextKey(0)).(Locale)
 	return ok
 }

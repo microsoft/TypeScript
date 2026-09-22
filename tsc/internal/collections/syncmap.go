@@ -3,6 +3,8 @@ package collections
 import (
 	"iter"
 	"sync"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 type SyncMap[K comparable, V any] struct {
@@ -11,7 +13,7 @@ type SyncMap[K comparable, V any] struct {
 	m sync.Map
 }
 
-func (s *SyncMap[K, V]) Load(key K) (value V, ok bool) {
+func (s *SyncMap[K, V] /* ref: nonnil */) Load(key K) (value V, ok bool) {
 	val, ok := s.m.Load(key)
 	if !ok || val == nil {
 		return value, ok
@@ -19,11 +21,11 @@ func (s *SyncMap[K, V]) Load(key K) (value V, ok bool) {
 	return val.(V), true
 }
 
-func (s *SyncMap[K, V]) Store(key K, value V) {
+func (s *SyncMap[K, V] /* ref: nonnil */) Store(key K, value V) {
 	s.m.Store(key, value)
 }
 
-func (s *SyncMap[K, V]) LoadOrStore(key K, value V) (actual V, loaded bool) {
+func (s *SyncMap[K, V] /* ref: nonnil */) LoadOrStore(key K, value V) (actual V, loaded bool) {
 	actualAny, loaded := s.m.LoadOrStore(key, value)
 	if actualAny == nil {
 		return actual, loaded
@@ -32,15 +34,15 @@ func (s *SyncMap[K, V]) LoadOrStore(key K, value V) (actual V, loaded bool) {
 	return actualAny.(V), loaded
 }
 
-func (s *SyncMap[K, V]) Delete(key K) {
+func (s *SyncMap[K, V] /* ref: nonnil */) Delete(key K) {
 	s.m.Delete(key)
 }
 
-func (s *SyncMap[K, V]) Clear() {
+func (s *SyncMap[K, V] /* ref: nonnil */) Clear() {
 	s.m.Clear()
 }
 
-func (s *SyncMap[K, V]) Range(f func(key K, value V) bool) {
+func (s *SyncMap[K, V] /* ref: nonnil */) Range(f func(key K, value V) bool /* ref: nonnil */) {
 	s.m.Range(func(key, value any) bool {
 		var k K
 		if key != nil {
@@ -59,7 +61,7 @@ func (s *SyncMap[K, V]) Range(f func(key K, value V) bool) {
 // Size returns the approximate number of items in the map.
 // Note that this is not a precise count, as the map may be modified
 // concurrently while this method is running.
-func (s *SyncMap[K, V]) Size() int {
+func (s *SyncMap[K, V] /* ref: nonnil */) Size() int {
 	count := 0
 	s.m.Range(func(_, _ any) bool {
 		count++
@@ -68,7 +70,7 @@ func (s *SyncMap[K, V]) Size() int {
 	return count
 }
 
-func (s *SyncMap[K, V]) ToMap() map[K]V {
+func (s *SyncMap[K, V] /* ref: nonnil */) ToMap() typeutil.DefMap[K, V] {
 	m := make(map[K]V, s.Size())
 	s.m.Range(func(key, value any) bool {
 		m[key.(K)] = value.(V)
@@ -77,8 +79,8 @@ func (s *SyncMap[K, V]) ToMap() map[K]V {
 	return m
 }
 
-func (s *SyncMap[K, V]) Keys() iter.Seq[K] {
-	return func(yield func(K) bool) {
+func (s *SyncMap[K, V] /* ref: nonnil */) Keys() iter.Seq[K] /* ref: nonnil */ {
+	return func(yield func(K) bool /* ref: nonnil */) {
 		s.m.Range(func(key, value any) bool {
 			if !yield(key.(K)) {
 				return false
@@ -88,7 +90,7 @@ func (s *SyncMap[K, V]) Keys() iter.Seq[K] {
 	}
 }
 
-func (s *SyncMap[K, V]) Clone() *SyncMap[K, V] {
+func (s *SyncMap[K, V] /* ref: nonnil */) Clone() typeutil.DefPtr[SyncMap[K, V]] {
 	clone := &SyncMap[K, V]{}
 	s.m.Range(func(key, value any) bool {
 		clone.m.Store(key, value)

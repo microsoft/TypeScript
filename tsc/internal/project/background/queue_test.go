@@ -54,7 +54,7 @@ func TestQueue(t *testing.T) {
 		var executed []string
 		var mu sync.Mutex
 
-		q.Enqueue(context.Background(), func(ctx context.Context) {
+		q.Enqueue(context.Background(), func(ctx background.DefContext) {
 			mu.Lock()
 			executed = append(executed, "parent")
 			mu.Unlock()

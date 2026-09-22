@@ -6,14 +6,17 @@ import (
 	"errors"
 	"unsafe"
 
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 	"golang.org/x/sys/unix"
 )
 
 // walkState carries state shared across the whole walk so we only
 // allocate one read buffer per top-level walkDir, not one per directory.
 type walkState struct {
-	buf []byte
+	buf typeutil.DefSlice[byte]
 }
+
+type defWalkState = *walkState /* ref: nonnil */
 
 // walkDir walks dir, optionally recursively, invoking fn for each entry.
 // On Linux/BSDs it uses getdents/getdirentries directly so the d_type
@@ -41,7 +44,7 @@ func walkDir(dir string, recursive bool, fn func(path string, isDir bool) error)
 // the caller; iterateDir does not close it. Sharing fd as the openat
 // anchor for children avoids reopening the parent path once for the
 // listing and again for each child.
-func iterateDir(st *walkState, fd int, dirname string, recursive bool, fn func(path string, isDir bool) error) error {
+func iterateDir(st defWalkState, fd int, dirname string, recursive bool, fn func(path string, isDir bool) error) error {
 	if fn != nil {
 		if err := fn(dirname, true); err != nil {
 			return err
@@ -105,7 +108,7 @@ type unixDirent struct {
 // extracting d_type so callers can skip per-entry lstat on filesystems
 // that support it. The supplied buf is reused for every getdents
 // syscall in the loop and may be reused across calls.
-func readDirEntries(fd int, buf []byte) ([]unixDirent, error) {
+func readDirEntries(fd int, buf typeutil.DefSlice[byte]) ([]unixDirent, error) {
 	var entries []unixDirent
 	for {
 		n, err := unix.ReadDirent(fd, buf)
@@ -117,7 +120,7 @@ func readDirEntries(fd int, buf []byte) ([]unixDirent, error) {
 		}
 		data := buf[:n]
 		for len(data) > 0 {
-			dirent := (*unix.Dirent)(unsafe.Pointer(&data[0]))
+			dirent := typeutil.NonNil((*unix.Dirent)(unsafe.Pointer(&data[0])))
 			reclen := reclenOf(dirent)
 			if reclen == 0 || int(reclen) > len(data) {
 				break

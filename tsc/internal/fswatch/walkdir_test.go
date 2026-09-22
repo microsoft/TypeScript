@@ -8,9 +8,9 @@ import (
 	"testing"
 )
 
-type walkDirFunc = func(dir string, recursive bool, fn func(string, bool) error) error
+type walkDirFunc = func(dir string, recursive bool, fn func(string, bool) error) error /* ref: nonnil */
 
-func runWalkDirTest(t *testing.T, fn func(t *testing.T, walk walkDirFunc)) {
+func runWalkDirTest(t *testing.T, fn func(t *testing.T, walk walkDirFunc) /* ref: nonnil */) {
 	t.Helper()
 	t.Parallel()
 	for _, rt := range []struct {
@@ -205,7 +205,10 @@ func testWalkDirCallback(t *testing.T, walk walkDirFunc) {
 	}
 }
 
-func TestWalkDirCallbackError(t *testing.T) { runWalkDirTest(t, testWalkDirCallbackError) } //nolint:paralleltest // runWalkDirTest calls t.Parallel.
+func TestWalkDirCallbackError(t *testing.T) { //nolint:paralleltest // runWalkDirTest calls t.Parallel.
+	runWalkDirTest(t, testWalkDirCallbackError)
+}
+
 func testWalkDirCallbackError(t *testing.T, walk walkDirFunc) {
 	root := newTmpDir(t)
 	if err := os.WriteFile(filepath.Join(root, "a.txt"), []byte("a"), 0o644); err != nil {

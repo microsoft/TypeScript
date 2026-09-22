@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 	"gotest.tools/v3/assert"
 )
 
@@ -110,7 +111,7 @@ func TestOrderedMapClone(t *testing.T) {
 	m.Set(1, "one")
 	m.Set(2, "two")
 
-	clone := m.Clone()
+	clone := typeutil.NonNil(m.Clone())
 
 	assert.Assert(t, clone != m)
 	assert.Equal(t, clone.Size(), 2)
@@ -163,11 +164,11 @@ func TestOrderedMapUnmarshalJSON(t *testing.T) {
 
 	t.Run("UnmarshalJSONV2", func(t *testing.T) {
 		t.Parallel()
-		testOrderedMapUnmarshalJSON(t, func(in []byte, out any) error { return json.Unmarshal(in, out) })
+		testOrderedMapUnmarshalJSON(t, func(in []byte, out typeutil.DefAny) error { return json.Unmarshal(in, out) })
 	})
 }
 
-func testOrderedMapUnmarshalJSON(t *testing.T, unmarshal func([]byte, any) error) {
+func testOrderedMapUnmarshalJSON(t *testing.T, unmarshal func([]byte, typeutil.DefAny) error /* ref: nonnil */) {
 	var m collections.OrderedMap[string, any]
 	err := unmarshal([]byte(`{"a": 1, "b": "two", "c": { "d": 4 } }`), &m)
 	assert.NilError(t, err)

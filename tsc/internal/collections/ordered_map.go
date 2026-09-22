@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 // OrderedMap is an insertion ordered map.
@@ -31,7 +32,7 @@ func (*noCopy) Lock()   {}
 func (*noCopy) Unlock() {}
 
 // NewOrderedMapWithSizeHint creates a new OrderedMap with a hint for the number of elements it will contain.
-func NewOrderedMapWithSizeHint[K comparable, V any](hint int) *OrderedMap[K, V] {
+func NewOrderedMapWithSizeHint[K comparable, V any](hint int) typeutil.DefPtr[OrderedMap[K, V]] {
 	m := newMapWithSizeHint[K, V](hint)
 	return &m
 }
@@ -48,7 +49,7 @@ type MapEntry[K comparable, V any] struct {
 	Value V
 }
 
-func NewOrderedMapFromList[K comparable, V any](items []MapEntry[K, V]) *OrderedMap[K, V] {
+func NewOrderedMapFromList[K comparable, V any](items []MapEntry[K, V]) typeutil.DefPtr[OrderedMap[K, V]] {
 	mp := NewOrderedMapWithSizeHint[K, V](len(items))
 	for _, item := range items {
 		mp.Set(item.Key, item.Value)
@@ -57,7 +58,7 @@ func NewOrderedMapFromList[K comparable, V any](items []MapEntry[K, V]) *Ordered
 }
 
 // Set sets a key-value pair in the map.
-func (m *OrderedMap[K, V]) Set(key K, value V) {
+func (m *OrderedMap[K, V] /* ref: nonnil */) Set(key K, value V) {
 	if m.mp == nil {
 		m.mp = make(map[K]V)
 	}
@@ -69,19 +70,19 @@ func (m *OrderedMap[K, V]) Set(key K, value V) {
 }
 
 // Get retrieves a value from the map.
-func (m *OrderedMap[K, V]) Get(key K) (V, bool) {
+func (m *OrderedMap[K, V] /* ref: nonnil */) Get(key K) (V, bool) {
 	v, ok := m.mp[key]
 	return v, ok
 }
 
 // GetOrZero retrieves a value from the map, or returns the zero value of the value type if the key is not present.
-func (m *OrderedMap[K, V]) GetOrZero(key K) V {
+func (m *OrderedMap[K, V] /* ref: nonnil */) GetOrZero(key K) V {
 	return m.mp[key]
 }
 
 // EntryAt retrieves the key-value pair at the specified index.
-func (m *OrderedMap[K, V]) EntryAt(index int) (K, V, bool) {
-	if index < 0 || index >= len(m.keys) {
+func (m *OrderedMap[K, V] /* ref: nonnil */) EntryAt(index int) (K, V, bool) {
+	if m.keys == nil || index < 0 || index >= len(m.keys) {
 		var zero K
 		var zeroV V
 		return zero, zeroV, false
@@ -93,13 +94,13 @@ func (m *OrderedMap[K, V]) EntryAt(index int) (K, V, bool) {
 }
 
 // Has returns true if the map contains the key.
-func (m *OrderedMap[K, V]) Has(key K) bool {
+func (m *OrderedMap[K, V] /* ref: nonnil */) Has(key K) bool {
 	_, ok := m.mp[key]
 	return ok
 }
 
 // Delete removes a key-value pair from the map.
-func (m *OrderedMap[K, V]) Delete(key K) (V, bool) {
+func (m *OrderedMap[K, V] /* ref: nonnil */) Delete(key K) (V, bool) {
 	v, ok := m.mp[key]
 	if !ok {
 		var zero V
@@ -111,12 +112,12 @@ func (m *OrderedMap[K, V]) Delete(key K) (V, bool) {
 	// If we're just removing the first or last element, avoid shifting everything around.
 	if i == 0 {
 		var zero K
-		m.keys[0] = zero
-		m.keys = m.keys[1:]
+		m.keys[0] = zero    //ref:ignore m.mp[key] ok implies slice is not nil
+		m.keys = m.keys[1:] //ref:ignore m.mp[key] ok implies slice is not nil
 	} else if end := len(m.keys) - 1; i == end {
 		var zero K
-		m.keys[end] = zero
-		m.keys = m.keys[:end]
+		m.keys[end] = zero    //ref:ignore m.mp[key] ok implies slice is not nil
+		m.keys = m.keys[:end] //ref:ignore m.mp[key] ok implies slice is not nil
 	} else {
 		m.keys = slices.Delete(m.keys, i, i+1)
 	}
@@ -126,9 +127,9 @@ func (m *OrderedMap[K, V]) Delete(key K) (V, bool) {
 
 // Keys returns an iterator over the keys in the map.
 // A slice of the keys can be obtained by calling `slices.Collect`.
-func (m *OrderedMap[K, V]) Keys() iter.Seq[K] {
-	return func(yield func(K) bool) {
-		if m == nil {
+func (m *OrderedMap[K, V]) Keys() iter.Seq[K] /* ref: nonnil */ {
+	return func(yield func(K) bool /* ref: nonnil */) {
+		if m == nil || m.keys == nil {
 			return
 		}
 
@@ -144,9 +145,9 @@ func (m *OrderedMap[K, V]) Keys() iter.Seq[K] {
 
 // Values returns an iterator over the values in the map.
 // A slice of the values can be obtained by calling `slices.Collect`.
-func (m *OrderedMap[K, V]) Values() iter.Seq[V] {
-	return func(yield func(V) bool) {
-		if m == nil {
+func (m *OrderedMap[K, V]) Values() iter.Seq[V] /* ref: nonnil */ {
+	return func(yield func(V) bool /* ref: nonnil */) {
+		if m == nil || m.keys == nil {
 			return
 		}
 
@@ -161,9 +162,9 @@ func (m *OrderedMap[K, V]) Values() iter.Seq[V] {
 }
 
 // Entries returns an iterator over the key-value pairs in the map.
-func (m *OrderedMap[K, V]) Entries() iter.Seq2[K, V] {
-	return func(yield func(K, V) bool) {
-		if m == nil {
+func (m *OrderedMap[K, V]) Entries() iter.Seq2[K, V] /* ref: nonnil */ {
+	return func(yield func(K, V) bool /* ref: nonnil */) {
+		if m == nil || m.keys == nil {
 			return
 		}
 
@@ -180,7 +181,7 @@ func (m *OrderedMap[K, V]) Entries() iter.Seq2[K, V] {
 
 // Clear removes all key-value pairs from the map.
 // The space allocated for the map will be reused.
-func (m *OrderedMap[K, V]) Clear() {
+func (m *OrderedMap[K, V] /* ref: nonnil */) Clear() {
 	clear(m.keys)
 	m.keys = m.keys[:0]
 	clear(m.mp)
@@ -205,16 +206,18 @@ func (m *OrderedMap[K, V]) Clone() *OrderedMap[K, V] {
 	return &m2
 }
 
-func (m *OrderedMap[K, V]) clone() OrderedMap[K, V] {
+func (m *OrderedMap[K, V] /* ref: nonnil */) clone() OrderedMap[K, V] {
 	return OrderedMap[K, V]{
 		keys: slices.Clone(m.keys),
 		mp:   maps.Clone(m.mp),
 	}
 }
 
-var _ json.MarshalerTo = (*OrderedMap[string, string])(nil)
+func assertOrderedMapImplementsMarshalerTo(m typeutil.DefPtr[OrderedMap[string, string]]) {
+	var _ json.MarshalerTo = m
+}
 
-func (m *OrderedMap[K, V]) MarshalJSONTo(enc *json.Encoder) error {
+func (m *OrderedMap[K, V] /* ref: nonnil */) MarshalJSONTo(enc *json.Encoder /* ref: nonnil */) error {
 	if err := enc.WriteToken(json.BeginObject); err != nil {
 		return err
 	}
@@ -258,9 +261,11 @@ func resolveKeyName(k reflect.Value) (string, error) {
 	panic("unexpected map key type")
 }
 
-var _ json.UnmarshalerFrom = (*OrderedMap[string, string])(nil)
+func assertOrderedMapImplementsUnmarshalerFrom(m typeutil.DefPtr[OrderedMap[string, string]]) {
+	var _ json.UnmarshalerFrom = m
+}
 
-func (m *OrderedMap[K, V]) UnmarshalJSONFrom(dec *json.Decoder) error {
+func (m *OrderedMap[K, V] /* ref: nonnil */) UnmarshalJSONFrom(dec *json.Decoder /* ref: nonnil */) error {
 	token, err := dec.ReadToken()
 	if err != nil {
 		return err
@@ -292,13 +297,13 @@ func (m *OrderedMap[K, V]) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return nil
 }
 
-func DiffOrderedMaps[K comparable, V comparable](m1 *OrderedMap[K, V], m2 *OrderedMap[K, V], onAdded func(key K, value V), onRemoved func(key K, value V), onModified func(key K, oldValue V, newValue V)) {
+func DiffOrderedMaps[K comparable, V comparable](m1 typeutil.DefPtr[OrderedMap[K, V]], m2 typeutil.DefPtr[OrderedMap[K, V]], onAdded func(key K, value V) /* ref: nonnil */, onRemoved func(key K, value V) /* ref: nonnil */, onModified func(key K, oldValue V, newValue V) /* ref: nonnil */) {
 	DiffOrderedMapsFunc(m1, m2, func(a, b V) bool {
 		return a == b
 	}, onAdded, onRemoved, onModified)
 }
 
-func DiffOrderedMapsFunc[K comparable, V any](m1 *OrderedMap[K, V], m2 *OrderedMap[K, V], equalValues func(a, b V) bool, onAdded func(key K, value V), onRemoved func(key K, value V), onModified func(key K, oldValue V, newValue V)) {
+func DiffOrderedMapsFunc[K comparable, V any](m1 typeutil.DefPtr[OrderedMap[K, V]], m2 typeutil.DefPtr[OrderedMap[K, V]], equalValues func(a, b V) bool /* ref: nonnil */, onAdded func(key K, value V) /* ref: nonnil */, onRemoved func(key K, value V) /* ref: nonnil */, onModified func(key K, oldValue V, newValue V) /* ref: nonnil */) {
 	for k, v2 := range m2.Entries() {
 		if _, ok := m1.Get(k); !ok {
 			onAdded(k, v2)
