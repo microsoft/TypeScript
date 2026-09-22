@@ -26,7 +26,7 @@ import assert from "node:assert";
 
 export interface ExtensionAPI {
     onLanguageServerInitialized: vscode.Event<void>;
-    initializeAPIConnection(pipe?: string): Promise<string>;
+    initializeAPIConnection(pipe?: string, synchronous?: boolean): Promise<string>;
     registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable;
 }
 
@@ -79,8 +79,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
 
     const api: ExtensionAPI = {
         onLanguageServerInitialized: onLanguageServerInitialized,
-        async initializeAPIConnection(pipe?: string): Promise<string> {
-            return sessionManager.initializeAPIConnection(pipe);
+        async initializeAPIConnection(pipe?: string, synchronous?: boolean): Promise<string> {
+            return sessionManager.initializeAPIConnection(pipe, synchronous);
         },
         registerContentMappers(contributorId, contributions): vscode.Disposable {
             return sessionManager.registerContentMappers(contributorId, contributions);
