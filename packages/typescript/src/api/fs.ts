@@ -20,19 +20,19 @@ export interface FileSystemEntries {
 }
 
 export interface FileSystem {
-    directoryExists?: (directoryName: string) => boolean | undefined;
-    fileExists?: (fileName: string) => boolean | undefined;
-    getAccessibleEntries?: (directoryName: string) => FileSystemEntries | undefined;
+    directoryExists?: ((directoryName: string) => boolean | undefined) | undefined;
+    fileExists?: ((fileName: string) => boolean | undefined) | undefined;
+    getAccessibleEntries?: ((directoryName: string) => FileSystemEntries | undefined) | undefined;
     /**
      * Read a file's content.
      * - Return the file content as a `string` (including `""` for empty files).
      * - Return `null` to indicate the file does not exist (without falling back to the real FS).
      * - Return `undefined` to fall back to the real filesystem.
      */
-    readFile?: (fileName: string) => string | null | undefined;
-    realpath?: (path: string) => string | undefined;
-    writeFile?: (path: string, content: string) => void;
-    removeFile?: (path: string) => void;
+    readFile?: ((fileName: string) => string | null | undefined) | undefined;
+    realpath?: ((path: string) => string | undefined) | undefined;
+    writeFile?: ((path: string, content: string) => void) | undefined;
+    removeFile?: ((path: string) => void) | undefined;
 }
 
 /** The callback names supported by the Go server for virtual FS delegation. */
@@ -40,15 +40,15 @@ export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "ge
 
 export interface CreateFileSystemOptions {
     /** Complete directory listings. Full filesystems derive these from `files` when omitted. */
-    directories?: Record<string, RequestDirectoryEntries>;
-    symlinks?: Record<string, RequestSymlink>;
+    directories?: Record<string, RequestDirectoryEntries> | undefined;
+    symlinks?: Record<string, RequestSymlink> | undefined;
     /** Files or directory trees hidden from an underlying snapshot or host filesystem. */
-    removedPaths?: readonly string[];
+    removedPaths?: readonly string[] | undefined;
 }
 
 export interface CreateFileSystemWithLibOptions extends CreateFileSystemOptions {
     /** Default library directory used by a custom or non-embedded compiler executable. */
-    defaultLibraryPath?: string;
+    defaultLibraryPath?: string | undefined;
 }
 
 /**
@@ -57,7 +57,7 @@ export interface CreateFileSystemWithLibOptions extends CreateFileSystemOptions 
  */
 export type RequestFileEntries = readonly (readonly [id: DocumentIdentifier, content: string])[];
 
-/** Creates a full request filesystem, deriving directory listings when omitted. */
+/** Creates a full request filesystem. The server derives directory listings when omitted. */
 export function createFileSystem(
     files: RequestFileEntries,
     options: CreateFileSystemOptions = {},
@@ -91,8 +91,8 @@ export function createFileSystemWithLib(
     }
     return createRequestFileSystem("full", files, {
         symlinks,
-        ...(options.directories ? { directories: options.directories } : {}),
-        ...(options.removedPaths?.length ? { removedPaths: options.removedPaths } : {}),
+        directories: options.directories,
+        removedPaths: options.removedPaths?.length ? options.removedPaths : undefined,
     });
 }
 
@@ -118,58 +118,13 @@ function createRequestFileSystem(
         normalizedFiles.set(fileName, content);
     }
     const fileRecord = Object.fromEntries(normalizedFiles);
-    const directories = options.directories ?? (kind === "full" ? deriveDirectoryListings(fileRecord) : undefined);
     return {
         kind,
         files: fileRecord,
-        ...(directories ? { directories } : {}),
-        ...(options.symlinks ? { symlinks: options.symlinks } : {}),
-        ...(options.removedPaths?.length ? { removedPaths: [...options.removedPaths] } : {}),
+        directories: options.directories,
+        symlinks: options.symlinks,
+        removedPaths: options.removedPaths?.length ? [...options.removedPaths] : undefined,
     };
-}
-
-function deriveDirectoryListings(files: Record<string, string>): Record<string, RequestDirectoryEntries> {
-    const listings = new Map<string, { files: Set<string>; directories: Set<string>; }>();
-    const getListing = (directory: string) => {
-        let listing = listings.get(directory);
-        if (!listing) {
-            listing = { files: new Set(), directories: new Set() };
-            listings.set(directory, listing);
-        }
-        return listing;
-    };
-
-    for (const inputPath of Object.keys(files)) {
-        const filePath = normalizePath(inputPath);
-        const fileName = getBaseName(filePath);
-        let directory = getDirectory(filePath);
-        getListing(directory).files.add(fileName);
-
-        let parent = getDirectory(directory);
-        while (parent !== directory) {
-            getListing(parent).directories.add(getBaseName(directory));
-            directory = parent;
-            parent = getDirectory(directory);
-        }
-    }
-
-    return Object.fromEntries([...listings].map(([directory, listing]) => [directory, {
-        files: [...listing.files],
-        directories: [...listing.directories],
-    }]));
-}
-
-function getDirectory(path: string): string {
-    const components = getPathComponents(path);
-    if (components.length <= 1) return components[0] ?? "";
-    components.pop();
-    const root = components.shift()!;
-    return root + components.join("/");
-}
-
-function getBaseName(path: string): string {
-    const components = getPathComponents(path);
-    return components.at(-1) ?? "";
 }
 
 interface VDirectory {

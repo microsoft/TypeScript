@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -95,12 +96,12 @@ func (a *autoImportRegistryCloneHost) GetCurrentDirectory() string {
 }
 
 // GetDefaultProject implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetDefaultProject(path tspath.Path) (tspath.Path, *compiler.Program) {
+func (a *autoImportRegistryCloneHost) GetDefaultProject(path tspath.Path) (autoimport.ProjectID, *compiler.Program) {
 	project := a.projectCollection.GetDefaultProject(path)
 	if project == nil {
-		return "", nil
+		return nil, nil
 	}
-	return project.configFilePath, project.GetProgram()
+	return project.ID(), project.GetProgram()
 }
 
 // GetPackageJson implements autoimport.RegistryCloneHost.
@@ -135,8 +136,12 @@ func (a *autoImportRegistryCloneHost) GetPackageJson(fileName string) *packagejs
 }
 
 // GetProgramForProject implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetProgramForProject(projectPath tspath.Path) *compiler.Program {
-	project := a.projectCollection.GetProjectByPath(projectPath)
+func (a *autoImportRegistryCloneHost) GetProgramForProject(projectID autoimport.ProjectID) *compiler.Program {
+	id, ok := projectID.(ID)
+	if !ok {
+		panic(fmt.Sprintf("unexpected project ID type %T", projectID))
+	}
+	project := a.projectCollection.GetProject(id)
 	if project == nil {
 		return nil
 	}

@@ -5,6 +5,7 @@ import { ModuleDetectionKind } from "#enums/moduleDetectionKind";
 import { ModuleKind } from "#enums/moduleKind";
 import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
+import { ScriptKind } from "#enums/scriptKind";
 import { ScriptTarget } from "#enums/scriptTarget";
 import type { Path } from "../ast/index.ts";
 
@@ -13,6 +14,7 @@ export { ModuleDetectionKind } from "#enums/moduleDetectionKind";
 export { ModuleKind } from "#enums/moduleKind";
 export { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 export { NewLineKind } from "#enums/newLineKind";
+export { ScriptKind } from "#enums/scriptKind";
 export { ScriptTarget } from "#enums/scriptTarget";
 
 export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
@@ -28,6 +30,8 @@ export interface APIMethodInfo {
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
     parseConfigFile: APIMethod<ParseConfigFileParams, ConfigFileResponse>;
+    createSourceFile: APIMethod<CreateSourceFileParams, SourceFileResponse>;
+    createSourceFileFromFile: APIMethod<CreateSourceFileFromFileParams, SourceFileResponse>;
     transpileModule: APIMethod<TranspileParams, TranspileOutputResponse>;
     transpileModuleFromFile: APIMethod<TranspileFromFileParams, TranspileOutputResponse>;
     transpileDeclaration: APIMethod<TranspileParams, TranspileOutputResponse>;
@@ -279,6 +283,26 @@ export interface ParseConfigFileParams {
     file: DocumentIdentifier;
 }
 
+export interface CreateSourceFileParams {
+    fileName: string;
+    sourceText: string;
+    options: CreateSourceFileOptions;
+}
+
+/**
+ * SourceFileResponse contains the binary-encoded AST data for a source file.
+ * The Data field is base64-encoded binary data in the encoder's format.
+ */
+export interface SourceFileResponse {
+    /** Data is the base64-encoded binary AST data in the encoder's format. */
+    data: string;
+}
+
+export interface CreateSourceFileFromFileParams {
+    fileName: string;
+    options: CreateSourceFileOptions;
+}
+
 export interface TranspileParams {
     input: string;
     options: TranspileOptions;
@@ -431,15 +455,6 @@ export interface GetSourceFileParams {
     snapshot: number;
     project: ProjectId;
     file: DocumentIdentifier;
-}
-
-/**
- * SourceFileResponse contains the binary-encoded AST data for a source file.
- * The Data field is base64-encoded binary data in the encoder's format.
- */
-export interface SourceFileResponse {
-    /** Data is the base64-encoded binary AST data in the encoder's format. */
-    data: string;
 }
 
 export interface GetSourceFileNamesParams {
@@ -987,6 +1002,8 @@ export interface BatchRequest {
     method:
         | "batchRequests"
         | "createSnapshot"
+        | "createSourceFile"
+        | "createSourceFileFromFile"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1148,6 +1165,8 @@ export interface BatchResponse {
     method:
         | "batchRequests"
         | "createSnapshot"
+        | "createSourceFile"
+        | "createSourceFileFromFile"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1324,6 +1343,7 @@ export interface SnapshotRequestChangesParams {
      * tsconfig that contains it; if found, that configured project is loaded and
      * becomes the file's default project. Otherwise the file is loaded into the
      * inferred project (e.g. a node_modules d.ts not in any project's import graph).
+     * If a file cannot be loaded into any project, the request fails.
      */
     openFiles?: readonly DocumentIdentifier[] | undefined;
     /**
@@ -1367,7 +1387,10 @@ export interface RequestFileSystem {
     kind: "full" | "layer";
     /** Files maps file names to their complete contents. */
     files: Record<string, string>;
-    /** Directories maps directory names to complete listing results. */
+    /**
+     * Directories maps directory names to complete listing results. Directory
+     * structure implied by Files is derived when a listing is omitted.
+     */
     directories?: Record<string, RequestDirectoryEntries> | undefined;
     /** Symlinks maps link paths to targets in this filesystem or the host filesystem. */
     symlinks?: Record<string, RequestSymlink> | undefined;
@@ -1519,9 +1542,9 @@ export interface ProjectReference {
     /** Path is a normalized path on disk. */
     path: string;
     /** OriginalPath is the path as it was originally written. */
-    originalPath: string;
+    originalPath?: string | undefined;
     /** Circular indicates that this reference is intended to form a circularity. */
-    circular: boolean;
+    circular?: boolean | undefined;
 }
 
 export interface TypeAcquisition {
@@ -1529,6 +1552,10 @@ export interface TypeAcquisition {
     include?: string[] | undefined;
     exclude?: string[] | undefined;
     disableFilenameBasedTypeAcquisition?: boolean | undefined;
+}
+
+export interface CreateSourceFileOptions {
+    scriptKind?: ScriptKind | undefined;
 }
 
 export interface TranspileOptions {
@@ -1580,7 +1607,8 @@ export interface EmitOutputFile {
 
 export interface CreateSnapshotProgramParams {
     rootFiles: readonly DocumentIdentifier[] | null;
-    options: CreateProgramOptions;
+    compilerOptions: CompilerOptions;
+    options?: CreateProgramOptions | undefined;
     /** Incremental restores persistent diagnostic and emit state from the configured build info file. */
     incremental?: boolean | undefined;
 }
@@ -1588,7 +1616,8 @@ export interface CreateSnapshotProgramParams {
 export interface ReconfigureSnapshotProgramParams {
     id: SyntheticProjectId;
     rootFiles: readonly DocumentIdentifier[] | null;
-    options: CreateProgramOptions;
+    compilerOptions: CompilerOptions;
+    options?: CreateProgramOptions | undefined;
 }
 
 export interface IncrementalOperationParams {
@@ -1644,7 +1673,6 @@ export interface CompletionEntryLabelDetailsResponse {
 }
 
 export interface CreateProgramOptions {
-    compilerOptions: CompilerOptions;
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
 }

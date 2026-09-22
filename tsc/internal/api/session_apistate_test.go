@@ -7,10 +7,23 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
+
+func configuredProjectID(path string) project.ID {
+	return project.ConfiguredProjectID(tspath.Path(path)).AsID()
+}
+
+func inferredProjectID() project.ID {
+	return project.ID("/dev/null/inferred")
+}
+
+func syntheticProjectID(id int) project.SyntheticProjectID {
+	return project.NewSyntheticProjectID(id)
+}
 
 func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	t.Parallel()
@@ -63,7 +76,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(removed.Projects), 0)
-	assert.DeepEqual(t, removed.Changes.RemovedProjects, []ProjectID{ProjectID(configFileName)})
+	assert.DeepEqual(t, removed.Changes.RemovedProjects, []project.ID{configuredProjectID(configFileName)})
 	assert.Equal(t, session.openProjects.Len(), 0)
 
 	session.Close()
@@ -80,6 +93,19 @@ func TestGetCurrentLanguageServerSnapshotRejectsStandaloneSession(t *testing.T) 
 
 	_, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{})
 	assert.ErrorContains(t, err, "requires an LSP-connected API session")
+}
+
+func TestOpenProjectRejectsReservedProjectID(t *testing.T) {
+	t.Parallel()
+
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{}, nil, &projecttestutil.TypingsInstallerOptions{})
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	_, err := session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/dev/null/inferred"}},
+	})
+	assert.ErrorContains(t, err, "invalid configured project ID")
 }
 
 func TestGetCurrentLanguageServerSnapshotCloseAndReopenProject(t *testing.T) {
@@ -196,8 +222,8 @@ func TestGetCurrentLanguageServerSnapshotReportsOpenedFilesInRequestOrder(t *tes
 	first, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{Changes: changes})
 	assert.NilError(t, err)
 	assert.Equal(t, len(*first.Operation.OpenedFiles), 2)
-	assert.Equal(t, (*first.Operation.OpenedFiles)[0].Project, ProjectID("/dev/null/inferred"))
-	assert.Equal(t, (*first.Operation.OpenedFiles)[1].Project, ProjectID("/home/projects/p/tsconfig.json"))
+	assert.Equal(t, (*first.Operation.OpenedFiles)[0].Project, inferredProjectID())
+	assert.Equal(t, (*first.Operation.OpenedFiles)[1].Project, configuredProjectID("/home/projects/p/tsconfig.json"))
 	assert.NilError(t, utils.FS().WriteFile(configuredFile, `export const configured = 2;`))
 	projectSession.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{
 		Uri:  DocumentIdentifier{FileName: configuredFile}.ToURI(projectSession.GetCurrentDirectory()),
@@ -229,10 +255,8 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 	created, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -242,12 +266,42 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 
 	removed, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id), SyntheticProjectID(created.Projects[0].Id)},
+			RemovePrograms: []project.SyntheticProjectID{syntheticProjectID(1), syntheticProjectID(1)},
 		},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(removed.Projects), 0)
 	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
+}
+
+func TestOpenFilePreservesWindowsDriveLetterCase(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "D:/repo/index.ts"
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		"D:/repo/tsconfig.json": "{}",
+		fileName:                "export const value = 1;",
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	init.Options.CurrentDirectory = "D:/repo"
+	projectSession := project.NewSession(init)
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	response, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
+	})
+	assert.NilError(t, err)
+
+	project := response.Projects[0]
+	snapshot, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	program, err := snapshot.getProgram(project.Id)
+	assert.NilError(t, err)
+	assert.Equal(t, program.GetSourceFile(fileName).FileName(), fileName)
 }
 
 func TestClosingAPISessionRemovesCreatedLanguageServerPrograms(t *testing.T) {
@@ -261,10 +315,8 @@ func TestClosingAPISessionRemovesCreatedLanguageServerPrograms(t *testing.T) {
 	_, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -283,13 +335,11 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	defer projectSession.Close()
 
 	owner := NewLSPSession(projectSession, nil)
-	created, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+	_, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -298,7 +348,7 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	other := NewLSPSession(projectSession, nil)
 	_, err = other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id)},
+			RemovePrograms: []project.SyntheticProjectID{syntheticProjectID(1)},
 		},
 	})
 	assert.NilError(t, err)
@@ -322,22 +372,22 @@ func TestLanguageServerProgramReconfigurationIsIsolatedByAPISession(t *testing.T
 	created, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
 	assert.NilError(t, err)
-	programID := SyntheticProjectID(created.Projects[0].Id)
+	programID := project.SyntheticProjectID(created.Projects[0].Id)
 
 	other := NewLSPSession(projectSession, nil)
 	defer other.Close()
 	_, err = other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
-				Id:        programID,
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue}},
+				Id:              programID,
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
 			}},
 		},
 	})

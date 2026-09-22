@@ -27,6 +27,7 @@ import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
+import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
@@ -81,6 +82,7 @@ import type {
     CreateSnapshotParams,
     CreateSnapshotProgramParams,
     CreateSnapshotResponse,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -175,7 +177,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -193,6 +195,7 @@ export type {
     ConfiguredProjectId,
     CreateProgramOptions,
     CreateSnapshotParams,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -250,9 +253,9 @@ export type {
 };
 
 export interface TranspileOptions {
-    compilerOptions?: CompilerOptions;
-    fileName?: string;
-    reportDiagnostics?: boolean;
+    compilerOptions?: CompilerOptions | undefined;
+    fileName?: string | undefined;
+    reportDiagnostics?: boolean | undefined;
 }
 
 export interface TranspileOutput {
@@ -262,6 +265,7 @@ export interface TranspileOutput {
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
+import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 import {
     type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
@@ -273,15 +277,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
     private currentDirectory: string | undefined;
+    private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
+    readonly printer: Printer;
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
+        this.printer = new Printer(this.client);
         this.internal = new InternalAPI(this.client, this.ensureInitialized);
     }
 
@@ -488,6 +495,60 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    get createSourceFile(): {
+        (fileName: string, sourceText: string, options?: CreateSourceFileOptions): SourceFile;
+        gen(fileName: string, sourceText: string, options?: CreateSourceFileOptions): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createSourceFile",
+            function (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): SourceFile {
+                owner.ensureInitialized();
+                const data = owner.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
+                if (!data) {
+                    throw new Error("createSourceFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+            function* (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileName, sourceText, options }));
+                if (!data) {
+                    throw new Error("createSourceFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+        );
+    }
+
+    get createSourceFileFromFile(): {
+        (file: DocumentIdentifier, options?: CreateSourceFileOptions): SourceFile;
+        gen(file: DocumentIdentifier, options?: CreateSourceFileOptions): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createSourceFileFromFile",
+            function (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): SourceFile {
+                owner.ensureInitialized();
+                const data = owner.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
+                if (!data) {
+                    throw new Error("createSourceFileFromFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+            function* (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFileFromFile", { fileName: resolveFileName(file), options }));
+                if (!data) {
+                    throw new Error("createSourceFileFromFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+        );
+    }
+
     get transpileModule(): {
         (input: string, options?: TranspileOptions): TranspileOutput;
         gen(input: string, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
@@ -642,6 +703,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     snapshot: baseSnapshot.id,
                     changes: toCreateSnapshotRequest(params),
                 });
+                if (data.snapshot === baseSnapshot.id) {
+                    owner.client.apiRequest("release", { snapshot: data.snapshot });
+                    return baseSnapshot;
+                }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,
@@ -669,6 +734,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     snapshot: baseSnapshot.id,
                     changes: toCreateSnapshotRequest(params),
                 });
+                if (data.snapshot === baseSnapshot.id) {
+                    yield* apiRequest("release", { snapshot: data.snapshot });
+                    return baseSnapshot;
+                }
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,
@@ -729,8 +798,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", {
-                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes } : {}),
+                baseSnapshot: baseSnapshot?.id,
+                changes,
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -765,8 +834,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
-                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes } : {}),
+                baseSnapshot: baseSnapshot?.id,
+                changes,
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -934,26 +1003,26 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     /** Creates a program from current filesystem state. */
     get createProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
+            function (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program {
                 owner.ensureInitialized();
 
                 const snapshot = owner.createSnapshot({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
                 return owner.getOwnedCreatedProgram(snapshot, "createProgram");
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
                 const snapshot = yield* owner.createSnapshot.gen({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
                 return owner.getOwnedCreatedProgram(snapshot, "createProgram");
             },
@@ -965,18 +1034,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
      * the build info file configured by `tsBuildInfoFile`.
      */
     get createIncrementalProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): IncrementalProgram;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, IncrementalProgram, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): IncrementalProgram;
+        gen(rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, IncrementalProgram, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createIncrementalProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): IncrementalProgram {
+            function (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): IncrementalProgram {
                 owner.ensureInitialized();
 
                 const snapshot = owner.createSnapshot({
-                    createPrograms: [{ rootFiles, options: createProgramOptions, incremental: true }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions, incremental: true }],
                 });
                 const program = owner.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
                 if (!(program instanceof IncrementalProgram)) {
@@ -985,11 +1054,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 }
                 return program;
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, IncrementalProgram, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, IncrementalProgram, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
                 const snapshot = yield* owner.createSnapshot.gen({
-                    createPrograms: [{ rootFiles, options: createProgramOptions, incremental: true }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions, incremental: true }],
                 });
                 const program = owner.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
                 if (!(program instanceof IncrementalProgram)) {
@@ -1089,9 +1158,9 @@ export class InternalAPI {
 type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
 
 export interface SnapshotOperation {
-    readonly createdPrograms?: readonly Program<SyntheticProjectId>[];
-    readonly openedFiles?: readonly SnapshotOpenedFileOperation[];
-    readonly incrementalOperations?: readonly IncrementalOperationResult[];
+    readonly createdPrograms?: readonly Program<SyntheticProjectId>[] | undefined;
+    readonly openedFiles?: readonly SnapshotOpenedFileOperation[] | undefined;
+    readonly incrementalOperations?: readonly IncrementalOperationResult[] | undefined;
 }
 
 export interface IncrementalOperationResult {
@@ -1103,21 +1172,41 @@ export interface SnapshotOpenedFileOperation {
     readonly project: Project;
 }
 
+/** Replaces every element of a tuple while preserving its length and index structure. */
 type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
+/**
+ * Keeps `Tuple` as an inference target while contextually typing each element from
+ * `Elements`. The mapped intersection supplies nested completions and excess-property
+ * checks without widening an inferred tuple to an array.
+ */
+type ContextualizeTuple<
+    Tuple extends readonly unknown[] | undefined,
+    Elements extends readonly unknown[] | undefined,
+> =
+    & Tuple
+    & {
+        readonly [Index in keyof Tuple]: NonNullable<Elements>[number];
+    };
+
+/** Substitutes the operation arrays with contextually typed, tuple-preserving versions. */
 type SnapshotOperationParams<
     Params extends CreateSnapshotParams,
     CreatePrograms extends Params["createPrograms"],
     OpenFiles extends Params["openFiles"],
     IncrementalOperations extends Params["incrementalOperations"],
 > = Omit<Params, "createPrograms" | "openFiles" | "incrementalOperations"> & {
-    createPrograms?: CreatePrograms;
-    openFiles?: OpenFiles;
-    incrementalOperations?: IncrementalOperations;
+    createPrograms?: ContextualizeTuple<CreatePrograms, Params["createPrograms"]> | undefined;
+    openFiles?: ContextualizeTuple<OpenFiles, Params["openFiles"]> | undefined;
+    incrementalOperations?: ContextualizeTuple<IncrementalOperations, Params["incrementalOperations"]> | undefined;
 };
 
+/**
+ * Refines a snapshot's operation results to required tuples when the corresponding
+ * operation arrays were supplied, preserving their lengths for indexed access.
+ */
 type SnapshotForOperationResults<
     CreatePrograms extends CreateSnapshotParams["createPrograms"],
     OpenFiles extends CreateSnapshotParams["openFiles"],
@@ -1130,6 +1219,7 @@ type SnapshotForOperationResults<
         & (IncrementalOperations extends readonly unknown[] ? { readonly incrementalOperations: MapTupleTo<IncrementalOperations, IncrementalOperationResult>; } : unknown);
 };
 
+/** Derives the refined snapshot result type from a complete operation parameter type. */
 export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
     Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
     Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined,
@@ -1182,19 +1272,15 @@ export class Snapshot {
         }
 
         this.operation = {
-            ...(data.operation.createdPrograms ? { createdPrograms: data.operation.createdPrograms.map(projectId => this.requireProject(projectId).program) } : {}),
-            ...(data.operation.openedFiles ? { openedFiles: data.operation.openedFiles.map(result => ({ project: this.requireProject(result.project) })) } : {}),
-            ...(data.operation.incrementalOperations
-                ? {
-                    incrementalOperations: data.operation.incrementalOperations.map(operation => {
-                        const program = this.requireProject(operation.program).program;
-                        if (!(program instanceof IncrementalProgram)) {
-                            throw new Error(`Snapshot operation returned non-incremental program '${operation.program}'`);
-                        }
-                        return { program, result: toEmitResult(operation.result) };
-                    }),
+            createdPrograms: data.operation.createdPrograms?.map(projectId => this.requireProject(projectId).program),
+            openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
+            incrementalOperations: data.operation.incrementalOperations?.map(operation => {
+                const program = this.requireProject(operation.program).program;
+                if (!(program instanceof IncrementalProgram)) {
+                    throw new Error(`Snapshot operation returned non-incremental program '${operation.program}'`);
                 }
-                : {}),
+                return { program, result: toEmitResult(operation.result) };
+            }),
         };
 
         this.internal = new SnapshotInternalAPI(this.id, client);
@@ -1959,7 +2045,6 @@ export class Project<Id extends ProjectId = ProjectId> {
 
     readonly program: Program<Id>;
     readonly checker: Checker;
-    readonly emitter: Emitter;
     readonly languageService: LanguageService;
     private client: Client;
     private snapshotId: number;
@@ -2002,7 +2087,6 @@ export class Project<Id extends ProjectId = ProjectId> {
             client,
             objectRegistry,
         );
-        this.emitter = new Emitter(client);
         this.languageService = new LanguageService(snapshotId, this, client, objectRegistry);
     }
 
@@ -2435,11 +2519,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 }
 
                 // Fetch from server
-                const binaryData = owner.client.apiRequestBinary("getSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    file,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("getSourceFile", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        file,
+                    }),
+                );
                 if (!binaryData) {
                     return undefined;
                 }
@@ -2840,11 +2926,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 return new RemoteSourceFile(binaryData, owner.decoder) as unknown as SourceFile;
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("getConfigSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    file,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("getConfigSourceFile", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        file,
+                    }),
+                );
                 if (!binaryData) {
                     return undefined;
                 }
@@ -4596,13 +4684,15 @@ export class Checker {
                 return decodeNode(binaryData) as TypeNode;
             },
             function* (type: Type, enclosingDeclaration?: Node, flags?: number): Generator<ProtocolRequest, TypeNode | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("typeToTypeNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
-                    flags,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("typeToTypeNode", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        type: type.id,
+                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
             },
@@ -4630,14 +4720,16 @@ export class Checker {
                 return decodeNode(binaryData) as Node;
             },
             function* (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Node | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("signatureToSignatureDeclaration", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signature: signature.id,
-                    kind,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
-                    flags,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("signatureToSignatureDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        signature: signature.id,
+                        kind,
+                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
             },
@@ -5707,7 +5799,7 @@ export interface PrintNodeOptions {
     terminateUnterminatedLiterals?: boolean | undefined;
 }
 
-export class Emitter {
+export class Printer {
     private client: Client;
 
     constructor(client: Client) {
@@ -5734,6 +5826,37 @@ export class Emitter {
             },
             function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 const encoded = encodeNode(node);
+                const base64 = uint8ArrayToBase64(encoded);
+                return yield* apiRequest("printNode", {
+                    data: base64,
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                });
+            },
+        );
+    }
+
+    get printFile(): {
+        (sourceFile: SourceFile, options?: PrintNodeOptions): string;
+        gen(sourceFile: SourceFile, options?: PrintNodeOptions): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "printFile",
+            function (sourceFile: SourceFile, options: PrintNodeOptions = {}): string {
+                const encoded = encodeNode(sourceFile);
+                const base64 = uint8ArrayToBase64(encoded);
+                return owner.client.apiRequest("printNode", {
+                    data: base64,
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                });
+            },
+            function* (sourceFile: SourceFile, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                const encoded = encodeNode(sourceFile);
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
                     data: base64,

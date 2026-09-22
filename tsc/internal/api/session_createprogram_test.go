@@ -9,8 +9,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -28,10 +28,8 @@ func TestCreateSnapshotUsesIndependentRoots(t *testing.T) {
 
 	firstResponse, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
-			Options: CreateProgramOptions{
-				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-			},
+			RootFiles:       []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 		}},
 	})
 	assert.NilError(t, err)
@@ -64,22 +62,20 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{
 			{
-				RootFiles: []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
 			},
 			{
-				RootFiles: []DocumentIdentifier{{FileName: fileB}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileB}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			},
 		},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(response.Projects), 2)
-	assert.DeepEqual(t, *response.Operation.CreatedPrograms, []SyntheticProjectID{"/dev/null/synthetic/1", "/dev/null/synthetic/2"})
+	assert.DeepEqual(t, *response.Operation.CreatedPrograms, []project.SyntheticProjectID{syntheticProjectID(1), syntheticProjectID(2)})
+	assert.Equal(t, response.Projects[0].ConfigFileName, "")
+	assert.Equal(t, response.Projects[1].ConfigFileName, "")
 	assert.DeepEqual(t, response.Projects[0].RootFiles, []string{fileA, fileB})
 	assert.Equal(t, response.Projects[0].CompilerOptions.Strict, core.TSTrue)
 	assert.DeepEqual(t, response.Projects[1].RootFiles, []string{fileB})
@@ -88,8 +84,34 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(snapshot.snapshot.CreatedPrograms()), 2)
 	for _, projectResponse := range response.Projects {
-		assert.Assert(t, snapshot.snapshot.ProjectCollection.GetProjectByPath(tspath.Path(projectResponse.Id)) != nil)
+		assert.Assert(t, snapshot.snapshot.ProjectCollection.GetProject(projectResponse.Id) != nil)
 	}
+}
+
+func TestCreateSnapshotPreservesWindowsRootDriveLetterCase(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "D:/repo/index.ts"
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		fileName: "export const value = 1;",
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	init.Options.CurrentDirectory = "D:/repo"
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:       []DocumentIdentifier{{URI: "file:///D%3A/repo/index.ts"}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		}},
+	})
+	assert.NilError(t, err)
+
+	snapshot, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	program, err := snapshot.getProgram(response.Projects[0].Id)
+	assert.NilError(t, err)
+	assert.Equal(t, program.GetSourceFile(fileName).FileName(), fileName)
 }
 
 func TestSnapshotOperationResponseOmitsUnrequestedFields(t *testing.T) {
@@ -130,8 +152,8 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 
 	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/a.ts"}},
-			Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+			RootFiles:       []DocumentIdentifier{{FileName: "/home/projects/p/a.ts"}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 		}},
 	})
 	assert.NilError(t, err)
@@ -141,14 +163,14 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 		Snapshot: created.Snapshot,
 		Changes: &CreateSnapshotParams{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
-				Id:        programID,
-				RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/b.ts"}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue}},
+				Id:              programID,
+				RootFiles:       []DocumentIdentifier{{FileName: "/home/projects/p/b.ts"}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
 			}},
 		},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, reconfigured.Projects[0].Id, ProjectID(programID))
+	assert.Equal(t, reconfigured.Projects[0].Id, project.ID(programID))
 	assert.DeepEqual(t, reconfigured.Projects[0].RootFiles, []string{"/home/projects/p/b.ts"})
 	assert.Equal(t, reconfigured.Projects[0].CompilerOptions.Strict, core.TSTrue)
 }
@@ -169,27 +191,27 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
-	options := func() CreateProgramOptions {
-		return CreateProgramOptions{CompilerOptions: core.CompilerOptions{
+	compilerOptions := func() core.CompilerOptions {
+		return core.CompilerOptions{
 			Declaration:     core.TSTrue,
 			Incremental:     core.TSTrue,
 			NoLib:           core.TSTrue,
 			OutDir:          "/home/projects/p/out",
 			RootDir:         "/home/projects/p",
 			TsBuildInfoFile: buildInfoFile,
-		}}
+		}
 	}
 
 	created, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles:   []DocumentIdentifier{{FileName: mainFile}},
-			Options:     options(),
-			Incremental: true,
+			RootFiles:       []DocumentIdentifier{{FileName: mainFile}},
+			CompilerOptions: compilerOptions(),
+			Incremental:     true,
 		}},
 	})
 	assert.NilError(t, err)
 	programID := (*created.Operation.CreatedPrograms)[0]
-	buildInfoText, err := session.handleGetBuildInfoEmit(ctx, &GetProjectDiagnosticsParams{Snapshot: created.Snapshot, Project: ProjectID(programID)})
+	buildInfoText, err := session.handleGetBuildInfoEmit(ctx, &GetProjectDiagnosticsParams{Snapshot: created.Snapshot, Project: programID.AsID()})
 	assert.NilError(t, err)
 	assert.Assert(t, len(buildInfoText) > 0)
 	_, buildInfoExists := sessionUtils.FS().ReadFile(buildInfoFile)
@@ -210,18 +232,18 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	assert.Assert(t, ok)
 	assert.Equal(t, writtenBuildInfo, buildInfoText)
 
-	firstEmit, err := session.handleEmit(ctx, &EmitParams{Snapshot: created.Snapshot, Project: ProjectID(programID)})
+	firstEmit, err := session.handleEmit(ctx, &EmitParams{Snapshot: created.Snapshot, Project: programID.AsID()})
 	assert.NilError(t, err)
 	assert.Assert(t, slices.Contains(firstEmit.EmittedFiles, buildInfoFile))
-	buildInfoAfterEmit, err := session.handleGetBuildInfoEmit(ctx, &GetProjectDiagnosticsParams{Snapshot: created.Snapshot, Project: ProjectID(programID)})
+	buildInfoAfterEmit, err := session.handleGetBuildInfoEmit(ctx, &GetProjectDiagnosticsParams{Snapshot: created.Snapshot, Project: programID.AsID()})
 	assert.NilError(t, err)
 	assert.Equal(t, buildInfoAfterEmit, buildInfoText)
 
 	restored, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles:   []DocumentIdentifier{{FileName: mainFile}},
-			Options:     options(),
-			Incremental: true,
+			RootFiles:       []DocumentIdentifier{{FileName: mainFile}},
+			CompilerOptions: compilerOptions(),
+			Incremental:     true,
 		}},
 	})
 	assert.NilError(t, err)
@@ -237,7 +259,7 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	assert.NilError(t, err)
 	dirtySnapshot, err := session.getSnapshotData(dirty.Snapshot)
 	assert.NilError(t, err)
-	dirtyProject, err := dirtySnapshot.getProject(ProjectID(restoredProgramID))
+	dirtyProject, err := dirtySnapshot.getProject(restoredProgramID.AsID())
 	assert.NilError(t, err)
 	_, isIncremental := dirtyProject.GetProgramLike().(*incremental.Program)
 	assert.Assert(t, isIncremental)
@@ -261,16 +283,16 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 		Snapshot: emittedSnapshot.Snapshot,
 		Changes: &CreateSnapshotParams{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
-				Id:        restoredProgramID,
-				RootFiles: []DocumentIdentifier{{FileName: mainFile}},
-				Options:   options(),
+				Id:              restoredProgramID,
+				RootFiles:       []DocumentIdentifier{{FileName: mainFile}},
+				CompilerOptions: compilerOptions(),
 			}},
 		},
 	})
 	assert.NilError(t, err)
 	reconfiguredSnapshot, err := session.getSnapshotData(reconfigured.Snapshot)
 	assert.NilError(t, err)
-	reconfiguredProject, err := reconfiguredSnapshot.getProject(ProjectID(restoredProgramID))
+	reconfiguredProject, err := reconfiguredSnapshot.getProject(restoredProgramID.AsID())
 	assert.NilError(t, err)
 	_, isIncremental = reconfiguredProject.GetProgramLike().(*incremental.Program)
 	assert.Assert(t, isIncremental)
@@ -302,7 +324,7 @@ func TestReconfigureSyntheticProgramValidation(t *testing.T) {
 
 	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{program},
-		RemovePrograms:      []SyntheticProjectID{program.Id},
+		RemovePrograms:      []project.SyntheticProjectID{program.Id},
 	})
 	assert.ErrorContains(t, err, "cannot be reconfigured and removed")
 
@@ -338,9 +360,9 @@ func TestCreateSnapshotRejectsRemovingProgramFromIndependentRoot(t *testing.T) {
 	defer session.Close()
 
 	_, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		RemovePrograms: []SyntheticProjectID{"/dev/null/synthetic/1"},
+		RemovePrograms: []project.SyntheticProjectID{syntheticProjectID(1)},
 	})
-	assert.ErrorContains(t, err, "synthetic program not found for removal: 1")
+	assert.ErrorContains(t, err, "synthetic program not found for removal: /dev/null/synthetic/1")
 }
 
 func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
@@ -354,8 +376,8 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 
 	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{FileName: fileName}},
-			Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+			RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 		}},
 	})
 	assert.NilError(t, err)
@@ -375,7 +397,7 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 	ensured, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: dirty.Snapshot,
 		Changes: &CreateSnapshotParams{
-			EnsurePrograms: &EnsurePrograms{Projects: []ProjectID{projectID}},
+			EnsurePrograms: &EnsurePrograms{Projects: []project.ID{projectID}},
 		},
 	})
 	assert.NilError(t, err)

@@ -496,10 +496,10 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return "DocumentIdentifier"
 	case r.apiPackagePath + ".EnsurePrograms":
 		return "EnsurePrograms"
-	case r.apiPackagePath + ".ProjectID":
+	case "github.com/microsoft/TypeScript/tsc/internal/project.ID":
 		r.importTypeOnly("Path", "../ast/index.ts")
 		return "ProjectId"
-	case r.apiPackagePath + ".SyntheticProjectID":
+	case "github.com/microsoft/TypeScript/tsc/internal/project.SyntheticProjectID":
 		return "SyntheticProjectId"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
@@ -523,6 +523,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importType("NewLineKind", "#enums/newLineKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptTarget":
 		return r.importType("ScriptTarget", "#enums/scriptTarget")
+	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptKind":
+		return r.importType("ScriptKind", "#enums/scriptKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/collections.OrderedMap":
 		if named.TypeArgs().Len() != 2 {
 			return "Record<string, unknown>"
