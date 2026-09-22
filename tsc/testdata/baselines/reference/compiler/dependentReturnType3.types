@@ -371,7 +371,7 @@ class NewSettingsBase {
 >Meteor : { settings: { [s: string]: any; }; }
 >settings : { [s: string]: any; }
 >reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
->(items: SettingComposedValue<T>[], key) => {				const value = Meteor.settings[key];				if (_id.test(key)) {					items.push({						key,						value,					});				}				return items;			} : (items: SettingComposedValue<T>[], key: string) => SettingComposedValue<T>[]
+>(items: SettingComposedValue<T>[], key) => {				const value = Meteor.settings[key];				if (_id.test(key)) {					items.push({						key,						value,					});				}				return items;			} : (items: SettingComposedValue<T>[], key: string) => C extends undefined ? I extends RegExp ? SettingComposedValue<T>[] : never : never
 >items : SettingComposedValue<T>[]
 >key : string
 

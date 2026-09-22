@@ -121,7 +121,7 @@ function createKatexMessageRendering(options, _isMessage) {
 >_isMessage : T
 
         return (/** @type {IMessage} */ message) => instance.renderMessage(message); // Ok
->(/** @type {IMessage} */ message) => instance.renderMessage(message) : (message: IMessage) => IMessage
+>(/** @type {IMessage} */ message) => instance.renderMessage(message) : (message: IMessage) => T extends true ? IMessage : never
 >message : IMessage
 >instance.renderMessage(message) : IMessage
 >instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
@@ -130,7 +130,7 @@ function createKatexMessageRendering(options, _isMessage) {
 >message : IMessage
     }
     return (/** @type {string} */ message) => instance.renderMessage(message); // Ok
->(/** @type {string} */ message) => instance.renderMessage(message) : (message: string) => string
+>(/** @type {string} */ message) => instance.renderMessage(message) : (message: string) => T extends false ? string : never
 >message : string
 >instance.renderMessage(message) : string
 >instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
@@ -381,7 +381,7 @@ class NewSettingsBase {
 >Meteor : { settings: { [s: string]: any; }; }
 >settings : { [s: string]: any; }
 >reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
->(/** @type {SettingComposedValue<T>[]} */ items, key) => {                const value = Meteor.settings[key];                if (_id.test(key)) {                    items.push({ key, value });                }                return items;            } : (items: SettingComposedValue<T>[], key: string) => SettingComposedValue<T>[]
+>(/** @type {SettingComposedValue<T>[]} */ items, key) => {                const value = Meteor.settings[key];                if (_id.test(key)) {                    items.push({ key, value });                }                return items;            } : (items: SettingComposedValue<T>[], key: string) => C extends undefined ? I extends RegExp ? SettingComposedValue<T>[] : never : never
 >items : SettingComposedValue<T>[]
 >key : string
 

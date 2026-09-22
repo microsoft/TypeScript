@@ -770,11 +770,11 @@ function capitalize<T extends string | string[]>(
 
     } else {
         return input.map(elt => capitalize(elt)); // Ok
->input.map(elt => capitalize(elt)) : string[]
+>input.map(elt => capitalize(elt)) : (T extends string[] ? string : never)[]
 >input.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >input : string[]
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->elt => capitalize(elt) : (elt: string) => string
+>elt => capitalize(elt) : (elt: string) => T extends string[] ? string : never
 >elt : string
 >capitalize(elt) : string
 >capitalize : <T extends string | string[]>(input: T) => T extends string[] ? string[] : T extends string ? string : never

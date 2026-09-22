@@ -4232,22 +4232,8 @@ func (c *Checker) checkReturnExpression(container *ast.Node, unwrappedReturnType
 	var narrowedTypeParameters []*Type
 	var narrowedTypes []*Type
 	for _, narrowable := range narrowableTypeParameters {
-		reference := narrowable.reference
-		reference.Parent = narrowPosition.Parent
-		reference.FlowNodeData().FlowNode = narrowFlowNode
-		// Set the symbol of the synthetic reference. This allows us to get its type at a location where the reference may be shadowed.
-		baseReference := reference
-		for ast.IsAccessExpression(baseReference) {
-			baseReference = baseReference.Expression()
-		}
-		c.symbolNodeLinks.Get(baseReference).resolvedSymbol = narrowable.symbol
-		initialType := c.getNarrowableTypeForReferenceEx(narrowable.typeParameter, reference, CheckModeNormal, true /*forReturnTypeNarrowing*/)
-		if initialType == narrowable.typeParameter {
-			continue
-		}
-		narrowedType := c.getFlowTypeOfReference(reference, initialType)
-		// If attempting to narrow the expression type did not produce a narrower type, discard this type parameter from narrowing.
-		if narrowedType.flags&TypeFlagsAnyOrUnknown != 0 || c.isErrorType(narrowedType) || narrowedType == narrowable.typeParameter || narrowedType == c.getBaseConstraintOrType(narrowable.typeParameter) {
+		narrowedType := c.getNarrowedTypeOfNarrowableTypeParameter(narrowable, narrowPosition, narrowFlowNode)
+		if narrowedType == nil {
 			continue
 		}
 		narrowedTypeParameters = append(narrowedTypeParameters, narrowable.typeParameter)
@@ -4287,8 +4273,8 @@ type typeParameterReferencePath struct {
 }
 
 // Narrowable type parameters have a union constraint and are syntactically used as the type of a single parameter in the function, and nothing else.
-func (c *Checker) getNarrowableTypeParameters(candidates []*Type) []narrowableTypeParameter {
-	var result []narrowableTypeParameter
+func (c *Checker) getNarrowableTypeParameters(candidates []*Type) []*narrowableTypeParameter {
+	var result []*narrowableTypeParameter
 	for _, typeParameter := range candidates {
 		constraint := c.getConstraintOfTypeParameter(typeParameter)
 		if constraint == nil || constraint.flags&TypeFlagsUnion == 0 || typeParameter.symbol == nil || len(typeParameter.symbol.Declarations) != 1 {
@@ -4327,7 +4313,7 @@ func (c *Checker) getNarrowableTypeParameters(candidates []*Type) []narrowableTy
 		if symbol == nil || symbol == c.unknownSymbol || reference == nil {
 			continue
 		}
-		result = append(result, narrowableTypeParameter{
+		result = append(result, &narrowableTypeParameter{
 			typeParameter: typeParameter,
 			symbol:        symbol,
 			reference:     reference,
@@ -20818,6 +20804,14 @@ func (c *Checker) getReturnTypeFromBody(fn *ast.Node, checkMode CheckMode) *Type
 		return c.errorType
 	}
 	functionFlags := ast.GetFunctionFlags(fn)
+	allTypeParams := c.appendTypeParameters(c.getOuterTypeParameters(fn, false /*includeThisTypes*/), fn.TypeParameters())
+	narrowableTypeParams := c.getNarrowableTypeParameters(allTypeParams)
+	if len(narrowableTypeParams) > 0 {
+		conditionalReturnType := c.getConditionalReturnTypeFromBody(fn, checkMode, body, functionFlags, narrowableTypeParams, allTypeParams)
+		if conditionalReturnType != nil {
+			return conditionalReturnType
+		}
+	}
 	isAsync := (functionFlags & ast.FunctionFlagsAsync) != 0
 	isGenerator := (functionFlags & ast.FunctionFlagsGenerator) != 0
 	var returnType *Type
@@ -20942,6 +20936,220 @@ func (c *Checker) getReturnTypeFromBody(fn *ast.Node, checkMode CheckMode) *Type
 		return c.createPromiseType(returnType)
 	}
 	return returnType
+}
+
+type narrowedTypeParam struct {
+	typeParam  *narrowableTypeParameter
+	constraint *Type
+}
+type returnConstraint struct {
+	returnType  *Type
+	constraints []*narrowedTypeParam
+}
+
+// !!! input: function with body
+// !!! checkmode should be Normal? When would we call `getReturnTypeFromBody` with another check mode?
+// !!! How do we get narrowable type params? Do we need to worry about causing circularities?
+func (c *Checker) getConditionalReturnTypeFromBody(
+	fn *ast.Node,
+	checkMode CheckMode,
+	body *ast.Node,
+	functionFlags ast.FunctionFlags,
+	typeParams []*narrowableTypeParameter,
+	outerTypeParams []*Type,
+) *Type {
+	if len(typeParams) == 0 {
+		return nil
+	}
+
+	var returnConstraints []*returnConstraint
+	switch {
+	case !ast.IsBlock(body):
+		c.collectConditionalConstraints(nil, body, &returnConstraints, typeParams, functionFlags, fn, checkMode)
+	default:
+		ast.ForEachReturnStatement(body, func(returnStatement *ast.Node) bool {
+			c.collectConditionalConstraints(returnStatement, returnStatement.Expression(), &returnConstraints, typeParams, functionFlags, fn, checkMode)
+			return false
+		})
+	}
+
+	trie := c.buildTrie(returnConstraints)
+	conditionalReturn := c.buildConditionalReturnType(trie, outerTypeParams, fn)
+	if conditionalReturn.flags&TypeFlagsConditional == 0 {
+		return nil
+	}
+	if !c.isNarrowableReturnType(conditionalReturn) {
+		return nil
+	}
+
+	// !!! HERE: validate that extends types don't overlap
+	return conditionalReturn
+}
+
+func (c *Checker) collectConditionalConstraints(
+	returnStmt *ast.Statement,
+	returnExpr *ast.Expression,
+	returnConstraints *[]*returnConstraint,
+	typeParams []*narrowableTypeParameter,
+	functionFlags ast.FunctionFlags,
+	fn *ast.Node,
+	checkMode CheckMode,
+) {
+	var expr *ast.Expression
+	if returnExpr != nil {
+		expr = ast.SkipParentheses(returnExpr)
+		if ast.IsConditionalExpression(expr) {
+			whenTrue := expr.AsConditionalExpression().WhenTrue
+			whenFalse := expr.AsConditionalExpression().WhenFalse
+			c.collectConditionalConstraints(returnStmt, whenTrue, returnConstraints, typeParams, functionFlags, fn, checkMode)
+			c.collectConditionalConstraints(returnStmt, whenFalse, returnConstraints, typeParams, functionFlags, fn, checkMode)
+			return
+		}
+	}
+	var returnType *Type
+	var position *ast.Node
+	var flowNode *ast.FlowNode
+	var constraints []*narrowedTypeParam
+	if expr == nil {
+		returnType = c.voidType
+		position = returnStmt
+		flowNode = getFlowNodeOfNode(position)
+	} else {
+		if functionFlags&ast.FunctionFlagsAsync != 0 && ast.IsAwaitExpression(expr) {
+			expr = ast.SkipParentheses(expr.Expression())
+		}
+		// Self-reference: skip
+		if ast.IsCallExpression(expr) && ast.IsIdentifier(expr.Expression()) && c.checkExpressionCached(expr.Expression()).symbol == c.getMergedSymbol(fn.Symbol()) &&
+			(!ast.IsFunctionExpressionOrArrowFunction(fn.Symbol().ValueDeclaration) || c.isConstantReference(expr.Expression())) {
+			return
+		}
+		t := c.checkExpressionCachedEx(expr, checkMode & ^CheckModeSkipGenericFunctions)
+		if functionFlags&ast.FunctionFlagsAsync != 0 {
+			// From within an async function you can return either a non-promise value or a promise. Any
+			// Promise/A+ compatible implementation will always assimilate any foreign promise, so the
+			// return type of the body should be unwrapped to its awaited type, which should be wrapped in
+			// the native Promise<T> type by the caller.
+			t = c.unwrapAwaitedType(c.checkAwaitedType(t, false /*withAlias*/, fn, diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member))
+		}
+		if t.flags&TypeFlagsNever != 0 {
+			return
+		}
+		if c.isConstContext(expr) {
+			t = c.getRegularTypeOfLiteralType(t)
+		}
+		returnType = t
+		position = returnExpr.Parent
+		flowNode = getFlowNodeOfNode(position)
+		if ast.IsConditionalExpression(returnExpr.Parent) {
+			conditional := returnExpr.Parent.AsConditionalExpression()
+			if conditional.WhenTrue == returnExpr {
+				flowNode = conditional.FlowNodeWhenTrue
+			} else {
+				flowNode = conditional.FlowNodeWhenFalse
+			}
+			position = returnExpr
+		}
+	}
+	constraints = make([]*narrowedTypeParam, 0, len(typeParams))
+
+	for _, typeParam := range typeParams {
+		constraints = append(constraints, &narrowedTypeParam{
+			typeParam:  typeParam,
+			constraint: c.getNarrowedTypeOfNarrowableTypeParameter(typeParam, position, flowNode),
+		})
+	}
+	*returnConstraints = append(*returnConstraints, &returnConstraint{returnType: returnType, constraints: constraints})
+}
+
+type edge struct {
+	next       *trie
+	constraint *Type
+	typeParam  *Type
+}
+
+type trie struct {
+	edges       []*edge
+	returnTypes []*Type
+}
+
+func (c *Checker) buildTrie(returnConstraints []*returnConstraint) *trie {
+	root := &trie{}
+	for _, returnConstraint := range returnConstraints {
+		cur := root
+	cons:
+		for _, constraint := range returnConstraint.constraints {
+			if constraint.constraint == nil {
+				continue
+			}
+			for _, edge := range cur.edges {
+				// !!! HERE: do we need to compare type parameters by symbol or enough by type identity?
+				// !!! HERE: compare constraint by typeIdenticalTo or type identity enough?
+				if edge.typeParam == constraint.typeParam.typeParameter && edge.constraint == constraint.constraint {
+					cur = edge.next
+					continue cons
+				}
+			}
+			newEdge := &edge{
+				next:       &trie{},
+				constraint: constraint.constraint,
+				typeParam:  constraint.typeParam.typeParameter,
+			}
+			cur.edges = append(cur.edges, newEdge)
+			cur = newEdge.next
+		}
+		cur.returnTypes = append(cur.returnTypes, returnConstraint.returnType)
+	}
+	return root
+}
+
+func (c *Checker) buildConditionalReturnType(tree *trie, outerTypeParameters []*Type, fn *ast.Node) *Type {
+	currentType := c.getUnionType(tree.returnTypes)
+	for _, edge := range slices.Backward(tree.edges) {
+		checkType := edge.typeParam
+		extendsType := edge.constraint
+		trueType := c.buildConditionalReturnType(edge.next, outerTypeParameters, fn)
+		falseType := currentType
+		root := &ConditionalRoot{
+			node:                c.factory.NewEmptyStatement(), // !!! HERE: connect this with fn somehow?
+			checkType:           checkType,
+			extendsType:         extendsType,
+			trueType:            trueType,
+			falseType:           falseType,
+			isDistributive:      true,
+			checkTuples:         false,
+			inferTypeParameters: nil,
+			outerTypeParameters: outerTypeParameters,
+			instantiations:      make(map[CacheHashKey]*Type),
+			alias:               nil,
+		}
+		currentType = c.newConditionalType(root, nil /*mapper*/, nil /*combinedMapper*/)
+		root.instantiations[getConditionalTypeKey(outerTypeParameters, nil /*alias*/, false /*forConstraint*/)] = currentType
+	}
+	return currentType
+}
+
+// Returns the narrowed type of the narrowable type parameter reference as if it occurred at position/flowNode.
+// If the type is not narrowed, returns nil.
+func (c *Checker) getNarrowedTypeOfNarrowableTypeParameter(narrowable *narrowableTypeParameter, position *ast.Node, flowNode *ast.FlowNode) *Type {
+	reference := narrowable.reference
+	reference.Parent = position.Parent
+	reference.FlowNodeData().FlowNode = flowNode
+	// Set the symbol of the synthetic reference. This allows us to get its type at a location where the reference may be shadowed.
+	baseReference := reference
+	for ast.IsAccessExpression(baseReference) {
+		baseReference = baseReference.Expression()
+	}
+	c.symbolNodeLinks.Get(baseReference).resolvedSymbol = narrowable.symbol
+	initialType := c.getNarrowableTypeForReferenceEx(narrowable.typeParameter, reference, CheckModeNormal, true /*forReturnTypeNarrowing*/)
+	if initialType == narrowable.typeParameter {
+		return nil
+	}
+	narrowedType := c.getFlowTypeOfReference(reference, initialType)
+	// If attempting to narrow the expression type did not produce a narrower type, discard this type parameter from narrowing.
+	if narrowedType.flags&TypeFlagsAnyOrUnknown != 0 || c.isErrorType(narrowedType) || narrowedType == narrowable.typeParameter || narrowedType == c.getBaseConstraintOrType(narrowable.typeParameter) {
+		return nil
+	}
+	return narrowedType
 }
 
 // Returns the aggregated list of return types, plus a bool indicating a never-returning function.
