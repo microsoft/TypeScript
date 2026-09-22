@@ -216,6 +216,38 @@ test("invocation fingerprints reuse metadata and invalidate writes and commands"
     }
 });
 
+test("fingerprint cache scopes can overlap", context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+    const input = path.join(directory, "input.ts");
+    fs.writeFileSync(input, "input");
+    const stats = context.mock.method(fs, "statSync");
+    syncBuiltinESMExports();
+    context.after(() => {
+        stats.mock.restore();
+        syncBuiltinESMExports();
+    });
+    const disableFirst = enableFileFingerprintCache();
+    const disableSecond = enableFileFingerprintCache();
+    try {
+        getFileFingerprint(input);
+        getFileFingerprint(input);
+        assert.equal(stats.mock.callCount(), 1);
+        disableFirst();
+        getFileFingerprint(input);
+        getFileFingerprint(input);
+        assert.equal(stats.mock.callCount(), 2);
+        disableSecond();
+        getFileFingerprint(input);
+        getFileFingerprint(input);
+        assert.equal(stats.mock.callCount(), 4);
+    }
+    finally {
+        disableSecond();
+        disableFirst();
+    }
+});
+
 test("command cache snapshots and generated files share invocation fingerprints", async context => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
