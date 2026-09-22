@@ -56,17 +56,19 @@ export default async function cache({
             ]),
         ].sort();
         const files: string[] = [];
+        const fingerprints = new Map<string, string>();
         const hash = createHash("sha256");
         for (const file of entries) {
             if (fs.statSync(file).isDirectory()) {
-                hash.update(JSON.stringify([file, "directory"]));
+                fingerprints.set(file, "directory");
             }
             else {
                 files.push(file);
-                hash.update(JSON.stringify([file, getFileFingerprint(file, fresh)]));
+                fingerprints.set(file, getFileFingerprint(file, fresh));
             }
+            hash.update(JSON.stringify([file, fingerprints.get(file)]));
         }
-        return { files, hash: hash.digest("hex") };
+        return { files, fingerprints, hash: hash.digest("hex") };
     };
     const before = snapshotInputs();
     const outputFiles = () => expand(outputs, cwd).filter(file => fs.statSync(file).isFile());
@@ -90,14 +92,36 @@ export default async function cache({
         console.log(`skipped ${commandText}: codegen outputs are already up to date`);
         return true;
     }
+    if (environment.TSGO_CODEGEN_DEBUG) {
+        console.log("codegen cache miss", JSON.stringify({
+            command: commandText,
+            inputHash: before.hash,
+            outputs: previous.map(file => ({ file: file.fileName, ...file.currentStatus(force) })),
+        }, undefined, 2));
+    }
 
     for (const file of previous) file.invalidate();
     for (const [command, ...args] of commands) {
         await run(command, args, { cwd, env: environment });
     }
     if (!complete()) throw new Error(`Generation did not produce all declared outputs: ${outputs.join(", ")}`);
-    if (snapshotInputs(true).hash === before.hash) {
+    const after = snapshotInputs(true);
+    if (after.hash === before.hash) {
         for (const file of artifacts(outputFiles())) file.markCurrent();
+    }
+    else if (environment.TSGO_CODEGEN_DEBUG) {
+        console.log("codegen inputs changed during generation", JSON.stringify({
+            command: commandText,
+            before: before.hash,
+            after: after.hash,
+            changed: [...new Set([...before.fingerprints.keys(), ...after.fingerprints.keys()])]
+                .filter(file => before.fingerprints.get(file) !== after.fingerprints.get(file))
+                .map(file => ({
+                    file,
+                    before: before.fingerprints.get(file),
+                    after: after.fingerprints.get(file),
+                })),
+        }, undefined, 2));
     }
     return false;
 }
