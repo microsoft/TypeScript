@@ -516,7 +516,7 @@ func TestRefCountingCaches(t *testing.T) {
 			})
 			assert.NilError(t, err)
 			defer baseSnapshot.Deref()
-			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
+			appProject := baseSnapshot.ProjectCollection.GetProject(ConfiguredProjectID(baseSnapshot.toPath(appConfigPath)).AsID())
 			assert.Assert(t, appProject != nil)
 
 			createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
@@ -560,7 +560,7 @@ func TestRefCountingCaches(t *testing.T) {
 			)
 			assert.NilError(t, err)
 			defer updatedProgramSnapshot.Deref()
-			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.GetProjectByPath(programProject.ID())
+			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.GetProject(programProject.ID())
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)
 			updatedReferences := updatedProgramProject.Program.GetResolvedProjectReferences()

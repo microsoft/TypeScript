@@ -496,10 +496,10 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return "DocumentIdentifier"
 	case r.apiPackagePath + ".EnsurePrograms":
 		return "EnsurePrograms"
-	case r.apiPackagePath + ".ProjectID":
+	case "github.com/microsoft/TypeScript/tsc/internal/project.ID":
 		r.importTypeOnly("Path", "../ast/index.ts")
 		return "ProjectId"
-	case r.apiPackagePath + ".SyntheticProjectID":
+	case "github.com/microsoft/TypeScript/tsc/internal/project.SyntheticProjectID":
 		return "SyntheticProjectId"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
