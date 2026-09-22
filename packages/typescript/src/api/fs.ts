@@ -57,7 +57,7 @@ export interface CreateFileSystemWithLibOptions extends CreateFileSystemOptions 
  */
 export type RequestFileEntries = readonly (readonly [id: DocumentIdentifier, content: string])[];
 
-/** Creates a full request filesystem, deriving directory listings when omitted. */
+/** Creates a full request filesystem. The server derives directory listings when omitted. */
 export function createFileSystem(
     files: RequestFileEntries,
     options: CreateFileSystemOptions = {},
@@ -118,58 +118,13 @@ function createRequestFileSystem(
         normalizedFiles.set(fileName, content);
     }
     const fileRecord = Object.fromEntries(normalizedFiles);
-    const directories = options.directories ?? (kind === "full" ? deriveDirectoryListings(fileRecord) : undefined);
     return {
         kind,
         files: fileRecord,
-        directories,
+        directories: options.directories,
         symlinks: options.symlinks,
         removedPaths: options.removedPaths?.length ? [...options.removedPaths] : undefined,
     };
-}
-
-function deriveDirectoryListings(files: Record<string, string>): Record<string, RequestDirectoryEntries> {
-    const listings = new Map<string, { files: Set<string>; directories: Set<string>; }>();
-    const getListing = (directory: string) => {
-        let listing = listings.get(directory);
-        if (!listing) {
-            listing = { files: new Set(), directories: new Set() };
-            listings.set(directory, listing);
-        }
-        return listing;
-    };
-
-    for (const inputPath of Object.keys(files)) {
-        const filePath = normalizePath(inputPath);
-        const fileName = getBaseName(filePath);
-        let directory = getDirectory(filePath);
-        getListing(directory).files.add(fileName);
-
-        let parent = getDirectory(directory);
-        while (parent !== directory) {
-            getListing(parent).directories.add(getBaseName(directory));
-            directory = parent;
-            parent = getDirectory(directory);
-        }
-    }
-
-    return Object.fromEntries([...listings].map(([directory, listing]) => [directory, {
-        files: [...listing.files],
-        directories: [...listing.directories],
-    }]));
-}
-
-function getDirectory(path: string): string {
-    const components = getPathComponents(path);
-    if (components.length <= 1) return components[0] ?? "";
-    components.pop();
-    const root = components.shift()!;
-    return root + components.join("/");
-}
-
-function getBaseName(path: string): string {
-    const components = getPathComponents(path);
-    return components.at(-1) ?? "";
 }
 
 interface VDirectory {

@@ -44,7 +44,8 @@ type RequestFileSystem struct {
 	Kind Kind `json:"kind"`
 	// Files maps file names to their complete contents.
 	Files map[string]string `json:"files" nonnil:"true"`
-	// Directories maps directory names to complete listing results.
+	// Directories maps directory names to complete listing results. Directory
+	// structure implied by Files is derived when a listing is omitted.
 	Directories map[string]RequestDirectoryEntries `json:"directories,omitempty"`
 	// Symlinks maps link paths to targets in this filesystem or the host filesystem.
 	Symlinks map[string]RequestSymlink `json:"symlinks,omitempty"`
@@ -131,7 +132,13 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		paths:                 &requestPathNode{},
 	}
 	result.registerDirectory(currentDirectory)
-	for fileName, content := range params.Files {
+	fileNames := make([]string, 0, len(params.Files))
+	for fileName := range params.Files {
+		fileNames = append(fileNames, fileName)
+	}
+	slices.Sort(fileNames)
+	for _, fileName := range fileNames {
+		content := params.Files[fileName]
 		absoluteFileName := result.toAbsolutePath(fileName)
 		path := result.toPath(absoluteFileName)
 		node := result.paths.ensure(path)
@@ -141,30 +148,23 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		node.entry = &requestFile{fileName: absoluteFileName, content: content}
 		result.registerDirectory(tspath.GetDirectoryPath(absoluteFileName))
 	}
-	directoryNames := make([]string, 0, len(params.Directories))
-	for directoryName := range params.Directories {
-		directoryNames = append(directoryNames, directoryName)
-	}
-	slices.Sort(directoryNames)
+	seenDirectories := make(map[tspath.Path]struct{}, len(params.Directories))
 	var listedDirectories []string
-	for _, directoryName := range directoryNames {
-		entries := params.Directories[directoryName]
+	for directoryName, entries := range params.Directories {
 		absoluteDirectoryName := result.toAbsolutePath(directoryName)
 		path := result.toPath(absoluteDirectoryName)
 		node := result.paths.ensure(path)
+		if _, ok := seenDirectories[path]; ok {
+			return nil, fmt.Errorf("duplicate request filesystem directory path %q", absoluteDirectoryName)
+		}
+		seenDirectories[path] = struct{}{}
 		if _, isFile := node.entry.(*requestFile); !isFile {
-			listing := vfs.Entries{
-				Files:       slices.Clone(entries.Files),
-				Directories: slices.Clone(entries.Directories),
-			}
-			if directory, ok := node.entry.(*requestDirectory); ok && directory.listing != nil {
-				listing = mergeEntries(*directory.listing, listing, result.equalEntryNames)
-				directory.listing = &listing
-			} else {
-				node.entry = &requestDirectory{
-					directoryName: absoluteDirectoryName,
-					listing:       &listing,
-				}
+			node.entry = &requestDirectory{
+				directoryName: absoluteDirectoryName,
+				listing: &vfs.Entries{
+					Files:       slices.Clone(entries.Files),
+					Directories: slices.Clone(entries.Directories),
+				},
 			}
 		}
 		result.registerDirectory(tspath.GetDirectoryPath(absoluteDirectoryName))

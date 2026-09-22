@@ -1381,7 +1381,10 @@ export interface RequestFileSystem {
     kind: "full" | "layer";
     /** Files maps file names to their complete contents. */
     files: Record<string, string>;
-    /** Directories maps directory names to complete listing results. */
+    /**
+     * Directories maps directory names to complete listing results. Directory
+     * structure implied by Files is derived when a listing is omitted.
+     */
     directories?: Record<string, RequestDirectoryEntries> | undefined;
     /** Symlinks maps link paths to targets in this filesystem or the host filesystem. */
     symlinks?: Record<string, RequestSymlink> | undefined;

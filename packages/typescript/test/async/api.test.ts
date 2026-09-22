@@ -3450,7 +3450,7 @@ describe("readFile callback semantics", () => {
 });
 
 describe("updateSnapshot file systems", () => {
-    test("request filesystem factories derive directory listings", () => {
+    test("request filesystem factories normalize files and preserve explicit listings", () => {
         const memory = createFileSystem([
             ["/src/index.ts", "posix"],
             ["C:\\repo\\src\\index.ts", "windows"],
@@ -3479,26 +3479,7 @@ describe("updateSnapshot file systems", () => {
                 "vscode-remote://ssh-remote+host/workspace/src/index.ts": "remote",
                 "vscode-notebook-cell://authority/workspace/notebook.ipynb/cell.ts": "notebook",
             },
-            directories: {
-                "/src": { files: ["index.ts"], directories: [] },
-                "/": { files: [], directories: ["src", "encoded"] },
-                "C:/repo/src": { files: ["index.ts"], directories: [] },
-                "C:/repo": { files: ["encoded#name.ts"], directories: ["src"] },
-                "C:/": { files: [], directories: ["repo"] },
-                "/encoded": {
-                    files: ["path with spaces.ts", "unicode–name.ts", "literal+plus.ts", "once%20encoded.ts"],
-                    directories: [],
-                },
-                "//server/share": { files: ["encoded name.ts"], directories: [] },
-                "//server/": { files: [], directories: ["share"] },
-                "file:///": { files: ["literal%20path.ts"], directories: [] },
-                "vscode-remote://ssh-remote+host/workspace/src": { files: ["index.ts"], directories: [] },
-                "vscode-remote://ssh-remote+host/workspace": { files: [], directories: ["src"] },
-                "vscode-remote://ssh-remote+host/": { files: [], directories: ["workspace"] },
-                "vscode-notebook-cell://authority/workspace/notebook.ipynb": { files: ["cell.ts"], directories: [] },
-                "vscode-notebook-cell://authority/workspace": { files: [], directories: ["notebook.ipynb"] },
-                "vscode-notebook-cell://authority/": { files: [], directories: ["workspace"] },
-            },
+            directories: undefined,
             symlinks: undefined,
             removedPaths: undefined,
         });
@@ -3533,19 +3514,6 @@ describe("updateSnapshot file systems", () => {
                 ]),
             /Duplicate request filesystem path: \/normalized\/duplicate\.ts/,
         );
-    });
-
-    test("request filesystem factories derive directory listings case-sensitively", () => {
-        const memory = createFileSystem([
-            ["C:/Repo/upper.ts", "upper"],
-            ["c:/repo/lower.ts", "lower"],
-        ]);
-        assert.deepEqual(memory.directories, {
-            "C:/Repo": { files: ["upper.ts"], directories: [] },
-            "C:/": { files: [], directories: ["Repo"] },
-            "c:/repo": { files: ["lower.ts"], directories: [] },
-            "c:/": { files: [], directories: ["repo"] },
-        });
     });
 
     test("full file system is total and does not invoke host callbacks", async () => {
