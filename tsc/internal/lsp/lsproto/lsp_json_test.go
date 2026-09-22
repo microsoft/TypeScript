@@ -162,6 +162,18 @@ func TestUnmarshalURI(t *testing.T) {
 	assert.ErrorContains(t, err, "invalid URI")
 }
 
+func TestUnmarshalDocumentUriMapKey(t *testing.T) {
+	t.Parallel()
+
+	var value map[DocumentUri]int
+	err := json.Unmarshal([]byte(`{"file://":1}`), &value)
+	assert.NilError(t, err)
+	assert.DeepEqual(t, value, map[DocumentUri]int{"file:///": 1})
+
+	err = json.Unmarshal([]byte(`{"file:////server/share":1}`), &value)
+	assert.ErrorContains(t, err, "invalid URI")
+}
+
 func TestUnmarshalAcceptsNullForNullableFields(t *testing.T) {
 	t.Parallel()
 

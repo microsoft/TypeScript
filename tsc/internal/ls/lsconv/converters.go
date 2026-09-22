@@ -3,14 +3,12 @@ package lsconv
 import (
 	"context"
 	"fmt"
-	"net/url"
 	"slices"
 	"strings"
 	"unicode/utf16"
 	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
-	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -19,7 +17,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type Converters struct {
@@ -304,63 +301,8 @@ func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
 	}
 }
 
-// https://github.com/microsoft/vscode-uri/blob/edfdccd976efaf4bb8fdeca87e97c47257721729/src/uri.ts#L455
-var extraEscapeReplacer = strings.NewReplacer(
-	":", "%3A",
-	"/", "%2F",
-	"?", "%3F",
-	"#", "%23",
-	"[", "%5B",
-	"]", "%5D",
-	"@", "%40",
-
-	"!", "%21",
-	"$", "%24",
-	"&", "%26",
-	"'", "%27",
-	"(", "%28",
-	")", "%29",
-	"*", "%2A",
-	"+", "%2B",
-	",", "%2C",
-	";", "%3B",
-	"=", "%3D",
-
-	" ", "%20",
-)
-
 func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
-	if bundled.IsBundled(fileName) {
-		return lsproto.DocumentUri(fileName)
-	}
-	if tspath.IsDynamicFileName(fileName) {
-		scheme, rest, ok := strings.Cut(fileName[2:], "/")
-		if !ok {
-			panic("invalid file name: " + fileName)
-		}
-		authority, path, ok := strings.Cut(rest, "/")
-		if !ok {
-			panic("invalid file name: " + fileName)
-		}
-		if authority == "ts-nul-authority" {
-			return lsproto.DocumentUri(scheme + ":" + path)
-		}
-		return lsproto.DocumentUri(scheme + "://" + authority + "/" + path)
-	}
-
-	volume, fileName, _ := tspath.SplitVolumePath(fileName)
-	if volume != "" {
-		volume = "/" + extraEscapeReplacer.Replace(volume)
-	}
-
-	fileName = strings.TrimPrefix(fileName, "//")
-
-	parts := strings.Split(fileName, "/")
-	for i, part := range parts {
-		parts[i] = extraEscapeReplacer.Replace(url.PathEscape(part))
-	}
-
-	return lsproto.DocumentUri("file://" + volume + strings.Join(parts, "/"))
+	return lsproto.DocumentUriFromFileName(fileName)
 }
 
 func (c *Converters) lineAndCharacterToPosition(script Script, lineAndCharacter lsproto.Position) core.TextPos {

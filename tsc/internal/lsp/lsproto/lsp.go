@@ -100,6 +100,65 @@ func (uri DocumentUri) Path(useCaseSensitiveFileNames bool) tspath.Path {
 	return tspath.ToPath(fileName, "", useCaseSensitiveFileNames)
 }
 
+// https://github.com/microsoft/vscode-uri/blob/edfdccd976efaf4bb8fdeca87e97c47257721729/src/uri.ts#L455
+var extraEscapeReplacer = strings.NewReplacer(
+	":", "%3A",
+	"/", "%2F",
+	"?", "%3F",
+	"#", "%23",
+	"[", "%5B",
+	"]", "%5D",
+	"@", "%40",
+
+	"!", "%21",
+	"$", "%24",
+	"&", "%26",
+	"'", "%27",
+	"(", "%28",
+	")", "%29",
+	"*", "%2A",
+	"+", "%2B",
+	",", "%2C",
+	";", "%3B",
+	"=", "%3D",
+
+	" ", "%20",
+)
+
+func DocumentUriFromFileName(fileName string) DocumentUri {
+	if bundled.IsBundled(fileName) {
+		return DocumentUri(fileName)
+	}
+	if tspath.IsDynamicFileName(fileName) {
+		scheme, rest, ok := strings.Cut(fileName[2:], "/")
+		if !ok {
+			panic("invalid file name: " + fileName)
+		}
+		authority, path, ok := strings.Cut(rest, "/")
+		if !ok {
+			panic("invalid file name: " + fileName)
+		}
+		if authority == "ts-nul-authority" {
+			return DocumentUri(scheme + ":" + path)
+		}
+		return DocumentUri(scheme + "://" + authority + "/" + path)
+	}
+
+	volume, fileName, _ := tspath.SplitVolumePath(fileName)
+	if volume != "" {
+		volume = "/" + extraEscapeReplacer.Replace(volume)
+	}
+
+	fileName = strings.TrimPrefix(fileName, "//")
+
+	parts := strings.Split(fileName, "/")
+	for i, part := range parts {
+		parts[i] = extraEscapeReplacer.Replace(url.PathEscape(part))
+	}
+
+	return DocumentUri("file://" + volume + strings.Join(parts, "/"))
+}
+
 func fixWindowsURIPath(path string) string {
 	if rest, ok := strings.CutPrefix(path, "/"); ok {
 		if len(rest) >= 2 && tspath.IsVolumeCharacter(rest[0]) && rest[1] == ':' {
