@@ -33,7 +33,6 @@
         },
         "packages/typescript": {
             "entry": [
-                "scripts/generateSync.ts",
                 "test/**/*.bench.ts"
             ],
             "paths": {
