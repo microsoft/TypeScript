@@ -702,7 +702,8 @@ func (p *Program) collectCheckerDiagnostics(ctx context.Context, sourceFile *ast
 		done()
 		return filterAndSortDiagnostics(result)
 	}
-	return filterAndSortDiagnostics(slices.Concat(p.collectCheckerDiagnosticsFromFiles(ctx, p.files, collect)...))
+	diagnostics, _ := p.collectCheckerDiagnosticsFromFiles(ctx, p.files, collect)
+	return filterAndSortDiagnostics(slices.Concat(diagnostics...))
 }
 
 func filterAndSortDiagnostics(diags []*ast.Diagnostic) []*ast.Diagnostic {
@@ -722,41 +723,52 @@ type wholeProgramCheckerPool interface {
 	ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile))
 }
 
-// collectCheckerDiagnosticsFromFiles collects checker diagnostics for a list of files.
-func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, sourceFiles []*ast.SourceFile, collect func(context.Context, *checker.Checker, *ast.SourceFile) []*ast.Diagnostic) [][]*ast.Diagnostic {
+// collectCheckerDiagnosticsFromFiles collects checker diagnostics for a list of files, and reports
+// which of them it got through: a file a cancelled caller never reached is left nil, the same as
+// one checked and found clean.
+func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, sourceFiles []*ast.SourceFile, collect func(context.Context, *checker.Checker, *ast.SourceFile) []*ast.Diagnostic) ([][]*ast.Diagnostic, []bool) {
 	diagnostics := make([][]*ast.Diagnostic, len(sourceFiles))
+	checked := make([]bool, len(sourceFiles))
+	check := func(c *checker.Checker, fileIndex int, file *ast.SourceFile) {
+		result := collect(ctx, c, file)
+		// Cancellation can land part way through a file, so only an uninterrupted check counts.
+		if ctx.Err() == nil {
+			diagnostics[fileIndex] = result
+			checked[fileIndex] = true
+		}
+	}
 	if p.compilerCheckerPool != nil {
-		p.compilerCheckerPool.forEachCheckerGroupDo(ctx, sourceFiles, p.SingleThreaded(), func(c *checker.Checker, fileIndex int, file *ast.SourceFile) {
-			diagnostics[fileIndex] = collect(ctx, c, file)
-		})
+		p.compilerCheckerPool.forEachCheckerGroupDo(ctx, sourceFiles, p.SingleThreaded(), check)
 	} else if pool, ok := p.checkerPool.(wholeProgramCheckerPool); ok {
 		files := make([]*ast.SourceFile, 0, len(sourceFiles))
 		indices := make([]int, 0, len(sourceFiles))
 		for i, file := range sourceFiles {
 			if p.SkipTypeChecking(file, false) {
+				checked[i] = true
 				continue
 			}
 			files = append(files, file)
 			indices = append(indices, i)
 		}
 		pool.ForEachCheckerGroupDo(ctx, files, p.SingleThreaded(), func(c *checker.Checker, fileIndex int, file *ast.SourceFile) {
-			diagnostics[indices[fileIndex]] = collect(ctx, c, file)
+			check(c, indices[fileIndex], file)
 		})
 	} else {
 		wg := core.NewWorkGroup(p.SingleThreaded())
 		for i, file := range sourceFiles {
 			if p.SkipTypeChecking(file, false) {
+				checked[i] = true
 				continue
 			}
 			wg.Queue(func() {
 				c, done := p.checkerPool.GetChecker(ctx, file)
-				diagnostics[i] = collect(ctx, c, file)
+				check(c, i, file)
 				done()
 			})
 		}
 		wg.RunAndWait()
 	}
-	return diagnostics
+	return diagnostics, checked
 }
 
 func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -821,12 +833,16 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.So
 // GetSemanticDiagnosticsForIncremental includes newly discovered globals in each
 // file's cached diagnostics and leaves noEmit filtering to the builder.
 func (p *Program) GetSemanticDiagnosticsForIncremental(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
-	allDiags := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, func(ctx context.Context, c *checker.Checker, file *ast.SourceFile) []*ast.Diagnostic {
+	allDiags, checked := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, func(ctx context.Context, c *checker.Checker, file *ast.SourceFile) []*ast.Diagnostic {
 		return p.getBindAndCheckDiagnosticsWithChecker(ctx, c, file, true /*includeDeferredGlobals*/)
 	})
 	result := make(map[*ast.SourceFile][]*ast.Diagnostic, len(sourceFiles))
 	for i, diags := range allDiags {
-		result[sourceFiles[i]] = filterAndSortDiagnostics(diags)
+		// Only the files this got through. A cancelled caller that kept the rest would be caching
+		// "no errors" for files nothing looked at.
+		if checked[i] {
+			result[sourceFiles[i]] = filterAndSortDiagnostics(diags)
+		}
 	}
 	return result
 }

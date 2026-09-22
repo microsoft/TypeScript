@@ -378,10 +378,8 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 					// Nothing left, so don't build a checker to do it with.
 					return
 				}
-				// A cancelled caller discards what comes back anyway. Checked here rather than
-				// left to waitForIdle, which returns without looking at the context when nothing
-				// is outstanding. Bailing leaves the rest of the files' diagnostics zero, so a
-				// caller must test for cancellation before reading them.
+				// Checked here rather than left to waitForIdle, which returns without looking at
+				// the context when nothing is outstanding.
 				if ctx.Err() != nil {
 					return
 				}

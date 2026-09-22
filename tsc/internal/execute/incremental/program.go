@@ -340,11 +340,11 @@ func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context,
 	}
 
 	// Get their diagnostics and cache them
+	// Only the files it got through come back, so a cancelled check keeps what it finished
+	// rather than starting again from nothing the next time it is asked. On a project big enough
+	// that a check outlasts the gap between two edits, throwing the work away meant it could
+	// never finish at all.
 	diagnosticsPerFile := p.program.GetSemanticDiagnosticsForIncremental(ctx, affectedFiles)
-	// commit changes if no err
-	if ctx.Err() != nil {
-		return
-	}
 
 	// Commit changes to snapshot
 	for file, diagnostics := range diagnosticsPerFile {
