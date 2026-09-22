@@ -14,10 +14,13 @@ import {
     styleText,
 } from "node:util";
 import * as tar from "tar";
+import { xSync } from "tinyexec";
 import {
-    x,
-    xSync,
-} from "tinyexec";
+    enableFileFingerprintCache,
+    run,
+} from "./tools/scripts/gen/utils.mts";
+
+enableFileFingerprintCache();
 
 if (process.platform === "win32") {
     process.chdir(fs.realpathSync.native(process.cwd()));
@@ -30,39 +33,7 @@ const isCI = !!process.env.CI || !!process.env.TF_BUILD;
 const stableThreeComponentVersionPatternSource = String.raw`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$`;
 const stableThreeComponentVersionPattern = new RegExp(stableThreeComponentVersionPatternSource);
 
-/**
- * @typedef {{
- *   captureOutput?: boolean;
- *   cwd?: string;
- *   env?: NodeJS.ProcessEnv;
- *   signal?: AbortSignal;
- * }} RunOptions
- */
-
-/**
- * @param {string} arg
- */
-function formatCommandArg(arg) {
-    return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
-}
-
-/**
- * @param {string} command
- * @param {readonly string[]} [args]
- * @param {RunOptions} [options]
- */
-function run(command, args = [], options = {}) {
-    console.log("$ " + [command, ...args].map(formatCommandArg).join(" "));
-    return x(command, args, {
-        throwOnError: true,
-        ...(options.signal ? { signal: options.signal } : {}),
-        nodeOptions: {
-            cwd: options.cwd,
-            env: options.env ? { ...process.env, ...options.env } : undefined,
-            stdio: options.captureOutput ? "pipe" : "inherit",
-        },
-    });
-}
+/** @typedef {import("./tools/scripts/gen/utils.mts").RunOptions} RunOptions */
 
 /**
  * @param {string} command
@@ -105,6 +76,7 @@ const { values: rawOptions } = parseArgs({
     options: {
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
+        force: { type: "boolean", default: parseEnvBoolean("FORCE") },
         api: { type: "boolean" },
         all: { type: "boolean" },
         debug: { type: "boolean" },
@@ -368,24 +340,271 @@ export const cleanBuilt = task({
     run: () => rimraf("built"),
 });
 
-async function runGenerate() {
-    return await run("go", ["generate", "-v", "./..."], { cwd: "./tsc" });
+/** @type {(() => Promise<void>)[]} */
+const goGenerateActions = [];
+
+async function runGenerateGo() {
+    for (const generate of goGenerateActions) {
+        await generate();
+    }
 }
 
-export const generate = task({
-    name: "generate",
-    description: "Runs go generate on the project.",
-    run: runGenerate,
+export const generateGo = task({
+    name: "generate:go",
+    description: "Runs the project's Go code generators directly. Pass --force to regenerate unchanged files.",
+    run: runGenerateGo,
+});
+
+const getGoGenerateEnvironment = memoize(async () => {
+    const { stdout } = await runOutput("go", ["env", "-json", "GOOS", "GOARCH", "GOROOT"], { cwd: "./tsc" });
+    return /** @type {{ GOOS: string; GOARCH: string; GOROOT: string }} */ (JSON.parse(stdout));
+});
+
+/** @typedef {import("./tools/scripts/gen/cache.mts").CacheOptions & { file: string }} GoGenerator */
+
+/**
+ * @param {string} name
+ * @param {GoGenerator} generator
+ */
+async function runGoGenerator(name, { file, ...spec }) {
+    const { default: cache } = await import("./tools/scripts/gen/cache.mts");
+    const sourcePath = path.resolve(__dirname, file);
+    const source = fs.readFileSync(sourcePath, "utf8");
+    const packageName = /^package\s+(\w+)/m.exec(source)?.[1];
+    const line = source.split(/\r?\n/).findIndex(line => line.trimEnd() === `//go:generate npx hereby ${name}`) + 1;
+    assert(packageName && line, `Missing package or generation directive in ${file}`);
+    const goEnv = await getGoGenerateEnvironment();
+    const pathKey = process.platform === "win32" ? Object.keys(process.env).find(key => key.toUpperCase() === "PATH") ?? "PATH" : "PATH";
+    const goBin = path.join(goEnv.GOROOT, "bin");
+    const searchPath = (process.env[pathKey] ?? "").split(path.delimiter).filter(entry => path.resolve(entry) !== goBin);
+    await cache({
+        ...spec,
+        cwd: spec.cwd ?? path.dirname(sourcePath),
+        inputs: [__filename, sourcePath, ...spec.inputs],
+        envInputs: [
+            ...(spec.envInputs ?? ["GOOS", "GOARCH", "GOFLAGS", "GOTOOLCHAIN", "GOEXPERIMENT", "CGO_ENABLED", "GOWORK"]),
+            "GOROOT",
+            "GOFILE",
+            "GOLINE",
+            "GOPACKAGE",
+            "DOLLAR",
+        ],
+        env: {
+            ...goEnv,
+            GOFILE: path.basename(sourcePath),
+            GOLINE: String(line),
+            GOPACKAGE: packageName,
+            DOLLAR: "$",
+            [pathKey]: [goBin, ...searchPath].join(path.delimiter),
+        },
+        force: !!options.force,
+    });
+}
+
+/**
+ * @param {string} name
+ * @param {GoGenerator[] | (() => Promise<void>)} generators
+ */
+function goGenerateTask(name, generators) {
+    const run = typeof generators === "function" ? generators : async () => {
+        for (const generator of generators) await runGoGenerator(name, generator);
+    };
+    goGenerateActions.push(run);
+    return task({
+        name,
+        description: `Generates ${name.slice("generate:".length)} files. Pass --force to regenerate unchanged files.`,
+        run,
+    });
+}
+
+/**
+ * @param {string} file
+ * @param {string} type
+ * @param {string} output
+ * @param {string} [trimPrefix]
+ * @returns {GoGenerator}
+ */
+function stringerGenerator(file, type, output, trimPrefix) {
+    return {
+        file,
+        inputs: [],
+        outputs: [output],
+        commands: [
+            ["go", "tool", "golang.org/x/tools/cmd/stringer", `-type=${type}`, ...(trimPrefix ? [`-trimprefix=${trimPrefix}`] : []), `-output=${output}`],
+            ["dprint", "fmt", output],
+        ],
+    };
+}
+
+/**
+ * @param {string} file
+ * @param {string} type
+ * @param {string} output
+ * @param {{ source?: string; packageName: string; inputs?: string[]; stub?: boolean }} options
+ * @returns {GoGenerator}
+ */
+function moqGenerator(file, type, output, { source = ".", packageName, inputs = [], stub = false }) {
+    return {
+        file,
+        inputs,
+        outputs: [output],
+        commands: [
+            ["go", "tool", "github.com/matryer/moq", ...(stub ? ["-stub"] : []), "-fmt", "goimports", "-pkg", packageName, "-out", output, source, type],
+            ["dprint", "fmt", output],
+        ],
+    };
+}
+
+async function runGenerateASTStringer() {
+    await runGoGenerator("generate:ast-stringer", stringerGenerator("tsc/internal/ast/kind_generated.go", "Kind", "kind_stringer_generated.go"));
+}
+
+export const generateASTStringer = goGenerateTask("generate:ast-stringer", runGenerateASTStringer);
+
+export const generateBundled = goGenerateTask("generate:bundled", [{
+    file: "tsc/internal/bundled/bundled.go",
+    inputs: ["generate.go", "CopyrightNotice.txt", "libs/*"],
+    outputs: ["libs_generated.go", "embed_generated.go"],
+    commands: [["go", "run", "generate.go"]],
+}]);
+
+export const generateChecker = goGenerateTask("generate:checker", [
+    stringerGenerator("tsc/internal/checker/types.go", "SignatureKind", "stringer_generated.go"),
+]);
+
+export const generateCompilerOptions = goGenerateTask("generate:compileroptions", [
+    stringerGenerator("tsc/internal/core/compileroptions.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"),
+    stringerGenerator("tsc/internal/core/compileroptions.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"),
+]);
+
+export const generateLanguageVariant = goGenerateTask("generate:languagevariant", [
+    stringerGenerator("tsc/internal/core/languagevariant.go", "LanguageVariant", "languagevariant_stringer_generated.go"),
+]);
+
+export const generateScriptKind = goGenerateTask("generate:scriptkind", [
+    stringerGenerator("tsc/internal/core/scriptkind.go", "ScriptKind", "scriptkind_stringer_generated.go"),
+]);
+
+export const generateTristate = goGenerateTask("generate:tristate", [
+    stringerGenerator("tsc/internal/core/tristate.go", "Tristate", "tristate_stringer_generated.go"),
+]);
+
+export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
+    {
+        file: "tsc/internal/diagnostics/diagnostics.go",
+        inputs: ["generate.go", "diagnosticMessages.json", "extraDiagnosticMessages.json", "../{collections,json}/*.go", "../locale/lcl/*/diagnosticMessages/diagnosticMessages.generated.json.lcl"],
+        exclude: ["**/*_test.go"],
+        outputs: ["diagnostics_generated.go", "loc_generated.go", "loc/*.json.gz"],
+        commands: [
+            ["go", "run", "generate.go", "-diagnostics", "diagnostics_generated.go", "-loc", "loc_generated.go", "-locdir", "loc"],
+            ["dprint", "fmt", "diagnostics_generated.go", "loc_generated.go"],
+        ],
+    },
+    stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go"),
+]);
+
+export const generateAutoImport = goGenerateTask("generate:autoimport", [
+    stringerGenerator("tsc/internal/ls/autoimport/export.go", "ExportSyntax", "export_stringer_generated.go"),
+]);
+
+export const generateProject = goGenerateTask("generate:project", [
+    stringerGenerator("tsc/internal/project/project.go", "Kind", "project_stringer_generated.go", "Kind"),
+]);
+
+export const generateProjectTestUtil = goGenerateTask("generate:projecttestutil", [
+    moqGenerator("tsc/internal/testutil/projecttestutil/projecttestutil.go", "Client", "clientmock_generated.go", {
+        source: "../../project",
+        packageName: "projecttestutil",
+        inputs: ["../../project/client.go"],
+        stub: true,
+    }),
+    moqGenerator("tsc/internal/testutil/projecttestutil/projecttestutil.go", "NpmExecutor", "npmexecutormock_generated.go", {
+        source: "../../project/ata",
+        packageName: "projecttestutil",
+        inputs: ["../../project/ata/ata.go"],
+        stub: true,
+    }),
+]);
+
+export const generateVFS = goGenerateTask("generate:vfs", [
+    moqGenerator("tsc/internal/vfs/vfs.go", "FS", "vfsmock/mock_generated.go", { packageName: "vfsmock" }),
+]);
+
+export const generateVFSMatch = goGenerateTask("generate:vfsmatch", [
+    stringerGenerator("tsc/internal/vfs/vfsmatch/vfsmatch.go", "Usage", "stringer_generated.go", "Usage"),
+]);
+
+export const generateUnicode = goGenerateTask("generate:unicode", async () => {
+    const { default: generate } = await import("./tsc/internal/stringutil/_scripts/generate-unicode-data.mts");
+    await generate(!!options.force);
 });
 
 async function runGenerateExtension() {
-    return await run("npm", ["run", "-w", "native-preview", "generateLocBundle"]);
+    const { default: cache } = await import("./tools/scripts/gen/cache.mts");
+    await cache({
+        cwd: __dirname,
+        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
+        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.json"],
+        commands: [["npm", "run", "-w", "native-preview", "generateLocBundle"]],
+        envInputs: [],
+        force: !!options.force,
+    });
 }
 
 export const generateExtension = task({
     name: "generate:extension",
-    description: "Generates files in the extension",
+    description: "Generates files in the extension. Pass --force to regenerate unchanged files.",
     run: runGenerateExtension,
+});
+
+async function runGenerateExtensionTest() {
+    const { default: cache } = await import("./tools/scripts/gen/cache.mts");
+    await cache({
+        cwd: __dirname,
+        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
+        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"],
+        commands: [["npm", "run", "-w", "native-preview", "generateLocTest"]],
+        envInputs: [],
+        force: !!options.force,
+    });
+}
+
+export const generateExtensionTest = task({
+    name: "generate:extension-test",
+    description: "Generates pseudo-localized extension resources. Pass --force to regenerate unchanged files.",
+    dependencies: [generateExtension],
+    run: runGenerateExtensionTest,
+});
+
+async function runGenerateLSP() {
+    const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
+    const directory = path.join(__dirname, "tsc/internal/lsp/lsproto/_generate");
+    const modelFiles = ["metaModel.json", "metaModelSchema.mts"].map(file => new GeneratedFile(path.join(directory, file), [path.join(directory, "fetchModel.mts"), path.join(__dirname, "package-lock.json")]));
+    if (!modelFiles.every(file => file.isCurrent(!!options.force))) {
+        for (const file of modelFiles) file.invalidate();
+        const { default: fetchModel } = await import("./tsc/internal/lsp/lsproto/_generate/fetchModel.mts");
+        await fetchModel();
+        for (const file of modelFiles) file.markCurrent();
+    }
+    const output = new GeneratedFile(path.join(directory, "../lsp_generated.go"), [
+        __filename,
+        path.join(directory, "generate.mts"),
+        ...modelFiles.map(file => file.fileName),
+    ]);
+    if (output.isCurrent(!!options.force)) {
+        console.log("LSP bindings are up to date.");
+        return;
+    }
+    output.invalidate();
+    const { default: generate } = await import("./tsc/internal/lsp/lsproto/_generate/generate.mts");
+    await generate();
+    output.markCurrent();
+}
+
+export const generateLSP = task({
+    name: "generate:lsp",
+    description: "Generates LSP bindings from the pinned protocol model. Pass --force to regenerate unchanged files.",
+    run: runGenerateLSP,
 });
 
 // ── Enum generation from Go source ──────────────────────────────
@@ -775,9 +994,10 @@ const enumValuesGeneratedGoPath = "tsc/internal/api/enum_values_generated.go";
  * because it already imports (nearly) every package enums are sourced from.
  *
  * @param {GeneratedEnum[]} generatedEnums
+ * @param {import("./tools/scripts/gen/generatedFile.mts").GeneratedFile} generatedGoFile
  * @returns {Promise<Record<string, Record<string, number>>>} enum def name -> (memberName -> Go value)
  */
-async function computeGoGroundTruth(generatedEnums) {
+async function computeGoGroundTruth(generatedEnums, generatedGoFile) {
     /** @type {Map<string, {importPath: string, pkgName: string}>} */
     const packagesByDir = new Map();
     /**
@@ -849,7 +1069,7 @@ func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32](v T)
 
 `;
 
-    fs.writeFileSync(enumValuesGeneratedGoPath, goSource);
+    generatedGoFile.write(goSource);
     await run("dprint", ["fmt", enumValuesGeneratedGoPath]);
 
     const { stdout } = await runOutput("go", ["run", enumValuesGeneratedGoPath]);
@@ -873,6 +1093,26 @@ async function evaluateEnumMembers(enumSource, enumName) {
 }
 
 async function runGenerateEnums() {
+    const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
+    const inputs = [
+        __filename,
+        ...fs.globSync(["go.work", "go.work.sum", "{tsc,tools}/go.{mod,sum}"]),
+    ];
+    const enumFiles = enumDefs.map(def => {
+        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
+        return {
+            def,
+            camelName,
+            typeFile: new GeneratedFile(path.join(def.outDir, `${camelName}.enum.ts`), [...inputs, def.goFile]),
+            runtimeFile: new GeneratedFile(path.join(def.outDir, `${camelName}.ts`), [...inputs, def.goFile]),
+        };
+    });
+    const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => def.goFile)]);
+    const generatedFiles = [generatedGoFile, ...enumFiles.flatMap(({ typeFile, runtimeFile }) => [typeFile, runtimeFile])];
+    if (generatedFiles.every(file => file.isCurrent(!!options.force))) {
+        console.log("Enums are up to date.");
+        return;
+    }
     const ts = /** @type {typeof import("typescript")} */ (await import("typescript"));
 
     /**
@@ -903,34 +1143,29 @@ async function runGenerateEnums() {
     console.log("Generating enums from Go source...");
     /** @type {Array<GeneratedEnum>} */
     const generatedEnums = [];
-    for (const def of enumDefs) {
+    for (const { def, camelName, typeFile, runtimeFile } of enumFiles) {
         const members = parseGoEnum(def);
-        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
-
-        fs.mkdirSync(def.outDir, { recursive: true });
 
         // Generate .enum.ts (TypeScript enum — used for types)
         const enumTS = renderEnumTS(def, members);
-        const enumPath = path.join(def.outDir, `${camelName}.enum.ts`);
-        fs.writeFileSync(enumPath, enumTS);
+        typeFile.write(enumTS);
 
         // Generate .ts (IIFE — used at runtime)
         const enumJsCode = transpile(enumTS, def.name);
         const iifeSource = convertEnumToTs(enumJsCode, def.name);
-        const iifePath = path.join(def.outDir, `${camelName}.ts`);
-        fs.writeFileSync(iifePath, iifeSource);
+        runtimeFile.write(iifeSource);
         generatedEnums.push({
             code: enumJsCode,
             def,
             members,
-            fileNames: [enumPath, iifePath],
+            fileNames: [typeFile.fileName, runtimeFile.fileName],
         });
 
         console.log(`  ${def.name}: ${members.length} members → ${camelName}.enum.ts, ${camelName}.ts`);
     }
 
     console.log("Getting values from go");
-    const goValuesByEnum = await computeGoGroundTruth(generatedEnums);
+    const goValuesByEnum = await computeGoGroundTruth(generatedEnums, generatedGoFile);
     /** @type {string[]} */
     const mismatches = [];
     for (const { def, members, code } of generatedEnums) {
@@ -958,31 +1193,63 @@ async function runGenerateEnums() {
     console.log("All generated values match Go.");
 
     await run("dprint", ["fmt", ...generatedEnums.flatMap(e => e.fileNames)]);
+    for (const file of generatedFiles) file.markCurrent();
     console.log("Done.");
 }
 
 export const generateEnums = task({
     name: "generate:enums",
-    description: "Generates TypeScript enum files from Go source.",
+    description: "Generates TypeScript enum files from Go source. Pass --force to regenerate unchanged files.",
     run: runGenerateEnums,
 });
 
+async function runGenerateAST() {
+    const { default: generate } = await import("./tools/scripts/tsc/generate.ts");
+    generate(!!options.force);
+    await runGenerateASTStringer();
+}
+
 export const generateAST = task({
     name: "generate:ast",
-    description: "Generates AST and encoder files from ast.json.",
-    run: () => run("node", ["./tools/scripts/tsc/generate.ts"]),
+    description: "Generates AST, kind stringer, and encoder files from ast.json. Pass --force to regenerate unchanged files.",
+    run: runGenerateAST,
+});
+
+async function runGenerateSync() {
+    const { generateSync } = await import("./packages/typescript/scripts/generateSync.ts");
+    generateSync(!!options.force);
+}
+
+export const generateSync = task({
+    name: "generate:sync",
+    description: "Generates synchronous and generator APIs and tests. Pass --force to regenerate unchanged files.",
+    run: runGenerateSync,
 });
 
 async function runGenerateAPI() {
-    await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
-    await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
+    await runGoGenerator("generate:api", {
+        file: "tsc/internal/api/proto.go",
+        cwd: __dirname,
+        inputs: [
+            "tsc/internal/api/*.go",
+            "tsc/internal/api/requestfilesystem/*.go",
+            "tsc/internal/core/*.go",
+            "tsc/internal/checker/types.go",
+            "tsc/internal/diagnostics/diagnostics.go",
+            "tsc/internal/tspath/path.go",
+            "tools/gen-proto/*.go",
+        ],
+        exclude: ["**/*_test.go", "**/*_generated.go"],
+        envInputs: [],
+        outputs: ["packages/typescript/src/api/proto.generated.ts"],
+        commands: [
+            ["go", "-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"],
+            ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"],
+        ],
+    });
 }
 
-export const generateAPI = task({
-    name: "generate:api",
-    description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
-    run: runGenerateAPI,
-});
+export const generateAPI = goGenerateTask("generate:api", runGenerateAPI);
 
 // ── Vendored npm dependencies ───────────────────────────────────
 
@@ -994,22 +1261,53 @@ const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
 const vendorJsonrpcFiles = ["package.json", "README.md", "License.txt", "lib", "typings"];
 
 async function runGenerateVendor() {
+    const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
     const src = path.join(__dirname, vendorJsonrpcSrc);
     const dest = path.join(__dirname, vendorJsonrpcDir);
     if (!fs.existsSync(src)) {
         throw new Error(`${vendorJsonrpcSrc} is not installed; run \`npm ci\` first.`);
     }
+    const entries = vendorJsonrpcFiles.flatMap(file =>
+        fs.statSync(path.join(src, file)).isDirectory()
+            ? [file, ...fs.globSync(`${file}/**/*`, { cwd: src })]
+            : [file]
+    ).sort();
+    const generatedFiles = entries.filter(file => fs.statSync(path.join(src, file)).isFile())
+        .map(file => new GeneratedFile(path.join(dest, file), [__filename, path.join(src, file)], undefined, entries));
+    const existingEntries = fs.existsSync(dest) ? fs.globSync("**/*", { cwd: dest }).sort() : [];
+    if (JSON.stringify(entries) === JSON.stringify(existingEntries) && generatedFiles.every(file => file.isCurrent(!!options.force))) {
+        console.log("Vendored vscode-jsonrpc files are up to date.");
+        return;
+    }
+    for (const file of generatedFiles) file.invalidate();
     await rimraf(dest);
     await fs.promises.mkdir(dest, { recursive: true });
     for (const file of vendorJsonrpcFiles) {
         await cpRecursive(path.join(src, file), path.join(dest, file));
     }
+    for (const file of generatedFiles) file.markCurrent();
 }
 
 export const generateVendor = task({
     name: "generate:vendor",
-    description: "Updates the vendored copy of vscode-jsonrpc from node_modules.",
+    description: "Updates the vendored copy of vscode-jsonrpc from node_modules. Pass --force to regenerate unchanged files.",
     run: runGenerateVendor,
+});
+
+const generateCompiler = task({
+    name: "generate:compiler",
+    hiddenFromTaskList: true,
+    dependencies: [generateAST, generateLSP],
+    run: async () => {
+        await runGenerateGo();
+        await runGenerateEnums();
+    },
+});
+
+export const generate = task({
+    name: "generate",
+    description: "Runs all code generation, including AST, LSP, APIs, extension localization, and vendored dependencies.",
+    dependencies: [generateCompiler, generateSync, generateExtensionTest, generateVendor],
 });
 
 const coverageDir = path.join(__dirname, "coverage");
@@ -1216,7 +1514,7 @@ async function runTestBenchmarks() {
 
 export const testBenchmarks = task({
     name: "test:benchmarks",
-    description: "Runs all benchmarks.",
+    description: "Runs Go benchmarks once; excluded from validate.",
     run: runTestBenchmarks,
 });
 
@@ -1229,10 +1527,22 @@ async function runTestAPI() {
     await run("node", ["--conditions", "@typescript/source", "--test", "./test/**/*.test.ts"], { cwd: "./packages/typescript" });
 }
 
+async function runTestAPIBenchmarks() {
+    for (const variant of ["async", "sync", "generators"]) {
+        await run("node", ["--conditions", "@typescript/source", `./test/${variant}/api.bench.ts`, "--singleIteration"], { cwd: "./packages/typescript" });
+    }
+}
+
 export const testTools = task({
     name: "test:tools",
     description: "Runs all tests in the tools module.",
     run: runTestTools,
+});
+
+export const testCodegen = task({
+    name: "test:codegen",
+    description: "Runs opt-in incremental codegen tests; excluded from validate and test:all. Because this runs asserts on build codegen, it takes awhile and is somewhat redundant.",
+    run: () => run("node", ["--test", "./tools/scripts/gen/*.test.mts"]),
 });
 
 export const buildAPI = task({
@@ -1243,7 +1553,8 @@ export const buildAPI = task({
     },
 });
 
-async function runBuildAPITests() {
+async function runBuildAPITests(generateSources = true) {
+    if (generateSources) await runGenerateSync();
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
 }
 
@@ -1261,9 +1572,16 @@ export const testAPI = task({
     run: runTestAPI,
 });
 
+export const testAPIBenchmarks = task({
+    name: "test:benchmarks:api",
+    description: "Runs async, sync, and generator API benchmarks once; excluded from validate.",
+    dependencies: [tsgo, buildAPITests],
+    run: runTestAPIBenchmarks,
+});
+
 export const testAll = task({
     name: "test:all",
-    description: "Runs ALL tests in the repo, including benchmarks, tools, and the API tests.",
+    description: "Runs compiler, extension, benchmark, tools, and API tests. Codegen tests are opt-in via test:codegen.",
     dependencies: [tsgo, buildAPITests],
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
@@ -1272,6 +1590,7 @@ export const testAll = task({
         await runTestBenchmarks();
         await runTestTools();
         await runTestAPI();
+        await runTestAPIBenchmarks();
     },
 });
 
@@ -1419,9 +1738,12 @@ async function runFormat() {
 
 export const validate = task({
     name: "validate",
-    description: "Builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all ancilliary repository tests.",
-    dependencies: [build],
+    description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all code generation and ancillary repository tests Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
+    dependencies: [options.all ? generate : generateGo],
     run: async () => {
+        await generateLibs(builtLocal);
+        await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
+
         /** @type {{ name: string; error: unknown }[]} */
         const failures = [];
         /** @param {string} name @param {() => Promise<void>} action */
@@ -1435,19 +1757,14 @@ export const validate = task({
             }
         };
 
-        await runGenerate();
         await runValidation("test:tsc", runTests);
         await runValidation("test:extension", runTestExtension);
         if (options.api || options.all) {
-            await runGenerateEnums(); // prereqs for test:api not included in `validate` deps
-            await runGenerateAPI();
-            await runBuildAPITests();
+            if (!options.all) await runGenerateEnums();
+            await runBuildAPITests(!options.all);
             await runValidation("test:api", runTestAPI);
         }
         if (options.all) {
-            await runGenerateExtension();
-            await runGenerateVendor();
-            await runValidation("test:benchmarks", runTestBenchmarks);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
@@ -1492,6 +1809,7 @@ export const checkHerebyfile = task({
             "./node_modules/typescript/bin/tsc",
             "--noEmit",
             "--allowJs",
+            "--allowImportingTsExtensions",
             "--checkJs",
             "--target",
             "es2022",
@@ -1546,6 +1864,7 @@ export const checkVsceVersion = task({
 });
 
 const scriptTsconfigs = [
+    "./tools/scripts/gen/tsconfig.json",
     "./tools/scripts/tsc/tsconfig.json",
     "./tsc/internal/lsp/lsproto/_generate/tsconfig.json",
 ];

@@ -269,6 +269,7 @@ const (
 	InferenceFlagsNoDefault              InferenceFlags = 1 << 0 // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
 	InferenceFlagsAnyDefault             InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
 	InferenceFlagsSkippedGenericFunction InferenceFlags = 1 << 2 // A generic function was skipped during inference
+	InferenceFlagsNoConstraintChecks     InferenceFlags = 1 << 3
 )
 
 // InferenceContext
@@ -795,6 +796,7 @@ type Checker struct {
 	typeResolutions                             []TypeResolution
 	resolutionStart                             int
 	varianceStack                               []VarianceStackEntry
+	callResolutionStack                         []*ast.Node
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -3462,6 +3464,7 @@ func (c *Checker) checkFunctionOrMethodDeclaration(node *ast.Node) {
 	c.checkSourceElement(body)
 	c.checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, c.getReturnTypeFromAnnotation(node))
 	if node.FunctionLikeData().FullSignature != nil {
+		c.checkSourceElement(node.FunctionLikeData().FullSignature)
 		if c.getContextualCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature), node) == nil {
 			c.error(node.FunctionLikeData().FullSignature, diagnostics.A_JSDoc_type_tag_on_a_function_must_have_a_signature_with_the_correct_number_of_arguments)
 		}
@@ -9014,6 +9017,7 @@ type CallState struct {
 	argCheckMode                   CheckMode
 	isSingleNonGenericCandidate    bool
 	signatureHelpTrailingComma     bool
+	recursiveResolution            bool
 	candidatesForArgumentError     []*Signature
 	candidateForArgumentArityError *Signature
 	candidateForTypeArgumentError  *Signature
@@ -9099,12 +9103,15 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	// is just important for choosing the best signature. So in the case where there is only one
 	// signature, the subtype pass is useless. So skipping it is an optimization.
 	var result *Signature
+	s.recursiveResolution = slices.Contains(c.callResolutionStack, s.node)
+	c.callResolutionStack = append(c.callResolutionStack, s.node)
 	if len(s.candidates) > 1 {
 		result = c.chooseOverload(&s, c.subtypeRelation)
 	}
 	if result == nil {
 		result = c.chooseOverload(&s, c.assignableRelation)
 	}
+	c.callResolutionStack = c.callResolutionStack[:len(c.callResolutionStack)-1]
 	if result != nil {
 		return result
 	}
@@ -9231,7 +9238,11 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 					continue
 				}
 			} else {
-				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone) /*flags*/, nil)
+				// When we are recursively resolving a call with a single candidate, we skip constraints checks during
+				// type inference to avoid circularity errors. For example, see #64192.
+				inferenceFlags := core.IfElse(s.recursiveResolution && len(s.candidates) == 1, InferenceFlagsNoConstraintChecks, InferenceFlagsNone) |
+					core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone)
+				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, inferenceFlags /*flags*/, nil)
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
 				if inferenceContext.flags&InferenceFlagsSkippedGenericFunction != 0 {
 					s.argCheckMode |= CheckModeSkipGenericFunctions
@@ -10292,6 +10303,9 @@ func (c *Checker) checkClassExpressionDeferred(node *ast.Node) {
 
 func (c *Checker) checkFunctionExpressionOrObjectLiteralMethod(node *ast.Node, checkMode CheckMode) *Type {
 	c.checkNodeDeferred(node)
+	if node.FunctionLikeData().FullSignature != nil {
+		c.checkSourceElement(node.FunctionLikeData().FullSignature)
+	}
 	if ast.IsFunctionExpression(node) {
 		c.checkCollisionsForDeclarationName(node, node.Name())
 	}
@@ -17125,11 +17139,12 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	var missingElements []*ast.Node
 	for _, e := range pattern.Elements() {
-		if e.Initializer() != nil {
-			name := c.getPropertyNameFromBindingElement(e)
-			if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
-				missingElements = append(missingElements, e)
-			}
+		if hasDotDotDotToken(e) {
+			continue
+		}
+		name := c.getPropertyNameFromBindingElement(e)
+		if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
+			missingElements = append(missingElements, e)
 		}
 	}
 	if len(missingElements) == 0 {
@@ -17141,7 +17156,7 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	}
 	for _, e := range missingElements {
 		symbol := c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, c.getPropertyNameFromBindingElement(e))
-		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, false /*reportErrors*/)
+		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
 		members[symbol.Name] = symbol
 	}
 	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
@@ -21052,7 +21067,7 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := make(ast.SymbolTable)
+	result := make(ast.SymbolTable, len(symbols))
 	for _, symbol := range symbols {
 		result[symbol.Name] = c.instantiateSymbol(symbol, m)
 	}

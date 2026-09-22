@@ -93,6 +93,16 @@ jobs:
             os: windows
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-26.04-arm
+            name: 'linux arm64'
+            os: linux
+            coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: windows-11-arm
+            name: 'windows arm64'
+            os: windows
+            coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - runner: macos-latest
             os: macos
             coverage: true
@@ -148,7 +158,7 @@ jobs:
       - name: Benchmarks
         run: npx hereby test:benchmarks
       - run: git add .
-      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
@@ -214,8 +224,9 @@ jobs:
       - run: npx hereby test:extension
       - run: npx hereby test:tools
       - run: npx hereby test:api
+      - run: npx hereby test:benchmarks:api
       - run: git add .
-      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
@@ -293,12 +304,6 @@ jobs:
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby generate
-      - run: npx hereby generate:enums
-      - run: npx hereby generate:ast
-      - run: npx hereby generate:vendor
-      - run: node ./tsc/internal/lsp/lsproto/_generate/fetchModel.mts
-      - run: node ./tsc/internal/lsp/lsproto/_generate/generate.mts
-      - run: npx hereby generate:extension
       - run: npx hereby check:scripts
       - run: git add .
       - run: git diff --staged --exit-code --stat
