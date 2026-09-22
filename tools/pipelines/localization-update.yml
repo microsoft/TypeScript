@@ -32,6 +32,8 @@ jobs:
         fetchTags: false
         submodules: false
 
+      - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
+
       - pwsh: |
           $ErrorActionPreference = "Stop"
           $match = Select-String -Path tsc/go.mod -Pattern '^go ([0-9]+\.[0-9]+)$'
