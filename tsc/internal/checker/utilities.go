@@ -1908,3 +1908,7 @@ func GetSetAccessorValueParameter(accessor *ast.Node) *ast.Node {
 	}
 	return nil
 }
+
+func quotedAndCommaSeparated(items []string) string {
+	return strings.Join(core.Map(items, func(item string) string { return "'" + item + "'" }), ", ")
+}

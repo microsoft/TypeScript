@@ -315,7 +315,7 @@ const Activity = z.object({
   },
 });
 export type ActivityT = output<typeof Activity>;
->ActivityT : { name: string; subactivities: unknown; }
+>ActivityT : { name: string; subactivities: { name: string; subactivities: any[] | null; }[] | null; }
 >Activity : $ZodObject<{ name: $ZodString; readonly subactivities: $ZodNullable<$ZodArray<$ZodObject<any>>>; }>
 
 // (4) reference through a separately-declared const
@@ -355,6 +355,6 @@ const NodeArray = z.array(Node1);
 >Node1 : $ZodObject<{ name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }>
 
 export type Node1T = output<typeof Node1>;
->Node1T : { name: string; children?: unknown; }
+>Node1T : { name: string; children?: { name: string; children?: any[] | undefined; }[] | undefined; }
 >Node1 : $ZodObject<{ name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }>
 

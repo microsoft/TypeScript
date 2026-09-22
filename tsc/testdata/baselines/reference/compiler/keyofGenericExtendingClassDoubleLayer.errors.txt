@@ -1,8 +1,9 @@
 keyofGenericExtendingClassDoubleLayer.ts(2,12): error TS2564: Property 'createdAt' has no initializer and is not definitely assigned in the constructor.
+keyofGenericExtendingClassDoubleLayer.ts(9,7): error TS5115: Instantiations of the following types appear infinitely circular: 'Model', 'ModelAttributes', 'Exclude'.
 keyofGenericExtendingClassDoubleLayer.ts(10,12): error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
 
 
-==== keyofGenericExtendingClassDoubleLayer.ts (2 errors) ====
+==== keyofGenericExtendingClassDoubleLayer.ts (3 errors) ====
     class Model<Attributes = any> {
         public createdAt: Date;
                ~~~~~~~~~
@@ -14,6 +15,8 @@ keyofGenericExtendingClassDoubleLayer.ts(10,12): error TS2564: Property 'age' ha
     class AutoModel<T> extends Model<ModelAttributes<T>> {}
     
     class PersonModel extends AutoModel<PersonModel> {
+          ~~~~~~~~~~~
+!!! error TS5115: Instantiations of the following types appear infinitely circular: 'Model', 'ModelAttributes', 'Exclude'.
         public age: number;
                ~~~
 !!! error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
