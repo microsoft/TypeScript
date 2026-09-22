@@ -101,18 +101,10 @@ jobs:
               $null = $manifestDestinations.Add($destination)
           }
 
-          $generatedOutputPatterns = @(
-              @("tsc/internal/diagnostics/loc", "*.generated.json"),
-              @("packages/vscode-typescript", "package.nls.*.json"),
-              @("packages/vscode-typescript-nightly", "package.nls.*.json"),
-              @("packages/vscode-typescript/l10n", "bundle.l10n.*.json")
-          )
-          foreach ($pattern in $generatedOutputPatterns) {
-              $directory = Join-Path $sourceRoot $pattern[0]
-              Get-ChildItem -LiteralPath $directory -Filter $pattern[1] -File |
-                  Where-Object { $_.Name -notmatch '\.qps-[^.]+\.json$' -and !$manifestDestinations.Contains($_.FullName) } |
-                  Remove-Item -Force
-          }
+          $handbackDirectory = Join-Path $sourceRoot "tsc/internal/diagnostics/loc"
+          Get-ChildItem -LiteralPath $handbackDirectory -Filter "*.generated.json" -File |
+              Where-Object { !$manifestDestinations.Contains($_.FullName) } |
+              Remove-Item -Force
 
           for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
               $source = [IO.Path]::GetFullPath($generatedFiles[$i])
