@@ -434,6 +434,13 @@ export function splitVolumePath(path: string): [volume: string, rest: string, ok
     return ["", path, false];
 }
 
+function splitVolumePathPreservingCase(path: string): [volume: string, rest: string, ok: boolean] {
+    if (path.length >= 2 && isVolumeCharacter(path.charCodeAt(0)) && path.charCodeAt(1) === CharacterCodesColon) {
+        return [path.substring(0, 2), path.substring(2), true];
+    }
+    return ["", path, false];
+}
+
 // Characters that need extra escaping in URI path segments
 // https://github.com/microsoft/vscode-uri/blob/edfdccd976efaf4bb8fdeca87e97c47257721729/src/uri.ts#L455
 const extraEscapeChars: Record<string, string> = {
@@ -557,7 +564,7 @@ export function documentURIToFileName(uri: string): string {
 
         // Local file - fix Windows path by removing leading slash before volume
         if (path.length >= 3 && path.charCodeAt(0) === CharacterCodesSlash) {
-            const [volume, rest, ok] = splitVolumePath(path.substring(1));
+            const [volume, rest, ok] = splitVolumePathPreservingCase(path.substring(1));
             if (ok) {
                 return volume + rest;
             }

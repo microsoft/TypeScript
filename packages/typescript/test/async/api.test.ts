@@ -3450,7 +3450,7 @@ describe("readFile callback semantics", () => {
 });
 
 describe("updateSnapshot file systems", () => {
-    test("request filesystem factories derive directory listings", () => {
+    test("request filesystem factories normalize files and preserve explicit listings", () => {
         const memory = createFileSystem([
             ["/src/index.ts", "posix"],
             ["C:\\repo\\src\\index.ts", "windows"],
@@ -3471,7 +3471,7 @@ describe("updateSnapshot file systems", () => {
                 "C:/repo/src/index.ts": "windows",
                 "file:///literal%20path.ts": "literal file-name string",
                 "/encoded/path with spaces.ts": "file URI",
-                "c:/repo/encoded#name.ts": "Windows file URI",
+                "C:/repo/encoded#name.ts": "Windows file URI",
                 "//server/share/encoded name.ts": "UNC file URI",
                 "/encoded/unicode–name.ts": "Unicode file URI",
                 "/encoded/literal+plus.ts": "plus file URI",
@@ -3479,28 +3479,7 @@ describe("updateSnapshot file systems", () => {
                 "vscode-remote://ssh-remote+host/workspace/src/index.ts": "remote",
                 "vscode-notebook-cell://authority/workspace/notebook.ipynb/cell.ts": "notebook",
             },
-            directories: {
-                "/src": { files: ["index.ts"], directories: [] },
-                "/": { files: [], directories: ["src", "encoded"] },
-                "C:/repo/src": { files: ["index.ts"], directories: [] },
-                "C:/repo": { files: [], directories: ["src"] },
-                "C:/": { files: [], directories: ["repo"] },
-                "c:/repo": { files: ["encoded#name.ts"], directories: [] },
-                "c:/": { files: [], directories: ["repo"] },
-                "/encoded": {
-                    files: ["path with spaces.ts", "unicode–name.ts", "literal+plus.ts", "once%20encoded.ts"],
-                    directories: [],
-                },
-                "//server/share": { files: ["encoded name.ts"], directories: [] },
-                "//server/": { files: [], directories: ["share"] },
-                "file:///": { files: ["literal%20path.ts"], directories: [] },
-                "vscode-remote://ssh-remote+host/workspace/src": { files: ["index.ts"], directories: [] },
-                "vscode-remote://ssh-remote+host/workspace": { files: [], directories: ["src"] },
-                "vscode-remote://ssh-remote+host/": { files: [], directories: ["workspace"] },
-                "vscode-notebook-cell://authority/workspace/notebook.ipynb": { files: ["cell.ts"], directories: [] },
-                "vscode-notebook-cell://authority/workspace": { files: [], directories: ["notebook.ipynb"] },
-                "vscode-notebook-cell://authority/": { files: [], directories: ["workspace"] },
-            },
+            directories: undefined,
             symlinks: undefined,
             removedPaths: undefined,
         });
