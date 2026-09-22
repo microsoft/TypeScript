@@ -208,7 +208,7 @@ export function explicitBounds(value: not string) {
 >result : never
     }
     return value;
->value : not string & {} & not string
+>value : not string & {}
 }
 
 export function symbolValue(value: unknown): symbol | undefined {

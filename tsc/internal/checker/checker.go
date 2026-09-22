@@ -26255,7 +26255,7 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type) ([]*Type, TypeFlags) {
 		slices.SortStableFunc(types, CompareTypes)
 		unique := 1
 		for _, t := range types[1:] {
-			if t != types[unique-1] {
+			if t != types[unique-1] && !(isFreshNegatedType(t) && containsType(types, t.AsNegatedType().regularType)) {
 				types[unique] = t
 				unique++
 			}
@@ -26714,6 +26714,15 @@ func (c *Checker) addTypeToIntersection(typeSet *orderedSet[*Type], includes Typ
 	flags := t.flags
 	if flags&TypeFlagsIntersection != 0 {
 		return c.addTypesToIntersection(typeSet, includes, t.Types())
+	}
+	if flags&TypeFlagsNegated != 0 {
+		if isFreshNegatedType(t) {
+			if typeSet.contains(t.AsNegatedType().regularType) {
+				return includes
+			}
+		} else if typeSet.replace(t.AsNegatedType().freshType, t) {
+			return includes
+		}
 	}
 	if c.IsEmptyAnonymousObjectType(t) {
 		if includes&TypeFlagsIncludesEmptyObject == 0 {
