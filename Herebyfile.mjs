@@ -1267,25 +1267,18 @@ async function runGenerateVendor() {
     if (!fs.existsSync(src)) {
         throw new Error(`${vendorJsonrpcSrc} is not installed; run \`npm ci\` first.`);
     }
-    const entries = vendorJsonrpcFiles.flatMap(file =>
-        fs.statSync(path.join(src, file)).isDirectory()
-            ? [file, ...fs.globSync(`${file}/**/*`, { cwd: src })]
-            : [file]
-    ).sort();
-    const generatedFiles = entries.filter(file => fs.statSync(path.join(src, file)).isFile())
-        .map(file => new GeneratedFile(path.join(dest, file), [__filename, path.join(src, file)], undefined, entries));
-    const existingEntries = fs.existsSync(dest) ? fs.globSync("**/*", { cwd: dest }).sort() : [];
-    if (JSON.stringify(entries) === JSON.stringify(existingEntries) && generatedFiles.every(file => file.isCurrent(!!options.force))) {
+    const manifest = new GeneratedFile(path.join(dest, "package.json"), [__filename, path.join(src, "package.json")]);
+    if (manifest.isCurrent(!!options.force)) {
         console.log("Vendored vscode-jsonrpc files are up to date.");
         return;
     }
-    for (const file of generatedFiles) file.invalidate();
+    manifest.invalidate();
     await rimraf(dest);
     await fs.promises.mkdir(dest, { recursive: true });
     for (const file of vendorJsonrpcFiles) {
         await cpRecursive(path.join(src, file), path.join(dest, file));
     }
-    for (const file of generatedFiles) file.markCurrent();
+    manifest.markCurrent();
 }
 
 export const generateVendor = task({
