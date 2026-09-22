@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/jsonLiteralTypes.ts] ////
+
+=== data.json ===
+{
+    "s": "string literal",
+>"s" : Symbol("s", Decl(data.json, 0, 1))
+
+    "n": 123,
+>"n" : Symbol("n", Decl(data.json, 1, 26))
+
+    "b": true,
+>"b" : Symbol("b", Decl(data.json, 2, 13))
+
+    "arr": ["a", "b"]
+>"arr" : Symbol("arr", Decl(data.json, 3, 14))
+}
+
+=== main.ts ===
+import data from "./data.json";
+>data : Symbol(data, Decl(main.ts, 0, 6))
+
+const s: "string literal" = data.s;
+>s : Symbol(s, Decl(main.ts, 2, 5))
+>data.s : Symbol("s", Decl(data.json, 0, 1))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>s : Symbol("s", Decl(data.json, 0, 1))
+
+const n: 123 = data.n;
+>n : Symbol(n, Decl(main.ts, 3, 5))
+>data.n : Symbol("n", Decl(data.json, 1, 26))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>n : Symbol("n", Decl(data.json, 1, 26))
+
+const b: true = data.b;
+>b : Symbol(b, Decl(main.ts, 4, 5))
+>data.b : Symbol("b", Decl(data.json, 2, 13))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>b : Symbol("b", Decl(data.json, 2, 13))
+
+const arr: readonly ["a", "b"] = data.arr;
+>arr : Symbol(arr, Decl(main.ts, 5, 5))
+>data.arr : Symbol("arr", Decl(data.json, 3, 14))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>arr : Symbol("arr", Decl(data.json, 3, 14))
+
