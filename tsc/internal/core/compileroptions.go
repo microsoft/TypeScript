@@ -9,9 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=ModuleKind -trimprefix=ModuleKind -output=modulekind_stringer_generated.go
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=ScriptTarget -trimprefix=ScriptTarget -output=scripttarget_stringer_generated.go
-//go:generate npx dprint fmt modulekind_stringer_generated.go scripttarget_stringer_generated.go
+//go:generate npx hereby generate:compileroptions
 
 // CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {
@@ -531,8 +529,8 @@ type JsxEmit int32
 const (
 	JsxEmitNone        JsxEmit = 0
 	JsxEmitPreserve    JsxEmit = 1
-	JsxEmitReactNative JsxEmit = 2
-	JsxEmitReact       JsxEmit = 3
+	JsxEmitReact       JsxEmit = 2
+	JsxEmitReactNative JsxEmit = 3
 	JsxEmitReactJSX    JsxEmit = 4
 	JsxEmitReactJSXDev JsxEmit = 5
 )

@@ -59,7 +59,7 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 		ParsedConfig: &tsoptions.ParsedOptions{
 			FileNames:       rootFiles,
 			CompilerOptions: options,
-			ContentMappers:  []*contentmapper.Mapper{{Definition: contentmapper.Definition{Package: "vue", Extensions: []string{".vue"}}, Manifest: contentmapper.Manifest{Name: "vue-mapper", Version: "1.0.0"}}},
+			ContentMappers:  []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, Name: "vue-mapper", Version: "1.0.0"}},
 		},
 	}
 	return compiler.NewProgram(compiler.ProgramOptions{

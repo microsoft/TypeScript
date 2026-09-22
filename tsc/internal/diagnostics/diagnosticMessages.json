@@ -1876,6 +1876,10 @@
         "category": "Error",
         "code": 1557
     },
+    "An import attributes property cannot have a 'readonly' modifier.": {
+        "category": "Error",
+        "code": 1558
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -4763,6 +4767,10 @@
     "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
         "category": "Error",
         "code": 5112
+    },
+    "'{0}' is only assignable to the non-distributed '{1}', but '{1}' has been distributed here.": {
+        "category": "Error",
+        "code": 5113
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

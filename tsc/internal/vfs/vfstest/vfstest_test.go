@@ -12,7 +12,6 @@ import (
 	"unicode/utf16"
 
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -261,15 +260,7 @@ func TestStress(t *testing.T) {
 		func() { fs.FileExists("/foo/bar/baz.txt") },
 		func() { fs.GetAccessibleEntries("/foo/bar") },
 		func() { fs.Realpath("/foo/bar/baz.txt") },
-		func() {
-			_ = fs.WalkDir("/", func(path string, d vfs.DirEntry, err error) error {
-				if err != nil {
-					return err
-				}
-				_, err = d.Info()
-				return err
-			})
-		},
+		func() { fs.Stat("/foo/bar/baz.txt") },
 	}
 
 	var wg sync.WaitGroup

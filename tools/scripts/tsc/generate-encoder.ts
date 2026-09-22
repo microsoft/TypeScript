@@ -10,18 +10,20 @@
  *   - packages/typescript/src/api/node/protocol.generated.ts
  */
 
-import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { xSync } from "tinyexec";
+import { GeneratedFile } from "../gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+    repoRoot as ROOT,
+} from "../gen/utils.mts";
 import type {
     KindType,
     MemberInfo,
     NodeType,
 } from "./schema.ts";
 import { api } from "./schema.ts";
-
-const ROOT = path.resolve(import.meta.dirname!, "../../..");
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Code writer
@@ -1474,6 +1476,9 @@ function generateTSNodeGenerated(): string {
 
 function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`import {`);
+    w.write(`    getChildren,`);
+    w.write(`    getFirstToken,`);
+    w.write(`    getLastToken,`);
     w.write(`    getTokenPosOfNode,`);
     w.write(`    ModifierFlags,`);
     w.write(`    type Node,`);
@@ -1539,6 +1544,10 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(``);
     w.write(`    get next(): number {`);
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_NEXT, true);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    get firstNodeIndex(): number {`);
+    w.write(`        return this.index + 1;`);
     w.write(`    }`);
     w.write(``);
     w.write(`    private get data(): number {`);
@@ -1632,7 +1641,7 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`        return this.getOrCreateChildAtNodeIndex(next) as RemoteNode;`);
     w.write(`    }`);
     w.write(``);
-    w.write(`    private getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {`);
+    w.write(`    getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {`);
     w.write(`        let child = this.sourceFile.nodes[index];`);
     w.write(`        if (!child) {`);
     w.write(`            const kind = this.view.getUint32(this.sourceFile._offsetNodes + index * NODE_LEN + NODE_OFFSET_KIND, true);`);
@@ -1705,6 +1714,36 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`        }`);
     w.write(`    }`);
     w.write(``);
+    w.write(`    *childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {`);
+    w.write(`        if (this.hasChildren()) {`);
+    w.write(`            let next = this.index + 1;`);
+    w.write(`            do {`);
+    w.write(`                const child = this.getOrCreateChildAtNodeIndex(next);`);
+    w.write(`                if (child instanceof RemoteNodeList) {`);
+    w.write(`                    if (child.length) {`);
+    w.write(`                        let listNext = child.firstNodeIndex;`);
+    w.write(`                        while (listNext) {`);
+    w.write(`                            const node = child.getOrCreateChildAtNodeIndex(listNext) as RemoteNode;`);
+    w.write(`                            listNext = node.next;`);
+    w.write(`                            const result = yield node;`);
+    w.write(`                            if (result) {`);
+    w.write(`                                return result;`);
+    w.write(`                            }`);
+    w.write(`                        }`);
+    w.write(`                    }`);
+    w.write(`                }`);
+    w.write(`                else if (child.kind !== SyntaxKind.JSDoc) {`);
+    w.write(`                    const result = yield child;`);
+    w.write(`                    if (result) {`);
+    w.write(`                        return result;`);
+    w.write(`                    }`);
+    w.write(`                }`);
+    w.write(`                next = child.next;`);
+    w.write(`            }`);
+    w.write(`            while (next);`);
+    w.write(`        }`);
+    w.write(`    }`);
+    w.write(``);
     w.write(`    get jsDoc(): readonly Node[] | undefined {`);
     w.write(`        if (!this.hasChildren()) {`);
     w.write(`            return undefined;`);
@@ -1757,6 +1796,26 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`    getText(sourceFile?: SourceFile): string {`);
     w.write(`        sourceFile ??= this.getSourceFile();`);
     w.write(`        return sourceFile.text.substring(this.getStart(sourceFile), this.end);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildCount(sourceFile?: SourceFile): number {`);
+    w.write(`        return this.getChildren(sourceFile).length;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildAt(index: number, sourceFile?: SourceFile): Node {`);
+    w.write(`        return this.getChildren(sourceFile)[index];`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildren(sourceFile?: SourceFile): readonly Node[] {`);
+    w.write(`        return getChildren(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getFirstToken(sourceFile?: SourceFile): Node | undefined {`);
+    w.write(`        return getFirstToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getLastToken(sourceFile?: SourceFile): Node | undefined {`);
+    w.write(`        return getLastToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
     w.write(`    }`);
     w.write(``);
     w.write(`    protected getString(index: number): string {`);
@@ -1986,14 +2045,13 @@ function emitRemoteNodeClassClose(w: CodeWriter) {
 // Main: generate and write all files
 // ═══════════════════════════════════════════════════════════════════════════
 
-function writeAndFormat(filePath: string, content: string, formatter: string) {
-    fs.writeFileSync(filePath, content);
+function writeAndFormat(filePath: string, generate: () => string, force: boolean) {
+    const generated = new GeneratedFile(filePath, [import.meta.filename, path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]);
+    if (generated.isCurrent(force)) return;
+    generated.write(generate() + "\n");
     try {
-        const [cmd, ...args] = formatter.split(" ");
-        xSync(cmd, [...args, filePath], {
-            throwOnError: true,
-            nodeOptions: { stdio: "inherit", cwd: ROOT },
-        });
+        formatFilesSync([filePath]);
+        generated.markCurrent();
     }
     catch {
         console.warn(`Warning: formatter failed for ${filePath}`);
@@ -2001,47 +2059,42 @@ function writeAndFormat(filePath: string, content: string, formatter: string) {
     console.log(`Wrote ${filePath}`);
 }
 
-export default function main() {
+export default function main(force = false) {
     console.log("Generating encoder/decoder code...");
 
-    const goEncoder = generateGoEncoder();
     writeAndFormat(
         path.join(ROOT, "tsc/internal/api/encoder/encoder_generated.go"),
-        goEncoder + "\n",
-        "dprint fmt",
+        generateGoEncoder,
+        force,
     );
 
-    const goDecoder = generateGoDecoder();
     writeAndFormat(
         path.join(ROOT, "tsc/internal/api/encoder/decoder_generated.go"),
-        goDecoder + "\n",
-        "dprint fmt",
+        generateGoDecoder,
+        force,
     );
 
-    const tsProtocol = generateTSProtocol();
     writeAndFormat(
         path.join(ROOT, "packages/typescript/src/api/node/protocol.generated.ts"),
-        tsProtocol + "\n",
-        "dprint fmt",
+        generateTSProtocol,
+        force,
     );
 
-    const tsEncoder = generateTSEncoder();
     writeAndFormat(
         path.join(ROOT, "packages/typescript/src/api/node/encoder.generated.ts"),
-        tsEncoder + "\n",
-        "dprint fmt",
+        generateTSEncoder,
+        force,
     );
 
-    const tsNode = generateTSNodeGenerated();
     writeAndFormat(
         path.join(ROOT, "packages/typescript/src/api/node/node.generated.ts"),
-        tsNode + "\n",
-        "dprint fmt",
+        generateTSNodeGenerated,
+        force,
     );
 
     console.log("Done!");
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    main();
+    main(parseGeneratorArgs({}).force);
 }
