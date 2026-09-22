@@ -28,7 +28,7 @@ type symbolExtractor struct {
 
 type exportExtractor struct {
 	*symbolExtractor
-	moduleResolver *module.DynamicResolver
+	moduleResolver *module.DefaultResolver
 }
 
 type extractorStats struct {
@@ -70,7 +70,7 @@ func newSymbolExtractor(packageName string, checker *checker.Checker, toPath fun
 	}
 }
 
-func (b *registryBuilder) newExportExtractor(packageName string, checker *checker.Checker, moduleResolver *module.DynamicResolver, realpath func(string) string) *exportExtractor {
+func (b *registryBuilder) newExportExtractor(packageName string, checker *checker.Checker, moduleResolver *module.DefaultResolver, realpath func(string) string) *exportExtractor {
 	return &exportExtractor{
 		symbolExtractor: newSymbolExtractor(packageName, checker, b.base.toPath, realpath),
 		moduleResolver:  moduleResolver,

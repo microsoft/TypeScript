@@ -66,7 +66,7 @@ func (t *tracer) getTraces() []DiagAndArgs {
 }
 
 type resolutionState struct {
-	resolver *DynamicResolver
+	resolver *DefaultResolver
 	tracer   *tracer
 
 	// request fields
@@ -97,7 +97,7 @@ func newResolutionState(
 	resolutionMode core.ResolutionMode,
 	compilerOptions *core.CompilerOptions,
 	redirectedReference ResolvedProjectReference,
-	resolver *DynamicResolver, traceBuilder *tracer,
+	resolver *DefaultResolver, traceBuilder *tracer,
 ) *resolutionState {
 	state := &resolutionState{
 		name:                name,
@@ -145,7 +145,7 @@ func GetCompilerOptionsWithRedirect(compilerOptions *core.CompilerOptions, redir
 	return compilerOptions
 }
 
-type DynamicResolver struct {
+type DefaultResolver struct {
 	caches
 	host            ResolutionHost
 	compilerOptions *core.CompilerOptions
@@ -156,59 +156,42 @@ type DynamicResolver struct {
 }
 
 type ResolverOptions struct {
+	Host             ResolutionHost
+	CompilerOptions  *core.CompilerOptions
+	TypingsLocation  string
+	ProjectName      string
+	ExtraExtensions  []string
 	PackageJsonCache *packagejson.InfoCache
 }
 
-func NewResolver(
-	host ResolutionHost,
-	options *core.CompilerOptions,
-	typingsLocation string,
-	projectName string,
-	extraExtensions []string,
-) *DynamicResolver {
-	return &DynamicResolver{
-		host:            host,
-		caches:          newCaches(host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames(), options),
-		compilerOptions: options,
-		typingsLocation: typingsLocation,
-		projectName:     projectName,
-		extraExtensions: extraExtensions,
-	}
-}
-
-func NewResolverWithOptions(
-	host ResolutionHost,
-	compilerOptions *core.CompilerOptions,
-	typingsLocation string,
-	projectName string,
-	opts ResolverOptions,
-) *DynamicResolver {
-	r := &DynamicResolver{
-		host:            host,
-		compilerOptions: compilerOptions,
-		typingsLocation: typingsLocation,
-		projectName:     projectName,
+func NewResolver(opts ResolverOptions) *DefaultResolver {
+	r := &DefaultResolver{
+		host:            opts.Host,
+		compilerOptions: opts.CompilerOptions,
+		typingsLocation: opts.TypingsLocation,
+		projectName:     opts.ProjectName,
+		extraExtensions: opts.ExtraExtensions,
 	}
 	if opts.PackageJsonCache != nil {
 		r.packageJsonInfoCache = opts.PackageJsonCache
 	} else {
-		r.caches = newCaches(host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames(), compilerOptions)
+		r.caches = newCaches(opts.Host.GetCurrentDirectory(), opts.Host.FS().UseCaseSensitiveFileNames(), opts.CompilerOptions)
 	}
 	return r
 }
 
-func (r *DynamicResolver) newTraceBuilder() *tracer {
+func (r *DefaultResolver) newTraceBuilder() *tracer {
 	if r.compilerOptions.TraceResolution == core.TSTrue {
 		return &tracer{}
 	}
 	return nil
 }
 
-func (r *DynamicResolver) GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry {
+func (r *DefaultResolver) GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry {
 	return (&resolutionState{compilerOptions: r.compilerOptions, resolver: r}).getPackageScopeForPath(directory)
 }
 
-func (r *DynamicResolver) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
+func (r *DefaultResolver) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
 	r.caches.packageJsonInfoCache.Range(f)
 }
 
@@ -218,7 +201,7 @@ func (r *tracer) traceResolutionUsingProjectReference(redirectedReference Resolv
 	}
 }
 
-func (r *DynamicResolver) ResolveTypeReferenceDirective(
+func (r *DefaultResolver) ResolveTypeReferenceDirective(
 	typeReferenceDirectiveName string,
 	containingFile string,
 	resolutionMode core.ResolutionMode,
@@ -263,17 +246,17 @@ func (r *DynamicResolver) ResolveTypeReferenceDirective(
 	return result, traceBuilder.getTraces()
 }
 
-func (r *DynamicResolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs, error) {
+func (r *DefaultResolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs, error) {
 	result, trace := r.resolveModuleName(moduleName, containingFile, tspath.GetDirectoryPath(containingFile), resolutionMode, redirectedReference)
 	return result, trace, nil
 }
 
-func (r *DynamicResolver) ResolveModuleNameFromDirectory(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*ResolvedModule, []DiagAndArgs, error) {
+func (r *DefaultResolver) ResolveModuleNameFromDirectory(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*ResolvedModule, []DiagAndArgs, error) {
 	result, trace := r.resolveModuleName(moduleName, containingDirectory, containingDirectory, resolutionMode, nil)
 	return result, trace, nil
 }
 
-func (r *DynamicResolver) resolveModuleName(moduleName string, containingFile string, containingDirectory string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
+func (r *DefaultResolver) resolveModuleName(moduleName string, containingFile string, containingDirectory string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
 	traceBuilder := r.newTraceBuilder()
 
 	cacheKey := moduleResolutionCacheKey{
@@ -333,7 +316,7 @@ func (r *DynamicResolver) resolveModuleName(moduleName string, containingFile st
 	return finalResult, traceBuilder.getTraces()
 }
 
-func (r *DynamicResolver) ResolvePackageDirectory(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
+func (r *DefaultResolver) ResolvePackageDirectory(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, nil)
@@ -344,7 +327,7 @@ func (r *DynamicResolver) ResolvePackageDirectory(moduleName string, containingF
 	return nil
 }
 
-func (r *DynamicResolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory string, originalResult *ResolvedModule, traceBuilder *tracer) *ResolvedModule {
+func (r *DefaultResolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory string, originalResult *ResolvedModule, traceBuilder *tracer) *ResolvedModule {
 	if r.typingsLocation == "" ||
 		tspath.IsExternalModuleNameRelative(moduleName) ||
 		(originalResult.ResolvedFileName != "" && tspath.ExtensionIsOneOf(originalResult.Extension, tspath.SupportedTSExtensionsWithJsonFlat)) {
@@ -373,7 +356,7 @@ func (r *DynamicResolver) tryResolveFromTypingsLocation(moduleName string, conta
 	return result
 }
 
-func (r *DynamicResolver) resolveConfig(moduleName string, containingFile string) *ResolvedModule {
+func (r *DefaultResolver) resolveConfig(moduleName string, containingFile string) *ResolvedModule {
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, core.ModuleKindCommonJS, r.compilerOptions, nil, r, nil)
 	state.isConfigLookup = true
@@ -1996,7 +1979,7 @@ type ParsedPatterns struct {
 	patterns           []core.Pattern
 }
 
-func (r *DynamicResolver) getParsedPatternsForPaths(compilerOptions *core.CompilerOptions) *ParsedPatterns {
+func (r *DefaultResolver) getParsedPatternsForPaths(compilerOptions *core.CompilerOptions) *ParsedPatterns {
 	return r.parsedPatternsForPaths.Get(compilerOptions.Paths)
 }
 
@@ -2087,7 +2070,10 @@ func extensionIsOk(extensions extensions, extension string) bool {
 }
 
 func ResolveConfig(moduleName string, containingFile string, host ResolutionHost) *ResolvedModule {
-	resolver := NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "", nil)
+	resolver := NewResolver(ResolverOptions{
+		Host:            host,
+		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
+	})
 	return resolver.resolveConfig(moduleName, containingFile)
 }
 
@@ -2173,7 +2159,7 @@ func (e *ResolvedEntrypoint) SymlinkOrRealpath() string {
 	return e.ResolvedFileName
 }
 
-func (r *DynamicResolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.InfoCacheEntry, packageName string, enableDirectorySearch bool) []*ResolvedEntrypoint {
+func (r *DefaultResolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.InfoCacheEntry, packageName string, enableDirectorySearch bool) []*ResolvedEntrypoint {
 	extensions := extensionsTypeScript | extensionsDeclaration
 	features := NodeResolutionFeaturesAll
 	state := &resolutionState{resolver: r, extensions: extensions, features: features, compilerOptions: r.compilerOptions}
@@ -2232,7 +2218,7 @@ func (r *DynamicResolver) GetEntrypointsFromPackageJsonInfo(packageJson *package
 	return nil
 }
 
-func (r *DynamicResolver) createResolvedEntrypointHandlingSymlink(fileName string, moduleSpecifier string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], ending Ending) *ResolvedEntrypoint {
+func (r *DefaultResolver) createResolvedEntrypointHandlingSymlink(fileName string, moduleSpecifier string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], ending Ending) *ResolvedEntrypoint {
 	var originalFileName string
 	resolvedFileName := fileName
 	if realPath := r.host.FS().Realpath(fileName); realPath != fileName {

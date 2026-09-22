@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
@@ -23,41 +24,47 @@ type moduleResolverFactory struct {
 	currentDirectory string
 }
 
-func (f *moduleResolverFactory) CompilerOptions() *core.CompilerOptions {
-	return f.registration.compilerOptions
+type programResolutionContext struct {
+	options   module.ResolverOptions
+	resolvers map[ModuleResolverID]module.Resolver
+	mu        sync.Mutex
 }
 
 type callbackModuleResolver struct {
-	registration       *moduleResolverRegistration
-	conn               ipc.Conn
-	ctx                context.Context
-	currentDirectory   string
-	snapshot           SnapshotID
-	inProgressSnapshot uint64
-	fallbackResolver   module.Resolver
+	registration               *moduleResolverRegistration
+	conn                       ipc.Conn
+	ctx                        context.Context
+	currentDirectory           string
+	snapshot                   SnapshotID
+	programResolutionContextID uint64
+	fallbackResolver           module.Resolver
 }
 
-func (f *moduleResolverFactory) NewResolver(fallback module.Resolver) (module.Resolver, func()) {
+func (f *moduleResolverFactory) NewResolver(
+	options module.ResolverOptions,
+) (module.Resolver, func()) {
+	options.CompilerOptions = f.registration.compilerOptions
+	var fallback module.Resolver = module.NewResolver(options)
 	if f.registration.resolveModuleNameCallback == "" {
 		if f.registration.resolutions != nil {
 			fallback = module.NewStaticResolver(fallback, f.registration.resolutions)
 		}
 		return fallback, func() {}
 	}
-	inProgressSnapshot := f.session.registerInProgressSnapshot(fallback)
+	contextID := f.session.registerProgramResolutionContext(fallback, options, f.registration)
 	var resolver module.Resolver = &callbackModuleResolver{
-		registration:       f.registration,
-		conn:               f.conn,
-		ctx:                f.ctx,
-		currentDirectory:   f.currentDirectory,
-		inProgressSnapshot: inProgressSnapshot,
-		fallbackResolver:   fallback,
+		registration:               f.registration,
+		conn:                       f.conn,
+		ctx:                        f.ctx,
+		currentDirectory:           f.currentDirectory,
+		programResolutionContextID: contextID,
+		fallbackResolver:           fallback,
 	}
 	if f.registration.resolutions != nil {
 		resolver = module.NewStaticResolver(resolver, f.registration.resolutions)
 	}
 	return resolver, func() {
-		f.session.releaseInProgressSnapshot(inProgressSnapshot)
+		f.session.releaseProgramResolutionContext(contextID)
 	}
 }
 
@@ -92,8 +99,8 @@ func (p *callbackModuleResolver) resolveModuleName(
 	if p.snapshot != 0 {
 		params.Snapshot = &p.snapshot
 	}
-	if p.inProgressSnapshot != 0 {
-		params.InProgressSnapshot = &p.inProgressSnapshot
+	if p.programResolutionContextID != 0 {
+		params.InProgressSnapshot = &p.programResolutionContextID
 	}
 	mode := ResolutionMode(resolutionMode)
 	params.ResolutionMode = &mode
@@ -241,18 +248,38 @@ func (s *Session) moduleResolverFactory(ctx context.Context, options *CreateProg
 	}, nil
 }
 
-func (s *Session) registerInProgressSnapshot(resolver module.Resolver) uint64 {
-	id := s.nextInProgressSnapshotHandle.Add(1)
-	s.inProgressSnapshotsMu.Lock()
-	s.inProgressSnapshots[id] = resolver
-	s.inProgressSnapshotsMu.Unlock()
+func (s *Session) registerProgramResolutionContext(
+	resolver module.Resolver,
+	options module.ResolverOptions,
+	registration *moduleResolverRegistration,
+) uint64 {
+	id := s.nextProgramResolutionContextID.Add(1)
+	s.programResolutionContextsMu.Lock()
+	s.programResolutionContexts[id] = &programResolutionContext{
+		options:   options,
+		resolvers: map[ModuleResolverID]module.Resolver{registration.id: resolver},
+	}
+	s.programResolutionContextsMu.Unlock()
 	return id
 }
 
-func (s *Session) releaseInProgressSnapshot(id uint64) {
-	s.inProgressSnapshotsMu.Lock()
-	delete(s.inProgressSnapshots, id)
-	s.inProgressSnapshotsMu.Unlock()
+func (s *Session) releaseProgramResolutionContext(id uint64) {
+	s.programResolutionContextsMu.Lock()
+	delete(s.programResolutionContexts, id)
+	s.programResolutionContextsMu.Unlock()
+}
+
+func (c *programResolutionContext) resolverFor(registration *moduleResolverRegistration) module.Resolver {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if resolver := c.resolvers[registration.id]; resolver != nil {
+		return resolver
+	}
+	options := c.options
+	options.CompilerOptions = registration.compilerOptions
+	resolver := module.NewResolver(options)
+	c.resolvers[registration.id] = resolver
+	return resolver
 }
 
 func moduleResolutionError(snapshot *project.Snapshot) error {
@@ -326,31 +353,38 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 		return nil, fmt.Errorf("%w: snapshot and inProgressSnapshot are mutually exclusive", ErrClientError)
 	}
 	if params.InProgressSnapshot != 0 {
-		s.inProgressSnapshotsMu.RLock()
-		inProgressResolver := s.inProgressSnapshots[params.InProgressSnapshot]
-		s.inProgressSnapshotsMu.RUnlock()
-		if inProgressResolver == nil {
+		s.programResolutionContextsMu.RLock()
+		resolutionContext := s.programResolutionContexts[params.InProgressSnapshot]
+		s.programResolutionContextsMu.RUnlock()
+		if resolutionContext == nil {
 			return nil, fmt.Errorf("%w: in-progress snapshot %d not found", ErrClientError, params.InProgressSnapshot)
 		}
-		resolver = inProgressResolver
+		resolver = resolutionContext.resolverFor(data)
 	} else if params.Snapshot != 0 {
 		sd, err := s.getSnapshotData(params.Snapshot)
 		if err != nil {
 			return nil, err
 		}
-		resolver = module.NewResolver(sd.snapshot, data.compilerOptions, "", "", sd.snapshot.ContentMapperExtensions())
+		resolver = module.NewResolver(module.ResolverOptions{
+			Host:            sd.snapshot,
+			CompilerOptions: data.compilerOptions,
+			ExtraExtensions: sd.snapshot.ContentMapperExtensions(),
+		})
 	} else {
-		resolver = module.NewResolver(s, data.compilerOptions, "", "", nil)
+		resolver = module.NewResolver(module.ResolverOptions{
+			Host:            s,
+			CompilerOptions: data.compilerOptions,
+		})
 	}
 	if data.resolveModuleNameCallback != "" {
 		resolver = &callbackModuleResolver{
-			registration:       data,
-			conn:               s.conn,
-			ctx:                ctx,
-			currentDirectory:   s.GetCurrentDirectory(),
-			snapshot:           params.Snapshot,
-			inProgressSnapshot: params.InProgressSnapshot,
-			fallbackResolver:   resolver,
+			registration:               data,
+			conn:                       s.conn,
+			ctx:                        ctx,
+			currentDirectory:           s.GetCurrentDirectory(),
+			snapshot:                   params.Snapshot,
+			programResolutionContextID: params.InProgressSnapshot,
+			fallbackResolver:           resolver,
 		}
 	}
 	if data.resolutions != nil {

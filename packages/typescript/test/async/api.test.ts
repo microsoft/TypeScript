@@ -669,7 +669,10 @@ describe("API", () => {
             module: ModuleKind.NodeNext,
             moduleResolution: ModuleResolutionKind.NodeNext,
         };
-        const defaultResolver = await api.createModuleResolver(compilerOptions);
+        const defaultResolver = await api.createModuleResolver({
+            ...compilerOptions,
+            customConditions: ["delegated"],
+        });
         const customResolver = await api.createModuleResolver(compilerOptions, {
             resolveModuleName: async (moduleName, containingDirectory, resolutionMode, { snapshot }) => {
                 assert.ok(snapshot);
@@ -683,7 +686,14 @@ describe("API", () => {
         });
         const snapshot = await api.createSnapshot({
             fileSystem: createFileSystemLayer([
-                ["/node_modules/layered/package.json", JSON.stringify({ name: "layered", version: "1.0.0", types: "index.d.ts" })],
+                [
+                    "/node_modules/layered/package.json",
+                    JSON.stringify({
+                        name: "layered",
+                        version: "1.0.0",
+                        exports: { ".": { delegated: "./index.d.ts" } },
+                    }),
+                ],
                 ["/node_modules/layered/index.d.ts", `export {};`],
             ]),
             createPrograms: [{
@@ -695,6 +705,32 @@ describe("API", () => {
         assert.deepEqual(
             [...await snapshot.operation.createdPrograms[0].getSourceFileNames()].sort(),
             ["/node_modules/layered/index.d.ts", "/src/index.ts"],
+        );
+    });
+
+    test("module resolver callback errors reject lib replacement", async () => {
+        await using api = spawnAPI({
+            "/src/index.ts": `export {};`,
+        });
+        const resolver = await api.createModuleResolver(
+            { moduleResolution: ModuleResolutionKind.Bundler },
+            {
+                resolveModuleName: () => {
+                    throw new Error("lib replacement callback failed");
+                },
+            },
+        );
+
+        await assert.rejects( // @sync: assert.throws(
+            () =>
+                api.createSnapshot({
+                    createPrograms: [{
+                        rootFiles: ["/src/index.ts"],
+                        compilerOptions: { libReplacement: true },
+                        options: { moduleResolver: resolver },
+                    }],
+                }),
+            /lib replacement callback failed/,
         );
     });
 

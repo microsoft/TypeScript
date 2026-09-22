@@ -314,10 +314,12 @@ func (rh *resolutionHost) FS() vfs.FS {
 	return rh.fs
 }
 
-func getModuleResolver(host RegistryCloneHost, realpath func(string) string, opts module.ResolverOptions) *module.DynamicResolver {
+func getModuleResolver(host RegistryCloneHost, realpath func(string) string, opts module.ResolverOptions) *module.DefaultResolver {
 	rh := &resolutionHost{
 		fs:               wrapvfs.Wrap(host.FS(), wrapvfs.Replacements{Realpath: realpath}),
 		currentDirectory: host.GetCurrentDirectory(),
 	}
-	return module.NewResolverWithOptions(rh, core.EmptyCompilerOptions, "", "", opts)
+	opts.Host = rh
+	opts.CompilerOptions = core.EmptyCompilerOptions
+	return module.NewResolver(opts)
 }

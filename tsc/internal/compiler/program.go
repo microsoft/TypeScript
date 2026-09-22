@@ -35,16 +35,15 @@ import (
 )
 
 type ProgramOptions struct {
-	Host                          CompilerHost
-	Config                        *tsoptions.ParsedCommandLine
-	UseSourceOfProjectReference   bool
-	SingleThreaded                core.Tristate
-	CreateCheckerPool             func(*Program) CheckerPool
-	TypingsLocation               string
-	ProjectName                   string
-	Tracing                       *tracing.Tracing
-	CreateModuleResolver          func(fallback module.Resolver) module.Resolver
-	ModuleResolverCompilerOptions *core.CompilerOptions
+	Host                        CompilerHost
+	Config                      *tsoptions.ParsedCommandLine
+	UseSourceOfProjectReference bool
+	SingleThreaded              core.Tristate
+	CreateCheckerPool           func(*Program) CheckerPool
+	TypingsLocation             string
+	ProjectName                 string
+	Tracing                     *tracing.Tracing
+	CreateModuleResolver        func(options module.ResolverOptions) module.Resolver
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
@@ -307,7 +306,7 @@ func (p *Program) UpdateProgram(
 	changedFilePath tspath.Path,
 	newHost CompilerHost,
 	createCheckerPool func(*Program) CheckerPool,
-	createModuleResolver func(module.Resolver) module.Resolver,
+	createModuleResolver func(module.ResolverOptions) module.Resolver,
 ) (*Program, *ast.SourceFile, bool) {
 	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool, createModuleResolver); reused {
 		return result, newFile, true
@@ -334,7 +333,7 @@ func (p *Program) ReuseProgram(
 	changedFilePath tspath.Path,
 	newHost CompilerHost,
 	createCheckerPool func(*Program) CheckerPool,
-	createModuleResolver func(module.Resolver) module.Resolver,
+	createModuleResolver func(module.ResolverOptions) module.Resolver,
 ) (*Program, *ast.SourceFile, bool) {
 	newOpts := p.opts
 	newOpts.Host = newHost

@@ -428,13 +428,13 @@ type Session struct {
 
 	languageServerUpdateMu sync.Mutex
 
-	nextModuleResolverID         atomic.Uint64
-	moduleResolvers              map[ModuleResolverID]*moduleResolverRegistration
-	moduleResolversMu            sync.RWMutex
-	nextInProgressSnapshotHandle atomic.Uint64
-	inProgressSnapshots          map[uint64]module.Resolver
-	inProgressSnapshotsMu        sync.RWMutex
-	conn                         ipc.Conn
+	nextModuleResolverID           atomic.Uint64
+	moduleResolvers                map[ModuleResolverID]*moduleResolverRegistration
+	moduleResolversMu              sync.RWMutex
+	nextProgramResolutionContextID atomic.Uint64
+	programResolutionContexts      map[uint64]*programResolutionContext
+	programResolutionContextsMu    sync.RWMutex
+	conn                           ipc.Conn
 
 	cpuProfiler pprof.CPUProfiler
 }
@@ -477,12 +477,12 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		withLocale = func(ctx context.Context) context.Context { return ctx }
 	}
 	s := &Session{
-		id:                  formatSessionID(id),
-		snapshotHost:        snapshotHost,
-		withLocale:          withLocale,
-		snapshots:           make(map[SnapshotID]*snapshotData),
-		moduleResolvers:     make(map[ModuleResolverID]*moduleResolverRegistration),
-		inProgressSnapshots: make(map[uint64]module.Resolver),
+		id:                        formatSessionID(id),
+		snapshotHost:              snapshotHost,
+		withLocale:                withLocale,
+		snapshots:                 make(map[SnapshotID]*snapshotData),
+		moduleResolvers:           make(map[ModuleResolverID]*moduleResolverRegistration),
+		programResolutionContexts: make(map[uint64]*programResolutionContext),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses

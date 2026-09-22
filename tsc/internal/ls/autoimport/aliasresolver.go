@@ -21,7 +21,7 @@ type pathAndFileName struct {
 type aliasResolver struct {
 	toPath         func(fileName string) tspath.Path
 	host           RegistryCloneHost
-	moduleResolver *module.DynamicResolver
+	moduleResolver *module.DefaultResolver
 
 	rootFiles []*ast.SourceFile
 	// symlinks maps from realpath to symlinked path and file name
@@ -34,7 +34,7 @@ func newAliasResolver(
 	rootFiles []*ast.SourceFile,
 	symlinks map[tspath.Path]pathAndFileName,
 	host RegistryCloneHost,
-	moduleResolver *module.DynamicResolver,
+	moduleResolver *module.DefaultResolver,
 	toPath func(fileName string) tspath.Path,
 	onFailedAmbientModuleLookup func(source ast.HasFileName, moduleName string),
 ) *aliasResolver {

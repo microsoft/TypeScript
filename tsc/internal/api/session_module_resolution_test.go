@@ -241,15 +241,18 @@ func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 		ctx:              context.Background(),
 		currentDirectory: "/",
 	}
-	provider, cleanup := factory.NewResolver(module.NewResolver(session, core.EmptyCompilerOptions, "", "", nil))
+	provider, cleanup := factory.NewResolver(module.ResolverOptions{
+		Host:            session,
+		CompilerOptions: core.EmptyCompilerOptions,
+	})
 	for range 2 {
 		_, _, err := provider.ResolveModuleNameFromDirectory("pkg", "/src", core.ResolutionModeESM)
 		assert.ErrorContains(t, err, "callback error")
 	}
 	assert.Equal(t, conn.calls, 2)
-	assert.Equal(t, len(session.inProgressSnapshots), 1)
+	assert.Equal(t, len(session.programResolutionContexts), 1)
 	cleanup()
-	assert.Equal(t, len(session.inProgressSnapshots), 0)
+	assert.Equal(t, len(session.programResolutionContexts), 0)
 }
 
 func TestModuleResolutionCallbackErrorRejectsLanguageServerUpdate(t *testing.T) {

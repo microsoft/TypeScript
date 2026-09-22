@@ -39,7 +39,7 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	for _, name := range []string{"pkg", "pkg/"} {
 		r, _, _ := resolver.ResolveModuleName(name, "/repo/src/file.ts", core.ModuleKindESNext, nil)
@@ -168,7 +168,7 @@ func TestResolveModuleNameTrailingSlashRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	type resolutionResult struct {
 		name     string
@@ -240,7 +240,7 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	var panicked atomic.Bool
 	type resolutionResult struct {
@@ -363,7 +363,7 @@ func TestResolvePeerDependencyNilContentsRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	var panicked atomic.Bool
 	type resolutionResult struct {

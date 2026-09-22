@@ -510,11 +510,11 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
 	}
 	var cleanupModuleResolver func()
-	createModuleResolver := func(fallback module.Resolver) module.Resolver {
+	createModuleResolver := func(options module.ResolverOptions) module.Resolver {
 		if p.moduleResolverFactory == nil {
-			return fallback
+			return module.NewResolver(options)
 		}
-		resolver, cleanup := p.moduleResolverFactory.NewResolver(fallback)
+		resolver, cleanup := p.moduleResolverFactory.NewResolver(options)
 		cleanupModuleResolver = cleanup
 		return resolver
 	}
@@ -567,19 +567,14 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		if p.GetTypeAcquisition().Enable.IsTrue() {
 			typingsLocation = p.host.sessionOptions.TypingsLocation
 		}
-		var moduleResolverCompilerOptions *core.CompilerOptions
-		if p.moduleResolverFactory != nil {
-			moduleResolverCompilerOptions = p.moduleResolverFactory.CompilerOptions()
-		}
 		newProgram = compiler.NewProgram(
 			compiler.ProgramOptions{
-				Host:                          p.host,
-				Config:                        commandLine,
-				UseSourceOfProjectReference:   true,
-				TypingsLocation:               typingsLocation,
-				CreateCheckerPool:             createCheckerPool,
-				CreateModuleResolver:          createModuleResolver,
-				ModuleResolverCompilerOptions: moduleResolverCompilerOptions,
+				Host:                        p.host,
+				Config:                      commandLine,
+				UseSourceOfProjectReference: true,
+				TypingsLocation:             typingsLocation,
+				CreateCheckerPool:           createCheckerPool,
+				CreateModuleResolver:        createModuleResolver,
 			},
 		)
 	}

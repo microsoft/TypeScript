@@ -188,7 +188,10 @@ func (ti *TypingsInstaller) installTypings(
 	if packageNames, ok := ti.installWorker(requestID, scopedTypings, logger); ok {
 		logger.Log(fmt.Sprintf("ATA:: Installed typings %v", packageNames))
 		var installedTypingFiles []string
-		resolver := module.NewResolver(ti.host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "", nil)
+		resolver := module.NewResolver(module.ResolverOptions{
+			Host:            ti.host,
+			CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
+		})
 		for _, packageName := range filteredTypings {
 			typingFile := ti.typingToFileName(resolver, packageName)
 			if typingFile == "" {
@@ -416,7 +419,10 @@ func (ti *TypingsInstaller) processCacheLocation(projectID string, fs vfs.FS, lo
 		logger.Log("ATA:: Loaded content of " + packageLockJson + ": " + npmLockContents)
 
 		// !!! sheetal strada uses Node10
-		resolver := module.NewResolver(ti.host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "", nil)
+		resolver := module.NewResolver(module.ResolverOptions{
+			Host:            ti.host,
+			CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
+		})
 		if npmConfig.DevDependencies != nil && (npmLock.Packages != nil || npmLock.Dependencies != nil) {
 			for key := range npmConfig.DevDependencies {
 				npmLockValue, npmLockValueExists := npmLock.Packages["node_modules/"+key]
@@ -476,7 +482,7 @@ func (ti *TypingsInstaller) ensureTypingsLocationExists(fs vfs.FS, logger loggin
 	}
 }
 
-func (ti *TypingsInstaller) typingToFileName(resolver *module.DynamicResolver, packageName string) string {
+func (ti *TypingsInstaller) typingToFileName(resolver *module.DefaultResolver, packageName string) string {
 	result, _, _ := resolver.ResolveModuleName(packageName, tspath.CombinePaths(ti.typingsLocation, "index.d.ts"), core.ModuleKindNone, nil)
 	return result.ResolvedFileName
 }

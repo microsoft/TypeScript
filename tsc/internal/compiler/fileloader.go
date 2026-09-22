@@ -178,13 +178,17 @@ func processAllProgramFiles(
 		contentMapperExtensions:                        opts.Config.ContentMapperExtensions(),
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
-	resolverCompilerOptions := compilerOptions
-	if opts.ModuleResolverCompilerOptions != nil {
-		resolverCompilerOptions = opts.ModuleResolverCompilerOptions
+	resolverOptions := module.ResolverOptions{
+		Host:            loader.projectReferenceFileMapper.host,
+		CompilerOptions: compilerOptions,
+		TypingsLocation: opts.TypingsLocation,
+		ProjectName:     opts.ProjectName,
+		ExtraExtensions: opts.Config.ContentMapperExtensions(),
 	}
-	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, resolverCompilerOptions, opts.TypingsLocation, opts.ProjectName, opts.Config.ContentMapperExtensions())
 	if opts.CreateModuleResolver != nil {
-		loader.resolver = opts.CreateModuleResolver(loader.resolver)
+		loader.resolver = opts.CreateModuleResolver(resolverOptions)
+	} else {
+		loader.resolver = module.NewResolver(resolverOptions)
 	}
 	if opts.Tracing != nil {
 		defer opts.Tracing.Push(tracing.PhaseProgram, "processRootFiles", map[string]any{"count": len(rootFiles)}, false)()
@@ -984,7 +988,12 @@ func (p *fileLoader) resolveLibrary(libraryName, resolveFrom string) (*module.Re
 	if tr := p.opts.Tracing; tr != nil {
 		defer tr.Push(tracing.PhaseProgram, "resolveLibrary", map[string]any{"resolveFrom": resolveFrom}, false)()
 	}
-	resolved, trace, _ := p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
+	resolved, trace, err := p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
+	if err != nil {
+		p.moduleResolutionErrorOnce.Do(func() {
+			p.moduleResolutionError = err
+		})
+	}
 	return resolved, trace
 }
 
