@@ -69,6 +69,7 @@ import {
     isErrorType,
     JsxEmit,
     type LiteralType,
+    type MappedType,
     ModifierFlags,
     ModuleKind,
     ModuleResolutionKind,
@@ -703,6 +704,16 @@ declare module "augmentation" {}`,
         const config = await api.parseConfigFile("/tsconfig.json");
         assert.equal(config.typeAcquisition?.enable, true);
         assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
+    });
+
+    test("parseConfigFile includes inherited plugins", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.base.json": JSON.stringify({ compilerOptions: { plugins: [{ name: "typescript-plugin" }] } }),
+            "/tsconfig.json": JSON.stringify({ extends: "./tsconfig.base.json" }),
+        });
+
+        const config = await api.parseConfigFile("/tsconfig.json");
+        assert.deepEqual(config.options.plugins, [{ name: "typescript-plugin" }]);
     });
 });
 
@@ -2710,6 +2721,8 @@ export const intersection: { a: number } & { b: string } = { a: 1, b: "hi" };
 export type KeyOf<T> = keyof T;
 export type Lookup<T, K extends keyof T> = T[K];
 export type Cond<T> = T extends string ? "yes" : "no";
+export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
+export type MappedUnion<T> = Mapped<T> | string;
 export const tpl: \`hello \${string}\` = "hello world";
 export type Upper = Uppercase<"hello">;
 export const tuple: readonly [number, string?, ...boolean[]] = [1];
@@ -2873,6 +2886,40 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         assert.ok(falseType, "should return the false-branch type");
         assert.ok(falseType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for false branch, got flags ${falseType.flags}`);
         assert.equal((falseType as LiteralType).value, "no");
+    });
+
+    test("MappedType exposes its component types", async () => {
+        await using api = spawnAPI(typeFiles);
+
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = await project.checker.resolveName("Mapped", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(type.isMappedType(), true);
+        const mapped = type as MappedType;
+        assert.ok((await mapped.getTypeParameter()).flags & TypeFlags.TypeParameter);
+        assert.ok(await mapped.getConstraintType());
+        assert.ok(await mapped.getNameType());
+        assert.ok(await mapped.getTemplateType());
+    });
+
+    test("MappedType returned as a union constituent exposes its component types", async () => {
+        await using api = spawnAPI(typeFiles);
+
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = await project.checker.resolveName("MappedUnion", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const union = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(union);
+        const mapped = (await (union as UnionOrIntersectionType).getTypes()).find(type => type.isMappedType());
+        assert.ok(mapped);
+        assert.ok((await mapped.getTypeParameter()).flags & TypeFlags.TypeParameter);
+        assert.ok(await mapped.getConstraintType());
+        assert.ok(await mapped.getNameType());
+        assert.ok(await mapped.getTemplateType());
     });
 
     test("TemplateLiteralType.texts and getTypes()", async () => {
