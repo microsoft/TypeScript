@@ -923,8 +923,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypeOfPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfoOfType):
 		return s.handleGetIndexInfoOfType(ctx, parsed.(*GetIndexInfoOfTypeParams))
-	case string(MethodGetIndexTypeOfTypeByKind):
-		return s.handleGetIndexTypeOfTypeByKind(ctx, parsed.(*GetIndexInfoOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
@@ -3893,16 +3891,6 @@ func (s *Session) handleGetIndexInfoOfType(ctx context.Context, params *GetIndex
 	}
 	defer setup.done()
 	return setup.newIndexInfoResponse(setup.checker.GetIndexInfoOfType(t, keyType)), nil
-}
-
-// @gen-proto-nullable
-func (s *Session) handleGetIndexTypeOfTypeByKind(ctx context.Context, params *GetIndexInfoOfTypeParams) (*TypeResponse, error) {
-	setup, t, keyType, err := s.resolveIndexInfoRequest(ctx, params)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetIndexTypeOfType(t, keyType), setup.checker), nil
 }
 
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.

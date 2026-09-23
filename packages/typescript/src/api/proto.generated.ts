@@ -126,7 +126,6 @@ export interface APIMethodInfo {
     getPropertyOfType: APIMethod<GetPropertyOfTypeParams, SymbolResponse | null>;
     getTypeOfPropertyOfType: APIMethod<GetPropertyOfTypeParams, TypeResponse | null>;
     getIndexInfoOfType: APIMethod<GetIndexInfoOfTypeParams, IndexInfoResponse | null>;
-    getIndexTypeOfTypeByKind: APIMethod<GetIndexInfoOfTypeParams, TypeResponse | null>;
     getIndexInfosOfType: APIMethod<CheckerTypeParams, IndexInfoResponse[] | null>;
     getConstraintOfTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getDefaultFromTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
@@ -1093,7 +1092,6 @@ export interface BatchRequest {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
-        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1262,7 +1260,6 @@ export interface BatchResponse {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
-        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
