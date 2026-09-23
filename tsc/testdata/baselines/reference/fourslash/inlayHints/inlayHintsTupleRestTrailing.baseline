@@ -383,11 +383,107 @@ noTrailing(1, "a", "b");
   "paddingRight": true
 }
 
+    multi<T, U>(1, ...middle, "end", true);
+                ^
+{
+  "position": {
+    "line": 10,
+    "character": 16
+  },
+  "label": [
+    {
+      "value": "first",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 73
+          },
+          "end": {
+            "line": 8,
+            "character": 78
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    multi<T, U>(1, ...middle, "end", true);
+                              ^
+{
+  "position": {
+    "line": 10,
+    "character": 30
+  },
+  "label": [
+    {
+      "value": "...left",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 91
+          },
+          "end": {
+            "line": 8,
+            "character": 95
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    multi<T, U>(1, ...middle, "end", true);
+                                     ^
+{
+  "position": {
+    "line": 10,
+    "character": 37
+  },
+  "label": [
+    {
+      "value": "...right",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 103
+          },
+          "end": {
+            "line": 8,
+            "character": 108
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
 skip({ x: 1 }, 2);
                ^
 {
   "position": {
-    "line": 9,
+    "line": 13,
     "character": 15
   },
   "label": [
@@ -397,11 +493,11 @@ skip({ x: 1 }, 2);
         "uri": "file:///inlayHintsTupleRestTrailing.ts",
         "range": {
           "start": {
-            "line": 8,
+            "line": 12,
             "character": 44
           },
           "end": {
-            "line": 8,
+            "line": 12,
             "character": 48
           }
         }
