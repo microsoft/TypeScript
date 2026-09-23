@@ -601,6 +601,18 @@ declare module "augmentation" {}`,
         };
 
         const firstProgram = api.createIncrementalProgram(["/src/main.ts"], options);
+        const initialStatus = firstProgram.status;
+        assert.equal(initialStatus.dirty, false);
+        assert.equal(initialStatus.buildInfoEmitPending, true);
+        assert.deepEqual(initialStatus.changedFiles, []);
+        assert.deepEqual(
+            initialStatus.pendingEmit.map(emit => emit.sourceFileName),
+            ["/src/dependency.ts", "/src/main.ts"],
+        );
+        assert.deepEqual(
+            initialStatus.pendingSemanticDiagnostics,
+            ["/src/dependency.ts", "/src/main.ts"],
+        );
         const buildInfoText = firstProgram.getBuildInfoEmit();
         assert.equal(typeof JSON.parse(buildInfoText).version, "string");
         assert.equal(fs.readFile!("/out/build.tsbuildinfo"), undefined);
@@ -610,6 +622,8 @@ declare module "augmentation" {}`,
         assert.equal(buildInfoEmit.emitSkipped, false);
         assert.deepEqual(buildInfoEmit.diagnostics, []);
         assert.equal(fs.readFile!("/out/build.tsbuildinfo"), buildInfoText);
+        assert.equal(firstProgram.status.buildInfoEmitPending, true);
+        assert.equal(buildInfoEmit.program.status.buildInfoEmitPending, false);
 
         const firstEmit = firstProgram.emit();
         using firstEmitSnapshot = firstEmit.snapshot;
@@ -617,6 +631,11 @@ declare module "augmentation" {}`,
         assert.ok(firstEmit.emittedFiles.includes("/out/dependency.js"));
         assert.ok(firstEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
         assert.ok(fs.readFile!("/out/build.tsbuildinfo"));
+        assert.deepEqual(firstProgram.status, initialStatus);
+        assert.equal(firstEmit.program.status.dirty, false);
+        assert.equal(firstEmit.program.status.buildInfoEmitPending, false);
+        assert.deepEqual(firstEmit.program.status.changedFiles, []);
+        assert.deepEqual(firstEmit.program.status.pendingEmit, []);
         const repeatedEmit = firstEmit.program.emit();
         using repeatedEmitSnapshot = repeatedEmit.snapshot;
         assert.deepEqual(repeatedEmit.emittedFiles, []);
@@ -658,6 +677,16 @@ declare module "augmentation" {}`,
         });
         const program = snapshot.operation.createdPrograms[0];
         assert.ok(program instanceof IncrementalProgram);
+        using dirtySnapshot = snapshot.update({
+            fileSystem: createFileSystemLayer([["/src/index.ts", `export const value = 2;`]]),
+        });
+        const dirtyProgram = dirtySnapshot.getProgram(program.id);
+        assert.ok(dirtyProgram instanceof IncrementalProgram);
+        assert.equal(dirtyProgram.status.dirty, true);
+        assert.deepEqual(
+            { ...dirtyProgram.status, dirty: false },
+            program.status,
+        );
 
         const buildInfoText = program.getBuildInfoEmit();
         const result = program.emitBuildInfo();

@@ -375,6 +375,13 @@ func (p *Project) IsIncremental() bool {
 	return p.incremental
 }
 
+func (p *Project) IncrementalStatus() *incremental.Status {
+	if p.incrementalProgram == nil {
+		return nil
+	}
+	return p.incrementalProgram.Status()
+}
+
 func (p *Project) IsDirty() bool {
 	return p.dirty
 }

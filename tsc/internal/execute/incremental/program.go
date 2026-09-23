@@ -132,6 +132,48 @@ func (p *Program) HasChangedDtsFile() bool {
 	return p.snapshot.hasChangedDtsFile
 }
 
+type PendingEmit struct {
+	SourceFileName string
+	Kind           FileEmitKind
+}
+
+type Status struct {
+	ChangedFiles               []string
+	PendingEmit                []*PendingEmit
+	PendingSemanticDiagnostics []string
+	BuildInfoEmitPending       bool
+	LatestChangedDtsFile       string
+}
+
+func (p *Program) Status() *Status {
+	status := &Status{
+		BuildInfoEmitPending: p.snapshot.buildInfoEmitPending.Load(),
+		LatestChangedDtsFile: p.snapshot.latestChangedDtsFile,
+	}
+	p.snapshot.changedFilesSet.Range(func(path tspath.Path) bool {
+		status.ChangedFiles = append(status.ChangedFiles, string(path))
+		return true
+	})
+	p.snapshot.affectedFilesPendingEmit.Range(func(path tspath.Path, kind FileEmitKind) bool {
+		status.PendingEmit = append(status.PendingEmit, &PendingEmit{
+			SourceFileName: string(path),
+			Kind:           kind,
+		})
+		return true
+	})
+	for _, file := range p.program.GetSourceFiles() {
+		if _, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path()); !ok {
+			status.PendingSemanticDiagnostics = append(status.PendingSemanticDiagnostics, file.FileName())
+		}
+	}
+	slices.Sort(status.ChangedFiles)
+	slices.SortFunc(status.PendingEmit, func(a, b *PendingEmit) int {
+		return strings.Compare(a.SourceFileName, b.SourceFileName)
+	})
+	slices.Sort(status.PendingSemanticDiagnostics)
+	return status
+}
+
 // Options implements compiler.AnyProgram interface.
 func (p *Program) Options() *core.CompilerOptions {
 	return p.snapshot.options

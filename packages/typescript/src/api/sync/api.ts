@@ -20,6 +20,7 @@ import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
+import { FileEmitKind } from "#enums/fileEmitKind";
 import { IndexKind } from "#enums/indexKind";
 import { JsxEmit } from "#enums/jsxEmit";
 import { ModuleKind } from "#enums/moduleKind";
@@ -91,6 +92,7 @@ import type {
     FileNotifications,
     ImportAdderAction,
     IncrementalOperationParams,
+    IncrementalStatusResponse,
     InferredProjectId,
     IntrinsicTypeMethod,
     LanguageServerSnapshotChanges,
@@ -177,7 +179,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, FileEmitKind, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -2071,15 +2073,32 @@ export class Project<Id extends ProjectId = ProjectId> {
         this.rootFiles = this.parsedCommandLine.fileNames;
         this.client = client;
         this.snapshotId = snapshotId;
-        this.program = new (data.incremental ? IncrementalProgram : Program)(
-            snapshotId,
-            this,
-            client,
-            sourceFileCache,
-            toPath,
-            formatDiagnosticsHost,
-            updateSnapshot,
-        );
+        if (data.incremental) {
+            if (!data.incrementalStatus) {
+                throw new Error(`Incremental project '${data.id}' has no incremental status`);
+            }
+            this.program = new IncrementalProgram(
+                snapshotId,
+                this,
+                client,
+                sourceFileCache,
+                toPath,
+                formatDiagnosticsHost,
+                updateSnapshot,
+                toIncrementalStatus(data.dirty, data.incrementalStatus),
+            );
+        }
+        else {
+            this.program = new Program(
+                snapshotId,
+                this,
+                client,
+                sourceFileCache,
+                toPath,
+                formatDiagnosticsHost,
+                updateSnapshot,
+            );
+        }
         const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
         this.checker = new Checker(
             snapshotId,
@@ -3339,6 +3358,22 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 }
 
 export class IncrementalProgram<Id extends ProjectId = ProjectId> extends Program<Id> {
+    readonly status: IncrementalStatus;
+
+    constructor(
+        snapshotId: number,
+        project: Project<Id>,
+        client: Client,
+        sourceFileCache: SourceFileCache,
+        toPath: (fileName: string) => Path,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
+        updateSnapshot: SnapshotUpdater,
+        status: IncrementalStatus,
+    ) {
+        super(snapshotId, project, client, sourceFileCache, toPath, formatDiagnosticsHost, updateSnapshot);
+        this.status = status;
+    }
+
     /**
      * Emits pending files and returns the new snapshot containing the advanced incremental state.
      */
@@ -3467,6 +3502,34 @@ export interface IncrementalEmitResult extends EmitResult {
     readonly program: IncrementalProgram;
 }
 
+export interface IncrementalPendingEmit {
+    readonly sourceFileName: string;
+    readonly kind: FileEmitKind;
+}
+
+export interface IncrementalStatus {
+    readonly dirty: boolean;
+    readonly changedFiles: readonly string[];
+    readonly pendingEmit: readonly IncrementalPendingEmit[];
+    readonly pendingSemanticDiagnostics: readonly string[];
+    readonly buildInfoEmitPending: boolean;
+    readonly latestChangedDtsFile?: string | undefined;
+}
+
+function toIncrementalStatus(dirty: boolean, status: IncrementalStatusResponse): IncrementalStatus {
+    return {
+        dirty,
+        changedFiles: status.changedFiles,
+        pendingEmit: status.pendingEmit.map(emit => ({
+            sourceFileName: emit.sourceFileName,
+            kind: emit.kind,
+        })),
+        pendingSemanticDiagnostics: status.pendingSemanticDiagnostics,
+        buildInfoEmitPending: status.buildInfoEmitPending,
+        latestChangedDtsFile: status.latestChangedDtsFile,
+    };
+}
+
 function toEmitResult(response: EmitResponse): EmitResult {
     const fileSystem = response.emittedFilesContents.length
         ? {
@@ -3478,7 +3541,7 @@ function toEmitResult(response: EmitResponse): EmitResult {
         emitSkipped: response.emitSkipped,
         diagnostics: response.diagnostics,
         emittedFiles: response.emittedFiles,
-        ...(fileSystem ? { fileSystem } : {}),
+        fileSystem,
     };
 }
 

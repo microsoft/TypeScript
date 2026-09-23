@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
@@ -846,16 +847,30 @@ type GetDefaultProjectForFileParams struct {
 }
 
 type ProjectResponse struct {
-	Id                project.ID          `json:"id"`
-	ConfigFileName    string              `json:"configFileName"`
-	CurrentDirectory  string              `json:"currentDirectory"`
-	Dirty             bool                `json:"dirty"`
-	Incremental       bool                `json:"incremental"`
-	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
+	Id                project.ID                 `json:"id"`
+	ConfigFileName    string                     `json:"configFileName"`
+	CurrentDirectory  string                     `json:"currentDirectory"`
+	Dirty             bool                       `json:"dirty"`
+	Incremental       bool                       `json:"incremental"`
+	IncrementalStatus *IncrementalStatusResponse `json:"incrementalStatus,omitempty"`
+	ParsedCommandLine *ConfigFileResponse        `json:"parsedCommandLine" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.fileNames.
 	RootFiles []string `json:"rootFiles" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.options.
 	CompilerOptions *core.CompilerOptions `json:"compilerOptions" nonnil:"true"`
+}
+
+type IncrementalStatusResponse struct {
+	ChangedFiles               []string                          `json:"changedFiles" nonnil:"true"`
+	PendingEmit                []*IncrementalPendingEmitResponse `json:"pendingEmit" nonnil:"true"`
+	PendingSemanticDiagnostics []string                          `json:"pendingSemanticDiagnostics" nonnil:"true"`
+	BuildInfoEmitPending       bool                              `json:"buildInfoEmitPending"`
+	LatestChangedDtsFile       string                            `json:"latestChangedDtsFile,omitempty"`
+}
+
+type IncrementalPendingEmitResponse struct {
+	SourceFileName string                   `json:"sourceFileName"`
+	Kind           incremental.FileEmitKind `json:"kind"`
 }
 
 func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *ConfigFileResponse {
@@ -919,12 +934,25 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 	if p.Kind == project.KindConfigured {
 		configFileName = p.ConfigFileName()
 	}
+	var incrementalStatus *IncrementalStatusResponse
+	if status := p.IncrementalStatus(); status != nil {
+		incrementalStatus = &IncrementalStatusResponse{
+			ChangedFiles: status.ChangedFiles,
+			PendingEmit: core.Map(status.PendingEmit, func(emit *incremental.PendingEmit) *IncrementalPendingEmitResponse {
+				return &IncrementalPendingEmitResponse{SourceFileName: emit.SourceFileName, Kind: emit.Kind}
+			}),
+			PendingSemanticDiagnostics: status.PendingSemanticDiagnostics,
+			BuildInfoEmitPending:       status.BuildInfoEmitPending,
+			LatestChangedDtsFile:       status.LatestChangedDtsFile,
+		}
+	}
 	return &ProjectResponse{
 		Id:                p.ID(),
 		ConfigFileName:    configFileName,
 		CurrentDirectory:  p.CurrentDirectory(),
 		Dirty:             p.IsDirty(),
 		Incremental:       p.IsIncremental(),
+		IncrementalStatus: incrementalStatus,
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
 		RootFiles:         p.CommandLine.FileNames(),
 		CompilerOptions:   p.CommandLine.CompilerOptions(),

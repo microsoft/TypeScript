@@ -264,6 +264,7 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	_, isIncremental := dirtyProject.GetProgramLike().(*incremental.Program)
 	assert.Assert(t, isIncremental)
 	assert.Assert(t, dirtyProject.IsDirty())
+	assert.Assert(t, dirtyProject.IncrementalStatus() != nil)
 
 	emittedSnapshot, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: dirty.Snapshot,
@@ -278,6 +279,12 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	emitted := (*emittedSnapshot.Operation.IncrementalOperations)[0].Result
 	assert.Assert(t, !slices.Contains(emitted.EmittedFiles, "/home/projects/p/out/main.js"), "unexpected emitted files: %v", emitted.EmittedFiles)
 	assert.Assert(t, slices.Contains(emitted.EmittedFiles, "/home/projects/p/out/dependency.js"))
+	emittedSnapshotData, err := session.getSnapshotData(emittedSnapshot.Snapshot)
+	assert.NilError(t, err)
+	emittedProject, err := emittedSnapshotData.getProject(restoredProgramID.AsID())
+	assert.NilError(t, err)
+	assert.Equal(t, emittedProject.IncrementalStatus().BuildInfoEmitPending, false)
+	assert.Equal(t, len(emittedProject.IncrementalStatus().PendingEmit), 0)
 
 	reconfigured, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: emittedSnapshot.Snapshot,
