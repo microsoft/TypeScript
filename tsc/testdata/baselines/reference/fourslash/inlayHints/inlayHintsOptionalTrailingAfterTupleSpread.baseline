@@ -1,0 +1,32 @@
+// === Inlay Hints ===
+    optional<T>(...x, 1);
+                      ^
+{
+  "position": {
+    "line": 2,
+    "character": 22
+  },
+  "label": [
+    {
+      "value": "...head",
+      "location": {
+        "uri": "file:///inlayHintsOptionalTrailingAfterTupleSpread.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 60
+          },
+          "end": {
+            "line": 0,
+            "character": 64
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
