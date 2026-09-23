@@ -118,7 +118,8 @@ jobs:
 
       - pwsh: |
           $ErrorActionPreference = "Stop"
-          go -C tsc generate -run=generate.go ./internal/diagnostics
+          $PSNativeCommandUseErrorActionPreference = $true
+          npx hereby generate:diagnostics
         displayName: Generate localization artifacts
 
       - task: CopyFiles@2
@@ -144,7 +145,7 @@ jobs:
                 $ErrorActionPreference = "Stop"
                 $PSNativeCommandUseErrorActionPreference = $true
 
-                git add --all
+                git add --all -- tsc/internal/diagnostics/loc tsc/internal/diagnostics/loc_generated.go
                 $changes = @(git diff --cached --name-only)
                 if ($changes.Count -eq 0) {
                     Write-Host "Localization files are already up to date."
