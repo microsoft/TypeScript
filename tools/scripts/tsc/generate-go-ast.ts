@@ -193,9 +193,6 @@ function verifyNodeBaseAtOffsetZero(): void {
     }
 }
 
-verifyNoDuplicateBases();
-verifyNodeBaseAtOffsetZero();
-
 // A base with no fields and no extends is a struct{} marker. Go pads a struct whose last field is
 // zero-size (so the field's address stays in bounds), so markers are embedded first, never last; being
 // zero-size, they don't move NodeBase off offset zero.
@@ -1095,6 +1092,9 @@ function writeAndFormat(filePath: string, generateContent: () => string, force: 
 export const outputs = ["tsc/internal/ast/ast_generated.go", "tsc/internal/ast/kind_generated.go"] as const;
 
 export default function main(force = false) {
+    verifyNoDuplicateBases();
+    verifyNodeBaseAtOffsetZero();
+
     console.log("Generating Go AST code...");
 
     const outPath = path.join(ROOT, outputs[0]);

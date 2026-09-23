@@ -731,6 +731,10 @@ export const buildWatch = task({
     description: "Watches sources and generator inputs, regenerating and rebuilding the tsc binary on changes.",
     run: async () => {
         const generatedOutputs = getGeneratedOutputPaths();
+        const generatorDirectories = [
+            "tsc/internal/lsp/lsproto/_generate",
+            "tsc/internal/stringutil/_scripts",
+        ].map(directory => path.resolve(directory));
         await watchDebounced("build:watch", async (_paths, abortSignal) => {
             abortSignal.throwIfAborted();
             invalidateFileFingerprints();
@@ -744,17 +748,14 @@ export const buildWatch = task({
             paths: [
                 "tsc/cmd",
                 "tsc/internal",
-                "tools/scripts/gen",
-                "tools/scripts/tsc",
+                "tools/scripts/tsc/ast.json",
                 "tools/gen-proto",
-                "packages/typescript/scripts",
                 "packages/typescript/src/api/async",
                 "packages/typescript/test/async",
                 "packages/vscode-typescript/src",
                 "packages/vscode-typescript/package.json",
                 "packages/vscode-typescript/package.nls.json",
                 "node_modules/vscode-jsonrpc/package.json",
-                "Herebyfile.mjs",
                 "package-lock.json",
                 ".dprint.jsonc",
                 "go.work",
@@ -764,7 +765,12 @@ export const buildWatch = task({
                 "tools/go.mod",
                 "tools/go.sum",
             ],
-            ignored: file => generatedOutputs.has(path.resolve(file)) || path.normalize(file).split(path.sep).includes("testdata"),
+            ignored: file => {
+                const absolutePath = path.resolve(file);
+                return generatedOutputs.has(absolutePath)
+                    || generatorDirectories.some(directory => absolutePath === directory || absolutePath.startsWith(directory + path.sep))
+                    || path.normalize(file).split(path.sep).includes("testdata");
+            },
         });
     },
 });

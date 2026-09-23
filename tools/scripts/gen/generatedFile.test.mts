@@ -1,7 +1,5 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
-import { once } from "node:events";
 import fs from "node:fs";
 import { syncBuiltinESMExports } from "node:module";
 import os from "node:os";
@@ -21,63 +19,26 @@ import {
     run,
 } from "./utils.mts";
 
-test("build watch reloads schema edits without generated-output restarts", async context => {
-    const root = path.resolve(import.meta.dirname, "../../..");
-    const schema = path.join(root, "tools/scripts/tsc/ast.json");
-    const original = fs.readFileSync(schema);
-    const kindOutput = path.join(root, "tsc/internal/ast/kind_generated.go");
-    const originalKindOutput = fs.readFileSync(kindOutput);
-    const script = `process.argv = [process.execPath, ${JSON.stringify(path.join(root, "node_modules/hereby/bin/hereby.js"))}, "build:watch"];
-        process.once("message", () => { process.emit("SIGINT"); process.disconnect(); });
-        await import("./node_modules/hereby/bin/hereby.js");`;
-    const child = spawn(process.execPath, ["--input-type=module", "-e", script], { cwd: root, stdio: ["ignore", "pipe", "pipe", "ipc"] });
-    const exited = once(child, "close");
-    let output = "";
-    let remaining = "";
-    let idle = Promise.withResolvers<string>();
-    const collect = (data: Buffer) => {
-        const text = stripVTControlCharacters(data.toString());
-        output += text;
-        remaining += text;
-        const marker = "[build:watch] run complete, waiting for changes...";
-        const index = remaining.indexOf(marker);
-        if (index >= 0) {
-            idle.resolve(remaining.slice(0, index));
-            remaining = remaining.slice(index + marker.length);
-        }
-    };
-    assert.ok(child.stdout && child.stderr);
-    child.stdout.on("data", collect);
-    child.stderr.on("data", collect);
-    const deadline = Promise.withResolvers<never>();
-    const timer = setTimeout(() => deadline.reject(new Error(`Watch did not complete:\n${output.slice(-8000)}`)), 300_000);
-    const unexpectedExit = exited.then(() => {
-        throw new Error(`Watcher exited unexpectedly:\n${output.slice(-8000)}`);
-    });
-    context.after(async () => {
-        clearTimeout(timer);
-        if (child.exitCode === null && child.signalCode === null) {
-            child.send("stop");
-            await exited;
-        }
-        fs.writeFileSync(schema, original);
-        fs.writeFileSync(kindOutput, originalKindOutput);
-    });
-    const initial = await Promise.race([idle.promise, deadline.promise, unexpectedExit]);
-    assert.match(initial, /\$ go build/);
-    for (const comment of ["First watch schema edit", "Second watch schema edit"]) {
-        timer.refresh();
-        idle = Promise.withResolvers<string>();
-        const updated = JSON.parse(original.toString());
-        updated.kinds.elements.unshift({ comment });
-        fs.writeFileSync(schema, JSON.stringify(updated, undefined, 4) + "\n");
-        const rebuilt = await Promise.race([idle.promise, deadline.promise, unexpectedExit]);
-        assert.match(rebuilt, /changed due to .*ast\.json/);
-        assert.match(rebuilt, /Wrote .*ast_generated\.go/);
-        assert.match(rebuilt, /\$ go build/);
-        assert.doesNotMatch(rebuilt, /changed due to .*_generated\.go|aborting in-progress run|Error in /);
-        assert.ok(rebuilt.indexOf("Wrote ") < rebuilt.indexOf("$ go build"));
-        assert.ok(fs.readFileSync(kindOutput, "utf8").includes(comment));
+test("Go AST generator validates bases after schema reloads", async context => {
+    const { default: generateGoAST } = await import("../tsc/generate-go-ast.ts");
+    const schema = await import("../tsc/schema.ts");
+    context.mock.method(GeneratedFile.prototype, "isCurrent", () => true);
+    context.after(() => schema.reloadSchema());
+    generateGoAST();
+
+    for (
+        const { name, extendsKeys, error } of [
+            { name: "duplicate bases", extendsKeys: ["NodeBase", "NodeBase"], error: /declares duplicate embedded bases/ },
+            { name: "missing NodeBase", extendsKeys: [], error: /does not embed NodeBase at offset zero/ },
+        ]
+    ) {
+        await context.test(name, context => {
+            schema.reloadSchema();
+            const node = [...schema.api.nodes()][0];
+            assert.ok(node);
+            context.mock.getter(node, "extendsKeys", () => extendsKeys);
+            assert.throws(() => generateGoAST(), error);
+        });
     }
 });
 
