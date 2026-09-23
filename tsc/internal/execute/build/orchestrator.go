@@ -896,7 +896,7 @@ func (o *Orchestrator) buildOrCleanOrder(order []string) *OrchestratorResult {
 		reported := make(chan struct{})
 		go func() {
 			defer close(reported)
-			for _, config := range o.order {
+			for _, config := range order {
 				path := o.toPath(config)
 				task := o.getTask(path)
 				<-task.built

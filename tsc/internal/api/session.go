@@ -1596,7 +1596,7 @@ func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildR
 	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
 		return nil, fmt.Errorf("build orchestrator not found while building %s", params.Project)
 	}
-	result := s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, string(params.Project))
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, params.Project)
 
 	return &BuildResponse{
 		Status:     result.Result.Status,
@@ -1611,7 +1611,7 @@ func (s *Session) handleBuildReferences(ctx context.Context, params *BuildParams
 	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
 		return nil, fmt.Errorf("build orchestrator not found for building references for %s", params.Project)
 	}
-	result := s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, string(params.Project))
+	result := s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, params.Project)
 
 	return &BuildResponse{
 		Status:     result.Result.Status,
@@ -1626,7 +1626,7 @@ func (s *Session) handleCleanBuild(ctx context.Context, params *CleanBuildParams
 	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
 		return nil, fmt.Errorf("build orchestrator not found while cleaning %s", params.Project)
 	}
-	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(string(params.Project))
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(params.Project)
 	return &CleanBuildResponse{
 		Status:       result.Result.Status,
 		Errors:       NewDiagnosticResponses(result.Errors),
@@ -1641,7 +1641,7 @@ func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildP
 	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
 		return nil, fmt.Errorf("build orchestrator not found while cleaning references for %s", params.Project)
 	}
-	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(string(params.Project))
+	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(params.Project)
 	return &CleanBuildResponse{
 		Status:       result.Result.Status,
 		Errors:       NewDiagnosticResponses(result.Errors),
