@@ -216,6 +216,22 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	assert.Assert(t, len(buildInfoText) > 0)
 	_, buildInfoExists := sessionUtils.FS().ReadFile(buildInfoFile)
 	assert.Assert(t, !buildInfoExists)
+	canceledContext, cancel := context.WithCancel(ctx)
+	cancel()
+	_, err = session.handleUpdateSnapshot(canceledContext, &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes: &CreateSnapshotParams{
+			IncrementalOperations: []*IncrementalOperationParams{{
+				Program: programID,
+				Kind:    IncrementalOperationKindEmitBuildInfo,
+			}},
+		},
+	})
+	assert.ErrorIs(t, err, context.Canceled)
+	buildInfoAfterCancellation, err := session.handleGetBuildInfoEmit(ctx, &GetProjectDiagnosticsParams{Snapshot: created.Snapshot, Project: programID.AsID()})
+	assert.NilError(t, err)
+	assert.Equal(t, buildInfoAfterCancellation, buildInfoText)
+
 	emittedBuildInfoSnapshot, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: created.Snapshot,
 		Changes: &CreateSnapshotParams{

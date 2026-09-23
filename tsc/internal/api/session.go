@@ -107,6 +107,9 @@ func (sd *snapshotData) getProgramLike(projectHandle project.ID) (compiler.Progr
 	if err != nil {
 		return nil, err
 	}
+	if proj.GetProgram() == nil {
+		return nil, fmt.Errorf("%w: project has no program", ErrClientError)
+	}
 	return proj.GetProgramLike(), nil
 }
 

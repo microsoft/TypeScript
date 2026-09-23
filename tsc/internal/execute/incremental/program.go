@@ -384,6 +384,9 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 	}
 	text, buildInfo, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
 	if err != nil {
+		if ctx.Err() != nil {
+			return nil
+		}
 		return &compiler.EmitResult{
 			EmitSkipped: true,
 			Diagnostics: []*ast.Diagnostic{
@@ -422,6 +425,9 @@ func (p *Program) EmitBuildInfo(ctx context.Context, options compiler.EmitOption
 	}
 	text, buildInfo, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
 	if err != nil {
+		if ctx.Err() != nil {
+			return nil
+		}
 		return &compiler.EmitResult{
 			EmitSkipped: true,
 			Diagnostics: []*ast.Diagnostic{
