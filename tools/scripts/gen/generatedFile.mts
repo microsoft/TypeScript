@@ -59,9 +59,13 @@ export class GeneratedFile {
         return JSON.stringify([this.inputHash, digest(output)]);
     }
 
+    protected readOutput(): Buffer | undefined {
+        return readIfExists(this.fileName);
+    }
+
     isCurrent(force = false): boolean {
         if (force) return false;
-        const output = readIfExists(this.fileName);
+        const output = this.readOutput();
         return output !== undefined && readIfExists(this.cacheFile)?.toString() === this.state(output);
     }
 
@@ -79,8 +83,29 @@ export class GeneratedFile {
     markCurrent(): void {
         invalidateFileFingerprints(this.fileName);
         if (this.inputHash !== this.hashInputs(true)) return;
-        const state = this.state(fs.readFileSync(this.fileName));
+        const output = this.readOutput();
+        if (output === undefined) throw new Error(`Missing generated output: ${this.fileName}`);
+        const state = this.state(output);
         fs.mkdirSync(path.dirname(this.cacheFile), { recursive: true });
         fs.writeFileSync(this.cacheFile, state);
+    }
+}
+
+export class GeneratedDirectory extends GeneratedFile {
+    private readonly pattern: string;
+
+    constructor(directory: string, inputs: readonly string[], pattern: string) {
+        super(directory, inputs, undefined, pattern);
+        this.pattern = pattern;
+    }
+
+    protected override readOutput(): Buffer | undefined {
+        if (!fs.existsSync(this.fileName)) return undefined;
+        return Buffer.from(JSON.stringify(
+            fs.globSync(this.pattern, { cwd: this.fileName }).sort().map(file => [
+                file,
+                digest(fs.readFileSync(path.join(this.fileName, file))),
+            ]),
+        ));
     }
 }

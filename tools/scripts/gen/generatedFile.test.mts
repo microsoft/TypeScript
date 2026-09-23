@@ -12,6 +12,7 @@ import ts from "typescript";
 import cache from "./cache.mts";
 import {
     defaultCacheDirectory,
+    GeneratedDirectory,
     GeneratedFile,
 } from "./generatedFile.mts";
 import {
@@ -131,6 +132,86 @@ test("generated files are current only while their inputs and formatted output m
     assert.throws(() => new GeneratedFile(output, [input, dependency], cache), { code: "ENOENT" });
     fs.rmSync(output);
     assert.equal(generated().isCurrent(), false);
+});
+
+test("generated directories track matching file names and contents", context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-directory-"));
+    const generated = () => new GeneratedDirectory(directory, [], "lib*.d.ts");
+    const output = generated();
+    context.after(() => {
+        output.invalidate();
+        fs.rmSync(directory, { recursive: true, force: true });
+    });
+    const first = path.join(directory, "lib.first.d.ts");
+    const second = path.join(directory, "lib.second.d.ts");
+    const unrelated = path.join(directory, "notes.txt");
+    fs.writeFileSync(first, "first");
+    fs.writeFileSync(unrelated, "unrelated");
+    assert.equal(output.isCurrent(), false);
+    output.markCurrent();
+    assert.equal(generated().isCurrent(), true);
+    fs.utimesSync(first, new Date(0), new Date(0));
+    fs.writeFileSync(unrelated, "changed but ignored");
+    assert.equal(generated().isCurrent(), true);
+    fs.rmSync(unrelated);
+    assert.equal(generated().isCurrent(), true);
+    fs.writeFileSync(first, "edited");
+    assert.equal(generated().isCurrent(), false);
+    fs.writeFileSync(first, "first");
+    assert.equal(generated().isCurrent(), true);
+    fs.renameSync(first, second);
+    assert.equal(generated().isCurrent(), false);
+    fs.writeFileSync(first, "first");
+    assert.equal(generated().isCurrent(), false);
+    fs.rmSync(second);
+    assert.equal(generated().isCurrent(), true);
+    fs.rmSync(first);
+    assert.equal(generated().isCurrent(), false);
+});
+
+test("generated directories distinguish missing and empty outputs and support invalidation", context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-directory-"));
+    const destination = path.join(directory, "output");
+    const generated = () => new GeneratedDirectory(destination, [], "*.d.ts");
+    const output = generated();
+    context.after(() => {
+        output.invalidate();
+        fs.rmSync(directory, { recursive: true, force: true });
+    });
+    assert.equal(output.isCurrent(), false);
+    assert.throws(() => output.markCurrent(), /Missing generated output/);
+    fs.mkdirSync(destination);
+    output.markCurrent();
+    assert.equal(generated().isCurrent(), true);
+    assert.equal(generated().isCurrent(true), false);
+    assert.equal(new GeneratedDirectory(destination, [], "*.txt").isCurrent(), false);
+    output.invalidate();
+    assert.equal(generated().isCurrent(), false);
+    output.markCurrent();
+    assert.equal(generated().isCurrent(), true);
+    fs.rmdirSync(destination);
+    assert.equal(generated().isCurrent(), false);
+});
+
+test("generated directories reject stale inputs when marking current", context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-directory-"));
+    const input = path.join(directory, "input.txt");
+    fs.writeFileSync(input, "initial");
+    fs.writeFileSync(path.join(directory, "lib.d.ts"), "generated");
+    const generated = () => new GeneratedDirectory(directory, [input], "*.d.ts");
+    const output = generated();
+    context.after(() => {
+        output.invalidate();
+        fs.rmSync(directory, { recursive: true, force: true });
+    });
+    output.markCurrent();
+    assert.equal(generated().isCurrent(), true);
+    fs.writeFileSync(input, "changed during generation");
+    assert.equal(generated().isCurrent(), false);
+    output.markCurrent();
+    assert.equal(generated().isCurrent(), false);
+    generated().markCurrent();
+    assert.equal(generated().isCurrent(), true);
 });
 
 test("generated files share input fingerprints and refresh changed inputs", context => {

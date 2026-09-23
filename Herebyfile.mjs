@@ -223,19 +223,33 @@ const libsRegexp = /(?:^|[\\/])internal[\\/]bundled[\\/]libs[\\/]/;
  * @param {string} out
  */
 async function generateLibs(out) {
+    const { GeneratedDirectory } = await import("./tools/scripts/gen/generatedFile.mts");
+    out = path.resolve(__dirname, out);
+    const sourceDir = path.resolve(__dirname, libsDir);
+    const libs = await fs.promises.readdir(sourceDir);
+    const output = new GeneratedDirectory(out, [__filename, ...libs.map(lib => path.join(sourceDir, lib))], "lib*.d.ts");
+    if (output.isCurrent(!!options.force)) {
+        console.log(`Library files in ${out} are up to date.`);
+        return;
+    }
+    output.invalidate();
     await fs.promises.mkdir(out, { recursive: true });
-
-    const libs = await fs.promises.readdir(libsDir);
-
-    await Promise.all(libs.map(async lib => {
-        fs.promises.copyFile(path.join(libsDir, lib), path.join(out, lib));
-    }));
+    await Promise.all(fs.globSync("lib*.d.ts", { cwd: out }).map(lib => fs.promises.unlink(path.join(out, lib))));
+    await Promise.all(libs.map(lib => fs.promises.copyFile(path.join(sourceDir, lib), path.join(out, lib))));
+    output.markCurrent();
+    console.log(`Copied ${libs.length} library files to ${out}.`);
 }
+
+export const generateLib = task({
+    name: "generate:libs",
+    description: "Copies the libs to built/local. Pass --force to recopy unchanged files.",
+    run: () => generateLibs(builtLocal),
+});
 
 export const lib = task({
     name: "lib",
-    description: "Copies the libs to built/local.",
-    run: () => generateLibs(builtLocal),
+    description: "Alias for generate:libs.",
+    dependencies: [generateLib],
 });
 
 /**
@@ -712,8 +726,8 @@ const generateCompiler = task({
 
 export const generate = task({
     name: "generate",
-    description: "Runs all code generation, including AST, LSP, APIs, extension localization, and vendored dependencies.",
-    dependencies: [generateCompiler, generateSync, generateExtensionTest, generateVendor],
+    description: "Runs all code generation, including AST, LSP, APIs, library copies, extension localization, and vendored dependencies.",
+    dependencies: [generateCompiler, generateSync, generateExtensionTest, generateVendor, generateLib],
 });
 
 const coverageDir = path.join(__dirname, "coverage");

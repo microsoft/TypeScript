@@ -104,6 +104,7 @@ npx hereby test          # Run compiler and language-service Go tests
 npx hereby test:all      # Also run benchmarks, tools, and API tests
 npx hereby lint          # Run custom golangci-lint for both Go modules
 npx hereby generate:go   # Run the generators also exposed through go generate
+npx hereby generate:libs # Incrementally copy declaration libraries to built/local
 npx hereby generate      # Regenerate all sources, assets, localization, and vendored files
 npx hereby format        # Format Go, TypeScript, JSON, and YAML
 npx hereby check:format  # Check formatting without changing files
@@ -116,6 +117,11 @@ Generation is owned by `Herebyfile.mjs`; Go directives forward to the same
 to bypass incremental caches. `generate` includes every generator and fetches
 the pinned LSP model when its local cache is missing or stale. Use
 `generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
+
+`generate` also includes `generate:libs`, which caches declaration libraries as
+one set. When sources or copies change, it removes the destination's `lib*.d.ts`
+files and recopies the current set, preserving non-library files. The `lib` task
+remains an alias for `generate:libs`.
 
 Package-specific commands:
 
