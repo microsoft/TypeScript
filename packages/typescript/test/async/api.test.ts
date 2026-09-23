@@ -109,12 +109,13 @@ import {
 } from "node:test";
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
+import { areTestsFiltered } from "../testUtils.ts";
 import {
     defaultFiles,
     spawnAPI,
 } from "./api.testUtils.ts";
 
-const concurrency = process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
+const concurrency = areTestsFiltered();
 
 describe("API", { concurrency }, () => {
     test("getCurrentLanguageServerSnapshot is LSP-only", () => {

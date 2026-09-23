@@ -11,8 +11,9 @@ import {
     encodeWtf8,
     Wtf8Decoder,
 } from "../src/api/node/wtf8.ts";
+import { areTestsFiltered } from "./testUtils.ts";
 
-const concurrency = process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
+const concurrency = areTestsFiltered();
 
 describe("encodeWtf8", { concurrency }, () => {
     test("matches UTF-8 for scalar values", () => {

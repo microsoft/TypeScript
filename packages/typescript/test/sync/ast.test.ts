@@ -56,9 +56,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import { areTestsFiltered } from "../testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
-const concurrency = process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
+const concurrency = areTestsFiltered();
 
 // ---------------------------------------------------------------------------
 // Helpers

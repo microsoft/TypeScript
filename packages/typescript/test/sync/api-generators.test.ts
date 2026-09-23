@@ -66,6 +66,7 @@ import {
     type APIRequestGenerator,
     executeRequestGenerators,
 } from "../../src/api/sync/generatorSupport.ts";
+import { areTestsFiltered } from "../testUtils.ts";
 import { spawnAPI } from "./api.testUtils.ts";
 
 const parityFiles = {
@@ -413,7 +414,7 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
     assert.deepEqual(missing, [], `Uncovered public generator getters: ${missing.join(", ")}`);
 }
 
-describe("API - generator batching", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
     test("batches source file requests", context => {
         const api = spawnAPI(parityFiles);
         context.after(() => api.close());

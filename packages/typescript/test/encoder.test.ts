@@ -47,8 +47,9 @@ import {
     NODE_OFFSET_DATA,
 } from "../src/api/node/protocol.ts";
 import { Wtf8Decoder } from "../src/api/node/wtf8.ts";
+import { areTestsFiltered } from "./testUtils.ts";
 
-const concurrency = process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
+const concurrency = areTestsFiltered();
 
 function makeSF(text: string, fileName: string, statements: readonly Statement[]): SourceFile {
     const endOfFileToken = createToken(SyntaxKind.EndOfFile);

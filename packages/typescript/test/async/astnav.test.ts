@@ -24,6 +24,7 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import { areTestsFiltered } from "../testUtils.ts";
 
 // ---------------------------------------------------------------------------
 // Go JSON baseline format
@@ -76,7 +77,7 @@ const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav")
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("astnav", { concurrency: process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern=")) }, () => {
+describe("astnav", { concurrency: areTestsFiltered() }, () => {
     let fileText: string;
 
     try {
