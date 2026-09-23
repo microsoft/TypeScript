@@ -2313,11 +2313,6 @@ func (p *Program) GetSymlinkCache() *symlinks.KnownSymlinks {
 	})
 }
 
-func (p *Program) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
-	resolved, _, _ := p.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
-	return resolved
-}
-
 func (p *Program) ForEachResolvedModule(callback func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.Path), file *ast.SourceFile) {
 	forEachResolution(p.resolvedModules, callback, file)
 }
