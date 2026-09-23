@@ -136,6 +136,7 @@ import type {
     IntrinsicType,
     JSDocTagInfo,
     LiteralType,
+    MappedType,
     NumberLiteralType,
     ObjectType,
     StringLiteralType,
@@ -199,6 +200,7 @@ export type {
     LanguageServerSnapshotChanges,
     LiteralType,
     LSPConnectionOptions,
+    MappedType,
     NumberLiteralType,
     ObjectType,
     PackageId,
@@ -432,6 +434,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             snapshot: baseSnapshot.id,
             changes: toCreateSnapshotRequest(params),
         });
+        if (data.snapshot === baseSnapshot.id) {
+            await this.client.apiRequest("release", { snapshot: data.snapshot });
+            return baseSnapshot;
+        }
         this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
         const snapshot = new Snapshot(
             data,
@@ -2818,6 +2824,10 @@ class TypeObject implements Type {
     readonly extendsType!: number;
     readonly baseType!: number;
     readonly substConstraint!: number;
+    readonly typeParameter!: number;
+    readonly constraintType!: number;
+    readonly nameType!: number;
+    readonly templateType!: number;
 
     // Cached results of lazy fetches, not included in TypeResponse
     // (typically because they require some amount of computation or
@@ -2897,6 +2907,10 @@ class TypeObject implements Type {
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
+        if (data.typeParameter !== undefined) this.typeParameter = data.typeParameter;
+        if (data.constraintType !== undefined) this.constraintType = data.constraintType;
+        if (data.nameType !== undefined) this.nameType = data.nameType;
+        if (data.templateType !== undefined) this.templateType = data.templateType;
 
         this.trueType = false;
         this.falseType = false;
@@ -3046,6 +3060,22 @@ class TypeObject implements Type {
         return this.objectRegistry.fetchTypes(this, "getAliasTypeArgumentsOfType", this.aliasTypeArguments);
     }
 
+    async getTypeParameter(): Promise<TypeParameter> {
+        return this.objectRegistry.fetchType(this, "getTypeParameterOfMappedType", this.typeParameter);
+    }
+
+    async getConstraintType(): Promise<Type> {
+        return this.objectRegistry.fetchType(this, "getConstraintTypeOfMappedType", this.constraintType);
+    }
+
+    async getNameType(): Promise<Type | undefined> {
+        return this.objectRegistry.fetchOptionalType(this, "getNameTypeOfMappedType", this.nameType);
+    }
+
+    async getTemplateType(): Promise<Type> {
+        return this.objectRegistry.fetchType(this, "getTemplateTypeOfMappedType", this.templateType);
+    }
+
     async getObjectType(): Promise<Type> {
         return this.objectRegistry.fetchType(this, "getObjectTypeOfType", this.objectType);
     }
@@ -3191,6 +3221,10 @@ class TypeObject implements Type {
 
     isTypeParameter(): this is TypeParameter {
         return isTypeParameter(this);
+    }
+
+    isMappedType(): this is MappedType {
+        return !!(this.flags & TypeFlags.Object) && !!(this.objectFlags & ObjectFlags.Mapped);
     }
 }
 

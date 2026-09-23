@@ -1,11 +1,4 @@
 {
-    "compilerOptions": {
-        "module": "nodenext",
-        "lib": ["esnext"],
-        "noEmit": true,
-        "verbatimModuleSyntax": true,
-        "erasableSyntaxOnly": true,
-        "allowImportingTsExtensions": true,
-        "types": ["node"]
-    }
+    "extends": "../gen/tsconfig.json",
+    "include": ["**/*.ts"]
 }

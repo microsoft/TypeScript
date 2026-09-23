@@ -230,9 +230,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	}
 
 	if apiRequest.OpenFiles != nil {
-		for uri := range apiRequest.OpenFiles.Keys() {
-			fileName := uri.FileName()
-			path := b.toPath(fileName)
+		for path, fileName := range apiRequest.OpenFiles {
 			if b.apiState.openFiles == nil {
 				b.apiState.openFiles = make(map[tspath.Path]apiOpenedFile)
 			}
@@ -261,9 +259,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	if apiRequest.OpenFiles != nil {
 		var retain collections.Set[tspath.Path]
 		ensureInferredProject := false
-		for uri := range apiRequest.OpenFiles.Keys() {
-			fileName := uri.FileName()
-			path := b.toPath(fileName)
+		for path, fileName := range apiRequest.OpenFiles {
 			if b.isOpenFile(path) {
 				if b.findDefaultConfiguredProject(fileName, path) == nil && !b.isSupportedInInferredProject(fileName) {
 					return fmt.Errorf("no project found for opened file: %s", fileName)
@@ -350,8 +346,11 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	}
 	wg.Wait()
 	b.createdPrograms = createdPrograms
-	for uri := range apiRequest.EnsureFiles.Keys() {
-		b.DidRequestFile(uri, false /*configuredProjectsOnly*/, logger)
+	for path, fileName := range apiRequest.EnsureFiles {
+		b.didRequestFile(fileName, path, false /*configuredProjectsOnly*/, logger)
+		if b.findDefaultProject(fileName, path) == nil {
+			return fmt.Errorf("no project found for opened file: %s", fileName)
+		}
 	}
 	for projectID := range apiRequest.EnsurePrograms.Keys() {
 		b.DidRequestProject(projectID, logger)
@@ -626,9 +625,13 @@ func (b *ProjectCollectionBuilder) ensureInferredProjectIncludesClosedFile(fileN
 // If configuredProjectsOnly is true, only configured projects are loaded; no inferred project is created
 // and it is not guaranteed that there will be any project containing the file in the resulting snapshot.
 func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, configuredProjectsOnly bool, logger *logging.LogTree) {
-	startTime := time.Now()
 	fileName := uri.FileName()
 	path := b.toPath(fileName)
+	b.didRequestFile(fileName, path, configuredProjectsOnly, logger)
+}
+
+func (b *ProjectCollectionBuilder) didRequestFile(fileName string, path tspath.Path, configuredProjectsOnly bool, logger *logging.LogTree) {
+	startTime := time.Now()
 	if b.defaultProjectsInvalidated {
 		b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		if !b.isOpenFile(path) {

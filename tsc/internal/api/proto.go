@@ -110,23 +110,27 @@ const (
 	MethodGetExportSymbolOfSymbol Method = "getExportSymbolOfSymbol"
 
 	// Type sub-property methods
-	MethodGetSymbolOfType              Method = "getSymbolOfType"
-	MethodGetTargetOfType              Method = "getTargetOfType"
-	MethodGetFreshTypeOfType           Method = "getFreshTypeOfType"
-	MethodGetRegularTypeOfType         Method = "getRegularTypeOfType"
-	MethodGetTypesOfType               Method = "getTypesOfType"
-	MethodGetTypeParametersOfType      Method = "getTypeParametersOfType"
-	MethodGetOuterTypeParametersOfType Method = "getOuterTypeParametersOfType"
-	MethodGetLocalTypeParametersOfType Method = "getLocalTypeParametersOfType"
-	MethodGetThisTypeOfType            Method = "getThisTypeOfType"
-	MethodGetAliasTypeArgumentsOfType  Method = "getAliasTypeArgumentsOfType"
-	MethodGetAliasSymbolOfType         Method = "getAliasSymbolOfType"
-	MethodGetObjectTypeOfType          Method = "getObjectTypeOfType"
-	MethodGetIndexTypeOfType           Method = "getIndexTypeOfType"
-	MethodGetCheckTypeOfType           Method = "getCheckTypeOfType"
-	MethodGetExtendsTypeOfType         Method = "getExtendsTypeOfType"
-	MethodGetBaseTypeOfType            Method = "getBaseTypeOfType"
-	MethodGetConstraintOfType          Method = "getConstraintOfType"
+	MethodGetSymbolOfType               Method = "getSymbolOfType"
+	MethodGetTargetOfType               Method = "getTargetOfType"
+	MethodGetFreshTypeOfType            Method = "getFreshTypeOfType"
+	MethodGetRegularTypeOfType          Method = "getRegularTypeOfType"
+	MethodGetTypesOfType                Method = "getTypesOfType"
+	MethodGetTypeParametersOfType       Method = "getTypeParametersOfType"
+	MethodGetOuterTypeParametersOfType  Method = "getOuterTypeParametersOfType"
+	MethodGetLocalTypeParametersOfType  Method = "getLocalTypeParametersOfType"
+	MethodGetThisTypeOfType             Method = "getThisTypeOfType"
+	MethodGetAliasTypeArgumentsOfType   Method = "getAliasTypeArgumentsOfType"
+	MethodGetAliasSymbolOfType          Method = "getAliasSymbolOfType"
+	MethodGetObjectTypeOfType           Method = "getObjectTypeOfType"
+	MethodGetIndexTypeOfType            Method = "getIndexTypeOfType"
+	MethodGetCheckTypeOfType            Method = "getCheckTypeOfType"
+	MethodGetExtendsTypeOfType          Method = "getExtendsTypeOfType"
+	MethodGetBaseTypeOfType             Method = "getBaseTypeOfType"
+	MethodGetConstraintOfType           Method = "getConstraintOfType"
+	MethodGetTypeParameterOfMappedType  Method = "getTypeParameterOfMappedType"
+	MethodGetConstraintTypeOfMappedType Method = "getConstraintTypeOfMappedType"
+	MethodGetNameTypeOfMappedType       Method = "getNameTypeOfMappedType"
+	MethodGetTemplateTypeOfMappedType   Method = "getTemplateTypeOfMappedType"
 
 	// Signature sub-property methods
 	MethodGetTypeParametersOfSignature Method = "getTypeParametersOfSignature"
@@ -356,6 +360,7 @@ type SnapshotRequestChangesParams struct {
 	// tsconfig that contains it; if found, that configured project is loaded and
 	// becomes the file's default project. Otherwise the file is loaded into the
 	// inferred project (e.g. a node_modules d.ts not in any project's import graph).
+	// If a file cannot be loaded into any project, the request fails.
 	OpenFiles []DocumentIdentifier `json:"openFiles,omitempty"`
 	// CloseFiles lists files to release in the new snapshot. A file is only fully
 	// closed once every API client that opened it closes it.
@@ -550,6 +555,10 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetExtendsTypeOfType:          unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseTypeOfType:             unmarshallerFor[GetTypePropertyParams],
 	MethodGetConstraintOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeParameterOfMappedType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetConstraintTypeOfMappedType: unmarshallerFor[GetTypePropertyParams],
+	MethodGetNameTypeOfMappedType:       unmarshallerFor[GetTypePropertyParams],
+	MethodGetTemplateTypeOfMappedType:   unmarshallerFor[GetTypePropertyParams],
 	MethodGetTrueTypeOfConditionalType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetFalseTypeOfConditionalType: unmarshallerFor[GetTypePropertyParams],
 
@@ -1013,6 +1022,12 @@ type TypeResponse struct {
 	// SubstitutionType data
 	BaseType        TypeID `json:"baseType,omitzero"`
 	SubstConstraint TypeID `json:"substConstraint,omitzero"`
+
+	// MappedType data
+	TypeParameter  TypeID `json:"typeParameter,omitzero"`
+	ConstraintType TypeID `json:"constraintType,omitzero"`
+	NameType       TypeID `json:"nameType,omitzero"`
+	TemplateType   TypeID `json:"templateType,omitzero"`
 
 	// TemplateLiteralType text segments
 	Texts []string `json:"texts,omitempty"`
