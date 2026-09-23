@@ -61,9 +61,8 @@ type BuildTask struct {
 	done       chan struct{}
 
 	// task reporting
-	result       *taskResult
-	prevReporter *BuildTask
-	reportDone   chan struct{}
+	result *taskResult
+	built  chan struct{} // closed when result is ready to be reported
 
 	buildInfoEntry   *buildInfoEntry
 	buildInfoEntryMu sync.Mutex
@@ -118,9 +117,6 @@ func (t *BuildTask) reportDiagnostic(err *ast.Diagnostic) {
 }
 
 func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, buildResult *OrchestratorResult) {
-	if t.prevReporter != nil {
-		<-t.prevReporter.reportDone
-	}
 	if len(t.errors) > 0 {
 		buildResult.Errors = append(core.IfElse(buildResult.Errors != nil, buildResult.Errors, []*ast.Diagnostic{}), t.errors...)
 	}
@@ -144,7 +140,6 @@ func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, b
 	}
 	buildResult.FilesToDelete = append(buildResult.FilesToDelete, t.result.filesToDelete...)
 	t.result = nil
-	close(t.reportDone)
 }
 
 func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
