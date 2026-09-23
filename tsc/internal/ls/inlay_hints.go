@@ -2,7 +2,6 @@ package ls
 
 import (
 	"context"
-	"slices"
 	"strings"
 	"unicode"
 
@@ -157,6 +156,14 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 		return
 	}
 
+	// A spread prevents matching trailing tuple elements from the end of the argument list.
+	argumentCount := len(args)
+	for _, arg := range args {
+		if ast.IsSpreadElement(ast.SkipParentheses(arg)) {
+			argumentCount = -1
+			break
+		}
+	}
 	signatureParamPos := 0
 	for _, originalArg := range args {
 		arg := ast.SkipParentheses(originalArg)
@@ -169,25 +176,18 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 		if ast.IsSpreadElement(arg) {
 			spreadType := s.checker.GetTypeAtLocation(arg.Expression())
 			if spreadType.IsTupleType() {
-				elementFlags := spreadType.Target().AsTupleType().ElementFlags()
-				fixedLength := spreadType.Target().AsTupleType().FixedLength()
-				if fixedLength == 0 {
+				tupleType := spreadType.Target().AsTupleType()
+				if tupleType.FixedLength() == 0 {
 					continue
 				}
-				firstOptionalIndex := slices.IndexFunc(elementFlags, func(f checker.ElementFlags) bool {
-					return f&checker.ElementFlagsRequired == 0
-				})
-				requiredArgs := core.IfElse(firstOptionalIndex < 0, fixedLength, firstOptionalIndex)
-				if requiredArgs > 0 {
-					spreadArgs = requiredArgs
-				}
+				spreadArgs = getRequiredTupleElementCount(tupleType)
 			}
 		}
 
-		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos)
+		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos, argumentCount)
 		signatureParamPos = signatureParamPos + core.IfElse(spreadArgs > 0, spreadArgs, 1)
 		if identifierInfo == nil {
-			return
+			continue
 		}
 
 		parameter := identifierInfo.parameter
@@ -831,7 +831,7 @@ type parameterInfo struct {
 	isRestParameter bool
 }
 
-func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int) *parameterInfo {
+func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int, argumentCount int) *parameterInfo {
 	parameters := signature.Parameters()
 	paramCount := len(parameters) - core.IfElse(signature.HasRestParameter(), 1, 0)
 	if pos < paramCount {
@@ -859,14 +859,23 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 
 	restType := s.checker.GetTypeOfSymbol(restParameter)
 	if restType.IsTupleType() {
-		associatedNames := make([]*ast.Node, 0, len(restType.Target().AsTupleType().ElementInfos()))
-		for _, elementInfo := range restType.Target().AsTupleType().ElementInfos() {
-			labeledElement := elementInfo.LabeledDeclaration()
-			associatedNames = append(associatedNames, labeledElement)
-		}
+		tupleType := restType.Target().AsTupleType()
+		elementInfos := tupleType.ElementInfos()
 		index := pos - paramCount
-		if index < len(associatedNames) {
-			associatedName := associatedNames[index]
+		restArgumentCount := argumentCount - paramCount
+		firstVariableIndex := tupleType.FixedLength()
+		trailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsFixed)
+		if argumentCount >= 0 && trailingCount > 0 && firstVariableIndex+trailingCount+1 == len(elementInfos) && restArgumentCount >= firstVariableIndex+trailingCount {
+			trailingStart := restArgumentCount - trailingCount
+			switch {
+			case index >= trailingStart:
+				index = len(elementInfos) - (restArgumentCount - index)
+			case index > firstVariableIndex:
+				return nil
+			}
+		}
+		if index < len(elementInfos) {
+			associatedName := elementInfos[index].LabeledDeclaration()
 			if associatedName != nil {
 				debug.Assert(ast.IsIdentifier(associatedName.Name()))
 				var isRestTupleElement bool

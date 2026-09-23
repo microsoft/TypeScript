@@ -96,11 +96,11 @@ fn(true, 1, "a", "b", "end");
 }
 
 fn(true, 1, "a", "b", "end");
-                 ^
+                      ^
 {
   "position": {
     "line": 1,
-    "character": 17
+    "character": 22
   },
   "label": [
     {
@@ -200,17 +200,17 @@ fn(true, 1, "end");
   },
   "label": [
     {
-      "value": "...middle",
+      "value": "last",
       "location": {
         "uri": "file:///inlayHintsTupleRestTrailing.ts",
         "range": {
           "start": {
             "line": 0,
-            "character": 65
+            "character": 83
           },
           "end": {
             "line": 0,
-            "character": 71
+            "character": 87
           }
         }
       }
@@ -256,11 +256,11 @@ onlyTrailing(1, 2, "end");
 }
 
 onlyTrailing(1, 2, "end");
-                ^
+                   ^
 {
   "position": {
     "line": 4,
-    "character": 16
+    "character": 19
   },
   "label": [
     {
@@ -296,17 +296,17 @@ onlyTrailing("end");
   },
   "label": [
     {
-      "value": "...head",
+      "value": "tail",
       "location": {
         "uri": "file:///inlayHintsTupleRestTrailing.ts",
         "range": {
           "start": {
             "line": 3,
-            "character": 43
+            "character": 59
           },
           "end": {
             "line": 3,
-            "character": 47
+            "character": 63
           }
         }
       }
@@ -371,6 +371,38 @@ noTrailing(1, "a", "b");
           "end": {
             "line": 6,
             "character": 60
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+skip({ x: 1 }, 2);
+               ^
+{
+  "position": {
+    "line": 9,
+    "character": 15
+  },
+  "label": [
+    {
+      "value": "next",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 44
+          },
+          "end": {
+            "line": 8,
+            "character": 48
           }
         }
       }
