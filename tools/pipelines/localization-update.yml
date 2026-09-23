@@ -212,5 +212,6 @@ jobs:
                     gh pr create --repo microsoft/TypeScript --base main --head $branch --title "Update localization files" --body "Updates localization handbacks and their generated runtime artifacts."
                 }
               displayName: Create or update localization pull request
+              condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
               env:
                 GH_TOKEN: $(GH_TOKEN)
