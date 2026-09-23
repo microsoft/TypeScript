@@ -90,6 +90,10 @@ export interface APIMethodInfo {
     getExtendsTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getBaseTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getConstraintOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getTypeParameterOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getConstraintTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getNameTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
+    getTemplateTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParametersOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[] | null>;
     getParametersOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse[] | null>;
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
@@ -455,6 +459,11 @@ export interface TypeResponse {
     /** SubstitutionType data */
     baseType?: number | undefined;
     substConstraint?: number | undefined;
+    /** MappedType data */
+    typeParameter?: number | undefined;
+    constraintType?: number | undefined;
+    nameType?: number | undefined;
+    templateType?: number | undefined;
     /** TemplateLiteralType text segments */
     texts?: string[] | undefined;
     /** FreshableType data (LiteralType and computed enum types) */
@@ -1058,6 +1067,7 @@ export interface BatchRequest {
         | "getConstantValue"
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
+        | "getConstraintTypeOfMappedType"
         | "getContextualType"
         | "getContextualTypeForArgument"
         | "getCurrentLanguageServerSnapshot"
@@ -1091,6 +1101,7 @@ export interface BatchRequest {
         | "getMembersOfSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
+        | "getNameTypeOfMappedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
@@ -1138,6 +1149,7 @@ export interface BatchRequest {
         | "getTargetOfSignature"
         | "getTargetOfType"
         | "getTargetSymbol"
+        | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
         | "getTrueTypeOfConditionalType"
@@ -1150,6 +1162,7 @@ export interface BatchRequest {
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
         | "getTypeParameterAtPosition"
+        | "getTypeParameterOfMappedType"
         | "getTypeParametersOfSignature"
         | "getTypeParametersOfType"
         | "getTypePredicateOfSignature"
@@ -1223,6 +1236,7 @@ export interface BatchResponse {
         | "getConstantValue"
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
+        | "getConstraintTypeOfMappedType"
         | "getContextualType"
         | "getContextualTypeForArgument"
         | "getCurrentLanguageServerSnapshot"
@@ -1256,6 +1270,7 @@ export interface BatchResponse {
         | "getMembersOfSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
+        | "getNameTypeOfMappedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
@@ -1303,6 +1318,7 @@ export interface BatchResponse {
         | "getTargetOfSignature"
         | "getTargetOfType"
         | "getTargetSymbol"
+        | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
         | "getTrueTypeOfConditionalType"
@@ -1315,6 +1331,7 @@ export interface BatchResponse {
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
         | "getTypeParameterAtPosition"
+        | "getTypeParameterOfMappedType"
         | "getTypeParametersOfSignature"
         | "getTypeParametersOfType"
         | "getTypePredicateOfSignature"
@@ -1530,6 +1547,8 @@ export interface CompilerOptions {
     noUncheckedSideEffectImports?: boolean | undefined;
     outDir?: string | undefined;
     paths?: Record<string, string[]> | undefined;
+    /** Plugins are parsed only so tools can report that native TypeScript does not support them. */
+    plugins?: PluginImport[] | undefined;
     preserveConstEnums?: boolean | undefined;
     preserveSymlinks?: boolean | undefined;
     project?: string | undefined;
@@ -1685,6 +1704,10 @@ export interface ProjectFileChanges {
 
 export interface OpenedFileOperationResult {
     project: ProjectId;
+}
+
+export interface PluginImport {
+    name: string;
 }
 
 export interface ModuleResolutionEntry {

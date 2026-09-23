@@ -947,8 +947,11 @@ export const testTools = task({
 
 export const testCodegen = task({
     name: "test:codegen",
-    description: "Runs opt-in incremental codegen tests; excluded from validate and test:all. Because this runs asserts on build codegen, it takes awhile and is somewhat redundant.",
-    run: () => run("node", ["--test", "./tools/scripts/gen/*.test.mts"]),
+    description: "Runs incremental codegen tests.",
+    run: async () => {
+        await run("go", ["-C", "tsc", "mod", "download"]);
+        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts"]);
+    },
 });
 
 export const buildAPI = task({

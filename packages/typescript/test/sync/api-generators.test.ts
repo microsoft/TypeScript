@@ -38,6 +38,7 @@ import {
     IndexKind,
     type InterfaceType,
     type LiteralType,
+    type MappedType,
     ModuleKind,
     ModuleResolutionKind,
     type NodeHandle,
@@ -103,6 +104,7 @@ export type Keys = keyof Box<Derived>;
 export type Union = Derived | string;
 export enum Choice { First = 1, Second = "second" }
 export class Unimported { value = "extra"; }
+export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
 `,
     "/src/index.ts": `
 /// <reference types="parity" />
@@ -1428,6 +1430,7 @@ describe("API - generator batching", () => {
             const indexAlias = cast(modelsFile.statements[8], isTypeAliasDeclaration);
             const unionAlias = cast(modelsFile.statements[9], isTypeAliasDeclaration);
             const enumDeclaration = cast(modelsFile.statements[10], isEnumDeclaration);
+            const mappedAlias = cast(modelsFile.statements[12], isTypeAliasDeclaration);
 
             const importedDerivedSymbol = checker.getSymbolAtLocation(importedDerived)!;
             const combineSymbol = checker.getSymbolAtLocation(combineDeclaration.name!)!;
@@ -1452,6 +1455,7 @@ describe("API - generator batching", () => {
             const typeParameter = checker.getTypeAtLocation(combineDeclaration.typeParameters![0].name) as TypeParameter;
             const literalType = checker.getTypeAtLocation(enumDeclaration.members[0].name) as LiteralType;
             const substitutionType = conditionalType.getTrueType() as SubstitutionType;
+            const mappedType = checker.getTypeFromTypeNode(mappedAlias.type) as MappedType;
             const signature = checker.getSignatureFromDeclaration(combineDeclaration);
             const predicateDeclaration = indexFile.statements.find(statement => isFunctionDeclaration(statement) && statement.name?.text === "isDerived")!;
             const predicateSignature = checker.getSignatureFromDeclaration(predicateDeclaration);
@@ -1715,6 +1719,10 @@ describe("API - generator batching", () => {
                 parityCase("Type", "getLocalTypeParameters", interfaceType.getLocalTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getThisType", interfaceType.getThisType, assertOptionalTypesEquivalent),
                 parityCase("Type", "getAliasTypeArguments", boxedType.getAliasTypeArguments, assertTypeArraysEquivalent),
+                parityCase("Type", "getTypeParameter", mappedType.getTypeParameter, assertTypesEquivalent),
+                parityCase("Type", "getConstraintType", mappedType.getConstraintType, assertTypesEquivalent),
+                parityCase("Type", "getNameType", mappedType.getNameType, assertOptionalTypesEquivalent),
+                parityCase("Type", "getTemplateType", mappedType.getTemplateType, assertTypesEquivalent),
                 parityCase("Type", "getObjectType", indexedType.getObjectType, assertTypesEquivalent),
                 parityCase("Type", "getIndexType", indexedType.getIndexType, assertTypesEquivalent),
                 parityCase("Type", "getCheckType", conditionalType.getCheckType, assertTypesEquivalent),

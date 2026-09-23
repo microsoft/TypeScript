@@ -19,6 +19,8 @@ function digest(value: string | Buffer): string {
     return createHash("sha256").update(value).digest("hex");
 }
 
+export const defaultCacheDirectory = path.join(os.tmpdir(), "typescript-codegen", digest(repoRoot));
+
 function readIfExists(file: string): Buffer | undefined {
     try {
         return fs.readFileSync(file);
@@ -35,7 +37,7 @@ export class GeneratedFile {
     private readonly cacheFile: string;
     private readonly key: unknown;
 
-    constructor(fileName: string, inputs: readonly string[], cacheDirectory = path.join(os.tmpdir(), "typescript-codegen"), key?: unknown) {
+    constructor(fileName: string, inputs: readonly string[], cacheDirectory = defaultCacheDirectory, key?: unknown) {
         this.fileName = path.resolve(fileName);
         this.inputs = [...new Set([...commonInputs, ...inputs].map(file => path.resolve(file)))].sort();
         this.key = key;
