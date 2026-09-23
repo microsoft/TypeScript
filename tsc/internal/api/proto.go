@@ -34,11 +34,12 @@ var (
 type Method string
 
 type (
-	SnapshotID  uint64
-	SymbolID    uint64
-	TypeID      uint32
-	SignatureID uint64
-	NodeHandle  string
+	SnapshotID       uint64
+	ModuleResolverID uint64
+	SymbolID         uint64
+	TypeID           uint32
+	SignatureID      uint64
+	NodeHandle       string
 )
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
@@ -62,6 +63,9 @@ const (
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
+	MethodCreateModuleResolver                           Method = "createModuleResolver"
+	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
+	MethodResolveModuleName                              Method = "resolveModuleName"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
@@ -441,6 +445,68 @@ type LanguageServerSnapshotChanges struct {
 type CreateProgramOptions struct {
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
+	ModuleResolver               ModuleResolverID         `json:"moduleResolver,omitempty"`
+}
+
+type (
+	ModuleResolutionFallback string
+	ResolutionMode           core.ModuleKind
+)
+
+const (
+	ModuleResolutionFallbackResolve    ModuleResolutionFallback = "resolve"
+	ModuleResolutionFallbackUnresolved ModuleResolutionFallback = "unresolved"
+)
+
+type ModuleResolutionSpec struct {
+	Fallback ModuleResolutionFallback `json:"fallback"`
+	Entries  []*ModuleResolutionEntry `json:"entries" nonnil:"true"`
+}
+
+type ModuleResolutionEntry struct {
+	ModuleName          string                  `json:"moduleName"`
+	ContainingDirectory *DocumentIdentifier     `json:"containingDirectory,omitempty"`
+	ResolutionMode      *ResolutionMode         `json:"resolutionMode,omitempty"`
+	Result              *StaticModuleResolution `json:"result" nonnil:"true"`
+}
+
+type StaticModuleResolution struct {
+	ResolvedFileName *DocumentIdentifier `json:"resolvedFileName,omitempty"`
+	OriginalPath     *DocumentIdentifier `json:"originalPath,omitempty"`
+	PackageID        *PackageId          `json:"packageId,omitempty"`
+}
+
+type CreateModuleResolverParams struct {
+	CompilerOptions           core.CompilerOptions  `json:"compilerOptions"`
+	ModuleResolutions         *ModuleResolutionSpec `json:"moduleResolutions,omitempty"`
+	ResolveModuleNameCallback string                `json:"resolveModuleNameCallback,omitempty"`
+}
+
+type ReleaseModuleResolverParams struct {
+	Resolver ModuleResolverID `json:"resolver"`
+}
+
+type ResolveModuleNameParams struct {
+	Snapshot            SnapshotID         `json:"snapshot,omitempty"`
+	InProgressSnapshot  uint64             `json:"inProgressSnapshot,omitempty"`
+	Resolver            ModuleResolverID   `json:"resolver"`
+	ModuleName          string             `json:"moduleName"`
+	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+type ResolveModuleNameCallbackParams struct {
+	ModuleName          string          `json:"moduleName"`
+	ContainingDirectory string          `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode `json:"resolutionMode,omitempty"`
+	Snapshot            *SnapshotID     `json:"snapshot,omitempty"`
+	InProgressSnapshot  *uint64         `json:"inProgressSnapshot,omitempty"`
+}
+
+type ResolveModuleNameResult struct {
+	ResolvedModule *ResolvedModule `json:"resolvedModule,omitempty"`
+	// Trace is provided when compilerOptions.traceResolution is true.
+	Trace []string `json:"trace,omitempty"`
 }
 
 // ProjectFileChanges describes what source files changed within a single project.
@@ -492,6 +558,9 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
+	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
+	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
+	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
