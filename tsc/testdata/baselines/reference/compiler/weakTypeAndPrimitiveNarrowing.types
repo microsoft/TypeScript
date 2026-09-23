@@ -67,7 +67,7 @@ const h = (arg: PrimitivesAndWeakTypes) => {
 
     } else {
       arg;
->arg : PrimitivesAndWeakTypes & not "A"
+>arg : string | number | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
     }
 }
 

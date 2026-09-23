@@ -140,63 +140,46 @@ func (c *Checker) removeOrRegularizeNegatedTypes(t *Type, remove bool) *Type {
 	return c.getRegularNegatedTypes(t)
 }
 
-// removeComplementaryFreshNegatedTypes cancels complementary members of a union that were produced
-// by the true and false branches of a control-flow narrowing. When both a refined type 'Base & C'
-// and its negated complement 'Base & not C' appear in the union, they cover all of 'Base', so both
-// are replaced by the common supertype 'Base'. For example, when the branches of
-//
-//	if (crate.isPackedTight()) { ... }
-//
-// rejoin, the union '(Crate<any> & {extraContents}) | (Crate<any> & not (Crate<any> & {extraContents}))'
-// simplifies back to just 'Crate<any>'. This is gated on ObjectFlagsFreshNegated so it only affects
-// negations introduced by narrowing, not negations written explicitly by the user.
+// removeComplementaryNegatedTypes replaces 'Base & not C' with 'Base' when another branch covers
+// 'Base & C'. That branch is retained unless it is also contained in Base. Removing one negation
+// at a time preserves shared negative factors and allows successive reductions, for example
+// '(T & A) | (T & B) | (T & not A & not B)' to '(T & A) | (T & B) | (T & not B)' and then 'T'.
 //
 // The input slice is assumed to be sorted (per CompareTypes); the result remains sorted.
-func (c *Checker) removeComplementaryFreshNegatedTypes(types []*Type) []*Type {
-	for i := 0; i < len(types); i++ {
-		n := types[i]
-		if n.flags&TypeFlagsIntersection == 0 || !core.Some(n.Types(), isFreshNegatedType) {
+func (c *Checker) removeComplementaryNegatedTypes(types []*Type) []*Type {
+	for index := 0; index < len(types); index++ {
+		candidate := types[index]
+		if candidate.flags&TypeFlagsIntersection == 0 || !core.Some(candidate.Types(), isNegatedType) {
 			continue
 		}
-		members := n.Types()
-		for _, m := range members {
-			if !isFreshNegatedType(m) {
+		for _, negated := range candidate.Types() {
+			if !isNegatedType(negated) {
 				continue
 			}
-			// 'base' is 'n' with this one negation removed; 'positive' is 'base' with the negation's
-			// base type intersected back in (i.e. the corresponding true-branch member).
-			rest := core.Filter(members, func(other *Type) bool { return other != m })
-			if len(rest) == 0 {
-				continue
-			}
-			base := c.getIntersectionType(rest)
-			positive := c.getIntersectionType([]*Type{base, m.AsNegatedType().baseType})
-			// Find the true-branch counterpart P. Narrowing may have reduced it (e.g. 'Crate<any> &
-			// Crate<Sundries>' to just 'Crate<Sundries>'), so match structurally: any P with
-			// (base & C) <: P <: base satisfies 'P | (base & not C) == base'.
-			j := -1
-			for k, p := range types {
-				if k != i && c.isTypeSubtypeOf(p, base) && c.isTypeSubtypeOf(positive, p) {
-					j = k
+			base := c.getIntersectionType(core.Filter(candidate.Types(), func(member *Type) bool { return member != negated }))
+			positiveHalf := c.getIntersectionType([]*Type{base, negated.AsNegatedType().baseType})
+			covered := false
+			for otherIndex, positive := range types {
+				if otherIndex != index && c.isTypeSubtypeOf(positiveHalf, positive) {
+					covered = true
 					break
 				}
 			}
-			if j < 0 {
+			if !covered {
 				continue
 			}
-			lo, hi := i, j
-			if lo > hi {
-				lo, hi = hi, lo
+			reducedTypes := make([]*Type, 0, len(types))
+			for otherIndex, other := range types {
+				if otherIndex != index && !c.isTypeSubtypeOf(other, base) {
+					reducedTypes = append(reducedTypes, other)
+				}
 			}
-			types = slices.Delete(types, hi, hi+1)
-			types = slices.Delete(types, lo, lo+1)
-			types, _ = insertType(types, base)
-			i = -1 // Restart the scan since the set changed.
+			types, _ = insertType(reducedTypes, base)
+			index = -1
 			break
 		}
 	}
 	if core.Some(types, isNegatedType) {
-		// Union type construction does this reduction *before* this intersection one - it may need to be checked again with the updated type set.
 		if c.checkForSaturatedNegatedType(types) {
 			return []*Type{c.unknownType}
 		}

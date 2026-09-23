@@ -33,9 +33,9 @@ declare var x: ABU;
 
 if (x.type === "a") {
 >x.type === "a" : boolean
->x.type : "a" | "b" | (string & not "a" & not "b")
+>x.type : string
 >x : ABU
->type : "a" | "b" | (string & not "a" & not "b")
+>type : string
 >"a" : "a"
 
     let y = x.data;
@@ -51,9 +51,9 @@ if (x.type === "a") {
 }
 else if (x.type === "b") {
 >x.type === "b" : boolean
->x.type : "b" | (string & not "a" & not "b")
+>x.type : string & not "a"
 >x : B | Unknown
->type : "b" | (string & not "a" & not "b")
+>type : string & not "a"
 >"b" : "b"
 
     needsString(x.data);

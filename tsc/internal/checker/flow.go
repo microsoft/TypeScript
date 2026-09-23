@@ -25,6 +25,13 @@ func (ft *FlowType) isNil() bool {
 	return ft.t == nil
 }
 
+func (c *Checker) getReducedFlowType(t *Type) *Type {
+	if t.flags&TypeFlagsUnion != 0 {
+		return c.getReducedType(t)
+	}
+	return t
+}
+
 func (c *Checker) newFlowType(t *Type, incomplete bool) FlowType {
 	if incomplete && t.flags&TypeFlagsNever != 0 {
 		t = c.silentNeverType
@@ -88,10 +95,12 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 			return declaredType
 		}
 	}
+	reducedDeclaredType := c.getReducedFlowType(declaredType)
+	reducedInitialType := c.getReducedFlowType(core.Coalesce(initialType, declaredType))
 	f := c.getFlowState()
 	f.reference = reference
-	f.declaredType = declaredType
-	f.initialType = core.Coalesce(initialType, declaredType)
+	f.declaredType = reducedDeclaredType
+	f.initialType = reducedInitialType
 	f.flowContainer = flowContainer
 	f.sharedFlowStart = len(c.sharedFlows)
 	c.flowInvocationCount++
@@ -196,6 +205,7 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 			// simply return the non-auto declared type to reduce follow-on errors.
 			t = FlowType{t: c.convertAutoToAny(f.declaredType)}
 		}
+		t = c.newFlowType(c.getReducedFlowType(t.t), t.incomplete)
 		if sharedFlow != nil {
 			// Record visited node and the associated type in the cache.
 			c.sharedFlows = append(c.sharedFlows, SharedFlow{flow: sharedFlow, flowType: t})
@@ -384,6 +394,7 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 // Narrow the given type based on the given expression having the assumed boolean value. The returned type
 // will be a subtype or the same type as the argument.
 func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue bool) *Type {
+	t = c.getReducedFlowType(t)
 	// for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
 	if ast.IsExpressionOfOptionalChainRoot(expr) || ast.IsBinaryExpression(expr.Parent) && (expr.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindQuestionQuestionToken || expr.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindQuestionQuestionEqualsToken) && expr.Parent.AsBinaryExpression().Left == expr {
 		return c.narrowTypeByOptionality(f, t, expr, assumeTrue)
@@ -1422,11 +1433,11 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 // At flow control branch or loop junctions, if the type along every antecedent code path
 // is an evolving array type, we construct a combined evolving array type. Otherwise we
 // finalize all evolving array types.
-func (c *Checker) getUnionOrEvolvingArrayType(f *FlowState, types []*Type, subtypeReduction UnionReduction) *Type {
+func (c *Checker) getUnionOrEvolvingArrayType(f *FlowState, types []*Type, unionReduction UnionReduction) *Type {
 	if isEvolvingArrayTypeList(types) {
 		return c.getEvolvingArrayType(c.getUnionType(core.Map(types, c.getElementTypeOfEvolvingArrayType)))
 	}
-	result := c.recombineUnknownType(c.getUnionTypeEx(core.SameMap(types, c.finalizeEvolvingArrayType), subtypeReduction, nil, nil))
+	result := c.recombineUnknownType(c.getReducedType(c.getUnionTypeEx(core.SameMap(types, c.finalizeEvolvingArrayType), unionReduction, nil, nil)))
 	if result != f.declaredType && result.flags&f.declaredType.flags&TypeFlagsUnion != 0 && slices.Equal(result.AsUnionType().types, f.declaredType.AsUnionType().types) {
 		return f.declaredType
 	}

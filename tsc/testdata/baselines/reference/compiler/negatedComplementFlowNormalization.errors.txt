@@ -1,0 +1,143 @@
+negatedComplementFlowNormalization.ts(28,11): error TS2322: Type 'unknown' is not assignable to type 'number'.
+negatedComplementFlowNormalization.ts(33,11): error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+negatedComplementFlowNormalization.ts(39,11): error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+negatedComplementFlowNormalization.ts(62,11): error TS2322: Type 'unknown' is not assignable to type 'number'.
+negatedComplementFlowNormalization.ts(67,11): error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+negatedComplementFlowNormalization.ts(73,11): error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+negatedComplementFlowNormalization.ts(96,15): error TS2322: Type 'string' is not assignable to type 'never'.
+negatedComplementFlowNormalization.ts(104,11): error TS2322: Type 'string' is not assignable to type 'never'.
+
+
+==== negatedComplementFlowNormalization.ts (8 errors) ====
+    type Full = string | not string;
+    declare const numericCase: number;
+    declare const objectCase: { value: string };
+    declare function isFull(value: unknown): value is Full;
+    declare function assertFull(value: unknown): asserts value is Full;
+    declare function assertCondition(value: unknown): asserts value;
+    
+    function complementFlow(value: Full, condition: boolean) {
+        switch (value) {
+            case numericCase:
+                const numeric: number = value;
+                break;
+            case objectCase:
+                const objectValue: object = value;
+                break;
+        }
+        if (value) {
+            const nonNull: {} = value;
+        }
+        if (typeof value === "string") {
+            const text: string = value;
+        }
+        if (typeof value === "object" && value !== null && "value" in value) {
+            const member: unknown = value.value;
+        }
+        value = 42;
+        // Error: An exhaustive complement behaves like unknown after assignment.
+        const assigned: number = value;
+              ~~~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'number'.
+        if (condition) {
+            value = "42";
+        }
+        // Error: Joining assignments must retain unknown.
+        const joined: string | number = value;
+              ~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+        while (condition) {
+            value = condition ? "42" : 42;
+            condition = false;
+        }
+        // Error: The loop result must also retain unknown.
+        const looped: string | number = value;
+              ~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+    }
+    
+    function unknownFlow(value: unknown, condition: boolean) {
+        switch (value) {
+            case numericCase:
+                const numeric: number = value;
+                break;
+            case objectCase:
+                const objectValue: object = value;
+                break;
+        }
+        if (value) {
+            const nonNull: {} = value;
+        }
+        if (typeof value === "string") {
+            const text: string = value;
+        }
+        if (typeof value === "object" && value !== null && "value" in value) {
+            const member: unknown = value.value;
+        }
+        value = 42;
+        // Error: Unknown is not assignment-narrowed.
+        const assigned: number = value;
+              ~~~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'number'.
+        if (condition) {
+            value = "42";
+        }
+        // Error: Joining assignments must retain unknown.
+        const joined: string | number = value;
+              ~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+        while (condition) {
+            value = condition ? "42" : 42;
+            condition = false;
+        }
+        // Error: The loop result must also retain unknown.
+        const looped: string | number = value;
+              ~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+    }
+    
+    function predicateFlow(value: unknown) {
+        if (isFull(value)) {
+            switch (value) {
+                case objectCase:
+                    const objectValue: object = value;
+                    break;
+            }
+        }
+    }
+    
+    function assertionFlow(value: unknown) {
+        assertFull(value);
+        switch (value) {
+            case objectCase:
+                const objectValue: object = value;
+                break;
+        }
+        assertCondition(value == 42);
+        if (typeof value === "string") {
+            // Error: Assertion narrowing must preserve the reachable string branch.
+            const impossible: never = value;
+                  ~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
+        }
+    }
+    
+    function compoundAssertionFlow(value: unknown) {
+        assertCondition(isFull(value) && value == 42 && typeof value === "string");
+        const text: string = value;
+        // Error: Narrowing steps within one assertion must also preserve strings.
+        const impossible: never = value;
+              ~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
+    }
+    
+    function evolvingArray(condition: boolean) {
+        const values = [];
+        if (condition) {
+            values.push(42);
+        } else {
+            values.push("42");
+        }
+        const result: (string | number)[] = values;
+        return result;
+    }

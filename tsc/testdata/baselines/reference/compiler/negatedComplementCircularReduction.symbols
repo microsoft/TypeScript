@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/negatedComplementCircularReduction.ts] ////
+
+=== negatedComplementCircularReduction.ts ===
+type Keys<Value> = Value extends unknown ? keyof Value : never;
+>Keys : Symbol(Keys, Decl(negatedComplementCircularReduction.ts, 0, 0))
+>Value : Symbol(Value, Decl(negatedComplementCircularReduction.ts, 0, 10))
+>Value : Symbol(Value, Decl(negatedComplementCircularReduction.ts, 0, 10))
+>Value : Symbol(Value, Decl(negatedComplementCircularReduction.ts, 0, 10))
+
+type Recursive =
+>Recursive : Symbol(Recursive, Decl(negatedComplementCircularReduction.ts, 0, 63))
+
+    | { next: Recursive; value: string }
+>next : Symbol(next, Decl(negatedComplementCircularReduction.ts, 2, 7))
+>Recursive : Symbol(Recursive, Decl(negatedComplementCircularReduction.ts, 0, 63))
+>value : Symbol(value, Decl(negatedComplementCircularReduction.ts, 2, 24))
+
+    | ({ next: unknown } & not { value: string })
+>next : Symbol(next, Decl(negatedComplementCircularReduction.ts, 3, 8))
+>value : Symbol(value, Decl(negatedComplementCircularReduction.ts, 3, 32))
+
+    | { next: unknown; value: string };
+>next : Symbol(next, Decl(negatedComplementCircularReduction.ts, 4, 7))
+>value : Symbol(value, Decl(negatedComplementCircularReduction.ts, 4, 22))
+
+// The first query encounters a reduction cycle and distributes over the unreduced union.
+type Early = Keys<Recursive>;
+>Early : Symbol(Early, Decl(negatedComplementCircularReduction.ts, 4, 39))
+>Keys : Symbol(Keys, Decl(negatedComplementCircularReduction.ts, 0, 0))
+>Recursive : Symbol(Recursive, Decl(negatedComplementCircularReduction.ts, 0, 63))
+
+// Use a separate conditional alias so the later query does not reuse the first instantiation.
+type LaterKeys<Value> = Value extends unknown ? keyof Value : never;
+>LaterKeys : Symbol(LaterKeys, Decl(negatedComplementCircularReduction.ts, 7, 29))
+>Value : Symbol(Value, Decl(negatedComplementCircularReduction.ts, 9, 15))
+>Value : Symbol(Value, Decl(negatedComplementCircularReduction.ts, 9, 15))
+>Value : Symbol(Value, Decl(negatedComplementCircularReduction.ts, 9, 15))
+
+declare const early: Early;
+>early : Symbol(early, Decl(negatedComplementCircularReduction.ts, 11, 13))
+>Early : Symbol(Early, Decl(negatedComplementCircularReduction.ts, 4, 39))
+
+declare const later: LaterKeys<Recursive>;
+>later : Symbol(later, Decl(negatedComplementCircularReduction.ts, 12, 13))
+>LaterKeys : Symbol(LaterKeys, Decl(negatedComplementCircularReduction.ts, 7, 29))
+>Recursive : Symbol(Recursive, Decl(negatedComplementCircularReduction.ts, 0, 63))
+
+const consistent: typeof early = later;
+>consistent : Symbol(consistent, Decl(negatedComplementCircularReduction.ts, 13, 5))
+>early : Symbol(early, Decl(negatedComplementCircularReduction.ts, 11, 13))
+>later : Symbol(later, Decl(negatedComplementCircularReduction.ts, 12, 13))
+
+const reverseConsistent: typeof later = early;
+>reverseConsistent : Symbol(reverseConsistent, Decl(negatedComplementCircularReduction.ts, 14, 5))
+>later : Symbol(later, Decl(negatedComplementCircularReduction.ts, 12, 13))
+>early : Symbol(early, Decl(negatedComplementCircularReduction.ts, 11, 13))
+
+// Retrying reduction used to remove "value" from only the later query.
+const earlyValue: typeof early = "value";
+>earlyValue : Symbol(earlyValue, Decl(negatedComplementCircularReduction.ts, 17, 5))
+>early : Symbol(early, Decl(negatedComplementCircularReduction.ts, 11, 13))
+
+const laterValue: typeof later = "value";
+>laterValue : Symbol(laterValue, Decl(negatedComplementCircularReduction.ts, 18, 5))
+>later : Symbol(later, Decl(negatedComplementCircularReduction.ts, 12, 13))
+

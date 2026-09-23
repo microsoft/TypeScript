@@ -1,0 +1,946 @@
+//// [tests/cases/compiler/extractExcludePartition.ts] ////
+
+=== extractExcludePartition.ts ===
+type MyExtract<T, U> = T & U;
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 0, 15))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 0, 17))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 0, 15))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 0, 17))
+
+type MyExclude<T, U> = T & not U;
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 1, 15))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 1, 17))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 1, 15))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 1, 17))
+
+type MyOmit<T, K extends keyof any> = Pick<T, MyExclude<keyof T, K>>;
+>MyOmit : Symbol(MyOmit, Decl(extractExcludePartition.ts, 1, 33))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 2, 12))
+>K : Symbol(K, Decl(extractExcludePartition.ts, 2, 14))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 2, 12))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 2, 12))
+>K : Symbol(K, Decl(extractExcludePartition.ts, 2, 14))
+
+type Partition<T, U> = MyExtract<T, U> | MyExclude<T, U>;
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 3, 15))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 3, 17))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 3, 15))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 3, 17))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 3, 15))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 3, 17))
+
+function partition<T, U>(value: T): Partition<T, U> {
+>partition : Symbol(partition, Decl(extractExcludePartition.ts, 3, 57))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 5, 19))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 5, 21))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 5, 25))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 5, 19))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 5, 19))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 5, 21))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 5, 25))
+}
+
+function identity<T, U>(value: Partition<T, U>): T {
+>identity : Symbol(identity, Decl(extractExcludePartition.ts, 7, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 9, 18))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 9, 20))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 9, 24))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 9, 18))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 9, 20))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 9, 18))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 9, 24))
+}
+
+type UnionPartition<T, A, B> = MyExtract<T, A | B> | MyExclude<T, A | B>;
+>UnionPartition : Symbol(UnionPartition, Decl(extractExcludePartition.ts, 11, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 13, 20))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 13, 22))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 13, 25))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 13, 20))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 13, 22))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 13, 25))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 13, 20))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 13, 22))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 13, 25))
+
+function unionPartition<T, A, B>(value: T): UnionPartition<T, A, B> {
+>unionPartition : Symbol(unionPartition, Decl(extractExcludePartition.ts, 13, 73))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 15, 24))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 15, 26))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 15, 29))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 15, 33))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 15, 24))
+>UnionPartition : Symbol(UnionPartition, Decl(extractExcludePartition.ts, 11, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 15, 24))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 15, 26))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 15, 29))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 15, 33))
+}
+
+function unionIdentity<T, A, B>(value: UnionPartition<T, A, B>): T {
+>unionIdentity : Symbol(unionIdentity, Decl(extractExcludePartition.ts, 17, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 19, 23))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 19, 25))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 19, 28))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 19, 32))
+>UnionPartition : Symbol(UnionPartition, Decl(extractExcludePartition.ts, 11, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 19, 23))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 19, 25))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 19, 28))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 19, 23))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 19, 32))
+}
+
+type RepeatedPartition<T, U, W> = Partition<T, U> | Partition<T, W>;
+>RepeatedPartition : Symbol(RepeatedPartition, Decl(extractExcludePartition.ts, 21, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 23, 23))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 23, 25))
+>W : Symbol(W, Decl(extractExcludePartition.ts, 23, 28))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 23, 23))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 23, 25))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 23, 23))
+>W : Symbol(W, Decl(extractExcludePartition.ts, 23, 28))
+
+function repeatedPartition<T, U, W>(value: T): RepeatedPartition<T, U, W> {
+>repeatedPartition : Symbol(repeatedPartition, Decl(extractExcludePartition.ts, 23, 68))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 25, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 25, 29))
+>W : Symbol(W, Decl(extractExcludePartition.ts, 25, 32))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 25, 36))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 25, 27))
+>RepeatedPartition : Symbol(RepeatedPartition, Decl(extractExcludePartition.ts, 21, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 25, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 25, 29))
+>W : Symbol(W, Decl(extractExcludePartition.ts, 25, 32))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 25, 36))
+}
+
+function repeatedIdentity<T, U, W>(value: RepeatedPartition<T, U, W>): T {
+>repeatedIdentity : Symbol(repeatedIdentity, Decl(extractExcludePartition.ts, 27, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 29, 26))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 29, 28))
+>W : Symbol(W, Decl(extractExcludePartition.ts, 29, 31))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 29, 35))
+>RepeatedPartition : Symbol(RepeatedPartition, Decl(extractExcludePartition.ts, 21, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 29, 26))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 29, 28))
+>W : Symbol(W, Decl(extractExcludePartition.ts, 29, 31))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 29, 26))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 29, 35))
+}
+
+type DifferentBasePartitions<T, Q, U> = Partition<T, U> | Partition<Q, U>;
+>DifferentBasePartitions : Symbol(DifferentBasePartitions, Decl(extractExcludePartition.ts, 31, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 33, 29))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 33, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 33, 34))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 33, 29))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 33, 34))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 33, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 33, 34))
+
+function differentBasePartitions<T, Q, U>(value: T | Q): DifferentBasePartitions<T, Q, U> {
+>differentBasePartitions : Symbol(differentBasePartitions, Decl(extractExcludePartition.ts, 33, 74))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 35, 33))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 35, 35))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 35, 38))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 35, 42))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 35, 33))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 35, 35))
+>DifferentBasePartitions : Symbol(DifferentBasePartitions, Decl(extractExcludePartition.ts, 31, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 35, 33))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 35, 35))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 35, 38))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 35, 42))
+}
+
+function differentBaseIdentity<T, Q, U>(value: DifferentBasePartitions<T, Q, U>): T | Q {
+>differentBaseIdentity : Symbol(differentBaseIdentity, Decl(extractExcludePartition.ts, 37, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 39, 31))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 39, 33))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 39, 36))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 39, 40))
+>DifferentBasePartitions : Symbol(DifferentBasePartitions, Decl(extractExcludePartition.ts, 31, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 39, 31))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 39, 33))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 39, 36))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 39, 31))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 39, 33))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 39, 40))
+}
+
+type UnionBasePartition<T, U, A, B> = Partition<T | U, A | B>;
+>UnionBasePartition : Symbol(UnionBasePartition, Decl(extractExcludePartition.ts, 41, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 43, 24))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 43, 26))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 43, 29))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 43, 32))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 43, 24))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 43, 26))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 43, 29))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 43, 32))
+
+function unionBasePartition<T, U, A, B>(value: T | U): UnionBasePartition<T, U, A, B> {
+>unionBasePartition : Symbol(unionBasePartition, Decl(extractExcludePartition.ts, 43, 62))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 45, 28))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 45, 30))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 45, 33))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 45, 36))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 45, 40))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 45, 28))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 45, 30))
+>UnionBasePartition : Symbol(UnionBasePartition, Decl(extractExcludePartition.ts, 41, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 45, 28))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 45, 30))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 45, 33))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 45, 36))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 45, 40))
+}
+
+function unionBaseIdentity<T, U, A, B>(value: UnionBasePartition<T, U, A, B>): T | U {
+>unionBaseIdentity : Symbol(unionBaseIdentity, Decl(extractExcludePartition.ts, 47, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 49, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 49, 29))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 49, 32))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 49, 35))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 49, 39))
+>UnionBasePartition : Symbol(UnionBasePartition, Decl(extractExcludePartition.ts, 41, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 49, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 49, 29))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 49, 32))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 49, 35))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 49, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 49, 29))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 49, 39))
+}
+
+type RepeatedUnionPartition<T, A, B, C, D> = Partition<T, A | B> | Partition<T, C | D>;
+>RepeatedUnionPartition : Symbol(RepeatedUnionPartition, Decl(extractExcludePartition.ts, 51, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 53, 28))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 53, 30))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 53, 33))
+>C : Symbol(C, Decl(extractExcludePartition.ts, 53, 36))
+>D : Symbol(D, Decl(extractExcludePartition.ts, 53, 39))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 53, 28))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 53, 30))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 53, 33))
+>Partition : Symbol(Partition, Decl(extractExcludePartition.ts, 2, 69))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 53, 28))
+>C : Symbol(C, Decl(extractExcludePartition.ts, 53, 36))
+>D : Symbol(D, Decl(extractExcludePartition.ts, 53, 39))
+
+function repeatedUnionPartition<T, A, B, C, D>(value: T): RepeatedUnionPartition<T, A, B, C, D> {
+>repeatedUnionPartition : Symbol(repeatedUnionPartition, Decl(extractExcludePartition.ts, 53, 87))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 55, 32))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 55, 34))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 55, 37))
+>C : Symbol(C, Decl(extractExcludePartition.ts, 55, 40))
+>D : Symbol(D, Decl(extractExcludePartition.ts, 55, 43))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 55, 47))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 55, 32))
+>RepeatedUnionPartition : Symbol(RepeatedUnionPartition, Decl(extractExcludePartition.ts, 51, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 55, 32))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 55, 34))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 55, 37))
+>C : Symbol(C, Decl(extractExcludePartition.ts, 55, 40))
+>D : Symbol(D, Decl(extractExcludePartition.ts, 55, 43))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 55, 47))
+}
+
+function repeatedUnionIdentity<T, A, B, C, D>(value: RepeatedUnionPartition<T, A, B, C, D>): T {
+>repeatedUnionIdentity : Symbol(repeatedUnionIdentity, Decl(extractExcludePartition.ts, 57, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 59, 31))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 59, 33))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 59, 36))
+>C : Symbol(C, Decl(extractExcludePartition.ts, 59, 39))
+>D : Symbol(D, Decl(extractExcludePartition.ts, 59, 42))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 59, 46))
+>RepeatedUnionPartition : Symbol(RepeatedUnionPartition, Decl(extractExcludePartition.ts, 51, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 59, 31))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 59, 33))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 59, 36))
+>C : Symbol(C, Decl(extractExcludePartition.ts, 59, 39))
+>D : Symbol(D, Decl(extractExcludePartition.ts, 59, 42))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 59, 31))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 59, 46))
+}
+
+type BooleanPartition<T, A, B> =
+>BooleanPartition : Symbol(BooleanPartition, Decl(extractExcludePartition.ts, 61, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 63, 22))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 63, 24))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 63, 27))
+
+    | MyExtract<MyExtract<T, A>, B>
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 63, 22))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 63, 24))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 63, 27))
+
+    | MyExclude<MyExtract<T, A>, B>
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 63, 22))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 63, 24))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 63, 27))
+
+    | MyExtract<MyExclude<T, A>, B>
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 63, 22))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 63, 24))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 63, 27))
+
+    | MyExclude<MyExclude<T, A>, B>;
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 63, 22))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 63, 24))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 63, 27))
+
+function booleanPartition<T, A, B>(value: T): BooleanPartition<T, A, B> {
+>booleanPartition : Symbol(booleanPartition, Decl(extractExcludePartition.ts, 67, 36))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 69, 26))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 69, 28))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 69, 31))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 69, 35))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 69, 26))
+>BooleanPartition : Symbol(BooleanPartition, Decl(extractExcludePartition.ts, 61, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 69, 26))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 69, 28))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 69, 31))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 69, 35))
+}
+
+function booleanIdentity<T, A, B>(value: BooleanPartition<T, A, B>): T {
+>booleanIdentity : Symbol(booleanIdentity, Decl(extractExcludePartition.ts, 71, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 73, 25))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 73, 27))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 73, 30))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 73, 34))
+>BooleanPartition : Symbol(BooleanPartition, Decl(extractExcludePartition.ts, 61, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 73, 25))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 73, 27))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 73, 30))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 73, 25))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 73, 34))
+}
+
+type PartitionWithRemainder<T, U, R> = MyExtract<T, U> | MyExclude<T, U> | R;
+>PartitionWithRemainder : Symbol(PartitionWithRemainder, Decl(extractExcludePartition.ts, 75, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 77, 28))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 77, 30))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 77, 33))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 77, 28))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 77, 30))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 77, 28))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 77, 30))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 77, 33))
+
+function partitionWithRemainder<T, U, R>(value: T | R): PartitionWithRemainder<T, U, R> {
+>partitionWithRemainder : Symbol(partitionWithRemainder, Decl(extractExcludePartition.ts, 77, 77))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 79, 32))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 79, 34))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 79, 37))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 79, 41))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 79, 32))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 79, 37))
+>PartitionWithRemainder : Symbol(PartitionWithRemainder, Decl(extractExcludePartition.ts, 75, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 79, 32))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 79, 34))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 79, 37))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 79, 41))
+}
+
+function remainderIdentity<T, U, R>(value: PartitionWithRemainder<T, U, R>): T | R {
+>remainderIdentity : Symbol(remainderIdentity, Decl(extractExcludePartition.ts, 81, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 83, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 83, 29))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 83, 32))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 83, 36))
+>PartitionWithRemainder : Symbol(PartitionWithRemainder, Decl(extractExcludePartition.ts, 75, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 83, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 83, 29))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 83, 32))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 83, 27))
+>R : Symbol(R, Decl(extractExcludePartition.ts, 83, 32))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 83, 36))
+}
+
+type IntersectionBasePartition<T, Q, U> = MyExtract<T & Q, U> | MyExclude<T & Q, U>;
+>IntersectionBasePartition : Symbol(IntersectionBasePartition, Decl(extractExcludePartition.ts, 85, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 87, 31))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 87, 33))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 87, 36))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 87, 31))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 87, 33))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 87, 36))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 87, 31))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 87, 33))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 87, 36))
+
+function intersectionBasePartition<T, Q, U>(value: T & Q): IntersectionBasePartition<T, Q, U> {
+>intersectionBasePartition : Symbol(intersectionBasePartition, Decl(extractExcludePartition.ts, 87, 84))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 89, 35))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 89, 37))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 89, 40))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 89, 44))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 89, 35))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 89, 37))
+>IntersectionBasePartition : Symbol(IntersectionBasePartition, Decl(extractExcludePartition.ts, 85, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 89, 35))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 89, 37))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 89, 40))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 89, 44))
+}
+
+function intersectionBaseIdentity<T, Q, U>(value: IntersectionBasePartition<T, Q, U>): T & Q {
+>intersectionBaseIdentity : Symbol(intersectionBaseIdentity, Decl(extractExcludePartition.ts, 91, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 93, 34))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 93, 36))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 93, 39))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 93, 43))
+>IntersectionBasePartition : Symbol(IntersectionBasePartition, Decl(extractExcludePartition.ts, 85, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 93, 34))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 93, 36))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 93, 39))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 93, 34))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 93, 36))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 93, 43))
+}
+
+type NeverPartition<T> = MyExtract<T, never> | MyExclude<T, never>;
+>NeverPartition : Symbol(NeverPartition, Decl(extractExcludePartition.ts, 95, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 97, 20))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 97, 20))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 97, 20))
+
+type UnknownPartition<T> = MyExtract<T, unknown> | MyExclude<T, unknown>;
+>UnknownPartition : Symbol(UnknownPartition, Decl(extractExcludePartition.ts, 97, 67))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 98, 22))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 98, 22))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 98, 22))
+
+function degeneratePartitions<T>(neverPartition: NeverPartition<T>, unknownPartition: UnknownPartition<T>): T {
+>degeneratePartitions : Symbol(degeneratePartitions, Decl(extractExcludePartition.ts, 98, 73))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 100, 30))
+>neverPartition : Symbol(neverPartition, Decl(extractExcludePartition.ts, 100, 33))
+>NeverPartition : Symbol(NeverPartition, Decl(extractExcludePartition.ts, 95, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 100, 30))
+>unknownPartition : Symbol(unknownPartition, Decl(extractExcludePartition.ts, 100, 67))
+>UnknownPartition : Symbol(UnknownPartition, Decl(extractExcludePartition.ts, 97, 67))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 100, 30))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 100, 30))
+
+    return Math.random() ? neverPartition : unknownPartition;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>neverPartition : Symbol(neverPartition, Decl(extractExcludePartition.ts, 100, 33))
+>unknownPartition : Symbol(unknownPartition, Decl(extractExcludePartition.ts, 100, 67))
+}
+
+type IncompletePartition<T, A, B> = MyExtract<T, A> | MyExclude<T, A | B>;
+>IncompletePartition : Symbol(IncompletePartition, Decl(extractExcludePartition.ts, 102, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 104, 25))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 104, 27))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 104, 30))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 104, 25))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 104, 27))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 104, 25))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 104, 27))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 104, 30))
+
+function incompletePartition<T, A, B>(value: T): IncompletePartition<T, A, B> {
+>incompletePartition : Symbol(incompletePartition, Decl(extractExcludePartition.ts, 104, 74))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 106, 29))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 106, 31))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 106, 34))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 106, 38))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 106, 29))
+>IncompletePartition : Symbol(IncompletePartition, Decl(extractExcludePartition.ts, 102, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 106, 29))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 106, 31))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 106, 34))
+
+    // Error: The positive branch does not cover B.
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 106, 38))
+}
+
+function incompleteIdentity<T, A, B>(value: IncompletePartition<T, A, B>): T {
+>incompleteIdentity : Symbol(incompleteIdentity, Decl(extractExcludePartition.ts, 109, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 111, 28))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 111, 30))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 111, 33))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 111, 37))
+>IncompletePartition : Symbol(IncompletePartition, Decl(extractExcludePartition.ts, 102, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 111, 28))
+>A : Symbol(A, Decl(extractExcludePartition.ts, 111, 30))
+>B : Symbol(B, Decl(extractExcludePartition.ts, 111, 33))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 111, 28))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 111, 37))
+}
+
+type MismatchedPartition<T, Q, U> = MyExtract<T, U> | MyExclude<Q, U>;
+>MismatchedPartition : Symbol(MismatchedPartition, Decl(extractExcludePartition.ts, 113, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 115, 25))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 115, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 115, 30))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 115, 25))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 115, 30))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 115, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 115, 30))
+
+function mismatchedPartition<T, Q, U>(value: T | Q): MismatchedPartition<T, Q, U> {
+>mismatchedPartition : Symbol(mismatchedPartition, Decl(extractExcludePartition.ts, 115, 70))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 117, 29))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 117, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 117, 34))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 117, 38))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 117, 29))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 117, 31))
+>MismatchedPartition : Symbol(MismatchedPartition, Decl(extractExcludePartition.ts, 113, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 117, 29))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 117, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 117, 34))
+
+    // Error: The positive and negative branches have different bases.
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 117, 38))
+}
+
+function mismatchedIdentity<T, Q, U>(value: MismatchedPartition<T, Q, U>): T | Q {
+>mismatchedIdentity : Symbol(mismatchedIdentity, Decl(extractExcludePartition.ts, 120, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 122, 28))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 122, 30))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 122, 33))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 122, 37))
+>MismatchedPartition : Symbol(MismatchedPartition, Decl(extractExcludePartition.ts, 113, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 122, 28))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 122, 30))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 122, 33))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 122, 28))
+>Q : Symbol(Q, Decl(extractExcludePartition.ts, 122, 30))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 122, 37))
+}
+
+type InjectedProps = {
+>InjectedProps : Symbol(InjectedProps, Decl(extractExcludePartition.ts, 124, 1))
+
+    owner: string;
+>owner : Symbol(owner, Decl(extractExcludePartition.ts, 126, 22))
+
+};
+
+declare function withOwner<T extends InjectedProps>(props: MyOmit<T, keyof InjectedProps> & InjectedProps): T;
+>withOwner : Symbol(withOwner, Decl(extractExcludePartition.ts, 128, 2))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 130, 27))
+>InjectedProps : Symbol(InjectedProps, Decl(extractExcludePartition.ts, 124, 1))
+>props : Symbol(props, Decl(extractExcludePartition.ts, 130, 52))
+>MyOmit : Symbol(MyOmit, Decl(extractExcludePartition.ts, 1, 33))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 130, 27))
+>InjectedProps : Symbol(InjectedProps, Decl(extractExcludePartition.ts, 124, 1))
+>InjectedProps : Symbol(InjectedProps, Decl(extractExcludePartition.ts, 124, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 130, 27))
+
+function render<T extends InjectedProps>(props: T) {
+>render : Symbol(render, Decl(extractExcludePartition.ts, 130, 110))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 132, 16))
+>InjectedProps : Symbol(InjectedProps, Decl(extractExcludePartition.ts, 124, 1))
+>props : Symbol(props, Decl(extractExcludePartition.ts, 132, 41))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 132, 16))
+
+    return withOwner<T>(props);
+>withOwner : Symbol(withOwner, Decl(extractExcludePartition.ts, 128, 2))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 132, 16))
+>props : Symbol(props, Decl(extractExcludePartition.ts, 132, 41))
+}
+
+type NegatedBasePartition<T, U, V> = MyExtract<MyExclude<T, V>, U> | MyExclude<MyExclude<T, V>, U>;
+>NegatedBasePartition : Symbol(NegatedBasePartition, Decl(extractExcludePartition.ts, 134, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 136, 26))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 136, 28))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 136, 31))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 136, 26))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 136, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 136, 28))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 136, 26))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 136, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 136, 28))
+
+function negatedBasePartition<T, U, V>(value: T & not V): NegatedBasePartition<T, U, V> {
+>negatedBasePartition : Symbol(negatedBasePartition, Decl(extractExcludePartition.ts, 136, 99))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 138, 30))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 138, 32))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 138, 35))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 138, 39))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 138, 30))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 138, 35))
+>NegatedBasePartition : Symbol(NegatedBasePartition, Decl(extractExcludePartition.ts, 134, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 138, 30))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 138, 32))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 138, 35))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 138, 39))
+}
+
+function negatedBaseIdentity<T, U, V>(value: NegatedBasePartition<T, U, V>): T & not V {
+>negatedBaseIdentity : Symbol(negatedBaseIdentity, Decl(extractExcludePartition.ts, 140, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 142, 29))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 142, 31))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 142, 34))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 142, 38))
+>NegatedBasePartition : Symbol(NegatedBasePartition, Decl(extractExcludePartition.ts, 134, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 142, 29))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 142, 31))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 142, 34))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 142, 29))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 142, 34))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 142, 38))
+}
+
+type DeferredPartition<T, U, V> = MyExtract<T, U> | MyExclude<T, V>;
+>DeferredPartition : Symbol(DeferredPartition, Decl(extractExcludePartition.ts, 144, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 146, 23))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 146, 25))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 146, 28))
+>MyExtract : Symbol(MyExtract, Decl(extractExcludePartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 146, 23))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 146, 25))
+>MyExclude : Symbol(MyExclude, Decl(extractExcludePartition.ts, 0, 29))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 146, 23))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 146, 28))
+
+function instantiatedPartition<T, U>(value: T): DeferredPartition<T, U, U> {
+>instantiatedPartition : Symbol(instantiatedPartition, Decl(extractExcludePartition.ts, 146, 68))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 148, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 148, 33))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 148, 37))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 148, 31))
+>DeferredPartition : Symbol(DeferredPartition, Decl(extractExcludePartition.ts, 144, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 148, 31))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 148, 33))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 148, 33))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 148, 37))
+}
+
+function instantiatedIdentity<T, U>(value: DeferredPartition<T, U, U>): T {
+>instantiatedIdentity : Symbol(instantiatedIdentity, Decl(extractExcludePartition.ts, 150, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 152, 30))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 152, 32))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 152, 36))
+>DeferredPartition : Symbol(DeferredPartition, Decl(extractExcludePartition.ts, 144, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 152, 30))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 152, 32))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 152, 32))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 152, 30))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 152, 36))
+}
+
+type RecursivePartition =
+>RecursivePartition : Symbol(RecursivePartition, Decl(extractExcludePartition.ts, 154, 1))
+
+    | { next: RecursivePartition; value: string }
+>next : Symbol(next, Decl(extractExcludePartition.ts, 157, 7))
+>RecursivePartition : Symbol(RecursivePartition, Decl(extractExcludePartition.ts, 154, 1))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 157, 33))
+
+    | ({ next: unknown } & not { value: string });
+>next : Symbol(next, Decl(extractExcludePartition.ts, 158, 8))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 158, 32))
+
+declare const recursivePartition: RecursivePartition;
+>recursivePartition : Symbol(recursivePartition, Decl(extractExcludePartition.ts, 160, 13))
+>RecursivePartition : Symbol(RecursivePartition, Decl(extractExcludePartition.ts, 154, 1))
+
+const recursiveNext: unknown = recursivePartition.next;
+>recursiveNext : Symbol(recursiveNext, Decl(extractExcludePartition.ts, 161, 5))
+>recursivePartition.next : Symbol(next, Decl(extractExcludePartition.ts, 157, 7), Decl(extractExcludePartition.ts, 158, 8))
+>recursivePartition : Symbol(recursivePartition, Decl(extractExcludePartition.ts, 160, 13))
+>next : Symbol(next, Decl(extractExcludePartition.ts, 157, 7), Decl(extractExcludePartition.ts, 158, 8))
+
+// Error: The recursive union is not a number.
+const recursiveNumber: number = recursivePartition;
+>recursiveNumber : Symbol(recursiveNumber, Decl(extractExcludePartition.ts, 163, 5))
+>recursivePartition : Symbol(recursivePartition, Decl(extractExcludePartition.ts, 160, 13))
+
+type PartitionWithPositiveRemainder<T, U, V> = (T & U) | (T & not U & V);
+>PartitionWithPositiveRemainder : Symbol(PartitionWithPositiveRemainder, Decl(extractExcludePartition.ts, 163, 51))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 165, 36))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 165, 38))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 165, 41))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 165, 36))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 165, 38))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 165, 36))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 165, 38))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 165, 41))
+
+function positiveRemainder<T, U, V>(value: T & U): PartitionWithPositiveRemainder<T, U, V> {
+>positiveRemainder : Symbol(positiveRemainder, Decl(extractExcludePartition.ts, 165, 73))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 167, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 167, 29))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 167, 32))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 167, 36))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 167, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 167, 29))
+>PartitionWithPositiveRemainder : Symbol(PartitionWithPositiveRemainder, Decl(extractExcludePartition.ts, 163, 51))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 167, 27))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 167, 29))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 167, 32))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 167, 36))
+}
+
+function reducedBase<T, U, V>(value: T & V): PartitionWithPositiveRemainder<T, U, V> {
+>reducedBase : Symbol(reducedBase, Decl(extractExcludePartition.ts, 169, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 171, 21))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 171, 23))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 171, 26))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 171, 30))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 171, 21))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 171, 26))
+>PartitionWithPositiveRemainder : Symbol(PartitionWithPositiveRemainder, Decl(extractExcludePartition.ts, 163, 51))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 171, 21))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 171, 23))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 171, 26))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 171, 30))
+}
+
+function positiveRemainderIdentity<T, U, V>(value: PartitionWithPositiveRemainder<T, U, V>): (T & U) | (T & V) {
+>positiveRemainderIdentity : Symbol(positiveRemainderIdentity, Decl(extractExcludePartition.ts, 173, 1))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 175, 35))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 175, 37))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 175, 40))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 175, 44))
+>PartitionWithPositiveRemainder : Symbol(PartitionWithPositiveRemainder, Decl(extractExcludePartition.ts, 163, 51))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 175, 35))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 175, 37))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 175, 40))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 175, 35))
+>U : Symbol(U, Decl(extractExcludePartition.ts, 175, 37))
+>T : Symbol(T, Decl(extractExcludePartition.ts, 175, 35))
+>V : Symbol(V, Decl(extractExcludePartition.ts, 175, 40))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 175, 44))
+}
+
+type PartitionContainer<Value> = { value: Value };
+>PartitionContainer : Symbol(PartitionContainer, Decl(extractExcludePartition.ts, 177, 1))
+>Value : Symbol(Value, Decl(extractExcludePartition.ts, 179, 24))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 179, 34))
+>Value : Symbol(Value, Decl(extractExcludePartition.ts, 179, 24))
+
+type OuterPartition = PartitionContainer<InnerPartition>;
+>OuterPartition : Symbol(OuterPartition, Decl(extractExcludePartition.ts, 179, 50))
+>PartitionContainer : Symbol(PartitionContainer, Decl(extractExcludePartition.ts, 177, 1))
+>InnerPartition : Symbol(InnerPartition, Decl(extractExcludePartition.ts, 180, 57))
+
+type InnerPartition = "chosen" | (string & not "chosen");
+>InnerPartition : Symbol(InnerPartition, Decl(extractExcludePartition.ts, 180, 57))
+
+function nestedPartition(value: string): InnerPartition {
+>nestedPartition : Symbol(nestedPartition, Decl(extractExcludePartition.ts, 181, 57))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 183, 25))
+>InnerPartition : Symbol(InnerPartition, Decl(extractExcludePartition.ts, 180, 57))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 183, 25))
+}
+
+function nestedPartitionElement(value: string): OuterPartition["value"] {
+>nestedPartitionElement : Symbol(nestedPartitionElement, Decl(extractExcludePartition.ts, 185, 1))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 187, 32))
+>OuterPartition : Symbol(OuterPartition, Decl(extractExcludePartition.ts, 179, 50))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 187, 32))
+}
+
+type ComplementPartition =
+>ComplementPartition : Symbol(ComplementPartition, Decl(extractExcludePartition.ts, 189, 1))
+
+    | { next: ComplementPartition; value: string }
+>next : Symbol(next, Decl(extractExcludePartition.ts, 192, 7))
+>ComplementPartition : Symbol(ComplementPartition, Decl(extractExcludePartition.ts, 189, 1))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 192, 34))
+
+    | ({ next: unknown } & not { value: string })
+>next : Symbol(next, Decl(extractExcludePartition.ts, 193, 8))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 193, 32))
+
+    | { next: unknown; value: string };
+>next : Symbol(next, Decl(extractExcludePartition.ts, 194, 7))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 194, 22))
+
+function recursiveComplement(value: { next: unknown }): ComplementPartition {
+>recursiveComplement : Symbol(recursiveComplement, Decl(extractExcludePartition.ts, 194, 39))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 196, 29))
+>next : Symbol(next, Decl(extractExcludePartition.ts, 196, 37))
+>ComplementPartition : Symbol(ComplementPartition, Decl(extractExcludePartition.ts, 189, 1))
+
+    // Error: Recursive reduction commits to the unreduced union.
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 196, 29))
+}
+
+function recursiveComplementMember(value: unknown): ComplementPartition["next"] {
+>recursiveComplementMember : Symbol(recursiveComplementMember, Decl(extractExcludePartition.ts, 199, 1))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 201, 35))
+>ComplementPartition : Symbol(ComplementPartition, Decl(extractExcludePartition.ts, 189, 1))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 201, 35))
+}
+
+declare const complementPartition: ComplementPartition;
+>complementPartition : Symbol(complementPartition, Decl(extractExcludePartition.ts, 205, 13))
+>ComplementPartition : Symbol(ComplementPartition, Decl(extractExcludePartition.ts, 189, 1))
+
+const complementNode: unknown = complementPartition.next;
+>complementNode : Symbol(complementNode, Decl(extractExcludePartition.ts, 206, 5))
+>complementPartition.next : Symbol(next, Decl(extractExcludePartition.ts, 192, 7), Decl(extractExcludePartition.ts, 194, 7), Decl(extractExcludePartition.ts, 193, 8))
+>complementPartition : Symbol(complementPartition, Decl(extractExcludePartition.ts, 205, 13))
+>next : Symbol(next, Decl(extractExcludePartition.ts, 192, 7), Decl(extractExcludePartition.ts, 194, 7), Decl(extractExcludePartition.ts, 193, 8))
+
+// Error: Reduction must not turn a recursive member into any.
+const complementNumber: number = complementPartition.next;
+>complementNumber : Symbol(complementNumber, Decl(extractExcludePartition.ts, 208, 5))
+>complementPartition.next : Symbol(next, Decl(extractExcludePartition.ts, 192, 7), Decl(extractExcludePartition.ts, 194, 7), Decl(extractExcludePartition.ts, 193, 8))
+>complementPartition : Symbol(complementPartition, Decl(extractExcludePartition.ts, 205, 13))
+>next : Symbol(next, Decl(extractExcludePartition.ts, 192, 7), Decl(extractExcludePartition.ts, 194, 7), Decl(extractExcludePartition.ts, 193, 8))
+
+type ForwardComplementMember = ForwardComplementPartition["next"];
+>ForwardComplementMember : Symbol(ForwardComplementMember, Decl(extractExcludePartition.ts, 208, 58))
+>ForwardComplementPartition : Symbol(ForwardComplementPartition, Decl(extractExcludePartition.ts, 210, 66))
+
+type ForwardComplementPartition =
+>ForwardComplementPartition : Symbol(ForwardComplementPartition, Decl(extractExcludePartition.ts, 210, 66))
+
+    | { next: ForwardComplementPartition; value: string }
+>next : Symbol(next, Decl(extractExcludePartition.ts, 212, 7))
+>ForwardComplementPartition : Symbol(ForwardComplementPartition, Decl(extractExcludePartition.ts, 210, 66))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 212, 41))
+
+    | ({ next: unknown } & not { value: string })
+>next : Symbol(next, Decl(extractExcludePartition.ts, 213, 8))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 213, 32))
+
+    | { next: unknown; value: string };
+>next : Symbol(next, Decl(extractExcludePartition.ts, 214, 7))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 214, 22))
+
+function forwardComplement(value: { next: unknown }): ForwardComplementPartition {
+>forwardComplement : Symbol(forwardComplement, Decl(extractExcludePartition.ts, 214, 39))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 216, 27))
+>next : Symbol(next, Decl(extractExcludePartition.ts, 216, 35))
+>ForwardComplementPartition : Symbol(ForwardComplementPartition, Decl(extractExcludePartition.ts, 210, 66))
+
+    // Error: Recursive reduction commits to the unreduced union.
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 216, 27))
+}
+
+function forwardComplementMember(value: unknown): ForwardComplementMember {
+>forwardComplementMember : Symbol(forwardComplementMember, Decl(extractExcludePartition.ts, 219, 1))
+>value : Symbol(value, Decl(extractExcludePartition.ts, 221, 33))
+>ForwardComplementMember : Symbol(ForwardComplementMember, Decl(extractExcludePartition.ts, 208, 58))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludePartition.ts, 221, 33))
+}
+
+declare const forwardComplementValue: ForwardComplementMember;
+>forwardComplementValue : Symbol(forwardComplementValue, Decl(extractExcludePartition.ts, 225, 13))
+>ForwardComplementMember : Symbol(ForwardComplementMember, Decl(extractExcludePartition.ts, 208, 58))
+
+// Error: Resolving the indexed access first must still produce unknown.
+const forwardComplementNumber: number = forwardComplementValue;
+>forwardComplementNumber : Symbol(forwardComplementNumber, Decl(extractExcludePartition.ts, 227, 5))
+>forwardComplementValue : Symbol(forwardComplementValue, Decl(extractExcludePartition.ts, 225, 13))
+

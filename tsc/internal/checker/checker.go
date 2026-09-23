@@ -64,6 +64,7 @@ const (
 	TypeSystemPropertyNameWriteType
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
+	TypeSystemPropertyNameResolvedReducedType
 )
 
 type TypeResolution struct {
@@ -19159,6 +19160,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).writeType != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
+	case TypeSystemPropertyNameResolvedReducedType:
+		return r.target.(*Type).AsUnionType().resolvedReducedType != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -22180,7 +22183,7 @@ func (c *Checker) getApparentTypeOfIntersectionType(t *Type, thisArgument *Type)
 }
 
 /**
- * Return the reduced form of the given type. For a union type, it is a union of the normalized constituent types.
+ * Return the reduced form of the given type. For a union type, normalize its constituents and combine negated complements.
  * For an intersection of types containing one or more mututally exclusive discriminant properties, it is 'never'.
  * For all other types, it is simply the type itself. Discriminant properties are considered mutually exclusive when
  * no constituent property has type 'never', but the intersection of the constituent property types is 'never'.
@@ -22188,13 +22191,25 @@ func (c *Checker) getApparentTypeOfIntersectionType(t *Type, thisArgument *Type)
 func (c *Checker) getReducedType(t *Type) *Type {
 	switch {
 	case t.flags&TypeFlagsUnion != 0:
-		if t.objectFlags&ObjectFlagsContainsIntersections != 0 {
+		if t.objectFlags&ObjectFlagsContainsIntersections != 0 || containsNegatedType(t) {
 			if reducedType := t.AsUnionType().resolvedReducedType; reducedType != nil {
 				return reducedType
 			}
+			if !c.pushTypeResolution(t, TypeSystemPropertyNameResolvedReducedType) {
+				t.AsUnionType().resolvedReducedType = t
+				return t
+			}
 			reducedType := c.getReducedUnionType(t)
-			t.AsUnionType().resolvedReducedType = reducedType
-			return reducedType
+			if !c.popTypeResolution() {
+				reducedType = t
+			}
+			if t.AsUnionType().resolvedReducedType == nil {
+				if reducedType.flags&TypeFlagsUnion != 0 && reducedType.AsUnionType().resolvedReducedType == nil {
+					reducedType.AsUnionType().resolvedReducedType = reducedType
+				}
+				t.AsUnionType().resolvedReducedType = reducedType
+			}
+			return t.AsUnionType().resolvedReducedType
 		}
 	case t.flags&TypeFlagsIntersection != 0:
 		if t.objectFlags&ObjectFlagsIsNeverIntersectionComputed == 0 {
@@ -22212,14 +22227,17 @@ func (c *Checker) getReducedType(t *Type) *Type {
 
 func (c *Checker) getReducedUnionType(unionType *Type) *Type {
 	reducedTypes := core.SameMap(unionType.Types(), c.getReducedType)
+	if !core.Same(reducedTypes, unionType.Types()) {
+		reducedTypes, _ = c.addTypesToUnion(reducedTypes)
+	}
+	if core.Some(reducedTypes, isNegatedType) && c.checkForSaturatedNegatedType(reducedTypes) {
+		return c.unknownType
+	}
+	reducedTypes = c.removeComplementaryNegatedTypes(reducedTypes)
 	if core.Same(reducedTypes, unionType.Types()) {
 		return unionType
 	}
-	reduced := c.getUnionType(reducedTypes)
-	if reduced.flags&TypeFlagsUnion != 0 {
-		reduced.AsUnionType().resolvedReducedType = reduced
-	}
-	return reduced
+	return c.getUnionType(reducedTypes)
 }
 
 func (c *Checker) isNeverReducedProperty(prop *ast.Symbol) bool {
@@ -26097,11 +26115,6 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 			}
 			return c.unknownType
 		}
-		if includes&TypeFlagsIncludesNegated != 0 && c.checkForSaturatedNegatedType(typeSet) {
-			// A union that contains a type and its complement (e.g. 'T | not T') covers every value,
-			// so it reduces to 'unknown' -- the union converse of 'T & not T' reducing to 'never'.
-			return c.unknownType
-		}
 		if includes&TypeFlagsUndefined != 0 {
 			// If type set contains both undefinedType and missingType, remove missingType
 			if len(typeSet) >= 2 && typeSet[0] == c.undefinedType && typeSet[1] == c.missingType {
@@ -26110,18 +26123,13 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 		}
 		if includes&(TypeFlagsEnum|TypeFlagsLiteral|TypeFlagsUniqueESSymbol|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 			includes&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 {
-			typeSet = c.removeRedundantLiteralTypes(typeSet, includes, unionReduction&UnionReductionSubtype != 0)
+			typeSet = c.removeRedundantLiteralTypes(typeSet, includes, unionReduction == UnionReductionSubtype)
 		}
 		if includes&TypeFlagsStringLiteral != 0 && includes&(TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 {
 			typeSet = c.removeStringLiteralsMatchedByTemplateLiterals(typeSet)
 		}
 		if includes&TypeFlagsIncludesConstrainedTypeVariable != 0 {
 			typeSet = c.removeConstrainedTypeVariables(typeSet)
-		}
-		if includes&TypeFlagsIntersection != 0 {
-			// Cancel complementary 'Base & C' / 'Base & not C' members produced by the true and
-			// false branches of a control-flow narrowing when those branches rejoin.
-			typeSet = c.removeComplementaryFreshNegatedTypes(typeSet)
 		}
 		if unionReduction == UnionReductionSubtype {
 			typeSet = c.removeSubtypes(typeSet, includes&TypeFlagsObject != 0)
