@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -163,6 +164,9 @@ type Project struct {
 	contentMapperWatchedFiles *collections.Set[tspath.Path]
 
 	checkerPool *checkerPool
+
+	moduleResolverFactory ModuleResolverFactory
+	moduleResolverID      uint64
 
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
@@ -411,6 +415,9 @@ func (p *Project) Clone() *Project {
 
 		checkerPool: p.checkerPool,
 
+		moduleResolverFactory: p.moduleResolverFactory,
+		moduleResolverID:      p.moduleResolverID,
+
 		installedTypingsInfo: p.installedTypingsInfo,
 		typingsFiles:         p.typingsFiles,
 	}
@@ -501,12 +508,26 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
 		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
 	}
+	var cleanupModuleResolver func()
+	createModuleResolver := func(options module.ResolverOptions) module.Resolver {
+		if p.moduleResolverFactory == nil {
+			return module.NewResolver(options)
+		}
+		resolver, cleanup := p.moduleResolverFactory.NewResolver(options)
+		cleanupModuleResolver = cleanup
+		return resolver
+	}
+	defer func() {
+		if cleanupModuleResolver != nil {
+			cleanupModuleResolver()
+		}
+	}()
 
 	// Create the command line, potentially augmented with typing files
 	commandLine := p.getCommandLineWithTypingsFiles()
 	if p.dirtyFilePath != "" && p.Program != nil && p.Program.CommandLine() == commandLine {
 		var dirtyFile *ast.SourceFile
-		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool)
+		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool, createModuleResolver)
 		if programCloned {
 			updateKind = ProgramUpdateKindCloned
 			for _, file := range newProgram.SourceFiles() {
@@ -552,6 +573,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 				UseSourceOfProjectReference: true,
 				TypingsLocation:             typingsLocation,
 				CreateCheckerPool:           createCheckerPool,
+				CreateModuleResolver:        createModuleResolver,
 			},
 		)
 	}

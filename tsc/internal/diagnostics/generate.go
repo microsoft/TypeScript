@@ -159,15 +159,13 @@ func generateDiagnostics(diagnosticMessages []*diagnosticMessage) *bytes.Buffer 
 		buf.WriteString("}\n\n")
 	}
 
-	buf.WriteString("func keyToMessage(key Key) *Message {\n")
-	buf.WriteString("\tswitch key {\n")
+	// Addresses can be statically initialized even across package initialization calls.
+	// Copying the pointer variables or using a large map literal generates substantial initialization code.
+	buf.WriteString("var allMessages = [...]**Message{\n")
 	for _, m := range diagnosticMessages {
-		_, key := convertPropertyName(m.key, m.Code)
 		varName, _ := convertPropertyName(m.key, m.Code)
-		fmt.Fprintf(&buf, "\tcase %q:\n\t\treturn %s\n", key, varName)
+		fmt.Fprintf(&buf, "\t&%s,\n", varName)
 	}
-	buf.WriteString("\tdefault:\n\t\treturn nil\n")
-	buf.WriteString("\t}\n")
 	buf.WriteString("}\n")
 
 	return &buf

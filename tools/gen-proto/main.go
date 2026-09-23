@@ -653,6 +653,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case r.apiPackagePath + ".DocumentIdentifier":
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
+	case r.apiPackagePath + ".ResolutionMode":
+		return "ResolutionMode"
 	case r.apiPackagePath + ".EnsurePrograms":
 		return "EnsurePrograms"
 	case "github.com/microsoft/TypeScript/tsc/internal/project.ID":
@@ -770,6 +772,7 @@ func (r *typeRenderer) declarations() (string, error) {
 		writeDoc(&out, "", r.docs[r.documentIdentifier])
 		out.WriteString("export type DocumentIdentifier = string | { uri: string; };\n\n")
 	}
+	out.WriteString("export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;\n\n")
 	out.WriteString("export type EnsurePrograms = true | readonly ProjectId[];\n\n")
 	out.WriteString("export type InferredProjectId = string & { __inferredProjectIdBrand: any; };\n")
 	out.WriteString("export type ConfiguredProjectId = Path & { __configuredProjectIdBrand: any; };\n")

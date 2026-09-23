@@ -99,7 +99,13 @@ export class Client {
         if (result.length) {
             return JSON.parse(result) as APIMethodInfo[K]["result"];
         }
+
         return undefined as APIMethodInfo[K]["result"];
+    }
+
+    registerCallback(name: string, callback: (params: unknown) => unknown): () => void {
+        this.channel.registerCallback(name, (_, payload) => JSON.stringify(callback(JSON.parse(payload))) ?? "");
+        return () => this.channel.unregisterCallback(name);
     }
 
     batchRequests(requests: readonly APIRequest[]): { result: unknown; error?: string | undefined; }[] {

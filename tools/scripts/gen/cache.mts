@@ -4,6 +4,7 @@ import path from "node:path";
 import { GeneratedFile } from "./generatedFile.mts";
 import {
     formatCommandArg,
+    getFileFingerprint,
     goInputs,
     repoRoot,
     run,
@@ -39,7 +40,7 @@ export default async function cache({
     }
     cwd = path.resolve(cwd);
     const environment = { ...process.env, ...env };
-    const snapshotInputs = () => {
+    const snapshotInputs = (fresh = false) => {
         const entries = [
             ...new Set([
                 import.meta.filename,
@@ -62,7 +63,7 @@ export default async function cache({
             }
             else {
                 files.push(file);
-                hash.update(JSON.stringify([file, createHash("sha256").update(fs.readFileSync(file)).digest("hex")]));
+                hash.update(JSON.stringify([file, getFileFingerprint(file, fresh)]));
             }
         }
         return { files, hash: hash.digest("hex") };
@@ -89,13 +90,12 @@ export default async function cache({
         console.log(`skipped ${commandText}: codegen outputs are already up to date`);
         return true;
     }
-
     for (const file of previous) file.invalidate();
     for (const [command, ...args] of commands) {
         await run(command, args, { cwd, env: environment });
     }
     if (!complete()) throw new Error(`Generation did not produce all declared outputs: ${outputs.join(", ")}`);
-    if (snapshotInputs().hash === before.hash) {
+    if (snapshotInputs(true).hash === before.hash) {
         for (const file of artifacts(outputFiles())) file.markCurrent();
     }
     return false;

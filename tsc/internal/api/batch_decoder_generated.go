@@ -142,6 +142,39 @@ func newBatchDecoderCheckerTypeParams(base json.Value, fields json.Value, count 
 	})
 }
 
+type batchColumnsCreateModuleResolverParams struct {
+	CompilerOptions           []core.CompilerOptions  `json:"compilerOptions,omitempty"`
+	ModuleResolutions         []*ModuleResolutionSpec `json:"moduleResolutions,omitempty"`
+	ResolveModuleNameCallback []string                `json:"resolveModuleNameCallback,omitempty"`
+}
+
+func newBatchDecoderCreateModuleResolverParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsCreateModuleResolverParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("compilerOptions", len(columns.CompilerOptions), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("moduleResolutions", len(columns.ModuleResolutions), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("resolveModuleNameCallback", len(columns.ResolveModuleNameCallback), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[CreateModuleResolverParams](base, func(params *CreateModuleResolverParams, index int) {
+		if columns.CompilerOptions != nil {
+			params.CompilerOptions = columns.CompilerOptions[index]
+		}
+		if columns.ModuleResolutions != nil {
+			params.ModuleResolutions = columns.ModuleResolutions[index]
+		}
+		if columns.ResolveModuleNameCallback != nil {
+			params.ResolveModuleNameCallback = columns.ResolveModuleNameCallback[index]
+		}
+	})
+}
+
 type batchColumnsCreateSnapshotParams struct {
 	FileNotifications []*FileNotifications                   `json:"fileNotifications,omitempty"`
 	FileSystem        []*requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
@@ -2003,6 +2036,25 @@ func newBatchDecoderReadConfigFileParams(base json.Value, fields json.Value, cou
 	})
 }
 
+type batchColumnsReleaseModuleResolverParams struct {
+	Resolver []ModuleResolverID `json:"resolver,omitempty"`
+}
+
+func newBatchDecoderReleaseModuleResolverParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsReleaseModuleResolverParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("resolver", len(columns.Resolver), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[ReleaseModuleResolverParams](base, func(params *ReleaseModuleResolverParams, index int) {
+		if columns.Resolver != nil {
+			params.Resolver = columns.Resolver[index]
+		}
+	})
+}
+
 type batchColumnsReleaseParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
 }
@@ -2018,6 +2070,60 @@ func newBatchDecoderReleaseParams(base json.Value, fields json.Value, count int)
 	return newTypedBatchRequestDecoder[ReleaseParams](base, func(params *ReleaseParams, index int) {
 		if columns.Snapshot != nil {
 			params.Snapshot = columns.Snapshot[index]
+		}
+	})
+}
+
+type batchColumnsResolveModuleNameParams struct {
+	Snapshot            []SnapshotID         `json:"snapshot,omitempty"`
+	InProgressSnapshot  []uint64             `json:"inProgressSnapshot,omitempty"`
+	Resolver            []ModuleResolverID   `json:"resolver,omitempty"`
+	ModuleName          []string             `json:"moduleName,omitempty"`
+	ContainingDirectory []DocumentIdentifier `json:"containingDirectory,omitempty"`
+	ResolutionMode      []*ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+func newBatchDecoderResolveModuleNameParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsResolveModuleNameParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("inProgressSnapshot", len(columns.InProgressSnapshot), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("resolver", len(columns.Resolver), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("moduleName", len(columns.ModuleName), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("containingDirectory", len(columns.ContainingDirectory), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("resolutionMode", len(columns.ResolutionMode), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[ResolveModuleNameParams](base, func(params *ResolveModuleNameParams, index int) {
+		if columns.Snapshot != nil {
+			params.Snapshot = columns.Snapshot[index]
+		}
+		if columns.InProgressSnapshot != nil {
+			params.InProgressSnapshot = columns.InProgressSnapshot[index]
+		}
+		if columns.Resolver != nil {
+			params.Resolver = columns.Resolver[index]
+		}
+		if columns.ModuleName != nil {
+			params.ModuleName = columns.ModuleName[index]
+		}
+		if columns.ContainingDirectory != nil {
+			params.ContainingDirectory = columns.ContainingDirectory[index]
+		}
+		if columns.ResolutionMode != nil {
+			params.ResolutionMode = columns.ResolutionMode[index]
 		}
 	})
 }
@@ -2312,6 +2418,12 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 		return newBatchDecoderUpdateSnapshotParams(base, fields, count)
 	case MethodGetCurrentLanguageServerSnapshot:
 		return newBatchDecoderGetCurrentLanguageServerSnapshotParams(base, fields, count)
+	case MethodCreateModuleResolver:
+		return newBatchDecoderCreateModuleResolverParams(base, fields, count)
+	case MethodReleaseModuleResolver:
+		return newBatchDecoderReleaseModuleResolverParams(base, fields, count)
+	case MethodResolveModuleName:
+		return newBatchDecoderResolveModuleNameParams(base, fields, count)
 	case MethodParseCommandLine:
 		return newBatchDecoderParseCommandLineParams(base, fields, count)
 	case MethodReadConfigFile:
@@ -2422,6 +2534,14 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 		return newBatchDecoderGetTypePropertyParams(base, fields, count)
 	case MethodGetConstraintOfType:
 		return newBatchDecoderGetTypePropertyParams(base, fields, count)
+	case MethodGetTypeParameterOfMappedType:
+		return newBatchDecoderGetTypePropertyParams(base, fields, count)
+	case MethodGetConstraintTypeOfMappedType:
+		return newBatchDecoderGetTypePropertyParams(base, fields, count)
+	case MethodGetNameTypeOfMappedType:
+		return newBatchDecoderGetTypePropertyParams(base, fields, count)
+	case MethodGetTemplateTypeOfMappedType:
+		return newBatchDecoderGetTypePropertyParams(base, fields, count)
 	case MethodGetTypeParametersOfSignature:
 		return newBatchDecoderGetSignaturePropertyParams(base, fields, count)
 	case MethodGetParametersOfSignature:
@@ -2485,8 +2605,6 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 	case MethodGetTypeOfPropertyOfType:
 		return newBatchDecoderGetPropertyOfTypeParams(base, fields, count)
 	case MethodGetIndexInfoOfType:
-		return newBatchDecoderGetIndexInfoOfTypeParams(base, fields, count)
-	case MethodGetIndexTypeOfTypeByKind:
 		return newBatchDecoderGetIndexInfoOfTypeParams(base, fields, count)
 	case MethodGetIndexInfosOfType:
 		return newBatchDecoderCheckerTypeParams(base, fields, count)
