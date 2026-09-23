@@ -157,6 +157,7 @@ import type {
     IntrinsicType,
     JSDocTagInfo,
     LiteralType,
+    MappedType,
     NumberLiteralType,
     ObjectType,
     StringLiteralType,
@@ -220,6 +221,7 @@ export type {
     LanguageServerSnapshotChanges,
     LiteralType,
     LSPConnectionOptions,
+    MappedType,
     NumberLiteralType,
     ObjectType,
     PackageId,
@@ -6176,6 +6178,10 @@ class TypeObject implements Type {
     readonly extendsType!: number;
     readonly baseType!: number;
     readonly substConstraint!: number;
+    readonly typeParameter!: number;
+    readonly constraintType!: number;
+    readonly nameType!: number;
+    readonly templateType!: number;
 
     // Cached results of lazy fetches, not included in TypeResponse
     // (typically because they require some amount of computation or
@@ -6255,6 +6261,10 @@ class TypeObject implements Type {
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
+        if (data.typeParameter !== undefined) this.typeParameter = data.typeParameter;
+        if (data.constraintType !== undefined) this.constraintType = data.constraintType;
+        if (data.nameType !== undefined) this.nameType = data.nameType;
+        if (data.templateType !== undefined) this.templateType = data.templateType;
 
         this.trueType = false;
         this.falseType = false;
@@ -6751,6 +6761,74 @@ class TypeObject implements Type {
         );
     }
 
+    get getTypeParameter(): {
+        (): TypeParameter;
+        gen(): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeParameter",
+            function (): TypeParameter {
+                return owner.objectRegistry.fetchType(owner, "getTypeParameterOfMappedType", owner.typeParameter);
+            },
+            function* (): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]> {
+                return yield* owner.objectRegistry.fetchType.gen(owner, "getTypeParameterOfMappedType", owner.typeParameter);
+            },
+        );
+    }
+
+    get getConstraintType(): {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getConstraintType",
+            function (): Type {
+                return owner.objectRegistry.fetchType(owner, "getConstraintTypeOfMappedType", owner.constraintType);
+            },
+            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                return yield* owner.objectRegistry.fetchType.gen(owner, "getConstraintTypeOfMappedType", owner.constraintType);
+            },
+        );
+    }
+
+    get getNameType(): {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNameType",
+            function (): Type | undefined {
+                return owner.objectRegistry.fetchOptionalType(owner, "getNameTypeOfMappedType", owner.nameType);
+            },
+            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                return yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getNameTypeOfMappedType", owner.nameType);
+            },
+        );
+    }
+
+    get getTemplateType(): {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTemplateType",
+            function (): Type {
+                return owner.objectRegistry.fetchType(owner, "getTemplateTypeOfMappedType", owner.templateType);
+            },
+            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                return yield* owner.objectRegistry.fetchType.gen(owner, "getTemplateTypeOfMappedType", owner.templateType);
+            },
+        );
+    }
+
     get getObjectType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
@@ -7045,6 +7123,10 @@ class TypeObject implements Type {
 
     isTypeParameter(): this is TypeParameter {
         return isTypeParameter(this);
+    }
+
+    isMappedType(): this is MappedType {
+        return !!(this.flags & TypeFlags.Object) && !!(this.objectFlags & ObjectFlags.Mapped);
     }
 }
 
