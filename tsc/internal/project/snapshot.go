@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -306,12 +307,31 @@ func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []st
 	return vfsmatch.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
 }
 
+func (s *Snapshot) FS() vfs.FS {
+	return newSourceFS(false, s.fs, s.host.toPath)
+}
+
+func (s *Snapshot) GetCurrentDirectory() string {
+	return s.host.GetCurrentDirectory()
+}
+
+func (s *Snapshot) ContentMapperExtensions() []string {
+	extensions, _ := s.contentMapperWatchState()
+	return extensions
+}
+
 type APICreateProgramRequest struct {
 	RootFileNames                []string
 	CompilerOptions              *core.CompilerOptions
 	ProjectReferences            []*core.ProjectReference
 	ConfigFileParsingDiagnostics []*ast.Diagnostic
 	Incremental                  bool
+	ModuleResolverFactory        ModuleResolverFactory
+	ModuleResolverID             uint64
+}
+
+type ModuleResolverFactory interface {
+	NewResolver(options module.ResolverOptions) (module.Resolver, func())
 }
 
 type APIReconfigureProgramRequest struct {

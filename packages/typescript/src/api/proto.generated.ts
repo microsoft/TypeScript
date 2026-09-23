@@ -28,6 +28,9 @@ export interface APIMethodInfo {
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
+    createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
+    releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
+    resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -89,6 +92,10 @@ export interface APIMethodInfo {
     getExtendsTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getBaseTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getConstraintOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getTypeParameterOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getConstraintTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getNameTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
+    getTemplateTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParametersOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[] | null>;
     getParametersOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse[] | null>;
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
@@ -121,7 +128,6 @@ export interface APIMethodInfo {
     getPropertyOfType: APIMethod<GetPropertyOfTypeParams, SymbolResponse | null>;
     getTypeOfPropertyOfType: APIMethod<GetPropertyOfTypeParams, TypeResponse | null>;
     getIndexInfoOfType: APIMethod<GetIndexInfoOfTypeParams, IndexInfoResponse | null>;
-    getIndexTypeOfTypeByKind: APIMethod<GetIndexInfoOfTypeParams, TypeResponse | null>;
     getIndexInfosOfType: APIMethod<CheckerTypeParams, IndexInfoResponse[] | null>;
     getConstraintOfTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getDefaultFromTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
@@ -183,6 +189,8 @@ export interface APIMethodInfo {
 }
 
 export type DocumentIdentifier = string | { uri: string; };
+
+export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;
 
 export type EnsurePrograms = true | readonly ProjectId[];
 
@@ -250,6 +258,31 @@ export interface UpdateSnapshotParams {
 export interface GetCurrentLanguageServerSnapshotParams {
     baseSnapshot?: number | undefined;
     changes?: LanguageServerSnapshotChanges | undefined;
+}
+
+export interface CreateModuleResolverParams {
+    compilerOptions: CompilerOptions;
+    moduleResolutions?: ModuleResolutionSpec | undefined;
+    resolveModuleNameCallback?: string | undefined;
+}
+
+export interface ReleaseModuleResolverParams {
+    resolver: number;
+}
+
+export interface ResolveModuleNameParams {
+    snapshot?: number | undefined;
+    inProgressSnapshot?: number | undefined;
+    resolver: number;
+    moduleName: string;
+    containingDirectory: DocumentIdentifier;
+    resolutionMode?: ResolutionMode | undefined;
+}
+
+export interface ResolveModuleNameResult {
+    resolvedModule?: ResolvedModule | undefined;
+    /** Trace is provided when compilerOptions.traceResolution is true. */
+    trace?: string[] | undefined;
 }
 
 export interface ParseCommandLineParams {
@@ -430,6 +463,11 @@ export interface TypeResponse {
     /** SubstitutionType data */
     baseType?: number | undefined;
     substConstraint?: number | undefined;
+    /** MappedType data */
+    typeParameter?: number | undefined;
+    constraintType?: number | undefined;
+    nameType?: number | undefined;
+    templateType?: number | undefined;
     /** TemplateLiteralType text segments */
     texts?: string[] | undefined;
     /** FreshableType data (LiteralType and computed enum types) */
@@ -1004,6 +1042,7 @@ export interface ProfileResult {
 export interface BatchRequest {
     method:
         | "batchRequests"
+        | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
@@ -1033,6 +1072,7 @@ export interface BatchRequest {
         | "getConstantValue"
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
+        | "getConstraintTypeOfMappedType"
         | "getContextualType"
         | "getContextualTypeForArgument"
         | "getCurrentLanguageServerSnapshot"
@@ -1058,7 +1098,6 @@ export interface BatchRequest {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
-        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1066,6 +1105,7 @@ export interface BatchRequest {
         | "getMembersOfSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
+        | "getNameTypeOfMappedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
@@ -1113,6 +1153,7 @@ export interface BatchRequest {
         | "getTargetOfSignature"
         | "getTargetOfType"
         | "getTargetSymbol"
+        | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
         | "getTrueTypeOfConditionalType"
@@ -1125,6 +1166,7 @@ export interface BatchRequest {
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
         | "getTypeParameterAtPosition"
+        | "getTypeParameterOfMappedType"
         | "getTypeParametersOfSignature"
         | "getTypeParametersOfType"
         | "getTypePredicateOfSignature"
@@ -1149,6 +1191,8 @@ export interface BatchRequest {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolver"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1167,6 +1211,7 @@ export interface BatchRequest {
 export interface BatchResponse {
     method:
         | "batchRequests"
+        | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
@@ -1196,6 +1241,7 @@ export interface BatchResponse {
         | "getConstantValue"
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
+        | "getConstraintTypeOfMappedType"
         | "getContextualType"
         | "getContextualTypeForArgument"
         | "getCurrentLanguageServerSnapshot"
@@ -1221,7 +1267,6 @@ export interface BatchResponse {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
-        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1229,6 +1274,7 @@ export interface BatchResponse {
         | "getMembersOfSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
+        | "getNameTypeOfMappedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
@@ -1276,6 +1322,7 @@ export interface BatchResponse {
         | "getTargetOfSignature"
         | "getTargetOfType"
         | "getTargetSymbol"
+        | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
         | "getTrueTypeOfConditionalType"
@@ -1288,6 +1335,7 @@ export interface BatchResponse {
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
         | "getTypeParameterAtPosition"
+        | "getTypeParameterOfMappedType"
         | "getTypeParametersOfSignature"
         | "getTypeParametersOfType"
         | "getTypePredicateOfSignature"
@@ -1312,6 +1360,8 @@ export interface BatchResponse {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolver"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1504,6 +1554,8 @@ export interface CompilerOptions {
     noUncheckedSideEffectImports?: boolean | undefined;
     outDir?: string | undefined;
     paths?: Record<string, string[]> | undefined;
+    /** Plugins are parsed only so tools can report that native TypeScript does not support them. */
+    plugins?: PluginImport[] | undefined;
     preserveConstEnums?: boolean | undefined;
     preserveSymlinks?: boolean | undefined;
     project?: string | undefined;
@@ -1539,6 +1591,11 @@ export interface CompilerOptions {
     maxNodeModuleJsDepth?: number | undefined;
     /** Internal fields */
     configFilePath?: string | undefined;
+}
+
+export interface ModuleResolutionSpec {
+    fallback: "resolve" | "unresolved";
+    entries: ModuleResolutionEntry[];
 }
 
 export interface ProjectReference {
@@ -1677,6 +1734,17 @@ export interface IncrementalOperationResultResponse {
     result: EmitResponse;
 }
 
+export interface PluginImport {
+    name: string;
+}
+
+export interface ModuleResolutionEntry {
+    moduleName: string;
+    containingDirectory?: DocumentIdentifier | undefined;
+    resolutionMode?: ResolutionMode | undefined;
+    result: StaticModuleResolution;
+}
+
 export interface IncrementalPendingEmitResponse {
     sourceFileName: string;
     kind: FileEmitKind;
@@ -1691,4 +1759,11 @@ export interface CompletionEntryLabelDetailsResponse {
 export interface CreateProgramOptions {
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
+    moduleResolver?: number | undefined;
+}
+
+export interface StaticModuleResolution {
+    resolvedFileName?: DocumentIdentifier | undefined;
+    originalPath?: DocumentIdentifier | undefined;
+    packageId?: PackageId | undefined;
 }

@@ -10,10 +10,14 @@ import { runInNewContext } from "node:vm";
 import { x } from "tinyexec";
 import ts from "typescript";
 import cache from "./cache.mts";
-import { GeneratedFile } from "./generatedFile.mts";
+import {
+    defaultCacheDirectory,
+    GeneratedFile,
+} from "./generatedFile.mts";
 import {
     enableFileFingerprintCache,
     getFileFingerprint,
+    repoRoot,
     run,
 } from "./utils.mts";
 
@@ -212,6 +216,38 @@ test("invocation fingerprints reuse metadata and invalidate writes and commands"
     }
 });
 
+test("fingerprint cache scopes can overlap", context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+    const input = path.join(directory, "input.ts");
+    fs.writeFileSync(input, "input");
+    const stats = context.mock.method(fs, "statSync");
+    syncBuiltinESMExports();
+    context.after(() => {
+        stats.mock.restore();
+        syncBuiltinESMExports();
+    });
+    const disableFirst = enableFileFingerprintCache();
+    const disableSecond = enableFileFingerprintCache();
+    try {
+        getFileFingerprint(input);
+        getFileFingerprint(input);
+        assert.equal(stats.mock.callCount(), 1);
+        disableFirst();
+        getFileFingerprint(input);
+        getFileFingerprint(input);
+        assert.equal(stats.mock.callCount(), 2);
+        disableSecond();
+        getFileFingerprint(input);
+        getFileFingerprint(input);
+        assert.equal(stats.mock.callCount(), 4);
+    }
+    finally {
+        disableSecond();
+        disableFirst();
+    }
+});
+
 test("command cache snapshots and generated files share invocation fingerprints", async context => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
@@ -251,11 +287,12 @@ test("changing inputs during generation does not mark stale output current", con
     assert.equal(new GeneratedFile(output, [input], cache).isCurrent(), false);
 });
 
-test("default metadata has a stable path in the OS temporary directory", context => {
+test("default metadata is isolated by repository worktree", context => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-codegen-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const output = path.join(directory, "output.ts");
-    const cacheFile = path.join(os.tmpdir(), "typescript-codegen", createHash("sha256").update(output).digest("hex") + ".json");
+    assert.equal(path.basename(defaultCacheDirectory), createHash("sha256").update(repoRoot).digest("hex"));
+    const cacheFile = path.join(defaultCacheDirectory, createHash("sha256").update(output).digest("hex") + ".json");
     context.after(() => fs.rmSync(cacheFile, { force: true }));
     const file = new GeneratedFile(output, []);
     file.write("generated");
@@ -319,9 +356,9 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     assert.match(current.stdout, /Unicode tables are up to date/);
     assert.deepEqual(files.map(file => fs.statSync(path.join(root, file)).mtimeMs), timestamps);
     const fallback = await x("go", ["-C", "./tsc", "generate", "./internal/diagnostics"], { throwOnError: true, nodeOptions: { cwd: root } });
-    assert.equal(fallback.stdout.match(/Codegen outputs are up to date/g)?.length, 2);
+    assert.equal(fallback.stdout.match(/codegen outputs are already up to date/g)?.length, 2);
     const nested = await x("npx", ["hereby", "generate:compileroptions"], { throwOnError: true, nodeOptions: { cwd: path.join(root, "tsc/internal/core") } });
-    assert.equal(nested.stdout.match(/Codegen outputs are up to date/g)?.length, 2);
+    assert.equal(nested.stdout.match(/codegen outputs are already up to date/g)?.length, 2);
 });
 
 test("generate includes standalone generators without Go traversal", async () => {
@@ -465,7 +502,7 @@ test("bundled generation skips unchanged library outputs", async () => {
     await generate();
     const files = ["libs_generated.go", "embed_generated.go"].map(file => path.join(root, "tsc/internal/bundled", file));
     const timestamps = files.map(file => fs.statSync(file).mtimeMs);
-    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
+    assert.match((await generate()).stdout, /codegen outputs are already up to date/);
     assert.deepEqual(files.map(file => fs.statSync(file).mtimeMs), timestamps);
 });
 
@@ -684,7 +721,7 @@ test("Unicode generation repairs outputs and supports force", async context => {
         assert.match((await generate()).stdout, /Generated Unicode tables\./);
         assert.deepEqual(fs.readFileSync(file), originals[index]);
     }
-    const cacheFile = path.join(os.tmpdir(), "typescript-codegen", createHash("sha256").update(files[0]).digest("hex") + ".json");
+    const cacheFile = path.join(defaultCacheDirectory, createHash("sha256").update(files[0]).digest("hex") + ".json");
     context.after(() => fs.rmSync(cacheFile, { force: true }));
     fs.rmSync(cacheFile);
     assert.match((await generate()).stdout, /Generated Unicode tables\./);
@@ -719,7 +756,7 @@ test("enum generation skips unchanged outputs and Go verification", async () => 
     assert.match(forced.stdout, /All generated values match Go\./);
     assert.match((await generate()).stdout, /Enums are up to date\./);
     const verifier = path.join(root, "tsc/internal/api/enum_values_generated.go");
-    const cacheFile = path.join(os.tmpdir(), "typescript-codegen", createHash("sha256").update(verifier).digest("hex") + ".json");
+    const cacheFile = path.join(defaultCacheDirectory, createHash("sha256").update(verifier).digest("hex") + ".json");
     fs.rmSync(cacheFile);
     const regenerated = await generate();
     assert.match(regenerated.stdout, /All generated values match Go\./);
@@ -730,17 +767,19 @@ test("AST generation forwards force to schema generators and the kind stringer",
     const root = path.resolve(import.meta.dirname, "../../..");
     const generate = (force = false) => x("npx", ["hereby", "generate:ast", ...(force ? ["--force"] : [])], { throwOnError: true, nodeOptions: { cwd: root } });
     await generate();
+    const output = path.join(root, "tsc/internal/ast/kind_stringer_generated.go");
+    const oldTime = new Date("2000-01-01T00:00:00Z");
+    fs.utimesSync(output, oldTime, oldTime);
     const forced = await generate(true);
     assert.match(forced.stdout, /Wrote .*encoder_generated\.go/);
     assert.match(forced.stdout, /Wrote .*ast_generated\.go/);
     assert.match(forced.stdout, /Generated .*ast\.generated\.ts/);
-    assert.match(forced.stdout, /Generated codegen outputs\./);
-    const output = path.join(root, "tsc/internal/ast/kind_stringer_generated.go");
+    assert.notEqual(fs.statSync(output).mtimeMs, oldTime.getTime());
     const timestamp = fs.statSync(output).mtimeMs;
     assert.doesNotMatch(forced.stdout, /\$ node .*tools\/scripts\/tsc\/generate\.ts/);
     const current = await generate();
     assert.doesNotMatch(current.stdout, /(?:Wrote|Generated) /);
-    assert.match(current.stdout, /Codegen outputs are up to date\./);
+    assert.match(current.stdout, /codegen outputs are already up to date/);
     assert.equal(fs.statSync(output).mtimeMs, timestamp);
 });
 
@@ -764,14 +803,14 @@ test("API protocol generation caches formatted output and supports force", async
     await generate();
     const timestamp = fs.statSync(output).mtimeMs;
     const current = await generate();
-    assert.match(current.stdout, /Codegen outputs are up to date\./);
+    assert.match(current.stdout, /codegen outputs are already up to date/);
     assert.doesNotMatch(current.stdout, /\$ node .*cache\.mts/);
     assert.equal(fs.statSync(output).mtimeMs, timestamp);
     const unrelated = path.join(root, "tsc/internal/parser/codegen_cache_probe.go");
     assert.equal(fs.existsSync(unrelated), false);
     context.after(() => fs.rmSync(unrelated, { force: true }));
     fs.writeFileSync(unrelated, "package parser\n");
-    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
+    assert.match((await generate()).stdout, /codegen outputs are already up to date/);
     fs.rmSync(unrelated);
     const schema = path.join(root, "tsc/internal/api/requestfilesystem/codegen_cache_probe.go");
     assert.equal(fs.existsSync(schema), false);
@@ -783,17 +822,21 @@ test("API protocol generation caches formatted output and supports force", async
         }
     });
     fs.writeFileSync(schema, 'package requestfilesystem\n\nconst KindCodegenCacheProbe Kind = "codegen-cache-probe"\n');
-    assert.match((await generate()).stdout, /Generated codegen outputs\./);
+    await generate();
     assert.match(fs.readFileSync(output, "utf8"), /"codegen-cache-probe"/);
     fs.rmSync(schema);
-    assert.match((await generate()).stdout, /Generated codegen outputs\./);
+    await generate();
     assert.equal(fs.readFileSync(output, "utf8"), original);
-    assert.match((await generate(true)).stdout, /Generated codegen outputs\./);
-    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
+    const oldTime = new Date("2000-01-01T00:00:00Z");
+    fs.utimesSync(output, oldTime, oldTime);
+    await generate(true);
+    assert.notEqual(fs.statSync(output).mtimeMs, oldTime.getTime());
+    assert.match((await generate()).stdout, /codegen outputs are already up to date/);
+    fs.utimesSync(output, oldTime, oldTime);
     const nested = await x("go", ["-C", "./tsc", "generate", "./internal/api"], {
         throwOnError: true,
         nodeOptions: { cwd: root, env: { ...process.env, TSGO_HEREBY_FORCE: "1" } },
     });
-    assert.match(nested.stdout, /Generated codegen outputs\./);
-    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
+    assert.notEqual(fs.statSync(output).mtimeMs, oldTime.getTime());
+    assert.match((await generate()).stdout, /codegen outputs are already up to date/);
 });

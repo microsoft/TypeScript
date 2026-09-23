@@ -1120,6 +1120,17 @@ type MappedType struct {
 	containsError        bool
 }
 
+func (t *MappedType) TypeParameter() *Type  { return t.typeParameter }
+func (t *MappedType) ConstraintType() *Type { return t.constraintType }
+func (t *MappedType) NameType() *Type       { return t.nameType }
+func (t *MappedType) TemplateType() *Type   { return t.templateType }
+func (t *MappedType) ResolveComponents(c *Checker, typ *Type) {
+	c.getTypeParameterFromMappedType(typ)
+	c.getConstraintTypeFromMappedType(typ)
+	c.getNameTypeFromMappedType(typ)
+	c.getTemplateTypeFromMappedType(typ)
+}
+
 // ReverseMappedType
 
 type ReverseMappedType struct {

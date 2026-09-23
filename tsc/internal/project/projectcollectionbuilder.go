@@ -324,6 +324,8 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
+			request.ModuleResolverFactory,
+			request.ModuleResolverID,
 			b.inferredContentMappers,
 			&request.Incremental,
 			logger,
@@ -338,6 +340,8 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
+			request.ModuleResolverFactory,
+			request.ModuleResolverID,
 			b.inferredContentMappers,
 			nil,
 			logger,
@@ -414,7 +418,15 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			return operationError
 		}
 	}
-	return nil
+	var moduleResolutionError error
+	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		project := entry.Value()
+		if project.Program != nil {
+			moduleResolutionError = project.Program.ModuleResolutionError()
+		}
+		return moduleResolutionError == nil
+	})
+	return moduleResolutionError
 }
 
 func (b *ProjectCollectionBuilder) nextSyntheticProjectID() SyntheticProjectID {
@@ -1330,6 +1342,8 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
+	moduleResolverFactory ModuleResolverFactory,
+	moduleResolverID uint64,
 	contentMappers []*contentmapper.Mapper,
 	incremental *bool,
 	logger *logging.LogTree,
@@ -1339,6 +1353,8 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 		syntheticProject := newSyntheticProject(projectID, b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
 		syntheticProject.incremental = incremental != nil && *incremental
 		syntheticProject.CommandLine.Errors = configFileParsingDiagnostics
+		syntheticProject.moduleResolverFactory = moduleResolverFactory
+		syntheticProject.moduleResolverID = moduleResolverID
 		project, _ = b.syntheticProjects.LoadOrStore(projectID, syntheticProject)
 		return project
 	}
@@ -1358,13 +1374,16 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
-				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
+				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers()) ||
+				p.moduleResolverID != moduleResolverID
 		},
 		func(p *Project) {
 			if logger != nil {
 				logger.Log(fmt.Sprintf("Updating synthetic project config with %d root files", len(rootFileNames)))
 			}
 			p.SetCommandLine(newCommandLine)
+			p.moduleResolverFactory = moduleResolverFactory
+			p.moduleResolverID = moduleResolverID
 		},
 	)
 	return project
