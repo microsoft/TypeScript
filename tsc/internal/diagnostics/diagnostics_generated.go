@@ -5624,6 +5624,7 @@ var allMessages = [...]**Message{
 	&Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information,
 	&X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error,
 	&X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here,
+	&Watch_mode_not_activated_in_build_orchestrator,
 	&Generates_a_sourcemap_for_each_corresponding_d_ts_file,
 	&Concatenate_and_emit_output_to_single_file,
 	&Generates_corresponding_d_ts_file,
