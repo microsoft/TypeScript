@@ -167,30 +167,34 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 		}
 	}
 	signatureParamPos := 0
+	hasUncertainTupleSpread := false
 	for i, originalArg := range args {
 		arg := ast.SkipParentheses(originalArg)
-		if shouldShowLiteralParameterNameHintsOnly(s.preferences) && !isHintableLiteral(arg) {
-			signatureParamPos++
-			continue
-		}
-
 		spreadArgs := 0
+		skipSpreadHint := false
 		if ast.IsSpreadElement(arg) {
 			spreadType := s.checker.GetTypeAtLocation(arg.Expression())
 			if spreadType.IsTupleType() {
 				tupleType := spreadType.Target().AsTupleType()
-				if tupleType.FixedLength() == 0 {
-					continue
-				}
 				spreadArgs = getRequiredTupleElementCount(tupleType)
+				// Optional or variable tuple elements make subsequent positional hints ambiguous.
+				hasUncertainTupleSpread = hasUncertainTupleSpread || spreadArgs < len(tupleType.ElementInfos())
+				skipSpreadHint = tupleType.FixedLength() == 0
 			}
+		}
+		if shouldShowLiteralParameterNameHintsOnly(s.preferences) && !isHintableLiteral(arg) {
+			signatureParamPos++
+			continue
+		}
+		if skipSpreadHint {
+			continue
 		}
 
 		offsetFromEnd := -1
 		if lastSpreadIndex >= 0 && i > lastSpreadIndex {
 			offsetFromEnd = len(args) - i
 		}
-		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos, argumentCount, offsetFromEnd)
+		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos, argumentCount, offsetFromEnd, hasUncertainTupleSpread && !ast.IsSpreadElement(arg))
 		signatureParamPos = signatureParamPos + core.IfElse(spreadArgs > 0, spreadArgs, 1)
 		if identifierInfo == nil {
 			continue
@@ -837,10 +841,13 @@ type parameterInfo struct {
 	isRestParameter bool
 }
 
-func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int, argumentCount int, offsetFromEnd int) *parameterInfo {
+func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int, argumentCount int, offsetFromEnd int, uncertainTupleSpread bool) *parameterInfo {
 	parameters := signature.Parameters()
 	paramCount := len(parameters) - core.IfElse(signature.HasRestParameter(), 1, 0)
 	if pos < paramCount {
+		if uncertainTupleSpread {
+			return nil
+		}
 		param := parameters[pos]
 		paramId := getParameterDeclarationIdentifier(param)
 		if paramId == nil {
@@ -873,6 +880,9 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		trailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsFixed)
 		// Optional trailing elements may be omitted, so only required ones can be aligned from the end.
 		requiredTrailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsRequired)
+		if uncertainTupleSpread && (offsetFromEnd <= 0 || offsetFromEnd > requiredTrailingCount) {
+			return nil
+		}
 		variableCount := len(elementInfos) - firstVariableIndex - trailingCount
 		if trailingCount > 0 && variableCount > 0 {
 			switch {
@@ -911,6 +921,9 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		return nil
 	}
 
+	if uncertainTupleSpread {
+		return nil
+	}
 	if pos == paramCount {
 		return &parameterInfo{
 			parameter:       restId,

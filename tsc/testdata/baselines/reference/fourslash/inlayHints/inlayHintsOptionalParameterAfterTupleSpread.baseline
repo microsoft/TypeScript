@@ -30,35 +30,3 @@ g(...x, "end");
   "kind": 2,
   "paddingRight": true
 }
-
-g(...x, "end");
-        ^
-{
-  "position": {
-    "line": 2,
-    "character": 8
-  },
-  "label": [
-    {
-      "value": "b",
-      "location": {
-        "uri": "file:///inlayHintsOptionalParameterAfterTupleSpread.ts",
-        "range": {
-          "start": {
-            "line": 0,
-            "character": 30
-          },
-          "end": {
-            "line": 0,
-            "character": 31
-          }
-        }
-      }
-    },
-    {
-      "value": ":"
-    }
-  ],
-  "kind": 2,
-  "paddingRight": true
-}
