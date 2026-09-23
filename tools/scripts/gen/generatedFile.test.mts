@@ -649,14 +649,27 @@ test("diagnostic generation tracks Go and locale outputs and supports force", as
     const directory = fs.mkdtempSync(path.join(root, "tsc/internal/_diagnostics-probe-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const output = path.join(directory, "diagnostics_generated.go");
+    const source = path.join(directory, "diagnosticMessages.generated.json");
     const localized = path.join(directory, "loc_generated.go");
+    const locDirectory = path.join(directory, "loc");
+    fs.mkdirSync(locDirectory);
+    const handbacks = fs.globSync("loc/*.generated.json", { cwd: path.join(root, "tsc/internal/diagnostics") });
+    for (const handback of handbacks) {
+        fs.copyFileSync(path.join(root, "tsc/internal/diagnostics", handback), path.join(locDirectory, path.basename(handback)));
+    }
+    const project = path.join(directory, "tools/LocProject.json");
+    fs.mkdirSync(path.dirname(project));
+    const projectData = JSON.parse(fs.readFileSync(path.join(root, "tools/LocProject.json"), "utf8"));
+    projectData.Projects[0].LocItems = [projectData.Projects[0].LocItems[0]];
+    projectData.Projects[0].LocItems[0].SourceFile = "diagnosticMessages.generated.json";
+    fs.writeFileSync(project, JSON.stringify(projectData));
     const options = {
         cwd: path.join(root, "tsc/internal/diagnostics"),
-        inputs: ["generate.go", "diagnosticMessages.json", "extraDiagnosticMessages.json", "../{collections,json}/*.go", "../locale/lcl/*/diagnosticMessages/diagnosticMessages.generated.json.lcl"],
+        inputs: ["generate.go", "diagnosticMessages.json", project, "../{collections,json}/*.go", path.join(locDirectory, "*.generated.json")],
         exclude: ["**/*_test.go"],
-        outputs: [output, localized, path.join(directory, "loc/*.json.gz")],
+        outputs: [output, source, localized, path.join(locDirectory, "*.json.gz")],
         commands: [
-            ["go", "run", "generate.go", "-diagnostics", output, "-loc", localized, "-locdir", path.join(directory, "loc")],
+            ["go", "run", "generate.go", "-diagnostics", output, "-loc", localized, "-locdir", locDirectory, "-locproject", project, "-locsource", source],
             ["dprint", "fmt", output, localized],
         ],
     };
@@ -664,10 +677,14 @@ test("diagnostic generation tracks Go and locale outputs and supports force", as
     await generate();
     const locales = fs.globSync("loc/*.json.gz", { cwd: directory }).map(file => path.join(directory, file));
     assert.ok(locales.length > 0);
-    const files = [output, localized, ...locales];
+    const files = [output, source, localized, ...locales];
     const timestamps = files.map(file => fs.statSync(file).mtimeMs);
     assert.equal(await generate(), true);
     assert.deepEqual(files.map(file => fs.statSync(file).mtimeMs), timestamps);
+    fs.appendFileSync(project, "\n");
+    assert.equal(await generate(), false);
+    fs.appendFileSync(path.join(locDirectory, path.basename(handbacks[0])), "\n");
+    assert.equal(await generate(), false);
     const archive = fs.readFileSync(locales[0]);
     fs.rmSync(locales[0]);
     assert.equal(await generate(), false);
@@ -679,7 +696,7 @@ test("diagnostic generation tracks Go and locale outputs and supports force", as
     fs.writeFileSync(unexpected, "unexpected");
     assert.equal(await generate(), false);
     assert.equal(fs.existsSync(unexpected), false);
-    fs.rmSync(path.join(directory, "loc"), { recursive: true });
+    for (const locale of locales) fs.rmSync(locale);
     assert.equal(await generate(), false);
     assert.deepEqual(fs.readFileSync(locales[0]), archive);
     fs.rmSync(localized);
