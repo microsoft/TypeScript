@@ -2590,6 +2590,7 @@ export type KeyOf<T> = keyof T;
 export type Lookup<T, K extends keyof T> = T[K];
 export type Cond<T> = T extends string ? "yes" : "no";
 export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
+export type MappedUnion<T> = Mapped<T> | string;
 export const tpl: \`hello \${string}\` = "hello world";
 export type Upper = Uppercase<"hello">;
 export const tuple: readonly [number, string?, ...boolean[]] = [1];
@@ -2766,6 +2767,23 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         assert.ok(type);
         assert.equal(type.isMappedType(), true);
         const mapped = type as MappedType;
+        assert.ok((mapped.getTypeParameter()).flags & TypeFlags.TypeParameter);
+        assert.ok(mapped.getConstraintType());
+        assert.ok(mapped.getNameType());
+        assert.ok(mapped.getTemplateType());
+    });
+
+    test("MappedType returned as a union constituent exposes its component types", () => {
+        using api = spawnAPI(typeFiles);
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = project.checker.resolveName("MappedUnion", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const union = project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(union);
+        const mapped = ((union as UnionOrIntersectionType).getTypes()).find(type => type.isMappedType());
+        assert.ok(mapped);
         assert.ok((mapped.getTypeParameter()).flags & TypeFlags.TypeParameter);
         assert.ok(mapped.getConstraintType());
         assert.ok(mapped.getNameType());
