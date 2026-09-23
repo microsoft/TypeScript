@@ -80,6 +80,8 @@ type Orchestrator struct {
 
 	// fswatch event-based watching
 	wm *watchmanager.WatchManager
+	// order sorted by dependency depth, to reduce how often builders block on upstream projects
+	scheduleOrder []string
 }
 
 var _ tsc.Watcher = (*Orchestrator)(nil)
@@ -101,6 +103,44 @@ func (o *Orchestrator) resolveBuildInfoFileName(fileName string, buildInfoDir st
 
 func (o *Orchestrator) Order() []string {
 	return o.order
+}
+
+// ScheduleOrder is the order in which builders pick up projects: Order() stably sorted by dependency depth.
+func (o *Orchestrator) ScheduleOrder() []string {
+	return o.scheduleOrder
+}
+
+// computeScheduleOrder sorts the build order by dependency depth (projects with no
+// upstream first, then their dependents, and so on). Builders take projects from this
+// order and block until upstream projects are done, so with the plain depth-first order
+// a builder that picks the root of a long chain sits idle while another builder works
+// through the chain, even when unrelated projects are ready to build. Depth order reduces
+// that avoidable blocking but does not eliminate it: a shallower project that has been
+// picked up may not be done yet, so a builder can take a dependent of a slow project and
+// wait on that project while a later project's upstream has already finished. The stable
+// sort preserves the original order within a depth, and reporting still follows Order().
+func (o *Orchestrator) computeScheduleOrder() []string {
+	type scheduleEntry struct {
+		config string
+		depth  int
+	}
+	entries := make([]scheduleEntry, len(o.order))
+	depths := make(map[*BuildTask]int, len(o.order))
+	for i, config := range o.order {
+		task := o.getTask(o.toPath(config))
+		depth := 0
+		for _, upstream := range task.upStream {
+			depth = max(depth, depths[upstream.task]+1)
+		}
+		depths[task] = depth
+		entries[i] = scheduleEntry{config: config, depth: depth}
+	}
+	slices.SortStableFunc(entries, func(a, b scheduleEntry) int {
+		return a.depth - b.depth
+	})
+	return core.Map(entries, func(entry scheduleEntry) string {
+		return entry.config
+	})
 }
 
 func (o *Orchestrator) Upstream(configName string) []string {
@@ -195,11 +235,7 @@ func (o *Orchestrator) setupBuildTask(
 		}
 		circularityStack = circularityStack[:len(circularityStack)-1]
 		completed.Add(path)
-		task.reportDone = make(chan struct{})
-		prev := core.LastOrNil(o.order)
-		if prev != "" {
-			task.prevReporter = o.getTask(o.toPath(prev))
-		}
+		task.built = make(chan struct{})
 		task.done = make(chan struct{})
 		o.order = append(o.order, configName)
 	}
@@ -231,6 +267,7 @@ func (o *Orchestrator) GenerateGraph(oldTasks *collections.SyncMap[tspath.Path, 
 	for _, project := range projects {
 		o.setupBuildTask(project, nil, false, &completed, &analyzing, circularityStack)
 	}
+	o.scheduleOrder = o.computeScheduleOrder()
 	if oldTasks != nil {
 		oldTasks.Range(func(path tspath.Path, oldTask *BuildTask) bool {
 			if task, ok := o.tasks.Load(path); ok && task == oldTask {
@@ -431,7 +468,7 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[string]fswatch
 			}
 		}
 
-		task.reportDone = make(chan struct{})
+		task.built = make(chan struct{})
 		task.done = make(chan struct{})
 
 		newConfig := task.resolved.ReloadFileNamesOfParsedCommandLine(o.host.FS())
@@ -450,7 +487,7 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[string]fswatch
 				if o.wm.IsPathUnderWatch(eventPath, opts) {
 					o.rangeTask(func(path tspath.Path, task *BuildTask) {
 						task.resetStatus()
-						task.reportDone = make(chan struct{})
+						task.built = make(chan struct{})
 						task.done = make(chan struct{})
 					})
 					needsUpdate.Store(true)
@@ -625,7 +662,7 @@ func (o *Orchestrator) DoCycle() {
 		// Overflow: reset all tasks to force a full rebuild.
 		o.rangeTask(func(path tspath.Path, task *BuildTask) {
 			task.resetConfig(o, path)
-			task.reportDone = make(chan struct{})
+			task.built = make(chan struct{})
 			task.done = make(chan struct{})
 		})
 		needsConfigUpdate.Store(true)
@@ -669,9 +706,21 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 	var buildResult orchestratorResult
 	if len(o.errors) == 0 {
 		buildResult.statistics.Projects = len(o.Order())
+		// Builders pick up projects in scheduleOrder; results are reported in Order(), waiting for each project to finish
+		reported := make(chan struct{})
+		go func() {
+			defer close(reported)
+			for _, config := range o.order {
+				path := o.toPath(config)
+				task := o.getTask(path)
+				<-task.built
+				task.report(o, path, &buildResult)
+			}
+		}()
 		o.rangeTask(func(path tspath.Path, task *BuildTask) {
-			o.buildOrCleanProject(task, path, &buildResult)
+			o.buildOrCleanProject(task, path)
 		})
+		<-reported
 	} else {
 		// Circularity errors prevent any project from being built
 		buildResult.result.Status = tsc.ExitStatusProjectReferenceCycle_OutputsSkipped
@@ -696,10 +745,10 @@ func (o *Orchestrator) rangeTask(f func(path tspath.Path, task *BuildTask)) {
 	var currentTaskIndex atomic.Int64
 	getNextTask := func() (tspath.Path, *BuildTask, bool) {
 		index := int(currentTaskIndex.Add(1) - 1)
-		if index >= len(o.order) {
+		if index >= len(o.scheduleOrder) {
 			return "", nil, false
 		}
-		config := o.order[index]
+		config := o.scheduleOrder[index]
 		path := o.toPath(config)
 		task := o.getTask(path)
 		return path, task, true
@@ -721,7 +770,7 @@ func (o *Orchestrator) rangeTask(f func(path tspath.Path, task *BuildTask)) {
 	}
 }
 
-func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.Path, buildResult *orchestratorResult) {
+func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.Path) {
 	task.result = &taskResult{}
 	task.result.reportStatus = o.createBuilderStatusReporter(task)
 	task.result.diagnosticReporter = o.createDiagnosticReporter(task)
@@ -730,7 +779,12 @@ func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.Path, bu
 	} else {
 		task.cleanProject(o, path)
 	}
-	task.report(o, path, buildResult)
+	if o.opts.Testing == nil {
+		// The program is only needed by Testing.OnProgram at report time; drop it now so a task
+		// that has finished but is not yet reported does not keep its program alive.
+		task.result.program = nil
+	}
+	close(task.built)
 }
 
 func (o *Orchestrator) getWriter(task *BuildTask) io.Writer {

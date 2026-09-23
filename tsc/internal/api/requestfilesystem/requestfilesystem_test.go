@@ -184,6 +184,30 @@ func TestRequestFileSystemPreservesExplicitDirectoryOrder(t *testing.T) {
 	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("/src").Files, []string{"index.ts", "foo.ts"})
 }
 
+func TestRequestFileSystemDerivesDirectoryListingsWithHostCaseSensitivity(t *testing.T) {
+	t.Parallel()
+
+	params := &RequestFileSystem{
+		Kind: KindFull,
+		Files: map[string]string{
+			"C:/Repo/upper.ts": "upper",
+			"c:/repo/lower.ts": "lower",
+		},
+	}
+
+	caseInsensitive := vfstest.FromMap(map[string]string{}, false)
+	fileSystem, err := newRequestFileSystem(params, caseInsensitive, "C:/Workspace")
+	assert.NilError(t, err)
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("C:/REPO").Files, []string{"lower.ts", "upper.ts"})
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("C:/").Directories, []string{"Repo", "Workspace"})
+
+	caseSensitive := vfstest.FromMap(map[string]string{}, true)
+	fileSystem, err = newRequestFileSystem(params, caseSensitive, "C:/Workspace")
+	assert.NilError(t, err)
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("C:/Repo").Files, []string{"upper.ts"})
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("c:/repo").Files, []string{"lower.ts"})
+}
+
 func TestRequestFileSystemOverlaysDoesNotReadFileHandles(t *testing.T) {
 	t.Parallel()
 	session, _ := projecttestutil.Setup(map[string]any{"/index.ts": "host"})
