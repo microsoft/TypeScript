@@ -40,17 +40,17 @@
   },
   "label": [
     {
-      "value": "second",
+      "value": "first",
       "location": {
         "uri": "file:///inlayHintsOptionalTrailingTupleAfterSpread.ts",
         "range": {
           "start": {
             "line": 0,
-            "character": 85
+            "character": 69
           },
           "end": {
             "line": 0,
-            "character": 91
+            "character": 74
           }
         }
       }

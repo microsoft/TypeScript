@@ -871,12 +871,14 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		restArgumentCount := argumentCount - paramCount
 		firstVariableIndex := tupleType.FixedLength()
 		trailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsFixed)
+		// Optional trailing elements may be omitted, so only required ones can be aligned from the end.
+		requiredTrailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsRequired)
 		variableCount := len(elementInfos) - firstVariableIndex - trailingCount
 		if trailingCount > 0 && variableCount > 0 {
 			switch {
-			case offsetFromEnd > 0 && offsetFromEnd <= trailingCount:
+			case offsetFromEnd > 0 && offsetFromEnd <= requiredTrailingCount:
 				index = len(elementInfos) - offsetFromEnd
-			case offsetFromEnd > trailingCount && variableCount > 1:
+			case offsetFromEnd > trailingCount:
 				return nil
 			case argumentCount >= 0 && restArgumentCount >= firstVariableIndex+trailingCount:
 				trailingStart := restArgumentCount - trailingCount

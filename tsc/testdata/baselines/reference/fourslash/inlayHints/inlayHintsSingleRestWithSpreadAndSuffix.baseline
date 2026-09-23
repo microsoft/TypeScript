@@ -32,38 +32,6 @@ f(...xs, "middle", "end");
 }
 
 f(...xs, "middle", "end");
-         ^
-{
-  "position": {
-    "line": 2,
-    "character": 9
-  },
-  "label": [
-    {
-      "value": "tail",
-      "location": {
-        "uri": "file:///inlayHintsSingleRestWithSpreadAndSuffix.ts",
-        "range": {
-          "start": {
-            "line": 0,
-            "character": 48
-          },
-          "end": {
-            "line": 0,
-            "character": 52
-          }
-        }
-      }
-    },
-    {
-      "value": ":"
-    }
-  ],
-  "kind": 2,
-  "paddingRight": true
-}
-
-f(...xs, "middle", "end");
                    ^
 {
   "position": {
