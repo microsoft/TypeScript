@@ -156,16 +156,18 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 		return
 	}
 
-	// A spread prevents matching trailing tuple elements from the end of the argument list.
+	// A spread makes the effective argument count unknown, but explicit arguments after the last
+	// spread still have a known offset from the end.
 	argumentCount := len(args)
-	for _, arg := range args {
+	lastSpreadIndex := -1
+	for i, arg := range args {
 		if ast.IsSpreadElement(ast.SkipParentheses(arg)) {
 			argumentCount = -1
-			break
+			lastSpreadIndex = i
 		}
 	}
 	signatureParamPos := 0
-	for _, originalArg := range args {
+	for i, originalArg := range args {
 		arg := ast.SkipParentheses(originalArg)
 		if shouldShowLiteralParameterNameHintsOnly(s.preferences) && !isHintableLiteral(arg) {
 			signatureParamPos++
@@ -184,7 +186,11 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 			}
 		}
 
-		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos, argumentCount)
+		offsetFromEnd := -1
+		if lastSpreadIndex >= 0 && i > lastSpreadIndex {
+			offsetFromEnd = len(args) - i
+		}
+		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos, argumentCount, offsetFromEnd)
 		signatureParamPos = signatureParamPos + core.IfElse(spreadArgs > 0, spreadArgs, 1)
 		if identifierInfo == nil {
 			continue
@@ -831,7 +837,7 @@ type parameterInfo struct {
 	isRestParameter bool
 }
 
-func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int, argumentCount int) *parameterInfo {
+func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int, argumentCount int, offsetFromEnd int) *parameterInfo {
 	parameters := signature.Parameters()
 	paramCount := len(parameters) - core.IfElse(signature.HasRestParameter(), 1, 0)
 	if pos < paramCount {
@@ -865,13 +871,21 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		restArgumentCount := argumentCount - paramCount
 		firstVariableIndex := tupleType.FixedLength()
 		trailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsFixed)
-		if argumentCount >= 0 && trailingCount > 0 && firstVariableIndex+trailingCount+1 == len(elementInfos) && restArgumentCount >= firstVariableIndex+trailingCount {
-			trailingStart := restArgumentCount - trailingCount
+		variableCount := len(elementInfos) - firstVariableIndex - trailingCount
+		if trailingCount > 0 && variableCount > 0 {
 			switch {
-			case index >= trailingStart:
-				index = len(elementInfos) - (restArgumentCount - index)
-			case index > firstVariableIndex:
+			case offsetFromEnd > 0 && offsetFromEnd <= trailingCount:
+				index = len(elementInfos) - offsetFromEnd
+			case offsetFromEnd > trailingCount && variableCount > 1:
 				return nil
+			case argumentCount >= 0 && restArgumentCount >= firstVariableIndex+trailingCount:
+				trailingStart := restArgumentCount - trailingCount
+				switch {
+				case index >= trailingStart:
+					index = len(elementInfos) - (restArgumentCount - index)
+				case index >= firstVariableIndex && (variableCount > 1 || index > firstVariableIndex):
+					return nil
+				}
 			}
 		}
 		if index < len(elementInfos) {

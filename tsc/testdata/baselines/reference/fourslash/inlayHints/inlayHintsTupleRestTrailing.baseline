@@ -424,17 +424,17 @@ noTrailing(1, "a", "b");
   },
   "label": [
     {
-      "value": "...left",
+      "value": "penultimate",
       "location": {
         "uri": "file:///inlayHintsTupleRestTrailing.ts",
         "range": {
           "start": {
             "line": 8,
-            "character": 91
+            "character": 113
           },
           "end": {
             "line": 8,
-            "character": 95
+            "character": 124
           }
         }
       }
@@ -456,17 +456,17 @@ noTrailing(1, "a", "b");
   },
   "label": [
     {
-      "value": "...right",
+      "value": "last",
       "location": {
         "uri": "file:///inlayHintsTupleRestTrailing.ts",
         "range": {
           "start": {
             "line": 8,
-            "character": 103
+            "character": 134
           },
           "end": {
             "line": 8,
-            "character": 108
+            "character": 138
           }
         }
       }
