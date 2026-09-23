@@ -252,9 +252,17 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	for dir, recursive := range resolvedDirs {
 		coverage.Set(dir, recursive)
 	}
+	programFiles := w.program.GetProgram().FilesByPath()
+	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
 	for _, filePath := range seenFilePaths {
 		dir := tspath.GetDirectoryPath(filePath)
-		if !coverage.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
+		if coverage.Covered(dir) {
+			continue
+		}
+		// Seen files mix program files with lookup locations. Only lookups keep the depth check, so an imported
+		// file outside the tsconfig directory (say /shared next to /app) is still watched.
+		_, isProgramFile := programFiles[tspath.ToPath(filePath, cwd, caseSensitive)]
+		if (isProgramFile && watchmanager.CanWatchProgramFileDirectory(dir)) || watchmanager.CanWatchDirectory(dir) {
 			coverage.Set(dir, false)
 		}
 	}

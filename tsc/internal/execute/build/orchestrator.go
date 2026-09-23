@@ -507,10 +507,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 		// Input file directories not already covered
 		for _, fileName := range task.resolved.FileNames() {
 			absPath := tspath.GetNormalizedAbsolutePath(fileName, o.opts.Sys.GetCurrentDirectory())
-			dir := tspath.GetDirectoryPath(absPath)
-			if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
-				desiredDirs.Set(dir, false)
-			}
+			o.addProgramFileWatchDir(desiredDirs, tspath.GetDirectoryPath(absPath))
 			for _, mapper := range task.resolved.ContentMappers() {
 				if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 					continue
@@ -549,10 +546,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 				if roots.Has(fp) {
 					continue
 				}
-				dir := tspath.GetDirectoryPath(absPath)
-				if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
-					desiredDirs.Set(dir, false)
-				}
+				o.addProgramFileWatchDir(desiredDirs, tspath.GetDirectoryPath(absPath))
 			}
 			for packageJson := range bi.buildInfo.GetPackageJsons(buildInfoDir) {
 				o.addPackageJsonWatchDirs(desiredDirs, packageJson)
@@ -571,6 +565,14 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 
 func (o *Orchestrator) addWatchDir(desiredDirs *watchmanager.DirWatchSet, dir string) {
 	if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
+		desiredDirs.Set(dir, false)
+	}
+}
+
+// addProgramFileWatchDir watches the directory of a program file at any depth, unlike addWatchDir, which guards lookup
+// locations against watching something as generic as / or /home.
+func (o *Orchestrator) addProgramFileWatchDir(desiredDirs *watchmanager.DirWatchSet, dir string) {
+	if !desiredDirs.Covered(dir) && watchmanager.CanWatchProgramFileDirectory(dir) {
 		desiredDirs.Set(dir, false)
 	}
 }
