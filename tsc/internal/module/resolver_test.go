@@ -40,10 +40,10 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	for _, name := range []string{"pkg", "pkg/"} {
-		r, _ := resolver.ResolveModuleName(name, "/repo/src/file.ts", core.ModuleKindESNext, nil)
+		r, _, _ := resolver.ResolveModuleName(name, "/repo/src/file.ts", core.ModuleKindESNext, nil)
 		if !r.IsResolved() {
 			t.Errorf("%q failed to resolve", name)
 		}
@@ -66,9 +66,9 @@ func TestResolveWasmModule(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if !resolved.IsResolved() {
 		t.Fatal("Wasm module was not resolved")
 	}
@@ -79,21 +79,21 @@ func TestResolveWasmModule(t *testing.T) {
 		t.Fatalf("resolved extension = %q, want %q", resolved.Extension, tspath.ExtensionWasm)
 	}
 
-	resolved, _ = resolver.ResolveModuleName("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	if resolved.IsResolved() {
 		t.Fatalf("Wasm module resolved in the evaluation phase to %q", resolved.ResolvedFileName)
 	}
 
-	resolved, _ = resolver.ResolveModuleName("./c.wasm", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("./c.wasm", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	if resolved.IsResolved() {
 		t.Fatalf("Wasm module resolved in the evaluation phase to %q", resolved.ResolvedFileName)
 	}
-	resolved, _ = resolver.ResolveModuleNameWithPhase("./c.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleNameWithPhase("./c.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if !resolved.IsResolved() {
 		t.Fatal("Wasm module was not resolved after an evaluation-phase miss")
 	}
 
-	resolved, _ = resolver.ResolveModuleNameWithPhase("pkg", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleNameWithPhase("pkg", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if !resolved.IsResolved() {
 		t.Fatal("package Wasm module was not resolved")
 	}
@@ -101,7 +101,7 @@ func TestResolveWasmModule(t *testing.T) {
 		t.Fatalf("resolved package file name = %q, want %q", resolved.ResolvedFileName, "/repo/node_modules/pkg/a.wasm")
 	}
 
-	resolved, _ = resolver.ResolveModuleName("pkg", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("pkg", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	if resolved.IsResolved() {
 		t.Fatalf("package Wasm module resolved in the evaluation phase to %q", resolved.ResolvedFileName)
 	}
@@ -121,12 +121,12 @@ func TestSourcePhaseWasmPrefersRuntimeFile(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/src/a.wasm")
 
-	resolved, _ = resolver.ResolveModuleName("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/src/a.d.wasm.ts")
 }
 
@@ -144,12 +144,12 @@ func TestSourcePhasePrefersJavaScriptOverDeclarationFile(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("./a.js", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("./a.js", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/src/a.js")
 
-	resolved, _ = resolver.ResolveModuleName("./a.js", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("./a.js", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/src/a.d.ts")
 }
 
@@ -185,10 +185,10 @@ func TestSourcePhasePackageResolutionUsesRuntimeTarget(t *testing.T) {
 		Target:           core.ScriptTargetESNext,
 		CustomConditions: []string{"types"},
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	for _, packageName := range []string{"exports", "main"} {
-		resolved, _ := resolver.ResolveModuleNameWithPhase(packageName, "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+		resolved, _, _ := resolver.ResolveModuleNameWithPhase(packageName, "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 		expected := "/repo/node_modules/" + packageName + "/a.wasm"
 		if resolved.ResolvedFileName != expected {
 			t.Errorf("source phase %q resolved to %q, want %q", packageName, resolved.ResolvedFileName, expected)
@@ -197,16 +197,16 @@ func TestSourcePhasePackageResolutionUsesRuntimeTarget(t *testing.T) {
 			t.Errorf("source phase %q has alternate type resolution %q", packageName, resolved.AlternateResult)
 		}
 
-		resolved, _ = resolver.ResolveModuleName(packageName, "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+		resolved, _, _ = resolver.ResolveModuleName(packageName, "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 		expected = "/repo/node_modules/" + packageName + "/index.d.ts"
 		if resolved.ResolvedFileName != expected {
 			t.Errorf("evaluation phase %q resolved to %q, want %q", packageName, resolved.ResolvedFileName, expected)
 		}
 	}
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("js", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("js", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/node_modules/js/index.js")
-	resolved, _ = resolver.ResolveModuleName("js", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("js", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/node_modules/js/index.d.ts")
 }
 
@@ -223,14 +223,14 @@ func TestSourcePhaseDoesNotResolveFromTypesPackage(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("a", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("a", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if resolved.IsResolved() {
 		t.Fatalf("source phase resolved through @types to %q", resolved.ResolvedFileName)
 	}
 
-	resolved, _ = resolver.ResolveModuleName("a", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("a", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/node_modules/@types/a/index.d.ts")
 }
 
@@ -248,14 +248,14 @@ func TestSourcePhaseDoesNotResolveFromTypeRoots(t *testing.T) {
 		Target:           core.ScriptTargetESNext,
 		TypeRoots:        []string{"/repo/types"},
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("a", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("a", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if resolved.IsResolved() {
 		t.Fatalf("source phase resolved through typeRoots to %q", resolved.ResolvedFileName)
 	}
 
-	resolved, _ = resolver.ResolveModuleName("a", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
+	resolved, _, _ = resolver.ResolveModuleName("a", "/repo/src/b.ts", core.ModuleKindESNext, nil /*redirectedReference*/)
 	assertResolvedFileName(t, resolved, "/repo/types/a/index.d.ts")
 }
 
@@ -273,9 +273,9 @@ func TestResolveWasmModuleWithModuleSuffix(t *testing.T) {
 		Target:           core.ScriptTargetESNext,
 		ModuleSuffixes:   []string{".native"},
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("./a.wasm", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if !resolved.IsResolved() {
 		t.Fatal("Wasm module was not resolved")
 	}
@@ -297,9 +297,9 @@ func TestSourcePhaseDoesNotResolveUnknownPhysicalModuleTypes(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("./a.txt", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("./a.txt", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if resolved.IsResolved() {
 		t.Fatalf("Unknown physical module type resolved to %q", resolved.ResolvedFileName)
 	}
@@ -320,9 +320,9 @@ func TestResolveWasmModuleDeclarationSidecarIgnoresGlobalTypings(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "/repo/cache", "project", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts, TypingsLocation: "/repo/cache", ProjectName: "project"})
 
-	resolved, _ := resolver.ResolveModuleNameWithPhase("pkg", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
+	resolved, _, _ := resolver.ResolveModuleNameWithPhase("pkg", "/repo/src/b.ts", core.ModuleKindESNext, module.ImportPhaseSource, nil /*redirectedReference*/)
 	if !resolved.IsResolved() {
 		t.Fatal("Wasm module declaration sidecar was not resolved")
 	}
@@ -450,7 +450,7 @@ func TestResolveModuleNameTrailingSlashRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	type resolutionResult struct {
 		name     string
@@ -464,7 +464,7 @@ func TestResolveModuleNameTrailingSlashRace(t *testing.T) {
 			containingFile = "/repo/src/b/file.ts"
 		}
 		wg.Go(func() {
-			r, _ := resolver.ResolveModuleName(name, containingFile, core.ModuleKindESNext, nil)
+			r, _, _ := resolver.ResolveModuleName(name, containingFile, core.ModuleKindESNext, nil)
 			results <- resolutionResult{name, r.IsResolved()}
 		})
 	}
@@ -522,7 +522,7 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	var panicked atomic.Bool
 	type resolutionResult struct {
@@ -542,7 +542,7 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 				}
 				results <- resolutionResult{containingFile: containingFile, resolved: resolved}
 			}()
-			r, _ := resolver.ResolveModuleName("pkg/sub", containingFile, core.ModuleKindESNext, nil)
+			r, _, _ := resolver.ResolveModuleName("pkg/sub", containingFile, core.ModuleKindESNext, nil)
 			resolved = r.IsResolved()
 		})
 	}
@@ -645,7 +645,7 @@ func TestResolvePeerDependencyNilContentsRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(host, opts, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
 
 	var panicked atomic.Bool
 	type resolutionResult struct {
@@ -663,7 +663,7 @@ func TestResolvePeerDependencyNilContentsRace(t *testing.T) {
 				}
 				results <- resolutionResult{containingFile: containingFile, resolved: resolved}
 			}()
-			r, _ := resolver.ResolveModuleName("pkg", containingFile, core.ModuleKindESNext, nil)
+			r, _, _ := resolver.ResolveModuleName("pkg", containingFile, core.ModuleKindESNext, nil)
 			resolved = r.IsResolved()
 		})
 	}

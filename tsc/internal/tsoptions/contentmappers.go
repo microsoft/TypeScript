@@ -15,7 +15,10 @@ import (
 // and package directory. It never executes the package. On failure it returns a diagnostic describing why
 // the mapper could not be resolved; on success the diagnostic is nil.
 func resolveContentMapperManifest(host ParseConfigHost, containingFile string, packageName string) (contentmapper.Manifest, string, *ast.Diagnostic) {
-	resolver := module.NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler}, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{
+		Host:            host,
+		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
+	})
 	resolved := resolver.ResolvePackageDirectory(packageName, containingFile, core.ResolutionModeNone, nil)
 	if resolved == nil || resolved.ResolvedFileName == "" {
 		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_could_not_be_resolved, packageName)

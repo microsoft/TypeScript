@@ -43,6 +43,7 @@ type ProgramOptions struct {
 	TypingsLocation             string
 	ProjectName                 string
 	Tracing                     *tracing.Tracing
+	CreateModuleResolver        func(options module.ResolverOptions) module.Resolver
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
@@ -301,14 +302,22 @@ func NewProgram(opts ProgramOptions) *Program {
 // only if the host cannot locate the file (e.g. it was deleted). Callers that manage
 // host-side parse caches must release this exact pointer when the old program could not be
 // reused, since it was acquired speculatively before that decision was made.
-func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
-	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool); reused {
+func (p *Program) UpdateProgram(
+	changedFilePath tspath.Path,
+	newHost CompilerHost,
+	createCheckerPool func(*Program) CheckerPool,
+	createModuleResolver func(module.ResolverOptions) module.Resolver,
+) (*Program, *ast.SourceFile, bool) {
+	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool, createModuleResolver); reused {
 		return result, newFile, true
 	} else {
 		newOpts := p.opts
 		newOpts.Host = newHost
 		if createCheckerPool != nil {
 			newOpts.CreateCheckerPool = createCheckerPool
+		}
+		if createModuleResolver != nil {
+			newOpts.CreateModuleResolver = createModuleResolver
 		}
 		return NewProgram(newOpts), newFile, false
 	}
@@ -320,13 +329,20 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 // file cannot be replaced in place. Unlike UpdateProgram, it never constructs a
 // full fallback program, so callers that build their own fallback (e.g. with a
 // different host) do not pay for a discarded program build.
-func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
+func (p *Program) ReuseProgram(
+	changedFilePath tspath.Path,
+	newHost CompilerHost,
+	createCheckerPool func(*Program) CheckerPool,
+	createModuleResolver func(module.ResolverOptions) module.Resolver,
+) (*Program, *ast.SourceFile, bool) {
 	newOpts := p.opts
 	newOpts.Host = newHost
 	if createCheckerPool != nil {
 		newOpts.CreateCheckerPool = createCheckerPool
 	}
-
+	if createModuleResolver != nil {
+		newOpts.CreateModuleResolver = createModuleResolver
+	}
 	oldFile := p.filesByPath[changedFilePath]
 	var newFile *ast.SourceFile
 	var oldSupplementalFiles []*ast.SourceFile
@@ -342,6 +358,7 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 		if err != nil {
 			return nil, nil, false
 		}
+
 		oldSupplementalFiles = oldFile.SupplementalSourceFiles()
 		newSupplementalFiles = files.Supplemental
 	} else {
@@ -633,6 +650,10 @@ func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, mod
 
 func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule] {
 	return p.resolvedModules
+}
+
+func (p *Program) ModuleResolutionError() error {
+	return p.moduleResolutionError
 }
 
 // GetPackagesMap returns a lazily-cached map of package names to whether they bundle types.
@@ -1064,7 +1085,11 @@ func (p *Program) verifyCompilerOptions() {
 		}
 
 		for _, file := range p.files {
-			if sourceFileMayBeEmitted(file, p, false, false) && !rootPaths.Has(file.Path()) {
+			rootPath := file.Path()
+			if canonical := file.CanonicalSourceFile(); canonical != nil {
+				rootPath = canonical.Path()
+			}
+			if sourceFileMayBeEmitted(file, p, false, false) && !rootPaths.Has(rootPath) {
 				p.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
 					kind: processingDiagnosticKindExplainingFileInclude,
 					data: &includeExplainingDiagnostic{
@@ -2301,11 +2326,6 @@ func (p *Program) GetSymlinkCache() *symlinks.KnownSymlinks {
 		}
 		return knownSymlinks
 	})
-}
-
-func (p *Program) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
-	resolved, _ := p.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
-	return resolved
 }
 
 func (p *Program) ForEachResolvedModule(callback func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.Path), file *ast.SourceFile) {
