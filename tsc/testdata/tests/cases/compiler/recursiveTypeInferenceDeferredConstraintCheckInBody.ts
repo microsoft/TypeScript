@@ -48,7 +48,8 @@ type TupleOut<T extends readonly $ZodType[]> = T extends readonly [infer H exten
 interface $ZodTupleInternals<T extends readonly $ZodType[]> extends $ZodTypeInternals { def: { type: "tuple"; items: T }; output: TupleOut<T>; input: TupleOut<T> }
 interface ZodTuple<T extends readonly $ZodType[]> extends ZodType<$ZodTupleInternals<T>> { items: T }
 declare function tuple<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
-declare function tuple(items: []): ZodTuple<[]>;
+declare function tuple2<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
+declare function tuple2(items: []): ZodTuple<[]>;
 
 // (1) The constraint check of `array`'s type argument mentions `Category` through `Writeable`, whose mapped
 // property for the accessor is what cycles.
@@ -56,15 +57,15 @@ const Category = object({ name: string(), get subcategories() { return array(Cat
 export const c1: output<typeof Category> = { name: "a", subcategories: [{ name: "b", subcategories: [] }] };
 export const c2: output<typeof Category> = { name: "a", subcategories: [{ name: 1, subcategories: [] }] }; // error
 
-// (2) An overloaded call inside the accessor: a re-entered call with several overloads cannot skip its check.
-const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
-export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
-export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
-
-// (3) A method whose parameter type is the output of `this`, chained onto the recursive reference.
+// (2) A method whose parameter type is the output of `this`, chained onto the recursive reference.
 const Tree = object({ name: string(), get children() { return array(Tree).default([]); } });
 export const t1: output<typeof Tree>["children"][0]["children"] = [{ name: "b", children: [] }];
 export const t2: output<typeof Tree>["children"][0]["children"] = [{ name: 1, children: [] }]; // error
+
+// (3) A tuple of recursive references.
+const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
+export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
+export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
 
 // (4) A violated constraint inside the accessor body is still reported, after the accessor has been checked.
 const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); } });
@@ -73,3 +74,6 @@ const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); }
 const Nested = object({ name: string(), get child() { return object({ inner: Nested, get deep() { return tuple([Nested, string()]); } }); } });
 export const n1: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = "x";
 export const n2: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = 1; // error
+
+// (6) An overloaded call inside the accessor does not defer, so it still resolves the accessor re-entrantly.
+const Pair2 = object({ name: string(), get pair() { return tuple2([Pair2, Pair2]); } }); // error

@@ -141,11 +141,15 @@ interface ZodTuple<T extends readonly $ZodType[]> extends ZodType<$ZodTupleInter
 >items : T
 
 declare function tuple<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
->tuple : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
+>tuple : <T extends readonly [$ZodType, ...$ZodType[]]>(items: T) => ZodTuple<T>
 >items : T
 
-declare function tuple(items: []): ZodTuple<[]>;
->tuple : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
+declare function tuple2<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
+>tuple2 : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
+>items : T
+
+declare function tuple2(items: []): ZodTuple<[]>;
+>tuple2 : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
 >items : []
 
 // (1) The constraint check of `array`'s type argument mentions `Category` through `Writeable`, whose mapped
@@ -191,33 +195,7 @@ export const c2: output<typeof Category> = { name: "a", subcategories: [{ name: 
 >subcategories : never[]
 >[] : never[]
 
-// (2) An overloaded call inside the accessor: a re-entered call with several overloads cannot skip its check.
-const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
->Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
->object({ name: string(), get pair() { return tuple([Pair, Pair]); } }) : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
->object : <T extends Shape>(shape: T) => ZodObject<Writeable<T>>
->{ name: string(), get pair() { return tuple([Pair, Pair]); } } : { name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]>; }
->name : ZodString
->string() : ZodString
->string : () => ZodString
->pair : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]>
->tuple([Pair, Pair]) : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]>
->tuple : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
->[Pair, Pair] : [ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]
->Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
->Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
-
-export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
->p1 : string
->Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
->"x" : "x"
-
-export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
->p2 : string
->Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
->1 : 1
-
-// (3) A method whose parameter type is the output of `this`, chained onto the recursive reference.
+// (2) A method whose parameter type is the output of `this`, chained onto the recursive reference.
 const Tree = object({ name: string(), get children() { return array(Tree).default([]); } });
 >Tree : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
 >object({ name: string(), get children() { return array(Tree).default([]); } }) : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
@@ -255,6 +233,32 @@ export const t2: output<typeof Tree>["children"][0]["children"] = [{ name: 1, ch
 >children : never[]
 >[] : never[]
 
+// (3) A tuple of recursive references.
+const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
+>Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
+>object({ name: string(), get pair() { return tuple([Pair, Pair]); } }) : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
+>object : <T extends Shape>(shape: T) => ZodObject<Writeable<T>>
+>{ name: string(), get pair() { return tuple([Pair, Pair]); } } : { name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]>; }
+>name : ZodString
+>string() : ZodString
+>string : () => ZodString
+>pair : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]>
+>tuple([Pair, Pair]) : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]>
+>tuple : <T extends readonly [$ZodType, ...$ZodType[]]>(items: T) => ZodTuple<T>
+>[Pair, Pair] : [ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>]
+>Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
+>Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
+
+export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
+>p1 : string
+>Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
+>"x" : "x"
+
+export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
+>p2 : string
+>Pair : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, ZodObject<Writeable<any>>]>; }>>
+>1 : 1
+
 // (4) A violated constraint inside the accessor body is still reported, after the accessor has been checked.
 const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); } });
 >Wrong : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>
@@ -266,7 +270,7 @@ const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); }
 >string : () => ZodString
 >pair : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]>
 >tuple([Wrong, 42]) : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]>
->tuple : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
+>tuple : <T extends readonly [$ZodType, ...$ZodType[]]>(items: T) => ZodTuple<T>
 >[Wrong, 42] : [ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]
 >Wrong : ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>
 >42 : 42
@@ -288,7 +292,7 @@ const Nested = object({ name: string(), get child() { return object({ inner: Nes
 >Nested : ZodObject<Writeable<{ name: ZodString; readonly child: ZodObject<Writeable<{ inner: ZodObject<Writeable<any>>; readonly deep: ZodTuple<[ZodObject<Writeable<any>>, ZodString]>; }>>; }>>
 >deep : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly child: ZodObject<Writeable<{ inner: ZodObject<Writeable<any>>; readonly deep: ZodTuple<[ZodObject<Writeable<any>>, ZodString]>; }>>; }>>, ZodString]>
 >tuple([Nested, string()]) : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly child: ZodObject<Writeable<{ inner: ZodObject<Writeable<any>>; readonly deep: ZodTuple<[ZodObject<Writeable<any>>, ZodString]>; }>>; }>>, ZodString]>
->tuple : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
+>tuple : <T extends readonly [$ZodType, ...$ZodType[]]>(items: T) => ZodTuple<T>
 >[Nested, string()] : [ZodObject<Writeable<{ name: ZodString; readonly child: ZodObject<Writeable<{ inner: ZodObject<Writeable<any>>; readonly deep: ZodTuple<[ZodObject<Writeable<any>>, ZodString]>; }>>; }>>, ZodString]
 >Nested : ZodObject<Writeable<{ name: ZodString; readonly child: ZodObject<Writeable<{ inner: ZodObject<Writeable<any>>; readonly deep: ZodTuple<[ZodObject<Writeable<any>>, ZodString]>; }>>; }>>
 >string() : ZodString
@@ -303,4 +307,20 @@ export const n2: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = 1
 >n2 : string
 >Nested : ZodObject<Writeable<{ name: ZodString; readonly child: ZodObject<Writeable<{ inner: ZodObject<Writeable<any>>; readonly deep: ZodTuple<[ZodObject<Writeable<any>>, ZodString]>; }>>; }>>
 >1 : 1
+
+// (6) An overloaded call inside the accessor does not defer, so it still resolves the accessor re-entrantly.
+const Pair2 = object({ name: string(), get pair() { return tuple2([Pair2, Pair2]); } }); // error
+>Pair2 : ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>
+>object({ name: string(), get pair() { return tuple2([Pair2, Pair2]); } }) : ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>
+>object : <T extends Shape>(shape: T) => ZodObject<Writeable<T>>
+>{ name: string(), get pair() { return tuple2([Pair2, Pair2]); } } : { name: ZodString; readonly pair: any; }
+>name : ZodString
+>string() : ZodString
+>string : () => ZodString
+>pair : any
+>tuple2([Pair2, Pair2]) : ZodTuple<[ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>]>
+>tuple2 : { <T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>; (items: []): ZodTuple<[]>; }
+>[Pair2, Pair2] : [ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>, ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>]
+>Pair2 : ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>
+>Pair2 : ZodObject<Writeable<{ name: ZodString; readonly pair: any; }>>
 

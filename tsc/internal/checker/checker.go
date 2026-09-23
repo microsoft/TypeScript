@@ -270,6 +270,7 @@ const (
 	InferenceFlagsAnyDefault             InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
 	InferenceFlagsSkippedGenericFunction InferenceFlags = 1 << 2 // A generic function was skipped during inference
 	InferenceFlagsNoConstraintChecks     InferenceFlags = 1 << 3
+	InferenceFlagsDeferAccessorChecks    InferenceFlags = 1 << 4 // Defer constraint checks that would resolve an accessor (see shouldDeferConstraintCheck)
 )
 
 // InferenceContext
@@ -2582,8 +2583,12 @@ func (c *Checker) hasUnresolvedAccessorProperty(t *Type) bool {
 
 // shouldDeferConstraintCheck reports whether the constraint check of an inferred type argument has to wait for the
 // accessors of an object literal: either the inferred type is such a literal, or the check would run while an
-// accessor's return type is being inferred from a body that mentions the literal through the inferred type.
-func (c *Checker) shouldDeferConstraintCheck(t *Type) bool {
+// accessor's return type is being inferred from a body that mentions the literal through the inferred type. Only a
+// call with a single candidate defers, since overload resolution depends on the outcome of the check.
+func (c *Checker) shouldDeferConstraintCheck(n *InferenceContext, t *Type) bool {
+	if n.flags&InferenceFlagsDeferAccessorChecks == 0 {
+		return false
+	}
 	return c.hasUnresolvedAccessorProperty(t) || c.accessorBodyDepth > 0 && c.containsUnresolvedAccessor(t, 0, make(map[*Type]struct{}))
 }
 
@@ -9356,6 +9361,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				// When we are recursively resolving a call with a single candidate, we skip constraints checks during
 				// type inference to avoid circularity errors. For example, see #64192.
 				inferenceFlags := core.IfElse(s.recursiveResolution && len(s.candidates) == 1, InferenceFlagsNoConstraintChecks, InferenceFlagsNone) |
+					core.IfElse(!s.recursiveResolution && len(s.candidates) == 1, InferenceFlagsDeferAccessorChecks, InferenceFlagsNone) |
 					core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone)
 				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, inferenceFlags /*flags*/, nil)
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
@@ -9403,7 +9409,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				continue
 			}
 		}
-		if inferenceContext != nil && !s.recursiveResolution {
+		if inferenceContext != nil {
 			c.queueDeferredConstraintChecks(s.node, inferenceContext)
 		}
 		s.candidates[candidateIndex] = checkCandidate

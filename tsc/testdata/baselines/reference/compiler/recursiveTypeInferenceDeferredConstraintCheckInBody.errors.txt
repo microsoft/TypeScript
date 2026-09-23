@@ -1,13 +1,15 @@
-recursiveTypeInferenceDeferredConstraintCheckInBody.ts(54,75): error TS2322: Type 'number' is not assignable to type 'string'.
-recursiveTypeInferenceDeferredConstraintCheckInBody.ts(59,14): error TS2322: Type 'number' is not assignable to type 'string'.
-recursiveTypeInferenceDeferredConstraintCheckInBody.ts(64,70): error TS2322: Type 'number' is not assignable to type 'string'.
-recursiveTypeInferenceDeferredConstraintCheckInBody.ts(67,60): error TS2345: Argument of type '[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]' is not assignable to parameter of type 'readonly [$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ...$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>[]]'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(55,75): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(60,70): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(65,14): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(68,60): error TS2345: Argument of type '[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]' is not assignable to parameter of type 'readonly [$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ...$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>[]]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type '$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>'.
-recursiveTypeInferenceDeferredConstraintCheckInBody.ts(72,14): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(73,14): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(76,44): error TS7023: 'pair' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(76,60): error TS2615: Type of property 'pair' circularly references itself in mapped type 'Writeable<{ name: ZodString; readonly pair: any; }>'.
 
 
-==== recursiveTypeInferenceDeferredConstraintCheckInBody.ts (5 errors) ====
+==== recursiveTypeInferenceDeferredConstraintCheckInBody.ts (7 errors) ====
     // A generic call inside an un-annotated accessor whose inferred type argument mentions the enclosing object literal.
     // The constraint check of that argument would instantiate the literal's inferred output type while the accessor is
     // still unresolved, so it is deferred until the accessors of the file have been checked. The declarations mirror
@@ -55,7 +57,8 @@ recursiveTypeInferenceDeferredConstraintCheckInBody.ts(72,14): error TS2322: Typ
     interface $ZodTupleInternals<T extends readonly $ZodType[]> extends $ZodTypeInternals { def: { type: "tuple"; items: T }; output: TupleOut<T>; input: TupleOut<T> }
     interface ZodTuple<T extends readonly $ZodType[]> extends ZodType<$ZodTupleInternals<T>> { items: T }
     declare function tuple<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
-    declare function tuple(items: []): ZodTuple<[]>;
+    declare function tuple2<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
+    declare function tuple2(items: []): ZodTuple<[]>;
     
     // (1) The constraint check of `array`'s type argument mentions `Category` through `Writeable`, whose mapped
     // property for the accessor is what cycles.
@@ -64,22 +67,22 @@ recursiveTypeInferenceDeferredConstraintCheckInBody.ts(72,14): error TS2322: Typ
     export const c2: output<typeof Category> = { name: "a", subcategories: [{ name: 1, subcategories: [] }] }; // error
                                                                               ~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 recursiveTypeInferenceDeferredConstraintCheckInBody.ts:52:27: The expected type comes from property 'name' which is declared here on type '{ name: string; subcategories: any[]; }'
+!!! related TS6500 recursiveTypeInferenceDeferredConstraintCheckInBody.ts:53:27: The expected type comes from property 'name' which is declared here on type '{ name: string; subcategories: any[]; }'
     
-    // (2) An overloaded call inside the accessor: a re-entered call with several overloads cannot skip its check.
-    const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
-    export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
-    export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
-                 ~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
-    
-    // (3) A method whose parameter type is the output of `this`, chained onto the recursive reference.
+    // (2) A method whose parameter type is the output of `this`, chained onto the recursive reference.
     const Tree = object({ name: string(), get children() { return array(Tree).default([]); } });
     export const t1: output<typeof Tree>["children"][0]["children"] = [{ name: "b", children: [] }];
     export const t2: output<typeof Tree>["children"][0]["children"] = [{ name: 1, children: [] }]; // error
                                                                          ~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 recursiveTypeInferenceDeferredConstraintCheckInBody.ts:62:23: The expected type comes from property 'name' which is declared here on type '{ name: string; children: any[]; }'
+!!! related TS6500 recursiveTypeInferenceDeferredConstraintCheckInBody.ts:58:23: The expected type comes from property 'name' which is declared here on type '{ name: string; children: any[]; }'
+    
+    // (3) A tuple of recursive references.
+    const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
+    export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
+    export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
+                 ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     
     // (4) A violated constraint inside the accessor body is still reported, after the accessor has been checked.
     const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); } });
@@ -94,4 +97,11 @@ recursiveTypeInferenceDeferredConstraintCheckInBody.ts(72,14): error TS2322: Typ
     export const n2: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = 1; // error
                  ~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    // (6) An overloaded call inside the accessor does not defer, so it still resolves the accessor re-entrantly.
+    const Pair2 = object({ name: string(), get pair() { return tuple2([Pair2, Pair2]); } }); // error
+                                               ~~~~
+!!! error TS7023: 'pair' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+                                                               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2615: Type of property 'pair' circularly references itself in mapped type 'Writeable<{ name: ZodString; readonly pair: any; }>'.
     

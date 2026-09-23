@@ -336,7 +336,7 @@ interface ZodTuple<T extends readonly $ZodType[]> extends ZodType<$ZodTupleInter
 >T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 19))
 
 declare function tuple<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
->tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101))
 >T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 23))
 >$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
 >$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
@@ -345,119 +345,140 @@ declare function tuple<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): 
 >ZodTuple : Symbol(ZodTuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 163))
 >T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 23))
 
-declare function tuple(items: []): ZodTuple<[]>;
->tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
->items : Symbol(items, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 23))
+declare function tuple2<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
+>tuple2 : Symbol(tuple2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 93))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 24))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>items : Symbol(items, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 70))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 24))
+>ZodTuple : Symbol(ZodTuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 163))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 24))
+
+declare function tuple2(items: []): ZodTuple<[]>;
+>tuple2 : Symbol(tuple2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 93))
+>items : Symbol(items, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 48, 24))
 >ZodTuple : Symbol(ZodTuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 163))
 
 // (1) The constraint check of `array`'s type argument mentions `Category` through `Writeable`, whose mapped
 // property for the accessor is what cycles.
 const Category = object({ name: string(), get subcategories() { return array(Category); } });
->Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 5))
 >object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 25))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 25))
 >string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
->subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 41))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 41))
 >array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 92))
->Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 5))
 
 export const c1: output<typeof Category> = { name: "a", subcategories: [{ name: "b", subcategories: [] }] };
->c1 : Symbol(c1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 12))
+>c1 : Symbol(c1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 12))
 >output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 44))
->subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 55))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 73))
->subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 84))
-
-export const c2: output<typeof Category> = { name: "a", subcategories: [{ name: 1, subcategories: [] }] }; // error
->c2 : Symbol(c2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 12))
->output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 5))
 >name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 44))
 >subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 55))
 >name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 73))
->subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 82))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 84))
 
-// (2) An overloaded call inside the accessor: a re-entered call with several overloads cannot skip its check.
-const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
->Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
->object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 21))
->string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
->pair : Symbol(pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 37))
->tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
->Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
->Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
-
-export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
->p1 : Symbol(p1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 12))
+export const c2: output<typeof Category> = { name: "a", subcategories: [{ name: 1, subcategories: [] }] }; // error
+>c2 : Symbol(c2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 54, 12))
 >output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 5))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 54, 44))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 54, 55))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 54, 73))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 54, 82))
 
-export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
->p2 : Symbol(p2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 58, 12))
->output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
-
-// (3) A method whose parameter type is the output of `this`, chained onto the recursive reference.
+// (2) A method whose parameter type is the output of `this`, chained onto the recursive reference.
 const Tree = object({ name: string(), get children() { return array(Tree).default([]); } });
->Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 5))
 >object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 21))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 21))
 >string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
->children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 37))
+>children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 37))
 >array(Tree).default : Symbol(ZodType.default, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 118), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 18, 60))
 >array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 92))
->Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 5))
 >default : Symbol(ZodType.default, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 118), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 18, 60))
 
 export const t1: output<typeof Tree>["children"][0]["children"] = [{ name: "b", children: [] }];
->t1 : Symbol(t1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 12))
+>t1 : Symbol(t1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 58, 12))
 >output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 68))
->children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 79))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 5))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 58, 68))
+>children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 58, 79))
 
 export const t2: output<typeof Tree>["children"][0]["children"] = [{ name: 1, children: [] }]; // error
->t2 : Symbol(t2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 63, 12))
+>t2 : Symbol(t2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 59, 12))
 >output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 63, 68))
->children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 63, 77))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 5))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 59, 68))
+>children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 59, 77))
+
+// (3) A tuple of recursive references.
+const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 21))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>pair : Symbol(pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 37))
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 5))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 5))
+
+export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
+>p1 : Symbol(p1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 63, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 5))
+
+export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
+>p2 : Symbol(p2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 64, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 5))
 
 // (4) A violated constraint inside the accessor body is still reported, after the accessor has been checked.
 const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); } });
->Wrong : Symbol(Wrong, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 5))
+>Wrong : Symbol(Wrong, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 67, 5))
 >object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 22))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 67, 22))
 >string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
->pair : Symbol(pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 38))
->tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
->Wrong : Symbol(Wrong, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 5))
+>pair : Symbol(pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 67, 38))
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101))
+>Wrong : Symbol(Wrong, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 67, 5))
 
 // (5) The literal is mentioned through a property of another literal.
 const Nested = object({ name: string(), get child() { return object({ inner: Nested, get deep() { return tuple([Nested, string()]); } }); } });
->Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 5))
 >object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
->name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 23))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 23))
 >string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
->child : Symbol(child, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 39))
+>child : Symbol(child, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 39))
 >object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
->inner : Symbol(inner, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 69))
->Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
->deep : Symbol(deep, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 84))
->tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
->Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+>inner : Symbol(inner, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 69))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 5))
+>deep : Symbol(deep, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 84))
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 5))
 >string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
 
 export const n1: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = "x";
->n1 : Symbol(n1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 12))
+>n1 : Symbol(n1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 71, 12))
 >output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 5))
 
 export const n2: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = 1; // error
->n2 : Symbol(n2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 71, 12))
+>n2 : Symbol(n2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 72, 12))
 >output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
->Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 5))
+
+// (6) An overloaded call inside the accessor does not defer, so it still resolves the accessor re-entrantly.
+const Pair2 = object({ name: string(), get pair() { return tuple2([Pair2, Pair2]); } }); // error
+>Pair2 : Symbol(Pair2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 75, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 75, 22))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>pair : Symbol(pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 75, 38))
+>tuple2 : Symbol(tuple2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 93))
+>Pair2 : Symbol(Pair2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 75, 5))
+>Pair2 : Symbol(Pair2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 75, 5))
 

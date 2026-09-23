@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/recursiveTypeInferenceDeferredConstraintCheck.ts] ////
 
 === recursiveTypeInferenceDeferredConstraintCheck.ts ===
-// When an inferred type argument is an object literal with un-annotated accessors, its constraint check is deferred
-// until the accessors have been checked. The accessor bodies are therefore never resolved while the enclosing
-// declaration is unresolved, so no re-entrant call resolution takes place for this pattern.
+// When the inferred type argument of a single-candidate call is an object literal with un-annotated accessors, its
+// constraint check is deferred until the accessors have been checked. The accessor bodies are therefore never
+// resolved while the enclosing declaration is unresolved, so no re-entrant call resolution takes place.
 
 interface Schema<O> { readonly out: O }
 >out : O
@@ -21,20 +21,15 @@ declare function array<T extends Schema<any>>(element: T): Schema<T["out"][]>;
 >array : <T extends Schema<any>>(element: T) => Schema<T["out"][]>
 >element : T
 
-// (1) An overloaded builder: previously only a single-candidate re-entered call could skip its constraint check.
 declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
->object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S_1 extends Shape>(name: string, shape: S_1): Schema<Infer<S_1>>; }
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
 >shape : S
 
-declare function object<S extends Shape>(name: string, shape: S): Schema<Infer<S>>;
->object : { <S_1 extends Shape>(shape: S_1): Schema<Infer<S_1>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
->name : string
->shape : S
-
+// (1) The outer call's constraint check is deferred.
 const Category = object({
 >Category : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>>
 >object({  name: str,  get subcategories() { return array(Category); },}) : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>>
->object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
 >{  name: str,  get subcategories() { return array(Category); },} : { name: Schema<string>; readonly subcategories: Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>[]>; }
 
   name: str,
@@ -60,7 +55,7 @@ type Category = typeof Category;
 const Bad = object({
 >Bad : Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>>
 >object({  name: 42,  get subcategories() { return array(Bad); },}) : Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>>
->object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
 >{  name: 42,  get subcategories() { return array(Bad); },} : { name: number; readonly subcategories: Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>[]>; }
 
   name: 42,
@@ -75,8 +70,7 @@ const Bad = object({
 
 });
 
-// (3) A pure return type inference stays filtered by its constraint: with no re-entrant resolution, the leaked
-// unfiltered inference reported in the review of #64311 no longer occurs.
+// (3) A pure return type inference stays filtered by its constraint, since no re-entrant resolution takes place.
 type Lookup = { x: 1; dflt: 2 };
 >Lookup : Lookup
 >x : 1
@@ -137,7 +131,7 @@ interface AnnotatedOut { name: string; subcategories: AnnotatedOut[] }
 const Annotated = object({
 >Annotated : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>>
 >object({  name: str,  get subcategories(): Schema<AnnotatedOut[]> { return array(Annotated); },}) : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>>
->object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
 >{  name: str,  get subcategories(): Schema<AnnotatedOut[]> { return array(Annotated); },} : { name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }
 
   name: str,
@@ -157,45 +151,50 @@ const a: AnnotatedOut = Annotated.out;
 >Annotated : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>>
 >out : Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>
 
-// (5) A call inside the accessor body whose inferred type argument mentions the literal: its constraint check would
-// instantiate the literal's mapped output type while the accessor is unresolved, so it is deferred as well.
-type Output<S extends Shape> = { [K in keyof S as S[K] extends { opt: true } ? never : K]: S[K]["out"] } & { [K in keyof S as S[K] extends { opt: true } ? K : never]?: S[K]["out"] };
->Output : Output<S>
->opt : true
->true : true
->opt : true
->true : true
+// (5) Overload resolution still depends on the constraint check, so an overloaded call does not defer.
+declare function pick<T extends { kind: "a" }>(x: T): "generic";
+>pick : { <T extends { kind: "a"; }>(x: T): "generic"; (x: object): "fallback"; }
+>kind : "a"
+>x : T
 
-interface Obj<S extends Shape> extends Schema<{ [K in keyof Output<S>]: Output<S>[K] }> { shape: S }
+declare function pick(x: object): "fallback";
+>pick : { <T extends { kind: "a"; }>(x: T): "generic"; (x: object): "fallback"; }
+>x : object
+
+const picked: "fallback" = pick({ kind: "b", get self() { return 1; } });
+>picked : "fallback"
+>pick({ kind: "b", get self() { return 1; } }) : "fallback"
+>pick : { <T extends { kind: "a"; }>(x: T): "generic"; (x: object): "fallback"; }
+>{ kind: "b", get self() { return 1; } } : { kind: string; readonly self: number; }
+>kind : string
+>"b" : "b"
+>self : number
+>1 : 1
+
+declare function object2<S extends Shape>(shape: S): Schema<Infer<S>>;
+>object2 : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S_1 extends Shape>(name: string, shape: S_1): Schema<Infer<S_1>>; }
 >shape : S
 
-declare function obj<S extends Shape>(shape: S): Obj<S>;
->obj : <S extends Shape>(shape: S) => Obj<S>
+declare function object2<S extends Shape>(name: string, shape: S): Schema<Infer<S>>;
+>object2 : { <S_1 extends Shape>(shape: S_1): Schema<Infer<S_1>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>name : string
 >shape : S
 
-declare function withDefault<T extends Schema<any>>(schema: T, value: T["out"]): T;
->withDefault : <T extends Schema<any>>(schema: T, value: T["out"]) => T
->schema : T
->value : T["out"]
-
-export const Tree = obj({
->Tree : Obj<{ name: Schema<string>; readonly children: Schema<unknown[]>; }>
->obj({  name: str,  get children() { return withDefault(array(Tree), []); },}) : Obj<{ name: Schema<string>; readonly children: Schema<unknown[]>; }>
->obj : <S extends Shape>(shape: S) => Obj<S>
->{  name: str,  get children() { return withDefault(array(Tree), []); },} : { name: Schema<string>; readonly children: Schema<unknown[]>; }
+const Overloaded = object2({
+>Overloaded : any
+>object2({  name: str,  get subcategories() { return array(Overloaded); }, // error}) : Schema<Infer<{ name: Schema<string>; readonly subcategories: any; }>>
+>object2 : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>{  name: str,  get subcategories() { return array(Overloaded); }, // error} : { name: Schema<string>; readonly subcategories: any; }
 
   name: str,
 >name : Schema<string>
 >str : Schema<string>
 
-  get children() { return withDefault(array(Tree), []); },
->children : Schema<unknown[]>
->withDefault(array(Tree), []) : Schema<unknown[]>
->withDefault : <T extends Schema<any>>(schema: T, value: T["out"]) => T
->array(Tree) : Schema<unknown[]>
+  get subcategories() { return array(Overloaded); }, // error
+>subcategories : any
+>array(Overloaded) : Schema<any[]>
 >array : <T extends Schema<any>>(element: T) => Schema<T["out"][]>
->Tree : Obj<{ name: Schema<string>; readonly children: Schema<unknown[]>; }>
->[] : never[]
+>Overloaded : any
 
 });
 
