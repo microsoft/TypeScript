@@ -21,6 +21,12 @@ parameters:
   - name: tokenVariable
     type: string
     default: 'GH_TOKEN'
+  - name: condition
+    type: string
+    default: succeeded()
+  - name: revokeCondition
+    type: string
+    default: always()
   - name: insertSteps
     type: stepList
     default: []
@@ -28,6 +34,7 @@ parameters:
 steps:
   - task: AzureCLI@2
     displayName: Create GitHub App token
+    condition: ${{ parameters.condition }}
     inputs:
       azureSubscription: ${{ parameters.azureSubscription }}
       scriptType: pscore
@@ -605,7 +612,7 @@ steps:
 
   - task: PowerShell@2
     displayName: Revoke GitHub App token
-    condition: always()
+    condition: ${{ parameters.revokeCondition }}
     continueOnError: true
     inputs:
       targetType: inline
