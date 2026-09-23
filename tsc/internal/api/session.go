@@ -497,6 +497,13 @@ func (s *Session) fileSystem() vfs.FS {
 	return s.snapshotHost.FS()
 }
 
+func (s *Session) defaultLibraryPath() string {
+	if s.projectSession != nil {
+		return s.projectSession.DefaultLibraryPath()
+	}
+	return s.snapshotHost.DefaultLibraryPath()
+}
+
 func (s *Session) useCaseSensitiveFileNames() bool {
 	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
 }
@@ -1574,10 +1581,10 @@ func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *Cre
 func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
 	currentDirectory := params.HostOptions.Cwd
 	if currentDirectory == "" {
-		currentDirectory = s.projectSession.GetCurrentDirectory()
+		currentDirectory = s.currentDirectory()
 	}
 	return &apiBuildSystem{
-		session:          s.projectSession,
+		session:          s,
 		currentDirectory: currentDirectory,
 		start:            time.Now(),
 	}
@@ -1643,16 +1650,17 @@ func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildP
 	}, nil
 }
 
+// Wrapper for the API session for build orchestrator
 type apiBuildSystem struct {
-	session          *project.Session
+	session          *Session
 	currentDirectory string
 	start            time.Time
 }
 
 func (s *apiBuildSystem) Writer() io.Writer           { return io.Discard }
 func (s *apiBuildSystem) ErrorWriter() io.Writer      { return io.Discard }
-func (s *apiBuildSystem) FS() vfs.FS                  { return s.session.FS() }
-func (s *apiBuildSystem) DefaultLibraryPath() string  { return s.session.DefaultLibraryPath() }
+func (s *apiBuildSystem) FS() vfs.FS                  { return s.session.fileSystem() }
+func (s *apiBuildSystem) DefaultLibraryPath() string  { return s.session.defaultLibraryPath() }
 func (s *apiBuildSystem) GetCurrentDirectory() string { return s.currentDirectory }
 func (s *apiBuildSystem) WriteOutputIsTTY() bool      { return false }
 func (s *apiBuildSystem) GetWidthOfTerminal() int     { return 0 }
