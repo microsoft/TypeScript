@@ -2325,13 +2325,7 @@ export class Checker {
     }
 
     async getIndexTypeOfType(type: Type, kind: IndexKind): Promise<Type | undefined> {
-        const data = await this.client.apiRequest("getIndexTypeOfTypeByKind", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            type: type.id,
-            kind,
-        });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return kind === IndexKind.String ? type.getStringIndexType() : type.getNumberIndexType();
     }
 
     async getTypeOfPropertyOfType(type: Type, propertyName: string): Promise<Type | undefined> {
@@ -2847,6 +2841,7 @@ class TypeObject implements Type {
     private constructSignatures: readonly Signature[] | false;
     private indexInfos: readonly IndexInfo[] | false;
     private baseTypes: readonly Type[] | false;
+    private types: readonly Type[] | false;
     private stringIndexType: Type | undefined | false;
     private numberIndexType: Type | undefined | false;
 
@@ -2925,6 +2920,7 @@ class TypeObject implements Type {
         this.constructSignatures = false;
         this.indexInfos = false;
         this.baseTypes = false;
+        this.types = false;
         this.stringIndexType = false;
         this.numberIndexType = false;
     }
@@ -3037,7 +3033,10 @@ class TypeObject implements Type {
         if (!(this.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
             return undefined;
         }
-        return this.objectRegistry.fetchTypes(this, "getTypesOfType");
+        if (this.types === false) {
+            this.types = await this.objectRegistry.fetchTypes(this, "getTypesOfType");
+        }
+        return this.types;
     }
 
     async getTypeParameters(): Promise<readonly TypeParameter[]> {

@@ -4929,22 +4929,10 @@ export class Checker {
             owner,
             "getIndexTypeOfType",
             function (type: Type, kind: IndexKind): Type | undefined {
-                const data = owner.client.apiRequest("getIndexTypeOfTypeByKind", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    type: type.id,
-                    kind,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+                return kind === IndexKind.String ? type.getStringIndexType() : type.getNumberIndexType();
             },
             function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getIndexTypeOfTypeByKind", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    type: type.id,
-                    kind,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+                return kind === IndexKind.String ? (yield* type.getStringIndexType.gen()) : (yield* type.getNumberIndexType.gen());
             },
         );
     }
@@ -6059,6 +6047,7 @@ class TypeObject implements Type {
     private constructSignatures: readonly Signature[] | false;
     private indexInfos: readonly IndexInfo[] | false;
     private baseTypes: readonly Type[] | false;
+    private types: readonly Type[] | false;
     private stringIndexType: Type | undefined | false;
     private numberIndexType: Type | undefined | false;
 
@@ -6137,6 +6126,7 @@ class TypeObject implements Type {
         this.constructSignatures = false;
         this.indexInfos = false;
         this.baseTypes = false;
+        this.types = false;
         this.stringIndexType = false;
         this.numberIndexType = false;
     }
@@ -6520,7 +6510,10 @@ class TypeObject implements Type {
                 if (!(owner.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
                     return undefined;
                 }
-                return owner.objectRegistry.fetchTypes(owner, "getTypesOfType");
+                if (owner.types === false) {
+                    owner.types = owner.objectRegistry.fetchTypes(owner, "getTypesOfType");
+                }
+                return owner.types;
             },
             function* (): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]> {
                 // Only union, intersection, and template literal types have constituent
@@ -6529,7 +6522,10 @@ class TypeObject implements Type {
                 if (!(owner.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
                     return undefined;
                 }
-                return yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypesOfType");
+                if (owner.types === false) {
+                    owner.types = yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypesOfType");
+                }
+                return owner.types;
             },
         );
     }

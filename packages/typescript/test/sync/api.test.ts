@@ -2641,6 +2641,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         const union = type as UnionOrIntersectionType;
         const types = union.getTypes();
         assert.ok(types.length >= 2);
+        assert.strictEqual(union.getTypes(), types);
         assert.equal(type.isUnionType(), true);
         assert.equal(type.isIntersectionType(), false);
     });
