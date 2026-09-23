@@ -1074,7 +1074,11 @@ func (p *Program) verifyCompilerOptions() {
 		}
 
 		for _, file := range p.files {
-			if sourceFileMayBeEmitted(file, p, false, false) && !rootPaths.Has(file.Path()) {
+			rootPath := file.Path()
+			if canonical := file.CanonicalSourceFile(); canonical != nil {
+				rootPath = canonical.Path()
+			}
+			if sourceFileMayBeEmitted(file, p, false, false) && !rootPaths.Has(rootPath) {
 				p.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
 					kind: processingDiagnosticKindExplainingFileInclude,
 					data: &includeExplainingDiagnostic{
