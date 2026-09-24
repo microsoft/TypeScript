@@ -694,6 +694,10 @@ func (r *resolutionState) loadModuleFromExportsOrImports(
 	scope *packagejson.InfoCacheEntry,
 	isImports bool,
 ) *resolved {
+	if lookupTable == nil {
+		return continueSearching()
+	}
+
 	if !strings.HasSuffix(moduleName, "/") && !strings.Contains(moduleName, "*") {
 		if target, ok := lookupTable.Get(moduleName); ok {
 			return r.loadModuleFromTargetExportOrImport(extensions, moduleName, scope, isImports, target, "", false /*isPattern*/, moduleName)
