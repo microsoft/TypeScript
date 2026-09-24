@@ -1,11 +1,26 @@
 package tsctests
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strconv"
 	"strings"
+	"sync/atomic"
 	"testing"
+	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
 
 func TestWatch(t *testing.T) {
@@ -703,5 +718,852 @@ func TestTscNoEmitWatch(t *testing.T) {
 
 	for _, test := range testCases {
 		test.run(t, "noEmit")
+	}
+}
+
+type watchComparerFailureFS struct {
+	vfs.FS
+	err   error
+	calls int
+}
+
+func (f *watchComparerFailureFS) WatchPathComparer(string) (fswatch.PathComparer, error) {
+	f.calls++
+	return fswatch.PathComparer{}, f.err
+}
+
+type watchComparerFailureSystem struct {
+	*TestSys
+	filesystem *watchComparerFailureFS
+}
+
+func (s *watchComparerFailureSystem) FS() vfs.FS { return s.filesystem }
+
+func TestWatchComparerFailureRecovery(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(fmt.Sprintf("build=%v", build), func(t *testing.T) {
+			t.Parallel()
+			const root = "/home/src/workspaces/project"
+			base := newTestSys(&tscInput{files: FileMap{
+				root + "/tsconfig.json": `{"compilerOptions":{"noEmit":true,"incremental":true},"files":["main.ts"]}`,
+				root + "/main.ts":       `const value: number = 1;`,
+			}}, false)
+			filesystem := &watchComparerFailureFS{FS: base.FS(), err: os.ErrPermission}
+			sys := &watchComparerFailureSystem{TestSys: base, filesystem: filesystem}
+			args := []string{"--watch"}
+			if build {
+				args = []string{"--build", "--watch"}
+			}
+			result := execute.CommandLine(context.Background(), sys, args, sys)
+			assert.Assert(t, result.Watcher != nil)
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), os.ErrPermission.Error()), base.currentWrite.String())
+			assert.Assert(t, base.mockWatchBackend.HasWatches(), "comparer failure must not prevent watch installation")
+
+			for _, step := range []struct {
+				text string
+				err  error
+				want string
+			}{
+				{`const value: number = "changed";`, os.ErrPermission, "TS2322"},
+				{`const value: number = 2;`, nil, "Found 0 errors"},
+				{`const value: number = "changed again";`, nil, "TS2322"},
+			} {
+				base.currentWrite.Reset()
+				calls := filesystem.calls
+				retry := filesystem.err != nil
+				filesystem.err = step.err
+				base.writeFileNoError(root+"/main.ts", step.text)
+				base.mockWatchBackend.SendEvents([]fswatch.Event{{Path: root + "/main.ts", Kind: fswatch.EventUpdate}})
+				result.Watcher.DoCycle()
+				output := base.currentWrite.String()
+				assert.Assert(t, strings.Contains(output, step.want), output)
+				if step.err != nil {
+					assert.Assert(t, strings.Contains(output, step.err.Error()), output)
+				} else {
+					assert.Assert(t, !strings.Contains(output, os.ErrPermission.Error()), output)
+				}
+				if retry {
+					assert.Assert(t, filesystem.calls > calls, "retry the failed alias index")
+				}
+			}
+		})
+	}
+}
+
+func TestWatchDirectoryOnlyWildcardChanges(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(fmt.Sprintf("build=%v", build), func(t *testing.T) {
+			t.Parallel()
+			const root = "/home/src/workspaces/project"
+			sys := newTestSys(&tscInput{files: FileMap{
+				root + "/tsconfig.json": `{"compilerOptions":{"noEmit":true,"incremental":true},"files":["main.ts"],"include":["src/**/*.ts"]}`,
+				root + "/main.ts":       `export {};`,
+				root + "/src/.keep":     "",
+			}}, false)
+			args := []string{"--watch"}
+			if build {
+				args = []string{"--build", "--watch"}
+			}
+			result := execute.CommandLine(context.Background(), sys, args, sys)
+			assert.Assert(t, result.Watcher != nil)
+			assert.Assert(t, strings.Contains(sys.currentWrite.String(), "Found 0 errors"), sys.currentWrite.String())
+			for _, remove := range []bool{false, true} {
+				sys.currentWrite.Reset()
+				want := "TS2322"
+				if remove {
+					sys.removeNoError(root + "/src/new.ts")
+					want = "Found 0 errors"
+				} else {
+					sys.writeFileNoError(root+"/src/new.ts", `export const value: number = "new";`)
+				}
+				sys.mockWatchBackend.SendEvents([]fswatch.Event{{Path: root + "/src", Kind: fswatch.EventUpdate}})
+				result.Watcher.DoCycle()
+				assert.Assert(t, strings.Contains(sys.currentWrite.String(), want), sys.currentWrite.String())
+			}
+		})
+	}
+}
+
+type aliasWatchSystem struct {
+	*TestSys
+}
+
+func (s *aliasWatchSystem) FS() vfs.FS                     { return osvfs.FS() }
+func (s *aliasWatchSystem) Now() time.Time                 { return time.Now() }
+func (s *aliasWatchSystem) OnProgram(*incremental.Program) {}
+func (s *aliasWatchSystem) OnEmittedFiles(*compiler.EmitResult, *collections.SyncMap[tspath.Path, time.Time]) {
+}
+
+var aliasWatchDirectoryID atomic.Uint64
+
+func aliasWatchDirectory(t *testing.T) string {
+	t.Helper()
+	dir, err := filepath.Abs(fmt.Sprintf(".watch-alias-%d-%d", os.Getpid(), aliasWatchDirectoryID.Add(1)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = os.RemoveAll(dir) })
+	return filepath.ToSlash(dir)
+}
+
+func writeAliasWatchFile(t *testing.T, name, text string) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(name, []byte(text), 0o644); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func sendAliasWatchEvent(t *testing.T, backend *MockWatchBackend, event fswatch.Event) {
+	t.Helper()
+	for _, watch := range backend.Dirs {
+		if watch.Closed || !osvfs.FS().DirectoryExists(watch.Path) {
+			continue
+		}
+		comparer, err := fswatch.PathComparerForPath(watch.Path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		opts := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: osvfs.FS().UseCaseSensitiveFileNames()}
+		_, covered := comparer.Rebase(event.Path, watch.Path, watch.Path)
+		if !covered && !tspath.ContainsPath(watch.Path, event.Path, opts) {
+			continue
+		}
+		parent := filepath.ToSlash(filepath.Dir(event.Path))
+		if !watch.Recursive && comparer.Key(parent) != comparer.Key(watch.Path) &&
+			tspath.GetCanonicalFileName(parent, opts.UseCaseSensitiveFileNames) != tspath.GetCanonicalFileName(watch.Path, opts.UseCaseSensitiveFileNames) {
+			continue
+		}
+		watch.Callback([]fswatch.Event{event}, nil)
+		return
+	}
+	t.Fatalf("no covering watch for %q", event.Path)
+}
+
+func TestWatchRealpathAliases(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, shape := range []string{"file", "directory", "delete-directory", "delete-file-target-directory", "retarget-file", "retarget-directory"} {
+			t.Run(fmt.Sprintf("build=%v/%s", build, shape), func(t *testing.T) {
+				t.Parallel()
+				root := aliasWatchDirectory(t)
+				dependency := root + "/physical/value.ts"
+				writeAliasWatchFile(t, dependency, "export const value = 1;")
+				target, link := root+"/physical", root+"/linked"
+				imported := "./linked/value"
+				if shape == "file" || shape == "delete-file-target-directory" || shape == "retarget-file" {
+					target, link = dependency, root+"/linked.ts"
+					imported = "./linked"
+				}
+				if err := os.Symlink(target, link); err != nil {
+					t.Skipf("symlinks unavailable: %v", err)
+				}
+				writeAliasWatchFile(t, root+"/main.ts", fmt.Sprintf(`import {value} from %q; const x: number = value;`, imported))
+				writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+				writeAliasWatchFile(t, root+"/tsconfig.json", fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"noEmit":true,"preserveSymlinks":true,"incremental":%v},"files":["main.ts"],"include":[]}`, build))
+				base := newTestSys(&tscInput{files: FileMap{}, cwd: root}, false)
+				base.defaultLibraryPath = root
+				base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+				base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+				sys := &aliasWatchSystem{TestSys: base}
+				args := []string{"--watch", "--project", root + "/tsconfig.json"}
+				if build {
+					args = []string{"--build", "--watch", root + "/tsconfig.json"}
+				}
+				result := execute.CommandLine(context.Background(), sys, args, sys)
+				if result.Watcher == nil || !strings.Contains(base.currentWrite.String(), "Found 0 errors") {
+					t.Fatalf("initial compilation failed: %s", base.currentWrite.String())
+				}
+				originalInfo, statErr := os.Stat(dependency)
+				if statErr != nil {
+					t.Fatal(statErr)
+				}
+				base.currentWrite.Reset()
+				writeAliasWatchFile(t, dependency, `export const value = "changed";`)
+				if build && (shape == "file" || shape == "directory") {
+					buildInfo, err := os.Stat(root + "/tsconfig.tsbuildinfo")
+					if err != nil {
+						t.Fatal(err)
+					}
+					// Build mode requires a newer input timestamp. Consecutive writes
+					// can share a filesystem timestamp even after compilation completes.
+					modified := buildInfo.ModTime().Add(time.Second)
+					assert.NilError(t, os.Chtimes(dependency, modified, modified))
+				}
+				event := fswatch.Event{Path: dependency, Kind: fswatch.EventUpdate}
+				want := "TS2322"
+				if strings.HasPrefix(shape, "retarget-") {
+					dependency = root + "/replacement/value.ts"
+					writeAliasWatchFile(t, dependency, `export const value = "retargeted";`)
+					if err := os.Chtimes(dependency, originalInfo.ModTime(), originalInfo.ModTime()); err != nil {
+						t.Fatal(err)
+					}
+					assertTarget := root + "/replacement"
+					if shape == "retarget-file" {
+						assertTarget = dependency
+					}
+					if err := os.Remove(link); err != nil {
+						t.Fatal(err)
+					}
+					if err := os.Symlink(assertTarget, link); err != nil {
+						t.Fatal(err)
+					}
+					event.Path = link
+				}
+				if strings.HasPrefix(shape, "delete-") {
+					event = fswatch.Event{Path: root + "/physical", Kind: fswatch.EventDelete}
+					if err := os.RemoveAll(event.Path); err != nil {
+						t.Fatal(err)
+					}
+					want = "TS2307"
+				}
+				sendAliasWatchEvent(t, base.mockWatchBackend, event)
+				result.Watcher.DoCycle()
+				if !strings.Contains(base.currentWrite.String(), want) {
+					t.Fatalf("watch retained stale symlink dependency: %s", base.currentWrite.String())
+				}
+				if strings.HasPrefix(shape, "retarget-") {
+					base.currentWrite.Reset()
+					writeAliasWatchFile(t, dependency, `export const value = 2;`)
+					sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: dependency, Kind: fswatch.EventUpdate})
+					result.Watcher.DoCycle()
+					if !strings.Contains(base.currentWrite.String(), "Found 0 errors") {
+						t.Fatalf("watch retained old symlink target: %s", base.currentWrite.String())
+					}
+				}
+			})
+		}
+	}
+}
+
+func TestWatchRootFileSymlink(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, incremental := range []bool{false, true} {
+			t.Run(fmt.Sprintf("build=%v/incremental=%v", build, incremental), func(t *testing.T) {
+				t.Parallel()
+				root, target := aliasWatchDirectory(t), aliasWatchDirectory(t)
+				dependency := target + "/value.ts"
+				writeAliasWatchFile(t, target+"/package.json", `{"type":"commonjs"}`)
+				writeAliasWatchFile(t, dependency, "export const value: number = 1;")
+				if err := os.Symlink(dependency, root+"/link.ts"); err != nil {
+					t.Skipf("symlinks unavailable: %v", err)
+				}
+				writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+				options := ""
+				if incremental {
+					options = `,"incremental":true`
+				}
+				writeAliasWatchFile(t, root+"/tsconfig.json", fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"types":[],"module":"node16","preserveSymlinks":true,"noEmit":true%s},"files":["link.ts"],"include":[]}`, options))
+				base := newTestSys(&tscInput{files: FileMap{}, cwd: root}, false)
+				base.defaultLibraryPath = root
+				base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+				base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+				sys := &aliasWatchSystem{TestSys: base}
+				args := []string{"--watch", "--project", root + "/tsconfig.json"}
+				if build {
+					args = []string{"--build", "--watch", root + "/tsconfig.json"}
+				}
+				result := execute.CommandLine(context.Background(), sys, args, sys)
+				assert.Assert(t, result.Watcher != nil)
+				assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+				base.currentWrite.Reset()
+				writeAliasWatchFile(t, dependency, `export const value: number = "changed";`)
+				if build {
+					buildInfo, err := os.Stat(root + "/tsconfig.tsbuildinfo")
+					assert.NilError(t, err)
+					modified := buildInfo.ModTime().Add(time.Second)
+					assert.NilError(t, os.Chtimes(dependency, modified, modified))
+				}
+				base.mockWatchBackend.SendEvents([]fswatch.Event{{Path: dependency, Kind: fswatch.EventUpdate}})
+				result.Watcher.DoCycle()
+				assert.Assert(t, strings.Contains(base.currentWrite.String(), "TS2322"), "physical target edit was missed: %s", base.currentWrite.String())
+			})
+		}
+	}
+}
+
+func TestWatchNestedSymlinkRetarget(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(fmt.Sprintf("build=%v", build), func(t *testing.T) {
+			t.Parallel()
+			root, packages := aliasWatchDirectory(t), aliasWatchDirectory(t)
+			for _, name := range []string{"one", "two"} {
+				writeAliasWatchFile(t, packages+"/"+name+"/package.json", `{"type":"commonjs"}`)
+				writeAliasWatchFile(t, packages+"/"+name+"/value.ts", "export const value: number = 1;")
+			}
+			writeAliasWatchFile(t, packages+"/two/value.ts", `export const value: number = "changed";`)
+			info, err := os.Stat(packages + "/one/value.ts")
+			assert.NilError(t, err)
+			assert.NilError(t, os.Chtimes(packages+"/two/value.ts", info.ModTime(), info.ModTime()))
+			writeAliasWatchFile(t, root+"/links/.keep", "")
+			link := root + "/links/pkg"
+			if err := os.Symlink(packages+"/one", link); err != nil {
+				t.Skipf("symlinks unavailable: %v", err)
+			}
+			writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+			writeAliasWatchFile(t, root+"/tsconfig.json", `{"compilerOptions":{"lib":["es5"],"types":[],"module":"node16","preserveSymlinks":true,"noEmit":true,"incremental":true},"files":["links/pkg/value.ts"],"include":[]}`)
+			base := newTestSys(&tscInput{files: FileMap{}, cwd: root}, false)
+			base.defaultLibraryPath = root
+			base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+			base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+			sys := &aliasWatchSystem{TestSys: base}
+			args := []string{"--watch", "--project", root + "/tsconfig.json"}
+			if build {
+				args = []string{"--build", "--watch", root + "/tsconfig.json"}
+			}
+			result := execute.CommandLine(context.Background(), sys, args, sys)
+			assert.Assert(t, result.Watcher != nil)
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+			base.currentWrite.Reset()
+			assert.NilError(t, os.Remove(link))
+			assert.NilError(t, os.Symlink(packages+"/two", link))
+			base.mockWatchBackend.SendEvents([]fswatch.Event{{Path: link, Kind: fswatch.EventUpdate}})
+			result.Watcher.DoCycle()
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "TS2322"), "nested symlink retarget was missed: %s", base.currentWrite.String())
+		})
+	}
+}
+
+func TestWatchSymlinkedCurrentDirectory(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(fmt.Sprintf("build=%v", build), func(t *testing.T) {
+			t.Parallel()
+			root := aliasWatchDirectory(t)
+			physical, logical := root+"/physical", root+"/linked"
+			config := func(strict bool) string {
+				return fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"strict":%v,"noEmit":true},"include":["*.ts"]}`, strict)
+			}
+			writeAliasWatchFile(t, physical+"/a.ts", "export const a: number = 1;")
+			writeAliasWatchFile(t, physical+"/lib.es5.d.ts", tscDefaultLibContent)
+			writeAliasWatchFile(t, physical+"/tsconfig.json", config(true))
+			if err := os.Symlink(physical, logical); err != nil {
+				t.Skipf("symlinks unavailable: %v", err)
+			}
+			base := newTestSys(&tscInput{files: FileMap{}, cwd: logical}, false)
+			base.defaultLibraryPath = logical
+			base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+			base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+			sys := &aliasWatchSystem{TestSys: base}
+			args := []string{"--watch"}
+			if build {
+				args = []string{"--build", "--watch"}
+			}
+			result := execute.CommandLine(context.Background(), sys, args, sys)
+			assert.Assert(t, result.Watcher != nil)
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+
+			for _, step := range []struct {
+				name, file, text, want string
+			}{
+				{"edit", "a.ts", `export const a: number = "x";`, "TS2322"},
+				{"fix", "a.ts", "export const a: number = 1;", "Found 0 errors"},
+				{"create", "b.ts", `export const b: number = "x";`, "TS2322"},
+				{"delete", "b.ts", "", "Found 0 errors"},
+				{"strict error", "a.ts", "export const a: number = null;", "TS2322"},
+				{"disable strict", "tsconfig.json", config(false), "Found 0 errors"},
+				{"enable strict", "tsconfig.json", config(true), "TS2322"},
+				{"fix strict error", "a.ts", "export const a: number = 1;", "Found 0 errors"},
+			} {
+				base.currentWrite.Reset()
+				event := fswatch.Event{Path: physical + "/" + step.file, Kind: fswatch.EventUpdate}
+				if step.text == "" {
+					assert.NilError(t, os.Remove(event.Path))
+					event.Kind = fswatch.EventDelete
+				} else {
+					writeAliasWatchFile(t, event.Path, step.text)
+					if build {
+						buildInfo, err := os.Stat(physical + "/tsconfig.tsbuildinfo")
+						assert.NilError(t, err)
+						modified := buildInfo.ModTime().Add(time.Second)
+						assert.NilError(t, os.Chtimes(event.Path, modified, modified))
+					}
+				}
+				// Native events name the physical directory, even when all names
+				// are lowercase and only the working directory traverses a symlink.
+				base.mockWatchBackend.SendEvents([]fswatch.Event{event})
+				result.Watcher.DoCycle()
+				assert.Assert(t, strings.Contains(base.currentWrite.String(), step.want), "%s: %s", step.name, base.currentWrite.String())
+			}
+		})
+	}
+}
+
+func TestWatchRealpathWildcardCreation(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(fmt.Sprintf("build=%v", build), func(t *testing.T) {
+			t.Parallel()
+			root := aliasWatchDirectory(t)
+			writeAliasWatchFile(t, root+"/physical/.keep", "")
+			if err := os.Symlink(root+"/physical", root+"/linked"); err != nil {
+				t.Skipf("symlinks unavailable: %v", err)
+			}
+			writeAliasWatchFile(t, root+"/main.ts", "export {};")
+			writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+			writeAliasWatchFile(t, root+"/tsconfig.json", fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"noEmit":true,"incremental":%v},"files":["main.ts"],"include":["linked/**/*.ts"]}`, build))
+			base := newTestSys(&tscInput{files: FileMap{}, cwd: root}, false)
+			base.defaultLibraryPath = root
+			base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+			base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+			sys := &aliasWatchSystem{TestSys: base}
+			args := []string{"--watch", "--project", root + "/tsconfig.json"}
+			if build {
+				args = []string{"--build", "--watch", root + "/tsconfig.json"}
+			}
+			result := execute.CommandLine(context.Background(), sys, args, sys)
+			if result.Watcher == nil || !strings.Contains(base.currentWrite.String(), "Found 0 errors") {
+				t.Fatalf("initial compilation failed: %s", base.currentWrite.String())
+			}
+			base.currentWrite.Reset()
+			created := root + "/physical/new.ts"
+			writeAliasWatchFile(t, created, `export const value: number = "new";`)
+			if build {
+				buildInfo, err := os.Stat(root + "/tsconfig.tsbuildinfo")
+				assert.NilError(t, err)
+				modified := buildInfo.ModTime().Add(time.Second)
+				assert.NilError(t, os.Chtimes(created, modified, modified))
+			}
+			sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: created, Kind: fswatch.EventUpdate})
+			result.Watcher.DoCycle()
+			if !strings.Contains(base.currentWrite.String(), "TS2322") {
+				t.Fatalf("watch missed new file in symlinked wildcard directory: %s", base.currentWrite.String())
+			}
+		})
+	}
+}
+
+func TestWatchFilesystemAliases(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, shape := range []string{"filename", "descendant", "root", "multiple", "delete-directory"} {
+			for _, pair := range []struct{ name, disk, alias string }{
+				{"ascii", "ASCII", "ascii"},
+				{"long-s", "s", "\u017f"},
+				{"sigma", "\u03c3", "\u03c2"},
+				{"sharp-s", "SS", "\u00df"},
+				{"dotted-i", "i\u0307", "\u0130"},
+				{"ligature", "ffi", "\ufb03"},
+				{"normalization", "\u00e9", "e\u0301"},
+			} {
+				t.Run(fmt.Sprintf("build=%v/%s/%s", build, shape, pair.name), func(t *testing.T) {
+					t.Parallel()
+					if shape == "multiple" && pair.name == "ascii" {
+						t.Skip("ASCII spellings intentionally share one compiler identity")
+					}
+					dir := aliasWatchDirectory(t)
+					comparer, err := fswatch.PathComparerForPath(dir)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if pair.name != "ascii" && comparer.Key(pair.disk) != comparer.Key(pair.alias) {
+						t.Skip("native watcher does not equate these Unicode spellings")
+					}
+					root, requestedRoot := dir, dir
+					dependency, imported := pair.disk, pair.alias
+					include := "[]"
+					if shape == "descendant" || shape == "delete-directory" {
+						dependency += "/value"
+						imported += "/value"
+						include = `["**/*.unmatched"]`
+					} else if shape == "root" {
+						root += "/" + pair.disk
+						requestedRoot += "/" + pair.alias
+						dependency, imported = "value", "value"
+					}
+					dependency = root + "/" + dependency + ".ts"
+					writeAliasWatchFile(t, dependency, "export const value = 1;")
+					diskInfo, err := os.Stat(dependency)
+					if err != nil {
+						t.Fatal(err)
+					}
+					aliasInfo, err := os.Stat(requestedRoot + "/" + imported + ".ts")
+					if err != nil || !os.SameFile(diskInfo, aliasInfo) {
+						t.Skip("volume does not equate these filename spellings")
+					}
+					main := fmt.Sprintf(`import { value } from "./%s"; const x: number = value;`, imported)
+					if shape == "multiple" {
+						main += fmt.Sprintf(`import { value as other } from "./%s"; const y: number = other;`, pair.disk)
+					}
+					writeAliasWatchFile(t, root+"/main.ts", main)
+					writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+					writeAliasWatchFile(t, root+"/tsconfig.json", fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"noEmit":true,"incremental":%v},"files":["main.ts"],"include":%s}`, build, include))
+					base := newTestSys(&tscInput{files: FileMap{}, cwd: requestedRoot}, false)
+					base.defaultLibraryPath = root
+					base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+					base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+					sys := &aliasWatchSystem{TestSys: base}
+					args := []string{"--watch", "--project", requestedRoot + "/tsconfig.json"}
+					if build {
+						args = []string{"--build", "--watch", requestedRoot + "/tsconfig.json"}
+					}
+					result := execute.CommandLine(context.Background(), sys, args, sys)
+					if result.Watcher == nil || !strings.Contains(base.currentWrite.String(), "Found 0 errors") {
+						t.Fatalf("initial compilation failed: %s", base.currentWrite.String())
+					}
+					base.currentWrite.Reset()
+					writeAliasWatchFile(t, dependency, `export const value = "changed";`)
+					event := fswatch.Event{Path: dependency, Kind: fswatch.EventUpdate}
+					wantDiagnostic := "TS2322"
+					if shape == "delete-directory" {
+						event.Path = filepath.ToSlash(filepath.Dir(dependency))
+						event.Kind = fswatch.EventDelete
+						if err := os.RemoveAll(event.Path); err != nil {
+							t.Fatal(err)
+						}
+						wantDiagnostic = "TS2307"
+					}
+					// Deliver the physical spelling through a genuinely covering
+					// subscription, as a recursive native backend does.
+					sendAliasWatchEvent(t, base.mockWatchBackend, event)
+					result.Watcher.DoCycle()
+					if !strings.Contains(base.currentWrite.String(), wantDiagnostic) {
+						t.Fatalf("watch retained stale aliased dependency: %s", base.currentWrite.String())
+					}
+
+					if shape == "multiple" && strings.Count(base.currentWrite.String(), "TS2322") != 2 {
+						t.Fatalf("both compiler identities must be invalidated: %s", base.currentWrite.String())
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestWatchFilesystemAliasLookups(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, lookup := range []string{"config", "package", "package-directory-delete", "discovery"} {
+			t.Run(fmt.Sprintf("build=%v/%s", build, lookup), func(t *testing.T) {
+				t.Parallel()
+				root := aliasWatchDirectory(t)
+				comparer, err := fswatch.PathComparerForPath(root)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if comparer.Key("s") != comparer.Key("\u017f") {
+					t.Skip("native watcher does not equate these Unicode spellings")
+				}
+				writeAliasWatchFile(t, root+"/s/marker", "")
+				disk, err := os.Stat(root + "/s")
+				if err != nil {
+					t.Fatal(err)
+				}
+				alias, err := os.Stat(root + "/\u017f")
+				if err != nil || !os.SameFile(disk, alias) {
+					t.Skip("volume does not equate these filename spellings")
+				}
+				main := `import {value} from "ſ"; const x: number = value;`
+				extra := ""
+				include := "[]"
+				event := fswatch.Event{Path: root + "/node_modules/s/package.json", Kind: fswatch.EventUpdate}
+				change := func() {
+					writeAliasWatchFile(t, event.Path, `{"types":"string.d.ts"}`)
+				}
+				want := "TS2322"
+				switch lookup {
+				case "config":
+					main = `const x: string = null;`
+					extra = `,"extends":"./ſ/base.json"`
+					event.Path = root + "/s/base.json"
+					writeAliasWatchFile(t, event.Path, `{"compilerOptions":{"strictNullChecks":false}}`)
+					change = func() {
+						writeAliasWatchFile(t, event.Path, `{"compilerOptions":{"strictNullChecks":true}}`)
+					}
+				case "discovery":
+					main = `import {value} from "./ſ/new"; const x: number = value;`
+					include = `["**/*.ts"]`
+					event.Path = root + "/s/new.ts"
+					change = func() { writeAliasWatchFile(t, event.Path, `export const value = "changed";`) }
+				default:
+					writeAliasWatchFile(t, event.Path, `{"types":"number.d.ts"}`)
+					writeAliasWatchFile(t, root+"/node_modules/s/number.d.ts", `export declare const value: number;`)
+					writeAliasWatchFile(t, root+"/node_modules/s/string.d.ts", `export declare const value: string;`)
+					if lookup == "package-directory-delete" {
+						event.Path = root + "/node_modules/s"
+						event.Kind = fswatch.EventDelete
+						change = func() {
+							if removeErr := os.RemoveAll(event.Path); removeErr != nil {
+								t.Fatal(removeErr)
+							}
+						}
+						want = "TS2307"
+					}
+				}
+				writeAliasWatchFile(t, root+"/main.ts", main)
+				writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+				writeAliasWatchFile(t, root+"/tsconfig.json", fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"module":"nodenext","noEmit":true,"incremental":%v},"files":["main.ts"],"include":%s%s}`, build, include, extra))
+				base := newTestSys(&tscInput{files: FileMap{}, cwd: root}, false)
+				base.defaultLibraryPath = root
+				base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+				sys := &aliasWatchSystem{TestSys: base}
+				args := []string{"--watch", "--project", root + "/tsconfig.json"}
+				if build {
+					args = []string{"--build", "--watch", root + "/tsconfig.json"}
+				}
+				result := execute.CommandLine(context.Background(), sys, args, sys)
+				initial := "Found 0 errors"
+				if lookup == "discovery" {
+					initial = "TS2307"
+				}
+				if result.Watcher == nil || !strings.Contains(base.currentWrite.String(), initial) {
+					t.Fatalf("initial compilation failed: %s", base.currentWrite.String())
+				}
+				base.currentWrite.Reset()
+				change()
+				sendAliasWatchEvent(t, base.mockWatchBackend, event)
+				result.Watcher.DoCycle()
+				if !strings.Contains(base.currentWrite.String(), want) {
+					t.Fatalf("watch retained stale %s lookup: %s", lookup, base.currentWrite.String())
+				}
+			})
+		}
+	}
+}
+
+func TestWatchConfigRetargetWithEqualTime(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, extended := range []bool{false, true} {
+			t.Run(fmt.Sprintf("build=%v/extended=%v", build, extended), func(t *testing.T) {
+				t.Parallel()
+				root := aliasWatchDirectory(t)
+				config := root + "/tsconfig.json"
+				link := config
+				baseConfig := fmt.Sprintf(`"compilerOptions":{"lib":["es5"],"noEmit":true,"incremental":%v,"noImplicitAny":%%v},"files":["main.ts"],"include":[]`, build)
+				if extended {
+					link = root + "/options.json"
+					writeAliasWatchFile(t, config, fmt.Sprintf(`{%s,"extends":"./options.json"}`, fmt.Sprintf(baseConfig, true)))
+					baseConfig = `"compilerOptions":{"strictNullChecks":%v}`
+				}
+				writeAliasWatchFile(t, root+"/one.json", "{"+fmt.Sprintf(baseConfig, false)+"}")
+				writeAliasWatchFile(t, root+"/two.json", "{"+fmt.Sprintf(baseConfig, true)+"}")
+				text, diagnostic := "export function f(x) { return x; }", "TS7006"
+				if extended {
+					text, diagnostic = "export const x: string = null;", "TS2322"
+				}
+				writeAliasWatchFile(t, root+"/main.ts", text)
+				writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+				stamp := time.Unix(1700000000, 0)
+				assert.NilError(t, os.Chtimes(root+"/one.json", stamp, stamp))
+				assert.NilError(t, os.Chtimes(root+"/two.json", stamp, stamp))
+				if err := os.Symlink(root+"/one.json", link); err != nil {
+					t.Skipf("symlinks unavailable: %v", err)
+				}
+				base := newTestSys(&tscInput{files: FileMap{}, cwd: root}, false)
+				base.defaultLibraryPath = root
+				base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+				base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+				sys := &aliasWatchSystem{TestSys: base}
+				args := []string{"--watch", "--project", config}
+				if build {
+					args = []string{"--build", "--watch", config}
+				}
+				result := execute.CommandLine(context.Background(), sys, args, sys)
+				assert.Assert(t, result.Watcher != nil)
+				assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+				base.currentWrite.Reset()
+				assert.NilError(t, os.Remove(link))
+				assert.NilError(t, os.Symlink(root+"/two.json", link))
+				sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: link, Kind: fswatch.EventUpdate})
+				result.Watcher.DoCycle()
+				assert.Assert(t, strings.Contains(base.currentWrite.String(), diagnostic), base.currentWrite.String())
+			})
+		}
+	}
+}
+
+type lifecycleWatchSystem struct {
+	*aliasWatchSystem
+	filesystem vfs.FS
+}
+
+func (s *lifecycleWatchSystem) FS() vfs.FS { return s.filesystem }
+
+type failedConfigReadFS struct {
+	vfs.FS
+	config string
+	fail   atomic.Bool
+}
+
+func (f *failedConfigReadFS) ReadFile(name string) (string, bool) {
+	if name == f.config && f.fail.Swap(false) {
+		return "", false
+	}
+	return f.FS.ReadFile(name)
+}
+
+func startPhysicalAliasWatch(t *testing.T, root string, build bool, filesystem vfs.FS) (*TestSys, func()) {
+	t.Helper()
+	writeAliasWatchFile(t, root+"/lib.es5.d.ts", tscDefaultLibContent)
+	base := newTestSys(&tscInput{files: FileMap{}, cwd: root}, false)
+	base.defaultLibraryPath = root
+	base.mockWatchBackend.DirectoryExists = osvfs.FS().DirectoryExists
+	base.mockWatchBackend.UseCaseSensitiveFileNames = osvfs.FS().UseCaseSensitiveFileNames()
+	sys := &lifecycleWatchSystem{aliasWatchSystem: &aliasWatchSystem{TestSys: base}, filesystem: filesystem}
+	args := []string{"--watch", "--project", root + "/tsconfig.json"}
+	if build {
+		args = []string{"--build", "--watch", root + "/tsconfig.json"}
+	}
+	result := execute.CommandLine(context.Background(), sys, args, sys)
+	assert.Assert(t, result.Watcher != nil)
+	assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+	return base, result.Watcher.DoCycle
+}
+
+func TestWatchRetargetIdenticalSourceText(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(strconv.FormatBool(build), func(t *testing.T) {
+			t.Parallel()
+			root := aliasWatchDirectory(t)
+			stamp := time.Unix(1700000000, 0)
+			for _, target := range []string{"one", "two"} {
+				writeAliasWatchFile(t, root+"/"+target+"/index.ts", `export {value} from "./dep";`)
+				value := "1"
+				if target == "two" {
+					value = `"two"`
+				}
+				writeAliasWatchFile(t, root+"/"+target+"/dep.ts", "export const value = "+value+";")
+				for _, name := range []string{"index.ts", "dep.ts"} {
+					assert.NilError(t, os.Chtimes(root+"/"+target+"/"+name, stamp, stamp))
+				}
+			}
+			link := root + "/linked"
+			if err := os.Symlink(root+"/one", link); err != nil {
+				t.Skipf("symlinks unavailable: %v", err)
+			}
+			writeAliasWatchFile(t, root+"/main.ts", `import {value} from "./linked/index"; const x: number = value;`)
+			writeAliasWatchFile(t, root+"/tsconfig.json", fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"noEmit":true,"preserveSymlinks":true,"incremental":%v},"files":["main.ts"],"include":[]}`, build))
+			base, cycle := startPhysicalAliasWatch(t, root, build, osvfs.FS())
+			base.currentWrite.Reset()
+			assert.NilError(t, os.Remove(link))
+			assert.NilError(t, os.Symlink(root+"/two", link))
+			sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: link, Kind: fswatch.EventUpdate})
+			cycle()
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "TS2322"), base.currentWrite.String())
+			base.currentWrite.Reset()
+			writeAliasWatchFile(t, root+"/two/dep.ts", "export const value = 2;")
+			sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: root + "/two/dep.ts", Kind: fswatch.EventUpdate})
+			cycle()
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+		})
+	}
+}
+
+func TestWatchRetargetConfigErrorRecovery(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(strconv.FormatBool(build), func(t *testing.T) {
+			t.Parallel()
+			root := aliasWatchDirectory(t)
+			config := fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"noEmit":true,"incremental":%v},"files":["main.ts"],"include":[]}`, build)
+			writeAliasWatchFile(t, root+"/one/config.json", config)
+			writeAliasWatchFile(t, root+"/two/config.json", "{")
+			stamp := time.Unix(1700000000, 0)
+			assert.NilError(t, os.Chtimes(root+"/one/config.json", stamp, stamp))
+			assert.NilError(t, os.Chtimes(root+"/two/config.json", stamp, stamp))
+			link := root + "/tsconfig.json"
+			if err := os.Symlink(root+"/one/config.json", link); err != nil {
+				t.Skipf("symlinks unavailable: %v", err)
+			}
+			writeAliasWatchFile(t, root+"/main.ts", "export const value = 1;")
+			base, cycle := startPhysicalAliasWatch(t, root, build, osvfs.FS())
+			base.currentWrite.Reset()
+			assert.NilError(t, os.Remove(link))
+			assert.NilError(t, os.Symlink(root+"/two/config.json", link))
+			sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: link, Kind: fswatch.EventUpdate})
+			cycle()
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "TS1005"), base.currentWrite.String())
+			base.currentWrite.Reset()
+			writeAliasWatchFile(t, root+"/two/config.json", config)
+			sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: root + "/two/config.json", Kind: fswatch.EventUpdate})
+			cycle()
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+		})
+	}
+}
+
+func TestWatchRetargetConfigReadFailureRecovery(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(strconv.FormatBool(build), func(t *testing.T) {
+			t.Parallel()
+			root := aliasWatchDirectory(t)
+			config := fmt.Sprintf(`{"compilerOptions":{"lib":["es5"],"noEmit":true,"incremental":%v},"files":["main.ts"],"include":[]}`, build)
+			writeAliasWatchFile(t, root+"/one/config.json", config)
+			writeAliasWatchFile(t, root+"/two/config.json", config)
+			link := root + "/tsconfig.json"
+			if err := os.Symlink(root+"/one/config.json", link); err != nil {
+				t.Skipf("symlinks unavailable: %v", err)
+			}
+			writeAliasWatchFile(t, root+"/main.ts", "export const value = 1;")
+			fs := &failedConfigReadFS{FS: osvfs.FS(), config: link}
+			base, cycle := startPhysicalAliasWatch(t, root, build, fs)
+			base.currentWrite.Reset()
+			assert.NilError(t, os.Remove(link))
+			assert.NilError(t, os.Symlink(root+"/two/config.json", link))
+			fs.fail.Store(true)
+			sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: link, Kind: fswatch.EventUpdate})
+			cycle()
+			diagnostic := "TS5083"
+			if build {
+				diagnostic = "TS6053"
+			}
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), diagnostic), base.currentWrite.String())
+			base.currentWrite.Reset()
+			sendAliasWatchEvent(t, base.mockWatchBackend, fswatch.Event{Path: root + "/two/config.json", Kind: fswatch.EventUpdate})
+			cycle()
+			assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
+		})
 	}
 }
