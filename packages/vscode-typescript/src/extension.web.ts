@@ -14,6 +14,7 @@ import {
     type MessageTransports,
 } from "vscode-languageclient/browser";
 import { nightlyExtensionId } from "./extensionIds";
+import { selectWebModuleExtensionUri } from "./webModuleExtension";
 import { uriToWasmMountPoint } from "./webMountPoint";
 
 declare global {
@@ -99,7 +100,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     context.subscriptions.push(output);
 
     const nightlyExtension = vscode.extensions.getExtension(nightlyExtensionId);
-    const moduleExtensionUri = nightlyExtension?.extensionUri ?? context.extensionUri;
+    const moduleExtensionUri = await selectWebModuleExtensionUri(
+        context.extensionUri,
+        nightlyExtension?.extensionUri,
+        async extensionUri => {
+            try {
+                await vscode.workspace.fs.stat(vscode.Uri.joinPath(extensionUri, "dist", "tsc.wasm"));
+                return true;
+            }
+            catch {
+                return false;
+            }
+        },
+    );
     context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider("bundled", {
         async provideTextDocumentContent(uri) {
             const prefix = "/libs/";
