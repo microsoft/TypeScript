@@ -25,7 +25,7 @@ const browserDir = fileURLToPath(new URL(".", import.meta.url));
 const packageDir = path.resolve(browserDir, "../..");
 const modes = ["async", "sync"] as const;
 const expectedTestCounts = {
-    async: 385,
+    async: 386,
     sync: 467,
 } as const;
 const fileExclusions = [
@@ -99,6 +99,10 @@ describe("API test suite in a browser", () => {
                                 {
                                     pattern: /module resolver callbacks (?:can delegate to another resolver|can resolve against the in-progress snapshot filesystem|preserve retained and live filesystem context)$/,
                                     reason: "An in-thread WebAssembly reactor cannot service nested API requests while a host callback is in flight.",
+                                },
+                                {
+                                    pattern: /can close a process client while initialization is manually batched$/,
+                                    reason: "This test exercises the Node.js spawned-process client.",
                                 },
                                 {
                                     pattern: /Parse-clone-emit roundtrip$/,

@@ -172,6 +172,17 @@ describe("async transport", () => {
         await rejected;
     });
 
+    test("can close a process client while initialization is manually batched", async () => {
+        const api = new API({ cwd: process.cwd() });
+        await api["client"].connect();
+        const batch = api.batchContext();
+        const request = api.parseCommandLine([]);
+        const rejected = assert.rejects(request, /Client is closed/);
+        await api.close();
+        batch[Symbol.dispose]();
+        await rejected;
+    });
+
     test("does not flush a manual batch from a stale microtask", async () => {
         const methods: string[] = [];
         const client = new TransportClient({
