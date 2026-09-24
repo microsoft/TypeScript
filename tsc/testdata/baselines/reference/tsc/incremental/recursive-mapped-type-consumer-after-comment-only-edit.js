@@ -38,16 +38,16 @@ export const n: number = value.items;
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mb.ts[0m:[93m2[0m:[93m26[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
+[96mb.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Parsed<Json[]>' is not assignable to type 'number'.
 
 [7m2[0m export const n: number = value.items;
-[7m [0m [91m                         ~~~~~~~~~~~[0m
+[7m [0m [91m             ~[0m
 
 
 Found 1 error in b.ts[90m:2[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"3f24abe1dc43308e4499e42c9bbbb9bd-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });","3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;"],"fileIdsList":[[2]],"options":{"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":54,"end":65,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"}]]],"affectedFilesPendingEmit":[2,3]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"3f24abe1dc43308e4499e42c9bbbb9bd-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });","3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;"],"fileIdsList":[[2]],"options":{"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":42,"end":43,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["Parsed<Json[]>","number"]}]]],"affectedFilesPendingEmit":[2,3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -112,11 +112,15 @@ Found 1 error in b.ts[90m:2[0m
       "./b.ts",
       [
         {
-          "pos": 54,
-          "end": 65,
-          "code": 2589,
+          "pos": 42,
+          "end": 43,
+          "code": 2322,
           "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "Parsed<Json[]>",
+            "number"
+          ]
         }
       ]
     ]
@@ -133,7 +137,7 @@ Found 1 error in b.ts[90m:2[0m
       3
     ]
   ],
-  "size": 1543
+  "size": 1559
 }
 
 tsconfig.json::
@@ -156,21 +160,19 @@ export const value = wrap({ items: [] as Json[] });
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-[96mb.ts[0m:[93m2[0m:[93m26[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
+[96mb.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Parsed<Json[]>' is not assignable to type 'number'.
 
 [7m2[0m export const n: number = value.items;
-[7m [0m [91m                         ~~~~~~~~~~~[0m
+[7m [0m [91m             ~[0m
 
 
-Found 2 errors in the same file, starting at: b.ts[90m:2[0m
+Found 1 error in b.ts[90m:2[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n","signature":"93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n","impliedNodeFormat":1},{"version":"3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;","signature":"3d01ec51536810851f52ebd881c4789f-export declare const n: number;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":54,"end":65,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"}]]],"affectedFilesPendingEmit":[2,3]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n","signature":"fcde39c2b051f56c2bdf4ff787c0b50e-type Json = string | Json[];\ntype Parsed<T> = T extends object ? {\n    [K in keyof T]: Parsed<T[K]>;\n} : T;\nexport declare const value: {\n    items: Parsed<Json[]>;\n};\nexport {};\n","impliedNodeFormat":1},{"version":"3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;","signature":"3d01ec51536810851f52ebd881c4789f-export declare const n: number;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":42,"end":43,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["Parsed<Json[]>","number"]}]]],"affectedFilesPendingEmit":[2,3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
-  "errors": true,
   "root": [
     {
       "files": [
@@ -204,11 +206,11 @@ Found 2 errors in the same file, starting at: b.ts[90m:2[0m
     {
       "fileName": "./a.ts",
       "version": "05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n",
-      "signature": "93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n",
+      "signature": "fcde39c2b051f56c2bdf4ff787c0b50e-type Json = string | Json[];\ntype Parsed<T> = T extends object ? {\n    [K in keyof T]: Parsed<T[K]>;\n} : T;\nexport declare const value: {\n    items: Parsed<Json[]>;\n};\nexport {};\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n",
-        "signature": "93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n",
+        "signature": "fcde39c2b051f56c2bdf4ff787c0b50e-type Json = string | Json[];\ntype Parsed<T> = T extends object ? {\n    [K in keyof T]: Parsed<T[K]>;\n} : T;\nexport declare const value: {\n    items: Parsed<Json[]>;\n};\nexport {};\n",
         "impliedNodeFormat": 1
       }
     },
@@ -242,11 +244,15 @@ Found 2 errors in the same file, starting at: b.ts[90m:2[0m
       "./b.ts",
       [
         {
-          "pos": 54,
-          "end": 65,
-          "code": 2589,
+          "pos": 42,
+          "end": 43,
+          "code": 2322,
           "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "Parsed<Json[]>",
+            "number"
+          ]
         }
       ]
     ]
@@ -263,7 +269,7 @@ Found 2 errors in the same file, starting at: b.ts[90m:2[0m
       3
     ]
   ],
-  "size": 1875
+  "size": 1967
 }
 
 tsconfig.json::
@@ -275,133 +281,19 @@ Signatures::
 (computed .d.ts) /home/src/workspaces/project/b.ts
 
 
-Diff:: Incremental signature serialization adds a locationless TS2589 to the consumer's cached diagnostic.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,8 +1,9 @@
-+[91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
- [96mb.ts[0m:[93m2[0m:[93m26[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-
- [7m2[0m export const n: number = value.items;
- [7m [0m [91m                         ~~~~~~~~~~~[0m
-
-
--Found 1 error in b.ts[90m:2[0m
-+Found 2 errors in the same file, starting at: b.ts[90m:2[0m
-
-
 Edit [1]:: no change
 
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mb.ts[0m:[93m2[0m:[93m26[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
+[96mb.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Parsed<Json[]>' is not assignable to type 'number'.
 
 [7m2[0m export const n: number = value.items;
-[7m [0m [91m                         ~~~~~~~~~~~[0m
+[7m [0m [91m             ~[0m
 
 
 Found 1 error in b.ts[90m:2[0m
 
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n","signature":"93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n","impliedNodeFormat":1},{"version":"3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;","signature":"3d01ec51536810851f52ebd881c4789f-export declare const n: number;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":54,"end":65,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"}]]],"affectedFilesPendingEmit":[2,3]}
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "root": [
-    {
-      "files": [
-        "./a.ts",
-        "./b.ts"
-      ],
-      "original": [
-        2,
-        3
-      ]
-    }
-  ],
-  "fileNames": [
-    "lib.es2025.full.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es2025.full.d.ts",
-      "version": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "./a.ts",
-      "version": "05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n",
-      "signature": "93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n",
-        "signature": "93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n",
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "./b.ts",
-      "version": "3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;",
-      "signature": "3d01ec51536810851f52ebd881c4789f-export declare const n: number;\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;",
-        "signature": "3d01ec51536810851f52ebd881c4789f-export declare const n: number;\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "fileIdsList": [
-    [
-      "./a.ts"
-    ]
-  ],
-  "options": {
-    "strict": true
-  },
-  "referencedMap": {
-    "./b.ts": [
-      "./a.ts"
-    ]
-  },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./b.ts",
-      [
-        {
-          "pos": 54,
-          "end": 65,
-          "code": 2589,
-          "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
-        }
-      ]
-    ]
-  ],
-  "affectedFilesPendingEmit": [
-    [
-      "./a.ts",
-      "Js",
-      2
-    ],
-    [
-      "./b.ts",
-      "Js",
-      3
-    ]
-  ],
-  "size": 1861
-}
 
 tsconfig.json::
 SemanticDiagnostics::
@@ -413,10 +305,10 @@ Edit [2]:: no change
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mb.ts[0m:[93m2[0m:[93m26[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
+[96mb.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Parsed<Json[]>' is not assignable to type 'number'.
 
 [7m2[0m export const n: number = value.items;
-[7m [0m [91m                         ~~~~~~~~~~~[0m
+[7m [0m [91m             ~[0m
 
 
 Found 1 error in b.ts[90m:2[0m
@@ -433,16 +325,16 @@ Edit [3]:: delete build info and check the edited source afresh
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mb.ts[0m:[93m2[0m:[93m26[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
+[96mb.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Parsed<Json[]>' is not assignable to type 'number'.
 
 [7m2[0m export const n: number = value.items;
-[7m [0m [91m                         ~~~~~~~~~~~[0m
+[7m [0m [91m             ~[0m
 
 
 Found 1 error in b.ts[90m:2[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n","3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;"],"fileIdsList":[[2]],"options":{"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":54,"end":65,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"}]]],"affectedFilesPendingEmit":[2,3]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n","3664d7db9751b354c0abbbd215c8689c-import { value } from \"./a\";\nexport const n: number = value.items;"],"fileIdsList":[[2]],"options":{"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":42,"end":43,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["Parsed<Json[]>","number"]}]]],"affectedFilesPendingEmit":[2,3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -507,11 +399,15 @@ Found 1 error in b.ts[90m:2[0m
       "./b.ts",
       [
         {
-          "pos": 54,
-          "end": 65,
-          "code": 2589,
+          "pos": 42,
+          "end": 43,
+          "code": 2322,
           "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "Parsed<Json[]>",
+            "number"
+          ]
         }
       ]
     ]
@@ -528,7 +424,7 @@ Found 1 error in b.ts[90m:2[0m
       3
     ]
   ],
-  "size": 1567
+  "size": 1583
 }
 
 tsconfig.json::

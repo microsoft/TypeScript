@@ -1,44 +1,44 @@
-growing.ts(3,31): error TS2589: Type instantiation is excessively deep and possibly infinite.
-growing.ts(8,31): error TS2589: Type instantiation is excessively deep and possibly infinite.
-growing.ts(13,31): error TS2589: Type instantiation is excessively deep and possibly infinite.
-growing.ts(18,31): error TS2589: Type instantiation is excessively deep and possibly infinite.
-growing.ts(23,31): error TS2589: Type instantiation is excessively deep and possibly infinite.
+growing.ts(1,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+growing.ts(6,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+growing.ts(11,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+growing.ts(16,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+growing.ts(21,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 
 
 ==== growing.ts (5 errors) ====
     export function tuple() {
+                    ~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
         type C<T> = { [K in keyof T]: C<[T]> };
         return null as unknown as C<[number]>;
-                                  ~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     }
     
     export function array() {
+                    ~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
         type C<T> = { [K in keyof T]: C<T[]> };
         return null as unknown as C<number[]>;
-                                  ~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     }
     
     export function changingTuple() {
+                    ~~~~~~~~~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
         type C<T, S extends string> = { [K in keyof T]: C<T, `${S}x`> };
         return null as unknown as C<[number], "">;
-                                  ~~~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     }
     
     export function changingArray() {
+                    ~~~~~~~~~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
         type C<T, S extends string> = { [K in keyof T]: C<T, `${S}x`> };
         return null as unknown as C<number[], "">;
-                                  ~~~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     }
     
     export function nestedContext() {
+                    ~~~~~~~~~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
         type C<T, S> = { [K in keyof T]: C<T, C<S, S>> };
         return null as unknown as C<[number], [number]>;
-                                  ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     }
     
 ==== finite.ts (0 errors) ====

@@ -31,10 +31,10 @@ type tup = [number, number, number, number];
 
 function foo(arg: Circular<tup>): tup {
 >foo : (arg: Circular<tup>) => tup
->arg : any
+>arg : Circular<tup>
 
   return arg;
->arg : any
+>arg : Circular<tup>
 }
 
 // Repro from #29442
@@ -52,10 +52,10 @@ type arr = string[][];
 >arr : arr
 
 type t1 = DeepMap<tpl, number>;  // [number, [number, [number]]]
->t1 : [number, [number, [number]]]
+>t1 : t1
 
 type t2 = DeepMap<arr, number>;  // number[][]
->t2 : number[][]
+>t2 : t2
 
 // Repro from #29577
 
@@ -81,9 +81,9 @@ declare var product: Transform<Product>;
 >product : Transform<Product>
 
 product.users;  // (Transform<User> | Transform<Guest>)[]
->product.users : Transform<Guest | User>[]
+>product.users : Transform<(Guest | User)[]>
 >product : Transform<Product>
->users : Transform<Guest | User>[]
+>users : Transform<(Guest | User)[]>
 
 // Repro from #29702
 
@@ -94,10 +94,10 @@ type Remap2<T> = T extends object ? { [P in keyof T]: Remap2<T[P]>; } : T;
 >Remap2 : Remap2<T>
   
 type a = Remap1<string[]>;  // string[]
->a : string[]
+>a : a
 
 type b = Remap2<string[]>;  // string[]
->b : string[]
+>b : b
 
 // Repro from #29992
 

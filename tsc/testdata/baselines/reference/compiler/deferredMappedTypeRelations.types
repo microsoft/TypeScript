@@ -8,48 +8,48 @@ type DeepReadonly<T> = T extends object ? { readonly [K in keyof T]: DeepReadonl
 >DeepReadonly : DeepReadonly<T>
 
 declare const array: Deep<string[][][][]>;
->array : string[][][][]
+>array : Deep<string[][][][]>
 
 const badArray: Deep<number[][][][]> = array;
->badArray : number[][][][]
->array : string[][][][]
+>badArray : Deep<number[][][][]>
+>array : Deep<string[][][][]>
 
 const goodArray: Deep<string[][][][]> = array;
->goodArray : string[][][][]
->array : string[][][][]
+>goodArray : Deep<string[][][][]>
+>array : Deep<string[][][][]>
 
 declare const tuple: Deep<[[[[string]]]]>;
->tuple : [[[[string]]]]
+>tuple : Deep<[[[[string]]]]>
 
 const badTuple: Deep<[[[[number]]]]> = tuple;
->badTuple : [[[[number]]]]
->tuple : [[[[string]]]]
+>badTuple : Deep<[[[[number]]]]>
+>tuple : Deep<[[[[string]]]]>
 
 const goodTuple: Deep<[[[[string]]]]> = tuple;
->goodTuple : [[[[string]]]]
->tuple : [[[[string]]]]
+>goodTuple : Deep<[[[[string]]]]>
+>tuple : Deep<[[[[string]]]]>
 
 declare const readonlyArray: DeepReadonly<string[][][][]>;
->readonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
+>readonlyArray : DeepReadonly<string[][][][]>
 
 const badReadonlyArray: DeepReadonly<number[][][][]> = readonlyArray;
->badReadonlyArray : readonly (readonly (readonly (readonly number[])[])[])[]
->readonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
+>badReadonlyArray : DeepReadonly<number[][][][]>
+>readonlyArray : DeepReadonly<string[][][][]>
 
 const goodReadonlyArray: DeepReadonly<string[][][][]> = readonlyArray;
->goodReadonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
->readonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
+>goodReadonlyArray : DeepReadonly<string[][][][]>
+>readonlyArray : DeepReadonly<string[][][][]>
 
 declare const readonlyTuple: DeepReadonly<[[[[string]]]]>;
->readonlyTuple : readonly [readonly [readonly [readonly [string]]]]
+>readonlyTuple : DeepReadonly<[[[[string]]]]>
 
 const badReadonlyTuple: DeepReadonly<[[[[number]]]]> = readonlyTuple;
->badReadonlyTuple : readonly [readonly [readonly [readonly [number]]]]
->readonlyTuple : readonly [readonly [readonly [readonly [string]]]]
+>badReadonlyTuple : DeepReadonly<[[[[number]]]]>
+>readonlyTuple : DeepReadonly<[[[[string]]]]>
 
 const goodReadonlyTuple: DeepReadonly<[[[[string]]]]> = readonlyTuple;
->goodReadonlyTuple : readonly [readonly [readonly [readonly [string]]]]
->readonlyTuple : readonly [readonly [readonly [readonly [string]]]]
+>goodReadonlyTuple : DeepReadonly<[[[[string]]]]>
+>readonlyTuple : DeepReadonly<[[[[string]]]]>
 
 type AssertFalse<T extends false> = T;
 >AssertFalse : T
@@ -67,34 +67,34 @@ type TupleRelation = AssertFalse<Deep<[[[[string]]]]> extends Deep<[[[[number]]]
 
 declare function infer<T>(value: Deep<{ value: T }[][][][]>): T;
 >infer : <T>(value: Deep<{ value: T; }[][][][]>) => T
->value : { value: Deep<T>; }[][][][]
+>value : Deep<{ value: T; }[][][][]>
 >value : T
 
 declare const nested: Deep<{ value: number }[][][][]>;
->nested : { value: number; }[][][][]
+>nested : Deep<{ value: number; }[][][][]>
 >value : number
 
 const inferred: number = infer(nested);
 >inferred : number
 >infer(nested) : number
 >infer : <T>(value: Deep<{ value: T; }[][][][]>) => T
->nested : { value: number; }[][][][]
+>nested : Deep<{ value: number; }[][][][]>
 
 const badInferred: string = infer(nested);
 >badInferred : string
 >infer(nested) : number
 >infer : <T>(value: Deep<{ value: T; }[][][][]>) => T
->nested : { value: number; }[][][][]
+>nested : Deep<{ value: number; }[][][][]>
 
 type Growing<T> = { [K in keyof T]: Growing<T[]> };
 >Growing : Growing<T>
 
 declare const growing: Growing<string[]>;
->growing : any
+>growing : Growing<string[]>
 
 const sameStructure: Growing<number[]> = growing;
->sameStructure : any
->growing : any
+>sameStructure : Growing<number[]>
+>growing : Growing<string[]>
 
 type Previous = [never, 0, 1, 2, 3, 4];
 >Previous : Previous
@@ -103,26 +103,26 @@ type Nest<T, D extends number> = { [K in keyof T]: D extends 0 ? T[K] : Nest<T, 
 >Nest : Nest<T, D>
 
 declare const boundedArray: Nest<string[], 4>;
->boundedArray : string[][][][][]
+>boundedArray : Nest<string[], 4>
 
 const badBoundedArray: Nest<number[], 4> = boundedArray;
->badBoundedArray : number[][][][][]
->boundedArray : string[][][][][]
+>badBoundedArray : Nest<number[], 4>
+>boundedArray : Nest<string[], 4>
 
 const goodBoundedArray: Nest<(string | number)[], 4> = boundedArray;
->goodBoundedArray : (string | number)[][][][][]
->boundedArray : string[][][][][]
+>goodBoundedArray : Nest<(string | number)[], 4>
+>boundedArray : Nest<string[], 4>
 
 declare const boundedTuple: Nest<[string], 4>;
->boundedTuple : [[[[[string]]]]]
+>boundedTuple : Nest<[string], 4>
 
 const badBoundedTuple: Nest<[number], 4> = boundedTuple;
->badBoundedTuple : [[[[[number]]]]]
->boundedTuple : [[[[[string]]]]]
+>badBoundedTuple : Nest<[number], 4>
+>boundedTuple : Nest<[string], 4>
 
 const goodBoundedTuple: Nest<[string | number], 4> = boundedTuple;
->goodBoundedTuple : [[[[[string | number]]]]]
->boundedTuple : [[[[[string]]]]]
+>goodBoundedTuple : Nest<[string | number], 4>
+>boundedTuple : Nest<[string], 4>
 
 type BoundedRelation = AssertFalse<Nest<[string], 4> extends Nest<[number], 4> ? true : false>;
 >BoundedRelation : false
@@ -139,15 +139,15 @@ type ChainNest<T, D> = { [K in keyof T]: D extends Step<infer R> ? ChainNest<T, 
 >ChainNest : ChainNest<T, D>
 
 declare const chain: ChainNest<[string], BuildChain<4>>;
->chain : [[[[[string]]]]]
+>chain : ChainNest<[string], Step<Step<Step<Step<null>>>>>
 
 const badChain: ChainNest<[number], BuildChain<4>> = chain;
->badChain : [[[[[number]]]]]
->chain : [[[[[string]]]]]
+>badChain : ChainNest<[number], Step<Step<Step<Step<null>>>>>
+>chain : ChainNest<[string], Step<Step<Step<Step<null>>>>>
 
 const goodChain: ChainNest<[string | number], BuildChain<4>> = chain;
->goodChain : [[[[[string | number]]]]]
->chain : [[[[[string]]]]]
+>goodChain : ChainNest<[string | number], Step<Step<Step<Step<null>>>>>
+>chain : ChainNest<[string], Step<Step<Step<Step<null>>>>>
 
 type ChainRelation = AssertFalse<ChainNest<[string], BuildChain<4>> extends ChainNest<[number], BuildChain<4>> ? true : false>;
 >ChainRelation : false
@@ -158,15 +158,15 @@ type BuildArray<D extends number, T> = D extends 0 ? T : BuildArray<Previous[D],
 >BuildArray : BuildArray<D, T>
 
 declare const computedArray: Deep<BuildArray<4, string>>;
->computedArray : string[][][][]
+>computedArray : Deep<string[][][][]>
 
 const badComputedArray: Deep<BuildArray<4, number>> = computedArray;
->badComputedArray : number[][][][]
->computedArray : string[][][][]
+>badComputedArray : Deep<number[][][][]>
+>computedArray : Deep<string[][][][]>
 
 const goodComputedArray: Deep<BuildArray<4, string | number>> = computedArray;
->goodComputedArray : (string | number)[][][][]
->computedArray : string[][][][]
+>goodComputedArray : Deep<(string | number)[][][][]>
+>computedArray : Deep<string[][][][]>
 
 type ComputedRelation = AssertFalse<Deep<BuildArray<4, string>> extends Deep<BuildArray<4, number>> ? true : false>;
 >ComputedRelation : false

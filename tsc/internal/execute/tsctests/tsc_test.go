@@ -1364,7 +1364,6 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Incremental checking incorrectly reports a locationless TS2589 after a comment-only edit.",
 				},
 				noChange,
 				{
@@ -1372,7 +1371,6 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// another comment\n")
 					},
-					expectedDiff: "Incremental checking incorrectly reports a locationless TS2589 after a comment-only edit.",
 				},
 				noChange,
 			},
@@ -2384,7 +2382,6 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/a.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Incremental signature serialization adds a locationless TS2589 to the consumer's cached diagnostic.",
 				},
 				noChange,
 				noChange,
@@ -2415,23 +2412,15 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/usage.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
 				},
-				{
-					caption:      "no change",
-					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
-				},
+				noChange,
 				{
 					caption: "edit the mapped declaration",
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/mapped.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
 				},
-				{
-					caption:      "no change",
-					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
-				},
+				noChange,
 			},
 		},
 		{
@@ -2582,12 +2571,8 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/index.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Signature serialization reports a locationless TS2589 before checking the property access.",
 				},
-				{
-					caption:      "no change",
-					expectedDiff: "The locationless TS2589 is not cached with the file's semantic diagnostics.",
-				},
+				noChange,
 			},
 		},
 		{

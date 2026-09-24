@@ -1,5 +1,5 @@
-usage.ts(4,18): error TS2589: Type instantiation is excessively deep and possibly infinite.
-usage.ts(5,18): error TS2589: Type instantiation is excessively deep and possibly infinite.
+usage.ts(4,18): error TS4109: Type arguments for 'Array' circularly reference themselves.
+usage.ts(5,18): error TS4110: Tuple type arguments circularly reference themselves.
 
 
 ==== mapped.ts (0 errors) ====
@@ -10,9 +10,9 @@ usage.ts(5,18): error TS2589: Type instantiation is excessively deep and possibl
     declare const array: M<string[]>;
     declare const tuple: M<[string]>;
     export const a = array[0];
-                     ~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+                     ~~~~~~~~
+!!! error TS4109: Type arguments for 'Array' circularly reference themselves.
     export const b = tuple[0];
-                     ~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+                     ~~~~~~~~
+!!! error TS4110: Tuple type arguments circularly reference themselves.
     

@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/recursiveMappedArray.ts] ////
+
+=== recursiveMappedArray.ts ===
+type Json = string | Json[];
+>Json : Json
+
+type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+>Parsed : Parsed<T>
+
+declare function wrap<T>(value: T): Parsed<T>;
+>wrap : <T>(value: T) => Parsed<T>
+>value : T
+
+export const value = wrap({ items: [] as Json[] });
+>value : { items: Parsed<Json[]>; }
+>wrap({ items: [] as Json[] }) : { items: Parsed<Json[]>; }
+>wrap : <T>(value: T) => Parsed<T>
+>{ items: [] as Json[] } : { items: Json[]; }
+>items : Json[]
+>[] as Json[] : Json[]
+>[] : never[]
+

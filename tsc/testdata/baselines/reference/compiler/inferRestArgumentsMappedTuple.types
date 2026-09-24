@@ -16,7 +16,7 @@ type TupleMapperOld<Tuple extends any[]> = {
 };
 
 type MyMappedTupleOld = TupleMapperOld<[string, number]>; // [MyMappedType<string>, MyMappedType<number>]
->MyMappedTupleOld : [MyMappedType<string>, MyMappedType<number>]
+>MyMappedTupleOld : MyMappedTupleOld
 
 declare function extractPrimitivesOld<Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>): Tuple;
 >extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
@@ -40,7 +40,7 @@ type TupleMapperNew<Tuple extends any[]> = {
 };
 
 type MyMappedTupleNew = TupleMapperNew<[string, number]>;
->MyMappedTupleNew : [MyMappedType<string>, MyMappedType<number>]
+>MyMappedTupleNew : MyMappedTupleNew
 
 declare function extractPrimitivesNew<Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>): Tuple;
 >extractPrimitivesNew : <Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>) => Tuple

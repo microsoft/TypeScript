@@ -82,48 +82,62 @@ export function anonymous() {
 tsgo --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mproducer/index.ts[0m:[93m7[0m:[93m25[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
+[96mproducer/private.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS5088: [0mThe inferred type of 'local' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 
-[7m7[0m declare const circular: Circular<[number, number]>;
-[7m [0m [91m                        ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m export function local() {
+[7m [0m [91m                ~~~~~[0m
 
-[96mproducer/index.ts[0m:[93m11[0m:[93m23[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
+[96mproducer/private.ts[0m:[93m5[0m:[93m17[0m - [91merror[0m[90m TS5088: [0mThe inferred type of 'anonymous' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 
-[7m11[0m export const nested = wrap(null as unknown as [Tuple]);
-[7m  [0m [91m                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m5[0m export function anonymous() {
+[7m [0m [91m                ~~~~~~~~~[0m
 
-[96mproducer/index.ts[0m:[93m15[0m:[93m25[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-
-[7m15[0m export const replaced = replace([] as Json[]);
-[7m  [0m [91m                        ~~~~~~~~~~~~~~~~~~~~~[0m
-
-[96mproducer/private.ts[0m:[93m3[0m:[93m31[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-
-[7m3[0m     return null as unknown as Circular<[number]>;
-[7m [0m [91m                              ~~~~~~~~~~~~~~~~~~[0m
-
-[96mproducer/private.ts[0m:[93m6[0m:[93m61[0m - [91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-
-[7m6[0m     type Circular<T> = T extends object ? { [K in keyof T]: Circular<[number]> } : T;
-[7m [0m [91m                                                            ~~~~~~~~~~~~~~~~~~[0m
-
-[96mconsumer/index.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'Json'.
+[96mconsumer/index.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string | Parsed<Json[]>'.
 
 [7m3[0m value.items[0] = 123;
 [7m [0m [91m~~~~~~~~~~~~~~[0m
 
-[96mconsumer/index.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'Json'.
+[96mconsumer/index.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string | Parsed<Json[]>'.
 
 [7m5[0m     value.items[0][0] = 123;
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
 
+[96mconsumer/index.ts[0m:[93m7[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'Circular<[number, number]>' is not assignable to type 'number'.
 
-Found 7 errors in 3 files.
+[7m7[0m const number: number = tuple[0];
+[7m [0m [91m      ~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m8[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'Circular<[number, number]>'.
+
+[7m8[0m tuple[0][0] = 123;
+[7m [0m [91m~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m10[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string | Parsed<[Tuple]>'.
+
+[7m10[0m nested[0] = 123;
+[7m  [0m [91m~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m12[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string | Parsed<[Tuple]>'.
+
+[7m12[0m     nested[0][0] = 123;
+[7m  [0m [91m    ~~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m15[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number | Replace<Json[], number>'.
+
+[7m15[0m replaced[0] = "error";
+[7m  [0m [91m~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m17[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number | Replace<Json[], number>'.
+
+[7m17[0m     replaced[0][0] = "error";
+[7m  [0m [91m    ~~~~~~~~~~~~~~[0m
+
+
+Found 10 errors in 2 files.
 
 Errors  Files
-     2  consumer/index.ts[90m:3[0m
-     3  producer/index.ts[90m:7[0m
-     2  producer/private.ts[90m:3[0m
+     8  consumer/index.ts[90m:3[0m
+     2  producer/private.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["./index.ts"],"semanticErrors":true}
@@ -143,12 +157,22 @@ Errors  Files
 }
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *new* 
 type Json = string | Json[];
+type Parsed<T> = T extends object ? {
+    [K in keyof T]: Parsed<T[K]>;
+} : T;
 export declare const value: {
-    items: Json[];
+    items: Parsed<Json[]>;
 };
-export declare const tuple: any;
-export declare const nested: any;
-export declare const replaced: any;
+type Circular<T> = {
+    [P in keyof T]: Circular<T>;
+};
+export declare const tuple: Circular<[number, number]>;
+type Tuple = string | [Tuple];
+export declare const nested: Parsed<[Tuple]>;
+type Replace<T, R> = T extends object ? {
+    [K in keyof T]: Replace<T[K], R>;
+} : R;
+export declare const replaced: Replace<Json[], number>;
 export {};
 
 //// [/home/src/workspaces/project/producer/dist/index.js] *new* 
@@ -156,10 +180,6 @@ export const value = wrap({ items: [] });
 export const tuple = circular;
 export const nested = wrap(null);
 export const replaced = replace([]);
-
-//// [/home/src/workspaces/project/producer/dist/private.d.ts] *new* 
-export declare function local(): any;
-export declare function anonymous(): any;
 
 //// [/home/src/workspaces/project/producer/dist/private.js] *new* 
 export function local() {
@@ -170,11 +190,10 @@ export function anonymous() {
 }
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","../index.ts","../private.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"ee3e8800eb4e45998a629f3cc7a195ab-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n\ntype Circular<T> = { [P in keyof T]: Circular<T> };\ndeclare const circular: Circular<[number, number]>;\nexport const tuple = circular;\n\ntype Tuple = string | [Tuple];\nexport const nested = wrap(null as unknown as [Tuple]);\n\ntype Replace<T, R> = T extends object ? { [K in keyof T]: Replace<T[K], R> } : R;\ndeclare function replace<T>(value: T): Replace<T, number>;\nexport const replaced = replace([] as Json[]);","signature":"6cc5162c702f22160262f45e30d9a7ac-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport declare const tuple: any;\nexport declare const nested: any;\nexport declare const replaced: any;\nexport {};\n","impliedNodeFormat":1},{"version":"3d0559a853159cce0f535e03084e7636-export function local() {\n    type Circular<T> = { [K in keyof T]: Circular<T> };\n    return null as unknown as Circular<[number]>;\n}\nexport function anonymous() {\n    type Circular<T> = T extends object ? { [K in keyof T]: Circular<[number]> } : T;\n    return null as unknown as Circular<[number]>;\n}","signature":"9ea5719d017da4129d83941774e0cb4d-export declare function local(): any;\nexport declare function anonymous(): any;\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"semanticDiagnosticsPerFile":[[2,[{"pos":279,"end":305,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"},{"pos":392,"end":424,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"},{"pos":592,"end":613,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"}]],[3,[{"pos":112,"end":130,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"},{"pos":224,"end":242,"code":2589,"category":1,"messageKey":"Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"}]]],"latestChangedDtsFile":"./private.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","../index.ts","../private.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"ee3e8800eb4e45998a629f3cc7a195ab-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n\ntype Circular<T> = { [P in keyof T]: Circular<T> };\ndeclare const circular: Circular<[number, number]>;\nexport const tuple = circular;\n\ntype Tuple = string | [Tuple];\nexport const nested = wrap(null as unknown as [Tuple]);\n\ntype Replace<T, R> = T extends object ? { [K in keyof T]: Replace<T[K], R> } : R;\ndeclare function replace<T>(value: T): Replace<T, number>;\nexport const replaced = replace([] as Json[]);","signature":"c519a80fea806bd865bc994a4b374b72-type Json = string | Json[];\ntype Parsed<T> = T extends object ? {\n    [K in keyof T]: Parsed<T[K]>;\n} : T;\nexport declare const value: {\n    items: Parsed<Json[]>;\n};\ntype Circular<T> = {\n    [P in keyof T]: Circular<T>;\n};\nexport declare const tuple: Circular<[number, number]>;\ntype Tuple = string | [Tuple];\nexport declare const nested: Parsed<[Tuple]>;\ntype Replace<T, R> = T extends object ? {\n    [K in keyof T]: Replace<T[K], R>;\n} : R;\nexport declare const replaced: Replace<Json[], number>;\nexport {};\n","impliedNodeFormat":1},"3d0559a853159cce0f535e03084e7636-export function local() {\n    type Circular<T> = { [K in keyof T]: Circular<T> };\n    return null as unknown as Circular<[number]>;\n}\nexport function anonymous() {\n    type Circular<T> = T extends object ? { [K in keyof T]: Circular<[number]> } : T;\n    return null as unknown as Circular<[number]>;\n}"],"options":{"composite":true,"outDir":"./","strict":true},"emitDiagnosticsPerFile":[[3,[{"pos":16,"end":21,"code":5088,"category":1,"messageKey":"The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialize_5088","messageArgs":["local"]},{"pos":150,"end":159,"code":5088,"category":1,"messageKey":"The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialize_5088","messageArgs":["anonymous"]}]]],"latestChangedDtsFile":"./index.d.ts","emitSignatures":[3]}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
-  "errors": true,
   "root": [
     {
       "files": [
@@ -208,24 +227,19 @@ export function anonymous() {
     {
       "fileName": "../index.ts",
       "version": "ee3e8800eb4e45998a629f3cc7a195ab-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n\ntype Circular<T> = { [P in keyof T]: Circular<T> };\ndeclare const circular: Circular<[number, number]>;\nexport const tuple = circular;\n\ntype Tuple = string | [Tuple];\nexport const nested = wrap(null as unknown as [Tuple]);\n\ntype Replace<T, R> = T extends object ? { [K in keyof T]: Replace<T[K], R> } : R;\ndeclare function replace<T>(value: T): Replace<T, number>;\nexport const replaced = replace([] as Json[]);",
-      "signature": "6cc5162c702f22160262f45e30d9a7ac-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport declare const tuple: any;\nexport declare const nested: any;\nexport declare const replaced: any;\nexport {};\n",
+      "signature": "c519a80fea806bd865bc994a4b374b72-type Json = string | Json[];\ntype Parsed<T> = T extends object ? {\n    [K in keyof T]: Parsed<T[K]>;\n} : T;\nexport declare const value: {\n    items: Parsed<Json[]>;\n};\ntype Circular<T> = {\n    [P in keyof T]: Circular<T>;\n};\nexport declare const tuple: Circular<[number, number]>;\ntype Tuple = string | [Tuple];\nexport declare const nested: Parsed<[Tuple]>;\ntype Replace<T, R> = T extends object ? {\n    [K in keyof T]: Replace<T[K], R>;\n} : R;\nexport declare const replaced: Replace<Json[], number>;\nexport {};\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "ee3e8800eb4e45998a629f3cc7a195ab-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n\ntype Circular<T> = { [P in keyof T]: Circular<T> };\ndeclare const circular: Circular<[number, number]>;\nexport const tuple = circular;\n\ntype Tuple = string | [Tuple];\nexport const nested = wrap(null as unknown as [Tuple]);\n\ntype Replace<T, R> = T extends object ? { [K in keyof T]: Replace<T[K], R> } : R;\ndeclare function replace<T>(value: T): Replace<T, number>;\nexport const replaced = replace([] as Json[]);",
-        "signature": "6cc5162c702f22160262f45e30d9a7ac-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport declare const tuple: any;\nexport declare const nested: any;\nexport declare const replaced: any;\nexport {};\n",
+        "signature": "c519a80fea806bd865bc994a4b374b72-type Json = string | Json[];\ntype Parsed<T> = T extends object ? {\n    [K in keyof T]: Parsed<T[K]>;\n} : T;\nexport declare const value: {\n    items: Parsed<Json[]>;\n};\ntype Circular<T> = {\n    [P in keyof T]: Circular<T>;\n};\nexport declare const tuple: Circular<[number, number]>;\ntype Tuple = string | [Tuple];\nexport declare const nested: Parsed<[Tuple]>;\ntype Replace<T, R> = T extends object ? {\n    [K in keyof T]: Replace<T[K], R>;\n} : R;\nexport declare const replaced: Replace<Json[], number>;\nexport {};\n",
         "impliedNodeFormat": 1
       }
     },
     {
       "fileName": "../private.ts",
       "version": "3d0559a853159cce0f535e03084e7636-export function local() {\n    type Circular<T> = { [K in keyof T]: Circular<T> };\n    return null as unknown as Circular<[number]>;\n}\nexport function anonymous() {\n    type Circular<T> = T extends object ? { [K in keyof T]: Circular<[number]> } : T;\n    return null as unknown as Circular<[number]>;\n}",
-      "signature": "9ea5719d017da4129d83941774e0cb4d-export declare function local(): any;\nexport declare function anonymous(): any;\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "3d0559a853159cce0f535e03084e7636-export function local() {\n    type Circular<T> = { [K in keyof T]: Circular<T> };\n    return null as unknown as Circular<[number]>;\n}\nexport function anonymous() {\n    type Circular<T> = T extends object ? { [K in keyof T]: Circular<[number]> } : T;\n    return null as unknown as Circular<[number]>;\n}",
-        "signature": "9ea5719d017da4129d83941774e0cb4d-export declare function local(): any;\nexport declare function anonymous(): any;\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "3d0559a853159cce0f535e03084e7636-export function local() {\n    type Circular<T> = { [K in keyof T]: Circular<T> };\n    return null as unknown as Circular<[number]>;\n}\nexport function anonymous() {\n    type Circular<T> = T extends object ? { [K in keyof T]: Circular<[number]> } : T;\n    return null as unknown as Circular<[number]>;\n}",
+      "impliedNodeFormat": "CommonJS"
     }
   ],
   "options": {
@@ -233,55 +247,41 @@ export function anonymous() {
     "outDir": "./",
     "strict": true
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../index.ts",
-      [
-        {
-          "pos": 279,
-          "end": 305,
-          "code": 2589,
-          "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
-        },
-        {
-          "pos": 392,
-          "end": 424,
-          "code": 2589,
-          "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
-        },
-        {
-          "pos": 592,
-          "end": 613,
-          "code": 2589,
-          "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
-        }
-      ]
-    ],
+  "emitDiagnosticsPerFile": [
     [
       "../private.ts",
       [
         {
-          "pos": 112,
-          "end": 130,
-          "code": 2589,
+          "pos": 16,
+          "end": 21,
+          "code": 5088,
           "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
+          "messageKey": "The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialize_5088",
+          "messageArgs": [
+            "local"
+          ]
         },
         {
-          "pos": 224,
-          "end": 242,
-          "code": 2589,
+          "pos": 150,
+          "end": 159,
+          "code": 5088,
           "category": 1,
-          "messageKey": "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589"
+          "messageKey": "The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialize_5088",
+          "messageArgs": [
+            "anonymous"
+          ]
         }
       ]
     ]
   ],
-  "latestChangedDtsFile": "./private.d.ts",
-  "size": 3195
+  "latestChangedDtsFile": "./index.d.ts",
+  "emitSignatures": [
+    {
+      "file": "../private.ts",
+      "original": 3
+    }
+  ],
+  "size": 3099
 }
 
 producer/tsconfig.json::
@@ -291,7 +291,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/producer/private.ts
 Signatures::
 (stored at emit) /home/src/workspaces/project/producer/index.ts
-(stored at emit) /home/src/workspaces/project/producer/private.ts
 
 consumer/tsconfig.json::
 SemanticDiagnostics::

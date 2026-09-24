@@ -9,20 +9,20 @@ import type { M } from "./mapped.js";
 >M : M<T>
 
 declare const array: M<string[]>;
->array : any
+>array : M<string[]>
 
 declare const tuple: M<[string]>;
->tuple : any
+>tuple : M<[string]>
 
 export const a = array[0];
 >a : any
 >array[0] : any
->array : any
+>array : M<string[]>
 >0 : 0
 
 export const b = tuple[0];
 >b : any
 >tuple[0] : any
->tuple : any
+>tuple : M<[string]>
 >0 : 0
 

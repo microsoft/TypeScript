@@ -38,16 +38,16 @@ type Json = string | Json[];
 type Parsed<T> = T extends object ? {
     [K in keyof T]: Parsed<T[K]>;
 } : T;
-export declare const concrete: string[];
-export declare const recursive: any;
+export declare const concrete: Parsed<string[]>;
+export declare const recursive: Parsed<Json[]>;
 export declare const instantiated: {
     concrete: Parsed<string[]>;
     recursive: Parsed<Json[]>;
-    generic: number[];
+    generic: Parsed<number[]>;
 };
 export declare const twice: {
     concrete: Parsed<string[]>;
     recursive: Parsed<Json[]>;
-    generic: boolean[];
+    generic: Parsed<boolean[]>;
 };
 export {};

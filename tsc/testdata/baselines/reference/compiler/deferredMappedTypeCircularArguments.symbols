@@ -29,4 +29,5 @@ export const a = array[0];
 export const b = tuple[0];
 >b : Symbol(b, Decl(usage.ts, 4, 12))
 >tuple : Symbol(tuple, Decl(usage.ts, 2, 13))
+>0 : Symbol(0)
 

@@ -1005,7 +1005,7 @@ func (t *ObjectType) AsObjectType() *ObjectType { return t }
 
 type TypeReference struct {
 	ObjectType
-	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
+	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode | MappedTypeNode when deferred, else nil
 	resolvedTypeArguments []*Type
 }
 

@@ -43,8 +43,8 @@ const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 >"value" : "value"
 
 const frozenArray = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
->frozenArray : readonly (string | number)[][]
->Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly (string | number)[][]
+>frozenArray : Readonly<(string | number)[][]>
+>Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : Readonly<(string | number)[][]>
 >Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
 >freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
@@ -65,11 +65,11 @@ const o4 = Object.fromEntries(frozenArray);
 >Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >Object : ObjectConstructor
 >fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
->frozenArray : readonly (string | number)[][]
+>frozenArray : Readonly<(string | number)[][]>
 
 const frozenArray2: readonly [string, number][] = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
 >frozenArray2 : readonly [string, number][]
->Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly [string, number][]
+>Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : Readonly<[string, number][]>
 >Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
 >freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }

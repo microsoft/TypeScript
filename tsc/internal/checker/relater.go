@@ -91,7 +91,7 @@ type RecursionId struct {
 }
 
 // This function exists to constrain the types of values that can be used as recursion IDs.
-func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
+func asRecursionId[T *ast.Node | *ast.Symbol | *Type | CacheHashKey](value T) RecursionId {
 	return RecursionId{value: value}
 }
 
@@ -758,8 +758,9 @@ func isExcessPropertyCheckTarget(t *Type) bool {
 // in `type Deep<T> = { next: Deep<Deep<T>> }`, repeatedly referencing the `next` property leads to an infinite
 // sequence of ever deeper instantiations with the same recursion identity (in this case the symbol associated with
 // the object type literal).
-// A homomorphic mapped type is considered deeply nested if its target type is deeply nested, and an intersection is
-// considered deeply nested if any constituent of the intersection is deeply nested.
+// Homomorphic mapped object types use their target's recursion identity. Deferred type references to mapped arrays
+// and tuples use the mapped type declaration and instantiated outer type parameters. An intersection is considered
+// deeply nested if any constituent of the intersection is deeply nested.
 // It is possible, though highly unlikely, for the deeply nested check to be true in a situation where a chain of
 // instantiations is not infinitely expanding. Effectively, we will generate a false positive when two types are
 // structurally equal to at least maxDepth levels, but unequal at some level beyond that.
@@ -838,6 +839,18 @@ func getRecursionIdentityTarget(t *Type) *Type {
 // identity of the type, meaning that every type is unique. Generally, types with constituents that could circularly
 // reference the type have a recursion identity that differs from the object identity.
 func getRecursionIdentityFromTarget(t *Type) RecursionId {
+	if isDeferredMappedTypeReference(t) {
+		// Include the mapped type declaration and instantiated outer type parameters in the recursion identity.
+		// Type arguments can share a recursion identity without being the same type.
+		c := t.checker
+		node := t.AsTypeReference().node
+		var key keyBuilder
+		key.writeNode(node)
+		for _, parameter := range c.typeNodeLinks.Get(node).outerTypeParameters {
+			key.writeType(c.instantiateType(parameter, t.Mapper()))
+		}
+		return asRecursionId(key.hash())
+	}
 	// Object and array literals are known not to contain recursive references and don't need a recursion identity.
 	if t.flags&TypeFlagsObject != 0 && !isObjectOrArrayLiteralType(t) {
 		if t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil {
@@ -2647,9 +2660,9 @@ func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recu
 		return TernaryFalse
 	}
 	// Normalize the source and target types: Turn fresh literal types into regular literal types,
-	// turn deferred type references into regular type references, simplify indexed access and
-	// conditional types, and resolve substitution types to either the substitution (on the source
-	// side) or the type variable (on the target side).
+	// turn deferred type references into regular type references (except those with a mapped type node),
+	// simplify indexed access and conditional types, and resolve substitution types to either the substitution
+	// (on the source side) or the type variable (on the target side).
 	source := r.c.getNormalizedType(originalSource, false /*writing*/)
 	target := r.c.getNormalizedType(originalTarget, true /*writing*/)
 	if source == target {

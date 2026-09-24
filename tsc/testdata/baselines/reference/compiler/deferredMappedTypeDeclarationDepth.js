@@ -110,12 +110,6 @@ export function boundedChain() {
 }
 
 
-//// [growing.d.ts]
-export declare function tuple(): any;
-export declare function array(): any;
-export declare function changingTuple(): any;
-export declare function changingArray(): any;
-export declare function nestedContext(): any;
 //// [finite.d.ts]
 type Previous = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 export declare function array(): number[][][][][][][][][][][][][];

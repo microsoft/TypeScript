@@ -1,91 +1,90 @@
-deferredMappedTypeRelations.ts(5,7): error TS2322: Type 'string[][][][]' is not assignable to type 'number[][][][]'.
-  Type 'string[][][]' is not assignable to type 'number[][][]'.
-    Type 'string[][]' is not assignable to type 'number[][]'.
-      Type 'string[]' is not assignable to type 'number[]'.
+deferredMappedTypeRelations.ts(5,7): error TS2322: Type 'Deep<string[][][][]>' is not assignable to type 'Deep<number[][][][]>'.
+  Type 'Deep<string[][][]>' is not assignable to type 'Deep<number[][][]>'.
+    Type 'Deep<string[][]>' is not assignable to type 'Deep<number[][]>'.
+      Type 'Deep<string[]>' is not assignable to type 'Deep<number[]>'.
         Type 'string' is not assignable to type 'number'.
-deferredMappedTypeRelations.ts(9,7): error TS2322: Type '[[[[string]]]]' is not assignable to type '[[[[number]]]]'.
-  Type '[[[string]]]' is not assignable to type '[[[number]]]'.
-    Type '[[string]]' is not assignable to type '[[number]]'.
-      Type '[string]' is not assignable to type '[number]'.
+deferredMappedTypeRelations.ts(9,7): error TS2322: Type 'Deep<[[[[string]]]]>' is not assignable to type 'Deep<[[[[number]]]]>'.
+  Type 'Deep<[[[string]]]>' is not assignable to type 'Deep<[[[number]]]>'.
+    Type 'Deep<[[string]]>' is not assignable to type 'Deep<[[number]]>'.
+      Type 'Deep<[string]>' is not assignable to type 'Deep<[number]>'.
         Type 'string' is not assignable to type 'number'.
-deferredMappedTypeRelations.ts(13,7): error TS2322: Type 'readonly (readonly (readonly (readonly string[])[])[])[]' is not assignable to type 'readonly (readonly (readonly (readonly number[])[])[])[]'.
-  Type 'readonly (readonly (readonly string[])[])[]' is not assignable to type 'readonly (readonly (readonly number[])[])[]'.
-    Type 'readonly (readonly string[])[]' is not assignable to type 'readonly (readonly number[])[]'.
-      Type 'readonly string[]' is not assignable to type 'readonly number[]'.
+deferredMappedTypeRelations.ts(13,7): error TS2322: Type 'DeepReadonly<string[][][][]>' is not assignable to type 'DeepReadonly<number[][][][]>'.
+  Type 'DeepReadonly<string[][][]>' is not assignable to type 'DeepReadonly<number[][][]>'.
+    Type 'DeepReadonly<string[][]>' is not assignable to type 'DeepReadonly<number[][]>'.
+      Type 'DeepReadonly<string[]>' is not assignable to type 'DeepReadonly<number[]>'.
         Type 'string' is not assignable to type 'number'.
-deferredMappedTypeRelations.ts(17,7): error TS2322: Type 'readonly [readonly [readonly [readonly [string]]]]' is not assignable to type 'readonly [readonly [readonly [readonly [number]]]]'.
-  Type 'readonly [readonly [readonly [string]]]' is not assignable to type 'readonly [readonly [readonly [number]]]'.
-    Type 'readonly [readonly [string]]' is not assignable to type 'readonly [readonly [number]]'.
-      Type 'readonly [string]' is not assignable to type 'readonly [number]'.
+deferredMappedTypeRelations.ts(17,7): error TS2322: Type 'DeepReadonly<[[[[string]]]]>' is not assignable to type 'DeepReadonly<[[[[number]]]]>'.
+  Type 'DeepReadonly<[[[string]]]>' is not assignable to type 'DeepReadonly<[[[number]]]>'.
+    Type 'DeepReadonly<[[string]]>' is not assignable to type 'DeepReadonly<[[number]]>'.
+      Type 'DeepReadonly<[string]>' is not assignable to type 'DeepReadonly<[number]>'.
         Type 'string' is not assignable to type 'number'.
 deferredMappedTypeRelations.ts(27,7): error TS2322: Type 'number' is not assignable to type 'string'.
-deferredMappedTypeRelations.ts(29,37): error TS2589: Type instantiation is excessively deep and possibly infinite.
-deferredMappedTypeRelations.ts(36,7): error TS2322: Type 'string[][][][][]' is not assignable to type 'number[][][][][]'.
-  Type 'string[][][][]' is not assignable to type 'number[][][][]'.
-    Type 'string[][][]' is not assignable to type 'number[][][]'.
-      Type 'string[][]' is not assignable to type 'number[][]'.
-        Type 'string[]' is not assignable to type 'number[]'.
+deferredMappedTypeRelations.ts(36,7): error TS2322: Type 'Nest<string[], 4>' is not assignable to type 'Nest<number[], 4>'.
+  Type 'Nest<string[], 3>' is not assignable to type 'Nest<number[], 3>'.
+    Type 'Nest<string[], 2>' is not assignable to type 'Nest<number[], 2>'.
+      Type 'Nest<string[], 1>' is not assignable to type 'Nest<number[], 1>'.
+        Type 'Nest<string[], 0>' is not assignable to type 'Nest<number[], 0>'.
           Type 'string' is not assignable to type 'number'.
-deferredMappedTypeRelations.ts(39,7): error TS2322: Type '[[[[[string]]]]]' is not assignable to type '[[[[[number]]]]]'.
-  Type '[[[[string]]]]' is not assignable to type '[[[[number]]]]'.
-    Type '[[[string]]]' is not assignable to type '[[[number]]]'.
-      Type '[[string]]' is not assignable to type '[[number]]'.
-        Type '[string]' is not assignable to type '[number]'.
+deferredMappedTypeRelations.ts(39,7): error TS2322: Type 'Nest<[string], 4>' is not assignable to type 'Nest<[number], 4>'.
+  Type 'Nest<[string], 3>' is not assignable to type 'Nest<[number], 3>'.
+    Type 'Nest<[string], 2>' is not assignable to type 'Nest<[number], 2>'.
+      Type 'Nest<[string], 1>' is not assignable to type 'Nest<[number], 1>'.
+        Type 'Nest<[string], 0>' is not assignable to type 'Nest<[number], 0>'.
           Type 'string' is not assignable to type 'number'.
-deferredMappedTypeRelations.ts(47,7): error TS2322: Type '[[[[[string]]]]]' is not assignable to type '[[[[[number]]]]]'.
-  Type '[[[[string]]]]' is not assignable to type '[[[[number]]]]'.
-    Type '[[[string]]]' is not assignable to type '[[[number]]]'.
-      Type '[[string]]' is not assignable to type '[[number]]'.
-        Type '[string]' is not assignable to type '[number]'.
+deferredMappedTypeRelations.ts(47,7): error TS2322: Type 'ChainNest<[string], Step<Step<Step<Step<null>>>>>' is not assignable to type 'ChainNest<[number], Step<Step<Step<Step<null>>>>>'.
+  Type 'ChainNest<[string], Step<Step<Step<null>>>>' is not assignable to type 'ChainNest<[number], Step<Step<Step<null>>>>'.
+    Type 'ChainNest<[string], Step<Step<null>>>' is not assignable to type 'ChainNest<[number], Step<Step<null>>>'.
+      Type 'ChainNest<[string], Step<null>>' is not assignable to type 'ChainNest<[number], Step<null>>'.
+        Type 'ChainNest<[string], null>' is not assignable to type 'ChainNest<[number], null>'.
           Type 'string' is not assignable to type 'number'.
-deferredMappedTypeRelations.ts(53,7): error TS2322: Type 'string[][][][]' is not assignable to type 'number[][][][]'.
-  Type 'string[][][]' is not assignable to type 'number[][][]'.
-    Type 'string[][]' is not assignable to type 'number[][]'.
-      Type 'string[]' is not assignable to type 'number[]'.
+deferredMappedTypeRelations.ts(53,7): error TS2322: Type 'Deep<string[][][][]>' is not assignable to type 'Deep<number[][][][]>'.
+  Type 'Deep<string[][][]>' is not assignable to type 'Deep<number[][][]>'.
+    Type 'Deep<string[][]>' is not assignable to type 'Deep<number[][]>'.
+      Type 'Deep<string[]>' is not assignable to type 'Deep<number[]>'.
         Type 'string' is not assignable to type 'number'.
 
 
-==== deferredMappedTypeRelations.ts (10 errors) ====
+==== deferredMappedTypeRelations.ts (9 errors) ====
     type Deep<T> = T extends object ? { [K in keyof T]: Deep<T[K]> } : T;
     type DeepReadonly<T> = T extends object ? { readonly [K in keyof T]: DeepReadonly<T[K]> } : T;
     
     declare const array: Deep<string[][][][]>;
     const badArray: Deep<number[][][][]> = array;
           ~~~~~~~~
-!!! error TS2322: Type 'string[][][][]' is not assignable to type 'number[][][][]'.
-!!! error TS2322:   Type 'string[][][]' is not assignable to type 'number[][][]'.
-!!! error TS2322:     Type 'string[][]' is not assignable to type 'number[][]'.
-!!! error TS2322:       Type 'string[]' is not assignable to type 'number[]'.
+!!! error TS2322: Type 'Deep<string[][][][]>' is not assignable to type 'Deep<number[][][][]>'.
+!!! error TS2322:   Type 'Deep<string[][][]>' is not assignable to type 'Deep<number[][][]>'.
+!!! error TS2322:     Type 'Deep<string[][]>' is not assignable to type 'Deep<number[][]>'.
+!!! error TS2322:       Type 'Deep<string[]>' is not assignable to type 'Deep<number[]>'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     const goodArray: Deep<string[][][][]> = array;
     
     declare const tuple: Deep<[[[[string]]]]>;
     const badTuple: Deep<[[[[number]]]]> = tuple;
           ~~~~~~~~
-!!! error TS2322: Type '[[[[string]]]]' is not assignable to type '[[[[number]]]]'.
-!!! error TS2322:   Type '[[[string]]]' is not assignable to type '[[[number]]]'.
-!!! error TS2322:     Type '[[string]]' is not assignable to type '[[number]]'.
-!!! error TS2322:       Type '[string]' is not assignable to type '[number]'.
+!!! error TS2322: Type 'Deep<[[[[string]]]]>' is not assignable to type 'Deep<[[[[number]]]]>'.
+!!! error TS2322:   Type 'Deep<[[[string]]]>' is not assignable to type 'Deep<[[[number]]]>'.
+!!! error TS2322:     Type 'Deep<[[string]]>' is not assignable to type 'Deep<[[number]]>'.
+!!! error TS2322:       Type 'Deep<[string]>' is not assignable to type 'Deep<[number]>'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     const goodTuple: Deep<[[[[string]]]]> = tuple;
     
     declare const readonlyArray: DeepReadonly<string[][][][]>;
     const badReadonlyArray: DeepReadonly<number[][][][]> = readonlyArray;
           ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'readonly (readonly (readonly (readonly string[])[])[])[]' is not assignable to type 'readonly (readonly (readonly (readonly number[])[])[])[]'.
-!!! error TS2322:   Type 'readonly (readonly (readonly string[])[])[]' is not assignable to type 'readonly (readonly (readonly number[])[])[]'.
-!!! error TS2322:     Type 'readonly (readonly string[])[]' is not assignable to type 'readonly (readonly number[])[]'.
-!!! error TS2322:       Type 'readonly string[]' is not assignable to type 'readonly number[]'.
+!!! error TS2322: Type 'DeepReadonly<string[][][][]>' is not assignable to type 'DeepReadonly<number[][][][]>'.
+!!! error TS2322:   Type 'DeepReadonly<string[][][]>' is not assignable to type 'DeepReadonly<number[][][]>'.
+!!! error TS2322:     Type 'DeepReadonly<string[][]>' is not assignable to type 'DeepReadonly<number[][]>'.
+!!! error TS2322:       Type 'DeepReadonly<string[]>' is not assignable to type 'DeepReadonly<number[]>'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     const goodReadonlyArray: DeepReadonly<string[][][][]> = readonlyArray;
     
     declare const readonlyTuple: DeepReadonly<[[[[string]]]]>;
     const badReadonlyTuple: DeepReadonly<[[[[number]]]]> = readonlyTuple;
           ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'readonly [readonly [readonly [readonly [string]]]]' is not assignable to type 'readonly [readonly [readonly [readonly [number]]]]'.
-!!! error TS2322:   Type 'readonly [readonly [readonly [string]]]' is not assignable to type 'readonly [readonly [readonly [number]]]'.
-!!! error TS2322:     Type 'readonly [readonly [string]]' is not assignable to type 'readonly [readonly [number]]'.
-!!! error TS2322:       Type 'readonly [string]' is not assignable to type 'readonly [number]'.
+!!! error TS2322: Type 'DeepReadonly<[[[[string]]]]>' is not assignable to type 'DeepReadonly<[[[[number]]]]>'.
+!!! error TS2322:   Type 'DeepReadonly<[[[string]]]>' is not assignable to type 'DeepReadonly<[[[number]]]>'.
+!!! error TS2322:     Type 'DeepReadonly<[[string]]>' is not assignable to type 'DeepReadonly<[[number]]>'.
+!!! error TS2322:       Type 'DeepReadonly<[string]>' is not assignable to type 'DeepReadonly<[number]>'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     const goodReadonlyTuple: DeepReadonly<[[[[string]]]]> = readonlyTuple;
     
@@ -101,8 +100,6 @@ deferredMappedTypeRelations.ts(53,7): error TS2322: Type 'string[][][][]' is not
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     
     type Growing<T> = { [K in keyof T]: Growing<T[]> };
-                                        ~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     declare const growing: Growing<string[]>;
     const sameStructure: Growing<number[]> = growing;
     
@@ -111,21 +108,21 @@ deferredMappedTypeRelations.ts(53,7): error TS2322: Type 'string[][][][]' is not
     declare const boundedArray: Nest<string[], 4>;
     const badBoundedArray: Nest<number[], 4> = boundedArray;
           ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'string[][][][][]' is not assignable to type 'number[][][][][]'.
-!!! error TS2322:   Type 'string[][][][]' is not assignable to type 'number[][][][]'.
-!!! error TS2322:     Type 'string[][][]' is not assignable to type 'number[][][]'.
-!!! error TS2322:       Type 'string[][]' is not assignable to type 'number[][]'.
-!!! error TS2322:         Type 'string[]' is not assignable to type 'number[]'.
+!!! error TS2322: Type 'Nest<string[], 4>' is not assignable to type 'Nest<number[], 4>'.
+!!! error TS2322:   Type 'Nest<string[], 3>' is not assignable to type 'Nest<number[], 3>'.
+!!! error TS2322:     Type 'Nest<string[], 2>' is not assignable to type 'Nest<number[], 2>'.
+!!! error TS2322:       Type 'Nest<string[], 1>' is not assignable to type 'Nest<number[], 1>'.
+!!! error TS2322:         Type 'Nest<string[], 0>' is not assignable to type 'Nest<number[], 0>'.
 !!! error TS2322:           Type 'string' is not assignable to type 'number'.
     const goodBoundedArray: Nest<(string | number)[], 4> = boundedArray;
     declare const boundedTuple: Nest<[string], 4>;
     const badBoundedTuple: Nest<[number], 4> = boundedTuple;
           ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '[[[[[string]]]]]' is not assignable to type '[[[[[number]]]]]'.
-!!! error TS2322:   Type '[[[[string]]]]' is not assignable to type '[[[[number]]]]'.
-!!! error TS2322:     Type '[[[string]]]' is not assignable to type '[[[number]]]'.
-!!! error TS2322:       Type '[[string]]' is not assignable to type '[[number]]'.
-!!! error TS2322:         Type '[string]' is not assignable to type '[number]'.
+!!! error TS2322: Type 'Nest<[string], 4>' is not assignable to type 'Nest<[number], 4>'.
+!!! error TS2322:   Type 'Nest<[string], 3>' is not assignable to type 'Nest<[number], 3>'.
+!!! error TS2322:     Type 'Nest<[string], 2>' is not assignable to type 'Nest<[number], 2>'.
+!!! error TS2322:       Type 'Nest<[string], 1>' is not assignable to type 'Nest<[number], 1>'.
+!!! error TS2322:         Type 'Nest<[string], 0>' is not assignable to type 'Nest<[number], 0>'.
 !!! error TS2322:           Type 'string' is not assignable to type 'number'.
     const goodBoundedTuple: Nest<[string | number], 4> = boundedTuple;
     type BoundedRelation = AssertFalse<Nest<[string], 4> extends Nest<[number], 4> ? true : false>;
@@ -136,11 +133,11 @@ deferredMappedTypeRelations.ts(53,7): error TS2322: Type 'string[][][][]' is not
     declare const chain: ChainNest<[string], BuildChain<4>>;
     const badChain: ChainNest<[number], BuildChain<4>> = chain;
           ~~~~~~~~
-!!! error TS2322: Type '[[[[[string]]]]]' is not assignable to type '[[[[[number]]]]]'.
-!!! error TS2322:   Type '[[[[string]]]]' is not assignable to type '[[[[number]]]]'.
-!!! error TS2322:     Type '[[[string]]]' is not assignable to type '[[[number]]]'.
-!!! error TS2322:       Type '[[string]]' is not assignable to type '[[number]]'.
-!!! error TS2322:         Type '[string]' is not assignable to type '[number]'.
+!!! error TS2322: Type 'ChainNest<[string], Step<Step<Step<Step<null>>>>>' is not assignable to type 'ChainNest<[number], Step<Step<Step<Step<null>>>>>'.
+!!! error TS2322:   Type 'ChainNest<[string], Step<Step<Step<null>>>>' is not assignable to type 'ChainNest<[number], Step<Step<Step<null>>>>'.
+!!! error TS2322:     Type 'ChainNest<[string], Step<Step<null>>>' is not assignable to type 'ChainNest<[number], Step<Step<null>>>'.
+!!! error TS2322:       Type 'ChainNest<[string], Step<null>>' is not assignable to type 'ChainNest<[number], Step<null>>'.
+!!! error TS2322:         Type 'ChainNest<[string], null>' is not assignable to type 'ChainNest<[number], null>'.
 !!! error TS2322:           Type 'string' is not assignable to type 'number'.
     const goodChain: ChainNest<[string | number], BuildChain<4>> = chain;
     type ChainRelation = AssertFalse<ChainNest<[string], BuildChain<4>> extends ChainNest<[number], BuildChain<4>> ? true : false>;
@@ -149,10 +146,10 @@ deferredMappedTypeRelations.ts(53,7): error TS2322: Type 'string[][][][]' is not
     declare const computedArray: Deep<BuildArray<4, string>>;
     const badComputedArray: Deep<BuildArray<4, number>> = computedArray;
           ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'string[][][][]' is not assignable to type 'number[][][][]'.
-!!! error TS2322:   Type 'string[][][]' is not assignable to type 'number[][][]'.
-!!! error TS2322:     Type 'string[][]' is not assignable to type 'number[][]'.
-!!! error TS2322:       Type 'string[]' is not assignable to type 'number[]'.
+!!! error TS2322: Type 'Deep<string[][][][]>' is not assignable to type 'Deep<number[][][][]>'.
+!!! error TS2322:   Type 'Deep<string[][][]>' is not assignable to type 'Deep<number[][][]>'.
+!!! error TS2322:     Type 'Deep<string[][]>' is not assignable to type 'Deep<number[][]>'.
+!!! error TS2322:       Type 'Deep<string[]>' is not assignable to type 'Deep<number[]>'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     const goodComputedArray: Deep<BuildArray<4, string | number>> = computedArray;
     type ComputedRelation = AssertFalse<Deep<BuildArray<4, string>> extends Deep<BuildArray<4, number>> ? true : false>;

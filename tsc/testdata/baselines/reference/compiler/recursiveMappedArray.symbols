@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/recursiveMappedArray.ts] ////
+
+=== recursiveMappedArray.ts ===
+type Json = string | Json[];
+>Json : Symbol(Json, Decl(recursiveMappedArray.ts, 0, 0))
+>Json : Symbol(Json, Decl(recursiveMappedArray.ts, 0, 0))
+
+type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+>Parsed : Symbol(Parsed, Decl(recursiveMappedArray.ts, 0, 28))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 1, 12))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 1, 12))
+>K : Symbol(K, Decl(recursiveMappedArray.ts, 1, 39))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 1, 12))
+>Parsed : Symbol(Parsed, Decl(recursiveMappedArray.ts, 0, 28))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 1, 12))
+>K : Symbol(K, Decl(recursiveMappedArray.ts, 1, 39))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 1, 12))
+
+declare function wrap<T>(value: T): Parsed<T>;
+>wrap : Symbol(wrap, Decl(recursiveMappedArray.ts, 1, 73))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 2, 22))
+>value : Symbol(value, Decl(recursiveMappedArray.ts, 2, 25))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 2, 22))
+>Parsed : Symbol(Parsed, Decl(recursiveMappedArray.ts, 0, 28))
+>T : Symbol(T, Decl(recursiveMappedArray.ts, 2, 22))
+
+export const value = wrap({ items: [] as Json[] });
+>value : Symbol(value, Decl(recursiveMappedArray.ts, 3, 12))
+>wrap : Symbol(wrap, Decl(recursiveMappedArray.ts, 1, 73))
+>items : Symbol(items, Decl(recursiveMappedArray.ts, 3, 27))
+>Json : Symbol(Json, Decl(recursiveMappedArray.ts, 0, 0))
+

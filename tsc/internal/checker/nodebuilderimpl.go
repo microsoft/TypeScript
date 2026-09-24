@@ -23,8 +23,7 @@ import (
 
 type CompositeSymbolIdentity struct {
 	isConstructorNode bool
-	symbolId          ast.SymbolId
-	nodeId            ast.NodeId
+	identity          RecursionId
 }
 
 type TrackedSymbolArgs struct {
@@ -3228,12 +3227,14 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	isConstructorObject := t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsClass != 0
 	var id *CompositeSymbolIdentity
 	switch {
+	case isDeferredMappedTypeReference(t):
+		id = &CompositeSymbolIdentity{false, getRecursionIdentity(t)}
 	case t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil:
-		id = &CompositeSymbolIdentity{false, 0, ast.GetNodeId(t.AsTypeReference().node)}
+		id = &CompositeSymbolIdentity{false, asRecursionId(t.AsTypeReference().node)}
 	case t.flags&TypeFlagsConditional != 0:
-		id = &CompositeSymbolIdentity{false, 0, ast.GetNodeId(t.AsConditionalType().root.node.AsNode())}
+		id = &CompositeSymbolIdentity{false, asRecursionId(t.AsConditionalType().root.node.AsNode())}
 	case t.symbol != nil:
-		id = &CompositeSymbolIdentity{isConstructorObject, ast.GetSymbolId(t.symbol), 0}
+		id = &CompositeSymbolIdentity{isConstructorObject, asRecursionId(t.symbol)}
 	default:
 		id = nil
 	}
@@ -3257,6 +3258,19 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 			b.ctx.approximateLength += cachedResult.addedLength
 			return b.f.DeepCloneNode(cachedResult.node)
 		}
+	}
+
+	if isDeferredMappedTypeReference(t) {
+		// Different type arguments can produce different recursion identities for the same mapped type.
+		// Also limit expansion by mapped type declaration.
+		origin := CompositeSymbolIdentity{false, asRecursionId(t.AsTypeReference().node)}
+		depth := b.ctx.symbolDepth[origin]
+		if depth >= maxTypeInstantiationDepth {
+			b.ctx.truncating = true
+			return b.createElidedInformationPlaceholder()
+		}
+		b.ctx.symbolDepth[origin] = depth + 1
+		defer func() { b.ctx.symbolDepth[origin] = depth }()
 	}
 
 	var depth int

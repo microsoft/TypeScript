@@ -37,13 +37,13 @@ type ToAnonymousTuple<T extends unknown[]> = {
 };
 
 type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
->AnonymousToAnonymous : [["0", boolean, keyof [boolean, number], [boolean, number]], ["1", number, keyof [boolean, number], [boolean, number]]]
+>AnonymousToAnonymous : AnonymousToAnonymous
 
 type MixedToAnonymous = ToAnonymousTuple<[boolean, second: number]>;
->MixedToAnonymous : [["0", boolean, keyof [boolean, second: number], [boolean, second: number]], second: ["1", number, keyof [boolean, second: number], [boolean, second: number]]]
+>MixedToAnonymous : MixedToAnonymous
 
 type NamedToAnonymous = ToAnonymousTuple<[first: boolean, second: number]>;
->NamedToAnonymous : [first: ["0", boolean, keyof [first: boolean, second: number], [first: boolean, second: number]], second: ["1", number, keyof [first: boolean, second: number], [first: boolean, second: number]]]
+>NamedToAnonymous : NamedToAnonymous
 
 type ToMixedTuple<T extends unknown[]> = {
 >ToMixedTuple : ToMixedTuple<T>
@@ -52,13 +52,13 @@ type ToMixedTuple<T extends unknown[]> = {
 };
 
 type AnonymousToMixed = ToMixedTuple<[boolean, number]>;
->AnonymousToMixed : [["0", second: boolean, keyof [boolean, number], fourth: [boolean, number]], ["1", second: number, keyof [boolean, number], fourth: [boolean, number]]]
+>AnonymousToMixed : AnonymousToMixed
 
 type MixedToMixed = ToMixedTuple<[boolean, second: number]>;
->MixedToMixed : [["0", second: boolean, keyof [boolean, second: number], fourth: [boolean, second: number]], second: ["1", second: number, keyof [boolean, second: number], fourth: [boolean, second: number]]]
+>MixedToMixed : MixedToMixed
 
 type NamedToMixed = ToMixedTuple<[first: boolean, second: number]>;
->NamedToMixed : [first: ["0", second: boolean, keyof [first: boolean, second: number], fourth: [first: boolean, second: number]], second: ["1", second: number, keyof [first: boolean, second: number], fourth: [first: boolean, second: number]]]
+>NamedToMixed : NamedToMixed
 
 type MixedSpread = [first: boolean, ...[second: string]];
 >MixedSpread : [first: boolean, second: string]
