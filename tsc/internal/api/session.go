@@ -78,6 +78,13 @@ type snapshotData struct {
 	projectRegistriesMu sync.RWMutex
 }
 
+type moduleResolverRegistration struct {
+	id                        ModuleResolverID
+	compilerOptions           *core.CompilerOptions
+	resolutions               *module.StaticResolutions
+	resolveModuleNameCallback string
+}
+
 // projectRegistryData holds per-project type and signature registries.
 // Types and signatures use per-checker sequential IDs, so the same local ID
 // can appear in multiple projects. Separate maps per project prevent collisions
@@ -436,6 +443,14 @@ type Session struct {
 	buildOrchestrators map[BuildOrchestratorID]*build.Orchestrator
 	buildMu            sync.Mutex
 
+	nextModuleResolverID           atomic.Uint64
+	moduleResolvers                map[ModuleResolverID]*moduleResolverRegistration
+	moduleResolversMu              sync.RWMutex
+	nextProgramResolutionContextID atomic.Uint64
+	programResolutionContexts      map[uint64]*programResolutionContext
+	programResolutionContextsMu    sync.RWMutex
+	conn                           ipc.Conn
+
 	cpuProfiler pprof.CPUProfiler
 }
 
@@ -477,11 +492,13 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		withLocale = func(ctx context.Context) context.Context { return ctx }
 	}
 	s := &Session{
-		id:                 formatSessionID(id),
-		snapshotHost:       snapshotHost,
-		withLocale:         withLocale,
-		snapshots:          make(map[SnapshotID]*snapshotData),
+		id:                        formatSessionID(id),
+		snapshotHost:              snapshotHost,
+		withLocale:                withLocale,
+		snapshots:                 make(map[SnapshotID]*snapshotData),
 		buildOrchestrators: make(map[BuildOrchestratorID]*build.Orchestrator),
+		moduleResolvers:           make(map[ModuleResolverID]*moduleResolverRegistration),
+		programResolutionContexts: make(map[uint64]*programResolutionContext),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -494,18 +511,22 @@ func (s *Session) ID() string {
 	return s.id
 }
 
-func (s *Session) currentDirectory() string {
+func (s *Session) SetConnection(conn ipc.Conn) {
+	s.conn = conn
+}
+
+func (s *Session) GetCurrentDirectory() string {
 	return s.snapshotHost.GetCurrentDirectory()
 }
 
-func (s *Session) fileSystem() vfs.FS {
+func (s *Session) FS() vfs.FS {
 	if s.projectSession != nil {
 		return s.projectSession.FS()
 	}
 	return s.snapshotHost.FS()
 }
 
-func (s *Session) defaultLibraryPath() string {
+func (s *Session) DefaultLibraryPath() string {
 	if s.projectSession != nil {
 		return s.projectSession.DefaultLibraryPath()
 	}
@@ -701,6 +722,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleUpdateSnapshot(ctx, parsed.(*UpdateSnapshotParams))
 	case string(MethodGetCurrentLanguageServerSnapshot):
 		return s.handleGetCurrentLanguageServerSnapshot(ctx, parsed.(*GetCurrentLanguageServerSnapshotParams))
+	case string(MethodCreateModuleResolver):
+		return s.handleCreateModuleResolver(parsed.(*CreateModuleResolverParams))
+	case string(MethodReleaseModuleResolver):
+		return s.handleReleaseModuleResolver(parsed.(*ReleaseModuleResolverParams))
+	case string(MethodResolveModuleName):
+		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -923,8 +950,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypeOfPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfoOfType):
 		return s.handleGetIndexInfoOfType(ctx, parsed.(*GetIndexInfoOfTypeParams))
-	case string(MethodGetIndexTypeOfTypeByKind):
-		return s.handleGetIndexTypeOfTypeByKind(ctx, parsed.(*GetIndexInfoOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
@@ -1188,13 +1213,13 @@ func (s *Session) HandleNotification(ctx context.Context, method string, params 
 func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, error) {
 	return &InitializeResponse{
 		UseCaseSensitiveFileNames: s.useCaseSensitiveFileNames(),
-		CurrentDirectory:          s.currentDirectory(),
+		CurrentDirectory:          s.GetCurrentDirectory(),
 	}, nil
 }
 
 // handleCreateSnapshot creates a new independent snapshot.
 func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapshotParams) (*CreateSnapshotResponse, error) {
-	apiRequest, err := s.toAPISnapshotRequest(&params.SnapshotRequestChangesParams)
+	apiRequest, err := s.toAPISnapshotRequest(ctx, &params.SnapshotRequestChangesParams)
 	if err != nil {
 		return nil, err
 	}
@@ -1203,7 +1228,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	fileChanges := s.toFileChangeSummary(params.FileNotifications)
 	var snapshotFileSystem vfs.FS
 	if params.FileSystem != nil {
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.fileSystem(), s.currentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.FS(), s.GetCurrentDirectory(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
@@ -1217,6 +1242,10 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	if err != nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create snapshot: %w", ErrClientError, err)
+	}
+	if err := moduleResolutionError(snapshot); err != nil {
+		snapshot.Deref()
+		return nil, err
 	}
 
 	response := s.createSnapshotResponse(snapshot, nil, &params.SnapshotRequestChangesParams)
@@ -1235,7 +1264,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if changes == nil {
 		changes = &CreateSnapshotParams{}
 	}
-	apiRequest, err := s.toAPISnapshotRequest(&changes.SnapshotRequestChangesParams)
+	apiRequest, err := s.toAPISnapshotRequest(ctx, &changes.SnapshotRequestChangesParams)
 	if err != nil {
 		return nil, err
 	}
@@ -1245,9 +1274,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if changes.FileSystem != nil {
 		baseFileSystem := snapshotFileSystem
 		if baseFileSystem == nil {
-			baseFileSystem = s.fileSystem()
+			baseFileSystem = s.FS()
 		}
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.currentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.GetCurrentDirectory(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
@@ -1262,17 +1291,21 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
 	}
+	if err := moduleResolutionError(snapshot); err != nil {
+		snapshot.Deref()
+		return nil, err
+	}
 
 	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
 	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
 }
 
-func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*project.APISnapshotRequest, error) {
+func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotRequestChangesParams) (*project.APISnapshotRequest, error) {
 	apiRequest := &project.APISnapshotRequest{}
 
 	for _, p := range changes.OpenProjects {
-		configFileName := p.ToAbsoluteFileName(s.currentDirectory())
+		configFileName := p.ToAbsoluteFileName(s.GetCurrentDirectory())
 		configuredProjectID, ok := project.ParseConfiguredProjectID(s.toPath(configFileName))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid configured project ID: %s", ErrClientError, configFileName)
@@ -1288,7 +1321,7 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 	}
 
 	for _, p := range changes.CloseProjects {
-		configPath := s.toPath(p.ToAbsoluteFileName(s.currentDirectory()))
+		configPath := s.toPath(p.ToAbsoluteFileName(s.GetCurrentDirectory()))
 		if apiRequest.CloseProjects == nil {
 			apiRequest.CloseProjects = collections.NewSetWithSizeHint[tspath.Path](len(changes.CloseProjects))
 		}
@@ -1296,7 +1329,7 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 	}
 
 	for _, f := range changes.OpenFiles {
-		fileName := f.ToAbsoluteFileName(s.currentDirectory())
+		fileName := f.ToAbsoluteFileName(s.GetCurrentDirectory())
 		path := s.toPath(fileName)
 		if apiRequest.OpenFiles == nil {
 			apiRequest.OpenFiles = make(map[tspath.Path]string, len(changes.OpenFiles))
@@ -1309,7 +1342,7 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 	}
 
 	for _, f := range changes.CloseFiles {
-		path := s.toPath(f.ToURI(s.currentDirectory()).FileName())
+		path := s.toPath(f.ToURI(s.GetCurrentDirectory()).FileName())
 		if apiRequest.CloseFiles == nil {
 			apiRequest.CloseFiles = collections.NewSetWithSizeHint[tspath.Path](len(changes.CloseFiles))
 		}
@@ -1323,7 +1356,7 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		}
 		rootFileNames := make([]string, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
-			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
+			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.GetCurrentDirectory())
 		}
 		request := &project.APICreateProgramRequest{
 			RootFileNames:   rootFileNames,
@@ -1332,6 +1365,12 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
 			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
+			if err != nil {
+				return nil, err
+			}
+			request.ModuleResolverFactory = factory
+			request.ModuleResolverID = uint64(programParams.Options.ModuleResolver)
 		}
 		apiRequest.CreatePrograms[i] = request
 	}
@@ -1351,7 +1390,7 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		reconfiguredProgramIDs.Add(programID)
 		rootFileNames := make([]string, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
-			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
+			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.GetCurrentDirectory())
 		}
 		request := &project.APIReconfigureProgramRequest{
 			ProgramID:       programID,
@@ -1361,6 +1400,12 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
 			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
+			if err != nil {
+				return nil, err
+			}
+			request.ModuleResolverFactory = factory
+			request.ModuleResolverID = uint64(programParams.Options.ModuleResolver)
 		}
 		apiRequest.ReconfigurePrograms[i] = request
 	}
@@ -1390,8 +1435,8 @@ type languageServerSnapshotUpdate struct {
 	openState snapshotOpenState
 }
 
-func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChangesParams) (*languageServerSnapshotUpdate, error) {
-	apiRequest, err := s.toAPISnapshotRequest(changes)
+func (s *Session) toLanguageServerSnapshotUpdate(ctx context.Context, changes *SnapshotRequestChangesParams) (*languageServerSnapshotUpdate, error) {
+	apiRequest, err := s.toAPISnapshotRequest(ctx, changes)
 	if err != nil {
 		return nil, err
 	}
@@ -1521,7 +1566,7 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 	if changes == nil {
 		changes = &LanguageServerSnapshotChanges{}
 	}
-	update, err := s.toLanguageServerSnapshotUpdate(&changes.SnapshotRequestChangesParams)
+	update, err := s.toLanguageServerSnapshotUpdate(ctx, &changes.SnapshotRequestChangesParams)
 	if err != nil {
 		return nil, err
 	}
@@ -1559,7 +1604,7 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 		return nil, err
 	}
 
-	uri := params.File.ToURI(s.currentDirectory())
+	uri := params.File.ToURI(s.GetCurrentDirectory())
 	proj := sd.snapshot.GetDefaultProject(uri)
 	if proj == nil {
 		return nil, nil
@@ -1662,7 +1707,7 @@ func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildP
 func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
 	currentDirectory := params.BuildOrchestratorOptions.Cwd
 	if currentDirectory == "" {
-		currentDirectory = s.currentDirectory()
+		currentDirectory = s.GetCurrentDirectory()
 	}
 	return &apiBuildSystem{
 		session:          s,
@@ -1680,8 +1725,8 @@ type apiBuildSystem struct {
 
 func (s *apiBuildSystem) Writer() io.Writer           { return io.Discard }
 func (s *apiBuildSystem) ErrorWriter() io.Writer      { return io.Discard }
-func (s *apiBuildSystem) FS() vfs.FS                  { return s.session.fileSystem() }
-func (s *apiBuildSystem) DefaultLibraryPath() string  { return s.session.defaultLibraryPath() }
+func (s *apiBuildSystem) FS() vfs.FS                  { return s.session.snapshotHost.FS() }
+func (s *apiBuildSystem) DefaultLibraryPath() string  { return s.session.DefaultLibraryPath() }
 func (s *apiBuildSystem) GetCurrentDirectory() string { return s.currentDirectory }
 func (s *apiBuildSystem) WriteOutputIsTTY() bool      { return false }
 func (s *apiBuildSystem) GetWidthOfTerminal() int     { return 0 }
@@ -1702,7 +1747,7 @@ func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseComma
 
 // handleReadConfigFile reads and parses a JSON configuration file.
 func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFileParams) (*ReadConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
+	configFileName := params.File.ToAbsoluteFileName(s.GetCurrentDirectory())
 	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return &ReadConfigFileResponse{
@@ -1732,9 +1777,9 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 	var basePath string
 	var configFileName string
 	if params.ConfigDirectory != nil {
-		basePath = tspath.GetNormalizedAbsolutePath(*params.ConfigDirectory, s.currentDirectory())
+		basePath = tspath.GetNormalizedAbsolutePath(*params.ConfigDirectory, s.GetCurrentDirectory())
 	} else {
-		configFileName = params.ConfigFileName.ToAbsoluteFileName(s.currentDirectory())
+		configFileName = params.ConfigFileName.ToAbsoluteFileName(s.GetCurrentDirectory())
 		basePath = tspath.GetDirectoryPath(configFileName)
 	}
 
@@ -1752,7 +1797,7 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 
 // handleParseConfigFile parses a tsconfig.json file and returns its contents.
 func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfigFileParams) (*ConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
+	configFileName := params.File.ToAbsoluteFileName(s.GetCurrentDirectory())
 	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, configFileName)
@@ -1792,7 +1837,7 @@ func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSour
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *CreateSourceFileFromFileParams) (any, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
+	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.GetCurrentDirectory())
 	sourceText, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
@@ -1812,7 +1857,7 @@ func (s *Session) createSourceFile(fileName string, sourceText string, options C
 	if !isValidCreateSourceFileScriptKind(scriptKind) {
 		return nil, fmt.Errorf("%w: invalid scriptKind %d", ErrClientError, scriptKind)
 	}
-	fileName = tspath.GetNormalizedAbsolutePath(fileName, s.currentDirectory())
+	fileName = tspath.GetNormalizedAbsolutePath(fileName, s.GetCurrentDirectory())
 	return parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: fileName,
 		Path:     s.toPath(fileName),
@@ -1829,7 +1874,7 @@ func isValidCreateSourceFileScriptKind(scriptKind core.ScriptKind) bool {
 }
 
 func (s *Session) handleTranspileFromFile(ctx context.Context, params *TranspileFromFileParams, declaration bool) (*TranspileOutputResponse, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
+	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.GetCurrentDirectory())
 	input, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
@@ -2756,7 +2801,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
 		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectID, userPreferences) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()), nil)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.GetCurrentDirectory()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
 		}
@@ -4002,16 +4047,6 @@ func (s *Session) handleGetIndexInfoOfType(ctx context.Context, params *GetIndex
 	return setup.newIndexInfoResponse(setup.checker.GetIndexInfoOfType(t, keyType)), nil
 }
 
-// @gen-proto-nullable
-func (s *Session) handleGetIndexTypeOfTypeByKind(ctx context.Context, params *GetIndexInfoOfTypeParams) (*TypeResponse, error) {
-	setup, t, keyType, err := s.resolveIndexInfoRequest(ctx, params)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetIndexTypeOfType(t, keyType), setup.checker), nil
-}
-
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.
 // @gen-proto-nullable
 func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
@@ -4576,9 +4611,9 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 	if request.OpenFiles != nil {
 		results := make([]*OpenedFileOperationResult, len(request.OpenFiles))
 		for i, file := range request.OpenFiles {
-			project := snapshot.GetDefaultProject(file.ToURI(s.currentDirectory()))
+			project := snapshot.GetDefaultProject(file.ToURI(s.GetCurrentDirectory()))
 			if project == nil {
-				panic("no project found for opened file " + file.ToAbsoluteFileName(s.currentDirectory()))
+				panic("no project found for opened file " + file.ToAbsoluteFileName(s.GetCurrentDirectory()))
 			}
 			results[i] = &OpenedFileOperationResult{Project: project.ID()}
 		}
@@ -4651,7 +4686,7 @@ func formatSessionID(id uint64) string {
 
 // toPath converts a file name to a normalized path.
 func (s *Session) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, s.currentDirectory(), s.useCaseSensitiveFileNames())
+	return tspath.ToPath(fileName, s.GetCurrentDirectory(), s.useCaseSensitiveFileNames())
 }
 
 // toFileChangeSummary converts API file changes to a project.FileChangeSummary.
@@ -4665,7 +4700,7 @@ func (s *Session) toFileChangeSummary(changes *FileNotifications) project.FileCh
 		summary.IncludesWatchChangeOutsideNodeModules = true
 		return summary
 	}
-	cwd := s.currentDirectory()
+	cwd := s.GetCurrentDirectory()
 	for _, doc := range changes.Changed {
 		uri := doc.ToURI(cwd)
 		summary.Changed.Add(uri)
@@ -4919,7 +4954,7 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	}
 	result, err := run(sd.snapshot, program)
 	if errors.Is(err, ls.ErrNeedsAutoImports) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.currentDirectory()), nil)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.GetCurrentDirectory()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
 		}

@@ -32,6 +32,9 @@ export interface APIMethodInfo {
     buildReferences: APIMethod<BuildParams, BuildResponse>;
     cleanBuild: APIMethod<CleanBuildParams, CleanBuildResponse>;
     cleanReferences: APIMethod<CleanBuildParams, CleanBuildResponse>;
+    createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
+    releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
+    resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -129,7 +132,6 @@ export interface APIMethodInfo {
     getPropertyOfType: APIMethod<GetPropertyOfTypeParams, SymbolResponse | null>;
     getTypeOfPropertyOfType: APIMethod<GetPropertyOfTypeParams, TypeResponse | null>;
     getIndexInfoOfType: APIMethod<GetIndexInfoOfTypeParams, IndexInfoResponse | null>;
-    getIndexTypeOfTypeByKind: APIMethod<GetIndexInfoOfTypeParams, TypeResponse | null>;
     getIndexInfosOfType: APIMethod<CheckerTypeParams, IndexInfoResponse[] | null>;
     getConstraintOfTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getDefaultFromTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
@@ -190,6 +192,8 @@ export interface APIMethodInfo {
 }
 
 export type DocumentIdentifier = string | { uri: string; };
+
+export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;
 
 export type EnsurePrograms = true | readonly ProjectId[];
 
@@ -292,6 +296,31 @@ export interface CleanBuildResponse {
     errors?: DiagnosticResponse[] | undefined;
     statistics: Statistics;
     filesDeleted?: string[] | undefined;
+}
+
+export interface CreateModuleResolverParams {
+    compilerOptions: CompilerOptions;
+    moduleResolutions?: ModuleResolutionSpec | undefined;
+    resolveModuleNameCallback?: string | undefined;
+}
+
+export interface ReleaseModuleResolverParams {
+    resolver: number;
+}
+
+export interface ResolveModuleNameParams {
+    snapshot?: number | undefined;
+    inProgressSnapshot?: number | undefined;
+    resolver: number;
+    moduleName: string;
+    containingDirectory: DocumentIdentifier;
+    resolutionMode?: ResolutionMode | undefined;
+}
+
+export interface ResolveModuleNameResult {
+    resolvedModule?: ResolvedModule | undefined;
+    /** Trace is provided when compilerOptions.traceResolution is true. */
+    trace?: string[] | undefined;
 }
 
 export interface ParseCommandLineParams {
@@ -1056,6 +1085,7 @@ export interface BatchRequest {
         | "cleanBuild"
         | "cleanReferences"
         | "createBuildOrchestrator"
+        | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
@@ -1111,7 +1141,6 @@ export interface BatchRequest {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
-        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1205,6 +1234,8 @@ export interface BatchRequest {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolver"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1228,6 +1259,7 @@ export interface BatchResponse {
         | "cleanBuild"
         | "cleanReferences"
         | "createBuildOrchestrator"
+        | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
@@ -1283,7 +1315,6 @@ export interface BatchResponse {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
-        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1377,6 +1408,8 @@ export interface BatchResponse {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolver"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1615,6 +1648,11 @@ export interface CompilerOptions {
     configFilePath?: string | undefined;
 }
 
+export interface ModuleResolutionSpec {
+    fallback: "resolve" | "unresolved";
+    entries: ModuleResolutionEntry[];
+}
+
 export interface BuildOptions {
     dry?: boolean | undefined;
     force?: boolean | undefined;
@@ -1754,6 +1792,13 @@ export interface PluginImport {
     name: string;
 }
 
+export interface ModuleResolutionEntry {
+    moduleName: string;
+    containingDirectory?: DocumentIdentifier | undefined;
+    resolutionMode?: ResolutionMode | undefined;
+    result: StaticModuleResolution;
+}
+
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
@@ -1763,4 +1808,11 @@ export interface CompletionEntryLabelDetailsResponse {
 export interface CreateProgramOptions {
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
+    moduleResolver?: number | undefined;
+}
+
+export interface StaticModuleResolution {
+    resolvedFileName?: DocumentIdentifier | undefined;
+    originalPath?: DocumentIdentifier | undefined;
+    packageId?: PackageId | undefined;
 }
