@@ -73,6 +73,7 @@ import {
     DiagnosticCategory,
     type DocumentIdentifier,
     EmitOnly,
+    FileEmitKind,
     type FreshableType,
     type ImportAdderAction,
     IncrementalProgram,
@@ -1076,6 +1077,38 @@ declare module "augmentation" {}`,
             },
         });
         assert.deepEqual(hostWrites, []);
+    });
+
+    test("incremental emitOnly preserves other pending output kinds", () => {
+        const fs = createVirtualFileSystem({
+            "/src/index.ts": `export const value = 1;`,
+        });
+        using api = new API({ cwd: "/", fs });
+        const program = api.createIncrementalProgram(
+            ["/src/index.ts"],
+            {
+                declaration: true,
+                incremental: true,
+                noLib: true,
+                outDir: "/out",
+                rootDir: "/src",
+                tsBuildInfoFile: "/out/build.tsbuildinfo",
+            },
+        );
+
+        const jsEmit = program.emit(EmitOnly.OnlyJs);
+        using jsSnapshot = jsEmit.snapshot;
+        assert.ok(jsEmit.emittedFiles.includes("/out/index.js"));
+        assert.ok(!jsEmit.emittedFiles.includes("/out/index.d.ts"));
+        assert.ok(jsEmit.program.status.pendingEmit.some(emit => emit.sourceFileName === "/src/index.ts" && (emit.kind & FileEmitKind.DtsEmit) !== 0));
+        assert.ok(jsEmit.program.status.pendingEmit.every(emit => (emit.kind & FileEmitKind.Js) === 0));
+
+        const dtsEmit = jsEmit.program.emit(EmitOnly.OnlyDts);
+        using dtsSnapshot = dtsEmit.snapshot;
+        assert.ok(!dtsEmit.emittedFiles.includes("/out/index.js"));
+        assert.ok(dtsEmit.emittedFiles.includes("/out/index.d.ts"));
+        assert.deepEqual(dtsEmit.program.status.pendingEmit, []);
+        program.dispose();
     });
 
     test("createProgram includes project references", () => {
