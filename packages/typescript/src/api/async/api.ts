@@ -29,7 +29,9 @@ import {
     type NamedTupleMember,
     type Node,
     type ParameterDeclaration,
-    type Path,
+    type PathKey,
+    type RootedDirectoryPath,
+    type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
     type SyntaxKind,
@@ -44,7 +46,7 @@ import {
 import {
     decodeNode,
     getNodeId,
-    parseNodeHandle,
+    parseNodeHandleFromCompiler,
     readParseOptionsKey,
     readSourceFileHash,
     RemoteSourceFile,
@@ -55,8 +57,10 @@ import type {
     LSPConnectionOptions,
 } from "../options.ts";
 import {
-    createGetCanonicalFileName,
-    toPath,
+    canonicalize,
+    CaseSensitivity,
+    pathKey,
+    toRootedPath,
 } from "../path.ts";
 import type {
     CompilerOptions,
@@ -82,6 +86,7 @@ import type {
     ProjectId,
     ProjectReference,
     ProjectResponse,
+    RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
     ResolutionMode,
@@ -213,6 +218,7 @@ export type {
     ParsedCommandLine,
     ProjectId,
     ProjectReference,
+    RawCompilerOptions,
     ReadConfigFileResponse,
     RequestTiming,
     ResolutionMode,
@@ -320,10 +326,9 @@ export interface TranspileOutput {
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
     private sourceFileCache: SourceFileCache;
-    private toPath: ((fileName: string) => Path) | undefined;
-    private currentDirectory: string | undefined;
     private readonly decoder = new Wtf8Decoder();
-    private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
+    private currentDirectory: RootedDirectoryPath | undefined;
+    private caseSensitivity: CaseSensitivity | undefined;
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Map<number, Snapshot> = new Map();
@@ -366,11 +371,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private async initializeWorker(): Promise<void> {
         try {
             const response = await this.client.apiRequest("initialize", null);
-            const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
-            const currentDirectory = response.currentDirectory;
-            this.getCanonicalFileNameWorker = getCanonicalFileName;
-            this.currentDirectory = currentDirectory;
-            this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+            this.currentDirectory = response.currentDirectory;
+            this.caseSensitivity = response.caseSensitivity;
             this.initialized = true;
         }
         catch (error) {
@@ -379,7 +381,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         }
     }
 
-    getCurrentDirectory(): string {
+    getCurrentDirectory(): RootedDirectoryPath {
         if (this.currentDirectory === undefined) {
             throw new Error("API has not been initialized");
         }
@@ -387,10 +389,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     getCanonicalFileName(fileName: string): string {
-        if (this.getCanonicalFileNameWorker === undefined) {
+        return canonicalize(fileName, this.getCaseSensitivity());
+    }
+
+    private getCaseSensitivity(): CaseSensitivity {
+        if (this.caseSensitivity === undefined) {
             throw new Error("API has not been initialized");
         }
-        return this.getCanonicalFileNameWorker(fileName);
+        return this.caseSensitivity;
     }
 
     getNewLine(): string {
@@ -475,7 +481,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             data,
             this.client,
             this.sourceFileCache,
-            this.toPath!,
+            this.getCurrentDirectory(),
+            this.getCaseSensitivity(),
             this,
             () => {
                 this.activeSnapshots.delete(snapshot.id);
@@ -508,7 +515,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             data,
             this.client,
             this.sourceFileCache,
-            this.toPath!,
+            this.getCurrentDirectory(),
+            this.getCaseSensitivity(),
             this,
             () => {
                 this.activeSnapshots.delete(snapshot.id);
@@ -589,7 +597,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             data,
             this.client,
             this.sourceFileCache,
-            this.toPath!,
+            this.getCurrentDirectory(),
+            this.getCaseSensitivity(),
             this,
             () => {
                 this.activeSnapshots.delete(snapshot.id);
@@ -688,7 +697,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     /** Creates a program from current filesystem state. */
     async createProgram(
         rootFiles: readonly DocumentIdentifier[],
-        compilerOptions: CompilerOptions,
+        compilerOptions: RawCompilerOptions,
         createProgramOptions?: CreateProgramOptions,
     ): Promise<Program> {
         await this.ensureInitialized();
@@ -723,13 +732,13 @@ export class InternalAPI {
         await this.client.apiRequest("startCPUProfile", { dir });
     }
 
-    async stopCPUProfile(): Promise<string> {
+    async stopCPUProfile(): Promise<RootedFilePath> {
         await this.ensureInitialized();
         const result = await this.client.apiRequest("stopCPUProfile", null);
         return result.file;
     }
 
-    async saveHeapProfile(dir: string): Promise<string> {
+    async saveHeapProfile(dir: string): Promise<RootedFilePath> {
         await this.ensureInitialized();
         const result = await this.client.apiRequest("saveHeapProfile", { dir });
         return result.file;
@@ -800,7 +809,8 @@ export class Snapshot {
     readonly id: number;
     readonly operation: SnapshotOperation;
     private projectMap: Map<ProjectId, Project>;
-    private toPath: (fileName: string) => Path;
+    private currentDirectory: RootedDirectoryPath;
+    private caseSensitivity: CaseSensitivity;
     private client: Client;
     private disposed: boolean = false;
     private disposePromise: Promise<void> | undefined;
@@ -814,7 +824,8 @@ export class Snapshot {
         data: CreateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        currentDirectory: RootedDirectoryPath,
+        caseSensitivity: CaseSensitivity,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
         updateSnapshot: SnapshotUpdater,
@@ -822,7 +833,8 @@ export class Snapshot {
     ) {
         this.id = data.snapshot;
         this.client = client;
-        this.toPath = toPath;
+        this.currentDirectory = currentDirectory;
+        this.caseSensitivity = caseSensitivity;
         this.onDispose = onDispose;
         this.updateSnapshot = updateSnapshot;
         this.projectMap = new Map();
@@ -837,7 +849,7 @@ export class Snapshot {
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of this.projectDataMap.values()) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
+            const project = new Project(projData, this.id, client, sourceFileCache, caseSensitivity, formatDiagnosticsHost, this.snapshotRegistry);
             this.projectMap.set(projData.id, project);
         }
 
@@ -856,7 +868,8 @@ export class Snapshot {
 
     getConfiguredProject(configFileName: string): Project<ConfiguredProjectId> | undefined {
         this.ensureNotDisposed();
-        return this.projectMap.get(this.toPath(configFileName) as ConfiguredProjectId) as Project<ConfiguredProjectId> | undefined;
+        const id = pathKey(toRootedPath(configFileName, this.currentDirectory), this.caseSensitivity) as ConfiguredProjectId;
+        return this.projectMap.get(id) as Project<ConfiguredProjectId> | undefined;
     }
 
     getProject<Id extends ProjectId>(projectId: Id): Project<Id> | undefined {
@@ -1265,14 +1278,14 @@ class ProjectObjectRegistry {
 
 export class Project<Id extends ProjectId = ProjectId> {
     readonly id: Id;
-    readonly configFileName: string;
-    readonly currentDirectory: string;
+    readonly configFileName: RootedFilePath | undefined;
+    readonly currentDirectory: RootedDirectoryPath;
     readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
     /** @deprecated Use `parsedCommandLine.fileNames`. */
-    readonly rootFiles: readonly string[];
+    readonly rootFiles: readonly RootedFilePath[];
 
     readonly program: Program<Id>;
     readonly checker: Checker;
@@ -1285,7 +1298,7 @@ export class Project<Id extends ProjectId = ProjectId> {
         snapshotId: number,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        caseSensitivity: CaseSensitivity,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
@@ -1306,7 +1319,7 @@ export class Project<Id extends ProjectId = ProjectId> {
             this,
             client,
             sourceFileCache,
-            toPath,
+            caseSensitivity,
             formatDiagnosticsHost,
         );
         const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
@@ -1450,10 +1463,10 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly project: Project<Id>;
     private readonly client: Client;
     private readonly sourceFileCache: SourceFileCache;
-    private readonly toPath: (fileName: string) => Path;
+    private readonly caseSensitivity: CaseSensitivity;
     private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
     private readonly decoder = new Wtf8Decoder();
-    private readonly sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
+    private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
 
@@ -1462,7 +1475,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         project: Project<Id>,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        caseSensitivity: CaseSensitivity,
         formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
@@ -1470,11 +1483,11 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         this.project = project;
         this.client = client;
         this.sourceFileCache = sourceFileCache;
-        this.toPath = toPath;
+        this.caseSensitivity = caseSensitivity;
         this.formatDiagnosticsHost = formatDiagnosticsHost;
     }
 
-    getCurrentDirectory(): string {
+    getCurrentDirectory(): RootedDirectoryPath {
         return this.project.currentDirectory;
     }
 
@@ -1511,8 +1524,22 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
         const fileName = resolveFileName(file);
-        const path = this.toPath(fileName);
+        const path = this.pathKeyForFileName(fileName);
+        return this.getSourceFileWorker(file, path);
+    }
 
+    /**
+     * Returns the source file for an already-canonical path.
+     *
+     * @internal
+     */
+    getSourceFileByPath(path: PathKey): Promise<SourceFile | undefined> {
+        // The wire format is a string, but the cache key remains the supplied
+        // PathKey and is never treated as a RootedPath.
+        return this.getSourceFileWorker(path, path);
+    }
+
+    private async getSourceFileWorker(file: DocumentIdentifier, path: PathKey): Promise<SourceFile | undefined> {
         // Check if we already have a retained cache entry for this (snapshot, project) pair
         const retained = this.sourceFileCache.getRetained(path, this.snapshotId, this.project.id);
         if (retained) {
@@ -1613,7 +1640,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return result ?? undefined;
     }
 
-    async getSourceFileNames(): Promise<readonly string[]> {
+    async getSourceFileNames(): Promise<readonly RootedFilePath[]> {
         const data = await this.client.apiRequest("getSourceFileNames", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1627,7 +1654,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
      * `Program` instance.
      */
     getSourceFileMetadata(file: DocumentIdentifier): Promise<SourceFileMetadata | undefined> {
-        return this.getSourceFileMetadataByPath(this.toPath(resolveFileName(file)));
+        return this.getSourceFileMetadataByPath(this.pathKeyForFileName(resolveFileName(file)));
     }
 
     /**
@@ -1636,7 +1663,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
      * the file name to path conversion. Metadata is fetched lazily per file and cached on
      * this `Program` instance.
      */
-    getSourceFileMetadataByPath(path: Path): Promise<SourceFileMetadata | undefined> {
+    getSourceFileMetadataByPath(path: PathKey): Promise<SourceFileMetadata | undefined> {
         let metadata = this.sourceFileMetadataCache.get(path);
         if (metadata === undefined) {
             metadata = this.fetchSourceFileMetadata(path);
@@ -1645,13 +1672,19 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return metadata;
     }
 
-    private async fetchSourceFileMetadata(path: Path): Promise<SourceFileMetadata | undefined> {
+    private async fetchSourceFileMetadata(path: PathKey): Promise<SourceFileMetadata | undefined> {
+        // PathKey is serialized as a string; the server deliberately treats all
+        // client-provided path text as untrusted input.
         const data = await this.client.apiRequest("getSourceFileMetadata", {
             snapshot: this.snapshotId,
             project: this.project.id,
             file: path,
         });
         return data ?? undefined;
+    }
+
+    private pathKeyForFileName(fileName: string): PathKey {
+        return pathKey(toRootedPath(fileName, this.project.currentDirectory), this.caseSensitivity);
     }
 
     /**
@@ -1678,7 +1711,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
      * Get all config source file names associated with this program's project config.
      * Includes the root config file and any extended config files.
      */
-    async getConfigFileNames(): Promise<readonly string[]> {
+    async getConfigFileNames(): Promise<readonly RootedFilePath[]> {
         const data = await this.client.apiRequest("getConfigFileNames", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1883,7 +1916,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 }
 
 function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
-    const outputFiles = new Map<string, EmitOutputFile>();
+    const outputFiles = new Map<RootedFilePath, EmitOutputFile>();
     for (const { fileName, ...outputFile } of response.outputFiles) {
         outputFiles.set(fileName, outputFile);
     }
@@ -2814,10 +2847,10 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly canonicalProject: Project;
     readonly index: number;
     readonly kind: SyntaxKind;
-    readonly path: Path;
+    readonly path: PathKey;
 
     constructor(handle: string, canonicalProject: Project) {
-        const parsed = parseNodeHandle(handle);
+        const parsed = parseNodeHandleFromCompiler(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
         this.path = parsed.path;
@@ -2830,7 +2863,7 @@ export class NodeHandle<out T extends Node = Node> {
      * the handle is used.
      */
     async resolve(project: Project = this.canonicalProject): Promise<T | undefined> {
-        const sourceFile = await project.program.getSourceFile(this.path);
+        const sourceFile = await project.program.getSourceFileByPath(this.path);
         if (!sourceFile) {
             return undefined;
         }

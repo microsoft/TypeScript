@@ -22,11 +22,11 @@ type emitFilesHandler struct {
 	ctx                   context.Context
 	program               *Program
 	isForDtsErrors        bool
-	signatures            collections.SyncMap[tspath.Path, string]
-	emitSignatures        collections.SyncMap[tspath.Path, *emitSignature]
-	latestChangedDtsFiles collections.SyncMap[tspath.Path, string]
-	deletedPendingKinds   collections.Set[tspath.Path]
-	emitUpdates           collections.SyncMap[tspath.Path, *emitUpdate]
+	signatures            collections.SyncMap[tspath.PathKey, string]
+	emitSignatures        collections.SyncMap[tspath.PathKey, *emitSignature]
+	latestChangedDtsFiles collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+	deletedPendingKinds   collections.Set[tspath.PathKey]
+	emitUpdates           collections.SyncMap[tspath.PathKey, *emitUpdate]
 	hasEmitDiagnostics    atomic.Bool
 }
 
@@ -55,7 +55,7 @@ func (h *emitFilesHandler) emitAllAffectedFiles(options compiler.EmitOptions) *c
 				result := &compiler.EmitResult{
 					EmitSkipped: true,
 					Diagnostics: core.FlatMap(options.TargetSourceFiles, func(targetFile *ast.SourceFile) []*ast.Diagnostic {
-						diagnostics, _ := h.program.snapshot.emitDiagnosticsPerFile.Load(targetFile.Path())
+						diagnostics, _ := h.program.snapshot.emitDiagnosticsPerFile.Load(targetFile.PathKey())
 						return diagnostics.getDiagnostics(h.program.program, targetFile)
 					}),
 				}
@@ -122,7 +122,7 @@ func (h *emitFilesHandler) emitFilesIncremental(options compiler.EmitOptions) []
 	}
 
 	wg := core.NewWorkGroup(h.program.program.SingleThreaded())
-	h.program.snapshot.affectedFilesPendingEmit.Range(func(path tspath.Path, emitKind FileEmitKind) bool {
+	h.program.snapshot.affectedFilesPendingEmit.Range(func(path tspath.PathKey, emitKind FileEmitKind) bool {
 		affectedFile := h.program.program.GetSourceFileByPath(path)
 		if affectedFile == nil || !h.program.program.SourceFileMayBeEmitted(affectedFile, false) {
 			h.deletedPendingKinds.Add(path)
@@ -170,7 +170,7 @@ func (h *emitFilesHandler) emitFilesIncremental(options compiler.EmitOptions) []
 	}
 
 	// Get updated errors that were not included in affected files emit
-	h.program.snapshot.emitDiagnosticsPerFile.Range(func(path tspath.Path, diagnostics *DiagnosticsOrBuildInfoDiagnosticsWithFileName) bool {
+	h.program.snapshot.emitDiagnosticsPerFile.Range(func(path tspath.PathKey, diagnostics *DiagnosticsOrBuildInfoDiagnosticsWithFileName) bool {
 		if _, ok := h.emitUpdates.Load(path); !ok {
 			affectedFile := h.program.program.GetSourceFileByPath(path)
 			if affectedFile == nil || !h.program.program.SourceFileMayBeEmitted(affectedFile, false) {
@@ -202,12 +202,12 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 		TargetSourceFiles: options.TargetSourceFiles,
 		EmitOnly:          options.EmitOnly,
 		ForceEmit:         options.ForceEmit,
-		WriteFile: func(fileName string, text string, data *compiler.WriteFileData) error {
+		WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 			var differsOnlyInMap bool
-			if tspath.IsDeclarationFileName(fileName) {
+			if fileName.IsDeclarationFile() {
 				if canUseIncrementalState {
 					var emitSignature string
-					info, _ := h.program.snapshot.fileInfos.Load(data.SourceFile.Path())
+					info, _ := h.program.snapshot.fileInfos.Load(data.SourceFile.PathKey())
 					if info.signature == info.version {
 						signature := h.program.snapshot.computeSignatureWithDiagnostics(data.SourceFile, text, data)
 						// With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
@@ -215,7 +215,7 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 							emitSignature = signature
 						}
 						if signature != info.version { // Update it
-							h.signatures.Store(data.SourceFile.Path(), signature)
+							h.signatures.Store(data.SourceFile.PathKey(), signature)
 						}
 					}
 
@@ -249,12 +249,12 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 
 // Compare to existing computed signature and store it or handle the changes in d.ts map option from before
 // returning undefined means that, we dont need to emit this d.ts file since its contents didnt change
-func (h *emitFilesHandler) skipDtsOutputOfComposite(file *ast.SourceFile, outputFileName string, text string, data *compiler.WriteFileData, newSignature string, differsOnlyInMap *bool) bool {
+func (h *emitFilesHandler) skipDtsOutputOfComposite(file *ast.SourceFile, outputFileName tspath.RootedFilePath, text string, data *compiler.WriteFileData, newSignature string, differsOnlyInMap *bool) bool {
 	if !h.program.snapshot.options.Composite.IsTrue() {
 		return false
 	}
 	var oldSignature string
-	oldSignatureFormat, ok := h.program.snapshot.emitSignatures.Load(file.Path())
+	oldSignatureFormat, ok := h.program.snapshot.emitSignatures.Load(file.PathKey())
 	if ok {
 		if oldSignatureFormat.signature != "" {
 			oldSignature = oldSignatureFormat.signature
@@ -277,15 +277,15 @@ func (h *emitFilesHandler) skipDtsOutputOfComposite(file *ast.SourceFile, output
 			*differsOnlyInMap = h.program.Options().Build.IsTrue()
 		}
 	} else {
-		h.latestChangedDtsFiles.Store(file.Path(), outputFileName)
+		h.latestChangedDtsFiles.Store(file.PathKey(), outputFileName)
 	}
-	h.emitSignatures.Store(file.Path(), &emitSignature{signature: newSignature})
+	h.emitSignatures.Store(file.PathKey(), &emitSignature{signature: newSignature})
 	return false
 }
 
 func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
 	if h.program.snapshot.canUseIncrementalState() {
-		h.signatures.Range(func(file tspath.Path, signature string) bool {
+		h.signatures.Range(func(file tspath.PathKey, signature string) bool {
 			info, _ := h.program.snapshot.fileInfos.Load(file)
 			info.signature = signature
 			if h.program.testingData != nil {
@@ -294,7 +294,7 @@ func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
 			h.program.snapshot.buildInfoEmitPending.Store(true)
 			return true
 		})
-		h.emitSignatures.Range(func(file tspath.Path, signature *emitSignature) bool {
+		h.emitSignatures.Range(func(file tspath.PathKey, signature *emitSignature) bool {
 			h.program.snapshot.emitSignatures.Store(file, signature)
 			h.program.snapshot.buildInfoEmitPending.Store(true)
 			return true
@@ -306,24 +306,24 @@ func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
 		// Always use correct order when to collect the result
 		var results []*compiler.EmitResult
 		for _, file := range h.program.GetSourceFiles() {
-			if latestChangedDtsFile, ok := h.latestChangedDtsFiles.Load(file.Path()); ok {
+			if latestChangedDtsFile, ok := h.latestChangedDtsFiles.Load(file.PathKey()); ok {
 				h.program.snapshot.latestChangedDtsFile = latestChangedDtsFile
 				h.program.snapshot.buildInfoEmitPending.Store(true)
 				h.program.snapshot.hasChangedDtsFile = true
 			}
-			if update, ok := h.emitUpdates.Load(file.Path()); ok {
+			if update, ok := h.emitUpdates.Load(file.PathKey()); ok {
 				if !update.dtsErrorsFromCache {
 					if update.pendingKind == 0 {
-						h.program.snapshot.affectedFilesPendingEmit.Delete(file.Path())
+						h.program.snapshot.affectedFilesPendingEmit.Delete(file.PathKey())
 					} else {
-						h.program.snapshot.affectedFilesPendingEmit.Store(file.Path(), update.pendingKind)
+						h.program.snapshot.affectedFilesPendingEmit.Store(file.PathKey(), update.pendingKind)
 					}
 					h.program.snapshot.buildInfoEmitPending.Store(true)
 				}
 				if update.result != nil {
 					results = append(results, update.result)
 					if len(update.result.Diagnostics) != 0 {
-						h.program.snapshot.emitDiagnosticsPerFile.Store(file.Path(), &DiagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
+						h.program.snapshot.emitDiagnosticsPerFile.Store(file.PathKey(), &DiagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
 					}
 				}
 			}

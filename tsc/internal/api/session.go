@@ -52,8 +52,8 @@ type snapshotData struct {
 	fileSystem vfs.FS
 	refCount   int
 
-	openProjects collections.Set[tspath.Path]
-	openFiles    collections.Set[tspath.Path]
+	openProjects collections.Set[tspath.PathKey]
+	openFiles    collections.Set[tspath.PathKey]
 
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
@@ -121,7 +121,7 @@ func (sd *snapshotData) getProject(projectHandle project.ID) (*project.Project, 
 // for the file on-demand if needed.
 func (sd *snapshotData) nodeHandleFrom(node *ast.Node) NodeHandle {
 	sourceFile := ast.GetSourceFileOfNode(node)
-	path := sourceFile.Path()
+	path := sourceFile.PathKey()
 	table := encoder.GetNodeIndexTable(sourceFile)
 	idx := table.GetIndex(node)
 	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, path))
@@ -430,8 +430,8 @@ type Session struct {
 
 	// openProjects, openFiles, and createdPrograms are the canonical LSP-state resources
 	// owned by this API client. Guarded by languageServerUpdateMu.
-	openProjects    collections.Set[tspath.Path]
-	openFiles       collections.Set[tspath.Path]
+	openProjects    collections.Set[tspath.PathKey]
+	openFiles       collections.Set[tspath.PathKey]
 	createdPrograms collections.Set[project.SyntheticProjectID]
 
 	languageServerUpdateMu sync.Mutex
@@ -507,8 +507,12 @@ func (s *Session) SetConnection(conn ipc.Conn) {
 	s.conn = conn
 }
 
-func (s *Session) GetCurrentDirectory() string {
+func (s *Session) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return s.snapshotHost.GetCurrentDirectory()
+}
+
+func (s *Session) currentDirectory() tspath.RootedDirectoryPath {
+	return s.GetCurrentDirectory()
 }
 
 func (s *Session) FS() vfs.FS {
@@ -518,8 +522,8 @@ func (s *Session) FS() vfs.FS {
 	return s.snapshotHost.FS()
 }
 
-func (s *Session) useCaseSensitiveFileNames() bool {
-	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
+func (s *Session) caseSensitivity() tspath.CaseSensitivity {
+	return s.snapshotHost.FS().CaseSensitivity()
 }
 
 // snapshotHandle creates a snapshot handle from a snapshot's ID.
@@ -621,7 +625,7 @@ func (setup checkerSetup) resolveLocation(handle NodeHandle, file *DocumentIdent
 		return setup.sd.resolveNodeHandle(setup.program, handle)
 	}
 	if file != nil && position != nil {
-		sourceFile := setup.program.GetSourceFile(file.ToFileName())
+		sourceFile := setup.program.GetSourceFile(file.ToFileName(setup.program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, *file)
 		}
@@ -1152,7 +1156,8 @@ func (s *Session) handleStartCPUProfile(_ context.Context, params *ProfileParams
 	if params == nil || params.Dir == "" {
 		return nil, fmt.Errorf("%w: dir is required", ErrClientError)
 	}
-	if err := s.cpuProfiler.StartCPUProfile(params.Dir); err != nil {
+	profileDirectory := tspath.ToRootedDirectoryPath(params.Dir, s.currentDirectory())
+	if err := s.cpuProfiler.StartCPUProfile(profileDirectory.AsString()); err != nil {
 		return nil, fmt.Errorf("%w: failed to start CPU profile: %w", ErrClientError, err)
 	}
 	return nil, nil
@@ -1163,18 +1168,19 @@ func (s *Session) handleStopCPUProfile(_ context.Context) (*ProfileResult, error
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to stop CPU profile: %w", ErrClientError, err)
 	}
-	return &ProfileResult{File: filePath}, nil
+	return &ProfileResult{File: tspath.ToRootedFilePath(filePath, s.currentDirectory())}, nil
 }
 
 func (s *Session) handleSaveHeapProfile(_ context.Context, params *ProfileParams) (*ProfileResult, error) {
 	if params == nil || params.Dir == "" {
 		return nil, fmt.Errorf("%w: dir is required", ErrClientError)
 	}
-	filePath, err := pprof.SaveHeapProfile(params.Dir)
+	profileDirectory := tspath.ToRootedDirectoryPath(params.Dir, s.currentDirectory())
+	filePath, err := pprof.SaveHeapProfile(profileDirectory.AsString())
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to save heap profile: %w", ErrClientError, err)
 	}
-	return &ProfileResult{File: filePath}, nil
+	return &ProfileResult{File: tspath.ToRootedFilePath(filePath, s.currentDirectory())}, nil
 }
 
 // HandleNotification implements Handler.
@@ -1185,8 +1191,8 @@ func (s *Session) HandleNotification(ctx context.Context, method string, params 
 
 func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, error) {
 	return &InitializeResponse{
-		UseCaseSensitiveFileNames: s.useCaseSensitiveFileNames(),
-		CurrentDirectory:          s.GetCurrentDirectory(),
+		CaseSensitivity:  s.caseSensitivity(),
+		CurrentDirectory: s.currentDirectory(),
 	}, nil
 }
 
@@ -1278,8 +1284,8 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 	apiRequest := &project.APISnapshotRequest{}
 
 	for _, p := range changes.OpenProjects {
-		configFileName := p.ToAbsoluteFileName(s.GetCurrentDirectory())
-		configuredProjectID, ok := project.ParseConfiguredProjectID(s.toPath(configFileName))
+		configFileName := p.ToFileName(s.currentDirectory())
+		configuredProjectID, ok := project.ParseConfiguredProjectID(s.pathKey(configFileName))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid configured project ID: %s", ErrClientError, configFileName)
 		}
@@ -1288,25 +1294,25 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 		}
 		apiRequest.EnsurePrograms.Add(configuredProjectID.AsID())
 		if apiRequest.OpenProjects == nil {
-			apiRequest.OpenProjects = collections.NewSetWithSizeHint[string](len(changes.OpenProjects))
+			apiRequest.OpenProjects = collections.NewSetWithSizeHint[tspath.RootedFilePath](len(changes.OpenProjects))
 		}
 		apiRequest.OpenProjects.Add(configFileName)
 	}
 
 	for _, p := range changes.CloseProjects {
-		configPath := s.toPath(p.ToAbsoluteFileName(s.GetCurrentDirectory()))
+		configPath := s.pathKey(s.toFileName(p))
 		if apiRequest.CloseProjects == nil {
-			apiRequest.CloseProjects = collections.NewSetWithSizeHint[tspath.Path](len(changes.CloseProjects))
+			apiRequest.CloseProjects = collections.NewSetWithSizeHint[tspath.PathKey](len(changes.CloseProjects))
 		}
 		apiRequest.CloseProjects.Add(configPath)
 	}
 
 	for _, f := range changes.OpenFiles {
-		fileName := f.ToAbsoluteFileName(s.GetCurrentDirectory())
-		path := s.toPath(fileName)
+		fileName := f.ToFileName(s.currentDirectory())
+		path := s.pathKey(fileName)
 		if apiRequest.OpenFiles == nil {
-			apiRequest.OpenFiles = make(map[tspath.Path]string, len(changes.OpenFiles))
-			apiRequest.EnsureFiles = make(map[tspath.Path]string, len(changes.OpenFiles))
+			apiRequest.OpenFiles = make(map[tspath.PathKey]tspath.RootedFilePath, len(changes.OpenFiles))
+			apiRequest.EnsureFiles = make(map[tspath.PathKey]tspath.RootedFilePath, len(changes.OpenFiles))
 		}
 		if _, ok := apiRequest.OpenFiles[path]; !ok {
 			apiRequest.OpenFiles[path] = fileName
@@ -1315,9 +1321,9 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 	}
 
 	for _, f := range changes.CloseFiles {
-		path := s.toPath(f.ToURI(s.GetCurrentDirectory()).FileName())
+		path := s.toURI(f).PathKey(s.caseSensitivity())
 		if apiRequest.CloseFiles == nil {
-			apiRequest.CloseFiles = collections.NewSetWithSizeHint[tspath.Path](len(changes.CloseFiles))
+			apiRequest.CloseFiles = collections.NewSetWithSizeHint[tspath.PathKey](len(changes.CloseFiles))
 		}
 		apiRequest.CloseFiles.Add(path)
 	}
@@ -1327,23 +1333,30 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 		if programParams == nil {
 			return nil, fmt.Errorf("%w: createPrograms[%d] must not be null", ErrClientError, i)
 		}
-		rootFileNames := make([]string, len(programParams.RootFiles))
+		compilerOptions := &programParams.CompilerOptions
+		var optionDiagnostics []*ast.Diagnostic
+		if programParams.CompilerOptionsInput != nil {
+			compilerOptions, optionDiagnostics = programParams.CompilerOptionsInput.Finalize(s.currentDirectory())
+		}
+		rootFileNames := make([]tspath.RootedFilePath, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
-			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.GetCurrentDirectory())
+			rootFileNames[j] = s.toFileName(rootFile)
 		}
 		request := &project.APICreateProgramRequest{
 			RootFileNames:   rootFileNames,
-			CompilerOptions: &programParams.CompilerOptions,
+			CompilerOptions: compilerOptions,
 		}
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
-			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+			request.ConfigFileParsingDiagnostics = append(optionDiagnostics, core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })...)
 			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
 			if err != nil {
 				return nil, err
 			}
 			request.ModuleResolverFactory = factory
 			request.ModuleResolverID = uint64(programParams.Options.ModuleResolver)
+		} else {
+			request.ConfigFileParsingDiagnostics = optionDiagnostics
 		}
 		apiRequest.CreatePrograms[i] = request
 	}
@@ -1361,24 +1374,31 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 			return nil, fmt.Errorf("%w: synthetic program reconfigured more than once: %s", ErrClientError, programID)
 		}
 		reconfiguredProgramIDs.Add(programID)
-		rootFileNames := make([]string, len(programParams.RootFiles))
+		compilerOptions := &programParams.CompilerOptions
+		var optionDiagnostics []*ast.Diagnostic
+		if programParams.CompilerOptionsInput != nil {
+			compilerOptions, optionDiagnostics = programParams.CompilerOptionsInput.Finalize(s.currentDirectory())
+		}
+		rootFileNames := make([]tspath.RootedFilePath, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
-			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.GetCurrentDirectory())
+			rootFileNames[j] = s.toFileName(rootFile)
 		}
 		request := &project.APIReconfigureProgramRequest{
 			ProgramID:       programID,
 			RootFileNames:   rootFileNames,
-			CompilerOptions: &programParams.CompilerOptions,
+			CompilerOptions: compilerOptions,
 		}
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
-			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+			request.ConfigFileParsingDiagnostics = append(optionDiagnostics, core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })...)
 			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
 			if err != nil {
 				return nil, err
 			}
 			request.ModuleResolverFactory = factory
 			request.ModuleResolverID = uint64(programParams.Options.ModuleResolver)
+		} else {
+			request.ConfigFileParsingDiagnostics = optionDiagnostics
 		}
 		apiRequest.ReconfigurePrograms[i] = request
 	}
@@ -1450,8 +1470,8 @@ func (u *languageServerSnapshotUpdate) commit(s *Session, snapshot *project.Snap
 }
 
 type snapshotOpenState struct {
-	openProjects collections.Set[tspath.Path]
-	openFiles    collections.Set[tspath.Path]
+	openProjects collections.Set[tspath.PathKey]
+	openFiles    collections.Set[tspath.PathKey]
 }
 
 func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest, base snapshotOpenState) snapshotOpenState {
@@ -1467,7 +1487,7 @@ func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest,
 		}
 	}
 	for configFileName := range apiRequest.OpenProjects.Keys() {
-		path := s.toPath(configFileName)
+		path := s.pathKey(configFileName)
 		if state.openProjects.Has(path) {
 			apiRequest.OpenProjects.Delete(configFileName)
 		} else {
@@ -1577,7 +1597,7 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 		return nil, err
 	}
 
-	uri := params.File.ToURI(s.GetCurrentDirectory())
+	uri := s.toURI(params.File)
 	proj := sd.snapshot.GetDefaultProject(uri)
 	if proj == nil {
 		return nil, nil
@@ -1588,12 +1608,12 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {
-	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotHost)), nil
+	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotHost.FS(), s.currentDirectory())), nil
 }
 
 // handleReadConfigFile reads and parses a JSON configuration file.
 func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFileParams) (*ReadConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.GetCurrentDirectory())
+	configFileName := s.toFileName(params.File)
 	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return &ReadConfigFileResponse{
@@ -1604,7 +1624,7 @@ func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFi
 
 	config, parseErrors := tsoptions.ParseConfigFileTextToJson(
 		configFileName,
-		s.toPath(configFileName),
+		s.pathKey(configFileName),
 		configFileContent,
 	)
 	response := &ReadConfigFileResponse{Config: config}
@@ -1620,18 +1640,18 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 		return nil, fmt.Errorf("%w: exactly one of configDirectory or configFileName is required", ErrClientError)
 	}
 
-	var basePath string
-	var configFileName string
+	var basePath tspath.RootedDirectoryPath
+	var configFileName tspath.RootedFilePath
 	if params.ConfigDirectory != nil {
-		basePath = tspath.GetNormalizedAbsolutePath(*params.ConfigDirectory, s.GetCurrentDirectory())
+		basePath = tspath.ToRootedDirectoryPath(*params.ConfigDirectory, s.currentDirectory())
 	} else {
-		configFileName = params.ConfigFileName.ToAbsoluteFileName(s.GetCurrentDirectory())
-		basePath = tspath.GetDirectoryPath(configFileName)
+		configFileName = s.toFileName(*params.ConfigFileName)
+		basePath = configFileName.Directory()
 	}
 
 	parsedCommandLine := tsoptions.ParseJsonConfigFileContent(
 		jsonValueToAny(params.JSON),
-		s.snapshotHost,
+		s.snapshotHost.FS(),
 		basePath,
 		nil, /*existingOptions*/
 		configFileName,
@@ -1643,25 +1663,24 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 
 // handleParseConfigFile parses a tsconfig.json file and returns its contents.
 func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfigFileParams) (*ConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.GetCurrentDirectory())
+	configFileName := s.toFileName(params.File)
 	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, configFileName)
 	}
 
-	configDir := tspath.GetDirectoryPath(configFileName)
+	configDir := configFileName.Directory()
 	tsConfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(
 		configFileName,
-		s.toPath(configFileName),
+		s.pathKey(configFileName),
 		configFileContent,
 	)
 	parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		s.snapshotHost,
+		s.snapshotHost.FS(),
 		configDir,
 		nil, /*existingOptions*/
 		nil, /*existingOptionsRaw*/
-		configFileName,
 		nil, /*resolutionStack*/
 		nil, /*extendedConfigCache*/
 	)
@@ -1669,12 +1688,16 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 }
 
 func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, declaration bool) (*TranspileOutputResponse, error) {
-	return transpileOutput(ctx, params.Input, params.Options, declaration)
+	return transpileOutput(ctx, params.Input, params.Options, declaration, s.currentDirectory())
 }
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
-	sourceFile, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.createSourceFile(fileName, params.SourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
@@ -1683,7 +1706,10 @@ func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSour
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *CreateSourceFileFromFileParams) (any, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.GetCurrentDirectory())
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
+	if err != nil {
+		return nil, err
+	}
 	sourceText, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
@@ -1695,7 +1721,14 @@ func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *Cr
 	return s.encodeSourceFileResponse(sourceFile)
 }
 
-func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*ast.SourceFile, error) {
+func (s *Session) resolveCreateSourceFileName(fileName string) (tspath.RootedFilePath, error) {
+	if fileName == "" {
+		return "", fmt.Errorf("%w: fileName must not be empty", ErrClientError)
+	}
+	return s.currentDirectory().ResolveFile(fileName), nil
+}
+
+func (s *Session) createSourceFile(fileName tspath.RootedFilePath, sourceText string, options CreateSourceFileOptions) (*ast.SourceFile, error) {
 	scriptKind := options.ScriptKind
 	if scriptKind == core.ScriptKindUnknown {
 		scriptKind = core.EnsureScriptKindFromFileName(fileName)
@@ -1703,10 +1736,9 @@ func (s *Session) createSourceFile(fileName string, sourceText string, options C
 	if !isValidCreateSourceFileScriptKind(scriptKind) {
 		return nil, fmt.Errorf("%w: invalid scriptKind %d", ErrClientError, scriptKind)
 	}
-	fileName = tspath.GetNormalizedAbsolutePath(fileName, s.GetCurrentDirectory())
 	return parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: fileName,
-		Path:     s.toPath(fileName),
+		PathKey:  s.pathKey(fileName),
 	}, sourceText, scriptKind), nil
 }
 
@@ -1720,19 +1752,24 @@ func isValidCreateSourceFileScriptKind(scriptKind core.ScriptKind) bool {
 }
 
 func (s *Session) handleTranspileFromFile(ctx context.Context, params *TranspileFromFileParams, declaration bool) (*TranspileOutputResponse, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.GetCurrentDirectory())
+	fileName := tspath.ToRootedFilePath(params.FileName, s.currentDirectory())
 	input, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
 	}
 	options := params.Options
-	options.FileName = fileName
-	return transpileOutput(ctx, input, options, declaration)
+	options.FileName = fileName.AsString()
+	return transpileOutput(ctx, input, options, declaration, s.currentDirectory())
 }
 
-func transpileOutput(ctx context.Context, input string, options TranspileOptions, declaration bool) (*TranspileOutputResponse, error) {
+func transpileOutput(ctx context.Context, input string, options TranspileOptions, declaration bool, currentDirectory tspath.RootedDirectoryPath) (*TranspileOutputResponse, error) {
+	compilerOptions := options.CompilerOptions
+	var diagnostics []*ast.Diagnostic
+	if options.CompilerOptionsInput != nil {
+		compilerOptions, diagnostics = options.CompilerOptionsInput.Finalize(currentDirectory)
+	}
 	transpileOptions := transpile.Options{
-		CompilerOptions:   options.CompilerOptions,
+		CompilerOptions:   compilerOptions,
 		FileName:          options.FileName,
 		ReportDiagnostics: options.ReportDiagnostics,
 	}
@@ -1748,6 +1785,7 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 		}
 		return nil, errors.New("transpilation produced no output")
 	}
+	output.Diagnostics = append(diagnostics, output.Diagnostics...)
 	return &TranspileOutputResponse{
 		OutputText:    output.OutputText,
 		Diagnostics:   NewDiagnosticResponses(output.Diagnostics),
@@ -1769,12 +1807,12 @@ func (s *Session) handleGetSourceFile(ctx context.Context, params *GetSourceFile
 		return nil, err
 	}
 
-	return s.encodeSourceFileResponse(program.GetSourceFile(params.File.ToFileName()))
+	return s.encodeSourceFileResponse(program.GetSourceFile(params.File.ToFileName(program.BaseDirectory())))
 }
 
 // handleGetConfigFileNames returns tsconfig file names associated with the project's command line.
 // @gen-proto-nullable
-func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProjectDiagnosticsParams) ([]string, error) {
+func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProjectDiagnosticsParams) ([]tspath.RootedFilePath, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1791,7 +1829,7 @@ func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProje
 	}
 
 	extendedFiles := commandLine.ExtendedSourceFiles()
-	configFiles := make([]string, 0, len(extendedFiles)+1)
+	configFiles := make([]tspath.RootedFilePath, 0, len(extendedFiles)+1)
 	configFiles = append(configFiles, commandLine.ConfigFile.SourceFile.FileName())
 	configFiles = append(configFiles, extendedFiles...)
 	return configFiles, nil
@@ -1816,14 +1854,14 @@ func (s *Session) handleGetConfigSourceFile(ctx context.Context, params *GetSour
 		return s.encodeSourceFileResponse(nil)
 	}
 
-	requestedPath := tspath.ToPath(params.File.ToFileName(), program.GetCurrentDirectory(), program.UseCaseSensitiveFileNames())
+	requestedPath := program.PathKeyForFileName(params.File.ToFileName(program.BaseDirectory()))
 	rootConfigSourceFile := commandLine.ConfigFile.SourceFile
-	if rootConfigSourceFile.Path() == requestedPath {
+	if rootConfigSourceFile.PathKey() == requestedPath {
 		return s.encodeSourceFileResponse(rootConfigSourceFile)
 	}
 
 	for _, configFileName := range commandLine.ExtendedSourceFiles() {
-		if tspath.ToPath(configFileName, program.GetCurrentDirectory(), program.UseCaseSensitiveFileNames()) != requestedPath {
+		if program.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)) != requestedPath {
 			continue
 		}
 
@@ -1862,7 +1900,7 @@ func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, err
 }
 
 // handleGetSourceFileNames returns file names of all source files in a project.
-func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourceFileNamesParams) ([]string, error) {
+func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourceFileNamesParams) ([]tspath.RootedFilePath, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1874,7 +1912,7 @@ func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourc
 	}
 
 	sourceFiles := program.GetSourceFiles()
-	result := make([]string, len(sourceFiles))
+	result := make([]tspath.RootedFilePath, len(sourceFiles))
 	for i, sourceFile := range sourceFiles {
 		result[i] = sourceFile.FileName()
 	}
@@ -1895,14 +1933,14 @@ func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSo
 		return nil, err
 	}
 
-	sourceFile := program.GetSourceFile(params.File.ToFileName())
+	sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, nil
 	}
 
-	metaData := program.GetSourceFileMetaData(sourceFile.Path())
+	metaData := program.GetSourceFileMetaData(sourceFile.PathKey())
 	return &SourceFileMetadata{
-		IsDefaultLibrary:      program.IsSourceFileDefaultLibrary(sourceFile.Path()),
+		IsDefaultLibrary:      program.IsSourceFileDefaultLibrary(sourceFile.PathKey()),
 		IsFromExternalLibrary: program.IsSourceFileFromExternalLibrary(sourceFile),
 		PackageJsonType:       metaData.PackageJsonType,
 		PackageJsonDirectory:  metaData.PackageJsonDirectory,
@@ -1915,14 +1953,14 @@ func newResolvedModuleResponse(resolution *module.ResolvedModule) *ResolvedModul
 		return nil
 	}
 	return &ResolvedModule{
-		ResolvedFileName:             resolution.ResolvedFileName,
-		OriginalPath:                 resolution.OriginalPath,
+		ResolvedFileName:             resolution.ResolvedFileName.AsString(),
+		OriginalPath:                 resolution.OriginalPath.AsString(),
 		Extension:                    resolution.Extension,
 		ResolvedUsingTsExtension:     resolution.ResolvedUsingTsExtension,
 		ResolvedUsingExtraExtensions: resolution.ResolvedUsingExtraExtensions,
 		PackageId:                    NewPackageId(resolution.PackageId),
 		IsExternalLibraryImport:      resolution.IsExternalLibraryImport,
-		AlternateResult:              resolution.AlternateResult,
+		AlternateResult:              resolution.AlternateResult.AsString(),
 	}
 }
 
@@ -1932,8 +1970,8 @@ func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeRe
 	}
 	return &ResolvedTypeReferenceDirective{
 		Primary:                 resolution.Primary,
-		ResolvedFileName:        resolution.ResolvedFileName,
-		OriginalPath:            resolution.OriginalPath,
+		ResolvedFileName:        resolution.ResolvedFileName.AsString(),
+		OriginalPath:            resolution.OriginalPath.AsString(),
 		PackageId:               NewPackageId(resolution.PackageId),
 		IsExternalLibraryImport: resolution.IsExternalLibraryImport,
 	}
@@ -2082,7 +2120,7 @@ func (s *Session) handleGetSymbolAtPosition(ctx context.Context, params *GetSymb
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2111,7 +2149,7 @@ func (s *Session) handleGetSymbolOfSourceFile(ctx context.Context, params *GetSy
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2133,7 +2171,7 @@ func (s *Session) handleGetSymbolsOfSourceFiles(ctx context.Context, params *Get
 
 	results := make([]*SymbolResponse, len(params.Files))
 	for i, file := range params.Files {
-		sourceFile := setup.program.GetSourceFile(file.ToFileName())
+		sourceFile := setup.program.GetSourceFile(file.ToFileName(setup.program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
 		}
@@ -2153,7 +2191,7 @@ func (s *Session) handleGetSymbolsAtPositions(ctx context.Context, params *GetSy
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2428,7 +2466,7 @@ func (s *Session) handleGetTypeAtPosition(ctx context.Context, params *GetTypeAt
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2455,7 +2493,7 @@ func (s *Session) handleGetTypesAtPositions(ctx context.Context, params *GetType
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2639,7 +2677,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	if err != nil {
 		return nil, err
 	}
-	sourceFile := program.GetSourceFile(params.File.ToFileName())
+	sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2647,7 +2685,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
 		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectID, userPreferences) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.GetCurrentDirectory()), nil)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
 		}
@@ -2662,7 +2700,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		if program == nil {
 			return nil, fmt.Errorf("%w: project has no program", ErrClientError)
 		}
-		sourceFile = program.GetSourceFile(params.File.ToFileName())
+		sourceFile = program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 		}
@@ -2691,7 +2729,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		ch,
 		sourceFile,
 		view,
-		workingSnapshot.GetPreferences(sourceFile.FileName()).FormatCodeSettings,
+		workingSnapshot.GetPreferences(sourceFile.FileName().AsString()).FormatCodeSettings,
 		workingSnapshot.Converters(),
 		userPreferences,
 	)
@@ -3356,22 +3394,22 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	var outputFiles map[string]string
+	var outputFiles map[tspath.RootedFilePath]string
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
 	}
 	if requestfilesystem.HasFullFileSystem(sd.fileSystem) {
-		outputFiles = make(map[string]string)
+		outputFiles = make(map[tspath.RootedFilePath]string)
 		var outputMu sync.Mutex
-		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+		options.WriteFile = func(fileName tspath.RootedFilePath, text string, _ *compiler.WriteFileData) error {
 			outputMu.Lock()
 			outputFiles[fileName] = text
 			outputMu.Unlock()
 			return nil
 		}
 	} else {
-		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+		options.WriteFile = func(fileName tspath.RootedFilePath, text string, _ *compiler.WriteFileData) error {
 			return s.snapshotHost.FS().WriteFile(fileName, text)
 		}
 	}
@@ -3381,7 +3419,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	}
 	emittedFiles := slices.Clone(result.EmittedFiles)
 	if emittedFiles == nil {
-		emittedFiles = []string{}
+		emittedFiles = []tspath.RootedFilePath{}
 	}
 	emittedFilesContents := []string{}
 	if outputFiles != nil {
@@ -3432,8 +3470,8 @@ func (s *Session) handleSelectedFilesEmit(ctx context.Context, params *SelectedF
 func emitToOutput(ctx context.Context, program *compiler.Program, options compiler.EmitOptions) (*EmitOutputResponse, error) {
 	var mu sync.Mutex
 	outputFiles := make([]*EmitOutputFile, 0)
-	options.WriteFile = func(fileName string, text string, data *compiler.WriteFileData) error {
-		var sourceFileName *string
+	options.WriteFile = func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
+		var sourceFileName *tspath.RootedFilePath
 		if data.SourceFile != nil {
 			name := data.SourceFile.FileName()
 			sourceFileName = &name
@@ -3449,7 +3487,7 @@ func emitToOutput(ctx context.Context, program *compiler.Program, options compil
 		return nil, err
 	}
 	slices.SortFunc(outputFiles, func(a, b *EmitOutputFile) int {
-		return strings.Compare(a.FileName, b.FileName)
+		return a.FileName.Compare(b.FileName)
 	})
 	return &EmitOutputResponse{
 		EmitSkipped: result.EmitSkipped,
@@ -4327,7 +4365,10 @@ func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle Node
 	if err != nil {
 		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
 	}
-	path := tspath.Path(s[secondDot+1:])
+	path, ok := tspath.TryPathKeyFromCanonical(s[secondDot+1:])
+	if !ok {
+		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
+	}
 
 	sourceFile := program.GetSourceFileByPath(path)
 	if sourceFile == nil {
@@ -4366,7 +4407,7 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 			if oldProj.GetProgram() == newProj.GetProgram() {
 				return
 			}
-			var oldFiles, newFiles map[tspath.Path]*ast.SourceFile
+			var oldFiles, newFiles map[tspath.PathKey]*ast.SourceFile
 			if p := oldProj.GetProgram(); p != nil {
 				oldFiles = p.FilesByPath()
 			}
@@ -4377,10 +4418,10 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 			core.DiffMaps(
 				oldFiles, newFiles,
 				nil, // onAdded: new file in project, not a change.
-				func(path tspath.Path, _ *ast.SourceFile) {
+				func(path tspath.PathKey, _ *ast.SourceFile) {
 					projectChanges.DeletedFiles = append(projectChanges.DeletedFiles, path)
 				},
-				func(path tspath.Path, _ *ast.SourceFile, _ *ast.SourceFile) {
+				func(path tspath.PathKey, _ *ast.SourceFile, _ *ast.SourceFile) {
 					projectChanges.ChangedFiles = append(projectChanges.ChangedFiles, path)
 				},
 			)
@@ -4459,7 +4500,7 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 		for i, file := range request.OpenFiles {
 			project := snapshot.GetDefaultProject(file.ToURI(s.GetCurrentDirectory()))
 			if project == nil {
-				panic("no project found for opened file " + file.ToAbsoluteFileName(s.GetCurrentDirectory()))
+				panic("no project found for opened file " + s.toFileName(file).AsString())
 			}
 			results[i] = &OpenedFileOperationResult{Project: project.ID()}
 		}
@@ -4530,9 +4571,16 @@ func formatSessionID(id uint64) string {
 	return fmt.Sprintf("api-session-%d", id)
 }
 
-// toPath converts a file name to a normalized path.
-func (s *Session) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, s.GetCurrentDirectory(), s.useCaseSensitiveFileNames())
+func (s *Session) pathKey(fileName tspath.RootedFilePath) tspath.PathKey {
+	return s.caseSensitivity().PathKey(tspath.RootedPath(fileName))
+}
+
+func (s *Session) toFileName(document DocumentIdentifier) tspath.RootedFilePath {
+	return document.ToFileName(s.currentDirectory())
+}
+
+func (s *Session) toURI(document DocumentIdentifier) lsproto.DocumentUri {
+	return document.ToURI(s.currentDirectory())
 }
 
 // toFileChangeSummary converts API file changes to a project.FileChangeSummary.
@@ -4693,7 +4741,7 @@ func (s *Session) resolveOptionalSourceFile(program *compiler.Program, file *Doc
 	if file == nil {
 		return nil, nil
 	}
-	sourceFile := program.GetSourceFile(file.ToFileName())
+	sourceFile := program.GetSourceFile(file.ToFileName(program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
 	}
@@ -4716,7 +4764,7 @@ func (s *Session) handleGetReferencesToSymbolInFile(ctx context.Context, params 
 		return nil, nil
 	}
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -4782,13 +4830,13 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 		return nil, err
 	}
 	run := func(snapshot *project.Snapshot, program *compiler.Program) (*ls.CompletionList, error) {
-		sourceFile := program.GetSourceFile(params.File.ToFileName())
+		sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, nil
 		}
-		langSvc, e := s.setupLanguageService(snapshot, program, params.Project, "")
-		if e != nil {
-			return nil, e
+		langSvc, setupErr := s.setupLanguageService(snapshot, program, params.Project, sourceFile.FileName().AsString())
+		if setupErr != nil {
+			return nil, setupErr
 		}
 		internalPos := sourceFile.GetPositionMap().UTF16ToUTF8(int(params.Position))
 		return langSvc.GetCompletionsAtPosition(ctx, sourceFile, internalPos, params.TriggerCharacter, params.IncludeSymbol)
@@ -4800,7 +4848,11 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	}
 	result, err := run(sd.snapshot, program)
 	if errors.Is(err, ls.ErrNeedsAutoImports) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.GetCurrentDirectory()), nil)
+		sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
+		if sourceFile == nil {
+			return nil, nil
+		}
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
 		}

@@ -1,5 +1,4 @@
 import type {
-    Path,
     SourceFile,
     Statement,
 } from "@typescript/typescript/unstable/ast";
@@ -27,6 +26,11 @@ import {
     createVariableDeclarationList,
     createVariableStatement,
 } from "@typescript/typescript/unstable/ast/factory";
+import {
+    CaseSensitivity,
+    pathKey,
+    toRootedFilePath,
+} from "@typescript/typescript/unstable/path";
 import assert from "node:assert";
 import {
     describe,
@@ -53,7 +57,14 @@ const concurrency = areTestsFiltered();
 
 function makeSF(text: string, fileName: string, statements: readonly Statement[]): SourceFile {
     const endOfFileToken = createToken(SyntaxKind.EndOfFile);
-    return createSourceFile(statements, endOfFileToken, text, fileName, fileName as Path);
+    const rootedFilePath = toRootedFilePath(fileName, undefined);
+    return createSourceFile(
+        statements,
+        endOfFileToken,
+        text,
+        rootedFilePath,
+        pathKey(rootedFilePath, CaseSensitivity.Sensitive),
+    );
 }
 
 function decode(data: Uint8Array): RemoteSourceFile {
@@ -89,11 +100,13 @@ describe("Encoder", { concurrency }, () => {
     test("keeps adjacent surrogate string-table entries separate", () => {
         const high = String.fromCharCode(0xD800);
         const low = String.fromCharCode(0xDC00);
-        const sf = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", high, low as Path);
+        const fileName = toRootedFilePath(`/${high}`, undefined);
+        const path = pathKey(toRootedFilePath(`/${low}`, undefined), CaseSensitivity.Sensitive);
+        const sf = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", fileName, path);
 
         const decoded = decode(encodeSourceFile(sf));
-        assert.strictEqual(decoded.fileName, high);
-        assert.strictEqual(decoded.path, low);
+        assert.strictEqual(decoded.fileName, `/${high}`);
+        assert.strictEqual(decoded.path, `/${low}`);
     });
 
     test("encodes source file with identifier", () => {

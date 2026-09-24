@@ -30,17 +30,17 @@ func DiscoverTypings(
 	fs vfs.FS,
 	logger logging.Logger,
 	typingsInfo *TypingsInfo,
-	fileNames []string,
-	projectRootPath string,
+	fileNames []tspath.RootedFilePath,
+	projectRootPath tspath.RootedDirectoryPath,
 	packageNameToTypingLocation *collections.SyncMap[string, *CachedTyping],
 	typesRegistry map[string]map[string]string,
-) (cachedTypingPaths []string, newTypingNames []string, filesToWatch []string) {
+) (cachedTypingPaths []tspath.RootedFilePath, newTypingNames []string, filesToWatch []tspath.RootedPath) {
 	// A typing name to typing file path mapping
-	inferredTypings := map[string]string{}
+	inferredTypings := map[string]tspath.RootedFilePath{}
 
 	// Only infer typings for .js and .jsx files
-	fileNames = core.Filter(fileNames, func(fileName string) bool {
-		return tspath.HasJSFileExtension(fileName)
+	fileNames = core.Filter(fileNames, func(fileName tspath.RootedFilePath) bool {
+		return fileName.HasJSFileExtension()
 	})
 
 	if typingsInfo.TypeAcquisition.Include != nil {
@@ -50,9 +50,9 @@ func DiscoverTypings(
 
 	// Directories to search for package.json, bower.json and other typing information
 	if typingsInfo.CompilerOptions.Types == nil {
-		possibleSearchDirs := map[string]bool{}
+		possibleSearchDirs := map[tspath.RootedDirectoryPath]bool{}
 		for _, fileName := range fileNames {
-			possibleSearchDirs[tspath.GetDirectoryPath(fileName)] = true
+			possibleSearchDirs[fileName.Directory()] = true
 		}
 		possibleSearchDirs[projectRootPath] = true
 		for searchDir := range possibleSearchDirs {
@@ -103,7 +103,7 @@ func DiscoverTypings(
 	return cachedTypingPaths, newTypingNames, filesToWatch
 }
 
-func addInferredTyping(inferredTypings map[string]string, typingName string) {
+func addInferredTyping(inferredTypings map[string]tspath.RootedFilePath, typingName string) {
 	if _, ok := inferredTypings[typingName]; !ok {
 		inferredTypings[typingName] = ""
 	}
@@ -112,7 +112,7 @@ func addInferredTyping(inferredTypings map[string]string, typingName string) {
 func addInferredTypings(
 	fs vfs.FS,
 	logger logging.Logger,
-	inferredTypings map[string]string,
+	inferredTypings map[string]tspath.RootedFilePath,
 	typingNames []string, message string,
 ) {
 	logger.Log(fmt.Sprintf("ATA:: %s: %v", message, typingNames))
@@ -130,14 +130,14 @@ func addInferredTypings(
 func getTypingNamesFromSourceFileNames(
 	fs vfs.FS,
 	logger logging.Logger,
-	inferredTypings map[string]string,
-	fileNames []string,
+	inferredTypings map[string]tspath.RootedFilePath,
+	fileNames []tspath.RootedFilePath,
 ) {
 	hasJsxFile := false
 	var fromFileNames []string
 	for _, fileName := range fileNames {
-		hasJsxFile = hasJsxFile || tspath.FileExtensionIs(fileName, tspath.ExtensionJsx)
-		inferredTypingName := tspath.RemoveFileExtension(tspath.ToFileNameLowerCase(tspath.GetBaseFileName(fileName)))
+		hasJsxFile = hasJsxFile || fileName.ExtensionIs(tspath.ExtensionJsx)
+		inferredTypingName := tspath.RemoveFileExtension(tspath.ToFileNameLowerCase(fileName.BaseName()))
 		cleanedTypingName := removeMinAndVersionNumbers(inferredTypingName)
 		if typeName, ok := safeFileNameToTypeName[cleanedTypingName]; ok {
 			fromFileNames = append(fromFileNames, typeName)
@@ -163,21 +163,21 @@ func getTypingNamesFromSourceFileNames(
 func addTypingNamesAndGetFilesToWatch(
 	fs vfs.FS,
 	logger logging.Logger,
-	inferredTypings map[string]string,
-	filesToWatch []string,
-	projectRootPath string,
+	inferredTypings map[string]tspath.RootedFilePath,
+	filesToWatch []tspath.RootedPath,
+	projectRootPath tspath.RootedDirectoryPath,
 	manifestName string,
 	modulesDirName string,
-) []string {
+) []tspath.RootedPath {
 	// First, we check the manifests themselves. They're not
 	// _required_, but they allow us to do some filtering when dealing
 	// with big flat dep directories.
-	manifestPath := tspath.CombinePaths(projectRootPath, manifestName)
+	manifestPath := projectRootPath.ResolveFile(manifestName)
 	var manifestTypingNames []string
 	manifestContents, ok := fs.ReadFile(manifestPath)
 	if ok {
 		var manifest packagejson.DependencyFields
-		filesToWatch = append(filesToWatch, manifestPath)
+		filesToWatch = append(filesToWatch, manifestPath.AsPath())
 		// var manifest map[string]any
 		err := json.Unmarshal([]byte(manifestContents), &manifest)
 		if err == nil {
@@ -185,7 +185,7 @@ func addTypingNamesAndGetFilesToWatch(
 			manifestTypingNames = slices.AppendSeq(manifestTypingNames, maps.Keys(manifest.DevDependencies.Value))
 			manifestTypingNames = slices.AppendSeq(manifestTypingNames, maps.Keys(manifest.OptionalDependencies.Value))
 			manifestTypingNames = slices.AppendSeq(manifestTypingNames, maps.Keys(manifest.PeerDependencies.Value))
-			addInferredTypings(fs, logger, inferredTypings, manifestTypingNames, "Typing names in '"+manifestPath+"' dependencies")
+			addInferredTypings(fs, logger, inferredTypings, manifestTypingNames, "Typing names in '"+manifestPath.AsString()+"' dependencies")
 		}
 	}
 
@@ -193,8 +193,8 @@ func addTypingNamesAndGetFilesToWatch(
 	// already-installed dependencies (if present). Note that this
 	// step happens regardless of whether a manifest was present,
 	// which is certainly a valid configuration, if an unusual one.
-	packagesFolderPath := tspath.CombinePaths(projectRootPath, modulesDirName)
-	filesToWatch = append(filesToWatch, packagesFolderPath)
+	packagesFolderPath := projectRootPath.ResolveDirectory(modulesDirName)
+	filesToWatch = append(filesToWatch, packagesFolderPath.AsPath())
 	if !fs.DirectoryExists(packagesFolderPath) {
 		return filesToWatch
 	}
@@ -214,17 +214,17 @@ func addTypingNamesAndGetFilesToWatch(
 	// we'll look them up.
 	var packageNames []string
 
-	var dependencyManifestNames []string
+	var dependencyManifestNames []tspath.RootedFilePath
 	if len(manifestTypingNames) > 0 {
 		// This is #1 described above.
 		for _, typingName := range manifestTypingNames {
-			dependencyManifestNames = append(dependencyManifestNames, tspath.CombinePaths(packagesFolderPath, typingName, manifestName))
+			dependencyManifestNames = append(dependencyManifestNames, packagesFolderPath.ResolveFile(tspath.CombinePaths(typingName, manifestName)))
 		}
 	} else {
 		// And #2. Depth = 3 because scoped packages look like `node_modules/@foo/bar/package.json`
 		depth := 3
-		for _, manifestPath := range vfsmatch.ReadDirectory(fs, projectRootPath, packagesFolderPath, []string{tspath.ExtensionJson}, nil, nil, depth) {
-			if tspath.GetBaseFileName(manifestPath) != manifestName {
+		for _, manifestPath := range vfsmatch.ReadDirectory[string](fs, packagesFolderPath, []string{tspath.ExtensionJson}, nil, nil, depth) {
+			if manifestPath.BaseName() != manifestName {
 				continue
 			}
 
@@ -234,7 +234,7 @@ func addTypingNamesAndGetFilesToWatch(
 			// We only assume depth 3 is ok for formally scoped
 			// packages. So that needs this dance here.
 
-			pathComponents := tspath.GetPathComponents(manifestPath, "")
+			pathComponents := manifestPath.Components()
 			lenPathComponents := len(pathComponents)
 			ch, _ := utf8.DecodeRuneInString(pathComponents[lenPathComponents-3])
 			isScoped := ch == '@'
@@ -268,7 +268,7 @@ func addTypingNamesAndGetFilesToWatch(
 			ownTypes = manifest.Typings.Value
 		}
 		if len(ownTypes) != 0 {
-			absolutePath := tspath.GetNormalizedAbsolutePath(ownTypes, tspath.GetDirectoryPath(manifestPath))
+			absolutePath := manifestPath.Directory().ResolveFile(ownTypes)
 			if fs.FileExists(absolutePath) {
 				logger.Log(fmt.Sprintf("ATA::     Package '%s' provides its own types.", manifest.Name.Value))
 				inferredTypings[manifest.Name.Value] = absolutePath

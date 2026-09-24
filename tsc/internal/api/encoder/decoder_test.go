@@ -1,6 +1,7 @@
 package encoder_test
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"testing"
@@ -17,7 +18,7 @@ import (
 func parseSourceFile(code string) *ast.SourceFile {
 	return parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, code, core.ScriptKindTS)
 }
 
@@ -30,7 +31,7 @@ func TestDecodeSourceFile_Basic(t *testing.T) {
 	decoded, err := encoder.DecodeSourceFile(buf)
 	assert.NilError(t, err)
 	assert.Equal(t, decoded.AsNode().Kind, ast.KindSourceFile)
-	assert.Equal(t, decoded.FileName(), "/test.ts")
+	assert.Equal(t, decoded.FileName().AsString(), "/test.ts")
 	assert.Equal(t, decoded.Text(), "let x = 1;")
 	assert.Assert(t, decoded.Statements != nil)
 	assert.Assert(t, decoded.EndOfFileToken != nil)
@@ -41,13 +42,13 @@ func TestDecodeSourceFile_Metadata(t *testing.T) {
 
 	tests := []struct {
 		name       string
-		fileName   string
+		fileName   tspath.RootedFilePath
 		scriptKind core.ScriptKind
 		code       string
 	}{
-		{"JSON", "/test.json", core.ScriptKindJSON, `{"x": 1}`},
-		{"JSX", "/test.jsx", core.ScriptKindJSX, `const x = <div />;`},
-		{"declaration", "/test.d.ts", core.ScriptKindTS, `declare const x: number;`},
+		{"JSON", tspath.RootedFilePathFromNormalized("/test.json"), core.ScriptKindJSON, `{"x": 1}`},
+		{"JSX", tspath.RootedFilePathFromNormalized("/test.jsx"), core.ScriptKindJSX, `const x = <div />;`},
+		{"declaration", tspath.RootedFilePathFromNormalized("/test.d.ts"), core.ScriptKindTS, `declare const x: number;`},
 	}
 
 	for _, tt := range tests {
@@ -55,7 +56,7 @@ func TestDecodeSourceFile_Metadata(t *testing.T) {
 			t.Parallel()
 			sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: tt.fileName,
-				Path:     tspath.Path(tt.fileName),
+				PathKey:  tspath.CaseSensitive.PathKey(tt.fileName.AsPath()),
 			}, tt.code, tt.scriptKind)
 			buf, _, err := encoder.EncodeSourceFile(sourceFile)
 			assert.NilError(t, err)
@@ -67,6 +68,23 @@ func TestDecodeSourceFile_Metadata(t *testing.T) {
 			assert.Equal(t, decoded.IsDeclarationFile, sourceFile.IsDeclarationFile)
 		})
 	}
+}
+
+func TestDecodeSourceFileRejectsInvalidFileName(t *testing.T) {
+	t.Parallel()
+	sf := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: "/Test.ts",
+		PathKey:  "/test.ts",
+	}, "", core.ScriptKindTS)
+	buf, _, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	invalidFileName := []byte("Test/.ts")
+	index := bytes.Index(buf, []byte("/Test.ts"))
+	assert.Assert(t, index >= 0)
+	copy(buf[index:index+len(invalidFileName)], invalidFileName)
+	_, err = encoder.DecodeSourceFile(buf)
+	assert.ErrorContains(t, err, `invalid source file name "Test/.ts"`)
 }
 
 func TestDecodeSourceFile_Statements(t *testing.T) {
@@ -459,7 +477,7 @@ func BenchmarkDecodeSourceFile(b *testing.B) {
 	code := string(fileContent)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/checker.ts",
-		Path:     "/checker.ts",
+		PathKey:  "/checker.ts",
 	}, code, core.ScriptKindTS)
 
 	buf, _, err := encoder.EncodeSourceFile(sourceFile)
@@ -469,7 +487,7 @@ func BenchmarkDecodeSourceFile(b *testing.B) {
 		for b.Loop() {
 			parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/checker.ts",
-				Path:     "/checker.ts",
+				PathKey:  "/checker.ts",
 			}, code, core.ScriptKindTS)
 		}
 	})

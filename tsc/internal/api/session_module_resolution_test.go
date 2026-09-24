@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -175,7 +176,7 @@ func TestCreateProgramUsesStaticModuleResolutions(t *testing.T) {
 		Project:  projectID,
 	})
 	assert.NilError(t, err)
-	assert.DeepEqual(t, fileNames, []string{provided, root})
+	assert.DeepEqual(t, fileNames, []tspath.RootedFilePath{provided, root})
 }
 
 func TestStaticModuleResolutionPreservesStaticIdentity(t *testing.T) {

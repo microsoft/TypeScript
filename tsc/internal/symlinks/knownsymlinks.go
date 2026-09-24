@@ -11,124 +11,137 @@ import (
 )
 
 type KnownDirectoryLink struct {
+	// Matches the spelling used to reach the symlink. Used to preserve the
+	// spelling of child paths when substituting the real directory.
+	Symlink tspath.RootedDirectoryPath
 	// Matches the casing returned by `realpath`. Used to compute the `realpath` of children.
-	// Always has trailing directory separator
-	Real string
-	// toPath(real). Stored to avoid repeated recomputation.
-	// Always has trailing directory separator
-	RealPath tspath.Path
+	Real tspath.RootedDirectoryPath
+	// Canonical key for Real, stored to avoid repeated recomputation.
+	RealPath tspath.PathKey
 }
 
 type KnownSymlinks struct {
-	directories               collections.SyncMap[tspath.Path, *KnownDirectoryLink]
-	directoriesByRealpath     collections.SyncMap[tspath.Path, *collections.SyncSet[string]]
-	files                     collections.SyncMap[tspath.Path, string]
-	filesByRealpath           collections.SyncMap[tspath.Path, *collections.SyncSet[string]]
-	cwd                       string
-	useCaseSensitiveFileNames bool
+	directories           collections.SyncMap[tspath.PathKey, *KnownDirectoryLink]
+	directoriesByRealpath collections.SyncMap[tspath.PathKey, *collections.SyncSet[tspath.RootedDirectoryPath]]
+	files                 collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+	filesByRealpath       collections.SyncMap[tspath.PathKey, *collections.SyncSet[tspath.RootedFilePath]]
+	caseSensitivity       tspath.CaseSensitivity
 }
 
-func (cache *KnownSymlinks) HasDirectory(symlinkPath tspath.Path) bool {
-	_, ok := cache.directories.Load(symlinkPath.EnsureTrailingDirectorySeparator())
+func (cache *KnownSymlinks) HasDirectory(symlinkPath tspath.PathKey) bool {
+	_, ok := cache.directories.Load(symlinkPath)
 	return ok
 }
 
-// Gets a map from symlink to realpath. Keys have trailing directory separators.
-func (cache *KnownSymlinks) Directories() *collections.SyncMap[tspath.Path, *KnownDirectoryLink] {
+// Gets a map from symlink to realpath.
+func (cache *KnownSymlinks) Directories() *collections.SyncMap[tspath.PathKey, *KnownDirectoryLink] {
 	return &cache.directories
 }
 
-func (cache *KnownSymlinks) DirectoriesByRealpath() *collections.SyncMap[tspath.Path, *collections.SyncSet[string]] {
+func (cache *KnownSymlinks) DirectoriesByRealpath() *collections.SyncMap[tspath.PathKey, *collections.SyncSet[tspath.RootedDirectoryPath]] {
 	return &cache.directoriesByRealpath
 }
 
 // Gets a map from symlink to realpath
-func (cache *KnownSymlinks) Files() *collections.SyncMap[tspath.Path, string] {
+func (cache *KnownSymlinks) Files() *collections.SyncMap[tspath.PathKey, tspath.RootedFilePath] {
 	return &cache.files
 }
 
 // Gets a map from realpath to symlinks
-func (cache *KnownSymlinks) FilesByRealpath() *collections.SyncMap[tspath.Path, *collections.SyncSet[string]] {
+func (cache *KnownSymlinks) FilesByRealpath() *collections.SyncMap[tspath.PathKey, *collections.SyncSet[tspath.RootedFilePath]] {
 	return &cache.filesByRealpath
 }
 
-func (cache *KnownSymlinks) SetDirectory(symlink string, symlinkPath tspath.Path, realDirectory *KnownDirectoryLink) {
+func (cache *KnownSymlinks) SetDirectory(symlink tspath.RootedDirectoryPath, symlinkPath tspath.PathKey, realDirectory *KnownDirectoryLink) {
 	if realDirectory != nil {
+		link := *realDirectory
+		link.Symlink = symlink
+		realDirectory = &link
 		if _, ok := cache.directories.Load(symlinkPath); !ok {
-			set, _ := cache.directoriesByRealpath.LoadOrStore(realDirectory.RealPath, &collections.SyncSet[string]{})
+			set, _ := cache.directoriesByRealpath.LoadOrStore(realDirectory.RealPath, &collections.SyncSet[tspath.RootedDirectoryPath]{})
 			set.Add(symlink)
 		}
 	}
 	cache.directories.Store(symlinkPath, realDirectory)
 }
 
-func (cache *KnownSymlinks) SetFile(symlink string, symlinkPath tspath.Path, realpath string) {
+func (link *KnownDirectoryLink) ResolveFilePath(fileName tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) (tspath.RootedFilePath, bool) {
+	relative, ok := caseSensitivity.RelativeFilePathFromDirectory(link.Symlink, fileName)
+	if !ok {
+		return "", false
+	}
+	return link.Real.ResolveRelativeFile(relative), true
+}
+
+func (cache *KnownSymlinks) SetFile(symlink tspath.RootedFilePath, symlinkPath tspath.PathKey, realpath tspath.RootedFilePath) {
 	if _, ok := cache.files.Load(symlinkPath); !ok {
-		realpathPath := tspath.ToPath(realpath, cache.cwd, cache.useCaseSensitiveFileNames)
-		set, _ := cache.filesByRealpath.LoadOrStore(realpathPath, &collections.SyncSet[string]{})
+		realpathPath := cache.caseSensitivity.PathKey(tspath.RootedPath(realpath))
+		set, _ := cache.filesByRealpath.LoadOrStore(realpathPath, &collections.SyncSet[tspath.RootedFilePath]{})
 		set.Add(symlink)
 	}
 	cache.files.Store(symlinkPath, realpath)
 }
 
-func NewKnownSymlink(currentDirectory string, useCaseSensitiveFileNames bool) *KnownSymlinks {
+func NewKnownSymlinks(caseSensitivity tspath.CaseSensitivity) *KnownSymlinks {
 	return &KnownSymlinks{
-		cwd:                       currentDirectory,
-		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+		caseSensitivity: caseSensitivity,
 	}
 }
 
 func (cache *KnownSymlinks) SetSymlinksFromResolutions(
-	forEachResolvedModule func(callback func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.Path), file *ast.SourceFile),
-	forEachResolvedTypeReferenceDirective func(callback func(resolution *module.ResolvedTypeReferenceDirective, moduleName string, mode core.ResolutionMode, filePath tspath.Path), file *ast.SourceFile),
+	forEachResolvedModule func(callback func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.PathKey), file *ast.SourceFile),
+	forEachResolvedTypeReferenceDirective func(callback func(resolution *module.ResolvedTypeReferenceDirective, moduleName string, mode core.ResolutionMode, filePath tspath.PathKey), file *ast.SourceFile),
 ) {
-	forEachResolvedModule(func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.Path) {
+	forEachResolvedModule(func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.PathKey) {
 		cache.ProcessResolution(resolution.OriginalPath, resolution.ResolvedFileName)
 	}, nil)
-	forEachResolvedTypeReferenceDirective(func(resolution *module.ResolvedTypeReferenceDirective, moduleName string, mode core.ResolutionMode, filePath tspath.Path) {
+	forEachResolvedTypeReferenceDirective(func(resolution *module.ResolvedTypeReferenceDirective, moduleName string, mode core.ResolutionMode, filePath tspath.PathKey) {
 		cache.ProcessResolution(resolution.OriginalPath, resolution.ResolvedFileName)
 	}, nil)
 }
 
-func (cache *KnownSymlinks) ProcessResolution(originalPath string, resolvedFileName string) {
-	if originalPath == "" || resolvedFileName == "" {
+func (cache *KnownSymlinks) ProcessResolution(originalFileName tspath.RootedFilePath, resolvedFileName tspath.RootedFilePath) {
+	if originalFileName == "" || resolvedFileName == "" {
 		return
 	}
-	cache.SetFile(originalPath, tspath.ToPath(originalPath, cache.cwd, cache.useCaseSensitiveFileNames), resolvedFileName)
-	commonResolved, commonOriginal := cache.guessDirectorySymlink(resolvedFileName, originalPath, cache.cwd)
+	cache.SetFile(originalFileName, cache.caseSensitivity.PathKey(tspath.RootedPath(originalFileName)), resolvedFileName)
+	commonResolved, commonOriginal := cache.guessDirectorySymlinkFromFilePaths(resolvedFileName, originalFileName)
 	if commonResolved != "" && commonOriginal != "" {
-		symlinkPath := tspath.ToPath(commonOriginal, cache.cwd, cache.useCaseSensitiveFileNames)
-		if !tspath.ContainsIgnoredPath(string(symlinkPath)) {
+		symlinkPath := cache.caseSensitivity.PathKey(commonOriginal.AsPath())
+		if !tspath.ContainsIgnoredPathKey(symlinkPath) {
 			cache.SetDirectory(
 				commonOriginal,
-				symlinkPath.EnsureTrailingDirectorySeparator(),
+				symlinkPath,
 				&KnownDirectoryLink{
-					Real:     tspath.EnsureTrailingDirectorySeparator(commonResolved),
-					RealPath: tspath.ToPath(commonResolved, cache.cwd, cache.useCaseSensitiveFileNames).EnsureTrailingDirectorySeparator(),
+					Real:     commonResolved,
+					RealPath: cache.caseSensitivity.PathKey(commonResolved.AsPath()),
 				},
 			)
 		}
 	}
 }
 
-func (cache *KnownSymlinks) guessDirectorySymlink(a string, b string, cwd string) (string, string) {
-	aParts := tspath.GetPathComponents(tspath.GetNormalizedAbsolutePath(a, cwd), "")
-	bParts := tspath.GetPathComponents(tspath.GetNormalizedAbsolutePath(b, cwd), "")
+func (cache *KnownSymlinks) guessDirectorySymlinkFromFilePaths(a tspath.RootedFilePath, b tspath.RootedFilePath) (tspath.RootedDirectoryPath, tspath.RootedDirectoryPath) {
 	isDirectory := false
-	for len(aParts) >= 2 && len(bParts) >= 2 &&
-		!cache.isNodeModulesOrScopedPackageDirectory(aParts[len(aParts)-2]) &&
-		!cache.isNodeModulesOrScopedPackageDirectory(bParts[len(bParts)-2]) &&
-		tspath.GetCanonicalFileName(aParts[len(aParts)-1], cache.useCaseSensitiveFileNames) == tspath.GetCanonicalFileName(bParts[len(bParts)-1], cache.useCaseSensitiveFileNames) {
-		aParts = aParts[:len(aParts)-1]
-		bParts = bParts[:len(bParts)-1]
+	for {
+		aParent := a.Directory()
+		bParent := b.Directory()
+		if aParent.AsPath() == a.AsPath() || bParent.AsPath() == b.AsPath() ||
+			cache.isNodeModulesOrScopedPackageDirectory(aParent.AsPath().BaseName()) ||
+			cache.isNodeModulesOrScopedPackageDirectory(bParent.AsPath().BaseName()) ||
+			cache.caseSensitivity.Canonicalize(a.BaseName()) != cache.caseSensitivity.Canonicalize(b.BaseName()) {
+			break
+		}
+		a = tspath.RootedFilePathFromPath(aParent.AsPath())
+		b = tspath.RootedFilePathFromPath(bParent.AsPath())
 		isDirectory = true
 	}
 	if isDirectory {
-		return tspath.GetPathFromPathComponents(aParts), tspath.GetPathFromPathComponents(bParts)
+		return tspath.RootedDirectoryPathFromPath(tspath.RootedPath(a)), tspath.RootedDirectoryPathFromPath(tspath.RootedPath(b))
 	}
 	return "", ""
 }
 
 func (cache *KnownSymlinks) isNodeModulesOrScopedPackageDirectory(s string) bool {
-	return s != "" && (tspath.GetCanonicalFileName(s, cache.useCaseSensitiveFileNames) == "node_modules" || strings.HasPrefix(s, "@"))
+	return s != "" && (cache.caseSensitivity.Canonicalize(s) == "node_modules" || strings.HasPrefix(s, "@"))
 }
