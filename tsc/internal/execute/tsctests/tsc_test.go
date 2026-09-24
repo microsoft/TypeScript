@@ -2291,7 +2291,36 @@ func TestTscIncremental(t *testing.T) {
 					export const value = doc;
 				`),
 			},
-			edits: []*tscEdit{noChange},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the recursive type",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/doc.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+				{
+					caption: "add a union constituent",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/doc.ts", "| string", "| number\n    | string")
+					},
+				},
+				noChange,
+				{
+					caption: "delete build info and check the edited source afresh",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
+					},
+				},
+				{
+					caption: "verify the consumer type was not weakened",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/consumer.ts", "\nexport const invalid: number = value;\n")
+					},
+				},
+				noChange,
+			},
 		},
 		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",

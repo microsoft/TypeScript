@@ -3073,6 +3073,16 @@ func (b *NodeBuilderImpl) getParentSymbolOfTypeParameter(typeParameter *TypePara
 
 func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 	var typeArguments []*Type = b.ch.getTypeArguments(t)
+	if b.ch.isArrayOrTupleType(t) {
+		// Use the regular type reference to detect cycles through both deferred and regular
+		// type references when expanding arrays and tuples.
+		typeId := b.ch.createTypeReference(t.Target(), typeArguments).id
+		if b.ctx.visitedTypes.Has(typeId) {
+			return b.createCyclicStructurePlaceholder()
+		}
+		b.ctx.visitedTypes.Add(typeId)
+		defer b.ctx.visitedTypes.Delete(typeId)
+	}
 	if t.Target() == b.ch.globalArrayType || t.Target() == b.ch.globalReadonlyArrayType {
 		if b.ctx.flags&nodebuilder.FlagsWriteArrayAsGenericType != 0 {
 			typeArgumentNode := b.typeToTypeNode(typeArguments[0])
