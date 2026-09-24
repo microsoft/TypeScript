@@ -6,8 +6,10 @@ import (
 	"sync/atomic"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
@@ -46,6 +48,48 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 		if !r.IsResolved() {
 			t.Errorf("%q failed to resolve", name)
 		}
+	}
+}
+
+func TestResolvePackageImportWithNilLookupTable(t *testing.T) {
+	t.Parallel()
+
+	fs := vfstest.FromMap(map[string]string{
+		"/repo/package.json": `{"imports": {}}`,
+		"/repo/src/file.ts":  "",
+	}, true)
+	fields, err := packagejson.Parse([]byte(`{"imports": {}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var imports *collections.OrderedMap[string, packagejson.ExportsOrImports]
+	fields.Imports.Value = imports
+	cache := packagejson.NewInfoCache("/repo", true)
+	cache.Set("/repo/package.json", &packagejson.InfoCacheEntry{
+		PackageDirectory: "/repo",
+		DirectoryExists:  true,
+		Contents: &packagejson.PackageJson{
+			Fields:    fields,
+			Parseable: true,
+		},
+	})
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindNodeNext,
+		Module:           core.ModuleKindNodeNext,
+		Target:           core.ScriptTargetESNext,
+	}
+	resolver := module.NewResolver(module.ResolverOptions{
+		Host:             &resolutionHostStub{fs: fs, cwd: "/repo"},
+		CompilerOptions:  opts,
+		PackageJsonCache: cache,
+	})
+
+	resolved, _, err := resolver.ResolveModuleName("#missing", "/repo/src/file.ts", core.ModuleKindESNext, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if resolved.IsResolved() {
+		t.Fatalf("expected #missing to be unresolved, got %q", resolved.ResolvedFileName)
 	}
 }
 
