@@ -496,7 +496,7 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		snapshotHost:              snapshotHost,
 		withLocale:                withLocale,
 		snapshots:                 make(map[SnapshotID]*snapshotData),
-		buildOrchestrators: make(map[BuildOrchestratorID]*build.Orchestrator),
+		buildOrchestrators:        make(map[BuildOrchestratorID]*build.Orchestrator),
 		moduleResolvers:           make(map[ModuleResolverID]*moduleResolverRegistration),
 		programResolutionContexts: make(map[uint64]*programResolutionContext),
 	}

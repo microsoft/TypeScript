@@ -288,22 +288,22 @@ func (o *Orchestrator) GenerateGraph(oldTasks *collections.SyncMap[tspath.Path, 
 
 // tsc -b entrypoint
 func (o *Orchestrator) Start(ctx context.Context) tsc.CommandLineResult {
-	return o.start(ctx, "", true /*watchAllowed*/, false /*onlyReferences*/).Result
+	return o.start(ctx, "", false /*onlyReferences*/).Result
 }
 
 // orchestrator.Build() entrypoint for api
 func (o *Orchestrator) Build(ctx context.Context, project string) *OrchestratorResult {
 	o.recheckAllProjects(project)
-	return o.start(ctx, project, false /*watchAllowed*/, false /*onlyReferences*/)
+	return o.start(ctx, project, false /*onlyReferences*/)
 }
 
 // orchestrator.BuildReferences() entrypoint for api
 func (o *Orchestrator) BuildReferences(ctx context.Context, project string) *OrchestratorResult {
 	o.recheckAllProjects(project)
-	return o.start(ctx, project, false /*watchAllowed*/, true /*onlyReferences*/)
+	return o.start(ctx, project, true /*onlyReferences*/)
 }
 
-func (o *Orchestrator) start(ctx context.Context, project string, watchAllowed bool, onlyReferences bool) *OrchestratorResult {
+func (o *Orchestrator) start(ctx context.Context, project string, onlyReferences bool) *OrchestratorResult {
 	o.contentMapperHost = tsc.NewContentMapperHost(ctx, o.opts.Sys, o.opts.Command.CompilerOptions)
 	if o.contentMapperHost != nil && (!o.opts.Command.CompilerOptions.Watch.IsTrue() || o.opts.Testing == nil) {
 		defer o.contentMapperHost.Close()
@@ -328,12 +328,8 @@ func (o *Orchestrator) start(ctx context.Context, project string, watchAllowed b
 	}
 	result := o.buildOrCleanOrder(order)
 	if o.opts.Command.CompilerOptions.Watch.IsTrue() {
-		if watchAllowed {
-			o.Watch(ctx)
-			result.Result.Watcher = o
-		} else {
-			result.Errors = append(result.Errors, ast.NewCompilerDiagnostic(diagnostics.Watch_mode_not_activated_in_build_orchestrator))
-		}
+		o.Watch(ctx)
+		result.Result.Watcher = o
 	}
 	return result
 }

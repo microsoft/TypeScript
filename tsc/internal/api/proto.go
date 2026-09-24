@@ -37,7 +37,7 @@ type Method string
 
 type (
 	SnapshotID          uint64
-	ModuleResolverID uint64
+	ModuleResolverID    uint64
 	SymbolID            uint64
 	BuildOrchestratorID uint64
 	TypeID              uint32

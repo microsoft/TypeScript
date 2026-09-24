@@ -2388,8 +2388,6 @@ var X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_
 
 var X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here = &Message{code: 5113, category: CategoryError, key: "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113", text: "'{0}' is only assignable to the non-distributed '{1}', but '{1}' has been distributed here."}
 
-var Watch_mode_not_activated_in_build_orchestrator = &Message{code: 5114, category: CategoryMessage, key: "Watch_mode_not_activated_in_build_orchestrator_5114", text: "Watch mode not activated in build orchestrator"}
-
 var Generates_a_sourcemap_for_each_corresponding_d_ts_file = &Message{code: 6000, category: CategoryMessage, key: "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000", text: "Generates a sourcemap for each corresponding '.d.ts' file."}
 
 var Concatenate_and_emit_output_to_single_file = &Message{code: 6001, category: CategoryMessage, key: "Concatenate_and_emit_output_to_single_file_6001", text: "Concatenate and emit output to single file."}
@@ -5624,7 +5622,6 @@ var allMessages = [...]**Message{
 	&Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information,
 	&X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error,
 	&X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here,
-	&Watch_mode_not_activated_in_build_orchestrator,
 	&Generates_a_sourcemap_for_each_corresponding_d_ts_file,
 	&Concatenate_and_emit_output_to_single_file,
 	&Generates_corresponding_d_ts_file,
