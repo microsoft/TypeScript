@@ -48,14 +48,25 @@ func TestAliasResolverGetDiagnosticsDoesNotPanic(t *testing.T) {
 
 	const fileName = "/pkg/index.ts"
 	text := "declare function f(arg: { a: string }): () => void;\nexport const x = f({ a: 1 });\n"
+	testAliasResolverGetDiagnostics(t, fileName, text, core.ScriptKindTS)
+}
 
+func TestAliasResolverGetDiagnosticsWithAutomaticJSXRuntimeDoesNotPanic(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/pkg/index.tsx"
+	text := "/** @jsxRuntime automatic */\nexport const x = { value: <div /> } satisfies {};\n"
+	testAliasResolverGetDiagnostics(t, fileName, text, core.ScriptKindTSX)
+}
+
+func testAliasResolverGetDiagnostics(t *testing.T, fileName string, text string, scriptKind core.ScriptKind) {
 	fs := vfstest.FromMap(map[string]string{fileName: text}, true /*useCaseSensitiveFileNames*/)
 	host := &fakeCloneHost{fs: fs}
 
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: fileName,
 		Path:     tspath.Path(fileName),
-	}, text, core.ScriptKindTS)
+	}, text, scriptKind)
 	binder.BindSourceFile(sourceFile)
 
 	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: core.EmptyCompilerOptions})
