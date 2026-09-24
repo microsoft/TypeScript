@@ -38,13 +38,23 @@ export const named = decode(namedInput);
 tsgo --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mconsumer/index.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'true' is not assignable to type 'false'.
+[96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m6[0m const notAny: false = null as unknown as
-[7m [0m [91m      ~~~~~~[0m
+[7m8[0m const invalidIndex: number = indexed["name"];
+[7m [0m [91m      ~~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m9[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m9[0m const invalidDeep: number = deep.a.b.c.d;
+[7m [0m [91m      ~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m10[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m10[0m const invalidNamed: number = named.node.leaf;
+[7m  [0m [91m      ~~~~~~~~~~~~[0m
 
 
-Found 1 error in consumer/index.ts[90m:6[0m
+Found 3 errors in the same file, starting at: consumer/index.ts[90m:8[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -87,20 +97,20 @@ declare const console: { log(msg: any): void; };
 }
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *new* 
 export declare const indexed: {
-    [x: string]: /*elided*/ any;
+    [x: string]: string;
 };
 export declare const deep: {
     a: {
         b: {
             c: {
-                d: /*elided*/ any;
+                d: string;
             };
         };
     };
 };
 export declare const named: {
     node: {
-        leaf: /*elided*/ any;
+        leaf: string;
     };
 };
 
@@ -110,7 +120,7 @@ export const deep = decode({ a: { b: { c: { d: stringValidator } } } });
 export const named = decode(namedInput);
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4074b2f28fc7614cd7f712938fd82f-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);","signature":"0f56ecd87ba219172866ed99af7058f5-export declare const indexed: {\n    [x: string]: /*elided*/ any;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: /*elided*/ any;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: /*elided*/ any;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4074b2f28fc7614cd7f712938fd82f-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);","signature":"39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -142,11 +152,11 @@ export const named = decode(namedInput);
     {
       "fileName": "../index.ts",
       "version": "6f4074b2f28fc7614cd7f712938fd82f-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);",
-      "signature": "0f56ecd87ba219172866ed99af7058f5-export declare const indexed: {\n    [x: string]: /*elided*/ any;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: /*elided*/ any;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: /*elided*/ any;\n    };\n};\n",
+      "signature": "39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "6f4074b2f28fc7614cd7f712938fd82f-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);",
-        "signature": "0f56ecd87ba219172866ed99af7058f5-export declare const indexed: {\n    [x: string]: /*elided*/ any;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: /*elided*/ any;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: /*elided*/ any;\n    };\n};\n",
+        "signature": "39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n",
         "impliedNodeFormat": 1
       }
     }
@@ -157,7 +167,7 @@ export const named = decode(namedInput);
     "strict": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2050
+  "size": 2026
 }
 
 producer/tsconfig.json::
@@ -180,13 +190,23 @@ Edit [0]:: no change
 tsgo --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mconsumer/index.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'true' is not assignable to type 'false'.
+[96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m6[0m const notAny: false = null as unknown as
-[7m [0m [91m      ~~~~~~[0m
+[7m8[0m const invalidIndex: number = indexed["name"];
+[7m [0m [91m      ~~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m9[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m9[0m const invalidDeep: number = deep.a.b.c.d;
+[7m [0m [91m      ~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m10[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m10[0m const invalidNamed: number = named.node.leaf;
+[7m  [0m [91m      ~~~~~~~~~~~~[0m
 
 
-Found 1 error in consumer/index.ts[90m:6[0m
+Found 3 errors in the same file, starting at: consumer/index.ts[90m:8[0m
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
@@ -219,13 +239,23 @@ export const named = decode(namedInput);
 tsgo --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mconsumer/index.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'true' is not assignable to type 'false'.
+[96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m6[0m const notAny: false = null as unknown as
-[7m [0m [91m      ~~~~~~[0m
+[7m8[0m const invalidIndex: number = indexed["name"];
+[7m [0m [91m      ~~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m9[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m9[0m const invalidDeep: number = deep.a.b.c.d;
+[7m [0m [91m      ~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m10[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m10[0m const invalidNamed: number = named.node.leaf;
+[7m  [0m [91m      ~~~~~~~~~~~~[0m
 
 
-Found 1 error in consumer/index.ts[90m:6[0m
+Found 3 errors in the same file, starting at: consumer/index.ts[90m:8[0m
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
@@ -236,7 +266,7 @@ export const named = decode(namedInput);
 // comment-only edit
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7b3972037d74f8acb94c246976ef7ffa-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);\n// comment-only edit\n","signature":"0f56ecd87ba219172866ed99af7058f5-export declare const indexed: {\n    [x: string]: /*elided*/ any;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: /*elided*/ any;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: /*elided*/ any;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7b3972037d74f8acb94c246976ef7ffa-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);\n// comment-only edit\n","signature":"39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -268,11 +298,11 @@ export const named = decode(namedInput);
     {
       "fileName": "../index.ts",
       "version": "7b3972037d74f8acb94c246976ef7ffa-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);\n// comment-only edit\n",
-      "signature": "0f56ecd87ba219172866ed99af7058f5-export declare const indexed: {\n    [x: string]: /*elided*/ any;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: /*elided*/ any;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: /*elided*/ any;\n    };\n};\n",
+      "signature": "39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "7b3972037d74f8acb94c246976ef7ffa-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);\n// comment-only edit\n",
-        "signature": "0f56ecd87ba219172866ed99af7058f5-export declare const indexed: {\n    [x: string]: /*elided*/ any;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: /*elided*/ any;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: /*elided*/ any;\n    };\n};\n",
+        "signature": "39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n",
         "impliedNodeFormat": 1
       }
     }
@@ -283,7 +313,7 @@ export const named = decode(namedInput);
     "strict": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2074
+  "size": 2050
 }
 
 producer/tsconfig.json::
@@ -305,13 +335,23 @@ Edit [2]:: no change
 tsgo --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mconsumer/index.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'true' is not assignable to type 'false'.
+[96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m6[0m const notAny: false = null as unknown as
-[7m [0m [91m      ~~~~~~[0m
+[7m8[0m const invalidIndex: number = indexed["name"];
+[7m [0m [91m      ~~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m9[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m9[0m const invalidDeep: number = deep.a.b.c.d;
+[7m [0m [91m      ~~~~~~~~~~~[0m
+
+[96mconsumer/index.ts[0m:[93m10[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m10[0m const invalidNamed: number = named.node.leaf;
+[7m  [0m [91m      ~~~~~~~~~~~~[0m
 
 
-Found 1 error in consumer/index.ts[90m:6[0m
+Found 3 errors in the same file, starting at: consumer/index.ts[90m:8[0m
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
