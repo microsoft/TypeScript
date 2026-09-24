@@ -11,8 +11,11 @@ import {
     encodeWtf8,
     Wtf8Decoder,
 } from "../src/api/node/wtf8.ts";
+import { areTestsFiltered } from "./testUtils.ts";
 
-describe("encodeWtf8", () => {
+const concurrency = areTestsFiltered();
+
+describe("encodeWtf8", { concurrency }, () => {
     test("matches UTF-8 for scalar values", () => {
         assert.deepEqual(encodeWtf8("hello 🦀"), new TextEncoder().encode("hello 🦀"));
     });
@@ -48,7 +51,7 @@ describe("encodeWtf8", () => {
     });
 });
 
-describe("Wtf8Decoder", () => {
+describe("Wtf8Decoder", { concurrency }, () => {
     test("decodes standard UTF-8", () => {
         const decoder = new Wtf8Decoder();
         assert.strictEqual(decoder.decode(new TextEncoder().encode("hello 🦀")), "hello 🦀");
@@ -86,7 +89,7 @@ describe("Wtf8Decoder", () => {
     });
 });
 
-describe("Msgpack strings", () => {
+describe("Msgpack strings", { concurrency }, () => {
     test("round-trip lone surrogates", () => {
         const text = `high:${String.fromCharCode(0xD800)} low:${String.fromCharCode(0xDFFF)}`;
         const writer = new MsgpackWriter();

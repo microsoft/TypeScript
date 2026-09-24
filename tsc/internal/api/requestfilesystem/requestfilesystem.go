@@ -44,7 +44,8 @@ type RequestFileSystem struct {
 	Kind Kind `json:"kind"`
 	// Files maps file names to their complete contents.
 	Files map[string]string `json:"files" nonnil:"true"`
-	// Directories maps directory names to complete listing results.
+	// Directories maps directory names to complete listing results. Directory
+	// structure implied by Files is derived when a listing is omitted.
 	Directories map[string]RequestDirectoryEntries `json:"directories,omitempty"`
 	// Symlinks maps link paths to targets in this filesystem or the host filesystem.
 	Symlinks map[string]RequestSymlink `json:"symlinks,omitempty"`
@@ -131,7 +132,13 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		paths:                 &requestPathNode{},
 	}
 	result.registerDirectory(currentDirectory)
-	for fileName, content := range params.Files {
+	fileNames := make([]string, 0, len(params.Files))
+	for fileName := range params.Files {
+		fileNames = append(fileNames, fileName)
+	}
+	slices.Sort(fileNames)
+	for _, fileName := range fileNames {
+		content := params.Files[fileName]
 		absoluteFileName := result.toAbsolutePath(fileName)
 		path := result.toPath(absoluteFileName)
 		node := result.paths.ensure(path)
