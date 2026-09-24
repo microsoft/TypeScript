@@ -2,6 +2,7 @@ package ls
 
 import (
 	"context"
+	"reflect"
 	"slices"
 	"strings"
 	"unicode"
@@ -51,7 +52,17 @@ func (l *LanguageService) ProvideInlayHint(
 			converters:      l.converters,
 		}
 		inlayHintState.visit(projection.AsNode())
-		result = append(result, inlayHintState.result...)
+		if len(result) == 0 {
+			result = append(result, inlayHintState.result...)
+			continue
+		}
+		for _, hint := range inlayHintState.result {
+			if !slices.ContainsFunc(result, func(existing *lsproto.InlayHint) bool {
+				return reflect.DeepEqual(existing, hint)
+			}) {
+				result = append(result, hint)
+			}
+		}
 	}
 	return lsproto.InlayHintsOrNull{InlayHints: &result}, nil
 }
