@@ -176,7 +176,7 @@ func (r *aliasResolver) GetImportHelpersImportSpecifier(path tspath.Path) *ast.N
 
 // GetJSXRuntimeImportSpecifier implements checker.Program.
 func (r *aliasResolver) GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node) {
-	return "", nil
+	panic("unimplemented")
 }
 
 // GetNearestAncestorDirectoryWithPackageJson implements checker.Program.
