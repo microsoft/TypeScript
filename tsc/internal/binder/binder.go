@@ -432,7 +432,7 @@ func (b *Binder) declareSourceFileMember(node *ast.Node, symbolFlags ast.SymbolF
 
 func (b *Binder) declareSymbolAndAddToSymbolTable(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {
 	switch b.container.Kind {
-	case ast.KindModuleDeclaration:
+	case ast.KindModuleDeclaration, ast.KindModuleExpression:
 		return b.declareModuleMember(node, symbolFlags, symbolExcludes)
 	case ast.KindSourceFile:
 		return b.declareSourceFileMember(node, symbolFlags, symbolExcludes)
@@ -705,6 +705,8 @@ func (b *Binder) bind(node *ast.Node) bool {
 		b.bindEnumDeclaration(node)
 	case ast.KindModuleDeclaration:
 		b.bindModuleDeclaration(node)
+	case ast.KindModuleExpression:
+		b.bindModuleExpression(node)
 	case ast.KindImportEqualsDeclaration, ast.KindNamespaceImport, ast.KindImportSpecifier, ast.KindExportSpecifier:
 		b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsAlias, ast.SymbolFlagsAliasExcludes)
 	case ast.KindNamespaceExportDeclaration:
@@ -823,6 +825,14 @@ func (b *Binder) declareModuleSymbol(node *ast.Node) ast.ModuleInstanceState {
 	instantiated := state != ast.ModuleInstanceStateNonInstantiated
 	b.declareSymbolAndAddToSymbolTable(node, core.IfElse(instantiated, ast.SymbolFlagsValueModule, ast.SymbolFlagsNamespaceModule), core.IfElse(instantiated, ast.SymbolFlagsValueModuleExcludes, ast.SymbolFlagsNamespaceModuleExcludes))
 	return state
+}
+
+// bindModuleExpression binds a TC39 module expression (`module { ... }`) to an anonymous value module symbol.
+// The exports of the module body become the properties of the anonymous object type that the expression evaluates to.
+func (b *Binder) bindModuleExpression(node *ast.Node) {
+	b.setExportContextFlag(node)
+	symbol := b.newSymbol(ast.SymbolFlagsValueModule, ast.InternalSymbolNameModuleExpression)
+	b.addDeclarationToSymbol(symbol, node, ast.SymbolFlagsValueModule)
 }
 
 func (b *Binder) bindNamespaceExportDeclaration(node *ast.Node) {
@@ -1245,7 +1255,7 @@ func (b *Binder) bindAnonymousDeclaration(node *ast.Node, symbolFlags ast.Symbol
 
 func (b *Binder) bindBlockScopedDeclaration(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) {
 	switch b.blockScopeContainer.Kind {
-	case ast.KindModuleDeclaration:
+	case ast.KindModuleDeclaration, ast.KindModuleExpression:
 		b.declareModuleMember(node, symbolFlags, symbolExcludes)
 	case ast.KindSourceFile:
 		if ast.IsExternalOrCommonJSModule(b.container.AsSourceFile()) {
@@ -2584,7 +2594,7 @@ func GetContainerFlags(node *ast.Node) ContainerFlags {
 		return ContainerFlagsIsContainer
 	case ast.KindInterfaceDeclaration:
 		return ContainerFlagsIsContainer | ContainerFlagsIsInterface
-	case ast.KindModuleDeclaration, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindMappedType, ast.KindIndexSignature:
+	case ast.KindModuleDeclaration, ast.KindModuleExpression, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindMappedType, ast.KindIndexSignature:
 		return ContainerFlagsIsContainer | ContainerFlagsHasLocals
 	case ast.KindSourceFile:
 		return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals

@@ -206,6 +206,7 @@ import type {
     ModuleBody,
     ModuleDeclaration,
     ModuleExportName,
+    ModuleExpression,
     ModuleName,
     ModuleReference,
     MultiplicativeOperator,
@@ -1035,6 +1036,15 @@ export declare namespace isSatisfiesExpression {
     function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, SatisfiesExpression>;
 }
 isSatisfiesExpression.Handle = isSatisfiesExpression as any;
+
+export function isModuleExpression(node: Node): node is ModuleExpression {
+    return node.kind === SyntaxKind.ModuleExpression;
+}
+
+export declare namespace isModuleExpression {
+    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, ModuleExpression>;
+}
+isModuleExpression.Handle = isModuleExpression as any;
 
 export function isConditionalExpression(node: Node): node is ConditionalExpression {
     return node.kind === SyntaxKind.ConditionalExpression;

@@ -164,6 +164,7 @@ import type {
     ModuleBody,
     ModuleDeclaration,
     ModuleExportName,
+    ModuleExpression,
     ModuleName,
     ModuleReference,
     NamedExportBindings,
@@ -922,6 +923,8 @@ function cloneNodeData(node: Node): any {
             return { expression: n.expression, type: n.type };
         case SyntaxKind.SatisfiesExpression:
             return { expression: n.expression, type: n.type };
+        case SyntaxKind.ModuleExpression:
+            return { body: n.body };
         case SyntaxKind.ConditionalExpression:
             return { condition: n.condition, questionToken: n.questionToken, whenTrue: n.whenTrue, colonToken: n.colonToken, whenFalse: n.whenFalse };
         case SyntaxKind.PropertyAccessExpression:
@@ -1388,6 +1391,7 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
     [SyntaxKind.SatisfiesExpression]: (data, cbNode, cbNodes) =>
         visitNode(cbNode, data.expression) ||
         visitNode(cbNode, data.type),
+    [SyntaxKind.ModuleExpression]: (data, cbNode, cbNodes) => visitNode(cbNode, data.body),
     [SyntaxKind.ConditionalExpression]: (data, cbNode, cbNodes) =>
         visitNode(cbNode, data.condition) ||
         visitNode(cbNode, data.questionToken) ||
@@ -2661,6 +2665,12 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
         if (data.type) {
             const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ModuleExpression]: function* (data) {
+        if (data.body) {
+            const res = yield data.body;
             if (res) return res;
         }
     },
@@ -4511,6 +4521,12 @@ export function createSatisfiesExpression(expression: Expression, type: TypeNode
     }) as unknown as SatisfiesExpression;
 }
 
+export function createModuleExpression(body: ModuleBlock): ModuleExpression {
+    return new NodeObject(SyntaxKind.ModuleExpression, {
+        body,
+    }) as unknown as ModuleExpression;
+}
+
 export function createConditionalExpression(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression {
     return new NodeObject(SyntaxKind.ConditionalExpression, {
         condition,
@@ -5631,6 +5647,10 @@ export function updateAsExpression(node: AsExpression, expression: Expression, t
 
 export function updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression {
     return node.expression !== expression || node.type !== type ? createSatisfiesExpression(expression, type) : node;
+}
+
+export function updateModuleExpression(node: ModuleExpression, body: ModuleBlock): ModuleExpression {
+    return node.body !== body ? createModuleExpression(body) : node;
 }
 
 export function updateConditionalExpression(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression {

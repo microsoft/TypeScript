@@ -263,6 +263,7 @@ const (
 	KindMetaProperty
 	KindSyntheticExpression
 	KindSatisfiesExpression
+	KindModuleExpression
 	// Misc
 	KindTemplateSpan
 	KindSemicolonClassElement

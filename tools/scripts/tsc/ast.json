@@ -293,6 +293,7 @@
             "MetaProperty",
             "SyntheticExpression",
             "SatisfiesExpression",
+            "ModuleExpression",
             {
                 "comment": "Misc"
             },
@@ -3009,6 +3010,21 @@
                         "type": "TypeNode"
                     }
                 ]
+            },
+            "ModuleExpression": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "DeclarationBase",
+                    "LocalsContainerBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Body",
+                        "type": "ModuleBlock"
+                    }
+                ],
+                "arena": true
             },
             "ConditionalExpression": {
                 "generateSubtreeFacts": true,

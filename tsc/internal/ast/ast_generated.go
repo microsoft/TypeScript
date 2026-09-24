@@ -46,6 +46,7 @@ type NodeFactory struct {
 	literalTypeNodeArena               core.Arena[LiteralTypeNode]
 	methodSignatureDeclarationArena    core.Arena[MethodSignatureDeclaration]
 	modifierListArena                  core.Arena[ModifierList]
+	moduleExpressionArena              core.Arena[ModuleExpression]
 	nodeListArena                      core.Arena[NodeList]
 	numericLiteralArena                core.Arena[NumericLiteral]
 	parameterDeclarationArena          core.Arena[ParameterDeclaration]
@@ -329,6 +330,7 @@ type (
 	FunctionExpressionNode            = Node
 	AsExpressionNode                  = Node
 	SatisfiesExpressionNode           = Node
+	ModuleExpressionNode              = Node
 	ConditionalExpressionNode         = Node
 	PropertyAccessExpressionNode      = Node
 	ElementAccessExpressionNode       = Node
@@ -4086,6 +4088,47 @@ func (node *SatisfiesExpression) Clone(f NodeFactoryCoercible) *Node {
 
 func IsSatisfiesExpression(node *Node) bool {
 	return node.Kind == KindSatisfiesExpression
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// ModuleExpression
+// ──────────────────────────────────────────────────────────────────────
+
+type ModuleExpression struct {
+	PrimaryExpressionBase
+	DeclarationBase
+	LocalsContainerBase
+	CompositeBase
+	Body *ModuleBlockNode
+}
+
+func (f *NodeFactory) NewModuleExpression(body *ModuleBlockNode) *Node {
+	data := f.moduleExpressionArena.New()
+	data.Body = body
+	return f.newNode(KindModuleExpression, data)
+}
+
+func (f *NodeFactory) UpdateModuleExpression(node *ModuleExpression, body *ModuleBlockNode) *Node {
+	if body != node.Body {
+		return updateNode(f.NewModuleExpression(body), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node *ModuleExpression) ForEachChild(v Visitor) bool {
+	return visit(v, node.Body)
+}
+
+func (node *ModuleExpression) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdateModuleExpression(node, v.visitNode(node.Body))
+}
+
+func (node *ModuleExpression) Clone(f NodeFactoryCoercible) *Node {
+	return cloneNode(f.AsNodeFactory().NewModuleExpression(node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsModuleExpression(node *Node) bool {
+	return node.Kind == KindModuleExpression
 }
 
 // ──────────────────────────────────────────────────────────────────────
@@ -8820,6 +8863,8 @@ func (n *Node) ForEachChild(v Visitor) bool {
 		return n.data.(*AsExpression).ForEachChild(v)
 	case KindSatisfiesExpression:
 		return n.data.(*SatisfiesExpression).ForEachChild(v)
+	case KindModuleExpression:
+		return n.data.(*ModuleExpression).ForEachChild(v)
 	case KindConditionalExpression:
 		return n.data.(*ConditionalExpression).ForEachChild(v)
 	case KindPropertyAccessExpression:
@@ -9351,6 +9396,10 @@ func (n *Node) AsAsExpression() *AsExpression {
 
 func (n *Node) AsSatisfiesExpression() *SatisfiesExpression {
 	return n.data.(*SatisfiesExpression)
+}
+
+func (n *Node) AsModuleExpression() *ModuleExpression {
+	return n.data.(*ModuleExpression)
 }
 
 func (n *Node) AsConditionalExpression() *ConditionalExpression {

@@ -831,6 +831,10 @@ export interface SatisfiesExpression extends ExpressionBase {
     readonly expression: Expression;
     readonly type: TypeNode;
 }
+export interface ModuleExpression extends PrimaryExpressionBase, DeclarationBase {
+    readonly kind: SyntaxKind.ModuleExpression;
+    readonly body: ModuleBlock;
+}
 export interface ConditionalExpression extends ExpressionBase {
     readonly kind: SyntaxKind.ConditionalExpression;
     readonly condition: Expression;

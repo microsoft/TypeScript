@@ -114,6 +114,7 @@ import type {
     MissingDeclaration,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExpression,
     NamedExports,
     NamedImports,
     NamedTupleMember,
@@ -288,6 +289,7 @@ import {
     updateMissingDeclaration,
     updateModuleBlock,
     updateModuleDeclaration,
+    updateModuleExpression,
     updateNamedExports,
     updateNamedImports,
     updateNamedTupleMember,
@@ -384,6 +386,7 @@ import {
     isJsxTagNameExpression,
     isLeftHandSideExpression,
     isMemberName,
+    isModuleBlock,
     isModuleBody,
     isModuleExportName,
     isModuleName,
@@ -877,6 +880,10 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
         const _expression = visitNode(node.expression, visitor, isExpression);
         const _type = visitNode(node.type, visitor, isTypeNode);
         return updateSatisfiesExpression(node, _expression, _type);
+    },
+    [SyntaxKind.ModuleExpression]: (node: ModuleExpression, visitor: Visitor): ModuleExpression => {
+        const _body = visitNode(node.body, visitor, isModuleBlock);
+        return updateModuleExpression(node, _body);
     },
     [SyntaxKind.ConditionalExpression]: (node: ConditionalExpression, visitor: Visitor): ConditionalExpression => {
         const _condition = visitNode(node.condition, visitor, isExpression);

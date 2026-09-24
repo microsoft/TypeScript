@@ -151,6 +151,12 @@ loop:
 					}
 				}
 			}
+		case ast.KindModuleExpression:
+			if moduleSymbol := r.getSymbolOfDeclaration(location); moduleSymbol != nil && name != ast.InternalSymbolNameDefault {
+				if result = r.lookup(moduleSymbol.Exports, name, meaning&ast.SymbolFlagsModuleMember); result != nil {
+					break loop
+				}
+			}
 		case ast.KindEnumDeclaration:
 			enumSymbol := r.getSymbolOfDeclaration(location)
 			if enumSymbol == nil {

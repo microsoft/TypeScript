@@ -3307,6 +3307,8 @@ func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPr
 		p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
 	case ast.KindSatisfiesExpression:
 		p.emitSatisfiesExpression(node.AsSatisfiesExpression())
+	case ast.KindModuleExpression:
+		p.emitModuleExpression(node.AsModuleExpression())
 	case ast.KindMetaProperty:
 		p.emitMetaProperty(node.AsMetaProperty())
 	case ast.KindSyntheticExpression:
@@ -3850,6 +3852,14 @@ func (p *Printer) emitModuleDeclaration(node *ast.ModuleDeclaration) {
 		p.writeSpace()
 		p.emitModuleBlock(body.AsModuleBlock())
 	}
+	p.exitNode(node.AsNode(), state)
+}
+
+func (p *Printer) emitModuleExpression(node *ast.ModuleExpression) {
+	state := p.enterNode(node.AsNode())
+	p.writeKeyword("module")
+	p.writeSpace()
+	p.emitModuleBlock(node.Body.AsModuleBlock())
 	p.exitNode(node.AsNode(), state)
 }
 

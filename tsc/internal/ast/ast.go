@@ -1706,6 +1706,12 @@ func (node *CatchClause) propagateSubtreeFacts() SubtreeFacts {
 	return node.SubtreeFacts() & ^SubtreeExclusionsCatchClause
 }
 
+func (node *ModuleExpression) computeSubtreeFacts() SubtreeFacts {
+	// A module expression must always be transformed for JS emit, and its body may contain TypeScript syntax,
+	// so treat the subtree as containing TypeScript to ensure the transforms descend into it.
+	return propagateSubtreeFacts(node.Body) | SubtreeContainsTypeScript
+}
+
 func (node *VariableStatement) computeSubtreeFacts() SubtreeFacts {
 	if node.modifiers != nil && node.modifiers.ModifierFlags&ModifierFlagsAmbient != 0 {
 		return SubtreeContainsTypeScript

@@ -5218,6 +5218,18 @@ func (c *Checker) checkEnumMember(node *ast.Node) {
 	}
 }
 
+func (c *Checker) checkModuleExpression(node *ast.Node) *Type {
+	if body := node.AsModuleExpression().Body; body != nil {
+		c.checkSourceElement(body)
+	}
+	symbol := node.Symbol()
+	// The value of a module expression is the namespace of its exported members. We build an anonymous
+	// object type directly (rather than the `typeof`-style type of a module symbol) so that declaration
+	// emit expands its members structurally instead of trying to reference the anonymous module by name.
+	members := c.getExportsOfSymbol(symbol)
+	return c.newAnonymousType(nil, members, nil, nil, nil)
+}
+
 func (c *Checker) checkModuleDeclaration(node *ast.Node) {
 	if body := node.Body(); body != nil {
 		c.checkSourceElement(body)
@@ -5473,7 +5485,8 @@ func (c *Checker) checkExternalImportOrExportDeclaration(node *ast.Node) bool {
 		return false
 	}
 	inAmbientExternalModule := ast.IsModuleBlock(node.Parent) && ast.IsAmbientModule(node.Parent.Parent)
-	if !ast.IsSourceFile(node.Parent) && !inAmbientExternalModule {
+	inModuleExpression := ast.IsModuleBlock(node.Parent) && ast.IsModuleExpression(node.Parent.Parent)
+	if !ast.IsSourceFile(node.Parent) && !inAmbientExternalModule && !inModuleExpression {
 		c.error(moduleName, core.IfElse(ast.IsExportDeclaration(node), diagnostics.Export_declarations_are_not_permitted_in_a_namespace, diagnostics.Import_declarations_in_a_namespace_cannot_reference_a_module))
 		return false
 	}
@@ -7964,6 +7977,8 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 		return c.checkExpressionWithTypeArguments(node)
 	case ast.KindSatisfiesExpression:
 		return c.checkSatisfiesExpression(node)
+	case ast.KindModuleExpression:
+		return c.checkModuleExpression(node)
 	case ast.KindMetaProperty:
 		return c.checkMetaProperty(node)
 	case ast.KindDeleteExpression:

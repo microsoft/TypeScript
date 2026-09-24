@@ -609,6 +609,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		expression := d.nodeAt(it.nextIf(mask, 0))
 		typeNode := d.nodeAt(it.nextIf(mask, 1))
 		return d.factory.NewSatisfiesExpression(expression, typeNode), nil
+	case ast.KindModuleExpression:
+		return d.factory.NewModuleExpression(d.singleChild(childIndices)), nil
 	case ast.KindConditionalExpression:
 		it := newChildIter(childIndices)
 		condition := d.nodeAt(it.nextIf(mask, 0))

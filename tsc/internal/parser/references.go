@@ -13,12 +13,35 @@ func collectExternalModuleReferences(file *ast.SourceFile) {
 		collectModuleReferences(file, node, false /*inAmbientModule*/)
 	}
 
+	// Imports and exports nested inside a module expression are part of that expression's module body and must
+	// be resolved as well.
+	collectModuleExpressionReferences(file, file.AsNode())
+
 	if file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
 		ast.ForEachDynamicImportOrRequireCall(file /*includeTypeSpaceImports*/, true /*requireStringLiteralLikeArgument*/, true, func(node *ast.Node, moduleSpecifier *ast.Expression) bool {
 			ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleSpecifier))
 			return false
 		})
 	}
+}
+
+// collectModuleExpressionReferences walks the entire source file looking for module expressions and collects the
+// external module references from each module expression's body.
+func collectModuleExpressionReferences(file *ast.SourceFile, node *ast.Node) {
+	if node == nil {
+		return
+	}
+	if ast.IsModuleExpression(node) {
+		if body := node.AsModuleExpression().Body; body != nil {
+			for _, statement := range body.Statements() {
+				collectModuleReferences(file, statement, false /*inAmbientModule*/)
+			}
+		}
+	}
+	node.ForEachChild(func(child *ast.Node) bool {
+		collectModuleExpressionReferences(file, child)
+		return false
+	})
 }
 
 func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbientModule bool) {

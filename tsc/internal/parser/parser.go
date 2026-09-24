@@ -4102,6 +4102,10 @@ func (p *Parser) nextTokenIsOpenBrace() bool {
 	return p.nextToken() == ast.KindOpenBraceToken
 }
 
+func (p *Parser) nextTokenIsOpenBraceOnSameLine() bool {
+	return p.nextToken() == ast.KindOpenBraceToken && !p.hasPrecedingLineBreak()
+}
+
 func (p *Parser) parseExpression() *ast.Expression {
 	// Expression[in]:
 	//      AssignmentExpression[in]
@@ -5644,8 +5648,26 @@ func (p *Parser) parsePrimaryExpression() *ast.Expression {
 		return p.parseTemplateExpression(false /*isTaggedTemplate*/)
 	case ast.KindPrivateIdentifier:
 		return p.parsePrivateIdentifier()
+	case ast.KindModuleKeyword:
+		if p.lookAhead((*Parser).nextTokenIsOpenBraceOnSameLine) {
+			return p.parseModuleExpression()
+		}
 	}
 	return p.parseIdentifierWithDiagnostic(diagnostics.Expression_expected, nil)
+}
+
+// parseModuleExpression parses a TC39 module expression (`module { ... }`), which is a primary expression
+// that evaluates to the module namespace of the statements in its body.
+func (p *Parser) parseModuleExpression() *ast.Expression {
+	pos := p.nodePos()
+	jsdoc := p.jsdocScannerInfo()
+	p.parseExpected(ast.KindModuleKeyword)
+	body := p.doInContext(ast.NodeFlagsAwaitContext, true, func(p *Parser) *ast.Node {
+		return p.parseModuleBlock()
+	})
+	result := p.finishNode(p.factory.NewModuleExpression(body), pos)
+	p.withJSDoc(result, jsdoc)
+	return result
 }
 
 func (p *Parser) parseParenthesizedExpression() *ast.Expression {

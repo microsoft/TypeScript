@@ -4,6 +4,7 @@ package tstransforms
 
 import (
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -99,6 +100,8 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 		node = tx.visitEnumDeclaration(node.AsEnumDeclaration())
 	case ast.KindModuleDeclaration:
 		node = tx.visitModuleDeclaration(node.AsModuleDeclaration())
+	case ast.KindModuleExpression:
+		node = tx.visitModuleExpression(node.AsModuleExpression())
 	case ast.KindClassDeclaration:
 		node = tx.visitClassDeclaration(node.AsClassDeclaration())
 	case ast.KindClassExpression:
@@ -482,6 +485,62 @@ func (tx *RuntimeSyntaxTransformer) visitModuleDeclaration(node *ast.ModuleDecla
 	tx.EmitContext().AssignCommentAndSourceMapRanges(moduleStatement, node.AsNode())
 	tx.EmitContext().AddEmitFlags(moduleStatement, emitFlags)
 	return tx.Factory().NewSyntaxList(append(statements, moduleStatement))
+}
+
+// visitModuleExpression lowers a TC39 module expression (`module { ... }`) into an awaited dynamic import of a Blob:
+//
+//	await import(URL.createObjectURL(new Blob([`...body...`], { type: "application/javascript" })))
+func (tx *RuntimeSyntaxTransformer) visitModuleExpression(node *ast.ModuleExpression) *ast.Node {
+	// Transform the body first so that any nested TypeScript syntax is lowered before it is serialized into the Blob.
+	visited := tx.Visitor().VisitEachChild(node.AsNode()).AsModuleExpression()
+	bodyText := tx.printStatementsToText(visited.Body.Statements())
+	return tx.buildModuleFragmentImportExpression(bodyText)
+}
+
+// printStatementsToText serializes the already-transformed statements of a module expression body back into
+// JavaScript source text that can be embedded inside a Blob.
+func (tx *RuntimeSyntaxTransformer) printStatementsToText(statements []*ast.Statement) string {
+	if len(statements) == 0 {
+		return ""
+	}
+	var sourceFile *ast.SourceFile
+	if tx.currentSourceFile != nil {
+		sourceFile = tx.currentSourceFile.AsSourceFile()
+	}
+	newLine := tx.compilerOptions.NewLine.GetNewLineCharacter()
+	var sb strings.Builder
+	for i, statement := range statements {
+		text, _ := printer.PrintAndPositionNode(&tx.Factory().NodeFactory, statement, sourceFile, newLine, 4 /*indentSize*/, tx.EmitContext())
+		if i > 0 {
+			sb.WriteString(newLine)
+		}
+		sb.WriteString(text)
+	}
+	return sb.String()
+}
+
+// buildModuleFragmentImportExpression builds:
+//
+//	await import(URL.createObjectURL(new Blob([`bodyText`], { type: "application/javascript" })))
+func (tx *RuntimeSyntaxTransformer) buildModuleFragmentImportExpression(bodyText string) *ast.Expression {
+	f := tx.Factory()
+
+	template := f.NewNoSubstitutionTemplateLiteral(bodyText, ast.TokenFlagsNone)
+
+	elements := f.NewNodeList([]*ast.Node{template})
+	arrayLiteral := f.NewArrayLiteralExpression(elements, true /*multiLine*/)
+
+	typeProperty := f.NewPropertyAssignment(nil, f.NewIdentifier("type"), nil, nil, f.NewStringLiteral("application/javascript", ast.TokenFlagsNone))
+	optionsObject := f.NewObjectLiteralExpression(f.NewNodeList([]*ast.Node{typeProperty}), false /*multiLine*/)
+
+	newExpression := f.NewNewExpression(f.NewIdentifier("Blob"), nil, f.NewNodeList([]*ast.Node{arrayLiteral, optionsObject}))
+
+	createObjectURL := f.NewPropertyAccessExpression(f.NewIdentifier("URL"), nil, f.NewIdentifier("createObjectURL"), ast.NodeFlagsNone)
+	createObjectURLCall := f.NewCallExpression(createObjectURL, nil, nil, f.NewNodeList([]*ast.Node{newExpression}), ast.NodeFlagsNone)
+
+	importCall := f.NewCallExpression(f.NewKeywordExpression(ast.KindImportKeyword), nil, nil, f.NewNodeList([]*ast.Node{createObjectURLCall}), ast.NodeFlagsNone)
+
+	return f.NewAwaitExpression(importCall)
 }
 
 func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclaration, namespaceLocalName *ast.IdentifierNode) *ast.BlockNode {
