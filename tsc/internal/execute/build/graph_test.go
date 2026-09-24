@@ -16,15 +16,15 @@ import (
 func TestBuildOrderGenerator(t *testing.T) {
 	t.Parallel()
 	testCases := []*buildOrderTestCase{
-		{"specify two roots", []string{"A", "G"}, []string{"D", "E", "C", "B", "A", "G"}, false},
-		{"multiple parts of the same graph in various orders", []string{"A"}, []string{"D", "E", "C", "B", "A"}, false},
-		{"multiple parts of the same graph in various orders", []string{"A", "C", "D"}, []string{"D", "E", "C", "B", "A"}, false},
-		{"multiple parts of the same graph in various orders", []string{"D", "C", "A"}, []string{"D", "E", "C", "B", "A"}, false},
-		{"other orderings", []string{"F"}, []string{"E", "F"}, false},
-		{"other orderings", []string{"E"}, []string{"E"}, false},
-		{"other orderings", []string{"F", "C", "A"}, []string{"E", "F", "D", "C", "B", "A"}, false},
-		{"returns circular order", []string{"H"}, []string{"E", "J", "I", "H"}, true},
-		{"returns circular order", []string{"A", "H"}, []string{"D", "E", "C", "B", "A", "J", "I", "H"}, true},
+		{"specify two roots", []string{"A", "G"}, []string{"D", "E", "C", "B", "A", "G"}, []string{"D", "E", "G", "C", "B", "A"}, false},
+		{"multiple parts of the same graph in various orders", []string{"A"}, []string{"D", "E", "C", "B", "A"}, []string{"D", "E", "C", "B", "A"}, false},
+		{"multiple parts of the same graph in various orders", []string{"A", "C", "D"}, []string{"D", "E", "C", "B", "A"}, []string{"D", "E", "C", "B", "A"}, false},
+		{"multiple parts of the same graph in various orders", []string{"D", "C", "A"}, []string{"D", "E", "C", "B", "A"}, []string{"D", "E", "C", "B", "A"}, false},
+		{"other orderings", []string{"F"}, []string{"E", "F"}, []string{"E", "F"}, false},
+		{"other orderings", []string{"E"}, []string{"E"}, []string{"E"}, false},
+		{"other orderings", []string{"F", "C", "A"}, []string{"E", "F", "D", "C", "B", "A"}, []string{"E", "D", "F", "C", "B", "A"}, false},
+		{"returns circular order", []string{"H"}, []string{"E", "J", "I", "H"}, []string{"E", "J", "I", "H"}, true},
+		{"returns circular order", []string{"A", "H"}, []string{"D", "E", "C", "B", "A", "J", "I", "H"}, []string{"D", "E", "C", "J", "B", "I", "A", "H"}, true},
 	}
 	for _, testcase := range testCases {
 		testcase.run(t)
@@ -32,10 +32,11 @@ func TestBuildOrderGenerator(t *testing.T) {
 }
 
 type buildOrderTestCase struct {
-	name     string
-	projects []string
-	expected []string
-	circular bool
+	name             string
+	projects         []string
+	expected         []string
+	expectedSchedule []string
+	circular         bool
 }
 
 func (b *buildOrderTestCase) configName(project string) string {
@@ -119,6 +120,9 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 		buildOrder := core.Map(orchestrator.Order(), b.projectName)
 		assert.DeepEqual(t, buildOrder, b.expected)
 		verifyDeps(orchestrator, buildOrder, false)
+		scheduleOrder := core.Map(orchestrator.ScheduleOrder(), b.projectName)
+		assert.DeepEqual(t, scheduleOrder, b.expectedSchedule)
+		verifyDeps(orchestrator, scheduleOrder, false)
 
 		if !b.circular {
 			for project, projectDeps := range deps {

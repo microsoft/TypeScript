@@ -448,6 +448,16 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.NoResolve = ParseTristate(value)
 	case "paths":
 		allOptions.Paths = parseStringMap(value)
+	case "plugins":
+		// Native TypeScript does not load plugins; retain them only so tools can report the incompatibility.
+		if plugins, ok := value.([]any); ok {
+			allOptions.Plugins = core.Map(plugins, func(plugin any) core.PluginImport {
+				if pluginMap, isMap := plugin.(*collections.OrderedMap[string, any]); isMap {
+					return core.PluginImport{Name: ParseString(pluginMap.GetOrZero("name"))}
+				}
+				return core.PluginImport{}
+			})
+		}
 	case "preserveWatchOutput":
 		allOptions.PreserveWatchOutput = ParseTristate(value)
 	case "preserveConstEnums":
