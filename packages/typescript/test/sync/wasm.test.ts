@@ -10,6 +10,7 @@ import {
 import { API as AsyncAPI } from "@typescript/typescript/unstable/async";
 import { API as SyncAPI } from "@typescript/typescript/unstable/sync";
 import assert from "node:assert";
+import { spawn } from "node:child_process";
 import {
     mkdtemp,
     open,
@@ -87,6 +88,63 @@ describe("API over WebAssembly", () => {
         finally {
             await rm(directory, { recursive: true });
         }
+    });
+
+    test("waits for LSP stdin without repeatedly reading", { timeout: 10_000 }, async () => {
+        const childSource = `
+            import { readFileSync } from "node:fs";
+            import { WASI } from "node:wasi";
+            const wasi = new WASI({
+                version: "preview1",
+                args: ["tsc.wasm", "--lsp", "--stdio"],
+                env: { PWD: "/" },
+                preopens: { "/": process.cwd() },
+                returnOnExit: true,
+            });
+            let reads = 0;
+            const imports = {
+                ...wasi.wasiImport,
+                fd_read(...args) {
+                    if (++reads > 10) throw new Error("stdin was read repeatedly while idle");
+                    return wasi.wasiImport.fd_read(...args);
+                },
+            };
+            const module = await WebAssembly.compile(readFileSync(new URL(${JSON.stringify(wasmURL.toString())})));
+            const instance = await WebAssembly.instantiate(module, { wasi_snapshot_preview1: imports });
+            process.exitCode = wasi.start(instance);
+        `;
+        const child = spawn(process.execPath, ["--input-type=module", "-e", childSource], {
+            cwd: process.cwd(),
+            stdio: ["pipe", "pipe", "pipe"],
+        });
+        let stdout = "";
+        let stderr = "";
+        child.stdout.setEncoding("utf8");
+        child.stderr.setEncoding("utf8");
+        child.stdout.on("data", chunk => stdout += chunk);
+        child.stderr.on("data", chunk => stderr += chunk);
+
+        await new Promise(resolve => setTimeout(resolve, 250));
+        const request = JSON.stringify({
+            jsonrpc: "2.0",
+            id: 1,
+            method: "initialize",
+            params: {
+                processId: null,
+                capabilities: {},
+                rootUri: null,
+                workspaceFolders: null,
+            },
+        });
+        child.stdin.write(`Content-Length: ${Buffer.byteLength(request)}\r\n\r\n${request}`);
+
+        while (!stdout.includes("Resolved client capabilities") && child.exitCode === null) {
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        child.stdin.end();
+        const exitCode = child.exitCode ?? await new Promise<number | null>(resolve => child.once("exit", resolve));
+        assert.strictEqual(exitCode, 0, stderr);
+        assert.match(stdout, /Resolved client capabilities/);
     });
 
     test("runs the compiler and checker through the reactor", async () => {
