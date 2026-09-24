@@ -702,7 +702,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const snapshot = await this.createSnapshot({
             createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
         });
-        return this.getOwnedCreatedProgram(snapshot, "createProgram");
+        const program = snapshot.operation.createdPrograms![0];
+        if (!program) {
+            await snapshot.dispose();
+            throw new Error("createProgram did not return a project");
+        }
+        program.setOwnedSnapshot(snapshot);
+        return program;
     }
 
     /**
@@ -719,19 +725,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const snapshot = await this.createSnapshot({
             createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions, incremental: true }],
         });
-        const program = this.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
+        const program = snapshot.operation.createdPrograms![0];
+        if (!program) {
+            await snapshot.dispose();
+            throw new Error("createIncrementalProgram did not return a project");
+        }
         if (!(program instanceof IncrementalProgram)) {
             await snapshot.dispose();
             throw new Error("createIncrementalProgram did not return an incremental program");
-        }
-        return program;
-    }
-
-    private getOwnedCreatedProgram(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined, undefined>, method: "createProgram" | "createIncrementalProgram"): Program {
-        const program = snapshot.operation.createdPrograms![0];
-        if (!program) {
-            void snapshot.dispose();
-            throw new Error(`${method} did not return a project`);
         }
         program.setOwnedSnapshot(snapshot);
         return program;

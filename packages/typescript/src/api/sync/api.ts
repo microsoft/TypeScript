@@ -1155,7 +1155,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = owner.createSnapshot({
                     createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
-                return owner.getOwnedCreatedProgram(snapshot, "createProgram");
+                const program = snapshot.operation.createdPrograms![0];
+                if (!program) {
+                    snapshot.dispose();
+                    throw new Error("createProgram did not return a project");
+                }
+                program.setOwnedSnapshot(snapshot);
+                return program;
             },
             function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
@@ -1163,7 +1169,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = yield* owner.createSnapshot.gen({
                     createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
-                return owner.getOwnedCreatedProgram(snapshot, "createProgram");
+                const program = snapshot.operation.createdPrograms![0];
+                if (!program) {
+                    yield* snapshot.dispose.gen();
+                    throw new Error("createProgram did not return a project");
+                }
+                program.setOwnedSnapshot(snapshot);
+                return program;
             },
         );
     }
@@ -1186,11 +1198,16 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = owner.createSnapshot({
                     createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions, incremental: true }],
                 });
-                const program = owner.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
+                const program = snapshot.operation.createdPrograms![0];
+                if (!program) {
+                    snapshot.dispose();
+                    throw new Error("createIncrementalProgram did not return a project");
+                }
                 if (!(program instanceof IncrementalProgram)) {
                     snapshot.dispose();
                     throw new Error("createIncrementalProgram did not return an incremental program");
                 }
+                program.setOwnedSnapshot(snapshot);
                 return program;
             },
             function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, IncrementalProgram, ProtocolResponse["result"]> {
@@ -1199,24 +1216,19 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = yield* owner.createSnapshot.gen({
                     createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions, incremental: true }],
                 });
-                const program = owner.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
+                const program = snapshot.operation.createdPrograms![0];
+                if (!program) {
+                    yield* snapshot.dispose.gen();
+                    throw new Error("createIncrementalProgram did not return a project");
+                }
                 if (!(program instanceof IncrementalProgram)) {
                     yield* snapshot.dispose.gen();
                     throw new Error("createIncrementalProgram did not return an incremental program");
                 }
+                program.setOwnedSnapshot(snapshot);
                 return program;
             },
         );
-    }
-
-    private getOwnedCreatedProgram(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined, undefined>, method: "createProgram" | "createIncrementalProgram"): Program {
-        const program = snapshot.operation.createdPrograms![0];
-        if (!program) {
-            void snapshot.dispose();
-            throw new Error(`${method} did not return a project`);
-        }
-        program.setOwnedSnapshot(snapshot);
-        return program;
     }
 }
 
