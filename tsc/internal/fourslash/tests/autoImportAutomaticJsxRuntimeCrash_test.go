@@ -43,3 +43,48 @@ Widg/**/`
 		},
 	})
 }
+
+func TestAutoImportAutomaticJsxRuntimeProjectReferenceCrash(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `
+// @Filename: /packages/lib/package.json
+{ "name": "lib", "types": "out/index.d.ts" }
+
+// @Filename: /packages/lib/tsconfig.json
+{ "compilerOptions": { "composite": true, "jsx": "react-jsx", "outDir": "out" } }
+
+// @Filename: /packages/lib/index.tsx
+/** @jsxRuntime automatic */
+const container = { Widget: { value: <div /> } satisfies {} };
+export default container.Widget;
+
+// @Filename: /packages/app/package.json
+{ "dependencies": { "lib": "*" } }
+
+// @Filename: /packages/app/tsconfig.json
+{ "references": [{ "path": "../lib" }] }
+
+// @Filename: /packages/app/index.ts
+Widg/**/
+
+// @link: /packages/lib -> /packages/app/node_modules/lib
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.MarkTestAsStradaServer()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		UserPreferences: &lsutil.UserPreferences{
+			IncludeCompletionsForModuleExports:    core.TSTrue,
+			IncludeCompletionsForImportStatements: core.TSTrue,
+		},
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{"Widget"},
+		},
+	})
+}
