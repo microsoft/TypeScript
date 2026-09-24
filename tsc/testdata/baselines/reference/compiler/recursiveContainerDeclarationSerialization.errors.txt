@@ -1,0 +1,44 @@
+local.ts(1,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+local.ts(5,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+local.ts(9,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+local.ts(13,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+
+
+==== local.ts (4 errors) ====
+    export function array() {
+                    ~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+        type Recursive = Recursive[];
+        return null as unknown as Recursive;
+    }
+    export function tuple() {
+                    ~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+        type Recursive = [Recursive];
+        return null as unknown as Recursive;
+    }
+    export function readonlyTuple() {
+                    ~~~~~~~~~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+        type Recursive = readonly [Recursive];
+        return null as unknown as Recursive;
+    }
+    export function union() {
+                    ~~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+        type Recursive = string | Recursive[];
+        return null as unknown as Recursive;
+    }
+    
+==== nameable.ts (0 errors) ====
+    export type RecursiveArray = RecursiveArray[];
+    export type RecursiveTuple = readonly [RecursiveTuple];
+    declare const array: RecursiveArray;
+    declare const tuple: RecursiveTuple;
+    export const namedArray = array;
+    export const namedTuple = tuple;
+    export function finite() {
+        type Nested = [[[[[[[[[[[[[number]]]]]]]]]]]]];
+        return null as unknown as Nested;
+    }
+    

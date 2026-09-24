@@ -1349,6 +1349,7 @@ func TestTscIgnoreConfig(t *testing.T) {
 
 func TestTscIncremental(t *testing.T) {
 	t.Parallel()
+	libWithReadonlyArray := strings.Replace(tscDefaultLibContent, "interface ReadonlyArray<T> {}", "interface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }", 1)
 	getConstEnumTest := func(bdsContents string, changeEnumFile string, testSuffix string) *tscInput {
 		return &tscInput{
 			subScenario: "const enums" + testSuffix,
@@ -2269,6 +2270,28 @@ func TestTscIncremental(t *testing.T) {
 				`),
 			},
 			commandLineArgs: []string{"--noEmit"},
+		},
+		{
+			subScenario: "recursive tagged tuple after incremental edits",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "incremental": true, "noEmit": true, "module": "esnext", "moduleResolution": "bundler"}}`,
+				tscLibPath + "/lib.es2025.full.d.ts":         libWithReadonlyArray,
+				"/home/src/workspaces/project/doc.ts": stringtestutil.Dedent(`
+					type Doc =
+						| string
+						| { [k: string]: Doc }
+						| readonly ["array", Doc]
+						| readonly ["array", Doc, { length: number }]
+						| readonly ["array", Doc, { min?: number; max?: number }]
+						| readonly ["union", Doc, ...Doc[]];
+					export declare const doc: Doc;
+				`),
+				"/home/src/workspaces/project/consumer.ts": stringtestutil.Dedent(`
+					import { doc } from "./doc";
+					export const value = doc;
+				`),
+			},
+			edits: []*tscEdit{noChange},
 		},
 		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",

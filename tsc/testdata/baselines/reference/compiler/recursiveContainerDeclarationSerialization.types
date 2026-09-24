@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/recursiveContainerDeclarationSerialization.ts] ////
+
+=== local.ts ===
+export function array() {
+>array : () => any[][][][][][][][][][][]
+
+    type Recursive = Recursive[];
+>Recursive : any[][][][][][][][][][][]
+
+    return null as unknown as Recursive;
+>null as unknown as Recursive : any[][][][][][][][][][][]
+>null as unknown : unknown
+}
+export function tuple() {
+>tuple : () => [[[[[[[[[[[any]]]]]]]]]]]
+
+    type Recursive = [Recursive];
+>Recursive : [[[[[[[[[[[any]]]]]]]]]]]
+
+    return null as unknown as Recursive;
+>null as unknown as Recursive : [[[[[[[[[[[any]]]]]]]]]]]
+>null as unknown : unknown
+}
+export function readonlyTuple() {
+>readonlyTuple : () => readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [any]]]]]]]]]]]
+
+    type Recursive = readonly [Recursive];
+>Recursive : readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [any]]]]]]]]]]]
+
+    return null as unknown as Recursive;
+>null as unknown as Recursive : readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [any]]]]]]]]]]]
+>null as unknown : unknown
+}
+export function union() {
+>union : () => string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any)[])[])[])[])[])[])[])[])[])[])[]
+
+    type Recursive = string | Recursive[];
+>Recursive : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any)[])[])[])[])[])[])[])[])[])[])[]
+
+    return null as unknown as Recursive;
+>null as unknown as Recursive : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any)[])[])[])[])[])[])[])[])[])[])[]
+>null as unknown : unknown
+}
+
+=== nameable.ts ===
+export type RecursiveArray = RecursiveArray[];
+>RecursiveArray : RecursiveArray
+
+export type RecursiveTuple = readonly [RecursiveTuple];
+>RecursiveTuple : RecursiveTuple
+
+declare const array: RecursiveArray;
+>array : RecursiveArray
+
+declare const tuple: RecursiveTuple;
+>tuple : RecursiveTuple
+
+export const namedArray = array;
+>namedArray : RecursiveArray
+>array : RecursiveArray
+
+export const namedTuple = tuple;
+>namedTuple : RecursiveTuple
+>tuple : RecursiveTuple
+
+export function finite() {
+>finite : () => [[[[[[[[[[[[[number]]]]]]]]]]]]]
+
+    type Nested = [[[[[[[[[[[[[number]]]]]]]]]]]]];
+>Nested : [[[[[[[[[[[[[number]]]]]]]]]]]]]
+
+    return null as unknown as Nested;
+>null as unknown as Nested : [[[[[[[[[[[[[number]]]]]]]]]]]]]
+>null as unknown : unknown
+}
+
