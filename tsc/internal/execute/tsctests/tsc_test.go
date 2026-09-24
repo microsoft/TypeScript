@@ -2424,6 +2424,48 @@ func TestTscIncremental(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "recursive function declaration consumption",
+			files: FileMap{
+				"/home/src/workspaces/project/producer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" }
+				}`,
+				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
+					export const arrow = () => arrow;
+					export const expression = function self() { return self; };
+					export const first = () => second;
+					export const second = () => first;
+					export const generic = <T>(value: T) => generic;
+				`),
+				"/home/src/workspaces/project/consumer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "noEmit": true },
+					"references": [{ "path": "../producer" }]
+				}`,
+				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					import { arrow, expression, first, generic } from "../producer/dist/index.js";
+					const a: typeof arrow = arrow()()();
+					const b: typeof expression = expression()()();
+					const c: typeof first = first()()();
+					const d: typeof generic = generic(1)("text")(true);
+					type IsAny<T> = 0 extends (1 & T) ? true : false;
+					const result = arrow()()();
+					const notAny: false = null as unknown as IsAny<typeof result>;
+					const invalid: number = arrow()()();
+					const invalidExpression: number = expression()()();
+				`),
+			},
+			commandLineArgs: []string{"--build", "consumer"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the producer",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/producer/index.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+			},
+		},
+		{
 			subScenario: "recursive mapped declaration consumption",
 			files: FileMap{
 				tscLibPath + "/lib.es2025.full.d.ts": libWithReadonlyArray,

@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/recursiveFunctionDeclarationSerialization.ts] ////
+
+=== script.ts ===
+const scriptArrow = () => scriptArrow;
+>scriptArrow : () => typeof scriptArrow
+>() => scriptArrow : () => typeof scriptArrow
+>scriptArrow : () => typeof scriptArrow
+
+const scriptExpression = function () { return scriptExpression; };
+>scriptExpression : () => typeof scriptExpression
+>function () { return scriptExpression; } : () => typeof scriptExpression
+>scriptExpression : () => typeof scriptExpression
+
+function scriptDeclaration() { return scriptDeclaration; }
+>scriptDeclaration : () => typeof scriptDeclaration
+>scriptDeclaration : () => typeof scriptDeclaration
+
+=== exported.ts ===
+export const arrow = () => arrow;
+>arrow : () => typeof arrow
+>() => arrow : () => typeof arrow
+>arrow : () => typeof arrow
+
+export const expression = function () { return expression; };
+>expression : () => typeof expression
+>function () { return expression; } : () => typeof expression
+>expression : () => typeof expression
+
+export function declaration() { return declaration; }
+>declaration : () => typeof declaration
+>declaration : () => typeof declaration
+
+export const annotated: () => typeof annotated = () => annotated;
+>annotated : () => typeof annotated
+>annotated : () => typeof annotated
+>() => annotated : () => () => typeof annotated
+>annotated : () => typeof annotated
+
+export const first = () => second;
+>first : () => () => typeof first
+>() => second : () => () => typeof first
+>second : () => () => typeof second
+
+export const second = () => first;
+>second : () => () => typeof second
+>() => first : () => () => typeof second
+>first : () => () => typeof first
+
+export const generic = <T>(value: T) => generic;
+>generic : <T>(value: T) => typeof generic
+><T>(value: T) => generic : <T>(value: T) => typeof generic
+>value : T
+>generic : <T>(value: T) => typeof generic
+
+export const finite = () => () => 1;
+>finite : () => () => number
+>() => () => 1 : () => () => number
+>() => 1 : () => number
+>1 : 1
+
+export const wrapped = { arrow };
+>wrapped : { arrow: () => typeof arrow; }
+>{ arrow } : { arrow: () => typeof arrow; }
+>arrow : () => typeof arrow
+
+export const tuple = [arrow] as const;
+>tuple : readonly [() => typeof arrow]
+>[arrow] as const : readonly [() => typeof arrow]
+>[arrow] : readonly [() => typeof arrow]
+>arrow : () => typeof arrow
+
+export const named = function self() { return self; };
+>named : () => typeof self
+>function self() { return self; } : () => typeof self
+>self : () => typeof named
+>self : () => typeof named
+
+export const broad: unknown = function self() { return self; };
+>broad : unknown
+>function self() { return self; } : () => typeof self
+>self : () => typeof broad
+>self : () => typeof broad
+
+export const contextual: () => unknown = function self() { return self; };
+>contextual : () => unknown
+>function self() { return self; } : () => typeof self
+>self : () => typeof contextual
+>self : () => typeof contextual
+
+export const specialized = generic<number>;
+>specialized : (value: number) => <T>(value: number) => typeof generic
+>generic<number> : (value: number) => <T>(value: number) => typeof generic
+>generic : <T>(value: T) => typeof generic
+
+=== consumer.ts ===
+import { arrow, expression, declaration, first, generic, finite, wrapped, tuple } from "./exported";
+>arrow : () => typeof arrow
+>expression : () => typeof expression
+>declaration : () => typeof declaration
+>first : () => () => typeof first
+>generic : <T>(value: T) => typeof generic
+>finite : () => () => number
+>wrapped : { arrow: () => typeof arrow; }
+>tuple : readonly [() => typeof arrow]
+
+const a: typeof arrow = arrow()()();
+>a : () => typeof arrow
+>arrow : () => typeof arrow
+>arrow()()() : () => typeof arrow
+>arrow()() : () => typeof arrow
+>arrow() : () => typeof arrow
+>arrow : () => typeof arrow
+
+const b: typeof expression = expression()()();
+>b : () => typeof expression
+>expression : () => typeof expression
+>expression()()() : () => typeof expression
+>expression()() : () => typeof expression
+>expression() : () => typeof expression
+>expression : () => typeof expression
+
+const c: typeof declaration = declaration()()();
+>c : () => typeof declaration
+>declaration : () => typeof declaration
+>declaration()()() : () => typeof declaration
+>declaration()() : () => typeof declaration
+>declaration() : () => typeof declaration
+>declaration : () => typeof declaration
+
+const d: typeof first = first()()();
+>d : () => () => typeof first
+>first : () => () => typeof first
+>first()()() : () => () => typeof import("./exported").second
+>first()() : () => () => typeof first
+>first() : () => () => typeof import("./exported").second
+>first : () => () => typeof first
+
+const e: typeof generic = generic(1)("text")(true);
+>e : <T>(value: T) => typeof generic
+>generic : <T>(value: T) => typeof generic
+>generic(1)("text")(true) : <T>(value: T) => typeof generic
+>generic(1)("text") : <T>(value: T) => typeof generic
+>generic(1) : <T>(value: T) => typeof generic
+>generic : <T>(value: T) => typeof generic
+>1 : 1
+>"text" : "text"
+>true : true
+
+const f: number = finite()();
+>f : number
+>finite()() : number
+>finite() : () => number
+>finite : () => () => number
+
+const g: typeof arrow = wrapped.arrow()();
+>g : () => typeof arrow
+>arrow : () => typeof arrow
+>wrapped.arrow()() : () => typeof arrow
+>wrapped.arrow() : () => typeof arrow
+>wrapped.arrow : () => typeof arrow
+>wrapped : { arrow: () => typeof arrow; }
+>arrow : () => typeof arrow
+
+const h: typeof arrow = tuple[0]()();
+>h : () => typeof arrow
+>arrow : () => typeof arrow
+>tuple[0]()() : () => typeof arrow
+>tuple[0]() : () => typeof arrow
+>tuple[0] : () => typeof arrow
+>tuple : readonly [() => typeof arrow]
+>0 : 0
+
+const invalid: number = arrow()()();
+>invalid : number
+>arrow()()() : () => typeof arrow
+>arrow()() : () => typeof arrow
+>arrow() : () => typeof arrow
+>arrow : () => typeof arrow
+

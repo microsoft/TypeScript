@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/recursiveFunctionDeclarationSerialization.ts] ////
+
+=== script.ts ===
+const scriptArrow = () => scriptArrow;
+>scriptArrow : Symbol(scriptArrow, Decl(script.ts, 0, 5))
+>scriptArrow : Symbol(scriptArrow, Decl(script.ts, 0, 5))
+
+const scriptExpression = function () { return scriptExpression; };
+>scriptExpression : Symbol(scriptExpression, Decl(script.ts, 1, 5))
+>scriptExpression : Symbol(scriptExpression, Decl(script.ts, 1, 5))
+
+function scriptDeclaration() { return scriptDeclaration; }
+>scriptDeclaration : Symbol(scriptDeclaration, Decl(script.ts, 1, 66))
+>scriptDeclaration : Symbol(scriptDeclaration, Decl(script.ts, 1, 66))
+
+=== exported.ts ===
+export const arrow = () => arrow;
+>arrow : Symbol(arrow, Decl(exported.ts, 0, 12))
+>arrow : Symbol(arrow, Decl(exported.ts, 0, 12))
+
+export const expression = function () { return expression; };
+>expression : Symbol(expression, Decl(exported.ts, 1, 12))
+>expression : Symbol(expression, Decl(exported.ts, 1, 12))
+
+export function declaration() { return declaration; }
+>declaration : Symbol(declaration, Decl(exported.ts, 1, 61))
+>declaration : Symbol(declaration, Decl(exported.ts, 1, 61))
+
+export const annotated: () => typeof annotated = () => annotated;
+>annotated : Symbol(annotated, Decl(exported.ts, 3, 12))
+>annotated : Symbol(annotated, Decl(exported.ts, 3, 12))
+>annotated : Symbol(annotated, Decl(exported.ts, 3, 12))
+
+export const first = () => second;
+>first : Symbol(first, Decl(exported.ts, 4, 12))
+>second : Symbol(second, Decl(exported.ts, 5, 12))
+
+export const second = () => first;
+>second : Symbol(second, Decl(exported.ts, 5, 12))
+>first : Symbol(first, Decl(exported.ts, 4, 12))
+
+export const generic = <T>(value: T) => generic;
+>generic : Symbol(generic, Decl(exported.ts, 6, 12))
+>T : Symbol(T, Decl(exported.ts, 6, 24))
+>value : Symbol(value, Decl(exported.ts, 6, 27))
+>T : Symbol(T, Decl(exported.ts, 6, 24))
+>generic : Symbol(generic, Decl(exported.ts, 6, 12))
+
+export const finite = () => () => 1;
+>finite : Symbol(finite, Decl(exported.ts, 7, 12))
+
+export const wrapped = { arrow };
+>wrapped : Symbol(wrapped, Decl(exported.ts, 8, 12))
+>arrow : Symbol(arrow, Decl(exported.ts, 8, 24))
+
+export const tuple = [arrow] as const;
+>tuple : Symbol(tuple, Decl(exported.ts, 9, 12))
+>arrow : Symbol(arrow, Decl(exported.ts, 0, 12))
+>const : Symbol(const)
+
+export const named = function self() { return self; };
+>named : Symbol(named, Decl(exported.ts, 10, 12))
+>self : Symbol(self, Decl(exported.ts, 10, 20))
+>self : Symbol(self, Decl(exported.ts, 10, 20))
+
+export const broad: unknown = function self() { return self; };
+>broad : Symbol(broad, Decl(exported.ts, 11, 12))
+>self : Symbol(self, Decl(exported.ts, 11, 29))
+>self : Symbol(self, Decl(exported.ts, 11, 29))
+
+export const contextual: () => unknown = function self() { return self; };
+>contextual : Symbol(contextual, Decl(exported.ts, 12, 12))
+>self : Symbol(self, Decl(exported.ts, 12, 40))
+>self : Symbol(self, Decl(exported.ts, 12, 40))
+
+export const specialized = generic<number>;
+>specialized : Symbol(specialized, Decl(exported.ts, 13, 12))
+>generic : Symbol(generic, Decl(exported.ts, 6, 12))
+
+=== consumer.ts ===
+import { arrow, expression, declaration, first, generic, finite, wrapped, tuple } from "./exported";
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>expression : Symbol(expression, Decl(consumer.ts, 0, 15))
+>declaration : Symbol(declaration, Decl(consumer.ts, 0, 27))
+>first : Symbol(first, Decl(consumer.ts, 0, 40))
+>generic : Symbol(generic, Decl(consumer.ts, 0, 47))
+>finite : Symbol(finite, Decl(consumer.ts, 0, 56))
+>wrapped : Symbol(wrapped, Decl(consumer.ts, 0, 64))
+>tuple : Symbol(tuple, Decl(consumer.ts, 0, 73))
+
+const a: typeof arrow = arrow()()();
+>a : Symbol(a, Decl(consumer.ts, 1, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+
+const b: typeof expression = expression()()();
+>b : Symbol(b, Decl(consumer.ts, 2, 5))
+>expression : Symbol(expression, Decl(consumer.ts, 0, 15))
+>expression : Symbol(expression, Decl(consumer.ts, 0, 15))
+
+const c: typeof declaration = declaration()()();
+>c : Symbol(c, Decl(consumer.ts, 3, 5))
+>declaration : Symbol(declaration, Decl(consumer.ts, 0, 27))
+>declaration : Symbol(declaration, Decl(consumer.ts, 0, 27))
+
+const d: typeof first = first()()();
+>d : Symbol(d, Decl(consumer.ts, 4, 5))
+>first : Symbol(first, Decl(consumer.ts, 0, 40))
+>first : Symbol(first, Decl(consumer.ts, 0, 40))
+
+const e: typeof generic = generic(1)("text")(true);
+>e : Symbol(e, Decl(consumer.ts, 5, 5))
+>generic : Symbol(generic, Decl(consumer.ts, 0, 47))
+>generic : Symbol(generic, Decl(consumer.ts, 0, 47))
+
+const f: number = finite()();
+>f : Symbol(f, Decl(consumer.ts, 6, 5))
+>finite : Symbol(finite, Decl(consumer.ts, 0, 56))
+
+const g: typeof arrow = wrapped.arrow()();
+>g : Symbol(g, Decl(consumer.ts, 7, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>wrapped.arrow : Symbol(arrow, Decl(exported.ts, 8, 24))
+>wrapped : Symbol(wrapped, Decl(consumer.ts, 0, 64))
+>arrow : Symbol(arrow, Decl(exported.ts, 8, 24))
+
+const h: typeof arrow = tuple[0]()();
+>h : Symbol(h, Decl(consumer.ts, 8, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>tuple : Symbol(tuple, Decl(consumer.ts, 0, 73))
+>0 : Symbol(0)
+
+const invalid: number = arrow()()();
+>invalid : Symbol(invalid, Decl(consumer.ts, 9, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+

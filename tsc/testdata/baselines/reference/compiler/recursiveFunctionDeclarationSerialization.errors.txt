@@ -1,0 +1,53 @@
+consumer.ts(10,7): error TS2322: Type '() => typeof arrow' is not assignable to type 'number'.
+exported.ts(1,14): error TS5088: The inferred type of 'arrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+exported.ts(2,14): error TS5088: The inferred type of 'expression' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+exported.ts(11,14): error TS5088: The inferred type of 'named' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+script.ts(1,7): error TS5088: The inferred type of 'scriptArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+script.ts(2,7): error TS5088: The inferred type of 'scriptExpression' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== script.ts (2 errors) ====
+    const scriptArrow = () => scriptArrow;
+          ~~~~~~~~~~~
+!!! error TS5088: The inferred type of 'scriptArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    const scriptExpression = function () { return scriptExpression; };
+          ~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of 'scriptExpression' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    function scriptDeclaration() { return scriptDeclaration; }
+    
+==== exported.ts (3 errors) ====
+    export const arrow = () => arrow;
+                 ~~~~~
+!!! error TS5088: The inferred type of 'arrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    export const expression = function () { return expression; };
+                 ~~~~~~~~~~
+!!! error TS5088: The inferred type of 'expression' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    export function declaration() { return declaration; }
+    export const annotated: () => typeof annotated = () => annotated;
+    export const first = () => second;
+    export const second = () => first;
+    export const generic = <T>(value: T) => generic;
+    export const finite = () => () => 1;
+    export const wrapped = { arrow };
+    export const tuple = [arrow] as const;
+    export const named = function self() { return self; };
+                 ~~~~~
+!!! error TS5088: The inferred type of 'named' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    export const broad: unknown = function self() { return self; };
+    export const contextual: () => unknown = function self() { return self; };
+    export const specialized = generic<number>;
+    
+==== consumer.ts (1 errors) ====
+    import { arrow, expression, declaration, first, generic, finite, wrapped, tuple } from "./exported";
+    const a: typeof arrow = arrow()()();
+    const b: typeof expression = expression()()();
+    const c: typeof declaration = declaration()()();
+    const d: typeof first = first()()();
+    const e: typeof generic = generic(1)("text")(true);
+    const f: number = finite()();
+    const g: typeof arrow = wrapped.arrow()();
+    const h: typeof arrow = tuple[0]()();
+    const invalid: number = arrow()()();
+          ~~~~~~~
+!!! error TS2322: Type '() => typeof arrow' is not assignable to type 'number'.
+    
