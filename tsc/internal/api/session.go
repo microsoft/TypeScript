@@ -711,6 +711,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
 	case string(MethodCreateBuildOrchestrator):
 		return s.handleCreateBuildOrchestrator(ctx, parsed.(*CreateBuildOrchestratorParams))
+	case string(MethodDisposeBuildOrchestrator):
+		return s.handleDisposeBuildOrchestrator(ctx, parsed.(*DisposeBuildOrchestratorParams))
 	case string(MethodBuild):
 		return s.handleBuild(ctx, parsed.(*BuildParams))
 	case string(MethodBuildReferences):
@@ -1570,14 +1572,11 @@ func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *Cre
 	buildSys := s.getBuildSys(params)
 	command := tsoptions.ParseBuildCommandLine(params.RootNames, buildSys)
 	createdOrchestratorResponse := &CreateBuildOrchestratorResponse{}
-	if params.Options != nil {
-		command.CompilerOptions = params.Options
+	if params.CompilerOptions != nil {
+		command.CompilerOptions = params.CompilerOptions
 	}
 	if params.BuildOptions != nil {
 		command.BuildOptions = params.BuildOptions
-	}
-	if params.WatchOptions != nil {
-		createdOrchestratorResponse.Errors = NewDiagnosticResponses([]*ast.Diagnostic{ast.NewCompilerDiagnostic(diagnostics.Watch_mode_not_activated_in_build_orchestrator)})
 	}
 	orchestrator := build.NewOrchestrator(build.Options{
 		Sys:     buildSys,
@@ -1590,16 +1589,14 @@ func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *Cre
 	return createdOrchestratorResponse, nil
 }
 
-func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
-	currentDirectory := params.HostOptions.Cwd
-	if currentDirectory == "" {
-		currentDirectory = s.currentDirectory()
+func (s *Session) handleDisposeBuildOrchestrator(ctx context.Context, params *DisposeBuildOrchestratorParams) (any, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, errors.New("build orchestrator not found while disposing")
 	}
-	return &apiBuildSystem{
-		session:          s,
-		currentDirectory: currentDirectory,
-		start:            time.Now(),
-	}
+	delete(s.buildOrchestrators, params.BuildOrchestratorID)
+	return true, nil
 }
 
 func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
@@ -1660,6 +1657,18 @@ func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildP
 		Statistics:   result.Statistics,
 		FilesDeleted: result.FilesToDelete,
 	}, nil
+}
+
+func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
+	currentDirectory := params.BuildOrchestratorOptions.Cwd
+	if currentDirectory == "" {
+		currentDirectory = s.currentDirectory()
+	}
+	return &apiBuildSystem{
+		session:          s,
+		currentDirectory: currentDirectory,
+		start:            time.Now(),
+	}
 }
 
 // Wrapper for the API session for build orchestrator

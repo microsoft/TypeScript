@@ -27,6 +27,7 @@ export interface APIMethodInfo {
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
     createBuildOrchestrator: APIMethod<CreateBuildOrchestratorParams, CreateBuildOrchestratorResponse>;
+    disposeBuildOrchestrator: APIMethod<DisposeBuildOrchestratorParams, unknown>;
     build: APIMethod<BuildParams, BuildResponse>;
     buildReferences: APIMethod<BuildParams, BuildResponse>;
     cleanBuild: APIMethod<CleanBuildParams, CleanBuildResponse>;
@@ -258,14 +259,16 @@ export interface GetCurrentLanguageServerSnapshotParams {
     changes?: LanguageServerSnapshotChanges | undefined;
 }
 
-export interface CreateBuildOrchestratorParams extends ConfigFileResponse {
-    hostOptions: BuildOrchestratorHostOptions;
+export interface CreateBuildOrchestratorParams extends BuildOrchestratorOptions {
     rootNames: readonly string[] | null;
 }
 
 export interface CreateBuildOrchestratorResponse {
     buildOrchestratorID: number;
-    errors?: DiagnosticResponse[] | undefined;
+}
+
+export interface DisposeBuildOrchestratorParams {
+    buildOrchestratorID: number;
 }
 
 export interface BuildParams {
@@ -1056,6 +1059,7 @@ export interface BatchRequest {
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
+        | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1227,6 +1231,7 @@ export interface BatchResponse {
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
+        | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1492,7 +1497,7 @@ export interface SnapshotOperationResponse {
 export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams {
 }
 
-export interface BuildOrchestratorHostOptions {
+export interface BuildOrchestratorOptions extends BuildOptions, CompilerOptions {
     cwd?: string | undefined;
 }
 

@@ -76,6 +76,7 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    BuildOrchestratorOptions,
     BuildResponse,
     CleanBuildResponse,
     CompilerOptions,
@@ -285,6 +286,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
+    private activeBuildOrchestrators: Set<BuildOrchestrator> = new Set();
     readonly printer: Printer;
     readonly internal: InternalAPI;
 
@@ -403,25 +405,31 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     get createBuildOrchestrator(): {
-        (host: ClientSpawnOptions, rootNames: readonly string[], defaultOptions: ParsedCommandLine): BuildOrchestrator;
-        gen(host: ClientSpawnOptions, rootNames: readonly string[], defaultOptions: ParsedCommandLine): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]>;
+        (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator;
+        gen(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createBuildOrchestrator",
-            function (host: ClientSpawnOptions, rootNames: readonly string[], defaultOptions: ParsedCommandLine): BuildOrchestrator {
+            function (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator {
                 owner.ensureInitialized();
-                const orchestratorResponse = owner.client.apiRequest("createBuildOrchestrator", { hostOptions: host, rootNames, ...defaultOptions });
+                const orchestratorResponse = owner.client.apiRequest("createBuildOrchestrator", { ...buildOrchestratorOptions, rootNames });
 
-                const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse);
+                const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
+                    owner.activeBuildOrchestrators.delete(orchestrator);
+                });
+                owner.activeBuildOrchestrators.add(orchestrator);
                 return orchestrator;
             },
-            function* (host: ClientSpawnOptions, rootNames: readonly string[], defaultOptions: ParsedCommandLine): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]> {
+            function* (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                const orchestratorResponse = yield* apiRequest("createBuildOrchestrator", { hostOptions: host, rootNames, ...defaultOptions });
+                const orchestratorResponse = yield* apiRequest("createBuildOrchestrator", { ...buildOrchestratorOptions, rootNames });
 
-                const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse);
+                const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
+                    owner.activeBuildOrchestrators.delete(orchestrator);
+                });
+                owner.activeBuildOrchestrators.add(orchestrator);
                 return orchestrator;
             },
         );
@@ -900,8 +908,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             owner,
             "close",
             function (): void {
-                // Dispose all active snapshots
+                // Dispose all active resources
                 try {
+                    for (const orchestrator of [...owner.activeBuildOrchestrators]) {
+                        orchestrator.dispose();
+                    }
                     for (const snapshot of [...owner.activeSnapshots]) {
                         snapshot.dispose();
                     }
@@ -912,8 +923,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 }
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                // Dispose all active snapshots
+                // Dispose all active resources
                 try {
+                    for (const orchestrator of [...owner.activeBuildOrchestrators]) {
+                        yield* orchestrator.dispose.gen();
+                    }
                     for (const snapshot of [...owner.activeSnapshots]) {
                         yield* snapshot.dispose.gen();
                     }
@@ -3329,16 +3343,73 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 export class BuildOrchestrator {
     private client: Client;
     private id: number;
-    private errors: DiagnosticResponse[] | undefined;
+    private disposed = false;
+    private disposePromise: void | undefined;
+    private onDispose: () => void;
 
-    constructor(client: Client, orchestratorResponse: CreateBuildOrchestratorResponse) {
+    constructor(
+        client: Client,
+        orchestratorResponse: CreateBuildOrchestratorResponse,
+        onDispose: () => void,
+    ) {
         this.client = client;
         this.id = orchestratorResponse.buildOrchestratorID;
-        this.errors = orchestratorResponse.errors;
+        this.onDispose = onDispose;
     }
 
-    getErrors(): DiagnosticResponse[] | undefined {
-        return this.errors;
+    [globalThis.Symbol.dispose](): void {
+        void this.dispose();
+    }
+    get dispose(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "dispose",
+            function (): void {
+                return owner.disposePromise ??= owner.disposeWorker();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
+            },
+        );
+    }
+
+    private get disposeWorker(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "disposeWorker",
+            function (): void {
+                if (owner.disposed) return;
+                owner.disposed = true;
+                try {
+                    owner.client.apiRequest("disposeBuildOrchestrator", {
+                        buildOrchestratorID: owner.id,
+                    });
+                }
+                finally {
+                    owner.onDispose();
+                }
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                if (owner.disposed) return;
+                owner.disposed = true;
+                try {
+                    yield* apiRequest("disposeBuildOrchestrator", {
+                        buildOrchestratorID: owner.id,
+                    });
+                }
+                finally {
+                    owner.onDispose();
+                }
+            },
+        );
     }
 
     get build(): {
@@ -3350,6 +3421,7 @@ export class BuildOrchestrator {
             owner,
             "build",
             function (project?: string): BuildResponse {
+                owner.ensureNotDisposed();
                 const response = owner.client.apiRequest("build", {
                     buildOrchestratorID: owner.id,
                     ...(project !== undefined ? { project } : {}),
@@ -3357,6 +3429,7 @@ export class BuildOrchestrator {
                 return response;
             },
             function* (project?: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
                 const response = yield* apiRequest("build", {
                     buildOrchestratorID: owner.id,
                     ...(project !== undefined ? { project } : {}),
@@ -3374,6 +3447,7 @@ export class BuildOrchestrator {
             owner,
             "buildReferences",
             function (project: string): BuildResponse {
+                owner.ensureNotDisposed();
                 const response = owner.client.apiRequest("buildReferences", {
                     buildOrchestratorID: owner.id,
                     project,
@@ -3381,6 +3455,7 @@ export class BuildOrchestrator {
                 return response;
             },
             function* (project: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
                 const response = yield* apiRequest("buildReferences", {
                     buildOrchestratorID: owner.id,
                     project,
@@ -3398,6 +3473,7 @@ export class BuildOrchestrator {
             owner,
             "clean",
             function (project?: string): CleanBuildResponse {
+                owner.ensureNotDisposed();
                 const response = owner.client.apiRequest("cleanBuild", {
                     buildOrchestratorID: owner.id,
                     ...(project !== undefined ? { project } : {}),
@@ -3405,6 +3481,7 @@ export class BuildOrchestrator {
                 return response;
             },
             function* (project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
                 const response = yield* apiRequest("cleanBuild", {
                     buildOrchestratorID: owner.id,
                     ...(project !== undefined ? { project } : {}),
@@ -3422,6 +3499,7 @@ export class BuildOrchestrator {
             owner,
             "cleanReferences",
             function (project?: string): CleanBuildResponse {
+                owner.ensureNotDisposed();
                 const response = owner.client.apiRequest("cleanReferences", {
                     buildOrchestratorID: owner.id,
                     ...(project !== undefined ? { project } : {}),
@@ -3429,6 +3507,7 @@ export class BuildOrchestrator {
                 return response;
             },
             function* (project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
                 const response = yield* apiRequest("cleanReferences", {
                     buildOrchestratorID: owner.id,
                     ...(project !== undefined ? { project } : {}),
@@ -3436,6 +3515,16 @@ export class BuildOrchestrator {
                 return response;
             },
         );
+    }
+
+    isDisposed(): boolean {
+        return this.disposed;
+    }
+
+    private ensureNotDisposed(): void {
+        if (this.disposed) {
+            throw new Error("Build orchestrator is disposed");
+        }
     }
 }
 

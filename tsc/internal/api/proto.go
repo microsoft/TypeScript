@@ -71,6 +71,7 @@ const (
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
 	MethodCreateBuildOrchestrator                        Method = "createBuildOrchestrator"
+	MethodDisposeBuildOrchestrator                       Method = "disposeBuildOrchestrator"
 	MethodBuild                                          Method = "build"
 	MethodBuildReferences                                Method = "buildReferences"
 	MethodCleanBuild                                     Method = "cleanBuild"
@@ -506,6 +507,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
 	MethodCreateBuildOrchestrator:                        unmarshallerFor[CreateBuildOrchestratorParams],
+	MethodDisposeBuildOrchestrator:                       unmarshallerFor[DisposeBuildOrchestratorParams],
 	MethodBuild:                                          unmarshallerFor[BuildParams],
 	MethodBuildReferences:                                unmarshallerFor[BuildParams],
 	MethodCleanBuild:                                     unmarshallerFor[CleanBuildParams],
@@ -827,18 +829,22 @@ type ProfileResult struct {
 }
 
 type CreateBuildOrchestratorParams struct {
-	HostOptions        BuildOrchestratorHostOptions `json:"hostOptions"`
-	RootNames          []string                     `json:"rootNames"`
-	ConfigFileResponse `json:"defaultOptions"`
+	BuildOrchestratorOptions `json:"buildOrchestratorOptions"`
+	RootNames                []string `json:"rootNames"`
 }
 
-type BuildOrchestratorHostOptions struct {
-	Cwd string `json:"cwd,omitempty"`
+type BuildOrchestratorOptions struct {
+	Cwd                   string `json:"cwd,omitempty"`
+	*core.BuildOptions    `json:"buildOptions,omitempty"`
+	*core.CompilerOptions `json:"compilerOptions,omitempty"`
 }
 
 type CreateBuildOrchestratorResponse struct {
-	BuildOrchestratorID BuildOrchestratorID   `json:"buildOrchestratorID"`
-	Errors              []*DiagnosticResponse `json:"errors,omitempty"`
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type DisposeBuildOrchestratorParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
 }
 
 type BuildParams struct {

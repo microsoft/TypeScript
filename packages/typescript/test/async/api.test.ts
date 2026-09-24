@@ -858,14 +858,51 @@ describe("BuildOrchestrator", () => {
         "/c/src/index.ts": `export const c = 3;`,
     };
 
+    test("dispose is idempotent", async () => {
+        const { api: disposableApi } = spawnAPIWithFS({ ...files });
+        await using api = disposableApi;
+        const options = await api.parseCommandLine([]);
+        const orchestrator = await api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", ...options },
+        );
+
+        const firstDispose = orchestrator.dispose();
+        const secondDispose = orchestrator.dispose();
+        assert.strictEqual(firstDispose, secondDispose);
+        await firstDispose; // @sync: orchestrator.dispose();
+        // Second dispose should not throw
+        await orchestrator.dispose();
+        await assert.rejects(orchestrator.build(), /Build orchestrator is disposed/); // @sync: assert.throws(() => orchestrator.build(), /Build orchestrator is disposed/);
+    });
+
+    test("api.close disposes all build orchestrators", async () => {
+        const { api } = spawnAPIWithFS({ ...files });
+        const options = await api.parseCommandLine([]);
+        const orchestrator1 = await api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", ...options },
+        );
+        const orchestrator2 = await api.createBuildOrchestrator(
+            ["/b/tsconfig.json"],
+            { cwd: "/", ...options },
+        );
+        assert.ok(!orchestrator1.isDisposed());
+        assert.ok(!orchestrator2.isDisposed());
+        await api.close();
+        assert.ok(orchestrator1.isDisposed());
+        assert.ok(orchestrator2.isDisposed());
+        await orchestrator1.dispose();
+        await orchestrator2.dispose();
+    });
+
     test("builds the configured root projects", async () => {
         const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
         const defaultOptions = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/a/tsconfig.json", "/b/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...defaultOptions },
         );
 
         assert.equal((await orchestrator.build()).status, 0);
@@ -885,9 +922,8 @@ describe("BuildOrchestrator", () => {
         await using api = disposableApi;
         const defaultOptions = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/a/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...defaultOptions },
         );
 
         const response = await orchestrator.build();
@@ -910,11 +946,10 @@ describe("BuildOrchestrator", () => {
     test("returns build response information after clean", async () => {
         const { api: disposableApi } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
-        const defaultOptions = await api.parseCommandLine([]);
+        const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/c/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...options },
         );
 
         assert.equal((await orchestrator.build()).status, 0);
@@ -984,9 +1019,8 @@ describe("BuildOrchestrator", () => {
         await using api = disposableApi;
         const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/a/tsconfig.json"],
-            options,
+            { cwd: "/", ...options },
         );
 
         const response = await orchestrator.clean();
@@ -1005,11 +1039,10 @@ describe("BuildOrchestrator", () => {
     test("rebuilds projects after multiple file system changes", async () => {
         const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
-        const defaultOptions = await api.parseCommandLine([]);
+        const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/a/tsconfig.json", "/b/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...options },
         );
 
         assert.equal((await orchestrator.build()).status, 0);
@@ -1036,11 +1069,10 @@ describe("BuildOrchestrator", () => {
     test("clean removes build outputs", async () => {
         const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
-        const defaultOptions = await api.parseCommandLine([]);
+        const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/c/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...options },
         );
 
         assert.equal((await orchestrator.build()).status, 0);
@@ -1056,11 +1088,10 @@ describe("BuildOrchestrator", () => {
     test("builds and cleans selected projects after file system changes", async () => {
         const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
-        const defaultOptions = await api.parseCommandLine([]);
+        const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/c/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...options },
         );
 
         assert.equal((await orchestrator.build("/a/tsconfig.json")).status, 0);
@@ -1100,11 +1131,10 @@ describe("BuildOrchestrator", () => {
             ...files,
         });
         await using api = disposableApi;
-        const defaultOptions = await api.parseCommandLine([]);
+        const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/c/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...options },
         );
 
         assert.equal((await orchestrator.buildReferences("/c/tsconfig.json")).status, 0);
@@ -1118,11 +1148,10 @@ describe("BuildOrchestrator", () => {
             ...files,
         });
         await using api = disposableApi;
-        const defaultOptions = await api.parseCommandLine([]);
+        const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/c/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...options },
         );
 
         assert.equal((await orchestrator.build()).status, 0);
@@ -1159,11 +1188,10 @@ describe("BuildOrchestrator", () => {
             path => writes.push(path),
         );
         await using api = disposableApi;
-        const defaultOptions = await api.parseCommandLine([]);
+        const options = await api.parseCommandLine([]);
         const orchestrator = await api.createBuildOrchestrator(
-            { cwd: "/" },
             ["/c/tsconfig.json", "/d/tsconfig.json"],
-            defaultOptions,
+            { cwd: "/", ...options },
         );
 
         assert.equal((await orchestrator.build()).status, 0);
