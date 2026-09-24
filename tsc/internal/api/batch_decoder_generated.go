@@ -21,14 +21,20 @@ func newBatchDecoderCheckerNodeParams(base json.Value, fields json.Value, count 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CheckerNodeParams](base, func(params *CheckerNodeParams, index int) {
 		if columns.Snapshot != nil {
@@ -54,14 +60,20 @@ func newBatchDecoderCheckerSignatureParams(base json.Value, fields json.Value, c
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("signature", len(columns.Signature), count); err != nil {
-		return nil, err
+	if columns.Signature != nil {
+		if err := validateBatchColumn("signature", len(columns.Signature), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CheckerSignatureParams](base, func(params *CheckerSignatureParams, index int) {
 		if columns.Snapshot != nil {
@@ -87,14 +99,20 @@ func newBatchDecoderCheckerSymbolParams(base json.Value, fields json.Value, coun
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
-		return nil, err
+	if columns.Symbol != nil {
+		if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CheckerSymbolParams](base, func(params *CheckerSymbolParams, index int) {
 		if columns.Snapshot != nil {
@@ -120,14 +138,20 @@ func newBatchDecoderCheckerTypeParams(base json.Value, fields json.Value, count 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CheckerTypeParams](base, func(params *CheckerTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -153,14 +177,20 @@ func newBatchDecoderCreateModuleResolverParams(base json.Value, fields json.Valu
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("compilerOptions", len(columns.CompilerOptions), count); err != nil {
-		return nil, err
+	if columns.CompilerOptions != nil {
+		if err := validateBatchColumn("compilerOptions", len(columns.CompilerOptions), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("moduleResolutions", len(columns.ModuleResolutions), count); err != nil {
-		return nil, err
+	if columns.ModuleResolutions != nil {
+		if err := validateBatchColumn("moduleResolutions", len(columns.ModuleResolutions), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("resolveModuleNameCallback", len(columns.ResolveModuleNameCallback), count); err != nil {
-		return nil, err
+	if columns.ResolveModuleNameCallback != nil {
+		if err := validateBatchColumn("resolveModuleNameCallback", len(columns.ResolveModuleNameCallback), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CreateModuleResolverParams](base, func(params *CreateModuleResolverParams, index int) {
 		if columns.CompilerOptions != nil {
@@ -176,8 +206,16 @@ func newBatchDecoderCreateModuleResolverParams(base json.Value, fields json.Valu
 }
 
 type batchColumnsCreateSnapshotParams struct {
-	FileNotifications []*FileNotifications                   `json:"fileNotifications,omitempty"`
-	FileSystem        []*requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
+	OpenProjects        [][]DocumentIdentifier                 `json:"openProjects,omitempty"`
+	CloseProjects       [][]DocumentIdentifier                 `json:"closeProjects,omitempty"`
+	OpenFiles           [][]DocumentIdentifier                 `json:"openFiles,omitempty"`
+	CloseFiles          [][]DocumentIdentifier                 `json:"closeFiles,omitempty"`
+	CreatePrograms      [][]*CreateSnapshotProgramParams       `json:"createPrograms,omitempty"`
+	ReconfigurePrograms [][]*ReconfigureSnapshotProgramParams  `json:"reconfigurePrograms,omitempty"`
+	RemovePrograms      [][]project.SyntheticProjectID         `json:"removePrograms,omitempty"`
+	EnsurePrograms      []*EnsurePrograms                      `json:"ensurePrograms,omitempty"`
+	FileNotifications   []*FileNotifications                   `json:"fileNotifications,omitempty"`
+	FileSystem          []*requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 }
 
 func newBatchDecoderCreateSnapshotParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
@@ -185,13 +223,81 @@ func newBatchDecoderCreateSnapshotParams(base json.Value, fields json.Value, cou
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("fileNotifications", len(columns.FileNotifications), count); err != nil {
-		return nil, err
+	if columns.OpenProjects != nil {
+		if err := validateBatchColumn("openProjects", len(columns.OpenProjects), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("fileSystem", len(columns.FileSystem), count); err != nil {
-		return nil, err
+	if columns.CloseProjects != nil {
+		if err := validateBatchColumn("closeProjects", len(columns.CloseProjects), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.OpenFiles != nil {
+		if err := validateBatchColumn("openFiles", len(columns.OpenFiles), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.CloseFiles != nil {
+		if err := validateBatchColumn("closeFiles", len(columns.CloseFiles), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.CreatePrograms != nil {
+		if err := validateBatchColumn("createPrograms", len(columns.CreatePrograms), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.ReconfigurePrograms != nil {
+		if err := validateBatchColumn("reconfigurePrograms", len(columns.ReconfigurePrograms), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.RemovePrograms != nil {
+		if err := validateBatchColumn("removePrograms", len(columns.RemovePrograms), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.EnsurePrograms != nil {
+		if err := validateBatchColumn("ensurePrograms", len(columns.EnsurePrograms), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.FileNotifications != nil {
+		if err := validateBatchColumn("fileNotifications", len(columns.FileNotifications), count); err != nil {
+			return nil, err
+		}
+	}
+	if columns.FileSystem != nil {
+		if err := validateBatchColumn("fileSystem", len(columns.FileSystem), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CreateSnapshotParams](base, func(params *CreateSnapshotParams, index int) {
+		if columns.OpenProjects != nil {
+			params.SnapshotRequestChangesParams.OpenProjects = columns.OpenProjects[index]
+		}
+		if columns.CloseProjects != nil {
+			params.SnapshotRequestChangesParams.CloseProjects = columns.CloseProjects[index]
+		}
+		if columns.OpenFiles != nil {
+			params.SnapshotRequestChangesParams.OpenFiles = columns.OpenFiles[index]
+		}
+		if columns.CloseFiles != nil {
+			params.SnapshotRequestChangesParams.CloseFiles = columns.CloseFiles[index]
+		}
+		if columns.CreatePrograms != nil {
+			params.SnapshotRequestChangesParams.CreatePrograms = columns.CreatePrograms[index]
+		}
+		if columns.ReconfigurePrograms != nil {
+			params.SnapshotRequestChangesParams.ReconfigurePrograms = columns.ReconfigurePrograms[index]
+		}
+		if columns.RemovePrograms != nil {
+			params.SnapshotRequestChangesParams.RemovePrograms = columns.RemovePrograms[index]
+		}
+		if columns.EnsurePrograms != nil {
+			params.SnapshotRequestChangesParams.EnsurePrograms = columns.EnsurePrograms[index]
+		}
 		if columns.FileNotifications != nil {
 			params.FileNotifications = columns.FileNotifications[index]
 		}
@@ -211,11 +317,15 @@ func newBatchDecoderCreateSourceFileFromFileParams(base json.Value, fields json.
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
-		return nil, err
+	if columns.FileName != nil {
+		if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
-		return nil, err
+	if columns.Options != nil {
+		if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CreateSourceFileFromFileParams](base, func(params *CreateSourceFileFromFileParams, index int) {
 		if columns.FileName != nil {
@@ -238,14 +348,20 @@ func newBatchDecoderCreateSourceFileParams(base json.Value, fields json.Value, c
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
-		return nil, err
+	if columns.FileName != nil {
+		if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("sourceText", len(columns.SourceText), count); err != nil {
-		return nil, err
+	if columns.SourceText != nil {
+		if err := validateBatchColumn("sourceText", len(columns.SourceText), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
-		return nil, err
+	if columns.Options != nil {
+		if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[CreateSourceFileParams](base, func(params *CreateSourceFileParams, index int) {
 		if columns.FileName != nil {
@@ -271,14 +387,20 @@ func newBatchDecoderEmitParams(base json.Value, fields json.Value, count int) (b
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("emitOnly", len(columns.EmitOnly), count); err != nil {
-		return nil, err
+	if columns.EmitOnly != nil {
+		if err := validateBatchColumn("emitOnly", len(columns.EmitOnly), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[EmitParams](base, func(params *EmitParams, index int) {
 		if columns.Snapshot != nil {
@@ -306,20 +428,30 @@ func newBatchDecoderFormatNodeForInsertionParams(base json.Value, fields json.Va
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
-		return nil, err
+	if columns.Position != nil {
+		if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("data", len(columns.Data), count); err != nil {
-		return nil, err
+	if columns.Data != nil {
+		if err := validateBatchColumn("data", len(columns.Data), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[FormatNodeForInsertionParams](base, func(params *FormatNodeForInsertionParams, index int) {
 		if columns.Snapshot != nil {
@@ -351,14 +483,20 @@ func newBatchDecoderGetBaseTypeOfLiteralTypeParams(base json.Value, fields json.
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetBaseTypeOfLiteralTypeParams](base, func(params *GetBaseTypeOfLiteralTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -387,23 +525,35 @@ func newBatchDecoderGetCompletionsAtPositionParams(base json.Value, fields json.
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
-		return nil, err
+	if columns.Position != nil {
+		if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("triggerCharacter", len(columns.TriggerCharacter), count); err != nil {
-		return nil, err
+	if columns.TriggerCharacter != nil {
+		if err := validateBatchColumn("triggerCharacter", len(columns.TriggerCharacter), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("includeSymbol", len(columns.IncludeSymbol), count); err != nil {
-		return nil, err
+	if columns.IncludeSymbol != nil {
+		if err := validateBatchColumn("includeSymbol", len(columns.IncludeSymbol), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetCompletionsAtPositionParams](base, func(params *GetCompletionsAtPositionParams, index int) {
 		if columns.Snapshot != nil {
@@ -439,17 +589,25 @@ func newBatchDecoderGetContextualTypeForArgumentParams(base json.Value, fields j
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
-		return nil, err
+	if columns.Index != nil {
+		if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetContextualTypeForArgumentParams](base, func(params *GetContextualTypeForArgumentParams, index int) {
 		if columns.Snapshot != nil {
@@ -478,14 +636,20 @@ func newBatchDecoderGetContextualTypeParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetContextualTypeParams](base, func(params *GetContextualTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -510,11 +674,15 @@ func newBatchDecoderGetCurrentLanguageServerSnapshotParams(base json.Value, fiel
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("baseSnapshot", len(columns.BaseSnapshot), count); err != nil {
-		return nil, err
+	if columns.BaseSnapshot != nil {
+		if err := validateBatchColumn("baseSnapshot", len(columns.BaseSnapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("changes", len(columns.Changes), count); err != nil {
-		return nil, err
+	if columns.Changes != nil {
+		if err := validateBatchColumn("changes", len(columns.Changes), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetCurrentLanguageServerSnapshotParams](base, func(params *GetCurrentLanguageServerSnapshotParams, index int) {
 		if columns.BaseSnapshot != nil {
@@ -536,11 +704,15 @@ func newBatchDecoderGetDefaultProjectForFileParams(base json.Value, fields json.
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetDefaultProjectForFileParams](base, func(params *GetDefaultProjectForFileParams, index int) {
 		if columns.Snapshot != nil {
@@ -563,14 +735,20 @@ func newBatchDecoderGetDiagnosticsParams(base json.Value, fields json.Value, cou
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("files", len(columns.Files), count); err != nil {
-		return nil, err
+	if columns.Files != nil {
+		if err := validateBatchColumn("files", len(columns.Files), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetDiagnosticsParams](base, func(params *GetDiagnosticsParams, index int) {
 		if columns.Snapshot != nil {
@@ -597,17 +775,25 @@ func newBatchDecoderGetImportAdderEditsParams(base json.Value, fields json.Value
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("actions", len(columns.Actions), count); err != nil {
-		return nil, err
+	if columns.Actions != nil {
+		if err := validateBatchColumn("actions", len(columns.Actions), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetImportAdderEditsParams](base, func(params *GetImportAdderEditsParams, index int) {
 		if columns.Snapshot != nil {
@@ -637,17 +823,25 @@ func newBatchDecoderGetIndexInfoOfTypeParams(base json.Value, fields json.Value,
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("kind", len(columns.Kind), count); err != nil {
-		return nil, err
+	if columns.Kind != nil {
+		if err := validateBatchColumn("kind", len(columns.Kind), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetIndexInfoOfTypeParams](base, func(params *GetIndexInfoOfTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -675,11 +869,15 @@ func newBatchDecoderGetIntrinsicTypeParams(base json.Value, fields json.Value, c
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetIntrinsicTypeParams](base, func(params *GetIntrinsicTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -703,17 +901,25 @@ func newBatchDecoderGetMemberInModuleExportsParams(base json.Value, fields json.
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
-		return nil, err
+	if columns.Symbol != nil {
+		if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("name", len(columns.Name), count); err != nil {
-		return nil, err
+	if columns.Name != nil {
+		if err := validateBatchColumn("name", len(columns.Name), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetMemberInModuleExportsParams](base, func(params *GetMemberInModuleExportsParams, index int) {
 		if columns.Snapshot != nil {
@@ -743,17 +949,25 @@ func newBatchDecoderGetModeForResolutionAtIndexParams(base json.Value, fields js
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
-		return nil, err
+	if columns.Index != nil {
+		if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetModeForResolutionAtIndexParams](base, func(params *GetModeForResolutionAtIndexParams, index int) {
 		if columns.Snapshot != nil {
@@ -783,17 +997,25 @@ func newBatchDecoderGetModeForUsageLocationParams(base json.Value, fields json.V
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("usage", len(columns.Usage), count); err != nil {
-		return nil, err
+	if columns.Usage != nil {
+		if err := validateBatchColumn("usage", len(columns.Usage), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetModeForUsageLocationParams](base, func(params *GetModeForUsageLocationParams, index int) {
 		if columns.Snapshot != nil {
@@ -823,17 +1045,25 @@ func newBatchDecoderGetParameterTypeParams(base json.Value, fields json.Value, c
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("signature", len(columns.Signature), count); err != nil {
-		return nil, err
+	if columns.Signature != nil {
+		if err := validateBatchColumn("signature", len(columns.Signature), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
-		return nil, err
+	if columns.Index != nil {
+		if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetParameterTypeParams](base, func(params *GetParameterTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -861,11 +1091,15 @@ func newBatchDecoderGetProjectDiagnosticsParams(base json.Value, fields json.Val
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetProjectDiagnosticsParams](base, func(params *GetProjectDiagnosticsParams, index int) {
 		if columns.Snapshot != nil {
@@ -889,17 +1123,25 @@ func newBatchDecoderGetPropertyOfTypeParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("name", len(columns.Name), count); err != nil {
-		return nil, err
+	if columns.Name != nil {
+		if err := validateBatchColumn("name", len(columns.Name), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetPropertyOfTypeParams](base, func(params *GetPropertyOfTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -929,17 +1171,25 @@ func newBatchDecoderGetReferencedSymbolsForNodeParams(base json.Value, fields js
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("node", len(columns.Node), count); err != nil {
-		return nil, err
+	if columns.Node != nil {
+		if err := validateBatchColumn("node", len(columns.Node), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
-		return nil, err
+	if columns.Position != nil {
+		if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetReferencedSymbolsForNodeParams](base, func(params *GetReferencedSymbolsForNodeParams, index int) {
 		if columns.Snapshot != nil {
@@ -969,17 +1219,25 @@ func newBatchDecoderGetReferencesToSymbolInFileParams(base json.Value, fields js
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
-		return nil, err
+	if columns.Symbol != nil {
+		if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetReferencesToSymbolInFileParams](base, func(params *GetReferencesToSymbolInFileParams, index int) {
 		if columns.Snapshot != nil {
@@ -1009,17 +1267,25 @@ func newBatchDecoderGetResolvedModuleFromModuleSpecifierParams(base json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("moduleSpecifier", len(columns.ModuleSpecifier), count); err != nil {
-		return nil, err
+	if columns.ModuleSpecifier != nil {
+		if err := validateBatchColumn("moduleSpecifier", len(columns.ModuleSpecifier), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("sourceFile", len(columns.SourceFile), count); err != nil {
-		return nil, err
+	if columns.SourceFile != nil {
+		if err := validateBatchColumn("sourceFile", len(columns.SourceFile), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetResolvedModuleFromModuleSpecifierParams](base, func(params *GetResolvedModuleFromModuleSpecifierParams, index int) {
 		if columns.Snapshot != nil {
@@ -1050,20 +1316,30 @@ func newBatchDecoderGetResolvedModuleParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("moduleName", len(columns.ModuleName), count); err != nil {
-		return nil, err
+	if columns.ModuleName != nil {
+		if err := validateBatchColumn("moduleName", len(columns.ModuleName), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("mode", len(columns.Mode), count); err != nil {
-		return nil, err
+	if columns.Mode != nil {
+		if err := validateBatchColumn("mode", len(columns.Mode), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetResolvedModuleParams](base, func(params *GetResolvedModuleParams, index int) {
 		if columns.Snapshot != nil {
@@ -1095,14 +1371,20 @@ func newBatchDecoderGetResolvedSignatureParams(base json.Value, fields json.Valu
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetResolvedSignatureParams](base, func(params *GetResolvedSignatureParams, index int) {
 		if columns.Snapshot != nil {
@@ -1130,20 +1412,30 @@ func newBatchDecoderGetResolvedTypeReferenceDirectiveFromReferenceParams(base js
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("sourceFile", len(columns.SourceFile), count); err != nil {
-		return nil, err
+	if columns.SourceFile != nil {
+		if err := validateBatchColumn("sourceFile", len(columns.SourceFile), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("typeDirectiveName", len(columns.TypeDirectiveName), count); err != nil {
-		return nil, err
+	if columns.TypeDirectiveName != nil {
+		if err := validateBatchColumn("typeDirectiveName", len(columns.TypeDirectiveName), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("resolutionMode", len(columns.ResolutionMode), count); err != nil {
-		return nil, err
+	if columns.ResolutionMode != nil {
+		if err := validateBatchColumn("resolutionMode", len(columns.ResolutionMode), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetResolvedTypeReferenceDirectiveFromReferenceParams](base, func(params *GetResolvedTypeReferenceDirectiveFromReferenceParams, index int) {
 		if columns.Snapshot != nil {
@@ -1177,20 +1469,30 @@ func newBatchDecoderGetResolvedTypeReferenceDirectiveParams(base json.Value, fie
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("typeDirectiveName", len(columns.TypeDirectiveName), count); err != nil {
-		return nil, err
+	if columns.TypeDirectiveName != nil {
+		if err := validateBatchColumn("typeDirectiveName", len(columns.TypeDirectiveName), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("mode", len(columns.Mode), count); err != nil {
-		return nil, err
+	if columns.Mode != nil {
+		if err := validateBatchColumn("mode", len(columns.Mode), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetResolvedTypeReferenceDirectiveParams](base, func(params *GetResolvedTypeReferenceDirectiveParams, index int) {
 		if columns.Snapshot != nil {
@@ -1222,14 +1524,20 @@ func newBatchDecoderGetSignaturePropertyParams(base json.Value, fields json.Valu
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("objectId", len(columns.Signature), count); err != nil {
-		return nil, err
+	if columns.Signature != nil {
+		if err := validateBatchColumn("objectId", len(columns.Signature), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSignaturePropertyParams](base, func(params *GetSignaturePropertyParams, index int) {
 		if columns.Snapshot != nil {
@@ -1255,14 +1563,20 @@ func newBatchDecoderGetSignatureUsagesParams(base json.Value, fields json.Value,
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("signatureDecl", len(columns.SignatureDecl), count); err != nil {
-		return nil, err
+	if columns.SignatureDecl != nil {
+		if err := validateBatchColumn("signatureDecl", len(columns.SignatureDecl), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSignatureUsagesParams](base, func(params *GetSignatureUsagesParams, index int) {
 		if columns.Snapshot != nil {
@@ -1289,17 +1603,25 @@ func newBatchDecoderGetSignaturesOfTypeParams(base json.Value, fields json.Value
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("kind", len(columns.Kind), count); err != nil {
-		return nil, err
+	if columns.Kind != nil {
+		if err := validateBatchColumn("kind", len(columns.Kind), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSignaturesOfTypeParams](base, func(params *GetSignaturesOfTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -1327,11 +1649,15 @@ func newBatchDecoderGetSourceFileNamesParams(base json.Value, fields json.Value,
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSourceFileNamesParams](base, func(params *GetSourceFileNamesParams, index int) {
 		if columns.Snapshot != nil {
@@ -1354,14 +1680,20 @@ func newBatchDecoderGetSourceFileParams(base json.Value, fields json.Value, coun
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSourceFileParams](base, func(params *GetSourceFileParams, index int) {
 		if columns.Snapshot != nil {
@@ -1387,14 +1719,20 @@ func newBatchDecoderGetSymbolAtLocationParams(base json.Value, fields json.Value
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSymbolAtLocationParams](base, func(params *GetSymbolAtLocationParams, index int) {
 		if columns.Snapshot != nil {
@@ -1421,17 +1759,25 @@ func newBatchDecoderGetSymbolAtPositionParams(base json.Value, fields json.Value
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
-		return nil, err
+	if columns.Position != nil {
+		if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSymbolAtPositionParams](base, func(params *GetSymbolAtPositionParams, index int) {
 		if columns.Snapshot != nil {
@@ -1460,14 +1806,20 @@ func newBatchDecoderGetSymbolOfSourceFileParams(base json.Value, fields json.Val
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSymbolOfSourceFileParams](base, func(params *GetSymbolOfSourceFileParams, index int) {
 		if columns.Snapshot != nil {
@@ -1493,14 +1845,20 @@ func newBatchDecoderGetSymbolPropertyParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("objectId", len(columns.Symbol), count); err != nil {
-		return nil, err
+	if columns.Symbol != nil {
+		if err := validateBatchColumn("objectId", len(columns.Symbol), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSymbolPropertyParams](base, func(params *GetSymbolPropertyParams, index int) {
 		if columns.Snapshot != nil {
@@ -1529,23 +1887,35 @@ func newBatchDecoderGetSymbolsInScopeParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
-		return nil, err
+	if columns.Position != nil {
+		if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("meaning", len(columns.Meaning), count); err != nil {
-		return nil, err
+	if columns.Meaning != nil {
+		if err := validateBatchColumn("meaning", len(columns.Meaning), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetSymbolsInScopeParams](base, func(params *GetSymbolsInScopeParams, index int) {
 		if columns.Snapshot != nil {
@@ -1580,14 +1950,20 @@ func newBatchDecoderGetTypeAtLocationParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetTypeAtLocationParams](base, func(params *GetTypeAtLocationParams, index int) {
 		if columns.Snapshot != nil {
@@ -1614,17 +1990,25 @@ func newBatchDecoderGetTypeAtPositionParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
-		return nil, err
+	if columns.Position != nil {
+		if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetTypeAtPositionParams](base, func(params *GetTypeAtPositionParams, index int) {
 		if columns.Snapshot != nil {
@@ -1653,14 +2037,20 @@ func newBatchDecoderGetTypeFromTypeNodeParams(base json.Value, fields json.Value
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetTypeFromTypeNodeParams](base, func(params *GetTypeFromTypeNodeParams, index int) {
 		if columns.Snapshot != nil {
@@ -1687,17 +2077,25 @@ func newBatchDecoderGetTypeOfSymbolAtLocationParams(base json.Value, fields json
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
-		return nil, err
+	if columns.Symbol != nil {
+		if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetTypeOfSymbolAtLocationParams](base, func(params *GetTypeOfSymbolAtLocationParams, index int) {
 		if columns.Snapshot != nil {
@@ -1726,14 +2124,20 @@ func newBatchDecoderGetTypeOfSymbolParams(base json.Value, fields json.Value, co
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
-		return nil, err
+	if columns.Symbol != nil {
+		if err := validateBatchColumn("symbol", len(columns.Symbol), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetTypeOfSymbolParams](base, func(params *GetTypeOfSymbolParams, index int) {
 		if columns.Snapshot != nil {
@@ -1759,14 +2163,20 @@ func newBatchDecoderGetTypePropertyParams(base json.Value, fields json.Value, co
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("objectId", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("objectId", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetTypePropertyParams](base, func(params *GetTypePropertyParams, index int) {
 		if columns.Snapshot != nil {
@@ -1792,14 +2202,20 @@ func newBatchDecoderGetWidenedTypeParams(base json.Value, fields json.Value, cou
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[GetWidenedTypeParams](base, func(params *GetWidenedTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -1825,14 +2241,20 @@ func newBatchDecoderIsArrayLikeTypeParams(base json.Value, fields json.Value, co
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[IsArrayLikeTypeParams](base, func(params *IsArrayLikeTypeParams, index int) {
 		if columns.Snapshot != nil {
@@ -1859,17 +2281,25 @@ func newBatchDecoderIsTypeAssignableToParams(base json.Value, fields json.Value,
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("source", len(columns.Source), count); err != nil {
-		return nil, err
+	if columns.Source != nil {
+		if err := validateBatchColumn("source", len(columns.Source), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("target", len(columns.Target), count); err != nil {
-		return nil, err
+	if columns.Target != nil {
+		if err := validateBatchColumn("target", len(columns.Target), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[IsTypeAssignableToParams](base, func(params *IsTypeAssignableToParams, index int) {
 		if columns.Snapshot != nil {
@@ -1896,8 +2326,10 @@ func newBatchDecoderParseCommandLineParams(base json.Value, fields json.Value, c
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("commandLine", len(columns.CommandLine), count); err != nil {
-		return nil, err
+	if columns.CommandLine != nil {
+		if err := validateBatchColumn("commandLine", len(columns.CommandLine), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ParseCommandLineParams](base, func(params *ParseCommandLineParams, index int) {
 		if columns.CommandLine != nil {
@@ -1915,8 +2347,10 @@ func newBatchDecoderParseConfigFileParams(base json.Value, fields json.Value, co
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ParseConfigFileParams](base, func(params *ParseConfigFileParams, index int) {
 		if columns.File != nil {
@@ -1936,14 +2370,20 @@ func newBatchDecoderParseJsonConfigFileContentParams(base json.Value, fields jso
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("json", len(columns.JSON), count); err != nil {
-		return nil, err
+	if columns.JSON != nil {
+		if err := validateBatchColumn("json", len(columns.JSON), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("configDirectory", len(columns.ConfigDirectory), count); err != nil {
-		return nil, err
+	if columns.ConfigDirectory != nil {
+		if err := validateBatchColumn("configDirectory", len(columns.ConfigDirectory), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("configFileName", len(columns.ConfigFileName), count); err != nil {
-		return nil, err
+	if columns.ConfigFileName != nil {
+		if err := validateBatchColumn("configFileName", len(columns.ConfigFileName), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ParseJsonConfigFileContentParams](base, func(params *ParseJsonConfigFileContentParams, index int) {
 		if columns.JSON != nil {
@@ -1970,17 +2410,25 @@ func newBatchDecoderPrintNodeParams(base json.Value, fields json.Value, count in
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("data", len(columns.Data), count); err != nil {
-		return nil, err
+	if columns.Data != nil {
+		if err := validateBatchColumn("data", len(columns.Data), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("preserveSourceNewlines", len(columns.PreserveSourceNewlines), count); err != nil {
-		return nil, err
+	if columns.PreserveSourceNewlines != nil {
+		if err := validateBatchColumn("preserveSourceNewlines", len(columns.PreserveSourceNewlines), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("neverAsciiEscape", len(columns.NeverAsciiEscape), count); err != nil {
-		return nil, err
+	if columns.NeverAsciiEscape != nil {
+		if err := validateBatchColumn("neverAsciiEscape", len(columns.NeverAsciiEscape), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("terminateUnterminatedLiterals", len(columns.TerminateUnterminatedLiterals), count); err != nil {
-		return nil, err
+	if columns.TerminateUnterminatedLiterals != nil {
+		if err := validateBatchColumn("terminateUnterminatedLiterals", len(columns.TerminateUnterminatedLiterals), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[PrintNodeParams](base, func(params *PrintNodeParams, index int) {
 		if columns.Data != nil {
@@ -2007,8 +2455,10 @@ func newBatchDecoderProfileParams(base json.Value, fields json.Value, count int)
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("dir", len(columns.Dir), count); err != nil {
-		return nil, err
+	if columns.Dir != nil {
+		if err := validateBatchColumn("dir", len(columns.Dir), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ProfileParams](base, func(params *ProfileParams, index int) {
 		if columns.Dir != nil {
@@ -2026,8 +2476,10 @@ func newBatchDecoderReadConfigFileParams(base json.Value, fields json.Value, cou
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ReadConfigFileParams](base, func(params *ReadConfigFileParams, index int) {
 		if columns.File != nil {
@@ -2045,8 +2497,10 @@ func newBatchDecoderReleaseModuleResolverParams(base json.Value, fields json.Val
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("resolver", len(columns.Resolver), count); err != nil {
-		return nil, err
+	if columns.Resolver != nil {
+		if err := validateBatchColumn("resolver", len(columns.Resolver), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ReleaseModuleResolverParams](base, func(params *ReleaseModuleResolverParams, index int) {
 		if columns.Resolver != nil {
@@ -2064,8 +2518,10 @@ func newBatchDecoderReleaseParams(base json.Value, fields json.Value, count int)
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ReleaseParams](base, func(params *ReleaseParams, index int) {
 		if columns.Snapshot != nil {
@@ -2088,23 +2544,35 @@ func newBatchDecoderResolveModuleNameParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("inProgressSnapshot", len(columns.InProgressSnapshot), count); err != nil {
-		return nil, err
+	if columns.InProgressSnapshot != nil {
+		if err := validateBatchColumn("inProgressSnapshot", len(columns.InProgressSnapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("resolver", len(columns.Resolver), count); err != nil {
-		return nil, err
+	if columns.Resolver != nil {
+		if err := validateBatchColumn("resolver", len(columns.Resolver), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("moduleName", len(columns.ModuleName), count); err != nil {
-		return nil, err
+	if columns.ModuleName != nil {
+		if err := validateBatchColumn("moduleName", len(columns.ModuleName), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("containingDirectory", len(columns.ContainingDirectory), count); err != nil {
-		return nil, err
+	if columns.ContainingDirectory != nil {
+		if err := validateBatchColumn("containingDirectory", len(columns.ContainingDirectory), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("resolutionMode", len(columns.ResolutionMode), count); err != nil {
-		return nil, err
+	if columns.ResolutionMode != nil {
+		if err := validateBatchColumn("resolutionMode", len(columns.ResolutionMode), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ResolveModuleNameParams](base, func(params *ResolveModuleNameParams, index int) {
 		if columns.Snapshot != nil {
@@ -2144,29 +2612,45 @@ func newBatchDecoderResolveNameParams(base json.Value, fields json.Value, count 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("name", len(columns.Name), count); err != nil {
-		return nil, err
+	if columns.Name != nil {
+		if err := validateBatchColumn("name", len(columns.Name), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("file", len(columns.File), count); err != nil {
-		return nil, err
+	if columns.File != nil {
+		if err := validateBatchColumn("file", len(columns.File), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
-		return nil, err
+	if columns.Position != nil {
+		if err := validateBatchColumn("position", len(columns.Position), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("meaning", len(columns.Meaning), count); err != nil {
-		return nil, err
+	if columns.Meaning != nil {
+		if err := validateBatchColumn("meaning", len(columns.Meaning), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("excludeGlobals", len(columns.ExcludeGlobals), count); err != nil {
-		return nil, err
+	if columns.ExcludeGlobals != nil {
+		if err := validateBatchColumn("excludeGlobals", len(columns.ExcludeGlobals), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[ResolveNameParams](base, func(params *ResolveNameParams, index int) {
 		if columns.Snapshot != nil {
@@ -2207,14 +2691,20 @@ func newBatchDecoderSelectedFilesEmitParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("files", len(columns.Files), count); err != nil {
-		return nil, err
+	if columns.Files != nil {
+		if err := validateBatchColumn("files", len(columns.Files), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[SelectedFilesEmitParams](base, func(params *SelectedFilesEmitParams, index int) {
 		if columns.Snapshot != nil {
@@ -2243,23 +2733,35 @@ func newBatchDecoderSignatureToSignatureDeclarationParams(base json.Value, field
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("signature", len(columns.Signature), count); err != nil {
-		return nil, err
+	if columns.Signature != nil {
+		if err := validateBatchColumn("signature", len(columns.Signature), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("kind", len(columns.Kind), count); err != nil {
-		return nil, err
+	if columns.Kind != nil {
+		if err := validateBatchColumn("kind", len(columns.Kind), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("flags", len(columns.Flags), count); err != nil {
-		return nil, err
+	if columns.Flags != nil {
+		if err := validateBatchColumn("flags", len(columns.Flags), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[SignatureToSignatureDeclarationParams](base, func(params *SignatureToSignatureDeclarationParams, index int) {
 		if columns.Snapshot != nil {
@@ -2293,11 +2795,15 @@ func newBatchDecoderTranspileFromFileParams(base json.Value, fields json.Value, 
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
-		return nil, err
+	if columns.FileName != nil {
+		if err := validateBatchColumn("fileName", len(columns.FileName), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
-		return nil, err
+	if columns.Options != nil {
+		if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[TranspileFromFileParams](base, func(params *TranspileFromFileParams, index int) {
 		if columns.FileName != nil {
@@ -2319,11 +2825,15 @@ func newBatchDecoderTranspileParams(base json.Value, fields json.Value, count in
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("input", len(columns.Input), count); err != nil {
-		return nil, err
+	if columns.Input != nil {
+		if err := validateBatchColumn("input", len(columns.Input), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
-		return nil, err
+	if columns.Options != nil {
+		if err := validateBatchColumn("options", len(columns.Options), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[TranspileParams](base, func(params *TranspileParams, index int) {
 		if columns.Input != nil {
@@ -2348,20 +2858,30 @@ func newBatchDecoderTypeToTypeNodeParams(base json.Value, fields json.Value, cou
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
-		return nil, err
+	if columns.Project != nil {
+		if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
-		return nil, err
+	if columns.Type != nil {
+		if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
-		return nil, err
+	if columns.Location != nil {
+		if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("flags", len(columns.Flags), count); err != nil {
-		return nil, err
+	if columns.Flags != nil {
+		if err := validateBatchColumn("flags", len(columns.Flags), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[TypeToTypeNodeParams](base, func(params *TypeToTypeNodeParams, index int) {
 		if columns.Snapshot != nil {
@@ -2392,11 +2912,15 @@ func newBatchDecoderUpdateSnapshotParams(base json.Value, fields json.Value, cou
 	if err := json.Unmarshal(fields, &columns); err != nil {
 		return nil, err
 	}
-	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
-		return nil, err
+	if columns.Snapshot != nil {
+		if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+			return nil, err
+		}
 	}
-	if err := validateBatchColumn("changes", len(columns.Changes), count); err != nil {
-		return nil, err
+	if columns.Changes != nil {
+		if err := validateBatchColumn("changes", len(columns.Changes), count); err != nil {
+			return nil, err
+		}
 	}
 	return newTypedBatchRequestDecoder[UpdateSnapshotParams](base, func(params *UpdateSnapshotParams, index int) {
 		if columns.Snapshot != nil {

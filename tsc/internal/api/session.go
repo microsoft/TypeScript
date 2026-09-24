@@ -503,7 +503,7 @@ func (d *typedBatchRequestDecoder[T]) request(index int) any {
 }
 
 func validateBatchColumn(name string, length int, count int) error {
-	if length != 0 && length != count {
+	if length != count {
 		return fmt.Errorf("parameter %q has %d values, expected %d", name, length, count)
 	}
 	return nil
@@ -1461,13 +1461,7 @@ func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) 
 	if err != nil {
 		response.Error = err.Error()
 	}
-	if data, ok := response.Result.(RawBinary); ok && isSourceFileResponseMethod(request.Method) {
-		if data == nil {
-			response.Result = nil
-		} else {
-			response.Result = &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}
-		}
-	}
+	response.Result = normalizeBatchResult(request.Method, response.Result)
 	return response
 }
 
@@ -1483,7 +1477,18 @@ func (s *Session) handleParsedBatchRequest(ctx context.Context, method Method, p
 	if err != nil {
 		response.Error = err.Error()
 	}
+	response.Result = normalizeBatchResult(method, response.Result)
 	return response
+}
+
+func normalizeBatchResult(method Method, result any) any {
+	if data, ok := result.(RawBinary); ok && isSourceFileResponseMethod(method) {
+		if data == nil {
+			return nil
+		}
+		return &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}
+	}
+	return result
 }
 
 func isSourceFileResponseMethod(method Method) bool {

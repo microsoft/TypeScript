@@ -207,22 +207,7 @@ func generateBatchDecoders(inputPath string, outputPath string) error {
 		}
 		decoder := decoderTypes[named]
 		if decoder == nil {
-			decoder = &decoderType{name: named.Obj().Name(), named: named}
-			for i := range structType.NumFields() {
-				field := structType.Field(i)
-				if !field.Exported() || field.Embedded() {
-					continue
-				}
-				jsonName, _, _ := strings.Cut(reflect.StructTag(structType.Tag(i)).Get("json"), ",")
-				if jsonName == "" || jsonName == "-" {
-					continue
-				}
-				decoder.fields = append(decoder.fields, batchField{
-					goName:   field.Name(),
-					jsonName: jsonName,
-					typeName: types.TypeString(field.Type(), qualifier),
-				})
-			}
+			decoder = &decoderType{name: named.Obj().Name(), named: named, fields: batchFields(structType, qualifier)}
 			decoderTypes[named] = decoder
 		}
 		methodTypes[method] = decoder
@@ -241,11 +226,29 @@ func generateBatchDecoders(inputPath string, outputPath string) error {
 		fmt.Fprintf(&body, "\tvar columns batchColumns%s\n", decoder.name)
 		body.WriteString("\tif err := json.Unmarshal(fields, &columns); err != nil {\n\t\treturn nil, err\n\t}\n")
 		for _, field := range decoder.fields {
-			fmt.Fprintf(&body, "\tif err := validateBatchColumn(\"%s\", len(columns.%s), count); err != nil { return nil, err }\n", field.jsonName, field.goName)
+			fmt.Fprintf(&body, "\tif columns.%s != nil {\n\t\tif err := validateBatchColumn(\"%s\", len(columns.%s), count); err != nil { return nil, err }\n\t}\n", field.goName, field.jsonName, field.goName)
 		}
 		fmt.Fprintf(&body, "\treturn newTypedBatchRequestDecoder[%s](base, func(params *%s, index int) {\n", decoder.name, decoder.name)
+		initialized := make(map[string]bool)
 		for _, field := range decoder.fields {
-			fmt.Fprintf(&body, "\t\tif columns.%s != nil { params.%s = columns.%s[index] }\n", field.goName, field.goName, field.goName)
+			for _, pointer := range field.pointers {
+				if initialized[pointer.selector] {
+					continue
+				}
+				initialized[pointer.selector] = true
+				var conditions []string
+				for _, other := range decoder.fields {
+					if strings.HasPrefix(other.selector, pointer.selector+".") {
+						conditions = append(conditions, "columns."+other.goName+" != nil")
+					}
+				}
+				fmt.Fprintf(&body, "\t\tif %s {\n", strings.Join(conditions, " || "))
+				fmt.Fprintf(&body, "\t\t\tif params.%s == nil { params.%s = new(%s) } else { value := *params.%s; params.%s = &value }\n", pointer.selector, pointer.selector, pointer.typeName, pointer.selector, pointer.selector)
+				body.WriteString("\t\t}\n")
+			}
+		}
+		for _, field := range decoder.fields {
+			fmt.Fprintf(&body, "\t\tif columns.%s != nil { params.%s = columns.%s[index] }\n", field.goName, field.selector, field.goName)
 		}
 		body.WriteString("\t})\n}\n\n")
 	}
@@ -280,6 +283,94 @@ type batchField struct {
 	goName   string
 	jsonName string
 	typeName string
+	typ      types.Type
+	selector string
+	pointers []batchPointer
+	depth    int
+	tagged   bool
+}
+
+type batchPointer struct {
+	selector string
+	typeName string
+	typ      types.Type
+}
+
+func batchFields(structType *types.Struct, qualifier types.Qualifier) []batchField {
+	var candidates []batchField
+	visiting := make(map[*types.Struct]bool)
+	var collect func(*types.Struct, []string, []batchPointer)
+	collect = func(current *types.Struct, path []string, pointers []batchPointer) {
+		if visiting[current] {
+			return
+		}
+		visiting[current] = true
+		defer delete(visiting, current)
+		for index := range current.NumFields() {
+			field := current.Field(index)
+			if !field.Exported() {
+				continue
+			}
+			tag := reflect.StructTag(current.Tag(index)).Get("json")
+			if tag == "-" {
+				continue
+			}
+			jsonName, options, _ := strings.Cut(tag, ",")
+			fieldPath := append(slices.Clone(path), field.Name())
+			selector := strings.Join(fieldPath, ".")
+			if jsonName == "" && (field.Embedded() || slices.Contains(strings.Split(options, ","), "embed")) {
+				embedded := types.Unalias(field.Type())
+				fieldPointers := pointers
+				if pointer, ok := embedded.(*types.Pointer); ok {
+					embedded = types.Unalias(pointer.Elem())
+					fieldPointers = append(slices.Clone(pointers), batchPointer{selector: selector, typ: embedded})
+				}
+				if embeddedStruct, ok := embedded.Underlying().(*types.Struct); ok {
+					collect(embeddedStruct, fieldPath, fieldPointers)
+					continue
+				}
+			}
+			tagged := jsonName != ""
+			if jsonName == "" {
+				jsonName = field.Name()
+			}
+			candidates = append(candidates, batchField{
+				goName: field.Name(), jsonName: jsonName,
+				typ:      field.Type(),
+				selector: selector, pointers: pointers, depth: len(path), tagged: tagged,
+			})
+		}
+	}
+	collect(structType, nil, nil)
+
+	byName := make(map[string][]batchField)
+	for _, field := range candidates {
+		previous := byName[field.jsonName]
+		if len(previous) == 0 || field.depth < previous[0].depth || field.depth == previous[0].depth && field.tagged && !previous[0].tagged {
+			byName[field.jsonName] = []batchField{field}
+		} else if field.depth == previous[0].depth && field.tagged == previous[0].tagged {
+			byName[field.jsonName] = append(previous, field)
+		}
+	}
+	var fields []batchField
+	usedNames := make(map[string]bool)
+	for _, field := range candidates {
+		matches := byName[field.jsonName]
+		if len(matches) != 1 || matches[0].selector != field.selector {
+			continue
+		}
+		name := field.goName
+		for suffix := 2; usedNames[field.goName]; suffix++ {
+			field.goName = name + strconv.Itoa(suffix)
+		}
+		usedNames[field.goName] = true
+		field.typeName = types.TypeString(field.typ, qualifier)
+		for index := range field.pointers {
+			field.pointers[index].typeName = types.TypeString(field.pointers[index].typ, qualifier)
+		}
+		fields = append(fields, field)
+	}
+	return fields
 }
 
 func loadAPIPackage(absInput string) (*packages.Package, *ast.File, error) {
