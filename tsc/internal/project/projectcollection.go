@@ -78,11 +78,11 @@ type apiOpenedFile struct {
 func (c *ProjectCollection) ConfigFileRegistry() *ConfigFileRegistry { return c.configFileRegistry }
 
 func (c *ProjectCollection) inferredProjectTypingsWatch() *WatchedFiles[PatternsAndIgnored] {
-	if c.inferredProject != nil {
-		return c.inferredProject.typingsWatch
-	}
 	if c.inferredProjectATAState != nil {
 		return c.inferredProjectATAState.typingsWatch
+	}
+	if c.inferredProject != nil {
+		return c.inferredProject.typingsWatch
 	}
 	return nil
 }

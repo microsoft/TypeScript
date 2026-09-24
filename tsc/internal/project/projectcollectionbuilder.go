@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -151,6 +152,11 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if newInferredProject, inferredProjectChanged := b.inferredProject.Finalize(); inferredProjectChanged {
 		ensureCloned()
 		newProjectCollection.inferredProject = newInferredProject
+	}
+	if b.inferredProjectATAState != nil {
+		if inferred := b.inferredProject.Value(); inferred != nil {
+			debug.Assert(inferred.Program == nil, "cached inferred ATA state coexists with a built inferred project")
+		}
 	}
 	if b.inferredProjectATAState != b.base.inferredProjectATAState {
 		ensureCloned()
@@ -987,6 +993,30 @@ func (b *ProjectCollectionBuilder) ensureProjectTree(
 }
 
 func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAStateChange, fileChanges FileChangeSummary, logger *logging.LogTree) {
+	installedTypingsSnapshotID := func(projectID ID) uint64 {
+		if _, inferred := projectID.Inferred(); inferred {
+			if state := b.inferredProjectATAState; state != nil {
+				return state.snapshotID
+			}
+			if project := b.inferredProject.Value(); project != nil {
+				return project.installedTypingsSnapshotID
+			}
+		} else if syntheticID, synthetic := projectID.Synthetic(); synthetic {
+			if entry, loaded := b.syntheticProjects.Load(syntheticID); loaded {
+				if project := entry.Value(); project != nil {
+					return project.installedTypingsSnapshotID
+				}
+			}
+		} else if configuredID, configured := projectID.Configured(); configured {
+			if entry, loaded := b.configuredProjects.Load(configuredID); loaded {
+				if project := entry.Value(); project != nil {
+					return project.installedTypingsSnapshotID
+				}
+			}
+		}
+		return 0
+	}
+
 	updateProject := func(project dirty.Value[*Project], ataChange *ATAStateChange) {
 		project.ChangeIf(
 			func(p *Project) bool {
@@ -1001,6 +1031,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 			},
 			func(p *Project) {
 				p.installedTypingsInfo = ataChange.TypingsInfo
+				p.installedTypingsSnapshotID = ataChange.SnapshotID
 				p.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
 				p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
 				p.typingsFiles = ataChange.TypingsFiles
@@ -1020,6 +1051,12 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 
 	for projectID, ataChange := range ataChanges {
 		logger.Embed(ataChange.Logs)
+		if ataChange.SnapshotID < installedTypingsSnapshotID(projectID) {
+			if logger != nil {
+				logger.Logf("Ignoring ATA state older than installed state for project %s", projectID)
+			}
+			continue
+		}
 		if fileChangeSummaryAffectsTypingsWatch(
 			fileChanges,
 			slices.Concat(ataChange.TypingsFilesToWatch, ataChange.FileNames),
@@ -1039,7 +1076,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 			continue
 		}
 		if _, ok := projectID.Inferred(); ok {
-			if b.inferredProject.Value() != nil {
+			if inferred := b.inferredProject.Value(); inferred != nil && inferred.Program != nil {
 				updateProject(b.inferredProject, ataChange)
 			} else {
 				typingsWatch := newTypingsWatch(b)
@@ -1059,6 +1096,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 					installedTypingsFilesToWatch: slices.Clone(ataChange.TypingsFilesToWatch),
 					typingsFiles:                 slices.Clone(ataChange.TypingsFiles),
 					typingsWatch:                 typingsWatch.Clone(typingsWatchGlobs),
+					snapshotID:                   ataChange.SnapshotID,
 				}
 			}
 		} else if syntheticProjectID, ok := projectID.Synthetic(); ok {
@@ -1583,7 +1621,9 @@ func (b *ProjectCollectionBuilder) deleteInferredProject(logger *logging.LogTree
 			return true
 		})
 	}
-	b.inferredProjectATAState = project.inferredProjectATAState()
+	if project.Program != nil {
+		b.inferredProjectATAState = project.inferredProjectATAState()
+	}
 	b.inferredProject.Delete()
 	return true
 }

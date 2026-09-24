@@ -182,6 +182,9 @@ type Project struct {
 	// ataInvalidationSnapshotID is the latest snapshot that invalidated this
 	// project's ATA discovery inputs.
 	ataInvalidationSnapshotID uint64
+	// installedTypingsSnapshotID is the snapshot that triggered the most recently
+	// applied typings installation.
+	installedTypingsSnapshotID uint64
 }
 
 type inferredProjectATAState struct {
@@ -190,11 +193,19 @@ type inferredProjectATAState struct {
 	installedTypingsFilesToWatch []string
 	typingsFiles                 []string
 	typingsWatch                 *WatchedFiles[PatternsAndIgnored]
+	snapshotID                   uint64
 }
 
 func (p *Project) inferredProjectATAState() *inferredProjectATAState {
 	if p.installedTypingsInfo == nil && len(p.installedTypingsFilesToWatch) == 0 {
 		return nil
+	}
+	snapshotID := p.installedTypingsSnapshotID
+	if p.installedTypingsInfo != nil &&
+		p.installedTypingsInfo.Equals(p.ComputeTypingsInfo()) &&
+		slices.Equal(p.installedTypingsFileNames, p.ComputeTypingsFileNames()) &&
+		p.ProgramLastUpdate > snapshotID {
+		snapshotID = p.ProgramLastUpdate
 	}
 	return &inferredProjectATAState{
 		installedTypingsInfo:         p.installedTypingsInfo,
@@ -202,6 +213,7 @@ func (p *Project) inferredProjectATAState() *inferredProjectATAState {
 		installedTypingsFilesToWatch: slices.Clone(p.installedTypingsFilesToWatch),
 		typingsFiles:                 slices.Clone(p.typingsFiles),
 		typingsWatch:                 p.typingsWatch,
+		snapshotID:                   snapshotID,
 	}
 }
 
@@ -231,6 +243,7 @@ func (s *inferredProjectATAState) apply(project *Project) {
 	project.installedTypingsFilesToWatch = slices.Clone(s.installedTypingsFilesToWatch)
 	project.typingsFiles = slices.Clone(s.typingsFiles)
 	project.typingsWatch = s.typingsWatch
+	project.installedTypingsSnapshotID = s.snapshotID
 	if typingsFilesChanged {
 		project.dirty = true
 		project.dirtyFilePath = ""
@@ -251,6 +264,7 @@ func (s *inferredProjectATAState) applyWatchState(project *Project) {
 		s.typingsFiles,
 	)
 	project.typingsWatch = s.typingsWatch
+	project.installedTypingsSnapshotID = s.snapshotID
 }
 
 var _ ls.Project = (*Project)(nil)
@@ -507,6 +521,7 @@ func (p *Project) Clone() *Project {
 		installedTypingsFilesToWatch: p.installedTypingsFilesToWatch,
 		typingsFiles:                 p.typingsFiles,
 		ataInvalidationSnapshotID:    p.ataInvalidationSnapshotID,
+		installedTypingsSnapshotID:   p.installedTypingsSnapshotID,
 	}
 }
 
