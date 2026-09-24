@@ -36,9 +36,11 @@ test("the CLI falls back to the WASI package", {
         const packageDirectory = path.join(directory, "node_modules", "typescript");
         const libraryDirectory = path.join(packageDirectory, "lib");
         await mkdir(libraryDirectory, { recursive: true });
+        const responseFile = path.join(directory, "args.rsp");
         await Promise.all([
             cp(new URL("../lib/tsc.js", import.meta.url), path.join(libraryDirectory, "tsc.js")),
             cp(new URL("../lib/getExePath.js", import.meta.url), path.join(libraryDirectory, "getExePath.js")),
+            writeFile(responseFile, "--version"),
             writeFile(
                 path.join(packageDirectory, "package.json"),
                 JSON.stringify({
@@ -57,7 +59,7 @@ test("the CLI falls back to the WASI package", {
             process.platform === "win32" ? "junction" : "dir",
         );
 
-        const output = execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), "--version"], {
+        const output = execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
             cwd: directory,
             encoding: "utf8",
         });

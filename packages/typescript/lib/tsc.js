@@ -98,6 +98,9 @@ function getWasiPaths(wasmPath) {
         return path.posix.join(getGuestRoot(root), relative);
     };
     const translatePath = arg => {
+        if (arg.startsWith("@") && path.isAbsolute(arg.slice(1))) {
+            return `@${toGuestPath(arg.slice(1))}`;
+        }
         return path.isAbsolute(arg) ? toGuestPath(arg) : arg;
     };
 
