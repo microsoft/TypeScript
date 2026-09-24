@@ -1099,7 +1099,10 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			}
 		}
 		if len(rootFiles) > 0 {
-			moduleResolver := module.NewResolverWithOptions(b.host, core.EmptyCompilerOptions, "", "", b.resolverOptions)
+			resolverOptions := b.resolverOptions
+			resolverOptions.Host = b.host
+			resolverOptions.CompilerOptions = core.EmptyCompilerOptions
+			moduleResolver := module.NewResolver(resolverOptions)
 			aliasResolver := newAliasResolver(
 				slices.Collect(maps.Values(rootFiles)),
 				nil,
@@ -1244,7 +1247,10 @@ func (b *registryBuilder) buildProjectBucket(
 	var mu sync.Mutex
 	fileExcludePatterns := b.userPreferences.ParsedAutoImportFileExcludePatterns(b.host.FS().UseCaseSensitiveFileNames())
 	result.bucket = &RegistryBucket{}
-	moduleResolver := module.NewResolverWithOptions(b.host, core.EmptyCompilerOptions, "", "", b.resolverOptions)
+	resolverOptions := b.resolverOptions
+	resolverOptions.Host = b.host
+	resolverOptions.CompilerOptions = core.EmptyCompilerOptions
+	moduleResolver := module.NewResolver(resolverOptions)
 	program := b.host.GetProgramForProject(projectID)
 	projectRootPath := b.base.toPath(program.GetCurrentDirectory())
 	symlinkCache := program.GetSymlinkCache()

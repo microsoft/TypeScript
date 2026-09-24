@@ -2332,6 +2332,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 		}()
 
 		conn := ipc.NewAsyncConn(rwc, apiSession)
+		apiSession.SetConnection(conn)
 		if apiErr := conn.Run(apiCtx); apiErr != nil {
 			s.logger.Errorf("API session %s: %v", apiSession.ID(), apiErr)
 		}

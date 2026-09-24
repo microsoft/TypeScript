@@ -8,10 +8,14 @@
  * Usage: node tools/scripts/tsc/generate-ts-ast.ts
  */
 
-import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { xSync } from "tinyexec";
+import { GeneratedFile } from "../gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+    repoRoot as ROOT,
+} from "../gen/utils.mts";
 import type {
     MemberInfo,
     NodeType,
@@ -25,8 +29,6 @@ import {
 // ────────────────────────────────────────────────────────────────────────────
 // Load schema
 // ────────────────────────────────────────────────────────────────────────────
-
-const ROOT = path.resolve(import.meta.dirname!, "../../..");
 
 // TS members only (filter noTS/inherited issues)
 function tsMembers(node: NodeType): MemberInfo[] {
@@ -1810,16 +1812,16 @@ function generateVisitor(): string {
 // Main
 // ────────────────────────────────────────────────────────────────────────────
 
-function writeAndFormat(filePath: string, content: string) {
-    fs.writeFileSync(filePath, content);
-    xSync("dprint", ["fmt", filePath], {
-        throwOnError: true,
-        nodeOptions: { stdio: "inherit", cwd: ROOT },
-    });
+function writeAndFormat(filePath: string, generate: () => string, force: boolean) {
+    const generated = new GeneratedFile(filePath, [import.meta.filename, path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]);
+    if (generated.isCurrent(force)) return;
+    generated.write(generate());
+    formatFilesSync([filePath]);
+    generated.markCurrent();
     console.log(`Generated ${filePath}`);
 }
 
-export default function main() {
+export default function main(force = false) {
     console.log("Generating TS AST code...");
 
     const factoryPath = path.join(ROOT, "packages/typescript/src/ast/factory.generated.ts");
@@ -1827,12 +1829,12 @@ export default function main() {
     const astGenPath = path.join(ROOT, "packages/typescript/src/ast/ast.generated.ts");
     const visitorPath = path.join(ROOT, "packages/typescript/src/ast/visitor.generated.ts");
 
-    writeAndFormat(astGenPath, generateAstGenerated());
-    writeAndFormat(factoryPath, generateFactory());
-    writeAndFormat(isGenPath, generateIsGenerated());
-    writeAndFormat(visitorPath, generateVisitor());
+    writeAndFormat(astGenPath, generateAstGenerated, force);
+    writeAndFormat(factoryPath, generateFactory, force);
+    writeAndFormat(isGenPath, generateIsGenerated, force);
+    writeAndFormat(visitorPath, generateVisitor, force);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    main();
+    main(parseGeneratorArgs({}).force);
 }

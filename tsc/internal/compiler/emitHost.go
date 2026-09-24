@@ -138,6 +138,6 @@ func (host *emitHost) GetSymlinkCache() *symlinks.KnownSymlinks {
 }
 
 func (host *emitHost) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
-	resolved, _ := host.program.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
+	resolved, _, _ := host.program.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
 	return resolved
 }
