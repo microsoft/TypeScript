@@ -1018,6 +1018,13 @@ declare module "augmentation" {}`,
         const repeatedEmit = await firstEmit.program.emit();
         using repeatedEmitSnapshot = repeatedEmit.snapshot;
         assert.deepEqual(repeatedEmit.emittedFiles, []);
+        const emitToString = await firstEmit.program.emitToString();
+        assert.deepEqual([...emitToString.outputFiles.keys()].sort(), [
+            "/out/dependency.d.ts",
+            "/out/dependency.js",
+            "/out/main.d.ts",
+            "/out/main.js",
+        ]);
         await firstProgram.dispose();
 
         fs.writeFile!("/src/dependency.ts", `export function value() { return 2; }`);

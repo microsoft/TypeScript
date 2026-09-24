@@ -69,7 +69,7 @@ func NewProgram(program *compiler.Program, oldProgram *Program, host Host, neste
 
 func (p *Program) Fork() *Program {
 	return &Program{
-		snapshot:      createProgramSnapshot(p.program, p, p.snapshot.hashWithText),
+		snapshot:      p.snapshot.clone(),
 		program:       p.program,
 		host:          p.host,
 		nestedEmitNow: p.nestedEmitNow,
@@ -147,8 +147,11 @@ type Status struct {
 
 func (p *Program) Status() *Status {
 	status := &Status{
-		BuildInfoEmitPending: p.snapshot.buildInfoEmitPending.Load(),
-		LatestChangedDtsFile: p.snapshot.latestChangedDtsFile,
+		ChangedFiles:               []string{},
+		PendingEmit:                []*PendingEmit{},
+		PendingSemanticDiagnostics: []string{},
+		BuildInfoEmitPending:       p.snapshot.buildInfoEmitPending.Load(),
+		LatestChangedDtsFile:       p.snapshot.latestChangedDtsFile,
 	}
 	p.snapshot.changedFilesSet.Range(func(path tspath.Path) bool {
 		status.ChangedFiles = append(status.ChangedFiles, string(path))

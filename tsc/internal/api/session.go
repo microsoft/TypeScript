@@ -3425,7 +3425,7 @@ func newPrinter(params *PrintNodeParams) *printer.Printer {
 }
 
 func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResponse, error) {
-	program, options, err := s.getEmitOptions(params)
+	program, options, err := s.getIncrementalEmitOptions(params)
 	if err != nil {
 		return nil, err
 	}
@@ -3558,7 +3558,21 @@ func emitToOutput(ctx context.Context, program compiler.ProgramLike, options com
 	}, nil
 }
 
-func (s *Session) getEmitOptions(params *EmitParams) (compiler.ProgramLike, compiler.EmitOptions, error) {
+func (s *Session) getEmitOptions(params *EmitParams) (*compiler.Program, compiler.EmitOptions, error) {
+	program, err := s.getEmitProgram(params.Snapshot, params.Project)
+	if err != nil {
+		return nil, compiler.EmitOptions{}, err
+	}
+	emitOnly, err := getEmitOnly(params.EmitOnly)
+	if err != nil {
+		return nil, compiler.EmitOptions{}, err
+	}
+	return program, compiler.EmitOptions{
+		EmitOnly: emitOnly,
+	}, nil
+}
+
+func (s *Session) getIncrementalEmitOptions(params *EmitParams) (compiler.ProgramLike, compiler.EmitOptions, error) {
 	program, err := s.getEmitProgramLike(params.Snapshot, params.Project)
 	if err != nil {
 		return nil, compiler.EmitOptions{}, err
