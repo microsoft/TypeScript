@@ -262,7 +262,7 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 		// Seen files mix program files with lookup locations. Only lookups keep the depth check, so an imported
 		// file outside the tsconfig directory (say /shared next to /app) is still watched.
 		_, isProgramFile := programFiles[tspath.ToPath(filePath, cwd, caseSensitive)]
-		if (isProgramFile && watchmanager.CanWatchProgramFileDirectory(dir)) || watchmanager.CanWatchDirectory(dir) {
+		if isProgramFile || watchmanager.CanWatchDirectory(dir) {
 			coverage.Set(dir, false)
 		}
 	}

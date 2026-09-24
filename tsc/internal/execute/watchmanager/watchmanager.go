@@ -195,6 +195,13 @@ func (wm *WatchManager) createDirWatchRequest(dir string, entry *watchedDir) Wat
 func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[string]bool {
 	resolved := make(map[string]bool, len(desiredDirs))
 	for dir, recursive := range desiredDirs {
+		// Only directories on disk can be watched. The embedded libs (bundled:///libs) exist in the FS but not on disk.
+		if !tspath.IsRootedDiskPath(dir) {
+			if wm.DebugLog != nil {
+				fmt.Fprintf(wm.DebugLog, "[watch] not a disk path: %s\n", dir)
+			}
+			continue
+		}
 		watchDir := dir
 		watchRecursive := recursive
 		for !wm.dirExists(watchDir) {

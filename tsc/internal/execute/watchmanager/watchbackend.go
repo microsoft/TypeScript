@@ -4,7 +4,6 @@ import (
 	"io"
 	"strings"
 
-	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -76,14 +75,6 @@ func ShouldIgnoreWatchPath(path string) bool {
 		strings.Contains(p, "/.git/") ||
 		strings.Contains(p, "/node_modules/.") ||
 		strings.Contains(p, "/.#")
-}
-
-// CanWatchProgramFileDirectory reports whether the directory of a file that is part of the program can be watched.
-// Program files are watched at any depth, like tsc 6.0 watched every source file, so a project near the
-// filesystem root (/app, /srv/app, a Docker WORKDIR) still rebuilds. Only virtual locations such as the
-// embedded libs are skipped. Lookup locations (package.json, failed resolutions) use CanWatchDirectory instead.
-func CanWatchProgramFileDirectory(dir string) bool {
-	return !bundled.IsBundled(dir)
 }
 
 func CanWatchDirectory(dir string) bool {

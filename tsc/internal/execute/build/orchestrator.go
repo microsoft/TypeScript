@@ -572,7 +572,7 @@ func (o *Orchestrator) addWatchDir(desiredDirs *watchmanager.DirWatchSet, dir st
 // addProgramFileWatchDir watches the directory of a program file at any depth, unlike addWatchDir, which guards lookup
 // locations against watching something as generic as / or /home.
 func (o *Orchestrator) addProgramFileWatchDir(desiredDirs *watchmanager.DirWatchSet, dir string) {
-	if !desiredDirs.Covered(dir) && watchmanager.CanWatchProgramFileDirectory(dir) {
+	if !desiredDirs.Covered(dir) {
 		desiredDirs.Set(dir, false)
 	}
 }

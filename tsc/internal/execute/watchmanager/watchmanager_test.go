@@ -183,3 +183,18 @@ func TestResolveDesiredDirsAncestorFallback(t *testing.T) {
 
 	assert.DeepEqual(t, resolved, map[string]bool{"/repo/a/b/c": false})
 }
+
+// TestResolveDesiredDirsSkipsNonDiskPaths verifies that a directory that is not on disk, such as the embedded libs
+// (bundled:///libs), is never watched, even though the wrapped FS reports that it exists.
+func TestResolveDesiredDirsSkipsNonDiskPaths(t *testing.T) {
+	t.Parallel()
+
+	wm := NewWatchManager(io.Discard, func(dir string) bool { return true })
+
+	resolved := wm.ResolveDesiredDirs(map[string]bool{
+		"bundled:///libs": false,
+		"/app":            true,
+	})
+
+	assert.DeepEqual(t, resolved, map[string]bool{"/app": true})
+}
