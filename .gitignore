@@ -139,3 +139,6 @@ tools/gotestsum.exe.hash
 !packages/typescript/vendor/**/*.txt
 !tsc/testdata/submoduleAccepted.txt
 !tsc/testdata/submoduleTriaged.txt
+
+
+NOTES.md
