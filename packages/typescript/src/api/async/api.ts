@@ -59,7 +59,6 @@ import {
     toPath,
 } from "../path.ts";
 import type {
-    BuildOrchestratorOptions,
     BuildResponse,
     CleanBuildResponse,
     CompilerOptions,
@@ -1900,6 +1899,22 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     getProject(): Project<Id> {
         return this.project;
     }
+}
+
+export interface BuildOrchestratorOptions {
+    cwd?: string | undefined;
+    dry?: boolean;
+    force?: boolean;
+    verbose?: boolean;
+    stopBuildOnErrors?: boolean;
+    incremental?: boolean;
+    assumeChangesOnlyAffectDirectDependencies?: boolean;
+    declaration?: boolean;
+    declarationMap?: boolean;
+    emitDeclarationOnly?: boolean;
+    sourceMap?: boolean;
+    inlineSourceMap?: boolean;
+    traceResolution?: boolean;
 }
 
 export class BuildOrchestrator {

@@ -896,12 +896,9 @@ type ProfileResult struct {
 }
 
 type CreateBuildOrchestratorParams struct {
-	BuildOrchestratorOptions `json:"buildOrchestratorOptions"`
-	RootNames                []string `json:"rootNames"`
-}
-
-type BuildOrchestratorOptions struct {
-	Cwd                   string `json:"cwd,omitempty"`
+	RootNames []string `json:"rootNames"`
+	Cwd       string   `json:"cwd,omitempty"`
+	// Only a subset of these options are exposed  the API
 	*core.BuildOptions    `json:"buildOptions,omitempty"`
 	*core.CompilerOptions `json:"compilerOptions,omitempty"`
 }

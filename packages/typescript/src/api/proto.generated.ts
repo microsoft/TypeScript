@@ -263,8 +263,9 @@ export interface GetCurrentLanguageServerSnapshotParams {
     changes?: LanguageServerSnapshotChanges | undefined;
 }
 
-export interface CreateBuildOrchestratorParams extends BuildOrchestratorOptions {
+export interface CreateBuildOrchestratorParams extends BuildOptions, CompilerOptions {
     rootNames: readonly string[] | null;
+    cwd?: string | undefined;
 }
 
 export interface CreateBuildOrchestratorResponse {
@@ -1530,14 +1531,14 @@ export interface SnapshotOperationResponse {
 export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams {
 }
 
-export interface BuildOrchestratorOptions extends BuildOptions, CompilerOptions {
-    cwd?: string | undefined;
-}
-
-export interface Statistics {
-    Projects: number;
-    ProjectsBuilt: number;
-    TimestampUpdates: number;
+export interface BuildOptions {
+    dry?: boolean | undefined;
+    force?: boolean | undefined;
+    verbose?: boolean | undefined;
+    builders?: number | undefined;
+    stopBuildOnErrors?: boolean | undefined;
+    /** Internal fields */
+    clean?: boolean | undefined;
 }
 
 /** CompilerOptions contains the compiler options exposed by the API. */
@@ -1648,19 +1649,15 @@ export interface CompilerOptions {
     configFilePath?: string | undefined;
 }
 
+export interface Statistics {
+    Projects: number;
+    ProjectsBuilt: number;
+    TimestampUpdates: number;
+}
+
 export interface ModuleResolutionSpec {
     fallback: "resolve" | "unresolved";
     entries: ModuleResolutionEntry[];
-}
-
-export interface BuildOptions {
-    dry?: boolean | undefined;
-    force?: boolean | undefined;
-    verbose?: boolean | undefined;
-    builders?: number | undefined;
-    stopBuildOnErrors?: boolean | undefined;
-    /** Internal fields */
-    clean?: boolean | undefined;
 }
 
 export interface WatchOptions {

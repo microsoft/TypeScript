@@ -1705,7 +1705,7 @@ func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildP
 }
 
 func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
-	currentDirectory := params.BuildOrchestratorOptions.Cwd
+	currentDirectory := params.Cwd
 	if currentDirectory == "" {
 		currentDirectory = s.GetCurrentDirectory()
 	}
