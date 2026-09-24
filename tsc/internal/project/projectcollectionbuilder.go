@@ -480,6 +480,16 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		return true
 	})
 
+	// Handle opened file
+	if summary.Opened != "" || summary.Reopened != "" {
+		fileName := core.FirstNonZero(summary.Opened, summary.Reopened).FileName()
+		path := b.toPathKey(fileName)
+		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
+		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
+	}
+}
+
+func (b *ProjectCollectionBuilder) DidChangeTypingsWatchInputs(summary FileChangeSummary, logger *logging.LogTree) {
 	b.forEachProject(func(entry dirty.Value[*Project]) bool {
 		projectID := entry.Value().ID()
 		if entry.ChangeIf(
@@ -488,7 +498,6 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 					summary,
 					project.installedTypingsFilesToWatch,
 					project.typingsFiles,
-					b.sessionOptions.TypingsLocation,
 					b.fs.fs.CaseSensitivity(),
 				)
 			},
@@ -508,18 +517,9 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		summary,
 		b.inferredProjectATAState.installedTypingsFilesToWatch,
 		b.inferredProjectATAState.typingsFiles,
-		b.sessionOptions.TypingsLocation,
 		b.fs.fs.CaseSensitivity(),
 	) {
 		b.invalidateInferredProjectATAState("typings watch changes", logger)
-	}
-
-	// Handle opened file
-	if summary.Opened != "" || summary.Reopened != "" {
-		fileName := core.FirstNonZero(summary.Opened, summary.Reopened).FileName()
-		path := b.toPathKey(fileName)
-		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
-		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
 	}
 }
 
@@ -527,7 +527,6 @@ func fileChangeSummaryAffectsTypingsWatch(
 	summary FileChangeSummary,
 	filesToWatch []tspath.RootedPath,
 	typingsFiles []tspath.RootedFilePath,
-	typingsLocation tspath.RootedDirectoryPath,
 	caseSensitivity tspath.CaseSensitivity,
 ) bool {
 	if summary.InvalidateAll {
@@ -539,8 +538,9 @@ func fileChangeSummaryAffectsTypingsWatch(
 	affectsWatch := func(uri lsproto.DocumentUri) bool {
 		fileName := uri.FileName().AsPath()
 		return slices.ContainsFunc(slices.Concat(filesToWatch, core.Map(typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })), func(watchedPath tspath.RootedPath) bool {
-			if caseSensitivity.PathKey(watchedPath) == caseSensitivity.PathKey(fileName) ||
-				caseSensitivity.PathKey(watchedPath).ContainsPath(caseSensitivity.PathKey(fileName)) {
+			watchedPathKey := caseSensitivity.PathKey(watchedPath)
+			fileNameKey := caseSensitivity.PathKey(fileName)
+			if watchedPathKey == fileNameKey || watchedPathKey.ContainsPath(fileNameKey) {
 				return true
 			}
 			switch watchedPath.BaseName() {
@@ -550,7 +550,7 @@ func fileChangeSummaryAffectsTypingsWatch(
 				return caseSensitivity.ComparePaths(watchedPath.Directory().ResolveFile("bower.json").AsPath(), fileName) == 0
 			}
 			return false
-		}) || typingsLocation != "" && caseSensitivity.ContainsPath(typingsLocation, fileName)
+		})
 	}
 	for uri := range summary.Changed.Keys() {
 		if affectsWatch(uri) {
@@ -1039,7 +1039,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				p.installedTypingsSnapshotID = ataChange.SnapshotID
 				p.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
 				p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
-				p.typingsFiles = ataChange.TypingsFiles
+				p.setTypingsFiles(ataChange.TypingsFiles)
 				typingsWatchGlobs := getTypingsLocationsGlobs(
 					slices.Concat(ataChange.TypingsFilesToWatch, core.Map(ataChange.TypingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
 					b.sessionOptions.TypingsLocation,
@@ -1065,7 +1065,6 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 			fileChanges,
 			slices.Concat(ataChange.TypingsFilesToWatch, core.Map(ataChange.FileNames, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
 			ataChange.TypingsFiles,
-			b.sessionOptions.TypingsLocation,
 			b.fs.fs.CaseSensitivity(),
 		) {
 			b.invalidateProjectATAState(projectID)
