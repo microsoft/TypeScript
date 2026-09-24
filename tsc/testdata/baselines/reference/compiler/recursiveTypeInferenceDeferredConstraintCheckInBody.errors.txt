@@ -1,7 +1,7 @@
 recursiveTypeInferenceDeferredConstraintCheckInBody.ts(55,75): error TS2322: Type 'number' is not assignable to type 'string'.
 recursiveTypeInferenceDeferredConstraintCheckInBody.ts(60,70): error TS2322: Type 'number' is not assignable to type 'string'.
 recursiveTypeInferenceDeferredConstraintCheckInBody.ts(65,14): error TS2322: Type 'number' is not assignable to type 'string'.
-recursiveTypeInferenceDeferredConstraintCheckInBody.ts(68,60): error TS2345: Argument of type '[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]' is not assignable to parameter of type 'readonly [$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ...$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>[]]'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(68,66): error TS2345: Argument of type '[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]' is not assignable to parameter of type 'readonly [$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ...$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>[]]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type '$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>'.
 recursiveTypeInferenceDeferredConstraintCheckInBody.ts(73,14): error TS2322: Type 'number' is not assignable to type 'string'.
@@ -86,7 +86,7 @@ recursiveTypeInferenceDeferredConstraintCheckInBody.ts(76,60): error TS2615: Typ
     
     // (4) A violated constraint inside the accessor body is still reported, after the accessor has been checked.
     const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); } });
-                                                               ~~~~~~~~~~~~~~~~~~
+                                                                     ~~~~~~~~~~~
 !!! error TS2345: Argument of type '[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]' is not assignable to parameter of type 'readonly [$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ...$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>[]]'.
 !!! error TS2345:   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2345:     Type 'number' is not assignable to type '$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>'.

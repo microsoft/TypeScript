@@ -11,9 +11,16 @@ recursiveTypeInferenceDeferredConstraintCheck.ts(67,17): error TS2345: Argument 
     Type 'number' is not assignable to type 'string'.
 recursiveTypeInferenceDeferredConstraintCheck.ts(71,10): error TS2322: Type 'number' is not assignable to type 'string'.
 recursiveTypeInferenceDeferredConstraintCheck.ts(75,75): error TS2554: Expected 2 arguments, but got 3.
+recursiveTypeInferenceDeferredConstraintCheck.ts(78,33): error TS2345: Argument of type '{ readonly y: number; }' is not assignable to parameter of type '{ y: string; }'.
+  Types of property 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheck.ts(98,20): error TS2345: Argument of type 'Box<{ readonly y: number; }>' is not assignable to parameter of type 'Box<{ y: string; }>'.
+  Type '{ readonly y: number; }' is not assignable to type '{ y: string; }'.
+    Types of property 'y' are incompatible.
+      Type 'number' is not assignable to type 'string'.
 
 
-==== recursiveTypeInferenceDeferredConstraintCheck.ts (9 errors) ====
+==== recursiveTypeInferenceDeferredConstraintCheck.ts (11 errors) ====
     // When the inferred type argument of a single-candidate call is an object literal with un-annotated accessors, its
     // constraint check is deferred until the accessors have been checked. The accessor bodies are therefore never
     // resolved while the enclosing declaration is unresolved, so no re-entrant call resolution takes place.
@@ -112,4 +119,36 @@ recursiveTypeInferenceDeferredConstraintCheck.ts(75,75): error TS2554: Expected 
     const F = { get f() { return fixedRest("oops", { get y() { return 1; } }, "extra"); } }; // error
                                                                               ~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 3.
+    
+    // (10) A call inside a class accessor body defers the same way.
+    class K { get a() { return wrap(lit); } } // error
+                                    ~~~
+!!! error TS2345: Argument of type '{ readonly y: number; }' is not assignable to parameter of type '{ y: string; }'.
+!!! error TS2345:   Types of property 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    const ka = new K().a;
+    
+    // (11) The walk covers union constituents.
+    declare function wrapSchema<T extends Schema<any>>(t: T): Schema<T["out"]>;
+    declare const flag: boolean;
+    const Alt = object({
+      name: str,
+      get alt() { return wrapSchema(flag ? Alt : str); },
+    });
+    const alt: Alt["out"]["alt"] = "x";
+    type Alt = typeof Alt;
+    
+    // (12) A call resolved first from inside another accessor's body gets the same result as one resolved from the top level, since only an accessor that is being resolved defers.
+    interface Box<T> { v: T }
+    declare function box<T>(t: T): Box<T>;
+    declare function wrapBox<T extends Box<{ y: string }>>(t: T): { w: T };
+    const boxed = box(lit);
+    const g = { get z() { return w3; } };
+    g.z;
+    const w3 = wrapBox(boxed); // error
+                       ~~~~~
+!!! error TS2345: Argument of type 'Box<{ readonly y: number; }>' is not assignable to parameter of type 'Box<{ y: string; }>'.
+!!! error TS2345:   Type '{ readonly y: number; }' is not assignable to type '{ y: string; }'.
+!!! error TS2345:     Types of property 'y' are incompatible.
+!!! error TS2345:       Type 'number' is not assignable to type 'string'.
     

@@ -337,3 +337,98 @@ const F = { get f() { return fixedRest("oops", { get y() { return 1; } }, "extra
 >fixedRest : Symbol(fixedRest, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 70, 42))
 >y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 74, 48))
 
+// (10) A call inside a class accessor body defers the same way.
+class K { get a() { return wrap(lit); } } // error
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 74, 88))
+>a : Symbol(K.a, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 77, 9))
+>wrap : Symbol(wrap, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 62, 38))
+>lit : Symbol(lit, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 62, 5))
+
+const ka = new K().a;
+>ka : Symbol(ka, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 78, 5))
+>new K().a : Symbol(K.a, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 77, 9))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 74, 88))
+>a : Symbol(K.a, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 77, 9))
+
+// (11) The walk covers union constituents.
+declare function wrapSchema<T extends Schema<any>>(t: T): Schema<T["out"]>;
+>wrapSchema : Symbol(wrapSchema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 78, 21))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 81, 28))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 81, 51))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 81, 28))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 81, 28))
+
+declare const flag: boolean;
+>flag : Symbol(flag, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 82, 13))
+
+const Alt = object({
+>Alt : Symbol(Alt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 83, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 87, 35))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 78))
+
+  name: str,
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 83, 20))
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+
+  get alt() { return wrapSchema(flag ? Alt : str); },
+>alt : Symbol(alt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 84, 12))
+>wrapSchema : Symbol(wrapSchema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 78, 21))
+>flag : Symbol(flag, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 82, 13))
+>Alt : Symbol(Alt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 83, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 87, 35))
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+
+});
+const alt: Alt["out"]["alt"] = "x";
+>alt : Symbol(alt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 87, 5))
+>Alt : Symbol(Alt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 83, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 87, 35))
+
+type Alt = typeof Alt;
+>Alt : Symbol(Alt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 83, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 87, 35))
+>Alt : Symbol(Alt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 83, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 87, 35))
+
+// (12) A call resolved first from inside another accessor's body gets the same result as one resolved from the top level, since only an accessor that is being resolved defers.
+interface Box<T> { v: T }
+>Box : Symbol(Box, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 88, 22))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 91, 14))
+>v : Symbol(Box.v, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 91, 18))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 91, 14))
+
+declare function box<T>(t: T): Box<T>;
+>box : Symbol(box, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 91, 25))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 92, 21))
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 92, 24))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 92, 21))
+>Box : Symbol(Box, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 88, 22))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 92, 21))
+
+declare function wrapBox<T extends Box<{ y: string }>>(t: T): { w: T };
+>wrapBox : Symbol(wrapBox, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 92, 38))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 93, 25))
+>Box : Symbol(Box, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 88, 22))
+>y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 93, 40))
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 93, 55))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 93, 25))
+>w : Symbol(w, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 93, 63))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 93, 25))
+
+const boxed = box(lit);
+>boxed : Symbol(boxed, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 94, 5))
+>box : Symbol(box, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 91, 25))
+>lit : Symbol(lit, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 62, 5))
+
+const g = { get z() { return w3; } };
+>g : Symbol(g, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 95, 5))
+>z : Symbol(z, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 95, 11))
+>w3 : Symbol(w3, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 97, 5))
+
+g.z;
+>g.z : Symbol(z, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 95, 11))
+>g : Symbol(g, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 95, 5))
+>z : Symbol(z, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 95, 11))
+
+const w3 = wrapBox(boxed); // error
+>w3 : Symbol(w3, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 97, 5))
+>wrapBox : Symbol(wrapBox, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 92, 38))
+>boxed : Symbol(boxed, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 94, 5))
+

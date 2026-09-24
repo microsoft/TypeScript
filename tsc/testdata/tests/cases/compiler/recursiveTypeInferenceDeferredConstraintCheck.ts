@@ -76,3 +76,26 @@ ni({ get y() { return 1; } }, { y: "s" }); // error on the accessor
 // (9) The arity of a candidate with a generic rest parameter is checked again after the re-inference.
 declare function fixedRest<T extends [{ y: string }]>(n: number, ...ts: T): T;
 const F = { get f() { return fixedRest("oops", { get y() { return 1; } }, "extra"); } }; // error
+
+// (10) A call inside a class accessor body defers the same way.
+class K { get a() { return wrap(lit); } } // error
+const ka = new K().a;
+
+// (11) The walk covers union constituents.
+declare function wrapSchema<T extends Schema<any>>(t: T): Schema<T["out"]>;
+declare const flag: boolean;
+const Alt = object({
+  name: str,
+  get alt() { return wrapSchema(flag ? Alt : str); },
+});
+const alt: Alt["out"]["alt"] = "x";
+type Alt = typeof Alt;
+
+// (12) A call resolved first from inside another accessor's body gets the same result as one resolved from the top level, since only an accessor that is being resolved defers.
+interface Box<T> { v: T }
+declare function box<T>(t: T): Box<T>;
+declare function wrapBox<T extends Box<{ y: string }>>(t: T): { w: T };
+const boxed = box(lit);
+const g = { get z() { return w3; } };
+g.z;
+const w3 = wrapBox(boxed); // error

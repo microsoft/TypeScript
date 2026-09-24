@@ -1384,8 +1384,8 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 				// unresolved, which is a circularity for self-referential literals (#64192). The check runs after the
 				// deferred nodes of the file, by which time the accessor has been checked. A pure return type inference
 				// is not deferred, since its constraint check also filters the inferred type.
-				if !slices.Contains(n.deferredConstraintChecks, index) {
-					n.deferredConstraintChecks = append(n.deferredConstraintChecks, index)
+				if !slices.ContainsFunc(n.deferredConstraintChecks, func(d deferredInference) bool { return d.index == index }) {
+					n.deferredConstraintChecks = append(n.deferredConstraintChecks, deferredInference{index: index, constraint: instantiatedConstraint})
 				}
 			} else if inferredType != nil && n.flags&InferenceFlagsNoConstraintChecks == 0 {
 				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)

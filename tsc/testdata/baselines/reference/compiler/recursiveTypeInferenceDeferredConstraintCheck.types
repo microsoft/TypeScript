@@ -315,3 +315,91 @@ const F = { get f() { return fixedRest("oops", { get y() { return 1; } }, "extra
 >1 : 1
 >"extra" : "extra"
 
+// (10) A call inside a class accessor body defers the same way.
+class K { get a() { return wrap(lit); } } // error
+>K : K
+>a : { w: { readonly y: number; }; }
+>wrap(lit) : { w: { readonly y: number; }; }
+>wrap : <T extends { y: string; }>(t: T) => { w: T; }
+>lit : { readonly y: number; }
+
+const ka = new K().a;
+>ka : { w: { readonly y: number; }; }
+>new K().a : { w: { readonly y: number; }; }
+>new K() : K
+>K : typeof K
+>a : { w: { readonly y: number; }; }
+
+// (11) The walk covers union constituents.
+declare function wrapSchema<T extends Schema<any>>(t: T): Schema<T["out"]>;
+>wrapSchema : <T extends Schema<any>>(t: T) => Schema<T["out"]>
+>t : T
+
+declare const flag: boolean;
+>flag : boolean
+
+const Alt = object({
+>Alt : Schema<Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+>object({  name: str,  get alt() { return wrapSchema(flag ? Alt : str); },}) : Schema<Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>{  name: str,  get alt() { return wrapSchema(flag ? Alt : str); },} : { name: Schema<string>; readonly alt: Schema<string | Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>; }
+
+  name: str,
+>name : Schema<string>
+>str : Schema<string>
+
+  get alt() { return wrapSchema(flag ? Alt : str); },
+>alt : Schema<string | Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+>wrapSchema(flag ? Alt : str) : Schema<string | Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+>wrapSchema : <T extends Schema<any>>(t: T) => Schema<T["out"]>
+>flag ? Alt : str : Schema<string> | Schema<Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+>flag : boolean
+>Alt : Schema<Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+>str : Schema<string>
+
+});
+const alt: Alt["out"]["alt"] = "x";
+>alt : string | Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>
+>"x" : "x"
+
+type Alt = typeof Alt;
+>Alt : Schema<Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+>Alt : Schema<Infer<{ name: Schema<string>; readonly alt: Schema<string | Infer<any>>; }>>
+
+// (12) A call resolved first from inside another accessor's body gets the same result as one resolved from the top level, since only an accessor that is being resolved defers.
+interface Box<T> { v: T }
+>v : T
+
+declare function box<T>(t: T): Box<T>;
+>box : <T>(t: T) => Box<T>
+>t : T
+
+declare function wrapBox<T extends Box<{ y: string }>>(t: T): { w: T };
+>wrapBox : <T extends Box<{ y: string; }>>(t: T) => { w: T; }
+>y : string
+>t : T
+>w : T
+
+const boxed = box(lit);
+>boxed : Box<{ readonly y: number; }>
+>box(lit) : Box<{ readonly y: number; }>
+>box : <T>(t: T) => Box<T>
+>lit : { readonly y: number; }
+
+const g = { get z() { return w3; } };
+>g : { readonly z: { w: Box<{ y: string; }>; }; }
+>{ get z() { return w3; } } : { readonly z: { w: Box<{ y: string; }>; }; }
+>z : { w: Box<{ y: string; }>; }
+>w3 : { w: Box<{ y: string; }>; }
+
+g.z;
+>g.z : { w: Box<{ y: string; }>; }
+>g : { readonly z: { w: Box<{ y: string; }>; }; }
+>z : { w: Box<{ y: string; }>; }
+
+const w3 = wrapBox(boxed); // error
+>w3 : { w: Box<{ y: string; }>; }
+>wrapBox(boxed) : { w: Box<{ y: string; }>; }
+>wrapBox : <T extends Box<{ y: string; }>>(t: T) => { w: T; }
+>boxed : Box<{ readonly y: number; }>
+
