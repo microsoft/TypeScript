@@ -1932,7 +1932,7 @@ ${entries}
  * @typedef {"Microsoft400" | "LinuxSign" | "MacDeveloperHarden" | "8020" | "VSCodePublisher"} Cert
  * @typedef {`${OS | "alpine"}-${Exclude<Arch, "arm"> | "armhf"}`} VSCodeTarget
  * @typedef {{ name: string; sourceDir: string }} VsixExtensionPackage
- * @typedef {{ nodeOs: string; vscodeTarget: string; sourceDir: string; extensionDir: string; vsixPath: string; vsixManifestPath: string; vsixSignaturePath: string }} VsixExtension
+ * @typedef {{ nodeOs?: string; vscodeTarget: VSCodeTarget | "web"; sourceDir: string; extensionDir: string; vsixPath: string; vsixManifestPath: string; vsixSignaturePath: string }} VsixExtension
  * @typedef {{ GOOS: string; GOARCH: string }} GoDistTarget
  * @typedef {{ os: OS; arch: Arch; cert?: Cert; vsix?: boolean; alpine?: boolean }} Platform
  */
@@ -1943,6 +1943,36 @@ const vsixExtensionPackages = [
     ...(produceNativePreviewVsix ? [{ name: "native-preview", sourceDir: extensionDir }] : []),
     ...(produceTypeScriptNightlyVsix ? [{ name: "vscode-typescript-nightly", sourceDir: nightlyExtensionDir }] : []),
 ];
+
+/**
+ * @param {string} packageName
+ * @param {string} sourceDir
+ * @param {VSCodeTarget | "web"} vscodeTarget
+ * @param {string} [nodeOs]
+ * @returns {VsixExtension}
+ */
+function createVsixExtension(packageName, sourceDir, vscodeTarget, nodeOs) {
+    const extensionDir = path.join(builtVsix, `${packageName}-${vscodeTarget}`);
+    return {
+        nodeOs,
+        vscodeTarget,
+        sourceDir,
+        extensionDir,
+        vsixPath: extensionDir + ".vsix",
+        vsixManifestPath: extensionDir + ".manifest",
+        vsixSignaturePath: extensionDir + ".signature.p7s",
+    };
+}
+
+function getLocalWebVsixExtensions() {
+    if (options.forRelease) {
+        return [];
+    }
+    return [
+        createVsixExtension("native-preview", extensionDir, "web"),
+        createVsixExtension("vscode-typescript-nightly", nightlyExtensionDir, "web"),
+    ];
+}
 
 /**
  * npm package platforms supported by the native release.
@@ -2073,23 +2103,7 @@ const getPlatforms = memoize(() => {
                 vscodeTargets.push(`alpine-${arch === "arm" ? "armhf" : arch}`);
             }
 
-            extensions = vscodeTargets.flatMap(vscodeTarget =>
-                vsixExtensionPackages.map(({ name: packageName, sourceDir }) => {
-                    const extensionDir = path.join(builtVsix, `${packageName}-${vscodeTarget}`);
-                    const vsixPath = extensionDir + ".vsix";
-                    const vsixManifestPath = extensionDir + ".manifest";
-                    const vsixSignaturePath = extensionDir + ".signature.p7s";
-                    return {
-                        nodeOs: os,
-                        vscodeTarget,
-                        sourceDir,
-                        extensionDir,
-                        vsixPath,
-                        vsixManifestPath,
-                        vsixSignaturePath,
-                    };
-                })
-            );
+            extensions = vscodeTargets.flatMap(vscodeTarget => vsixExtensionPackages.map(({ name: packageName, sourceDir }) => createVsixExtension(packageName, sourceDir, vscodeTarget, os)));
         }
 
         return {
@@ -2833,7 +2847,15 @@ async function runPackVsixExtensions() {
     }
 
     const platforms = getPlatforms();
-    const extensions = platforms.flatMap(({ npmDir, npmPackageName, extensions }) => extensions.map(e => ({ npmDir, npmPackageName, ...e })));
+    const localPlatform = !options.forRelease ? platforms[0] : undefined;
+    const extensions = [
+        ...platforms.flatMap(({ npmDir, npmPackageName, extensions }) => extensions.map(e => ({ npmDir, npmPackageName, ...e }))),
+        ...getLocalWebVsixExtensions().map(e => ({
+            npmDir: localPlatform?.npmDir,
+            npmPackageName: localPlatform?.npmPackageName,
+            ...e,
+        })),
+    ];
     if (!extensions.length) {
         console.log("No VSIX targets configured; skipping extension packaging.");
         return;
@@ -2841,6 +2863,9 @@ async function runPackVsixExtensions() {
 
     // We don't use vscode:prepublish, as that would run the build for each package below.
     await run("npm", ["run", "bundle:release"], { cwd: extensionDir, env: releasePackageEnv });
+    if (extensions.some(extension => extension.vscodeTarget === "web")) {
+        await run("npm", ["run", "bundle:release:web"], { cwd: extensionDir, env: releasePackageEnv });
+    }
 
     let version = "0.0.0";
     if (options.forRelease) {
@@ -2866,20 +2891,50 @@ async function runPackVsixExtensions() {
     console.log("Version:", version);
 
     await Promise.all(extensions.map(async ({ npmDir, npmPackageName, nodeOs, vscodeTarget, sourceDir, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
-        const npmLibDir = usePublishedPlatformPackagesForVsix
-            ? await getPublishedPlatformPackageLibDir(npmPackageName)
-            : path.join(npmDir, "lib");
-        const extensionLibDir = path.join(thisExtensionDir, "lib");
-        await fs.promises.mkdir(extensionLibDir, { recursive: true });
-
         await cpWithoutNodeModulesOrTsconfig(sourceDir, thisExtensionDir);
-        await cpWithoutNodeModulesOrTsconfig(npmLibDir, extensionLibDir);
-        await fs.promises.chmod(path.join(extensionLibDir, nativePreviewExeName(nodeOs)), 0o755);
+        if (vscodeTarget === "web") {
+            assert(npmDir);
+            const npmLibDir = path.join(npmDir, "lib");
+            const extensionLibDir = path.join(thisExtensionDir, "lib");
+            await cpRecursive(npmLibDir, extensionLibDir, path => path === npmLibDir || path.endsWith(".d.ts"));
+            if (sourceDir === nightlyExtensionDir) {
+                const wasmDir = path.join(thisExtensionDir, "dist");
+                await fs.promises.mkdir(wasmDir, { recursive: true });
+                await fs.promises.copyFile(path.join(extensionDir, "dist", "tsc.wasm"), path.join(wasmDir, "tsc.wasm"));
+            }
+        }
+        else {
+            assert(npmDir);
+            assert(npmPackageName);
+            assert(nodeOs);
+            const npmLibDir = usePublishedPlatformPackagesForVsix
+                ? await getPublishedPlatformPackageLibDir(npmPackageName)
+                : path.join(npmDir, "lib");
+            const extensionLibDir = path.join(thisExtensionDir, "lib");
+            await fs.promises.mkdir(extensionLibDir, { recursive: true });
+            await cpWithoutNodeModulesOrTsconfig(npmLibDir, extensionLibDir);
+            await fs.promises.chmod(path.join(extensionLibDir, nativePreviewExeName(nodeOs)), 0o755);
+        }
 
         const packageJsonPath = path.join(thisExtensionDir, "package.json");
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
         packageJson.version = version;
         packageJson.bundledTypeScriptVersion = usePublishedPlatformPackagesForVsix ? getPublishedTypeScriptVersion() : getVersion();
+        if (vscodeTarget === "web") {
+            delete packageJson.main;
+            packageJson.files = (packageJson.files ?? []).filter(file => file !== "dist/extension.bundle.js");
+            if (sourceDir === nightlyExtensionDir) {
+                packageJson.files.push("dist/tsc.wasm");
+            }
+            else {
+                packageJson.browser = "./dist/extension.web.bundle.js";
+                packageJson.extensionDependencies = [
+                    ...(packageJson.extensionDependencies ?? []),
+                    "ms-vscode.wasm-wasi-core",
+                ];
+                packageJson.files.push("dist/extension.web.bundle.js", "dist/tsc.wasm");
+            }
+        }
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 4));
 
         await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));
