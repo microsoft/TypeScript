@@ -27,6 +27,8 @@ type TypingsInfo struct {
 func (ti TypingsInfo) Equals(other TypingsInfo) bool {
 	return ti.TypeAcquisition.Equals(other.TypeAcquisition) &&
 		ti.CompilerOptions.GetAllowJS() == other.CompilerOptions.GetAllowJS() &&
+		(ti.CompilerOptions.Types == nil) == (other.CompilerOptions.Types == nil) &&
+		slices.Equal(ti.CompilerOptions.Types, other.CompilerOptions.Types) &&
 		ti.UnresolvedImports.Equals(other.UnresolvedImports)
 }
 
