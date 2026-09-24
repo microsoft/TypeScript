@@ -37,5 +37,8 @@ export declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
 export declare function array<T extends Schema<any>>(el: T): Schema<T["out"][]>;
 export declare function string(): Schema<string>;
 export declare function lazy<T extends Schema<any>>(fn: () => T): T;
-export declare const Category: any;
+export declare const Category: Schema<Infer<{
+    name: Schema<string>;
+    subcategories: Schema<Infer</*elided*/ any>[]>;
+}>>;
 export {};

@@ -36,10 +36,10 @@ declare function map<T>(cb: (v: number) => T): T;
 
 // A callback passed as the whole argument of a call that initializes a property.
 const Category = object({
->Category : any
->object({    name: string(),    subcategories: lazy(() => array(Category)),}) : Schema<Infer<{ name: Schema<string>; subcategories: any; }>>
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
+>object({    name: string(),    subcategories: lazy(() => array(Category)),}) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{    name: string(),    subcategories: lazy(() => array(Category)),} : { name: Schema<string>; subcategories: any; }
+>{    name: string(),    subcategories: lazy(() => array(Category)),} : { name: Schema<string>; subcategories: Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>; }
 
     name: string(),
 >name : Schema<string>
@@ -47,18 +47,18 @@ const Category = object({
 >string : () => Schema<string>
 
     subcategories: lazy(() => array(Category)),
->subcategories : any
->lazy(() => array(Category)) : any
+>subcategories : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>lazy(() => array(Category)) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => array(Category) : () => any
->array(Category) : Schema<any[]>
+>() => array(Category) : () => Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>array(Category) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->Category : any
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
 
 });
 const ok: (typeof Category)["out"] = { name: "x", subcategories: [{ name: "y", subcategories: [] }] };
->ok : any
->Category : any
+>ok : Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
 >{ name: "x", subcategories: [{ name: "y", subcategories: [] }] } : { name: string; subcategories: { name: string; subcategories: never[]; }[]; }
 >name : string
 >"x" : "x"
@@ -71,8 +71,8 @@ const ok: (typeof Category)["out"] = { name: "x", subcategories: [{ name: "y", s
 >[] : never[]
 
 const bad: (typeof Category)["out"] = { name: "x", subcategories: [{ name: 1, subcategories: [] }] };
->bad : any
->Category : any
+>bad : Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
 >{ name: "x", subcategories: [{ name: 1, subcategories: [] }] } : { name: string; subcategories: { name: number; subcategories: never[]; }[]; }
 >name : string
 >"x" : "x"
@@ -86,10 +86,10 @@ const bad: (typeof Category)["out"] = { name: "x", subcategories: [{ name: 1, su
 
 // Nested call and a chained call.
 const Tree = object({
->Tree : any
->object({    id: string(),    children: array(lazy(() => Tree)),    parent: lazy(() => Tree).optional(),}) : Schema<Infer<{ id: Schema<string>; children: Schema<any[]>; parent: any; }>>
+>Tree : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
+>object({    id: string(),    children: array(lazy(() => Tree)),    parent: lazy(() => Tree).optional(),}) : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{    id: string(),    children: array(lazy(() => Tree)),    parent: lazy(() => Tree).optional(),} : { id: Schema<string>; children: Schema<any[]>; parent: any; }
+>{    id: string(),    children: array(lazy(() => Tree)),    parent: lazy(() => Tree).optional(),} : { id: Schema<string>; children: Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>[]>; parent: Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }> | undefined>; }
 
     id: string(),
 >id : Schema<string>
@@ -97,28 +97,28 @@ const Tree = object({
 >string : () => Schema<string>
 
     children: array(lazy(() => Tree)),
->children : Schema<any[]>
->array(lazy(() => Tree)) : Schema<any[]>
+>children : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>[]>
+>array(lazy(() => Tree)) : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->lazy(() => Tree) : any
+>lazy(() => Tree) : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => Tree : () => any
->Tree : any
+>() => Tree : () => Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
+>Tree : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
 
     parent: lazy(() => Tree).optional(),
->parent : any
->lazy(() => Tree).optional() : any
->lazy(() => Tree).optional : any
->lazy(() => Tree) : any
+>parent : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }> | undefined>
+>lazy(() => Tree).optional() : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }> | undefined>
+>lazy(() => Tree).optional : () => Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }> | undefined>
+>lazy(() => Tree) : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => Tree : () => any
->Tree : any
->optional : any
+>() => Tree : () => Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
+>Tree : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
+>optional : () => Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }> | undefined>
 
 });
 const tree: (typeof Tree)["out"] = { id: "a", children: [], parent: { id: "b", children: [], parent: undefined } };
->tree : any
->Tree : any
+>tree : Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>
+>Tree : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
 >{ id: "a", children: [], parent: { id: "b", children: [], parent: undefined } } : { id: string; children: never[]; parent: { id: string; children: never[]; parent: undefined; }; }
 >id : string
 >"a" : "a"
@@ -134,8 +134,8 @@ const tree: (typeof Tree)["out"] = { id: "a", children: [], parent: { id: "b", c
 >undefined : undefined
 
 const wrongTree: (typeof Tree)["out"] = { id: "a", children: [{ id: 1, children: [], parent: undefined }], parent: undefined };
->wrongTree : any
->Tree : any
+>wrongTree : Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>
+>Tree : Schema<Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>>
 >{ id: "a", children: [{ id: 1, children: [], parent: undefined }], parent: undefined } : { id: string; children: { id: number; children: never[]; parent: undefined; }[]; parent: undefined; }
 >id : string
 >"a" : "a"
@@ -153,38 +153,38 @@ const wrongTree: (typeof Tree)["out"] = { id: "a", children: [{ id: 1, children:
 
 // Mutual recursion.
 const User = object({ name: string(), posts: lazy(() => array(Post)) });
->User : any
->object({ name: string(), posts: lazy(() => array(Post)) }) : Schema<Infer<{ name: Schema<string>; posts: any; }>>
+>User : Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>
+>object({ name: string(), posts: lazy(() => array(Post)) }) : Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{ name: string(), posts: lazy(() => array(Post)) } : { name: Schema<string>; posts: any; }
+>{ name: string(), posts: lazy(() => array(Post)) } : { name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>[]>; }
 >name : Schema<string>
 >string() : Schema<string>
 >string : () => Schema<string>
->posts : any
->lazy(() => array(Post)) : any
+>posts : Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>[]>
+>lazy(() => array(Post)) : Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>[]>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => array(Post) : () => any
->array(Post) : Schema<any[]>
+>() => array(Post) : () => Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>[]>
+>array(Post) : Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->Post : any
+>Post : Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>>
 
 const Post = object({ title: string(), author: lazy(() => User) });
->Post : any
->object({ title: string(), author: lazy(() => User) }) : Schema<Infer<{ title: Schema<string>; author: any; }>>
+>Post : Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>>
+>object({ title: string(), author: lazy(() => User) }) : Schema<Infer<{ title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<any>[]>; }>>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{ title: string(), author: lazy(() => User) } : { title: Schema<string>; author: any; }
+>{ title: string(), author: lazy(() => User) } : { title: Schema<string>; author: Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>; }
 >title : Schema<string>
 >string() : Schema<string>
 >string : () => Schema<string>
->author : any
->lazy(() => User) : any
+>author : Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>
+>lazy(() => User) : Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => User : () => any
->User : any
+>() => User : () => Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>
+>User : Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>
 
 const user: (typeof User)["out"] = { name: "u", posts: [{ title: "t", author: { name: 1, posts: [] } }] };
->user : any
->User : any
+>user : Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>
+>User : Schema<Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>>
 >{ name: "u", posts: [{ title: "t", author: { name: 1, posts: [] } }] } : { name: string; posts: { title: string; author: { name: number; posts: never[]; }; }[]; }
 >name : string
 >"u" : "u"
@@ -202,10 +202,10 @@ const user: (typeof User)["out"] = { name: "u", posts: [{ title: "t", author: { 
 
 // A context-sensitive callback inside the call keeps its parameter type.
 const Self = object({
->Self : any
->object({    name: string(),    child: map((v) => (v.toFixed(), array(Self))),}) : Schema<Infer<{ name: Schema<string>; child: any; }>>
+>Self : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>>
+>object({    name: string(),    child: map((v) => (v.toFixed(), array(Self))),}) : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{    name: string(),    child: map((v) => (v.toFixed(), array(Self))),} : { name: Schema<string>; child: any; }
+>{    name: string(),    child: map((v) => (v.toFixed(), array(Self))),} : { name: Schema<string>; child: Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>[]>; }
 
     name: string(),
 >name : Schema<string>
@@ -213,29 +213,29 @@ const Self = object({
 >string : () => Schema<string>
 
     child: map((v) => (v.toFixed(), array(Self))),
->child : any
->map((v) => (v.toFixed(), array(Self))) : any
+>child : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>[]>
+>map((v) => (v.toFixed(), array(Self))) : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>[]>
 >map : <T>(cb: (v: number) => T) => T
->(v) => (v.toFixed(), array(Self)) : (v: number) => any
+>(v) => (v.toFixed(), array(Self)) : (v: number) => Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>[]>
 >v : number
->(v.toFixed(), array(Self)) : Schema<any[]>
->v.toFixed(), array(Self) : Schema<any[]>
+>(v.toFixed(), array(Self)) : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>[]>
+>v.toFixed(), array(Self) : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>[]>
 >v.toFixed() : string
 >v.toFixed : (fractionDigits?: number) => string
 >v : number
 >toFixed : (fractionDigits?: number) => string
->array(Self) : Schema<any[]>
+>array(Self) : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->Self : any
+>Self : Schema<Infer<{ name: Schema<string>; child: Schema<Infer<any>[]>; }>>
 
 });
 
 // Errors inside a lazily typed property are still reported.
 const Errors = object({
->Errors : any
->object({    name: string(),    a: lazy(() => { const n: number = "x"; return array(Errors); }),    b: lazy(() => array(Errors), 42),    c: lazy((v) => array(Errors)),}) : Schema<Infer<{ name: Schema<string>; a: any; b: Schema<any[]>; c: Schema<any>; }>>
+>Errors : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>>
+>object({    name: string(),    a: lazy(() => { const n: number = "x"; return array(Errors); }),    b: lazy(() => array(Errors), 42),    c: lazy((v) => array(Errors)),}) : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{    name: string(),    a: lazy(() => { const n: number = "x"; return array(Errors); }),    b: lazy(() => array(Errors), 42),    c: lazy((v) => array(Errors)),} : { name: Schema<string>; a: any; b: Schema<any[]>; c: Schema<any>; }
+>{    name: string(),    a: lazy(() => { const n: number = "x"; return array(Errors); }),    b: lazy(() => array(Errors), 42),    c: lazy((v) => array(Errors)),} : { name: Schema<string>; a: Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>; b: Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>; c: Schema<any>; }
 
     name: string(),
 >name : Schema<string>
@@ -243,35 +243,35 @@ const Errors = object({
 >string : () => Schema<string>
 
     a: lazy(() => { const n: number = "x"; return array(Errors); }),
->a : any
->lazy(() => { const n: number = "x"; return array(Errors); }) : any
+>a : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
+>lazy(() => { const n: number = "x"; return array(Errors); }) : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => { const n: number = "x"; return array(Errors); } : () => any
+>() => { const n: number = "x"; return array(Errors); } : () => Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
 >n : number
 >"x" : "x"
->array(Errors) : Schema<any[]>
+>array(Errors) : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->Errors : any
+>Errors : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>>
 
     b: lazy(() => array(Errors), 42),
->b : Schema<any[]>
->lazy(() => array(Errors), 42) : Schema<any[]>
+>b : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
+>lazy(() => array(Errors), 42) : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => array(Errors) : () => Schema<any[]>
->array(Errors) : Schema<any[]>
+>() => array(Errors) : () => Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
+>array(Errors) : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->Errors : any
+>Errors : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>>
 >42 : 42
 
     c: lazy((v) => array(Errors)),
 >c : Schema<any>
 >lazy((v) => array(Errors)) : Schema<any>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->(v) => array(Errors) : (v: any) => Schema<any[]>
+>(v) => array(Errors) : (v: any) => Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
 >v : any
->array(Errors) : Schema<any[]>
+>array(Errors) : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->Errors : any
+>Errors : Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>>
 
 });
 
@@ -316,10 +316,10 @@ declare function first<T>(x: T, fn: () => T): T;
 >fn : () => T
 
 const Eager = object({
->Eager : any
->object({    name: string(),    self: first(Eager, () => Eager),}) : Schema<Infer<{ name: Schema<string>; self: any; }>>
+>Eager : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>
+>object({    name: string(),    self: first(Eager, () => Eager),}) : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{    name: string(),    self: first(Eager, () => Eager),} : { name: Schema<string>; self: any; }
+>{    name: string(),    self: first(Eager, () => Eager),} : { name: Schema<string>; self: Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>; }
 
     name: string(),
 >name : Schema<string>
@@ -327,12 +327,12 @@ const Eager = object({
 >string : () => Schema<string>
 
     self: first(Eager, () => Eager),
->self : any
->first(Eager, () => Eager) : any
+>self : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>
+>first(Eager, () => Eager) : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>
 >first : <T>(x: T, fn: () => T) => T
->Eager : any
->() => Eager : () => any
->Eager : any
+>Eager : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>
+>() => Eager : () => Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>
+>Eager : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>>; }>>
 
 });
 

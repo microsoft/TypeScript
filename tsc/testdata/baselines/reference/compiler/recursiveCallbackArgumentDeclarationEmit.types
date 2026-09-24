@@ -29,10 +29,10 @@ export declare function lazy<T extends Schema<any>>(fn: () => T): T;
 >fn : () => T
 
 export const Category = object({
->Category : any
->object({    name: string(),    subcategories: lazy(() => array(Category)),}) : Schema<Infer<{ name: Schema<string>; subcategories: any; }>>
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
+>object({    name: string(),    subcategories: lazy(() => array(Category)),}) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
 >object : <S extends Shape>(shape: S) => Schema<Infer<S>>
->{    name: string(),    subcategories: lazy(() => array(Category)),} : { name: Schema<string>; subcategories: any; }
+>{    name: string(),    subcategories: lazy(() => array(Category)),} : { name: Schema<string>; subcategories: Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>; }
 
     name: string(),
 >name : Schema<string>
@@ -40,13 +40,13 @@ export const Category = object({
 >string : () => Schema<string>
 
     subcategories: lazy(() => array(Category)),
->subcategories : any
->lazy(() => array(Category)) : any
+>subcategories : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>lazy(() => array(Category)) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
 >lazy : <T extends Schema<any>>(fn: () => T) => T
->() => array(Category) : () => any
->array(Category) : Schema<any[]>
+>() => array(Category) : () => Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>array(Category) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
 >array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
->Category : any
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
 
 });
 

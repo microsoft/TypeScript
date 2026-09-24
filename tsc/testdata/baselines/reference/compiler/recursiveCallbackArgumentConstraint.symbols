@@ -125,8 +125,10 @@ const Tree = object({
 
     parent: lazy(() => Tree).optional(),
 >parent : Symbol(parent, Decl(recursiveCallbackArgumentConstraint.ts, 22, 38))
+>lazy(() => Tree).optional : Symbol(Schema.optional, Decl(recursiveCallbackArgumentConstraint.ts, 0, 38))
 >lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
 >Tree : Symbol(Tree, Decl(recursiveCallbackArgumentConstraint.ts, 20, 5))
+>optional : Symbol(Schema.optional, Decl(recursiveCallbackArgumentConstraint.ts, 0, 38))
 
 });
 const tree: (typeof Tree)["out"] = { id: "a", children: [], parent: { id: "b", children: [], parent: undefined } };
