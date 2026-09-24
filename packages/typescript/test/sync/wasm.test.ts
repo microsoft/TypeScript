@@ -160,12 +160,15 @@ describe("API over WebAssembly", () => {
         assert.ok(exportNames.includes("_start"));
         assert.ok(exportNames.includes("typescript_initialize"));
         assert.ok(!exportNames.includes("_initialize"));
-        const instance = await instantiateWasm(module);
+        const instance = await instantiateWasm(module, { stdout: undefined, stderr: undefined });
 
         assert.throws(
             () =>
                 new WasmTransport({
                     instance: { exports: instance.exports },
+                    cwd: undefined,
+                    useCaseSensitiveFileNames: undefined,
+                    collectTiming: undefined,
                     fs: { writeFile() {} },
                 }),
             /was not created by instantiateWasm/,

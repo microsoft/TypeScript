@@ -137,7 +137,7 @@ export class TransportClient {
         register.call(this.transport, name, (_, payload) => {
             const result = callback(JSON.parse(payload));
             if (result instanceof Promise) {
-                throw new Error("Asynchronous callbacks are not supported by this transport");
+                throw new Error("Injected transport callbacks must complete synchronously");
             }
             return JSON.stringify(result) ?? "";
         });

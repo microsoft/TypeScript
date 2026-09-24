@@ -33,3 +33,8 @@ const api = new API({ transport });
 ```
 
 Use `typescript/unstable/sync` instead for the synchronous API.
+
+WASM host callbacks run synchronously while the outer API request is in
+progress. A callback must not return a Promise or call the same API transport;
+use a process-backed API client when callbacks need asynchronous work or nested
+API requests.

@@ -12,12 +12,12 @@ const hostCallbackFD = 0x7fff_fffd;
 const hostWriteFileFD = 0x7fff_fffe;
 
 export interface InstantiateWasmOptions {
-    stdout?: (text: string) => void;
-    stderr?: (text: string) => void;
+    stdout?: ((text: string) => void) | undefined;
+    stderr?: ((text: string) => void) | undefined;
 }
 
 export interface WasmFileSystem {
-    writeFile?(path: string, data: string): void;
+    writeFile?: ((path: string, data: string) => void) | undefined;
 }
 
 interface WasmHost {

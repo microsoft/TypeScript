@@ -42,14 +42,18 @@ export function isSpawnOptions(options: ClientOptions): options is ClientSpawnOp
 }
 
 export interface ClientTransportOptions {
-    /** An existing synchronous transport connected to an API session. */
+    /**
+     * An existing synchronous transport connected to an API session.
+     * Custom module resolution callbacks must obey the transport's reentrancy
+     * constraints.
+     */
     transport: SyncTransport;
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
-    maxResponseBytesPerPage?: number;
+    maxResponseBytesPerPage?: number | undefined;
     /** Virtual filesystem callbacks used by transports that support them. */
-    fs?: FileSystem;
+    fs?: FileSystem | undefined;
     /** Collect timing information for requests made through the transport. */
-    collectTiming?: boolean;
+    collectTiming?: boolean | undefined;
 }
 
 export type SyncClientOptions = ClientSocketOptions | ClientSpawnOptions | ClientTransportOptions;
@@ -59,14 +63,19 @@ export function isTransportOptions(options: SyncClientOptions): options is Clien
 }
 
 export interface AsyncClientTransportOptions {
-    /** An existing asynchronous transport connected to an API session. */
+    /**
+     * An existing asynchronous transport connected to an API session.
+     * Host callbacks are synchronous even when requests are asynchronous, so
+     * custom module resolution callbacks cannot return Promises and must obey
+     * the transport's reentrancy constraints.
+     */
     transport: AsyncTransport;
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
-    maxResponseBytesPerPage?: number;
+    maxResponseBytesPerPage?: number | undefined;
     /** Virtual filesystem callbacks used by transports that support them. */
-    fs?: FileSystem;
+    fs?: FileSystem | undefined;
     /** Collect timing information for requests made through the transport. */
-    collectTiming?: boolean;
+    collectTiming?: boolean | undefined;
 }
 
 export type AsyncClientOptions = ClientOptions | AsyncClientTransportOptions;

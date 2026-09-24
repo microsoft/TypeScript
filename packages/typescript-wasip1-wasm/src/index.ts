@@ -30,16 +30,21 @@ export interface WasmTransportOptions {
      * For example, call `wasi.initialize(instance)` before constructing the transport.
      */
     instance: WasmReactorInstance;
-    cwd?: string;
-    useCaseSensitiveFileNames?: boolean;
-    collectTiming?: boolean;
-    fs?: WasmFileSystem;
+    cwd?: string | undefined;
+    useCaseSensitiveFileNames?: boolean | undefined;
+    collectTiming?: boolean | undefined;
+    fs?: WasmFileSystem | undefined;
 }
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-/** Synchronous API transport backed by an in-process TypeScript WebAssembly reactor. */
+/**
+ * Synchronous API transport backed by an in-process TypeScript WebAssembly reactor.
+ *
+ * Host callbacks must complete synchronously and cannot call this transport while
+ * an outer request is in progress.
+ */
 export class WasmTransport {
     lastBytesSent = 0;
     lastBytesReceived = 0;
@@ -48,6 +53,7 @@ export class WasmTransport {
     private readonly exports: WasmReactorExports;
     private requestPointer = 0;
     private closed = false;
+    private inCallback = false;
 
     constructor(options: WasmTransportOptions) {
         this.instance = options.instance;
@@ -111,7 +117,15 @@ export class WasmTransport {
 
     registerCallback(name: string, callback: (name: string, payload: string) => string): void {
         this.ensureOpen();
-        registerWasmCallback(this.instance, name, callback);
+        registerWasmCallback(this.instance, name, (callbackName, payload) => {
+            this.inCallback = true;
+            try {
+                return callback(callbackName, payload);
+            }
+            finally {
+                this.inCallback = false;
+            }
+        });
     }
 
     unregisterCallback(name: string): void {
@@ -163,6 +177,9 @@ export class WasmTransport {
 
     private call(method: string, payload: Uint8Array): Uint8Array {
         this.ensureOpen();
+        if (this.inCallback) {
+            throw new Error("TypeScript WASM callbacks cannot call the same API transport");
+        }
         const methodBytes = encoder.encode(method);
         this.writeRequest(methodBytes, payload);
         this.lastBytesSent = payload.length;
