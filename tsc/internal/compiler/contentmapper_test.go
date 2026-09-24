@@ -91,6 +91,69 @@ func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 	assert.Equal(t, program.GetSourceFileMetaData(file.Path()).ImpliedNodeFormat, core.ResolutionModeESM)
 }
 
+func TestCompositeProjectContentMapperSupplementalRoots(t *testing.T) {
+	t.Parallel()
+	contentMapperHost := fakeContentMapperHost{transform: func(fileName string, content string) (contentmapper.Result, error) {
+		return contentmapper.Result{
+			Text:             "export {};",
+			VirtualExtension: ".ts",
+			Mappings:         spanmap.New(nil),
+			Supplemental: []contentmapper.MappedResult{{
+				Text:             "export {};",
+				VirtualExtension: ".mts",
+				Mappings:         spanmap.New(nil),
+			}},
+		}, nil
+	}}
+	options := func() *core.CompilerOptions {
+		return &core.CompilerOptions{
+			Composite:        core.TSTrue,
+			SkipLibCheck:     core.TSTrue,
+			Module:           core.ModuleKindESNext,
+			ModuleResolution: core.ModuleResolutionKindBundler,
+		}
+	}
+
+	t.Run("listed canonical root", func(t *testing.T) {
+		t.Parallel()
+		program := newContentMapperProgramWithOptions(
+			t,
+			contentMapperHost,
+			map[string]string{"/src/Component.vue": "<template />"},
+			[]string{"/src/Component.vue"},
+			options(),
+		)
+
+		programDiagnostics := collectContentMapperDiagnostics(program)
+		hasUnlistedFileDiagnostic := slices.ContainsFunc(programDiagnostics, func(diagnostic *ast.Diagnostic) bool {
+			return diagnostic.Code() == diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern.Code()
+		})
+		assert.Assert(t, !hasUnlistedFileDiagnostic, "supplemental output should be covered by its listed canonical root: %v", programDiagnostics)
+	})
+
+	t.Run("imported canonical file", func(t *testing.T) {
+		t.Parallel()
+		program := newContentMapperProgramWithOptions(
+			t,
+			contentMapperHost,
+			map[string]string{
+				"/src/index.ts":      `import "./Component.vue";`,
+				"/src/Component.vue": "<template />",
+			},
+			[]string{"/src/index.ts"},
+			options(),
+		)
+
+		unlistedFileDiagnosticCount := 0
+		for _, diagnostic := range collectContentMapperDiagnostics(program) {
+			if diagnostic.Code() == diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern.Code() {
+				unlistedFileDiagnosticCount++
+			}
+		}
+		assert.Equal(t, unlistedFileDiagnosticCount, 2)
+	})
+}
+
 func collectContentMapperDiagnostics(program *compiler.Program) []*ast.Diagnostic {
 	ctx := context.Background()
 	return slices.Concat(

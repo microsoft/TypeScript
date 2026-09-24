@@ -1,8 +1,12 @@
 package diagnostics
 
 import (
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"golang.org/x/text/language"
 	"gotest.tools/v3/assert"
@@ -142,4 +146,68 @@ func TestLocalize_ByKey(t *testing.T) {
 			assert.Equal(t, result, tt.expected)
 		})
 	}
+}
+
+func TestLocaleFiles(t *testing.T) {
+	t.Parallel()
+
+	files, err := filepath.Glob("loc/*.generated.json")
+	assert.NilError(t, err)
+	assert.Assert(t, len(files) > 0)
+
+	for _, path := range files {
+		localeName := strings.TrimSuffix(filepath.Base(path), ".generated.json")
+		t.Run(localeName, func(t *testing.T) {
+			t.Parallel()
+
+			file, openErr := os.Open(path)
+			assert.NilError(t, openErr)
+			defer file.Close()
+
+			var handback map[Key]string
+			assert.NilError(t, json.UnmarshalRead(file, &handback))
+			validateLocalizedMessages(t, handback)
+
+			activeMessages := make(map[Key]string, len(handback))
+			for key, text := range handback {
+				if keyToMessage(key) != nil {
+					activeMessages[key] = text
+				}
+			}
+
+			actual := getLocalizedMessages(language.MustParse(localeName))
+			assert.DeepEqual(t, actual, activeMessages)
+		})
+	}
+}
+
+func TestLocaleFilesIgnoreStaleDiagnostics(t *testing.T) {
+	t.Parallel()
+	validateLocalizedMessages(t, map[Key]string{
+		"Removed_diagnostic_99999": "Stale translation.",
+	})
+}
+
+func validateLocalizedMessages(t *testing.T, localizedMessages map[Key]string) {
+	t.Helper()
+	for key, localizedText := range localizedMessages {
+		message := keyToMessage(key)
+		if message == nil {
+			continue
+		}
+		localizedPlaceholders := placeholderSet(localizedText)
+		englishPlaceholders := placeholderSet(message.text)
+		assert.Equal(t, len(localizedPlaceholders), len(englishPlaceholders), "placeholder mismatch for %q", key)
+		for placeholder := range englishPlaceholders {
+			assert.Assert(t, localizedPlaceholders[placeholder], "localized diagnostic %q is missing placeholder %s", key, placeholder)
+		}
+	}
+}
+
+func placeholderSet(text string) map[string]bool {
+	result := map[string]bool{}
+	for _, placeholder := range placeholderRegexp.FindAllString(text, -1) {
+		result[placeholder] = true
+	}
+	return result
 }
