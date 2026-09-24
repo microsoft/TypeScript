@@ -30,7 +30,7 @@ export interface CachedSourceFile {
 }
 
 /**
- * Client-side cache for source files keyed by (path, scriptKind, parseOptionsKey, contentHash).
+ * Client-side cache for source files keyed by (path, fileName, scriptKind, parseOptionsKey, contentHash).
  *
  * Supports multiple versions of the same file at the same path (e.g., from
  * different snapshots with different file contents). Each version is identified
@@ -99,6 +99,7 @@ export class SourceFileCache {
         }
         // Check if we already have this exact version
         const existing = entries.find(e =>
+            e.file.fileName === file.fileName &&
             e.file.scriptKind === file.scriptKind &&
             e.parseOptionsKey === parseOptionsKey &&
             e.contentHash === contentHash

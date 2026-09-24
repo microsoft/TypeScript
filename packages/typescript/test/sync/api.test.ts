@@ -391,6 +391,12 @@ describe("API", { concurrency }, () => {
         using defaultKind = api.createSourceFile("/component.txt", sourceText);
         assert.notStrictEqual(defaultKind.sourceFile, overridden.sourceFile);
 
+        using upperCase = api.createSourceFile("/CaseSensitive.ts", "");
+        using lowerCase = api.createSourceFile("/casesensitive.ts", "");
+        assert.notStrictEqual(lowerCase.sourceFile, upperCase.sourceFile);
+        assert.equal(upperCase.sourceFile.fileName, "/CaseSensitive.ts");
+        assert.equal(lowerCase.sourceFile.fileName, "/casesensitive.ts");
+
         assert.throws(() => api.createSourceFile("/invalid.ts", "", { scriptKind: 999 as ScriptKind }), /invalid scriptKind 999/);
 
         // Each lease can be disposed repeatedly without throwing or releasing another lease.
