@@ -57,12 +57,13 @@ func TestCallbackFSStatAndEntries(t *testing.T) {
 
 	base := vfstest.FromMap(map[string]string{}, true)
 	fs := newCallbackFS(base, []string{"stat", "getAccessibleEntries"}, nil)
-	fs.SetConnection(t.Context(), &callbackTestConn{
+	conn := &callbackTestConn{
 		responses: map[string]json.Value{
 			callbackStat:                 []byte(`{"stat":{"mode":33060,"size":12,"mtime":"2024-01-02T03:04:05.000Z"}}`),
 			callbackGetAccessibleEntries: []byte(`{"files":["link.ts"],"directories":["pkg"],"symlinks":["link.ts","pkg"]}`),
 		},
-	})
+	}
+	fs.SetConnection(t.Context(), conn)
 
 	info := fs.Stat("/link.ts")
 	if info == nil || info.IsDir() || info.Size() != 12 {
@@ -82,6 +83,12 @@ func TestCallbackFSStatAndEntries(t *testing.T) {
 	}
 	if _, ok := entries.Symlinks["pkg"]; !ok {
 		t.Fatal("expected directory symlink metadata")
+	}
+
+	conn.responses[callbackGetAccessibleEntries] = []byte(`{"files":[],"directories":["src"],"symlinks":[]}`)
+	entries = fs.GetAccessibleEntries("/")
+	if entries.Symlinks == nil {
+		t.Fatal("explicitly empty symlink metadata was treated as unavailable")
 	}
 }
 

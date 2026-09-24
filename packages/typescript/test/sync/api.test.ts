@@ -3725,6 +3725,20 @@ describe("readFile callback semantics", { concurrency }, () => {
         );
     });
 
+    test("invalid callback results do not fall through to the server OS", () => {
+        const fs: FileSystemCallbacks = {
+            ...createVirtualFileSystem({
+                "/tsconfig.json": "{}",
+            }),
+            readFile: (() => undefined) as unknown as FileSystemCallbacks["readFile"],
+        };
+        using api = new API({ cwd: "/", fs });
+        assert.throws(
+            () => api.readConfigFile("/tsconfig.json"),
+            /Invalid result from filesystem callback 'readFile'/,
+        );
+    });
+
     test("readFile: string returns content, null blocks fallback, useOS falls through to the server OS", () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

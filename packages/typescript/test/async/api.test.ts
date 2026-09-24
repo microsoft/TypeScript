@@ -3857,6 +3857,43 @@ describe("readFile callback semantics", { concurrency }, () => {
         );
     });
 
+    test("invalid callback results do not fall through to the server OS", async () => {
+        const fs: FileSystemCallbacks = {
+            ...createVirtualFileSystem({
+                "/tsconfig.json": "{}",
+            }),
+            readFile: (() => undefined) as unknown as FileSystemCallbacks["readFile"],
+        };
+        await using api = new API({ cwd: "/", fs });
+        await assert.rejects( // @sync: assert.throws(
+            () => api.readConfigFile("/tsconfig.json"),
+            /Invalid result from filesystem callback 'readFile'/,
+        );
+    });
+
+    // @sync-skip-block-start
+    test("callback configuration and implementations are read together when connecting", async () => {
+        const fs: FileSystemCallbacks = {
+            directoryExists: serverFS.useOS,
+            fileExists: serverFS.useOS,
+            getAccessibleEntries: serverFS.useOS,
+            readFile: serverFS.useOS,
+            realpath: serverFS.identity,
+            stat: serverFS.fakeStat,
+            writeFile: serverFS.useOS,
+        };
+        await using api = new API({ fs });
+        let calls = 0;
+        fs.readFile = () => {
+            calls++;
+            return null;
+        };
+
+        await api.readConfigFile(fileURLToPath(new URL("../../package.json", import.meta.url).toString()));
+        assert.ok(calls > 0);
+    });
+    // @sync-skip-block-end
+
     test("readFile: string returns content, null blocks fallback, useOS falls through to the server OS", async () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

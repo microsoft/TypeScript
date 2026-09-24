@@ -1,5 +1,8 @@
 import { serverFS } from "../fs.ts";
-import { configureFileSystemCallbacks } from "../fsCallbacks.ts";
+import {
+    configureFileSystemCallbacks,
+    validateFileSystemCallbackResult,
+} from "../fsCallbacks.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -61,7 +64,9 @@ export class Client {
 
                     channel.registerCallback(name, (_, arg) => {
                         const { path, data } = JSON.parse(arg);
-                        return callback(path, data) === serverFS.useOS ? "" : "true";
+                        const result = callback(path, data);
+                        validateFileSystemCallbackResult(name, result);
+                        return result === serverFS.useOS ? "" : "true";
                     });
 
                     continue;
@@ -71,6 +76,7 @@ export class Client {
                 if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
                 channel.registerCallback(name, (_, arg) => {
                     const result = callback(JSON.parse(arg));
+                    validateFileSystemCallbackResult(name, result);
                     if (result === serverFS.useOS) return "";
                     if (name === "readFile") {
                         return JSON.stringify({ content: result });

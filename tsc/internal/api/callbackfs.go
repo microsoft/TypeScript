@@ -192,7 +192,7 @@ func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
 					Files:       rawEntries.Files,
 					Directories: rawEntries.Directories,
 				}
-				if len(rawEntries.Symlinks) > 0 {
+				if rawEntries.Symlinks != nil {
 					entries.Symlinks = make(map[string]struct{}, len(rawEntries.Symlinks))
 					for _, name := range rawEntries.Symlinks {
 						entries.Symlinks[name] = struct{}{}

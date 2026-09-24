@@ -16,6 +16,7 @@ import {
 import {
     configureFileSystemCallbacks,
     type FileSystemCallbackConfiguration,
+    validateFileSystemCallbackResult,
 } from "../fsCallbacks.ts";
 import {
     type ClientOptions,
@@ -56,14 +57,13 @@ export class Client {
     private closed = false;
     private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
-    private fsConfiguration: FileSystemCallbackConfiguration | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
     constructor(options: ClientOptions) {
         this.options = options;
         if (isSpawnOptions(options)) {
-            this.fsConfiguration = configureFileSystemCallbacks(options.fs);
+            configureFileSystemCallbacks(options.fs);
             if (options.collectTiming) {
                 this.timing = new TimingCollector();
             }
@@ -92,9 +92,10 @@ export class Client {
 
         return new Promise((resolve, reject) => {
             const args = getAPIProcessArgs(options, true);
+            const fsConfiguration = configureFileSystemCallbacks(options.fs);
 
-            if (this.fsConfiguration!.arguments.length > 0) {
-                args.push(`--callbacks=${this.fsConfiguration!.arguments.join(",")}`);
+            if (fsConfiguration.arguments.length > 0) {
+                args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
             }
 
             this.process = spawn(resolveExePath(options), args, {
@@ -113,7 +114,7 @@ export class Client {
             const reader = new StreamMessageReader(this.process.stdout!);
             const writer = new StreamMessageWriter(this.process.stdin!);
             this.connection = createMessageConnection(reader, writer);
-            this.registerFSCallbacks(this.connection, options.fs);
+            this.registerFSCallbacks(this.connection, options.fs, fsConfiguration);
             this.connection.listen();
         });
     }
@@ -137,16 +138,22 @@ export class Client {
         });
     }
 
-    private registerFSCallbacks(connection: MessageConnection, fs: FileSystemCallbacks | undefined): void {
+    private registerFSCallbacks(
+        connection: MessageConnection,
+        fs: FileSystemCallbacks | undefined,
+        configuration: FileSystemCallbackConfiguration,
+    ): void {
         if (!fs) return;
-        for (const name of this.fsConfiguration!.callbackNames) {
+        for (const name of configuration.callbackNames) {
             if (name === "writeFile") {
                 const callback = fs.writeFile;
                 if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
 
                 const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
                 connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    return callback(arg.path, arg.data) === serverFS.useOS ? null : true;
+                    const result = callback(arg.path, arg.data);
+                    validateFileSystemCallbackResult(name, result);
+                    return result === serverFS.useOS ? null : true;
                 });
 
                 continue;
@@ -157,6 +164,7 @@ export class Client {
             const requestType = new RequestType<unknown, unknown, void>(name);
             connection.onRequest(requestType, (arg: unknown) => {
                 const result = callback(arg as string);
+                validateFileSystemCallbackResult(name, result);
                 if (result === serverFS.useOS) return null;
                 if (name === "readFile") {
                     return { content: result };
