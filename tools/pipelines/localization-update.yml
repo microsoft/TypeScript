@@ -1,10 +1,9 @@
 trigger: none
 pr: none
 
-# OneLocBuild materializes packaged LCL handbacks under the artifact directory.
-# Its manifests map those files to their native repository paths. After applying
-# them, the diagnostics generator produces deterministic runtime gzip files.
-# The resulting changes update a stable GitHub branch and pull request.
+# Before OneLoc assigns an LCL package ID, this pipeline publishes the initial
+# localization handoff. After the package ID is configured, it applies packaged
+# handbacks, generates deterministic runtime gzip files, and updates a pull request.
 schedules:
   - cron: '0 7 * * *'
     displayName: Daily localization update
@@ -14,6 +13,9 @@ schedules:
         - main
 
 variables:
+  # Fill this in after the localization team assigns the LCL package ID.
+  - name: OneLocLclPackageId
+    value: ''
   - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
     value: Iv23li4GolzJSEp1mzHI
   - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
@@ -52,7 +54,7 @@ jobs:
       - task: AzureCLI@2
         displayName: Create OneLocBuild token
         inputs:
-          azureSubscription: devdiv-onelocbuild-ceapex
+          azureSubscription: dnceng-onelocbuild-ceapex
           scriptType: pscore
           scriptLocation: inlineScript
           inlineScript: |
@@ -62,7 +64,19 @@ jobs:
             Write-Host "##vso[task.setvariable variable=OneLocBuildToken;issecret=true]$token"
 
       - task: OneLocBuild@3
+        displayName: Generate localization handoff
+        condition: and(succeeded(), eq(variables['OneLocLclPackageId'], ''))
+        inputs:
+          locProj: tools/LocProject.json
+          outDir: $(Build.ArtifactStagingDirectory)
+          LclSource: lclFilesInRepo
+          packageSourceAuth: patAuth
+          patVariable: $(OneLocBuildToken)
+          isCreatePrSelected: false
+
+      - task: OneLocBuild@3
         displayName: Generate localized files
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
         env:
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
         inputs:
@@ -115,12 +129,14 @@ jobs:
               Copy-Item -LiteralPath $source -Destination $destination -Force
           }
         displayName: Apply localized files
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
 
       - pwsh: |
           $ErrorActionPreference = "Stop"
           $PSNativeCommandUseErrorActionPreference = $true
           npx hereby generate:diagnostics
         displayName: Generate localization artifacts
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
 
       - task: CopyFiles@2
         displayName: Add localization project to handoff
@@ -140,6 +156,8 @@ jobs:
           azureSubscription: TypeScript-DevDiv-KeyVault
           repositories: TypeScript
           permissions: contents:write,pull_requests:write
+          condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+          revokeCondition: and(always(), ne(variables['OneLocLclPackageId'], ''))
           insertSteps:
             - pwsh: |
                 $ErrorActionPreference = "Stop"
@@ -194,5 +212,6 @@ jobs:
                     gh pr create --repo microsoft/TypeScript --base main --head $branch --title "Update localization files" --body "Updates localization handbacks and their generated runtime artifacts."
                 }
               displayName: Create or update localization pull request
+              condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
               env:
                 GH_TOKEN: $(GH_TOKEN)
