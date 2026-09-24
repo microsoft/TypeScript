@@ -20,11 +20,20 @@ and limitations under the License.
 
 interface String {
     /**
-     * Matches a string with a regular expression, and returns an iterable of matches
-     * containing the results of that search.
-     * @param regexp A regular expression
+     * Matches a string with a regular expression.
+     * @param regexp The regular expression for searching. If the provided value is not a RegExp,
+     * it is implicitly converted to a RegExp with the global (`g`) flag set by `new RegExp(regexp, "g")`.
+     * @returns An iterator of regular expression matches.
+     * @throws A {@linkcode TypeError} if the global (`g`) flag is not set on the RegExp.
      */
-    matchAll(regexp: RegExp): RegExpStringIterator<RegExpExecArray>;
+    matchAll(regexp: RegExp | string): RegExpStringIterator<RegExpExecArray>;
+
+    /**
+     * Passes the string to the `[Symbol.matchAll]` method on {@linkcode matcher}.
+     * This method is expected to implement its own matching algorithm.
+     * @param matcher An object that supports being matched against.
+     */
+    matchAll<This, R>(this: This, matcher: { [Symbol.matchAll](string: This): R; }): R;
 
     /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
     toLocaleLowerCase(locales?: Intl.LocalesArgument): string;
