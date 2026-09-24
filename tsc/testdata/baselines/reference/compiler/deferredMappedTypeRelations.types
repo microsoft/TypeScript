@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/deferredMappedTypeRelations.ts] ////
+
+=== deferredMappedTypeRelations.ts ===
+type Deep<T> = T extends object ? { [K in keyof T]: Deep<T[K]> } : T;
+>Deep : Deep<T>
+
+type DeepReadonly<T> = T extends object ? { readonly [K in keyof T]: DeepReadonly<T[K]> } : T;
+>DeepReadonly : DeepReadonly<T>
+
+declare const array: Deep<string[][][][]>;
+>array : string[][][][]
+
+const badArray: Deep<number[][][][]> = array;
+>badArray : number[][][][]
+>array : string[][][][]
+
+const goodArray: Deep<string[][][][]> = array;
+>goodArray : string[][][][]
+>array : string[][][][]
+
+declare const tuple: Deep<[[[[string]]]]>;
+>tuple : [[[[string]]]]
+
+const badTuple: Deep<[[[[number]]]]> = tuple;
+>badTuple : [[[[number]]]]
+>tuple : [[[[string]]]]
+
+const goodTuple: Deep<[[[[string]]]]> = tuple;
+>goodTuple : [[[[string]]]]
+>tuple : [[[[string]]]]
+
+declare const readonlyArray: DeepReadonly<string[][][][]>;
+>readonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
+
+const badReadonlyArray: DeepReadonly<number[][][][]> = readonlyArray;
+>badReadonlyArray : readonly (readonly (readonly (readonly number[])[])[])[]
+>readonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
+
+const goodReadonlyArray: DeepReadonly<string[][][][]> = readonlyArray;
+>goodReadonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
+>readonlyArray : readonly (readonly (readonly (readonly string[])[])[])[]
+
+declare const readonlyTuple: DeepReadonly<[[[[string]]]]>;
+>readonlyTuple : readonly [readonly [readonly [readonly [string]]]]
+
+const badReadonlyTuple: DeepReadonly<[[[[number]]]]> = readonlyTuple;
+>badReadonlyTuple : readonly [readonly [readonly [readonly [number]]]]
+>readonlyTuple : readonly [readonly [readonly [readonly [string]]]]
+
+const goodReadonlyTuple: DeepReadonly<[[[[string]]]]> = readonlyTuple;
+>goodReadonlyTuple : readonly [readonly [readonly [readonly [string]]]]
+>readonlyTuple : readonly [readonly [readonly [readonly [string]]]]
+
+type AssertFalse<T extends false> = T;
+>AssertFalse : T
+>false : false
+
+type ArrayRelation = AssertFalse<Deep<string[][][][]> extends Deep<number[][][][]> ? true : false>;
+>ArrayRelation : false
+>true : true
+>false : false
+
+type TupleRelation = AssertFalse<Deep<[[[[string]]]]> extends Deep<[[[[number]]]]> ? true : false>;
+>TupleRelation : false
+>true : true
+>false : false
+
+declare function infer<T>(value: Deep<{ value: T }[][][][]>): T;
+>infer : <T>(value: Deep<{ value: T; }[][][][]>) => T
+>value : { value: Deep<T>; }[][][][]
+>value : T
+
+declare const nested: Deep<{ value: number }[][][][]>;
+>nested : { value: number; }[][][][]
+>value : number
+
+const inferred: number = infer(nested);
+>inferred : number
+>infer(nested) : number
+>infer : <T>(value: Deep<{ value: T; }[][][][]>) => T
+>nested : { value: number; }[][][][]
+
+const badInferred: string = infer(nested);
+>badInferred : string
+>infer(nested) : number
+>infer : <T>(value: Deep<{ value: T; }[][][][]>) => T
+>nested : { value: number; }[][][][]
+
+type Growing<T> = { [K in keyof T]: Growing<T[]> };
+>Growing : Growing<T>
+
+declare const growing: Growing<string[]>;
+>growing : any
+
+const sameStructure: Growing<number[]> = growing;
+>sameStructure : any
+>growing : any
+
+type Previous = [never, 0, 1, 2, 3, 4];
+>Previous : Previous
+
+type Nest<T, D extends number> = { [K in keyof T]: D extends 0 ? T[K] : Nest<T, Previous[D]> };
+>Nest : Nest<T, D>
+
+declare const boundedArray: Nest<string[], 4>;
+>boundedArray : string[][][][][]
+
+const badBoundedArray: Nest<number[], 4> = boundedArray;
+>badBoundedArray : number[][][][][]
+>boundedArray : string[][][][][]
+
+const goodBoundedArray: Nest<(string | number)[], 4> = boundedArray;
+>goodBoundedArray : (string | number)[][][][][]
+>boundedArray : string[][][][][]
+
+declare const boundedTuple: Nest<[string], 4>;
+>boundedTuple : [[[[[string]]]]]
+
+const badBoundedTuple: Nest<[number], 4> = boundedTuple;
+>badBoundedTuple : [[[[[number]]]]]
+>boundedTuple : [[[[[string]]]]]
+
+const goodBoundedTuple: Nest<[string | number], 4> = boundedTuple;
+>goodBoundedTuple : [[[[[string | number]]]]]
+>boundedTuple : [[[[[string]]]]]
+
+type BoundedRelation = AssertFalse<Nest<[string], 4> extends Nest<[number], 4> ? true : false>;
+>BoundedRelation : false
+>true : true
+>false : false
+
+interface Step<T> { next: T }
+>next : T
+
+type BuildChain<D extends number, T = null> = D extends 0 ? T : BuildChain<Previous[D], Step<T>>;
+>BuildChain : BuildChain<D, T>
+
+type ChainNest<T, D> = { [K in keyof T]: D extends Step<infer R> ? ChainNest<T, R> : T[K] };
+>ChainNest : ChainNest<T, D>
+
+declare const chain: ChainNest<[string], BuildChain<4>>;
+>chain : [[[[[string]]]]]
+
+const badChain: ChainNest<[number], BuildChain<4>> = chain;
+>badChain : [[[[[number]]]]]
+>chain : [[[[[string]]]]]
+
+const goodChain: ChainNest<[string | number], BuildChain<4>> = chain;
+>goodChain : [[[[[string | number]]]]]
+>chain : [[[[[string]]]]]
+
+type ChainRelation = AssertFalse<ChainNest<[string], BuildChain<4>> extends ChainNest<[number], BuildChain<4>> ? true : false>;
+>ChainRelation : false
+>true : true
+>false : false
+
+type BuildArray<D extends number, T> = D extends 0 ? T : BuildArray<Previous[D], T[]>;
+>BuildArray : BuildArray<D, T>
+
+declare const computedArray: Deep<BuildArray<4, string>>;
+>computedArray : string[][][][]
+
+const badComputedArray: Deep<BuildArray<4, number>> = computedArray;
+>badComputedArray : number[][][][]
+>computedArray : string[][][][]
+
+const goodComputedArray: Deep<BuildArray<4, string | number>> = computedArray;
+>goodComputedArray : (string | number)[][][][]
+>computedArray : string[][][][]
+
+type ComputedRelation = AssertFalse<Deep<BuildArray<4, string>> extends Deep<BuildArray<4, number>> ? true : false>;
+>ComputedRelation : false
+>true : true
+>false : false
+

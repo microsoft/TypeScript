@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/deferredMappedTypeCircularArguments.ts] ////
+
+=== mapped.ts ===
+export type M<T> = { [K in keyof T]: T extends M<T> ? 1 : 2 };
+>M : M<T>
+
+=== usage.ts ===
+import type { M } from "./mapped.js";
+>M : M<T>
+
+declare const array: M<string[]>;
+>array : any
+
+declare const tuple: M<[string]>;
+>tuple : any
+
+export const a = array[0];
+>a : any
+>array[0] : any
+>array : any
+>0 : 0
+
+export const b = tuple[0];
+>b : any
+>tuple[0] : any
+>tuple : any
+>0 : 0
+

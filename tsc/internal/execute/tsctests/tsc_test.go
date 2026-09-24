@@ -1350,6 +1350,34 @@ func TestTscIgnoreConfig(t *testing.T) {
 func TestTscIncremental(t *testing.T) {
 	t.Parallel()
 	libWithReadonlyArray := strings.Replace(tscDefaultLibContent, "interface ReadonlyArray<T> {}", "interface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }", 1)
+	getRecursiveTypeTest := func(name string, source string) *tscInput {
+		return &tscInput{
+			subScenario: name + " after comment only edit",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts":      stringtestutil.Dedent(source),
+				tscLibPath + "/lib.es2025.full.d.ts":         libWithReadonlyArray,
+			},
+			edits: []*tscEdit{
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Incremental checking incorrectly reports a locationless TS2589 after a comment-only edit.",
+				},
+				noChange,
+				{
+					caption: "add another comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// another comment\n")
+					},
+					expectedDiff: "Incremental checking incorrectly reports a locationless TS2589 after a comment-only edit.",
+				},
+				noChange,
+			},
+		}
+	}
 	getConstEnumTest := func(bdsContents string, changeEnumFile string, testSuffix string) *tscInput {
 		return &tscInput{
 			subScenario: "const enums" + testSuffix,
@@ -2271,6 +2299,18 @@ func TestTscIncremental(t *testing.T) {
 			},
 			commandLineArgs: []string{"--noEmit"},
 		},
+		getRecursiveTypeTest("recursive mapped type", `
+			type Json = string | Json[];
+			type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+			declare function wrap<T>(value: T): Parsed<T>;
+			export const value = wrap({ items: [] as Json[] });
+		`),
+		getRecursiveTypeTest("recursive readonly mapped type", `
+			type Json = string | readonly Json[];
+			type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+			declare function wrap<T>(value: T): Parsed<T>;
+			export const value = wrap({ items: [] as readonly Json[] });
+		`),
 		{
 			subScenario: "recursive tagged tuple after incremental edits",
 			files: FileMap{
@@ -2323,6 +2363,234 @@ func TestTscIncremental(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "recursive mapped type consumer after comment only edit",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "noEmit": true, "incremental": true}}`,
+				tscLibPath + "/lib.es2025.full.d.ts":         libWithReadonlyArray,
+				"/home/src/workspaces/project/a.ts": stringtestutil.Dedent(`
+					type Json = string | Json[];
+					type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+					declare function wrap<T>(value: T): Parsed<T>;
+					export const value = wrap({ items: [] as Json[] });
+				`),
+				"/home/src/workspaces/project/b.ts": stringtestutil.Dedent(`
+					import { value } from "./a";
+					export const n: number = value.items;
+				`),
+			},
+			edits: []*tscEdit{
+				{
+					caption: "add a comment to the producer",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/a.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Incremental signature serialization adds a locationless TS2589 to the consumer's cached diagnostic.",
+				},
+				noChange,
+				noChange,
+				{
+					caption: "delete build info and check the edited source afresh",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "mapped type circular arguments across files",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/mapped.ts":     `export type M<T> = { [K in keyof T]: T extends M<T> ? 1 : 2 };`,
+				"/home/src/workspaces/project/usage.ts": stringtestutil.Dedent(`
+					import type { M } from "./mapped.js";
+					declare const array: M<string[]>;
+					declare const tuple: M<[string]>;
+					export const a = array[0];
+					export const b = tuple[0];
+				`),
+			},
+			edits: []*tscEdit{
+				{
+					caption: "edit the use site",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/usage.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
+				},
+				{
+					caption:      "no change",
+					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
+				},
+				{
+					caption: "edit the mapped declaration",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/mapped.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
+				},
+				{
+					caption:      "no change",
+					expectedDiff: "Incremental signature serialization moves TS2589 from the annotations to the property accesses.",
+				},
+			},
+		},
+		{
+			subScenario: "recursive mapped declaration consumption",
+			files: FileMap{
+				tscLibPath + "/lib.es2025.full.d.ts": libWithReadonlyArray,
+				"/home/src/workspaces/project/producer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" },
+					"files": ["index.ts", "private.ts"]
+				}`,
+				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
+					type Json = string | Json[];
+					type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+					declare function wrap<T>(value: T): Parsed<T>;
+					export const value = wrap({ items: [] as Json[] });
+
+					type Circular<T> = { [P in keyof T]: Circular<T> };
+					declare const circular: Circular<[number, number]>;
+					export const tuple = circular;
+
+					type Tuple = string | [Tuple];
+					export const nested = wrap(null as unknown as [Tuple]);
+
+					type Replace<T, R> = T extends object ? { [K in keyof T]: Replace<T[K], R> } : R;
+					declare function replace<T>(value: T): Replace<T, number>;
+					export const replaced = replace([] as Json[]);
+				`),
+				"/home/src/workspaces/project/producer/private.ts": stringtestutil.Dedent(`
+					export function local() {
+						type Circular<T> = { [K in keyof T]: Circular<T> };
+						return null as unknown as Circular<[number]>;
+					}
+					export function anonymous() {
+						type Circular<T> = T extends object ? { [K in keyof T]: Circular<[number]> } : T;
+						return null as unknown as Circular<[number]>;
+					}
+				`),
+				"/home/src/workspaces/project/consumer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "noEmit": true },
+					"references": [{ "path": "../producer" }]
+				}`,
+				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					import { value, tuple, nested, replaced } from "../producer/dist/index.js";
+					value.items[0] = ["ok"];
+					value.items[0] = 123;
+					if (typeof value.items[0] !== "string") {
+						value.items[0][0] = 123;
+					}
+					const number: number = tuple[0];
+					tuple[0][0] = 123;
+					nested[0] = ["ok"];
+					nested[0] = 123;
+					if (typeof nested[0] !== "string") {
+						nested[0][0] = 123;
+					}
+					replaced[0] = [123];
+					replaced[0] = "error";
+					if (typeof replaced[0] !== "number") {
+						replaced[0][0] = "error";
+					}
+				`),
+			},
+			commandLineArgs: []string{"--build", "consumer"},
+		},
+		{
+			subScenario: "recursive mapped array types",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "declaration": true, "incremental": true}}`,
+				tscLibPath + "/lib.es2025.full.d.ts":         libWithReadonlyArray,
+				"/home/src/workspaces/project/index.ts": stringtestutil.Dedent(`
+					type Json = string | Json[];
+					type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+					declare function wrap<T>(value: T): Parsed<T>;
+					export const value = wrap({ items: [] as Json[] });
+					const items: Json[] = value.items;
+					value.items[0] = ["ok"];
+					value.items[0] = 123;
+
+					type Mutable<T> = { -readonly [K in keyof T]: Parsed<T[K]> };
+					type Immutable<T> = { readonly [K in keyof T]: Parsed<T[K]> };
+					type Optional<T> = { [K in keyof T]?: Parsed<T[K]> };
+					type Required<T> = { [K in keyof T]-?: Parsed<T[K]> };
+					declare const mutable: Mutable<readonly Json[]>;
+					declare const immutable: Immutable<Json[]>;
+					declare const optional: Optional<Json[]>;
+					declare const required: Required<(Json | undefined)[]>;
+					mutable[0] = ["ok"];
+					immutable[0] = "error";
+					optional[0] = undefined;
+					required[0] = undefined;
+
+					function convert<T>(value: T[]): Parsed<T[]> {
+						return wrap(value);
+					}
+					const converted: Json[] = convert<Json>(["ok"]);
+					type Tuple = string | [Tuple];
+					type ReadonlyTuple = string | readonly [ReadonlyTuple];
+					type OptionalTuple = string | [OptionalTuple?];
+					type RestTuple = string | [head: RestTuple, ...tail: RestTuple[]];
+					type LeadingRestTuple = string | [...head: LeadingRestTuple[], tail: LeadingRestTuple];
+					declare const tuple: Parsed<[Tuple]>;
+					declare const readonlyTuple: Parsed<readonly [ReadonlyTuple]>;
+					declare const optionalTuple: Parsed<[OptionalTuple?]>;
+					declare const restTuple: Parsed<[head: RestTuple, ...tail: RestTuple[]]>;
+					declare const leadingRestTuple: Parsed<[...head: LeadingRestTuple[], tail: LeadingRestTuple]>;
+					const tupleItem: Tuple = tuple[0];
+					const optionalItem: OptionalTuple | undefined = optionalTuple[0];
+					const restItem: RestTuple = restTuple[1];
+					const leadingRestItem: LeadingRestTuple = leadingRestTuple[0];
+					tuple[0] = ["ok"];
+					tuple[0] = 123;
+					readonlyTuple[0] = "error";
+					optionalTuple[0] = undefined;
+					optionalTuple[0] = 123;
+					restTuple[1] = 123;
+					leadingRestTuple[0] = 123;
+
+					declare const optionalRest: Optional<[...items: Json[], last: Json]>;
+					const optionalRestItems: (Json | undefined)[] = optionalRest;
+					type DeepOptional<T> = T extends object ? { [K in keyof T]?: DeepOptional<T[K]> } : T;
+					declare const deepOptionalRest: DeepOptional<[...items: LeadingRestTuple[], last: LeadingRestTuple]>;
+					const emptyOptionalRest: typeof deepOptionalRest = [];
+					deepOptionalRest[0] = undefined;
+					deepOptionalRest[0] = 123;
+					declare const requiredTuple: Required<[item?: Json]>;
+					requiredTuple[0] = undefined;
+					function convertTuple<T extends unknown[]>(value: [string, ...T]): Parsed<[string, ...T]> {
+						return wrap(value);
+					}
+					const convertedTuple: [string, [Tuple], number] = convertTuple(["ok", ["nested"] as [Tuple], 1]);
+					declare const variadicUnion: Parsed<[string, ...([Tuple] | [Tuple, Tuple])]>;
+					const mappedUnion: [string, Tuple] | [string, Tuple, Tuple] = variadicUnion;
+					declare const intersection: Parsed<Json[] & readonly Json[]>;
+					intersection[0] = 123;
+					type First = string | [Second];
+					type Second = string | First[];
+					declare const mutual: Parsed<[First, Second]>;
+					const mutualItems: [First, Second] = mutual;
+					mutual[0] = 123;
+					type Endless<T> = T extends string ? Endless<T> : never;
+					type NonTerminating = Endless<string>;
+				`),
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/index.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Signature serialization reports a locationless TS2589 before checking the property access.",
+				},
+				{
+					caption:      "no change",
+					expectedDiff: "The locationless TS2589 is not cached with the file's semantic diagnostics.",
+				},
+			},
+		},
+		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
@@ -2362,6 +2630,23 @@ func TestTscIncremental(t *testing.T) {
 		},
 	}
 
+	for _, tuple := range []struct {
+		name string
+		text string
+	}{
+		{"required", "[Json]"},
+		{"readonly", "readonly [Json]"},
+		{"optional", "[Json?]"},
+		{"rest", "[head: Json, ...tail: Json[]]"},
+		{"leading rest", "[...head: Json[], tail: Json]"},
+	} {
+		testCases = append(testCases, getRecursiveTypeTest("recursive mapped tuple "+tuple.name, `
+			type Json = string | `+tuple.text+`;
+			type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+			declare function wrap<T>(value: T): Parsed<T>;
+			export const value = wrap({ items: null as unknown as Json });
+		`))
+	}
 	for _, test := range testCases {
 		test.run(t, "incremental")
 	}

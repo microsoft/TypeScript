@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/deferredMappedTypeCircularArguments.ts] ////
+
+=== mapped.ts ===
+export type M<T> = { [K in keyof T]: T extends M<T> ? 1 : 2 };
+>M : Symbol(M, Decl(mapped.ts, 0, 0))
+>T : Symbol(T, Decl(mapped.ts, 0, 14))
+>K : Symbol(K, Decl(mapped.ts, 0, 22))
+>T : Symbol(T, Decl(mapped.ts, 0, 14))
+>T : Symbol(T, Decl(mapped.ts, 0, 14))
+>M : Symbol(M, Decl(mapped.ts, 0, 0))
+>T : Symbol(T, Decl(mapped.ts, 0, 14))
+
+=== usage.ts ===
+import type { M } from "./mapped.js";
+>M : Symbol(M, Decl(usage.ts, 0, 13))
+
+declare const array: M<string[]>;
+>array : Symbol(array, Decl(usage.ts, 1, 13))
+>M : Symbol(M, Decl(usage.ts, 0, 13))
+
+declare const tuple: M<[string]>;
+>tuple : Symbol(tuple, Decl(usage.ts, 2, 13))
+>M : Symbol(M, Decl(usage.ts, 0, 13))
+
+export const a = array[0];
+>a : Symbol(a, Decl(usage.ts, 3, 12))
+>array : Symbol(array, Decl(usage.ts, 1, 13))
+
+export const b = tuple[0];
+>b : Symbol(b, Decl(usage.ts, 4, 12))
+>tuple : Symbol(tuple, Decl(usage.ts, 2, 13))
+

@@ -1,0 +1,284 @@
+//// [tests/cases/compiler/deferredMappedTypeRelations.ts] ////
+
+=== deferredMappedTypeRelations.ts ===
+type Deep<T> = T extends object ? { [K in keyof T]: Deep<T[K]> } : T;
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 0, 10))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 0, 10))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 0, 37))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 0, 10))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 0, 10))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 0, 37))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 0, 10))
+
+type DeepReadonly<T> = T extends object ? { readonly [K in keyof T]: DeepReadonly<T[K]> } : T;
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 1, 18))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 1, 18))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 1, 54))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 1, 18))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 1, 18))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 1, 54))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 1, 18))
+
+declare const array: Deep<string[][][][]>;
+>array : Symbol(array, Decl(deferredMappedTypeRelations.ts, 3, 13))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+
+const badArray: Deep<number[][][][]> = array;
+>badArray : Symbol(badArray, Decl(deferredMappedTypeRelations.ts, 4, 5))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>array : Symbol(array, Decl(deferredMappedTypeRelations.ts, 3, 13))
+
+const goodArray: Deep<string[][][][]> = array;
+>goodArray : Symbol(goodArray, Decl(deferredMappedTypeRelations.ts, 5, 5))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>array : Symbol(array, Decl(deferredMappedTypeRelations.ts, 3, 13))
+
+declare const tuple: Deep<[[[[string]]]]>;
+>tuple : Symbol(tuple, Decl(deferredMappedTypeRelations.ts, 7, 13))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+
+const badTuple: Deep<[[[[number]]]]> = tuple;
+>badTuple : Symbol(badTuple, Decl(deferredMappedTypeRelations.ts, 8, 5))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>tuple : Symbol(tuple, Decl(deferredMappedTypeRelations.ts, 7, 13))
+
+const goodTuple: Deep<[[[[string]]]]> = tuple;
+>goodTuple : Symbol(goodTuple, Decl(deferredMappedTypeRelations.ts, 9, 5))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>tuple : Symbol(tuple, Decl(deferredMappedTypeRelations.ts, 7, 13))
+
+declare const readonlyArray: DeepReadonly<string[][][][]>;
+>readonlyArray : Symbol(readonlyArray, Decl(deferredMappedTypeRelations.ts, 11, 13))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+
+const badReadonlyArray: DeepReadonly<number[][][][]> = readonlyArray;
+>badReadonlyArray : Symbol(badReadonlyArray, Decl(deferredMappedTypeRelations.ts, 12, 5))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+>readonlyArray : Symbol(readonlyArray, Decl(deferredMappedTypeRelations.ts, 11, 13))
+
+const goodReadonlyArray: DeepReadonly<string[][][][]> = readonlyArray;
+>goodReadonlyArray : Symbol(goodReadonlyArray, Decl(deferredMappedTypeRelations.ts, 13, 5))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+>readonlyArray : Symbol(readonlyArray, Decl(deferredMappedTypeRelations.ts, 11, 13))
+
+declare const readonlyTuple: DeepReadonly<[[[[string]]]]>;
+>readonlyTuple : Symbol(readonlyTuple, Decl(deferredMappedTypeRelations.ts, 15, 13))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+
+const badReadonlyTuple: DeepReadonly<[[[[number]]]]> = readonlyTuple;
+>badReadonlyTuple : Symbol(badReadonlyTuple, Decl(deferredMappedTypeRelations.ts, 16, 5))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+>readonlyTuple : Symbol(readonlyTuple, Decl(deferredMappedTypeRelations.ts, 15, 13))
+
+const goodReadonlyTuple: DeepReadonly<[[[[string]]]]> = readonlyTuple;
+>goodReadonlyTuple : Symbol(goodReadonlyTuple, Decl(deferredMappedTypeRelations.ts, 17, 5))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deferredMappedTypeRelations.ts, 0, 69))
+>readonlyTuple : Symbol(readonlyTuple, Decl(deferredMappedTypeRelations.ts, 15, 13))
+
+type AssertFalse<T extends false> = T;
+>AssertFalse : Symbol(AssertFalse, Decl(deferredMappedTypeRelations.ts, 17, 70))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 19, 17))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 19, 17))
+
+type ArrayRelation = AssertFalse<Deep<string[][][][]> extends Deep<number[][][][]> ? true : false>;
+>ArrayRelation : Symbol(ArrayRelation, Decl(deferredMappedTypeRelations.ts, 19, 38))
+>AssertFalse : Symbol(AssertFalse, Decl(deferredMappedTypeRelations.ts, 17, 70))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+
+type TupleRelation = AssertFalse<Deep<[[[[string]]]]> extends Deep<[[[[number]]]]> ? true : false>;
+>TupleRelation : Symbol(TupleRelation, Decl(deferredMappedTypeRelations.ts, 20, 99))
+>AssertFalse : Symbol(AssertFalse, Decl(deferredMappedTypeRelations.ts, 17, 70))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+
+declare function infer<T>(value: Deep<{ value: T }[][][][]>): T;
+>infer : Symbol(infer, Decl(deferredMappedTypeRelations.ts, 21, 99))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 23, 23))
+>value : Symbol(value, Decl(deferredMappedTypeRelations.ts, 23, 26))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>value : Symbol(value, Decl(deferredMappedTypeRelations.ts, 23, 39))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 23, 23))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 23, 23))
+
+declare const nested: Deep<{ value: number }[][][][]>;
+>nested : Symbol(nested, Decl(deferredMappedTypeRelations.ts, 24, 13))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>value : Symbol(value, Decl(deferredMappedTypeRelations.ts, 24, 28))
+
+const inferred: number = infer(nested);
+>inferred : Symbol(inferred, Decl(deferredMappedTypeRelations.ts, 25, 5))
+>infer : Symbol(infer, Decl(deferredMappedTypeRelations.ts, 21, 99))
+>nested : Symbol(nested, Decl(deferredMappedTypeRelations.ts, 24, 13))
+
+const badInferred: string = infer(nested);
+>badInferred : Symbol(badInferred, Decl(deferredMappedTypeRelations.ts, 26, 5))
+>infer : Symbol(infer, Decl(deferredMappedTypeRelations.ts, 21, 99))
+>nested : Symbol(nested, Decl(deferredMappedTypeRelations.ts, 24, 13))
+
+type Growing<T> = { [K in keyof T]: Growing<T[]> };
+>Growing : Symbol(Growing, Decl(deferredMappedTypeRelations.ts, 26, 42))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 28, 13))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 28, 21))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 28, 13))
+>Growing : Symbol(Growing, Decl(deferredMappedTypeRelations.ts, 26, 42))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 28, 13))
+
+declare const growing: Growing<string[]>;
+>growing : Symbol(growing, Decl(deferredMappedTypeRelations.ts, 29, 13))
+>Growing : Symbol(Growing, Decl(deferredMappedTypeRelations.ts, 26, 42))
+
+const sameStructure: Growing<number[]> = growing;
+>sameStructure : Symbol(sameStructure, Decl(deferredMappedTypeRelations.ts, 30, 5))
+>Growing : Symbol(Growing, Decl(deferredMappedTypeRelations.ts, 26, 42))
+>growing : Symbol(growing, Decl(deferredMappedTypeRelations.ts, 29, 13))
+
+type Previous = [never, 0, 1, 2, 3, 4];
+>Previous : Symbol(Previous, Decl(deferredMappedTypeRelations.ts, 30, 49))
+
+type Nest<T, D extends number> = { [K in keyof T]: D extends 0 ? T[K] : Nest<T, Previous[D]> };
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 33, 10))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 33, 12))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 33, 36))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 33, 10))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 33, 12))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 33, 10))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 33, 36))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 33, 10))
+>Previous : Symbol(Previous, Decl(deferredMappedTypeRelations.ts, 30, 49))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 33, 12))
+
+declare const boundedArray: Nest<string[], 4>;
+>boundedArray : Symbol(boundedArray, Decl(deferredMappedTypeRelations.ts, 34, 13))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+
+const badBoundedArray: Nest<number[], 4> = boundedArray;
+>badBoundedArray : Symbol(badBoundedArray, Decl(deferredMappedTypeRelations.ts, 35, 5))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+>boundedArray : Symbol(boundedArray, Decl(deferredMappedTypeRelations.ts, 34, 13))
+
+const goodBoundedArray: Nest<(string | number)[], 4> = boundedArray;
+>goodBoundedArray : Symbol(goodBoundedArray, Decl(deferredMappedTypeRelations.ts, 36, 5))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+>boundedArray : Symbol(boundedArray, Decl(deferredMappedTypeRelations.ts, 34, 13))
+
+declare const boundedTuple: Nest<[string], 4>;
+>boundedTuple : Symbol(boundedTuple, Decl(deferredMappedTypeRelations.ts, 37, 13))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+
+const badBoundedTuple: Nest<[number], 4> = boundedTuple;
+>badBoundedTuple : Symbol(badBoundedTuple, Decl(deferredMappedTypeRelations.ts, 38, 5))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+>boundedTuple : Symbol(boundedTuple, Decl(deferredMappedTypeRelations.ts, 37, 13))
+
+const goodBoundedTuple: Nest<[string | number], 4> = boundedTuple;
+>goodBoundedTuple : Symbol(goodBoundedTuple, Decl(deferredMappedTypeRelations.ts, 39, 5))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+>boundedTuple : Symbol(boundedTuple, Decl(deferredMappedTypeRelations.ts, 37, 13))
+
+type BoundedRelation = AssertFalse<Nest<[string], 4> extends Nest<[number], 4> ? true : false>;
+>BoundedRelation : Symbol(BoundedRelation, Decl(deferredMappedTypeRelations.ts, 39, 66))
+>AssertFalse : Symbol(AssertFalse, Decl(deferredMappedTypeRelations.ts, 17, 70))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+>Nest : Symbol(Nest, Decl(deferredMappedTypeRelations.ts, 32, 39))
+
+interface Step<T> { next: T }
+>Step : Symbol(Step, Decl(deferredMappedTypeRelations.ts, 40, 95))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 42, 15))
+>next : Symbol(Step.next, Decl(deferredMappedTypeRelations.ts, 42, 19))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 42, 15))
+
+type BuildChain<D extends number, T = null> = D extends 0 ? T : BuildChain<Previous[D], Step<T>>;
+>BuildChain : Symbol(BuildChain, Decl(deferredMappedTypeRelations.ts, 42, 29))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 43, 16))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 43, 33))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 43, 16))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 43, 33))
+>BuildChain : Symbol(BuildChain, Decl(deferredMappedTypeRelations.ts, 42, 29))
+>Previous : Symbol(Previous, Decl(deferredMappedTypeRelations.ts, 30, 49))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 43, 16))
+>Step : Symbol(Step, Decl(deferredMappedTypeRelations.ts, 40, 95))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 43, 33))
+
+type ChainNest<T, D> = { [K in keyof T]: D extends Step<infer R> ? ChainNest<T, R> : T[K] };
+>ChainNest : Symbol(ChainNest, Decl(deferredMappedTypeRelations.ts, 43, 97))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 44, 15))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 44, 17))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 44, 26))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 44, 15))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 44, 17))
+>Step : Symbol(Step, Decl(deferredMappedTypeRelations.ts, 40, 95))
+>R : Symbol(R, Decl(deferredMappedTypeRelations.ts, 44, 61))
+>ChainNest : Symbol(ChainNest, Decl(deferredMappedTypeRelations.ts, 43, 97))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 44, 15))
+>R : Symbol(R, Decl(deferredMappedTypeRelations.ts, 44, 61))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 44, 15))
+>K : Symbol(K, Decl(deferredMappedTypeRelations.ts, 44, 26))
+
+declare const chain: ChainNest<[string], BuildChain<4>>;
+>chain : Symbol(chain, Decl(deferredMappedTypeRelations.ts, 45, 13))
+>ChainNest : Symbol(ChainNest, Decl(deferredMappedTypeRelations.ts, 43, 97))
+>BuildChain : Symbol(BuildChain, Decl(deferredMappedTypeRelations.ts, 42, 29))
+
+const badChain: ChainNest<[number], BuildChain<4>> = chain;
+>badChain : Symbol(badChain, Decl(deferredMappedTypeRelations.ts, 46, 5))
+>ChainNest : Symbol(ChainNest, Decl(deferredMappedTypeRelations.ts, 43, 97))
+>BuildChain : Symbol(BuildChain, Decl(deferredMappedTypeRelations.ts, 42, 29))
+>chain : Symbol(chain, Decl(deferredMappedTypeRelations.ts, 45, 13))
+
+const goodChain: ChainNest<[string | number], BuildChain<4>> = chain;
+>goodChain : Symbol(goodChain, Decl(deferredMappedTypeRelations.ts, 47, 5))
+>ChainNest : Symbol(ChainNest, Decl(deferredMappedTypeRelations.ts, 43, 97))
+>BuildChain : Symbol(BuildChain, Decl(deferredMappedTypeRelations.ts, 42, 29))
+>chain : Symbol(chain, Decl(deferredMappedTypeRelations.ts, 45, 13))
+
+type ChainRelation = AssertFalse<ChainNest<[string], BuildChain<4>> extends ChainNest<[number], BuildChain<4>> ? true : false>;
+>ChainRelation : Symbol(ChainRelation, Decl(deferredMappedTypeRelations.ts, 47, 69))
+>AssertFalse : Symbol(AssertFalse, Decl(deferredMappedTypeRelations.ts, 17, 70))
+>ChainNest : Symbol(ChainNest, Decl(deferredMappedTypeRelations.ts, 43, 97))
+>BuildChain : Symbol(BuildChain, Decl(deferredMappedTypeRelations.ts, 42, 29))
+>ChainNest : Symbol(ChainNest, Decl(deferredMappedTypeRelations.ts, 43, 97))
+>BuildChain : Symbol(BuildChain, Decl(deferredMappedTypeRelations.ts, 42, 29))
+
+type BuildArray<D extends number, T> = D extends 0 ? T : BuildArray<Previous[D], T[]>;
+>BuildArray : Symbol(BuildArray, Decl(deferredMappedTypeRelations.ts, 48, 127))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 50, 16))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 50, 33))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 50, 16))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 50, 33))
+>BuildArray : Symbol(BuildArray, Decl(deferredMappedTypeRelations.ts, 48, 127))
+>Previous : Symbol(Previous, Decl(deferredMappedTypeRelations.ts, 30, 49))
+>D : Symbol(D, Decl(deferredMappedTypeRelations.ts, 50, 16))
+>T : Symbol(T, Decl(deferredMappedTypeRelations.ts, 50, 33))
+
+declare const computedArray: Deep<BuildArray<4, string>>;
+>computedArray : Symbol(computedArray, Decl(deferredMappedTypeRelations.ts, 51, 13))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>BuildArray : Symbol(BuildArray, Decl(deferredMappedTypeRelations.ts, 48, 127))
+
+const badComputedArray: Deep<BuildArray<4, number>> = computedArray;
+>badComputedArray : Symbol(badComputedArray, Decl(deferredMappedTypeRelations.ts, 52, 5))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>BuildArray : Symbol(BuildArray, Decl(deferredMappedTypeRelations.ts, 48, 127))
+>computedArray : Symbol(computedArray, Decl(deferredMappedTypeRelations.ts, 51, 13))
+
+const goodComputedArray: Deep<BuildArray<4, string | number>> = computedArray;
+>goodComputedArray : Symbol(goodComputedArray, Decl(deferredMappedTypeRelations.ts, 53, 5))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>BuildArray : Symbol(BuildArray, Decl(deferredMappedTypeRelations.ts, 48, 127))
+>computedArray : Symbol(computedArray, Decl(deferredMappedTypeRelations.ts, 51, 13))
+
+type ComputedRelation = AssertFalse<Deep<BuildArray<4, string>> extends Deep<BuildArray<4, number>> ? true : false>;
+>ComputedRelation : Symbol(ComputedRelation, Decl(deferredMappedTypeRelations.ts, 53, 78))
+>AssertFalse : Symbol(AssertFalse, Decl(deferredMappedTypeRelations.ts, 17, 70))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>BuildArray : Symbol(BuildArray, Decl(deferredMappedTypeRelations.ts, 48, 127))
+>Deep : Symbol(Deep, Decl(deferredMappedTypeRelations.ts, 0, 0))
+>BuildArray : Symbol(BuildArray, Decl(deferredMappedTypeRelations.ts, 48, 127))
+

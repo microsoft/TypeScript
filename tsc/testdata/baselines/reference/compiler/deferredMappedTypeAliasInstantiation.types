@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/deferredMappedTypeAliasInstantiation.ts] ////
+
+=== deferredMappedTypeAliasInstantiation.ts ===
+type Json = string | Json[];
+>Json : Json
+
+type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+>Parsed : Parsed<T>
+
+declare function direct<T>(value: T): Parsed<T>;
+>direct : <T>(value: T) => Parsed<T>
+>value : T
+
+declare function indirect<U>(value: U): { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: Parsed<U[]> };
+>indirect : <U>(value: U) => { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: Parsed<U[]>; }
+>value : U
+>concrete : string[]
+>recursive : any
+>generic : Parsed<U>[]
+
+export const concrete = direct([] as string[]);
+>concrete : string[]
+>direct([] as string[]) : string[]
+>direct : <T>(value: T) => Parsed<T>
+>[] as string[] : string[]
+>[] : never[]
+
+export const recursive = direct([] as Json[]);
+>recursive : any
+>direct([] as Json[]) : any
+>direct : <T>(value: T) => Parsed<T>
+>[] as Json[] : Json[]
+>[] : never[]
+
+export const instantiated = indirect(1);
+>instantiated : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: number[]; }
+>indirect(1) : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: number[]; }
+>indirect : <U>(value: U) => { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: Parsed<U[]>; }
+>1 : 1
+
+const numeric: number[] = instantiated.generic;
+>numeric : number[]
+>instantiated.generic : number[]
+>instantiated : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: number[]; }
+>generic : number[]
+
+instantiated.generic[0] = "error";
+>instantiated.generic[0] = "error" : "error"
+>instantiated.generic[0] : number
+>instantiated.generic : number[]
+>instantiated : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: number[]; }
+>generic : number[]
+>0 : 0
+>"error" : "error"
+
+function generic<T>(value: T) {
+>generic : <T>(value: T) => { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: Parsed<T>[]; }
+>value : T
+
+    return indirect(value);
+>indirect(value) : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: Parsed<T>[]; }
+>indirect : <U>(value: U) => { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: Parsed<U[]>; }
+>value : T
+}
+export const twice = generic(true);
+>twice : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: boolean[]; }
+>generic(true) : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: boolean[]; }
+>generic : <T>(value: T) => { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: Parsed<T>[]; }
+>true : true
+
+const boolean: boolean[] = twice.generic;
+>boolean : boolean[]
+>twice.generic : boolean[]
+>twice : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: boolean[]; }
+>generic : boolean[]
+
+twice.generic[0] = "error";
+>twice.generic[0] = "error" : "error"
+>twice.generic[0] : boolean
+>twice.generic : boolean[]
+>twice : { concrete: Parsed<string[]>; recursive: Parsed<Json[]>; generic: boolean[]; }
+>generic : boolean[]
+>0 : 0
+>"error" : "error"
+

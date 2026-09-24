@@ -1,0 +1,151 @@
+//// [tests/cases/compiler/deferredMappedTypeDeclarationDepth.ts] ////
+
+=== growing.ts ===
+export function tuple() {
+>tuple : () => any
+
+    type C<T> = { [K in keyof T]: C<[T]> };
+>C : { [K in keyof T]: any; }
+
+    return null as unknown as C<[number]>;
+>null as unknown as C<[number]> : any
+>null as unknown : unknown
+}
+
+export function array() {
+>array : () => any
+
+    type C<T> = { [K in keyof T]: C<T[]> };
+>C : { [K in keyof T]: any; }
+
+    return null as unknown as C<number[]>;
+>null as unknown as C<number[]> : any
+>null as unknown : unknown
+}
+
+export function changingTuple() {
+>changingTuple : () => any
+
+    type C<T, S extends string> = { [K in keyof T]: C<T, `${S}x`> };
+>C : { [K in keyof T]: { [K_1 in keyof T]: { [K_2 in keyof T]: { [K_3 in keyof T]: { [K_4 in keyof T]: { [K_5 in keyof T]: { [K_6 in keyof T]: { [K_7 in keyof T]: { [K_8 in keyof T]: { [K_9 in keyof T]: { [K_10 in keyof T]: any; }; }; }; }; }; }; }; }; }; }; }
+
+    return null as unknown as C<[number], "">;
+>null as unknown as C<[number], ""> : any
+>null as unknown : unknown
+}
+
+export function changingArray() {
+>changingArray : () => any
+
+    type C<T, S extends string> = { [K in keyof T]: C<T, `${S}x`> };
+>C : { [K in keyof T]: { [K_1 in keyof T]: { [K_2 in keyof T]: { [K_3 in keyof T]: { [K_4 in keyof T]: { [K_5 in keyof T]: { [K_6 in keyof T]: { [K_7 in keyof T]: { [K_8 in keyof T]: { [K_9 in keyof T]: { [K_10 in keyof T]: any; }; }; }; }; }; }; }; }; }; }; }
+
+    return null as unknown as C<number[], "">;
+>null as unknown as C<number[], ""> : any
+>null as unknown : unknown
+}
+
+export function nestedContext() {
+>nestedContext : () => any
+
+    type C<T, S> = { [K in keyof T]: C<T, C<S, S>> };
+>C : { [K in keyof T]: { [K_1 in keyof T]: { [K_2 in keyof T]: { [K_3 in keyof T]: { [K_4 in keyof T]: { [K_5 in keyof T]: { [K_6 in keyof T]: { [K_7 in keyof T]: { [K_8 in keyof T]: { [K_9 in keyof T]: { [K_10 in keyof T]: any; }; }; }; }; }; }; }; }; }; }; }
+
+    return null as unknown as C<[number], [number]>;
+>null as unknown as C<[number], [number]> : any
+>null as unknown : unknown
+}
+
+=== finite.ts ===
+type Previous = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+>Previous : Previous
+
+export function array() {
+>array : () => number[][][][][][][][][][][][][]
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : T extends object ? { [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends object ? { [K_1 in keyof T_1]: T_1[K_1] extends infer T_2 ? T_2 extends T_1[K_1] ? T_2 extends object ? { [K_2 in keyof T_2]: T_2[K_2] extends infer T_3 ? T_3 extends T_2[K_2] ? T_3 extends object ? { [K_3 in keyof T_3]: T_3[K_3] extends infer T_4 ? T_4 extends T_3[K_3] ? T_4 extends object ? { [K_4 in keyof T_4]: T_4[K_4] extends infer T_5 ? T_5 extends T_4[K_4] ? T_5 extends object ? { [K_5 in keyof T_5]: T_5[K_5] extends infer T_6 ? T_6 extends T_5[K_5] ? T_6 extends object ? { [K_6 in keyof T_6]: T_6[K_6] extends infer T_7 ? T_7 extends T_6[K_6] ? T_7 extends object ? { [K_7 in keyof T_7]: T_7[K_7] extends infer T_8 ? T_8 extends T_7[K_7] ? T_8 extends object ? { [K_8 in keyof T_8]: T_8[K_8] extends infer T_9 ? T_9 extends T_8[K_8] ? T_9 extends object ? { [K_9 in keyof T_9]: T_9[K_9] extends infer T_10 ? T_10 extends T_9[K_9] ? T_10 extends object ? { [K_10 in keyof T_10]: any; } : T_10 : never : never; } : T_9 : never : never; } : T_8 : never : never; } : T_7 : never : never; } : T_6 : never : never; } : T_5 : never : never; } : T_4 : never : never; } : T_3 : never : never; } : T_2 : never : never; } : T_1 : never : never; } : T
+
+    return null as unknown as P<number[][][][][][][][][][][][][]>;
+>null as unknown as P<number[][][][][][][][][][][][][]> : number[][][][][][][][][][][][][]
+>null as unknown : unknown
+}
+
+export function tuple() {
+>tuple : () => [[[[[[[[[[[[[number]]]]]]]]]]]]]
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : T extends object ? { [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends object ? { [K_1 in keyof T_1]: T_1[K_1] extends infer T_2 ? T_2 extends T_1[K_1] ? T_2 extends object ? { [K_2 in keyof T_2]: T_2[K_2] extends infer T_3 ? T_3 extends T_2[K_2] ? T_3 extends object ? { [K_3 in keyof T_3]: T_3[K_3] extends infer T_4 ? T_4 extends T_3[K_3] ? T_4 extends object ? { [K_4 in keyof T_4]: T_4[K_4] extends infer T_5 ? T_5 extends T_4[K_4] ? T_5 extends object ? { [K_5 in keyof T_5]: T_5[K_5] extends infer T_6 ? T_6 extends T_5[K_5] ? T_6 extends object ? { [K_6 in keyof T_6]: T_6[K_6] extends infer T_7 ? T_7 extends T_6[K_6] ? T_7 extends object ? { [K_7 in keyof T_7]: T_7[K_7] extends infer T_8 ? T_8 extends T_7[K_7] ? T_8 extends object ? { [K_8 in keyof T_8]: T_8[K_8] extends infer T_9 ? T_9 extends T_8[K_8] ? T_9 extends object ? { [K_9 in keyof T_9]: T_9[K_9] extends infer T_10 ? T_10 extends T_9[K_9] ? T_10 extends object ? { [K_10 in keyof T_10]: any; } : T_10 : never : never; } : T_9 : never : never; } : T_8 : never : never; } : T_7 : never : never; } : T_6 : never : never; } : T_5 : never : never; } : T_4 : never : never; } : T_3 : never : never; } : T_2 : never : never; } : T_1 : never : never; } : T
+
+    return null as unknown as P<[[[[[[[[[[[[[number]]]]]]]]]]]]]>;
+>null as unknown as P<[[[[[[[[[[[[[number]]]]]]]]]]]]]> : [[[[[[[[[[[[[number]]]]]]]]]]]]]
+>null as unknown : unknown
+}
+
+export function composedArray() {
+>composedArray : () => number[][][][][][][][][][][][][]
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : T extends object ? { [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends object ? { [K_1 in keyof T_1]: T_1[K_1] extends infer T_2 ? T_2 extends T_1[K_1] ? T_2 extends object ? { [K_2 in keyof T_2]: T_2[K_2] extends infer T_3 ? T_3 extends T_2[K_2] ? T_3 extends object ? { [K_3 in keyof T_3]: T_3[K_3] extends infer T_4 ? T_4 extends T_3[K_3] ? T_4 extends object ? { [K_4 in keyof T_4]: T_4[K_4] extends infer T_5 ? T_5 extends T_4[K_4] ? T_5 extends object ? { [K_5 in keyof T_5]: T_5[K_5] extends infer T_6 ? T_6 extends T_5[K_5] ? T_6 extends object ? { [K_6 in keyof T_6]: T_6[K_6] extends infer T_7 ? T_7 extends T_6[K_6] ? T_7 extends object ? { [K_7 in keyof T_7]: T_7[K_7] extends infer T_8 ? T_8 extends T_7[K_7] ? T_8 extends object ? { [K_8 in keyof T_8]: T_8[K_8] extends infer T_9 ? T_9 extends T_8[K_8] ? T_9 extends object ? { [K_9 in keyof T_9]: T_9[K_9] extends infer T_10 ? T_10 extends T_9[K_9] ? T_10 extends object ? { [K_10 in keyof T_10]: any; } : T_10 : never : never; } : T_9 : never : never; } : T_8 : never : never; } : T_7 : never : never; } : T_6 : never : never; } : T_5 : never : never; } : T_4 : never : never; } : T_3 : never : never; } : T_2 : never : never; } : T_1 : never : never; } : T
+
+    type Q<T> = T extends object ? { [K in keyof T]: Q<T[K]> } : T;
+>Q : T extends object ? { [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends object ? { [K_1 in keyof T_1]: T_1[K_1] extends infer T_2 ? T_2 extends T_1[K_1] ? T_2 extends object ? { [K_2 in keyof T_2]: T_2[K_2] extends infer T_3 ? T_3 extends T_2[K_2] ? T_3 extends object ? { [K_3 in keyof T_3]: T_3[K_3] extends infer T_4 ? T_4 extends T_3[K_3] ? T_4 extends object ? { [K_4 in keyof T_4]: T_4[K_4] extends infer T_5 ? T_5 extends T_4[K_4] ? T_5 extends object ? { [K_5 in keyof T_5]: T_5[K_5] extends infer T_6 ? T_6 extends T_5[K_5] ? T_6 extends object ? { [K_6 in keyof T_6]: T_6[K_6] extends infer T_7 ? T_7 extends T_6[K_6] ? T_7 extends object ? { [K_7 in keyof T_7]: T_7[K_7] extends infer T_8 ? T_8 extends T_7[K_7] ? T_8 extends object ? { [K_8 in keyof T_8]: T_8[K_8] extends infer T_9 ? T_9 extends T_8[K_8] ? T_9 extends object ? { [K_9 in keyof T_9]: T_9[K_9] extends infer T_10 ? T_10 extends T_9[K_9] ? T_10 extends object ? { [K_10 in keyof T_10]: any; } : T_10 : never : never; } : T_9 : never : never; } : T_8 : never : never; } : T_7 : never : never; } : T_6 : never : never; } : T_5 : never : never; } : T_4 : never : never; } : T_3 : never : never; } : T_2 : never : never; } : T_1 : never : never; } : T
+
+    return null as unknown as P<Q<number[][][][][][][][][][][][][]>>;
+>null as unknown as P<Q<number[][][][][][][][][][][][][]>> : number[][][][][][][][][][][][][]
+>null as unknown : unknown
+}
+
+export function composedTuple() {
+>composedTuple : () => [[[[[[[[[[[[[number]]]]]]]]]]]]]
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : T extends object ? { [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends object ? { [K_1 in keyof T_1]: T_1[K_1] extends infer T_2 ? T_2 extends T_1[K_1] ? T_2 extends object ? { [K_2 in keyof T_2]: T_2[K_2] extends infer T_3 ? T_3 extends T_2[K_2] ? T_3 extends object ? { [K_3 in keyof T_3]: T_3[K_3] extends infer T_4 ? T_4 extends T_3[K_3] ? T_4 extends object ? { [K_4 in keyof T_4]: T_4[K_4] extends infer T_5 ? T_5 extends T_4[K_4] ? T_5 extends object ? { [K_5 in keyof T_5]: T_5[K_5] extends infer T_6 ? T_6 extends T_5[K_5] ? T_6 extends object ? { [K_6 in keyof T_6]: T_6[K_6] extends infer T_7 ? T_7 extends T_6[K_6] ? T_7 extends object ? { [K_7 in keyof T_7]: T_7[K_7] extends infer T_8 ? T_8 extends T_7[K_7] ? T_8 extends object ? { [K_8 in keyof T_8]: T_8[K_8] extends infer T_9 ? T_9 extends T_8[K_8] ? T_9 extends object ? { [K_9 in keyof T_9]: T_9[K_9] extends infer T_10 ? T_10 extends T_9[K_9] ? T_10 extends object ? { [K_10 in keyof T_10]: any; } : T_10 : never : never; } : T_9 : never : never; } : T_8 : never : never; } : T_7 : never : never; } : T_6 : never : never; } : T_5 : never : never; } : T_4 : never : never; } : T_3 : never : never; } : T_2 : never : never; } : T_1 : never : never; } : T
+
+    type Q<T> = T extends object ? { [K in keyof T]: Q<T[K]> } : T;
+>Q : T extends object ? { [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends object ? { [K_1 in keyof T_1]: T_1[K_1] extends infer T_2 ? T_2 extends T_1[K_1] ? T_2 extends object ? { [K_2 in keyof T_2]: T_2[K_2] extends infer T_3 ? T_3 extends T_2[K_2] ? T_3 extends object ? { [K_3 in keyof T_3]: T_3[K_3] extends infer T_4 ? T_4 extends T_3[K_3] ? T_4 extends object ? { [K_4 in keyof T_4]: T_4[K_4] extends infer T_5 ? T_5 extends T_4[K_4] ? T_5 extends object ? { [K_5 in keyof T_5]: T_5[K_5] extends infer T_6 ? T_6 extends T_5[K_5] ? T_6 extends object ? { [K_6 in keyof T_6]: T_6[K_6] extends infer T_7 ? T_7 extends T_6[K_6] ? T_7 extends object ? { [K_7 in keyof T_7]: T_7[K_7] extends infer T_8 ? T_8 extends T_7[K_7] ? T_8 extends object ? { [K_8 in keyof T_8]: T_8[K_8] extends infer T_9 ? T_9 extends T_8[K_8] ? T_9 extends object ? { [K_9 in keyof T_9]: T_9[K_9] extends infer T_10 ? T_10 extends T_9[K_9] ? T_10 extends object ? { [K_10 in keyof T_10]: any; } : T_10 : never : never; } : T_9 : never : never; } : T_8 : never : never; } : T_7 : never : never; } : T_6 : never : never; } : T_5 : never : never; } : T_4 : never : never; } : T_3 : never : never; } : T_2 : never : never; } : T_1 : never : never; } : T
+
+    return null as unknown as P<Q<[[[[[[[[[[[[[number]]]]]]]]]]]]]>>;
+>null as unknown as P<Q<[[[[[[[[[[[[[number]]]]]]]]]]]]]>> : [[[[[[[[[[[[[number]]]]]]]]]]]]]
+>null as unknown : unknown
+}
+
+export function boundedArray() {
+>boundedArray : () => number[][][][][][][][][][][][][][]
+
+    type C<T, D extends number> = { [K in keyof T]: D extends 0 ? T[K] : C<T, Previous[D]> };
+>C : { [K in keyof T]: D extends 0 ? T[K] : { [K_1 in keyof T]: Previous[D] extends infer T_1 ? T_1 extends Previous[D] ? T_1 extends 0 ? T[K_1] : { [K_2 in keyof T]: Previous[T_1] extends infer T_2 ? T_2 extends Previous[T_1] ? T_2 extends 0 ? T[K_2] : { [K_3 in keyof T]: Previous[T_2] extends infer T_3 ? T_3 extends Previous[T_2] ? T_3 extends 0 ? T[K_3] : { [K_4 in keyof T]: Previous[T_3] extends infer T_4 ? T_4 extends Previous[T_3] ? T_4 extends 0 ? T[K_4] : { [K_5 in keyof T]: Previous[T_4] extends infer T_5 ? T_5 extends Previous[T_4] ? T_5 extends 0 ? T[K_5] : { [K_6 in keyof T]: Previous[T_5] extends infer T_6 ? T_6 extends Previous[T_5] ? T_6 extends 0 ? T[K_6] : { [K_7 in keyof T]: Previous[T_6] extends infer T_7 ? T_7 extends Previous[T_6] ? T_7 extends 0 ? T[K_7] : { [K_8 in keyof T]: Previous[T_7] extends infer T_8 ? T_8 extends Previous[T_7] ? T_8 extends 0 ? T[K_8] : { [K_9 in keyof T]: Previous[T_8] extends infer T_9 ? T_9 extends Previous[T_8] ? T_9 extends 0 ? T[K_9] : { [K_10 in keyof T]: Previous[T_9] extends infer T_10 ? T_10 extends Previous[T_9] ? T_10 extends 0 ? T[K_10] : any : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; }; }
+
+    return null as unknown as C<number[], 13>;
+>null as unknown as C<number[], 13> : number[][][][][][][][][][][][][][]
+>null as unknown : unknown
+}
+
+export function boundedTuple() {
+>boundedTuple : () => [[[[[[[[[[[[[[number]]]]]]]]]]]]]]
+
+    type C<T, D extends number> = { [K in keyof T]: D extends 0 ? T[K] : C<T, Previous[D]> };
+>C : { [K in keyof T]: D extends 0 ? T[K] : { [K_1 in keyof T]: Previous[D] extends infer T_1 ? T_1 extends Previous[D] ? T_1 extends 0 ? T[K_1] : { [K_2 in keyof T]: Previous[T_1] extends infer T_2 ? T_2 extends Previous[T_1] ? T_2 extends 0 ? T[K_2] : { [K_3 in keyof T]: Previous[T_2] extends infer T_3 ? T_3 extends Previous[T_2] ? T_3 extends 0 ? T[K_3] : { [K_4 in keyof T]: Previous[T_3] extends infer T_4 ? T_4 extends Previous[T_3] ? T_4 extends 0 ? T[K_4] : { [K_5 in keyof T]: Previous[T_4] extends infer T_5 ? T_5 extends Previous[T_4] ? T_5 extends 0 ? T[K_5] : { [K_6 in keyof T]: Previous[T_5] extends infer T_6 ? T_6 extends Previous[T_5] ? T_6 extends 0 ? T[K_6] : { [K_7 in keyof T]: Previous[T_6] extends infer T_7 ? T_7 extends Previous[T_6] ? T_7 extends 0 ? T[K_7] : { [K_8 in keyof T]: Previous[T_7] extends infer T_8 ? T_8 extends Previous[T_7] ? T_8 extends 0 ? T[K_8] : { [K_9 in keyof T]: Previous[T_8] extends infer T_9 ? T_9 extends Previous[T_8] ? T_9 extends 0 ? T[K_9] : { [K_10 in keyof T]: Previous[T_9] extends infer T_10 ? T_10 extends Previous[T_9] ? T_10 extends 0 ? T[K_10] : any : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; } : never : never; }; }
+
+    return null as unknown as C<[number], 13>;
+>null as unknown as C<[number], 13> : [[[[[[[[[[[[[[number]]]]]]]]]]]]]]
+>null as unknown : unknown
+}
+
+interface Step<T> { next: T }
+>next : T
+
+type BuildChain<D extends number, T = null> = D extends 0 ? T : BuildChain<Previous[D], Step<T>>;
+>BuildChain : BuildChain<D, T>
+
+export function boundedChain() {
+>boundedChain : () => [[[[[[[[[[[[[[number]]]]]]]]]]]]]]
+
+    type C<T, D> = { [K in keyof T]: D extends Step<infer R> ? C<T, R> : T[K] };
+>C : { [K in keyof T]: D extends Step<infer R> ? { [K_1 in keyof T]: R extends Step<infer R> ? C : T[K_1]; } : T[K]; }
+
+    return null as unknown as C<[number], BuildChain<13>>;
+>null as unknown as C<[number], BuildChain<13>> : [[[[[[[[[[[[[[number]]]]]]]]]]]]]]
+>null as unknown : unknown
+}
+
