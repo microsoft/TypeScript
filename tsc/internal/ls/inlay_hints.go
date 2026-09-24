@@ -2,7 +2,6 @@ package ls
 
 import (
 	"context"
-	"reflect"
 	"slices"
 	"strings"
 	"unicode"
@@ -13,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -38,6 +38,10 @@ func (l *LanguageService) ProvideInlayHint(
 
 	mappedRanges := l.converters.FromLSPRangeIntersectingForSourceFile(file, params.Range, spanmap.FeatureInlayHints)
 	result := make([]*lsproto.InlayHint, 0, len(mappedRanges))
+	var seen map[string]struct{}
+	if len(mappedRanges) > 1 {
+		seen = make(map[string]struct{})
+	}
 	for _, mapped := range mappedRanges {
 		projection := mapped.Script
 		checker, done := program.GetTypeCheckerForFile(ctx, projection)
@@ -52,16 +56,21 @@ func (l *LanguageService) ProvideInlayHint(
 			converters:      l.converters,
 		}
 		inlayHintState.visit(projection.AsNode())
-		if len(result) == 0 {
+		if seen == nil {
 			result = append(result, inlayHintState.result...)
 			continue
 		}
 		for _, hint := range inlayHintState.result {
-			if !slices.ContainsFunc(result, func(existing *lsproto.InlayHint) bool {
-				return reflect.DeepEqual(existing, hint)
-			}) {
-				result = append(result, hint)
+			encoded, err := json.Marshal(hint)
+			if err != nil {
+				return lsproto.InlayHintsOrNull{}, err
 			}
+			key := string(encoded)
+			if _, ok := seen[key]; ok {
+				continue
+			}
+			seen[key] = struct{}{}
+			result = append(result, hint)
 		}
 	}
 	return lsproto.InlayHintsOrNull{InlayHints: &result}, nil
