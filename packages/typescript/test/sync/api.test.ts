@@ -61,8 +61,9 @@ import {
     createFileSystem,
     createFileSystemLayer,
     createFileSystemWithLib,
+    type FileSystemCallbacks,
+    serverFS,
 } from "@typescript/typescript/unstable/fs";
-import type { FileSystemCallbacks } from "@typescript/typescript/unstable/fs";
 import {
     API,
     type BigIntLiteralType,
@@ -177,29 +178,29 @@ describe("API", { concurrency }, () => {
             void invalid;
 
             const callbacks: FileSystemCallbacks = {
-                directoryExists: "passthrough",
-                fileExists: "passthrough",
-                getAccessibleEntries: "passthrough",
-                readFile: "passthrough",
-                realpath: "identity",
-                stat: "infer",
-                writeFile: "passthrough",
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
+                readFile: serverFS.useOS,
+                realpath: serverFS.identity,
+                stat: serverFS.fakeStat,
+                writeFile: serverFS.useOS,
             };
             void new API({ fs: callbacks });
             // @ts-expect-error Filesystem callback configurations must specify every operation.
-            void new API({ fs: { readFile: "passthrough" } });
+            void new API({ fs: { readFile: serverFS.useOS } });
             void new API({
                 fs: {
                     ...callbacks,
                     // @ts-expect-error Identity is only a valid realpath implementation.
-                    readFile: "identity",
+                    readFile: serverFS.identity,
                 },
             });
             void new API({
                 fs: {
                     ...callbacks,
                     // @ts-expect-error Infer is only a valid stat implementation.
-                    fileExists: "infer",
+                    fileExists: serverFS.fakeStat,
                 },
             });
         }
@@ -3719,12 +3720,12 @@ export const obj = { name };
 describe("readFile callback semantics", { concurrency }, () => {
     test("callback configurations require every operation at runtime", () => {
         assert.throws(
-            () => new API({ fs: { readFile: "passthrough" } as FileSystemCallbacks }),
+            () => new API({ fs: { readFile: serverFS.useOS } as FileSystemCallbacks }),
             /Invalid filesystem callback 'fileExists'/,
         );
     });
 
-    test("readFile: string returns content, null blocks fallback, undefined falls through to real FS", () => {
+    test("readFile: string returns content, null blocks fallback, useOS falls through to the server OS", () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x: number = 1;`,
@@ -3740,8 +3741,8 @@ describe("readFile callback semantics", { concurrency }, () => {
                     return null;
                 }
                 // Try the VFS first; if it has the file, return its content (string).
-                // Otherwise return undefined to fall through to the real FS.
-                return vfs.readFile!(fileName);
+                // Otherwise use the OS filesystem on the server.
+                return vfs.readFile(fileName);
             },
         };
 
@@ -3758,7 +3759,7 @@ describe("readFile callback semantics", { concurrency }, () => {
         assert.ok(sf, "Virtual file should be found");
         assert.equal(sf.text, virtualFiles["/src/index.ts"]);
 
-        // 2. undefined fallback: lib files from the real FS should be present.
+        // 2. useOS fallback: lib files from the server OS should be present.
         //    If readFile returned null for unknowns, lib files would be missing
         //    and `number` would not resolve — this was the original async bug.
         //    Verify by checking that `number` resolves to a proper type (not error).
@@ -4046,16 +4047,16 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
-                directoryExists: "passthrough",
-                fileExists: "passthrough",
-                getAccessibleEntries: "passthrough",
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
                 readFile: path => {
                     callbackCalls.push(path);
-                    return undefined;
+                    return serverFS.useOS;
                 },
-                realpath: "passthrough",
-                stat: "passthrough",
-                writeFile: "passthrough",
+                realpath: serverFS.useOS,
+                stat: serverFS.useOS,
+                writeFile: serverFS.useOS,
             },
         });
 
@@ -4086,16 +4087,16 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
-                directoryExists: "passthrough",
-                fileExists: "passthrough",
-                getAccessibleEntries: "passthrough",
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
                 readFile: path => {
                     callbackCalls.push(path);
-                    return undefined;
+                    return serverFS.useOS;
                 },
-                realpath: "passthrough",
-                stat: "passthrough",
-                writeFile: "passthrough",
+                realpath: serverFS.useOS,
+                stat: serverFS.useOS,
+                writeFile: serverFS.useOS,
             },
         });
 
@@ -4275,12 +4276,12 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
-                directoryExists: "passthrough",
-                fileExists: "passthrough",
-                getAccessibleEntries: "passthrough",
-                readFile: "passthrough",
-                realpath: "passthrough",
-                stat: "passthrough",
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
+                readFile: serverFS.useOS,
+                realpath: serverFS.useOS,
+                stat: serverFS.useOS,
                 writeFile: path => {
                     hostWrites.push(path);
                 },
@@ -6640,7 +6641,7 @@ describe("Program - selected file emit", { concurrency }, () => {
         ]);
         assert.equal(result.outputFiles.get("/src/a.js")?.sourceFileName, "/src/a.ts");
         assert.match(result.outputFiles.get("/src/a.js")!.text, /export const a = 1/);
-        assert.equal(fs.readFile?.("/src/a.js"), undefined);
+        assert.equal(fs.readFile("/src/a.js"), serverFS.useOS);
     });
 
     test("getDeclarationEmit forces declarations and declaration maps", () => {
@@ -6658,7 +6659,7 @@ describe("Program - selected file emit", { concurrency }, () => {
             "/src/b.d.ts.map",
         ]);
         assert.equal(result.outputFiles.get("/src/a.d.ts")?.sourceFileName, "/src/a.ts");
-        assert.equal(fs.readFile?.("/src/a.d.ts"), undefined);
+        assert.equal(fs.readFile("/src/a.d.ts"), serverFS.useOS);
     });
 
     test("selected file emit accepts empty arrays", () => {
@@ -7610,9 +7611,9 @@ describe("Program - emit", { concurrency }, () => {
         const dts = fs.readFile?.("/dist/src/index.d.ts");
         const js2 = fs.readFile?.("/dist/src/testing.js");
         const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
-        assert.strictEqual(js, undefined);
+        assert.strictEqual(js, serverFS.useOS);
         assert.strictEqual(dts, `export declare const x: number;\n`);
-        assert.strictEqual(js2, undefined);
+        assert.strictEqual(js2, serverFS.useOS);
         assert.strictEqual(dts2, `export declare const y: string;\n`);
     });
 
@@ -7642,9 +7643,9 @@ describe("Program - emit", { concurrency }, () => {
         const js2 = fs.readFile?.("/dist/src/testing.js");
         const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
         assert.strictEqual(js, `export const x = 1;\n`);
-        assert.strictEqual(dts, undefined);
+        assert.strictEqual(dts, serverFS.useOS);
         assert.strictEqual(js2, `export const y = 'typescript';\n`);
-        assert.strictEqual(dts2, undefined);
+        assert.strictEqual(dts2, serverFS.useOS);
     });
 
     test("emitToString emits the whole program and respects emitOnly", () => {
@@ -7658,7 +7659,7 @@ describe("Program - emit", { concurrency }, () => {
             "/dist/src/index.d.ts",
             "/dist/src/testing.d.ts",
         ]);
-        assert.equal(fs.readFile?.("/dist/src/index.js"), undefined);
+        assert.equal(fs.readFile("/dist/src/index.js"), serverFS.useOS);
     });
 
     test("whole-program emit includes option-controlled maps", () => {
@@ -7723,8 +7724,8 @@ describe("Program - emit", { concurrency }, () => {
         assert.equal(result.emitSkipped, true);
         assert.ok(result.diagnostics.some(d => d.code === 1109));
         assert.deepEqual(result.emittedFiles, []);
-        assert.equal(fs.readFile?.("/dist/src/bad.js"), undefined);
-        assert.equal(fs.readFile?.("/dist/src/good.js"), undefined);
+        assert.equal(fs.readFile("/dist/src/bad.js"), serverFS.useOS);
+        assert.equal(fs.readFile("/dist/src/good.js"), serverFS.useOS);
 
         const stringResult = project.program.emitToString();
         assert.equal(stringResult.emitSkipped, true);
@@ -7752,7 +7753,7 @@ describe("Program - emit", { concurrency }, () => {
             emitSkipped: false,
             outputFiles: new Map(),
         });
-        assert.equal(fs.readFile?.("/src/index.js"), undefined);
+        assert.equal(fs.readFile("/src/index.js"), serverFS.useOS);
     });
 
     test("emit rejects unknown files and invalid emitOnly values", () => {

@@ -1,6 +1,7 @@
-import type {
-    FileSystemCallbacks,
-    FileSystemEntries,
+import {
+    type FileSystemCallbacks,
+    type FileSystemEntries,
+    serverFS,
 } from "../src/api/fs.ts";
 import { getPathComponents } from "../src/api/path.ts";
 
@@ -22,10 +23,10 @@ type VNode = VDirectory | VFile;
 interface TestFileSystem extends FileSystemCallbacks {
     directoryExists(directoryName: string): boolean;
     fileExists(fileName: string): boolean;
-    getAccessibleEntries(directoryName: string): FileSystemEntries | undefined;
-    readFile(fileName: string): string | undefined;
-    realpath: "identity";
-    stat: "infer";
+    getAccessibleEntries(directoryName: string): FileSystemEntries | typeof serverFS.useOS;
+    readFile(fileName: string): string | typeof serverFS.useOS;
+    realpath: typeof serverFS.identity;
+    stat: typeof serverFS.fakeStat;
     writeFile(path: string, data: string): void;
     removeFile(path: string): void;
 }
@@ -47,8 +48,8 @@ export function createVirtualFileSystem(files: Record<string, string>): TestFile
         fileExists,
         getAccessibleEntries,
         readFile,
-        realpath: "identity",
-        stat: "infer",
+        realpath: serverFS.identity,
+        stat: serverFS.fakeStat,
         writeFile,
         removeFile,
     };
@@ -121,10 +122,10 @@ export function createVirtualFileSystem(files: Record<string, string>): TestFile
         return fileName in content;
     }
 
-    function getAccessibleEntries(directoryName: string): FileSystemEntries | undefined {
+    function getAccessibleEntries(directoryName: string): FileSystemEntries | typeof serverFS.useOS {
         const node = getNodeFromPath(directoryName);
         if (!node || node.type !== "directory") {
-            return undefined;
+            return serverFS.useOS;
         }
         const fileEntries: string[] = [];
         const directories: string[] = [];
@@ -139,7 +140,7 @@ export function createVirtualFileSystem(files: Record<string, string>): TestFile
         return { files: fileEntries, directories };
     }
 
-    function readFile(fileName: string): string | undefined {
-        return content[fileName];
+    function readFile(fileName: string): string | typeof serverFS.useOS {
+        return content[fileName] ?? serverFS.useOS;
     }
 }

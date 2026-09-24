@@ -1,3 +1,4 @@
+import { serverFS } from "../fs.ts";
 import { configureFileSystemCallbacks } from "../fsCallbacks.ts";
 import {
     type ClientOptions,
@@ -60,8 +61,7 @@ export class Client {
 
                     channel.registerCallback(name, (_, arg) => {
                         const { path, data } = JSON.parse(arg);
-                        callback(path, data);
-                        return "";
+                        return callback(path, data) === serverFS.useOS ? "" : "true";
                     });
 
                     continue;
@@ -71,16 +71,14 @@ export class Client {
                 if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
                 channel.registerCallback(name, (_, arg) => {
                     const result = callback(JSON.parse(arg));
+                    if (result === serverFS.useOS) return "";
                     if (name === "readFile") {
-                        // Wrap defined results to preserve null vs undefined.
-                        if (result === undefined) return "";
                         return JSON.stringify({ content: result });
                     }
                     if (name === "stat") {
-                        if (result === undefined) return "";
                         return JSON.stringify({ stat: result });
                     }
-                    return JSON.stringify(result) ?? "";
+                    return JSON.stringify(result);
                 });
             }
         }

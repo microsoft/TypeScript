@@ -33,7 +33,7 @@ func TestCallbackFSDefaults(t *testing.T) {
 		"/file.ts": "content",
 	}, false)
 	caseSensitive := true
-	fs := newCallbackFS(base, []string{"realpath:identity", "stat:infer"}, &caseSensitive)
+	fs := newCallbackFS(base, []string{"realpath:identity", "stat:fakeStat"}, &caseSensitive)
 
 	if !fs.UseCaseSensitiveFileNames() {
 		t.Fatal("expected configured case sensitivity")
@@ -107,5 +107,29 @@ func TestNodeFileModeToGoFileMode(t *testing.T) {
 				t.Fatalf("nodeFileModeToGoFileMode(%#o) = %#o, want %#o", test.node, got, test.goMode)
 			}
 		})
+	}
+}
+
+func TestCallbackFSWriteFilePassthrough(t *testing.T) {
+	t.Parallel()
+
+	base := vfstest.FromMap(map[string]string{}, true)
+	fs := newCallbackFS(base, []string{"writeFile"}, nil)
+	conn := &callbackTestConn{responses: map[string]json.Value{callbackWriteFile: nil}}
+	fs.SetConnection(t.Context(), conn)
+
+	if err := fs.WriteFile("/use-os.ts", "content"); err != nil {
+		t.Fatal(err)
+	}
+	if content, ok := base.ReadFile("/use-os.ts"); !ok || content != "content" {
+		t.Fatalf("base ReadFile() = %q, %v, want OS filesystem content", content, ok)
+	}
+
+	conn.responses[callbackWriteFile] = []byte("true")
+	if err := fs.WriteFile("/handled.ts", "content"); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := base.ReadFile("/handled.ts"); ok {
+		t.Fatal("handled callback write unexpectedly reached base filesystem")
 	}
 }

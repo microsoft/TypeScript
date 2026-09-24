@@ -1,6 +1,7 @@
 import {
     type FileSystemCallbacks,
     fsCallbackNames,
+    serverFS,
 } from "./fs.ts";
 
 export interface FileSystemCallbackConfiguration {
@@ -21,18 +22,18 @@ export function configureFileSystemCallbacks(fs: FileSystemCallbacks | undefined
             callbackNames.push(name);
             continue;
         }
-        if (value === "passthrough") {
+        if (value === serverFS.useOS) {
             continue;
         }
-        if (name === "realpath" && value === "identity") {
+        if (name === "realpath" && value === serverFS.identity) {
             args.push("realpath:identity");
             continue;
         }
-        if (name === "stat" && value === "infer") {
-            args.push("stat:infer");
+        if (name === "stat" && value === serverFS.fakeStat) {
+            args.push("stat:fakeStat");
             continue;
         }
-        throw new TypeError(`Invalid filesystem callback '${name}': expected a function${name === "realpath" ? ', "passthrough", or "identity"' : name === "stat" ? ', "passthrough", or "infer"' : ' or "passthrough"'}`);
+        throw new TypeError(`Invalid filesystem callback '${name}': expected a function or a supported filesystem sentinel`);
     }
     args.push(...callbackNames);
     return { callbackNames, arguments: args };

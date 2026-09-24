@@ -9,7 +9,10 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
-import type { FileSystemCallbacks } from "../fs.ts";
+import {
+    type FileSystemCallbacks,
+    serverFS,
+} from "../fs.ts";
 import {
     configureFileSystemCallbacks,
     type FileSystemCallbackConfiguration,
@@ -143,8 +146,7 @@ export class Client {
 
                 const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
                 connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    callback(arg.path, arg.data);
-                    return null;
+                    return callback(arg.path, arg.data) === serverFS.useOS ? null : true;
                 });
 
                 continue;
@@ -155,16 +157,14 @@ export class Client {
             const requestType = new RequestType<unknown, unknown, void>(name);
             connection.onRequest(requestType, (arg: unknown) => {
                 const result = callback(arg as string);
+                if (result === serverFS.useOS) return null;
                 if (name === "readFile") {
-                    // JSON-RPC can't distinguish null from undefined, so wrap defined results.
-                    if (result === undefined) return null;
                     return { content: result };
                 }
                 if (name === "stat") {
-                    if (result === undefined) return null;
                     return { stat: result };
                 }
-                return result ?? null;
+                return result;
             });
         }
     }

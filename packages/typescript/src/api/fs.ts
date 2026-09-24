@@ -27,20 +27,37 @@ export interface FileSystemStat {
     mtime: Date;
 }
 
+const useOS: unique symbol = Symbol("useOS");
+const identity: unique symbol = Symbol("identity");
+const fakeStat: unique symbol = Symbol("fakeStat");
+
+export const serverFS: {
+    /** Delegate the configured operation, or the current callback invocation, to the server's operating-system filesystem. */
+    readonly useOS: typeof useOS;
+    /** Use the input path as its own real path without consulting a filesystem. Valid only for `realpath`. */
+    readonly identity: typeof identity;
+    /** Synthesize stat information from `directoryExists` and `fileExists`. Valid only for `stat`. */
+    readonly fakeStat: typeof fakeStat;
+} = {
+    useOS: useOS,
+    identity: identity,
+    fakeStat: fakeStat,
+};
+
 export interface FileSystemCallbacks {
-    directoryExists: ((directoryName: string) => boolean | undefined) | "passthrough";
-    fileExists: ((fileName: string) => boolean | undefined) | "passthrough";
-    getAccessibleEntries: ((directoryName: string) => FileSystemEntries | undefined) | "passthrough";
+    directoryExists: ((directoryName: string) => boolean | typeof serverFS.useOS) | typeof serverFS.useOS;
+    fileExists: ((fileName: string) => boolean | typeof serverFS.useOS) | typeof serverFS.useOS;
+    getAccessibleEntries: ((directoryName: string) => FileSystemEntries | typeof serverFS.useOS) | typeof serverFS.useOS;
     /**
      * Read a file's content.
      * - Return the file content as a `string` (including `""` for empty files).
      * - Return `null` to indicate the file does not exist (without falling back to the real FS).
-     * - Return `undefined` to fall back to the real filesystem.
+     * - Return {@link serverFS.useOS} to fall back to the server's operating-system filesystem.
      */
-    readFile: ((fileName: string) => string | null | undefined) | "passthrough";
-    realpath: ((path: string) => string | undefined) | "passthrough" | "identity";
-    stat: ((path: string) => FileSystemStat | null | undefined) | "passthrough" | "infer";
-    writeFile: ((path: string, content: string) => void) | "passthrough";
+    readFile: ((fileName: string) => string | null | typeof serverFS.useOS) | typeof serverFS.useOS;
+    realpath: ((path: string) => string | typeof serverFS.useOS) | typeof serverFS.useOS | typeof serverFS.identity;
+    stat: ((path: string) => FileSystemStat | null | typeof serverFS.useOS) | typeof serverFS.useOS | typeof serverFS.fakeStat;
+    writeFile: ((path: string, content: string) => void | typeof serverFS.useOS) | typeof serverFS.useOS;
 }
 
 /** The callback names supported by the Go server for virtual FS delegation. */

@@ -24,7 +24,7 @@ type callbackFS struct {
 	base             vfs.FS
 	enabledCallbacks map[string]bool
 	realpathIdentity bool
-	statInfer        bool
+	fakeStat         bool
 	caseSensitive    *bool
 
 	// conn and ctx are set after connection is established
@@ -64,7 +64,7 @@ func isCallbackName(name string) bool {
 func newCallbackFS(base vfs.FS, callbacks []string, caseSensitive *bool) *callbackFS {
 	enabled := make(map[string]bool, len(callbacks))
 	for _, cb := range callbacks {
-		if cb == "realpath:identity" || cb == "stat:infer" {
+		if cb == "realpath:identity" || cb == "stat:fakeStat" {
 			continue
 		}
 		if !isCallbackName(cb) {
@@ -76,7 +76,7 @@ func newCallbackFS(base vfs.FS, callbacks []string, caseSensitive *bool) *callba
 		base:             base,
 		enabledCallbacks: enabled,
 		realpathIdentity: slices.Contains(callbacks, "realpath:identity"),
-		statInfer:        slices.Contains(callbacks, "stat:infer"),
+		fakeStat:         slices.Contains(callbacks, "stat:fakeStat"),
 		caseSensitive:    caseSensitive,
 	}
 }
@@ -118,7 +118,7 @@ func (fs *callbackFS) UseCaseSensitiveFileNames() bool {
 // ReadFile implements vfs.FS.
 //
 // The readFile callback uses a wrapped response format to distinguish three states:
-//   - undefined (fall back to real FS): null or empty on wire
+//   - useOS: null or empty on wire
 //   - null (not found, no fallback): {"content": null}
 //   - string content: {"content": "..."}
 func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
@@ -277,7 +277,7 @@ func (fs *callbackFS) Stat(path string) vfs.FileInfo {
 			return info
 		}
 	}
-	if fs.statInfer {
+	if fs.fakeStat {
 		if fs.DirectoryExists(path) {
 			return &callbackFileInfo{name: tspath.GetBaseFileName(path), mode: iofs.ModeDir | 0o555}
 		}
@@ -329,11 +329,13 @@ func (fs *callbackFS) WriteFile(path string, data string) error {
 			Data string `json:"data"`
 		}{Path: path, Data: data}
 
-		_, err := fs.call(callbackWriteFile, payload)
+		result, err := fs.call(callbackWriteFile, payload)
 		if err != nil {
 			return err
 		}
-		return nil
+		if len(result) > 0 && string(result) != "null" {
+			return nil
+		}
 	}
 
 	return fs.base.WriteFile(path, data)
