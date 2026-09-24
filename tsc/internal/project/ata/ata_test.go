@@ -3,15 +3,29 @@ package ata_test
 import (
 	"context"
 	"slices"
+	"sync"
 	"testing"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
+
+func waitForInstall(t *testing.T, installStarted <-chan struct{}) {
+	t.Helper()
+	select {
+	case <-installStarted:
+		return
+	case <-time.After(10 * time.Second):
+		t.Fatal("timed out waiting for typings installation to start")
+	}
+}
 
 func TestATA(t *testing.T) {
 	t.Parallel()
@@ -87,6 +101,168 @@ func TestATA(t *testing.T) {
 		assert.Equal(t, npmCalls[1].Cwd, projecttestutil.TestTypingsLocation)
 		assert.Assert(t, slices.Contains(npmCalls[1].Args, "@types/jquery@latest"))
 		assert.Equal(t, len(utils.Client().RefreshDiagnosticsCalls()), 1)
+	})
+
+	t.Run("configured project ignores ATA results from before manifest invalidation", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js": ``,
+			"/user/username/projects/project/tsconfig.json": `{
+				"compilerOptions": { "allowJs": true },
+				"typeAcquisition": { "enable": true },
+			}`,
+			"/user/username/projects/project/package.json": `{
+				"name": "test",
+				"dependencies": {
+					"jquery": "^3.1.0"
+				}
+			}`,
+		}
+
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"commander": `declare const commander: { x: number }`,
+				"jquery":    `declare const $: { x: number }`,
+			},
+		})
+
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		packageJSONURI := lsproto.DocumentUri("file:///user/username/projects/project/package.json")
+		session.DidOpenFile(ctx, uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		_, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		originalNpmInstall := utils.NpmExecutor().NpmInstallFunc
+		installStarted := make(chan struct{}, 1)
+		releaseInstall := make(chan struct{})
+		var releaseInstallOnce sync.Once
+		release := func() { releaseInstallOnce.Do(func() { close(releaseInstall) }) }
+		defer release()
+		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+			if slices.Contains(args, "@types/commander@latest") {
+				installStarted <- struct{}{}
+				<-releaseInstall
+			}
+			return originalNpmInstall(cwd, args)
+		}
+
+		err = utils.FS().WriteFile(packageJSONURI.FileName(), `{
+			"name": "test",
+			"dependencies": {
+				"commander": "^14.0.0",
+				"jquery": "^3.1.0"
+			}
+		}`)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+			Uri:  packageJSONURI,
+			Type: lsproto.FileChangeTypeChanged,
+		}})
+		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		snapshot.Deref()
+		waitForInstall(t, installStarted)
+
+		session.Configure(lsutil.ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"tsserver": map[string]any{
+					"automaticTypeAcquisition": map[string]any{
+						"enabled": false,
+					},
+				},
+			},
+		}))
+		err = utils.FS().WriteFile(packageJSONURI.FileName(), files["/user/username/projects/project/package.json"].(string))
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+			Uri:  packageJSONURI,
+			Type: lsproto.FileChangeTypeChanged,
+		}})
+		snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		snapshot.Deref()
+
+		release()
+		session.WaitForBackgroundTasks()
+
+		ls, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		commanderTypesFile := ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/commander/index.d.ts")
+		assert.Assert(t, commanderTypesFile == nil, "stale commander typings should not be applied after the manifest changes")
+	})
+
+	t.Run("configured project ignores ATA results from a previous project lifetime", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js": ``,
+			"/user/username/projects/project/tsconfig.json": `{
+				"compilerOptions": { "allowJs": true },
+				"typeAcquisition": { "enable": true },
+			}`,
+			"/user/username/projects/project/package.json": `{
+				"name": "test",
+				"dependencies": {
+					"commander": "^14.0.0"
+				}
+			}`,
+		}
+
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"commander": `declare const commander: { x: number }`,
+			},
+		})
+
+		originalNpmInstall := utils.NpmExecutor().NpmInstallFunc
+		installStarted := make(chan struct{}, 1)
+		releaseInstall := make(chan struct{})
+		var releaseInstallOnce sync.Once
+		release := func() { releaseInstallOnce.Do(func() { close(releaseInstall) }) }
+		defer release()
+		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+			if slices.Contains(args, "@types/commander@latest") {
+				installStarted <- struct{}{}
+				<-releaseInstall
+			}
+			return originalNpmInstall(cwd, args)
+		}
+
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		waitForInstall(t, installStarted)
+
+		session.DidCloseFile(ctx, uri)
+		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
+			CloseFiles: &collections.Set[tspath.Path]{},
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+		snapshot.Deref()
+
+		session.Configure(lsutil.ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"tsserver": map[string]any{
+					"automaticTypeAcquisition": map[string]any{
+						"enabled": false,
+					},
+				},
+			},
+		}))
+		session.DidOpenFile(ctx, uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+
+		release()
+		session.WaitForBackgroundTasks()
+
+		ls, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		commanderTypesFile := ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/commander/index.d.ts")
+		assert.Assert(t, commanderTypesFile == nil, "stale commander typings should not be applied to a replacement project")
 	})
 
 	t.Run("inferred projects", func(t *testing.T) {
