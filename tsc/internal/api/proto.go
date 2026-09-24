@@ -34,12 +34,13 @@ var (
 type Method string
 
 type (
-	SnapshotID       uint64
-	ModuleResolverID uint64
-	SymbolID         uint64
-	TypeID           uint32
-	SignatureID      uint64
-	NodeHandle       string
+	SnapshotID        uint64
+	ModuleResolverID  uint64
+	SourceFileLeaseID uint64
+	SymbolID          uint64
+	TypeID            uint32
+	SignatureID       uint64
+	NodeHandle        string
 )
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
@@ -55,7 +56,8 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 }
 
 const (
-	MethodRelease Method = "release"
+	MethodRelease           Method = "release"
+	MethodReleaseSourceFile Method = "releaseSourceFile"
 
 	MethodBatchRequests Method = "batchRequests"
 
@@ -553,6 +555,7 @@ type OpenedFileOperationResult struct {
 var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodBatchRequests:                                  unmarshallerFor[BatchRequestsParams],
 	MethodRelease:                                        unmarshallerFor[ReleaseParams],
+	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
@@ -865,6 +868,10 @@ type BatchResponse struct {
 // ReleaseParams are the parameters for the release method.
 type ReleaseParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
+}
+
+type ReleaseSourceFileParams struct {
+	Lease SourceFileLeaseID `json:"lease"`
 }
 
 type ProfileParams struct {
