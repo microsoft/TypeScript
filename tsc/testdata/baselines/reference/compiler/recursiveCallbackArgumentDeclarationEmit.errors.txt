@@ -1,0 +1,24 @@
+recursiveCallbackArgumentDeclarationEmit.ts(11,14): error TS7022: 'Category' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveCallbackArgumentDeclarationEmit.ts(13,25): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== recursiveCallbackArgumentDeclarationEmit.ts (2 errors) ====
+    export interface Schema<O> { readonly out: O }
+    export type Shape = Record<string, Schema<any> | (() => Schema<any>)>;
+    type Resolve<T> = T extends () => infer R ? R : T;
+    export type Infer<S extends Shape> = { [K in keyof S]: Resolve<S[K]> extends Schema<infer O> ? O : never };
+    
+    export declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
+    export declare function array<T extends Schema<any>>(el: T): Schema<T["out"][]>;
+    export declare function string(): Schema<string>;
+    export declare function lazy<T extends Schema<any>>(fn: () => T): T;
+    
+    export const Category = object({
+                 ~~~~~~~~
+!!! error TS7022: 'Category' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: string(),
+        subcategories: lazy(() => array(Category)),
+                            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    
