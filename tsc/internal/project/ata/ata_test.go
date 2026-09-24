@@ -2,6 +2,7 @@ package ata_test
 
 import (
 	"context"
+	"fmt"
 	"slices"
 	"strings"
 	"sync"
@@ -441,13 +442,313 @@ func TestATA(t *testing.T) {
 
 		release()
 		session.WaitForBackgroundTasks()
+		snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil, "the ATA result should be delivered while no inferred project exists")
+		snapshot.Deref()
 		session.DidOpenFile(ctx, uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
 
-		ls, err := session.GetLanguageService(ctx, uri)
-		assert.NilError(t, err)
-		typingsFile := ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts")
+		inferred := session.Snapshot().ProjectCollection.InferredProject()
+		assert.Assert(t, inferred != nil && inferred.GetProgram() != nil)
+		typingsFile := inferred.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts")
 		assert.Assert(t, typingsFile != nil, "jquery types should be available immediately after reopening")
 	})
+
+	t.Run("ATA install writes delivered with the result do not discard it", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/a/app.js":        ``,
+			"/user/username/projects/a/tsconfig.json": `{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}`,
+			"/user/username/projects/a/package.json":  `{"name":"a","dependencies":{"jquery":"^3.1.0"}}`,
+			"/user/username/projects/b/app.js":        ``,
+			"/user/username/projects/b/tsconfig.json": `{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}`,
+			"/user/username/projects/b/package.json":  `{"name":"b","dependencies":{"commander":"^14.0.0"}}`,
+		}
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"commander": `declare const commander: { x: number }`,
+				"jquery":    `declare const $: { x: number }`,
+			},
+		})
+		ctx := context.Background()
+		aURI := lsproto.DocumentUri("file:///user/username/projects/a/app.js")
+		bURI := lsproto.DocumentUri("file:///user/username/projects/b/app.js")
+		commanderTypings := projecttestutil.TestTypingsLocation + "/node_modules/@types/commander/index.d.ts"
+		session.DidOpenFile(ctx, aURI, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		_, err := session.GetLanguageService(ctx, aURI)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+		assert.Assert(t, utils.WatchesFile(strings.ToLower(commanderTypings)), "the typings location should be watched")
+
+		session.DidOpenFile(ctx, bURI, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+			Uri:  lsproto.DocumentUri("file://" + commanderTypings),
+			Type: lsproto.FileChangeTypeCreated,
+		}})
+		ls, err := session.GetLanguageService(ctx, bURI)
+		assert.NilError(t, err)
+		assert.Assert(t, ls.GetProgram().GetSourceFile(commanderTypings) != nil, "the install's own writes should not discard its result")
+	})
+
+	t.Run("source edit delivered with an ATA result rejects obsolete typings", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js": `import "jquery";`,
+		}
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"commander": `declare const commander: { x: number }`,
+				"jquery":    `declare const $: { x: number }`,
+			},
+		})
+		originalNpmInstall := utils.NpmExecutor().NpmInstallFunc
+		jqueryInstallStarted := make(chan struct{}, 1)
+		releaseJqueryInstall := make(chan struct{})
+		releaseCommanderInstall := make(chan struct{})
+		var releaseOnce sync.Once
+		releaseCommander := func() { releaseOnce.Do(func() { close(releaseCommanderInstall) }) }
+		defer releaseCommander()
+		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+			switch {
+			case slices.Contains(args, "@types/jquery@latest"):
+				jqueryInstallStarted <- struct{}{}
+				<-releaseJqueryInstall
+			case slices.Contains(args, "@types/commander@latest"):
+				<-releaseCommanderInstall
+			}
+			return originalNpmInstall(cwd, args)
+		}
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		waitForInstall(t, jqueryInstallStarted)
+		close(releaseJqueryInstall)
+		session.WaitForBackgroundTasks()
+
+		session.DidChangeFile(ctx, uri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+			WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `import "commander";`},
+		}})
+		ls, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		assert.Assert(t, ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts") == nil)
+	})
+
+	t.Run("package-owned typings deleted with the result invalidate discovery", func(t *testing.T) {
+		t.Parallel()
+
+		const bundledTypes = "/user/username/projects/typings/foo.d.ts"
+		files := map[string]any{
+			"/user/username/projects/project/app.js":                        `import "foo";`,
+			"/user/username/projects/project/package.json":                  `{"name":"test","dependencies":{"foo":"^1.0.0"}}`,
+			"/user/username/projects/project/node_modules/foo/package.json": `{"name":"foo","types":"../../../typings/foo.d.ts"}`,
+			bundledTypes: `declare const bundledFoo: { x: number }`,
+		}
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{"foo": `declare const foo: { x: number }`},
+		})
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+
+		assert.NilError(t, utils.FS().Remove(bundledTypes))
+		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+			Uri:  lsproto.DocumentUri("file://" + bundledTypes),
+			Type: lsproto.FileChangeTypeDeleted,
+		}})
+		ls, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		assert.Assert(t, !slices.Contains(ls.GetProgram().CommandLine().FileNames(), bundledTypes))
+		session.WaitForBackgroundTasks()
+		ls, err = session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		assert.Assert(t, ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/foo/index.d.ts") != nil)
+	})
+
+	t.Run("ATA install for another project does not discard cached inferred typings", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js":       ``,
+			"/user/username/projects/project/package.json": `{"name":"test","dependencies":{"jquery":"^3.1.0"}}`,
+			"/user/username/projects/c/app.js":             ``,
+			"/user/username/projects/c/tsconfig.json":      `{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}`,
+			"/user/username/projects/c/package.json":       `{"name":"c","dependencies":{"commander":"^14.0.0"}}`,
+		}
+		session, _ := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"commander": `declare const commander: { x: number }`,
+				"jquery":    `declare const $: { x: number }`,
+			},
+		})
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		cURI := lsproto.DocumentUri("file:///user/username/projects/c/app.js")
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		_, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+		session.DidCloseFile(ctx, uri)
+		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+		snapshot.Deref()
+		session.WaitForBackgroundTasks()
+
+		session.DidOpenFile(ctx, cURI, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+			Uri:  lsproto.DocumentUri("file://" + projecttestutil.TestTypingsLocation + "/node_modules/@types/commander/index.d.ts"),
+			Type: lsproto.FileChangeTypeCreated,
+		}})
+		_, err = session.GetLanguageService(ctx, cURI)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		inferred := session.Snapshot().ProjectCollection.InferredProject()
+		assert.Assert(t, inferred != nil && inferred.GetProgram() != nil)
+		assert.Assert(t, inferred.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts") != nil)
+	})
+
+	t.Run("excessive typings cache writes do not discard cached inferred typings", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js":       ``,
+			"/user/username/projects/project/package.json": `{"name":"test","dependencies":{"jquery":"^3.1.0"}}`,
+		}
+		session, _ := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{"jquery": `declare const $: { x: number }`},
+		})
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		_, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+		session.DidCloseFile(ctx, uri)
+		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+		snapshot.Deref()
+
+		events := make([]*lsproto.FileEvent, 1001)
+		for i := range events {
+			events[i] = &lsproto.FileEvent{
+				Uri:  lsproto.DocumentUri(fmt.Sprintf("file://%s/node_modules/@types/generated/%d.d.ts", projecttestutil.TestTypingsLocation, i)),
+				Type: lsproto.FileChangeTypeCreated,
+			}
+		}
+		session.DidChangeWatchedFiles(ctx, events)
+		session.WaitForBackgroundTasks()
+
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		inferred := session.Snapshot().ProjectCollection.InferredProject()
+		assert.Assert(t, inferred != nil && inferred.GetProgram() != nil)
+		assert.Assert(t, inferred.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts") != nil)
+	})
+
+	t.Run("excessive cache writes do not hide filesystem replacement invalidation", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js":       ``,
+			"/user/username/projects/project/package.json": `{"name":"test","dependencies":{"jquery":"^3.1.0"}}`,
+		}
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{"jquery": `declare const $: { x: number }`},
+		})
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		_, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+		session.DidCloseFile(ctx, uri)
+		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+		snapshot.Deref()
+
+		summary := project.FileChangeSummary{}
+		for i := range 1001 {
+			summary.Created.Add(lsproto.DocumentUri(fmt.Sprintf("file://%s/node_modules/@types/generated/%d.d.ts", projecttestutil.TestTypingsLocation, i)))
+		}
+		replacement := bundled.WrapFS(vfstest.FromMap(map[string]string{
+			"/user/username/projects/project/app.js":                                       "",
+			"/user/username/projects/project/package.json":                                 `{"name":"test"}`,
+			projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts": `declare const $: { x: number }`,
+		}, false))
+		snapshot, err = session.APIUpdate(ctx, summary, &project.APISnapshotRequest{
+			FileSystem:        replacement,
+			ReplaceFileSystem: true,
+		})
+		assert.NilError(t, err)
+		snapshot.Deref()
+
+		snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
+			FileSystem: replacement,
+			OpenFiles: map[tspath.Path]string{
+				utils.ToPath(uri.FileName()): uri.FileName(),
+			},
+		})
+		assert.NilError(t, err)
+		defer snapshot.Deref()
+		inferred := snapshot.ProjectCollection.InferredProject()
+		assert.Assert(t, inferred != nil && inferred.GetProgram() != nil)
+		assert.Assert(t, inferred.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts") == nil)
+	})
+
+	for _, configured := range []bool{false, true} {
+		name := "inferred"
+		if configured {
+			name = "configured"
+		}
+		t.Run("typings added by a manifest change reach the "+name+" program", func(t *testing.T) {
+			t.Parallel()
+
+			files := map[string]any{
+				"/user/username/projects/project/app.js":       ``,
+				"/user/username/projects/project/package.json": `{"name":"test","dependencies":{"jquery":"^3.1.0"}}`,
+			}
+			if configured {
+				files["/user/username/projects/project/tsconfig.json"] = `{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}`
+			}
+			session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+				PackageToFile: map[string]string{
+					"commander": `declare const commander: { x: number }`,
+					"jquery":    `declare const $: { x: number }`,
+				},
+			})
+			ctx := context.Background()
+			uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+			packageJSONURI := lsproto.DocumentUri("file:///user/username/projects/project/package.json")
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			session.WaitForBackgroundTasks()
+			_, err := session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			assert.NilError(t, utils.FS().WriteFile(packageJSONURI.FileName(), `{"name":"test","dependencies":{"commander":"^14.0.0","jquery":"^3.1.0"}}`))
+			session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{Uri: packageJSONURI, Type: lsproto.FileChangeTypeChanged}})
+			_, err = session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+			ls, err := session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			program := ls.GetProgram()
+			assert.Assert(t, program.GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts") != nil)
+			assert.Assert(t, program.GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/commander/index.d.ts") != nil)
+		})
+	}
 
 	t.Run("inferred project rejects ATA result invalidated after closing last file", func(t *testing.T) {
 		t.Parallel()

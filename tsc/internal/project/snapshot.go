@@ -501,6 +501,10 @@ func (s *Snapshot) Clone(
 
 	start := time.Now()
 	hadExcessiveWatchEvents := change.fileChanges.HasExcessiveWatchEvents()
+	var unfilteredFileChanges FileChangeSummary
+	if hadExcessiveWatchEvents {
+		unfilteredFileChanges = change.fileChanges.Clone()
+	}
 	inferredContentMappers := s.inferredProjectContentMappers
 	inferredContentMapperExtensions := s.inferredProjectContentMapperExtensions
 	if change.contentMapperContributions != nil {
@@ -521,6 +525,17 @@ func (s *Snapshot) Clone(
 	overlays = layeredFS.Overlays()
 	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions, s.overlays(), overlays)
+	typingsWatchChanges := change.fileChanges
+	if hadExcessiveWatchEvents {
+		typingsWatchChanges = unfilteredFileChanges
+		typingsWatchChanges.InvalidateAll = typingsWatchChanges.InvalidateAll || change.fileChanges.InvalidateAll
+	}
+	if typingsLocation := store.options.TypingsLocation; typingsLocation != "" {
+		typingsWatchChanges = typingsWatchChanges.withoutChangesWithin(typingsLocation, fs.fs.UseCaseSensitiveFileNames())
+		if realTypingsLocation := fs.fs.Realpath(typingsLocation); realTypingsLocation != typingsLocation {
+			typingsWatchChanges = typingsWatchChanges.withoutChangesWithin(realTypingsLocation, fs.fs.UseCaseSensitiveFileNames())
+		}
+	}
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {
@@ -554,7 +569,7 @@ func (s *Snapshot) Clone(
 		client,
 	)
 
-	if hadExcessiveWatchEvents {
+	if typingsWatchChanges.HasExcessiveWatchEvents() {
 		projectCollectionBuilder.DidInvalidateTypingsWatchState(logger.Fork("DidInvalidateTypingsWatchState"))
 	}
 
@@ -583,8 +598,11 @@ func (s *Snapshot) Clone(
 	if !change.fileChanges.IsEmpty() {
 		projectCollectionBuilder.DidChangeFiles(change.fileChanges, logger.Fork("DidChangeFiles"))
 	}
+	if !typingsWatchChanges.IsEmpty() {
+		projectCollectionBuilder.DidChangeTypingsWatchInputs(typingsWatchChanges, logger.Fork("DidChangeTypingsWatchInputs"))
+	}
 	if len(change.ataChanges) != 0 {
-		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, change.fileChanges, logger.Fork("DidUpdateATAState"))
+		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, typingsWatchChanges, logger.Fork("DidUpdateATAState"))
 	}
 
 	var apiError error

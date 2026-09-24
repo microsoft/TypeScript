@@ -241,7 +241,7 @@ func (s *inferredProjectATAState) apply(project *Project) {
 	project.installedTypingsInfo = s.installedTypingsInfo
 	project.installedTypingsFileNames = slices.Clone(s.installedTypingsFileNames)
 	project.installedTypingsFilesToWatch = slices.Clone(s.installedTypingsFilesToWatch)
-	project.typingsFiles = slices.Clone(s.typingsFiles)
+	project.setTypingsFiles(slices.Clone(s.typingsFiles))
 	project.typingsWatch = s.typingsWatch
 	project.installedTypingsSnapshotID = s.snapshotID
 	if typingsFilesChanged {
@@ -539,6 +539,14 @@ func (p *Project) SetCommandLine(commandLine *tsoptions.ParsedCommandLine) {
 	p.potentialProjectReferences = nil
 	p.dirty = true
 	p.dirtyFilePath = ""
+}
+
+func (p *Project) setTypingsFiles(typingsFiles []string) {
+	if !slices.Equal(p.typingsFiles, typingsFiles) {
+		p.commandLineWithTypingsFiles = nil
+		p.commandLineWithTypingsFilesOnce = sync.Once{}
+	}
+	p.typingsFiles = typingsFiles
 }
 
 // getCommandLineWithTypingsFiles returns the command line augmented with typing files if ATA is enabled.

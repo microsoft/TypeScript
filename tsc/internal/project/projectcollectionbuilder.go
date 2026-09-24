@@ -471,6 +471,16 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		return true
 	})
 
+	// Handle opened file
+	if summary.Opened != "" || summary.Reopened != "" {
+		fileName := core.FirstNonZero(summary.Opened, summary.Reopened).FileName()
+		path := b.toPath(fileName)
+		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
+		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
+	}
+}
+
+func (b *ProjectCollectionBuilder) DidChangeTypingsWatchInputs(summary FileChangeSummary, logger *logging.LogTree) {
 	b.forEachProject(func(entry dirty.Value[*Project]) bool {
 		projectID := entry.Value().ID()
 		if entry.ChangeIf(
@@ -479,7 +489,6 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 					summary,
 					project.installedTypingsFilesToWatch,
 					project.typingsFiles,
-					b.sessionOptions.TypingsLocation,
 					b.fs.fs.UseCaseSensitiveFileNames(),
 				)
 			},
@@ -499,18 +508,9 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		summary,
 		b.inferredProjectATAState.installedTypingsFilesToWatch,
 		b.inferredProjectATAState.typingsFiles,
-		b.sessionOptions.TypingsLocation,
 		b.fs.fs.UseCaseSensitiveFileNames(),
 	) {
 		b.invalidateInferredProjectATAState("typings watch changes", logger)
-	}
-
-	// Handle opened file
-	if summary.Opened != "" || summary.Reopened != "" {
-		fileName := core.FirstNonZero(summary.Opened, summary.Reopened).FileName()
-		path := b.toPath(fileName)
-		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
-		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
 	}
 }
 
@@ -518,7 +518,6 @@ func fileChangeSummaryAffectsTypingsWatch(
 	summary FileChangeSummary,
 	filesToWatch []string,
 	typingsFiles []string,
-	typingsLocation string,
 	useCaseSensitiveFileNames bool,
 ) bool {
 	if summary.InvalidateAll {
@@ -544,7 +543,7 @@ func fileChangeSummaryAffectsTypingsWatch(
 				return tspath.ComparePaths(tspath.CombinePaths(tspath.GetDirectoryPath(watchedPath), "bower.json"), fileName, comparePathsOptions) == 0
 			}
 			return false
-		}) || typingsLocation != "" && tspath.ContainsPath(typingsLocation, fileName, comparePathsOptions)
+		})
 	}
 	for uri := range summary.Changed.Keys() {
 		if affectsWatch(uri) {
@@ -1034,7 +1033,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				p.installedTypingsSnapshotID = ataChange.SnapshotID
 				p.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
 				p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
-				p.typingsFiles = ataChange.TypingsFiles
+				p.setTypingsFiles(ataChange.TypingsFiles)
 				typingsWatchGlobs := getTypingsLocationsGlobs(
 					slices.Concat(ataChange.TypingsFilesToWatch, ataChange.TypingsFiles),
 					b.sessionOptions.TypingsLocation,
@@ -1061,7 +1060,6 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 			fileChanges,
 			slices.Concat(ataChange.TypingsFilesToWatch, ataChange.FileNames),
 			ataChange.TypingsFiles,
-			b.sessionOptions.TypingsLocation,
 			b.fs.fs.UseCaseSensitiveFileNames(),
 		) {
 			b.invalidateProjectATAState(projectID)
