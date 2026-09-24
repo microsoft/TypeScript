@@ -7,7 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 )
 
 const embedded = true
@@ -44,6 +46,21 @@ func wrapFS(fs vfs.FS) vfs.FS {
 
 func (vfs *wrappedFS) UseCaseSensitiveFileNames() bool {
 	return vfs.fs.UseCaseSensitiveFileNames()
+}
+
+func (vfs *wrappedFS) WatchPathComparer(directory string) (fswatch.PathComparer, error) {
+	if !IsBundled(directory) {
+		if provider, ok := vfs.fs.(interface {
+			WatchPathComparer(directory string) (fswatch.PathComparer, error)
+		}); ok {
+			return provider.WatchPathComparer(directory)
+		}
+	}
+	return fswatch.PathComparer{}, nil
+}
+
+func (vfs *wrappedFS) WatchPathComparisonEnabled() bool {
+	return watchalias.Enabled(vfs.fs)
 }
 
 func (vfs *wrappedFS) FileExists(path string) bool {
