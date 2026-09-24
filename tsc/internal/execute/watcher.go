@@ -254,15 +254,20 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	}
 	programFiles := w.program.GetProgram().FilesByPath()
 	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
+	rootFiles := collections.NewSetFromItems(core.Map(w.config.FileNames(), func(fileName string) tspath.Path {
+		return tspath.ToPath(fileName, cwd, caseSensitive)
+	})...)
 	for _, filePath := range seenFilePaths {
 		dir := tspath.GetDirectoryPath(filePath)
 		if coverage.Covered(dir) {
 			continue
 		}
 		// Seen files mix program files with lookup locations. Only lookups keep the depth check, so an imported
-		// file outside the tsconfig directory (say /shared next to /app) is still watched.
-		_, isProgramFile := programFiles[tspath.ToPath(filePath, cwd, caseSensitive)]
-		if isProgramFile || watchmanager.CanWatchDirectory(dir) {
+		// file outside the tsconfig directory (say /shared next to /app) is still watched. A root file is not in
+		// the program while it is missing, but its directory stays watched so that recreating it rebuilds.
+		p := tspath.ToPath(filePath, cwd, caseSensitive)
+		_, isProgramFile := programFiles[p]
+		if isProgramFile || rootFiles.Has(p) || watchmanager.CanWatchDirectory(dir) {
 			coverage.Set(dir, false)
 		}
 	}
