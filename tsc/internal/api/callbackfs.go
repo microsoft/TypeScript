@@ -3,10 +3,13 @@ package api
 import (
 	"context"
 	"fmt"
+	iofs "io/fs"
+	"slices"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -20,6 +23,9 @@ import (
 type callbackFS struct {
 	base             vfs.FS
 	enabledCallbacks map[string]bool
+	realpathIdentity bool
+	statInfer        bool
+	caseSensitive    *bool
 
 	// conn and ctx are set after connection is established
 	conn ipc.Conn
@@ -33,6 +39,7 @@ const (
 	callbackDirectoryExists      = "directoryExists"
 	callbackGetAccessibleEntries = "getAccessibleEntries"
 	callbackRealpath             = "realpath"
+	callbackStat                 = "stat"
 	callbackWriteFile            = "writeFile"
 )
 
@@ -43,6 +50,7 @@ func isCallbackName(name string) bool {
 		callbackDirectoryExists,
 		callbackGetAccessibleEntries,
 		callbackRealpath,
+		callbackStat,
 		callbackWriteFile:
 		return true
 	default:
@@ -53,9 +61,12 @@ func isCallbackName(name string) bool {
 // newCallbackFS creates a new callbackFS wrapping the given base filesystem.
 // The callbacks slice specifies which filesystem operations should be delegated
 // to the client (e.g., "readFile", "fileExists").
-func newCallbackFS(base vfs.FS, callbacks []string) *callbackFS {
+func newCallbackFS(base vfs.FS, callbacks []string, caseSensitive *bool) *callbackFS {
 	enabled := make(map[string]bool, len(callbacks))
 	for _, cb := range callbacks {
+		if cb == "realpath:identity" || cb == "stat:infer" {
+			continue
+		}
 		if !isCallbackName(cb) {
 			panic("unknown callback name: " + cb)
 		}
@@ -64,6 +75,9 @@ func newCallbackFS(base vfs.FS, callbacks []string) *callbackFS {
 	return &callbackFS{
 		base:             base,
 		enabledCallbacks: enabled,
+		realpathIdentity: slices.Contains(callbacks, "realpath:identity"),
+		statInfer:        slices.Contains(callbacks, "stat:infer"),
+		caseSensitive:    caseSensitive,
 	}
 }
 
@@ -95,6 +109,9 @@ func (fs *callbackFS) call(name string, arg any) ([]byte, error) {
 
 // UseCaseSensitiveFileNames implements vfs.FS.
 func (fs *callbackFS) UseCaseSensitiveFileNames() bool {
+	if fs.caseSensitive != nil {
+		return *fs.caseSensitive
+	}
 	return fs.base.UseCaseSensitiveFileNames()
 }
 
@@ -114,8 +131,8 @@ func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
 			var wrapper struct {
 				Content *string `json:"content"`
 			}
-			if err := json.Unmarshal(result, &wrapper); err != nil {
-				panic(err)
+			if unmarshalErr := json.Unmarshal(result, &wrapper); unmarshalErr != nil {
+				panic(unmarshalErr)
 			}
 			if wrapper.Content == nil {
 				return "", false
@@ -165,15 +182,23 @@ func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
 			var rawEntries *struct {
 				Files       []string `json:"files"`
 				Directories []string `json:"directories"`
+				Symlinks    []string `json:"symlinks"`
 			}
 			if err := json.Unmarshal(result, &rawEntries); err != nil {
 				panic(err)
 			}
 			if rawEntries != nil {
-				return vfs.Entries{
+				entries := vfs.Entries{
 					Files:       rawEntries.Files,
 					Directories: rawEntries.Directories,
 				}
+				if len(rawEntries.Symlinks) > 0 {
+					entries.Symlinks = make(map[string]struct{}, len(rawEntries.Symlinks))
+					for _, name := range rawEntries.Symlinks {
+						entries.Symlinks[name] = struct{}{}
+					}
+				}
+				return entries
 			}
 		}
 	}
@@ -195,7 +220,105 @@ func (fs *callbackFS) Realpath(path string) string {
 			return realpath
 		}
 	}
+	if fs.realpathIdentity {
+		return path
+	}
 	return fs.base.Realpath(path)
+}
+
+type callbackFileInfo struct {
+	name    string
+	size    int64
+	mode    iofs.FileMode
+	modTime time.Time
+}
+
+func (info *callbackFileInfo) Name() string        { return info.name }
+func (info *callbackFileInfo) Size() int64         { return info.size }
+func (info *callbackFileInfo) Mode() iofs.FileMode { return info.mode }
+func (info *callbackFileInfo) ModTime() time.Time  { return info.modTime }
+func (info *callbackFileInfo) IsDir() bool         { return info.mode.IsDir() }
+func (info *callbackFileInfo) Sys() any            { return nil }
+
+// Stat implements vfs.FS.
+func (fs *callbackFS) Stat(path string) vfs.FileInfo {
+	if fs.isEnabled(callbackStat) {
+		result, err := fs.call(callbackStat, path)
+		if err != nil {
+			panic(err)
+		}
+		if len(result) > 0 && string(result) != "null" {
+			var wrapper struct {
+				Stat json.Value `json:"stat"`
+			}
+			if unmarshalErr := json.Unmarshal(result, &wrapper); unmarshalErr != nil {
+				panic(unmarshalErr)
+			}
+			if string(wrapper.Stat) == "null" {
+				return nil
+			}
+			var stat struct {
+				Mode  uint32 `json:"mode"`
+				Size  int64  `json:"size"`
+				MTime string `json:"mtime"`
+			}
+			if unmarshalErr := json.Unmarshal(wrapper.Stat, &stat); unmarshalErr != nil {
+				panic(unmarshalErr)
+			}
+			info := &callbackFileInfo{
+				name: tspath.GetBaseFileName(path),
+				size: stat.Size,
+				mode: nodeFileModeToGoFileMode(stat.Mode),
+			}
+			info.modTime, err = time.Parse(time.RFC3339Nano, stat.MTime)
+			if err != nil {
+				panic(err)
+			}
+			return info
+		}
+	}
+	if fs.statInfer {
+		if fs.DirectoryExists(path) {
+			return &callbackFileInfo{name: tspath.GetBaseFileName(path), mode: iofs.ModeDir | 0o555}
+		}
+		if fs.FileExists(path) {
+			return &callbackFileInfo{name: tspath.GetBaseFileName(path), mode: 0o444}
+		}
+		return nil
+	}
+	return fs.base.Stat(path)
+}
+
+func nodeFileModeToGoFileMode(mode uint32) iofs.FileMode {
+	result := iofs.FileMode(mode & 0o777)
+	if mode&0o4000 != 0 {
+		result |= iofs.ModeSetuid
+	}
+	if mode&0o2000 != 0 {
+		result |= iofs.ModeSetgid
+	}
+	if mode&0o1000 != 0 {
+		result |= iofs.ModeSticky
+	}
+	switch mode & 0o170000 {
+	case 0o010000:
+		result |= iofs.ModeNamedPipe
+	case 0o020000:
+		result |= iofs.ModeDevice | iofs.ModeCharDevice
+	case 0o040000:
+		result |= iofs.ModeDir
+	case 0o060000:
+		result |= iofs.ModeDevice
+	case 0o100000:
+		// Regular file.
+	case 0o120000:
+		result |= iofs.ModeSymlink
+	case 0o140000:
+		result |= iofs.ModeSocket
+	default:
+		result |= iofs.ModeIrregular
+	}
+	return result
 }
 
 // WriteFile implements vfs.FS.
@@ -229,9 +352,4 @@ func (fs *callbackFS) Remove(path string) error {
 // Chtimes implements vfs.FS - always delegates to base (no callback support).
 func (fs *callbackFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
 	return fs.base.Chtimes(path, aTime, mTime)
-}
-
-// Stat implements vfs.FS - always delegates to base (no callback support).
-func (fs *callbackFS) Stat(path string) vfs.FileInfo {
-	return fs.base.Stat(path)
 }

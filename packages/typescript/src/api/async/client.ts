@@ -9,10 +9,11 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
+import type { FileSystemCallbacks } from "../fs.ts";
 import {
-    type FileSystem,
-    fsCallbackNames,
-} from "../fs.ts";
+    configureFileSystemCallbacks,
+    type FileSystemCallbackConfiguration,
+} from "../fsCallbacks.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -52,13 +53,17 @@ export class Client {
     private closed = false;
     private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
+    private fsConfiguration: FileSystemCallbackConfiguration | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
     constructor(options: ClientOptions) {
         this.options = options;
-        if (isSpawnOptions(options) && options.collectTiming) {
-            this.timing = new TimingCollector();
+        if (isSpawnOptions(options)) {
+            this.fsConfiguration = configureFileSystemCallbacks(options.fs);
+            if (options.collectTiming) {
+                this.timing = new TimingCollector();
+            }
         }
     }
 
@@ -85,17 +90,8 @@ export class Client {
         return new Promise((resolve, reject) => {
             const args = getAPIProcessArgs(options, true);
 
-            // Enable virtual FS callbacks for each provided FS function
-            const enabledCallbacks: string[] = [];
-            if (options.fs) {
-                for (const name of fsCallbackNames) {
-                    if (options.fs[name]) {
-                        enabledCallbacks.push(name);
-                    }
-                }
-            }
-            if (enabledCallbacks.length > 0) {
-                args.push(`--callbacks=${enabledCallbacks.join(",")}`);
+            if (this.fsConfiguration!.arguments.length > 0) {
+                args.push(`--callbacks=${this.fsConfiguration!.arguments.join(",")}`);
             }
 
             this.process = spawn(resolveExePath(options), args, {
@@ -138,12 +134,12 @@ export class Client {
         });
     }
 
-    private registerFSCallbacks(connection: MessageConnection, fs: FileSystem | undefined): void {
+    private registerFSCallbacks(connection: MessageConnection, fs: FileSystemCallbacks | undefined): void {
         if (!fs) return;
-        for (const name of fsCallbackNames) {
+        for (const name of this.fsConfiguration!.callbackNames) {
             if (name === "writeFile") {
-                if (!fs.writeFile) continue;
                 const callback = fs.writeFile;
+                if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
 
                 const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
                 connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
@@ -155,19 +151,21 @@ export class Client {
             }
 
             const callback = fs[name];
-            if (callback) {
-                const requestType = new RequestType<unknown, unknown, void>(name);
-                connection.onRequest(requestType, (arg: unknown) => {
-                    const result = callback(arg as any);
-                    if (name === "readFile") {
-                        // readFile has 3 returns: string (content), null (not found), undefined (fall back).
-                        // JSON-RPC can't distinguish null from undefined, so wrap in object.
-                        if (result === undefined) return null;
-                        return { content: result };
-                    }
-                    return result ?? null;
-                });
-            }
+            if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
+            const requestType = new RequestType<unknown, unknown, void>(name);
+            connection.onRequest(requestType, (arg: unknown) => {
+                const result = callback(arg as string);
+                if (name === "readFile") {
+                    // JSON-RPC can't distinguish null from undefined, so wrap defined results.
+                    if (result === undefined) return null;
+                    return { content: result };
+                }
+                if (name === "stat") {
+                    if (result === undefined) return null;
+                    return { stat: result };
+                }
+                return result ?? null;
+            });
         }
     }
 

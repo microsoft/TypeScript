@@ -3,7 +3,9 @@
  */
 
 import getExePath from "#getExePath";
-import type { FileSystem } from "./fs.ts";
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import type { FileSystemCallbacks } from "./fs.ts";
 
 export interface ClientSocketOptions {
     /** Path to the Unix domain socket or Windows named pipe for API communication */
@@ -17,8 +19,10 @@ export interface ClientSpawnOptions {
     tsserverPath?: string | undefined;
     /** Current working directory */
     cwd?: string | undefined;
-    /** Virtual filesystem callbacks */
-    fs?: FileSystem | undefined;
+    /** Host filesystem callbacks. */
+    fs?: FileSystemCallbacks | undefined;
+    /** Whether file names are case-sensitive. Inferred from the client filesystem when omitted. */
+    useCaseSensitiveFileNames?: boolean | undefined;
     /** Allow trusted projects to execute configured external content mapper processes. */
     runExternalCode?: boolean | undefined;
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
@@ -47,9 +51,18 @@ export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean): 
     const args = ["--api"];
     if (async) args.push("--async");
     args.push("--cwd", options.cwd ?? process.cwd());
+    args.push(`--useCaseSensitiveFileNames=${options.useCaseSensitiveFileNames ?? inferUseCaseSensitiveFileNames()}`);
     if (options.runExternalCode) args.push("--runExternalCode");
     if (options.collectTiming) args.push("--timing");
     return args;
+}
+
+function inferUseCaseSensitiveFileNames(): boolean {
+    if (process.platform === "win32") {
+        return false;
+    }
+    const fileName = fileURLToPath(import.meta.url);
+    return !existsSync(fileName.replace(/\w/g, char => char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()));
 }
 
 export interface LSPConnectionOptions extends ClientSocketOptions {

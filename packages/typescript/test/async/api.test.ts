@@ -100,9 +100,8 @@ import {
     createFileSystem,
     createFileSystemLayer,
     createFileSystemWithLib,
-    createVirtualFileSystem,
 } from "@typescript/typescript/unstable/fs";
-import type { FileSystem } from "@typescript/typescript/unstable/fs";
+import type { FileSystemCallbacks } from "@typescript/typescript/unstable/fs";
 import assert from "node:assert";
 import { globSync } from "node:fs";
 import { resolve } from "node:path";
@@ -112,7 +111,10 @@ import {
 } from "node:test";
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
-import { areTestsFiltered } from "../testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 import {
     defaultFiles,
     spawnAPI,
@@ -165,6 +167,33 @@ describe("API", { concurrency }, () => {
             // @ts-expect-error Project ID brands are not interchangeable.
             const invalid: ConfiguredProjectId = synthetic;
             void invalid;
+
+            const callbacks: FileSystemCallbacks = {
+                directoryExists: "passthrough",
+                fileExists: "passthrough",
+                getAccessibleEntries: "passthrough",
+                readFile: "passthrough",
+                realpath: "identity",
+                stat: "infer",
+                writeFile: "passthrough",
+            };
+            void new API({ fs: callbacks });
+            // @ts-expect-error Filesystem callback configurations must specify every operation.
+            void new API({ fs: { readFile: "passthrough" } });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    // @ts-expect-error Identity is only a valid realpath implementation.
+                    readFile: "identity",
+                },
+            });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    // @ts-expect-error Infer is only a valid stat implementation.
+                    fileExists: "infer",
+                },
+            });
         }
     });
 
@@ -3820,6 +3849,13 @@ export const obj = { name };
 });
 
 describe("readFile callback semantics", { concurrency }, () => {
+    test("callback configurations require every operation at runtime", () => {
+        assert.throws(
+            () => new API({ fs: { readFile: "passthrough" } as FileSystemCallbacks }),
+            /Invalid filesystem callback 'fileExists'/,
+        );
+    });
+
     test("readFile: string returns content, null blocks fallback, undefined falls through to real FS", async () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3828,7 +3864,7 @@ describe("readFile callback semantics", { concurrency }, () => {
         const vfs = createVirtualFileSystem(virtualFiles);
         const blockedPath = "/src/blocked.ts";
 
-        const fs: FileSystem = {
+        const fs: FileSystemCallbacks = {
             ...vfs,
             readFile: (fileName: string) => {
                 if (fileName === blockedPath) {
@@ -3866,6 +3902,31 @@ describe("readFile callback semantics", { concurrency }, () => {
         // 3. null blocks fallback: blocked file should not be found
         const blockedSf = await project.program.getSourceFile(blockedPath);
         assert.equal(blockedSf, undefined, "Blocked file should not be found (null prevents fallback)");
+    });
+
+    test("configured case sensitivity is used by the server and client", async () => {
+        const files = {
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["/src/index.ts"] }),
+            "/src/index.ts": `export const value = 1;`,
+        };
+        {
+            await using api = new API({
+                cwd: "/",
+                fs: createVirtualFileSystem(files),
+                useCaseSensitiveFileNames: false,
+            });
+            const program = (await api.createSnapshot({ openProject: "/tsconfig.json" })).getConfiguredProject("/tsconfig.json")!.program;
+            assert.ok(await program.getSourceFile("/SRC/INDEX.TS"));
+        }
+        {
+            await using api = new API({
+                cwd: "/",
+                fs: createVirtualFileSystem(files),
+                useCaseSensitiveFileNames: true,
+            });
+            const program = (await api.createSnapshot({ openProject: "/tsconfig.json" })).getConfiguredProject("/tsconfig.json")!.program;
+            assert.equal(await program.getSourceFile("/SRC/INDEX.TS"), undefined);
+        }
     });
 });
 
@@ -3941,7 +4002,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         const host = createVirtualFileSystem({
             "/host.ts": `export const source = "host";`,
         });
-        const fs: FileSystem = {
+        const fs: FileSystemCallbacks = {
             readFile: path => {
                 callbackCalls.push(`readFile:${path}`);
                 return host.readFile!(path);
@@ -3961,6 +4022,12 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             realpath: path => {
                 callbackCalls.push(`realpath:${path}`);
                 return path;
+            },
+            stat: path => {
+                callbackCalls.push(`stat:${path}`);
+                if (host.directoryExists(path)) return { mode: 0o040555, size: 0, mtime: new Date(0) };
+                if (host.fileExists(path)) return { mode: 0o100444, size: 0, mtime: new Date(0) };
+                return null;
             },
             writeFile: (path, content) => {
                 callbackCalls.push(`writeFile:${path}`);
@@ -4043,7 +4110,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         const host = createVirtualFileSystem({
             "/src/fallback.ts": `export const fallback = true;`,
         });
-        const fs: FileSystem = {
+        const fs: FileSystemCallbacks = {
             ...host,
             readFile: path => {
                 readFileCalls.push(path);
@@ -4111,10 +4178,16 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
+                directoryExists: "passthrough",
+                fileExists: "passthrough",
+                getAccessibleEntries: "passthrough",
                 readFile: path => {
                     callbackCalls.push(path);
                     return undefined;
                 },
+                realpath: "passthrough",
+                stat: "passthrough",
+                writeFile: "passthrough",
             },
         });
 
@@ -4145,10 +4218,16 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
+                directoryExists: "passthrough",
+                fileExists: "passthrough",
+                getAccessibleEntries: "passthrough",
                 readFile: path => {
                     callbackCalls.push(path);
                     return undefined;
                 },
+                realpath: "passthrough",
+                stat: "passthrough",
+                writeFile: "passthrough",
             },
         });
 
@@ -4328,6 +4407,12 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
+                directoryExists: "passthrough",
+                fileExists: "passthrough",
+                getAccessibleEntries: "passthrough",
+                readFile: "passthrough",
+                realpath: "passthrough",
+                stat: "passthrough",
                 writeFile: path => {
                     hostWrites.push(path);
                 },
@@ -8066,7 +8151,7 @@ describe("runWithTemporaryFileUpdate", { concurrency }, () => {
     });
 });
 
-function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: FileSystem; } {
+function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: ReturnType<typeof createVirtualFileSystem>; } {
     const fs = createVirtualFileSystem(files);
     const api = new API({
         cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),

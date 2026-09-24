@@ -1,4 +1,4 @@
-import { fsCallbackNames } from "../fs.ts";
+import { configureFileSystemCallbacks } from "../fsCallbacks.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -39,17 +39,9 @@ export class Client {
         const args = getAPIProcessArgs(options, false);
         this.maxResponseBytesPerPage = options.maxResponseBytesPerPage;
 
-        // Enable virtual FS callbacks for each provided FS function
-        const enabledCallbacks: (typeof fsCallbackNames[number])[] = [];
-        if (options.fs) {
-            for (const name of fsCallbackNames) {
-                if (options.fs[name]) {
-                    enabledCallbacks.push(name);
-                }
-            }
-        }
-        if (enabledCallbacks.length > 0) {
-            args.push(`--callbacks=${enabledCallbacks.join(",")}`);
+        const fsConfiguration = configureFileSystemCallbacks(options.fs);
+        if (fsConfiguration.arguments.length > 0) {
+            args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
         }
 
         const collectTiming = options.collectTiming ?? false;
@@ -61,10 +53,10 @@ export class Client {
         this.channel = channel;
 
         if (options.fs) {
-            for (const name of enabledCallbacks) {
+            for (const name of fsConfiguration.callbackNames) {
                 if (name === "writeFile") {
-                    if (!options.fs.writeFile) continue;
                     const callback = options.fs.writeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
 
                     channel.registerCallback(name, (_, arg) => {
                         const { path, data } = JSON.parse(arg);
@@ -75,14 +67,18 @@ export class Client {
                     continue;
                 }
 
-                const callback = options.fs[name]!;
+                const callback = options.fs[name];
+                if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
                 channel.registerCallback(name, (_, arg) => {
                     const result = callback(JSON.parse(arg));
                     if (name === "readFile") {
-                        // readFile has 3 returns: string (content), null (not found), undefined (fall back).
-                        // Wrap in object to preserve null vs undefined distinction.
+                        // Wrap defined results to preserve null vs undefined.
                         if (result === undefined) return "";
                         return JSON.stringify({ content: result });
+                    }
+                    if (name === "stat") {
+                        if (result === undefined) return "";
+                        return JSON.stringify({ stat: result });
                     }
                     return JSON.stringify(result) ?? "";
                 });
