@@ -308,3 +308,59 @@ const Eager = object({
 
 });
 
+// Code that runs immediately is not deferred: an immediately invoked function and a computed method name.
+const Iife = object({
+>Iife : Symbol(Iife, Decl(recursiveCallbackArgumentConstraint.ts, 64, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 64, 21))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    self: identity((() => array(Iife))()),
+>self : Symbol(self, Decl(recursiveCallbackArgumentConstraint.ts, 65, 19))
+>identity : Symbol(identity, Decl(recursiveCallbackArgumentConstraint.ts, 49, 98))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Iife : Symbol(Iife, Decl(recursiveCallbackArgumentConstraint.ts, 64, 5))
+
+});
+const ComputedName = object({
+>ComputedName : Symbol(ComputedName, Decl(recursiveCallbackArgumentConstraint.ts, 68, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 68, 29))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    self: identity({ [ComputedName.out.name]() { return 1; } }),
+>self : Symbol(self, Decl(recursiveCallbackArgumentConstraint.ts, 69, 19))
+>identity : Symbol(identity, Decl(recursiveCallbackArgumentConstraint.ts, 49, 98))
+>[ComputedName.out.name] : Symbol([ComputedName.out.name], Decl(recursiveCallbackArgumentConstraint.ts, 70, 20))
+>ComputedName : Symbol(ComputedName, Decl(recursiveCallbackArgumentConstraint.ts, 68, 5))
+
+});
+
+// An immediately invoked function inside a callback runs when the callback does.
+const NestedIife = object({
+>NestedIife : Symbol(NestedIife, Decl(recursiveCallbackArgumentConstraint.ts, 74, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 74, 27))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    self: lazy(() => (() => array(NestedIife))()),
+>self : Symbol(self, Decl(recursiveCallbackArgumentConstraint.ts, 75, 19))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>NestedIife : Symbol(NestedIife, Decl(recursiveCallbackArgumentConstraint.ts, 74, 5))
+
+});
+const nestedIife: (typeof NestedIife)["out"] = { name: "x", self: [{ name: 1, self: [] }] };
+>nestedIife : Symbol(nestedIife, Decl(recursiveCallbackArgumentConstraint.ts, 78, 5))
+>NestedIife : Symbol(NestedIife, Decl(recursiveCallbackArgumentConstraint.ts, 74, 5))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 78, 48))
+>self : Symbol(self, Decl(recursiveCallbackArgumentConstraint.ts, 78, 59))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 78, 68))
+>self : Symbol(self, Decl(recursiveCallbackArgumentConstraint.ts, 78, 77))
+

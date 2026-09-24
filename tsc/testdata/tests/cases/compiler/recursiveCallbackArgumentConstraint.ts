@@ -63,3 +63,20 @@ const Eager = object({
     name: string(),
     self: first(Eager, () => Eager),
 });
+
+// Code that runs immediately is not deferred: an immediately invoked function and a computed method name.
+const Iife = object({
+    name: string(),
+    self: identity((() => array(Iife))()),
+});
+const ComputedName = object({
+    name: string(),
+    self: identity({ [ComputedName.out.name]() { return 1; } }),
+});
+
+// An immediately invoked function inside a callback runs when the callback does.
+const NestedIife = object({
+    name: string(),
+    self: lazy(() => (() => array(NestedIife))()),
+});
+const nestedIife: (typeof NestedIife)["out"] = { name: "x", self: [{ name: 1, self: [] }] };

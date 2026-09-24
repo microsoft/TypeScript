@@ -9,9 +9,15 @@ recursiveCallbackArgumentConstraint.ts(45,14): error TS7006: Parameter 'v' impli
 recursiveCallbackArgumentConstraint.ts(54,20): error TS2322: Type '() => Schema<Infer2<Record<string, Schema<any>>>[]>' is not assignable to type 'Schema<any>'.
 recursiveCallbackArgumentConstraint.ts(61,17): error TS2448: Block-scoped variable 'Eager' used before its declaration.
 recursiveCallbackArgumentConstraint.ts(61,17): error TS2454: Variable 'Eager' is used before being assigned.
+recursiveCallbackArgumentConstraint.ts(65,7): error TS7022: 'Iife' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveCallbackArgumentConstraint.ts(67,21): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveCallbackArgumentConstraint.ts(67,33): error TS2448: Block-scoped variable 'Iife' used before its declaration.
+recursiveCallbackArgumentConstraint.ts(69,7): error TS7022: 'ComputedName' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveCallbackArgumentConstraint.ts(71,5): error TS2322: Type '{ [ComputedName.out.name]: () => 1; }' is not assignable to type 'Schema<any> | (() => Schema<any>)'.
+recursiveCallbackArgumentConstraint.ts(79,70): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== recursiveCallbackArgumentConstraint.ts (10 errors) ====
+==== recursiveCallbackArgumentConstraint.ts (16 errors) ====
     interface Schema<O> { readonly out: O; optional(): Schema<O | undefined> }
     type Shape = Record<string, Schema<any> | (() => Schema<any>)>;
     type Resolve<T> = T extends () => infer R ? R : T;
@@ -100,4 +106,35 @@ recursiveCallbackArgumentConstraint.ts(61,17): error TS2454: Variable 'Eager' is
                     ~~~~~
 !!! error TS2454: Variable 'Eager' is used before being assigned.
     });
+    
+    // Code that runs immediately is not deferred: an immediately invoked function and a computed method name.
+    const Iife = object({
+          ~~~~
+!!! error TS7022: 'Iife' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: string(),
+        self: identity((() => array(Iife))()),
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+                                    ~~~~
+!!! error TS2448: Block-scoped variable 'Iife' used before its declaration.
+!!! related TS2728 recursiveCallbackArgumentConstraint.ts:65:7: 'Iife' is declared here.
+    });
+    const ComputedName = object({
+          ~~~~~~~~~~~~
+!!! error TS7022: 'ComputedName' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: string(),
+        self: identity({ [ComputedName.out.name]() { return 1; } }),
+        ~~~~
+!!! error TS2322: Type '{ [ComputedName.out.name]: () => 1; }' is not assignable to type 'Schema<any> | (() => Schema<any>)'.
+    });
+    
+    // An immediately invoked function inside a callback runs when the callback does.
+    const NestedIife = object({
+        name: string(),
+        self: lazy(() => (() => array(NestedIife))()),
+    });
+    const nestedIife: (typeof NestedIife)["out"] = { name: "x", self: [{ name: 1, self: [] }] };
+                                                                         ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveCallbackArgumentConstraint.ts:76:5: The expected type comes from property 'name' which is declared here on type 'Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>'
     

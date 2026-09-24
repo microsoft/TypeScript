@@ -336,3 +336,92 @@ const Eager = object({
 
 });
 
+// Code that runs immediately is not deferred: an immediately invoked function and a computed method name.
+const Iife = object({
+>Iife : any
+>object({    name: string(),    self: identity((() => array(Iife))()),}) : Schema<Infer<{ name: Schema<string>; self: any; }>>
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>{    name: string(),    self: identity((() => array(Iife))()),} : { name: Schema<string>; self: any; }
+
+    name: string(),
+>name : Schema<string>
+>string() : Schema<string>
+>string : () => Schema<string>
+
+    self: identity((() => array(Iife))()),
+>self : any
+>identity((() => array(Iife))()) : any
+>identity : <T>(x: T) => T
+>(() => array(Iife))() : any
+>(() => array(Iife)) : () => any
+>() => array(Iife) : () => any
+>array(Iife) : Schema<any[]>
+>array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
+>Iife : any
+
+});
+const ComputedName = object({
+>ComputedName : any
+>object({    name: string(),    self: identity({ [ComputedName.out.name]() { return 1; } }),}) : Schema<Infer<Shape>>
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>{    name: string(),    self: identity({ [ComputedName.out.name]() { return 1; } }),} : { name: Schema<string>; self: { [ComputedName.out.name]: () => 1; }; }
+
+    name: string(),
+>name : Schema<string>
+>string() : Schema<string>
+>string : () => Schema<string>
+
+    self: identity({ [ComputedName.out.name]() { return 1; } }),
+>self : { [ComputedName.out.name]: () => 1; }
+>identity({ [ComputedName.out.name]() { return 1; } }) : { [ComputedName.out.name]: () => 1; }
+>identity : <T>(x: T) => T
+>{ [ComputedName.out.name]() { return 1; } } : { [ComputedName.out.name]: () => 1; }
+>[ComputedName.out.name] : () => 1
+>ComputedName.out.name : any
+>ComputedName.out : any
+>ComputedName : any
+>out : any
+>name : any
+>1 : 1
+
+});
+
+// An immediately invoked function inside a callback runs when the callback does.
+const NestedIife = object({
+>NestedIife : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>>
+>object({    name: string(),    self: lazy(() => (() => array(NestedIife))()),}) : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>{    name: string(),    self: lazy(() => (() => array(NestedIife))()),} : { name: Schema<string>; self: Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>; }
+
+    name: string(),
+>name : Schema<string>
+>string() : Schema<string>
+>string : () => Schema<string>
+
+    self: lazy(() => (() => array(NestedIife))()),
+>self : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>
+>lazy(() => (() => array(NestedIife))()) : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>
+>lazy : <T extends Schema<any>>(fn: () => T) => T
+>() => (() => array(NestedIife))() : () => Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>
+>(() => array(NestedIife))() : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>
+>(() => array(NestedIife)) : () => Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>
+>() => array(NestedIife) : () => Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>
+>array(NestedIife) : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>[]>
+>array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
+>NestedIife : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>>
+
+});
+const nestedIife: (typeof NestedIife)["out"] = { name: "x", self: [{ name: 1, self: [] }] };
+>nestedIife : Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>
+>NestedIife : Schema<Infer<{ name: Schema<string>; self: Schema<Infer<any>[]>; }>>
+>{ name: "x", self: [{ name: 1, self: [] }] } : { name: string; self: { name: number; self: never[]; }[]; }
+>name : string
+>"x" : "x"
+>self : { name: number; self: never[]; }[]
+>[{ name: 1, self: [] }] : { name: number; self: never[]; }[]
+>{ name: 1, self: [] } : { name: number; self: never[]; }
+>name : number
+>1 : 1
+>self : never[]
+>[] : never[]
+

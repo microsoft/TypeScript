@@ -1432,8 +1432,13 @@ func (c *Checker) hasDeferredReferenceToResolvingSymbol(expr *ast.Node) bool {
 				}
 			}
 			return false
-		case ast.IsFunctionLike(node):
-			inBody = true
+		case ast.IsFunctionLike(node) && ast.GetImmediatelyInvokedFunctionExpression(node) == nil:
+			// A function body runs later, but its computed name and decorators are evaluated where it is declared.
+			// An immediately invoked function runs right away, so it is visited like any other expression.
+			name := node.Name()
+			return node.ForEachChild(func(child *ast.Node) bool {
+				return visit(child, inBody || child != name && child.Kind != ast.KindDecorator)
+			})
 		}
 		return node.ForEachChild(func(child *ast.Node) bool { return visit(child, inBody) })
 	}
