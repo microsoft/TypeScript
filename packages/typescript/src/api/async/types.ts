@@ -132,6 +132,8 @@ export interface Type {
     isStringMappingType(): this is StringMappingType;
     /** Whether this type is a type parameter */
     isTypeParameter(): this is TypeParameter;
+    /** Whether this is a mapped type */
+    isMappedType(): this is MappedType;
 }
 
 /**
@@ -178,6 +180,18 @@ export interface BooleanLiteralType extends LiteralType {
 export interface ObjectType extends Type {
     /** Object flags — use to determine the specific kind of object type. */
     readonly objectFlags: ObjectFlags;
+}
+
+/** Mapped types (ObjectFlags.Mapped) */
+export interface MappedType extends ObjectType {
+    /** Get the type parameter iterated by the mapped type */
+    getTypeParameter(): Promise<TypeParameter>;
+    /** Get the constraint over which the mapped type iterates */
+    getConstraintType(): Promise<Type>;
+    /** Get the remapped property name type, if present */
+    getNameType(): Promise<Type | undefined>;
+    /** Get the property value template type */
+    getTemplateType(): Promise<Type>;
 }
 
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
