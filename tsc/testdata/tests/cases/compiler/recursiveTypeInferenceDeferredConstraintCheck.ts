@@ -66,7 +66,13 @@ const h: typeof Other = Holder.out.rec.p;
 const lit = { get y() { return 1; } };
 declare function wrap<T extends { y: string }>(t: T): { w: T };
 const w = wrap(lit); // error
+declare function id<T>(t: T): T;
+const w2 = wrap(id(lit)); // error
 
 // (8) A candidate that is not applicable with the deferred inference is inferred again with the check in place.
 declare function ni<T extends { y: string }>(t: T, u: NoInfer<T>): T;
 ni({ get y() { return 1; } }, { y: "s" }); // error on the accessor
+
+// (9) The arity of a candidate with a generic rest parameter is checked again after the re-inference.
+declare function fixedRest<T extends [{ y: string }]>(n: number, ...ts: T): T;
+const F = { get f() { return fixedRest("oops", { get y() { return 1; } }, "extra"); } }; // error

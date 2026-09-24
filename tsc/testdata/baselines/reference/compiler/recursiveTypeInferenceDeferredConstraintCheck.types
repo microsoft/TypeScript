@@ -267,6 +267,18 @@ const w = wrap(lit); // error
 >wrap : <T extends { y: string; }>(t: T) => { w: T; }
 >lit : { readonly y: number; }
 
+declare function id<T>(t: T): T;
+>id : <T>(t: T) => T
+>t : T
+
+const w2 = wrap(id(lit)); // error
+>w2 : { w: { readonly y: number; }; }
+>wrap(id(lit)) : { w: { readonly y: number; }; }
+>wrap : <T extends { y: string; }>(t: T) => { w: T; }
+>id(lit) : { readonly y: number; }
+>id : <T>(t: T) => T
+>lit : { readonly y: number; }
+
 // (8) A candidate that is not applicable with the deferred inference is inferred again with the check in place.
 declare function ni<T extends { y: string }>(t: T, u: NoInfer<T>): T;
 >ni : <T extends { y: string; }>(t: T, u: NoInfer<T>) => T
@@ -283,4 +295,23 @@ ni({ get y() { return 1; } }, { y: "s" }); // error on the accessor
 >{ y: "s" } : { y: string; }
 >y : string
 >"s" : "s"
+
+// (9) The arity of a candidate with a generic rest parameter is checked again after the re-inference.
+declare function fixedRest<T extends [{ y: string }]>(n: number, ...ts: T): T;
+>fixedRest : <T extends [{ y: string; }]>(n: number, ...ts: T) => T
+>y : string
+>n : number
+>ts : T
+
+const F = { get f() { return fixedRest("oops", { get y() { return 1; } }, "extra"); } }; // error
+>F : { readonly f: [{ y: string; }]; }
+>{ get f() { return fixedRest("oops", { get y() { return 1; } }, "extra"); } } : { readonly f: [{ y: string; }]; }
+>f : [{ y: string; }]
+>fixedRest("oops", { get y() { return 1; } }, "extra") : [{ y: string; }]
+>fixedRest : <T extends [{ y: string; }]>(n: number, ...ts: T) => T
+>"oops" : "oops"
+>{ get y() { return 1; } } : { readonly y: number; }
+>y : number
+>1 : 1
+>"extra" : "extra"
 

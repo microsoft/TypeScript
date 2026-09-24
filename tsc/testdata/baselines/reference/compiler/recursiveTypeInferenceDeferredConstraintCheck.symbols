@@ -291,20 +291,49 @@ const w = wrap(lit); // error
 >wrap : Symbol(wrap, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 62, 38))
 >lit : Symbol(lit, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 62, 5))
 
+declare function id<T>(t: T): T;
+>id : Symbol(id, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 64, 20))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 65, 20))
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 65, 23))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 65, 20))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 65, 20))
+
+const w2 = wrap(id(lit)); // error
+>w2 : Symbol(w2, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 66, 5))
+>wrap : Symbol(wrap, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 62, 38))
+>id : Symbol(id, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 64, 20))
+>lit : Symbol(lit, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 62, 5))
+
 // (8) A candidate that is not applicable with the deferred inference is inferred again with the check in place.
 declare function ni<T extends { y: string }>(t: T, u: NoInfer<T>): T;
->ni : Symbol(ni, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 64, 20))
->T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 67, 20))
->y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 67, 31))
->t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 67, 45))
->T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 67, 20))
->u : Symbol(u, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 67, 50))
+>ni : Symbol(ni, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 66, 25))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 69, 20))
+>y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 69, 31))
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 69, 45))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 69, 20))
+>u : Symbol(u, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 69, 50))
 >NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 67, 20))
->T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 67, 20))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 69, 20))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 69, 20))
 
 ni({ get y() { return 1; } }, { y: "s" }); // error on the accessor
->ni : Symbol(ni, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 64, 20))
->y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 68, 4))
->y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 68, 31))
+>ni : Symbol(ni, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 66, 25))
+>y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 70, 4))
+>y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 70, 31))
+
+// (9) The arity of a candidate with a generic rest parameter is checked again after the re-inference.
+declare function fixedRest<T extends [{ y: string }]>(n: number, ...ts: T): T;
+>fixedRest : Symbol(fixedRest, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 70, 42))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 73, 27))
+>y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 73, 39))
+>n : Symbol(n, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 73, 54))
+>ts : Symbol(ts, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 73, 64))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 73, 27))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 73, 27))
+
+const F = { get f() { return fixedRest("oops", { get y() { return 1; } }, "extra"); } }; // error
+>F : Symbol(F, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 74, 5))
+>f : Symbol(f, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 74, 11))
+>fixedRest : Symbol(fixedRest, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 70, 42))
+>y : Symbol(y, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 74, 48))
 

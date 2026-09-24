@@ -295,6 +295,7 @@ type InferenceContext struct {
 type deferredConstraintCheck struct {
 	node          *ast.Node
 	source        *Type
+	signature     *Signature
 	typeParameter *Type
 	mapper        *TypeMapper
 }
@@ -2643,7 +2644,7 @@ func (c *Checker) queueDeferredConstraintChecks(node *ast.Node, n *InferenceCont
 	for _, index := range n.deferredConstraintChecks {
 		inference := n.inferences[index]
 		source := inference.inferredType
-		links.deferredConstraintChecks = append(links.deferredConstraintChecks, deferredConstraintCheck{node: node, source: source, typeParameter: inference.typeParameter, mapper: n.mapper})
+		links.deferredConstraintChecks = append(links.deferredConstraintChecks, deferredConstraintCheck{node: node, source: source, signature: n.signature, typeParameter: inference.typeParameter, mapper: n.mapper})
 	}
 	n.deferredConstraintChecks = nil
 }
@@ -2656,27 +2657,38 @@ func (c *Checker) checkDeferredConstraint(d deferredConstraintCheck) {
 		return
 	}
 	target := c.getTypeWithThisArgument(c.instantiateType(constraint, d.mapper), d.source, false)
-	errorNode := c.getDeferredConstraintErrorNode(d.node, d.source)
+	errorNode := c.getDeferredConstraintErrorNode(d)
 	c.checkTypeAssignableToAndOptionallyElaborate(d.source, target, errorNode, errorNode, diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1, nil)
 }
 
 // A violated deferred constraint is reported on the argument that produced the inference when that argument can be
 // identified, where the applicability check would have reported it, and on the call otherwise.
-func (c *Checker) getDeferredConstraintErrorNode(node *ast.Node, source *Type) *ast.Node {
-	if source.symbol != nil && source.symbol.ValueDeclaration != nil && ast.IsObjectLiteralExpression(source.symbol.ValueDeclaration) && ast.IsNodeDescendantOf(source.symbol.ValueDeclaration, node) {
+func (c *Checker) getDeferredConstraintErrorNode(d deferredConstraintCheck) *ast.Node {
+	source := d.source
+	if source.symbol != nil && source.symbol.ValueDeclaration != nil && ast.IsObjectLiteralExpression(source.symbol.ValueDeclaration) && ast.IsNodeDescendantOf(source.symbol.ValueDeclaration, d.node) {
 		return source.symbol.ValueDeclaration
 	}
-	if ast.IsCallOrNewExpression(node) {
-		for _, arg := range node.Arguments() {
-			if ast.IsIdentifier(arg) {
-				t := c.getTypeOfExpression(arg)
-				if t == source || t.symbol != nil && t.symbol == source.symbol && t.symbol.Flags&ast.SymbolFlagsObjectLiteral != 0 {
+	if ast.IsCallOrNewExpression(d.node) {
+		var match *ast.Node
+		for i, arg := range d.node.Arguments() {
+			if ast.IsSpreadElement(arg) {
+				continue
+			}
+			t := c.getTypeOfExpression(arg)
+			if t == source || t.symbol != nil && t.symbol == source.symbol && t.symbol.Flags&ast.SymbolFlagsObjectLiteral != 0 {
+				if d.signature != nil && c.getTypeAtPosition(d.signature, i) == d.typeParameter {
 					return arg
+				}
+				if match == nil {
+					match = arg
 				}
 			}
 		}
+		if match != nil {
+			return match
+		}
 	}
-	return node
+	return d.node
 }
 
 func (c *Checker) checkDeferredNode(node *ast.Node) {
@@ -9402,7 +9414,9 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		}
 		if checkCandidate, applicable = c.isCandidateApplicable(s, relation, candidate, checkCandidate, inferenceContext); !applicable {
 			// Give preference to error candidates that have no rest parameters (as they are more specific)
-			s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+			if checkCandidate != nil {
+				s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+			}
 			continue
 		}
 		if s.argCheckMode != 0 {
@@ -9422,7 +9436,9 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 			}
 			if checkCandidate, applicable = c.isCandidateApplicable(s, relation, candidate, checkCandidate, inferenceContext); !applicable {
 				// Give preference to error candidates that have no rest parameters (as they are more specific)
-				s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+				if checkCandidate != nil {
+					s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+				}
 				continue
 			}
 		}
@@ -9449,6 +9465,10 @@ func (c *Checker) isCandidateApplicable(s *CallState, relation *Relation, candid
 	clearCachedInferences(inferenceContext.inferences)
 	typeArgumentTypes := c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode, inferenceContext)
 	checkCandidate = c.getSignatureInstantiation(candidate, typeArgumentTypes, ast.IsInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters)
+	if c.getNonArrayRestType(candidate) != nil && !c.hasCorrectArity(s.node, s.args, checkCandidate, s.signatureHelpTrailingComma) {
+		s.candidateForArgumentArityError = checkCandidate
+		return nil, false
+	}
 	return checkCandidate, c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, nil /*diagnosticOutput*/)
 }
 
