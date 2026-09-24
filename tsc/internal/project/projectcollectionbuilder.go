@@ -314,6 +314,13 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		if request.Kind != APIIncrementalOperationKindEmit && request.Kind != APIIncrementalOperationKindEmitBuildInfo {
 			return fmt.Errorf("unsupported incremental operation: %s", request.Kind)
 		}
+		entry, ok := b.syntheticProjects.Load(request.ProgramID)
+		if !ok {
+			return fmt.Errorf("incremental program not found: %s", request.ProgramID)
+		}
+		if entry.Value().incrementalProgram == nil {
+			return fmt.Errorf("project is not incremental: %s", request.ProgramID)
+		}
 	}
 	createdPrograms := make([]*Project, len(apiRequest.CreatePrograms))
 	createdEntries := make([]dirty.Value[*Project], len(apiRequest.CreatePrograms))
@@ -381,19 +388,12 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		})
 	}
 	for _, request := range apiRequest.IncrementalOperations {
-		entry, ok := b.syntheticProjects.Load(request.ProgramID)
-		if !ok {
-			return fmt.Errorf("incremental program not found: %s", request.ProgramID)
-		}
+		entry, _ := b.syntheticProjects.Load(request.ProgramID)
 		if entry.Value().dirty {
 			b.updateProgram(entry, logger)
 		}
 		var operationError error
 		entry.Change(func(project *Project) {
-			if project.incrementalProgram == nil {
-				operationError = fmt.Errorf("project is not incremental: %s", request.ProgramID)
-				return
-			}
 			program := project.incrementalProgram.Fork()
 			options := compiler.EmitOptions{
 				EmitOnly:  request.EmitOnly,

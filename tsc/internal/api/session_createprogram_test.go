@@ -358,6 +358,117 @@ func TestReconfigureSyntheticProgramValidation(t *testing.T) {
 	assert.ErrorContains(t, err, "not found for reconfiguration")
 }
 
+func TestIncrementalOperationsValidateBeforeWriting(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, sessionUtils := projecttestutil.Setup(map[string]any{
+		fileName: `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+
+	created, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{
+			{
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{
+					Incremental:     core.TSTrue,
+					NoLib:           core.TSTrue,
+					OutDir:          "/out/incremental",
+					RootDir:         "/home/projects/p",
+					TsBuildInfoFile: "/out/incremental.tsbuildinfo",
+				},
+				Incremental: true,
+			},
+			{
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{
+					NoLib:   core.TSTrue,
+					OutDir:  "/out/regular",
+					RootDir: "/home/projects/p",
+				},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	programs := *created.Operation.CreatedPrograms
+
+	_, err = session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes: &CreateSnapshotParams{
+			IncrementalOperations: []*IncrementalOperationParams{
+				{Program: programs[0], Kind: IncrementalOperationKindEmit},
+				{Program: programs[1], Kind: IncrementalOperationKindEmit},
+			},
+		},
+	})
+	assert.ErrorContains(t, err, "project is not incremental")
+	_, written := sessionUtils.FS().ReadFile("/out/incremental/index.js")
+	assert.Assert(t, !written)
+}
+
+func TestIncrementalStatusPreservesSourceFileNameCasing(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/Src/Foo.ts"
+	projectSession, sessionUtils := projecttestutil.Setup(map[string]any{
+		fileName: `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+
+	created, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			Incremental:     true,
+		}},
+	})
+	assert.NilError(t, err)
+	programID := (*created.Operation.CreatedPrograms)[0]
+	createdSnapshot, err := session.getSnapshotData(created.Snapshot)
+	assert.NilError(t, err)
+	createdProject, err := createdSnapshot.getProject(programID.AsID())
+	assert.NilError(t, err)
+	assert.Equal(t, createdProject.IncrementalStatus().PendingEmit[0].SourceFileName, fileName)
+
+	assert.NilError(t, sessionUtils.FS().WriteFile(fileName, `export const value = 2;`))
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileNotifications: &FileNotifications{Changed: []DocumentIdentifier{{FileName: fileName}}},
+			EnsurePrograms:    &EnsurePrograms{Projects: []project.ID{programID.AsID()}},
+		},
+	})
+	assert.NilError(t, err)
+	updatedSnapshot, err := session.getSnapshotData(updated.Snapshot)
+	assert.NilError(t, err)
+	updatedProject, err := updatedSnapshot.getProject(programID.AsID())
+	assert.NilError(t, err)
+	assert.DeepEqual(t, updatedProject.IncrementalStatus().ChangedFiles, []string{fileName})
+
+	assert.NilError(t, sessionUtils.FS().Remove(fileName))
+	deleted, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: updated.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileNotifications: &FileNotifications{Deleted: []DocumentIdentifier{{FileName: fileName}}},
+			EnsurePrograms:    &EnsurePrograms{Projects: []project.ID{programID.AsID()}},
+		},
+	})
+	assert.NilError(t, err)
+	deletedSnapshot, err := session.getSnapshotData(deleted.Snapshot)
+	assert.NilError(t, err)
+	deletedProject, err := deletedSnapshot.getProject(programID.AsID())
+	assert.NilError(t, err)
+	assert.DeepEqual(t, deletedProject.IncrementalStatus().ChangedFiles, []string{})
+	assert.DeepEqual(t, deletedProject.IncrementalStatus().PendingEmit, []*incremental.PendingEmit{})
+}
+
 func TestCreateSyntheticProgramValidation(t *testing.T) {
 	t.Parallel()
 

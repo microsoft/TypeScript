@@ -168,6 +168,8 @@ func (t *toProgramSnapshot) handleFileDelete() {
 		// If the global file is removed, add all files as changed
 		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
 			if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
+				t.snapshot.changedFilesSet.Delete(filePath)
+				t.snapshot.affectedFilesPendingEmit.Delete(filePath)
 				if oldInfo.affectsGlobalScope {
 					for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
 						t.snapshot.addFileToChangeSet(file.Path())

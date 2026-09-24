@@ -154,12 +154,12 @@ func (p *Program) Status() *Status {
 		LatestChangedDtsFile:       p.snapshot.latestChangedDtsFile,
 	}
 	p.snapshot.changedFilesSet.Range(func(path tspath.Path) bool {
-		status.ChangedFiles = append(status.ChangedFiles, string(path))
+		status.ChangedFiles = append(status.ChangedFiles, p.sourceFileName(path))
 		return true
 	})
 	p.snapshot.affectedFilesPendingEmit.Range(func(path tspath.Path, kind FileEmitKind) bool {
 		status.PendingEmit = append(status.PendingEmit, &PendingEmit{
-			SourceFileName: string(path),
+			SourceFileName: p.sourceFileName(path),
 			Kind:           kind,
 		})
 		return true
@@ -175,6 +175,14 @@ func (p *Program) Status() *Status {
 	})
 	slices.Sort(status.PendingSemanticDiagnostics)
 	return status
+}
+
+func (p *Program) sourceFileName(path tspath.Path) string {
+	file := p.program.GetSourceFileByPath(path)
+	if file == nil {
+		panic(fmt.Sprintf("incremental state contains source file path not present in program: %s", path))
+	}
+	return file.FileName()
 }
 
 // Options implements compiler.AnyProgram interface.
