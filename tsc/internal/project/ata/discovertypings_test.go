@@ -84,14 +84,19 @@ func TestDiscoverTypings(t *testing.T) {
 		t.Parallel()
 		logger := logging.NewLogTree("DiscoverTypings")
 		files := map[string]string{
-			"/home/src/projects/project/app.js":    "",
-			"/home/src/projects/project/node.d.ts": "",
+			"/home/src/projects/project/app.js":      "",
+			"/home/src/projects/project/jquery.d.ts": "",
+			"/home/src/projects/project/node.d.ts":   "",
 		}
 		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
 		cache := collections.SyncMap[string, *ata.CachedTyping]{}
 		version := semver.MustParse("1.3.0")
 		cache.Store("node", &ata.CachedTyping{
 			TypingsLocation: "/home/src/projects/project/node.d.ts",
+			Version:         &version,
+		})
+		cache.Store("jquery", &ata.CachedTyping{
+			TypingsLocation: "/home/src/projects/project/jquery.d.ts",
 			Version:         &version,
 		})
 		unresolvedImports := collections.NewSetFromItems("fs", "bar")
@@ -107,7 +112,8 @@ func TestDiscoverTypings(t *testing.T) {
 			"/home/src/projects/project",
 			&cache,
 			map[string]map[string]string{
-				"node": projecttestutil.TypesRegistryConfig(),
+				"jquery": projecttestutil.TypesRegistryConfig(),
+				"node":   projecttestutil.TypesRegistryConfig(),
 			},
 		)
 		assert.DeepEqual(t, cachedTypingPaths, []string{
