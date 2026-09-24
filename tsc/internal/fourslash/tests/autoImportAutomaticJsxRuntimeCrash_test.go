@@ -13,18 +13,24 @@ import (
 func TestAutoImportAutomaticJsxRuntimeCrash(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: /project/node_modules/pkg/package.json
+	const content = `
+// @Filename: /project/node_modules/pkg/package.json
 { "name": "pkg", "types": "index.tsx" }
+
 // @Filename: /project/node_modules/pkg/index.tsx
 /** @jsxRuntime automatic */
 const container = { Widget: { value: <div /> } satisfies {} };
 export default container.Widget;
+
 // @Filename: /project/package.json
 { "dependencies": { "pkg": "*" } }
+
 // @Filename: /project/tsconfig.json
 { "compilerOptions": { "jsx": "react-jsx" } }
+
 // @Filename: /project/index.ts
-Widg/**/`
+Widg/**/
+`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.MarkTestAsStradaServer()
