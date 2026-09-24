@@ -135,7 +135,7 @@ type sourceDefResolver struct {
 	options       *core.CompilerOptions
 	getSourceFile func(string) *ast.SourceFile
 	resolveFrom   string
-	resolver      *module.Resolver
+	resolver      *module.DefaultResolver
 	parsedFiles   map[string]*ast.SourceFile
 }
 
@@ -152,7 +152,12 @@ func (l *LanguageService) newSourceDefResolver(
 		options:       options,
 		getSourceFile: program.GetSourceFile,
 		resolveFrom:   resolveFrom,
-		resolver:      module.NewResolver(program.Host(), noDtsOptions, program.GetGlobalTypingsCacheLocation(), "", program.CommandLine().ContentMapperExtensions()),
+		resolver: module.NewResolver(module.ResolverOptions{
+			Host:            program.Host(),
+			CompilerOptions: noDtsOptions,
+			TypingsLocation: program.GetGlobalTypingsCacheLocation(),
+			ExtraExtensions: program.CommandLine().ContentMapperExtensions(),
+		}),
 	}
 }
 
@@ -422,7 +427,7 @@ func (r *sourceDefResolver) resolveImplementationFrom(
 	}
 
 	for _, mode := range modes {
-		resolved, _ := r.resolver.ResolveModuleName(moduleName, resolveFromFile, mode, nil)
+		resolved, _, _ := r.resolver.ResolveModuleName(moduleName, resolveFromFile, mode, nil)
 		if resolved != nil && resolved.IsResolved() && !tspath.IsDeclarationFileName(resolved.ResolvedFileName) {
 			return resolved.ResolvedFileName
 		}

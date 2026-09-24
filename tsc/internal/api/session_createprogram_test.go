@@ -184,20 +184,20 @@ func TestReconfigureSyntheticProgramValidation(t *testing.T) {
 	program := &ReconfigureSnapshotProgramParams{Id: "/dev/null/synthetic/1"}
 	var nullReconfigure SnapshotRequestChangesParams
 	assert.NilError(t, json.Unmarshal([]byte(`{"reconfigurePrograms":[null]}`), &nullReconfigure))
-	_, err := session.toAPISnapshotRequest(&nullReconfigure)
+	_, err := session.toAPISnapshotRequest(context.Background(), &nullReconfigure)
 	assert.ErrorContains(t, err, "reconfigurePrograms[0] must not be null")
 
-	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err = session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{Id: "/tsconfig.json"}},
 	})
 	assert.ErrorContains(t, err, "invalid synthetic project handle")
 
-	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err = session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{program, program},
 	})
 	assert.ErrorContains(t, err, "reconfigured more than once")
 
-	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err = session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{program},
 		RemovePrograms:      []project.SyntheticProjectID{program.Id},
 	})
@@ -220,7 +220,7 @@ func TestCreateSyntheticProgramValidation(t *testing.T) {
 
 	var nullCreate SnapshotRequestChangesParams
 	assert.NilError(t, json.Unmarshal([]byte(`{"createPrograms":[null]}`), &nullCreate))
-	_, err := session.toAPISnapshotRequest(&nullCreate)
+	_, err := session.toAPISnapshotRequest(context.Background(), &nullCreate)
 	assert.ErrorContains(t, err, "createPrograms[0] must not be null")
 	assert.ErrorIs(t, err, ErrClientError)
 }

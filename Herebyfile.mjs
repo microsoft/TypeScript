@@ -447,22 +447,33 @@ export const generateTristate = goGenerateTask("generate:tristate", [
     stringerGenerator("tsc/internal/core/tristate.go", "Tristate", "tristate_stringer_generated.go"),
 ]);
 
-const diagnosticLocaleDir = "loc";
-const diagnosticOutputs = ["diagnostics_generated.go", "loc_generated.go"];
-
 export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
     {
         file: "tsc/internal/diagnostics/diagnostics.go",
-        inputs: ["generate.go", "diagnosticMessages.json", "extraDiagnosticMessages.json", "../{collections,json}/*.go", "../locale/lcl/*/diagnosticMessages/diagnosticMessages.generated.json.lcl"],
+        inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
-        outputs: [...diagnosticOutputs, `${diagnosticLocaleDir}/*.json.gz`],
+        outputs: ["diagnostics_generated.go", "loc_generated.go", "diagnosticMessages.generated.json", "loc/*.json.gz"],
         commands: [
-            ["go", "run", "generate.go", "-diagnostics", diagnosticOutputs[0], "-loc", diagnosticOutputs[1], "-locdir", diagnosticLocaleDir],
+            [
+                "go",
+                "run",
+                "generate.go",
+                "-diagnostics",
+                "diagnostics_generated.go",
+                "-loc",
+                "loc_generated.go",
+                "-locdir",
+                "loc",
+                "-locproject",
+                "../../../tools/LocProject.json",
+                "-locsource",
+                "diagnosticMessages.generated.json",
+            ],
             ["dprint", "fmt", "diagnostics_generated.go", "loc_generated.go"],
         ],
     },
     stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go"),
-], [path.join("tsc/internal/diagnostics", diagnosticLocaleDir)]);
+], ["tsc/internal/diagnostics/loc"]);
 
 export const generateAutoImport = goGenerateTask("generate:autoimport", [
     stringerGenerator("tsc/internal/ls/autoimport/export.go", "ExportSyntax", "export_stringer_generated.go"),
