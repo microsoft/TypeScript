@@ -2,7 +2,11 @@ import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { repoRoot } from "./utils.mts";
+import {
+    getFileFingerprint,
+    invalidateFileFingerprints,
+    repoRoot,
+} from "./utils.mts";
 
 const commonInputs = [
     import.meta.filename,
@@ -14,6 +18,8 @@ const commonInputs = [
 function digest(value: string | Buffer): string {
     return createHash("sha256").update(value).digest("hex");
 }
+
+export const defaultCacheDirectory = path.join(os.tmpdir(), "typescript-codegen", digest(repoRoot));
 
 function readIfExists(file: string): Buffer | undefined {
     try {
@@ -31,7 +37,7 @@ export class GeneratedFile {
     private readonly cacheFile: string;
     private readonly key: unknown;
 
-    constructor(fileName: string, inputs: readonly string[], cacheDirectory = path.join(os.tmpdir(), "typescript-codegen"), key?: unknown) {
+    constructor(fileName: string, inputs: readonly string[], cacheDirectory = defaultCacheDirectory, key?: unknown) {
         this.fileName = path.resolve(fileName);
         this.inputs = [...new Set([...commonInputs, ...inputs].map(file => path.resolve(file)))].sort();
         this.key = key;
@@ -39,13 +45,13 @@ export class GeneratedFile {
         this.cacheFile = path.join(cacheDirectory, digest(this.fileName) + ".json");
     }
 
-    private hashInputs(): string {
+    private hashInputs(fresh = false): string {
         return digest(JSON.stringify([
             process.version,
             process.platform,
             process.arch,
             this.key,
-            this.inputs.map(file => [file, digest(fs.readFileSync(file))]),
+            this.inputs.map(file => [file, getFileFingerprint(file, fresh)]),
         ]));
     }
 
@@ -60,6 +66,7 @@ export class GeneratedFile {
     }
 
     invalidate(): void {
+        invalidateFileFingerprints(this.fileName);
         fs.rmSync(this.cacheFile, { force: true });
     }
 
@@ -70,7 +77,8 @@ export class GeneratedFile {
     }
 
     markCurrent(): void {
-        if (this.inputHash !== this.hashInputs()) return;
+        invalidateFileFingerprints(this.fileName);
+        if (this.inputHash !== this.hashInputs(true)) return;
         const state = this.state(fs.readFileSync(this.fileName));
         fs.mkdirSync(path.dirname(this.cacheFile), { recursive: true });
         fs.writeFileSync(this.cacheFile, state);

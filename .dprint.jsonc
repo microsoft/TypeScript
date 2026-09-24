@@ -53,7 +53,8 @@
         // Needs to be LF to have a working shebang.
         "packages/typescript/bin/tsc",
         "tsc/internal/bundled/source/**",
-        "tsc/internal/locale/lcl/**",
+        "tsc/internal/diagnostics/diagnosticMessages.generated.json",
+        "tsc/internal/diagnostics/loc/*.generated.json",
         "packages/typescript/dist/**",
         "packages/typescript/tsconfig.tsbuildinfo",
         "packages/vscode-typescript/dist/**",

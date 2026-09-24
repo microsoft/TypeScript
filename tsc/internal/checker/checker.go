@@ -17139,11 +17139,12 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	var missingElements []*ast.Node
 	for _, e := range pattern.Elements() {
-		if e.Initializer() != nil {
-			name := c.getPropertyNameFromBindingElement(e)
-			if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
-				missingElements = append(missingElements, e)
-			}
+		if hasDotDotDotToken(e) {
+			continue
+		}
+		name := c.getPropertyNameFromBindingElement(e)
+		if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
+			missingElements = append(missingElements, e)
 		}
 	}
 	if len(missingElements) == 0 {
@@ -17155,7 +17156,7 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	}
 	for _, e := range missingElements {
 		symbol := c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, c.getPropertyNameFromBindingElement(e))
-		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, false /*reportErrors*/)
+		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
 		members[symbol.Name] = symbol
 	}
 	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
@@ -23918,8 +23919,8 @@ func (c *Checker) isArrayLikeType(t *Type) bool {
 
 func (c *Checker) isMutableArrayLikeType(t *Type) bool {
 	// A type is mutable-array-like if it is a reference to the global Array type, or if it is not the
-	// any, undefined or null type and if it is assignable to Array<any>
-	return c.isMutableArrayOrTuple(t) || t.flags&(TypeFlagsAny|TypeFlagsNullable) == 0 && c.isTypeAssignableTo(t, c.anyArrayType)
+	// any, undefined, null or never type and if it is assignable to Array<any>
+	return c.isMutableArrayOrTuple(t) || t.flags&(TypeFlagsAny|TypeFlagsNullable|TypeFlagsNever) == 0 && c.isTypeAssignableTo(t, c.anyArrayType)
 }
 
 func (c *Checker) isEmptyArrayLiteralType(t *Type) bool {
