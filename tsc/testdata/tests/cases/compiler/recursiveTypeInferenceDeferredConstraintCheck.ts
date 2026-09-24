@@ -52,3 +52,21 @@ const Overloaded = object2({
   name: str,
   get subcategories() { return array(Overloaded); }, // error
 });
+
+// (6) A pure return type inference inside an accessor body is not deferred, so it stays filtered by its constraint.
+declare function make2<S extends Shape, P extends Schema<any>>(shape: S): Schema<{ p: P }> & { p: P };
+const Other = object({ name: str, get g() { return str; } });
+const Holder = object({
+  name: str,
+  get rec() { return make2({ inner: str }) satisfies { p: typeof Other | number }; },
+});
+const h: typeof Other = Holder.out.rec.p;
+
+// (7) A violated deferred constraint is reported on the argument.
+const lit = { get y() { return 1; } };
+declare function wrap<T extends { y: string }>(t: T): { w: T };
+const w = wrap(lit); // error
+
+// (8) A candidate that is not applicable with the deferred inference is inferred again with the check in place.
+declare function ni<T extends { y: string }>(t: T, u: NoInfer<T>): T;
+ni({ get y() { return 1; } }, { y: "s" }); // error on the accessor

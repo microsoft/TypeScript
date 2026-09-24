@@ -3,9 +3,13 @@ recursiveTypeInferenceDeferredConstraintCheck.ts(30,5): error TS2345: Argument o
 recursiveTypeInferenceDeferredConstraintCheck.ts(32,5): error TS2345: Argument of type '42' is not assignable to parameter of type '"x"'.
 recursiveTypeInferenceDeferredConstraintCheck.ts(48,7): error TS7022: 'Overloaded' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 recursiveTypeInferenceDeferredConstraintCheck.ts(50,7): error TS7023: 'subcategories' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveTypeInferenceDeferredConstraintCheck.ts(65,16): error TS2345: Argument of type '{ readonly y: number; }' is not assignable to parameter of type '{ y: string; }'.
+  Types of property 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheck.ts(69,10): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== recursiveTypeInferenceDeferredConstraintCheck.ts (5 errors) ====
+==== recursiveTypeInferenceDeferredConstraintCheck.ts (7 errors) ====
     // When the inferred type argument of a single-candidate call is an object literal with un-annotated accessors, its
     // constraint check is deferred until the accessors have been checked. The accessor bodies are therefore never
     // resolved while the enclosing declaration is unresolved, so no re-entrant call resolution takes place.
@@ -67,4 +71,29 @@ recursiveTypeInferenceDeferredConstraintCheck.ts(50,7): error TS7023: 'subcatego
           ~~~~~~~~~~~~~
 !!! error TS7023: 'subcategories' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     });
+    
+    // (6) A pure return type inference inside an accessor body is not deferred, so it stays filtered by its constraint.
+    declare function make2<S extends Shape, P extends Schema<any>>(shape: S): Schema<{ p: P }> & { p: P };
+    const Other = object({ name: str, get g() { return str; } });
+    const Holder = object({
+      name: str,
+      get rec() { return make2({ inner: str }) satisfies { p: typeof Other | number }; },
+    });
+    const h: typeof Other = Holder.out.rec.p;
+    
+    // (7) A violated deferred constraint is reported on the argument.
+    const lit = { get y() { return 1; } };
+    declare function wrap<T extends { y: string }>(t: T): { w: T };
+    const w = wrap(lit); // error
+                   ~~~
+!!! error TS2345: Argument of type '{ readonly y: number; }' is not assignable to parameter of type '{ y: string; }'.
+!!! error TS2345:   Types of property 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    
+    // (8) A candidate that is not applicable with the deferred inference is inferred again with the check in place.
+    declare function ni<T extends { y: string }>(t: T, u: NoInfer<T>): T;
+    ni({ get y() { return 1; } }, { y: "s" }); // error on the accessor
+             ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveTypeInferenceDeferredConstraintCheck.ts:68:33: The expected type comes from property 'y' which is declared here on type '{ y: string; }'
     

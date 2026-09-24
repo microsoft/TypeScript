@@ -198,3 +198,89 @@ const Overloaded = object2({
 
 });
 
+// (6) A pure return type inference inside an accessor body is not deferred, so it stays filtered by its constraint.
+declare function make2<S extends Shape, P extends Schema<any>>(shape: S): Schema<{ p: P }> & { p: P };
+>make2 : <S extends Shape, P extends Schema<any>>(shape: S) => Schema<{ p: P; }> & { p: P; }
+>shape : S
+>p : P
+>p : P
+
+const Other = object({ name: str, get g() { return str; } });
+>Other : Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+>object({ name: str, get g() { return str; } }) : Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>{ name: str, get g() { return str; } } : { name: Schema<string>; readonly g: Schema<string>; }
+>name : Schema<string>
+>str : Schema<string>
+>g : Schema<string>
+>str : Schema<string>
+
+const Holder = object({
+>Holder : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }; }>>
+>object({  name: str,  get rec() { return make2({ inner: str }) satisfies { p: typeof Other | number }; },}) : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }; }>>
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>{  name: str,  get rec() { return make2({ inner: str }) satisfies { p: typeof Other | number }; },} : { name: Schema<string>; readonly rec: Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }; }
+
+  name: str,
+>name : Schema<string>
+>str : Schema<string>
+
+  get rec() { return make2({ inner: str }) satisfies { p: typeof Other | number }; },
+>rec : Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }
+>make2({ inner: str }) satisfies { p: typeof Other | number } : Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }
+>make2({ inner: str }) : Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }
+>make2 : <S extends Shape, P extends Schema<any>>(shape: S) => Schema<{ p: P; }> & { p: P; }
+>{ inner: str } : { inner: Schema<string>; }
+>inner : Schema<string>
+>str : Schema<string>
+>p : number | Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+>Other : Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+
+});
+const h: typeof Other = Holder.out.rec.p;
+>h : Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+>Other : Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+>Holder.out.rec.p : Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+>Holder.out.rec : { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }
+>Holder.out : Infer<{ name: Schema<string>; readonly rec: Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }; }>
+>Holder : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }; }>>
+>out : Infer<{ name: Schema<string>; readonly rec: Schema<{ p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }> & { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }; }>
+>rec : { p: Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>; }
+>p : Schema<Infer<{ name: Schema<string>; readonly g: Schema<string>; }>>
+
+// (7) A violated deferred constraint is reported on the argument.
+const lit = { get y() { return 1; } };
+>lit : { readonly y: number; }
+>{ get y() { return 1; } } : { readonly y: number; }
+>y : number
+>1 : 1
+
+declare function wrap<T extends { y: string }>(t: T): { w: T };
+>wrap : <T extends { y: string; }>(t: T) => { w: T; }
+>y : string
+>t : T
+>w : T
+
+const w = wrap(lit); // error
+>w : { w: { readonly y: number; }; }
+>wrap(lit) : { w: { readonly y: number; }; }
+>wrap : <T extends { y: string; }>(t: T) => { w: T; }
+>lit : { readonly y: number; }
+
+// (8) A candidate that is not applicable with the deferred inference is inferred again with the check in place.
+declare function ni<T extends { y: string }>(t: T, u: NoInfer<T>): T;
+>ni : <T extends { y: string; }>(t: T, u: NoInfer<T>) => T
+>y : string
+>t : T
+>u : NoInfer<T>
+
+ni({ get y() { return 1; } }, { y: "s" }); // error on the accessor
+>ni({ get y() { return 1; } }, { y: "s" }) : { y: string; }
+>ni : <T extends { y: string; }>(t: T, u: NoInfer<T>) => T
+>{ get y() { return 1; } } : { readonly y: number; }
+>y : number
+>1 : 1
+>{ y: "s" } : { y: string; }
+>y : string
+>"s" : "s"
+
