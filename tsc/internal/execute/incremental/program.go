@@ -385,20 +385,20 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 	if buildInfoFileName == "" || p.program.IsEmitBlocked(buildInfoFileName) {
 		return nil
 	}
-	text, buildInfo, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
+	if err := p.prepareBuildInfoState(ctx); err != nil {
+		return nil
+	}
+	if !p.snapshot.buildInfoEmitPending.Load() {
+		return nil
+	}
+	text, buildInfo, err := p.serializeBuildInfo(buildInfoFileName)
 	if err != nil {
-		if ctx.Err() != nil {
-			return nil
-		}
 		return &compiler.EmitResult{
 			EmitSkipped: true,
 			Diagnostics: []*ast.Diagnostic{
 				compiler.ContentMapperProjectDiagnostic(err),
 			},
 		}
-	}
-	if !p.snapshot.buildInfoEmitPending.Load() {
-		return nil
 	}
 	return p.writeBuildInfo(buildInfoFileName, text, buildInfo, options)
 }
@@ -414,7 +414,10 @@ func (p *Program) GetBuildInfoEmit(ctx context.Context) (string, error) {
 	if p.program.IsEmitBlocked(buildInfoFileName) {
 		return "", fmt.Errorf("build info emit is blocked for %s", buildInfoFileName)
 	}
-	text, _, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
+	if err := p.prepareBuildInfoState(ctx); err != nil {
+		return "", err
+	}
+	text, _, err := p.serializeBuildInfo(buildInfoFileName)
 	return text, err
 }
 
@@ -426,11 +429,11 @@ func (p *Program) EmitBuildInfo(ctx context.Context, options compiler.EmitOption
 	if buildInfoFileName == "" || p.program.IsEmitBlocked(buildInfoFileName) {
 		return &compiler.EmitResult{EmitSkipped: true}
 	}
-	text, buildInfo, err := p.getBuildInfoEmit(ctx, buildInfoFileName)
+	if err := p.prepareBuildInfoState(ctx); err != nil {
+		return nil
+	}
+	text, buildInfo, err := p.serializeBuildInfo(buildInfoFileName)
 	if err != nil {
-		if ctx.Err() != nil {
-			return nil
-		}
 		return &compiler.EmitResult{
 			EmitSkipped: true,
 			Diagnostics: []*ast.Diagnostic{
@@ -441,7 +444,7 @@ func (p *Program) EmitBuildInfo(ctx context.Context, options compiler.EmitOption
 	return p.writeBuildInfo(buildInfoFileName, text, buildInfo, options)
 }
 
-func (p *Program) getBuildInfoEmit(ctx context.Context, buildInfoFileName string) (string, *BuildInfo, error) {
+func (p *Program) prepareBuildInfoState(ctx context.Context) error {
 	if p.snapshot.hasErrors == core.TSUnknown {
 		p.ensureHasErrorsForState(ctx, p.program)
 		if p.snapshot.hasErrors != p.snapshot.hasErrorsFromOldState || p.snapshot.hasSemanticErrors != p.snapshot.hasSemanticErrorsFromOldState {
@@ -455,9 +458,10 @@ func (p *Program) getBuildInfoEmit(ctx context.Context, buildInfoFileName string
 			p.snapshot.buildInfoEmitPending.Store(true)
 		}
 	}
-	if err := ctx.Err(); err != nil {
-		return "", nil, err
-	}
+	return ctx.Err()
+}
+
+func (p *Program) serializeBuildInfo(buildInfoFileName string) (string, *BuildInfo, error) {
 	buildInfo, err := snapshotToBuildInfo(p.snapshot, p.program, buildInfoFileName)
 	if err != nil {
 		return "", nil, err

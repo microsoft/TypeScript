@@ -702,7 +702,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const snapshot = await this.createSnapshot({
             createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
         });
-        const program = snapshot.operation.createdPrograms![0];
         return this.getOwnedCreatedProgram(snapshot, "createProgram");
     }
 

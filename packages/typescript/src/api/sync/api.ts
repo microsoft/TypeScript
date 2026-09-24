@@ -1155,7 +1155,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = owner.createSnapshot({
                     createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
-                const program = snapshot.operation.createdPrograms![0];
                 return owner.getOwnedCreatedProgram(snapshot, "createProgram");
             },
             function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
@@ -1164,7 +1163,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = yield* owner.createSnapshot.gen({
                     createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
-                const program = snapshot.operation.createdPrograms![0];
                 return owner.getOwnedCreatedProgram(snapshot, "createProgram");
             },
         );

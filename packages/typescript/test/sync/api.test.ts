@@ -1018,6 +1018,8 @@ declare module "augmentation" {}`,
 
         fs.writeFile!("/src/dependency.ts", `export function value() { return 2; }`);
         const secondProgram = api.createIncrementalProgram(["/src/main.ts"], options);
+        const globalDiagnostics = secondProgram.getGlobalDiagnostics();
+        assert.ok(globalDiagnostics.some(diagnostic => diagnostic.code === 2318));
         const secondEmit = secondProgram.emit();
         using secondEmitSnapshot = secondEmit.snapshot;
         assert.ok(!secondEmit.emittedFiles.includes("/out/main.js"), JSON.stringify(secondEmit.emittedFiles));

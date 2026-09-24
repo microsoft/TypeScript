@@ -4810,12 +4810,9 @@ func (s *Session) handleGetGlobalDiagnostics(ctx context.Context, params *GetPro
 		return nil, err
 	}
 
-	program, err := sd.getProgramLike(params.Project)
+	program, err := sd.getProgram(params.Project)
 	if err != nil {
 		return nil, err
-	}
-	if program.Program() == nil {
-		return nil, fmt.Errorf("%w: project has no program", ErrClientError)
 	}
 
 	// Global diagnostics are accumulated lazily by the project's checker pool as
