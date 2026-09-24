@@ -1653,9 +1653,9 @@ func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildR
 	result := s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, params.Project)
 
 	return &BuildResponse{
-		Status:     result.Result.Status,
-		Errors:     NewDiagnosticResponses(result.Errors),
-		Statistics: result.Statistics,
+		Status:      result.Result.Status,
+		Diagnostics: NewDiagnosticResponses(result.Errors),
+		Statistics:  result.Statistics,
 	}, nil
 }
 
@@ -1668,9 +1668,9 @@ func (s *Session) handleBuildReferences(ctx context.Context, params *BuildParams
 	result := s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, params.Project)
 
 	return &BuildResponse{
-		Status:     result.Result.Status,
-		Errors:     NewDiagnosticResponses(result.Errors),
-		Statistics: result.Statistics,
+		Status:      result.Result.Status,
+		Diagnostics: NewDiagnosticResponses(result.Errors),
+		Statistics:  result.Statistics,
 	}, nil
 }
 
@@ -1683,7 +1683,7 @@ func (s *Session) handleCleanBuild(ctx context.Context, params *CleanBuildParams
 	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(params.Project)
 	return &CleanBuildResponse{
 		Status:       result.Result.Status,
-		Errors:       NewDiagnosticResponses(result.Errors),
+		Diagnostics:  NewDiagnosticResponses(result.Errors),
 		Statistics:   result.Statistics,
 		FilesDeleted: result.FilesToDelete,
 	}, nil
@@ -1698,7 +1698,7 @@ func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildP
 	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(params.Project)
 	return &CleanBuildResponse{
 		Status:       result.Result.Status,
-		Errors:       NewDiagnosticResponses(result.Errors),
+		Diagnostics:  NewDiagnosticResponses(result.Errors),
 		Statistics:   result.Statistics,
 		FilesDeleted: result.FilesToDelete,
 	}, nil

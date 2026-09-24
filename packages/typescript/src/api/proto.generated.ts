@@ -283,7 +283,7 @@ export interface BuildParams {
 
 export interface BuildResponse {
     status: number;
-    errors?: DiagnosticResponse[] | undefined;
+    diagnostics?: DiagnosticResponse[] | undefined;
     statistics: Statistics;
 }
 
@@ -294,7 +294,7 @@ export interface CleanBuildParams {
 
 export interface CleanBuildResponse {
     status: number;
-    errors?: DiagnosticResponse[] | undefined;
+    diagnostics?: DiagnosticResponse[] | undefined;
     statistics: Statistics;
     filesDeleted?: string[] | undefined;
 }
@@ -332,7 +332,6 @@ export interface ConfigFileResponse {
     fileNames: string[];
     options: CompilerOptions;
     buildOptions?: BuildOptions | undefined;
-    watchOptions?: WatchOptions | undefined;
     projectReferences?: ProjectReference[] | undefined;
     typeAcquisition?: TypeAcquisition | undefined;
     compileOnSave?: boolean | undefined;
@@ -1658,16 +1657,6 @@ export interface Statistics {
 export interface ModuleResolutionSpec {
     fallback: "resolve" | "unresolved";
     entries: ModuleResolutionEntry[];
-}
-
-export interface WatchOptions {
-    watchInterval: number | null;
-    watchFile: number;
-    watchDirectory: number;
-    fallbackPolling: number;
-    synchronousWatchDirectory: boolean;
-    excludeDirectories: string[] | null;
-    excludeFiles: string[] | null;
 }
 
 export interface ProjectReference {

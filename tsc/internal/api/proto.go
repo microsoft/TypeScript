@@ -917,9 +917,9 @@ type BuildParams struct {
 }
 
 type BuildResponse struct {
-	Status     tsc.ExitStatus        `json:"status"`
-	Errors     []*DiagnosticResponse `json:"errors,omitempty"`
-	Statistics tsc.Statistics        `json:"statistics"`
+	Status      tsc.ExitStatus        `json:"status"`
+	Diagnostics []*DiagnosticResponse `json:"diagnostics,omitempty"`
+	Statistics  tsc.Statistics        `json:"statistics"`
 }
 
 type CleanBuildParams struct {
@@ -929,7 +929,7 @@ type CleanBuildParams struct {
 
 type CleanBuildResponse struct {
 	Status       tsc.ExitStatus        `json:"status"`
-	Errors       []*DiagnosticResponse `json:"errors,omitempty"`
+	Diagnostics  []*DiagnosticResponse `json:"diagnostics,omitempty"`
 	Statistics   tsc.Statistics        `json:"statistics"`
 	FilesDeleted []string              `json:"filesDeleted,omitempty"`
 }
@@ -944,7 +944,6 @@ type ConfigFileResponse struct {
 	FileNames         []string                 `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
 	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
-	WatchOptions      *core.WatchOptions       `json:"watchOptions,omitempty"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
@@ -992,10 +991,8 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *Conf
 		errors = []*DiagnosticResponse{}
 	}
 	return &ConfigFileResponse{
-		FileNames: parsedCommandLine.FileNames(),
-		Options:   compilerOptions,
-		// BuildOptions:      parsedCommandLine.BuildOptions(),
-		// WatchOptions:      parsedCommandLine.WatchOptions(),
+		FileNames:         parsedCommandLine.FileNames(),
+		Options:           compilerOptions,
 		ProjectReferences: parsedCommandLine.ProjectReferences(),
 		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
 		CompileOnSave:     compileOnSave,

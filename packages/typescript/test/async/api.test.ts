@@ -1313,7 +1313,7 @@ describe("BuildOrchestrator", () => {
         assert.equal(response.status, 1);
         assert.equal(response.statistics.Projects, 1);
         assert.equal(response.statistics.ProjectsBuilt, 1);
-        assert.deepEqual(response.errors, [{
+        assert.deepEqual(response.diagnostics, [{
             fileName: "/a/src/index.ts",
             pos: source.indexOf("value"),
             end: source.indexOf("value") + "value".length,
@@ -1339,7 +1339,7 @@ describe("BuildOrchestrator", () => {
 
         const cleanResp1 = await orchestrator.clean("/a/tsconfig.json");
         assert.equal(cleanResp1.status, 0);
-        assert.deepEqual(cleanResp1.errors, undefined);
+        assert.deepEqual(cleanResp1.diagnostics, undefined);
         assert.deepEqual(cleanResp1.filesDeleted!.sort(), [
             "/a/dist/index.d.ts",
             "/a/dist/index.js",
@@ -1349,13 +1349,13 @@ describe("BuildOrchestrator", () => {
         assert.equal(cleanResp1.statistics.ProjectsBuilt, 0);
         const buildResp1 = await orchestrator.build("/a/tsconfig.json");
         assert.equal(buildResp1.status, 0);
-        assert.deepEqual(buildResp1.errors, undefined);
+        assert.deepEqual(buildResp1.diagnostics, undefined);
         assert.equal(buildResp1.statistics.Projects, 1);
         assert.equal(buildResp1.statistics.ProjectsBuilt, 1);
 
         const cleanRefResp = await orchestrator.cleanReferences("/c/tsconfig.json");
         assert.equal(cleanRefResp.status, 0);
-        assert.deepEqual(cleanRefResp.errors, undefined);
+        assert.deepEqual(cleanRefResp.diagnostics, undefined);
         assert.deepEqual(cleanRefResp.filesDeleted!.sort(), [
             "/a/dist/index.d.ts",
             "/a/dist/index.js",
@@ -1368,11 +1368,11 @@ describe("BuildOrchestrator", () => {
         assert.equal(cleanRefResp.statistics.ProjectsBuilt, 0);
         const buildRefsResp = await orchestrator.buildReferences("/c/tsconfig.json");
         assert.equal(buildRefsResp.status, 0);
-        assert.deepEqual(buildRefsResp.errors, undefined);
+        assert.deepEqual(buildRefsResp.diagnostics, undefined);
 
         const cleanResp2 = await orchestrator.clean();
         assert.equal(cleanResp2.status, 0);
-        assert.deepEqual(cleanResp2.errors, undefined);
+        assert.deepEqual(cleanResp2.diagnostics, undefined);
         assert.deepEqual(cleanResp2.filesDeleted!.sort(), [
             "/a/dist/index.d.ts",
             "/a/dist/index.js",
@@ -1388,7 +1388,7 @@ describe("BuildOrchestrator", () => {
         assert.equal(cleanResp2.statistics.ProjectsBuilt, 0);
         const buildResp2 = await orchestrator.build();
         assert.equal(buildResp2.status, 0);
-        assert.deepEqual(buildResp2.errors, undefined);
+        assert.deepEqual(buildResp2.diagnostics, undefined);
         assert.equal(buildResp2.statistics.Projects, 3);
         assert.equal(buildResp2.statistics.ProjectsBuilt, 3);
     });
@@ -1407,7 +1407,7 @@ describe("BuildOrchestrator", () => {
 
         const response = await orchestrator.clean();
         assert.equal(response.status, 0);
-        assert.deepEqual(response.errors, undefined);
+        assert.deepEqual(response.diagnostics, undefined);
         assert.deepEqual(response.filesDeleted!.sort(), [
             "/a/dist/index.d.ts",
             "/a/dist/index.js",

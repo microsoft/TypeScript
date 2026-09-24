@@ -3559,12 +3559,15 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 }
 
-export interface BuildOrchestratorOptions {
+export interface BuildOrchestratorOptions extends OverrideCompilerOptions {
     cwd?: string | undefined;
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
     stopBuildOnErrors?: boolean;
+}
+
+export interface OverrideCompilerOptions {
     incremental?: boolean;
     assumeChangesOnlyAffectDirectDependencies?: boolean;
     declaration?: boolean;
