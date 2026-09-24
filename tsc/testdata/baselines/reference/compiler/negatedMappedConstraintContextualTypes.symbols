@@ -1,0 +1,201 @@
+//// [tests/cases/compiler/negatedMappedConstraintContextualTypes.ts] ////
+
+=== negatedMappedConstraintContextualTypes.ts ===
+type MyExtract<T, U> = T & U;
+>MyExtract : Symbol(MyExtract, Decl(negatedMappedConstraintContextualTypes.ts, 0, 0))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 0, 15))
+>U : Symbol(U, Decl(negatedMappedConstraintContextualTypes.ts, 0, 17))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 0, 15))
+>U : Symbol(U, Decl(negatedMappedConstraintContextualTypes.ts, 0, 17))
+
+type MyExclude<T, U> = T & not U;
+>MyExclude : Symbol(MyExclude, Decl(negatedMappedConstraintContextualTypes.ts, 0, 29))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 1, 15))
+>U : Symbol(U, Decl(negatedMappedConstraintContextualTypes.ts, 1, 17))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 1, 15))
+>U : Symbol(U, Decl(negatedMappedConstraintContextualTypes.ts, 1, 17))
+
+type MyOmit<T, K extends keyof any> = Pick<T, MyExclude<keyof T, K>>;
+>MyOmit : Symbol(MyOmit, Decl(negatedMappedConstraintContextualTypes.ts, 1, 33))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 2, 12))
+>K : Symbol(K, Decl(negatedMappedConstraintContextualTypes.ts, 2, 14))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 2, 12))
+>MyExclude : Symbol(MyExclude, Decl(negatedMappedConstraintContextualTypes.ts, 0, 29))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 2, 12))
+>K : Symbol(K, Decl(negatedMappedConstraintContextualTypes.ts, 2, 14))
+
+type Tags<Value> = Value extends { tag: infer Tag } ? Tag : never;
+>Tags : Symbol(Tags, Decl(negatedMappedConstraintContextualTypes.ts, 2, 69))
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 3, 10))
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 3, 10))
+>tag : Symbol(tag, Decl(negatedMappedConstraintContextualTypes.ts, 3, 34))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 3, 45))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 3, 45))
+
+declare function cases<Value>(): <
+>cases : Symbol(cases, Decl(negatedMappedConstraintContextualTypes.ts, 3, 66))
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 5, 23))
+
+    Handlers extends {
+>Handlers : Symbol(Handlers, Decl(negatedMappedConstraintContextualTypes.ts, 5, 34))
+
+        [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag }>) => unknown;
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 7, 9))
+>Tags : Symbol(Tags, Decl(negatedMappedConstraintContextualTypes.ts, 2, 69))
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 5, 23))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 7, 40))
+>MyExtract : Symbol(MyExtract, Decl(negatedMappedConstraintContextualTypes.ts, 0, 0))
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 5, 23))
+>tag : Symbol(tag, Decl(negatedMappedConstraintContextualTypes.ts, 7, 65))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 7, 9))
+
+    } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never }
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 8, 11))
+>MyExclude : Symbol(MyExclude, Decl(negatedMappedConstraintContextualTypes.ts, 0, 29))
+>Handlers : Symbol(Handlers, Decl(negatedMappedConstraintContextualTypes.ts, 5, 34))
+>Tags : Symbol(Tags, Decl(negatedMappedConstraintContextualTypes.ts, 2, 69))
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 5, 23))
+
+>(handlers: Handlers) => void;
+>handlers : Symbol(handlers, Decl(negatedMappedConstraintContextualTypes.ts, 9, 2))
+>Handlers : Symbol(Handlers, Decl(negatedMappedConstraintContextualTypes.ts, 5, 34))
+
+type Value = { tag: "a"; count: number } | { tag: "b"; text: string };
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 9, 30))
+>tag : Symbol(tag, Decl(negatedMappedConstraintContextualTypes.ts, 11, 14))
+>count : Symbol(count, Decl(negatedMappedConstraintContextualTypes.ts, 11, 24))
+>tag : Symbol(tag, Decl(negatedMappedConstraintContextualTypes.ts, 11, 44))
+>text : Symbol(text, Decl(negatedMappedConstraintContextualTypes.ts, 11, 54))
+
+const match = cases<Value>();
+>match : Symbol(match, Decl(negatedMappedConstraintContextualTypes.ts, 12, 5))
+>cases : Symbol(cases, Decl(negatedMappedConstraintContextualTypes.ts, 3, 66))
+>Value : Symbol(Value, Decl(negatedMappedConstraintContextualTypes.ts, 9, 30))
+
+match({
+>match : Symbol(match, Decl(negatedMappedConstraintContextualTypes.ts, 12, 5))
+
+    a: value => value.count,
+>a : Symbol(a, Decl(negatedMappedConstraintContextualTypes.ts, 13, 7))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 14, 6))
+>value.count : Symbol(count, Decl(negatedMappedConstraintContextualTypes.ts, 11, 24))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 14, 6))
+>count : Symbol(count, Decl(negatedMappedConstraintContextualTypes.ts, 11, 24))
+
+    b: value => value.text,
+>b : Symbol(b, Decl(negatedMappedConstraintContextualTypes.ts, 14, 28))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 15, 6))
+>value.text : Symbol(text, Decl(negatedMappedConstraintContextualTypes.ts, 11, 54))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 15, 6))
+>text : Symbol(text, Decl(negatedMappedConstraintContextualTypes.ts, 11, 54))
+
+});
+
+match({
+>match : Symbol(match, Decl(negatedMappedConstraintContextualTypes.ts, 12, 5))
+
+    a: value => value.count,
+>a : Symbol(a, Decl(negatedMappedConstraintContextualTypes.ts, 18, 7))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 19, 6))
+>value.count : Symbol(count, Decl(negatedMappedConstraintContextualTypes.ts, 11, 24))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 19, 6))
+>count : Symbol(count, Decl(negatedMappedConstraintContextualTypes.ts, 11, 24))
+
+    b: value => value.text,
+>b : Symbol(b, Decl(negatedMappedConstraintContextualTypes.ts, 19, 28))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 20, 6))
+>value.text : Symbol(text, Decl(negatedMappedConstraintContextualTypes.ts, 11, 54))
+>value : Symbol(value, Decl(negatedMappedConstraintContextualTypes.ts, 20, 6))
+>text : Symbol(text, Decl(negatedMappedConstraintContextualTypes.ts, 11, 54))
+
+    // Error: Additional handlers are excluded.
+    extra: () => 0,
+>extra : Symbol(extra, Decl(negatedMappedConstraintContextualTypes.ts, 20, 27))
+
+});
+
+type Elements = {
+>Elements : Symbol(Elements, Decl(negatedMappedConstraintContextualTypes.ts, 23, 3))
+
+    div: { onChange: (event: Event) => void };
+>div : Symbol(div, Decl(negatedMappedConstraintContextualTypes.ts, 25, 17))
+>onChange : Symbol(onChange, Decl(negatedMappedConstraintContextualTypes.ts, 26, 10))
+>event : Symbol(event, Decl(negatedMappedConstraintContextualTypes.ts, 26, 22))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    span: { onChange: (event: Event) => void };
+>span : Symbol(span, Decl(negatedMappedConstraintContextualTypes.ts, 26, 46))
+>onChange : Symbol(onChange, Decl(negatedMappedConstraintContextualTypes.ts, 27, 11))
+>event : Symbol(event, Decl(negatedMappedConstraintContextualTypes.ts, 27, 23))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+};
+type Props<Tag extends keyof Elements> = MyOmit<Elements[Tag], "onChange"> & {
+>Props : Symbol(Props, Decl(negatedMappedConstraintContextualTypes.ts, 28, 2))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 29, 11))
+>Elements : Symbol(Elements, Decl(negatedMappedConstraintContextualTypes.ts, 23, 3))
+>MyOmit : Symbol(MyOmit, Decl(negatedMappedConstraintContextualTypes.ts, 1, 33))
+>Elements : Symbol(Elements, Decl(negatedMappedConstraintContextualTypes.ts, 23, 3))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 29, 11))
+
+    onChange: (index: number) => void;
+>onChange : Symbol(onChange, Decl(negatedMappedConstraintContextualTypes.ts, 29, 78))
+>index : Symbol(index, Decl(negatedMappedConstraintContextualTypes.ts, 30, 15))
+
+};
+declare function component<Tag extends keyof Elements = "div">(props: Props<Tag>): void;
+>component : Symbol(component, Decl(negatedMappedConstraintContextualTypes.ts, 31, 2))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 32, 27))
+>Elements : Symbol(Elements, Decl(negatedMappedConstraintContextualTypes.ts, 23, 3))
+>props : Symbol(props, Decl(negatedMappedConstraintContextualTypes.ts, 32, 63))
+>Props : Symbol(Props, Decl(negatedMappedConstraintContextualTypes.ts, 28, 2))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 32, 27))
+
+component({ onChange: index => { const numeric: number = index; } });
+>component : Symbol(component, Decl(negatedMappedConstraintContextualTypes.ts, 31, 2))
+>onChange : Symbol(onChange, Decl(negatedMappedConstraintContextualTypes.ts, 33, 11))
+>index : Symbol(index, Decl(negatedMappedConstraintContextualTypes.ts, 33, 21))
+>numeric : Symbol(numeric, Decl(negatedMappedConstraintContextualTypes.ts, 33, 38))
+>index : Symbol(index, Decl(negatedMappedConstraintContextualTypes.ts, 33, 21))
+
+type RemappedOmit<T, Keys> = { [Key in keyof T as MyExclude<Key, Keys>]: T[Key] };
+>RemappedOmit : Symbol(RemappedOmit, Decl(negatedMappedConstraintContextualTypes.ts, 33, 69))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 35, 18))
+>Keys : Symbol(Keys, Decl(negatedMappedConstraintContextualTypes.ts, 35, 20))
+>Key : Symbol(Key, Decl(negatedMappedConstraintContextualTypes.ts, 35, 32))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 35, 18))
+>MyExclude : Symbol(MyExclude, Decl(negatedMappedConstraintContextualTypes.ts, 0, 29))
+>Key : Symbol(Key, Decl(negatedMappedConstraintContextualTypes.ts, 35, 32))
+>Keys : Symbol(Keys, Decl(negatedMappedConstraintContextualTypes.ts, 35, 20))
+>T : Symbol(T, Decl(negatedMappedConstraintContextualTypes.ts, 35, 18))
+>Key : Symbol(Key, Decl(negatedMappedConstraintContextualTypes.ts, 35, 32))
+
+type RemappedProps<Tag extends keyof Elements> = RemappedOmit<Elements[Tag], "onChange"> & {
+>RemappedProps : Symbol(RemappedProps, Decl(negatedMappedConstraintContextualTypes.ts, 35, 82))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 36, 19))
+>Elements : Symbol(Elements, Decl(negatedMappedConstraintContextualTypes.ts, 23, 3))
+>RemappedOmit : Symbol(RemappedOmit, Decl(negatedMappedConstraintContextualTypes.ts, 33, 69))
+>Elements : Symbol(Elements, Decl(negatedMappedConstraintContextualTypes.ts, 23, 3))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 36, 19))
+
+    onChange: (index: number) => void;
+>onChange : Symbol(onChange, Decl(negatedMappedConstraintContextualTypes.ts, 36, 92))
+>index : Symbol(index, Decl(negatedMappedConstraintContextualTypes.ts, 37, 15))
+
+};
+declare function remappedComponent<Tag extends keyof Elements = "div">(props: RemappedProps<Tag>): void;
+>remappedComponent : Symbol(remappedComponent, Decl(negatedMappedConstraintContextualTypes.ts, 38, 2))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 39, 35))
+>Elements : Symbol(Elements, Decl(negatedMappedConstraintContextualTypes.ts, 23, 3))
+>props : Symbol(props, Decl(negatedMappedConstraintContextualTypes.ts, 39, 71))
+>RemappedProps : Symbol(RemappedProps, Decl(negatedMappedConstraintContextualTypes.ts, 35, 82))
+>Tag : Symbol(Tag, Decl(negatedMappedConstraintContextualTypes.ts, 39, 35))
+
+remappedComponent({ onChange: index => { const numeric: number = index; } });
+>remappedComponent : Symbol(remappedComponent, Decl(negatedMappedConstraintContextualTypes.ts, 38, 2))
+>onChange : Symbol(onChange, Decl(negatedMappedConstraintContextualTypes.ts, 40, 19))
+>index : Symbol(index, Decl(negatedMappedConstraintContextualTypes.ts, 40, 29))
+>numeric : Symbol(numeric, Decl(negatedMappedConstraintContextualTypes.ts, 40, 46))
+>index : Symbol(index, Decl(negatedMappedConstraintContextualTypes.ts, 40, 29))
+

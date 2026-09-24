@@ -2531,6 +2531,7 @@ func (c *Checker) getTypeWithDefault(t *Type, defaultExpression *ast.Node) *Type
 // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
 // we remove type string.
 func (c *Checker) getAssignmentReducedType(declaredType *Type, assignedType *Type) *Type {
+	assignedType = c.getReducedType(assignedType)
 	if declaredType == assignedType {
 		return declaredType
 	}

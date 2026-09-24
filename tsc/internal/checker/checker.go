@@ -17450,7 +17450,13 @@ func (c *Checker) getInferredTypeParameterConstraint(t *Type, omitTypeReferences
 				}
 				switch {
 				case ast.IsTypeReferenceNode(parent) && !omitTypeReferences:
-					typeParameters := c.getTypeParametersForTypeReferenceOrImport(parent)
+					var typeParameters []*Type
+					symbol := c.getSymbolFromTypeReference(parent)
+					if symbol.Flags&ast.SymbolFlagsTypeAlias != 0 && symbol.CheckFlags&ast.CheckFlagsUnresolved == 0 {
+						typeParameters = c.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
+					} else {
+						typeParameters = c.getTypeParametersForTypeReferenceOrImport(parent)
+					}
 					if typeParameters != nil {
 						index := slices.Index(parent.TypeArguments(), child)
 						if index >= 0 && index < len(typeParameters) {
@@ -21407,7 +21413,11 @@ func (c *Checker) resolveUnionTypeMembers(t *Type) {
 		if t == c.globalFunctionType {
 			return []*Signature{c.unknownSignature}
 		}
-		return c.getSignaturesOfType(t, SignatureKindCall)
+		signatures := c.getSignaturesOfType(t, SignatureKindCall)
+		if len(signatures) == 0 && t.flags&TypeFlagsIntersection != 0 && slices.Contains(t.Types(), c.globalFunctionType) && len(c.getSignaturesOfType(t, SignatureKindConstruct)) == 0 {
+			return []*Signature{c.unknownSignature}
+		}
+		return signatures
 	}))
 	if len(callSignatures) == 0 {
 		callSignatures = c.getArrayMemberCallSignatures(t)
@@ -26574,11 +26584,13 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 	if includes&TypeFlagsIncludesMissingType != 0 {
 		typeSet[slices.Index(typeSet, c.undefinedType)] = c.missingType
 	}
-	if core.Some(typeSet, isNegatedType) {
-		if c.checkForUnsatisfiedNegatedType(typeSet) {
+	if includes&TypeFlagsUnion == 0 && core.Some(typeSet, isNegatedType) {
+		if c.checkForUnsatisfiedNegatedType(typeSet, flags) {
 			return c.neverType
 		}
-		typeSet = c.removeNegatedSubtypes(typeSet)
+		if flags&IntersectionFlagsNoConstraintReduction == 0 {
+			typeSet = c.removeNegatedSubtypes(typeSet)
+		}
 	}
 	if len(typeSet) == 0 {
 		return c.unknownType
@@ -31087,7 +31099,7 @@ func (c *Checker) getIndexedMappedTypeSubstitutedTypeOfContextualType(t *Type, n
 		propertyNameType = c.getStringLiteralType(name)
 	}
 	constraint := c.getConstraintTypeFromMappedType(t)
-	// special case for conditional types pretending to be negated types
+	// Excluded names cannot contribute contextual property types, even when the key constraint is generic.
 	if t.AsMappedType().nameType != nil && c.isExcludedMappedPropertyName(t.AsMappedType().nameType, propertyNameType) || c.isExcludedMappedPropertyName(constraint, propertyNameType) {
 		return nil
 	}
@@ -31099,6 +31111,9 @@ func (c *Checker) getIndexedMappedTypeSubstitutedTypeOfContextualType(t *Type, n
 }
 
 func (c *Checker) isExcludedMappedPropertyName(t *Type, propertyNameType *Type) bool {
+	if t.flags&TypeFlagsNegated != 0 {
+		return c.isTypeAssignableTo(propertyNameType, t.AsNegatedType().baseType)
+	}
 	if t.flags&TypeFlagsConditional != 0 {
 		return c.getReducedType(c.getTrueTypeFromConditionalType(t)).flags&TypeFlagsNever != 0 &&
 			c.getActualTypeVariable(c.getFalseTypeFromConditionalType(t)) == c.getActualTypeVariable(t.AsConditionalType().checkType) &&

@@ -1,0 +1,122 @@
+//// [tests/cases/compiler/mappedUnionKeyInference.ts] ////
+
+=== mappedUnionKeyInference.ts ===
+declare function inferMapped<Value>(source: { [Key in keyof Value | "fixed"]: Value }): Value;
+>inferMapped : Symbol(inferMapped, Decl(mappedUnionKeyInference.ts, 0, 0))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 0, 29))
+>source : Symbol(source, Decl(mappedUnionKeyInference.ts, 0, 36))
+>Key : Symbol(Key, Decl(mappedUnionKeyInference.ts, 0, 47))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 0, 29))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 0, 29))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 0, 29))
+
+const mapped = inferMapped({
+>mapped : Symbol(mapped, Decl(mappedUnionKeyInference.ts, 2, 5))
+>inferMapped : Symbol(inferMapped, Decl(mappedUnionKeyInference.ts, 0, 0))
+
+    fixed: { fixed: 1, other: "text" },
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 2, 28))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 3, 12))
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 3, 22))
+
+    other: { fixed: "text", other: 1 },
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 3, 39))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 4, 12))
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 4, 27))
+
+});
+
+const fixed: unknown = mapped.fixed;
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 7, 5))
+>mapped.fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 2, 28))
+>mapped : Symbol(mapped, Decl(mappedUnionKeyInference.ts, 2, 5))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 2, 28))
+
+const other: unknown = mapped.other;
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 8, 5))
+>mapped.other : Symbol(other, Decl(mappedUnionKeyInference.ts, 3, 39))
+>mapped : Symbol(mapped, Decl(mappedUnionKeyInference.ts, 2, 5))
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 3, 39))
+
+declare function inferFixed<Value, Extra>(source: {
+>inferFixed : Symbol(inferFixed, Decl(mappedUnionKeyInference.ts, 8, 36))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 10, 28))
+>Extra : Symbol(Extra, Decl(mappedUnionKeyInference.ts, 10, 34))
+>source : Symbol(source, Decl(mappedUnionKeyInference.ts, 10, 42))
+
+    [Key in keyof Extra | "fixed"]: Key extends "fixed" ? Value : Extra[Key & keyof Extra];
+>Key : Symbol(Key, Decl(mappedUnionKeyInference.ts, 11, 5))
+>Extra : Symbol(Extra, Decl(mappedUnionKeyInference.ts, 10, 34))
+>Key : Symbol(Key, Decl(mappedUnionKeyInference.ts, 11, 5))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 10, 28))
+>Extra : Symbol(Extra, Decl(mappedUnionKeyInference.ts, 10, 34))
+>Key : Symbol(Key, Decl(mappedUnionKeyInference.ts, 11, 5))
+>Extra : Symbol(Extra, Decl(mappedUnionKeyInference.ts, 10, 34))
+
+}): Value;
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 10, 28))
+
+const fixedValue = inferFixed({ fixed: { count: 1 }, other: "text" });
+>fixedValue : Symbol(fixedValue, Decl(mappedUnionKeyInference.ts, 14, 5))
+>inferFixed : Symbol(inferFixed, Decl(mappedUnionKeyInference.ts, 8, 36))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 14, 31))
+>count : Symbol(count, Decl(mappedUnionKeyInference.ts, 14, 40))
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 14, 52))
+
+const count: number = fixedValue.count;
+>count : Symbol(count, Decl(mappedUnionKeyInference.ts, 15, 5))
+>fixedValue.count : Symbol(count, Decl(mappedUnionKeyInference.ts, 14, 40))
+>fixedValue : Symbol(fixedValue, Decl(mappedUnionKeyInference.ts, 14, 5))
+>count : Symbol(count, Decl(mappedUnionKeyInference.ts, 14, 40))
+
+declare function inferWithCallback<Value>(source: {
+>inferWithCallback : Symbol(inferWithCallback, Decl(mappedUnionKeyInference.ts, 15, 39))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 17, 35))
+>source : Symbol(source, Decl(mappedUnionKeyInference.ts, 17, 42))
+
+    [Key in keyof Value | "fixed"]: { value: Value; callback?: (value: Value) => void };
+>Key : Symbol(Key, Decl(mappedUnionKeyInference.ts, 18, 5))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 17, 35))
+>value : Symbol(value, Decl(mappedUnionKeyInference.ts, 18, 37))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 17, 35))
+>callback : Symbol(callback, Decl(mappedUnionKeyInference.ts, 18, 51))
+>value : Symbol(value, Decl(mappedUnionKeyInference.ts, 18, 64))
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 17, 35))
+
+}): Value;
+>Value : Symbol(Value, Decl(mappedUnionKeyInference.ts, 17, 35))
+
+const withCallback = inferWithCallback({
+>withCallback : Symbol(withCallback, Decl(mappedUnionKeyInference.ts, 21, 5))
+>inferWithCallback : Symbol(inferWithCallback, Decl(mappedUnionKeyInference.ts, 15, 39))
+
+    fixed: {
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 21, 40))
+
+        value: { fixed: 1, other: "text" },
+>value : Symbol(value, Decl(mappedUnionKeyInference.ts, 22, 12))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 23, 16))
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 23, 26))
+
+        callback: value => { const fixed: unknown = value.fixed; },
+>callback : Symbol(callback, Decl(mappedUnionKeyInference.ts, 23, 43))
+>value : Symbol(value, Decl(mappedUnionKeyInference.ts, 24, 17))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 24, 34))
+>value.fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 21, 40))
+>value : Symbol(value, Decl(mappedUnionKeyInference.ts, 24, 17))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 21, 40))
+
+    },
+    other: { value: { fixed: "text", other: 1 } },
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 25, 6))
+>value : Symbol(value, Decl(mappedUnionKeyInference.ts, 26, 12))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 26, 21))
+>other : Symbol(other, Decl(mappedUnionKeyInference.ts, 26, 36))
+
+});
+const callbackFixed: unknown = withCallback.fixed;
+>callbackFixed : Symbol(callbackFixed, Decl(mappedUnionKeyInference.ts, 28, 5))
+>withCallback.fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 21, 40))
+>withCallback : Symbol(withCallback, Decl(mappedUnionKeyInference.ts, 21, 5))
+>fixed : Symbol(fixed, Decl(mappedUnionKeyInference.ts, 21, 40))
+

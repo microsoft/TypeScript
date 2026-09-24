@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/functionIntersectionUnionCalls.ts] ////
+
+=== functionIntersectionUnionCalls.ts ===
+declare const untyped: (Function & { tag: string }) | (() => string);
+>untyped : (() => string) | (Function & { tag: string; })
+>tag : string
+
+const result = untyped();
+>result : any
+>untyped() : any
+>untyped : (() => string) | (Function & { tag: string; })
+
+declare const primitive: (string & Function) | (() => string);
+>primitive : (() => string) | (string & Function)
+
+const primitiveResult = primitive();
+>primitiveResult : any
+>primitive() : any
+>primitive : (() => string) | (string & Function)
+
+declare const typed: (Function & ((value: number) => number)) | ((value: number) => string);
+>typed : ((value: number) => string) | (Function & ((value: number) => number))
+>value : number
+>value : number
+
+const typedResult: number | string = typed(1);
+>typedResult : string | number
+>typed(1) : string | number
+>typed : ((value: number) => string) | (Function & ((value: number) => number))
+>1 : 1
+
+typed("wrong");
+>typed("wrong") : string | number
+>typed : ((value: number) => string) | (Function & ((value: number) => number))
+>"wrong" : "wrong"
+
+declare const incompatible: ((value: number) => void) | ((value: string) => void);
+>incompatible : ((value: number) => void) | ((value: string) => void)
+>value : number
+>value : string
+
+incompatible(1);
+>incompatible(1) : void
+>incompatible : ((value: number) => void) | ((value: string) => void)
+>1 : 1
+
+declare const nonCallable: { tag: string } | (() => void);
+>nonCallable : { tag: string; } | (() => void)
+>tag : string
+
+nonCallable();
+>nonCallable() : any
+>nonCallable : { tag: string; } | (() => void)
+
+declare const constructor: (Function & (new () => object)) | (() => void);
+>constructor : (() => void) | (Function & (new () => object))
+
+constructor();
+>constructor() : any
+>constructor : (() => void) | (Function & (new () => object))
+

@@ -191,16 +191,24 @@ func (c *Checker) removeComplementaryNegatedTypes(types []*Type) []*Type {
 // because some non-negated member is a subtype of the union of the negated members' base types.
 // For example, in '"w" & not string' the non-negated member '"w"' is a subtype of 'string'
 // (the base type of 'not string'), so the intersection reduces to never.
-func (c *Checker) checkForUnsatisfiedNegatedType(typeSet []*Type) bool {
+// During effective-constraint construction, only identity and union membership may be used:
+// subtype checking can re-enter construction of the same effective constraint with a fresh relater.
+func (c *Checker) checkForUnsatisfiedNegatedType(typeSet []*Type, flags IntersectionFlags) bool {
 	nonNegatedSet := core.Filter(typeSet, func(t *Type) bool { return t.flags&TypeFlagsNegated == 0 })
 	if len(nonNegatedSet) == 0 {
 		return false
 	}
-	negatedBounds := c.getUnionType(core.Map(core.Filter(typeSet, isNegatedType), func(t *Type) *Type {
+	isSubtype := c.isTypeSubtypeOf
+	unionReduction := UnionReductionLiteral
+	if flags&IntersectionFlagsNoConstraintReduction != 0 {
+		isSubtype = c.isTypeSubsetOf
+		unionReduction = UnionReductionNone
+	}
+	negatedBounds := c.getUnionTypeEx(core.Map(core.Filter(typeSet, isNegatedType), func(t *Type) *Type {
 		return t.AsNegatedType().baseType
-	}))
+	}), unionReduction, nil, nil)
 	for _, nonNegatedType := range nonNegatedSet {
-		if c.isTypeSubtypeOf(nonNegatedType, negatedBounds) {
+		if isSubtype(nonNegatedType, negatedBounds) {
 			return true
 		}
 	}
@@ -250,7 +258,7 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 			continue
 		}
 		negatedBase := types[i].AsNegatedType().baseType
-		if c.isTypeSubtypeOf(nonNegativePart, types[i]) || isFreshNegatedType(types[i]) && c.typesAreInDisjointDomainsIncludingObjects(nonNegativePart, negatedBase) || c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) {
+		if isFreshNegatedType(types[i]) && c.typesAreInDisjointDomainsIncludingObjects(nonNegativePart, negatedBase) || c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) || c.isTypeSubtypeOf(nonNegativePart, types[i]) {
 			types = slices.Delete(types, i, i+1)
 		}
 	}
@@ -264,7 +272,7 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 // For example '{ kind: "c" }' and '{ kind: "a" }' are disjoint by their 'kind' property, so
 // 'C & not A' reduces to 'C'.
 //
-// Discriminant properties are located with findDiscriminantProperties over the union 'a | b' -- the
+// Discriminant properties are located with isDiscriminantProperty over the union 'a | b' -- the
 // same mechanism used for discriminated-union narrowing -- and disjointness of a single discriminant
 // is decided by intersecting the two property types and checking for never. Other shared properties,
 // including properties matched by an index signature, are only compared by their primitive domains,
@@ -278,13 +286,15 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 // types, so this stays cheap and avoids the circularities a general 'a & b is never' computation
 // would risk during intersection construction.
 func (c *Checker) objectTypesAreDisjointByProperties(source *Type, target *Type, sourceIsClosed bool) bool {
+	if source.flags&(TypeFlagsStructuredType|TypeFlagsPrimitive|TypeFlagsNonPrimitive) == 0 || target.flags&(TypeFlagsStructuredType|TypeFlagsPrimitive|TypeFlagsNonPrimitive) == 0 {
+		return false
+	}
 	union := c.getUnionType([]*Type{source, target})
 	if union.flags&TypeFlagsUnion == 0 {
 		// 'source' and 'target' collapsed into a single type (e.g. one is a subtype of the other), so there is
 		// no discriminant to distinguish them.
 		return false
 	}
-	discriminantProperties := c.findDiscriminantProperties(c.getPropertiesOfType(source), union)
 	for _, prop := range c.getPropertiesOfType(source) {
 		sourcePropType := c.getTypeOfPropertyOfType(source, prop.Name)
 		targetProp := c.getPropertyOfType(target, prop.Name)
@@ -302,7 +312,7 @@ func (c *Checker) objectTypesAreDisjointByProperties(source *Type, target *Type,
 		}
 		if (isRequiredProperty(prop) || isRequiredProperty(targetProp)) &&
 			(typesAreInDisjointDomains(sourcePropType, targetPropType) ||
-				slices.Contains(discriminantProperties, prop) && c.getIntersectionType([]*Type{sourcePropType, targetPropType}).flags&TypeFlagsNever != 0) {
+				c.isDiscriminantProperty(union, prop.Name) && c.getIntersectionType([]*Type{sourcePropType, targetPropType}).flags&TypeFlagsNever != 0) {
 			return true
 		}
 	}

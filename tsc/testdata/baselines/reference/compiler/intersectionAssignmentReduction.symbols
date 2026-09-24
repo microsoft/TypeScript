@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/intersectionAssignmentReduction.ts] ////
+
+=== intersectionAssignmentReduction.ts ===
+interface ValueNode { kind: "value"; value: number; }
+>ValueNode : Symbol(ValueNode, Decl(intersectionAssignmentReduction.ts, 0, 0))
+>kind : Symbol(ValueNode.kind, Decl(intersectionAssignmentReduction.ts, 0, 21))
+>value : Symbol(ValueNode.value, Decl(intersectionAssignmentReduction.ts, 0, 36))
+
+interface TextNode { kind: "text"; text: string; }
+>TextNode : Symbol(TextNode, Decl(intersectionAssignmentReduction.ts, 0, 53))
+>kind : Symbol(TextNode.kind, Decl(intersectionAssignmentReduction.ts, 1, 20))
+>text : Symbol(TextNode.text, Decl(intersectionAssignmentReduction.ts, 1, 34))
+
+interface OmittedNode { kind: "omitted"; }
+>OmittedNode : Symbol(OmittedNode, Decl(intersectionAssignmentReduction.ts, 1, 50))
+>kind : Symbol(OmittedNode.kind, Decl(intersectionAssignmentReduction.ts, 2, 23))
+
+type AssignmentNode = ValueNode | TextNode | OmittedNode;
+>AssignmentNode : Symbol(AssignmentNode, Decl(intersectionAssignmentReduction.ts, 2, 42))
+>ValueNode : Symbol(ValueNode, Decl(intersectionAssignmentReduction.ts, 0, 0))
+>TextNode : Symbol(TextNode, Decl(intersectionAssignmentReduction.ts, 0, 53))
+>OmittedNode : Symbol(OmittedNode, Decl(intersectionAssignmentReduction.ts, 1, 50))
+
+declare function updateNode<NodeType extends AssignmentNode>(node: NodeType): AssignmentNode & Pick<NodeType, "kind">;
+>updateNode : Symbol(updateNode, Decl(intersectionAssignmentReduction.ts, 3, 57))
+>NodeType : Symbol(NodeType, Decl(intersectionAssignmentReduction.ts, 5, 28))
+>AssignmentNode : Symbol(AssignmentNode, Decl(intersectionAssignmentReduction.ts, 2, 42))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 5, 61))
+>NodeType : Symbol(NodeType, Decl(intersectionAssignmentReduction.ts, 5, 28))
+>AssignmentNode : Symbol(AssignmentNode, Decl(intersectionAssignmentReduction.ts, 2, 42))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>NodeType : Symbol(NodeType, Decl(intersectionAssignmentReduction.ts, 5, 28))
+
+function updateExcluded(node: AssignmentNode & not OmittedNode) {
+>updateExcluded : Symbol(updateExcluded, Decl(intersectionAssignmentReduction.ts, 5, 118))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 7, 24))
+>AssignmentNode : Symbol(AssignmentNode, Decl(intersectionAssignmentReduction.ts, 2, 42))
+>OmittedNode : Symbol(OmittedNode, Decl(intersectionAssignmentReduction.ts, 1, 50))
+
+    if (node.kind === "value") {
+>node.kind : Symbol(kind, Decl(intersectionAssignmentReduction.ts, 1, 20), Decl(intersectionAssignmentReduction.ts, 0, 21))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 7, 24))
+>kind : Symbol(kind, Decl(intersectionAssignmentReduction.ts, 1, 20), Decl(intersectionAssignmentReduction.ts, 0, 21))
+
+        node = updateNode(node);
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 7, 24))
+>updateNode : Symbol(updateNode, Decl(intersectionAssignmentReduction.ts, 3, 57))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 7, 24))
+
+        const value: number = node.value;
+>value : Symbol(value, Decl(intersectionAssignmentReduction.ts, 10, 13))
+>node.value : Symbol(ValueNode.value, Decl(intersectionAssignmentReduction.ts, 0, 36))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 7, 24))
+>value : Symbol(ValueNode.value, Decl(intersectionAssignmentReduction.ts, 0, 36))
+
+        const updated: ValueNode = node;
+>updated : Symbol(updated, Decl(intersectionAssignmentReduction.ts, 11, 13))
+>ValueNode : Symbol(ValueNode, Decl(intersectionAssignmentReduction.ts, 0, 0))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 7, 24))
+    }
+}
+
+function updateUnion(node: AssignmentNode) {
+>updateUnion : Symbol(updateUnion, Decl(intersectionAssignmentReduction.ts, 13, 1))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 15, 21))
+>AssignmentNode : Symbol(AssignmentNode, Decl(intersectionAssignmentReduction.ts, 2, 42))
+
+    if (node.kind === "value") {
+>node.kind : Symbol(kind, Decl(intersectionAssignmentReduction.ts, 2, 23), Decl(intersectionAssignmentReduction.ts, 1, 20), Decl(intersectionAssignmentReduction.ts, 0, 21))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 15, 21))
+>kind : Symbol(kind, Decl(intersectionAssignmentReduction.ts, 2, 23), Decl(intersectionAssignmentReduction.ts, 1, 20), Decl(intersectionAssignmentReduction.ts, 0, 21))
+
+        node = updateNode(node);
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 15, 21))
+>updateNode : Symbol(updateNode, Decl(intersectionAssignmentReduction.ts, 3, 57))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 15, 21))
+
+        const value: number = node.value;
+>value : Symbol(value, Decl(intersectionAssignmentReduction.ts, 18, 13))
+>node.value : Symbol(ValueNode.value, Decl(intersectionAssignmentReduction.ts, 0, 36))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 15, 21))
+>value : Symbol(ValueNode.value, Decl(intersectionAssignmentReduction.ts, 0, 36))
+
+        const updated: ValueNode = node;
+>updated : Symbol(updated, Decl(intersectionAssignmentReduction.ts, 19, 13))
+>ValueNode : Symbol(ValueNode, Decl(intersectionAssignmentReduction.ts, 0, 0))
+>node : Symbol(node, Decl(intersectionAssignmentReduction.ts, 15, 21))
+    }
+}

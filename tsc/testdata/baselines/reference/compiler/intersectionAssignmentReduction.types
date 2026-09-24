@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/intersectionAssignmentReduction.ts] ////
+
+=== intersectionAssignmentReduction.ts ===
+interface ValueNode { kind: "value"; value: number; }
+>kind : "value"
+>value : number
+
+interface TextNode { kind: "text"; text: string; }
+>kind : "text"
+>text : string
+
+interface OmittedNode { kind: "omitted"; }
+>kind : "omitted"
+
+type AssignmentNode = ValueNode | TextNode | OmittedNode;
+>AssignmentNode : AssignmentNode
+
+declare function updateNode<NodeType extends AssignmentNode>(node: NodeType): AssignmentNode & Pick<NodeType, "kind">;
+>updateNode : <NodeType extends AssignmentNode>(node: NodeType) => AssignmentNode & Pick<NodeType, "kind">
+>node : NodeType
+
+function updateExcluded(node: AssignmentNode & not OmittedNode) {
+>updateExcluded : (node: AssignmentNode & not OmittedNode) => void
+>node : TextNode | ValueNode
+
+    if (node.kind === "value") {
+>node.kind === "value" : boolean
+>node.kind : "text" | "value"
+>node : TextNode | ValueNode
+>kind : "text" | "value"
+>"value" : "value"
+
+        node = updateNode(node);
+>node = updateNode(node) : ValueNode & Pick<ValueNode, "kind">
+>node : TextNode | ValueNode
+>updateNode(node) : ValueNode & Pick<ValueNode, "kind">
+>updateNode : <NodeType extends AssignmentNode>(node: NodeType) => AssignmentNode & Pick<NodeType, "kind">
+>node : ValueNode
+
+        const value: number = node.value;
+>value : number
+>node.value : number
+>node : ValueNode
+>value : number
+
+        const updated: ValueNode = node;
+>updated : ValueNode
+>node : ValueNode
+    }
+}
+
+function updateUnion(node: AssignmentNode) {
+>updateUnion : (node: AssignmentNode) => void
+>node : AssignmentNode
+
+    if (node.kind === "value") {
+>node.kind === "value" : boolean
+>node.kind : "omitted" | "text" | "value"
+>node : AssignmentNode
+>kind : "omitted" | "text" | "value"
+>"value" : "value"
+
+        node = updateNode(node);
+>node = updateNode(node) : ValueNode & Pick<ValueNode, "kind">
+>node : AssignmentNode
+>updateNode(node) : ValueNode & Pick<ValueNode, "kind">
+>updateNode : <NodeType extends AssignmentNode>(node: NodeType) => AssignmentNode & Pick<NodeType, "kind">
+>node : ValueNode
+
+        const value: number = node.value;
+>value : number
+>node.value : number
+>node : ValueNode
+>value : number
+
+        const updated: ValueNode = node;
+>updated : ValueNode
+>node : ValueNode
+    }
+}
