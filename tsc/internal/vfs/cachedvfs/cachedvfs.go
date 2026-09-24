@@ -101,13 +101,23 @@ func (fsys *FS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) 
 }
 
 func (fsys *FS) Realpath(path tspath.RootedPath) tspath.RootedPath {
+	return fsys.cachedRealpath(path, fsys.fs.Realpath)
+}
+
+func (fsys *FS) RealpathWithParent(path tspath.RootedPath, realpath func(tspath.RootedPath) tspath.RootedPath) tspath.RootedPath {
+	return fsys.cachedRealpath(path, func(path tspath.RootedPath) tspath.RootedPath {
+		return vfs.RealpathWithParent(fsys.fs, path, realpath)
+	})
+}
+
+func (fsys *FS) cachedRealpath(path tspath.RootedPath, resolve func(tspath.RootedPath) tspath.RootedPath) tspath.RootedPath {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.realpathCache.Load(path); ok {
 			return ret
 		}
 	}
 
-	ret := fsys.fs.Realpath(path)
+	ret := resolve(path)
 
 	if fsys.enabled.Load() {
 		fsys.realpathCache.Store(path, ret)

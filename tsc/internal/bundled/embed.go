@@ -120,6 +120,13 @@ func (vfs *wrappedFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	return vfs.fs.Realpath(path)
 }
 
+func (w *wrappedFS) RealpathWithParent(path tspath.RootedPath, realpath func(tspath.RootedPath) tspath.RootedPath) tspath.RootedPath {
+	if _, ok := splitPath(path.AsString()); ok {
+		return path
+	}
+	return vfs.RealpathWithParent(w.fs, path, realpath)
+}
+
 func (vfs *wrappedFS) WriteFile(path tspath.RootedFilePath, data string) error {
 	if _, ok := splitPath(path.AsString()); ok {
 		panic("cannot write to embedded file system")
