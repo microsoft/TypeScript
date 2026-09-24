@@ -19,6 +19,6 @@ arrow/*use*/()();
 	defer done()
 	f.VerifyQuickInfoAt(t, "arrow", "const arrow: () => typeof arrow", "")
 	f.VerifyQuickInfoAt(t, "use", "const arrow: () => () => typeof arrow", "")
-	f.VerifyQuickInfoAt(t, "self", "function self(): () => typeof broad", "")
+	f.VerifyQuickInfoAt(t, "self", "function self(): () => typeof self", "")
 	f.VerifyNoErrors(t)
 }

@@ -2876,8 +2876,12 @@ func (b *NodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, ty
 		}
 	}
 	if isStaticMethodSymbol || isNonLocalFunctionSymbol {
-		if isFunctionExpressionSymbol && symbol.ValueDeclaration != nil && symbol.ValueDeclaration.Parent != nil && symbol.ValueDeclaration.Parent != b.ctx.enclosingDeclaration {
-			symbol = b.ch.getMergedSymbol(symbol.ValueDeclaration.Parent.Symbol())
+		if isFunctionExpressionSymbol && symbol.ValueDeclaration != nil && symbol.ValueDeclaration.Parent != nil &&
+			(symbol.ValueDeclaration.Parent != b.ctx.enclosingDeclaration || b.ctx.visitedTypes.Has(typeId)) {
+			variableSymbol := b.ch.getMergedSymbol(symbol.ValueDeclaration.Parent.Symbol())
+			if variableSymbol != nil && b.ch.getTypeOfSymbol(variableSymbol).id == typeId {
+				symbol = variableSymbol
+			}
 		}
 		// typeof is allowed only for static/non local functions
 		return (b.ctx.flags&nodebuilder.FlagsUseTypeOfFunction != 0 || b.ctx.visitedTypes.Has(typeId)) && // it is type of the symbol uses itself recursively

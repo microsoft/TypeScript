@@ -70,22 +70,22 @@ export const tuple = [arrow] as const;
 >arrow : () => typeof arrow
 
 export const named = function self() { return self; };
->named : () => typeof self
->function self() { return self; } : () => typeof self
+>named : () => typeof named
+>function self() { return self; } : () => typeof named
 >self : () => typeof named
 >self : () => typeof named
 
 export const broad: unknown = function self() { return self; };
 >broad : unknown
 >function self() { return self; } : () => typeof self
->self : () => typeof broad
->self : () => typeof broad
+>self : () => typeof self
+>self : () => typeof self
 
 export const contextual: () => unknown = function self() { return self; };
 >contextual : () => unknown
 >function self() { return self; } : () => typeof self
->self : () => typeof contextual
->self : () => typeof contextual
+>self : () => typeof self
+>self : () => typeof self
 
 export const specialized = generic<number>;
 >specialized : (value: number) => <T>(value: number) => typeof generic
