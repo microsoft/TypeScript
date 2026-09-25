@@ -982,6 +982,7 @@ func TestContentMapperInferredProjectSurvivesTypingsInstall(t *testing.T) {
 		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
 		LoggingEnabled:     true,
 		RunExternalCode:    true,
+		WatchEnabled:       true,
 	}, &projecttestutil.TypingsInstallerOptions{
 		PackageToFile: map[string]string{
 			"jquery": `declare const $: { x: number }`,
@@ -1032,6 +1033,23 @@ func TestContentMapperInferredProjectSurvivesTypingsInstall(t *testing.T) {
 		}
 	}
 	assert.Assert(t, typingsFile != nil, "expected installed typings in the inferred program (the typings-augmented rebuild did not happen)")
+
+	session.DidCloseFile(ctx, boxURI)
+	session.WaitForBackgroundTasks()
+	session.DidOpenFile(ctx, boxURI, 1, files["/home/loose/app.box"].(string), lsproto.LanguageKind("box"))
+	languageService, err = session.GetLanguageService(ctx, boxURI)
+	assert.NilError(t, err)
+	boxFile = languageService.GetProgram().GetSourceFile("/home/loose/app.box")
+	assert.Assert(t, boxFile != nil)
+	assert.Assert(t, boxFile.ContentMapper() != "")
+	typingsFile = nil
+	for _, file := range languageService.GetProgram().SourceFiles() {
+		if strings.HasSuffix(file.FileName(), "@types/jquery/index.d.ts") {
+			typingsFile = file
+			break
+		}
+	}
+	assert.Assert(t, typingsFile != nil, "expected cached typings immediately after reopening a content-mapped root")
 }
 
 func TestContentMapperCreatedFileAdoptedByConfiguredProject(t *testing.T) {

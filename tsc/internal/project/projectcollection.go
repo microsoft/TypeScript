@@ -31,6 +31,12 @@ type ProjectCollection struct {
 	// inferredProject is a fallback project that is used when no configured
 	// project can be found for an open file.
 	inferredProject *Project
+	// inferredProjectATAState preserves acquired typings while there is no active
+	// inferred project, so reopening a loose file does not wait for ATA again.
+	inferredProjectATAState *inferredProjectATAState
+	// inferredProjectATAInvalidationSnapshotID is the latest snapshot that
+	// invalidated inferred-project ATA discovery inputs.
+	inferredProjectATAInvalidationSnapshotID uint64
 	// apiState tracks the projects and files that API clients have explicitly
 	// opened so they are kept loaded across snapshots.
 	apiState APIState
@@ -70,6 +76,16 @@ type apiOpenedFile struct {
 }
 
 func (c *ProjectCollection) ConfigFileRegistry() *ConfigFileRegistry { return c.configFileRegistry }
+
+func (c *ProjectCollection) inferredProjectTypingsWatch() *WatchedFiles[PatternsAndIgnored] {
+	if c.inferredProjectATAState != nil {
+		return c.inferredProjectATAState.typingsWatch
+	}
+	if c.inferredProject != nil {
+		return c.inferredProject.typingsWatch
+	}
+	return nil
+}
 
 func (c *ProjectCollection) ConfiguredProject(path tspath.Path) *Project {
 	return c.configuredProjects[ConfiguredProjectID(path)]
@@ -328,14 +344,16 @@ func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path,
 // clone creates a shallow copy of the project collection.
 func (c *ProjectCollection) clone() *ProjectCollection {
 	return &ProjectCollection{
-		toPath:              c.toPath,
-		configFileRegistry:  c.configFileRegistry,
-		configuredProjects:  c.configuredProjects,
-		syntheticProjects:   c.syntheticProjects,
-		openFiles:           c.openFiles,
-		inferredProject:     c.inferredProject,
-		fileDefaultProjects: c.fileDefaultProjects,
-		apiState:            c.apiState,
+		toPath:                                   c.toPath,
+		configFileRegistry:                       c.configFileRegistry,
+		configuredProjects:                       c.configuredProjects,
+		syntheticProjects:                        c.syntheticProjects,
+		openFiles:                                c.openFiles,
+		inferredProject:                          c.inferredProject,
+		inferredProjectATAState:                  c.inferredProjectATAState,
+		inferredProjectATAInvalidationSnapshotID: c.inferredProjectATAInvalidationSnapshotID,
+		fileDefaultProjects:                      c.fileDefaultProjects,
+		apiState:                                 c.apiState,
 	}
 }
 

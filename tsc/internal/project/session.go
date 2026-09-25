@@ -1629,12 +1629,16 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		newSnapshot.ProjectCollection.ProjectsByID(),
 		func(_ ID, addedProject *Project) {
 			errors = append(errors, s.updateWatch(ctx, nil, addedProject.programFilesWatch)...)
-			errors = append(errors, s.updateWatch(ctx, nil, addedProject.typingsWatch)...)
+			if addedProject.Kind != KindInferred {
+				errors = append(errors, s.updateWatch(ctx, nil, addedProject.typingsWatch)...)
+			}
 			errors = append(errors, s.updateWatch(ctx, nil, addedProject.contentMapperWatch)...)
 		},
 		func(_ ID, removedProject *Project) {
 			errors = append(errors, s.updateWatch(ctx, removedProject.programFilesWatch, nil)...)
-			errors = append(errors, s.updateWatch(ctx, removedProject.typingsWatch, nil)...)
+			if removedProject.Kind != KindInferred {
+				errors = append(errors, s.updateWatch(ctx, removedProject.typingsWatch, nil)...)
+			}
 			errors = append(errors, s.updateWatch(ctx, removedProject.contentMapperWatch, nil)...)
 		},
 		func(_ ID, oldProject, newProject *Project) {
@@ -1645,11 +1649,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 					errors = append(errors, s.updateWatch(ctx, nil, newProject.programFilesWatch)...)
 				}
 			}
-			if oldProject.typingsWatch.ID() != newProject.typingsWatch.ID() {
-				errors = append(errors, s.updateWatch(ctx, oldProject.typingsWatch, newProject.typingsWatch)...)
-			} else {
-				if s.watches.IsPending(newProject.typingsWatch.ID()) {
-					errors = append(errors, s.updateWatch(ctx, nil, newProject.typingsWatch)...)
+			if newProject.Kind != KindInferred {
+				if oldProject.typingsWatch.ID() != newProject.typingsWatch.ID() {
+					errors = append(errors, s.updateWatch(ctx, oldProject.typingsWatch, newProject.typingsWatch)...)
+				} else {
+					if s.watches.IsPending(newProject.typingsWatch.ID()) {
+						errors = append(errors, s.updateWatch(ctx, nil, newProject.typingsWatch)...)
+					}
 				}
 			}
 			if oldProject.contentMapperWatch.ID() != newProject.contentMapperWatch.ID() {
@@ -1659,6 +1665,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 			}
 		},
 	)
+	oldInferredTypingsWatch := oldSnapshot.ProjectCollection.inferredProjectTypingsWatch()
+	newInferredTypingsWatch := newSnapshot.ProjectCollection.inferredProjectTypingsWatch()
+	if oldInferredTypingsWatch.ID() != newInferredTypingsWatch.ID() {
+		errors = append(errors, s.updateWatch(ctx, oldInferredTypingsWatch, newInferredTypingsWatch)...)
+	} else if newInferredTypingsWatch != nil && s.watches.IsPending(newInferredTypingsWatch.ID()) {
+		errors = append(errors, s.updateWatch(ctx, nil, newInferredTypingsWatch)...)
+	}
 
 	if oldSnapshot.autoImportsWatch.ID() != newSnapshot.autoImportsWatch.ID() {
 		errors = append(errors, s.updateWatch(ctx, oldSnapshot.autoImportsWatch, newSnapshot.autoImportsWatch)...)
@@ -1996,10 +2009,11 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 				}
 
 				typingsInfo := project.ComputeTypingsInfo()
+				fileNames := project.ComputeTypingsFileNames()
 				request := &ata.TypingsInstallRequest{
 					ProjectID:        project.ID(),
 					TypingsInfo:      &typingsInfo,
-					FileNames:        core.Map(project.Program.GetSourceFiles(), func(file *ast.SourceFile) string { return file.FileName() }),
+					FileNames:        fileNames,
 					ProjectRootPath:  project.currentDirectory,
 					CompilerOptions:  project.CommandLine.CompilerOptions(),
 					CurrentDirectory: s.options.CurrentDirectory,
@@ -2022,16 +2036,29 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 						s.logger.Log(logTree.String())
 					}
 				} else {
-					if !slices.Equal(result.TypingsFiles, project.typingsFiles) {
+					if !slices.Equal(result.TypingsFiles, project.typingsFiles) ||
+						project.installedTypingsInfo == nil ||
+						!typingsInfo.Equals(*project.installedTypingsInfo) ||
+						!slices.Equal(fileNames, project.installedTypingsFileNames) ||
+						!slices.Equal(result.FilesToWatch, project.installedTypingsFilesToWatch) {
 						s.pendingATAChangesMu.Lock()
-						defer s.pendingATAChangesMu.Unlock()
-						s.pendingATAChanges[project.ID()] = &ATAStateChange{
-							TypingsInfo:         &typingsInfo,
-							TypingsFiles:        result.TypingsFiles,
-							TypingsFilesToWatch: result.FilesToWatch,
-							Logs:                logTree,
+						projectID := project.ID()
+						pendingChange := s.pendingATAChanges[projectID]
+						updatedPendingChange := pendingChange == nil || pendingChange.SnapshotID <= newSnapshot.ID()
+						if updatedPendingChange {
+							s.pendingATAChanges[projectID] = &ATAStateChange{
+								SnapshotID:          newSnapshot.ID(),
+								TypingsInfo:         &typingsInfo,
+								FileNames:           fileNames,
+								TypingsFiles:        result.TypingsFiles,
+								TypingsFilesToWatch: result.FilesToWatch,
+								Logs:                logTree,
+							}
 						}
-						s.ScheduleDiagnosticsRefresh()
+						s.pendingATAChangesMu.Unlock()
+						if updatedPendingChange {
+							s.ScheduleDiagnosticsRefresh()
+						}
 					}
 				}
 			})

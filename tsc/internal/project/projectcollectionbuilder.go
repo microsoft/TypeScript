@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -56,11 +57,13 @@ type ProjectCollectionBuilder struct {
 	defaultProjectsInvalidated bool
 	openFilesChanged           bool
 
-	fileDefaultProjects map[tspath.Path]ID
-	configuredProjects  *dirty.SyncMap[ConfiguredProjectID, *Project]
-	syntheticProjects   *dirty.SyncMap[SyntheticProjectID, *Project]
-	inferredProject     *dirty.Box[*Project]
-	createdPrograms     []*Project
+	fileDefaultProjects                      map[tspath.Path]ID
+	configuredProjects                       *dirty.SyncMap[ConfiguredProjectID, *Project]
+	syntheticProjects                        *dirty.SyncMap[SyntheticProjectID, *Project]
+	inferredProject                          *dirty.Box[*Project]
+	inferredProjectATAState                  *inferredProjectATAState
+	inferredProjectATAInvalidationSnapshotID uint64
+	createdPrograms                          []*Project
 
 	apiState APIState
 }
@@ -86,27 +89,29 @@ func newProjectCollectionBuilder(
 ) *ProjectCollectionBuilder {
 	openFiles := openFilePaths(overlays)
 	return &ProjectCollectionBuilder{
-		ctx:                                ctx,
-		fs:                                 fs,
-		overlays:                           overlays,
-		toPath:                             fs.toPath,
-		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
-		inferredContentMappers:             inferredContentMappers,
-		inferredContentMapperExtensions:    inferredContentMapperExtensions,
-		sessionOptions:                     sessionOptions,
-		parseCache:                         parseCache,
-		contentMappedParseCache:            contentMappedParseCache,
-		extendedConfigCache:                extendedConfigCache,
-		contentMapperHost:                  contentMapperHost,
-		base:                               oldProjectCollection,
-		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, func(path tspath.Path) bool { _, ok := overlays[path]; return ok }, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
-		newSnapshotID:                      newSnapshotID,
-		openFilesChanged:                   !openFiles.Equals(&oldProjectCollection.openFiles),
-		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
-		syntheticProjects:                  dirty.NewSyncMap(oldProjectCollection.syntheticProjects),
-		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
-		apiState:                           oldAPIState.clone(),
-		client:                             client,
+		ctx:                                      ctx,
+		fs:                                       fs,
+		overlays:                                 overlays,
+		toPath:                                   fs.toPath,
+		compilerOptionsForInferredProjects:       compilerOptionsForInferredProjects,
+		inferredContentMappers:                   inferredContentMappers,
+		inferredContentMapperExtensions:          inferredContentMapperExtensions,
+		sessionOptions:                           sessionOptions,
+		parseCache:                               parseCache,
+		contentMappedParseCache:                  contentMappedParseCache,
+		extendedConfigCache:                      extendedConfigCache,
+		contentMapperHost:                        contentMapperHost,
+		base:                                     oldProjectCollection,
+		configFileRegistryBuilder:                newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, func(path tspath.Path) bool { _, ok := overlays[path]; return ok }, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
+		newSnapshotID:                            newSnapshotID,
+		openFilesChanged:                         !openFiles.Equals(&oldProjectCollection.openFiles),
+		configuredProjects:                       dirty.NewSyncMap(oldProjectCollection.configuredProjects),
+		syntheticProjects:                        dirty.NewSyncMap(oldProjectCollection.syntheticProjects),
+		inferredProject:                          dirty.NewBox(oldProjectCollection.inferredProject),
+		inferredProjectATAState:                  oldProjectCollection.inferredProjectATAState,
+		inferredProjectATAInvalidationSnapshotID: oldProjectCollection.inferredProjectATAInvalidationSnapshotID,
+		apiState:                                 oldAPIState.clone(),
+		client:                                   client,
 	}
 }
 
@@ -147,6 +152,19 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if newInferredProject, inferredProjectChanged := b.inferredProject.Finalize(); inferredProjectChanged {
 		ensureCloned()
 		newProjectCollection.inferredProject = newInferredProject
+	}
+	if b.inferredProjectATAState != nil {
+		if inferred := b.inferredProject.Value(); inferred != nil {
+			debug.Assert(inferred.Program == nil, "cached inferred ATA state coexists with a built inferred project")
+		}
+	}
+	if b.inferredProjectATAState != b.base.inferredProjectATAState {
+		ensureCloned()
+		newProjectCollection.inferredProjectATAState = b.inferredProjectATAState
+	}
+	if b.inferredProjectATAInvalidationSnapshotID != b.base.inferredProjectATAInvalidationSnapshotID {
+		ensureCloned()
+		newProjectCollection.inferredProjectATAInvalidationSnapshotID = b.inferredProjectATAInvalidationSnapshotID
 	}
 
 	configFileRegistry := b.configFileRegistryBuilder.Finalize()
@@ -459,6 +477,167 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		path := b.toPath(fileName)
 		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
+	}
+}
+
+func (b *ProjectCollectionBuilder) DidChangeTypingsWatchInputs(summary FileChangeSummary, logger *logging.LogTree) {
+	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		projectID := entry.Value().ID()
+		if entry.ChangeIf(
+			func(project *Project) bool {
+				return fileChangeSummaryAffectsTypingsWatch(
+					summary,
+					project.installedTypingsFilesToWatch,
+					project.typingsFiles,
+					b.fs.fs.UseCaseSensitiveFileNames(),
+				)
+			},
+			func(project *Project) {
+				project.installedTypingsInfo = nil
+			},
+		) {
+			b.invalidateProjectATAState(projectID)
+			if _, inferred := projectID.Inferred(); inferred {
+				b.clearInferredProjectATAState("typings watch changes", logger)
+			}
+		}
+		return true
+	})
+
+	if b.inferredProjectATAState != nil && fileChangeSummaryAffectsTypingsWatch(
+		summary,
+		b.inferredProjectATAState.installedTypingsFilesToWatch,
+		b.inferredProjectATAState.typingsFiles,
+		b.fs.fs.UseCaseSensitiveFileNames(),
+	) {
+		b.invalidateInferredProjectATAState("typings watch changes", logger)
+	}
+}
+
+func fileChangeSummaryAffectsTypingsWatch(
+	summary FileChangeSummary,
+	filesToWatch []string,
+	typingsFiles []string,
+	useCaseSensitiveFileNames bool,
+) bool {
+	if summary.InvalidateAll {
+		return true
+	}
+	if len(filesToWatch) == 0 {
+		return false
+	}
+	comparePathsOptions := tspath.ComparePathsOptions{
+		UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
+	}
+	affectsWatch := func(uri lsproto.DocumentUri) bool {
+		fileName := uri.FileName()
+		return slices.ContainsFunc(slices.Concat(filesToWatch, typingsFiles), func(watchedPath string) bool {
+			if tspath.ComparePaths(watchedPath, fileName, comparePathsOptions) == 0 ||
+				tspath.ContainsPath(watchedPath, fileName, comparePathsOptions) {
+				return true
+			}
+			switch tspath.GetBaseFileName(watchedPath) {
+			case "node_modules":
+				return tspath.ComparePaths(tspath.CombinePaths(tspath.GetDirectoryPath(watchedPath), "package.json"), fileName, comparePathsOptions) == 0
+			case "bower_components":
+				return tspath.ComparePaths(tspath.CombinePaths(tspath.GetDirectoryPath(watchedPath), "bower.json"), fileName, comparePathsOptions) == 0
+			}
+			return false
+		})
+	}
+	for uri := range summary.Changed.Keys() {
+		if affectsWatch(uri) {
+			return true
+		}
+	}
+	for uri := range summary.Created.Keys() {
+		if affectsWatch(uri) {
+			return true
+		}
+	}
+	for uri := range summary.Deleted.Keys() {
+		if affectsWatch(uri) {
+			return true
+		}
+	}
+	return false
+}
+
+func (b *ProjectCollectionBuilder) DidInvalidateTypingsWatchState(logger *logging.LogTree) {
+	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		b.invalidateProjectATAState(entry.Value().ID())
+		entry.ChangeIf(
+			func(project *Project) bool {
+				return project.installedTypingsInfo != nil
+			},
+			func(project *Project) {
+				project.installedTypingsInfo = nil
+			},
+		)
+		return true
+	})
+	b.invalidateInferredProjectATAState("excessive file changes", logger)
+}
+
+func (b *ProjectCollectionBuilder) invalidateProjectATAState(projectID ID) {
+	setProjectGeneration := func(project dirty.Value[*Project]) {
+		if project == nil || project.Value() == nil {
+			return
+		}
+		project.ChangeIf(
+			func(project *Project) bool {
+				return project.ataInvalidationSnapshotID != b.newSnapshotID
+			},
+			func(project *Project) {
+				project.ataInvalidationSnapshotID = b.newSnapshotID
+			},
+		)
+	}
+	if _, inferred := projectID.Inferred(); inferred {
+		b.inferredProjectATAInvalidationSnapshotID = b.newSnapshotID
+		setProjectGeneration(b.inferredProject)
+		return
+	}
+	if syntheticProjectID, ok := projectID.Synthetic(); ok {
+		if project, loaded := b.syntheticProjects.Load(syntheticProjectID); loaded {
+			setProjectGeneration(project)
+		}
+		return
+	}
+	if configuredProjectID, ok := projectID.Configured(); ok {
+		if project, loaded := b.configuredProjects.Load(configuredProjectID); loaded {
+			setProjectGeneration(project)
+		}
+	}
+}
+
+func (b *ProjectCollectionBuilder) ataInvalidationSnapshotID(projectID ID) uint64 {
+	if _, inferred := projectID.Inferred(); inferred {
+		return b.inferredProjectATAInvalidationSnapshotID
+	}
+	if syntheticProjectID, ok := projectID.Synthetic(); ok {
+		if project, loaded := b.syntheticProjects.Load(syntheticProjectID); loaded {
+			return project.Value().ataInvalidationSnapshotID
+		}
+		return 0
+	}
+	if configuredProjectID, ok := projectID.Configured(); ok {
+		if project, loaded := b.configuredProjects.Load(configuredProjectID); loaded {
+			return project.Value().ataInvalidationSnapshotID
+		}
+	}
+	return 0
+}
+
+func (b *ProjectCollectionBuilder) invalidateInferredProjectATAState(reason string, logger *logging.LogTree) {
+	b.invalidateProjectATAState(inferredProjectID.AsID())
+	b.clearInferredProjectATAState(reason, logger)
+}
+
+func (b *ProjectCollectionBuilder) clearInferredProjectATAState(reason string, logger *logging.LogTree) {
+	b.inferredProjectATAState = nil
+	if logger != nil {
+		logger.Log("Invalidating cached inferred project ATA state due to " + reason)
 	}
 }
 
@@ -812,7 +991,31 @@ func (b *ProjectCollectionBuilder) ensureProjectTree(
 	}
 }
 
-func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAStateChange, logger *logging.LogTree) {
+func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAStateChange, fileChanges FileChangeSummary, logger *logging.LogTree) {
+	installedTypingsSnapshotID := func(projectID ID) uint64 {
+		if _, inferred := projectID.Inferred(); inferred {
+			if state := b.inferredProjectATAState; state != nil {
+				return state.snapshotID
+			}
+			if project := b.inferredProject.Value(); project != nil {
+				return project.installedTypingsSnapshotID
+			}
+		} else if syntheticID, synthetic := projectID.Synthetic(); synthetic {
+			if entry, loaded := b.syntheticProjects.Load(syntheticID); loaded {
+				if project := entry.Value(); project != nil {
+					return project.installedTypingsSnapshotID
+				}
+			}
+		} else if configuredID, configured := projectID.Configured(); configured {
+			if entry, loaded := b.configuredProjects.Load(configuredID); loaded {
+				if project := entry.Value(); project != nil {
+					return project.installedTypingsSnapshotID
+				}
+			}
+		}
+		return 0
+	}
+
 	updateProject := func(project dirty.Value[*Project], ataChange *ATAStateChange) {
 		project.ChangeIf(
 			func(p *Project) bool {
@@ -822,15 +1025,17 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				// Consistency check: the ATA demands (project options, unresolved imports) of this project
 				// has not changed since the time the ATA request was dispatched; the change can still be
 				// applied to this project in its current state.
-				return ataChange.TypingsInfo.Equals(p.ComputeTypingsInfo())
+				return ataChange.TypingsInfo.Equals(p.ComputeTypingsInfo()) &&
+					slices.Equal(ataChange.FileNames, p.ComputeTypingsFileNames())
 			},
 			func(p *Project) {
-				// We checked before triggering this change (in Session.triggerATAForUpdatedProjects) that
-				// the set of typings files is actually different.
 				p.installedTypingsInfo = ataChange.TypingsInfo
-				p.typingsFiles = ataChange.TypingsFiles
+				p.installedTypingsSnapshotID = ataChange.SnapshotID
+				p.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
+				p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
+				p.setTypingsFiles(ataChange.TypingsFiles)
 				typingsWatchGlobs := getTypingsLocationsGlobs(
-					ataChange.TypingsFilesToWatch,
+					slices.Concat(ataChange.TypingsFilesToWatch, ataChange.TypingsFiles),
 					b.sessionOptions.TypingsLocation,
 					b.sessionOptions.CurrentDirectory,
 					p.currentDirectory,
@@ -845,8 +1050,53 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 
 	for projectID, ataChange := range ataChanges {
 		logger.Embed(ataChange.Logs)
+		if ataChange.SnapshotID < installedTypingsSnapshotID(projectID) {
+			if logger != nil {
+				logger.Logf("Ignoring ATA state older than installed state for project %s", projectID)
+			}
+			continue
+		}
+		if fileChangeSummaryAffectsTypingsWatch(
+			fileChanges,
+			slices.Concat(ataChange.TypingsFilesToWatch, ataChange.FileNames),
+			ataChange.TypingsFiles,
+			b.fs.fs.UseCaseSensitiveFileNames(),
+		) {
+			b.invalidateProjectATAState(projectID)
+			if _, inferred := projectID.Inferred(); inferred {
+				b.clearInferredProjectATAState("typings watch changes", logger)
+			}
+		}
+		if ataChange.SnapshotID < b.ataInvalidationSnapshotID(projectID) {
+			if logger != nil {
+				logger.Logf("Ignoring stale ATA state for project %s", projectID)
+			}
+			continue
+		}
 		if _, ok := projectID.Inferred(); ok {
-			updateProject(b.inferredProject, ataChange)
+			if inferred := b.inferredProject.Value(); inferred != nil && inferred.Program != nil {
+				updateProject(b.inferredProject, ataChange)
+			} else {
+				typingsWatch := newTypingsWatch(b)
+				if b.inferredProjectATAState != nil && b.inferredProjectATAState.typingsWatch != nil {
+					typingsWatch = b.inferredProjectATAState.typingsWatch
+				}
+				typingsWatchGlobs := getTypingsLocationsGlobs(
+					slices.Concat(ataChange.TypingsFilesToWatch, ataChange.TypingsFiles),
+					b.sessionOptions.TypingsLocation,
+					b.sessionOptions.CurrentDirectory,
+					b.sessionOptions.CurrentDirectory,
+					b.fs.fs.UseCaseSensitiveFileNames(),
+				)
+				b.inferredProjectATAState = &inferredProjectATAState{
+					installedTypingsInfo:         ataChange.TypingsInfo,
+					installedTypingsFileNames:    slices.Clone(ataChange.FileNames),
+					installedTypingsFilesToWatch: slices.Clone(ataChange.TypingsFilesToWatch),
+					typingsFiles:                 slices.Clone(ataChange.TypingsFiles),
+					typingsWatch:                 typingsWatch.Clone(typingsWatchGlobs),
+					snapshotID:                   ataChange.SnapshotID,
+				}
+			}
 		} else if syntheticProjectID, ok := projectID.Synthetic(); ok {
 			if project, loaded := b.syntheticProjects.Load(syntheticProjectID); loaded {
 				updateProject(project, ataChange)
@@ -895,6 +1145,10 @@ func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 	logger *logging.LogTree,
 ) bool {
 	for projectID := range configChangeResult.affectedProjects {
+		b.invalidateProjectATAState(projectID)
+		if _, inferred := projectID.Inferred(); inferred {
+			b.clearInferredProjectATAState("config changes", logger)
+		}
 		var project dirty.Value[*Project]
 		if _, ok := projectID.Inferred(); ok {
 			project = b.inferredProject
@@ -1365,6 +1619,9 @@ func (b *ProjectCollectionBuilder) deleteInferredProject(logger *logging.LogTree
 			return true
 		})
 	}
+	if project.Program != nil {
+		b.inferredProjectATAState = project.inferredProjectATAState()
+	}
 	b.inferredProject.Delete()
 	return true
 }
@@ -1536,6 +1793,32 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 	if updateProgram && logger != nil {
 		elapsed := time.Since(startTime)
 		logger.Log(fmt.Sprintf("Program update for %s completed in %v", projectID, elapsed))
+	}
+	if _, inferred := projectID.Inferred(); inferred && b.inferredProjectATAState != nil {
+		state := b.inferredProjectATAState
+		b.inferredProjectATAState = nil
+		if entry.ChangeIf(
+			func(project *Project) bool {
+				return state.canApply(project, b.fs, b.sessionOptions.WatchEnabled)
+			},
+			func(project *Project) {
+				state.apply(project)
+			},
+		) {
+			if logger != nil {
+				logger.Log("Reusing cached inferred project ATA state")
+			}
+			filesChanged = b.updateProgram(entry, logger) || filesChanged
+		} else {
+			entry.ChangeIf(
+				func(project *Project) bool {
+					return state.canApplyWatchState(project, b.sessionOptions.WatchEnabled)
+				},
+				func(project *Project) {
+					state.applyWatchState(project)
+				},
+			)
+		}
 	}
 	return filesChanged
 }

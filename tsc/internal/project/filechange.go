@@ -3,6 +3,7 @@ package project
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 const excessiveChangeThreshold = 1000
@@ -95,4 +96,25 @@ func mergeFileChangeSummary(dst *FileChangeSummary, src FileChangeSummary) {
 	if src.IncludesWatchChangeOutsideNodeModules {
 		dst.IncludesWatchChangeOutsideNodeModules = true
 	}
+}
+
+func (f FileChangeSummary) withoutChangesWithin(directory string, useCaseSensitiveFileNames bool) FileChangeSummary {
+	if directory == "" {
+		return f
+	}
+	options := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: useCaseSensitiveFileNames}
+	filter := func(uris collections.Set[lsproto.DocumentUri]) collections.Set[lsproto.DocumentUri] {
+		var result collections.Set[lsproto.DocumentUri]
+		for uri := range uris.Keys() {
+			fileName := uri.FileName()
+			if tspath.ComparePaths(directory, fileName, options) != 0 && !tspath.ContainsPath(directory, fileName, options) {
+				result.Add(uri)
+			}
+		}
+		return result
+	}
+	f.Changed = filter(f.Changed)
+	f.Created = filter(f.Created)
+	f.Deleted = filter(f.Deleted)
+	return f
 }
