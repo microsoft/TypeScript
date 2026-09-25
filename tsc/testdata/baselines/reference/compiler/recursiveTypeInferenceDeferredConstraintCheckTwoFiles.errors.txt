@@ -1,0 +1,18 @@
+b.ts(3,23): error TS2345: Argument of type '{ readonly y: number; }' is not assignable to parameter of type '{ y: string; }'.
+  Types of property 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== a.ts (0 errors) ====
+    import "./b";
+    export const lit = { get y() { return 1; } };
+    
+==== b.ts (1 errors) ====
+    import { lit } from "./a";
+    declare function wrap<T extends { y: string }>(t: T): { w: T };
+    export const w = wrap(lit); // error
+                          ~~~
+!!! error TS2345: Argument of type '{ readonly y: number; }' is not assignable to parameter of type '{ y: string; }'.
+!!! error TS2345:   Types of property 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    

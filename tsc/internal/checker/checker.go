@@ -270,6 +270,7 @@ const (
 	InferenceFlagsAnyDefault             InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
 	InferenceFlagsSkippedGenericFunction InferenceFlags = 1 << 2 // A generic function was skipped during inference
 	InferenceFlagsNoConstraintChecks     InferenceFlags = 1 << 3
+	InferenceFlagsDeferAccessorChecks    InferenceFlags = 1 << 4 // Defer constraint checks that would resolve an accessor (see shouldDeferConstraintCheck)
 )
 
 // InferenceContext
@@ -285,6 +286,24 @@ type InferenceContext struct {
 	outerReturnMapper             *TypeMapper      // Type mapper for inferences from return types of outer function (if any)
 	inferredTypeParameters        []*Type          // Inferred type parameters for function result
 	intraExpressionInferenceSites []IntraExpressionInferenceSite
+	deferredConstraintChecks      []deferredInference // Inferences whose constraint check is deferred (see queueDeferredConstraintChecks)
+}
+
+// A constraint check that was skipped during inference because the inferred type mentions an object literal with an
+// accessor whose type is still to be computed from its body. It is performed once the deferred nodes of the file have
+// been checked.
+// An inference whose constraint check is deferred, with the constraint as instantiated when the check would have run.
+type deferredInference struct {
+	index      int
+	constraint *Type
+}
+
+// A deferred constraint check of one inferred type argument of a call, run after the deferred nodes of the call's file.
+type deferredConstraintCheck struct {
+	node       *ast.Node
+	context    *InferenceContext
+	index      int
+	constraint *Type
 }
 
 type InferenceInfo struct {
@@ -797,6 +816,7 @@ type Checker struct {
 	resolutionStart                             int
 	varianceStack                               []VarianceStackEntry
 	callResolutionStack                         []*ast.Node
+	accessorBodyDepth                           int
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -2540,6 +2560,147 @@ func (c *Checker) checkDeferredNodes(context *ast.SourceFile) {
 		c.checkDeferredNode(node)
 	}
 	links.deferredNodes = collections.OrderedSet[*ast.Node]{}
+	// Checking a deferred node may queue further deferred constraint checks, so iterate by index.
+	for i := 0; i < len(links.deferredConstraintChecks); i++ {
+		if c.isCanceled() {
+			break
+		}
+		c.checkDeferredConstraint(links.deferredConstraintChecks[i])
+	}
+	links.deferredConstraintChecks = nil
+}
+
+// hasUnresolvedAccessorProperty reports whether t is an object literal type with an accessor property whose type
+// is not annotated and has not been computed from its body yet.
+func (c *Checker) hasUnresolvedAccessorProperty(t *Type) bool {
+	if t.flags&TypeFlagsObject == 0 || t.symbol == nil || t.symbol.Flags&ast.SymbolFlagsObjectLiteral == 0 {
+		return false
+	}
+	for _, prop := range c.getPropertiesOfType(t) {
+		if prop.Flags&ast.SymbolFlagsAccessor != 0 && c.valueSymbolLinks.Get(prop).resolvedType == nil {
+			getter := ast.GetDeclarationOfKind(prop, ast.KindGetAccessor)
+			setter := ast.GetDeclarationOfKind(prop, ast.KindSetAccessor)
+			if (getter == nil || c.getAnnotatedAccessorTypeNode(getter) == nil) && (setter == nil || c.getAnnotatedAccessorTypeNode(setter) == nil) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// hasResolvingAccessorProperty reports whether t is an object literal type with an accessor property whose type is
+// being computed from its body right now, so that reading it would be a circularity.
+func (c *Checker) hasResolvingAccessorProperty(t *Type) bool {
+	if t.flags&TypeFlagsObject == 0 || t.symbol == nil || t.symbol.Flags&ast.SymbolFlagsObjectLiteral == 0 {
+		return false
+	}
+	for _, prop := range c.getPropertiesOfType(t) {
+		if prop.Flags&ast.SymbolFlagsAccessor != 0 && c.isResolvingTypeOfSymbol(prop) {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Checker) isResolvingTypeOfSymbol(symbol *ast.Symbol) bool {
+	for i := len(c.typeResolutions) - 1; i >= 0; i-- {
+		r := &c.typeResolutions[i]
+		if r.propertyName == TypeSystemPropertyNameType && r.target == symbol {
+			return true
+		}
+	}
+	return false
+}
+
+// shouldDeferConstraintCheck reports whether the constraint check of an inferred type argument has to wait for the
+// accessors of an object literal: either the inferred type is such a literal, or the check would run while an
+// accessor's return type is being inferred from a body that mentions the literal through the inferred type. Only a
+// call with a single candidate defers, since overload resolution depends on the outcome of the check.
+func (c *Checker) shouldDeferConstraintCheck(n *InferenceContext, t *Type) bool {
+	if n.flags&InferenceFlagsDeferAccessorChecks == 0 {
+		return false
+	}
+	return c.hasUnresolvedAccessorProperty(t) || c.accessorBodyDepth > 0 && c.containsResolvingAccessor(t, 0, make(map[*Type]struct{}))
+}
+
+// containsResolvingAccessor reports whether t mentions an object literal with an accessor that is being resolved,
+// through type arguments, the source of a mapped type, union or intersection constituents, or object literal property
+// types. An accessor that is merely unresolved is read on the ordinary path, so the result of the call does not depend
+// on where it was resolved from.
+func (c *Checker) containsResolvingAccessor(t *Type, depth int, visited map[*Type]struct{}) bool {
+	if depth > 8 {
+		return false
+	}
+	if _, seen := visited[t]; seen {
+		return false
+	}
+	visited[t] = struct{}{}
+	switch {
+	case t.flags&TypeFlagsUnionOrIntersection != 0:
+		for _, m := range t.Types() {
+			if c.containsResolvingAccessor(m, depth+1, visited) {
+				return true
+			}
+		}
+	case t.flags&TypeFlagsObject != 0:
+		switch {
+		case t.objectFlags&ObjectFlagsReference != 0:
+			for _, a := range c.getTypeArguments(t) {
+				if c.containsResolvingAccessor(a, depth+1, visited) {
+					return true
+				}
+			}
+		case t.objectFlags&ObjectFlagsMapped != 0:
+			return c.containsResolvingAccessor(c.getModifiersTypeFromMappedType(t), depth+1, visited)
+		case t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsObjectLiteral != 0:
+			if c.hasResolvingAccessorProperty(t) {
+				return true
+			}
+			for _, prop := range c.getPropertiesOfType(t) {
+				if prop.Flags&ast.SymbolFlagsAccessor == 0 && c.containsResolvingAccessor(c.getTypeOfSymbol(prop), depth+1, visited) {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+// queueDeferredConstraintChecks moves the constraint checks deferred during inference for a chosen candidate onto the
+// call's source file, to run after the file's deferred nodes.
+func (c *Checker) queueDeferredConstraintChecks(node *ast.Node, n *InferenceContext) {
+	if len(n.deferredConstraintChecks) == 0 {
+		return
+	}
+	links := c.sourceFileLinks.Get(ast.GetSourceFileOfNode(node))
+	if !links.typeChecked {
+		for _, d := range n.deferredConstraintChecks {
+			links.deferredConstraintChecks = append(links.deferredConstraintChecks, deferredConstraintCheck{node: node, context: n, index: d.index, constraint: d.constraint})
+		}
+	}
+	n.deferredConstraintChecks = nil
+}
+
+// checkDeferredConstraint runs a deferred constraint check. A violation is reported the way the ordinary path reports
+// it: the type argument is fixed to its constraint and the arguments are checked against that instantiation.
+func (c *Checker) checkDeferredConstraint(d deferredConstraintCheck) {
+	source := d.context.inferences[d.index].inferredType
+	if source == nil {
+		return
+	}
+	target := c.getTypeWithThisArgument(d.constraint, source, false)
+	if c.isTypeAssignableTo(source, target) {
+		return
+	}
+	if signature := d.context.signature; signature != nil {
+		typeArguments := slices.Clone(c.getInferredTypes(d.context))
+		typeArguments[d.index] = d.constraint
+		instantiated := c.getSignatureInstantiation(signature, typeArguments, ast.IsInJSFile(signature.declaration), d.context.inferredTypeParameters)
+		if !c.isSignatureApplicable(d.node, c.getEffectiveCallArguments(d.node), instantiated, c.assignableRelation, CheckModeNormal, true /*reportErrors*/, nil /*diagnosticOutput*/) {
+			return
+		}
+	}
+	c.checkTypeAssignableToAndOptionallyElaborate(source, target, d.node, d.node, diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1, nil)
 }
 
 func (c *Checker) checkDeferredNode(node *ast.Node) {
@@ -9229,6 +9390,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		}
 		var checkCandidate *Signature
 		var inferenceContext *InferenceContext
+		var applicable bool
 		if len(candidate.typeParameters) != 0 {
 			var typeArgumentTypes []*Type
 			if len(s.typeArguments) != 0 {
@@ -9241,6 +9403,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				// When we are recursively resolving a call with a single candidate, we skip constraints checks during
 				// type inference to avoid circularity errors. For example, see #64192.
 				inferenceFlags := core.IfElse(s.recursiveResolution && len(s.candidates) == 1, InferenceFlagsNoConstraintChecks, InferenceFlagsNone) |
+					core.IfElse(!s.recursiveResolution && len(s.candidates) == 1, InferenceFlagsDeferAccessorChecks, InferenceFlagsNone) |
 					core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone)
 				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, inferenceFlags /*flags*/, nil)
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
@@ -9262,9 +9425,11 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		} else {
 			checkCandidate = candidate
 		}
-		if !c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
+		if checkCandidate, applicable = c.resolveCandidateApplicability(s, relation, candidate, checkCandidate, inferenceContext, s.argCheckMode|CheckModeSkipGenericFunctions); !applicable {
 			// Give preference to error candidates that have no rest parameters (as they are more specific)
-			s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+			if checkCandidate != nil {
+				s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+			}
 			continue
 		}
 		if s.argCheckMode != 0 {
@@ -9282,16 +9447,43 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 					continue
 				}
 			}
-			if !c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
+			if checkCandidate, applicable = c.resolveCandidateApplicability(s, relation, candidate, checkCandidate, inferenceContext, s.argCheckMode); !applicable {
 				// Give preference to error candidates that have no rest parameters (as they are more specific)
-				s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+				if checkCandidate != nil {
+					s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
+				}
 				continue
 			}
+		}
+		if inferenceContext != nil {
+			c.queueDeferredConstraintChecks(s.node, inferenceContext)
 		}
 		s.candidates[candidateIndex] = checkCandidate
 		return checkCandidate
 	}
 	return nil
+}
+
+// resolveCandidateApplicability checks whether a candidate is applicable. When it is not and constraint checks were
+// deferred during its inference, the candidate is inferred again with the checks in place, so that the error reports
+// the violated constraint rather than a mismatch the unchecked inference causes elsewhere.
+func (c *Checker) resolveCandidateApplicability(s *CallState, relation *Relation, candidate *Signature, checkCandidate *Signature, inferenceContext *InferenceContext, inferMode CheckMode) (*Signature, bool) {
+	if c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
+		return checkCandidate, true
+	}
+	if inferenceContext == nil || len(inferenceContext.deferredConstraintChecks) == 0 {
+		return checkCandidate, false
+	}
+	inferenceContext.flags &^= InferenceFlagsDeferAccessorChecks
+	inferenceContext.deferredConstraintChecks = nil
+	clearCachedInferences(inferenceContext.inferences)
+	typeArgumentTypes := c.inferTypeArguments(s.node, candidate, s.args, inferMode, inferenceContext)
+	checkCandidate = c.getSignatureInstantiation(candidate, typeArgumentTypes, ast.IsInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters)
+	if c.getNonArrayRestType(candidate) != nil && !c.hasCorrectArity(s.node, s.args, checkCandidate, s.signatureHelpTrailingComma) {
+		s.candidateForArgumentArityError = checkCandidate
+		return nil, false
+	}
+	return checkCandidate, c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, nil /*diagnosticOutput*/)
 }
 
 func (c *Checker) hasCorrectArity(node *ast.Node, args []*ast.Node, signature *Signature, signatureHelpTrailingComma bool) bool {
@@ -18865,7 +19057,9 @@ func (c *Checker) getTypeOfAccessors(symbol *ast.Symbol) *Type {
 		}
 		if t == nil && getter != nil {
 			if body := getter.Body(); body != nil {
+				c.accessorBodyDepth++
 				t = c.getReturnTypeFromBody(getter, CheckModeNormal)
+				c.accessorBodyDepth--
 			}
 		}
 		if t == nil && accessor != nil {

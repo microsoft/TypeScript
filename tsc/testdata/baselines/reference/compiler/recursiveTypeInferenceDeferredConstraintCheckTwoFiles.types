@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/recursiveTypeInferenceDeferredConstraintCheckTwoFiles.ts] ////
+
+=== a.ts ===
+import "./b";
+export const lit = { get y() { return 1; } };
+>lit : { readonly y: number; }
+>{ get y() { return 1; } } : { readonly y: number; }
+>y : number
+>1 : 1
+
+=== b.ts ===
+import { lit } from "./a";
+>lit : { readonly y: number; }
+
+declare function wrap<T extends { y: string }>(t: T): { w: T };
+>wrap : <T extends { y: string; }>(t: T) => { w: T; }
+>y : string
+>t : T
+>w : T
+
+export const w = wrap(lit); // error
+>w : { w: { readonly y: number; }; }
+>wrap(lit) : { w: { readonly y: number; }; }
+>wrap : <T extends { y: string; }>(t: T) => { w: T; }
+>lit : { readonly y: number; }
+
