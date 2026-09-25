@@ -52,6 +52,7 @@ import {
     parseNodeHandle,
     readParseOptionsKey,
     readSourceFileHash,
+    readSourceFileLease,
     RemoteSourceFile,
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
@@ -327,6 +328,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Map<number, Snapshot> = new Map();
+    private activeSourceFileLeases: Map<number, RetainedSourceFile> = new Map();
     readonly printer: Printer;
     readonly internal: InternalAPI;
 
@@ -422,22 +424,57 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("parseJsonConfigFileContent", { json, ...options });
     }
 
-    async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
+    /**
+     * Create and retain a source file independently of a program.
+     * Dispose the returned lease when the source file no longer needs to remain available remotely.
+     */
+    async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<RetainedSourceFile> {
         await this.ensureInitialized();
         const data = await this.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
         if (!data) {
             throw new Error("createSourceFile returned no source file");
         }
-        return new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+        return this.retainSourceFileResponse(data);
     }
 
-    async createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
+    /**
+     * Read, create, and retain a source file independently of a program.
+     * Dispose the returned lease when the source file no longer needs to remain available remotely.
+     */
+    async createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Promise<RetainedSourceFile> {
         await this.ensureInitialized();
         const data = await this.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
         if (!data) {
             throw new Error("createSourceFileFromFile returned no source file");
         }
-        return new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+        return this.retainSourceFileResponse(data);
+    }
+
+    private retainSourceFileResponse(data: Uint8Array): RetainedSourceFile {
+        const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+        const lease = readSourceFileLease(view);
+        try {
+            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+            const sourceFile = this.sourceFileCache.setForLease(decoded.path, decoded, readParseOptionsKey(view), readSourceFileHash(view), lease);
+            const retained = new RetainedSourceFile(sourceFile, lease, this.client, () => {
+                this.activeSourceFileLeases.delete(lease);
+                this.sourceFileCache.releaseLease(lease);
+            });
+            this.activeSourceFileLeases.set(lease, retained);
+            return retained;
+        }
+        catch (error) {
+            // @sync-skip-block-start
+            void this.client.apiRequest("releaseSourceFile", { lease }).catch(() => {});
+            // @sync-skip-block-end
+            // @sync-only-start
+            // try {
+            //     this.client.apiRequest("releaseSourceFile", { lease });
+            // }
+            // catch {}
+            // @sync-only-end
+            throw error;
+        }
     }
 
     async transpileModule(input: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
@@ -617,15 +654,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         }
         // @sync-skip-block-end
         await this.initializing?.catch(() => {}); // @sync-skip
-        // Dispose all active snapshots
         try {
-            for (const snapshot of [...this.activeSnapshots.values()]) {
-                await snapshot.dispose();
+            for (const retained of [...this.activeSourceFileLeases.values()]) {
+                await retained.dispose();
             }
-            this.sourceFileCache.clear();
         }
         finally {
-            await this.client.close(); // always close the underlying connection
+            try {
+                for (const snapshot of [...this.activeSnapshots.values()]) {
+                    await snapshot.dispose();
+                }
+                this.sourceFileCache.clear();
+            }
+            finally {
+                await this.client.close(); // always close the underlying connection
+            }
         }
     }
 
@@ -716,6 +759,42 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 }
 
 type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
+
+/** An independently retained source file and its disposable remote-lifetime lease. */
+export class RetainedSourceFile {
+    readonly sourceFile: SourceFile;
+    private readonly lease: number;
+    private readonly client: Client;
+    private readonly onDispose: () => void;
+    private disposed = false;
+    private disposePromise: Promise<void> | undefined;
+
+    constructor(sourceFile: SourceFile, lease: number, client: Client, onDispose: () => void) {
+        this.sourceFile = sourceFile;
+        this.lease = lease;
+        this.client = client;
+        this.onDispose = onDispose;
+    }
+
+    [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        return this.dispose(); // @sync: this.dispose();
+    }
+
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            await this.client.apiRequest("releaseSourceFile", { lease: this.lease });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+}
 
 export class InternalAPI {
     private client: Client;
