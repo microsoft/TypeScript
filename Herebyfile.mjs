@@ -636,7 +636,7 @@ async function runGenerateEnums() {
 
 export const generateEnums = task({
     name: "generate:enums",
-    description: "Generates TypeScript enum files from Go source. Pass --force to regenerate unchanged files.",
+    description: "Generates TypeScript enums from metadata and Go source. Pass --force to regenerate unchanged files.",
     run: runGenerateEnums,
 });
 

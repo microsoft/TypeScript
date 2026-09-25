@@ -785,6 +785,21 @@ test("enum generation skips unchanged outputs and Go verification", async () => 
     const regenerated = await generate();
     assert.match(regenerated.stdout, /All generated values match Go\./);
     assert.match((await generate()).stdout, /Enums are up to date\./);
+
+    const astSchema = path.join(root, "tools/scripts/tsc/ast.json");
+    const originalSchema = fs.readFileSync(astSchema, "utf8");
+    const goKinds = path.join(root, "tsc/internal/ast/kind_generated.go");
+    const goKindsTimestamp = fs.statSync(goKinds).mtimeMs;
+    try {
+        fs.writeFileSync(astSchema, originalSchema + "\n");
+        assert.match((await generate()).stdout, /All generated values match Go\./);
+        assert.equal(fs.statSync(goKinds).mtimeMs, goKindsTimestamp);
+        assert.match((await generate()).stdout, /Enums are up to date\./);
+    }
+    finally {
+        fs.writeFileSync(astSchema, originalSchema);
+        await generate();
+    }
 });
 
 test("AST generation forwards force to schema generators and the kind stringer", async () => {
