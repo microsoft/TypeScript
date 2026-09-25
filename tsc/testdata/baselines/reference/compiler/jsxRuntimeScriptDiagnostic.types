@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/jsxRuntimeScriptDiagnostic.tsx] ////
+
+=== node_modules/@solidjs/web/jsx-runtime.d.ts ===
+export namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        div: {};
+>div : {}
+    }
+}
+=== script.tsx ===
+const scriptElement = <div>hi</div>;
+>scriptElement : import("@solidjs/web/jsx-runtime").JSX.Element
+><div>hi</div> : import("@solidjs/web/jsx-runtime").JSX.Element
+>div : any
+>div : any
+
+=== module.tsx ===
+export {};
+const moduleElement = <div>hi</div>;
+>moduleElement : import("@solidjs/web/jsx-runtime").JSX.Element
+><div>hi</div> : import("@solidjs/web/jsx-runtime").JSX.Element
+>div : any
+>div : any
+
