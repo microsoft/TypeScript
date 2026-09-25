@@ -1,6 +1,12 @@
 interface RegisteredTest {
     name: string;
     run: (context: BrowserTestContext) => unknown;
+    skip?: string;
+}
+
+interface RegisteredSuite {
+    name: string;
+    skip?: string;
 }
 
 interface BrowserTestContext {
@@ -37,7 +43,7 @@ export interface BrowserTestExclusion {
 }
 
 const tests: RegisteredTest[] = [];
-const suites: string[] = [];
+const suites: RegisteredSuite[] = [];
 
 interface TestOptions {
     skip?: boolean | string;
@@ -47,7 +53,11 @@ export function describe(name: string, options: TestOptions, run: () => void): v
 export function describe(name: string, run: () => void): void;
 export function describe(name: string, optionsOrRun: TestOptions | (() => void), run?: () => void): void {
     const callback = typeof optionsOrRun === "function" ? optionsOrRun : run!;
-    suites.push(name);
+    const skip = currentSuiteSkip() ?? (typeof optionsOrRun === "function" ? undefined : skipReason(optionsOrRun.skip));
+    suites.push({
+        name,
+        ...skip === undefined ? {} : { skip },
+    });
     try {
         callback();
     }
@@ -64,9 +74,11 @@ export function test(
     run?: (context: BrowserTestContext) => unknown,
 ): void {
     const callback = typeof optionsOrRun === "function" ? optionsOrRun : run!;
+    const skip = currentSuiteSkip() ?? (typeof optionsOrRun === "function" ? undefined : skipReason(optionsOrRun.skip));
     tests.push({
-        name: [...suites, name].join(" > "),
+        name: [...suites.map(suite => suite.name), name].join(" > "),
         run: callback,
+        ...skip === undefined ? {} : { skip },
     });
 }
 
@@ -75,6 +87,13 @@ export async function runRegisteredTests(exclusions: readonly BrowserTestExclusi
     const skipped: BrowserTestSkip[] = [];
     let passed = 0;
     for (const registered of tests) {
+        if (registered.skip) {
+            skipped.push({
+                name: registered.name,
+                reason: registered.skip,
+            });
+            continue;
+        }
         const exclusion = exclusions.find(entry => entry.pattern.test(registered.name));
         if (exclusion) {
             skipped.push({
@@ -136,6 +155,22 @@ export async function runRegisteredTests(exclusions: readonly BrowserTestExclusi
         }
     }
     return { passed, skipped, failures };
+}
+
+function currentSuiteSkip(): string | undefined {
+    for (let i = suites.length - 1; i >= 0; i--) {
+        if (suites[i].skip) {
+            return suites[i].skip;
+        }
+    }
+    return undefined;
+}
+
+function skipReason(skip: boolean | string | undefined): string | undefined {
+    if (!skip) {
+        return undefined;
+    }
+    return typeof skip === "string" ? skip : "Skipped by test option";
 }
 
 function normalizeError(error: unknown): Error {
