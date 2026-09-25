@@ -17125,6 +17125,10 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 		switch name.Kind {
 		case ast.KindObjectBindingPattern:
 			if isObjectLiteralType(t) {
+				parameter := ast.GetRootDeclaration(declaration)
+				if parameter.Type() != nil || c.hasContextualTypeForObjectBindingPattern(name) {
+					return t
+				}
 				return c.padObjectLiteralType(t, name)
 			}
 		case ast.KindArrayBindingPattern:
@@ -17156,13 +17160,37 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	}
 	for _, e := range missingElements {
 		symbol := c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, c.getPropertyNameFromBindingElement(e))
-		reportErrors := ast.GetRootDeclaration(e).Type() == nil
-		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, reportErrors)
+		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
 		members[symbol.Name] = symbol
 	}
 	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
 	result.objectFlags = t.objectFlags
 	return result
+}
+
+func (c *Checker) hasContextualTypeForObjectBindingPattern(pattern *ast.Node) bool {
+	for _, e := range pattern.Elements() {
+		if !hasDotDotDotToken(e) && c.getContextualPropertyTypeForObjectBindingElement(e) == nil {
+			return false
+		}
+	}
+	return true
+}
+
+func (c *Checker) getContextualPropertyTypeForObjectBindingElement(element *ast.Node) *Type {
+	var path []*ast.Node
+	for current := element; ast.IsBindingElement(current); current = current.Parent.Parent {
+		path = append(path, current)
+	}
+	t := c.getContextualTypeForVariableLikeDeclaration(ast.GetRootDeclaration(element), ContextFlagsNone)
+	for i := len(path) - 1; i >= 0 && t != nil; i-- {
+		name := c.getLiteralTypeFromPropertyName(path[i].PropertyNameOrName())
+		if !isTypeUsableAsPropertyName(name) {
+			return nil
+		}
+		t = c.getTypeOfPropertyOfType(c.GetNonNullableType(t), getPropertyNameFromType(name))
+	}
+	return t
 }
 
 func (c *Checker) getPropertyNameFromBindingElement(e *ast.Node) string {
