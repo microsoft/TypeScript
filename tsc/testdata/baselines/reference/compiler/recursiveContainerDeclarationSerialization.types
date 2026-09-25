@@ -2,43 +2,43 @@
 
 === local.ts ===
 export function array() {
->array : () => any[][][][][][][][][][][]
+>array : () => any[]
 
     type Recursive = Recursive[];
->Recursive : any[][][][][][][][][][][]
+>Recursive : any[]
 
     return null as unknown as Recursive;
->null as unknown as Recursive : any[][][][][][][][][][][]
+>null as unknown as Recursive : any[]
 >null as unknown : unknown
 }
 export function tuple() {
->tuple : () => [[[[[[[[[[[any]]]]]]]]]]]
+>tuple : () => [any]
 
     type Recursive = [Recursive];
->Recursive : [[[[[[[[[[[any]]]]]]]]]]]
+>Recursive : [any]
 
     return null as unknown as Recursive;
->null as unknown as Recursive : [[[[[[[[[[[any]]]]]]]]]]]
+>null as unknown as Recursive : [any]
 >null as unknown : unknown
 }
 export function readonlyTuple() {
->readonlyTuple : () => readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [any]]]]]]]]]]]
+>readonlyTuple : () => readonly [any]
 
     type Recursive = readonly [Recursive];
->Recursive : readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [any]]]]]]]]]]]
+>Recursive : readonly [any]
 
     return null as unknown as Recursive;
->null as unknown as Recursive : readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [readonly [any]]]]]]]]]]]
+>null as unknown as Recursive : readonly [any]
 >null as unknown : unknown
 }
 export function union() {
->union : () => string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any)[])[])[])[])[])[])[])[])[])[])[]
+>union : () => string | (string | any)[]
 
     type Recursive = string | Recursive[];
->Recursive : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any)[])[])[])[])[])[])[])[])[])[])[]
+>Recursive : string | (string | any)[]
 
     return null as unknown as Recursive;
->null as unknown as Recursive : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any)[])[])[])[])[])[])[])[])[])[])[]
+>null as unknown as Recursive : string | (string | any)[]
 >null as unknown : unknown
 }
 
