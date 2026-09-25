@@ -21,6 +21,7 @@ export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
 
 export interface APIMethodInfo {
     release: APIMethod<ReleaseParams, void>;
+    releaseSourceFile: APIMethod<ReleaseSourceFileParams, unknown>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
@@ -205,6 +206,10 @@ export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProje
 /** ReleaseParams are the parameters for the release method. */
 export interface ReleaseParams {
     snapshot: number;
+}
+
+export interface ReleaseSourceFileParams {
+    lease: number;
 }
 
 export interface BatchRequestsParams {
@@ -1235,6 +1240,7 @@ export interface BatchRequest {
         | "readConfigFile"
         | "release"
         | "releaseModuleResolver"
+        | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
@@ -1409,6 +1415,7 @@ export interface BatchResponse {
         | "readConfigFile"
         | "release"
         | "releaseModuleResolver"
+        | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
