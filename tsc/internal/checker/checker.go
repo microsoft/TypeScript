@@ -19433,6 +19433,14 @@ func (c *Checker) resolveTypeReferenceMembers(t *Type) {
 	source := t.Target()
 	typeParameters := source.AsInterfaceType().allTypeParameters
 	typeArguments := c.getTypeArguments(t)
+	// Share member instantiations across equivalent mapped arrays and tuples while leaving
+	// their original deferred references intact for aliases and recursion tracking.
+	typeArguments = core.SameMap(typeArguments, func(arg *Type) *Type {
+		if isDeferredMappedTypeReference(arg) {
+			return c.createTypeReference(arg.Target(), c.getTypeArguments(arg))
+		}
+		return arg
+	})
 	paddedTypeArguments := typeArguments
 	if len(typeArguments) == len(typeParameters)-1 {
 		paddedTypeArguments = core.Concatenate(typeArguments, []*Type{t})
@@ -22257,6 +22265,7 @@ func (c *Checker) getTypeArguments(t *Type) []*Type {
 		}
 		var typeArguments []*Type
 		node := t.AsTypeReference().node
+		mapper := d.mapper
 		if node != nil {
 			switch node.Kind {
 			case ast.KindTypeReference:
@@ -22265,19 +22274,37 @@ func (c *Checker) getTypeArguments(t *Type) []*Type {
 				typeArguments = []*Type{c.getTypeFromTypeNode(node.AsArrayTypeNode().ElementType)}
 			case ast.KindTupleType:
 				typeArguments = core.Map(node.Elements(), c.getTypeFromTypeNode)
+			case ast.KindMappedType:
+				mappedType := c.getTypeFromTypeNode(node)
+				typeVariable := c.getHomomorphicTypeVariable(mappedType)
+				source := c.instantiateType(typeVariable, mapper)
+				if isTupleType(source) {
+					mapped := c.instantiateMappedTupleTypeEager(source, mappedType, typeVariable, mapper)
+					if mapped == c.errorType {
+						typeArguments = slices.Repeat([]*Type{c.errorType}, len(n.TypeParameters()))
+					} else {
+						typeArguments = c.getTypeArguments(mapped)
+					}
+				} else {
+					typeArguments = []*Type{c.instantiateMappedTypeTemplate(mappedType, c.numberType, true /*isOptional*/, mapper)}
+				}
+				mapper = nil
 			default:
 				panic("Unhandled case in getTypeArguments")
 			}
 		}
 		if c.popTypeResolution() {
 			if d.resolvedTypeArguments == nil {
-				d.resolvedTypeArguments = c.instantiateTypes(typeArguments, d.mapper)
+				d.resolvedTypeArguments = c.instantiateTypes(typeArguments, mapper)
 			}
 		} else {
 			if d.resolvedTypeArguments == nil {
 				d.resolvedTypeArguments = slices.Repeat([]*Type{c.errorType}, len(n.TypeParameters()))
 			}
 			errorNode := core.IfElse(node != nil, node, c.currentNode)
+			if node != nil && node.Kind == ast.KindMappedType {
+				errorNode = c.currentNode
+			}
 			if d.target.symbol != nil {
 				c.error(errorNode, diagnostics.Type_arguments_for_0_circularly_reference_themselves, c.symbolToString(d.target.symbol))
 			} else {
@@ -22455,6 +22482,8 @@ func (c *Checker) symbolIsValueEx(symbol *ast.Symbol, includeTypeOnlyMembers boo
 		c.getSymbolFlagsEx(symbol, !includeTypeOnlyMembers, false /*excludeLocalMeanings*/)&ast.SymbolFlagsValue != 0
 }
 
+const maxTypeInstantiationDepth = 100
+
 func (c *Checker) instantiateType(t *Type, m *TypeMapper) *Type {
 	return c.instantiateTypeWithAlias(t, m, nil /*alias*/)
 }
@@ -22466,7 +22495,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	if t == nil || m == nil || !(c.couldContainTypeVariables(t) || (t.alias != nil && len(t.alias.typeArguments) > 0 && core.Some(t.alias.typeArguments, c.couldContainTypeVariables))) {
 		return t
 	}
-	if c.instantiationDepth == 100 || c.instantiationCount >= 5_000_000 {
+	if c.instantiationDepth == maxTypeInstantiationDepth || c.instantiationCount >= 5_000_000 {
 		// We have reached 100 recursive type instantiations, or 5M type instantiations caused by the same statement
 		// or expression. There is a very high likelihood we're dealing with a combination of infinite generic types
 		// that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
@@ -22736,6 +22765,9 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 			result = c.createDeferredTypeReference(t.Target(), t.AsTypeReference().node, newMapper, newAlias)
 		case target.objectFlags&ObjectFlagsMapped != 0:
 			result = c.instantiateMappedType(target, newMapper, newAlias)
+			if newAlias != nil && isDeferredMappedTypeReference(result) && result.alias != newAlias {
+				result = c.createDeferredTypeReference(result.Target(), result.AsTypeReference().node, result.Mapper(), newAlias)
+			}
 		default:
 			result = c.instantiateAnonymousType(target, newMapper, newAlias)
 		}
@@ -22851,6 +22883,22 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 		result := root.instantiations[key]
 		if result == nil {
 			newMapper := newTypeMapper(root.outerTypeParameters, typeArguments)
+			instantiate := func(m *TypeMapper, alias *TypeAlias) *Type {
+				instantiated := c.getConditionalType(root, m, forConstraint, alias)
+				// Preserve the alias on a deferred type reference without modifying a shared instantiation.
+				// Constraint approximations need not be equivalent to the original conditional type.
+				if !forConstraint && isDeferredMappedTypeReference(instantiated) && instantiated.alias == nil {
+					if alias == nil {
+						alias = c.instantiateTypeAlias(root.alias, m)
+					}
+					if alias != nil {
+						reference := c.createDeferredTypeReference(instantiated.Target(), instantiated.AsTypeReference().node, instantiated.Mapper(), alias)
+						reference.objectFlags |= instantiated.objectFlags & (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables)
+						instantiated = reference
+					}
+				}
+				return instantiated
+			}
 			checkType := root.checkType
 			var distributionType *Type
 			if root.isDistributive {
@@ -22861,10 +22909,10 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 			// result is (A extends U ? X : Y) | (B extends U ? X : Y).
 			if distributionType != nil && checkType != distributionType && distributionType.flags&(TypeFlagsUnion|TypeFlagsNever) != 0 {
 				result = c.mapTypeWithAlias(distributionType, func(t *Type) *Type {
-					return c.getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint, nil)
+					return instantiate(prependTypeMapping(checkType, t, newMapper), nil)
 				}, alias)
 			} else {
-				result = c.getConditionalType(root, newMapper, forConstraint, alias)
+				result = instantiate(newMapper, alias)
 			}
 			root.instantiations[key] = result
 		}
@@ -22941,14 +22989,59 @@ func (c *Checker) hasArrayOrTypeTypeConstraint(typeVariable *Type) bool {
 }
 
 func (c *Checker) instantiateMappedArrayType(arrayType *Type, mappedType *Type, m *TypeMapper) *Type {
-	elementType := c.instantiateMappedTypeTemplate(mappedType, c.numberType, true /*isOptional*/, m)
-	if c.isErrorType(elementType) {
-		return c.errorType
+	readonly := getModifiedReadonlyState(c.isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType))
+	return c.createDeferredMappedTypeReference(core.IfElse(readonly, c.globalReadonlyArrayType, c.globalArrayType), mappedType, m)
+}
+
+func (c *Checker) createDeferredMappedTypeReference(target *Type, mappedType *Type, m *TypeMapper) *Type {
+	if target == c.emptyGenericType {
+		return c.emptyObjectType
 	}
-	return c.createArrayTypeEx(elementType, getModifiedReadonlyState(c.isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)))
+	// Defer resolution of the type arguments so recursive mapped types can refer to this type.
+	return c.createDeferredTypeReference(target, mappedType.AsMappedType().declaration.AsNode(), m, nil)
+}
+
+func isDeferredMappedTypeReference(t *Type) bool {
+	return t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil && t.AsTypeReference().node.Kind == ast.KindMappedType
 }
 
 func (c *Checker) instantiateMappedTupleType(tupleType *Type, mappedType *Type, typeVariable *Type, m *TypeMapper) *Type {
+	if isGenericTupleType(tupleType) {
+		// Mapping a variadic element can change the tuple's shape or produce a union of tuples.
+		return c.instantiateMappedTupleTypeEager(tupleType, mappedType, typeVariable, m)
+	}
+	modifiers := getMappedTypeModifiers(mappedType)
+	elementInfos := getMappedTupleElementInfos(tupleType, modifiers)
+	readonly := getModifiedReadonlyState(tupleType.TargetTupleType().readonly, modifiers)
+	if modifiers&MappedTypeModifiersIncludeOptional != 0 && tupleType.TargetTupleType().combinedFlags&ElementFlagsRest != 0 {
+		// Optional elements after a rest element collapse into that rest. Without variadic elements,
+		// normalization of the shape is independent of the mapped element types.
+		normalizer := &TupleNormalizer{}
+		if !normalizer.normalize(c, c.getElementTypes(tupleType), elementInfos) {
+			return c.errorType
+		}
+		elementInfos = normalizer.infos
+	}
+	target := c.getTupleTargetType(elementInfos, readonly)
+	if len(elementInfos) == 0 {
+		return target
+	}
+	return c.createDeferredMappedTypeReference(target, mappedType, prependTypeMapping(typeVariable, tupleType, m))
+}
+
+func getMappedTupleElementInfos(tupleType *Type, modifiers MappedTypeModifiers) []TupleElementInfo {
+	return core.SameMap(tupleType.TargetTupleType().elementInfos, func(info TupleElementInfo) TupleElementInfo {
+		switch {
+		case modifiers&MappedTypeModifiersIncludeOptional != 0 && info.flags&ElementFlagsRequired != 0:
+			info.flags = ElementFlagsOptional
+		case modifiers&MappedTypeModifiersExcludeOptional != 0 && info.flags&ElementFlagsOptional != 0:
+			info.flags = ElementFlagsRequired
+		}
+		return info
+	})
+}
+
+func (c *Checker) instantiateMappedTupleTypeEager(tupleType *Type, mappedType *Type, typeVariable *Type, m *TypeMapper) *Type {
 	// We apply the mapped type's template type to each of the fixed part elements. For variadic elements, we
 	// apply the mapped type itself to the variadic element type. For other elements in the variable part of the
 	// tuple, we surround the element type with an array type and apply the mapped type to that. This ensures
@@ -22967,7 +23060,7 @@ func (c *Checker) instantiateMappedTupleType(tupleType *Type, mappedType *Type, 
 	modifiers := getMappedTypeModifiers(mappedType)
 	elementTypes := c.getElementTypes(tupleType)
 	newElementTypes := make([]*Type, len(elementTypes))
-	newElementInfos := slices.Clone(elementInfos)
+	newElementInfos := getMappedTupleElementInfos(tupleType, modifiers)
 	for i, e := range elementTypes {
 		flags := elementInfos[i].flags
 		var mapped *Type
@@ -22980,16 +23073,6 @@ func (c *Checker) instantiateMappedTupleType(tupleType *Type, mappedType *Type, 
 			mapped = c.getElementTypeOfArrayType(c.instantiateType(mappedType, prependTypeMapping(typeVariable, c.createArrayType(e), m)))
 			if mapped == nil {
 				mapped = c.unknownType
-			}
-		}
-		switch {
-		case modifiers&MappedTypeModifiersIncludeOptional != 0:
-			if flags&ElementFlagsRequired != 0 {
-				newElementInfos[i].flags = ElementFlagsOptional
-			}
-		case modifiers&MappedTypeModifiersExcludeOptional != 0:
-			if flags&ElementFlagsOptional != 0 {
-				newElementInfos[i].flags = ElementFlagsRequired
 			}
 		}
 		newElementTypes[i] = mapped
@@ -28273,6 +28356,9 @@ func (c *Checker) getNormalizedType(t *Type, writing bool) *Type {
 			n = t.AsLiteralType().regularType
 		case c.isGenericTupleType(t):
 			n = c.getNormalizedTupleType(t, writing)
+		case isDeferredMappedTypeReference(t):
+			// Preserve the deferred mapped type reference's recursion identity during type comparison.
+			return t
 		case t.objectFlags&ObjectFlagsReference != 0:
 			if t.AsTypeReference().node != nil {
 				n = c.createTypeReference(t.Target(), c.getTypeArguments(t))

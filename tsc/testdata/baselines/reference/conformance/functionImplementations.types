@@ -11,10 +11,10 @@ var v: void = function () { } ();
 var a: any = function f() {
 >a : any
 >function f() {    return f;} : () => typeof f
->f : () => typeof a
+>f : () => typeof f
 
     return f;
->f : () => typeof a
+>f : () => typeof f
 
 };
 var a: any = function f() {
@@ -32,14 +32,14 @@ var a: any = function f() {
 var a: any = function f() {
 >a : any
 >function f() {    var x = f;    return x;} : () => typeof f
->f : () => typeof a
+>f : () => typeof f
 
     var x = f;
->x : () => typeof a
->f : () => typeof a
+>x : () => typeof f
+>f : () => typeof f
 
     return x;
->x : () => typeof a
+>x : () => typeof f
 
 };
 

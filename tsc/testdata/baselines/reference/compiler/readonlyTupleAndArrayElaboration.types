@@ -57,7 +57,7 @@ declare const a: readonly number[];
 >a : readonly number[]
 
 declare const b: Readonly<number[]>;
->b : readonly number[]
+>b : Readonly<number[]>
 
 declare const c: ReadonlyArray<number>;
 >c : readonly number[]
@@ -70,7 +70,7 @@ arryFn2(a);
 arryFn2(b);
 >arryFn2(b) : void
 >arryFn2 : (x: Array<number>) => void
->b : readonly number[]
+>b : Readonly<number[]>
 
 arryFn2(c);
 >arryFn2(c) : void

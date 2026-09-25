@@ -9,16 +9,16 @@ type Boxify<T> = { [K in keyof T]: Box<T[K]> };
 >Boxify : Boxify<T>
 
 type T1 = Boxify<string[]>;
->T1 : Box<string>[]
+>T1 : T1
 
 type T2 = Boxify<[string, string]>;
->T2 : [Box<string>, Box<string>]
+>T2 : T2
 
 type T3 = Boxify<string[] & unknown[]>;
->T3 : Box<string>[] & Box<unknown>[]
+>T3 : Boxify<string[]> & Boxify<unknown[]>
 
 type T4 = Boxify<string[] & [string, string]>;
->T4 : Box<string>[] & [Box<string>, Box<string>]
+>T4 : Boxify<string[]> & Boxify<[string, string]>
 
 type T5 = Boxify<string[] & { x: string }>;
 >T5 : Boxify<string[] & { x: string; }>
@@ -36,5 +36,5 @@ type Hmm<T extends any[]> = T extends number[] ?
     never;
 
 type X = Hmm<[3, 4, 5]>;
->X : [1, 1, 1]
+>X : X
 

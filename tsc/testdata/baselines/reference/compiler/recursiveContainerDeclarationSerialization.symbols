@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/recursiveContainerDeclarationSerialization.ts] ////
+
+=== local.ts ===
+export function array() {
+>array : Symbol(array, Decl(local.ts, 0, 0))
+
+    type Recursive = Recursive[];
+>Recursive : Symbol(Recursive, Decl(local.ts, 0, 25))
+>Recursive : Symbol(Recursive, Decl(local.ts, 0, 25))
+
+    return null as unknown as Recursive;
+>Recursive : Symbol(Recursive, Decl(local.ts, 0, 25))
+}
+export function tuple() {
+>tuple : Symbol(tuple, Decl(local.ts, 3, 1))
+
+    type Recursive = [Recursive];
+>Recursive : Symbol(Recursive, Decl(local.ts, 4, 25))
+>Recursive : Symbol(Recursive, Decl(local.ts, 4, 25))
+
+    return null as unknown as Recursive;
+>Recursive : Symbol(Recursive, Decl(local.ts, 4, 25))
+}
+export function readonlyTuple() {
+>readonlyTuple : Symbol(readonlyTuple, Decl(local.ts, 7, 1))
+
+    type Recursive = readonly [Recursive];
+>Recursive : Symbol(Recursive, Decl(local.ts, 8, 33))
+>Recursive : Symbol(Recursive, Decl(local.ts, 8, 33))
+
+    return null as unknown as Recursive;
+>Recursive : Symbol(Recursive, Decl(local.ts, 8, 33))
+}
+export function union() {
+>union : Symbol(union, Decl(local.ts, 11, 1))
+
+    type Recursive = string | Recursive[];
+>Recursive : Symbol(Recursive, Decl(local.ts, 12, 25))
+>Recursive : Symbol(Recursive, Decl(local.ts, 12, 25))
+
+    return null as unknown as Recursive;
+>Recursive : Symbol(Recursive, Decl(local.ts, 12, 25))
+}
+
+=== nameable.ts ===
+export type RecursiveArray = RecursiveArray[];
+>RecursiveArray : Symbol(RecursiveArray, Decl(nameable.ts, 0, 0))
+>RecursiveArray : Symbol(RecursiveArray, Decl(nameable.ts, 0, 0))
+
+export type RecursiveTuple = readonly [RecursiveTuple];
+>RecursiveTuple : Symbol(RecursiveTuple, Decl(nameable.ts, 0, 46))
+>RecursiveTuple : Symbol(RecursiveTuple, Decl(nameable.ts, 0, 46))
+
+declare const array: RecursiveArray;
+>array : Symbol(array, Decl(nameable.ts, 2, 13))
+>RecursiveArray : Symbol(RecursiveArray, Decl(nameable.ts, 0, 0))
+
+declare const tuple: RecursiveTuple;
+>tuple : Symbol(tuple, Decl(nameable.ts, 3, 13))
+>RecursiveTuple : Symbol(RecursiveTuple, Decl(nameable.ts, 0, 46))
+
+export const namedArray = array;
+>namedArray : Symbol(namedArray, Decl(nameable.ts, 4, 12))
+>array : Symbol(array, Decl(nameable.ts, 2, 13))
+
+export const namedTuple = tuple;
+>namedTuple : Symbol(namedTuple, Decl(nameable.ts, 5, 12))
+>tuple : Symbol(tuple, Decl(nameable.ts, 3, 13))
+
+export function finite() {
+>finite : Symbol(finite, Decl(nameable.ts, 5, 32))
+
+    type Nested = [[[[[[[[[[[[[number]]]]]]]]]]]]];
+>Nested : Symbol(Nested, Decl(nameable.ts, 6, 26))
+
+    return null as unknown as Nested;
+>Nested : Symbol(Nested, Decl(nameable.ts, 6, 26))
+}
+

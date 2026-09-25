@@ -1,0 +1,57 @@
+noImplicitThisBigThis.ts(3,10): error TS5088: The inferred type of 'createObj' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+noImplicitThisBigThis.ts(17,10): error TS5088: The inferred type of 'createObjNoCrash' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== noImplicitThisBigThis.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/29902
+    
+    function createObj() {
+             ~~~~~~~~~
+!!! error TS5088: The inferred type of 'createObj' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        return {
+            func1() {
+                return this;
+            },
+            func2() {
+                return this;
+            },
+            func3() {
+                return this;
+            }
+        };
+    }
+    
+    function createObjNoCrash() {
+             ~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of 'createObjNoCrash' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        return {
+            func1() {
+                return this;
+            },
+            func2() {
+                return this;
+            },
+            func3() {
+                return this;
+            },
+            func4() {
+                return this;
+            },
+            func5() {
+                return this;
+            },
+            func6() {
+                return this;
+            },
+            func7() {
+                return this;
+            },
+            func8() {
+                return this;
+            },
+            func9() {
+                return this;
+            }
+        };
+    }
+    

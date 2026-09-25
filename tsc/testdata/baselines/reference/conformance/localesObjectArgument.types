@@ -43,7 +43,7 @@ const str = "";
 >"" : ""
 
 const readonlyLocales: Readonly<string[]> = ['de-DE', 'ja-JP'];
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 >['de-DE', 'ja-JP'] : string[]
 >'de-DE' : "de-DE"
 >'ja-JP' : "ja-JP"
@@ -199,7 +199,7 @@ new Intl.PluralRules(readonlyLocales);
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >Intl : typeof Intl
 >PluralRules : Intl.PluralRulesConstructor
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 Intl.PluralRules.supportedLocalesOf(enUS);
 >Intl.PluralRules.supportedLocalesOf(enUS) : string[]
@@ -228,7 +228,7 @@ Intl.PluralRules.supportedLocalesOf(readonlyLocales);
 >Intl : typeof Intl
 >PluralRules : Intl.PluralRulesConstructor
 >supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 new Intl.RelativeTimeFormat(enUS);
 >new Intl.RelativeTimeFormat(enUS) : Intl.RelativeTimeFormat
@@ -251,7 +251,7 @@ new Intl.RelativeTimeFormat(readonlyLocales);
 >Intl.RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.UnicodeBCP47LocaleIdentifier[]; }
 >Intl : typeof Intl
 >RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.UnicodeBCP47LocaleIdentifier[]; }
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 Intl.RelativeTimeFormat.supportedLocalesOf(enUS);
 >Intl.RelativeTimeFormat.supportedLocalesOf(enUS) : string[]
@@ -280,7 +280,7 @@ Intl.RelativeTimeFormat.supportedLocalesOf(readonlyLocales);
 >Intl : typeof Intl
 >RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.UnicodeBCP47LocaleIdentifier[]; }
 >supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => Intl.UnicodeBCP47LocaleIdentifier[]
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 new Intl.Collator(enUS);
 >new Intl.Collator(enUS) : Intl.Collator
@@ -303,7 +303,7 @@ new Intl.Collator(readonlyLocales);
 >Intl.Collator : Intl.CollatorConstructor
 >Intl : typeof Intl
 >Collator : Intl.CollatorConstructor
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 Intl.Collator.supportedLocalesOf(enUS);
 >Intl.Collator.supportedLocalesOf(enUS) : string[]
@@ -346,7 +346,7 @@ new Intl.DateTimeFormat(readonlyLocales);
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >Intl : typeof Intl
 >DateTimeFormat : Intl.DateTimeFormatConstructor
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 Intl.DateTimeFormat.supportedLocalesOf(enUS);
 >Intl.DateTimeFormat.supportedLocalesOf(enUS) : string[]
@@ -375,7 +375,7 @@ Intl.DateTimeFormat.supportedLocalesOf(readonlyLocales);
 >Intl : typeof Intl
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >supportedLocalesOf : { (locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 new Intl.NumberFormat(enUS);
 >new Intl.NumberFormat(enUS) : Intl.NumberFormat
@@ -398,7 +398,7 @@ new Intl.NumberFormat(readonlyLocales);
 >Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
 >NumberFormat : Intl.NumberFormatConstructor
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 
 Intl.NumberFormat.supportedLocalesOf(enUS);
 >Intl.NumberFormat.supportedLocalesOf(enUS) : string[]
@@ -416,5 +416,5 @@ Intl.NumberFormat.supportedLocalesOf(readonlyLocales);
 >Intl : typeof Intl
 >NumberFormat : Intl.NumberFormatConstructor
 >supportedLocalesOf : { (locales: string | string[], options?: Intl.NumberFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
->readonlyLocales : readonly string[]
+>readonlyLocales : Readonly<string[]>
 

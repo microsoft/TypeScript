@@ -1,0 +1,269 @@
+//// [tests/cases/compiler/deferredMappedTypeDeclarationDepth.ts] ////
+
+=== growing.ts ===
+export function tuple() {
+>tuple : Symbol(tuple, Decl(growing.ts, 0, 0))
+
+    type C<T> = { [K in keyof T]: C<[T]> };
+>C : Symbol(C, Decl(growing.ts, 0, 25))
+>T : Symbol(T, Decl(growing.ts, 1, 11))
+>K : Symbol(K, Decl(growing.ts, 1, 19))
+>T : Symbol(T, Decl(growing.ts, 1, 11))
+>C : Symbol(C, Decl(growing.ts, 0, 25))
+>T : Symbol(T, Decl(growing.ts, 1, 11))
+
+    return null as unknown as C<[number]>;
+>C : Symbol(C, Decl(growing.ts, 0, 25))
+}
+
+export function array() {
+>array : Symbol(array, Decl(growing.ts, 3, 1))
+
+    type C<T> = { [K in keyof T]: C<T[]> };
+>C : Symbol(C, Decl(growing.ts, 5, 25))
+>T : Symbol(T, Decl(growing.ts, 6, 11))
+>K : Symbol(K, Decl(growing.ts, 6, 19))
+>T : Symbol(T, Decl(growing.ts, 6, 11))
+>C : Symbol(C, Decl(growing.ts, 5, 25))
+>T : Symbol(T, Decl(growing.ts, 6, 11))
+
+    return null as unknown as C<number[]>;
+>C : Symbol(C, Decl(growing.ts, 5, 25))
+}
+
+export function changingTuple() {
+>changingTuple : Symbol(changingTuple, Decl(growing.ts, 8, 1))
+
+    type C<T, S extends string> = { [K in keyof T]: C<T, `${S}x`> };
+>C : Symbol(C, Decl(growing.ts, 10, 33))
+>T : Symbol(T, Decl(growing.ts, 11, 11))
+>S : Symbol(S, Decl(growing.ts, 11, 13))
+>K : Symbol(K, Decl(growing.ts, 11, 37))
+>T : Symbol(T, Decl(growing.ts, 11, 11))
+>C : Symbol(C, Decl(growing.ts, 10, 33))
+>T : Symbol(T, Decl(growing.ts, 11, 11))
+>S : Symbol(S, Decl(growing.ts, 11, 13))
+
+    return null as unknown as C<[number], "">;
+>C : Symbol(C, Decl(growing.ts, 10, 33))
+}
+
+export function changingArray() {
+>changingArray : Symbol(changingArray, Decl(growing.ts, 13, 1))
+
+    type C<T, S extends string> = { [K in keyof T]: C<T, `${S}x`> };
+>C : Symbol(C, Decl(growing.ts, 15, 33))
+>T : Symbol(T, Decl(growing.ts, 16, 11))
+>S : Symbol(S, Decl(growing.ts, 16, 13))
+>K : Symbol(K, Decl(growing.ts, 16, 37))
+>T : Symbol(T, Decl(growing.ts, 16, 11))
+>C : Symbol(C, Decl(growing.ts, 15, 33))
+>T : Symbol(T, Decl(growing.ts, 16, 11))
+>S : Symbol(S, Decl(growing.ts, 16, 13))
+
+    return null as unknown as C<number[], "">;
+>C : Symbol(C, Decl(growing.ts, 15, 33))
+}
+
+export function nestedContext() {
+>nestedContext : Symbol(nestedContext, Decl(growing.ts, 18, 1))
+
+    type C<T, S> = { [K in keyof T]: C<T, C<S, S>> };
+>C : Symbol(C, Decl(growing.ts, 20, 33))
+>T : Symbol(T, Decl(growing.ts, 21, 11))
+>S : Symbol(S, Decl(growing.ts, 21, 13))
+>K : Symbol(K, Decl(growing.ts, 21, 22))
+>T : Symbol(T, Decl(growing.ts, 21, 11))
+>C : Symbol(C, Decl(growing.ts, 20, 33))
+>T : Symbol(T, Decl(growing.ts, 21, 11))
+>C : Symbol(C, Decl(growing.ts, 20, 33))
+>S : Symbol(S, Decl(growing.ts, 21, 13))
+>S : Symbol(S, Decl(growing.ts, 21, 13))
+
+    return null as unknown as C<[number], [number]>;
+>C : Symbol(C, Decl(growing.ts, 20, 33))
+}
+
+=== finite.ts ===
+type Previous = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+>Previous : Symbol(Previous, Decl(finite.ts, 0, 0))
+
+export function array() {
+>array : Symbol(array, Decl(finite.ts, 0, 70))
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : Symbol(P, Decl(finite.ts, 2, 25))
+>T : Symbol(T, Decl(finite.ts, 3, 11))
+>T : Symbol(T, Decl(finite.ts, 3, 11))
+>K : Symbol(K, Decl(finite.ts, 3, 38))
+>T : Symbol(T, Decl(finite.ts, 3, 11))
+>P : Symbol(P, Decl(finite.ts, 2, 25))
+>T : Symbol(T, Decl(finite.ts, 3, 11))
+>K : Symbol(K, Decl(finite.ts, 3, 38))
+>T : Symbol(T, Decl(finite.ts, 3, 11))
+
+    return null as unknown as P<number[][][][][][][][][][][][][]>;
+>P : Symbol(P, Decl(finite.ts, 2, 25))
+}
+
+export function tuple() {
+>tuple : Symbol(tuple, Decl(finite.ts, 5, 1))
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : Symbol(P, Decl(finite.ts, 7, 25))
+>T : Symbol(T, Decl(finite.ts, 8, 11))
+>T : Symbol(T, Decl(finite.ts, 8, 11))
+>K : Symbol(K, Decl(finite.ts, 8, 38))
+>T : Symbol(T, Decl(finite.ts, 8, 11))
+>P : Symbol(P, Decl(finite.ts, 7, 25))
+>T : Symbol(T, Decl(finite.ts, 8, 11))
+>K : Symbol(K, Decl(finite.ts, 8, 38))
+>T : Symbol(T, Decl(finite.ts, 8, 11))
+
+    return null as unknown as P<[[[[[[[[[[[[[number]]]]]]]]]]]]]>;
+>P : Symbol(P, Decl(finite.ts, 7, 25))
+}
+
+export function composedArray() {
+>composedArray : Symbol(composedArray, Decl(finite.ts, 10, 1))
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : Symbol(P, Decl(finite.ts, 12, 33))
+>T : Symbol(T, Decl(finite.ts, 13, 11))
+>T : Symbol(T, Decl(finite.ts, 13, 11))
+>K : Symbol(K, Decl(finite.ts, 13, 38))
+>T : Symbol(T, Decl(finite.ts, 13, 11))
+>P : Symbol(P, Decl(finite.ts, 12, 33))
+>T : Symbol(T, Decl(finite.ts, 13, 11))
+>K : Symbol(K, Decl(finite.ts, 13, 38))
+>T : Symbol(T, Decl(finite.ts, 13, 11))
+
+    type Q<T> = T extends object ? { [K in keyof T]: Q<T[K]> } : T;
+>Q : Symbol(Q, Decl(finite.ts, 13, 67))
+>T : Symbol(T, Decl(finite.ts, 14, 11))
+>T : Symbol(T, Decl(finite.ts, 14, 11))
+>K : Symbol(K, Decl(finite.ts, 14, 38))
+>T : Symbol(T, Decl(finite.ts, 14, 11))
+>Q : Symbol(Q, Decl(finite.ts, 13, 67))
+>T : Symbol(T, Decl(finite.ts, 14, 11))
+>K : Symbol(K, Decl(finite.ts, 14, 38))
+>T : Symbol(T, Decl(finite.ts, 14, 11))
+
+    return null as unknown as P<Q<number[][][][][][][][][][][][][]>>;
+>P : Symbol(P, Decl(finite.ts, 12, 33))
+>Q : Symbol(Q, Decl(finite.ts, 13, 67))
+}
+
+export function composedTuple() {
+>composedTuple : Symbol(composedTuple, Decl(finite.ts, 16, 1))
+
+    type P<T> = T extends object ? { [K in keyof T]: P<T[K]> } : T;
+>P : Symbol(P, Decl(finite.ts, 18, 33))
+>T : Symbol(T, Decl(finite.ts, 19, 11))
+>T : Symbol(T, Decl(finite.ts, 19, 11))
+>K : Symbol(K, Decl(finite.ts, 19, 38))
+>T : Symbol(T, Decl(finite.ts, 19, 11))
+>P : Symbol(P, Decl(finite.ts, 18, 33))
+>T : Symbol(T, Decl(finite.ts, 19, 11))
+>K : Symbol(K, Decl(finite.ts, 19, 38))
+>T : Symbol(T, Decl(finite.ts, 19, 11))
+
+    type Q<T> = T extends object ? { [K in keyof T]: Q<T[K]> } : T;
+>Q : Symbol(Q, Decl(finite.ts, 19, 67))
+>T : Symbol(T, Decl(finite.ts, 20, 11))
+>T : Symbol(T, Decl(finite.ts, 20, 11))
+>K : Symbol(K, Decl(finite.ts, 20, 38))
+>T : Symbol(T, Decl(finite.ts, 20, 11))
+>Q : Symbol(Q, Decl(finite.ts, 19, 67))
+>T : Symbol(T, Decl(finite.ts, 20, 11))
+>K : Symbol(K, Decl(finite.ts, 20, 38))
+>T : Symbol(T, Decl(finite.ts, 20, 11))
+
+    return null as unknown as P<Q<[[[[[[[[[[[[[number]]]]]]]]]]]]]>>;
+>P : Symbol(P, Decl(finite.ts, 18, 33))
+>Q : Symbol(Q, Decl(finite.ts, 19, 67))
+}
+
+export function boundedArray() {
+>boundedArray : Symbol(boundedArray, Decl(finite.ts, 22, 1))
+
+    type C<T, D extends number> = { [K in keyof T]: D extends 0 ? T[K] : C<T, Previous[D]> };
+>C : Symbol(C, Decl(finite.ts, 24, 32))
+>T : Symbol(T, Decl(finite.ts, 25, 11))
+>D : Symbol(D, Decl(finite.ts, 25, 13))
+>K : Symbol(K, Decl(finite.ts, 25, 37))
+>T : Symbol(T, Decl(finite.ts, 25, 11))
+>D : Symbol(D, Decl(finite.ts, 25, 13))
+>T : Symbol(T, Decl(finite.ts, 25, 11))
+>K : Symbol(K, Decl(finite.ts, 25, 37))
+>C : Symbol(C, Decl(finite.ts, 24, 32))
+>T : Symbol(T, Decl(finite.ts, 25, 11))
+>Previous : Symbol(Previous, Decl(finite.ts, 0, 0))
+>D : Symbol(D, Decl(finite.ts, 25, 13))
+
+    return null as unknown as C<number[], 13>;
+>C : Symbol(C, Decl(finite.ts, 24, 32))
+}
+
+export function boundedTuple() {
+>boundedTuple : Symbol(boundedTuple, Decl(finite.ts, 27, 1))
+
+    type C<T, D extends number> = { [K in keyof T]: D extends 0 ? T[K] : C<T, Previous[D]> };
+>C : Symbol(C, Decl(finite.ts, 29, 32))
+>T : Symbol(T, Decl(finite.ts, 30, 11))
+>D : Symbol(D, Decl(finite.ts, 30, 13))
+>K : Symbol(K, Decl(finite.ts, 30, 37))
+>T : Symbol(T, Decl(finite.ts, 30, 11))
+>D : Symbol(D, Decl(finite.ts, 30, 13))
+>T : Symbol(T, Decl(finite.ts, 30, 11))
+>K : Symbol(K, Decl(finite.ts, 30, 37))
+>C : Symbol(C, Decl(finite.ts, 29, 32))
+>T : Symbol(T, Decl(finite.ts, 30, 11))
+>Previous : Symbol(Previous, Decl(finite.ts, 0, 0))
+>D : Symbol(D, Decl(finite.ts, 30, 13))
+
+    return null as unknown as C<[number], 13>;
+>C : Symbol(C, Decl(finite.ts, 29, 32))
+}
+
+interface Step<T> { next: T }
+>Step : Symbol(Step, Decl(finite.ts, 32, 1))
+>T : Symbol(T, Decl(finite.ts, 34, 15))
+>next : Symbol(Step.next, Decl(finite.ts, 34, 19))
+>T : Symbol(T, Decl(finite.ts, 34, 15))
+
+type BuildChain<D extends number, T = null> = D extends 0 ? T : BuildChain<Previous[D], Step<T>>;
+>BuildChain : Symbol(BuildChain, Decl(finite.ts, 34, 29))
+>D : Symbol(D, Decl(finite.ts, 35, 16))
+>T : Symbol(T, Decl(finite.ts, 35, 33))
+>D : Symbol(D, Decl(finite.ts, 35, 16))
+>T : Symbol(T, Decl(finite.ts, 35, 33))
+>BuildChain : Symbol(BuildChain, Decl(finite.ts, 34, 29))
+>Previous : Symbol(Previous, Decl(finite.ts, 0, 0))
+>D : Symbol(D, Decl(finite.ts, 35, 16))
+>Step : Symbol(Step, Decl(finite.ts, 32, 1))
+>T : Symbol(T, Decl(finite.ts, 35, 33))
+
+export function boundedChain() {
+>boundedChain : Symbol(boundedChain, Decl(finite.ts, 35, 97))
+
+    type C<T, D> = { [K in keyof T]: D extends Step<infer R> ? C<T, R> : T[K] };
+>C : Symbol(C, Decl(finite.ts, 37, 32))
+>T : Symbol(T, Decl(finite.ts, 38, 11))
+>D : Symbol(D, Decl(finite.ts, 38, 13))
+>K : Symbol(K, Decl(finite.ts, 38, 22))
+>T : Symbol(T, Decl(finite.ts, 38, 11))
+>D : Symbol(D, Decl(finite.ts, 38, 13))
+>Step : Symbol(Step, Decl(finite.ts, 32, 1))
+>R : Symbol(R, Decl(finite.ts, 38, 57))
+>C : Symbol(C, Decl(finite.ts, 37, 32))
+>T : Symbol(T, Decl(finite.ts, 38, 11))
+>R : Symbol(R, Decl(finite.ts, 38, 57))
+>T : Symbol(T, Decl(finite.ts, 38, 11))
+>K : Symbol(K, Decl(finite.ts, 38, 22))
+
+    return null as unknown as C<[number], BuildChain<13>>;
+>C : Symbol(C, Decl(finite.ts, 37, 32))
+>BuildChain : Symbol(BuildChain, Decl(finite.ts, 34, 29))
+}
+

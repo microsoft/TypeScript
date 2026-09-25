@@ -10,16 +10,16 @@ type M<T> = { [P in keyof T]: T[P] };
 >M : M<T>
 
 type KA = K<[string, string, boolean]>;  // ["0", "1", "2"]
->KA : ["0", "1", "2"]
+>KA : KA
 
 type KB = K<[string, string, ...string[], string]>;  // ["0", "1", ...number[], number]
->KB : ["0", "1", ...number[], number]
+>KB : KB
 
 type KC = K<[...string[]]>;  // number[]
->KC : number[]
+>KC : KC
 
 type KD = K<string[]>;  // number[]
->KD : number[]
+>KD : KD
 
 type A = { a: string };
 >A : A
@@ -61,10 +61,10 @@ type Keys<O extends unknown[]> = { [K in keyof O]: K };
 >Keys : Keys<O>
 
 type Keys1 = Keys<[string, ...string[]]>;
->Keys1 : ["0", ...number[]]
+>Keys1 : Keys1
 
 type Keys2 = Keys<[string, ...string[], number]>;
->Keys2 : ["0", ...number[], number]
+>Keys2 : Keys2
 
 // Repro from #56888
 
@@ -86,5 +86,5 @@ type R1<T> = readonly [...unknown[], T];  // readonly [...unknown[], T]
 >R1 : R1<T>
 
 type R2<T> = Readonly<[...unknown[], T]>;  // readonly [...unknown[], T]
->R2 : readonly [...unknown[], T]
+>R2 : R2<T>
 

@@ -39,8 +39,8 @@ new c(1);
 >1 : 1
 
 const a = Object.freeze([1, 2, 3]);
->a : readonly number[]
->Object.freeze([1, 2, 3]) : readonly number[]
+>a : Readonly<number[]>
+>Object.freeze([1, 2, 3]) : Readonly<number[]>
 >Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
 >freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
@@ -52,12 +52,12 @@ const a = Object.freeze([1, 2, 3]);
 a[0] = a[2].toString();
 >a[0] = a[2].toString() : string
 >a[0] : number
->a : readonly number[]
+>a : Readonly<number[]>
 >0 : 0
 >a[2].toString() : string
 >a[2].toString : (radix?: number) => string
 >a[2] : number
->a : readonly number[]
+>a : Readonly<number[]>
 >2 : 2
 >toString : (radix?: number) => string
 

@@ -2,7 +2,7 @@ readonlyTupleAndArrayElaboration.ts(10,20): error TS4104: The type 'readonly [3,
 readonlyTupleAndArrayElaboration.ts(13,8): error TS4104: The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
 readonlyTupleAndArrayElaboration.ts(16,9): error TS4104: The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
 readonlyTupleAndArrayElaboration.ts(22,9): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
-readonlyTupleAndArrayElaboration.ts(23,9): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+readonlyTupleAndArrayElaboration.ts(23,9): error TS4104: The type 'Readonly<number[]>' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
 readonlyTupleAndArrayElaboration.ts(24,9): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
 readonlyTupleAndArrayElaboration.ts(27,7): error TS2322: Type 'readonly [1]' is not assignable to type 'readonly []'.
   Source has 1 element(s) but target allows only 0.
@@ -67,7 +67,7 @@ readonlyTupleAndArrayElaboration.ts(72,7): error TS2322: Type 'number[]' is not 
 !!! error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
     arryFn2(b);
             ~
-!!! error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+!!! error TS4104: The type 'Readonly<number[]>' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
     arryFn2(c);
             ~
 !!! error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.

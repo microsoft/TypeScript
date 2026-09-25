@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/mappedTupleInstantiationSharing.ts] ////
+
+=== mappedTupleInstantiationSharing.ts ===
+type Select<T, I extends (keyof T)[]> = { [K in keyof I]: T[I[K]] };
+>Select : Symbol(Select, Decl(mappedTupleInstantiationSharing.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTupleInstantiationSharing.ts, 0, 12))
+>I : Symbol(I, Decl(mappedTupleInstantiationSharing.ts, 0, 14))
+>T : Symbol(T, Decl(mappedTupleInstantiationSharing.ts, 0, 12))
+>K : Symbol(K, Decl(mappedTupleInstantiationSharing.ts, 0, 43))
+>I : Symbol(I, Decl(mappedTupleInstantiationSharing.ts, 0, 14))
+>T : Symbol(T, Decl(mappedTupleInstantiationSharing.ts, 0, 12))
+>I : Symbol(I, Decl(mappedTupleInstantiationSharing.ts, 0, 14))
+>K : Symbol(K, Decl(mappedTupleInstantiationSharing.ts, 0, 43))
+
+interface Box<T extends unknown[]> {
+>Box : Symbol(Box, Decl(mappedTupleInstantiationSharing.ts, 0, 68))
+>T : Symbol(T, Decl(mappedTupleInstantiationSharing.ts, 1, 14))
+
+    value: T;
+>value : Symbol(Box.value, Decl(mappedTupleInstantiationSharing.ts, 1, 36))
+>T : Symbol(T, Decl(mappedTupleInstantiationSharing.ts, 1, 14))
+
+    callback: (...args: T) => T;
+>callback : Symbol(Box.callback, Decl(mappedTupleInstantiationSharing.ts, 2, 13))
+>args : Symbol(args, Decl(mappedTupleInstantiationSharing.ts, 3, 15))
+>T : Symbol(T, Decl(mappedTupleInstantiationSharing.ts, 1, 14))
+>T : Symbol(T, Decl(mappedTupleInstantiationSharing.ts, 1, 14))
+}
+type Boxes<Tag> = Tag extends unknown ? Box<Select<[Tag, string], [1]>> : never;
+>Boxes : Symbol(Boxes, Decl(mappedTupleInstantiationSharing.ts, 4, 1))
+>Tag : Symbol(Tag, Decl(mappedTupleInstantiationSharing.ts, 5, 11))
+>Tag : Symbol(Tag, Decl(mappedTupleInstantiationSharing.ts, 5, 11))
+>Box : Symbol(Box, Decl(mappedTupleInstantiationSharing.ts, 0, 68))
+>Select : Symbol(Select, Decl(mappedTupleInstantiationSharing.ts, 0, 0))
+>Tag : Symbol(Tag, Decl(mappedTupleInstantiationSharing.ts, 5, 11))
+
+declare const boxes: Boxes<0 | 1 | 2 | 3 | 4 | 5 | 6 | 7>;
+>boxes : Symbol(boxes, Decl(mappedTupleInstantiationSharing.ts, 6, 13))
+>Boxes : Symbol(Boxes, Decl(mappedTupleInstantiationSharing.ts, 4, 1))
+
+const result: [string] = boxes.callback("hello");
+>result : Symbol(result, Decl(mappedTupleInstantiationSharing.ts, 7, 5))
+>boxes.callback : Symbol(Box.callback, Decl(mappedTupleInstantiationSharing.ts, 2, 13))
+>boxes : Symbol(boxes, Decl(mappedTupleInstantiationSharing.ts, 6, 13))
+>callback : Symbol(Box.callback, Decl(mappedTupleInstantiationSharing.ts, 2, 13))
+

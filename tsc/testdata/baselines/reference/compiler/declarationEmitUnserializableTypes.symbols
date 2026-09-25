@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/declarationEmitUnserializableTypes.ts] ////
+
+=== local.ts ===
+export function localArrow() {
+>localArrow : Symbol(localArrow, Decl(local.ts, 0, 0))
+
+    const inner = () => inner;
+>inner : Symbol(inner, Decl(local.ts, 1, 9))
+>inner : Symbol(inner, Decl(local.ts, 1, 9))
+
+    return inner;
+>inner : Symbol(inner, Decl(local.ts, 1, 9))
+}
+export function localDeclaration() {
+>localDeclaration : Symbol(localDeclaration, Decl(local.ts, 3, 1))
+
+    function inner() { return inner; }
+>inner : Symbol(inner, Decl(local.ts, 4, 36))
+>inner : Symbol(inner, Decl(local.ts, 4, 36))
+
+    return inner;
+>inner : Symbol(inner, Decl(local.ts, 4, 36))
+}
+export function localInstantiation() {
+>localInstantiation : Symbol(localInstantiation, Decl(local.ts, 7, 1))
+
+    function inner<T>(): typeof inner<T> { return inner<T>; }
+>inner : Symbol(inner, Decl(local.ts, 8, 38))
+>T : Symbol(T, Decl(local.ts, 9, 19))
+>inner : Symbol(inner, Decl(local.ts, 8, 38))
+>T : Symbol(T, Decl(local.ts, 9, 19))
+>inner : Symbol(inner, Decl(local.ts, 8, 38))
+>T : Symbol(T, Decl(local.ts, 9, 19))
+
+    return inner<number>;
+>inner : Symbol(inner, Decl(local.ts, 8, 38))
+}
+export const object = {
+>object : Symbol(object, Decl(local.ts, 12, 12))
+
+    self() { return object; }
+>self : Symbol(self, Decl(local.ts, 12, 23))
+>object : Symbol(object, Decl(local.ts, 12, 12))
+
+};
+export const annotatedObject: { self(): typeof annotatedObject } = {
+>annotatedObject : Symbol(annotatedObject, Decl(local.ts, 15, 12))
+>self : Symbol(self, Decl(local.ts, 15, 31))
+>annotatedObject : Symbol(annotatedObject, Decl(local.ts, 15, 12))
+
+    self() { return annotatedObject; }
+>self : Symbol(self, Decl(local.ts, 15, 68))
+>annotatedObject : Symbol(annotatedObject, Decl(local.ts, 15, 12))
+
+};
+
+=== growing.ts ===
+export function grow<T extends object>(value: T) {
+>grow : Symbol(grow, Decl(growing.ts, 0, 0))
+>T : Symbol(T, Decl(growing.ts, 0, 21))
+>value : Symbol(value, Decl(growing.ts, 0, 39))
+>T : Symbol(T, Decl(growing.ts, 0, 21))
+
+    return {
+        value,
+>value : Symbol(value, Decl(growing.ts, 1, 12))
+
+        deeper: <U extends object>(next: U) => grow<T & U>({ ...value, ...next }),
+>deeper : Symbol(deeper, Decl(growing.ts, 2, 14))
+>U : Symbol(U, Decl(growing.ts, 3, 17))
+>next : Symbol(next, Decl(growing.ts, 3, 35))
+>U : Symbol(U, Decl(growing.ts, 3, 17))
+>grow : Symbol(grow, Decl(growing.ts, 0, 0))
+>T : Symbol(T, Decl(growing.ts, 0, 21))
+>U : Symbol(U, Decl(growing.ts, 3, 17))
+>value : Symbol(value, Decl(growing.ts, 0, 39))
+>next : Symbol(next, Decl(growing.ts, 3, 35))
+
+    };
+}
+
+=== annotatedLocal.ts ===
+interface Recursive {
+>Recursive : Symbol(Recursive, Decl(annotatedLocal.ts, 0, 0))
+
+    (): Recursive;
+>Recursive : Symbol(Recursive, Decl(annotatedLocal.ts, 0, 0))
+}
+export function local(): Recursive {
+>local : Symbol(local, Decl(annotatedLocal.ts, 2, 1))
+>Recursive : Symbol(Recursive, Decl(annotatedLocal.ts, 0, 0))
+
+    const inner = () => inner;
+>inner : Symbol(inner, Decl(annotatedLocal.ts, 4, 9))
+>inner : Symbol(inner, Decl(annotatedLocal.ts, 4, 9))
+
+    return inner;
+>inner : Symbol(inner, Decl(annotatedLocal.ts, 4, 9))
+}
+

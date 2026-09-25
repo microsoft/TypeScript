@@ -41,6 +41,15 @@ func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.P
 			return result
 		}
 	}
+	switch t.Kind {
+	case pseudochecker.PseudoTypeKindSingleCallSignature, pseudochecker.PseudoTypeKindObjectLiteral, pseudochecker.PseudoTypeKindTuple:
+		// Mark structural pseudotypes as visited before serializing them.
+		// Checker fallbacks must recognize recursive references to the type being emitted.
+		if !b.ctx.visitedTypes.Has(checkerType.id) {
+			b.ctx.visitedTypes.Add(checkerType.id)
+			defer b.ctx.visitedTypes.Delete(checkerType.id)
+		}
+	}
 	return b.pseudoTypeToNode(t)
 }
 

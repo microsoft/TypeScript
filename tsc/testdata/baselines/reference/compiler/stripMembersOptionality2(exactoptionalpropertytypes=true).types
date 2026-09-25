@@ -14,10 +14,10 @@ const obj1: WithObject1 = { a: undefined };
 >undefined : undefined
 
 type WithArray1 = Required<[(string | undefined)?]>;
->WithArray1 : [string | undefined]
+>WithArray1 : WithArray1
 
 const tup1: WithArray1 = [undefined];
->tup1 : [string | undefined]
+>tup1 : WithArray1
 >[undefined] : [undefined]
 >undefined : undefined
 
@@ -38,10 +38,10 @@ const obj2: WithObject2 = { a: "1", b: undefined };
 >undefined : undefined
 
 type WithArray2 = ToStringOrUnd<[1, 2?]>;
->WithArray2 : [string | undefined, string | undefined]
+>WithArray2 : WithArray2
 
 const tup2: WithArray2 = ["1", undefined];
->tup2 : [string | undefined, string | undefined]
+>tup2 : WithArray2
 >["1", undefined] : [string, undefined]
 >"1" : "1"
 >undefined : undefined
