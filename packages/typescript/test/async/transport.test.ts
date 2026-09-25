@@ -362,4 +362,27 @@ describe("async transport", () => {
         await assert.rejects(text, /Client is closed/);
         await assert.rejects(binary, /Client is closed/);
     });
+
+    test("rejects thenable callback results", () => {
+        let registeredCallback: ((name: string, payload: string) => string) | undefined;
+        const client = new TransportClient({
+            request() {
+                throw new Error("Unexpected request");
+            },
+            requestBinary() {
+                throw new Error("Unexpected binary request");
+            },
+            close() {},
+            registerCallback(_name, callback) {
+                registeredCallback = callback;
+            },
+            unregisterCallback() {},
+        }, false);
+
+        client.registerCallback("callback", () => ({ then() {} }));
+        assert.throws(
+            () => registeredCallback?.("callback", "null"),
+            /Injected transport callbacks must complete synchronously/,
+        );
+    });
 });

@@ -136,7 +136,7 @@ export class TransportClient {
         }
         register.call(this.transport, name, (_, payload) => {
             const result = callback(JSON.parse(payload));
-            if (result instanceof Promise) {
+            if (isPromiseLike(result)) {
                 throw new Error("Injected transport callbacks must complete synchronously");
             }
             return JSON.stringify(result) ?? "";
@@ -242,6 +242,7 @@ export class TransportClient {
                         resolve(item.result);
                     }
                 }
+
                 return;
             }
 
@@ -296,4 +297,12 @@ export class TransportClient {
             bytesReceived,
         });
     }
+}
+
+function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
+    return (
+        (typeof value === "object" && value !== null || typeof value === "function")
+        && "then" in value
+        && typeof value.then === "function"
+    );
 }
