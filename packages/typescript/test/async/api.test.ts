@@ -379,7 +379,8 @@ describe("API", { concurrency }, () => {
     test("createSourceFile", async () => {
         await using api = spawnAPI();
         const sourceText = "export const element = <div />;";
-        const sourceFile = await api.createSourceFile("/component.tsx", sourceText);
+        await using retained = await api.createSourceFile("/component.tsx", sourceText);
+        const sourceFile = retained.sourceFile;
         assert.equal(sourceFile.fileName, "/component.tsx");
         assert.match(sourceFile.path, /\/component\.tsx$/);
         assert.equal(sourceFile.text, sourceText);
@@ -387,14 +388,35 @@ describe("API", { concurrency }, () => {
         assert.equal(sourceFile.statements.length, 1);
         assert.strictEqual(sourceFile.statements[0].parent, sourceFile);
 
-        assert.equal((await api.createSourceFile("", "")).scriptKind, ScriptKind.TS);
-        assert.equal((await api.createSourceFile(".", "")).scriptKind, ScriptKind.TS);
+        await using retainedAgain = await api.createSourceFile("/component.tsx", sourceText);
+        assert.strictEqual(retainedAgain.sourceFile, sourceFile);
 
-        const overridden = await api.createSourceFile("/component.txt", sourceText, { scriptKind: ScriptKind.TSX });
-        assert.equal(overridden.scriptKind, ScriptKind.TSX);
-        assert.equal(overridden.statements.length, 1);
+        await using empty = await api.createSourceFile("", "");
+        assert.equal(empty.sourceFile.scriptKind, ScriptKind.TS);
+        await using dot = await api.createSourceFile(".", "");
+        assert.equal(dot.sourceFile.scriptKind, ScriptKind.TS);
+
+        await using overridden = await api.createSourceFile("/component.txt", sourceText, { scriptKind: ScriptKind.TSX });
+        assert.equal(overridden.sourceFile.scriptKind, ScriptKind.TSX);
+        assert.equal(overridden.sourceFile.statements.length, 1);
+        await using defaultKind = await api.createSourceFile("/component.txt", sourceText);
+        assert.notStrictEqual(defaultKind.sourceFile, overridden.sourceFile);
+
+        await using upperCase = await api.createSourceFile("/CaseSensitive.ts", "");
+        await using lowerCase = await api.createSourceFile("/casesensitive.ts", "");
+        assert.notStrictEqual(lowerCase.sourceFile, upperCase.sourceFile);
+        assert.equal(upperCase.sourceFile.fileName, "/CaseSensitive.ts");
+        assert.equal(lowerCase.sourceFile.fileName, "/casesensitive.ts");
 
         await assert.rejects(api.createSourceFile("/invalid.ts", "", { scriptKind: 999 as ScriptKind }), /invalid scriptKind 999/); // @sync: assert.throws(() => api.createSourceFile("/invalid.ts", "", { scriptKind: 999 as ScriptKind }), /invalid scriptKind 999/);
+
+        // Each lease can be disposed repeatedly without throwing or releasing another lease.
+        const firstDispose = retained.dispose();
+        const secondDispose = retained.dispose();
+        assert.strictEqual(firstDispose, secondDispose); // @sync-skip
+        await firstDispose; // @sync: retained.dispose();
+        await using retainedAfterDispose = await api.createSourceFile("/component.tsx", sourceText);
+        assert.strictEqual(retainedAfterDispose.sourceFile, retainedAgain.sourceFile);
     });
 
     test("createSourceFile can be used with a compatible program", async () => {
@@ -402,7 +424,8 @@ describe("API", { concurrency }, () => {
         await using api = spawnAPI({
             "/component.tsx": sourceText,
         });
-        const sourceFile = await api.createSourceFile("/component.tsx", sourceText);
+        await using retained = await api.createSourceFile("/component.tsx", sourceText);
+        const sourceFile = retained.sourceFile;
         const snapshot = await api.createSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
         assert.equal((await api.printer.printNode(sourceFile)).trimEnd(), sourceText);
@@ -411,11 +434,24 @@ describe("API", { concurrency }, () => {
         await snapshot.dispose();
     });
 
+    test("createSourceFile shares identity with a matching program file", async () => {
+        const sourceText = "export declare const element: number;";
+        await using api = spawnAPI({
+            "/component.d.ts": sourceText,
+        });
+        await using retained = await api.createSourceFile("/component.d.ts", sourceText);
+        const snapshot = await api.createSnapshot({ openFiles: ["/component.d.ts"] });
+        const project = snapshot.getProjects()[0];
+        assert.strictEqual(await project.program.getSourceFile("/component.d.ts"), retained.sourceFile);
+        await snapshot.dispose();
+    });
+
     test("createSourceFileFromFile", async () => {
         await using api = spawnAPI({
             "/input.ts": "export const fromFile = 1;",
         });
-        const fromFile = await api.createSourceFileFromFile({ uri: "file:///input.ts" });
+        await using retained = await api.createSourceFileFromFile({ uri: "file:///input.ts" });
+        const fromFile = retained.sourceFile;
         assert.equal(fromFile.fileName, "/input.ts");
         assert.equal(fromFile.text, "export const fromFile = 1;");
         assert.equal(fromFile.scriptKind, ScriptKind.TS);
@@ -2463,6 +2499,39 @@ describe("Snapshot disposal", { concurrency }, () => {
         assert.ok(snap1.isDisposed());
         assert.ok(snap2.isDisposed());
     });
+
+    // @sync-skip-block-start
+    test("api.close waits for source file disposal already in progress", async () => {
+        const api = spawnAPI();
+        const retained = await api.createSourceFile("/retained.ts", "export {};");
+        const client = (api as unknown as {
+            client: { apiRequest(method: string, params: unknown): Promise<unknown>; };
+        }).client;
+        const apiRequest = client.apiRequest.bind(client);
+        let releaseStarted!: () => void;
+        let finishRelease!: () => void;
+        const started = new Promise<void>(resolve => releaseStarted = resolve);
+        const finish = new Promise<void>(resolve => finishRelease = resolve);
+        client.apiRequest = async (method, params) => {
+            if (method === "releaseSourceFile") {
+                releaseStarted();
+                await finish;
+            }
+            return apiRequest(method, params);
+        };
+
+        const disposePromise = retained.dispose();
+        await started;
+        let closed = false;
+        const closePromise = api.close().then(() => closed = true);
+        await Promise.resolve();
+        assert.equal(closed, false);
+        finishRelease();
+        await disposePromise;
+        await closePromise;
+        assert.equal(closed, true);
+    });
+    // @sync-skip-block-end
 });
 
 describe("Source file cache keying across projects", { concurrency }, () => {

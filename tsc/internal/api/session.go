@@ -31,7 +31,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
-	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -442,6 +441,9 @@ type Session struct {
 	nextProgramResolutionContextID atomic.Uint64
 	programResolutionContexts      map[uint64]*programResolutionContext
 	programResolutionContextsMu    sync.RWMutex
+	sourceFileLeases               map[SourceFileLeaseID]*project.SourceFileLease
+	sourceFileLeasesMu             sync.Mutex
+	nextSourceFileLeaseID          atomic.Uint64
 	conn                           ipc.Conn
 
 	cpuProfiler pprof.CPUProfiler
@@ -491,6 +493,7 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		snapshots:                 make(map[SnapshotID]*snapshotData),
 		moduleResolvers:           make(map[ModuleResolverID]*moduleResolverRegistration),
 		programResolutionContexts: make(map[uint64]*programResolutionContext),
+		sourceFileLeases:          make(map[SourceFileLeaseID]*project.SourceFileLease),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -699,6 +702,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleBatchRequests(ctx, parsed.(*BatchRequestsParams))
 	case string(MethodRelease):
 		return s.handleRelease(ctx, parsed.(*ReleaseParams))
+	case string(MethodReleaseSourceFile):
+		return s.handleReleaseSourceFile(parsed.(*ReleaseSourceFileParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
 	case string(MethodCreateSnapshot):
@@ -1674,11 +1679,11 @@ func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, 
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
-	sourceFile, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
+	lease, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponse(sourceFile)
+	return s.encodeLeasedSourceFile(lease)
 }
 
 // @gen-proto-result: SourceFileResponse
@@ -1688,14 +1693,14 @@ func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *Cr
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
 	}
-	sourceFile, err := s.createSourceFile(fileName, sourceText, params.Options)
+	lease, err := s.createSourceFile(fileName, sourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponse(sourceFile)
+	return s.encodeLeasedSourceFile(lease)
 }
 
-func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*ast.SourceFile, error) {
+func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*project.SourceFileLease, error) {
 	scriptKind := options.ScriptKind
 	if scriptKind == core.ScriptKindUnknown {
 		scriptKind = core.EnsureScriptKindFromFileName(fileName)
@@ -1704,10 +1709,61 @@ func (s *Session) createSourceFile(fileName string, sourceText string, options C
 		return nil, fmt.Errorf("%w: invalid scriptKind %d", ErrClientError, scriptKind)
 	}
 	fileName = tspath.GetNormalizedAbsolutePath(fileName, s.GetCurrentDirectory())
-	return parser.ParseSourceFile(ast.SourceFileParseOptions{
+	return s.acquireSourceFile(ast.SourceFileParseOptions{
 		FileName: fileName,
 		Path:     s.toPath(fileName),
 	}, sourceText, scriptKind), nil
+}
+
+func (s *Session) acquireSourceFile(options ast.SourceFileParseOptions, sourceText string, scriptKind core.ScriptKind) *project.SourceFileLease {
+	return s.snapshotHost.AcquireSourceFile(options, sourceText, scriptKind)
+}
+
+func (s *Session) encodeLeasedSourceFile(lease *project.SourceFileLease) (any, error) {
+	data, _, err := encoder.EncodeSourceFile(lease.SourceFile())
+	if err != nil {
+		lease.Release()
+		return nil, fmt.Errorf("failed to encode source file: %w", err)
+	}
+	id := SourceFileLeaseID(s.nextSourceFileLeaseID.Add(1))
+	encoder.SetSourceFileLease(data, uint64(id))
+	s.sourceFileLeasesMu.Lock()
+	s.sourceFileLeases[id] = lease
+	s.sourceFileLeasesMu.Unlock()
+	if s.useBinaryResponses {
+		return RawBinary(data), nil
+	}
+	return &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}, nil
+}
+
+func (s *Session) handleReleaseSourceFile(params *ReleaseSourceFileParams) (any, error) {
+	if params == nil || params.Lease == 0 {
+		return nil, fmt.Errorf("%w: empty source file lease", ErrClientError)
+	}
+	s.sourceFileLeasesMu.Lock()
+	lease := s.sourceFileLeases[params.Lease]
+	if lease != nil {
+		delete(s.sourceFileLeases, params.Lease)
+	}
+	s.sourceFileLeasesMu.Unlock()
+	if lease == nil {
+		return nil, fmt.Errorf("%w: source file lease %d not found", ErrClientError, params.Lease)
+	}
+	lease.Release()
+	return true, nil
+}
+
+func (s *Session) releaseSourceFileLeases() {
+	s.sourceFileLeasesMu.Lock()
+	leases := make([]*project.SourceFileLease, 0, len(s.sourceFileLeases))
+	for _, lease := range s.sourceFileLeases {
+		leases = append(leases, lease)
+	}
+	clear(s.sourceFileLeases)
+	s.sourceFileLeasesMu.Unlock()
+	for _, lease := range leases {
+		lease.Release()
+	}
 }
 
 func isValidCreateSourceFileScriptKind(scriptKind core.ScriptKind) bool {
@@ -4472,6 +4528,7 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 func (s *Session) Close() {
 	s.closeOnce.Do(func() {
 		s.releaseLanguageServerRefs()
+		s.releaseSourceFileLeases()
 
 		s.snapshotsMu.Lock()
 		snapshots := make([]*project.Snapshot, 0, len(s.snapshots))
