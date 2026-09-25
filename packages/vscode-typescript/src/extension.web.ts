@@ -27,6 +27,7 @@ class WasmMessageReader extends AbstractMessageReader {
     private readonly decoder = new TextDecoder();
     private buffer = new Uint8Array();
     private callback: DataCallback | undefined;
+    private closed = false;
     private readonly dataSubscription: vscode.Disposable;
 
     constructor(process: WasmProcess) {
@@ -42,6 +43,13 @@ class WasmMessageReader extends AbstractMessageReader {
     override dispose(): void {
         this.dataSubscription.dispose();
         super.dispose();
+    }
+
+    close(): void {
+        if (!this.closed) {
+            this.closed = true;
+            this.fireClose();
+        }
     }
 
     private accept(chunk: Uint8Array): void {
@@ -154,14 +162,15 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             throw new Error("WASM WASI did not create language server stdio pipes");
         }
         process.stderr?.onData(chunk => output.append(stderrDecoder.decode(chunk, { stream: true })));
+        const reader = new WasmMessageReader(process);
         void process.run().then(
             code => {
                 if (code !== 0) output.error(`TypeScript language server exited with code ${code}`);
             },
             error => output.error(`TypeScript language server failed: ${String(error)}`),
-        );
+        ).finally(() => reader.close());
         return {
-            reader: new WasmMessageReader(process),
+            reader,
             writer: new WasmMessageWriter(process.stdin),
         };
     };
