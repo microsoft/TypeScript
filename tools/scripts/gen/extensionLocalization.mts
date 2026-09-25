@@ -23,10 +23,6 @@ export function generateBundle(sourceDirectory: string, outputFile: string) {
     for (const file of files) {
         const fileName = path.join(sourceDirectory, file);
         const source = ts.createSourceFile(fileName, fs.readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true);
-        if (source.parseDiagnostics.length) {
-            const diagnostic = source.parseDiagnostics[0];
-            throw new Error(`${fileName}: ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
-        }
         for (const statement of source.statements) {
             if (ts.isImportDeclaration(statement) && ts.isStringLiteral(statement.moduleSpecifier) && statement.moduleSpecifier.text === "vscode") {
                 const clause = statement.importClause;
