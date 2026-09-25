@@ -17,6 +17,7 @@ import (
 	compiler "github.com/microsoft/TypeScript/tsc/internal/compiler"
 	core "github.com/microsoft/TypeScript/tsc/internal/core"
 	diagnostics "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	incremental "github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	lsproto "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	nodebuilder "github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	spanmap "github.com/microsoft/TypeScript/tsc/internal/spanmap"
@@ -1006,6 +1007,15 @@ func main() {
 			"All":     toInt32(compiler.EmitAll),
 			"OnlyJs":  toInt32(compiler.EmitOnlyJs),
 			"OnlyDts": toInt32(compiler.EmitOnlyDts),
+		},
+		"FileEmitKind": {
+			"None":        toInt32(incremental.FileEmitKindNone),
+			"Js":          toInt32(incremental.FileEmitKindJs),
+			"JsMap":       toInt32(incremental.FileEmitKindJsMap),
+			"JsInlineMap": toInt32(incremental.FileEmitKindJsInlineMap),
+			"DtsErrors":   toInt32(incremental.FileEmitKindDtsErrors),
+			"DtsEmit":     toInt32(incremental.FileEmitKindDtsEmit),
+			"DtsMap":      toInt32(incremental.FileEmitKindDtsMap),
 		},
 	}
 	if err := json.NewEncoder(os.Stdout).Encode(values); err != nil {

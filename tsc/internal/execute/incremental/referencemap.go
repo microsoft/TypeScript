@@ -16,6 +16,13 @@ type referenceMap struct {
 	referenceBy  sync.Once
 }
 
+func (r *referenceMap) cloneInto(target *referenceMap) {
+	r.references.Range(func(path tspath.Path, refs *collections.Set[tspath.Path]) bool {
+		target.references.Store(path, refs)
+		return true
+	})
+}
+
 func (r *referenceMap) storeReferences(path tspath.Path, refs *collections.Set[tspath.Path]) {
 	r.references.Store(path, refs)
 }

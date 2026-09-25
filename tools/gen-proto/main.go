@@ -527,6 +527,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importType("ScriptTarget", "#enums/scriptTarget")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptKind":
 		return r.importType("ScriptKind", "#enums/scriptKind")
+	case "github.com/microsoft/TypeScript/tsc/internal/execute/incremental.FileEmitKind":
+		return r.importType("FileEmitKind", "#enums/fileEmitKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/collections.OrderedMap":
 		if named.TypeArgs().Len() != 2 {
 			return "Record<string, unknown>"

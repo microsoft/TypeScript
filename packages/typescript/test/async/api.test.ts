@@ -58,8 +58,10 @@ import {
     DiagnosticCategory,
     type DocumentIdentifier,
     EmitOnly,
+    FileEmitKind,
     type FreshableType,
     type ImportAdderAction,
+    IncrementalProgram,
     type IndexedAccessType,
     IndexKind,
     type IndexType,
@@ -996,6 +998,166 @@ declare module "augmentation" {}`,
         assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
         assert.deepEqual(await program.getConfigFileNames(), []);
         assert.equal(await program.getSourceFile("/src/from-config.ts"), undefined);
+        await program.dispose();
+    });
+
+    test("createIncrementalProgram restores build info and emits only affected files", async () => {
+        const fs = createVirtualFileSystem({
+            "/src/main.ts": `import { value } from "./dependency"; export const result = value();`,
+            "/src/dependency.ts": `export function value() { return 1; }`,
+        });
+        await using api = new API({
+            cwd: "/",
+            fs,
+        });
+        const options = {
+            declaration: true,
+            incremental: true,
+            noLib: true,
+            outDir: "/out",
+            rootDir: "/src",
+            tsBuildInfoFile: "/out/build.tsbuildinfo",
+        };
+
+        const firstProgram = await api.createIncrementalProgram(["/src/main.ts"], options);
+        const initialStatus = firstProgram.status;
+        assert.equal(initialStatus.dirty, false);
+        assert.equal(initialStatus.buildInfoEmitPending, true);
+        assert.deepEqual(initialStatus.changedFiles, []);
+        assert.deepEqual(
+            initialStatus.pendingEmit.map(emit => emit.sourceFileName),
+            ["/src/dependency.ts", "/src/main.ts"],
+        );
+        assert.deepEqual(
+            initialStatus.pendingSemanticDiagnostics,
+            ["/src/dependency.ts", "/src/main.ts"],
+        );
+        const buildInfoText = await firstProgram.getBuildInfoEmit();
+        assert.equal(typeof JSON.parse(buildInfoText).version, "string");
+        assert.equal(fs.readFile!("/out/build.tsbuildinfo"), undefined);
+        const buildInfoEmit = await firstProgram.emitBuildInfo();
+        using buildInfoSnapshot = buildInfoEmit.snapshot;
+        assert.deepEqual(buildInfoEmit.emittedFiles, ["/out/build.tsbuildinfo"]);
+        assert.equal(buildInfoEmit.emitSkipped, false);
+        assert.deepEqual(buildInfoEmit.diagnostics, []);
+        assert.equal(fs.readFile!("/out/build.tsbuildinfo"), buildInfoText);
+        assert.equal(firstProgram.status.buildInfoEmitPending, true);
+        assert.equal(buildInfoEmit.program.status.buildInfoEmitPending, false);
+
+        const firstEmit = await firstProgram.emit();
+        using firstEmitSnapshot = firstEmit.snapshot;
+        assert.ok(firstEmit.emittedFiles.includes("/out/main.js"));
+        assert.ok(firstEmit.emittedFiles.includes("/out/dependency.js"));
+        assert.ok(firstEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
+        assert.ok(fs.readFile!("/out/build.tsbuildinfo"));
+        assert.deepEqual(firstProgram.status, initialStatus);
+        assert.equal(firstEmit.program.status.dirty, false);
+        assert.equal(firstEmit.program.status.buildInfoEmitPending, false);
+        assert.deepEqual(firstEmit.program.status.changedFiles, []);
+        assert.deepEqual(firstEmit.program.status.pendingEmit, []);
+        const repeatedEmit = await firstEmit.program.emit();
+        using repeatedEmitSnapshot = repeatedEmit.snapshot;
+        assert.deepEqual(repeatedEmit.emittedFiles, []);
+        const emitToString = await firstEmit.program.emitToString();
+        assert.deepEqual([...emitToString.outputFiles.keys()].sort(), [
+            "/out/dependency.d.ts",
+            "/out/dependency.js",
+            "/out/main.d.ts",
+            "/out/main.js",
+        ]);
+        await firstProgram.dispose();
+
+        fs.writeFile!("/src/dependency.ts", `export function value() { return 2; }`);
+        const secondProgram = await api.createIncrementalProgram(["/src/main.ts"], options);
+        const globalDiagnostics = await secondProgram.getGlobalDiagnostics();
+        assert.ok(globalDiagnostics.some(diagnostic => diagnostic.code === 2318));
+        const secondEmit = await secondProgram.emit();
+        using secondEmitSnapshot = secondEmit.snapshot;
+        assert.ok(!secondEmit.emittedFiles.includes("/out/main.js"), JSON.stringify(secondEmit.emittedFiles));
+        assert.ok(secondEmit.emittedFiles.includes("/out/dependency.js"));
+        assert.ok(secondEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
+        await secondProgram.dispose();
+    });
+
+    test("emitBuildInfo returns a filesystem layer for a full filesystem", async () => {
+        const hostWrites: string[] = [];
+        await using api = new API({
+            cwd: "/",
+            fs: {
+                writeFile: path => {
+                    hostWrites.push(path);
+                },
+            },
+        });
+        using snapshot = await api.createSnapshot({
+            fileSystem: createFileSystem(Object.entries({
+                "/src/index.ts": `export const value = 1;`,
+            })),
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                compilerOptions: {
+                    incremental: true,
+                    noLib: true,
+                    tsBuildInfoFile: "/out/build.tsbuildinfo",
+                },
+                incremental: true,
+            }],
+        });
+        const program = snapshot.operation.createdPrograms[0];
+        assert.ok(program instanceof IncrementalProgram);
+        using dirtySnapshot = await snapshot.update({
+            fileSystem: createFileSystemLayer([["/src/index.ts", `export const value = 2;`]]),
+        });
+        const dirtyProgram = dirtySnapshot.getProgram(program.id);
+        assert.ok(dirtyProgram instanceof IncrementalProgram);
+        assert.equal(dirtyProgram.status.dirty, true);
+        assert.deepEqual(
+            { ...dirtyProgram.status, dirty: false },
+            program.status,
+        );
+
+        const buildInfoText = await program.getBuildInfoEmit();
+        const result = await program.emitBuildInfo();
+        using emittedSnapshot = result.snapshot;
+        assert.deepEqual(result.emittedFiles, ["/out/build.tsbuildinfo"]);
+        assert.deepEqual(result.fileSystem, {
+            kind: "layer",
+            files: {
+                "/out/build.tsbuildinfo": buildInfoText,
+            },
+        });
+        assert.deepEqual(hostWrites, []);
+    });
+
+    test("incremental emitOnly preserves other pending output kinds", async () => {
+        const fs = createVirtualFileSystem({
+            "/src/index.ts": `export const value = 1;`,
+        });
+        await using api = new API({ cwd: "/", fs });
+        const program = await api.createIncrementalProgram(
+            ["/src/index.ts"],
+            {
+                declaration: true,
+                incremental: true,
+                noLib: true,
+                outDir: "/out",
+                rootDir: "/src",
+                tsBuildInfoFile: "/out/build.tsbuildinfo",
+            },
+        );
+
+        const jsEmit = await program.emit(EmitOnly.OnlyJs);
+        using jsSnapshot = jsEmit.snapshot;
+        assert.ok(jsEmit.emittedFiles.includes("/out/index.js"));
+        assert.ok(!jsEmit.emittedFiles.includes("/out/index.d.ts"));
+        assert.ok(jsEmit.program.status.pendingEmit.some(emit => emit.sourceFileName === "/src/index.ts" && (emit.kind & FileEmitKind.DtsEmit) !== 0));
+        assert.ok(jsEmit.program.status.pendingEmit.every(emit => (emit.kind & FileEmitKind.Js) === 0));
+
+        const dtsEmit = await jsEmit.program.emit(EmitOnly.OnlyDts);
+        using dtsSnapshot = dtsEmit.snapshot;
+        assert.ok(!dtsEmit.emittedFiles.includes("/out/index.js"));
+        assert.ok(dtsEmit.emittedFiles.includes("/out/index.d.ts"));
+        assert.deepEqual(dtsEmit.program.status.pendingEmit, []);
         await program.dispose();
     });
 
