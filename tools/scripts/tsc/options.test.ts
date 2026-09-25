@@ -66,6 +66,26 @@ test("compiler options preserve the internal fields comment", () => {
     assert.match(source, /\/\/ Internal fields\nConfigFilePath /);
 });
 
+test("transpilation clears only options marked with an unknown transpile value", () => {
+    const source = generateOptions().get("tsc/internal/transpile/compileroptions_generated.go")!;
+    assert.deepEqual([...source.matchAll(/options\.(\w+) = ([^\n]+)/g)].map(match => [match[1], match[2]]), [
+        ["AllowImportingTsExtensions", "core.TSUnknown"],
+        ["Composite", "core.TSUnknown"],
+        ["EmitDeclarationOnly", "core.TSUnknown"],
+        ["Declaration", "core.TSUnknown"],
+        ["DeclarationDir", '""'],
+        ["Incremental", "core.TSUnknown"],
+        ["Lib", "nil"],
+        ["NoEmit", "core.TSUnknown"],
+        ["NoEmitOnError", "core.TSUnknown"],
+        ["Paths", "nil"],
+        ["RootDirs", "nil"],
+        ["TsBuildInfoFile", '""'],
+        ["Types", "nil"],
+        ["OutFile", '""'],
+    ]);
+});
+
 test("all generated options artifacts are checked in and current", () => {
     for (const [file, content] of generateOptions()) {
         const actual = fs.readFileSync(path.join(repoRoot, file), "utf8");

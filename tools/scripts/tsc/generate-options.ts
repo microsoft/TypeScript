@@ -159,6 +159,25 @@ ${declarations.map(option => `${option.field.name} ${option.field.type} \`json:"
 `;
 }
 
+function transpileOptions(): string {
+    const clearedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => typeof declaration.transpileOptionValue === "object" && declaration.transpileOptionValue.go === "core.TSUnknown"));
+    return `${header}
+package transpile
+
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+
+func clearOptionsForTranspile(options *core.CompilerOptions) {
+${
+        clearedOptions.map(option => {
+            const kind = optionKind(option);
+            const value = kind === "Boolean" ? "core.TSUnknown" : kind === "String" ? '""' : kind === "Enum" ? "0" : "nil";
+            return `options.${fieldName(option)} = ${value}`;
+        }).join("\n")
+    }
+}
+`;
+}
+
 function numericEnums(): string {
     return `${header}
 package core
@@ -391,6 +410,7 @@ export function generateOptions(): Map<string, string> {
         ["tsc/internal/core/watchoptions_generated.go", storedOptions("WatchOptions", options.watchOptions, false)],
         ["tsc/internal/core/typeacquisition_generated.go", storedOptions("TypeAcquisition", options.typeAcquisition, true)],
         ["tsc/internal/core/buildoptions_generated.go", storedOptions("BuildOptions", orderByName(buildOptions, options.buildOptionFieldOrder, "BuildOptions fields"), true)],
+        ["tsc/internal/transpile/compileroptions_generated.go", transpileOptions()],
         ["tsc/internal/tsoptions/declarations_generated.go", declarations()],
         ["tsc/internal/tsoptions/rootoptions_generated.go", rootDeclarations()],
         ["tsc/internal/tsoptions/enummaps_generated.go", enumMaps()],
