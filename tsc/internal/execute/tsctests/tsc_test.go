@@ -27,6 +27,13 @@ func TestTscCommandline(t *testing.T) {
 	}
 	testCases := []*tscInput{
 		{
+			subScenario: "global diagnostics produced during ordinary semantic checking",
+			files: FileMap{
+				"/home/src/workspaces/project/index.ts": `export function* values() { yield 1; }`,
+			},
+			commandLineArgs: []string{"index.ts", "--noEmit"},
+		},
+		{
 			subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
 			env: map[string]string{
 				"TS_TEST_TERMINAL_WIDTH": "120",
