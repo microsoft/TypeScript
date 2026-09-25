@@ -71,15 +71,15 @@ export function getWasmPath() {
 
     let wasmDir;
     if (normalizedDirname.endsWith("/packages/typescript/lib")) {
-        wasmDir = path.resolve(__dirname, "..", "..", "typescript-wasip1-wasm", "dist");
+        wasmDir = path.resolve(__dirname, "..", "..", "typescript-wasip1-wasm", "lib");
     }
     else if (normalizedDirname.endsWith("/built/npm/typescript/lib") || normalizedDirname.endsWith("/built/npm/native-preview/lib")) {
-        wasmDir = path.resolve(__dirname, "..", "..", "typescript-wasip1-wasm", "dist");
+        wasmDir = path.resolve(__dirname, "..", "..", "typescript-wasip1-wasm", "lib");
     }
     else {
         const require = module.createRequire(import.meta.url);
         const packageJson = require.resolve("@typescript/typescript-wasip1-wasm/package.json");
-        wasmDir = path.join(path.dirname(packageJson), "dist");
+        wasmDir = path.join(path.dirname(packageJson), "lib");
     }
 
     const wasmPath = path.join(wasmDir, "tsc.wasm");

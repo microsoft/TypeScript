@@ -113,7 +113,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         nightlyExtension?.extensionUri,
         async extensionUri => {
             try {
-                await vscode.workspace.fs.stat(vscode.Uri.joinPath(extensionUri, "dist", "tsc.wasm"));
+                await vscode.workspace.fs.stat(vscode.Uri.joinPath(extensionUri, "lib", "tsc.wasm"));
                 return true;
             }
             catch {
@@ -140,7 +140,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const stderrDecoder = new TextDecoder();
     const serverOptions = async (): Promise<MessageTransports> => {
         const wasm = await Wasm.load();
-        const module = wasm.compile(vscode.Uri.joinPath(moduleExtensionUri, "dist", "tsc.wasm"));
+        const module = wasm.compile(vscode.Uri.joinPath(moduleExtensionUri, "lib", "tsc.wasm"));
         const mountPoints = (vscode.workspace.workspaceFolders ?? []).map(folder => ({
             kind: "vscodeFileSystem" as const,
             uri: folder.uri,

@@ -1049,9 +1049,15 @@ function patchWasiFile(file) {
     }
 }
 
-async function runBuildWasi() {
+/**
+ * @param {string[]} [extraFlags]
+ */
+async function runBuildWasi(extraFlags = []) {
+    const packageDir = "./packages/typescript-wasip1-wasm";
     await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
-    await buildWasiFile("./packages/typescript-wasip1-wasm/dist/tsc.wasm");
+    await fs.promises.rm(path.join(packageDir, "dist", "tsc.wasm"), { force: true });
+    await buildWasiFile(path.join(packageDir, "lib", "tsc.wasm"), extraFlags);
+    await generateLibs(path.join(packageDir, "lib"));
 }
 
 export const buildWasi = task({
@@ -2409,8 +2415,7 @@ async function runBuildNativePreviewPackages() {
     delete wasmPackageJson.scripts;
     stripSourceConditions(wasmPackageJson);
 
-    await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
-    await buildWasiFile(path.join(wasmInputDir, "dist", "tsc.wasm"), extraFlags);
+    await runBuildWasi(extraFlags);
     await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
     await cpRecursive(path.join(wasmInputDir, "dist"), path.join(wasip1Package.npmDir, "dist"));
     await fs.promises.writeFile(
@@ -2487,12 +2492,14 @@ async function testNativePreviewPackage(platforms) {
     const nodeModules = path.join(testRoot, "node_modules");
     const mainPackageDir = path.join(nodeModules, ...mainNativePreviewPackage.npmPackageName.split("/"));
     const platformPackageDir = path.join(nodeModules, ...hostPlatform.npmPackageName.split("/"));
+    const wasmPackageDir = path.join(nodeModules, ...wasip1Package.npmPackageName.split("/"));
     const sourceFile = path.join(testRoot, "index.ts");
 
     await rimraf(testRoot);
     try {
         await cpRecursive(mainNativePreviewPackage.npmDir, mainPackageDir);
         await cpRecursive(hostPlatform.npmDir, platformPackageDir);
+        await cpRecursive(wasip1Package.npmDir, wasmPackageDir);
         await fs.promises.writeFile(sourceFile, 'export const value: string = "value";\n');
 
         const binName = publishAsTypescript ? "tsc" : "tsgo";
@@ -2504,6 +2511,8 @@ async function testNativePreviewPackage(platforms) {
         assert(!listFilesOutput.includes("bundled:///"), "Packaged compiler listed an embedded library path");
 
         const expectedLib = path.resolve(platformPackageDir, "lib", "lib.es5.d.ts");
+        const expectedWasmLib = path.resolve(wasmPackageDir, "lib", "lib.es5.d.ts");
+        assert(fs.existsSync(expectedWasmLib), `Expected WASM package to contain ${expectedWasmLib}`);
         const listedFiles = listFilesOutput
             .split(/\r?\n/)
             .filter(Boolean)
@@ -2850,12 +2859,11 @@ async function runPackVsixExtensions() {
     }
 
     const platforms = getPlatforms();
-    const localPlatform = !options.forRelease ? platforms[0] : undefined;
     const extensions = [
         ...platforms.flatMap(({ npmDir, npmPackageName, extensions }) => extensions.map(e => ({ npmDir, npmPackageName, ...e }))),
         ...getLocalWebVsixExtensions().map(e => ({
-            npmDir: localPlatform?.npmDir,
-            npmPackageName: localPlatform?.npmPackageName,
+            npmDir: "./packages/typescript-wasip1-wasm",
+            npmPackageName: wasip1Package.npmPackageName,
             ...e,
         })),
     ];
@@ -2895,27 +2903,24 @@ async function runPackVsixExtensions() {
 
     await Promise.all(extensions.map(async ({ npmDir, npmPackageName, nodeOs, vscodeTarget, sourceDir, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
         await cpWithoutNodeModulesOrTsconfig(sourceDir, thisExtensionDir);
-        if (vscodeTarget === "web") {
-            assert(npmDir);
-            const npmLibDir = path.join(npmDir, "lib");
-            const extensionLibDir = path.join(thisExtensionDir, "lib");
-            await cpRecursive(npmLibDir, extensionLibDir, path => path === npmLibDir || path.endsWith(".d.ts"));
-            if (sourceDir === nightlyExtensionDir) {
-                const wasmDir = path.join(thisExtensionDir, "dist");
-                await fs.promises.mkdir(wasmDir, { recursive: true });
-                await fs.promises.copyFile(path.join(extensionDir, "dist", "tsc.wasm"), path.join(wasmDir, "tsc.wasm"));
-            }
-        }
-        else {
-            assert(npmDir);
+        assert(npmDir);
+        if (vscodeTarget !== "web") {
             assert(npmPackageName);
             assert(nodeOs);
-            const npmLibDir = usePublishedPlatformPackagesForVsix
-                ? await getPublishedPlatformPackageLibDir(npmPackageName)
-                : path.join(npmDir, "lib");
-            const extensionLibDir = path.join(thisExtensionDir, "lib");
-            await fs.promises.mkdir(extensionLibDir, { recursive: true });
-            await cpWithoutNodeModulesOrTsconfig(npmLibDir, extensionLibDir);
+        }
+        let npmLibDir;
+        if (vscodeTarget !== "web" && usePublishedPlatformPackagesForVsix) {
+            assert(npmPackageName);
+            npmLibDir = await getPublishedPlatformPackageLibDir(npmPackageName);
+        }
+        else {
+            npmLibDir = path.join(npmDir, "lib");
+        }
+        const extensionLibDir = path.join(thisExtensionDir, "lib");
+        await fs.promises.mkdir(extensionLibDir, { recursive: true });
+        await cpWithoutNodeModulesOrTsconfig(npmLibDir, extensionLibDir);
+        if (vscodeTarget !== "web") {
+            assert(nodeOs);
             await fs.promises.chmod(path.join(extensionLibDir, nativePreviewExeName(nodeOs)), 0o755);
         }
 
@@ -2926,16 +2931,13 @@ async function runPackVsixExtensions() {
         if (vscodeTarget === "web") {
             delete packageJson.main;
             packageJson.files = /** @type {string[]} */ (packageJson.files ?? []).filter(file => file !== "dist/extension.bundle.js");
-            if (sourceDir === nightlyExtensionDir) {
-                packageJson.files.push("dist/tsc.wasm");
-            }
-            else {
+            if (sourceDir !== nightlyExtensionDir) {
                 packageJson.browser = "./dist/extension.web.bundle.js";
                 packageJson.extensionDependencies = [
                     ...(packageJson.extensionDependencies ?? []),
                     "ms-vscode.wasm-wasi-core",
                 ];
-                packageJson.files.push("dist/extension.web.bundle.js", "dist/tsc.wasm");
+                packageJson.files.push("dist/extension.web.bundle.js");
             }
         }
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 4));

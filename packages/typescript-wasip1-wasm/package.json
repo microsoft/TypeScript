@@ -8,7 +8,8 @@
     "description": "TypeScript compiler, language server, and API transport for wasip1/wasm",
     "type": "module",
     "files": [
-        "dist"
+        "dist",
+        "lib"
     ],
     "exports": {
         "./package.json": "./package.json",
@@ -16,7 +17,7 @@
             "@typescript/source": "./src/index.ts",
             "default": "./dist/index.js"
         },
-        "./tsc.wasm": "./dist/tsc.wasm"
+        "./tsc.wasm": "./lib/tsc.wasm"
     },
     "imports": {
         "#wasmURL": {

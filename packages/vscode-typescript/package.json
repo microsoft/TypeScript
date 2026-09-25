@@ -371,14 +371,14 @@
         "build": "tsc && npm run bundle",
         "bundle": "npm run bundle:desktop && npm run bundle:web",
         "bundle:desktop": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.bundle.js --sourcemap",
-        "bundle:web": "npm run -w @typescript/typescript-wasip1-wasm build && esbuild src/extension.web.ts --bundle --external:vscode --platform=browser --format=cjs --outfile=dist/extension.web.bundle.js --sourcemap && node -e \"require('fs').copyFileSync('../typescript-wasip1-wasm/dist/tsc.wasm', 'dist/tsc.wasm')\"",
+        "bundle:web": "npm run -w @typescript/typescript-wasip1-wasm build && esbuild src/extension.web.ts --bundle --external:vscode --platform=browser --format=cjs --outfile=dist/extension.web.bundle.js --sourcemap",
         "test": "tsc -p test && esbuild test/index.test.ts --bundle --platform=node --format=cjs --outfile=dist/test/index.test.cjs && node --test dist/test/index.test.cjs",
         "watch": "npm run bundle:desktop -- --watch",
         "generateLocTest": "vscode-l10n-dev generate-pseudo -o ./l10n/ ./l10n/bundle.l10n.json ./package.nls.json",
         "generateLocBundle": "vscode-l10n-dev export --outDir ./l10n ./src",
         "//vscode:prepublish": "we do not use this hook; the Herebyfile runs bundle:release once instead",
         "bundle:release": "npm run bundle:desktop -- --minify",
-        "bundle:release:web": "npm run -w @typescript/typescript-wasip1-wasm build && esbuild src/extension.web.ts --bundle --external:vscode --platform=browser --format=cjs --outfile=dist/extension.web.bundle.js --sourcemap --minify && node -e \"require('fs').copyFileSync('../typescript-wasip1-wasm/dist/tsc.wasm', 'dist/tsc.wasm')\""
+        "bundle:release:web": "npm run -w @typescript/typescript-wasip1-wasm build && esbuild src/extension.web.ts --bundle --external:vscode --platform=browser --format=cjs --outfile=dist/extension.web.bundle.js --sourcemap --minify"
     },
     "dependencies": {
         "@vscode/extension-telemetry": "^1.5.2",
