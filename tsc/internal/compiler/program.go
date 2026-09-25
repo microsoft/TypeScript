@@ -1547,7 +1547,7 @@ func applyContentMapperDiagnosticDirectives(sourceFile *ast.SourceFile, diags []
 	}
 	used := make([]bool, len(directives))
 	markUsed := func(diag *ast.Diagnostic) bool {
-		if diag.Source() != "" {
+		if diag.File() != sourceFile || diag.Source() != "" {
 			return false
 		}
 		for i, directive := range directives {
