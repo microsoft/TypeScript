@@ -5,6 +5,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -13,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
@@ -34,14 +36,21 @@ var (
 type Method string
 
 type (
-	SnapshotID        uint64
-	ModuleResolverID  uint64
-	SourceFileLeaseID uint64
-	SymbolID          uint64
-	TypeID            uint32
-	SignatureID       uint64
-	NodeHandle        string
+	SnapshotID          uint64
+	ModuleResolverID    uint64
+	SourceFileLeaseID   uint64
+	BuildOrchestratorID uint64
+	SymbolID            uint64
+	TypeID              uint32
+	SignatureID         uint64
+	NodeHandle          string
 )
+
+var nextBuildOrchestratorId atomic.Uint64
+
+func NewBuildOrchestratorID() BuildOrchestratorID {
+	return BuildOrchestratorID(nextBuildOrchestratorId.Add(1))
+}
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
 	return SymbolID(ast.GetSymbolId(symbol))
@@ -59,12 +68,17 @@ const (
 	MethodRelease           Method = "release"
 	MethodReleaseSourceFile Method = "releaseSourceFile"
 
-	MethodBatchRequests Method = "batchRequests"
-
+	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
+	MethodCreateBuildOrchestrator                        Method = "createBuildOrchestrator"
+	MethodDisposeBuildOrchestrator                       Method = "disposeBuildOrchestrator"
+	MethodBuild                                          Method = "build"
+	MethodBuildReferences                                Method = "buildReferences"
+	MethodCleanBuild                                     Method = "cleanBuild"
+	MethodCleanReferences                                Method = "cleanReferences"
 	MethodCreateModuleResolver                           Method = "createModuleResolver"
 	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
 	MethodResolveModuleName                              Method = "resolveModuleName"
@@ -560,6 +574,12 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
+	MethodCreateBuildOrchestrator:                        unmarshallerFor[CreateBuildOrchestratorParams],
+	MethodDisposeBuildOrchestrator:                       unmarshallerFor[DisposeBuildOrchestratorParams],
+	MethodBuild:                                          unmarshallerFor[BuildParams],
+	MethodBuildReferences:                                unmarshallerFor[BuildParams],
+	MethodCleanBuild:                                     unmarshallerFor[CleanBuildParams],
+	MethodCleanReferences:                                unmarshallerFor[CleanBuildParams],
 	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
 	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
@@ -882,9 +902,55 @@ type ProfileResult struct {
 	File string `json:"file"`
 }
 
+type CreateBuildOrchestratorParams struct {
+	RootNames []string `json:"rootNames"`
+	Cwd       string   `json:"cwd,omitempty"`
+	// Only a subset of these options are exposed  the API
+	*core.BuildOptions    `json:"buildOptions,omitempty"`
+	*core.CompilerOptions `json:"compilerOptions,omitempty"`
+}
+
+type CreateBuildOrchestratorResponse struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type DisposeBuildOrchestratorParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type BuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             string              `json:"project,omitempty"`
+}
+
+type BuildResponse struct {
+	Status      tsc.ExitStatus        `json:"status"`
+	Diagnostics []*DiagnosticResponse `json:"diagnostics,omitempty"`
+	Statistics  tsc.Statistics        `json:"statistics"`
+}
+
+type CleanBuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             string              `json:"project,omitempty"`
+}
+
+type CleanBuildResponse struct {
+	Status       tsc.ExitStatus        `json:"status"`
+	Diagnostics  []*DiagnosticResponse `json:"diagnostics,omitempty"`
+	Statistics   tsc.Statistics        `json:"statistics"`
+	FilesDeleted []string              `json:"filesDeleted,omitempty"`
+}
+
+type BuildOrchestrator struct {
+	Build           func(project string) tsc.ExitStatus
+	BuildReferences func(project string) tsc.ExitStatus
+	CleanReferences func(project string) tsc.ExitStatus
+}
+
 type ConfigFileResponse struct {
 	FileNames         []string                 `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
+	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
