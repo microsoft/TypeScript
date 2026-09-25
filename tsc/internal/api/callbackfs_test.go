@@ -215,7 +215,9 @@ func TestCallbackFSError(t *testing.T) {
 		callbackRealpath,
 		callbackStat,
 		callbackWriteFile,
+		callbackRemoveFile,
 	}
+
 	callbacks := make([]string, len(names))
 	for i, name := range names {
 		callbacks[i] = name + ":error"
@@ -240,6 +242,20 @@ func TestCallbackFSError(t *testing.T) {
 	assertPanicsWith(t, "serverFS.error: fileExists", func() {
 		callbackFS.FileExists("/unexpected.ts")
 	})
+}
+
+func TestCallbackFSRemoveFileNoop(t *testing.T) {
+	t.Parallel()
+
+	base := vfstest.FromMap(map[string]string{"/retained.ts": "content"}, true)
+	fs := newCallbackFS(base, []string{"removeFile:noop"}, nil)
+
+	if err := fs.Remove("/retained.ts"); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := base.ReadFile("/retained.ts"); !ok {
+		t.Fatal("noop removal unexpectedly reached base filesystem")
+	}
 }
 
 func assertPanicsWith(t *testing.T, expected string, cb func()) {

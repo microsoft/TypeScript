@@ -27,6 +27,7 @@ type callbackFS struct {
 	realpathIdentity bool
 	fakeStat         bool
 	writeFileNoop    bool
+	removeFileNoop   bool
 	errorCallbacks   map[string]bool
 	caseSensitive    *bool
 
@@ -44,6 +45,7 @@ const (
 	callbackRealpath             = "realpath"
 	callbackStat                 = "stat"
 	callbackWriteFile            = "writeFile"
+	callbackRemoveFile           = "removeFile"
 )
 
 func isCallbackName(name string) bool {
@@ -54,7 +56,8 @@ func isCallbackName(name string) bool {
 		callbackGetAccessibleEntries,
 		callbackRealpath,
 		callbackStat,
-		callbackWriteFile:
+		callbackWriteFile,
+		callbackRemoveFile:
 		return true
 	default:
 		return false
@@ -75,7 +78,7 @@ func newCallbackFS(base vfs.FS, callbacks []string, caseSensitive *bool) *callba
 			errorCallbacks[name] = true
 			continue
 		}
-		if cb == "realpath:identity" || cb == "stat:fakeStat" || cb == "writeFile:noop" {
+		if cb == "realpath:identity" || cb == "stat:fakeStat" || cb == "writeFile:noop" || cb == "removeFile:noop" {
 			continue
 		}
 		if !isCallbackName(cb) {
@@ -89,6 +92,7 @@ func newCallbackFS(base vfs.FS, callbacks []string, caseSensitive *bool) *callba
 		realpathIdentity: slices.Contains(callbacks, "realpath:identity"),
 		fakeStat:         slices.Contains(callbacks, "stat:fakeStat"),
 		writeFileNoop:    slices.Contains(callbacks, "writeFile:noop"),
+		removeFileNoop:   slices.Contains(callbacks, "removeFile:noop"),
 		errorCallbacks:   errorCallbacks,
 		caseSensitive:    caseSensitive,
 	}
@@ -439,8 +443,27 @@ func (fs *callbackFS) AppendFile(path string, data string) error {
 	return fs.base.AppendFile(path, data)
 }
 
-// Remove implements vfs.FS - always delegates to base (no callback support).
+// Remove implements vfs.FS.
 func (fs *callbackFS) Remove(path string) error {
+	fs.panicIfError(callbackRemoveFile)
+	if fs.isEnabled(callbackRemoveFile) {
+		result, err := fs.call(callbackRemoveFile, path)
+		if err != nil {
+			return err
+		}
+		response := decodeCallbackResponse(callbackRemoveFile, result)
+		switch response.Kind {
+		case "value", "noop":
+			return nil
+		case "useOS":
+			return fs.base.Remove(path)
+		default:
+			invalidCallbackResponse(callbackRemoveFile, response)
+		}
+	}
+	if fs.removeFileNoop {
+		return nil
+	}
 	return fs.base.Remove(path)
 }
 

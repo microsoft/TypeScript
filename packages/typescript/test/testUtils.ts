@@ -24,7 +24,7 @@ interface TestFileSystem extends FileSystemCallbacks {
     directoryExists(directoryName: string): boolean;
     fileExists(fileName: string): boolean;
     getAccessibleEntries(directoryName: string): FileSystemEntries | typeof serverFS.useOS;
-    readFile(fileName: string): string | typeof serverFS.useOS;
+    readFile(fileName: string): any;
     realpath: typeof serverFS.identity;
     stat: typeof serverFS.fakeStat;
     writeFile(path: string, data: string): void;
@@ -140,7 +140,7 @@ export function createVirtualFileSystem(files: Record<string, string>): TestFile
         return { files: fileEntries, directories };
     }
 
-    function readFile(fileName: string): string | typeof serverFS.useOS {
+    function readFile(fileName: string): any {
         return content[fileName] ?? serverFS.useOS;
     }
 }

@@ -32,6 +32,9 @@ const fileSystemCallbackTable: Record<keyof FileSystemCallbacks, FileSystemCallb
     writeFile: {
         serverFS: [serverFS.useOS, serverFS.noop, serverFS.error],
     },
+    removeFile: {
+        serverFS: [serverFS.useOS, serverFS.noop, serverFS.error],
+    },
 };
 
 type FileSystemCallbackName = keyof typeof fileSystemCallbackTable;
@@ -116,6 +119,7 @@ export function encodeFileSystemCallbackResult(
             break;
         }
         case "writeFile":
+        case "removeFile":
             valid = result === undefined;
             break;
     }
@@ -123,7 +127,7 @@ export function encodeFileSystemCallbackResult(
     if (!valid) {
         throw new TypeError(`Invalid result from filesystem callback '${name}'`);
     }
-    return name === "writeFile" ? { kind: "value" } : { kind: "value", value: result };
+    return name === "writeFile" || name === "removeFile" ? { kind: "value" } : { kind: "value", value: result };
 }
 
 function isStringArray(value: unknown): value is string[] {

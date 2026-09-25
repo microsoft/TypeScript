@@ -771,6 +771,15 @@ func main() {
 			"AllExceptAssertionsOrExpressionsWithTypeArguments": toInt32(ast.OEKAllExceptAssertionsOrExpressionsWithTypeArguments),
 			"ExpressionTypePassthrough":                         toInt32(ast.OEKExpressionTypePassthrough),
 		},
+		"JSDeclarationKind": {
+			"None":                        toInt32(ast.JSDeclarationKindNone),
+			"ModuleExports":               toInt32(ast.JSDeclarationKindModuleExports),
+			"ExportsProperty":             toInt32(ast.JSDeclarationKindExportsProperty),
+			"ThisProperty":                toInt32(ast.JSDeclarationKindThisProperty),
+			"Property":                    toInt32(ast.JSDeclarationKindProperty),
+			"ObjectDefinePropertyValue":   toInt32(ast.JSDeclarationKindObjectDefinePropertyValue),
+			"ObjectDefinePropertyExports": toInt32(ast.JSDeclarationKindObjectDefinePropertyExports),
+		},
 		"ModifierFlags": {
 			"None":                           toInt32(ast.ModifierFlagsNone),
 			"Public":                         toInt32(ast.ModifierFlagsPublic),

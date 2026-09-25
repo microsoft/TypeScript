@@ -90,6 +90,11 @@ export interface FileSystemCallbacks {
         | typeof serverFS.useOS
         | typeof serverFS.noop
         | typeof serverFS.error;
+    removeFile:
+        | ((path: string) => void | typeof serverFS.useOS | typeof serverFS.noop | typeof serverFS.error)
+        | typeof serverFS.useOS
+        | typeof serverFS.noop
+        | typeof serverFS.error;
 }
 
 export interface CreateFileSystemOptions {
