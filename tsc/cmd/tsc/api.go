@@ -12,12 +12,14 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
 type apiFlags struct {
 	cwd             string
 	pipePath        string
 	callbacks       string
+	caseSensitive   bool
 	async           bool
 	timing          bool
 	runExternalCode bool
@@ -28,7 +30,8 @@ func parseAPIFlags(args []string) (apiFlags, error) {
 	result := apiFlags{}
 	flags.StringVar(&result.cwd, "cwd", core.Must(os.Getwd()), "current working directory")
 	flags.StringVar(&result.pipePath, "pipe", "", "use named pipe or Unix domain socket for communication instead of stdio")
-	flags.StringVar(&result.callbacks, "callbacks", "", "comma-separated list of FS callbacks to enable (readFile,fileExists,directoryExists,getAccessibleEntries,realpath)")
+	flags.StringVar(&result.callbacks, "callbacks", "", "comma-separated list of FS callbacks and defaults to enable")
+	flags.BoolVar(&result.caseSensitive, "useCaseSensitiveFileNames", osvfs.FS().UseCaseSensitiveFileNames(), "treat filesystem paths as case-sensitive")
 	flags.BoolVar(&result.async, "async", false, "use JSON-RPC protocol instead of MessagePack (for async API)")
 	flags.BoolVar(&result.timing, "timing", false, "collect per-request server processing time, folded into the client's timing snapshot")
 	flags.BoolVar(&result.runExternalCode, "runExternalCode", false, "allow projects to execute configured external plugins")
@@ -53,14 +56,15 @@ func runAPI(args []string) int {
 	}
 
 	options := &api.StdioServerOptions{
-		Err:                  os.Stderr,
-		Cwd:                  flags.cwd,
-		DefaultLibraryPath:   defaultLibraryPath,
-		Callbacks:            callbacksList,
-		Async:                flags.async,
-		CollectTiming:        flags.timing,
-		RunExternalCode:      flags.runExternalCode,
-		ContentMapperSpawner: newSystem(),
+		Err:                       os.Stderr,
+		Cwd:                       flags.cwd,
+		DefaultLibraryPath:        defaultLibraryPath,
+		Callbacks:                 callbacksList,
+		UseCaseSensitiveFileNames: &flags.caseSensitive,
+		Async:                     flags.async,
+		CollectTiming:             flags.timing,
+		RunExternalCode:           flags.runExternalCode,
+		ContentMapperSpawner:      newSystem(),
 	}
 	if flags.pipePath != "" {
 		options.PipePath = flags.pipePath

@@ -57,7 +57,6 @@ import {
     visitNode,
     visitNodes,
 } from "@typescript/typescript/unstable/ast/visitor";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import {
     API,
     Checker,
@@ -69,7 +68,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
-import { areTestsFiltered } from "../testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();

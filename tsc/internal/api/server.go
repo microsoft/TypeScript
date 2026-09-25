@@ -26,6 +26,8 @@ type StdioServerOptions struct {
 	// Callbacks specifies which filesystem operations should be delegated
 	// to the client (e.g., "readFile", "fileExists"). Empty means no callbacks.
 	Callbacks []string
+	// UseCaseSensitiveFileNames overrides the base filesystem's case sensitivity.
+	UseCaseSensitiveFileNames *bool
 	// Async enables JSON-RPC protocol with async connection handling.
 	// When false (default), uses MessagePack protocol with sync connection.
 	Async bool
@@ -76,10 +78,10 @@ func (s *StdioServer) Run(ctx context.Context) error {
 
 	fs := bundled.WrapFS(osvfs.FS())
 
-	// Wrap the base FS with callbackFS if callbacks are requested
+	// Wrap the base FS when callbacks or an explicit case-sensitivity setting are requested.
 	var callbackFS *callbackFS
-	if len(s.options.Callbacks) > 0 {
-		callbackFS = newCallbackFS(fs, s.options.Callbacks)
+	if len(s.options.Callbacks) > 0 || s.options.UseCaseSensitiveFileNames != nil {
+		callbackFS = newCallbackFS(fs, s.options.Callbacks, s.options.UseCaseSensitiveFileNames)
 		fs = callbackFS
 	}
 

@@ -100,9 +100,9 @@ import {
     createFileSystem,
     createFileSystemLayer,
     createFileSystemWithLib,
-    createVirtualFileSystem,
+    type FileSystemCallbacks,
+    serverFS,
 } from "@typescript/typescript/unstable/fs";
-import type { FileSystem } from "@typescript/typescript/unstable/fs";
 import assert from "node:assert";
 import { globSync } from "node:fs";
 import { resolve } from "node:path";
@@ -112,7 +112,10 @@ import {
 } from "node:test";
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
-import { areTestsFiltered } from "../testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 import {
     defaultFiles,
     spawnAPI,
@@ -165,6 +168,74 @@ describe("API", { concurrency }, () => {
             // @ts-expect-error Project ID brands are not interchangeable.
             const invalid: ConfiguredProjectId = synthetic;
             void invalid;
+
+            const callbacks: FileSystemCallbacks = {
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
+                readFile: serverFS.useOS,
+                realpath: serverFS.identity,
+                stat: serverFS.fakeStat,
+                writeFile: serverFS.useOS,
+                removeFile: serverFS.useOS,
+            };
+            void new API({ fs: callbacks });
+            void new API({ fs: { ...callbacks, writeFile: serverFS.noop } });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    realpath: () => serverFS.identity,
+                    stat: () => serverFS.fakeStat,
+                    writeFile: () => serverFS.noop,
+                },
+            });
+            void new API({
+                fs: {
+                    directoryExists: serverFS.error,
+                    fileExists: serverFS.error,
+                    getAccessibleEntries: serverFS.error,
+                    readFile: serverFS.error,
+                    realpath: serverFS.error,
+                    stat: serverFS.error,
+                    writeFile: serverFS.error,
+                    removeFile: serverFS.error,
+                },
+            });
+            void new API({
+                fs: {
+                    directoryExists: () => serverFS.error,
+                    fileExists: () => serverFS.error,
+                    getAccessibleEntries: () => serverFS.error,
+                    readFile: () => serverFS.error,
+                    realpath: () => serverFS.error,
+                    stat: () => serverFS.error,
+                    writeFile: () => serverFS.error,
+                    removeFile: () => serverFS.error,
+                },
+            });
+            // @ts-expect-error Filesystem callback configurations must specify every operation.
+            void new API({ fs: { readFile: serverFS.useOS } });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    // @ts-expect-error Identity is only a valid realpath implementation.
+                    readFile: serverFS.identity,
+                },
+            });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    // @ts-expect-error fakeStat is only a valid stat implementation.
+                    fileExists: serverFS.fakeStat,
+                },
+            });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    // @ts-expect-error Noop is only a valid writeFile implementation.
+                    readFile: serverFS.noop,
+                },
+            });
         }
     });
 
@@ -1452,8 +1523,8 @@ describe("BuildOrchestrator", () => {
         ]);
         assert.equal(response.statistics.Projects, 1);
         assert.equal(response.statistics.ProjectsBuilt, 0);
-        assert.equal(fs.readFile!("/a/dist/index.d.ts"), undefined);
-        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/a/dist/index.d.ts"), serverFS.useOS);
+        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
     });
 
     test("rebuilds projects after multiple file system changes", async () => {
@@ -1498,9 +1569,9 @@ describe("BuildOrchestrator", () => {
         assert.ok(fs.readFile!("/b/dist/index.js"));
         assert.ok(fs.readFile!("/a/dist/index.js"));
         assert.equal((await orchestrator.clean()).status, 0);
-        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
-        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
-        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
     });
 
     test("builds and cleans selected projects after file system changes", async () => {
@@ -1513,20 +1584,20 @@ describe("BuildOrchestrator", () => {
 
         assert.equal((await orchestrator.build("/a/tsconfig.json")).status, 0);
         assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
-        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
-        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
 
         fs.writeFile!("/a/src/index.ts", `export const a = 10;`);
         assert.equal((await orchestrator.build("/b/tsconfig.json")).status, 0);
         assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
         assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
-        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
 
         fs.writeFile!("/b/src/index.ts", `export const b = 20;`);
         assert.equal((await orchestrator.clean("/a/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
         assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
-        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
 
         assert.equal((await orchestrator.build()).status, 0);
         assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
@@ -1535,12 +1606,12 @@ describe("BuildOrchestrator", () => {
 
         assert.equal((await orchestrator.clean("/b/tsconfig.json")).status, 0);
         assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
-        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
         assert.match(fs.readFile!("/c/dist/index.js")!, /export const c = 3/);
 
         fs.writeFile!("/b/dist/index.js", `export const b = 2`);
         assert.equal((await orchestrator.clean("/b/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
     });
 
     test("builds only references of a selected project", async () => {
@@ -1557,7 +1628,7 @@ describe("BuildOrchestrator", () => {
         assert.equal((await orchestrator.buildReferences("/c/tsconfig.json")).status, 0);
         assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
         assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
-        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
     });
 
     test("cleans only references of a selected project", async () => {
@@ -1576,16 +1647,16 @@ describe("BuildOrchestrator", () => {
         assert.ok(fs.readFile!("/c/dist/index.js"));
 
         assert.equal((await orchestrator.cleanReferences("/c/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
-        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
         assert.ok(fs.readFile!("/c/dist/index.js"));
 
         assert.equal((await orchestrator.build()).status, 0);
         assert.ok(fs.readFile!("/a/dist/index.js"));
         assert.ok(fs.readFile!("/b/dist/index.js"));
         assert.equal((await orchestrator.cleanReferences()).status, 0);
-        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
-        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
         assert.ok(fs.readFile!("/c/dist/index.js"));
     });
 
@@ -1622,12 +1693,12 @@ describe("BuildOrchestrator", () => {
         fs.writeFile!("/d/lib/index.js", `export const d = 40;`);
 
         assert.equal((await orchestrator.clean("/d/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/d/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/d/dist/index.js"), serverFS.useOS);
         assert.ok(fs.readFile!("/d/lib/index.js"));
 
         assert.equal((await orchestrator.build()).status, 0);
         assert.match(fs.readFile!("/d/lib/index.js")!, /export const d = 4/);
-        assert.equal(fs.readFile!("/d/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/d/dist/index.js"), serverFS.useOS);
     });
 });
 
@@ -4276,7 +4347,52 @@ export const obj = { name };
 });
 
 describe("readFile callback semantics", { concurrency }, () => {
-    test("readFile: string returns content, null blocks fallback, undefined falls through to real FS", async () => {
+    test("callback configurations require every operation at runtime", () => {
+        assert.throws(
+            () => new API({ fs: { readFile: serverFS.useOS } as FileSystemCallbacks }),
+            /Invalid filesystem callback 'fileExists'/,
+        );
+    });
+
+    test("invalid callback results do not fall through to the server OS", async () => {
+        const fs: FileSystemCallbacks = {
+            ...createVirtualFileSystem({
+                "/tsconfig.json": "{}",
+            }),
+            readFile: (() => null) as unknown as FileSystemCallbacks["readFile"],
+        };
+        await using api = new API({ cwd: "/", fs });
+        await assert.rejects( // @sync: assert.throws(
+            () => api.readConfigFile("/tsconfig.json"),
+            /Invalid result from filesystem callback 'readFile'/,
+        );
+    });
+
+    // @sync-skip-block-start
+    test("callback configuration and implementations are read together when connecting", async () => {
+        const fs: FileSystemCallbacks = {
+            directoryExists: serverFS.useOS,
+            fileExists: serverFS.useOS,
+            getAccessibleEntries: serverFS.useOS,
+            readFile: serverFS.useOS,
+            realpath: serverFS.identity,
+            stat: serverFS.fakeStat,
+            writeFile: serverFS.useOS,
+            removeFile: serverFS.useOS,
+        };
+        await using api = new API({ fs });
+        let calls = 0;
+        fs.readFile = () => {
+            calls++;
+            return undefined;
+        };
+
+        await api.readConfigFile(fileURLToPath(new URL("../../package.json", import.meta.url).toString()));
+        assert.ok(calls > 0);
+    });
+    // @sync-skip-block-end
+
+    test("readFile: string returns content, undefined blocks fallback, useOS falls through to the server OS", async () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x: number = 1;`,
@@ -4284,16 +4400,15 @@ describe("readFile callback semantics", { concurrency }, () => {
         const vfs = createVirtualFileSystem(virtualFiles);
         const blockedPath = "/src/blocked.ts";
 
-        const fs: FileSystem = {
+        const fs: FileSystemCallbacks = {
             ...vfs,
             readFile: (fileName: string) => {
                 if (fileName === blockedPath) {
-                    // null = file not found, don't fall back to real FS
-                    return null;
+                    return undefined;
                 }
                 // Try the VFS first; if it has the file, return its content (string).
-                // Otherwise return undefined to fall through to the real FS.
-                return vfs.readFile!(fileName);
+                // Otherwise use the OS filesystem on the server.
+                return vfs.readFile(fileName);
             },
         };
 
@@ -4310,8 +4425,8 @@ describe("readFile callback semantics", { concurrency }, () => {
         assert.ok(sf, "Virtual file should be found");
         assert.equal(sf.text, virtualFiles["/src/index.ts"]);
 
-        // 2. undefined fallback: lib files from the real FS should be present.
-        //    If readFile returned null for unknowns, lib files would be missing
+        // 2. useOS fallback: lib files from the server OS should be present.
+        //    If readFile returned undefined rather than useOS for unknowns, lib files would be missing
         //    and `number` would not resolve — this was the original async bug.
         //    Verify by checking that `number` resolves to a proper type (not error).
         const pos = virtualFiles["/src/index.ts"].indexOf("x:");
@@ -4319,9 +4434,34 @@ describe("readFile callback semantics", { concurrency }, () => {
         assert.ok(type, "Type should resolve");
         assert.ok(type.flags & TypeFlags.Number, `Expected number type, got flags ${type.flags}`);
 
-        // 3. null blocks fallback: blocked file should not be found
+        // 3. undefined blocks fallback: blocked file should not be found
         const blockedSf = await project.program.getSourceFile(blockedPath);
-        assert.equal(blockedSf, undefined, "Blocked file should not be found (null prevents fallback)");
+        assert.equal(blockedSf, undefined, "Blocked file should not be found");
+    });
+
+    test("configured case sensitivity is used by the server and client", async () => {
+        const files = {
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["/src/index.ts"] }),
+            "/src/index.ts": `export const value = 1;`,
+        };
+        {
+            await using api = new API({
+                cwd: "/",
+                fs: createVirtualFileSystem(files),
+                useCaseSensitiveFileNames: false,
+            });
+            const program = (await api.createSnapshot({ openProject: "/tsconfig.json" })).getConfiguredProject("/tsconfig.json")!.program;
+            assert.ok(await program.getSourceFile("/SRC/INDEX.TS"));
+        }
+        {
+            await using api = new API({
+                cwd: "/",
+                fs: createVirtualFileSystem(files),
+                useCaseSensitiveFileNames: true,
+            });
+            const program = (await api.createSnapshot({ openProject: "/tsconfig.json" })).getConfiguredProject("/tsconfig.json")!.program;
+            assert.equal(await program.getSourceFile("/SRC/INDEX.TS"), undefined);
+        }
     });
 });
 
@@ -4397,7 +4537,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         const host = createVirtualFileSystem({
             "/host.ts": `export const source = "host";`,
         });
-        const fs: FileSystem = {
+        const fs: FileSystemCallbacks = {
             readFile: path => {
                 callbackCalls.push(`readFile:${path}`);
                 return host.readFile!(path);
@@ -4418,9 +4558,19 @@ describe("updateSnapshot file systems", { concurrency }, () => {
                 callbackCalls.push(`realpath:${path}`);
                 return path;
             },
+            stat: path => {
+                callbackCalls.push(`stat:${path}`);
+                if (host.directoryExists(path)) return { mode: 0o040555, size: 0, mtime: new Date(0) };
+                if (host.fileExists(path)) return { mode: 0o100444, size: 0, mtime: new Date(0) };
+                return undefined;
+            },
             writeFile: (path, content) => {
                 callbackCalls.push(`writeFile:${path}`);
                 host.writeFile!(path, content);
+            },
+            removeFile: path => {
+                callbackCalls.push(`removeFile:${path}`);
+                host.removeFile(path);
             },
         };
         await using api = new API({
@@ -4499,7 +4649,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         const host = createVirtualFileSystem({
             "/src/fallback.ts": `export const fallback = true;`,
         });
-        const fs: FileSystem = {
+        const fs: FileSystemCallbacks = {
             ...host,
             readFile: path => {
                 readFileCalls.push(path);
@@ -4567,10 +4717,17 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
                 readFile: path => {
                     callbackCalls.push(path);
-                    return undefined;
+                    return serverFS.useOS;
                 },
+                realpath: serverFS.useOS,
+                stat: serverFS.useOS,
+                writeFile: serverFS.useOS,
+                removeFile: serverFS.useOS,
             },
         });
 
@@ -4601,10 +4758,17 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
                 readFile: path => {
                     callbackCalls.push(path);
-                    return undefined;
+                    return serverFS.useOS;
                 },
+                realpath: serverFS.useOS,
+                stat: serverFS.useOS,
+                writeFile: serverFS.useOS,
+                removeFile: serverFS.useOS,
             },
         });
 
@@ -4784,9 +4948,16 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: {
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
+                readFile: serverFS.useOS,
+                realpath: serverFS.useOS,
+                stat: serverFS.useOS,
                 writeFile: path => {
                     hostWrites.push(path);
                 },
+                removeFile: serverFS.useOS,
             },
         });
         using snapshot = await api.createSnapshot({
@@ -7143,7 +7314,7 @@ describe("Program - selected file emit", { concurrency }, () => {
         ]);
         assert.equal(result.outputFiles.get("/src/a.js")?.sourceFileName, "/src/a.ts");
         assert.match(result.outputFiles.get("/src/a.js")!.text, /export const a = 1/);
-        assert.equal(fs.readFile?.("/src/a.js"), undefined);
+        assert.equal(fs.readFile("/src/a.js"), serverFS.useOS);
     });
 
     test("getDeclarationEmit forces declarations and declaration maps", async () => {
@@ -7161,7 +7332,7 @@ describe("Program - selected file emit", { concurrency }, () => {
             "/src/b.d.ts.map",
         ]);
         assert.equal(result.outputFiles.get("/src/a.d.ts")?.sourceFileName, "/src/a.ts");
-        assert.equal(fs.readFile?.("/src/a.d.ts"), undefined);
+        assert.equal(fs.readFile("/src/a.d.ts"), serverFS.useOS);
     });
 
     test("selected file emit accepts empty arrays", async () => {
@@ -8113,9 +8284,9 @@ describe("Program - emit", { concurrency }, () => {
         const dts = fs.readFile?.("/dist/src/index.d.ts");
         const js2 = fs.readFile?.("/dist/src/testing.js");
         const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
-        assert.strictEqual(js, undefined);
+        assert.strictEqual(js, serverFS.useOS);
         assert.strictEqual(dts, `export declare const x: number;\n`);
-        assert.strictEqual(js2, undefined);
+        assert.strictEqual(js2, serverFS.useOS);
         assert.strictEqual(dts2, `export declare const y: string;\n`);
     });
 
@@ -8145,9 +8316,9 @@ describe("Program - emit", { concurrency }, () => {
         const js2 = fs.readFile?.("/dist/src/testing.js");
         const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
         assert.strictEqual(js, `export const x = 1;\n`);
-        assert.strictEqual(dts, undefined);
+        assert.strictEqual(dts, serverFS.useOS);
         assert.strictEqual(js2, `export const y = 'typescript';\n`);
-        assert.strictEqual(dts2, undefined);
+        assert.strictEqual(dts2, serverFS.useOS);
     });
 
     test("emitToString emits the whole program and respects emitOnly", async () => {
@@ -8161,7 +8332,7 @@ describe("Program - emit", { concurrency }, () => {
             "/dist/src/index.d.ts",
             "/dist/src/testing.d.ts",
         ]);
-        assert.equal(fs.readFile?.("/dist/src/index.js"), undefined);
+        assert.equal(fs.readFile("/dist/src/index.js"), serverFS.useOS);
     });
 
     test("whole-program emit includes option-controlled maps", async () => {
@@ -8226,8 +8397,8 @@ describe("Program - emit", { concurrency }, () => {
         assert.equal(result.emitSkipped, true);
         assert.ok(result.diagnostics.some(d => d.code === 1109));
         assert.deepEqual(result.emittedFiles, []);
-        assert.equal(fs.readFile?.("/dist/src/bad.js"), undefined);
-        assert.equal(fs.readFile?.("/dist/src/good.js"), undefined);
+        assert.equal(fs.readFile("/dist/src/bad.js"), serverFS.useOS);
+        assert.equal(fs.readFile("/dist/src/good.js"), serverFS.useOS);
 
         const stringResult = await project.program.emitToString();
         assert.equal(stringResult.emitSkipped, true);
@@ -8255,7 +8426,7 @@ describe("Program - emit", { concurrency }, () => {
             emitSkipped: false,
             outputFiles: new Map(),
         });
-        assert.equal(fs.readFile?.("/src/index.js"), undefined);
+        assert.equal(fs.readFile("/src/index.js"), serverFS.useOS);
     });
 
     test("emit rejects unknown files and invalid emitOnly values", async () => {
@@ -8522,7 +8693,10 @@ describe("runWithTemporaryFileUpdate", { concurrency }, () => {
     });
 });
 
-function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }, onWrite?: (path: string) => void): { api: API; fs: FileSystem; } {
+function spawnAPIWithFS(
+    files: Record<string, string> = { ...defaultFiles },
+    onWrite?: (path: string) => void,
+): { api: API; fs: ReturnType<typeof createVirtualFileSystem>; } {
     const fs = createVirtualFileSystem(files);
     if (onWrite) {
         const writeFile = fs.writeFile!;
