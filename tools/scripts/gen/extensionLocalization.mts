@@ -19,8 +19,7 @@ function isLocalizationCall(node: ts.Node): node is ts.CallExpression {
 
 export function generateBundle(sourceDirectory: string, outputFile: string) {
     const messages: Record<string, string> = Object.create(null);
-    const files = fs.globSync(["**/*.ts", "**/*.tsx"], { cwd: sourceDirectory })
-        .map(file => file.replaceAll("\\", "/")).sort();
+    const files = fs.globSync(["**/*.ts", "**/*.tsx"], { cwd: sourceDirectory });
     for (const file of files) {
         const fileName = path.join(sourceDirectory, file);
         const source = ts.createSourceFile(fileName, fs.readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true);
@@ -53,7 +52,8 @@ export function generateBundle(sourceDirectory: string, outputFile: string) {
         }
         visit(source);
     }
-    writeJson(outputFile, messages);
+    const entries = Object.entries(messages).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0);
+    writeJson(outputFile, Object.fromEntries(entries));
 }
 
 const accents: Record<string, string> = {
