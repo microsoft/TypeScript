@@ -1,0 +1,76 @@
+// Document diagnostics
+{
+  "kind": "full",
+  "items": []
+}
+
+// Hover on value
+{
+  "contents": {
+    "kind": "plaintext",
+    "value": "const value: {\n    items: Json[];\n}"
+  },
+  "range": {
+    "start": {
+      "line": 3,
+      "character": 13
+    },
+    "end": {
+      "line": 3,
+      "character": 18
+    }
+  }
+}
+
+// Published after hover
+[
+  {
+    "uri": "file:///src/tsconfig.json",
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        },
+        "severity": 1,
+        "code": 2589,
+        "source": "ts",
+        "message": "Type instantiation is excessively deep and possibly infinite."
+      }
+    ]
+  }
+]
+
+// Hover on value
+{
+  "contents": {
+    "kind": "plaintext",
+    "value": "const value: {\n    items: Json[];\n}"
+  },
+  "range": {
+    "start": {
+      "line": 3,
+      "character": 13
+    },
+    "end": {
+      "line": 3,
+      "character": 18
+    }
+  }
+}
+
+// Published after hover
+[]
+
+// Document diagnostics
+{
+  "kind": "full",
+  "items": []
+}
+
