@@ -97,11 +97,8 @@ declare class Private {
     c;
     /** @private */
     private constructor();
-    /** @private */
     private m;
-    /** @private */
     private get p();
-    /** @private */
     private set p(value);
 }
 declare class C {

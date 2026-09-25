@@ -13,7 +13,6 @@ export class C {
 
 //// [a.d.ts]
 export declare class C {
-    /** @private */
     private static foo;
     /** @protected */
     protected static bar(): void;
