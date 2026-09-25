@@ -1,5 +1,5 @@
 ---
-name: restack
+name: mcfly
 description: Only invoke when explicitly instructed to
 ---
 
@@ -25,4 +25,4 @@ Do not accept baseline diffs yet!
 
 Finally, if there are baseline diffs, commit those in a separate commit.
 
-Ensure that the final diff you have matches the original diff you started with; this process should not introduce any unintended changes.
+Ensure that the final diff you have matches the original diff you started with, as this process should not introduce any unintended changes.
