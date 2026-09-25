@@ -34,7 +34,7 @@ import {
 
 /** Get all JSDoc tags related to a node, including those on parent nodes. */
 export function getJSDocTags(node: Node): readonly JSDocTag[] {
-    return getJSDocCommentsAndTags(node);
+    return getJSDocCommentsAndTags(node).flatMap(j => isJSDoc(j) ? j.tags ?? [] : j);
 }
 
 /** Gets all JSDoc tags that match a specified predicate */
@@ -95,21 +95,27 @@ function ownsJSDocTag(hostNode: Node, tag: JSDocTag): boolean {
         || tag.parent.parent === hostNode;
 }
 
-function filterOwnedJSDocTags(hostNode: Node, comments: JSDoc[]): JSDocTag[] {
-    const result: JSDocTag[] = [];
+function filterOwnedJSDocTags(hostNode: Node, comments: JSDoc[]): (JSDoc | JSDocTag)[] {
+    const result: (JSDoc | JSDocTag)[] = [];
     const lastJSDoc = comments[comments.length - 1];
     for (const jsDoc of comments) {
-        if (!jsDoc.tags) {
-            continue;
-        }
         if (jsDoc === lastJSDoc) {
-            for (const tag of jsDoc.tags) {
-                if (ownsJSDocTag(hostNode, tag)) {
-                    result.push(tag);
+            let onlyOwnTags = jsDoc.tags?.every(t => ownsJSDocTag(hostNode, t)) ?? true
+            if(!onlyOwnTags && jsDoc.tags) {
+                for (const tag of jsDoc.tags) {
+                    if (ownsJSDocTag(hostNode, tag)) {
+                        result.push(tag);
+                    }
                 }
+            } else {
+                result.push(jsDoc)
             }
         }
         else {
+
+            if (!jsDoc.tags) {
+                continue;
+            }
             // Tags from earlier comments only contribute their `@overload` tags.
             for (const tag of jsDoc.tags) {
                 if (isJSDocOverloadTag(tag)) {
@@ -181,8 +187,8 @@ function getNextJSDocCommentLocation(node: Node): Node | undefined {
     return undefined;
 }
 
-function getJSDocCommentsAndTags(hostNode: Node): JSDocTag[] {
-    const result: JSDocTag[] = [];
+export function getJSDocCommentsAndTags(hostNode: Node): (JSDoc | JSDocTag)[] {
+    const result: (JSDoc | JSDocTag)[] = [];
     // Pull parameter comments from a declaring initializer (e.g. `var x = function () {}`).
     if (isVariableLike(hostNode)) {
         const initializer = (hostNode as { initializer?: Node; }).initializer;
