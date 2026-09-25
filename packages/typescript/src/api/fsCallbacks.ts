@@ -1,28 +1,54 @@
 import {
     type FileSystemCallbacks,
-    fsCallbackNames,
     serverFS,
 } from "./fs.ts";
 
-export interface FileSystemCallbackConfiguration {
-    callbackNames: (typeof fsCallbackNames[number])[];
-    arguments: string[];
-}
+type ServerFSSentinelName = keyof typeof serverFS;
+type ServerFSSentinel = typeof serverFS[ServerFSSentinelName];
+type ServerFSSentinelResponse = {
+    [K in ServerFSSentinelName]: { kind: K; };
+}[ServerFSSentinelName];
 
 export type FileSystemCallbackResponse =
     | { kind: "value"; value?: unknown; }
     | { kind: "missing"; }
-    | { kind: "useOS"; }
-    | { kind: "identity"; }
-    | { kind: "fakeStat"; }
-    | { kind: "noop"; };
+    | ServerFSSentinelResponse;
+
+interface FileSystemCallbackDefinition {
+    serverFS: readonly ServerFSSentinel[];
+}
+
+const fileSystemCallbackTable: Record<keyof FileSystemCallbacks, FileSystemCallbackDefinition> = {
+    readFile: { serverFS: [serverFS.useOS] },
+    fileExists: { serverFS: [serverFS.useOS] },
+    directoryExists: { serverFS: [serverFS.useOS] },
+    getAccessibleEntries: { serverFS: [serverFS.useOS] },
+    realpath: {
+        serverFS: [serverFS.useOS, serverFS.identity],
+    },
+    stat: {
+        serverFS: [serverFS.useOS, serverFS.fakeStat],
+    },
+    writeFile: {
+        serverFS: [serverFS.useOS, serverFS.noop],
+    },
+};
+
+type FileSystemCallbackName = keyof typeof fileSystemCallbackTable;
+const fsCallbackNames = Object.keys(fileSystemCallbackTable) as FileSystemCallbackName[];
+const serverFSSentinelNames = Object.keys(serverFS) as ServerFSSentinelName[];
+
+export interface FileSystemCallbackConfiguration {
+    callbackNames: FileSystemCallbackName[];
+    arguments: string[];
+}
 
 export function configureFileSystemCallbacks(fs: FileSystemCallbacks | undefined): FileSystemCallbackConfiguration {
     if (!fs) {
         return { callbackNames: [], arguments: [] };
     }
 
-    const callbackNames: (typeof fsCallbackNames[number])[] = [];
+    const callbackNames: FileSystemCallbackName[] = [];
     const args: string[] = [];
     for (const name of fsCallbackNames) {
         const value = fs[name];
@@ -30,19 +56,12 @@ export function configureFileSystemCallbacks(fs: FileSystemCallbacks | undefined
             callbackNames.push(name);
             continue;
         }
-        if (value === serverFS.useOS) {
-            continue;
-        }
-        if (name === "realpath" && value === serverFS.identity) {
-            args.push("realpath:identity");
-            continue;
-        }
-        if (name === "stat" && value === serverFS.fakeStat) {
-            args.push("stat:fakeStat");
-            continue;
-        }
-        if (name === "writeFile" && value === serverFS.noop) {
-            args.push("writeFile:noop");
+        const sentinel = fileSystemCallbackTable[name].serverFS.find(sentinel => sentinel === value);
+        if (sentinel) {
+            const sentinelName = getServerFSSentinelName(sentinel);
+            if (sentinelName !== "useOS") {
+                args.push(`${name}:${sentinelName}`);
+            }
             continue;
         }
         throw new TypeError(`Invalid filesystem callback '${name}': expected a function or a supported serverFS sentinel`);
@@ -52,20 +71,12 @@ export function configureFileSystemCallbacks(fs: FileSystemCallbacks | undefined
 }
 
 export function encodeFileSystemCallbackResult(
-    name: typeof fsCallbackNames[number],
+    name: FileSystemCallbackName,
     result: unknown,
 ): FileSystemCallbackResponse {
-    if (result === serverFS.useOS) {
-        return { kind: "useOS" };
-    }
-    if (name === "realpath" && result === serverFS.identity) {
-        return { kind: "identity" };
-    }
-    if (name === "stat" && result === serverFS.fakeStat) {
-        return { kind: "fakeStat" };
-    }
-    if (name === "writeFile" && result === serverFS.noop) {
-        return { kind: "noop" };
+    const sentinel = fileSystemCallbackTable[name].serverFS.find(sentinel => sentinel === result);
+    if (sentinel) {
+        return { kind: getServerFSSentinelName(sentinel) };
     }
 
     let valid: boolean;
@@ -117,4 +128,13 @@ export function encodeFileSystemCallbackResult(
 
 function isStringArray(value: unknown): value is string[] {
     return Array.isArray(value) && value.every(element => typeof element === "string");
+}
+
+function getServerFSSentinelName(sentinel: ServerFSSentinel): ServerFSSentinelName {
+    for (const name of serverFSSentinelNames) {
+        if (serverFS[name] === sentinel) {
+            return name;
+        }
+    }
+    throw new TypeError("Unknown serverFS sentinel");
 }

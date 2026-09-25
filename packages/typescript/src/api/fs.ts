@@ -73,9 +73,6 @@ export interface FileSystemCallbacks {
         | typeof serverFS.noop;
 }
 
-/** The callback names supported by the Go server for virtual FS delegation. */
-export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "stat", "writeFile"] as const;
-
 export interface CreateFileSystemOptions {
     /** Complete directory listings. Full filesystems derive these from `files` when omitted. */
     directories?: Record<string, RequestDirectoryEntries> | undefined;
