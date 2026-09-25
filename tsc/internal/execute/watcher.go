@@ -85,6 +85,13 @@ type Watcher struct {
 	seenFiles     *collections.Set[tspath.Path] // all build dependencies (for event filtering)
 	configMtimes  map[string]time.Time
 	watchSetDirty bool
+	// symlinkedDirs maps the physical directory of files that the program
+	// reaches through a symlinked directory (e.g. src/common -> ../common/src)
+	// back to that logical directory, keyed by canonical path. OS watchers do
+	// not follow symlinks, so the physical directory is watched instead and
+	// its events are mapped back to the paths the program knows the files by
+	// (see computeDesiredWatches and mapSymlinkedEventPaths).
+	symlinkedDirs map[tspath.Path]string
 	// forceFullRebuild records a reason that requires a full NewProgram rebuild
 	// (e.g. an event overflow, a mid-cycle watch failure, a newly appeared
 	// project file, or a changed non-source dependency). Unlike watchSetDirty,
@@ -252,15 +259,55 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	for dir, recursive := range resolvedDirs {
 		coverage.Set(dir, recursive)
 	}
+	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
+	realDirs := make(map[string]string)
+	symlinkedDirs := make(map[tspath.Path]string)
 	for _, filePath := range seenFilePaths {
 		dir := tspath.GetDirectoryPath(filePath)
+		realDir, ok := realDirs[dir]
+		if !ok {
+			realDir = w.sys.FS().Realpath(dir)
+			realDirs[dir] = realDir
+		}
+		if realDir != dir {
+			// The file is reached through a symlinked directory. A recursive
+			// watch covering the logical path does not see it: OS watchers do
+			// not follow symlinks. Watch the physical directory instead and
+			// remember how to map its events back to the logical path.
+			symlinkedDirs[tspath.ToPath(realDir, cwd, caseSensitive)] = dir
+			dir = realDir
+		}
 		if !coverage.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 			coverage.Set(dir, false)
 		}
 	}
+	w.symlinkedDirs = symlinkedDirs
 
 	// Re-resolve in case newly added dirs don't exist
 	return w.wm.ResolveDesiredDirs(coverage.Dirs())
+}
+
+// mapSymlinkedEventPaths rewrites events reported under a physical directory
+// that stands in for a symlinked logical directory (see computeDesiredWatches)
+// to the logical path, which is the name the program knows the file by.
+func (w *Watcher) mapSymlinkedEventPaths(changedPaths map[string]fswatch.EventKind) map[string]fswatch.EventKind {
+	if len(w.symlinkedDirs) == 0 || len(changedPaths) == 0 {
+		return changedPaths
+	}
+	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
+	cwd := w.sys.GetCurrentDirectory()
+	mapped := make(map[string]fswatch.EventKind, len(changedPaths))
+	for eventPath, kind := range changedPaths {
+		if logicalDir, ok := w.symlinkedDirs[tspath.ToPath(eventPath, cwd, caseSensitive)]; ok {
+			eventPath = logicalDir
+		} else if logicalDir, ok := w.symlinkedDirs[tspath.ToPath(tspath.GetDirectoryPath(eventPath), cwd, caseSensitive)]; ok {
+			eventPath = tspath.CombinePaths(logicalDir, tspath.GetBaseFileName(eventPath))
+		}
+		if existing, ok := mapped[eventPath]; !ok || existing != fswatch.EventDelete {
+			mapped[eventPath] = kind
+		}
+	}
+	return mapped
 }
 
 func (w *Watcher) reconcileWatches(seenFilePaths []string) error {
@@ -280,6 +327,7 @@ func (w *Watcher) DoCycle() {
 	defer w.wm.Unlock()
 
 	changedPaths, overflow := w.wm.DrainEvents()
+	changedPaths = w.mapSymlinkedEventPaths(changedPaths)
 	hasEvents := len(changedPaths) > 0 || overflow
 
 	if w.recheckTsConfig(w.contentMapperManifestChanged(changedPaths)) {

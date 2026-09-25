@@ -549,6 +549,25 @@ func TestWatch(t *testing.T) {
 				}),
 			},
 		},
+		// A directory symlinked into the project (a common monorepo layout for
+		// shared sources): the files are reached through the logical path, but
+		// OS watchers do not follow symlinks, so the physical directory must
+		// be watched and its events mapped back to the logical path.
+		{
+			subScenario: "watch detects change in file under symlinked directory",
+			files: FileMap{
+				"/home/src/workspaces/project/src/index.ts":  `import { Greeting } from "./common/types"; const g: Greeting = { message: "hi" }; console.log(g);`,
+				"/home/src/workspaces/shared/src/types.ts":   `export type Greeting = { message: string };`,
+				"/home/src/workspaces/project/src/common":    vfstest.Symlink("/home/src/workspaces/shared/src"),
+				"/home/src/workspaces/project/tsconfig.json": `{ "compilerOptions": { "rootDir": "src", "outDir": "dist" }, "include": ["src/**/*.ts"] }`,
+			},
+			commandLineArgs: []string{"--watch"},
+			edits: []*tscEdit{
+				newTscEdit("modify file behind symlinked directory", func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/shared/src/types.ts", `export type Greeting = { message: number };`)
+				}),
+			},
+		},
 		// Ancestor fallback stability — when a tsconfig include references a
 		// directory that doesn't exist
 		{
