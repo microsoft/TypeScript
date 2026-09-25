@@ -8539,7 +8539,18 @@ func (c *Checker) checkDeprecatedSignature(sig *Signature, node *ast.Node) {
 	}
 	if sig.declaration != nil && c.IsDeprecatedDeclaration(sig.declaration) {
 		suggestionNode := c.getDeprecatedSuggestionNode(node)
-		name := tryGetPropertyAccessOrIdentifierToString(ast.GetInvokedExpression(node))
+		invokedExpression := ast.SkipParentheses(ast.GetInvokedExpression(node))
+		name := tryGetPropertyAccessOrIdentifierToString(invokedExpression)
+		if name == "" {
+			switch {
+			case ast.IsPropertyAccessExpression(invokedExpression):
+				name = invokedExpression.Name().Text()
+			case ast.IsElementAccessExpression(invokedExpression):
+				if memberName := ast.GetElementOrPropertyAccessName(invokedExpression); memberName != nil {
+					name = memberName.Text()
+				}
+			}
+		}
 		c.addDeprecatedSuggestionWithSignature(suggestionNode, sig.declaration, name, c.signatureToString(sig))
 	}
 }
