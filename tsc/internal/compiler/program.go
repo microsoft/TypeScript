@@ -2218,42 +2218,39 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 				if tspath.IsExternalModuleNameRelative(imp.Text()) {
 					continue
 				}
-				if resolvedModules, ok := p.resolvedModules[file.Path()]; ok {
-					key := module.ModeAwareCacheKey{Name: imp.Text(), Mode: p.GetModeForUsageLocation(file, imp), Phase: module.GetImportPhaseForUsage(imp)}
-					if resolvedModule, ok := resolvedModules[key]; ok && resolvedModule.IsResolved() {
-						if !resolvedModule.IsExternalLibraryImport {
-							continue
-						}
-						// Priority order for getting package name:
-						// 1. PackageId.Name (requires both name and version in package.json)
-						name := resolvedModule.PackageId.Name
-						if name == "" {
-							// 2. GetPackageScopeForPath - get name from package.json in the package directory
-							if packageScope := p.resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); packageScope != nil && packageScope.Exists() {
-								if scopeName, ok := packageScope.Contents.Name.GetValue(); ok {
-									name = scopeName
-								}
-							}
-						}
-						if name == "" {
-							// 3. GetPackageNameFromDirectory - extract from node_modules path
-							name = modulespecifiers.GetPackageNameFromDirectory(resolvedModule.ResolvedFileName)
-						}
-						// 4. If all fail, don't add empty string
-						if name != "" {
-							packageNames.resolved.Add(name)
-							// Detect deep imports: subpath imports in packages without exports.
-							// These are imports like "lodash/fp" where the package has no exports
-							// map, so auto-import can only find them via recursive directory search.
-							_, rest := module.ParsePackageName(imp.Text())
-							if rest != "" {
-								if scope := p.resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); scope != nil && scope.Exists() && !scope.Contents.Exports.IsPresent() {
-									packageNames.deepImportPackages.Add(module.GetPackageNameFromTypesPackageName(name))
-								}
-							}
-						}
+				if resolvedModule := p.GetResolvedModuleFromModuleSpecifier(file, imp); resolvedModule.IsResolved() {
+					if !resolvedModule.IsExternalLibraryImport {
 						continue
 					}
+					// Priority order for getting package name:
+					// 1. PackageId.Name (requires both name and version in package.json)
+					name := resolvedModule.PackageId.Name
+					if name == "" {
+						// 2. GetPackageScopeForPath - get name from package.json in the package directory
+						if packageScope := p.resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); packageScope != nil && packageScope.Exists() {
+							if scopeName, ok := packageScope.Contents.Name.GetValue(); ok {
+								name = scopeName
+							}
+						}
+					}
+					if name == "" {
+						// 3. GetPackageNameFromDirectory - extract from node_modules path
+						name = modulespecifiers.GetPackageNameFromDirectory(resolvedModule.ResolvedFileName)
+					}
+					// 4. If all fail, don't add empty string
+					if name != "" {
+						packageNames.resolved.Add(name)
+						// Detect deep imports: subpath imports in packages without exports.
+						// These are imports like "lodash/fp" where the package has no exports
+						// map, so auto-import can only find them via recursive directory search.
+						_, rest := module.ParsePackageName(imp.Text())
+						if rest != "" {
+							if scope := p.resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); scope != nil && scope.Exists() && !scope.Contents.Exports.IsPresent() {
+								packageNames.deepImportPackages.Add(module.GetPackageNameFromTypesPackageName(name))
+							}
+						}
+					}
+					continue
 				}
 				packageNames.unresolved.Add(imp.Text())
 			}

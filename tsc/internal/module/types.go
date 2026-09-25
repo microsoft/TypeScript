@@ -66,6 +66,10 @@ const (
 	ImportPhaseSource
 )
 
+func (phase ImportPhase) IsValid() bool {
+	return phase == ImportPhaseEvaluation || phase == ImportPhaseSource
+}
+
 type ResolvedProjectReference interface {
 	ConfigName() string
 	CompilerOptions() *core.CompilerOptions

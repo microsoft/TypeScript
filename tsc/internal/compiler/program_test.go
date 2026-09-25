@@ -344,6 +344,8 @@ func TestSourcePhaseImportsAreNotUnresolvedImports(t *testing.T) {
 	assert.Assert(t, !unresolvedImports.Has("missing"))
 	assert.Assert(t, unresolvedImports.Has("evaluation-missing"))
 	assert.Equal(t, unresolvedImports.Len(), 1)
+	assert.DeepEqual(t, program.ResolvedPackageNames().Keys(), map[string]struct{}{"a": {}, "b": {}, "c": {}})
+	assert.DeepEqual(t, program.UnresolvedPackageNames().Keys(), map[string]struct{}{"missing": {}, "evaluation-missing": {}})
 }
 
 func BenchmarkNewProgram(b *testing.B) {

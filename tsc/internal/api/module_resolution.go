@@ -194,7 +194,7 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory st
 			staticEntry.ResolutionMode = &mode
 		}
 		if entry.ImportPhase != nil {
-			if *entry.ImportPhase != module.ImportPhaseEvaluation && *entry.ImportPhase != module.ImportPhaseSource {
+			if !entry.ImportPhase.IsValid() {
 				return nil, fmt.Errorf("%w: module resolution entry %d has invalid importPhase %d", ErrClientError, i, *entry.ImportPhase)
 			}
 			staticEntry.ImportPhase = entry.ImportPhase
@@ -353,7 +353,7 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 	if params.ModuleName == "" {
 		return nil, fmt.Errorf("%w: moduleName is empty", ErrClientError)
 	}
-	if params.ImportPhase != module.ImportPhaseEvaluation && params.ImportPhase != module.ImportPhaseSource {
+	if !params.ImportPhase.IsValid() {
 		return nil, fmt.Errorf("%w: invalid importPhase %d", ErrClientError, params.ImportPhase)
 	}
 	s.moduleResolversMu.RLock()

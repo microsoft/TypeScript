@@ -704,7 +704,6 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 			program,
 			checker,
 			extensionOptions,
-			importPhase,
 		)
 	}
 }
@@ -722,7 +721,6 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 	program *compiler.Program,
 	typeChecker *checker.Checker,
 	extensionOptions *extensionOptions,
-	importPhase module.ImportPhase,
 ) []moduleCompletionNameAndKind {
 	compilerOptions := program.Options()
 	paths := compilerOptions.Paths
@@ -743,7 +741,7 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 		})
 	}
 
-	if importPhase == module.ImportPhaseEvaluation {
+	if extensionOptions.importPhase == module.ImportPhaseEvaluation {
 		l.getCompletionEntriesFromTypings(program, scriptPath, fragmentDirectory, extensionOptions, result)
 	}
 
@@ -767,7 +765,7 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 			resolvePackageJsonExports := compilerOptions.GetResolvePackageJsonExports()
 			resolvePackageJsonImports := compilerOptions.GetResolvePackageJsonImports()
 			seenPackageScope := false
-			conditions := module.GetConditionsForImportPhase(compilerOptions, mode, importPhase)
+			conditions := module.GetConditionsForImportPhase(compilerOptions, mode, extensionOptions.importPhase)
 
 			// Returns true if the search should stop.
 			exportsOrImportsLookup := func(lookupTable *packagejson.ExportsOrImports, fragment string, baseDirectory string, isExports bool, isImports bool) bool {
