@@ -987,6 +987,7 @@ export const buildAPI = task({
 
 async function runBuildAPITests(generateSources = true) {
     if (generateSources) await runGenerateSync();
+    await runBuildWasi();
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
 }
 
@@ -1048,20 +1049,22 @@ function patchWasiFile(file) {
     }
 }
 
+async function runBuildWasi() {
+    await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
+    await buildWasiFile("./packages/typescript-wasip1-wasm/dist/tsc.wasm");
+}
+
 export const buildWasi = task({
     name: "build:wasip1",
     description: "Builds the @typescript/typescript-wasip1-wasm package.",
     dependencies: [lib],
-    run: async () => {
-        await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
-        await buildWasiFile("./packages/typescript-wasip1-wasm/dist/tsc.wasm");
-    },
+    run: runBuildWasi,
 });
 
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
-    dependencies: [generateEnums, generateAPI, buildWasi],
+    dependencies: [generateEnums, generateAPI, lib],
     run: runBuildAPITests,
 });
 
