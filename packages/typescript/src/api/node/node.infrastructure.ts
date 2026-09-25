@@ -11,6 +11,7 @@ import {
     HEADER_OFFSET_HASH_LO0,
     HEADER_OFFSET_HASH_LO1,
     HEADER_OFFSET_PARSE_OPTIONS,
+    HEADER_OFFSET_SOURCE_FILE_LEASE,
     NODE_DATA_TYPE_CHILDREN,
     NODE_DATA_TYPE_EXTENDED,
     NODE_DATA_TYPE_STRING,
@@ -88,6 +89,17 @@ export function readSourceFileHash(data: DataView): string {
  */
 export function readParseOptionsKey(data: DataView): string {
     return data.getUint32(HEADER_OFFSET_PARSE_OPTIONS, true).toString();
+}
+
+export function readSourceFileLease(data: DataView): number {
+    const lease = data.getBigUint64(HEADER_OFFSET_SOURCE_FILE_LEASE, true);
+    if (lease === 0n) {
+        throw new Error("Source file response has no lease");
+    }
+    if (lease > BigInt(Number.MAX_SAFE_INTEGER)) {
+        throw new Error(`Source file lease ${lease} exceeds the maximum safe integer`);
+    }
+    return Number(lease);
 }
 
 function hex8(n: number): string {

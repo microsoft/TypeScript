@@ -368,7 +368,8 @@ describe("API", { concurrency }, () => {
     test("createSourceFile", () => {
         using api = spawnAPI();
         const sourceText = "export const element = <div />;";
-        const sourceFile = api.createSourceFile("/component.tsx", sourceText);
+        using retained = api.createSourceFile("/component.tsx", sourceText);
+        const sourceFile = retained.sourceFile;
         assert.equal(sourceFile.fileName, "/component.tsx");
         assert.match(sourceFile.path, /\/component\.tsx$/);
         assert.equal(sourceFile.text, sourceText);
@@ -376,14 +377,34 @@ describe("API", { concurrency }, () => {
         assert.equal(sourceFile.statements.length, 1);
         assert.strictEqual(sourceFile.statements[0].parent, sourceFile);
 
-        assert.equal((api.createSourceFile("", "")).scriptKind, ScriptKind.TS);
-        assert.equal((api.createSourceFile(".", "")).scriptKind, ScriptKind.TS);
+        using retainedAgain = api.createSourceFile("/component.tsx", sourceText);
+        assert.strictEqual(retainedAgain.sourceFile, sourceFile);
 
-        const overridden = api.createSourceFile("/component.txt", sourceText, { scriptKind: ScriptKind.TSX });
-        assert.equal(overridden.scriptKind, ScriptKind.TSX);
-        assert.equal(overridden.statements.length, 1);
+        using empty = api.createSourceFile("", "");
+        assert.equal(empty.sourceFile.scriptKind, ScriptKind.TS);
+        using dot = api.createSourceFile(".", "");
+        assert.equal(dot.sourceFile.scriptKind, ScriptKind.TS);
+
+        using overridden = api.createSourceFile("/component.txt", sourceText, { scriptKind: ScriptKind.TSX });
+        assert.equal(overridden.sourceFile.scriptKind, ScriptKind.TSX);
+        assert.equal(overridden.sourceFile.statements.length, 1);
+        using defaultKind = api.createSourceFile("/component.txt", sourceText);
+        assert.notStrictEqual(defaultKind.sourceFile, overridden.sourceFile);
+
+        using upperCase = api.createSourceFile("/CaseSensitive.ts", "");
+        using lowerCase = api.createSourceFile("/casesensitive.ts", "");
+        assert.notStrictEqual(lowerCase.sourceFile, upperCase.sourceFile);
+        assert.equal(upperCase.sourceFile.fileName, "/CaseSensitive.ts");
+        assert.equal(lowerCase.sourceFile.fileName, "/casesensitive.ts");
 
         assert.throws(() => api.createSourceFile("/invalid.ts", "", { scriptKind: 999 as ScriptKind }), /invalid scriptKind 999/);
+
+        // Each lease can be disposed repeatedly without throwing or releasing another lease.
+        const firstDispose = retained.dispose();
+        const secondDispose = retained.dispose();
+        retained.dispose();
+        using retainedAfterDispose = api.createSourceFile("/component.tsx", sourceText);
+        assert.strictEqual(retainedAfterDispose.sourceFile, retainedAgain.sourceFile);
     });
 
     test("createSourceFile can be used with a compatible program", () => {
@@ -391,7 +412,8 @@ describe("API", { concurrency }, () => {
         using api = spawnAPI({
             "/component.tsx": sourceText,
         });
-        const sourceFile = api.createSourceFile("/component.tsx", sourceText);
+        using retained = api.createSourceFile("/component.tsx", sourceText);
+        const sourceFile = retained.sourceFile;
         const snapshot = api.createSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
         assert.equal((api.printer.printNode(sourceFile)).trimEnd(), sourceText);
@@ -400,11 +422,24 @@ describe("API", { concurrency }, () => {
         snapshot.dispose();
     });
 
+    test("createSourceFile shares identity with a matching program file", () => {
+        const sourceText = "export declare const element: number;";
+        using api = spawnAPI({
+            "/component.d.ts": sourceText,
+        });
+        using retained = api.createSourceFile("/component.d.ts", sourceText);
+        const snapshot = api.createSnapshot({ openFiles: ["/component.d.ts"] });
+        const project = snapshot.getProjects()[0];
+        assert.strictEqual(project.program.getSourceFile("/component.d.ts"), retained.sourceFile);
+        snapshot.dispose();
+    });
+
     test("createSourceFileFromFile", () => {
         using api = spawnAPI({
             "/input.ts": "export const fromFile = 1;",
         });
-        const fromFile = api.createSourceFileFromFile({ uri: "file:///input.ts" });
+        using retained = api.createSourceFileFromFile({ uri: "file:///input.ts" });
+        const fromFile = retained.sourceFile;
         assert.equal(fromFile.fileName, "/input.ts");
         assert.equal(fromFile.text, "export const fromFile = 1;");
         assert.equal(fromFile.scriptKind, ScriptKind.TS);
