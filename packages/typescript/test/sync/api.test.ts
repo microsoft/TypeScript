@@ -986,7 +986,7 @@ import.source("pkg");`,
                 "/src/source.ts": ["/node_modules/pkg/module.wasm", "/node_modules/pkg/module.wasm", "/node_modules/pkg/index.d.ts", undefined],
                 "/src/mixed.ts": ["/node_modules/pkg/index.d.ts", "/node_modules/pkg/module.wasm", "/node_modules/pkg/index.d.ts", "/node_modules/pkg/module.wasm"],
             };
-            const compilerOptions = { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true };
+            const compilerOptions = { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, allowJs: true, maxNodeModuleJsDepth: 1, noLib: true };
             const fallback = api.createModuleResolver(compilerOptions);
             const moduleResolver = resolverKind === "native" ? fallback : api.createModuleResolver(compilerOptions, {
                 moduleResolutions: resolverKind === "static" ? {
@@ -1012,6 +1012,8 @@ import.source("pkg");`,
                 compilerOptions,
                 { moduleResolver },
             );
+            assert.equal(program.getSourceFile("/node_modules/pkg/module.wasm"), undefined);
+            assert.deepEqual(program.getSyntacticDiagnostics(), []);
             for (const [fileName, expected] of Object.entries(expectedResolutions)) {
                 const sourceFile = program.getSourceFile(fileName);
                 assert.ok(sourceFile);
@@ -1024,6 +1026,9 @@ import.source("pkg");`,
                     );
                     const resolution = program.getResolvedModuleFromModuleSpecifier(specifier);
                     assert.equal(resolution?.resolvedFileName, expected[index], `${fileName}, statement ${index}`);
+                    if (resolution?.resolvedFileName.endsWith(".wasm")) {
+                        assert.equal(resolution.extension, ".wasm");
+                    }
                     const resolutionWithSourceFile = program.getResolvedModuleFromModuleSpecifier(specifier, fileName);
                     assert.deepEqual(resolutionWithSourceFile, resolution);
                 }
@@ -1036,6 +1041,7 @@ import.source("pkg");`,
                         resolution.resolvedModule?.resolvedFileName,
                         importPhase === ImportPhase.Source ? "/node_modules/pkg/module.wasm" : "/node_modules/pkg/index.d.ts",
                     );
+                    assert.equal(resolution.resolvedModule?.extension, importPhase === ImportPhase.Source ? ".wasm" : ".d.ts");
                 }
             }
         });

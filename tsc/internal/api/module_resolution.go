@@ -232,7 +232,11 @@ func staticModuleResolutionToResolvedModule(staticResolution *StaticModuleResolu
 	if result.OriginalPath != "" {
 		originalPath = result.OriginalPath
 	}
-	result.Extension = tspath.TryGetExtensionFromPath(result.ResolvedFileName)
+	if tspath.FileExtensionIs(result.ResolvedFileName, tspath.ExtensionWasm) {
+		result.Extension = tspath.ExtensionWasm
+	} else {
+		result.Extension = tspath.TryGetExtensionFromPath(result.ResolvedFileName)
+	}
 	result.IsExternalLibraryImport = strings.Contains(originalPath, "/node_modules/")
 	return result
 }
