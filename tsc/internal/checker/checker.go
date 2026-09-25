@@ -14854,7 +14854,8 @@ func (c *Checker) getResolvedSourcePhaseImport(moduleSpecifier *ast.Node) (*modu
 		sourceFile := ast.GetSourceFileOfNode(moduleSpecifier)
 		resolvedModule := c.program.GetResolvedModuleFromModuleSpecifier(sourceFile, moduleSpecifier)
 		if resolvedModule.IsResolved() {
-			if tspath.IsDeclarationFileName(moduleSpecifier.Text()) {
+			if tspath.IsDeclarationFileName(moduleSpecifier.Text()) &&
+				(tspath.IsExternalModuleNameRelative(moduleSpecifier.Text()) || resolvedModule.ResolvedUsingTsExtension) {
 				c.error(moduleSpecifier, diagnostics.A_declaration_file_cannot_be_imported_with_a_source_phase_import)
 				return resolvedModule, c.errorType
 			}

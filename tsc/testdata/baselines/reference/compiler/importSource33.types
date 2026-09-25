@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/importSource33.ts] ////
+
+=== index.ts ===
+import a from "a.d.ts";
+>a : string
+
+import source b from "a.d.ts";
+>b : WebAssembly.Module
+
+import source c from "a.d.ts/b.d.ts";
+>c : WebAssembly.Module
+
+import source d from "a.d.ts/c.d.ts";
+>d : WebAssembly.Module
+
+import source e from "@a/b.d.ts";
+>e : WebAssembly.Module
+
+export const f: string = a;
+>f : string
+>a : string
+
+export const g: WebAssembly.Module = b;
+>g : WebAssembly.Module
+>WebAssembly : any
+>b : WebAssembly.Module
+
+export const h: WebAssembly.Module = c;
+>h : WebAssembly.Module
+>WebAssembly : any
+>c : WebAssembly.Module
+
+export const i: WebAssembly.Module = d;
+>i : WebAssembly.Module
+>WebAssembly : any
+>d : WebAssembly.Module
+
+export const j: WebAssembly.Module = e;
+>j : WebAssembly.Module
+>WebAssembly : any
+>e : WebAssembly.Module
+
+export const k = import.source("a.d.ts");
+>k : Promise<WebAssembly.Module>
+>import.source("a.d.ts") : Promise<WebAssembly.Module>
+>source : any
+>"a.d.ts" : "a.d.ts"
+
+export const l = import.source("a.d.ts/b.d.ts");
+>l : Promise<WebAssembly.Module>
+>import.source("a.d.ts/b.d.ts") : Promise<WebAssembly.Module>
+>source : any
+>"a.d.ts/b.d.ts" : "a.d.ts/b.d.ts"
+
+export const m = import.source("a.d.ts/c.d.ts");
+>m : Promise<WebAssembly.Module>
+>import.source("a.d.ts/c.d.ts") : Promise<WebAssembly.Module>
+>source : any
+>"a.d.ts/c.d.ts" : "a.d.ts/c.d.ts"
+
+export const n = import.source("@a/b.d.ts");
+>n : Promise<WebAssembly.Module>
+>import.source("@a/b.d.ts") : Promise<WebAssembly.Module>
+>source : any
+>"@a/b.d.ts" : "@a/b.d.ts"
+
+export { a, b, c, d, e };
+>a : string
+>b : WebAssembly.Module
+>c : WebAssembly.Module
+>d : WebAssembly.Module
+>e : WebAssembly.Module
+
+import source o from "a.d.ts/c.d.wasm.ts";
+>o : any
+
+import.source("a.d.ts/c.d.wasm.ts");
+>import.source("a.d.ts/c.d.wasm.ts") : Promise<any>
+>source : any
+>"a.d.ts/c.d.wasm.ts" : "a.d.ts/c.d.wasm.ts"
+
+=== node_modules/a.d.ts/index.d.ts ===
+declare const a: string;
+>a : string
+
+export default a;
+>a : string
+
+=== node_modules/a.d.ts/c.d.wasm.ts ===
+
+export {};
+

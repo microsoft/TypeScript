@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/importSource33.ts] ////
+
+=== index.ts ===
+import a from "a.d.ts";
+>a : Symbol(a, Decl(index.ts, 0, 6))
+
+import source b from "a.d.ts";
+>b : Symbol(b, Decl(index.ts, 1, 6))
+
+import source c from "a.d.ts/b.d.ts";
+>c : Symbol(c, Decl(index.ts, 2, 6))
+
+import source d from "a.d.ts/c.d.ts";
+>d : Symbol(d, Decl(index.ts, 3, 6))
+
+import source e from "@a/b.d.ts";
+>e : Symbol(e, Decl(index.ts, 4, 6))
+
+export const f: string = a;
+>f : Symbol(f, Decl(index.ts, 6, 12))
+>a : Symbol(a, Decl(index.ts, 0, 6))
+
+export const g: WebAssembly.Module = b;
+>g : Symbol(g, Decl(index.ts, 7, 12))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(index.ts, 1, 6))
+
+export const h: WebAssembly.Module = c;
+>h : Symbol(h, Decl(index.ts, 8, 12))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>c : Symbol(c, Decl(index.ts, 2, 6))
+
+export const i: WebAssembly.Module = d;
+>i : Symbol(i, Decl(index.ts, 9, 12))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>d : Symbol(d, Decl(index.ts, 3, 6))
+
+export const j: WebAssembly.Module = e;
+>j : Symbol(j, Decl(index.ts, 10, 12))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(index.ts, 4, 6))
+
+export const k = import.source("a.d.ts");
+>k : Symbol(k, Decl(index.ts, 12, 12))
+
+export const l = import.source("a.d.ts/b.d.ts");
+>l : Symbol(l, Decl(index.ts, 13, 12))
+
+export const m = import.source("a.d.ts/c.d.ts");
+>m : Symbol(m, Decl(index.ts, 14, 12))
+>"a.d.ts/c.d.ts" : Symbol("a.d.ts/c.d.ts", Decl(c.d.wasm.ts, 0, 0))
+
+export const n = import.source("@a/b.d.ts");
+>n : Symbol(n, Decl(index.ts, 15, 12))
+
+export { a, b, c, d, e };
+>a : Symbol(a, Decl(index.ts, 16, 8))
+>b : Symbol(b, Decl(index.ts, 16, 11))
+>c : Symbol(c, Decl(index.ts, 16, 14))
+>d : Symbol(d, Decl(index.ts, 16, 17))
+>e : Symbol(e, Decl(index.ts, 16, 20))
+
+import source o from "a.d.ts/c.d.wasm.ts";
+>o : Symbol(o, Decl(index.ts, 18, 6))
+
+import.source("a.d.ts/c.d.wasm.ts");
+>"a.d.ts/c.d.wasm.ts" : Symbol("a.d.ts/c.d.ts", Decl(c.d.wasm.ts, 0, 0))
+
+=== node_modules/a.d.ts/index.d.ts ===
+declare const a: string;
+>a : Symbol(a, Decl(index.d.ts, 0, 13))
+
+export default a;
+>a : Symbol(a, Decl(index.d.ts, 0, 13))
+
+=== node_modules/a.d.ts/c.d.wasm.ts ===
+
+export {};
+
