@@ -41,7 +41,7 @@ function isInheritedFromTsBase(member: MemberInfo): boolean {
 
 // NodeBase fields (e.g. Flags) are class-level properties on NodeObject,
 // not data members stored in _data.
-const nodeBaseFieldNames = new Set(
+let nodeBaseFieldNames = new Set(
     api.bases().find(b => b.name === "NodeBase")?.fields.filter(f => !f.noTS).map(f => f.name) ?? [],
 );
 
@@ -107,7 +107,7 @@ function syntaxKindChecksForNode(node: NodeType): string[] {
 // Bases for ast.generated.ts
 // ────────────────────────────────────────────────────────────────────────────
 
-const goOnlyBases = new Set(
+let goOnlyBases = new Set(
     api.bases().filter(base => base.isGoOnly()).map(base => base.key),
 );
 
@@ -216,7 +216,7 @@ function computeTsVariants(): TsVariant[] {
     return result;
 }
 
-const tsVariants = computeTsVariants();
+let tsVariants = computeTsVariants();
 
 function visitorNodes(): NodeType[] {
     return api.nodes().filter(node => !isVariantNode(node));
@@ -1821,13 +1821,23 @@ function writeAndFormat(filePath: string, generate: () => string, force: boolean
     console.log(`Generated ${filePath}`);
 }
 
+export const outputs = [
+    "packages/typescript/src/ast/factory.generated.ts",
+    "packages/typescript/src/ast/is.generated.ts",
+    "packages/typescript/src/ast/ast.generated.ts",
+    "packages/typescript/src/ast/visitor.generated.ts",
+] as const;
+
 export default function main(force = false) {
     console.log("Generating TS AST code...");
+    nodeBaseFieldNames = new Set(api.bases().find(base => base.name === "NodeBase")?.fields.filter(field => !field.noTS).map(field => field.name) ?? []);
+    goOnlyBases = new Set(api.bases().filter(base => base.isGoOnly()).map(base => base.key));
+    tsVariants = computeTsVariants();
 
-    const factoryPath = path.join(ROOT, "packages/typescript/src/ast/factory.generated.ts");
-    const isGenPath = path.join(ROOT, "packages/typescript/src/ast/is.generated.ts");
-    const astGenPath = path.join(ROOT, "packages/typescript/src/ast/ast.generated.ts");
-    const visitorPath = path.join(ROOT, "packages/typescript/src/ast/visitor.generated.ts");
+    const factoryPath = path.join(ROOT, outputs[0]);
+    const isGenPath = path.join(ROOT, outputs[1]);
+    const astGenPath = path.join(ROOT, outputs[2]);
+    const visitorPath = path.join(ROOT, outputs[3]);
 
     writeAndFormat(astGenPath, generateAstGenerated, force);
     writeAndFormat(factoryPath, generateFactory, force);

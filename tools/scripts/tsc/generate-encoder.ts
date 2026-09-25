@@ -2059,35 +2059,43 @@ function writeAndFormat(filePath: string, generate: () => string, force: boolean
     console.log(`Wrote ${filePath}`);
 }
 
+export const outputs = [
+    "tsc/internal/api/encoder/encoder_generated.go",
+    "tsc/internal/api/encoder/decoder_generated.go",
+    "packages/typescript/src/api/node/protocol.generated.ts",
+    "packages/typescript/src/api/node/encoder.generated.ts",
+    "packages/typescript/src/api/node/node.generated.ts",
+] as const;
+
 export default function main(force = false) {
     console.log("Generating encoder/decoder code...");
 
     writeAndFormat(
-        path.join(ROOT, "tsc/internal/api/encoder/encoder_generated.go"),
+        path.join(ROOT, outputs[0]),
         generateGoEncoder,
         force,
     );
 
     writeAndFormat(
-        path.join(ROOT, "tsc/internal/api/encoder/decoder_generated.go"),
+        path.join(ROOT, outputs[1]),
         generateGoDecoder,
         force,
     );
 
     writeAndFormat(
-        path.join(ROOT, "packages/typescript/src/api/node/protocol.generated.ts"),
+        path.join(ROOT, outputs[2]),
         generateTSProtocol,
         force,
     );
 
     writeAndFormat(
-        path.join(ROOT, "packages/typescript/src/api/node/encoder.generated.ts"),
+        path.join(ROOT, outputs[3]),
         generateTSEncoder,
         force,
     );
 
     writeAndFormat(
-        path.join(ROOT, "packages/typescript/src/api/node/node.generated.ts"),
+        path.join(ROOT, outputs[4]),
         generateTSNodeGenerated,
         force,
     );
