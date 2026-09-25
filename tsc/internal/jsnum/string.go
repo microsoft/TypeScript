@@ -13,6 +13,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 )
 
+const InfinityLiteralText = "1e999"
+
 // https://tc39.es/ecma262/2024/multipage/ecmascript-data-types-and-values.html#sec-numeric-types-number-tostring
 func (n Number) String() string {
 	switch {

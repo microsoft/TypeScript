@@ -15,6 +15,6 @@ export declare enum E {
 export declare enum E {
     A = NaN,
     B = NaN,
-    C = Infinity,
-    D = -Infinity
+    C = 1e999,
+    D = -1e999
 }
