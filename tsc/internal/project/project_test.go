@@ -627,6 +627,14 @@ func TestPushDiagnostics(t *testing.T) {
 		session.WaitForBackgroundTasks()
 
 		for range 2 {
+			program := ls.GetProgram()
+			file := program.GetSourceFile("/src/index.ts")
+			diags := program.GetSemanticDiagnostics(core.WithCheckerLifetime(projecttestutil.WithRequestID(context.Background()), core.CheckerLifetimeDiagnostics), file)
+			assert.Assert(t, len(diags) > 0)
+			for _, diag := range diags {
+				assert.Equal(t, diag.File(), file)
+			}
+
 			report, err := ls.ProvideDiagnostics(core.WithCheckerLifetime(projecttestutil.WithRequestID(context.Background()), core.CheckerLifetimeDiagnostics), lsproto.DocumentUri("file:///src/index.ts"))
 			assert.NilError(t, err)
 			assert.Assert(t, report.FullDocumentDiagnosticReport != nil)

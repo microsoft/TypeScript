@@ -14190,25 +14190,10 @@ func (c *Checker) GetSuggestionDiagnostics(ctx context.Context, sourceFile *ast.
 
 func (c *Checker) getDiagnostics(ctx context.Context, sourceFile *ast.SourceFile, collection *ast.DiagnosticsCollection) []*ast.Diagnostic {
 	c.checkNotCanceled()
-	c.produceDeferredDiagnostics()
-	previousGlobalDiagnostics := c.diagnostics.GetGlobalDiagnostics()
 	checkUnused := c.compilerOptions.NoUnusedLocals.IsTrue() || c.compilerOptions.NoUnusedParameters.IsTrue() || collection == &c.suggestionDiagnostics
 	c.checkSourceFile(ctx, sourceFile, checkUnused)
 	if c.wasCanceled {
 		return nil
-	}
-	links := c.sourceFileLinks.Get(sourceFile)
-	currentGlobalDiagnostics := c.diagnostics.GetGlobalDiagnostics()
-	if len(currentGlobalDiagnostics) > len(previousGlobalDiagnostics) {
-		// Retain globals produced by checking this file for repeated requests and incremental caching.
-		for _, diagnostic := range currentGlobalDiagnostics {
-			if _, found := slices.BinarySearchFunc(previousGlobalDiagnostics, diagnostic, ast.CompareDiagnostics); !found {
-				links.deferredGlobalDiagnostics = append(links.deferredGlobalDiagnostics, diagnostic)
-			}
-		}
-	}
-	if collection == &c.diagnostics && len(links.deferredGlobalDiagnostics) > 0 {
-		return slices.Concat(links.deferredGlobalDiagnostics, collection.GetDiagnosticsForFile(sourceFile))
 	}
 	return collection.GetDiagnosticsForFile(sourceFile)
 }

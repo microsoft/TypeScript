@@ -799,8 +799,12 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.So
 	return p.collectCheckerDiagnostics(ctx, sourceFile, p.getSemanticDiagnosticsWithChecker)
 }
 
-func (p *Program) GetSemanticDiagnosticsWithoutNoEmitFiltering(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
-	allDiags := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, p.getBindAndCheckDiagnosticsWithChecker)
+// GetSemanticDiagnosticsForIncremental includes newly discovered globals in each
+// file's cached diagnostics and leaves noEmit filtering to the builder.
+func (p *Program) GetSemanticDiagnosticsForIncremental(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
+	allDiags := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, func(ctx context.Context, c *checker.Checker, file *ast.SourceFile) []*ast.Diagnostic {
+		return p.getBindAndCheckDiagnosticsWithChecker(ctx, c, file, true /*includeDeferredGlobals*/)
+	})
 	result := make(map[*ast.SourceFile][]*ast.Diagnostic, len(sourceFiles))
 	for i, diags := range allDiags {
 		result[sourceFiles[i]] = filterAndSortDiagnostics(diags)
@@ -1475,7 +1479,7 @@ func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *cor
 
 func (p *Program) getSemanticDiagnosticsWithChecker(ctx context.Context, c *checker.Checker, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	return core.Concatenate(
-		FilterNoEmitSemanticDiagnostics(p.getBindAndCheckDiagnosticsWithChecker(ctx, c, sourceFile), p.Options()),
+		FilterNoEmitSemanticDiagnostics(p.getBindAndCheckDiagnosticsWithChecker(ctx, c, sourceFile, false /*includeDeferredGlobals*/), p.Options()),
 		p.GetIncludeProcessorDiagnostics(sourceFile),
 	)
 }
@@ -1483,15 +1487,33 @@ func (p *Program) getSemanticDiagnosticsWithChecker(ctx context.Context, c *chec
 // getBindAndCheckDiagnosticsWithChecker gets semantic diagnostics for a single file using a
 // caller-provided checker, including bind diagnostics, checker diagnostics, and handling
 // of @ts-ignore/@ts-expect-error directives.
-func (p *Program) getBindAndCheckDiagnosticsWithChecker(ctx context.Context, fileChecker *checker.Checker, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+func (p *Program) getBindAndCheckDiagnosticsWithChecker(ctx context.Context, fileChecker *checker.Checker, sourceFile *ast.SourceFile, includeDeferredGlobals bool) []*ast.Diagnostic {
 	compilerOptions := p.Options()
 	if p.SkipTypeChecking(sourceFile, false) {
 		return nil
+	}
+	var previousGlobals []*ast.Diagnostic
+	if includeDeferredGlobals {
+		previousGlobals = fileChecker.GetGlobalDiagnostics()
 	}
 
 	// Checker creation forces binding, so bind diagnostics will be populated.
 	diags := slices.Clip(sourceFile.BindDiagnostics())
 	diags = append(diags, fileChecker.GetDiagnostics(ctx, sourceFile)...)
+
+	if includeDeferredGlobals {
+		if fileChecker.WasCanceled() {
+			return nil
+		}
+		currentGlobals := fileChecker.GetGlobalDiagnostics()
+		if len(currentGlobals) > len(previousGlobals) {
+			for _, diagnostic := range currentGlobals {
+				if _, found := slices.BinarySearchFunc(previousGlobals, diagnostic, ast.CompareDiagnostics); !found {
+					diags = append(diags, diagnostic)
+				}
+			}
+		}
+	}
 
 	isPlainJS := ast.IsPlainJSFile(sourceFile, compilerOptions.CheckJs)
 	if isPlainJS {
@@ -2027,6 +2049,11 @@ func GetDiagnosticsOfAnyProgram(
 
 			if len(allDiagnostics) == configFileParsingDiagnosticsLength {
 				allDiagnostics = appendDiagnosticsForAllFiles(allDiagnostics, getSemanticDiagnostics)
+				if p, ok := program.(*Program); ok {
+					// Incremental programs cache checking globals with file diagnostics;
+					// a late sweep would also collect incidental signature-generation globals.
+					allDiagnostics = append(allDiagnostics, p.GetGlobalDiagnostics(ctx)...)
+				}
 			}
 
 			if (skipNoEmitCheckForDtsDiagnostics || program.Options().NoEmit.IsTrue()) && program.Options().GetEmitDeclarations() && len(allDiagnostics) == configFileParsingDiagnosticsLength {
