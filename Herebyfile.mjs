@@ -2097,7 +2097,7 @@ const getPlatforms = memoize(() => {
         /** @type {VsixExtension[]} */
         let extensions = [];
         if (produceAnyVsix && vsix) {
-            /** @type {string[]} */
+            /** @type {VSCodeTarget[]} */
             const vscodeTargets = [`${os}-${arch === "arm" ? "armhf" : arch}`];
             if (alpine) {
                 vscodeTargets.push(`alpine-${arch === "arm" ? "armhf" : arch}`);
@@ -2922,7 +2922,7 @@ async function runPackVsixExtensions() {
         packageJson.bundledTypeScriptVersion = usePublishedPlatformPackagesForVsix ? getPublishedTypeScriptVersion() : getVersion();
         if (vscodeTarget === "web") {
             delete packageJson.main;
-            packageJson.files = (packageJson.files ?? []).filter(file => file !== "dist/extension.bundle.js");
+            packageJson.files = /** @type {string[]} */ (packageJson.files ?? []).filter(file => file !== "dist/extension.bundle.js");
             if (sourceDir === nightlyExtensionDir) {
                 packageJson.files.push("dist/tsc.wasm");
             }
