@@ -1474,6 +1474,9 @@ func (c *Checker) getJsxNamespaceContainerForImplicitImport(location *ast.Node) 
 		return nil
 	}
 	errorMessage := diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_for_the_appropriate_package_installed
+	if !ast.IsExternalModule(file) {
+		errorMessage = diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement
+	}
 	mod := c.resolveExternalModule(core.OrElse(specifier, canonicalErrorTag), moduleReference, errorMessage, canonicalErrorTag, false, nil /*importAttributesType*/)
 	var result *ast.Symbol
 	if mod != nil && mod != c.unknownSymbol {

@@ -4054,6 +4054,10 @@
         "category": "Error",
         "code": 2883
     },
+    "This JSX tag requires the module path '{0}' to exist, but none could be found. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.": {
+        "category": "Error",
+        "code": 2884
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
