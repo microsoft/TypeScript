@@ -157,6 +157,9 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 		return
 	}
 
+	// The elements after the rest element of a tuple are matched with the last arguments, which are only known
+	// when there is no spread argument.
+	argumentCount := core.IfElse(slices.ContainsFunc(args, ast.IsSpreadElement), -1, len(args))
 	signatureParamPos := 0
 	for _, originalArg := range args {
 		arg := ast.SkipParentheses(originalArg)
@@ -184,10 +187,10 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 			}
 		}
 
-		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos)
+		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos, argumentCount)
 		signatureParamPos = signatureParamPos + core.IfElse(spreadArgs > 0, spreadArgs, 1)
 		if identifierInfo == nil {
-			return
+			continue
 		}
 
 		parameter := identifierInfo.parameter
@@ -831,7 +834,7 @@ type parameterInfo struct {
 	isRestParameter bool
 }
 
-func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int) *parameterInfo {
+func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int, argumentCount int) *parameterInfo {
 	parameters := signature.Parameters()
 	paramCount := len(parameters) - core.IfElse(signature.HasRestParameter(), 1, 0)
 	if pos < paramCount {
@@ -859,14 +862,11 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 
 	restType := s.checker.GetTypeOfSymbol(restParameter)
 	if restType.IsTupleType() {
-		associatedNames := make([]*ast.Node, 0, len(restType.Target().AsTupleType().ElementInfos()))
-		for _, elementInfo := range restType.Target().AsTupleType().ElementInfos() {
-			labeledElement := elementInfo.LabeledDeclaration()
-			associatedNames = append(associatedNames, labeledElement)
-		}
-		index := pos - paramCount
-		if index < len(associatedNames) {
-			associatedName := associatedNames[index]
+		elementInfos := restType.Target().AsTupleType().ElementInfos()
+		restArgumentCount := core.IfElse(argumentCount < 0, -1, max(argumentCount-paramCount, 0))
+		index := getRestTupleElementIndex(elementInfos, pos-paramCount, restArgumentCount)
+		if index >= 0 {
+			associatedName := elementInfos[index].LabeledDeclaration()
 			if associatedName != nil {
 				debug.Assert(ast.IsIdentifier(associatedName.Name()))
 				var isRestTupleElement bool
@@ -894,6 +894,37 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		}
 	}
 	return nil
+}
+
+// getRestTupleElementIndex returns the index of the element of a rest parameter's tuple type that the argument at the given
+// index among the rest arguments corresponds to, or -1 if there is none. argumentCount is the number of rest arguments,
+// or -1 if it is not known.
+func getRestTupleElementIndex(elementInfos []checker.TupleElementInfo, index int, argumentCount int) int {
+	restIndex, lastRestIndex := -1, -1
+	for i, info := range elementInfos {
+		if info.TupleElementFlags()&checker.ElementFlagsVariable != 0 {
+			if restIndex < 0 {
+				restIndex = i
+			}
+			lastRestIndex = i
+		}
+	}
+
+	// The elements after the rest element correspond to the last arguments, so that the rest element is left with
+	// the arguments in between, and only the first of them gets a hint.
+	trailingCount := len(elementInfos) - lastRestIndex - 1
+	trailingStart := argumentCount - trailingCount
+	if restIndex >= 0 && restIndex == lastRestIndex && trailingCount > 0 && argumentCount >= 0 && trailingStart >= restIndex {
+		switch {
+		case index < restIndex:
+			return index
+		case index < trailingStart:
+			return core.IfElse(index == restIndex, restIndex, -1)
+		default:
+			return restIndex + 1 + index - trailingStart
+		}
+	}
+	return core.IfElse(index < len(elementInfos), index, -1)
 }
 
 func getParameterDeclarationIdentifier(symbol *ast.Symbol) *ast.IdentifierNode {
