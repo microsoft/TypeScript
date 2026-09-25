@@ -14858,16 +14858,22 @@ func (c *Checker) getResolvedSourcePhaseImport(moduleSpecifier *ast.Node) (*modu
 				c.error(moduleSpecifier, diagnostics.A_declaration_file_cannot_be_imported_with_a_source_phase_import)
 				return resolvedModule, c.errorType
 			}
+			var sourceType *Type
 			if module.IsResolvedModuleForArbitraryExtension(resolvedModule, tspath.ExtensionWasm) {
-				return resolvedModule, c.getGlobalWebAssemblyModuleType()
-			}
-			switch resolvedModule.Extension {
-			case tspath.ExtensionJs, tspath.ExtensionMjs, tspath.ExtensionCjs:
-				return resolvedModule, c.anyType
-			case tspath.ExtensionJsx:
-				if c.compilerOptions.Jsx != core.JsxEmitNone {
-					return resolvedModule, c.anyType
+				sourceType = c.getGlobalWebAssemblyModuleType()
+			} else {
+				switch resolvedModule.Extension {
+				case tspath.ExtensionJs, tspath.ExtensionMjs, tspath.ExtensionCjs:
+					sourceType = c.anyType
+				case tspath.ExtensionJsx:
+					if c.compilerOptions.Jsx != core.JsxEmitNone {
+						sourceType = c.anyType
+					}
 				}
+			}
+			if sourceType != nil {
+				c.checkImportPathForRewrite(moduleSpecifier, moduleSpecifier.Text(), moduleSpecifier, resolvedModule, nil /*sourceFile*/)
+				return resolvedModule, sourceType
 			}
 		}
 	}
@@ -15657,63 +15663,8 @@ func (c *Checker) resolveExternalModule(
 						tsExtension,
 					)
 				}
-			} else if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
-				location.Flags&ast.NodeFlagsAmbient == 0 &&
-				!tspath.IsDeclarationFileName(moduleReference) &&
-				!ast.IsLiteralImportTypeNode(location) &&
-				!ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) {
-				shouldRewrite := core.ShouldRewriteModuleSpecifier(moduleReference, c.compilerOptions)
-				if !resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
-					relativeToSourceFile := tspath.GetRelativePathFromFile(
-						tspath.GetNormalizedAbsolutePath(importingSourceFile.FileName(), c.program.GetCurrentDirectory()),
-						resolvedModule.ResolvedFileName,
-						tspath.ComparePathsOptions{
-							UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
-							CurrentDirectory:          c.program.GetCurrentDirectory(),
-						},
-					)
-					c.error(
-						errorNode,
-						diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
-						relativeToSourceFile,
-					)
-				} else if resolvedModule.ResolvedUsingTsExtension && !shouldRewrite && c.program.SourceFileMayBeEmitted(sourceFile, false) {
-					c.error(
-						errorNode,
-						diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
-						tspath.GetAnyExtensionFromPath(moduleReference, nil, false),
-					)
-				} else if resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
-					if redirect := c.program.GetRedirectForResolution(sourceFile); redirect != nil {
-						ownRootDir := c.program.CommonSourceDirectory()
-						otherRootDir := redirect.CommonSourceDirectory()
-
-						compareOptions := tspath.ComparePathsOptions{
-							UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
-							CurrentDirectory:          c.program.GetCurrentDirectory(),
-						}
-
-						rootDirPath := tspath.GetRelativePathFromDirectory(ownRootDir, otherRootDir, compareOptions)
-
-						// Get outDir paths, defaulting to root directories if not specified
-						ownOutDir := c.compilerOptions.OutDir
-						if ownOutDir == "" {
-							ownOutDir = ownRootDir
-						}
-						otherOutDir := redirect.CompilerOptions().OutDir
-						if otherOutDir == "" {
-							otherOutDir = otherRootDir
-						}
-						outDirPath := tspath.GetRelativePathFromDirectory(ownOutDir, otherOutDir, compareOptions)
-
-						if rootDirPath != outDirPath {
-							c.error(
-								errorNode,
-								diagnostics.This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_between_the_projects_output_files_is_not_the_same_as_the_relative_path_between_its_input_files,
-							)
-						}
-					}
-				}
+			} else {
+				c.checkImportPathForRewrite(location, moduleReference, errorNode, resolvedModule, sourceFile)
 			}
 		}
 
@@ -15826,6 +15777,68 @@ func (c *Checker) resolveExternalModule(
 	}
 
 	return nil
+}
+
+func (c *Checker) checkImportPathForRewrite(location *ast.Node, moduleReference string, errorNode *ast.Node, resolvedModule *module.ResolvedModule, sourceFile *ast.SourceFile) {
+	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		location.Flags&ast.NodeFlagsAmbient == 0 &&
+		!tspath.IsDeclarationFileName(moduleReference) &&
+		!ast.IsLiteralImportTypeNode(location) &&
+		!ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) {
+		shouldRewrite := core.ShouldRewriteModuleSpecifier(moduleReference, c.compilerOptions)
+		if !resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
+			importingSourceFile := ast.GetSourceFileOfNode(location)
+			relativeToSourceFile := tspath.GetRelativePathFromFile(
+				tspath.GetNormalizedAbsolutePath(importingSourceFile.FileName(), c.program.GetCurrentDirectory()),
+				resolvedModule.ResolvedFileName,
+				tspath.ComparePathsOptions{
+					UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
+					CurrentDirectory:          c.program.GetCurrentDirectory(),
+				},
+			)
+			c.error(
+				errorNode,
+				diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
+				relativeToSourceFile,
+			)
+		} else if resolvedModule.ResolvedUsingTsExtension && sourceFile != nil && !shouldRewrite && c.program.SourceFileMayBeEmitted(sourceFile, false) {
+			c.error(
+				errorNode,
+				diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
+				tspath.GetAnyExtensionFromPath(moduleReference, nil, false),
+			)
+		} else if resolvedModule.ResolvedUsingTsExtension && sourceFile != nil && shouldRewrite {
+			if redirect := c.program.GetRedirectForResolution(sourceFile); redirect != nil {
+				ownRootDir := c.program.CommonSourceDirectory()
+				otherRootDir := redirect.CommonSourceDirectory()
+
+				compareOptions := tspath.ComparePathsOptions{
+					UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
+					CurrentDirectory:          c.program.GetCurrentDirectory(),
+				}
+
+				rootDirPath := tspath.GetRelativePathFromDirectory(ownRootDir, otherRootDir, compareOptions)
+
+				// Get outDir paths, defaulting to root directories if not specified
+				ownOutDir := c.compilerOptions.OutDir
+				if ownOutDir == "" {
+					ownOutDir = ownRootDir
+				}
+				otherOutDir := redirect.CompilerOptions().OutDir
+				if otherOutDir == "" {
+					otherOutDir = otherRootDir
+				}
+				outDirPath := tspath.GetRelativePathFromDirectory(ownOutDir, otherOutDir, compareOptions)
+
+				if rootDirPath != outDirPath {
+					c.error(
+						errorNode,
+						diagnostics.This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_between_the_projects_output_files_is_not_the_same_as_the_relative_path_between_its_input_files,
+					)
+				}
+			}
+		}
+	}
 }
 
 // Resolves the module reference to a pattern ambient module, if one exists.

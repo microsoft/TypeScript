@@ -1,0 +1,48 @@
+index.ts(2,22): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./a.ts/index.wasm".
+index.ts(3,22): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./b.ts/index.js".
+index.ts(10,32): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./a.ts/index.wasm".
+index.ts(11,32): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./b.ts/index.js".
+
+
+==== index.ts (4 errors) ====
+    /// <reference path="d.d.ts" />
+    import source a from "./a.ts";
+                         ~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./a.ts/index.wasm".
+    import source b from "./b.ts";
+                         ~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./b.ts/index.js".
+    import source c from "./c.ts";
+    import source d from "./a.ts/index.wasm";
+    import type e from "./b.ts";
+    export { a, b, c, d };
+    export type T = typeof e;
+    
+    export const f = import.source("./a.ts");
+                                   ~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./a.ts/index.wasm".
+    export const g = import.source("./b.ts");
+                                   ~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./b.ts/index.js".
+    export const h = import.source("./c.ts");
+    export const i = import.source("./a.ts/index.wasm");
+    
+==== a.ts/package.json (0 errors) ====
+    { "main": "index.wasm" }
+    
+==== a.ts/index.wasm (0 errors) ====
+    
+==== b.ts/package.json (0 errors) ====
+    { "main": "index.js" }
+    
+==== b.ts/index.js (0 errors) ====
+    export default 1;
+    
+==== c.ts (0 errors) ====
+    export default 1;
+    
+==== d.d.ts (0 errors) ====
+    import source a from "./a.ts";
+    import source b from "./b.ts";
+    export { a, b };
+    

@@ -1,0 +1,62 @@
+//// [tests/cases/conformance/importSource/importSource32.ts] ////
+
+=== index.ts ===
+/// <reference path="d.d.ts" />
+import source a from "./a.ts";
+>a : Symbol(a, Decl(index.ts, 1, 6))
+
+import source b from "./b.ts";
+>b : Symbol(b, Decl(index.ts, 2, 6))
+
+import source c from "./c.ts";
+>c : Symbol(c, Decl(index.ts, 3, 6))
+
+import source d from "./a.ts/index.wasm";
+>d : Symbol(d, Decl(index.ts, 4, 6))
+
+import type e from "./b.ts";
+>e : Symbol(e, Decl(index.ts, 5, 6))
+
+export { a, b, c, d };
+>a : Symbol(a, Decl(index.ts, 6, 8))
+>b : Symbol(b, Decl(index.ts, 6, 11))
+>c : Symbol(c, Decl(index.ts, 6, 14))
+>d : Symbol(d, Decl(index.ts, 6, 17))
+
+export type T = typeof e;
+>T : Symbol(T, Decl(index.ts, 6, 22))
+>e : Symbol(e, Decl(index.ts, 5, 6))
+
+export const f = import.source("./a.ts");
+>f : Symbol(f, Decl(index.ts, 9, 12))
+
+export const g = import.source("./b.ts");
+>g : Symbol(g, Decl(index.ts, 10, 12))
+>"./b.ts" : Symbol("./b.ts", Decl(index.js, 0, 0))
+
+export const h = import.source("./c.ts");
+>h : Symbol(h, Decl(index.ts, 11, 12))
+>"./c.ts" : Symbol("./c.ts", Decl(c.ts, 0, 0))
+
+export const i = import.source("./a.ts/index.wasm");
+>i : Symbol(i, Decl(index.ts, 12, 12))
+
+=== b.ts/index.js ===
+
+export default 1;
+
+=== c.ts ===
+
+export default 1;
+
+=== d.d.ts ===
+import source a from "./a.ts";
+>a : Symbol(a, Decl(d.d.ts, 0, 6))
+
+import source b from "./b.ts";
+>b : Symbol(b, Decl(d.d.ts, 1, 6))
+
+export { a, b };
+>a : Symbol(a, Decl(d.d.ts, 2, 8))
+>b : Symbol(b, Decl(d.d.ts, 2, 11))
+
