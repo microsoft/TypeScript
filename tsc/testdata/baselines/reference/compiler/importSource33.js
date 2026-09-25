@@ -25,6 +25,25 @@ export {};
 
 //// [a.wasm]
 
+//// [package.json]
+{
+    "exports": {
+        ".": "./index.d.ts",
+        "./a": "./index.d.mts",
+        "./b": "./index.d.cts"
+    }
+}
+
+//// [index.d.ts]
+declare const a: string;
+export default a;
+
+//// [index.d.mts]
+export {};
+
+//// [index.d.cts]
+export {};
+
 //// [index.ts]
 import a from "a.d.ts";
 import source b from "a.d.ts";
@@ -47,6 +66,15 @@ export { a, b, c, d, e };
 import source o from "a.d.ts/c.d.wasm.ts";
 import.source("a.d.ts/c.d.wasm.ts");
 
+import p from "c";
+const q: string = p;
+import source r from "c";
+import source s from "c/a";
+import source t from "c/b";
+import.source("c");
+import.source("c/a");
+import.source("c/b");
+
 
 //// [index.js]
 import a from "a.d.ts";
@@ -65,6 +93,11 @@ export const m = import.source("a.d.ts/c.d.ts");
 export const n = import.source("@a/b.d.ts");
 export { a, b, c, d, e };
 import.source("a.d.ts/c.d.wasm.ts");
+import p from "c";
+const q = p;
+import.source("c");
+import.source("c/a");
+import.source("c/b");
 
 
 //// [index.d.ts]

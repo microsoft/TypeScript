@@ -14862,6 +14862,9 @@ func (c *Checker) getResolvedSourcePhaseImport(moduleSpecifier *ast.Node) (*modu
 			var sourceType *Type
 			if module.IsResolvedModuleForArbitraryExtension(resolvedModule, tspath.ExtensionWasm) {
 				sourceType = c.getGlobalWebAssemblyModuleType()
+			} else if tspath.FileExtensionIsOneOf(resolvedModule.ResolvedFileName, tspath.SupportedDeclarationExtensions) {
+				c.error(moduleSpecifier, diagnostics.A_declaration_file_cannot_be_imported_with_a_source_phase_import)
+				return resolvedModule, c.errorType
 			} else {
 				switch resolvedModule.Extension {
 				case tspath.ExtensionJs, tspath.ExtensionMjs, tspath.ExtensionCjs:

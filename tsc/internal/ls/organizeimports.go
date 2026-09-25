@@ -171,7 +171,7 @@ func organizeImportsWorker(
 		for _, importGroup := range grouped {
 			coalesced := coalesceImportsWorker(importGroup, comparer.moduleSpecifierComparer, specifierComparer, sourceFile, changeTracker)
 			if shouldSort {
-				slices.SortFunc(coalesced, func(a, b *ast.Statement) int {
+				slices.SortStableFunc(coalesced, func(a, b *ast.Statement) int {
 					return lsutil.CompareImportsOrRequireStatements(a, b, comparer.moduleSpecifierComparer)
 				})
 			}
@@ -473,19 +473,19 @@ func coalesceImportsWorker(
 		if categorized.importWithoutClause != nil {
 			coalescedImports = append(coalescedImports, categorized.importWithoutClause)
 		}
-		slices.SortFunc(categorized.sourcePhaseImports, func(a, b *ast.Statement) int {
-			aName := a.AsImportDeclaration().ImportClause.Name()
-			bName := b.AsImportDeclaration().ImportClause.Name()
-			if aName == nil && bName == nil {
+		slices.SortStableFunc(categorized.sourcePhaseImports, func(a, b *ast.Statement) int {
+			a = a.AsImportDeclaration().ImportClause
+			b = b.AsImportDeclaration().ImportClause
+			if a.Name() == nil && b.Name() == nil {
 				return 0
 			}
-			if aName == nil {
+			if a.Name() == nil {
 				return 1
 			}
-			if bName == nil {
+			if b.Name() == nil {
 				return -1
 			}
-			return comparer(aName.Text(), bName.Text())
+			return specifierComparer(a, b)
 		})
 		coalescedImports = append(coalescedImports, categorized.sourcePhaseImports...)
 

@@ -79,6 +79,37 @@ import.source("a.d.ts/c.d.wasm.ts");
 >source : any
 >"a.d.ts/c.d.wasm.ts" : "a.d.ts/c.d.wasm.ts"
 
+import p from "c";
+>p : string
+
+const q: string = p;
+>q : string
+>p : string
+
+import source r from "c";
+>r : any
+
+import source s from "c/a";
+>s : any
+
+import source t from "c/b";
+>t : any
+
+import.source("c");
+>import.source("c") : Promise<any>
+>source : any
+>"c" : "c"
+
+import.source("c/a");
+>import.source("c/a") : Promise<any>
+>source : any
+>"c/a" : "c/a"
+
+import.source("c/b");
+>import.source("c/b") : Promise<any>
+>source : any
+>"c/b" : "c/b"
+
 === node_modules/a.d.ts/index.d.ts ===
 declare const a: string;
 >a : string
@@ -87,6 +118,21 @@ export default a;
 >a : string
 
 === node_modules/a.d.ts/c.d.wasm.ts ===
+
+export {};
+
+=== node_modules/c/index.d.ts ===
+declare const a: string;
+>a : string
+
+export default a;
+>a : string
+
+=== node_modules/c/index.d.mts ===
+
+export {};
+
+=== node_modules/c/index.d.cts ===
 
 export {};
 
