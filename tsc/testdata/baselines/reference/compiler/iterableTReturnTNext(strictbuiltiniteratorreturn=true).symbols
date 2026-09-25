@@ -3,7 +3,7 @@
 === iterableTReturnTNext.ts ===
 declare const map: Map<string, number>;
 >map : Symbol(map, Decl(iterableTReturnTNext.ts, 0, 13))
->Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
 
 declare const set: Set<number>;
 >set : Symbol(set, Decl(iterableTReturnTNext.ts, 1, 13))
@@ -70,7 +70,7 @@ const r3: number | undefined = set.values().next().value;
 // based on: https://github.com/microsoft/TypeScript/blob/15f67e0b482faf9f6a3ab9965f3c11196bf3e99b/src/harness/compilerImpl.ts#L77
 class MyMap implements Map<string, number> {
 >MyMap : Symbol(MyMap, Decl(iterableTReturnTNext.ts, 21, 57))
->Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
 
     declare private _keys: string[];
 >_keys : Symbol(MyMap._keys, Decl(iterableTReturnTNext.ts, 24, 44))
@@ -100,7 +100,7 @@ class MyMap implements Map<string, number> {
 >value : Symbol(value, Decl(iterableTReturnTNext.ts, 32, 25))
 >key : Symbol(key, Decl(iterableTReturnTNext.ts, 32, 39))
 >map : Symbol(map, Decl(iterableTReturnTNext.ts, 32, 52))
->Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(iterableTReturnTNext.ts, 32, 87))
 
     get(key: string): number | undefined { return undefined; }

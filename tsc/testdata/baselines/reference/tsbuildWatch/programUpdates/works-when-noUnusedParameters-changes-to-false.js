@@ -22,7 +22,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -71,7 +71,7 @@ Directory watches::
   /user/username/projects/myproject (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/myproject/index.ts
 Signatures::
 
@@ -112,6 +112,6 @@ Directory watches::
   /user/username/projects/myproject (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/myproject/index.ts
 Signatures::

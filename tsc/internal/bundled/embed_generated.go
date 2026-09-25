@@ -185,14 +185,28 @@ var (
 	libs_lib_es2025_promise_d_ts string
 	//go:embed libs/lib.es2025.regexp.d.ts
 	libs_lib_es2025_regexp_d_ts string
+	//go:embed libs/lib.es2026.array.d.ts
+	libs_lib_es2026_array_d_ts string
+	//go:embed libs/lib.es2026.collection.d.ts
+	libs_lib_es2026_collection_d_ts string
+	//go:embed libs/lib.es2026.d.ts
+	libs_lib_es2026_d_ts string
+	//go:embed libs/lib.es2026.error.d.ts
+	libs_lib_es2026_error_d_ts string
+	//go:embed libs/lib.es2026.full.d.ts
+	libs_lib_es2026_full_d_ts string
+	//go:embed libs/lib.es2026.iterator.d.ts
+	libs_lib_es2026_iterator_d_ts string
+	//go:embed libs/lib.es2026.json.d.ts
+	libs_lib_es2026_json_d_ts string
+	//go:embed libs/lib.es2026.math.d.ts
+	libs_lib_es2026_math_d_ts string
+	//go:embed libs/lib.es2026.typedarrays.d.ts
+	libs_lib_es2026_typedarrays_d_ts string
 	//go:embed libs/lib.es5.d.ts
 	libs_lib_es5_d_ts string
 	//go:embed libs/lib.es6.d.ts
 	libs_lib_es6_d_ts string
-	//go:embed libs/lib.esnext.array.d.ts
-	libs_lib_esnext_array_d_ts string
-	//go:embed libs/lib.esnext.collection.d.ts
-	libs_lib_esnext_collection_d_ts string
 	//go:embed libs/lib.esnext.d.ts
 	libs_lib_esnext_d_ts string
 	//go:embed libs/lib.esnext.date.d.ts
@@ -201,8 +215,6 @@ var (
 	libs_lib_esnext_decorators_d_ts string
 	//go:embed libs/lib.esnext.disposable.d.ts
 	libs_lib_esnext_disposable_d_ts string
-	//go:embed libs/lib.esnext.error.d.ts
-	libs_lib_esnext_error_d_ts string
 	//go:embed libs/lib.esnext.full.d.ts
 	libs_lib_esnext_full_d_ts string
 	//go:embed libs/lib.esnext.intl.d.ts
@@ -211,8 +223,6 @@ var (
 	libs_lib_esnext_sharedmemory_d_ts string
 	//go:embed libs/lib.esnext.temporal.d.ts
 	libs_lib_esnext_temporal_d_ts string
-	//go:embed libs/lib.esnext.typedarrays.d.ts
-	libs_lib_esnext_typedarrays_d_ts string
 	//go:embed libs/lib.scripthost.d.ts
 	libs_lib_scripthost_d_ts string
 	//go:embed libs/lib.webworker.asynciterable.d.ts
@@ -315,20 +325,25 @@ var embeddedContents = map[string]string{
 	"libs/lib.es2025.iterator.d.ts":         libs_lib_es2025_iterator_d_ts,
 	"libs/lib.es2025.promise.d.ts":          libs_lib_es2025_promise_d_ts,
 	"libs/lib.es2025.regexp.d.ts":           libs_lib_es2025_regexp_d_ts,
+	"libs/lib.es2026.array.d.ts":            libs_lib_es2026_array_d_ts,
+	"libs/lib.es2026.collection.d.ts":       libs_lib_es2026_collection_d_ts,
+	"libs/lib.es2026.d.ts":                  libs_lib_es2026_d_ts,
+	"libs/lib.es2026.error.d.ts":            libs_lib_es2026_error_d_ts,
+	"libs/lib.es2026.full.d.ts":             libs_lib_es2026_full_d_ts,
+	"libs/lib.es2026.iterator.d.ts":         libs_lib_es2026_iterator_d_ts,
+	"libs/lib.es2026.json.d.ts":             libs_lib_es2026_json_d_ts,
+	"libs/lib.es2026.math.d.ts":             libs_lib_es2026_math_d_ts,
+	"libs/lib.es2026.typedarrays.d.ts":      libs_lib_es2026_typedarrays_d_ts,
 	"libs/lib.es5.d.ts":                     libs_lib_es5_d_ts,
 	"libs/lib.es6.d.ts":                     libs_lib_es6_d_ts,
-	"libs/lib.esnext.array.d.ts":            libs_lib_esnext_array_d_ts,
-	"libs/lib.esnext.collection.d.ts":       libs_lib_esnext_collection_d_ts,
 	"libs/lib.esnext.d.ts":                  libs_lib_esnext_d_ts,
 	"libs/lib.esnext.date.d.ts":             libs_lib_esnext_date_d_ts,
 	"libs/lib.esnext.decorators.d.ts":       libs_lib_esnext_decorators_d_ts,
 	"libs/lib.esnext.disposable.d.ts":       libs_lib_esnext_disposable_d_ts,
-	"libs/lib.esnext.error.d.ts":            libs_lib_esnext_error_d_ts,
 	"libs/lib.esnext.full.d.ts":             libs_lib_esnext_full_d_ts,
 	"libs/lib.esnext.intl.d.ts":             libs_lib_esnext_intl_d_ts,
 	"libs/lib.esnext.sharedmemory.d.ts":     libs_lib_esnext_sharedmemory_d_ts,
 	"libs/lib.esnext.temporal.d.ts":         libs_lib_esnext_temporal_d_ts,
-	"libs/lib.esnext.typedarrays.d.ts":      libs_lib_esnext_typedarrays_d_ts,
 	"libs/lib.scripthost.d.ts":              libs_lib_scripthost_d_ts,
 	"libs/lib.webworker.asynciterable.d.ts": libs_lib_webworker_asynciterable_d_ts,
 	"libs/lib.webworker.d.ts":               libs_lib_webworker_d_ts,
