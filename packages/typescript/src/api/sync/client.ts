@@ -1,7 +1,6 @@
-import { serverFS } from "../fs.ts";
 import {
     configureFileSystemCallbacks,
-    validateFileSystemCallbackResult,
+    encodeFileSystemCallbackResult,
 } from "../fsCallbacks.ts";
 import {
     type ClientOptions,
@@ -64,9 +63,7 @@ export class Client {
 
                     channel.registerCallback(name, (_, arg) => {
                         const { path, data } = JSON.parse(arg);
-                        const result = callback(path, data);
-                        validateFileSystemCallbackResult(name, result);
-                        return result === serverFS.useOS ? "" : "true";
+                        return JSON.stringify(encodeFileSystemCallbackResult(name, callback(path, data)));
                     });
 
                     continue;
@@ -75,16 +72,7 @@ export class Client {
                 const callback = options.fs[name];
                 if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
                 channel.registerCallback(name, (_, arg) => {
-                    const result = callback(JSON.parse(arg));
-                    validateFileSystemCallbackResult(name, result);
-                    if (result === serverFS.useOS) return "";
-                    if (name === "readFile") {
-                        return JSON.stringify({ content: result });
-                    }
-                    if (name === "stat") {
-                        return JSON.stringify({ stat: result });
-                    }
-                    return JSON.stringify(result);
+                    return JSON.stringify(encodeFileSystemCallbackResult(name, callback(JSON.parse(arg))));
                 });
             }
         }

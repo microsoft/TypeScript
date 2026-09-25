@@ -187,6 +187,15 @@ describe("API", { concurrency }, () => {
                 writeFile: serverFS.useOS,
             };
             void new API({ fs: callbacks });
+            void new API({ fs: { ...callbacks, writeFile: serverFS.noop } });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    realpath: () => serverFS.identity,
+                    stat: () => serverFS.fakeStat,
+                    writeFile: () => serverFS.noop,
+                },
+            });
             // @ts-expect-error Filesystem callback configurations must specify every operation.
             void new API({ fs: { readFile: serverFS.useOS } });
             void new API({
@@ -201,6 +210,13 @@ describe("API", { concurrency }, () => {
                     ...callbacks,
                     // @ts-expect-error Infer is only a valid stat implementation.
                     fileExists: serverFS.fakeStat,
+                },
+            });
+            void new API({
+                fs: {
+                    ...callbacks,
+                    // @ts-expect-error Noop is only a valid writeFile implementation.
+                    readFile: serverFS.noop,
                 },
             });
         }
@@ -3730,7 +3746,7 @@ describe("readFile callback semantics", { concurrency }, () => {
             ...createVirtualFileSystem({
                 "/tsconfig.json": "{}",
             }),
-            readFile: (() => undefined) as unknown as FileSystemCallbacks["readFile"],
+            readFile: (() => null) as unknown as FileSystemCallbacks["readFile"],
         };
         using api = new API({ cwd: "/", fs });
         assert.throws(
@@ -3739,7 +3755,7 @@ describe("readFile callback semantics", { concurrency }, () => {
         );
     });
 
-    test("readFile: string returns content, null blocks fallback, useOS falls through to the server OS", () => {
+    test("readFile: string returns content, undefined blocks fallback, useOS falls through to the server OS", () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x: number = 1;`,
@@ -3751,8 +3767,7 @@ describe("readFile callback semantics", { concurrency }, () => {
             ...vfs,
             readFile: (fileName: string) => {
                 if (fileName === blockedPath) {
-                    // null = file not found, don't fall back to real FS
-                    return null;
+                    return undefined;
                 }
                 // Try the VFS first; if it has the file, return its content (string).
                 // Otherwise use the OS filesystem on the server.
@@ -3774,7 +3789,7 @@ describe("readFile callback semantics", { concurrency }, () => {
         assert.equal(sf.text, virtualFiles["/src/index.ts"]);
 
         // 2. useOS fallback: lib files from the server OS should be present.
-        //    If readFile returned null for unknowns, lib files would be missing
+        //    If readFile returned undefined rather than useOS for unknowns, lib files would be missing
         //    and `number` would not resolve — this was the original async bug.
         //    Verify by checking that `number` resolves to a proper type (not error).
         const pos = virtualFiles["/src/index.ts"].indexOf("x:");
@@ -3782,9 +3797,9 @@ describe("readFile callback semantics", { concurrency }, () => {
         assert.ok(type, "Type should resolve");
         assert.ok(type.flags & TypeFlags.Number, `Expected number type, got flags ${type.flags}`);
 
-        // 3. null blocks fallback: blocked file should not be found
+        // 3. undefined blocks fallback: blocked file should not be found
         const blockedSf = project.program.getSourceFile(blockedPath);
-        assert.equal(blockedSf, undefined, "Blocked file should not be found (null prevents fallback)");
+        assert.equal(blockedSf, undefined, "Blocked file should not be found");
     });
 
     test("configured case sensitivity is used by the server and client", () => {
@@ -3910,7 +3925,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
                 callbackCalls.push(`stat:${path}`);
                 if (host.directoryExists(path)) return { mode: 0o040555, size: 0, mtime: new Date(0) };
                 if (host.fileExists(path)) return { mode: 0o100444, size: 0, mtime: new Date(0) };
-                return null;
+                return undefined;
             },
             writeFile: (path, content) => {
                 callbackCalls.push(`writeFile:${path}`);

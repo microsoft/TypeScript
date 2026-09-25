@@ -30,6 +30,7 @@ export interface FileSystemStat {
 const useOS: unique symbol = Symbol("useOS");
 const identity: unique symbol = Symbol("identity");
 const fakeStat: unique symbol = Symbol("fakeStat");
+const noop: unique symbol = Symbol("noop");
 
 export const serverFS: {
     /** Delegate the configured operation, or the current callback invocation, to the server's operating-system filesystem. */
@@ -38,10 +39,13 @@ export const serverFS: {
     readonly identity: typeof identity;
     /** Synthesize stat information from `directoryExists` and `fileExists`. Valid only for `stat`. */
     readonly fakeStat: typeof fakeStat;
+    /** Ignore writes without invoking a callback or writing to the server's operating-system filesystem. Valid only for `writeFile`. */
+    readonly noop: typeof noop;
 } = {
     useOS: useOS,
     identity: identity,
     fakeStat: fakeStat,
+    noop: noop,
 };
 
 export interface FileSystemCallbacks {
@@ -51,13 +55,22 @@ export interface FileSystemCallbacks {
     /**
      * Read a file's content.
      * - Return the file content as a `string` (including `""` for empty files).
-     * - Return `null` to indicate the file does not exist (without falling back to the real FS).
+     * - Return `undefined` to indicate the file does not exist.
      * - Return {@link serverFS.useOS} to fall back to the server's operating-system filesystem.
      */
-    readFile: ((fileName: string) => string | null | typeof serverFS.useOS) | typeof serverFS.useOS;
-    realpath: ((path: string) => string | typeof serverFS.useOS) | typeof serverFS.useOS | typeof serverFS.identity;
-    stat: ((path: string) => FileSystemStat | null | typeof serverFS.useOS) | typeof serverFS.useOS | typeof serverFS.fakeStat;
-    writeFile: ((path: string, content: string) => void | typeof serverFS.useOS) | typeof serverFS.useOS;
+    readFile: ((fileName: string) => string | undefined | typeof serverFS.useOS) | typeof serverFS.useOS;
+    realpath:
+        | ((path: string) => string | typeof serverFS.useOS | typeof serverFS.identity)
+        | typeof serverFS.useOS
+        | typeof serverFS.identity;
+    stat:
+        | ((path: string) => FileSystemStat | undefined | typeof serverFS.useOS | typeof serverFS.fakeStat)
+        | typeof serverFS.useOS
+        | typeof serverFS.fakeStat;
+    writeFile:
+        | ((path: string, content: string) => void | typeof serverFS.useOS | typeof serverFS.noop)
+        | typeof serverFS.useOS
+        | typeof serverFS.noop;
 }
 
 /** The callback names supported by the Go server for virtual FS delegation. */

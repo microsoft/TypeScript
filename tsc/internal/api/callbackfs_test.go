@@ -59,8 +59,8 @@ func TestCallbackFSStatAndEntries(t *testing.T) {
 	fs := newCallbackFS(base, []string{"stat", "getAccessibleEntries"}, nil)
 	conn := &callbackTestConn{
 		responses: map[string]json.Value{
-			callbackStat:                 []byte(`{"stat":{"mode":33060,"size":12,"mtime":"2024-01-02T03:04:05.000Z"}}`),
-			callbackGetAccessibleEntries: []byte(`{"files":["link.ts"],"directories":["pkg"],"symlinks":["link.ts","pkg"]}`),
+			callbackStat:                 []byte(`{"kind":"value","value":{"mode":33060,"size":12,"mtime":"2024-01-02T03:04:05.000Z"}}`),
+			callbackGetAccessibleEntries: []byte(`{"kind":"value","value":{"files":["link.ts"],"directories":["pkg"],"symlinks":["link.ts","pkg"]}}`),
 		},
 	}
 	fs.SetConnection(t.Context(), conn)
@@ -76,6 +76,10 @@ func TestCallbackFSStatAndEntries(t *testing.T) {
 	if !info.ModTime().Equal(wantTime) {
 		t.Fatalf("ModTime() = %v, want %v", info.ModTime(), wantTime)
 	}
+	conn.responses[callbackStat] = []byte(`{"kind":"missing"}`)
+	if info := fs.Stat("/missing.ts"); info != nil {
+		t.Fatalf("Stat(missing) = %#v, want nil", info)
+	}
 
 	entries := fs.GetAccessibleEntries("/")
 	if _, ok := entries.Symlinks["link.ts"]; !ok {
@@ -85,7 +89,7 @@ func TestCallbackFSStatAndEntries(t *testing.T) {
 		t.Fatal("expected directory symlink metadata")
 	}
 
-	conn.responses[callbackGetAccessibleEntries] = []byte(`{"files":[],"directories":["src"],"symlinks":[]}`)
+	conn.responses[callbackGetAccessibleEntries] = []byte(`{"kind":"value","value":{"files":[],"directories":["src"],"symlinks":[]}}`)
 	entries = fs.GetAccessibleEntries("/")
 	if entries.Symlinks == nil {
 		t.Fatal("explicitly empty symlink metadata was treated as unavailable")
@@ -122,7 +126,7 @@ func TestCallbackFSWriteFilePassthrough(t *testing.T) {
 
 	base := vfstest.FromMap(map[string]string{}, true)
 	fs := newCallbackFS(base, []string{"writeFile"}, nil)
-	conn := &callbackTestConn{responses: map[string]json.Value{callbackWriteFile: nil}}
+	conn := &callbackTestConn{responses: map[string]json.Value{callbackWriteFile: []byte(`{"kind":"useOS"}`)}}
 	fs.SetConnection(t.Context(), conn)
 
 	if err := fs.WriteFile("/use-os.ts", "content"); err != nil {
@@ -132,11 +136,68 @@ func TestCallbackFSWriteFilePassthrough(t *testing.T) {
 		t.Fatalf("base ReadFile() = %q, %v, want OS filesystem content", content, ok)
 	}
 
-	conn.responses[callbackWriteFile] = []byte("true")
+	conn.responses[callbackWriteFile] = []byte(`{"kind":"value"}`)
 	if err := fs.WriteFile("/handled.ts", "content"); err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := base.ReadFile("/handled.ts"); ok {
 		t.Fatal("handled callback write unexpectedly reached base filesystem")
+	}
+
+	conn.responses[callbackWriteFile] = []byte(`{"kind":"noop"}`)
+	if err := fs.WriteFile("/noop.ts", "content"); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := base.ReadFile("/noop.ts"); ok {
+		t.Fatal("noop callback write unexpectedly reached base filesystem")
+	}
+}
+
+func TestCallbackFSWriteFileNoop(t *testing.T) {
+	t.Parallel()
+
+	base := vfstest.FromMap(map[string]string{}, true)
+	fs := newCallbackFS(base, []string{"writeFile:noop"}, nil)
+
+	if err := fs.WriteFile("/ignored.ts", "content"); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := base.ReadFile("/ignored.ts"); ok {
+		t.Fatal("noop write unexpectedly reached base filesystem")
+	}
+}
+
+func TestCallbackFSPerCallFakeStat(t *testing.T) {
+	t.Parallel()
+
+	base := vfstest.FromMap(map[string]string{}, true)
+	fs := newCallbackFS(base, []string{"stat", "directoryExists", "fileExists"}, nil)
+	fs.SetConnection(t.Context(), &callbackTestConn{
+		responses: map[string]json.Value{
+			callbackStat:            []byte(`{"kind":"fakeStat"}`),
+			callbackDirectoryExists: []byte(`{"kind":"value","value":false}`),
+			callbackFileExists:      []byte(`{"kind":"value","value":true}`),
+		},
+	})
+
+	info := fs.Stat("/virtual.ts")
+	if info == nil || info.IsDir() {
+		t.Fatalf("Stat() = %#v, want fake file stat", info)
+	}
+}
+
+func TestCallbackFSPerCallIdentityRealpath(t *testing.T) {
+	t.Parallel()
+
+	base := vfstest.FromMap(map[string]string{}, true)
+	fs := newCallbackFS(base, []string{"realpath"}, nil)
+	fs.SetConnection(t.Context(), &callbackTestConn{
+		responses: map[string]json.Value{
+			callbackRealpath: []byte(`{"kind":"identity"}`),
+		},
+	})
+
+	if got := fs.Realpath("/virtual.ts"); got != "/virtual.ts" {
+		t.Fatalf("Realpath() = %q, want identity", got)
 	}
 }

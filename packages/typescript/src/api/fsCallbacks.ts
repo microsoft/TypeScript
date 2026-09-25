@@ -9,6 +9,14 @@ export interface FileSystemCallbackConfiguration {
     arguments: string[];
 }
 
+export type FileSystemCallbackResponse =
+    | { kind: "value"; value?: unknown; }
+    | { kind: "missing"; }
+    | { kind: "useOS"; }
+    | { kind: "identity"; }
+    | { kind: "fakeStat"; }
+    | { kind: "noop"; };
+
 export function configureFileSystemCallbacks(fs: FileSystemCallbacks | undefined): FileSystemCallbackConfiguration {
     if (!fs) {
         return { callbackNames: [], arguments: [] };
@@ -33,15 +41,31 @@ export function configureFileSystemCallbacks(fs: FileSystemCallbacks | undefined
             args.push("stat:fakeStat");
             continue;
         }
+        if (name === "writeFile" && value === serverFS.noop) {
+            args.push("writeFile:noop");
+            continue;
+        }
         throw new TypeError(`Invalid filesystem callback '${name}': expected a function or a supported serverFS sentinel`);
     }
     args.push(...callbackNames);
     return { callbackNames, arguments: args };
 }
 
-export function validateFileSystemCallbackResult(name: typeof fsCallbackNames[number], result: unknown): void {
+export function encodeFileSystemCallbackResult(
+    name: typeof fsCallbackNames[number],
+    result: unknown,
+): FileSystemCallbackResponse {
     if (result === serverFS.useOS) {
-        return;
+        return { kind: "useOS" };
+    }
+    if (name === "realpath" && result === serverFS.identity) {
+        return { kind: "identity" };
+    }
+    if (name === "stat" && result === serverFS.fakeStat) {
+        return { kind: "fakeStat" };
+    }
+    if (name === "writeFile" && result === serverFS.noop) {
+        return { kind: "noop" };
     }
 
     let valid: boolean;
@@ -59,24 +83,25 @@ export function validateFileSystemCallbackResult(name: typeof fsCallbackNames[nu
             break;
         }
         case "readFile":
-            valid = typeof result === "string" || result === null;
+            if (result === undefined) return { kind: "missing" };
+            valid = typeof result === "string";
             break;
         case "realpath":
             valid = typeof result === "string";
             break;
         case "stat": {
-            const stat = result as { mode?: unknown; size?: unknown; mtime?: unknown; } | null;
-            valid = stat === null
-                || !!stat
-                    && typeof stat.mode === "number"
-                    && Number.isSafeInteger(stat.mode)
-                    && stat.mode >= 0
-                    && stat.mode <= 0xffff_ffff
-                    && typeof stat.size === "number"
-                    && Number.isSafeInteger(stat.size)
-                    && stat.size >= 0
-                    && stat.mtime instanceof Date
-                    && !Number.isNaN(stat.mtime.getTime());
+            if (result === undefined) return { kind: "missing" };
+            const stat = result as { mode?: unknown; size?: unknown; mtime?: unknown; } | undefined;
+            valid = !!stat
+                && typeof stat.mode === "number"
+                && Number.isSafeInteger(stat.mode)
+                && stat.mode >= 0
+                && stat.mode <= 0xffff_ffff
+                && typeof stat.size === "number"
+                && Number.isSafeInteger(stat.size)
+                && stat.size >= 0
+                && stat.mtime instanceof Date
+                && !Number.isNaN(stat.mtime.getTime());
             break;
         }
         case "writeFile":
@@ -87,6 +112,7 @@ export function validateFileSystemCallbackResult(name: typeof fsCallbackNames[nu
     if (!valid) {
         throw new TypeError(`Invalid result from filesystem callback '${name}'`);
     }
+    return name === "writeFile" ? { kind: "value" } : { kind: "value", value: result };
 }
 
 function isStringArray(value: unknown): value is string[] {

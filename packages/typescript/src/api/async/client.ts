@@ -9,14 +9,11 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
-import {
-    type FileSystemCallbacks,
-    serverFS,
-} from "../fs.ts";
+import type { FileSystemCallbacks } from "../fs.ts";
 import {
     configureFileSystemCallbacks,
+    encodeFileSystemCallbackResult,
     type FileSystemCallbackConfiguration,
-    validateFileSystemCallbackResult,
 } from "../fsCallbacks.ts";
 import {
     type ClientOptions,
@@ -151,9 +148,7 @@ export class Client {
 
                 const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
                 connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    const result = callback(arg.path, arg.data);
-                    validateFileSystemCallbackResult(name, result);
-                    return result === serverFS.useOS ? null : true;
+                    return encodeFileSystemCallbackResult(name, callback(arg.path, arg.data));
                 });
 
                 continue;
@@ -163,16 +158,7 @@ export class Client {
             if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
             const requestType = new RequestType<unknown, unknown, void>(name);
             connection.onRequest(requestType, (arg: unknown) => {
-                const result = callback(arg as string);
-                validateFileSystemCallbackResult(name, result);
-                if (result === serverFS.useOS) return null;
-                if (name === "readFile") {
-                    return { content: result };
-                }
-                if (name === "stat") {
-                    return { stat: result };
-                }
-                return result;
+                return encodeFileSystemCallbackResult(name, callback(arg as string));
             });
         }
     }
