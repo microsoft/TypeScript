@@ -17,3 +17,7 @@ export function withSibling({ inner: { a = 1, b } = {} }: Outer) {
 export function alone({ inner: { b } = {} }: Outer) {
     return b;
 }
+
+declare function contextual(callback: (outer: Outer) => unknown): void;
+
+contextual(({ inner: { b } = {} }) => b);
