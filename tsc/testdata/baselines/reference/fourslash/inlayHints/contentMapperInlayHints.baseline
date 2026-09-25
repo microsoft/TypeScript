@@ -1,0 +1,96 @@
+// === Inlay Hints ===
+(+ 1 2 "oops")
+   ^
+{
+  "position": {
+    "line": 0,
+    "character": 3
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///main.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 21
+          },
+          "end": {
+            "line": 0,
+            "character": 22
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+(+ 1 2 "oops")
+     ^
+{
+  "position": {
+    "line": 0,
+    "character": 5
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///main.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 32
+          },
+          "end": {
+            "line": 0,
+            "character": 33
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+(+ 1 2 "oops")
+       ^
+{
+  "position": {
+    "line": 0,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///main.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 43
+          },
+          "end": {
+            "line": 0,
+            "character": 44
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
