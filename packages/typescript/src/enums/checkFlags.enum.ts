@@ -29,6 +29,7 @@ export enum CheckFlags {
     IsDiscriminantComputed = 1 << 24,
     IsDiscriminant = 1 << 25,
     IndexSymbol = 1 << 26,
+    NonFileOwned = 1 << 27,
     Synthetic = SyntheticProperty | SyntheticMethod,
     NonUniformAndLiteral = HasNonUniformType | HasLiteralType,
     Partial = ReadPartial | WritePartial,

@@ -33,6 +33,7 @@ const (
 	CheckFlagsIsDiscriminantComputed CheckFlags = 1 << 24 // IsDiscriminant flags has been computed
 	CheckFlagsIsDiscriminant         CheckFlags = 1 << 25 // Discriminant property
 	CheckFlagsIndexSymbol            CheckFlags = 1 << 26 // Synthetic property created from index signature
+	CheckFlagsNonFileOwned           CheckFlags = 1 << 27 // Not created by BindSourceFile
 	CheckFlagsSynthetic                         = CheckFlagsSyntheticProperty | CheckFlagsSyntheticMethod
 	CheckFlagsNonUniformAndLiteral              = CheckFlagsHasNonUniformType | CheckFlagsHasLiteralType
 	CheckFlagsPartial                           = CheckFlagsReadPartial | CheckFlagsWritePartial

@@ -122,6 +122,7 @@ func main() {
 			"IsDiscriminantComputed": toInt32(ast.CheckFlagsIsDiscriminantComputed),
 			"IsDiscriminant":         toInt32(ast.CheckFlagsIsDiscriminant),
 			"IndexSymbol":            toInt32(ast.CheckFlagsIndexSymbol),
+			"NonFileOwned":           toInt32(ast.CheckFlagsNonFileOwned),
 			"Synthetic":              toInt32(ast.CheckFlagsSynthetic),
 			"NonUniformAndLiteral":   toInt32(ast.CheckFlagsNonUniformAndLiteral),
 			"Partial":                toInt32(ast.CheckFlagsPartial),
