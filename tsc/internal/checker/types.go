@@ -409,6 +409,7 @@ type AssertionLinks struct {
 type SourceFileLinks struct {
 	typeChecked                  bool
 	unusedChecked                bool
+	deferredGlobalDiagnostics    []*ast.Diagnostic
 	externalHelpersModule        *ast.Symbol
 	requestedExternalEmitHelpers ExternalEmitHelpers
 	deferredNodes                collections.OrderedSet[*ast.Node]

@@ -26,7 +26,10 @@ func getAllDiagnostics(ctx context.Context, program *compiler.Program, file *ast
 			diags = append(diags, program.GetDeclarationDiagnostics(ctx, sourceFile)...)
 		}
 	}
-	return diags
+	// File-less diagnostics are published separately as project diagnostics.
+	return core.Filter(diags, func(diag *ast.Diagnostic) bool {
+		return diag.File() != nil
+	})
 }
 
 func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri) (lsproto.DocumentDiagnosticResponse, error) {

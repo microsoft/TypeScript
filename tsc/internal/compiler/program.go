@@ -1568,6 +1568,10 @@ func (p *Program) getDiagnosticsWithPrecedingDirectives(sourceFile *ast.SourceFi
 	filtered := make([]*ast.Diagnostic, 0, len(diags))
 	for _, diagnostic := range diags {
 		ignoreDiagnostic := false
+		if diagnostic.File() != sourceFile {
+			filtered = append(filtered, diagnostic)
+			continue
+		}
 		for line := scanner.ComputeLineOfPosition(lineStarts, diagnostic.Pos()) - 1; line >= 0; line-- {
 			// If line contains a @ts-ignore or @ts-expect-error directive, ignore this diagnostic and change
 			// the directive kind to @ts-ignore to indicate it was used.
@@ -2023,8 +2027,6 @@ func GetDiagnosticsOfAnyProgram(
 
 			if len(allDiagnostics) == configFileParsingDiagnosticsLength {
 				allDiagnostics = appendDiagnosticsForAllFiles(allDiagnostics, getSemanticDiagnostics)
-				// Ask for the global diagnostics again (they were empty above); we may have found new during checking, e.g. missing globals.
-				allDiagnostics = append(allDiagnostics, program.GetGlobalDiagnostics(ctx)...)
 			}
 
 			if (skipNoEmitCheckForDtsDiagnostics || program.Options().NoEmit.IsTrue()) && program.Options().GetEmitDeclarations() && len(allDiagnostics) == configFileParsingDiagnosticsLength {

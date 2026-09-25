@@ -102,12 +102,8 @@ export const value = wrap({ items: [] as Json[] });
 
 
 tsgo 
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: Success
 Output::
-[91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-
-Found 1 error.
-
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2025.full.d.ts","./repro.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"05e6c83fc809e0d08962e5b3425da798-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n","signature":"93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n","impliedNodeFormat":1}],"options":{"strict":true},"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -170,15 +166,6 @@ SemanticDiagnostics::
 Signatures::
 (computed .d.ts) /home/src/workspaces/project/repro.ts
 
-
-Diff:: Incremental signature generation leaks a global excessive-instantiation diagnostic that a clean build does not report.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,4 @@
-+[91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-+
-+Found 1 error.
-+
 
 Edit [1]:: no change
 
@@ -257,12 +244,8 @@ export const value = wrap({ items: [] as Json[] });
 
 
 tsgo 
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: Success
 Output::
-[91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-
-Found 1 error.
-
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2025.full.d.ts","./repro.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"989f15878b40fd4e572d65e47a8cc845-type Json = string | Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as Json[] });\n// comment-only edit\n\n// another comment\n","signature":"93e92d0786a923286e91eb7834b5ae1a-type Json = string | Json[];\nexport declare const value: {\n    items: Json[];\n};\nexport {};\n","impliedNodeFormat":1}],"options":{"strict":true},"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -325,15 +308,6 @@ SemanticDiagnostics::
 Signatures::
 (computed .d.ts) /home/src/workspaces/project/repro.ts
 
-
-Diff:: Incremental signature generation leaks a global excessive-instantiation diagnostic that a clean build does not report.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,4 @@
-+[91merror[0m[90m TS2589: [0mType instantiation is excessively deep and possibly infinite.
-+
-+Found 1 error.
-+
 
 Edit [3]:: no change
 

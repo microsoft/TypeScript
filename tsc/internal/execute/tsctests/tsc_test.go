@@ -1364,7 +1364,6 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Incremental signature generation leaks a global excessive-instantiation diagnostic that a clean build does not report.",
 				},
 				noChange,
 				{
@@ -1372,7 +1371,6 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// another comment\n")
 					},
-					expectedDiff: "Incremental signature generation leaks a global excessive-instantiation diagnostic that a clean build does not report.",
 				},
 				noChange,
 			},
@@ -2318,21 +2316,18 @@ func TestTscIncremental(t *testing.T) {
 				"/home/src/workspaces/project/repro.ts":      `export function* values() { yield 1; }`,
 			},
 			edits: []*tscEdit{
-				{
-					caption:      "no change",
-					edit:         noChange.edit,
-					expectedDiff: "Global diagnostics produced during checking are not cached with the file's semantic diagnostics.",
-				},
+				noChange,
 				{
 					caption: "add a comment",
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
 					},
+					expectedDiff: "Like Strada, signature generation produces the missing-global diagnostic before semantic checking, so it is excluded from the file's semantic diagnostics.",
 				},
 				{
 					caption:      "no change",
 					edit:         noChange.edit,
-					expectedDiff: "Global diagnostics produced during checking are not cached with the file's semantic diagnostics.",
+					expectedDiff: "Like Strada, the cached semantic diagnostics do not include the missing-global diagnostic produced during signature generation.",
 				},
 				{
 					caption: "delete build info to restore the semantic diagnostic",
@@ -2354,22 +2349,14 @@ func TestTscIncremental(t *testing.T) {
 				`),
 			},
 			edits: []*tscEdit{
-				{
-					caption:      "no change",
-					edit:         noChange.edit,
-					expectedDiff: "Global diagnostics produced during checking are not cached with the file's semantic diagnostics.",
-				},
+				noChange,
 				{
 					caption: "add a comment",
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
 					},
 				},
-				{
-					caption:      "no change",
-					edit:         noChange.edit,
-					expectedDiff: "Global diagnostics produced during checking are not cached with the file's semantic diagnostics.",
-				},
+				noChange,
 			},
 		},
 		{
@@ -2379,22 +2366,14 @@ func TestTscIncremental(t *testing.T) {
 				"/home/src/workspaces/project/repro.js":      `export function* values() { yield 1; }`,
 			},
 			edits: []*tscEdit{
-				{
-					caption:      "no change",
-					edit:         noChange.edit,
-					expectedDiff: "Global diagnostics produced during checking are not cached with the file's semantic diagnostics.",
-				},
+				noChange,
 				{
 					caption: "enable javascript checking",
 					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"allowJs": true`, `"allowJs": true, "checkJs": true`)
 					},
 				},
-				{
-					caption:      "no change",
-					edit:         noChange.edit,
-					expectedDiff: "Global diagnostics produced during checking are not cached with the file's semantic diagnostics.",
-				},
+				noChange,
 			},
 		},
 		{
