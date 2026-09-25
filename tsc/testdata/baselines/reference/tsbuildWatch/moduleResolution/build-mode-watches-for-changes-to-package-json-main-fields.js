@@ -253,6 +253,10 @@ export {};
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::
@@ -364,6 +368,10 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::
@@ -469,6 +477,10 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::
