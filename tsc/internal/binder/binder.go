@@ -69,6 +69,7 @@ type Binder struct {
 	emitFlags               ast.NodeFlags
 	seenThisKeyword         bool
 	hasExplicitReturn       bool
+	inReturnPosition        bool
 	hasFlowEffects          bool
 	inAssignmentPattern     bool
 	seenParseError          bool
@@ -1483,6 +1484,10 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 	saveContainer := b.container
 	saveThisContainer := b.thisContainer
 	savedBlockScopeContainer := b.blockScopeContainer
+	savedInReturnPosition := b.inReturnPosition
+	if ast.IsArrowFunction(node) && !ast.IsBlock(node.Body()) {
+		b.inReturnPosition = true
+	}
 	// Depending on what kind of node this is, we may have to adjust the current container
 	// and block-container.   If the current node is a container, then it is automatically
 	// considered the current block-container as well.  Also, for containers that we know
@@ -1620,6 +1625,7 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 	if ast.IsSourceFile(node) && ast.IsExternalOrCommonJSModule(node.AsSourceFile()) || ast.IsAmbientModule(node) {
 		b.bindCommonJSTypeExports(node.Symbol())
 	}
+	b.inReturnPosition = savedInReturnPosition
 	b.container = saveContainer
 	b.thisContainer = saveThisContainer
 	b.blockScopeContainer = savedBlockScopeContainer
@@ -1959,7 +1965,10 @@ func (b *Binder) bindIfStatement(node *ast.Node) {
 }
 
 func (b *Binder) bindReturnStatement(node *ast.Node) {
+	savedInReturnPosition := b.inReturnPosition
+	b.inReturnPosition = true
 	b.bind(node.Expression())
+	b.inReturnPosition = savedInReturnPosition
 	if b.currentReturnTarget != nil {
 		b.addAntecedent(b.currentReturnTarget, b.currentFlow)
 	}
@@ -2318,10 +2327,16 @@ func (b *Binder) bindConditionalExpressionFlow(node *ast.Node) {
 	b.hasFlowEffects = false
 	b.bindCondition(expr.Condition, trueLabel, falseLabel)
 	b.currentFlow = b.finishFlowLabel(trueLabel)
+	if b.inReturnPosition {
+		expr.FlowNodeWhenTrue = b.currentFlow
+	}
 	b.bind(expr.QuestionToken)
 	b.bind(expr.WhenTrue)
 	b.addAntecedent(postExpressionLabel, b.currentFlow)
 	b.currentFlow = b.finishFlowLabel(falseLabel)
+	if b.inReturnPosition {
+		expr.FlowNodeWhenFalse = b.currentFlow
+	}
 	b.bind(expr.ColonToken)
 	b.bind(expr.WhenFalse)
 	b.addAntecedent(postExpressionLabel, b.currentFlow)

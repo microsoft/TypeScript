@@ -214,6 +214,13 @@ type InstantiationExpressionKey struct {
 type SubstitutionTypeKey struct {
 	baseId       TypeId
 	constraintId TypeId
+	isNarrowing  bool
+}
+
+type NarrowableReturnTypeKey struct {
+	typeId                   TypeId
+	typeArguments            CacheHashKey
+	nonPrimitiveExtendsTypes CacheHashKey
 }
 
 // ReverseMappedTypeKey
@@ -643,6 +650,7 @@ type Checker struct {
 	discriminatedContextualTypes                map[DiscriminatedContextualTypeKey]*Type
 	instantiationExpressionTypes                map[InstantiationExpressionKey]*Type
 	substitutionTypes                           map[SubstitutionTypeKey]*Type
+	narrowableReturnTypes                       map[NarrowableReturnTypeKey]bool
 	reverseMappedCache                          map[ReverseMappedTypeKey]*Type
 	reverseHomomorphicMappedCache               map[ReverseMappedTypeKey]*Type
 	iterationTypesCache                         map[IterationTypesKey]IterationTypes
@@ -678,6 +686,7 @@ type Checker struct {
 	typeNodeLinks                               core.LinkStore[*ast.Node, TypeNodeLinks]
 	enumMemberLinks                             core.LinkStore[*ast.Node, EnumMemberLinks]
 	assertionLinks                              core.LinkStore[*ast.Node, AssertionLinks]
+	contextualReturnTypeLinks                   core.LinkStore[*ast.Node, ContextualReturnTypeLinks]
 	arrayLiteralLinks                           core.LinkStore[*ast.Node, ArrayLiteralLinks]
 	switchStatementLinks                        core.LinkStore[*ast.Node, SwitchStatementLinks]
 	jsxElementLinks                             core.LinkStore[*ast.Node, JsxElementLinks]
@@ -959,6 +968,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.discriminatedContextualTypes = make(map[DiscriminatedContextualTypeKey]*Type)
 	c.instantiationExpressionTypes = make(map[InstantiationExpressionKey]*Type)
 	c.substitutionTypes = make(map[SubstitutionTypeKey]*Type)
+	c.narrowableReturnTypes = make(map[NarrowableReturnTypeKey]bool)
 	c.reverseMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.reverseHomomorphicMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.iterationTypesCache = make(map[IterationTypesKey]IterationTypes)
@@ -4176,7 +4186,352 @@ func (c *Checker) checkReturnExpression(container *ast.Node, unwrappedReturnType
 		effectiveExpr = c.getEffectiveCheckNode(expr)
 	}
 	errorNode := core.IfElse(inReturnStatement && !inConditionalExpression, node, effectiveExpr)
-	c.checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr, nil, nil)
+	// If the return type is not narrowable, we simply check if the return expression type is assignable to the return type.
+	if unwrappedReturnType.flags&(TypeFlagsIndexedAccess|TypeFlagsConditional) == 0 || !c.couldContainTypeVariables(unwrappedReturnType) {
+		c.checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr, nil, nil)
+		return
+	}
+	// If the type of the return expression is assignable to the original return type, we don't need to narrow the return type.
+	if c.isTypeAssignableTo(unwrappedExprType, unwrappedReturnType) {
+		return
+	}
+
+	// There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
+	// - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
+	// `function foo(...) {
+	//       return cond ? |expr| : ...
+	// }`
+	// - When the return expression is undefined, or it is defined and it is not one of the branches of a conditional expression, then the position is the return statement itself:
+	// `function foo(...) {
+	//       |return expr;|
+	// }`
+	// or
+	// `function foo(...) {
+	//       |return;|
+	// }`
+	narrowPosition := node
+	narrowFlowNode := getFlowNodeOfNode(node)
+	if expr != nil && ast.IsConditionalExpression(expr.Parent) {
+		conditional := expr.Parent.AsConditionalExpression()
+		if conditional.WhenTrue == expr {
+			narrowFlowNode = conditional.FlowNodeWhenTrue
+		} else {
+			narrowFlowNode = conditional.FlowNodeWhenFalse
+		}
+		narrowPosition = expr
+	}
+	if narrowFlowNode == nil {
+		c.checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr, nil, nil)
+		return
+	}
+
+	allTypeParameters := c.appendTypeParameters(c.getOuterTypeParameters(container, false /*includeThisTypes*/), container.TypeParameters())
+	narrowableTypeParameters := c.getNarrowableTypeParameters(allTypeParameters)
+	if len(narrowableTypeParameters) == 0 || !c.isNarrowableReturnType(unwrappedReturnType) {
+		c.checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr, nil, nil)
+		return
+	}
+
+	var narrowedTypeParameters []*Type
+	var narrowedTypes []*Type
+	for _, narrowable := range narrowableTypeParameters {
+		narrowedType := c.getNarrowedTypeOfNarrowableTypeParameter(narrowable, narrowPosition, narrowFlowNode)
+		if narrowedType == nil {
+			continue
+		}
+		narrowedTypeParameters = append(narrowedTypeParameters, narrowable.typeParameter)
+		narrowedTypes = append(narrowedTypes, c.getNarrowingSubstitutionType(narrowable.typeParameter, narrowedType))
+	}
+
+	narrowedReturnType := unwrappedReturnType
+	if len(narrowedTypeParameters) != 0 {
+		narrowedReturnType = c.instantiateType(unwrappedReturnType, newTypeMapper(narrowedTypeParameters, narrowedTypes))
+	}
+	if expr != nil {
+		links := c.contextualReturnTypeLinks.Get(expr)
+		if links.contextualReturnType == nil {
+			links.contextualReturnType = narrowedReturnType
+		}
+	}
+	narrowedExprType := exprType
+	if expr != nil {
+		narrowedExprType = c.checkExpression(expr)
+	}
+	if functionFlags&ast.FunctionFlagsAsync != 0 {
+		narrowedExprType = c.checkAwaitedType(narrowedExprType, false /*withAlias*/, node, diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+	}
+	c.checkTypeAssignableToAndOptionallyElaborate(narrowedExprType, narrowedReturnType, errorNode, effectiveExpr, nil, nil)
+}
+
+type narrowableTypeParameter struct {
+	typeParameter *Type
+	symbol        *ast.Symbol
+	reference     *ast.Node
+}
+
+type typeParameterReferencePath struct {
+	valid bool
+	found bool
+	path  []*ast.Node
+}
+
+// Narrowable type parameters have a union constraint and are syntactically used as the type of a single parameter in the function, and nothing else.
+func (c *Checker) getNarrowableTypeParameters(candidates []*Type) []*narrowableTypeParameter {
+	var result []*narrowableTypeParameter
+	for _, typeParameter := range candidates {
+		constraint := c.getConstraintOfTypeParameter(typeParameter)
+		if constraint == nil || constraint.flags&TypeFlagsUnion == 0 || typeParameter.symbol == nil || len(typeParameter.symbol.Declarations) != 1 {
+			continue
+		}
+		container := typeParameter.symbol.Declarations[0].Parent
+		if !ast.IsFunctionLike(container) {
+			continue
+		}
+		var parameter *ast.Node
+		var referencePath []*ast.Node
+		invalidReference := false
+		for _, candidate := range container.Parameters() {
+			typeNode := candidate.Type()
+			if typeNode == nil {
+				continue
+			}
+			pathResult := c.getValidTypeParameterReference(typeNode, typeParameter, nil)
+			if !pathResult.valid {
+				invalidReference = true
+				break
+			}
+			if pathResult.found {
+				if parameter != nil {
+					invalidReference = true
+					break
+				}
+				parameter = candidate
+				referencePath = pathResult.path
+			}
+		}
+		if invalidReference || parameter == nil || !c.validateNarrowableReferenceOptionality(parameter, constraint, referencePath) {
+			continue
+		}
+		symbol, reference := c.constructNarrowableReference(parameter, referencePath)
+		if symbol == nil || symbol == c.unknownSymbol || reference == nil {
+			continue
+		}
+		result = append(result, &narrowableTypeParameter{
+			typeParameter: typeParameter,
+			symbol:        symbol,
+			reference:     reference,
+		})
+	}
+	return result
+}
+
+// Given a type node and a type parameter T, getValidTypeParameterReference validates every syntactic occurrence of T and collects a path to a valid occurrence.
+// A valid result with found false means no references were found; an invalid result means invalid or multiple valid references were found; a valid, found result
+// contains the path to the one valid reference. The initially empty path accumulates valid property accesses.
+func (c *Checker) getValidTypeParameterReference(typeNode *ast.Node, typeParameter *Type, path []*ast.Node) typeParameterReferencePath {
+	validNoReference := typeParameterReferencePath{valid: true}
+	invalid := typeParameterReferencePath{}
+	switch typeNode.Kind {
+	case ast.KindTypeReference:
+		if len(typeNode.TypeArguments()) == 0 && c.getSymbolFromTypeReference(typeNode) == typeParameter.symbol {
+			return typeParameterReferencePath{valid: true, found: true, path: path}
+		}
+		// Find type arguments that reference the type parameter.
+		var referencedTypeArgument *ast.Node
+		for _, typeArgument := range typeNode.TypeArguments() {
+			if c.isTypeParameterReferenced(typeParameter, typeArgument) {
+				if referencedTypeArgument != nil {
+					return invalid
+				}
+				referencedTypeArgument = typeArgument
+			}
+		}
+		if referencedTypeArgument == nil {
+			return validNoReference
+		}
+		t := c.getTypeFromTypeReference(typeNode)
+		if !ast.IsTypeReferenceNode(referencedTypeArgument) || c.getTypeFromTypeNode(referencedTypeArgument) != typeParameter || t.symbol == nil || len(t.symbol.Declarations) != 1 {
+			return invalid
+		}
+		typeDeclaration := t.symbol.Declarations[0]
+		aliasDeclaration := typeDeclaration
+		if ast.IsTypeLiteralNode(typeDeclaration) {
+			aliasDeclaration = ast.WalkUpParenthesizedTypes(typeDeclaration.Parent)
+			if !ast.IsTypeAliasDeclaration(aliasDeclaration) {
+				return invalid
+			}
+		} else if !ast.IsInterfaceDeclaration(typeDeclaration) && !ast.IsClassLike(typeDeclaration) {
+			return invalid
+		}
+		typeArgumentIndex := slices.Index(typeNode.TypeArguments(), referencedTypeArgument)
+		typeParameters := aliasDeclaration.TypeParameters()
+		if typeArgumentIndex < 0 || typeArgumentIndex >= len(typeParameters) {
+			return invalid
+		}
+		matchingTypeParameter := c.getDeclaredTypeOfTypeParameter(c.getSymbolOfDeclaration(typeParameters[typeArgumentIndex]))
+		return c.getValidTypeParameterReference(typeDeclaration, matchingTypeParameter, path)
+	case ast.KindInterfaceDeclaration, ast.KindClassDeclaration, ast.KindClassExpression:
+		var heritageClauses *ast.NodeList
+		switch typeNode.Kind {
+		case ast.KindInterfaceDeclaration:
+			heritageClauses = typeNode.AsInterfaceDeclaration().HeritageClauses
+		case ast.KindClassDeclaration:
+			heritageClauses = typeNode.AsClassDeclaration().HeritageClauses
+		case ast.KindClassExpression:
+			heritageClauses = typeNode.AsClassExpression().HeritageClauses
+		}
+		var referencedHeritageType *ast.Node
+		if heritageClauses != nil {
+			for _, clause := range heritageClauses.Nodes {
+				for _, heritageType := range clause.AsHeritageClause().Types.Nodes {
+					if c.isTypeParameterReferenced(typeParameter, heritageType) {
+						if referencedHeritageType != nil {
+							return invalid
+						}
+						referencedHeritageType = heritageType
+					}
+				}
+			}
+		}
+		memberResult := c.getValidTypeParameterReferenceFromMembers(typeNode.Members(), typeParameter, path)
+		if !memberResult.valid {
+			return invalid
+		}
+		if referencedHeritageType != nil {
+			if memberResult.found {
+				return invalid
+			}
+			return c.getValidTypeParameterReference(referencedHeritageType, typeParameter, path)
+		}
+		return memberResult
+	case ast.KindTypeLiteral:
+		return c.getValidTypeParameterReferenceFromMembers(typeNode.Members(), typeParameter, path)
+	case ast.KindIntersectionType:
+		result := validNoReference
+		for _, constituent := range typeNode.AsIntersectionTypeNode().Types.Nodes {
+			constituentResult := c.getValidTypeParameterReference(constituent, typeParameter, path)
+			if !constituentResult.valid || result.found && constituentResult.found {
+				return invalid
+			}
+			if constituentResult.found {
+				result = constituentResult
+			}
+		}
+		return result
+	default:
+		// If we see a reference to the type parameter in the type node here, invalidate the whole thing.
+		if c.isTypeParameterReferenced(typeParameter, typeNode) {
+			return invalid
+		}
+		return validNoReference
+	}
+}
+
+func (c *Checker) getValidTypeParameterReferenceFromMembers(members []*ast.Node, typeParameter *Type, path []*ast.Node) typeParameterReferencePath {
+	result := typeParameterReferencePath{valid: true}
+	for _, member := range members {
+		if !c.isTypeParameterReferenced(typeParameter, member) {
+			continue
+		}
+		if (!ast.IsPropertySignatureDeclaration(member) && !ast.IsPropertyDeclaration(member)) || (!ast.IsIdentifier(member.Name()) && !ast.IsStringLiteral(member.Name())) || member.Type() == nil {
+			return typeParameterReferencePath{}
+		}
+		memberPath := append(slices.Clone(path), member)
+		memberResult := c.getValidTypeParameterReference(member.Type(), typeParameter, memberPath)
+		if !memberResult.valid || result.found && memberResult.found {
+			return typeParameterReferencePath{}
+		}
+		if memberResult.found {
+			result = memberResult
+		}
+	}
+	return result
+}
+
+func (c *Checker) validateNarrowableReferenceOptionality(parameter *ast.Node, constraint *Type, path []*ast.Node) bool {
+	// `function f<T extends ...>(obj: { prop?: { prop2: T }})` is not allowed.
+	for _, member := range path[:max(0, len(path)-1)] {
+		if member.QuestionToken() != nil {
+			return false
+		}
+	}
+	parameterIsOptional := parameter.QuestionToken() != nil
+	// `function f<T extends ...>(obj?: { prop: T })` is not allowed.
+	if parameterIsOptional && len(path) != 0 {
+		return false
+	}
+	isOptional := parameterIsOptional || len(path) != 0 && path[len(path)-1].QuestionToken() != nil
+	// `function f<T extends boolean>(obj?: T)` is not allowed under `strictNullChecks`.
+	return !isOptional || !c.strictNullChecks || c.containsUndefinedType(constraint)
+}
+
+// Given a parameter declaration and a name path to a reference of type parameter T in the parameter's type,
+// constructNarrowableReference constructs a reference to the parameter property corresponding to T.
+// Examples:
+// `constructNarrowableReference(param: { b: T }, [b])` => `param.b`
+// `constructNarrowableReference(param: { a: { b: T } }, [a, b])` => `param.a.b`
+// `constructNarrowableReference(param: { "a b": T }, ["a b"])` => `param["a b"]`
+// `constructNarrowableReference({ b }: { b: T }, [b])` => `b`
+// `constructNarrowableReference({ a }: { a: { b: T } }, [a, b])` => `a.b`
+// `constructNarrowableReference({ a: { b } }: { a: { b: T } }, [a, b])` => `b`
+func (c *Checker) constructNarrowableReference(parameter *ast.Node, path []*ast.Node) (*ast.Symbol, *ast.Node) {
+	currentName := parameter.Name()
+	pathIndex := 0
+	for ; pathIndex < len(path); pathIndex++ {
+		if ast.IsIdentifier(currentName) {
+			break
+		}
+		if !ast.IsObjectBindingPattern(currentName) {
+			// Shouldn't happen unless the program has errors.
+			return nil, nil
+		}
+		propertyName, ok := c.getLiteralPropertyNameText(path[pathIndex].Name())
+		if !ok {
+			return nil, nil
+		}
+		// Find the binding element corresponding to the property name.
+		bindingElement := core.Find(currentName.Elements(), func(element *ast.Node) bool {
+			name, hasName := c.getDestructuringPropertyName(element)
+			return hasName && name == propertyName
+		})
+		if bindingElement == nil {
+			// Shouldn't happen unless the program has errors.
+			return nil, nil
+		}
+		currentName = bindingElement.Name()
+	}
+	if !ast.IsIdentifier(currentName) {
+		return nil, nil
+	}
+	reference := c.factory.NewIdentifier(currentName.Text())
+	symbol := c.getSymbolOfDeclaration(currentName.Parent)
+	for ; pathIndex < len(path); pathIndex++ {
+		name := path[pathIndex].Name()
+		if ast.IsIdentifier(name) {
+			reference = c.factory.NewPropertyAccessExpression(reference, nil, c.factory.NewIdentifier(name.Text()), ast.NodeFlagsNone)
+		} else {
+			reference = c.factory.NewElementAccessExpression(reference, nil, c.factory.DeepCloneNode(name), ast.NodeFlagsNone)
+		}
+	}
+	ast.SetParentInChildren(reference)
+	return symbol, reference
+}
+
+func (c *Checker) isTypeParameterReferenced(typeParameter *Type, node *ast.Node) bool {
+	if ast.IsTypeReferenceNode(node) {
+		if len(node.TypeArguments()) == 0 && c.getSymbolFromTypeReference(node) == typeParameter.symbol {
+			return true
+		}
+		return core.Some(node.TypeArguments(), func(typeArgument *ast.Node) bool {
+			return c.isTypeParameterReferenced(typeParameter, typeArgument)
+		})
+	}
+	if ast.IsTypeQueryNode(node) {
+		return c.isTypeParameterPossiblyReferenced(typeParameter, node)
+	}
+	return node.ForEachChild(func(child *ast.Node) bool {
+		return c.isTypeParameterReferenced(typeParameter, child)
+	})
 }
 
 func (c *Checker) checkWithStatement(node *ast.Node) {
@@ -20466,6 +20821,14 @@ func (c *Checker) getReturnTypeFromBody(fn *ast.Node, checkMode CheckMode) *Type
 		return c.errorType
 	}
 	functionFlags := ast.GetFunctionFlags(fn)
+	allTypeParams := c.appendTypeParameters(c.getOuterTypeParameters(fn, false /*includeThisTypes*/), fn.TypeParameters())
+	narrowableTypeParams := c.getNarrowableTypeParameters(allTypeParams)
+	if len(narrowableTypeParams) > 0 {
+		conditionalReturnType := c.getConditionalReturnTypeFromBody(fn, checkMode, body, functionFlags, narrowableTypeParams, allTypeParams)
+		if conditionalReturnType != nil {
+			return conditionalReturnType
+		}
+	}
 	isAsync := (functionFlags & ast.FunctionFlagsAsync) != 0
 	isGenerator := (functionFlags & ast.FunctionFlagsGenerator) != 0
 	var returnType *Type
@@ -20590,6 +20953,220 @@ func (c *Checker) getReturnTypeFromBody(fn *ast.Node, checkMode CheckMode) *Type
 		return c.createPromiseType(returnType)
 	}
 	return returnType
+}
+
+type narrowedTypeParam struct {
+	typeParam  *narrowableTypeParameter
+	constraint *Type
+}
+type returnConstraint struct {
+	returnType  *Type
+	constraints []*narrowedTypeParam
+}
+
+// !!! input: function with body
+// !!! checkmode should be Normal? When would we call `getReturnTypeFromBody` with another check mode?
+// !!! How do we get narrowable type params? Do we need to worry about causing circularities?
+func (c *Checker) getConditionalReturnTypeFromBody(
+	fn *ast.Node,
+	checkMode CheckMode,
+	body *ast.Node,
+	functionFlags ast.FunctionFlags,
+	typeParams []*narrowableTypeParameter,
+	outerTypeParams []*Type,
+) *Type {
+	if len(typeParams) == 0 {
+		return nil
+	}
+
+	var returnConstraints []*returnConstraint
+	switch {
+	case !ast.IsBlock(body):
+		c.collectConditionalConstraints(nil, body, &returnConstraints, typeParams, functionFlags, fn, checkMode)
+	default:
+		ast.ForEachReturnStatement(body, func(returnStatement *ast.Node) bool {
+			c.collectConditionalConstraints(returnStatement, returnStatement.Expression(), &returnConstraints, typeParams, functionFlags, fn, checkMode)
+			return false
+		})
+	}
+
+	trie := c.buildTrie(returnConstraints)
+	conditionalReturn := c.buildConditionalReturnType(trie, outerTypeParams, fn)
+	if conditionalReturn.flags&TypeFlagsConditional == 0 {
+		return nil
+	}
+	if !c.isNarrowableReturnType(conditionalReturn) {
+		return nil
+	}
+
+	// !!! HERE: validate that extends types don't overlap
+	return conditionalReturn
+}
+
+func (c *Checker) collectConditionalConstraints(
+	returnStmt *ast.Statement,
+	returnExpr *ast.Expression,
+	returnConstraints *[]*returnConstraint,
+	typeParams []*narrowableTypeParameter,
+	functionFlags ast.FunctionFlags,
+	fn *ast.Node,
+	checkMode CheckMode,
+) {
+	var expr *ast.Expression
+	if returnExpr != nil {
+		expr = ast.SkipParentheses(returnExpr)
+		if ast.IsConditionalExpression(expr) {
+			whenTrue := expr.AsConditionalExpression().WhenTrue
+			whenFalse := expr.AsConditionalExpression().WhenFalse
+			c.collectConditionalConstraints(returnStmt, whenTrue, returnConstraints, typeParams, functionFlags, fn, checkMode)
+			c.collectConditionalConstraints(returnStmt, whenFalse, returnConstraints, typeParams, functionFlags, fn, checkMode)
+			return
+		}
+	}
+	var returnType *Type
+	var position *ast.Node
+	var flowNode *ast.FlowNode
+	var constraints []*narrowedTypeParam
+	if expr == nil {
+		returnType = c.voidType
+		position = returnStmt
+		flowNode = getFlowNodeOfNode(position)
+	} else {
+		if functionFlags&ast.FunctionFlagsAsync != 0 && ast.IsAwaitExpression(expr) {
+			expr = ast.SkipParentheses(expr.Expression())
+		}
+		// Self-reference: skip
+		if ast.IsCallExpression(expr) && ast.IsIdentifier(expr.Expression()) && c.checkExpressionCached(expr.Expression()).symbol == c.getMergedSymbol(fn.Symbol()) &&
+			(!ast.IsFunctionExpressionOrArrowFunction(fn.Symbol().ValueDeclaration) || c.isConstantReference(expr.Expression())) {
+			return
+		}
+		t := c.checkExpressionCachedEx(expr, checkMode & ^CheckModeSkipGenericFunctions)
+		if functionFlags&ast.FunctionFlagsAsync != 0 {
+			// From within an async function you can return either a non-promise value or a promise. Any
+			// Promise/A+ compatible implementation will always assimilate any foreign promise, so the
+			// return type of the body should be unwrapped to its awaited type, which should be wrapped in
+			// the native Promise<T> type by the caller.
+			t = c.unwrapAwaitedType(c.checkAwaitedType(t, false /*withAlias*/, fn, diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member))
+		}
+		if t.flags&TypeFlagsNever != 0 {
+			return
+		}
+		if c.isConstContext(expr) {
+			t = c.getRegularTypeOfLiteralType(t)
+		}
+		returnType = t
+		position = returnExpr.Parent
+		flowNode = getFlowNodeOfNode(position)
+		if ast.IsConditionalExpression(returnExpr.Parent) {
+			conditional := returnExpr.Parent.AsConditionalExpression()
+			if conditional.WhenTrue == returnExpr {
+				flowNode = conditional.FlowNodeWhenTrue
+			} else {
+				flowNode = conditional.FlowNodeWhenFalse
+			}
+			position = returnExpr
+		}
+	}
+	constraints = make([]*narrowedTypeParam, 0, len(typeParams))
+
+	for _, typeParam := range typeParams {
+		constraints = append(constraints, &narrowedTypeParam{
+			typeParam:  typeParam,
+			constraint: c.getNarrowedTypeOfNarrowableTypeParameter(typeParam, position, flowNode),
+		})
+	}
+	*returnConstraints = append(*returnConstraints, &returnConstraint{returnType: returnType, constraints: constraints})
+}
+
+type edge struct {
+	next       *trie
+	constraint *Type
+	typeParam  *Type
+}
+
+type trie struct {
+	edges       []*edge
+	returnTypes []*Type
+}
+
+func (c *Checker) buildTrie(returnConstraints []*returnConstraint) *trie {
+	root := &trie{}
+	for _, returnConstraint := range returnConstraints {
+		cur := root
+	cons:
+		for _, constraint := range returnConstraint.constraints {
+			if constraint.constraint == nil {
+				continue
+			}
+			for _, edge := range cur.edges {
+				// !!! HERE: do we need to compare type parameters by symbol or enough by type identity?
+				// !!! HERE: compare constraint by typeIdenticalTo or type identity enough?
+				if edge.typeParam == constraint.typeParam.typeParameter && edge.constraint == constraint.constraint {
+					cur = edge.next
+					continue cons
+				}
+			}
+			newEdge := &edge{
+				next:       &trie{},
+				constraint: constraint.constraint,
+				typeParam:  constraint.typeParam.typeParameter,
+			}
+			cur.edges = append(cur.edges, newEdge)
+			cur = newEdge.next
+		}
+		cur.returnTypes = append(cur.returnTypes, returnConstraint.returnType)
+	}
+	return root
+}
+
+func (c *Checker) buildConditionalReturnType(tree *trie, outerTypeParameters []*Type, fn *ast.Node) *Type {
+	currentType := c.getUnionType(tree.returnTypes)
+	for _, edge := range slices.Backward(tree.edges) {
+		checkType := edge.typeParam
+		extendsType := edge.constraint
+		trueType := c.buildConditionalReturnType(edge.next, outerTypeParameters, fn)
+		falseType := currentType
+		root := &ConditionalRoot{
+			node:                c.factory.NewEmptyStatement(), // !!! HERE: connect this with fn somehow?
+			checkType:           checkType,
+			extendsType:         extendsType,
+			trueType:            trueType,
+			falseType:           falseType,
+			isDistributive:      true,
+			checkTuples:         false,
+			inferTypeParameters: nil,
+			outerTypeParameters: outerTypeParameters,
+			instantiations:      make(map[CacheHashKey]*Type),
+			alias:               nil,
+		}
+		currentType = c.newConditionalType(root, nil /*mapper*/, nil /*combinedMapper*/)
+		root.instantiations[getConditionalTypeKey(outerTypeParameters, nil /*alias*/, false /*forConstraint*/)] = currentType
+	}
+	return currentType
+}
+
+// Returns the narrowed type of the narrowable type parameter reference as if it occurred at position/flowNode.
+// If the type is not narrowed, returns nil.
+func (c *Checker) getNarrowedTypeOfNarrowableTypeParameter(narrowable *narrowableTypeParameter, position *ast.Node, flowNode *ast.FlowNode) *Type {
+	reference := narrowable.reference
+	reference.Parent = position.Parent
+	reference.FlowNodeData().FlowNode = flowNode
+	// Set the symbol of the synthetic reference. This allows us to get its type at a location where the reference may be shadowed.
+	baseReference := reference
+	for ast.IsAccessExpression(baseReference) {
+		baseReference = baseReference.Expression()
+	}
+	c.symbolNodeLinks.Get(baseReference).resolvedSymbol = narrowable.symbol
+	initialType := c.getNarrowableTypeForReferenceEx(narrowable.typeParameter, reference, CheckModeNormal, true /*forReturnTypeNarrowing*/)
+	if initialType == narrowable.typeParameter {
+		return nil
+	}
+	narrowedType := c.getFlowTypeOfReference(reference, initialType)
+	// If attempting to narrow the expression type did not produce a narrower type, discard this type parameter from narrowing.
+	if narrowedType.flags&TypeFlagsAnyOrUnknown != 0 || c.isErrorType(narrowedType) || narrowedType == narrowable.typeParameter || narrowedType == c.getBaseConstraintOrType(narrowable.typeParameter) {
+		return nil
+	}
+	return narrowedType
 }
 
 // Returns the aggregated list of return types, plus a bool indicating a never-returning function.
@@ -22856,15 +23433,27 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 			if root.isDistributive {
 				distributionType = c.getReducedType(getMappedType(checkType, newMapper))
 			}
+			var narrowingBaseType *Type
+			forNarrowing := distributionType != nil && isNarrowingSubstitutionType(distributionType) && c.isNarrowableConditionalType(t, nil, mapper)
+			if forNarrowing {
+				narrowingBaseType = distributionType.AsSubstitutionType().baseType
+				distributionType = c.getReducedType(distributionType.AsSubstitutionType().constraint)
+			}
 			// Distributive conditional types are distributed over union types. For example, when the
 			// distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
 			// result is (A extends U ? X : Y) | (B extends U ? X : Y).
 			if distributionType != nil && checkType != distributionType && distributionType.flags&(TypeFlagsUnion|TypeFlagsNever) != 0 {
-				result = c.mapTypeWithAlias(distributionType, func(t *Type) *Type {
-					return c.getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint, nil)
-				}, alias)
+				if narrowingBaseType != nil {
+					result = c.mapTypeToIntersection(distributionType, func(t *Type) *Type {
+						return c.getConditionalType(root, prependTypeMapping(checkType, c.getNarrowingSubstitutionType(narrowingBaseType, t), newMapper), forConstraint, nil, forNarrowing)
+					})
+				} else {
+					result = c.mapTypeWithAlias(distributionType, func(t *Type) *Type {
+						return c.getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint, nil, false)
+					}, alias)
+				}
 			} else {
-				result = c.getConditionalType(root, newMapper, forConstraint, alias)
+				result = c.getConditionalType(root, newMapper, forConstraint, alias, forNarrowing)
 			}
 			root.instantiations[key] = result
 		}
@@ -24682,16 +25271,17 @@ func (c *Checker) getTypeFromConditionalTypeNode(node *ast.Node) *Type {
 			outerTypeParameters = core.Filter(allOuterTypeParameters, func(tp *Type) bool { return c.isTypeParameterPossiblyReferenced(tp, node) })
 		}
 		root := &ConditionalRoot{
-			node:                node.AsConditionalTypeNode(),
+			node:                node,
 			checkType:           checkType,
 			extendsType:         c.getTypeFromTypeNode(node.AsConditionalTypeNode().ExtendsType),
 			isDistributive:      checkType.flags&TypeFlagsTypeParameter != 0,
+			checkTuples:         c.checkTuplesInConditionalType(node.AsConditionalTypeNode()),
 			inferTypeParameters: c.getInferTypeParameters(node),
 			outerTypeParameters: outerTypeParameters,
 			instantiations:      nil,
 			alias:               alias,
 		}
-		links.resolvedType = c.getConditionalType(root, nil /*mapper*/, false /*forConstraint*/, nil)
+		links.resolvedType = c.getConditionalType(root, nil /*mapper*/, false /*forConstraint*/, nil, false /*forNarrowing*/)
 		if outerTypeParameters != nil {
 			root.instantiations = make(map[CacheHashKey]*Type)
 			root.instantiations[getConditionalTypeKey(outerTypeParameters, nil /*alias*/, false /*forConstraint*/)] = links.resolvedType
@@ -24700,7 +25290,7 @@ func (c *Checker) getTypeFromConditionalTypeNode(node *ast.Node) *Type {
 	return links.resolvedType
 }
 
-func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, forConstraint bool, alias *TypeAlias) *Type {
+func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, forConstraint bool, alias *TypeAlias, forNarrowing bool) *Type {
 	var result *Type
 	var extraTypes []*Type
 	tailCount := 0
@@ -24722,13 +25312,14 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 		if checkType == c.wildcardType || extendsType == c.wildcardType {
 			return c.wildcardType
 		}
-		checkTypeNode := ast.SkipTypeParentheses(root.node.CheckType)
-		extendsTypeNode := ast.SkipTypeParentheses(root.node.ExtendsType)
+		effectiveCheckType := checkType
+		if forNarrowing && isNarrowingSubstitutionType(checkType) {
+			effectiveCheckType = checkType.AsSubstitutionType().constraint
+		}
 		// When the check and extends types are simple tuple types of the same arity, we defer resolution of the
 		// conditional type when any tuple elements are generic. This is such that non-distributable conditional
 		// types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
-		checkTuples := c.isSimpleTupleType(checkTypeNode) && c.isSimpleTupleType(extendsTypeNode) && len(checkTypeNode.Elements()) == len(extendsTypeNode.Elements())
-		checkTypeDeferred := c.isDeferredType(checkType, checkTuples)
+		checkTypeDeferred := c.isDeferredType(effectiveCheckType, root.checkTuples)
 		var combinedMapper *TypeMapper
 		if len(root.inferTypeParameters) != 0 {
 			// When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
@@ -24772,25 +25363,25 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 			inferredExtendsType = extendsType
 		}
 		// We attempt to resolve the conditional type only when the check and extends types are non-generic
-		if !checkTypeDeferred && !c.isDeferredType(inferredExtendsType, checkTuples) {
-			// Return falseType for a definitely false extends check. We check an instantiations of the two
+		if !checkTypeDeferred && !c.isDeferredType(inferredExtendsType, root.checkTuples) {
+			// Return falseType for a definitely false extends check. We check an instantiation of the two
 			// types with type parameters mapped to the wildcard type, the most permissive instantiations
 			// possible (the wildcard type is assignable to and from all types). If those are not related,
 			// then no instantiations will be and we can just return the false branch type.
-			if inferredExtendsType.flags&TypeFlagsAnyOrUnknown == 0 && (checkType.flags&TypeFlagsAny != 0 || !c.isTypeAssignableTo(c.getPermissiveInstantiation(checkType), c.getPermissiveInstantiation(inferredExtendsType))) {
+			if inferredExtendsType.flags&TypeFlagsAnyOrUnknown == 0 && (effectiveCheckType.flags&TypeFlagsAny != 0 || !c.isTypeAssignableTo(c.getPermissiveInstantiation(effectiveCheckType), c.getPermissiveInstantiation(inferredExtendsType))) {
 				// Return union of trueType and falseType for 'any' since it matches anything. Furthermore, for a
 				// distributive conditional type applied to the constraint of a type variable, include trueType if
 				// there are possible values of the check type that are also possible values of the extends type.
 				// We use a reverse assignability check as it is less expensive than the comparable relationship
 				// and avoids false positives of a non-empty intersection check.
-				if checkType.flags&TypeFlagsAny != 0 || forConstraint && inferredExtendsType.flags&TypeFlagsNever == 0 && someType(c.getPermissiveInstantiation(inferredExtendsType), func(t *Type) bool {
-					return c.isTypeAssignableTo(t, c.getPermissiveInstantiation(checkType))
+				if effectiveCheckType.flags&TypeFlagsAny != 0 || forConstraint && inferredExtendsType.flags&TypeFlagsNever == 0 && someType(c.getPermissiveInstantiation(inferredExtendsType), func(t *Type) bool {
+					return c.isTypeAssignableTo(t, c.getPermissiveInstantiation(effectiveCheckType))
 				}) {
-					extraTypes = append(extraTypes, c.instantiateType(c.getTypeFromTypeNode(root.node.TrueType), core.OrElse(combinedMapper, mapper)))
+					extraTypes = append(extraTypes, c.instantiateType(c.getRootTrueType(root), core.OrElse(combinedMapper, mapper)))
 				}
 				// If falseType is an immediately nested conditional type that isn't distributive or has an
 				// identical checkType, switch to that type and loop.
-				falseType := c.getTypeFromTypeNode(root.node.FalseType)
+				falseType := c.getRootFalseType(root)
 				if falseType.flags&TypeFlagsConditional != 0 {
 					newRoot := falseType.AsConditionalType().root
 					if newRoot.node.Parent == root.node.AsNode() && (!newRoot.isDistributive || newRoot.checkType == root.checkType) {
@@ -24815,8 +25406,8 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 			// that has no constraint. This ensures that, for example, the type
 			//   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
 			// doesn't immediately resolve to 'string' instead of being deferred.
-			if inferredExtendsType.flags&TypeFlagsAnyOrUnknown != 0 || c.isTypeAssignableTo(c.getRestrictiveInstantiation(checkType), c.getRestrictiveInstantiation(inferredExtendsType)) {
-				trueType := c.getTypeFromTypeNode(root.node.TrueType)
+			if inferredExtendsType.flags&TypeFlagsAnyOrUnknown != 0 || c.isTypeAssignableTo(c.getRestrictiveInstantiation(effectiveCheckType), c.getRestrictiveInstantiation(inferredExtendsType)) {
+				trueType := c.getRootTrueType(root)
 				trueMapper := core.OrElse(combinedMapper, mapper)
 				if newRoot, newRootMapper := c.getTailRecursionRoot(trueType, trueMapper); newRoot != nil {
 					root = newRoot
@@ -24942,7 +25533,7 @@ func (c *Checker) permissiveMapperWorker(t *Type) *Type {
 func (c *Checker) getTrueTypeFromConditionalType(t *Type) *Type {
 	d := t.AsConditionalType()
 	if d.resolvedTrueType == nil {
-		d.resolvedTrueType = c.instantiateType(c.getTypeFromTypeNode(d.root.node.TrueType), d.mapper)
+		d.resolvedTrueType = c.instantiateType(c.getRootTrueType(d.root), d.mapper)
 	}
 	return d.resolvedTrueType
 }
@@ -24950,16 +25541,129 @@ func (c *Checker) getTrueTypeFromConditionalType(t *Type) *Type {
 func (c *Checker) getFalseTypeFromConditionalType(t *Type) *Type {
 	d := t.AsConditionalType()
 	if d.resolvedFalseType == nil {
-		d.resolvedFalseType = c.instantiateType(c.getTypeFromTypeNode(d.root.node.FalseType), d.mapper)
+		d.resolvedFalseType = c.instantiateType(c.getRootFalseType(d.root), d.mapper)
 	}
 	return d.resolvedFalseType
+}
+
+func (c *Checker) getRootTrueType(root *ConditionalRoot) *Type {
+	if root.trueType == nil {
+		root.trueType = c.getTypeFromTypeNode(root.node.AsConditionalTypeNode().TrueType)
+	}
+	return root.trueType
+}
+
+func (c *Checker) getRootFalseType(root *ConditionalRoot) *Type {
+	if root.falseType == nil {
+		root.falseType = c.getTypeFromTypeNode(root.node.AsConditionalTypeNode().FalseType)
+	}
+	return root.falseType
+}
+
+func (c *Checker) checkTuplesInConditionalType(node *ast.ConditionalTypeNode) bool {
+	checkTypeNode := ast.SkipTypeParentheses(node.CheckType)
+	extendsTypeNode := ast.SkipTypeParentheses(node.ExtendsType)
+	return c.isSimpleTupleType(checkTypeNode) && c.isSimpleTupleType(extendsTypeNode) && len(checkTypeNode.Elements()) == len(extendsTypeNode.Elements())
+}
+
+func (c *Checker) isNarrowableReturnType(t *Type) bool {
+	if t.flags&TypeFlagsConditional != 0 {
+		return c.isNarrowableConditionalType(t, nil, nil)
+	}
+	return t.flags&TypeFlagsIndexedAccess != 0 && t.AsIndexedAccessType().indexType.flags&TypeFlagsTypeParameter != 0
+}
+
+func (c *Checker) isNarrowableConditionalType(t *Type, hadNonPrimitiveExtendsTypes []*Type, mapper *TypeMapper) bool {
+	d := t.AsConditionalType()
+	var typeArguments []*Type
+	if mapper != nil {
+		typeArguments = core.Map(d.root.outerTypeParameters, func(t *Type) *Type {
+			mapped := mapper.Map(t)
+			if isNarrowingSubstitutionType(mapped) {
+				return mapped.AsSubstitutionType().baseType
+			}
+			return mapped
+		})
+	}
+	key := NarrowableReturnTypeKey{
+		typeId:                   t.id,
+		typeArguments:            getTypeListKey(typeArguments),
+		nonPrimitiveExtendsTypes: getTypeListKey(hadNonPrimitiveExtendsTypes),
+	}
+	if result, ok := c.narrowableReturnTypes[key]; ok {
+		return result
+	}
+	var nonNarrowingMapper *TypeMapper
+	if len(d.root.outerTypeParameters) != 0 && typeArguments != nil {
+		nonNarrowingMapper = newTypeMapper(d.root.outerTypeParameters, typeArguments)
+	}
+	instantiatedType := c.instantiateType(t, nonNarrowingMapper)
+	result := instantiatedType.flags&TypeFlagsConditional != 0 && c.isNarrowableConditionalTypeWorker(instantiatedType, hadNonPrimitiveExtendsTypes)
+	c.narrowableReturnTypes[key] = result
+	return result
+}
+
+// A narrowable conditional type has the shape `T extends A ? TrueBranch<T> : FalseBranch<T>`, where:
+// (0) The conditional type is distributive.
+// (1) The conditional type has no `infer` type parameters.
+// (2) The check type is a narrowable type parameter, meaning a type parameter with a union constraint.
+// (3) A is a type or union of types that are supertypes of the type parameter's union constraint.
+// (4) At most one extends type has a non-primitive type.
+// (5) TrueBranch<T> and FalseBranch<T> are valid recursively; in particular, the false-most branch must be `never`.
+func (c *Checker) isNarrowableConditionalTypeWorker(t *Type, hadNonPrimitiveExtendsTypes []*Type) bool {
+	d := t.AsConditionalType()
+	// (0)
+	if !d.root.isDistributive {
+		return false
+	}
+	// (1)
+	if len(d.root.inferTypeParameters) != 0 {
+		return false
+	}
+	// (2)
+	if d.checkType.flags&TypeFlagsTypeParameter == 0 {
+		return false
+	}
+	// (2)
+	constraintType := c.getConstraintOfTypeParameter(d.checkType)
+	if constraintType == nil || constraintType.flags&TypeFlagsUnion == 0 {
+		return false
+	}
+	// (3)
+	if !everyType(d.extendsType, func(extendsType *Type) bool {
+		return core.Some(constraintType.Types(), func(constraintType *Type) bool {
+			return c.isTypeAssignableTo(constraintType, extendsType)
+		})
+	}) {
+		return false
+	}
+	// (4)
+	hasNonPrimitive := someType(d.extendsType, func(t *Type) bool {
+		return t.flags&TypeFlagsPrimitive == 0
+	})
+	if hasNonPrimitive && slices.Contains(hadNonPrimitiveExtendsTypes, d.checkType) {
+		return false
+	}
+	if hasNonPrimitive {
+		hadNonPrimitiveExtendsTypes = append(slices.Clone(hadNonPrimitiveExtendsTypes), d.checkType)
+	}
+	// (5)
+	trueType := c.getTrueTypeFromConditionalType(t)
+	if trueType.flags&TypeFlagsConditional != 0 && !c.isNarrowableConditionalType(trueType, hadNonPrimitiveExtendsTypes, nil) {
+		return false
+	}
+	falseType := c.getFalseTypeFromConditionalType(t)
+	if falseType.flags&TypeFlagsConditional != 0 {
+		return c.isNarrowableConditionalType(falseType, hadNonPrimitiveExtendsTypes, nil)
+	}
+	return falseType == c.neverType
 }
 
 func (c *Checker) getInferredTrueTypeFromConditionalType(t *Type) *Type {
 	d := t.AsConditionalType()
 	if d.resolvedInferredTrueType == nil {
 		if d.combinedMapper != nil {
-			d.resolvedInferredTrueType = c.instantiateType(c.getTypeFromTypeNode(d.root.node.TrueType), d.combinedMapper)
+			d.resolvedInferredTrueType = c.instantiateType(c.getRootTrueType(d.root), d.combinedMapper)
 		} else {
 			d.resolvedInferredTrueType = c.getTrueTypeFromConditionalType(t)
 		}
@@ -25963,6 +26667,28 @@ func (c *Checker) mapTypeWithAlias(t *Type, f func(t *Type) *Type, alias *TypeAl
 
 func (c *Checker) mapType(t *Type, f func(*Type) *Type) *Type {
 	return c.mapTypeEx(t, f, false /*noReductions*/)
+}
+
+// mapTypeToIntersection is similar to mapType, but creates an intersection with the result of mapping over a union type.
+func (c *Checker) mapTypeToIntersection(t *Type, f func(*Type) *Type) *Type {
+	if t.flags&TypeFlagsNever != 0 {
+		return t
+	}
+	if t.flags&TypeFlagsUnion == 0 {
+		return f(t)
+	}
+	u := t.AsUnionType()
+	types := u.types
+	if u.origin != nil && u.origin.flags&TypeFlagsUnion != 0 {
+		types = u.origin.Types()
+	}
+	mappedTypes := core.Map(types, func(t *Type) *Type {
+		if t.flags&TypeFlagsUnion != 0 {
+			return c.mapTypeToIntersection(t, f)
+		}
+		return f(t)
+	})
+	return c.getIntersectionType(mappedTypes)
 }
 
 func (c *Checker) mapTypeEx(t *Type, f func(*Type) *Type, noReductions bool) *Type {
@@ -27796,7 +28522,7 @@ func indexTypeLessThan(indexType *Type, limit int) bool {
 
 func (c *Checker) getNoInferType(t *Type) *Type {
 	if c.isNoInferTargetType(t) {
-		return c.getOrCreateSubstitutionType(t, c.unknownType)
+		return c.getOrCreateSubstitutionType(t, c.unknownType, false)
 	}
 	return t
 }
@@ -27815,17 +28541,31 @@ func (c *Checker) getSubstitutionType(baseType *Type, constraint *Type) *Type {
 	if constraint.flags&TypeFlagsAnyOrUnknown != 0 || constraint == baseType || baseType.flags&TypeFlagsAny != 0 {
 		return baseType
 	}
-	return c.getOrCreateSubstitutionType(baseType, constraint)
+	return c.getOrCreateSubstitutionType(baseType, constraint, false)
 }
 
-func (c *Checker) getOrCreateSubstitutionType(baseType *Type, constraint *Type) *Type {
-	key := SubstitutionTypeKey{baseId: baseType.id, constraintId: constraint.id}
+func (c *Checker) getNarrowingSubstitutionType(baseType *Type, constraint *Type) *Type {
+	if constraint.flags&TypeFlagsAnyOrUnknown != 0 || constraint == baseType || baseType.flags&TypeFlagsAny != 0 {
+		return baseType
+	}
+	return c.getOrCreateSubstitutionType(baseType, constraint, true)
+}
+
+func (c *Checker) getOrCreateSubstitutionType(baseType *Type, constraint *Type, isNarrowing bool) *Type {
+	key := SubstitutionTypeKey{baseId: baseType.id, constraintId: constraint.id, isNarrowing: isNarrowing}
 	if cached := c.substitutionTypes[key]; cached != nil {
 		return cached
 	}
 	result := c.newSubstitutionType(baseType, constraint)
+	if isNarrowing {
+		result.objectFlags |= ObjectFlagsIsNarrowingType
+	}
 	c.substitutionTypes[key] = result
 	return result
+}
+
+func isNarrowingSubstitutionType(t *Type) bool {
+	return t.flags&TypeFlagsSubstitution != 0 && t.objectFlags&ObjectFlagsIsNarrowingType != 0
 }
 
 func (c *Checker) getBaseConstraintOrType(t *Type) *Type {
@@ -28463,10 +29203,13 @@ func (c *Checker) getNormalizedUnionOrIntersectionType(t *Type, writing bool) *T
 func (c *Checker) shouldNormalizeIntersection(t *Type) bool {
 	hasInstantiable := false
 	hasNullableOrEmpty := false
+	hasNarrowingSubstitution := false
 	for _, t := range t.Types() {
 		hasInstantiable = hasInstantiable || t.flags&TypeFlagsInstantiable != 0
 		hasNullableOrEmpty = hasNullableOrEmpty || t.flags&TypeFlagsNullable != 0 || c.IsEmptyAnonymousObjectType(t)
-		if hasInstantiable && hasNullableOrEmpty {
+		// This avoids displaying error messages with types like `T & T` when narrowing a return type.
+		hasNarrowingSubstitution = hasNarrowingSubstitution || isNarrowingSubstitutionType(t)
+		if hasInstantiable && hasNullableOrEmpty || hasNarrowingSubstitution {
 			return true
 		}
 	}
@@ -29754,6 +30497,12 @@ func (c *Checker) getContextualType(node *ast.Node, contextFlags ContextFlags) *
 	if index >= 0 {
 		return c.contextualInfos[index].t
 	}
+	if links := c.contextualReturnTypeLinks.TryGet(node); links != nil && links.contextualReturnType != nil {
+		if node.Flags&ast.NodeFlagsAwaitContext != 0 {
+			return c.getUnionType([]*Type{links.contextualReturnType, c.createPromiseLikeType(links.contextualReturnType)})
+		}
+		return links.contextualReturnType
+	}
 	parent := node.Parent
 	switch parent.Kind {
 	case ast.KindVariableDeclaration, ast.KindParameter, ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindBindingElement:
@@ -30024,9 +30773,15 @@ func (c *Checker) getContextualTypeForStaticPropertyDeclaration(declaration *ast
 func (c *Checker) getContextualTypeForReturnExpression(node *ast.Node, contextFlags ContextFlags) *Type {
 	fn := ast.GetContainingFunction(node)
 	if fn != nil {
+		functionFlags := ast.GetFunctionFlags(fn)
+		if links := c.contextualReturnTypeLinks.TryGet(node); links != nil && links.contextualReturnType != nil {
+			if functionFlags&ast.FunctionFlagsAsync != 0 {
+				return c.getUnionType([]*Type{links.contextualReturnType, c.createPromiseLikeType(links.contextualReturnType)})
+			}
+			return links.contextualReturnType
+		}
 		contextualReturnType := c.getContextualReturnType(fn, contextFlags)
 		if contextualReturnType != nil {
-			functionFlags := ast.GetFunctionFlags(fn)
 			if functionFlags&ast.FunctionFlagsGenerator != 0 {
 				isAsyncGenerator := (functionFlags & ast.FunctionFlagsAsync) != 0
 				if contextualReturnType.flags&TypeFlagsUnion != 0 {
@@ -31892,6 +32647,10 @@ func (c *Checker) getTargetType(t *Type) *Type {
 }
 
 func (c *Checker) getNarrowableTypeForReference(t *Type, reference *ast.Node, checkMode CheckMode) *Type {
+	return c.getNarrowableTypeForReferenceEx(t, reference, checkMode, false /*forReturnTypeNarrowing*/)
+}
+
+func (c *Checker) getNarrowableTypeForReferenceEx(t *Type, reference *ast.Node, checkMode CheckMode, forReturnTypeNarrowing bool) *Type {
 	if c.isNoInferType(t) {
 		t = t.AsSubstitutionType().baseType
 	}
@@ -31902,7 +32661,7 @@ func (c *Checker) getNarrowableTypeForReference(t *Type, reference *ast.Node, ch
 	// control flow analysis an opportunity to narrow it further. For example, for a reference of a type
 	// parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
 	// 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-	substituteConstraints := checkMode&CheckModeInferential == 0 && someType(t, c.isGenericTypeWithUnionConstraint) && (c.isConstraintPosition(t, reference) || c.hasContextualTypeWithNoGenericTypes(reference, checkMode))
+	substituteConstraints := checkMode&CheckModeInferential == 0 && someType(t, c.isGenericTypeWithUnionConstraint) && (forReturnTypeNarrowing || c.isConstraintPosition(t, reference) || c.hasContextualTypeWithNoGenericTypes(reference, checkMode))
 	if substituteConstraints {
 		return c.mapType(t, c.getBaseConstraintOrType)
 	}

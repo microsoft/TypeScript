@@ -3036,6 +3036,16 @@
                     {
                         "name": "WhenFalse",
                         "type": "Expression"
+                    },
+                    {
+                        "name": "FlowNodeWhenTrue",
+                        "type": "*FlowNode",
+                        "goOnly": true
+                    },
+                    {
+                        "name": "FlowNodeWhenFalse",
+                        "type": "*FlowNode",
+                        "goOnly": true
                     }
                 ],
                 "arena": true

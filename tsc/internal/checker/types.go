@@ -404,6 +404,12 @@ type AssertionLinks struct {
 	exprType *Type // Assertion expression type
 }
 
+// Links for return expressions
+
+type ContextualReturnTypeLinks struct {
+	contextualReturnType *Type // If the node is a return statement's expression, this is its contextual return type.
+}
+
 // SourceFile links
 
 type SourceFileLinks struct {
@@ -648,6 +654,7 @@ const (
 	ObjectFlagsIsGenericObjectType   = 1 << 23 // Union or intersection contains generic object type
 	ObjectFlagsIsGenericIndexType    = 1 << 24 // Union or intersection contains generic index type
 	ObjectFlagsIsGenericType         = ObjectFlagsIsGenericObjectType | ObjectFlagsIsGenericIndexType
+	ObjectFlagsIsNarrowingType       = 1 << 31 // Substitution type that comes from type narrowing
 	// Flags that require TypeFlags.Union
 	ObjectFlagsContainsIntersections      = 1 << 25 // Union contains intersections
 	ObjectFlagsIsUnknownLikeUnionComputed = 1 << 26 // IsUnknownLikeUnion flag has been computed
@@ -1247,6 +1254,15 @@ type StringMappingType struct {
 
 func (t *StringMappingType) Target() *Type { return t.target }
 
+// Type parameter substitution (TypeFlagsSubstitution)
+// - Substitution types are created for type parameters or indexed access types that occur in the true branch of a conditional type.
+// For example, in `T extends string ? Foo<T> : Bar<T>`, the reference to T in Foo<T> resolves as a substitution type that substitutes
+// `string & T` for T. Thus, if Foo has a string constraint on its type parameter, T will satisfy it.
+// - Substitution types are also created for `NoInfer<T>` types. Those are represented as substitution types where the constraint is
+// `unknown`, which is never generated for the case above.
+// - Substitution types are also created for return type narrowing. If a type parameter T is linked to a parameter x and x's narrowed
+// type is S, we represent that with a substitution type with base T and constraint S. The resulting substitution type has
+// ObjectFlagsIsNarrowingType set.
 type SubstitutionType struct {
 	ConstrainedType
 	baseType   *Type // Target type
@@ -1257,10 +1273,13 @@ func (t *SubstitutionType) BaseType() *Type        { return t.baseType }
 func (t *SubstitutionType) SubstConstraint() *Type { return t.constraint }
 
 type ConditionalRoot struct {
-	node                *ast.ConditionalTypeNode
+	node                *ast.Node
+	trueType            *Type
+	falseType           *Type
 	checkType           *Type
 	extendsType         *Type
 	isDistributive      bool
+	checkTuples         bool
 	inferTypeParameters []*Type
 	outerTypeParameters []*Type
 	instantiations      map[CacheHashKey]*Type
