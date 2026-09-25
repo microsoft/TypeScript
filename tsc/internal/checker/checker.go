@@ -23374,6 +23374,22 @@ func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
 }
 
 func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Type {
+	if keyType.flags&TypeFlagsUnion != 0 {
+		members := make([]*Type, 0, len(keyType.Types()))
+		for _, member := range keyType.Types() {
+			if member.flags&TypeFlagsStringOrNumberLiteral == 0 {
+				return c.esSymbolType
+			}
+			memberAlias := &TypeAlias{symbol: alias.symbol, typeArguments: []*Type{member}}
+			members = append(members, c.getRegisteredESSymbolType(member, memberAlias))
+		}
+		return c.getUnionType(members)
+	}
+	// Keep a type parameter deferred so instantiating Symbol.for's generic
+	// return type can resolve the actual key supplied at the call site.
+	if keyType.flags&(TypeFlagsStringOrNumberLiteral|TypeFlagsTypeParameter) == 0 {
+		return c.esSymbolType
+	}
 	key := c.getRegisteredESSymbolTypeKey(keyType)
 	t := c.registeredESSymbolTypes[key]
 	if t == nil {

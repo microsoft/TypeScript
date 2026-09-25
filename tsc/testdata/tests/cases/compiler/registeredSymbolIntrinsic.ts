@@ -12,6 +12,12 @@ let widenedSymbol: symbol = foo;
 
 declare const key: string;
 let registeredString: RegisteredSymbol<string> = Symbol.for(key);
+let dynamic = Symbol.for(key);
+let invalidDynamicKey: typeof foo = dynamic;
+
+declare const unionKey: "foo" | "bar";
+let registeredUnion: RegisteredSymbol<"foo" | "bar"> = Symbol.for(unionKey);
+let invalidUnionKey: typeof foo = registeredUnion;
 
 interface WithRegisteredKeys {
     [foo]: string;

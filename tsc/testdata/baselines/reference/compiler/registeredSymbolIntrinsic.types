@@ -46,12 +46,41 @@ declare const key: string;
 >key : string
 
 let registeredString: RegisteredSymbol<string> = Symbol.for(key);
->registeredString : RegisteredSymbol<string>
->Symbol.for(key) : RegisteredSymbol<string>
+>registeredString : symbol
+>Symbol.for(key) : symbol
 >Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
 >for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >key : string
+
+let dynamic = Symbol.for(key);
+>dynamic : symbol
+>Symbol.for(key) : symbol
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>key : string
+
+let invalidDynamicKey: typeof foo = dynamic;
+>invalidDynamicKey : RegisteredSymbol<"foo">
+>foo : RegisteredSymbol<"foo">
+>dynamic : symbol
+
+declare const unionKey: "foo" | "bar";
+>unionKey : "bar" | "foo"
+
+let registeredUnion: RegisteredSymbol<"foo" | "bar"> = Symbol.for(unionKey);
+>registeredUnion : RegisteredSymbol<"bar"> | RegisteredSymbol<"foo">
+>Symbol.for(unionKey) : RegisteredSymbol<"bar"> | RegisteredSymbol<"foo">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>unionKey : "bar" | "foo"
+
+let invalidUnionKey: typeof foo = registeredUnion;
+>invalidUnionKey : RegisteredSymbol<"foo">
+>foo : RegisteredSymbol<"foo">
+>registeredUnion : RegisteredSymbol<"bar"> | RegisteredSymbol<"foo">
 
 interface WithRegisteredKeys {
     [foo]: string;
