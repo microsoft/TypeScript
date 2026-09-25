@@ -19,7 +19,7 @@ func (f *FourslashTest) VerifySemanticTokens(t *testing.T, expected []SemanticTo
 
 	params := &lsproto.SemanticTokensParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
-			Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+			Uri: lsproto.DocumentUriFromFileName(f.activeFilename),
 		},
 	}
 

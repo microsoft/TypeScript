@@ -9,7 +9,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -585,7 +584,7 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 		path := s.toPath(uri.FileName())
 		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
 			for aliasPath := range aliases.paths.Keys() {
-				additionalChanged.Add(lsconv.FileNameToDocumentURI(string(aliasPath)))
+				additionalChanged.Add(lsproto.DocumentUriFromFileName(string(aliasPath)))
 			}
 		}
 	}
@@ -598,7 +597,7 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 		path := s.toPath(uri.FileName())
 		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
 			for aliasPath := range aliases.paths.Keys() {
-				additionalDeleted.Add(lsconv.FileNameToDocumentURI(string(aliasPath)))
+				additionalDeleted.Add(lsproto.DocumentUriFromFileName(string(aliasPath)))
 			}
 		}
 	}
@@ -709,12 +708,12 @@ func hasOpenFileWithin(path tspath.Path, previousOpenFiles map[tspath.Path]FileH
 func (s *snapshotFSBuilder) collectFilesRecursive(dirPath tspath.Path, files *collections.Set[lsproto.DocumentUri], previousOpenFiles map[tspath.Path]FileHandle, openFiles map[tspath.Path]FileHandle) {
 	for path, file := range openFiles {
 		if dirPath.ContainsPath(path) {
-			files.Add(lsconv.FileNameToDocumentURI(file.FileName()))
+			files.Add(lsproto.DocumentUriFromFileName(file.FileName()))
 		}
 	}
 	for path, file := range previousOpenFiles {
 		if dirPath.ContainsPath(path) {
-			files.Add(lsconv.FileNameToDocumentURI(file.FileName()))
+			files.Add(lsproto.DocumentUriFromFileName(file.FileName()))
 		}
 	}
 	dirEntry, ok := s.cacheDirectories.Get(dirPath)
@@ -724,7 +723,7 @@ func (s *snapshotFSBuilder) collectFilesRecursive(dirPath tspath.Path, files *co
 	for childPath := range dirEntry.Value() {
 		if entry, ok := s.cacheFiles.Load(childPath); ok {
 			if file := entry.Value(); file != nil {
-				files.Add(lsconv.FileNameToDocumentURI(file.FileName()))
+				files.Add(lsproto.DocumentUriFromFileName(file.FileName()))
 			}
 		}
 		s.collectFilesRecursive(childPath, files, previousOpenFiles, openFiles)

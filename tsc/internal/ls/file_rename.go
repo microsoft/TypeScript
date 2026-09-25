@@ -57,8 +57,8 @@ func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lspr
 					newOriginalPath := tspath.ChangeFullExtension(newPath, ext)
 					documentChanges = append(documentChanges, lsproto.TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile{
 						RenameFile: &lsproto.RenameFile{
-							OldUri: lsconv.FileNameToDocumentURI(oldOriginalPath),
-							NewUri: lsconv.FileNameToDocumentURI(newOriginalPath),
+							OldUri: lsproto.DocumentUriFromFileName(oldOriginalPath),
+							NewUri: lsproto.DocumentUriFromFileName(newOriginalPath),
 						},
 					})
 				}
@@ -68,7 +68,7 @@ func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lspr
 
 	changes, _ := changeTracker.GetChanges()
 	for fileName, edits := range changes {
-		uri := lsconv.FileNameToDocumentURI(fileName)
+		uri := lsproto.DocumentUriFromFileName(fileName)
 		lspEdits := make([]lsproto.TextEditOrAnnotatedTextEditOrSnippetTextEdit, 0, len(edits))
 		for _, edit := range edits {
 			lspEdits = append(lspEdits, lsproto.TextEditOrAnnotatedTextEditOrSnippetTextEdit{

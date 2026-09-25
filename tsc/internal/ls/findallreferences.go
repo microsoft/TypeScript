@@ -16,7 +16,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
@@ -519,7 +518,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 				continue
 			}
 			return &nonLocalDefinition{
-				uri: lsconv.FileNameToDocumentURI(fileName),
+				uri: lsproto.DocumentUriFromFileName(fileName),
 				pos: lspPosition,
 				GetSourcePosition: sync.OnceValue(func() lsproto.HasTextDocumentPosition {
 					mapped := l.tryGetSourcePosition(fileName, startPos)
@@ -529,7 +528,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 							return nil
 						}
 						return &position{
-							uri: lsconv.FileNameToDocumentURI(mapped.FileName),
+							uri: lsproto.DocumentUriFromFileName(mapped.FileName),
 							pos: mappedPosition,
 						}
 					}
@@ -543,7 +542,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 							return nil
 						}
 						return &position{
-							uri: lsconv.FileNameToDocumentURI(mapped.FileName),
+							uri: lsproto.DocumentUriFromFileName(mapped.FileName),
 							pos: mappedPosition,
 						}
 					}
@@ -616,13 +615,13 @@ func (l *LanguageService) forEachOriginalDefinitionLocation(
 			if mapped != nil {
 				lspPosition, fidelity := l.converters.ToLSPPosition(l.getScript(mapped.FileName), core.TextPos(mapped.Pos))
 				if !fidelity.IsNone() {
-					cb(lsconv.FileNameToDocumentURI(mapped.FileName), lspPosition)
+					cb(lsproto.DocumentUriFromFileName(mapped.FileName), lspPosition)
 				}
 			}
 		} else if program.IsSourceFromProjectReference(l.toPath(fileName)) {
 			lspPosition, fidelity := l.converters.ToLSPPosition(file, startPos)
 			if !fidelity.IsNone() {
-				cb(lsconv.FileNameToDocumentURI(fileName), lspPosition)
+				cb(lsproto.DocumentUriFromFileName(fileName), lspPosition)
 			}
 		}
 	}
@@ -1138,7 +1137,7 @@ func (l *LanguageService) convertEntriesToLocationLinks(entries []*ReferenceEntr
 		}
 
 		links = append(links, &lsproto.LocationLink{
-			TargetUri:            lsconv.FileNameToDocumentURI(entry.sourceFile.OriginalFileName()),
+			TargetUri:            lsproto.DocumentUriFromFileName(entry.sourceFile.OriginalFileName()),
 			TargetRange:          targetRange,
 			TargetSelectionRange: targetSelectionRange,
 		})

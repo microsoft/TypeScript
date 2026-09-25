@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
@@ -23,7 +22,7 @@ type FileHandle struct {
 
 func (f FileHandle) FileName() string         { return f.fileName }
 func (f FileHandle) Content() string          { return f.content }
-func (f FileHandle) URI() lsproto.DocumentUri { return lsconv.FileNameToDocumentURI(f.fileName) }
+func (f FileHandle) URI() lsproto.DocumentUri { return lsproto.DocumentUriFromFileName(f.fileName) }
 
 // ProjectFileHandle adds export metadata for TypeScript source files.
 type ProjectFileHandle struct {

@@ -26,7 +26,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lspwatcher"
@@ -1935,8 +1934,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 				{
 					RenameFile: &lsproto.RenameFile{
 						Kind:   lsproto.StringLiteralRename{},
-						OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
-						NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
+						OldUri: lsproto.DocumentUriFromFileName(info.FileToRename),
+						NewUri: lsproto.DocumentUriFromFileName(info.NewFileName),
 					},
 				},
 			}
@@ -1948,8 +1947,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 		}
 		renameFilesParams := &lsproto.RenameFilesParams{
 			Files: []*lsproto.FileRename{{
-				OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
-				NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
+				OldUri: lsproto.DocumentUriFromFileName(info.FileToRename),
+				NewUri: lsproto.DocumentUriFromFileName(info.NewFileName),
 			}},
 		}
 		return s.handleWillRenameFilesWorker(ctx, renameFilesParams, req, true /*sendRenameFile*/)
@@ -2118,7 +2117,7 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
 	}
-	languageService, err := s.session.GetLanguageService(ctx, lsconv.FileNameToDocumentURI(data.FileName))
+	languageService, err := s.session.GetLanguageService(ctx, lsproto.DocumentUriFromFileName(data.FileName))
 	if err != nil {
 		return nil, err
 	}

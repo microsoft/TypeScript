@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
@@ -96,8 +95,8 @@ helper;`
 	defer done()
 	f.GoToMarker(t, "helper")
 	result := f.WillRenameFiles(t, &lsproto.FileRename{
-		OldUri: lsconv.FileNameToDocumentURI("/lib/helper.ts"),
-		NewUri: lsconv.FileNameToDocumentURI("/lib/renamed-helper.ts"),
+		OldUri: lsproto.DocumentUriFromFileName("/lib/helper.ts"),
+		NewUri: lsproto.DocumentUriFromFileName("/lib/renamed-helper.ts"),
 	})
 	if result.WorkspaceEdit == nil || result.WorkspaceEdit.DocumentChanges == nil {
 		t.Fatal("workspace/willRenameFiles returned no document changes")

@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -423,7 +422,7 @@ func (w *Watcher) forwardEvents(kind lsproto.WatchKind, events []fswatch.Event) 
 		}
 
 		path := tspath.NormalizeSlashes(event.Path)
-		uri := lsconv.FileNameToDocumentURI(path)
+		uri := lsproto.DocumentUriFromFileName(path)
 		w.pending[string(uri)] = &lsproto.FileEvent{
 			Uri:  uri,
 			Type: changeType,
@@ -476,7 +475,7 @@ func (w *Watcher) enqueueSyntheticCreates(paths []string) {
 		w.pending = make(map[string]*lsproto.FileEvent, len(paths))
 	}
 	for _, path := range paths {
-		uri := lsconv.FileNameToDocumentURI(path)
+		uri := lsproto.DocumentUriFromFileName(path)
 		if _, ok := w.pending[string(uri)]; ok {
 			continue
 		}

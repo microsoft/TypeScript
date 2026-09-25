@@ -2,7 +2,6 @@ package requestfilesystem
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -14,7 +13,7 @@ func (s *requestFileSystem) ExpandFileChanges(summary project.FileChangeSummary)
 		var additional collections.Set[lsproto.DocumentUri]
 		for uri := range uris.Keys() {
 			for _, alias := range s.aliasesForPath(uri.FileName()) {
-				additional.Add(lsconv.FileNameToDocumentURI(alias))
+				additional.Add(lsproto.DocumentUriFromFileName(alias))
 			}
 		}
 		for uri := range additional.Keys() {
@@ -33,7 +32,7 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 	}
 	baseRequestFS := getRequestFileSystem(baseFS)
 	addChange := func(fileName string, deleted bool) {
-		uri := lsconv.FileNameToDocumentURI(fileName)
+		uri := lsproto.DocumentUriFromFileName(fileName)
 		if deleted {
 			if baseFS.FileExists(fileName) || baseFS.DirectoryExists(fileName) {
 				summary.Deleted.Add(uri)
@@ -73,10 +72,10 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 	addReplacement := func(path string) {
 		absolutePath := tspath.GetNormalizedAbsolutePath(path, currentDirectory)
 		addChangeAndAliases(absolutePath, true)
-		summary.Created.Add(lsconv.FileNameToDocumentURI(absolutePath))
+		summary.Created.Add(lsproto.DocumentUriFromFileName(absolutePath))
 		if baseRequestFS != nil {
 			for _, alias := range baseRequestFS.aliasesForPath(absolutePath) {
-				summary.Created.Add(lsconv.FileNameToDocumentURI(alias))
+				summary.Created.Add(lsproto.DocumentUriFromFileName(alias))
 			}
 		}
 	}
@@ -92,7 +91,7 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 			if _, preserved := overlays[path]; preserved {
 				continue
 			}
-			uri := lsconv.FileNameToDocumentURI(overlay.FileName())
+			uri := lsproto.DocumentUriFromFileName(overlay.FileName())
 			if summary.Closed.Has(uri) {
 				continue
 			}

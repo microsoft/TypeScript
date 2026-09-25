@@ -10,7 +10,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -463,7 +462,7 @@ func getRecursiveGlobPattern(directory string) string {
 // for the given directory that would be produced by newRecursiveDirectoryWatcher.
 func recursiveDirectoryGlobPattern(directory string, useRelativePattern bool) string {
 	if useRelativePattern {
-		return string(lsconv.FileNameToDocumentURI(directory)) + "/**/*"
+		return string(lsproto.DocumentUriFromFileName(directory)) + "/**/*"
 	}
 	return getRecursiveGlobPattern(directory)
 }
@@ -473,7 +472,7 @@ func recursiveDirectoryGlobPattern(directory string, useRelativePattern bool) st
 // a file:// base URI is used; otherwise a plain glob Pattern is used.
 func newRecursiveDirectoryWatcher(directory string, kind lsproto.WatchKind, useRelativePattern bool) *lsproto.FileSystemWatcher {
 	if useRelativePattern {
-		baseUri := lsproto.URI(lsconv.FileNameToDocumentURI(directory))
+		baseUri := lsproto.URI(lsproto.DocumentUriFromFileName(directory))
 		return &lsproto.FileSystemWatcher{
 			GlobPattern: lsproto.PatternOrRelativePattern{
 				RelativePattern: &lsproto.RelativePattern{

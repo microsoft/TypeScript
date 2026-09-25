@@ -13,7 +13,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/fsbaselineutil"
@@ -71,7 +70,7 @@ func (f *FourslashTest) baselineProjectsAfterNotification(t *testing.T, fileName
 	// Do hover so we have snapshot to check things on!!
 	_, _, resultOk := f.client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
-			Uri: lsconv.FileNameToDocumentURI(fileName),
+			Uri: lsproto.DocumentUriFromFileName(fileName),
 		},
 		Position: lsproto.Position{
 			Line:      uint32(0),

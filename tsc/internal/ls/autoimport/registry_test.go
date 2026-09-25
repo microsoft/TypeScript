@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -258,7 +257,7 @@ export const bar = 2;`,
 		nodeModulesDir := tspath.CombinePaths(project.Root(), "node_modules")
 		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodeModulesDir)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsproto.DocumentUriFromFileName(nodeModulesDir)},
 		})
 
 		// Re-preparing auto-imports must succeed and leave the registry prepared.
@@ -308,7 +307,7 @@ export const bar = 2;`,
 		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
 			{Type: lsproto.FileChangeTypeChanged, Uri: packageJSON.URI()},
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodeModulesDir)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsproto.DocumentUriFromFileName(nodeModulesDir)},
 		})
 
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(ctx, mainFile.URI())
@@ -340,7 +339,7 @@ export const bar = 2;`,
 		// it must survive snapshotfs filtering to invalidate the bucket.
 		assert.NilError(t, sessionUtils.FS().Remove(nodePackage.Directory))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodePackage.Directory)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsproto.DocumentUriFromFileName(nodePackage.Directory)},
 		})
 
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(ctx, mainFile.URI())
@@ -561,7 +560,7 @@ export declare const otherValue: string;`,
 		ctx := context.Background()
 
 		// Open project-a's index file and get initial auto-imports
-		projectAURI := lsconv.FileNameToDocumentURI(projectAIndex)
+		projectAURI := lsproto.DocumentUriFromFileName(projectAIndex)
 		projectAContent := files[projectAIndex].(string)
 		session.DidOpenFile(ctx, projectAURI, 1, projectAContent, lsproto.LanguageKindTypeScript)
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, projectAURI)
@@ -575,7 +574,7 @@ export declare const otherValue: string;`,
 		assert.Assert(t, initialFileCount > 0, "bucket should have files initially")
 
 		// Open project-b's source file
-		projectBURI := lsconv.FileNameToDocumentURI(projectBSrcIndex)
+		projectBURI := lsproto.DocumentUriFromFileName(projectBSrcIndex)
 		projectBContent := files[projectBSrcIndex].(string)
 		session.DidOpenFile(ctx, projectBURI, 1, projectBContent, lsproto.LanguageKindTypeScript)
 
@@ -699,7 +698,7 @@ export declare const otherValue: string;`,
 		ctx := context.Background()
 
 		// Open project-a's index file and build auto-imports
-		projectAURI := lsconv.FileNameToDocumentURI(projectAIndex)
+		projectAURI := lsproto.DocumentUriFromFileName(projectAIndex)
 		projectAContent := files[projectAIndex].(string)
 		session.DidOpenFile(ctx, projectAURI, 1, projectAContent, lsproto.LanguageKindTypeScript)
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, projectAURI)
@@ -711,7 +710,7 @@ export declare const otherValue: string;`,
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false, "bucket should be clean initially")
 
 		// Modify project-b's source file (local workspace package)
-		projectBURI := lsconv.FileNameToDocumentURI(projectBSrcIndex)
+		projectBURI := lsproto.DocumentUriFromFileName(projectBSrcIndex)
 		projectBContent := files[projectBSrcIndex].(string)
 		session.DidOpenFile(ctx, projectBURI, 1, projectBContent, lsproto.LanguageKindTypeScript)
 		session.DidChangeFile(ctx, projectBURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -737,7 +736,7 @@ export declare const otherValue: string;`,
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false, "bucket should be clean after rebuild")
 
 		// Now modify other-pkg (pnpm registry package, realpath inside node_modules/.pnpm)
-		otherPkgURI := lsconv.FileNameToDocumentURI(otherPkgIndex)
+		otherPkgURI := lsproto.DocumentUriFromFileName(otherPkgIndex)
 		otherPkgContent := files[otherPkgIndex].(string)
 		session.DidOpenFile(ctx, otherPkgURI, 1, otherPkgContent, lsproto.LanguageKindTypeScript)
 		session.DidChangeFile(ctx, otherPkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -817,7 +816,7 @@ export const b = a;
 		session, _ := projecttestutil.Setup(files)
 		t.Cleanup(session.Close)
 		ctx := context.Background()
-		consumerAURI := lsconv.FileNameToDocumentURI(consumerA)
+		consumerAURI := lsproto.DocumentUriFromFileName(consumerA)
 		session.DidOpenFile(ctx, consumerAURI, 1, files[consumerA].(string), lsproto.LanguageKindTypeScript)
 
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, consumerAURI)
@@ -931,7 +930,7 @@ export const b = a;
 		t.Cleanup(session.Close)
 
 		ctx := context.Background()
-		appURI := lsconv.FileNameToDocumentURI(appIndex)
+		appURI := lsproto.DocumentUriFromFileName(appIndex)
 		session.DidOpenFile(ctx, appURI, 1, files[appIndex].(string), lsproto.LanguageKindTypeScript)
 
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, appURI)

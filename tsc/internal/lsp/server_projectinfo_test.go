@@ -125,3 +125,40 @@ func TestProjectInfoInferredProject(t *testing.T) {
 	assert.Assert(t, msg.AsResponse().Error == nil)
 	assert.Equal(t, resp.ConfigFilePath, "")
 }
+
+func TestEmptyFileURIDoesNotStopServer(t *testing.T) {
+	t.Parallel()
+
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	client := initProjectInfoClient(t, map[string]string{
+		"/home/projects/index.ts": "export const x = 1;",
+	})
+
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{
+			Uri:        "file://",
+			LanguageId: "typescript",
+			Version:    1,
+			Text:       "export const root = true;",
+		},
+	})
+
+	uri := lsproto.DocumentUri("file:///home/projects/index.ts")
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{
+			Uri:        uri,
+			LanguageId: "typescript",
+			Version:    1,
+			Text:       "export const x = 1;",
+		},
+	})
+
+	msg, _, ok := client.SendRequest(t, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok, "expected a response")
+	assert.Assert(t, msg.AsResponse().Error == nil, "valid request failed after empty file URI")
+}
