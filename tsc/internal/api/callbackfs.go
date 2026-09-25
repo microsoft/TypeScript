@@ -5,6 +5,7 @@ import (
 	"fmt"
 	iofs "io/fs"
 	"slices"
+	"strings"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
@@ -26,6 +27,7 @@ type callbackFS struct {
 	realpathIdentity bool
 	fakeStat         bool
 	writeFileNoop    bool
+	errorCallbacks   map[string]bool
 	caseSensitive    *bool
 
 	// conn and ctx are set after connection is established
@@ -64,7 +66,15 @@ func isCallbackName(name string) bool {
 // to the client (e.g., "readFile", "fileExists").
 func newCallbackFS(base vfs.FS, callbacks []string, caseSensitive *bool) *callbackFS {
 	enabled := make(map[string]bool, len(callbacks))
+	errorCallbacks := make(map[string]bool)
 	for _, cb := range callbacks {
+		if name, isError := strings.CutSuffix(cb, ":error"); isError {
+			if !isCallbackName(name) {
+				panic("unknown callback name: " + name)
+			}
+			errorCallbacks[name] = true
+			continue
+		}
 		if cb == "realpath:identity" || cb == "stat:fakeStat" || cb == "writeFile:noop" {
 			continue
 		}
@@ -79,6 +89,7 @@ func newCallbackFS(base vfs.FS, callbacks []string, caseSensitive *bool) *callba
 		realpathIdentity: slices.Contains(callbacks, "realpath:identity"),
 		fakeStat:         slices.Contains(callbacks, "stat:fakeStat"),
 		writeFileNoop:    slices.Contains(callbacks, "writeFile:noop"),
+		errorCallbacks:   errorCallbacks,
 		caseSensitive:    caseSensitive,
 	}
 }
@@ -114,7 +125,7 @@ type callbackResponse struct {
 	Value json.Value `json:"value"`
 }
 
-func decodeCallbackResponse(result []byte) callbackResponse {
+func decodeCallbackResponse(name string, result []byte) callbackResponse {
 	var response callbackResponse
 	if err := json.Unmarshal(result, &response); err != nil {
 		panic(err)
@@ -122,11 +133,20 @@ func decodeCallbackResponse(result []byte) callbackResponse {
 	if response.Kind == "" {
 		panic("filesystem callback response is missing a kind")
 	}
+	if response.Kind == "error" {
+		panic("filesystem callback returned serverFS.error: " + name)
+	}
 	return response
 }
 
 func invalidCallbackResponse(name string, response callbackResponse) {
 	panic(fmt.Sprintf("invalid %s callback response kind: %s", name, response.Kind))
+}
+
+func (fs *callbackFS) panicIfError(name string) {
+	if fs.errorCallbacks[name] {
+		panic("filesystem operation configured with serverFS.error: " + name)
+	}
 }
 
 // UseCaseSensitiveFileNames implements vfs.FS.
@@ -139,12 +159,13 @@ func (fs *callbackFS) UseCaseSensitiveFileNames() bool {
 
 // ReadFile implements vfs.FS.
 func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
+	fs.panicIfError(callbackReadFile)
 	if fs.isEnabled(callbackReadFile) {
 		result, err := fs.call(callbackReadFile, path)
 		if err != nil {
 			panic(err)
 		}
-		response := decodeCallbackResponse(result)
+		response := decodeCallbackResponse(callbackReadFile, result)
 		switch response.Kind {
 		case "value":
 			var content string
@@ -165,12 +186,13 @@ func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
 
 // FileExists implements vfs.FS.
 func (fs *callbackFS) FileExists(path string) bool {
+	fs.panicIfError(callbackFileExists)
 	if fs.isEnabled(callbackFileExists) {
 		result, err := fs.call(callbackFileExists, path)
 		if err != nil {
 			panic(err)
 		}
-		response := decodeCallbackResponse(result)
+		response := decodeCallbackResponse(callbackFileExists, result)
 		switch response.Kind {
 		case "value":
 			var exists bool
@@ -189,12 +211,13 @@ func (fs *callbackFS) FileExists(path string) bool {
 
 // DirectoryExists implements vfs.FS.
 func (fs *callbackFS) DirectoryExists(path string) bool {
+	fs.panicIfError(callbackDirectoryExists)
 	if fs.isEnabled(callbackDirectoryExists) {
 		result, err := fs.call(callbackDirectoryExists, path)
 		if err != nil {
 			panic(err)
 		}
-		response := decodeCallbackResponse(result)
+		response := decodeCallbackResponse(callbackDirectoryExists, result)
 		switch response.Kind {
 		case "value":
 			var exists bool
@@ -213,12 +236,13 @@ func (fs *callbackFS) DirectoryExists(path string) bool {
 
 // GetAccessibleEntries implements vfs.FS.
 func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
+	fs.panicIfError(callbackGetAccessibleEntries)
 	if fs.isEnabled(callbackGetAccessibleEntries) {
 		result, err := fs.call(callbackGetAccessibleEntries, path)
 		if err != nil {
 			panic(err)
 		}
-		response := decodeCallbackResponse(result)
+		response := decodeCallbackResponse(callbackGetAccessibleEntries, result)
 		switch response.Kind {
 		case "value":
 			var rawEntries *struct {
@@ -251,12 +275,13 @@ func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
 
 // Realpath implements vfs.FS.
 func (fs *callbackFS) Realpath(path string) string {
+	fs.panicIfError(callbackRealpath)
 	if fs.isEnabled(callbackRealpath) {
 		result, err := fs.call(callbackRealpath, path)
 		if err != nil {
 			panic(err)
 		}
-		response := decodeCallbackResponse(result)
+		response := decodeCallbackResponse(callbackRealpath, result)
 		switch response.Kind {
 		case "value":
 			var realpath string
@@ -294,12 +319,13 @@ func (info *callbackFileInfo) Sys() any            { return nil }
 
 // Stat implements vfs.FS.
 func (fs *callbackFS) Stat(path string) vfs.FileInfo {
+	fs.panicIfError(callbackStat)
 	if fs.isEnabled(callbackStat) {
 		result, err := fs.call(callbackStat, path)
 		if err != nil {
 			panic(err)
 		}
-		response := decodeCallbackResponse(result)
+		response := decodeCallbackResponse(callbackStat, result)
 		switch response.Kind {
 		case "value":
 			var stat struct {
@@ -380,6 +406,7 @@ func nodeFileModeToGoFileMode(mode uint32) iofs.FileMode {
 
 // WriteFile implements vfs.FS.
 func (fs *callbackFS) WriteFile(path string, data string) error {
+	fs.panicIfError(callbackWriteFile)
 	if fs.isEnabled(callbackWriteFile) {
 		payload := struct {
 			Path string `json:"path"`
@@ -390,7 +417,7 @@ func (fs *callbackFS) WriteFile(path string, data string) error {
 		if err != nil {
 			return err
 		}
-		response := decodeCallbackResponse(result)
+		response := decodeCallbackResponse(callbackWriteFile, result)
 		switch response.Kind {
 		case "value", "noop":
 			return nil

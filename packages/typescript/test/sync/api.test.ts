@@ -196,6 +196,28 @@ describe("API", { concurrency }, () => {
                     writeFile: () => serverFS.noop,
                 },
             });
+            void new API({
+                fs: {
+                    directoryExists: serverFS.error,
+                    fileExists: serverFS.error,
+                    getAccessibleEntries: serverFS.error,
+                    readFile: serverFS.error,
+                    realpath: serverFS.error,
+                    stat: serverFS.error,
+                    writeFile: serverFS.error,
+                },
+            });
+            void new API({
+                fs: {
+                    directoryExists: () => serverFS.error,
+                    fileExists: () => serverFS.error,
+                    getAccessibleEntries: () => serverFS.error,
+                    readFile: () => serverFS.error,
+                    realpath: () => serverFS.error,
+                    stat: () => serverFS.error,
+                    writeFile: () => serverFS.error,
+                },
+            });
             // @ts-expect-error Filesystem callback configurations must specify every operation.
             void new API({ fs: { readFile: serverFS.useOS } });
             void new API({

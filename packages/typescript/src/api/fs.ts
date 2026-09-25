@@ -31,6 +31,7 @@ const useOS: unique symbol = Symbol("useOS");
 const identity: unique symbol = Symbol("identity");
 const fakeStat: unique symbol = Symbol("fakeStat");
 const noop: unique symbol = Symbol("noop");
+const error: unique symbol = Symbol("error");
 
 export const serverFS: {
     /** Delegate the configured operation, or the current callback invocation, to the server's operating-system filesystem. */
@@ -41,36 +42,54 @@ export const serverFS: {
     readonly fakeStat: typeof fakeStat;
     /** Ignore writes without invoking a callback or writing to the server's operating-system filesystem. Valid only for `writeFile`. */
     readonly noop: typeof noop;
+    /** Panic if the configured operation, or current callback invocation, reaches the server filesystem. */
+    readonly error: typeof error;
 } = {
     useOS: useOS,
     identity: identity,
     fakeStat: fakeStat,
     noop: noop,
+    error: error,
 };
 
 export interface FileSystemCallbacks {
-    directoryExists: ((directoryName: string) => boolean | typeof serverFS.useOS) | typeof serverFS.useOS;
-    fileExists: ((fileName: string) => boolean | typeof serverFS.useOS) | typeof serverFS.useOS;
-    getAccessibleEntries: ((directoryName: string) => FileSystemEntries | typeof serverFS.useOS) | typeof serverFS.useOS;
+    directoryExists:
+        | ((directoryName: string) => boolean | typeof serverFS.useOS | typeof serverFS.error)
+        | typeof serverFS.useOS
+        | typeof serverFS.error;
+    fileExists:
+        | ((fileName: string) => boolean | typeof serverFS.useOS | typeof serverFS.error)
+        | typeof serverFS.useOS
+        | typeof serverFS.error;
+    getAccessibleEntries:
+        | ((directoryName: string) => FileSystemEntries | typeof serverFS.useOS | typeof serverFS.error)
+        | typeof serverFS.useOS
+        | typeof serverFS.error;
     /**
      * Read a file's content.
      * - Return the file content as a `string` (including `""` for empty files).
      * - Return `undefined` to indicate the file does not exist.
      * - Return {@link serverFS.useOS} to fall back to the server's operating-system filesystem.
      */
-    readFile: ((fileName: string) => string | undefined | typeof serverFS.useOS) | typeof serverFS.useOS;
+    readFile:
+        | ((fileName: string) => string | undefined | typeof serverFS.useOS | typeof serverFS.error)
+        | typeof serverFS.useOS
+        | typeof serverFS.error;
     realpath:
-        | ((path: string) => string | typeof serverFS.useOS | typeof serverFS.identity)
+        | ((path: string) => string | typeof serverFS.useOS | typeof serverFS.identity | typeof serverFS.error)
         | typeof serverFS.useOS
-        | typeof serverFS.identity;
+        | typeof serverFS.identity
+        | typeof serverFS.error;
     stat:
-        | ((path: string) => FileSystemStat | undefined | typeof serverFS.useOS | typeof serverFS.fakeStat)
+        | ((path: string) => FileSystemStat | undefined | typeof serverFS.useOS | typeof serverFS.fakeStat | typeof serverFS.error)
         | typeof serverFS.useOS
-        | typeof serverFS.fakeStat;
+        | typeof serverFS.fakeStat
+        | typeof serverFS.error;
     writeFile:
-        | ((path: string, content: string) => void | typeof serverFS.useOS | typeof serverFS.noop)
+        | ((path: string, content: string) => void | typeof serverFS.useOS | typeof serverFS.noop | typeof serverFS.error)
         | typeof serverFS.useOS
-        | typeof serverFS.noop;
+        | typeof serverFS.noop
+        | typeof serverFS.error;
 }
 
 export interface CreateFileSystemOptions {

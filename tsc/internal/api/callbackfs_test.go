@@ -2,7 +2,9 @@ package api
 
 import (
 	"context"
+	"fmt"
 	iofs "io/fs"
+	"strings"
 	"testing"
 	"time"
 
@@ -200,4 +202,56 @@ func TestCallbackFSPerCallIdentityRealpath(t *testing.T) {
 	if got := fs.Realpath("/virtual.ts"); got != "/virtual.ts" {
 		t.Fatalf("Realpath() = %q, want identity", got)
 	}
+}
+
+func TestCallbackFSError(t *testing.T) {
+	t.Parallel()
+
+	names := []string{
+		callbackReadFile,
+		callbackFileExists,
+		callbackDirectoryExists,
+		callbackGetAccessibleEntries,
+		callbackRealpath,
+		callbackStat,
+		callbackWriteFile,
+	}
+	callbacks := make([]string, len(names))
+	for i, name := range names {
+		callbacks[i] = name + ":error"
+	}
+	base := vfstest.FromMap(map[string]string{}, true)
+	fs := newCallbackFS(base, callbacks, nil)
+	for _, name := range names {
+		if !fs.errorCallbacks[name] {
+			t.Fatalf("%s was not configured to panic", name)
+		}
+	}
+	assertPanicsWith(t, "serverFS.error: readFile", func() {
+		fs.ReadFile("/unexpected.ts")
+	})
+
+	callbackFS := newCallbackFS(base, []string{"fileExists"}, nil)
+	callbackFS.SetConnection(t.Context(), &callbackTestConn{
+		responses: map[string]json.Value{
+			callbackFileExists: []byte(`{"kind":"error"}`),
+		},
+	})
+	assertPanicsWith(t, "serverFS.error: fileExists", func() {
+		callbackFS.FileExists("/unexpected.ts")
+	})
+}
+
+func assertPanicsWith(t *testing.T, expected string, cb func()) {
+	t.Helper()
+	defer func() {
+		value := recover()
+		if value == nil {
+			t.Fatal("expected panic")
+		}
+		if message := fmt.Sprint(value); !strings.Contains(message, expected) {
+			t.Fatalf("panic = %q, want substring %q", message, expected)
+		}
+	}()
+	cb()
 }

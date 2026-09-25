@@ -19,18 +19,18 @@ interface FileSystemCallbackDefinition {
 }
 
 const fileSystemCallbackTable: Record<keyof FileSystemCallbacks, FileSystemCallbackDefinition> = {
-    readFile: { serverFS: [serverFS.useOS] },
-    fileExists: { serverFS: [serverFS.useOS] },
-    directoryExists: { serverFS: [serverFS.useOS] },
-    getAccessibleEntries: { serverFS: [serverFS.useOS] },
+    readFile: { serverFS: [serverFS.useOS, serverFS.error] },
+    fileExists: { serverFS: [serverFS.useOS, serverFS.error] },
+    directoryExists: { serverFS: [serverFS.useOS, serverFS.error] },
+    getAccessibleEntries: { serverFS: [serverFS.useOS, serverFS.error] },
     realpath: {
-        serverFS: [serverFS.useOS, serverFS.identity],
+        serverFS: [serverFS.useOS, serverFS.identity, serverFS.error],
     },
     stat: {
-        serverFS: [serverFS.useOS, serverFS.fakeStat],
+        serverFS: [serverFS.useOS, serverFS.fakeStat, serverFS.error],
     },
     writeFile: {
-        serverFS: [serverFS.useOS, serverFS.noop],
+        serverFS: [serverFS.useOS, serverFS.noop, serverFS.error],
     },
 };
 
