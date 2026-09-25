@@ -1,0 +1,388 @@
+//// [tests/cases/compiler/iteratorZipInputs.ts] ////
+
+=== iteratorZipInputs.ts ===
+Iterator.zip("ab");
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+
+Iterator.zip(["ab"]);
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+
+Iterator.zip(new Set(["ab"]));
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+Iterator.zipKeyed("ab");
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+
+Iterator.zipKeyed({ a: "ab" });
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 4, 19))
+
+Iterator.zip([], { mode: "longest", padding: "ab" });
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 5, 18))
+>padding : Symbol(padding, Decl(iteratorZipInputs.ts, 5, 35))
+
+Iterator.zip([["a"]], { mode: "longest", padding: "ab" });
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 6, 23))
+>padding : Symbol(padding, Decl(iteratorZipInputs.ts, 6, 40))
+
+Iterator.zipKeyed({}, { mode: "longest", padding: "ab" });
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 7, 23))
+>padding : Symbol(padding, Decl(iteratorZipInputs.ts, 7, 40))
+
+const a: [string][] = Iterator.zip([new String("ab")]).toArray();
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 9, 5))
+>Iterator.zip([new String("ab")]).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const b: { a: string; }[] = Iterator.zipKeyed({ a: new String("ab") }).toArray();
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 10, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 10, 10))
+>Iterator.zipKeyed({ a: new String("ab") }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 10, 47))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const c: (string | undefined)[][] = Iterator.zip([["a"]], { mode: "longest", padding: new String("ab") }).toArray();
+>c : Symbol(c, Decl(iteratorZipInputs.ts, 11, 5))
+>Iterator.zip([["a"]], { mode: "longest", padding: new String("ab") }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 11, 59))
+>padding : Symbol(padding, Decl(iteratorZipInputs.ts, 11, 76))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const d = Iterator.zipKeyed({ a: [1], b: undefined }).toArray();
+>d : Symbol(d, Decl(iteratorZipInputs.ts, 13, 5))
+>Iterator.zipKeyed({ a: [1], b: undefined }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 13, 29))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 13, 37))
+>undefined : Symbol(undefined)
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const e: { a: number; }[] = d;
+>e : Symbol(e, Decl(iteratorZipInputs.ts, 14, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 14, 10))
+>d : Symbol(d, Decl(iteratorZipInputs.ts, 13, 5))
+
+d[0].b;
+>d : Symbol(d, Decl(iteratorZipInputs.ts, 13, 5))
+
+const f: never[] = Iterator.zipKeyed({ a: undefined }).toArray();
+>f : Symbol(f, Decl(iteratorZipInputs.ts, 16, 5))
+>Iterator.zipKeyed({ a: undefined }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 16, 38))
+>undefined : Symbol(undefined)
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const g: never[] = Iterator.zipKeyed({ a: undefined }, { mode: "longest", padding: {} }).toArray();
+>g : Symbol(g, Decl(iteratorZipInputs.ts, 17, 5))
+>Iterator.zipKeyed({ a: undefined }, { mode: "longest", padding: {} }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 17, 38))
+>undefined : Symbol(undefined)
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 17, 56))
+>padding : Symbol(padding, Decl(iteratorZipInputs.ts, 17, 73))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+interface I {
+>I : Symbol(I, Decl(iteratorZipInputs.ts, 17, 99))
+
+    readonly a: Iterable<number>;
+>a : Symbol(I.a, Decl(iteratorZipInputs.ts, 19, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    readonly b?: Iterator<string>;
+>b : Symbol(I.b, Decl(iteratorZipInputs.ts, 20, 33))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+
+    readonly c: Iterable<boolean> | undefined;
+>c : Symbol(I.c, Decl(iteratorZipInputs.ts, 21, 34))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    readonly d?: undefined;
+>d : Symbol(I.d, Decl(iteratorZipInputs.ts, 22, 46))
+}
+declare const h: I;
+>h : Symbol(h, Decl(iteratorZipInputs.ts, 25, 13))
+>I : Symbol(I, Decl(iteratorZipInputs.ts, 17, 99))
+
+const i = Iterator.zipKeyed(h).toArray();
+>i : Symbol(i, Decl(iteratorZipInputs.ts, 26, 5))
+>Iterator.zipKeyed(h).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>h : Symbol(h, Decl(iteratorZipInputs.ts, 25, 13))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const j: { a: number; b?: string; c?: boolean; }[] = i;
+>j : Symbol(j, Decl(iteratorZipInputs.ts, 27, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 27, 10))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 27, 21))
+>c : Symbol(c, Decl(iteratorZipInputs.ts, 27, 33))
+>i : Symbol(i, Decl(iteratorZipInputs.ts, 26, 5))
+
+i[0].a = 2;
+>i[0].a : Symbol(a, Decl(iteratorZipInputs.ts, 19, 13))
+>i : Symbol(i, Decl(iteratorZipInputs.ts, 26, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 19, 13))
+
+i[0].b = "a";
+>i[0].b : Symbol(b, Decl(iteratorZipInputs.ts, 20, 33))
+>i : Symbol(i, Decl(iteratorZipInputs.ts, 26, 5))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 20, 33))
+
+i[0].c = true;
+>i[0].c : Symbol(c, Decl(iteratorZipInputs.ts, 21, 34))
+>i : Symbol(i, Decl(iteratorZipInputs.ts, 26, 5))
+>c : Symbol(c, Decl(iteratorZipInputs.ts, 21, 34))
+
+i[0].d;
+>i : Symbol(i, Decl(iteratorZipInputs.ts, 26, 5))
+
+const k: { a: number; c: boolean; }[] = i;
+>k : Symbol(k, Decl(iteratorZipInputs.ts, 32, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 32, 10))
+>c : Symbol(c, Decl(iteratorZipInputs.ts, 32, 21))
+>i : Symbol(i, Decl(iteratorZipInputs.ts, 26, 5))
+
+const l: { a: number | undefined; b?: string | undefined; c?: boolean | undefined; }[] = Iterator.zipKeyed(h, { mode: "longest" }).toArray();
+>l : Symbol(l, Decl(iteratorZipInputs.ts, 33, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 33, 10))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 33, 33))
+>c : Symbol(c, Decl(iteratorZipInputs.ts, 33, 57))
+>Iterator.zipKeyed(h, { mode: "longest" }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>h : Symbol(h, Decl(iteratorZipInputs.ts, 25, 13))
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 33, 111))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+declare const m: { a: Iterable<number>; } | { b: Iterator<string>; };
+>m : Symbol(m, Decl(iteratorZipInputs.ts, 35, 13))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 35, 18))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 35, 45))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+
+const n: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(m).toArray();
+>n : Symbol(n, Decl(iteratorZipInputs.ts, 36, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 36, 11))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 36, 28))
+>Iterator.zipKeyed(m).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>m : Symbol(m, Decl(iteratorZipInputs.ts, 35, 13))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+declare const o: { a: Iterable<number>; } | { b: number; };
+>o : Symbol(o, Decl(iteratorZipInputs.ts, 37, 13))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 37, 18))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 37, 45))
+
+Iterator.zipKeyed(o);
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>o : Symbol(o, Decl(iteratorZipInputs.ts, 37, 13))
+
+Iterator.zipKeyed(o, { mode: "longest" });
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>o : Symbol(o, Decl(iteratorZipInputs.ts, 37, 13))
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 39, 22))
+
+Iterator.zipKeyed(o, { mode: "longest", padding: {} });
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>o : Symbol(o, Decl(iteratorZipInputs.ts, 37, 13))
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 40, 22))
+>padding : Symbol(padding, Decl(iteratorZipInputs.ts, 40, 39))
+
+declare const p: { a?: Iterable<number>; } | { b: string; };
+>p : Symbol(p, Decl(iteratorZipInputs.ts, 41, 13))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 41, 18))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 41, 46))
+
+Iterator.zipKeyed(p);
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>p : Symbol(p, Decl(iteratorZipInputs.ts, 41, 13))
+
+declare const q: { a: Iterable<number>; } | { b: undefined; };
+>q : Symbol(q, Decl(iteratorZipInputs.ts, 43, 13))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 43, 18))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 43, 45))
+
+const r: { a: number; }[] = Iterator.zipKeyed(q).toArray();
+>r : Symbol(r, Decl(iteratorZipInputs.ts, 44, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 44, 10))
+>Iterator.zipKeyed(q).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>q : Symbol(q, Decl(iteratorZipInputs.ts, 43, 13))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+declare const s: unique symbol;
+>s : Symbol(s, Decl(iteratorZipInputs.ts, 46, 13))
+
+declare const t: { a: Iterable<number>; [s]?: Iterable<string>; };
+>t : Symbol(t, Decl(iteratorZipInputs.ts, 47, 13))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 47, 18))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>[s] : Symbol([s], Decl(iteratorZipInputs.ts, 47, 39))
+>s : Symbol(s, Decl(iteratorZipInputs.ts, 46, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const u: { a: number; [s]?: string; }[] = Iterator.zipKeyed(t).toArray();
+>u : Symbol(u, Decl(iteratorZipInputs.ts, 48, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 48, 10))
+>[s] : Symbol([s], Decl(iteratorZipInputs.ts, 48, 21))
+>s : Symbol(s, Decl(iteratorZipInputs.ts, 46, 13))
+>Iterator.zipKeyed(t).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>t : Symbol(t, Decl(iteratorZipInputs.ts, 47, 13))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+Iterator.zipKeyed({ a: [1], b: null });
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 50, 19))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 50, 27))
+
+Iterator.zipKeyed({ a: [1], b: false });
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 51, 19))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 51, 27))
+
+Iterator.zip([undefined]);
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>undefined : Symbol(undefined)
+
+declare const v: { a?: undefined; };
+>v : Symbol(v, Decl(iteratorZipInputs.ts, 54, 13))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 54, 18))
+
+const w: never[] = Iterator.zipKeyed(v).toArray();
+>w : Symbol(w, Decl(iteratorZipInputs.ts, 55, 5))
+>Iterator.zipKeyed(v).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>v : Symbol(v, Decl(iteratorZipInputs.ts, 54, 13))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const x: { a: number; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest", padding: { a: 0 } }).toArray();
+>x : Symbol(x, Decl(iteratorZipInputs.ts, 56, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 56, 10))
+>Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest", padding: { a: 0 } }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 56, 47))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 56, 55))
+>undefined : Symbol(undefined)
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 56, 73))
+>padding : Symbol(padding, Decl(iteratorZipInputs.ts, 56, 90))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 56, 101))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const y: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest" }).toArray();
+>y : Symbol(y, Decl(iteratorZipInputs.ts, 57, 5))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 57, 10))
+>Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest" }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 57, 59))
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 57, 67))
+>undefined : Symbol(undefined)
+>mode : Symbol(mode, Decl(iteratorZipInputs.ts, 57, 85))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+function f1<T>(a: Iterable<T>) {
+>f1 : Symbol(f1, Decl(iteratorZipInputs.ts, 57, 115))
+>T : Symbol(T, Decl(iteratorZipInputs.ts, 59, 12))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 59, 15))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(iteratorZipInputs.ts, 59, 12))
+
+    const b: { a: T; }[] = Iterator.zipKeyed({ a }).toArray();
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 60, 9))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 60, 14))
+>T : Symbol(T, Decl(iteratorZipInputs.ts, 59, 12))
+>Iterator.zipKeyed({ a }).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zipKeyed : Symbol(IteratorConstructor.zipKeyed, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 60, 46))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+    const c: [T][] = Iterator.zip([a]).toArray();
+>c : Symbol(c, Decl(iteratorZipInputs.ts, 61, 9))
+>T : Symbol(T, Decl(iteratorZipInputs.ts, 59, 12))
+>Iterator.zip([a]).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>zip : Symbol(IteratorConstructor.zip, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --) ... and 1 more)
+>a : Symbol(a, Decl(iteratorZipInputs.ts, 59, 15))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+    return { b, c };
+>b : Symbol(b, Decl(iteratorZipInputs.ts, 62, 12))
+>c : Symbol(c, Decl(iteratorZipInputs.ts, 62, 15))
+}
+

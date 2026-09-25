@@ -1,0 +1,262 @@
+iteratorZipInputs.ts(1,14): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+      Type 'string' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+iteratorZipInputs.ts(2,14): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string[]' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+      Type 'string[]' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+        The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+          Type 'IteratorResult<string, undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+            Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+              Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+                Type 'string' is not assignable to type 'IteratorInput<unknown>'.
+iteratorZipInputs.ts(3,14): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'Set<string>' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+      Type 'Set<string>' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+        The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+          Type 'IteratorResult<string, undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+            Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+              Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+                Type 'string' is not assignable to type 'IteratorInput<unknown>'.
+iteratorZipInputs.ts(4,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object & IteratorZipKeyedInput<object>'.
+  Type 'string' is not assignable to type 'object'.
+iteratorZipInputs.ts(5,21): error TS2322: Type 'string' is not assignable to type 'never'.
+iteratorZipInputs.ts(6,37): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'string' is not assignable to type 'Iterable<undefined> & object'.
+      Type 'string' is not assignable to type 'Iterable<undefined>'.
+iteratorZipInputs.ts(7,42): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'string' is not assignable to type 'Iterable<string | undefined> & object'.
+      Type 'string' is not assignable to type 'object'.
+iteratorZipInputs.ts(8,42): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'string' is not assignable to type 'object'.
+iteratorZipInputs.ts(16,6): error TS2339: Property 'b' does not exist on type 'IteratorZipResult<{ a: number[]; } & {}, never, {}>'.
+iteratorZipInputs.ts(32,6): error TS2339: Property 'd' does not exist on type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>'.
+iteratorZipInputs.ts(33,7): error TS2322: Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>[]' is not assignable to type '{ a: number; c: boolean; }[]'.
+  Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' is not assignable to type '{ a: number; c: boolean; }'.
+    Property 'c' is optional in type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' but required in type '{ a: number; c: boolean; }'.
+iteratorZipInputs.ts(39,19): error TS2345: Argument of type '{ a: Iterable<number>; } | { b: number; }' is not assignable to parameter of type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+  Type '{ b: number; }' is not assignable to type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+    Type '{ b: number; }' is not assignable to type '{ b: number; } & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+      Type '{ b: number; }' is not assignable to type 'IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+        Types of property 'b' are incompatible.
+          Type 'number' is not assignable to type 'IteratorInput<unknown> | undefined'.
+iteratorZipInputs.ts(40,19): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ a: Iterable<number>; } | { b: number; }' is not assignable to parameter of type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+      Type '{ b: number; }' is not assignable to type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+        Type '{ b: number; }' is not assignable to type '{ b: number; } & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+          Type '{ b: number; }' is not assignable to type 'IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+            Types of property 'b' are incompatible.
+              Type 'number' is not assignable to type 'IteratorInput<unknown> | undefined'.
+iteratorZipInputs.ts(41,19): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ a: Iterable<number>; } | { b: number; }' is not assignable to parameter of type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+      Type '{ b: number; }' is not assignable to type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+        Type '{ b: number; }' is not assignable to type '{ b: number; } & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+          Type '{ b: number; }' is not assignable to type 'IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+            Types of property 'b' are incompatible.
+              Type 'number' is not assignable to type 'IteratorInput<unknown> | undefined'.
+iteratorZipInputs.ts(43,19): error TS2345: Argument of type '{ a?: Iterable<number>; } | { b: string; }' is not assignable to parameter of type '({ a?: Iterable<number>; } | { b: string; }) & IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+  Type '{ b: string; }' is not assignable to type '({ a?: Iterable<number>; } | { b: string; }) & IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+    Type '{ b: string; }' is not assignable to type '{ b: string; } & IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+      Type '{ b: string; }' is not assignable to type 'IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+        Types of property 'b' are incompatible.
+          Type 'string' is not assignable to type 'IteratorInput<unknown> | undefined'.
+iteratorZipInputs.ts(51,21): error TS2322: Type 'number[]' is not assignable to type 'never'.
+iteratorZipInputs.ts(51,29): error TS2322: Type 'null' is not assignable to type 'never'.
+iteratorZipInputs.ts(52,21): error TS2322: Type 'number[]' is not assignable to type 'never'.
+iteratorZipInputs.ts(52,29): error TS2322: Type 'false' is not assignable to type 'never'.
+iteratorZipInputs.ts(53,14): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'undefined[]' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+      Type 'undefined[]' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+        The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+          Type 'IteratorResult<undefined, undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+            Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+              Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+                Type 'undefined' is not assignable to type 'IteratorInput<unknown>'.
+
+
+==== iteratorZipInputs.ts (20 errors) ====
+    Iterator.zip("ab");
+                 ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+!!! error TS2769:       Type 'string' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    Iterator.zip(["ab"]);
+                 ~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'string[]' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+!!! error TS2769:       Type 'string[]' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+!!! error TS2769:         The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+!!! error TS2769:           Type 'IteratorResult<string, undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:             Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:               Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:                 Type 'string' is not assignable to type 'IteratorInput<unknown>'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    Iterator.zip(new Set(["ab"]));
+                 ~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'Set<string>' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+!!! error TS2769:       Type 'Set<string>' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+!!! error TS2769:         The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+!!! error TS2769:           Type 'IteratorResult<string, undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:             Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:               Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:                 Type 'string' is not assignable to type 'IteratorInput<unknown>'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    Iterator.zipKeyed("ab");
+                      ~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'object & IteratorZipKeyedInput<object>'.
+!!! error TS2345:   Type 'string' is not assignable to type 'object'.
+    Iterator.zipKeyed({ a: "ab" });
+                        ~
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
+!!! related TS6500 iteratorZipInputs.ts:5:21: The expected type comes from property 'a' which is declared here on type '{ a: string; } & IteratorZipKeyedInput<{ a: string; }>'
+    Iterator.zip([], { mode: "longest", padding: "ab" });
+                                        ~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'string' is not assignable to type 'Iterable<undefined> & object'.
+!!! error TS2769:       Type 'string' is not assignable to type 'Iterable<undefined>'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    Iterator.zip([["a"]], { mode: "longest", padding: "ab" });
+                                             ~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'string' is not assignable to type 'Iterable<string | undefined> & object'.
+!!! error TS2769:       Type 'string' is not assignable to type 'object'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    Iterator.zipKeyed({}, { mode: "longest", padding: "ab" });
+                                             ~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'string' is not assignable to type 'object'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    
+    const a: [string][] = Iterator.zip([new String("ab")]).toArray();
+    const b: { a: string; }[] = Iterator.zipKeyed({ a: new String("ab") }).toArray();
+    const c: (string | undefined)[][] = Iterator.zip([["a"]], { mode: "longest", padding: new String("ab") }).toArray();
+    
+    const d = Iterator.zipKeyed({ a: [1], b: undefined }).toArray();
+    const e: { a: number; }[] = d;
+    d[0].b;
+         ~
+!!! error TS2339: Property 'b' does not exist on type 'IteratorZipResult<{ a: number[]; } & {}, never, {}>'.
+    const f: never[] = Iterator.zipKeyed({ a: undefined }).toArray();
+    const g: never[] = Iterator.zipKeyed({ a: undefined }, { mode: "longest", padding: {} }).toArray();
+    
+    interface I {
+        readonly a: Iterable<number>;
+        readonly b?: Iterator<string>;
+        readonly c: Iterable<boolean> | undefined;
+        readonly d?: undefined;
+    }
+    declare const h: I;
+    const i = Iterator.zipKeyed(h).toArray();
+    const j: { a: number; b?: string; c?: boolean; }[] = i;
+    i[0].a = 2;
+    i[0].b = "a";
+    i[0].c = true;
+    i[0].d;
+         ~
+!!! error TS2339: Property 'd' does not exist on type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>'.
+    const k: { a: number; c: boolean; }[] = i;
+          ~
+!!! error TS2322: Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>[]' is not assignable to type '{ a: number; c: boolean; }[]'.
+!!! error TS2322:   Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' is not assignable to type '{ a: number; c: boolean; }'.
+!!! error TS2322:     Property 'c' is optional in type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' but required in type '{ a: number; c: boolean; }'.
+    const l: { a: number | undefined; b?: string | undefined; c?: boolean | undefined; }[] = Iterator.zipKeyed(h, { mode: "longest" }).toArray();
+    
+    declare const m: { a: Iterable<number>; } | { b: Iterator<string>; };
+    const n: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(m).toArray();
+    declare const o: { a: Iterable<number>; } | { b: number; };
+    Iterator.zipKeyed(o);
+                      ~
+!!! error TS2345: Argument of type '{ a: Iterable<number>; } | { b: number; }' is not assignable to parameter of type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2345:   Type '{ b: number; }' is not assignable to type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2345:     Type '{ b: number; }' is not assignable to type '{ b: number; } & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2345:       Type '{ b: number; }' is not assignable to type 'IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2345:         Types of property 'b' are incompatible.
+!!! error TS2345:           Type 'number' is not assignable to type 'IteratorInput<unknown> | undefined'.
+    Iterator.zipKeyed(o, { mode: "longest" });
+                      ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ a: Iterable<number>; } | { b: number; }' is not assignable to parameter of type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:       Type '{ b: number; }' is not assignable to type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:         Type '{ b: number; }' is not assignable to type '{ b: number; } & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:           Type '{ b: number; }' is not assignable to type 'IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:             Types of property 'b' are incompatible.
+!!! error TS2769:               Type 'number' is not assignable to type 'IteratorInput<unknown> | undefined'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    Iterator.zipKeyed(o, { mode: "longest", padding: {} });
+                      ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ a: Iterable<number>; } | { b: number; }' is not assignable to parameter of type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:       Type '{ b: number; }' is not assignable to type '({ a: Iterable<number>; } | { b: number; }) & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:         Type '{ b: number; }' is not assignable to type '{ b: number; } & IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:           Type '{ b: number; }' is not assignable to type 'IteratorZipKeyedInput<{ a: Iterable<number>; } | { b: number; }>'.
+!!! error TS2769:             Types of property 'b' are incompatible.
+!!! error TS2769:               Type 'number' is not assignable to type 'IteratorInput<unknown> | undefined'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    declare const p: { a?: Iterable<number>; } | { b: string; };
+    Iterator.zipKeyed(p);
+                      ~
+!!! error TS2345: Argument of type '{ a?: Iterable<number>; } | { b: string; }' is not assignable to parameter of type '({ a?: Iterable<number>; } | { b: string; }) & IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+!!! error TS2345:   Type '{ b: string; }' is not assignable to type '({ a?: Iterable<number>; } | { b: string; }) & IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+!!! error TS2345:     Type '{ b: string; }' is not assignable to type '{ b: string; } & IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+!!! error TS2345:       Type '{ b: string; }' is not assignable to type 'IteratorZipKeyedInput<{ a?: Iterable<number>; } | { b: string; }>'.
+!!! error TS2345:         Types of property 'b' are incompatible.
+!!! error TS2345:           Type 'string' is not assignable to type 'IteratorInput<unknown> | undefined'.
+    declare const q: { a: Iterable<number>; } | { b: undefined; };
+    const r: { a: number; }[] = Iterator.zipKeyed(q).toArray();
+    
+    declare const s: unique symbol;
+    declare const t: { a: Iterable<number>; [s]?: Iterable<string>; };
+    const u: { a: number; [s]?: string; }[] = Iterator.zipKeyed(t).toArray();
+    
+    Iterator.zipKeyed({ a: [1], b: null });
+                        ~
+!!! error TS2322: Type 'number[]' is not assignable to type 'never'.
+                                ~
+!!! error TS2322: Type 'null' is not assignable to type 'never'.
+    Iterator.zipKeyed({ a: [1], b: false });
+                        ~
+!!! error TS2322: Type 'number[]' is not assignable to type 'never'.
+                                ~
+!!! error TS2322: Type 'false' is not assignable to type 'never'.
+    Iterator.zip([undefined]);
+                 ~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
+!!! error TS2769:       Type 'undefined[]' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
+!!! error TS2769:         The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+!!! error TS2769:           Type 'IteratorResult<undefined, undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:             Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:               Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2769:                 Type 'undefined' is not assignable to type 'IteratorInput<unknown>'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    
+    declare const v: { a?: undefined; };
+    const w: never[] = Iterator.zipKeyed(v).toArray();
+    const x: { a: number; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest", padding: { a: 0 } }).toArray();
+    const y: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest" }).toArray();
+    
+    function f1<T>(a: Iterable<T>) {
+        const b: { a: T; }[] = Iterator.zipKeyed({ a }).toArray();
+        const c: [T][] = Iterator.zip([a]).toArray();
+        return { b, c };
+    }
+    

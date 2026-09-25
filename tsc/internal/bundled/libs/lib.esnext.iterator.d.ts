@@ -50,17 +50,33 @@ type IteratorZipOptions<T> =
     | IteratorZipLongestOptions<T>
     | IteratorZipStrictOptions;
 
-type IteratorInput<T> = Iterable<T> | Iterator<T>;
-
-type IteratorInputTuple = readonly [] | readonly [IteratorInput<unknown>, ...IteratorInput<unknown>[]];
+type IteratorInput<T> = (Iterable<T> | Iterator<T>) & object;
 
 type IteratorYield<T> = T extends IteratorInput<infer U> ? U : never;
 
-type IteratorZipResult<T, TExtra = never> = {
-    -readonly [K in keyof T]: IteratorYield<T[K]> | TExtra;
+type IteratorZipPadding<T> = {
+    readonly [K in keyof T]?: IteratorYield<T[K]> | undefined;
 };
 
-type IteratorZipKeyedResult<T, TExtra = never> = T extends unknown ? keyof T extends never ? never : IteratorZipResult<T, TExtra> : never;
+type IteratorZipPaddingKeys<T> = keyof {
+    [K in keyof T as {} extends Pick<T, K> ? never : K]: unknown;
+};
+
+type IteratorZipResult<T, TExtra = never, TPadding = {}> = {
+    -readonly [K in keyof T]: IteratorYield<T[K]> | (K extends keyof TPadding ? TPadding[K] : never) | (K extends IteratorZipPaddingKeys<TPadding> ? never : TExtra);
+};
+
+type IteratorZipKeyedInput<T> = {
+    [K in T extends unknown ? keyof T : never]?: IteratorInput<unknown> | undefined;
+};
+
+type IteratorZipKeyedResult<T, TExtra = never, TPadding = {}> = T extends Partial<Record<keyof T, undefined>> ? never
+    : IteratorZipResult<
+        { [K in keyof T as undefined extends T[K] ? never : K]: T[K]; } &
+        { [K in keyof T as undefined extends T[K] ? T[K] extends undefined ? never : K : never]?: T[K]; },
+        TExtra,
+        TPadding
+    >;
 
 declare global {
     interface IteratorObject<T, TReturn, TNext> {
@@ -91,31 +107,32 @@ declare global {
          * @param iterables An iterable of iterators or iterables to zip.
          * @param options Controls how differing input lengths are handled.
          */
-        zip(iterables: readonly [], options?: IteratorZipOptions<Iterable<unknown>>): IteratorObject<never, undefined, unknown>;
+        zip(iterables: readonly [], options?: IteratorZipOptions<Iterable<unknown> & object>): IteratorObject<never, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are arrays containing values yielded at the same position by each input iterator or iterable.
          * @param iterables An iterable of iterators or iterables to zip.
          * @param options Controls how differing input lengths are handled.
          */
-        zip<T extends IteratorInputTuple>(iterables: T, options: IteratorZipLongestOptions<NoInfer<IteratorZipResult<T>>> & { padding: NoInfer<IteratorZipResult<T>>; }): IteratorObject<IteratorZipResult<T>, undefined, unknown>;
         zip<T extends readonly IteratorInput<unknown>[] | []>(iterables: T, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorZipResult<T>, undefined, unknown>;
-        zip<T extends readonly IteratorInput<unknown>[] | []>(iterables: T, options: IteratorZipOptions<NoInfer<Partial<IteratorZipResult<T>>>>): IteratorObject<IteratorZipResult<T, undefined>, undefined, unknown>;
+        zip<T extends readonly IteratorInput<unknown>[] | [], TPadding extends readonly unknown[] | []>(iterables: T, options: IteratorZipLongestOptions<TPadding> & { padding: TPadding & NoInfer<IteratorZipPadding<T>>; }): IteratorObject<IteratorZipResult<T, undefined, TPadding>, undefined, unknown>;
+        zip<T extends readonly IteratorInput<unknown>[] | []>(iterables: T, options: IteratorZipOptions<NoInfer<IteratorZipPadding<T>>>): IteratorObject<IteratorZipResult<T, undefined>, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are arrays containing values yielded at the same position by each input iterator or iterable.
          * @param iterables An iterable of iterators or iterables to zip.
          * @param options Controls how differing input lengths are handled.
          */
-        zip<T extends IteratorInput<unknown>>(iterables: Iterable<T>, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorYield<T>[], undefined, unknown>;
-        zip<T extends IteratorInput<unknown>>(iterables: Iterable<T>, options: IteratorZipOptions<NoInfer<Iterable<IteratorYield<T>>>>): IteratorObject<(IteratorYield<T> | undefined)[], undefined, unknown>;
+        zip<T extends IteratorInput<unknown>>(iterables: Iterable<T> & object, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorYield<T>[], undefined, unknown>;
+        zip<T extends IteratorInput<unknown>>(iterables: Iterable<T> & object, options: IteratorZipOptions<NoInfer<Iterable<IteratorYield<T> | undefined> & object>>): IteratorObject<(IteratorYield<T> | undefined)[], undefined, unknown>;
 
         /**
          * Creates an iterator whose values are objects containing values yielded at the same position by each iterator or iterable in the input object.
-         * @param iterables An object whose enumerable own properties contain iterators or iterables to zip.
+         * @param iterables An object whose enumerable own properties contain iterators or iterables to zip. Undefined values are ignored.
          * @param options Controls how differing input lengths are handled.
          */
-        zipKeyed<T extends object>(iterables: T & Record<keyof T, IteratorInput<unknown>>, options?: IteratorZipShortestOptions | (IteratorZipLongestOptions<NoInfer<IteratorZipResult<T>>> & { padding: NoInfer<IteratorZipResult<T>>; }) | IteratorZipStrictOptions): IteratorObject<IteratorZipKeyedResult<T>, undefined, unknown>;
-        zipKeyed<T extends object>(iterables: T & Record<keyof T, IteratorInput<unknown>>, options: IteratorZipOptions<NoInfer<Partial<IteratorZipResult<T>>>>): IteratorObject<IteratorZipKeyedResult<T, undefined>, undefined, unknown>;
+        zipKeyed<T extends object>(iterables: T & IteratorZipKeyedInput<T>, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorZipKeyedResult<T>, undefined, unknown>;
+        zipKeyed<T extends object, TPadding extends object>(iterables: T & IteratorZipKeyedInput<T>, options: IteratorZipLongestOptions<TPadding> & { padding: TPadding & NoInfer<IteratorZipPadding<T>>; }): IteratorObject<IteratorZipKeyedResult<T, undefined, TPadding>, undefined, unknown>;
+        zipKeyed<T extends object>(iterables: T & IteratorZipKeyedInput<T>, options: IteratorZipOptions<NoInfer<IteratorZipPadding<T> & object>>): IteratorObject<IteratorZipKeyedResult<T, undefined>, undefined, unknown>;
     }
 }
