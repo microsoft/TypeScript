@@ -222,7 +222,7 @@ describe("API", { concurrency }, () => {
             void new API({
                 fs: {
                     ...callbacks,
-                    // @ts-expect-error fakeStat is only a valid stat implementation.
+                    // @ts-expect-error fakeStat is only a valid stat implementation.
                     fileExists: serverFS.fakeStat,
                 },
             });
