@@ -845,6 +845,7 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 	parameters := signature.Parameters()
 	paramCount := len(parameters) - core.IfElse(signature.HasRestParameter(), 1, 0)
 	if pos < paramCount {
+		// In g(a, b?, ...rest), g(...x, "end") can't assign "end" to b when x is [number, number?].
 		if uncertainTupleSpread {
 			return nil
 		}
@@ -877,24 +878,31 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		index := pos - paramCount
 		restArgumentCount := argumentCount - paramCount
 		firstVariableIndex := tupleType.FixedLength()
-		trailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsFixed)
+		trailingFixedCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsFixed)
 		// Optional trailing elements may be omitted, so only required ones can be aligned from the end.
 		requiredTrailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsRequired)
+		// With [...head: T, first?: number], optional<T>(...x, 1) might consume 1 in T.
 		if uncertainTupleSpread && (offsetFromEnd <= 0 || offsetFromEnd > requiredTrailingCount) {
 			return nil
 		}
-		variableCount := len(elementInfos) - firstVariableIndex - trailingCount
-		if trailingCount > 0 && variableCount > 0 {
+		variableCount := len(elementInfos) - firstVariableIndex - trailingFixedCount
+		if trailingFixedCount > 0 && variableCount > 0 {
 			switch {
+			// In [...middle: string[], last: string], f(...xs, "end") has a known last argument.
 			case offsetFromEnd > 0 && offsetFromEnd <= requiredTrailingCount:
 				index = len(elementInfos) - offsetFromEnd
-			case offsetFromEnd > trailingCount:
+			// In f(...xs, "middle", "end"), "middle" cannot be the trailing last element.
+			case offsetFromEnd > trailingFixedCount:
 				return nil
-			case argumentCount >= 0 && restArgumentCount >= firstVariableIndex+trailingCount:
-				trailingStart := restArgumentCount - trailingCount
+			// With no spread, [...middle: string[], last: string] assigns the last argument to last.
+			case argumentCount >= 0 && restArgumentCount >= firstVariableIndex+trailingFixedCount:
+				trailingStart := restArgumentCount - trailingFixedCount
 				switch {
+				// fn(true, 1, "a", "b", "end") associates "end" with last, not middle.
 				case index >= trailingStart:
 					index = len(elementInfos) - (restArgumentCount - index)
+				// In [...middle: string[], last: string], only the first middle argument gets a hint;
+				// with multiple variadics, none can be assigned to a particular rest element.
 				case index >= firstVariableIndex && (variableCount > 1 || index > firstVariableIndex):
 					return nil
 				}
@@ -921,6 +929,7 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		return nil
 	}
 
+	// In g(...x, "end") with x: [number, number?], the rest position of "end" is uncertain.
 	if uncertainTupleSpread {
 		return nil
 	}
