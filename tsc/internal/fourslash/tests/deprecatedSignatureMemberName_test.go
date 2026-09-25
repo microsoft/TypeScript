@@ -22,8 +22,11 @@ object()[[|"passthrough"|]]();
 class C {
     /** @deprecated */
     m() {}
+    /** @deprecated */
+    #p() {}
     n() {
         this.[|m|]();
+        this.[|#p|]();
     }
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
@@ -46,6 +49,12 @@ class C {
 			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'm' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[2].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of '#p' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[3].LSRange,
 		},
 	})
 }
