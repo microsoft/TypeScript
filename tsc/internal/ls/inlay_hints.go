@@ -2,7 +2,6 @@ package ls
 
 import (
 	"context"
-	"slices"
 	"strings"
 	"unicode"
 
@@ -157,37 +156,48 @@ func (s *inlayHintState) visitCallOrNewExpression(expr *ast.CallOrNewExpression)
 		return
 	}
 
+	// A spread makes the effective argument count unknown, but explicit arguments after the last
+	// spread still have a known offset from the end.
+	argumentCount := len(args)
+	lastSpreadIndex := -1
+	for i, arg := range args {
+		if ast.IsSpreadElement(ast.SkipParentheses(arg)) {
+			argumentCount = -1
+			lastSpreadIndex = i
+		}
+	}
 	signatureParamPos := 0
-	for _, originalArg := range args {
+	hasUncertainTupleSpread := false
+	for i, originalArg := range args {
 		arg := ast.SkipParentheses(originalArg)
+		spreadArgs := 0
+		skipSpreadHint := false
+		if ast.IsSpreadElement(arg) {
+			spreadType := s.checker.GetTypeAtLocation(arg.Expression())
+			if spreadType.IsTupleType() {
+				tupleType := spreadType.Target().AsTupleType()
+				spreadArgs = getRequiredTupleElementCount(tupleType)
+				// Optional or variable tuple elements make subsequent positional hints ambiguous.
+				hasUncertainTupleSpread = hasUncertainTupleSpread || spreadArgs < len(tupleType.ElementInfos())
+				skipSpreadHint = tupleType.FixedLength() == 0
+			}
+		}
 		if shouldShowLiteralParameterNameHintsOnly(s.preferences) && !isHintableLiteral(arg) {
 			signatureParamPos++
 			continue
 		}
-
-		spreadArgs := 0
-		if ast.IsSpreadElement(arg) {
-			spreadType := s.checker.GetTypeAtLocation(arg.Expression())
-			if spreadType.IsTupleType() {
-				elementFlags := spreadType.Target().AsTupleType().ElementFlags()
-				fixedLength := spreadType.Target().AsTupleType().FixedLength()
-				if fixedLength == 0 {
-					continue
-				}
-				firstOptionalIndex := slices.IndexFunc(elementFlags, func(f checker.ElementFlags) bool {
-					return f&checker.ElementFlagsRequired == 0
-				})
-				requiredArgs := core.IfElse(firstOptionalIndex < 0, fixedLength, firstOptionalIndex)
-				if requiredArgs > 0 {
-					spreadArgs = requiredArgs
-				}
-			}
+		if skipSpreadHint {
+			continue
 		}
 
-		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos)
+		offsetFromEnd := -1
+		if lastSpreadIndex >= 0 && i > lastSpreadIndex {
+			offsetFromEnd = len(args) - i
+		}
+		identifierInfo := s.getParameterIdentifierInfoAtPosition(signature, signatureParamPos, argumentCount, offsetFromEnd, hasUncertainTupleSpread && !ast.IsSpreadElement(arg))
 		signatureParamPos = signatureParamPos + core.IfElse(spreadArgs > 0, spreadArgs, 1)
 		if identifierInfo == nil {
-			return
+			continue
 		}
 
 		parameter := identifierInfo.parameter
@@ -831,10 +841,14 @@ type parameterInfo struct {
 	isRestParameter bool
 }
 
-func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int) *parameterInfo {
+func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker.Signature, pos int, argumentCount int, offsetFromEnd int, uncertainTupleSpread bool) *parameterInfo {
 	parameters := signature.Parameters()
 	paramCount := len(parameters) - core.IfElse(signature.HasRestParameter(), 1, 0)
 	if pos < paramCount {
+		// In g(a, b?, ...rest), g(...x, "end") can't assign "end" to b when x is [number, number?].
+		if uncertainTupleSpread {
+			return nil
+		}
 		param := parameters[pos]
 		paramId := getParameterDeclarationIdentifier(param)
 		if paramId == nil {
@@ -859,14 +873,43 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 
 	restType := s.checker.GetTypeOfSymbol(restParameter)
 	if restType.IsTupleType() {
-		associatedNames := make([]*ast.Node, 0, len(restType.Target().AsTupleType().ElementInfos()))
-		for _, elementInfo := range restType.Target().AsTupleType().ElementInfos() {
-			labeledElement := elementInfo.LabeledDeclaration()
-			associatedNames = append(associatedNames, labeledElement)
-		}
+		tupleType := restType.Target().AsTupleType()
+		elementInfos := tupleType.ElementInfos()
 		index := pos - paramCount
-		if index < len(associatedNames) {
-			associatedName := associatedNames[index]
+		restArgumentCount := argumentCount - paramCount
+		firstVariableIndex := tupleType.FixedLength()
+		trailingFixedCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsFixed)
+		// Optional trailing elements may be omitted, so only required ones can be aligned from the end.
+		requiredTrailingCount := checker.GetEndElementCount(tupleType, checker.ElementFlagsRequired)
+		// With [...head: T, first?: number], optional<T>(...x, 1) might consume 1 in T.
+		if uncertainTupleSpread && (offsetFromEnd <= 0 || offsetFromEnd > requiredTrailingCount) {
+			return nil
+		}
+		variableCount := len(elementInfos) - firstVariableIndex - trailingFixedCount
+		if trailingFixedCount > 0 && variableCount > 0 {
+			switch {
+			// In [...middle: string[], last: string], f(...xs, "end") has a known last argument.
+			case offsetFromEnd > 0 && offsetFromEnd <= requiredTrailingCount:
+				index = len(elementInfos) - offsetFromEnd
+			// In f(...xs, "middle", "end"), "middle" cannot be the trailing last element.
+			case offsetFromEnd > trailingFixedCount:
+				return nil
+			// With no spread, [...middle: string[], last: string] assigns the last argument to last.
+			case argumentCount >= 0 && restArgumentCount >= firstVariableIndex+trailingFixedCount:
+				trailingStart := restArgumentCount - trailingFixedCount
+				switch {
+				// fn(true, 1, "a", "b", "end") associates "end" with last, not middle.
+				case index >= trailingStart:
+					index = len(elementInfos) - (restArgumentCount - index)
+				// In [...middle: string[], last: string], only the first middle argument gets a hint;
+				// with multiple variadics, none can be assigned to a particular rest element.
+				case index >= firstVariableIndex && (variableCount > 1 || index > firstVariableIndex):
+					return nil
+				}
+			}
+		}
+		if index < len(elementInfos) {
+			associatedName := elementInfos[index].LabeledDeclaration()
 			if associatedName != nil {
 				debug.Assert(ast.IsIdentifier(associatedName.Name()))
 				var isRestTupleElement bool
@@ -886,6 +929,10 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 		return nil
 	}
 
+	// In g(...x, "end") with x: [number, number?], the rest position of "end" is uncertain.
+	if uncertainTupleSpread {
+		return nil
+	}
 	if pos == paramCount {
 		return &parameterInfo{
 			parameter:       restId,

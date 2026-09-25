@@ -256,38 +256,6 @@
 }
 
     foo(...x, 3);
-              ^
-{
-  "position": {
-    "line": 11,
-    "character": 14
-  },
-  "label": [
-    {
-      "value": "b",
-      "location": {
-        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
-        "range": {
-          "start": {
-            "line": 0,
-            "character": 25
-          },
-          "end": {
-            "line": 0,
-            "character": 26
-          }
-        }
-      }
-    },
-    {
-      "value": ":"
-    }
-  ],
-  "kind": 2,
-  "paddingRight": true
-}
-
-    foo(...x, 3);
         ^
 {
   "position": {

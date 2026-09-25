@@ -220,6 +220,10 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func GetEndElementCount(t *TupleType, flags ElementFlags) int {
+	return getEndElementCount(t, flags)
+}
+
 func IsTupleTypeTarget(t *Type) bool {
 	return isTupleType(t) && t.Target() == t
 }
