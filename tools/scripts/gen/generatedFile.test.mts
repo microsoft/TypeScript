@@ -60,6 +60,11 @@ test("validate generates before building and selects the generation scope", asyn
             runTestAPI: action("test:api"),
             runTestBenchmarks: action("test:benchmarks"),
             runTestTools: action("test:tools"),
+            run: async (command: string, args: string[]) => {
+                assert.equal(command, "node");
+                assert.deepEqual(Array.from(args), ["--test", "./tools/scripts/tsc/options.test.ts"]);
+                calls.push("test:options");
+            },
             runSmokeTest: action("test:smoke"),
             runLint: action("lint"),
             runFormat: action("format"),
@@ -71,6 +76,7 @@ test("validate generates before building and selects the generation scope", asyn
         assert.ok(calls.indexOf("build") < calls.indexOf("test:tsc"));
         assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
         assert.equal(calls.includes("test:tools"), "all" in options);
+        assert.equal(calls.includes("test:options"), "all" in options);
         if ("all" in options) {
             assert.deepEqual(calls.filter(name => name.startsWith("generate")), ["generate"]);
         }
@@ -349,7 +355,7 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const generate = () => x("npx", ["hereby", "generate:go"], { throwOnError: true, nodeOptions: { cwd: root } });
     const first = await generate();
     assert.doesNotMatch(first.stdout, /\$ go generate|npm run --silent cache|\$ node .*generate-unicode-data/);
-    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/proto.generated.ts"], { cwd: root });
+    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/proto.generated.ts", "packages/typescript/src/enums/*.ts", "tsc/internal/tsoptions/schemas/*.schema.json"], { cwd: root });
     const timestamps = files.map(file => fs.statSync(path.join(root, file)).mtimeMs);
     const current = await generate();
     assert.doesNotMatch(current.stdout, /Generated codegen outputs|Generated Unicode tables/);
@@ -358,7 +364,8 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const fallback = await x("go", ["-C", "./tsc", "generate", "./internal/diagnostics"], { throwOnError: true, nodeOptions: { cwd: root } });
     assert.equal(fallback.stdout.match(/codegen outputs are already up to date/g)?.length, 2);
     const nested = await x("npx", ["hereby", "generate:compileroptions"], { throwOnError: true, nodeOptions: { cwd: path.join(root, "tsc/internal/core") } });
-    assert.equal(nested.stdout.match(/codegen outputs are already up to date/g)?.length, 2);
+    assert.equal(nested.stdout.match(/codegen outputs are already up to date/g)?.length, 3);
+    assert.match(nested.stdout, /Enums are up to date/);
 });
 
 test("generate includes standalone generators without Go traversal", async () => {

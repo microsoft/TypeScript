@@ -2,13 +2,6 @@ package core
 
 import "slices"
 
-type TypeAcquisition struct {
-	Enable                              Tristate `json:"enable,omitzero"`
-	Include                             []string `json:"include,omitzero"`
-	Exclude                             []string `json:"exclude,omitzero"`
-	DisableFilenameBasedTypeAcquisition Tristate `json:"disableFilenameBasedTypeAcquisition,omitzero"`
-}
-
 func (ta *TypeAcquisition) Equals(other *TypeAcquisition) bool {
 	if ta == other {
 		return true

@@ -472,10 +472,18 @@ export const generateChecker = goGenerateTask("generate:checker", [
     stringerGenerator("tsc/internal/checker/types.go", "SignatureKind", "stringer_generated.go"),
 ]);
 
-export const generateCompilerOptions = goGenerateTask("generate:compileroptions", [
-    stringerGenerator("tsc/internal/core/compileroptions.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"),
-    stringerGenerator("tsc/internal/core/compileroptions.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"),
-]);
+async function runGenerateOptionDefinitions() {
+    const { default: generate } = await import("./tools/scripts/tsc/generate-options.ts");
+    await generate(!!options.force);
+}
+
+export const generateCompilerOptions = goGenerateTask("generate:compileroptions", async () => {
+    await runGenerateOptionDefinitions();
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/optionenums_generated.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"));
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/optionenums_generated.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"));
+    await runGenerateEnums();
+    await runGenerateAPI();
+});
 
 export const generateLanguageVariant = goGenerateTask("generate:languagevariant", [
     stringerGenerator("tsc/internal/core/languagevariant.go", "LanguageVariant", "languagevariant_stringer_generated.go"),
@@ -656,6 +664,7 @@ export const generateSync = task({
 });
 
 async function runGenerateAPI() {
+    await runGenerateOptionDefinitions();
     await runGoGenerator("generate:api", {
         file: "tsc/internal/api/proto.go",
         cwd: __dirname,
@@ -668,7 +677,7 @@ async function runGenerateAPI() {
             "tsc/internal/tspath/path.go",
             "tools/gen-proto/*.go",
         ],
-        exclude: ["**/*_test.go", "**/*_generated.go"],
+        exclude: ["**/*_test.go"],
         envInputs: [],
         outputs: ["packages/typescript/src/api/proto.generated.ts"],
         commands: [
@@ -964,7 +973,7 @@ export const testCodegen = task({
     description: "Runs incremental codegen tests.",
     run: async () => {
         await run("go", ["-C", "tsc", "mod", "download"]);
-        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts"]);
+        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
     },
 });
 
@@ -1170,6 +1179,9 @@ export const validate = task({
         }
         if (options.all) {
             await runValidation("test:tools", runTestTools);
+            await runValidation("test:options", async () => {
+                await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
+            });
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);

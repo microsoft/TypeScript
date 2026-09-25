@@ -10,6 +10,8 @@ import {
     repoRoot as ROOT,
     run,
 } from "../gen/utils.mts";
+import generateOptions from "./generate-options.ts";
+import { options } from "./options.ts";
 
 function runOutput(command: string, args: readonly string[]) {
     return run(command, args, { captureOutput: true, cwd: ROOT });
@@ -43,11 +45,13 @@ const enumDefs = [
     { name: "OuterExpressionKinds", goPrefix: "OEK", goFile: "tsc/internal/ast/utilities.go", outDir: "packages/typescript/src/enums" },
     { name: "JSDeclarationKind", goPrefix: "JSDeclarationKind", goFile: "tsc/internal/ast/utilities.go", outDir: "packages/typescript/src/enums", fileName: "jsDeclarationKind" },
     { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "tsc/internal/ast/modifierflags.go", outDir: "packages/typescript/src/enums" },
-    { name: "ModuleKind", goPrefix: "ModuleKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "ModuleResolutionKind", goPrefix: "ModuleResolutionKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "ModuleDetectionKind", goPrefix: "ModuleDetectionKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "NewLineKind", goPrefix: "NewLineKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "JsxEmit", goPrefix: "JsxEmit", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
+    ...options.enums.filter(enumDef => enumDef.api).map<EnumDef>(enumDef => ({
+        name: enumDef.name,
+        goPrefix: enumDef.name,
+        goFile: "tsc/internal/core/optionenums_generated.go",
+        outDir: "packages/typescript/src/enums",
+        excludeMembers: enumDef.members.filter(member => member.excludeFromAPI).map(member => member.name),
+    })),
     { name: "ScriptKind", goPrefix: "ScriptKind", goFile: "tsc/internal/core/scriptkind.go", outDir: "packages/typescript/src/enums" },
     { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "tsc/internal/ast/tokenflags.go", outDir: "packages/typescript/src/enums" },
     { name: "DiagnosticDirectivePolicy", goPrefix: "MappedDiagnosticDirectivePolicy", goFile: "tsc/internal/ast/ast.go", outDir: "packages/typescript/src/enums" },
@@ -448,8 +452,11 @@ async function evaluateEnumMembers(enumSource: string, enumName: string): Promis
 }
 
 export default async function generateEnums(force = false) {
+    await generateOptions(force);
     const inputs = [
         import.meta.filename,
+        path.join(import.meta.dirname, "options.ts"),
+        path.join(import.meta.dirname, "options-model.ts"),
         ...goInputs(),
     ];
     const enumFiles = enumDefs.map(def => {

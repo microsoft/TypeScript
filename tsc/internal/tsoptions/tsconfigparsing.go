@@ -33,64 +33,6 @@ type extendsResult struct {
 	extendedSourceFiles collections.Set[string]
 }
 
-var compilerOptionsDeclaration = &CommandLineOption{
-	Name:           "compilerOptions",
-	Kind:           CommandLineOptionTypeObject,
-	ElementOptions: CommandLineCompilerOptionsMap,
-}
-
-var compileOnSaveCommandLineOption = &CommandLineOption{
-	Name:                    "compileOnSave",
-	Kind:                    CommandLineOptionTypeBoolean,
-	DefaultValueDescription: false,
-}
-
-var extendsOptionDeclaration = &CommandLineOption{
-	Name:     "extends",
-	Kind:     CommandLineOptionTypeListOrElement,
-	Category: diagnostics.File_Management,
-	ElementOptions: commandLineOptionsToMap([]*CommandLineOption{
-		{Name: "extends", Kind: CommandLineOptionTypeString},
-	}),
-}
-
-var tsconfigRootOptionsMap = &CommandLineOption{
-	Name: "undefined", // should never be needed since this is root
-	Kind: CommandLineOptionTypeObject,
-	ElementOptions: commandLineOptionsToMap([]*CommandLineOption{
-		compilerOptionsDeclaration,
-		typeAcquisitionDeclaration,
-		extendsOptionDeclaration,
-		{
-			Name: "references",
-			Kind: CommandLineOptionTypeList, // should be a list of projectReference
-			// Category: diagnostics.Projects,
-		},
-		{
-			Name: "contentMappers",
-			Kind: CommandLineOptionTypeList, // list of content mapper objects
-		},
-		{
-			Name: "files",
-			Kind: CommandLineOptionTypeList,
-			// Category: diagnostics.File_Management,
-		},
-		{
-			Name: "include",
-			Kind: CommandLineOptionTypeList,
-			// Category: diagnostics.File_Management,
-			// DefaultValueDescription: diagnostics.if_files_is_specified_otherwise_Asterisk_Asterisk_Slash_Asterisk,
-		},
-		{
-			Name: "exclude",
-			Kind: CommandLineOptionTypeList,
-			// Category: diagnostics.File_Management,
-			// DefaultValueDescription: diagnostics.Node_modules_bower_components_jspm_packages_plus_the_value_of_outDir_if_one_is_specified,
-		},
-		compileOnSaveCommandLineOption,
-	}),
-}
-
 type configFileSpecs struct {
 	filesSpecs any
 	// Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
@@ -922,28 +864,6 @@ func convertToObject(sourceFile *ast.SourceFile) (any, []*ast.Diagnostic) {
 		rootExpression = sourceFile.Statements.Nodes[0].Expression()
 	}
 	return convertToJson(sourceFile, rootExpression, true /*returnValue*/, nil /*jsonConversionNotifier*/)
-}
-
-func getDefaultCompilerOptions(configFileName string) *core.CompilerOptions {
-	options := &core.CompilerOptions{}
-	if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
-		depth := 2
-		options = &core.CompilerOptions{
-			AllowJs:              core.TSTrue,
-			MaxNodeModuleJsDepth: &depth,
-			SkipLibCheck:         core.TSTrue,
-			NoEmit:               core.TSTrue,
-		}
-	}
-	return options
-}
-
-func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
-	options := &core.TypeAcquisition{}
-	if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
-		options.Enable = core.TSTrue
-	}
-	return options
 }
 
 func convertCompilerOptionsFromJsonWorker(jsonOptions any, basePath string, configFileName string) (*core.CompilerOptions, []*ast.Diagnostic) {
