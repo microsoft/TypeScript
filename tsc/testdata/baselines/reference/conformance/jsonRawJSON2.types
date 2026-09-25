@@ -109,6 +109,12 @@ class C extends RawJSON {}
 >C : C
 >RawJSON : any
 
+RawJSONInstance;
+>RawJSONInstance : any
+
+type T = RawJSONInstance;
+>T : RawJSONInstance
+
 declare const q: unknown;
 >q : unknown
 
@@ -138,14 +144,14 @@ if (JSON.isRawJSON(g)) {
 
     const r: RawJSON = g;
 >r : RawJSON
->g : { rawJSON: string; }
+>g : RawJSON
 
 } else {
     const s: string = g.rawJSON;
 >s : string
->g.rawJSON : any
->g : never
->rawJSON : any
+>g.rawJSON : string
+>g : { rawJSON: string; }
+>rawJSON : string
 }
 
 const t: Readonly<RawJSON> = a;

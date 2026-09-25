@@ -9,9 +9,9 @@ const a = JSON.rawJSON("12345678901234567890");
 
 const b: string = a.rawJSON;
 >b : Symbol(b, Decl(jsonRawJSON1.ts, 1, 5))
->a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a.rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >a : Symbol(a, Decl(jsonRawJSON1.ts, 0, 5))
->rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 
 const c: string = JSON.stringify({ value: a });
 >c : Symbol(c, Decl(jsonRawJSON1.ts, 2, 5))
@@ -22,9 +22,9 @@ const c: string = JSON.stringify({ value: a });
 >a : Symbol(a, Decl(jsonRawJSON1.ts, 0, 5))
 
 a.rawJSON = "0";
->a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a.rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >a : Symbol(a, Decl(jsonRawJSON1.ts, 0, 5))
->rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 
 declare const d: unknown;
 >d : Symbol(d, Decl(jsonRawJSON1.ts, 6, 13))
@@ -37,8 +37,8 @@ if (JSON.isRawJSON(d)) {
 
     const e: string = d.rawJSON;
 >e : Symbol(e, Decl(jsonRawJSON1.ts, 8, 9))
->d.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>d.rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >d : Symbol(d, Decl(jsonRawJSON1.ts, 6, 13))
->rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 }
 

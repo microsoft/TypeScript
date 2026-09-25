@@ -21,6 +21,19 @@ export class C {
     readonly a = JSON.rawJSON("true");
 }
 
+declare global {
+    interface RawJSON {
+        f?(): string;
+    }
+
+    interface JSON {
+        f?(): RawJSON;
+    }
+}
+
+export const d = a.f?.();
+export const e = JSON.f?.();
+
 
 //// [jsonRawJSON3.js]
 export const a = JSON.rawJSON("1");
@@ -38,6 +51,8 @@ export function f3(x) {
 export class C {
     a = JSON.rawJSON("true");
 }
+export const d = a.f?.();
+export const e = JSON.f?.();
 
 
 //// [jsonRawJSON3.d.ts]
@@ -52,3 +67,13 @@ export declare function f3(x: RawJSON): string;
 export declare class C {
     readonly a: RawJSON;
 }
+declare global {
+    interface RawJSON {
+        f?(): string;
+    }
+    interface JSON {
+        f?(): RawJSON;
+    }
+}
+export declare const d: string | undefined;
+export declare const e: RawJSON | undefined;

@@ -23,3 +23,16 @@ export function f3(x: RawJSON): string {
 export class C {
     readonly a = JSON.rawJSON("true");
 }
+
+declare global {
+    interface RawJSON {
+        f?(): string;
+    }
+
+    interface JSON {
+        f?(): RawJSON;
+    }
+}
+
+export const d = a.f?.();
+export const e = JSON.f?.();

@@ -67,3 +67,31 @@ export class C {
 >"true" : "true"
 }
 
+declare global {
+>global : any
+
+    interface RawJSON {
+        f?(): string;
+>f : (() => string) | undefined
+    }
+
+    interface JSON {
+        f?(): RawJSON;
+>f : (() => RawJSON) | undefined
+    }
+}
+
+export const d = a.f?.();
+>d : string | undefined
+>a.f?.() : string | undefined
+>a.f : (() => string) | undefined
+>a : RawJSON
+>f : (() => string) | undefined
+
+export const e = JSON.f?.();
+>e : RawJSON | undefined
+>JSON.f?.() : RawJSON | undefined
+>JSON.f : (() => RawJSON) | undefined
+>JSON : JSON
+>f : (() => RawJSON) | undefined
+

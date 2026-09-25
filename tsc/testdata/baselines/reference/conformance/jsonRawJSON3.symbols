@@ -4,7 +4,7 @@
 export const a = JSON.rawJSON("1");
 >a : Symbol(a, Decl(jsonRawJSON3.ts, 0, 12))
 >JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 23, 5))
 >rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 
 export const b = { a };
@@ -20,7 +20,7 @@ export function f1() {
 
     return JSON.rawJSON("null");
 >JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 23, 5))
 >rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 }
 
@@ -30,7 +30,7 @@ export function f2(x: unknown) {
 
     return JSON.isRawJSON(x) ? x : undefined;
 >JSON.isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 23, 5))
 >isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >x : Symbol(x, Decl(jsonRawJSON3.ts, 8, 19))
 >x : Symbol(x, Decl(jsonRawJSON3.ts, 8, 19))
@@ -40,12 +40,12 @@ export function f2(x: unknown) {
 export function f3(x: RawJSON): string {
 >f3 : Symbol(f3, Decl(jsonRawJSON3.ts, 10, 1))
 >x : Symbol(x, Decl(jsonRawJSON3.ts, 12, 19))
->RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 20, 16))
 
     return x.rawJSON;
->x.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>x.rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >x : Symbol(x, Decl(jsonRawJSON3.ts, 12, 19))
->rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 }
 
 export class C {
@@ -54,7 +54,38 @@ export class C {
     readonly a = JSON.rawJSON("true");
 >a : Symbol(C.a, Decl(jsonRawJSON3.ts, 16, 16))
 >JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 23, 5))
 >rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 }
+
+declare global {
+>global : Symbol(global, Decl(jsonRawJSON3.ts, 18, 1))
+
+    interface RawJSON {
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 20, 16))
+
+        f?(): string;
+>f : Symbol(RawJSON.f, Decl(jsonRawJSON3.ts, 21, 23))
+    }
+
+    interface JSON {
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 23, 5))
+
+        f?(): RawJSON;
+>f : Symbol(JSON.f, Decl(jsonRawJSON3.ts, 25, 20))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 20, 16))
+    }
+}
+
+export const d = a.f?.();
+>d : Symbol(d, Decl(jsonRawJSON3.ts, 30, 12))
+>a.f : Symbol(RawJSON.f, Decl(jsonRawJSON3.ts, 21, 23))
+>a : Symbol(a, Decl(jsonRawJSON3.ts, 0, 12))
+>f : Symbol(RawJSON.f, Decl(jsonRawJSON3.ts, 21, 23))
+
+export const e = JSON.f?.();
+>e : Symbol(e, Decl(jsonRawJSON3.ts, 31, 12))
+>JSON.f : Symbol(JSON.f, Decl(jsonRawJSON3.ts, 25, 20))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --), Decl(jsonRawJSON3.ts, 23, 5))
+>f : Symbol(JSON.f, Decl(jsonRawJSON3.ts, 25, 20))
 

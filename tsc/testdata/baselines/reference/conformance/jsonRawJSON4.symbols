@@ -11,9 +11,9 @@ const a = JSON.rawJSON("1");
 /** @type {string} */
 const b = a.rawJSON;
 >b : Symbol(b, Decl(raw.js, 3, 5))
->a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a.rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >a : Symbol(a, Decl(raw.js, 1, 5))
->rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 
 /** @type {RawJSON} */
 const c = { rawJSON: "1" };
@@ -26,9 +26,9 @@ const d = { ...a };
 >a : Symbol(a, Decl(raw.js, 1, 5))
 
 a.rawJSON = "2";
->a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a.rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >a : Symbol(a, Decl(raw.js, 1, 5))
->rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 
 /** @param {unknown} x */
 function f(x) {
@@ -40,9 +40,9 @@ function f(x) {
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
 >isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >x : Symbol(x, Decl(raw.js, 12, 11))
->x.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>x.rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >x : Symbol(x, Decl(raw.js, 12, 11))
->rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(RawJSONInstance.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >undefined : Symbol(undefined)
 }
 

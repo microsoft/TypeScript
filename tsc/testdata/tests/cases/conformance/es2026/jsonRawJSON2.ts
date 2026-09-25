@@ -32,6 +32,9 @@ const o = RawJSON;
 new RawJSON();
 class C extends RawJSON {}
 
+RawJSONInstance;
+type T = RawJSONInstance;
+
 declare const q: unknown;
 if (JSON.isRawJSON(q)) {
     const r: RawJSON = q;
