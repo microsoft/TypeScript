@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/uniqueSymbolConstLikeWidening.ts] ////
+
+=== uniqueSymbolConstLikeWidening.ts ===
+const us = Symbol.match;
+>us : Symbol(us, Decl(uniqueSymbolConstLikeWidening.ts, 0, 5))
+>Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const us2 = us;
+>us2 : Symbol(us2, Decl(uniqueSymbolConstLikeWidening.ts, 1, 5))
+>us : Symbol(us, Decl(uniqueSymbolConstLikeWidening.ts, 0, 5))
+
+let widened = us;
+>widened : Symbol(widened, Decl(uniqueSymbolConstLikeWidening.ts, 2, 3))
+>us : Symbol(us, Decl(uniqueSymbolConstLikeWidening.ts, 0, 5))
+
+let asserted = us as const;
+>asserted : Symbol(asserted, Decl(uniqueSymbolConstLikeWidening.ts, 3, 3))
+>us : Symbol(us, Decl(uniqueSymbolConstLikeWidening.ts, 0, 5))
+>const : Symbol(const)
+
+let sameAsSource: typeof us = us2;
+>sameAsSource : Symbol(sameAsSource, Decl(uniqueSymbolConstLikeWidening.ts, 5, 3))
+>us : Symbol(us, Decl(uniqueSymbolConstLikeWidening.ts, 0, 5))
+>us2 : Symbol(us2, Decl(uniqueSymbolConstLikeWidening.ts, 1, 5))
+
+let sameAsAsserted: typeof us = asserted;
+>sameAsAsserted : Symbol(sameAsAsserted, Decl(uniqueSymbolConstLikeWidening.ts, 6, 3))
+>us : Symbol(us, Decl(uniqueSymbolConstLikeWidening.ts, 0, 5))
+>asserted : Symbol(asserted, Decl(uniqueSymbolConstLikeWidening.ts, 3, 3))
+
+let symbolFromConst: symbol = us2;
+>symbolFromConst : Symbol(symbolFromConst, Decl(uniqueSymbolConstLikeWidening.ts, 7, 3))
+>us2 : Symbol(us2, Decl(uniqueSymbolConstLikeWidening.ts, 1, 5))
+
+let symbolFromAsserted: symbol = asserted;
+>symbolFromAsserted : Symbol(symbolFromAsserted, Decl(uniqueSymbolConstLikeWidening.ts, 8, 3))
+>asserted : Symbol(asserted, Decl(uniqueSymbolConstLikeWidening.ts, 3, 3))
+
