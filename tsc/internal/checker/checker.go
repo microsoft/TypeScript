@@ -23771,10 +23771,15 @@ func (n *TupleNormalizer) normalize(c *Checker, elementTypes []*Type, elementInf
 			} else if isTupleType(t) {
 				spreadTypes := c.getElementTypes(t)
 				if len(spreadTypes)+len(n.types) >= 10_000 {
-					message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
-						diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
-						diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
-					c.error(c.currentNode, message)
+					// c.currentNode is nil when declaration emit resolves a type through the emit
+					// resolver. There is no location to report against, and a diagnostic raised
+					// during emit would never be shown on the command line or in the editor.
+					if c.currentNode != nil {
+						message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
+							diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
+							diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
+						c.error(c.currentNode, message)
+					}
 					return false
 				}
 				// Spread variadic elements with tuple types into the resulting tuple.
