@@ -19,6 +19,7 @@ interface Schema {
 declare function object(): Schema;
 object().[|passthrough|]();
 object()[[|"passthrough"|]]();
+(object().[|passthrough|])();
 class C {
     /** @deprecated */
     m() {}
@@ -44,17 +45,30 @@ class C {
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[1].LSRange,
 		},
+		// A parenthesized callee also reports the deprecated property itself; that suggestion is unchanged.
 		{
-			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
-			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'm' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'passthrough' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[2].LSRange,
 		},
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
-			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of '#p' is deprecated.")},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): Schema' of 'passthrough' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[2].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'm' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[3].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of '#p' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[4].LSRange,
 		},
 	})
 }

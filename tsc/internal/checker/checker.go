@@ -8539,7 +8539,7 @@ func (c *Checker) checkDeprecatedSignature(sig *Signature, node *ast.Node) {
 	}
 	if sig.declaration != nil && c.IsDeprecatedDeclaration(sig.declaration) {
 		suggestionNode := c.getDeprecatedSuggestionNode(node)
-		invokedExpression := ast.GetInvokedExpression(node)
+		invokedExpression := ast.SkipParentheses(ast.GetInvokedExpression(node))
 		name := tryGetPropertyAccessOrIdentifierToString(invokedExpression)
 		if name == "" {
 			switch {
