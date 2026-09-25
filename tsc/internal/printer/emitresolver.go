@@ -110,6 +110,7 @@ type EmitResolver interface {
 	IsLateBound(node *ast.Node) bool
 	IsOptionalParameter(node *ast.Node) bool
 	IsThisPropertyAssignmentDeclarationRedundant(node *ast.Node) bool
+	GetEffectiveBaseTypeNode(node *ast.Node) *ast.Node
 
 	// isolatedDeclarations-specific declaration emit
 	GetPropertiesOfContainerFunction(node *ast.Node) []*ast.Symbol
