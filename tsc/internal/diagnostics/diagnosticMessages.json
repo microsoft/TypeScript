@@ -7457,6 +7457,11 @@
         "category": "Suggestion",
         "code": 80010
     },
+    "Using a string literal as an enum member name via a computed property is deprecated. Use a simple string literal instead.": {
+        "category": "Suggestion",
+        "code": 80011,
+        "reportsDeprecated": true
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -8494,6 +8499,14 @@
     "JSDoc comment": {
         "category": "Message",
         "code": 95209
+    },
+    "Remove unnecessary computed property name syntax": {
+        "category": "Message",
+        "code": 95210
+    },
+    "Remove all unnecessary computed property name syntax": {
+        "category": "Message",
+        "code": 95211
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

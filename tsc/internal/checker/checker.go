@@ -24367,6 +24367,8 @@ func (c *Checker) computeEnumMemberValue(member *ast.Node, autoValue *jsnum.Numb
 		text := ast.GetTextOfPropertyName(member.Name())
 		if isNumericLiteralName(text) && !ast.IsInfinityOrNaNString(text) {
 			c.error(member.Name(), diagnostics.An_enum_member_cannot_have_a_numeric_name)
+		} else if ast.IsComputedPropertyName(member.Name()) {
+			c.addSuggestionDiagnostic(NewDiagnosticForNode(member.Name(), diagnostics.Using_a_string_literal_as_an_enum_member_name_via_a_computed_property_is_deprecated_Use_a_simple_string_literal_instead))
 		}
 	}
 	if member.Initializer() != nil {

@@ -1953,6 +1953,7 @@
     "Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accur_80008": "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as integers.",
     "JSDoc_typedef_may_be_converted_to_TypeScript_type_80009": "JSDoc typedef may be converted to TypeScript type.",
     "JSDoc_typedefs_may_be_converted_to_TypeScript_types_80010": "JSDoc typedefs may be converted to TypeScript types.",
+    "Using_a_string_literal_as_an_enum_member_name_via_a_computed_property_is_deprecated_Use_a_simple_str_80011": "Using a string literal as an enum member name via a computed property is deprecated. Use a simple string literal instead.",
     "Add_missing_super_call_90001": "Add missing 'super()' call",
     "Make_super_call_the_first_statement_in_the_constructor_90002": "Make 'super()' call the first statement in the constructor",
     "Change_extends_to_implements_90003": "Change 'extends' to 'implements'",
@@ -2211,5 +2212,7 @@
     "Organize_Imports_95206": "Organize Imports",
     "Remove_Unused_Imports_95207": "Remove Unused Imports",
     "Sort_Imports_95208": "Sort Imports",
-    "JSDoc_comment_95209": "JSDoc comment"
+    "JSDoc_comment_95209": "JSDoc comment",
+    "Remove_unnecessary_computed_property_name_syntax_95210": "Remove unnecessary computed property name syntax",
+    "Remove_all_unnecessary_computed_property_name_syntax_95211": "Remove all unnecessary computed property name syntax"
 }

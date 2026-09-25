@@ -3910,6 +3910,8 @@ var JSDoc_typedef_may_be_converted_to_TypeScript_type = &Message{code: 80009, ca
 
 var JSDoc_typedefs_may_be_converted_to_TypeScript_types = &Message{code: 80010, category: CategorySuggestion, key: "JSDoc_typedefs_may_be_converted_to_TypeScript_types_80010", text: "JSDoc typedefs may be converted to TypeScript types."}
 
+var Using_a_string_literal_as_an_enum_member_name_via_a_computed_property_is_deprecated_Use_a_simple_string_literal_instead = &Message{code: 80011, category: CategorySuggestion, key: "Using_a_string_literal_as_an_enum_member_name_via_a_computed_property_is_deprecated_Use_a_simple_str_80011", text: "Using a string literal as an enum member name via a computed property is deprecated. Use a simple string literal instead.", reportsDeprecated: true}
+
 var Add_missing_super_call = &Message{code: 90001, category: CategoryMessage, key: "Add_missing_super_call_90001", text: "Add missing 'super()' call"}
 
 var Make_super_call_the_first_statement_in_the_constructor = &Message{code: 90002, category: CategoryMessage, key: "Make_super_call_the_first_statement_in_the_constructor_90002", text: "Make 'super()' call the first statement in the constructor"}
@@ -4427,6 +4429,10 @@ var Remove_Unused_Imports = &Message{code: 95207, category: CategoryMessage, key
 var Sort_Imports = &Message{code: 95208, category: CategoryMessage, key: "Sort_Imports_95208", text: "Sort Imports"}
 
 var JSDoc_comment = &Message{code: 95209, category: CategoryMessage, key: "JSDoc_comment_95209", text: "JSDoc comment"}
+
+var Remove_unnecessary_computed_property_name_syntax = &Message{code: 95210, category: CategoryMessage, key: "Remove_unnecessary_computed_property_name_syntax_95210", text: "Remove unnecessary computed property name syntax"}
+
+var Remove_all_unnecessary_computed_property_name_syntax = &Message{code: 95211, category: CategoryMessage, key: "Remove_all_unnecessary_computed_property_name_syntax_95211", text: "Remove all unnecessary computed property name syntax"}
 
 var allMessages = [...]**Message{
 	&Unterminated_string_literal,
@@ -6383,6 +6389,7 @@ var allMessages = [...]**Message{
 	&Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers,
 	&JSDoc_typedef_may_be_converted_to_TypeScript_type,
 	&JSDoc_typedefs_may_be_converted_to_TypeScript_types,
+	&Using_a_string_literal_as_an_enum_member_name_via_a_computed_property_is_deprecated_Use_a_simple_string_literal_instead,
 	&Add_missing_super_call,
 	&Make_super_call_the_first_statement_in_the_constructor,
 	&Change_extends_to_implements,
@@ -6642,4 +6649,6 @@ var allMessages = [...]**Message{
 	&Remove_Unused_Imports,
 	&Sort_Imports,
 	&JSDoc_comment,
+	&Remove_unnecessary_computed_property_name_syntax,
+	&Remove_all_unnecessary_computed_property_name_syntax,
 }
