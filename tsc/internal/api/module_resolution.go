@@ -74,15 +74,16 @@ func (p *callbackModuleResolver) ResolveModuleName(
 	resolutionMode core.ResolutionMode,
 	redirectedReference module.ResolvedProjectReference,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
-	return p.resolveModuleName(moduleName, containingFile, tspath.GetDirectoryPath(containingFile), resolutionMode, redirectedReference)
+	return p.ResolveModuleNameWithPhase(moduleName, containingFile, resolutionMode, module.ImportPhaseEvaluation, redirectedReference)
 }
 
 func (p *callbackModuleResolver) ResolveModuleNameFromDirectory(
 	moduleName string,
 	containingDirectory string,
 	resolutionMode core.ResolutionMode,
+	importPhase module.ImportPhase,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
-	return p.resolveModuleName(moduleName, containingDirectory, containingDirectory, resolutionMode, nil)
+	return p.resolveModuleName(moduleName, containingDirectory, resolutionMode, importPhase)
 }
 
 func (p *callbackModuleResolver) ResolveModuleNameWithPhase(
@@ -92,20 +93,19 @@ func (p *callbackModuleResolver) ResolveModuleNameWithPhase(
 	importPhase module.ImportPhase,
 	redirectedReference module.ResolvedProjectReference,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
-	// Custom module resolutions apply to both import phases.
-	return p.ResolveModuleName(moduleName, containingFile, resolutionMode, redirectedReference)
+	return p.resolveModuleName(moduleName, tspath.GetDirectoryPath(containingFile), resolutionMode, importPhase)
 }
 
 func (p *callbackModuleResolver) resolveModuleName(
 	moduleName string,
-	containingFile string,
 	containingDirectory string,
 	resolutionMode core.ResolutionMode,
-	redirectedReference module.ResolvedProjectReference,
+	importPhase module.ImportPhase,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
 	params := &ResolveModuleNameCallbackParams{
 		ModuleName:          moduleName,
 		ContainingDirectory: containingDirectory,
+		ImportPhase:         importPhase,
 	}
 	if p.snapshot != 0 {
 		params.Snapshot = &p.snapshot
@@ -192,6 +192,12 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory st
 				return nil, fmt.Errorf("%w: module resolution entry %d has invalid resolutionMode %s", ErrClientError, i, mode.String())
 			}
 			staticEntry.ResolutionMode = &mode
+		}
+		if entry.ImportPhase != nil {
+			if *entry.ImportPhase != module.ImportPhaseEvaluation && *entry.ImportPhase != module.ImportPhaseSource {
+				return nil, fmt.Errorf("%w: module resolution entry %d has invalid importPhase %d", ErrClientError, i, *entry.ImportPhase)
+			}
+			staticEntry.ImportPhase = entry.ImportPhase
 		}
 		staticEntry.Result = staticModuleResolutionToResolvedModule(entry.Result, currentDirectory)
 		entries = append(entries, staticEntry)
@@ -343,6 +349,9 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 	if params.ModuleName == "" {
 		return nil, fmt.Errorf("%w: moduleName is empty", ErrClientError)
 	}
+	if params.ImportPhase != module.ImportPhaseEvaluation && params.ImportPhase != module.ImportPhaseSource {
+		return nil, fmt.Errorf("%w: invalid importPhase %d", ErrClientError, params.ImportPhase)
+	}
 	s.moduleResolversMu.RLock()
 	data := s.moduleResolvers[params.Resolver]
 	s.moduleResolversMu.RUnlock()
@@ -401,7 +410,7 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 	if data.resolutions != nil {
 		resolver = module.NewStaticResolver(resolver, data.resolutions)
 	}
-	result, trace, err := resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
+	result, trace, err := resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode, params.ImportPhase)
 	if err != nil {
 		return nil, err
 	}

@@ -33,6 +33,7 @@ import {
     type ConditionalType,
     defer,
     type DeferredAPIRequestGenerator,
+    ImportPhase,
     type IndexedAccessType,
     type IndexInfo,
     IndexKind,
@@ -429,6 +430,27 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("module resolution generators preserve the import phase", () => {
+        using api = spawnAPI({
+            "/src/a.d.wasm.ts": "export {};",
+            "/src/a.wasm": "\0asm\x01\0\0\0",
+        });
+        using resolver = api.createModuleResolver({
+            module: ModuleKind.ESNext,
+            moduleResolution: ModuleResolutionKind.Bundler,
+        });
+        const results = api.batch(
+            resolver.resolveModuleName.gen("./a.wasm", "/src", ModuleKind.ESNext, { importPhase: ImportPhase.Source }),
+            resolver.resolveModuleName.gen("./a.wasm", "/src", ModuleKind.ESNext, { importPhase: ImportPhase.Evaluation }),
+            resolver.resolveModuleName.gen("./a.wasm", "/src", ModuleKind.ESNext),
+        );
+        assert.deepEqual(results.map(result => result.resolvedModule?.resolvedFileName), [
+            "/src/a.wasm",
+            "/src/a.d.wasm.ts",
+            "/src/a.d.wasm.ts",
+        ]);
+    });
+
     test("batches source file requests", context => {
         const api = spawnAPI(parityFiles);
         context.after(() => api.close());

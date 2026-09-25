@@ -258,8 +258,8 @@ func (r *DefaultResolver) ResolveModuleNameWithPhase(moduleName string, containi
 	return result, trace, nil
 }
 
-func (r *DefaultResolver) ResolveModuleNameFromDirectory(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*ResolvedModule, []DiagAndArgs, error) {
-	result, trace := r.resolveModuleName(moduleName, containingDirectory, containingDirectory, resolutionMode, ImportPhaseEvaluation, nil)
+func (r *DefaultResolver) ResolveModuleNameFromDirectory(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode, importPhase ImportPhase) (*ResolvedModule, []DiagAndArgs, error) {
+	result, trace := r.resolveModuleName(moduleName, containingDirectory, containingDirectory, resolutionMode, importPhase, nil)
 	return result, trace, nil
 }
 

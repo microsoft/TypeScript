@@ -43,6 +43,7 @@ const enumDefs = [
     { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "tsc/internal/ast/modifierflags.go", outDir: "packages/typescript/src/enums" },
     { name: "ModuleKind", goPrefix: "ModuleKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
     { name: "ModuleResolutionKind", goPrefix: "ModuleResolutionKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
+    { name: "ImportPhase", goPrefix: "ImportPhase", goFile: "tsc/internal/module/types.go", outDir: "packages/typescript/src/enums" },
     { name: "ModuleDetectionKind", goPrefix: "ModuleDetectionKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
     { name: "NewLineKind", goPrefix: "NewLineKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
     { name: "JsxEmit", goPrefix: "JsxEmit", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },

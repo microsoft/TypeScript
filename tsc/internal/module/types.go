@@ -28,6 +28,7 @@ type Resolver interface {
 		moduleName string,
 		containingDirectory string,
 		resolutionMode core.ResolutionMode,
+		importPhase ImportPhase,
 	) (*ResolvedModule, []DiagAndArgs, error)
 	ResolveModuleNameWithPhase(
 		moduleName string,

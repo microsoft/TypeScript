@@ -521,6 +521,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importType("ModuleKind", "#enums/moduleKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleResolutionKind":
 		return r.importType("ModuleResolutionKind", "#enums/moduleResolutionKind")
+	case "github.com/microsoft/TypeScript/tsc/internal/module.ImportPhase":
+		return r.importType("ImportPhase", "#enums/importPhase")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.NewLineKind":
 		return r.importType("NewLineKind", "#enums/newLineKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptTarget":
