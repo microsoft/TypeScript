@@ -40,6 +40,7 @@ import {
     createKeywordTypeNode,
     createNumericLiteral,
     createParameterDeclaration,
+    createSourceFile,
     createToken,
     createTypeAliasDeclaration,
     createTypeReferenceNode,
@@ -444,6 +445,27 @@ describe("API", { concurrency }, () => {
         const project = snapshot.getProjects()[0];
         assert.strictEqual(await project.program.getSourceFile("/component.d.ts"), retained.sourceFile);
         await snapshot.dispose();
+    });
+
+    test("retainSourceFile keeps a borrowed program file available", async () => {
+        const sourceText = "export declare const value: number;";
+        await using api = spawnAPI({
+            "/retained.d.ts": sourceText,
+        });
+        const snapshot = await api.createSnapshot({ openFiles: ["/retained.d.ts"] });
+        const project = snapshot.getProjects()[0];
+        const sourceFile = await project.program.getSourceFile("/retained.d.ts");
+        assert.ok(sourceFile);
+
+        await using retained = await api.retainSourceFile(sourceFile);
+        assert.strictEqual(retained.sourceFile, sourceFile);
+        await snapshot.dispose();
+
+        await using recreated = await api.createSourceFile("/retained.d.ts", sourceText);
+        assert.strictEqual(recreated.sourceFile, sourceFile);
+
+        const local = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", "/local.ts", "/local.ts" as Path);
+        await assert.rejects(api.retainSourceFile(local), /Only remote source files can be retained/); // @sync: assert.throws(() => api.retainSourceFile(local), /Only remote source files can be retained/);
     });
 
     test("createSourceFileFromFile", async () => {
@@ -4083,27 +4105,39 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         assert.equal(await program.isSourceFileDefaultLibrary(defaultLibrary), true);
     });
 
-    test("full file system accepts paths decoded from VS Code document URIs", async () => {
+    test("full file system accepts and caches paths decoded from VS Code document URIs", async () => {
         const fileDocument = { uri: "file:///workspace/file%20name.ts" };
         const remoteDocument = { uri: "vscode-remote://ssh-remote+host/workspace/src/remote%20name.ts" };
         const notebookDocument = { uri: "vscode-notebook-cell:/workspace/notebook.ipynb/cell%20name.ts" };
+        const untitledDocument = { uri: "untitled:Untitled-1" };
+        const files: [DocumentIdentifier, string][] = [
+            [fileDocument, `export const file = true;`],
+            [remoteDocument, `export const remote = true;`],
+            [notebookDocument, `export const cell = true;`],
+            [untitledDocument, `export const untitled = true;`],
+        ];
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            collectTiming: true,
         });
         using snapshot = await api.createSnapshot({
-            openFiles: [fileDocument, remoteDocument, notebookDocument],
-            fileSystem: createFileSystem([
-                [fileDocument, `export const file = true;`],
-                [remoteDocument, `export const remote = true;`],
-                [notebookDocument, `export const cell = true;`],
-            ]),
+            openFiles: files.map(([document]) => document),
+            fileSystem: createFileSystem(files),
         });
-        const fileProject = await snapshot.getDefaultProjectForFile(fileDocument);
-        const remoteProject = await snapshot.getDefaultProjectForFile(remoteDocument);
-        const notebookProject = await snapshot.getDefaultProjectForFile(notebookDocument);
-        assert.equal((await fileProject?.program.getSourceFile(fileDocument))?.text, `export const file = true;`);
-        assert.equal((await remoteProject?.program.getSourceFile(remoteDocument))?.text, `export const remote = true;`);
-        assert.equal((await notebookProject?.program.getSourceFile(notebookDocument))?.text, `export const cell = true;`);
+        for (const [document, text] of files) {
+            const project = await snapshot.getDefaultProjectForFile(document);
+            assert.ok(project);
+            await api.resetTimingInfo();
+            const sourceFile = await project.program.getSourceFile(document);
+            assert.ok(sourceFile);
+            assert.equal(sourceFile.text, text);
+            assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
+
+            assert.strictEqual(await project.program.getSourceFile(document), sourceFile);
+            assert.strictEqual(await project.program.getSourceFile(sourceFile.fileName), sourceFile);
+            assert.strictEqual(await project.program.getSourceFile(sourceFile.path), sourceFile);
+            assert.equal((await api.getTimingInfo()).totals.requestCount, 1, sourceFile.fileName);
+        }
     });
 
     test("file system layer bypasses callbacks on hits and falls back on misses", async () => {

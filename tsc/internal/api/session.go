@@ -38,6 +38,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/zeebo/xxh3"
 )
 
 var sessionIDCounter atomic.Uint64
@@ -704,6 +705,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleRelease(ctx, parsed.(*ReleaseParams))
 	case string(MethodReleaseSourceFile):
 		return s.handleReleaseSourceFile(parsed.(*ReleaseSourceFileParams))
+	case string(MethodRetainSourceFile):
+		return s.handleRetainSourceFile(parsed.(*RetainSourceFileParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
 	case string(MethodCreateSnapshot):
@@ -1725,15 +1728,98 @@ func (s *Session) encodeLeasedSourceFile(lease *project.SourceFileLease) (any, e
 		lease.Release()
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
-	id := SourceFileLeaseID(s.nextSourceFileLeaseID.Add(1))
+	encoder.SetSourceFileID(data, sourceFileNodeID(lease.SourceFile()))
+	id := s.registerSourceFileLease(lease)
 	encoder.SetSourceFileLease(data, uint64(id))
-	s.sourceFileLeasesMu.Lock()
-	s.sourceFileLeases[id] = lease
-	s.sourceFileLeasesMu.Unlock()
 	if s.useBinaryResponses {
 		return RawBinary(data), nil
 	}
 	return &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}, nil
+}
+
+func (s *Session) handleRetainSourceFile(params *RetainSourceFileParams) (*RetainSourceFileResponse, error) {
+	key, err := params.File.parseCacheKey()
+	if err != nil {
+		return nil, fmt.Errorf("%w: invalid source file descriptor: %w", ErrClientError, err)
+	}
+	lease := s.snapshotHost.AcquireExistingSourceFile(key)
+	if lease == nil {
+		return nil, fmt.Errorf("%w: source file is not available", ErrClientError)
+	}
+	// The parse-cache key addresses a live ordinary file, but an equal key can identify a new
+	// AST after the original entry is evicted. The node ID verifies that this is the exact AST
+	// observed by the client; it is not used to address or retain the file.
+	actualDescriptor := newSourceFileDescriptor(lease.SourceFile())
+	if actualDescriptor != params.File {
+		lease.Release()
+		return nil, fmt.Errorf("%w: source file descriptor no longer identifies the cached source file", ErrClientError)
+	}
+	return &RetainSourceFileResponse{
+		Lease: s.registerSourceFileLease(lease),
+	}, nil
+}
+
+func (s *Session) registerSourceFileLease(lease *project.SourceFileLease) SourceFileLeaseID {
+	id := SourceFileLeaseID(s.nextSourceFileLeaseID.Add(1))
+	s.sourceFileLeasesMu.Lock()
+	s.sourceFileLeases[id] = lease
+	s.sourceFileLeasesMu.Unlock()
+	return id
+}
+
+func newSourceFileDescriptor(sourceFile *ast.SourceFile) SourceFileDescriptor {
+	parseOptions := sourceFile.ParseOptions()
+	var parseOptionsKey uint32
+	if parseOptions.ExternalModuleIndicatorOptions.JSX {
+		parseOptionsKey |= 1
+	}
+	if parseOptions.ExternalModuleIndicatorOptions.Force {
+		parseOptionsKey |= 2
+	}
+	return SourceFileDescriptor{
+		FileName:        parseOptions.FileName,
+		Path:            parseOptions.Path,
+		ContentHash:     encoder.SourceFileHash(sourceFile),
+		ParseOptionsKey: strconv.FormatUint(uint64(parseOptionsKey), 10),
+		ScriptKind:      sourceFile.ScriptKind,
+		NodeID:          strconv.FormatUint(sourceFileNodeID(sourceFile), 10),
+	}
+}
+
+// sourceFileNodeID is stable for one Go AST and changes when an equal parse-cache key is
+// recreated, making it suitable for validating remote references without introducing another
+// source-file identity or ownership registry.
+func sourceFileNodeID(sourceFile *ast.SourceFile) uint64 {
+	return uint64(ast.GetNodeId(sourceFile.AsNode()))
+}
+
+func (d SourceFileDescriptor) parseCacheKey() (project.ParseCacheKey, error) {
+	if len(d.ContentHash) != 32 {
+		return project.ParseCacheKey{}, errors.New("content hash must contain 32 hexadecimal digits")
+	}
+	hi, err := strconv.ParseUint(d.ContentHash[:16], 16, 64)
+	if err != nil {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid content hash: %w", err)
+	}
+	lo, err := strconv.ParseUint(d.ContentHash[16:], 16, 64)
+	if err != nil {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid content hash: %w", err)
+	}
+	parseOptionsKey, err := strconv.ParseUint(d.ParseOptionsKey, 10, 32)
+	if err != nil || parseOptionsKey&^3 != 0 {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid parse options key %q", d.ParseOptionsKey)
+	}
+	if !isValidCreateSourceFileScriptKind(d.ScriptKind) {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid script kind %d", d.ScriptKind)
+	}
+	return project.NewParseCacheKey(ast.SourceFileParseOptions{
+		FileName: d.FileName,
+		Path:     d.Path,
+		ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
+			JSX:   parseOptionsKey&1 != 0,
+			Force: parseOptionsKey&2 != 0,
+		},
+	}, xxh3.Uint128{Hi: hi, Lo: lo}, d.ScriptKind), nil
 }
 
 func (s *Session) handleReleaseSourceFile(params *ReleaseSourceFileParams) (any, error) {
@@ -1908,6 +1994,7 @@ func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, err
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
+	encoder.SetSourceFileID(data, sourceFileNodeID(sourceFile))
 
 	if s.useBinaryResponses {
 		return RawBinary(data), nil

@@ -1,7 +1,5 @@
-import type {
-    Path,
-    SourceFile,
-} from "../ast/index.ts";
+import type { Path } from "../ast/index.ts";
+import type { RemoteSourceFile } from "./node/node.ts";
 import type { SnapshotChanges } from "./proto.ts";
 
 /**
@@ -20,11 +18,7 @@ function leaseRefKey(leaseId: number): string {
  */
 export interface CachedSourceFile {
     /** The cached source file object */
-    file: SourceFile;
-    /** The content hash from the server */
-    contentHash: string;
-    /** The parse options key that was used to create this file */
-    parseOptionsKey: string;
+    file: RemoteSourceFile;
     /** Set of snapshot/project or direct-lease ref keys that reference this entry */
     refs: Set<string>;
 }
@@ -60,7 +54,7 @@ export class SourceFileCache {
      * A given (snapshot, project) pair always parses a file the same way, so there is
      * at most one matching entry per ref.
      */
-    getRetained(path: Path, snapshotId: number, projectId: string): SourceFile | undefined {
+    getRetained(path: Path, snapshotId: number, projectId: string): RemoteSourceFile | undefined {
         const entries = this.cache.get(path);
         if (!entries) return undefined;
         const key = snapshotRefKey(snapshotId, projectId);
@@ -68,13 +62,17 @@ export class SourceFileCache {
         return entry?.file;
     }
 
+    get(file: RemoteSourceFile): RemoteSourceFile | undefined {
+        return this.find(file)?.file;
+    }
+
     /**
      * Store a source file in the cache and retain it for the given (snapshot, project) pair.
      * Returns the cached file — which may be an existing entry if the hash matches.
      */
-    set(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, snapshotId: number, projectId: string): SourceFile {
-        const result = this.setWithRef(path, file, parseOptionsKey, contentHash, snapshotRefKey(snapshotId, projectId));
-        this.trackPath(snapshotId, projectId, path);
+    set(file: RemoteSourceFile, snapshotId: number, projectId: string): RemoteSourceFile {
+        const result = this.setWithRef(file, snapshotRefKey(snapshotId, projectId));
+        this.trackPath(snapshotId, projectId, file.path);
         return result;
     }
 
@@ -82,34 +80,38 @@ export class SourceFileCache {
      * Store a source file in the cache and retain it for a direct lease.
      * Returns the cached file so leased and program-owned files share identity.
      */
-    setForLease(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, leaseId: number): SourceFile {
+    setForLease(file: RemoteSourceFile, leaseId: number): RemoteSourceFile {
         if (this.leasePaths.has(leaseId)) {
             throw new Error(`Source file lease ${leaseId} is already cached`);
         }
-        const result = this.setWithRef(path, file, parseOptionsKey, contentHash, leaseRefKey(leaseId));
-        this.leasePaths.set(leaseId, path);
+        const result = this.setWithRef(file, leaseRefKey(leaseId));
+        this.leasePaths.set(leaseId, file.path);
         return result;
     }
 
-    private setWithRef(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, ref: string): SourceFile {
-        let entries = this.cache.get(path);
+    private setWithRef(file: RemoteSourceFile, ref: string): RemoteSourceFile {
+        let entries = this.cache.get(file.path);
         if (!entries) {
             entries = [];
-            this.cache.set(path, entries);
+            this.cache.set(file.path, entries);
         }
-        // Check if we already have this exact version
-        const existing = entries.find(e =>
-            e.file.fileName === file.fileName &&
-            e.file.scriptKind === file.scriptKind &&
-            e.parseOptionsKey === parseOptionsKey &&
-            e.contentHash === contentHash
-        );
+        const existing = this.find(file, entries);
         if (existing) {
             existing.refs.add(ref);
             return existing.file;
         }
-        entries.push({ file, contentHash, parseOptionsKey, refs: new Set([ref]) });
+        entries.push({ file, refs: new Set([ref]) });
         return file;
+    }
+
+    private find(file: RemoteSourceFile, entries = this.cache.get(file.path)): CachedSourceFile | undefined {
+        return entries?.find(entry =>
+            entry.file.fileName === file.fileName &&
+            entry.file.scriptKind === file.scriptKind &&
+            entry.file.parseOptionsKey === file.parseOptionsKey &&
+            entry.file.contentHash === file.contentHash &&
+            entry.file.nodeId === file.nodeId
+        );
     }
 
     /**

@@ -62,8 +62,6 @@ import {
     decodeNode,
     getNodeId,
     parseNodeHandle,
-    readParseOptionsKey,
-    readSourceFileHash,
     readSourceFileLease,
     RemoteSourceFile,
 } from "../node/node.ts";
@@ -108,6 +106,7 @@ import type {
     ResolveModuleNameResult,
     SignaturePropertyMethod,
     SignatureResponse,
+    SourceFileDescriptor,
     SourceFileMetadata,
     StaticModuleResolution,
     SymbolPropertyMethod,
@@ -623,18 +622,50 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    /**
+     * Retain an ordinary remote source file independently of the snapshot or lease that produced it.
+     */
+    get retainSourceFile(): {
+        (sourceFile: SourceFile): RetainedSourceFile;
+        gen(sourceFile: SourceFile): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "retainSourceFile",
+            function (sourceFile: SourceFile): RetainedSourceFile {
+                owner.ensureInitialized();
+                if (!(sourceFile instanceof RemoteSourceFile)) {
+                    throw new TypeError("Only remote source files can be retained");
+                }
+                const cached = owner.sourceFileCache.get(sourceFile);
+                if (cached && cached !== sourceFile) {
+                    throw new Error("Source file is no longer the canonical cached instance");
+                }
+                const result = owner.client.apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
+                return owner.addSourceFileLease(sourceFile, result.lease);
+            },
+            function* (sourceFile: SourceFile): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                if (!(sourceFile instanceof RemoteSourceFile)) {
+                    throw new TypeError("Only remote source files can be retained");
+                }
+                const cached = owner.sourceFileCache.get(sourceFile);
+                if (cached && cached !== sourceFile) {
+                    throw new Error("Source file is no longer the canonical cached instance");
+                }
+                const result = yield* apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
+                return owner.addSourceFileLease(sourceFile, result.lease);
+            },
+        );
+    }
+
     private retainSourceFileResponse(data: Uint8Array): RetainedSourceFile {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const lease = readSourceFileLease(view);
         try {
-            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
-            const sourceFile = this.sourceFileCache.setForLease(decoded.path, decoded, readParseOptionsKey(view), readSourceFileHash(view), lease);
-            const retained = new RetainedSourceFile(sourceFile, lease, this.client, () => {
-                this.activeSourceFileLeases.delete(lease);
-                this.sourceFileCache.releaseLease(lease);
-            });
-            this.activeSourceFileLeases.set(lease, retained);
-            return retained;
+            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector());
+            return this.addSourceFileLease(decoded, lease);
         }
         catch (error) {
             try {
@@ -643,6 +674,16 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             catch {}
             throw error;
         }
+    }
+
+    private addSourceFileLease(sourceFile: RemoteSourceFile, lease: number): RetainedSourceFile {
+        const cached = this.sourceFileCache.setForLease(sourceFile, lease);
+        const retained = new RetainedSourceFile(cached as unknown as SourceFile, lease, this.client, () => {
+            this.activeSourceFileLeases.delete(lease);
+            this.sourceFileCache.releaseLease(lease);
+        });
+        this.activeSourceFileLeases.set(lease, retained);
+        return retained;
     }
 
     get transpileModule(): {
@@ -1222,6 +1263,17 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 }
 
 type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
+
+function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescriptor {
+    return {
+        fileName: sourceFile.fileName,
+        path: sourceFile.path,
+        contentHash: sourceFile.contentHash,
+        parseOptionsKey: sourceFile.parseOptionsKey,
+        scriptKind: sourceFile.scriptKind,
+        nodeId: sourceFile.nodeId,
+    };
+}
 
 /** An independently retained source file and its disposable remote-lifetime lease. */
 export class RetainedSourceFile {
@@ -2757,7 +2809,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
                 if (retained) {
-                    return retained;
+                    return retained as unknown as SourceFile;
                 }
 
                 // Fetch from server
@@ -2770,13 +2822,9 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     return undefined;
                 }
 
-                const view = new DataView(binaryData.buffer, binaryData.byteOffset, binaryData.byteLength);
-                const contentHash = readSourceFileHash(view);
-                const parseOptionsKey = readParseOptionsKey(view);
-
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
-                return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
+                const decoded = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector());
+                return owner.sourceFileCache.set(decoded, owner.snapshotId, owner.project.id) as unknown as SourceFile;
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
                 const fileName = resolveFileName(file);
@@ -2785,7 +2833,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
                 if (retained) {
-                    return retained;
+                    return retained as unknown as SourceFile;
                 }
 
                 // Fetch from server
@@ -2800,13 +2848,9 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     return undefined;
                 }
 
-                const view = new DataView(binaryData.buffer, binaryData.byteOffset, binaryData.byteLength);
-                const contentHash = readSourceFileHash(view);
-                const parseOptionsKey = readParseOptionsKey(view);
-
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
-                return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
+                const decoded = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector());
+                return owner.sourceFileCache.set(decoded, owner.snapshotId, owner.project.id) as unknown as SourceFile;
             },
         );
     }

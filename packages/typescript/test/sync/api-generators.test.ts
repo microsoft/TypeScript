@@ -442,11 +442,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             fromText.dispose();
             fromFile.dispose();
         });
+        const [[retained]] = api.batch(all(api.retainSourceFile.gen(fromFile.sourceFile)));
+        context.after(() => retained.dispose());
         assert.equal(fromText.sourceFile.text, "export const generated = true;");
         assert.equal(fromFile.sourceFile.text, parityFiles["/src/index.ts"]);
+        assert.strictEqual(retained.sourceFile, fromFile.sourceFile);
         assert.deepEqual(requestBatches, [
             ["initialize"],
             ["createSourceFile", "createSourceFileFromFile"],
+            ["retainSourceFile"],
         ]);
     });
 
@@ -1557,6 +1561,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
                 parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
                 parityCase("API", "createSourceFileFromFile", api.createSourceFileFromFile, assertRetainedSourceFilesEquivalent, "/src/index.ts"),
+                parityCase("API", "retainSourceFile", api.retainSourceFile, assertRetainedSourceFilesEquivalent, indexFile),
                 parityCase("API", "transpileModule", api.transpileModule, assertDeepEquivalent, "export const value: number = 1;", { compilerOptions: { module: 99 } }),
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),

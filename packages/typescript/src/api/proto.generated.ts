@@ -22,6 +22,7 @@ export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
 export interface APIMethodInfo {
     release: APIMethod<ReleaseParams, void>;
     releaseSourceFile: APIMethod<ReleaseSourceFileParams, unknown>;
+    retainSourceFile: APIMethod<RetainSourceFileParams, RetainSourceFileResponse>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
@@ -203,6 +204,14 @@ export interface ReleaseParams {
 }
 
 export interface ReleaseSourceFileParams {
+    lease: number;
+}
+
+export interface RetainSourceFileParams {
+    file: SourceFileDescriptor;
+}
+
+export interface RetainSourceFileResponse {
     lease: number;
 }
 
@@ -1039,6 +1048,15 @@ export interface ProfileResult {
     file: string;
 }
 
+export interface SourceFileDescriptor {
+    fileName: string;
+    path: string;
+    contentHash: string;
+    parseOptionsKey: string;
+    scriptKind: ScriptKind;
+    nodeId: string;
+}
+
 export interface BatchRequest {
     method:
         | "batchRequests"
@@ -1194,6 +1212,7 @@ export interface BatchRequest {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"
@@ -1363,6 +1382,7 @@ export interface BatchResponse {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"

@@ -58,6 +58,7 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 const (
 	MethodRelease           Method = "release"
 	MethodReleaseSourceFile Method = "releaseSourceFile"
+	MethodRetainSourceFile  Method = "retainSourceFile"
 
 	MethodBatchRequests Method = "batchRequests"
 
@@ -556,6 +557,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodBatchRequests:                                  unmarshallerFor[BatchRequestsParams],
 	MethodRelease:                                        unmarshallerFor[ReleaseParams],
 	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
+	MethodRetainSourceFile:                               unmarshallerFor[RetainSourceFileParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
@@ -871,6 +873,23 @@ type ReleaseParams struct {
 }
 
 type ReleaseSourceFileParams struct {
+	Lease SourceFileLeaseID `json:"lease"`
+}
+
+type SourceFileDescriptor struct {
+	FileName        string          `json:"fileName"`
+	Path            tspath.Path     `json:"path"`
+	ContentHash     string          `json:"contentHash"`
+	ParseOptionsKey string          `json:"parseOptionsKey"`
+	ScriptKind      core.ScriptKind `json:"scriptKind"`
+	NodeID          string          `json:"nodeId"`
+}
+
+type RetainSourceFileParams struct {
+	File SourceFileDescriptor `json:"file"`
+}
+
+type RetainSourceFileResponse struct {
 	Lease SourceFileLeaseID `json:"lease"`
 }
 
