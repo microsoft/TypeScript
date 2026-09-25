@@ -47,7 +47,7 @@ func runLSP(args []string) int {
 	defer stop()
 
 	s := lsp.NewServer(&lsp.ServerOptions{
-		In:                 lsp.ToReader(lspStdin),
+		In:                 lsp.ToReader(stdioStdin),
 		Out:                lsp.ToWriter(os.Stdout),
 		Err:                os.Stderr,
 		Cwd:                core.Must(getCurrentDirectory()),

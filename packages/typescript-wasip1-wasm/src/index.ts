@@ -166,6 +166,9 @@ export class WasmTransport {
 
     close(): void {
         if (this.closed) return;
+        if (this.inCallback) {
+            throw new Error("TypeScript WASM callbacks cannot close the same API transport");
+        }
         this.closed = true;
         try {
             this.exports.close_session();

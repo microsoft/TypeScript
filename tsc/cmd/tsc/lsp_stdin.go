@@ -3,8 +3,7 @@
 package main
 
 import (
-	"io"
 	"os"
 )
 
-var lspStdin io.Reader = os.Stdin
+var stdioStdin = os.Stdin

@@ -147,6 +147,43 @@ describe("API over WebAssembly", () => {
         assert.match(stdout, /Resolved client capabilities/);
     });
 
+    test("waits for API stdin without repeatedly reading", { timeout: 10_000 }, async () => {
+        const childSource = `
+            import { readFileSync } from "node:fs";
+            import { WASI } from "node:wasi";
+            const wasi = new WASI({
+                version: "preview1",
+                args: ["tsc.wasm", "--api"],
+                env: { PWD: "/" },
+                preopens: { "/": process.cwd() },
+                returnOnExit: true,
+            });
+            let reads = 0;
+            const imports = {
+                ...wasi.wasiImport,
+                fd_read(...args) {
+                    if (++reads > 10) throw new Error("stdin was read repeatedly while idle");
+                    return wasi.wasiImport.fd_read(...args);
+                },
+            };
+            const module = await WebAssembly.compile(readFileSync(new URL(${JSON.stringify(wasmURL.toString())})));
+            const instance = await WebAssembly.instantiate(module, { wasi_snapshot_preview1: imports });
+            process.exitCode = wasi.start(instance);
+        `;
+        const child = spawn(process.execPath, ["--input-type=module", "-e", childSource], {
+            cwd: process.cwd(),
+            stdio: ["pipe", "pipe", "pipe"],
+        });
+        let stderr = "";
+        child.stderr.setEncoding("utf8");
+        child.stderr.on("data", chunk => stderr += chunk);
+
+        await new Promise(resolve => setTimeout(resolve, 250));
+        child.stdin.end();
+        const exitCode = child.exitCode ?? await new Promise<number | null>(resolve => child.once("exit", resolve));
+        assert.strictEqual(exitCode, 0, stderr);
+    });
+
     test("runs the compiler and checker through the reactor", async () => {
         const WebAssembly = (globalThis as any).WebAssembly;
         const module = await WebAssembly.compile(
@@ -231,6 +268,12 @@ describe("API over WebAssembly", () => {
         assert.strictEqual(timing.enabled, true);
         assert.ok(timing.totals.requestCount > 0);
         assert.ok(timing.totals.serverTimeMs >= 0);
+        Reflect.set(transport, "inCallback", true);
+        assert.throws(
+            () => transport.close(),
+            /TypeScript WASM callbacks cannot close the same API transport/,
+        );
+        Reflect.set(transport, "inCallback", false);
         api.close();
 
         const secondTransport = new WasmTransport({ instance, cwd: "/" });

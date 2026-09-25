@@ -12,4 +12,8 @@ func (wasiStdin) Read(buffer []byte) (int, error) {
 	return readWasiFD(syscall.Stdin, buffer)
 }
 
-var lspStdin wasiStdin
+func (wasiStdin) Close() error {
+	return nil
+}
+
+var stdioStdin wasiStdin

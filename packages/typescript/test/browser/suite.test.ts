@@ -25,8 +25,8 @@ const browserDir = fileURLToPath(new URL(".", import.meta.url));
 const packageDir = path.resolve(browserDir, "../..");
 const modes = ["async", "sync"] as const;
 const expectedTestCounts = {
-    async: 388,
-    sync: 469,
+    async: 389,
+    sync: 470,
 } as const;
 const fileExclusions = [
     {
@@ -50,7 +50,7 @@ const fileExclusions = [
     {
         mode: "sync",
         file: "sync/wasm.test.ts",
-        tests: 4,
+        tests: 5,
         reason: "These Node.js integration tests use node:fs and node:wasi; wasm.test.ts covers browser API loading.",
     },
     {

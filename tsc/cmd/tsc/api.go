@@ -64,7 +64,7 @@ func runAPI(args []string) int {
 	if flags.pipePath != "" {
 		options.PipePath = flags.pipePath
 	} else {
-		options.In = os.Stdin
+		options.In = stdioStdin
 		options.Out = os.Stdout
 	}
 
