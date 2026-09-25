@@ -67,9 +67,13 @@ func (l *LanguageService) provideSourceDefinitionAtPosition(
 
 	originSelectionRange, _ := l.createLspRangeFromNode(node, file)
 
+	containingModuleSpecifier := findContainingModuleSpecifier(node)
+	if containingModuleSpecifier != nil && module.GetImportPhaseForUsage(containingModuleSpecifier) == module.ImportPhaseSource {
+		return l.provideDefinitionAtPosition(ctx, program, file, textPos, clientSupportsLink), nil
+	}
+
 	// If the cursor is directly on a module specifier string, resolve to the
 	// implementation file's entry point.
-	containingModuleSpecifier := findContainingModuleSpecifier(node)
 	if node == containingModuleSpecifier {
 		specifierMode := program.GetModeForUsageLocation(file, containingModuleSpecifier)
 		if implementationFile := resolver.resolveImplementation(containingModuleSpecifier.Text(), specifierMode); implementationFile != "" {
