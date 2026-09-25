@@ -11,8 +11,10 @@ import {
     cast,
     escapeLeadingUnderscores,
     type Expression,
+    getJSDocCommentsAndTags,
     getJSDocTags,
     getSynthesizedDeepClone,
+    getTextOfJSDocComment,
     InternalSymbolName,
     isCallExpression,
     isExpressionStatement,
@@ -20,6 +22,7 @@ import {
     isIdentifier,
     isImportDeclaration,
     isInterfaceDeclaration,
+    isJSDoc,
     isJSDocParameterTag,
     isModuleDeclaration,
     isNamedImports,
@@ -5183,6 +5186,121 @@ const cast = /** @type {number} */ (someValue);
         // that expression and is not reported for the enclosing declaration.
         const castDecl = statements[1].declarationList.declarations[0];
         assert.deepEqual(getJSDocTags(castDecl).map(t => t.tagName.text), []);
+    });
+});
+
+describe("ast - getJSDocCommentsAndTags", { concurrency }, () => {
+    test("returns the whole JSDoc comment when the host node owns all of its tags", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+/**
+ * The answer to everything.
+ * @deprecated use theAnswer instead
+ */
+export const answer = 42;
+`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const answer = [...sourceFile.statements].filter(isVariableStatement)[0].declarationList.declarations[0];
+        assert.ok(answer);
+
+        // Every tag on `answer`'s JSDoc comment is owned by `answer`, so the whole
+        // comment is returned as a single entry rather than its individual tags.
+        const commentsAndTags = getJSDocCommentsAndTags(answer);
+        assert.equal(commentsAndTags.length, 1);
+        assert.ok(isJSDoc(commentsAndTags[0]));
+
+        // Flattening still yields the same tags as getJSDocTags.
+        assert.deepEqual(getJSDocTags(answer).map(t => t.tagName.text), ["deprecated"]);
+    });
+
+    test("returns the whole JSDoc comment when it has a description but no tags", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+/**
+ * The answer to everything.
+ */
+export const answer = 42;
+`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const answer = [...sourceFile.statements].filter(isVariableStatement)[0].declarationList.declarations[0];
+        assert.ok(answer);
+
+        // With no tags to discard, the JSDoc node (and its description) is
+        // still returned rather than an empty tag list.
+        const commentsAndTags = getJSDocCommentsAndTags(answer);
+        assert.equal(commentsAndTags.length, 1);
+        assert.ok(isJSDoc(commentsAndTags[0]));
+        assert.equal(getTextOfJSDocComment(commentsAndTags[0].comment), "The answer to everything.");
+
+        assert.deepEqual(getJSDocTags(answer), []);
+    });
+
+    test("returns individual tags when the host node does not own all of them", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, checkJs: true } }),
+            "/src/main.js": `
+/** @type {string} */
+const value = "hello";
+
+const cast = /** @type {number} */ (someValue);
+`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.js");
+        assert.ok(sourceFile);
+        const statements = [...sourceFile.statements].filter(isVariableStatement);
+
+        // The @type cast tag is not owned by `castDecl`, so no tags qualify and
+        // the JSDoc comment is not returned at all.
+        const castDecl = statements[1].declarationList.declarations[0];
+        assert.deepEqual(getJSDocCommentsAndTags(castDecl), []);
+    });
+
+    test("returns the whole JSDoc comment when the host node owns multiple tags", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+/**
+ * Adds two numbers.
+ * @param a the first number
+ * @param b the second number
+ * @returns the sum
+ */
+export function add(a: number, b: number): number {
+    return a + b;
+}
+`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const add = [...sourceFile.statements].find(isFunctionDeclaration);
+        assert.ok(add);
+
+        // All three tags on `add`'s JSDoc comment are owned by `add`, so the
+        // whole comment is returned as a single entry rather than three tags.
+        const commentsAndTags = getJSDocCommentsAndTags(add);
+        assert.equal(commentsAndTags.length, 1);
+        assert.ok(isJSDoc(commentsAndTags[0]));
+
+        // Flattening still yields all three tags, in order, via getJSDocTags.
+        assert.deepEqual(getJSDocTags(add).map(t => t.tagName.text), ["param", "param", "returns"]);
     });
 });
 
