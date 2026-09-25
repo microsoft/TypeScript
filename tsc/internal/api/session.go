@@ -4706,21 +4706,33 @@ func (s *Session) toFileChangeSummary(changes *FileNotifications) project.FileCh
 	return summary
 }
 
-func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsParams, getter func(compiler.ProgramLike, context.Context, *ast.SourceFile) []*ast.Diagnostic) ([]*DiagnosticResponse, error) {
+func (s *Session) getDiagnostics(
+	ctx context.Context,
+	params *GetDiagnosticsParams,
+	incremental bool,
+	getter func(compiler.ProgramLike, context.Context, *ast.SourceFile) []*ast.Diagnostic,
+) ([]*DiagnosticResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
 	}
 
-	program, err := sd.getProgramLike(params.Project)
+	compilerProgram, err := sd.getProgram(params.Project)
 	if err != nil {
 		return nil, err
+	}
+	var program compiler.ProgramLike = compilerProgram
+	if incremental {
+		program, err = sd.getProgramLike(params.Project)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if params.Files != nil {
 		var allDiags []*ast.Diagnostic
 		for _, file := range params.Files {
-			sourceFile, err := s.resolveOptionalSourceFile(program.Program(), &file)
+			sourceFile, err := s.resolveOptionalSourceFile(compilerProgram, &file)
 			if err != nil {
 				return nil, err
 			}
@@ -4735,31 +4747,31 @@ func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsPara
 // @gen-proto-nullable
 func (s *Session) handleGetSyntacticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetSyntacticDiagnostics)
+	return s.getDiagnostics(ctx, params, false, compiler.ProgramLike.GetSyntacticDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetBindDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetBindDiagnostics)
+	return s.getDiagnostics(ctx, params, false, compiler.ProgramLike.GetBindDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetSemanticDiagnostics)
+	return s.getDiagnostics(ctx, params, true, compiler.ProgramLike.GetSemanticDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetSuggestionDiagnostics)
+	return s.getDiagnostics(ctx, params, false, compiler.ProgramLike.GetSuggestionDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetDeclarationDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetDeclarationDiagnostics)
+	return s.getDiagnostics(ctx, params, true, compiler.ProgramLike.GetDeclarationDiagnostics)
 }
 
 // handleGetConfigFileParsingDiagnostics returns config file parsing diagnostics.
@@ -4770,7 +4782,7 @@ func (s *Session) handleGetConfigFileParsingDiagnostics(ctx context.Context, par
 		return nil, err
 	}
 
-	program, err := sd.getProgramLike(params.Project)
+	program, err := sd.getProgram(params.Project)
 	if err != nil {
 		return nil, err
 	}
@@ -4787,7 +4799,7 @@ func (s *Session) handleGetProgramDiagnostics(ctx context.Context, params *GetPr
 		return nil, err
 	}
 
-	program, err := sd.getProgramLike(params.Project)
+	program, err := sd.getProgram(params.Project)
 	if err != nil {
 		return nil, err
 	}
