@@ -4,9 +4,9 @@
 const match = ''.match(/ /)
 >match : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null
->''.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>''.match : { (regexp: string | RegExp): RegExpMatchArray | null; <This, R>(this: This, matcher: { [Symbol.match](string: This): R; }): R; }
 >'' : ""
->match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; <This, R>(this: This, matcher: { [Symbol.match](string: This): R; }): R; }
 >/ / : RegExp
 
 if (match !== null) {

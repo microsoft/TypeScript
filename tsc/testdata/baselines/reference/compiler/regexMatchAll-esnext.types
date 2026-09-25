@@ -4,7 +4,7 @@
 const matches = /\w/g[Symbol.matchAll]("matchAll");
 >matches : RegExpStringIterator<RegExpExecArray>
 >/\w/g[Symbol.matchAll]("matchAll") : RegExpStringIterator<RegExpExecArray>
->/\w/g[Symbol.matchAll] : (str: string) => RegExpStringIterator<RegExpExecArray>
+>/\w/g[Symbol.matchAll] : (string: string) => RegExpStringIterator<RegExpExecArray>
 >/\w/g : RegExp
 >Symbol.matchAll : unique symbol
 >Symbol : SymbolConstructor
