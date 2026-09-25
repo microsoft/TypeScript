@@ -12,12 +12,22 @@ import {
     generateOptions,
     validateOptions,
 } from "./generate-options.ts";
-import { optionKind } from "./options-model.ts";
+import {
+    diagnostic,
+    optionKind,
+} from "./options-model.ts";
 import type { JSONSchema } from "./options-schema.ts";
 import { options } from "./options.ts";
 
 test("option metadata is valid", () => {
     validateOptions(options);
+});
+
+test("diagnostic references use checked message text and preserve Go names", () => {
+    assert.deepEqual(diagnostic("JavaScript Support"), { go: "diagnostics.JavaScript_Support", text: "JavaScript Support" });
+    assert.deepEqual(diagnostic("'{0}' expected."), { go: "diagnostics.X_0_expected", text: "'{0}' expected." });
+    // @ts-expect-error Diagnostic text must exist in diagnosticMessages.json.
+    diagnostic("Not a real diagnostic.");
 });
 
 test("explicit option orders reject duplicates, unknown names, and omissions", () => {

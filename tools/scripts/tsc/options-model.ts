@@ -1,6 +1,21 @@
 /** Metadata shared by the compiler options, declaration, and config schema generators. */
 
-export type GoValue = string | number | boolean | { go: string; };
+import type messages from "../../../tsc/internal/diagnostics/diagnosticMessages.json";
+
+export interface DiagnosticMessage {
+    go: `diagnostics.${string}`;
+    text: keyof typeof messages;
+}
+
+export function diagnostic(text: keyof typeof messages): DiagnosticMessage {
+    const special: Record<string, string> = { "*": "_Asterisk", "/": "_Slash", ":": "_Colon" };
+    let name = [...text].map(char => special[char] ?? (/[\p{L}\p{Nd}]/u.test(char) ? char : "_")).join("")
+        .replace(/_+/g, "_").replace(/^_([^0-9])/, "$1").replace(/_+$/, "");
+    if (!/^\p{Lu}/u.test(name)) name = (name.startsWith("_") ? "X" : "X_") + name;
+    return { go: `diagnostics.${name}`, text };
+}
+
+export type GoValue = string | number | boolean | DiagnosticMessage | { go: `core.${string}`; };
 export type OptionKind = "Boolean" | "String" | "Number" | "Object" | "List" | "ListOrElement" | "Enum";
 export type CompilerOptionType =
     | "Tristate"
@@ -25,13 +40,13 @@ export interface DeclarationMetadata {
     isFilePath?: boolean;
     isTSConfigOnly?: boolean;
     isCommandLineOnly?: boolean;
-    description?: { go: string; };
+    description?: DiagnosticMessage;
     schemaDescription?: string;
     /** TSConfig reference anchor for schema hovers; defaults to the option name. False omits the link. */
     documentationAnchor?: string | false;
     defaultValueDescription?: GoValue;
     showInSimplifiedHelpView?: boolean;
-    category?: { go: string; };
+    category?: DiagnosticMessage;
     extraValidation?: { go: string; };
     minValue?: number;
     allowConfigDirTemplateSubstitution?: boolean;

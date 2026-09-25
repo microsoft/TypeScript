@@ -1,7 +1,4 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
-import { repoRoot } from "../gen/utils.mts";
 import {
     type Declaration,
     type GoValue,
@@ -35,25 +32,6 @@ export interface JSONSchema {
     allowTrailingCommas?: boolean;
 }
 
-function diagnosticName(text: string): string {
-    const special: Record<string, string> = { "*": "_Asterisk", "/": "_Slash", ":": "_Colon" };
-    let name = [...text].map(char => special[char] ?? (/[\p{L}\p{Nd}]/u.test(char) ? char : "_")).join("")
-        .replace(/_+/g, "_").replace(/^_([^0-9])/, "$1").replace(/_+$/, "");
-    if (!/^\p{Lu}/u.test(name)) name = (name.startsWith("_") ? "X" : "X_") + name;
-    return `diagnostics.${name}`;
-}
-
-function diagnosticMessages(): Map<string, string> {
-    const source: Record<string, unknown> = JSON.parse(fs.readFileSync(path.join(repoRoot, "tsc/internal/diagnostics/diagnosticMessages.json"), "utf8"));
-    return new Map(Object.keys(source).map(text => [diagnosticName(text), text]));
-}
-
-function message(value: { go: string; }, messages: Map<string, string>): string {
-    const text = messages.get(value.go);
-    assert(text !== undefined, `Unknown diagnostic message: ${value.go}`);
-    return text;
-}
-
 function nullable(schema: JSONSchema): JSONSchema {
     return { anyOf: [schema, { type: "null" }] };
 }
@@ -75,7 +53,7 @@ function defaultValue(value: GoValue | undefined, name: string): string | number
     // Help text may wrap a literal string default in a Markdown code span.
     if (typeof value === "string") return value.replace(/^`([^`]*)`$/, "$1");
     if (value === undefined || typeof value !== "object") return value;
-    if (value.go.startsWith("diagnostics.") || value.go === "core.TSUnknown") return undefined;
+    if ("text" in value || value.go === "core.TSUnknown") return undefined;
     let constant = value.go;
     if (constant === "core.ScriptTargetLatestStandard") {
         const target = options.enums.find(enumDef => enumDef.name === "ScriptTarget")?.members.find(member => member.name === "LatestStandard");
@@ -145,15 +123,15 @@ function withDescription(schema: JSONSchema, description: string | undefined, an
     return schema;
 }
 
-function optionSchema(declaration: Declaration, messages: Map<string, string>): JSONSchema {
+function optionSchema(declaration: Declaration): JSONSchema {
     const schema = nullable(valueSchema(declaration));
     if (declaration.schemaDescription !== undefined) schema.description = declaration.schemaDescription;
-    else if (declaration.description) schema.description = message(declaration.description, messages);
+    else if (declaration.description) schema.description = declaration.description.text;
     const value = defaultValue(declaration.defaultValueDescription, declaration.name);
     if (value !== undefined) schema.default = value;
     const defaultDescription = declaration.defaultValueDescription;
-    if (typeof defaultDescription === "object" && defaultDescription.go.startsWith("diagnostics.")) {
-        schema.description = [schema.description, `Default: ${message(defaultDescription, messages)}`].filter(Boolean).join("\n\n");
+    if (typeof defaultDescription === "object" && "text" in defaultDescription) {
+        schema.description = [schema.description, `Default: ${defaultDescription.text}`].filter(Boolean).join("\n\n");
     }
     return withDescription(schema, schema.description, declaration.documentationAnchor ?? declaration.name);
 }
@@ -163,7 +141,6 @@ function optionObject(properties: Record<string, JSONSchema>) {
 }
 
 export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
-    const messages = diagnosticMessages();
     const compilerProperties: Record<string, JSONSchema> = {};
     for (const option of options.compilerOptions) {
         const declaration = option.declarations?.[0];
@@ -173,21 +150,21 @@ export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
             kind: optionKind(option),
             ...declaration,
             ...(kind === "jsconfig" && option.jsconfigDefault !== undefined ? { defaultValueDescription: option.jsconfigDefault } : {}),
-        }, messages);
+        });
         if (option.deprecated) {
             schema.deprecated = true;
             schema.deprecationMessage = "This compiler option is deprecated.";
         }
         compilerProperties[option.name] = schema;
     }
-    const watchProperties = Object.fromEntries(options.watchOptions.map(option => [option.name, optionSchema(option, messages)]));
+    const watchProperties = Object.fromEntries(options.watchOptions.map(option => [option.name, optionSchema(option)]));
     const acquisitionProperties = Object.fromEntries(options.typeAcquisition.map(option => [
         option.name,
         optionSchema({
             documentationAnchor: "typeAcquisition",
             ...option,
             ...(kind === "jsconfig" && option.jsconfigDefault !== undefined ? { defaultValueDescription: option.jsconfigDefault } : {}),
-        }, messages),
+        }),
     ]));
     const descriptions: Record<string, string> = {
         compilerOptions: "Options for the TypeScript compiler.",
@@ -207,7 +184,7 @@ export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
     for (const option of options.rootOptions) {
         const schema = option.elementOptions && option.elementOptions !== "extends"
             ? { $ref: `#/definitions/${option.elementOptions}` }
-            : option.name === "extends" ? valueSchema(option) : optionSchema(option, messages);
+            : option.name === "extends" ? valueSchema(option) : optionSchema(option);
         properties[option.name] = withDescription(schema, option.schemaDescription ?? descriptions[option.name], option.documentationAnchor ?? option.name);
     }
     return {
