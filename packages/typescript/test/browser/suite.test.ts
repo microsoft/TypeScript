@@ -25,8 +25,8 @@ const browserDir = fileURLToPath(new URL(".", import.meta.url));
 const packageDir = path.resolve(browserDir, "../..");
 const modes = ["async", "sync"] as const;
 const expectedTestCounts = {
-    async: 386,
-    sync: 467,
+    async: 388,
+    sync: 469,
 } as const;
 const fileExclusions = [
     {
