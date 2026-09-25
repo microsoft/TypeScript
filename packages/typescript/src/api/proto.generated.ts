@@ -42,13 +42,9 @@ export interface APIMethodInfo {
     transpileDeclarationFromFile: APIMethod<TranspileFromFileParams, TranspileOutputResponse>;
     getDefaultProjectForFile: APIMethod<GetDefaultProjectForFileParams, ProjectResponse | null>;
     getSymbolAtPosition: APIMethod<GetSymbolAtPositionParams, SymbolResponse | null>;
-    getSymbolsAtPositions: APIMethod<GetSymbolsAtPositionsParams, SymbolResponse[]>;
     getSymbolAtLocation: APIMethod<GetSymbolAtLocationParams, SymbolResponse | null>;
-    getSymbolsAtLocations: APIMethod<GetSymbolsAtLocationsParams, SymbolResponse[]>;
     getSymbolOfSourceFile: APIMethod<GetSymbolOfSourceFileParams, SymbolResponse | null>;
-    getSymbolsOfSourceFiles: APIMethod<GetSymbolsOfSourceFilesParams, SymbolResponse[]>;
     getTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
-    getTypesOfSymbols: APIMethod<GetTypesOfSymbolsParams, TypeResponse[]>;
     getDeclaredTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getNonMissingTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
@@ -67,9 +63,7 @@ export interface APIMethodInfo {
     getSignaturesOfType: APIMethod<GetSignaturesOfTypeParams, SignatureResponse[]>;
     getResolvedSignature: APIMethod<GetResolvedSignatureParams, SignatureResponse>;
     getTypeAtLocation: APIMethod<GetTypeAtLocationParams, TypeResponse>;
-    getTypeAtLocations: APIMethod<GetTypeAtLocationsParams, TypeResponse[]>;
     getTypeAtPosition: APIMethod<GetTypeAtPositionParams, TypeResponse | null>;
-    getTypesAtPositions: APIMethod<GetTypesAtPositionsParams, TypeResponse[]>;
     getParentOfSymbol: APIMethod<GetSymbolPropertyParams, SymbolResponse | null>;
     getMembersOfSymbol: APIMethod<GetSymbolPropertyParams, SymbolResponse[] | null>;
     getExportsOfSymbol: APIMethod<GetSymbolPropertyParams, SymbolResponse[] | null>;
@@ -207,13 +201,16 @@ export interface ReleaseSourceFileParams {
 }
 
 export interface BatchRequestsParams {
-    requests: readonly BatchRequest[] | null;
+    requests?: readonly BatchRequest[] | undefined;
+    groups?: readonly BatchRequestGroup[] | undefined;
+    groupOrder?: readonly number[] | undefined;
     continuationToken?: string | undefined;
     maxResponseBytesPerPage?: number | undefined;
 }
 
 export interface BatchRequestsResponse {
-    responses: BatchResponse[];
+    results: unknown[];
+    errors?: Record<string, string> | undefined;
     continuationToken?: string | undefined;
 }
 
@@ -396,35 +393,16 @@ export interface SymbolResponse {
     exportSymbol?: number | undefined;
 }
 
-export interface GetSymbolsAtPositionsParams {
-    snapshot: number;
-    project: ProjectId;
-    file: DocumentIdentifier;
-    positions: readonly number[] | null;
-}
-
 export interface GetSymbolAtLocationParams {
     snapshot: number;
     project: ProjectId;
     location: string;
 }
 
-export interface GetSymbolsAtLocationsParams {
-    snapshot: number;
-    project: ProjectId;
-    locations: readonly string[] | null;
-}
-
 export interface GetSymbolOfSourceFileParams {
     snapshot: number;
     project: ProjectId;
     file: DocumentIdentifier;
-}
-
-export interface GetSymbolsOfSourceFilesParams {
-    snapshot: number;
-    project: ProjectId;
-    files: readonly DocumentIdentifier[] | null;
 }
 
 export interface GetTypeOfSymbolParams {
@@ -484,12 +462,6 @@ export interface TypeResponse {
     aliasSymbol?: number | undefined;
     /** Symbol associated with structured types */
     symbol?: number | undefined;
-}
-
-export interface GetTypesOfSymbolsParams {
-    snapshot: number;
-    project: ProjectId;
-    symbols: readonly number[] | null;
 }
 
 export interface GetSourceFileParams {
@@ -644,24 +616,11 @@ export interface GetTypeAtLocationParams {
     location: string;
 }
 
-export interface GetTypeAtLocationsParams {
-    snapshot: number;
-    project: ProjectId;
-    locations: readonly string[] | null;
-}
-
 export interface GetTypeAtPositionParams {
     snapshot: number;
     project: ProjectId;
     file: DocumentIdentifier;
     position: number;
-}
-
-export interface GetTypesAtPositionsParams {
-    snapshot: number;
-    project: ProjectId;
-    file: DocumentIdentifier;
-    positions: readonly number[] | null;
 }
 
 /** GetSymbolPropertyParams is used for all symbol sub-property endpoints. */
@@ -1144,10 +1103,7 @@ export interface BatchRequest {
         | "getSymbolAtPosition"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"
-        | "getSymbolsAtLocations"
-        | "getSymbolsAtPositions"
         | "getSymbolsInScope"
-        | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
         | "getTargetOfType"
@@ -1158,7 +1114,6 @@ export interface BatchRequest {
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
         | "getTypeAtLocation"
-        | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
         | "getTypeOfPropertyOfType"
@@ -1169,8 +1124,6 @@ export interface BatchRequest {
         | "getTypeParametersOfSignature"
         | "getTypeParametersOfType"
         | "getTypePredicateOfSignature"
-        | "getTypesAtPositions"
-        | "getTypesOfSymbols"
         | "getTypesOfType"
         | "getUndefinedType"
         | "getUnknownType"
@@ -1208,7 +1161,7 @@ export interface BatchRequest {
     params?: unknown | undefined;
 }
 
-export interface BatchResponse {
+export interface BatchRequestGroup {
     method:
         | "batchRequests"
         | "createModuleResolver"
@@ -1313,10 +1266,7 @@ export interface BatchResponse {
         | "getSymbolAtPosition"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"
-        | "getSymbolsAtLocations"
-        | "getSymbolsAtPositions"
         | "getSymbolsInScope"
-        | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
         | "getTargetOfType"
@@ -1327,7 +1277,6 @@ export interface BatchResponse {
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
         | "getTypeAtLocation"
-        | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
         | "getTypeOfPropertyOfType"
@@ -1338,8 +1287,6 @@ export interface BatchResponse {
         | "getTypeParametersOfSignature"
         | "getTypeParametersOfType"
         | "getTypePredicateOfSignature"
-        | "getTypesAtPositions"
-        | "getTypesOfSymbols"
         | "getTypesOfType"
         | "getUndefinedType"
         | "getUnknownType"
@@ -1374,8 +1321,10 @@ export interface BatchResponse {
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";
-    result: unknown;
-    error?: string | undefined;
+    base?: unknown | undefined;
+    count: number;
+    fields?: unknown | undefined;
+    requests?: unknown[] | undefined;
 }
 
 /**

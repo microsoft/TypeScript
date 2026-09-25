@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"go/ast"
 	"go/constant"
+	"go/format"
 	"go/types"
+	"maps"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -23,11 +25,15 @@ func main() {
 }
 
 func run() int {
-	if len(os.Args) != 3 {
-		fmt.Fprintln(os.Stderr, "Usage: gen-proto <input path>.go <output path>.ts")
+	if len(os.Args) != 4 {
+		fmt.Fprintln(os.Stderr, "Usage: gen-proto <input path>.go <output path>.ts <batch output path>.go")
 		return 1
 	}
 	if err := generate(os.Args[1], os.Args[2]); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	if err := generateBatchDecoders(os.Args[1], os.Args[3]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
@@ -35,6 +41,7 @@ func run() int {
 }
 
 type methodInfo struct {
+	constName      string
 	name           string
 	params         types.Type
 	result         types.Type
@@ -147,6 +154,249 @@ func generate(inputPath string, outputPath string) error {
 	return nil
 }
 
+func generateBatchDecoders(inputPath string, outputPath string) error {
+	absInput, err := filepath.Abs(inputPath)
+	if err != nil {
+		return err
+	}
+	pkg, inputFile, err := loadAPIPackage(absInput)
+	if err != nil {
+		return err
+	}
+	methods, methodObjects, err := declaredMethods(pkg, inputFile)
+	if err != nil {
+		return err
+	}
+	resultTypeOverrides, nullableResults, err := discoverResultMetadata(pkg)
+	if err != nil {
+		return err
+	}
+	discoverSessionMethods(pkg, methodObjects, methods, resultTypeOverrides, nullableResults)
+
+	type decoderType struct {
+		name   string
+		named  *types.Named
+		fields []batchField
+	}
+	decoderTypes := make(map[*types.Named]*decoderType)
+	methodTypes := make(map[*methodInfo]*decoderType)
+	imports := make(map[string]string)
+	qualifier := func(imported *types.Package) string {
+		if imported == nil || imported.Path() == pkg.Types.Path() {
+			return ""
+		}
+		imports[imported.Path()] = imported.Name()
+		return imported.Name()
+	}
+
+	for _, method := range methods {
+		if method.constName == "MethodBatchRequests" {
+			continue
+		}
+		pointer, ok := types.Unalias(method.params).(*types.Pointer)
+		if !ok {
+			continue
+		}
+		named, ok := types.Unalias(pointer.Elem()).(*types.Named)
+		if !ok || named.Obj().Pkg() != pkg.Types {
+			continue
+		}
+		structType, ok := named.Underlying().(*types.Struct)
+		if !ok {
+			continue
+		}
+		decoder := decoderTypes[named]
+		if decoder == nil {
+			decoder = &decoderType{name: named.Obj().Name(), named: named, fields: batchFields(structType, qualifier)}
+			decoderTypes[named] = decoder
+		}
+		methodTypes[method] = decoder
+	}
+
+	var body bytes.Buffer
+	decoders := slices.Collect(maps.Values(decoderTypes))
+	slices.SortFunc(decoders, func(a, b *decoderType) int { return strings.Compare(a.name, b.name) })
+	for _, decoder := range decoders {
+		fmt.Fprintf(&body, "type batchColumns%s struct {\n", decoder.name)
+		for _, field := range decoder.fields {
+			fmt.Fprintf(&body, "\t%s []%s `json:\"%s,omitempty\"`\n", field.goName, field.typeName, field.jsonName)
+		}
+		body.WriteString("}\n\n")
+		fmt.Fprintf(&body, "func newBatchDecoder%s(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {\n", decoder.name)
+		fmt.Fprintf(&body, "\tvar columns batchColumns%s\n", decoder.name)
+		body.WriteString("\tif err := json.Unmarshal(fields, &columns); err != nil {\n\t\treturn nil, err\n\t}\n")
+		for _, field := range decoder.fields {
+			fmt.Fprintf(&body, "\tif columns.%s != nil {\n\t\tif err := validateBatchColumn(\"%s\", len(columns.%s), count); err != nil { return nil, err }\n\t}\n", field.goName, field.jsonName, field.goName)
+		}
+		fmt.Fprintf(&body, "\treturn newTypedBatchRequestDecoder[%s](base, func(params *%s, index int) {\n", decoder.name, decoder.name)
+		initialized := make(map[string]bool)
+		for _, field := range decoder.fields {
+			for _, pointer := range field.pointers {
+				if initialized[pointer.selector] {
+					continue
+				}
+				initialized[pointer.selector] = true
+				var conditions []string
+				for _, other := range decoder.fields {
+					if strings.HasPrefix(other.selector, pointer.selector+".") {
+						conditions = append(conditions, "columns."+other.goName+" != nil")
+					}
+				}
+				fmt.Fprintf(&body, "\t\tif %s {\n", strings.Join(conditions, " || "))
+				fmt.Fprintf(&body, "\t\t\tif params.%s == nil { params.%s = new(%s) } else { value := *params.%s; params.%s = &value }\n", pointer.selector, pointer.selector, pointer.typeName, pointer.selector, pointer.selector)
+				body.WriteString("\t\t}\n")
+			}
+		}
+		for _, field := range decoder.fields {
+			fmt.Fprintf(&body, "\t\tif columns.%s != nil { params.%s = columns.%s[index] }\n", field.goName, field.selector, field.goName)
+		}
+		body.WriteString("\t})\n}\n\n")
+	}
+	body.WriteString("func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {\n\tswitch method {\n")
+	for _, method := range methods {
+		if decoder := methodTypes[method]; decoder != nil {
+			fmt.Fprintf(&body, "\tcase %s:\n\t\treturn newBatchDecoder%s(base, fields, count)\n", method.constName, decoder.name)
+		}
+	}
+	body.WriteString("\tdefault:\n\t\treturn nil, nil\n\t}\n}\n")
+
+	var out bytes.Buffer
+	out.WriteString("// Code generated by tools/gen-proto. DO NOT EDIT.\n\npackage api\n\n")
+	out.WriteString("import (\n\t\"github.com/microsoft/TypeScript/tsc/internal/json\"\n")
+	paths := slices.Sorted(maps.Keys(imports))
+	for _, path := range paths {
+		if path == "github.com/microsoft/TypeScript/tsc/internal/json" {
+			continue
+		}
+		fmt.Fprintf(&out, "\t%s \"%s\"\n", imports[path], path)
+	}
+	out.WriteString(")\n\n")
+	out.Write(body.Bytes())
+	formatted, err := format.Source(out.Bytes())
+	if err != nil {
+		return fmt.Errorf("format batch decoders: %w\n%s", err, out.String())
+	}
+	return os.WriteFile(outputPath, formatted, 0o644)
+}
+
+type batchField struct {
+	goName   string
+	jsonName string
+	typeName string
+	typ      types.Type
+	selector string
+	pointers []batchPointer
+	depth    int
+	tagged   bool
+}
+
+type batchPointer struct {
+	selector string
+	typeName string
+	typ      types.Type
+}
+
+func batchFields(structType *types.Struct, qualifier types.Qualifier) []batchField {
+	var candidates []batchField
+	visiting := make(map[*types.Struct]bool)
+	var collect func(*types.Struct, []string, []batchPointer)
+	collect = func(current *types.Struct, path []string, pointers []batchPointer) {
+		if visiting[current] {
+			return
+		}
+		visiting[current] = true
+		defer delete(visiting, current)
+		for index := range current.NumFields() {
+			field := current.Field(index)
+			if !field.Exported() {
+				continue
+			}
+			tag := reflect.StructTag(current.Tag(index)).Get("json")
+			if tag == "-" {
+				continue
+			}
+			jsonName, options, _ := strings.Cut(tag, ",")
+			fieldPath := append(slices.Clone(path), field.Name())
+			selector := strings.Join(fieldPath, ".")
+			if jsonName == "" && (field.Embedded() || slices.Contains(strings.Split(options, ","), "embed")) {
+				embedded := types.Unalias(field.Type())
+				fieldPointers := pointers
+				if pointer, ok := embedded.(*types.Pointer); ok {
+					embedded = types.Unalias(pointer.Elem())
+					fieldPointers = append(slices.Clone(pointers), batchPointer{selector: selector, typ: embedded})
+				}
+				if embeddedStruct, ok := embedded.Underlying().(*types.Struct); ok {
+					collect(embeddedStruct, fieldPath, fieldPointers)
+					continue
+				}
+			}
+			tagged := jsonName != ""
+			if jsonName == "" {
+				jsonName = field.Name()
+			}
+			candidates = append(candidates, batchField{
+				goName: field.Name(), jsonName: jsonName,
+				typ:      field.Type(),
+				selector: selector, pointers: pointers, depth: len(path), tagged: tagged,
+			})
+		}
+	}
+	collect(structType, nil, nil)
+
+	byName := make(map[string][]batchField)
+	for _, field := range candidates {
+		previous := byName[field.jsonName]
+		if len(previous) == 0 || field.depth < previous[0].depth || field.depth == previous[0].depth && field.tagged && !previous[0].tagged {
+			byName[field.jsonName] = []batchField{field}
+		} else if field.depth == previous[0].depth && field.tagged == previous[0].tagged {
+			byName[field.jsonName] = append(previous, field)
+		}
+	}
+	var fields []batchField
+	usedNames := make(map[string]bool)
+	for _, field := range candidates {
+		matches := byName[field.jsonName]
+		if len(matches) != 1 || matches[0].selector != field.selector {
+			continue
+		}
+		name := field.goName
+		for suffix := 2; usedNames[field.goName]; suffix++ {
+			field.goName = name + strconv.Itoa(suffix)
+		}
+		usedNames[field.goName] = true
+		field.typeName = types.TypeString(field.typ, qualifier)
+		for index := range field.pointers {
+			field.pointers[index].typeName = types.TypeString(field.pointers[index].typ, qualifier)
+		}
+		fields = append(fields, field)
+	}
+	return fields
+}
+
+func loadAPIPackage(absInput string) (*packages.Package, *ast.File, error) {
+	cfg := &packages.Config{
+		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
+			packages.NeedSyntax | packages.NeedTypes | packages.NeedTypesInfo |
+			packages.NeedImports | packages.NeedDeps,
+		Dir: filepath.Dir(absInput),
+	}
+	pkgs, err := packages.Load(cfg, ".")
+	if err != nil {
+		return nil, nil, fmt.Errorf("load API package: %w", err)
+	}
+	if len(pkgs) != 1 {
+		return nil, nil, fmt.Errorf("load API package: expected one package, got %d", len(pkgs))
+	}
+	if packages.PrintErrors(pkgs) != 0 {
+		return nil, nil, errors.New("load API package: package contains errors")
+	}
+	inputFile := findSyntaxFile(pkgs[0], absInput)
+	if inputFile == nil {
+		return nil, nil, fmt.Errorf("input file %q was not part of package %q", absInput, pkgs[0].PkgPath)
+	}
+	return pkgs[0], inputFile, nil
+}
+
 func findSyntaxFile(pkg *packages.Package, path string) *ast.File {
 	cleanPath := filepath.Clean(path)
 	for i, filePath := range pkg.CompiledGoFiles {
@@ -176,7 +426,7 @@ func declaredMethods(pkg *packages.Package, file *ast.File) ([]*methodInfo, map[
 				if !ok || constantObject.Val().Kind() != constant.String {
 					return nil, nil, fmt.Errorf("%s is not a string method constant", name.Name)
 				}
-				method := &methodInfo{name: constant.StringVal(constantObject.Val())}
+				method := &methodInfo{constName: name.Name, name: constant.StringVal(constantObject.Val())}
 				methods = append(methods, method)
 				methodObjects[obj] = method
 			}
@@ -223,7 +473,7 @@ func discoverSessionMethods(pkg *packages.Package, methodObjects map[types.Objec
 	for _, file := range pkg.Syntax {
 		for _, decl := range file.Decls {
 			fn, isFuncDecl := decl.(*ast.FuncDecl)
-			if !isFuncDecl || fn.Name.Name != "HandleRequest" || fn.Recv == nil || fn.Body == nil {
+			if !isFuncDecl || fn.Recv == nil || fn.Body == nil || fn.Name.Name != "HandleRequest" && fn.Name.Name != "handleParsedRequest" {
 				continue
 			}
 			ast.Inspect(fn.Body, func(node ast.Node) bool {

@@ -1,3 +1,4 @@
+import { groupBatchRequests } from "../batch.ts";
 import { fsCallbackNames } from "../fs.ts";
 import {
     type ClientOptions,
@@ -107,13 +108,22 @@ export class Client {
         return () => this.channel.unregisterCallback(name);
     }
 
-    batchRequests(requests: readonly APIRequest[]): BatchRequestsResponse {
-        const params: BatchRequestsParams = { requests };
+    batchRequests(requests: readonly APIRequest[]): { result: unknown; error?: string | undefined; }[] {
+        const grouped = requests.length >= 4 ? groupBatchRequests(requests) : undefined;
+        const response = this.batchRequest(grouped ?? { requests });
+        return response.results.map((result, index) => {
+            const error = response.errors?.[index];
+            return error === undefined ? { result } : { result, error };
+        });
+    }
+
+    batchRequest(params: BatchRequestsParams): BatchRequestsResponse {
         if (this.maxResponseBytesPerPage !== undefined) {
             params.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
         }
         const response = this.apiRequest("batchRequests", params);
-        let responses = response.responses;
+        let results = response.results;
+        let errors = response.errors;
         let continuationToken = response.continuationToken;
         while (continuationToken) {
             const pageParams: BatchRequestsParams = {
@@ -124,16 +134,15 @@ export class Client {
                 pageParams.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
             }
             const page = this.apiRequest("batchRequests", pageParams);
-            if (page.responses.length < 200) {
-                responses.push(...page.responses);
-            }
-            else {
-                // If the number of responses is approaching the max argument length, we need to concat instead of push
-                responses = responses.concat(page.responses);
+            const offset = results.length;
+            results = results.concat(page.results);
+            if (page.errors) {
+                errors ??= {};
+                for (const [index, message] of Object.entries(page.errors)) errors[Number(index) + offset] = message;
             }
             continuationToken = page.continuationToken;
         }
-        return { responses };
+        return errors ? { results, errors } : { results };
     }
 
     apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params?: APIMethodInfo[K]["params"]): Uint8Array | undefined {

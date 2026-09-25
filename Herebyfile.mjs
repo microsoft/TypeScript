@@ -670,9 +670,9 @@ async function runGenerateAPI() {
         ],
         exclude: ["**/*_test.go", "**/*_generated.go"],
         envInputs: [],
-        outputs: ["packages/typescript/src/api/proto.generated.ts"],
+        outputs: ["packages/typescript/src/api/proto.generated.ts", "tsc/internal/api/batch_decoder_generated.go"],
         commands: [
-            ["go", "-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"],
+            ["go", "-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts", "../tsc/internal/api/batch_decoder_generated.go"],
             ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"],
         ],
     });
