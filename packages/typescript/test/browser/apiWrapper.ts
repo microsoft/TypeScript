@@ -11,16 +11,16 @@ import {
 } from "../../src/api/proto.ts";
 
 interface BrowserAPIOptions {
-    cwd?: string;
-    fs?: FileSystem;
-    collectTiming?: boolean;
-    maxResponseBytesPerPage?: number;
-    transport?: object;
+    cwd?: string | undefined;
+    fs?: FileSystem | undefined;
+    collectTiming?: boolean | undefined;
+    maxResponseBytesPerPage?: number | undefined;
+    transport?: object | undefined;
 }
 
 interface BrowserSnapshotChanges {
-    fileNotifications?: FileNotifications;
-    openFiles?: readonly DocumentIdentifier[];
+    fileNotifications?: FileNotifications | undefined;
+    openFiles?: readonly DocumentIdentifier[] | undefined;
 }
 
 const availableInstances: WasmReactorInstance[] = [];
