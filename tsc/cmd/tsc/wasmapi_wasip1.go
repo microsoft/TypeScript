@@ -37,7 +37,8 @@ var (
 	responsePtr    uint32
 	responseLen    uint32
 
-	inCall bool
+	hostCallbackBuffer []byte
+	inCall             bool
 )
 
 //go:wasmexport create_session
@@ -255,7 +256,11 @@ func (hostCallbackConn) Call(_ context.Context, method string, params any) (json
 		return nil, err
 	}
 	methodBytes := []byte(method)
-	buffer := make([]byte, 16+len(methodBytes)+len(paramsBytes)+hostResultCapacity+hostErrorCapacity)
+	bufferSize := 16 + len(methodBytes) + len(paramsBytes) + hostResultCapacity + hostErrorCapacity
+	if cap(hostCallbackBuffer) < bufferSize {
+		hostCallbackBuffer = make([]byte, bufferSize)
+	}
+	buffer := hostCallbackBuffer[:bufferSize]
 	binary.LittleEndian.PutUint32(buffer, uint32(len(methodBytes)))
 	binary.LittleEndian.PutUint32(buffer[4:], uint32(len(paramsBytes)))
 	binary.LittleEndian.PutUint32(buffer[8:], hostResultCapacity)
