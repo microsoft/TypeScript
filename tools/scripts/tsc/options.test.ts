@@ -206,6 +206,7 @@ function accepts(schema: JSONSchema, value: unknown, root: JSONSchema): boolean 
                 "required",
                 "items",
                 "anyOf",
+                "allOf",
                 "enum",
                 "enumDescriptions",
                 "pattern",
@@ -227,6 +228,7 @@ function accepts(schema: JSONSchema, value: unknown, root: JSONSchema): boolean 
         return accepts(referenced, value, root);
     }
     if (schema.anyOf && !schema.anyOf.some(branch => accepts(branch, value, root))) return false;
+    if (schema.allOf && !schema.allOf.every(branch => accepts(branch, value, root))) return false;
     if (schema.type) {
         const types = Array.isArray(schema.type) ? schema.type : [schema.type];
         const type = value === null ? "null" : Array.isArray(value) ? "array" : typeof value;
@@ -252,6 +254,19 @@ function accepts(schema: JSONSchema, value: unknown, root: JSONSchema): boolean 
     }
     return true;
 }
+
+test("root option documentation is outside draft-07 references", () => {
+    for (const kind of ["tsconfig", "jsconfig"] as const) {
+        const schema = generateConfigSchema(kind);
+        for (const name of ["compilerOptions", "watchOptions", "typeAcquisition"]) {
+            const property = schema.properties[name];
+            assert.equal(property.$ref, undefined, name);
+            assert.deepEqual(property.allOf, [{ $ref: `#/definitions/${name}` }]);
+            assert(property.description, name);
+            assert(property.markdownDescription, name);
+        }
+    }
+});
 
 test("schemas accept representative valid configs and reject malformed configs", () => {
     const valid = [

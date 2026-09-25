@@ -11,17 +11,29 @@
             "description": "The JSON schema used to validate this configuration."
         },
         "watchOptions": {
-            "$ref": "#/definitions/watchOptions",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/watchOptions"
+                }
+            ],
             "description": "Options for watching files and directories.",
             "markdownDescription": "Options for watching files and directories.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#watchOptions)."
         },
         "compilerOptions": {
-            "$ref": "#/definitions/compilerOptions",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/compilerOptions"
+                }
+            ],
             "description": "Options for the TypeScript compiler.",
             "markdownDescription": "Options for the TypeScript compiler.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/)."
         },
         "typeAcquisition": {
-            "$ref": "#/definitions/typeAcquisition",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/typeAcquisition"
+                }
+            ],
             "description": "Options for automatic type acquisition in JavaScript projects.",
             "markdownDescription": "Options for automatic type acquisition in JavaScript projects.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#typeAcquisition)."
         },

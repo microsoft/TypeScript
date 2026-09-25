@@ -20,6 +20,7 @@ export interface JSONSchema {
     required?: string[];
     items?: JSONSchema;
     anyOf?: JSONSchema[];
+    allOf?: JSONSchema[];
     enum?: string[];
     enumDescriptions?: string[];
     pattern?: string;
@@ -179,11 +180,11 @@ export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
     };
     const properties: Record<string, JSONSchema> = {
         $schema: { type: "string", description: "The JSON schema used to validate this configuration." },
-        watchOptions: withDescription({ $ref: "#/definitions/watchOptions" }, "Options for watching files and directories.", "watchOptions"),
+        watchOptions: withDescription({ allOf: [{ $ref: "#/definitions/watchOptions" }] }, "Options for watching files and directories.", "watchOptions"),
     };
     for (const option of options.rootOptions) {
         const schema = option.elementOptions && option.elementOptions !== "extends"
-            ? { $ref: `#/definitions/${option.elementOptions}` }
+            ? { allOf: [{ $ref: `#/definitions/${option.elementOptions}` }] }
             : option.name === "extends" ? valueSchema(option) : optionSchema(option);
         properties[option.name] = withDescription(schema, option.schemaDescription ?? descriptions[option.name], option.documentationAnchor ?? option.name);
     }
