@@ -1403,6 +1403,66 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 	return inference.inferredType
 }
 
+// Report whether an identifier inside a function body nested in expr names a symbol whose type is still being resolved.
+// The whole resolution stack is scanned: getResolvedSignature hides entries below resolutionStart from cycle detection.
+func (c *Checker) hasDeferredReferenceToResolvingSymbol(expr *ast.Node) bool {
+	var targets []*ast.Symbol
+	for i := range c.typeResolutions {
+		r := &c.typeResolutions[i]
+		if r.propertyName == TypeSystemPropertyNameType && !c.typeResolutionHasProperty(r) {
+			targets = append(targets, r.target.(*ast.Symbol))
+		}
+	}
+	if len(targets) == 0 {
+		return false
+	}
+	var visit func(node *ast.Node, inBody bool) bool
+	visit = func(node *ast.Node, inBody bool) bool {
+		switch {
+		case ast.IsTypeNode(node) || ast.IsJSDocKind(node.Kind):
+			return false
+		case node.Kind == ast.KindIdentifier:
+			if !inBody || !ast.IsExpressionNode(node) {
+				return false
+			}
+			name := node.Text()
+			for _, target := range targets {
+				if target.Name == name && c.referenceResolvesToSymbol(node, target) {
+					return true
+				}
+			}
+			return false
+		case ast.IsFunctionLike(node) && ast.GetImmediatelyInvokedFunctionExpression(node) == nil:
+			// A function body runs later, but its computed name and decorators are evaluated where it is declared.
+			// An immediately invoked function runs right away, so it is visited like any other expression.
+			name := node.Name()
+			return node.ForEachChild(func(child *ast.Node) bool {
+				return visit(child, inBody || child != name && child.Kind != ast.KindDecorator)
+			})
+		}
+		return node.ForEachChild(func(child *ast.Node) bool { return visit(child, inBody) })
+	}
+	return visit(expr, false)
+}
+
+func (c *Checker) referenceResolvesToSymbol(reference *ast.Node, target *ast.Symbol) bool {
+	symbol := c.resolveName(reference, reference.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+	if symbol == nil {
+		return false
+	}
+	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		symbol = c.resolveAlias(symbol)
+	}
+	symbol = c.getMergedSymbol(symbol)
+	target = c.getMergedSymbol(target)
+	return symbol == target || symbol.ExportSymbol == target || target.ExportSymbol == symbol
+}
+
+// A property that checkObjectLiteral typed lazily. Keyed by declaration so the answer does not depend on query order.
+func (c *Checker) isDeferredPropertyAssignment(symbol *ast.Symbol) bool {
+	return symbol.ValueDeclaration != nil && symbol.ValueDeclaration.Kind == ast.KindPropertyAssignment && c.deferredPropertyAssignments.Has(symbol.ValueDeclaration)
+}
+
 func (c *Checker) getInferredTypes(n *InferenceContext) []*Type {
 	result := make([]*Type, len(n.inferences))
 	for i := range n.inferences {
