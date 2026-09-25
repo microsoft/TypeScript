@@ -154,7 +154,7 @@ package core
 
 type ${name} struct {
 ${name === "BuildOptions" ? "_ noCopy\n" : ""}
-${declarations.map(option => `${option.field.name} ${option.field.type} \`json:"${option.name}${omitZero ? ",omitzero" : ""}"\``).join("\n")}
+${declarations.map(option => `${option.field.comment ? "\n" + option.field.comment.split("\n").map(line => line ? "// " + line : "").join("\n") + "\n" : ""}${option.field.name} ${option.field.type} \`json:"${option.name}${omitZero ? ",omitzero" : ""}"\``).join("\n")}
 }
 `;
 }

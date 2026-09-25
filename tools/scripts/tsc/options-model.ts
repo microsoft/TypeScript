@@ -71,7 +71,7 @@ export interface Declaration extends DeclarationMetadata {
 }
 
 export interface StoredDeclaration extends Declaration {
-    field: { name: string; type: CompilerOptionType; };
+    field: { name: string; type: CompilerOptionType; comment?: string; };
 }
 
 export interface RootDeclaration extends Declaration {

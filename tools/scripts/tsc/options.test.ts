@@ -141,6 +141,11 @@ test("compiler options preserve the internal fields comment", () => {
     assert.match(source, /\/\/ Internal fields\nConfigFilePath /);
 });
 
+test("build options preserve the compiler options parsing comment", () => {
+    const source = generateOptions().get("tsc/internal/core/buildoptions_generated.go")!;
+    assert.match(source, /\/\/ CompilerOptions are not parsed here and will be available on ParsedBuildCommandLine\n\n\/\/ Internal fields\nClean /);
+});
+
 test("transpilation clears only options marked with an unknown transpile value", () => {
     const source = generateOptions().get("tsc/internal/transpile/compileroptions_generated.go")!;
     assert.deepEqual([...source.matchAll(/options\.(\w+) = ([^\n]+)/g)].map(match => [match[1], match[2]]), [

@@ -2137,7 +2137,11 @@ export const options: OptionsModel = {
             category: diagnostic("Command-line Options"),
             description: diagnostic("Delete the outputs of all projects."),
             defaultValueDescription: false,
-            field: { name: "Clean", type: "Tristate" },
+            field: {
+                name: "Clean",
+                type: "Tristate",
+                comment: "CompilerOptions are not parsed here and will be available on ParsedBuildCommandLine\n\nInternal fields",
+            },
         },
         {
             name: "builders",
