@@ -102,12 +102,12 @@ Output::
 [7m5[0m     value.items[0][0] = 123;
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
 
-[96mconsumer/index.ts[0m:[93m7[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'Circular<[number, number]>' is not assignable to type 'number'.
+[96mconsumer/index.ts[0m:[93m7[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '[Circular<[number, number]>, Circular<[number, number]>]' is not assignable to type 'number'.
 
 [7m7[0m const number: number = tuple[0];
 [7m [0m [91m      ~~~~~~[0m
 
-[96mconsumer/index.ts[0m:[93m8[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'Circular<[number, number]>'.
+[96mconsumer/index.ts[0m:[93m8[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type '[Circular<[number, number]>, Circular<[number, number]>]'.
 
 [7m8[0m tuple[0][0] = 123;
 [7m [0m [91m~~~~~~~~~~~[0m

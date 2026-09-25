@@ -19433,6 +19433,14 @@ func (c *Checker) resolveTypeReferenceMembers(t *Type) {
 	source := t.Target()
 	typeParameters := source.AsInterfaceType().allTypeParameters
 	typeArguments := c.getTypeArguments(t)
+	// Share member instantiations across equivalent mapped arrays and tuples while leaving
+	// their original deferred references intact for aliases and recursion tracking.
+	typeArguments = core.SameMap(typeArguments, func(arg *Type) *Type {
+		if isDeferredMappedTypeReference(arg) {
+			return c.createTypeReference(arg.Target(), c.getTypeArguments(arg))
+		}
+		return arg
+	})
 	paddedTypeArguments := typeArguments
 	if len(typeArguments) == len(typeParameters)-1 {
 		paddedTypeArguments = core.Concatenate(typeArguments, []*Type{t})

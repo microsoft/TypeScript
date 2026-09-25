@@ -1,0 +1,334 @@
+//// [tests/cases/compiler/recursiveMappedTupleInstantiationSharing.ts] ////
+
+=== recursiveMappedTupleInstantiationSharing.ts ===
+type Deep<T> = T extends object ? { [K in keyof T]: Deep<T[K]> } : T;
+>Deep : Deep<T>
+
+type Json = string | [Json];
+>Json : Json
+
+declare function direct<T>(value: T): Deep<T>;
+>direct : <T>(value: T) => Deep<T>
+>value : T
+
+declare function indirect<T>(value: T): { value: Deep<[T]> };
+>indirect : <T>(value: T) => { value: Deep<[T]>; }
+>value : T
+>value : Deep<[T]>
+
+export const concrete = direct([""] as [string]);
+>concrete : Deep<[string]>
+>direct([""] as [string]) : Deep<[string]>
+>direct : <T>(value: T) => Deep<T>
+>[""] as [string] : [string]
+>[""] : [string]
+>"" : ""
+
+export const recursive = direct([] as unknown as [Json]);
+>recursive : Deep<[Json]>
+>direct([] as unknown as [Json]) : Deep<[Json]>
+>direct : <T>(value: T) => Deep<T>
+>[] as unknown as [Json] : [Json]
+>[] as unknown : unknown
+>[] : never[]
+
+export const generic = indirect(1);
+>generic : { value: Deep<[number]>; }
+>indirect(1) : { value: Deep<[number]>; }
+>indirect : <T>(value: T) => { value: Deep<[T]>; }
+>1 : 1
+
+generic.value[0] = "error";
+>generic.value[0] = "error" : "error"
+>generic.value[0] : number
+>generic.value : Deep<[number]>
+>generic : { value: Deep<[number]>; }
+>value : Deep<[number]>
+>0 : 0
+>"error" : "error"
+
+function wrap<T>(value: T) {
+>wrap : <T>(value: T) => { value: Deep<[T]>; }
+>value : T
+
+    return indirect(value);
+>indirect(value) : { value: Deep<[T]>; }
+>indirect : <T_1>(value: T_1) => { value: Deep<[T_1]>; }
+>value : T
+}
+export const twice = wrap(true);
+>twice : { value: Deep<[boolean]>; }
+>wrap(true) : { value: Deep<[boolean]>; }
+>wrap : <T>(value: T) => { value: Deep<[T]>; }
+>true : true
+
+twice.value[0] = "error";
+>twice.value[0] = "error" : "error"
+>twice.value[0] : boolean
+>twice.value : Deep<[boolean]>
+>twice : { value: Deep<[boolean]>; }
+>value : Deep<[boolean]>
+>0 : 0
+>"error" : "error"
+
+type Left = [string, Right?];
+>Left : Left
+
+type Right = [number, Left?];
+>Right : Right
+
+export const mutual = direct([] as unknown as Left);
+>mutual : Deep<Left>
+>direct([] as unknown as Left) : Deep<Left>
+>direct : <T>(value: T) => Deep<T>
+>[] as unknown as Left : Left
+>[] as unknown : unknown
+>[] : never[]
+
+mutual[0] = 0;
+>mutual[0] = 0 : 0
+>mutual[0] : string
+>mutual : Deep<Left>
+>0 : 0
+>0 : 0
+
+mutual[1]![0] = "";
+>mutual[1]![0] = "" : ""
+>mutual[1]![0] : number
+>mutual[1]! : Deep<Right>
+>mutual[1] : Deep<Right> | undefined
+>mutual : Deep<Left>
+>1 : 1
+>0 : 0
+>"" : ""
+
+mutual[1]![1]![0] = 0;
+>mutual[1]![1]![0] = 0 : 0
+>mutual[1]![1]![0] : string
+>mutual[1]![1]! : Deep<Left>
+>mutual[1]![1] : Deep<Left> | undefined
+>mutual[1]! : Deep<Right>
+>mutual[1] : Deep<Right> | undefined
+>mutual : Deep<Left>
+>1 : 1
+>1 : 1
+>0 : 0
+>0 : 0
+
+type Grow<T> = { [K in keyof T]: Grow<[T]> };
+>Grow : Grow<T>
+
+export declare const growing: Grow<[string]>;
+>growing : Grow<[string]>
+
+export const next = growing[0];
+>next : [Grow<[[[string]]]>]
+>growing[0] : [Grow<[[[string]]]>]
+>growing : Grow<[string]>
+>0 : 0
+
+export const again = next[0];
+>again : [Grow<[[[[string]]]]>]
+>next[0] : [Grow<[[[[string]]]]>]
+>next : [Grow<[[[string]]]>]
+>0 : 0
+
+interface Box<T> {
+    value: T;
+>value : T
+
+    self: this;
+>self : this
+
+    set(value: T): this;
+>set : (value: T) => this
+>value : T
+}
+declare const boxed: Box<Deep<Left>>;
+>boxed : Box<Deep<Left>>
+
+export const boxedValue = boxed.value;
+>boxedValue : [string, (Deep<Right> | undefined)?]
+>boxed.value : [string, (Deep<Right> | undefined)?]
+>boxed : Box<Deep<Left>>
+>value : [string, (Deep<Right> | undefined)?]
+
+export const sameBox = boxed.set(boxed.value).self;
+>sameBox : Box<Deep<Left>>
+>boxed.set(boxed.value).self : Box<Deep<Left>>
+>boxed.set(boxed.value) : Box<Deep<Left>>
+>boxed.set : (value: [string, (Deep<Right> | undefined)?]) => Box<Deep<Left>>
+>boxed : Box<Deep<Left>>
+>set : (value: [string, (Deep<Right> | undefined)?]) => Box<Deep<Left>>
+>boxed.value : [string, (Deep<Right> | undefined)?]
+>boxed : Box<Deep<Left>>
+>value : [string, (Deep<Right> | undefined)?]
+>self : Box<Deep<Left>>
+
+sameBox.value[0] = 0;
+>sameBox.value[0] = 0 : 0
+>sameBox.value[0] : string
+>sameBox.value : [string, (Deep<Right> | undefined)?]
+>sameBox : Box<Deep<Left>>
+>value : [string, (Deep<Right> | undefined)?]
+>0 : 0
+>0 : 0
+
+sameBox.value[1]![0] = "";
+>sameBox.value[1]![0] = "" : ""
+>sameBox.value[1]![0] : number
+>sameBox.value[1]! : Deep<Right>
+>sameBox.value[1] : Deep<Right> | undefined
+>sameBox.value : [string, (Deep<Right> | undefined)?]
+>sameBox : Box<Deep<Left>>
+>value : [string, (Deep<Right> | undefined)?]
+>1 : 1
+>0 : 0
+>"" : ""
+
+declare const growingBox: Box<Grow<[string]>>;
+>growingBox : Box<Grow<[string]>>
+
+export const boxedGrowing = growingBox.value;
+>boxedGrowing : [Grow<[[string]]>]
+>growingBox.value : [Grow<[[string]]>]
+>growingBox : Box<Grow<[string]>>
+>value : [Grow<[[string]]>]
+
+export const boxedNext = boxedGrowing[0];
+>boxedNext : [Grow<[[[string]]]>]
+>boxedGrowing[0] : [Grow<[[[string]]]>]
+>boxedGrowing : [Grow<[[string]]>]
+>0 : 0
+
+export function unbox<T>(box: Box<Deep<[T]>>) {
+>unbox : <T>(box: Box<Deep<[T]>>) => [Deep<T>]
+>box : Box<Deep<[T]>>
+
+    return box.value;
+>box.value : [Deep<T>]
+>box : Box<Deep<[T]>>
+>value : [Deep<T>]
+}
+declare const numericBox: Box<Deep<[number]>>;
+>numericBox : Box<Deep<[number]>>
+
+export const unboxed = unbox(numericBox);
+>unboxed : [number]
+>unbox(numericBox) : [number]
+>unbox : <T>(box: Box<Deep<[T]>>) => [Deep<T>]
+>numericBox : Box<Deep<[number]>>
+
+unboxed[0] = "error";
+>unboxed[0] = "error" : "error"
+>unboxed[0] : number
+>unboxed : [number]
+>0 : 0
+>"error" : "error"
+
+type ArrayJson = string | ArrayJson[];
+>ArrayJson : ArrayJson
+
+declare const arrayBox: Box<Deep<ArrayJson[]>>;
+>arrayBox : Box<Deep<ArrayJson[]>>
+
+export const arrayValue = arrayBox.value;
+>arrayValue : (string | Deep<ArrayJson[]>)[]
+>arrayBox.value : (string | Deep<ArrayJson[]>)[]
+>arrayBox : Box<Deep<ArrayJson[]>>
+>value : (string | Deep<ArrayJson[]>)[]
+
+arrayValue[0] = 0;
+>arrayValue[0] = 0 : 0
+>arrayValue[0] : string | Deep<ArrayJson[]>
+>arrayValue : (string | Deep<ArrayJson[]>)[]
+>0 : 0
+>0 : 0
+
+arrayValue.map(value => {
+>arrayValue.map(value => {    if (typeof value !== "string") {        value[0] = 0;    }}) : void[]
+>arrayValue.map : <U>(callbackfn: (value: string | Deep<ArrayJson[]>, index: number, array: (string | Deep<ArrayJson[]>)[]) => U, thisArg?: any) => U[]
+>arrayValue : (string | Deep<ArrayJson[]>)[]
+>map : <U>(callbackfn: (value: string | Deep<ArrayJson[]>, index: number, array: (string | Deep<ArrayJson[]>)[]) => U, thisArg?: any) => U[]
+>value => {    if (typeof value !== "string") {        value[0] = 0;    }} : (value: string | Deep<ArrayJson[]>) => void
+>value : string | Deep<ArrayJson[]>
+
+    if (typeof value !== "string") {
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | Deep<ArrayJson[]>
+>"string" : "string"
+
+        value[0] = 0;
+>value[0] = 0 : 0
+>value[0] : string | Deep<ArrayJson[]>
+>value : Deep<ArrayJson[]>
+>0 : 0
+>0 : 0
+    }
+});
+
+type GrowArray<T> = { [K in keyof T]: GrowArray<T[]> };
+>GrowArray : GrowArray<T>
+
+declare const growingArrayBox: Box<GrowArray<number[]>>;
+>growingArrayBox : Box<GrowArray<number[]>>
+
+export const growingArrayValue = growingArrayBox.value;
+>growingArrayValue : GrowArray<number[][]>[]
+>growingArrayBox.value : GrowArray<number[][]>[]
+>growingArrayBox : Box<GrowArray<number[]>>
+>value : GrowArray<number[][]>[]
+
+export const growingArrayNext = growingArrayValue[0];
+>growingArrayNext : GrowArray<number[][][]>[]
+>growingArrayValue[0] : GrowArray<number[][][]>[]
+>growingArrayValue : GrowArray<number[][]>[]
+>0 : 0
+
+export const growingArrayAgain = growingArrayNext[0];
+>growingArrayAgain : GrowArray<number[][][][]>[]
+>growingArrayNext[0] : GrowArray<number[][][][]>[]
+>growingArrayNext : GrowArray<number[][][]>[]
+>0 : 0
+
+type DeepReadonly<T> = T extends object ? { readonly [K in keyof T]: DeepReadonly<T[K]> } : T;
+>DeepReadonly : DeepReadonly<T>
+
+declare const readonlyBox: Box<DeepReadonly<[first: number, ...rest: string[]]>>;
+>readonlyBox : Box<DeepReadonly<[first: number, ...rest: string[]]>>
+
+export const readonlyValue = readonlyBox.value;
+>readonlyValue : readonly [first: number, ...rest: string[]]
+>readonlyBox.value : readonly [first: number, ...rest: string[]]
+>readonlyBox : Box<DeepReadonly<[first: number, ...rest: string[]]>>
+>value : readonly [first: number, ...rest: string[]]
+
+readonlyValue[0] = 0;
+>readonlyValue[0] = 0 : 0
+>readonlyValue[0] : any
+>readonlyValue : readonly [first: number, ...rest: string[]]
+>0 : 0
+>0 : 0
+
+type NamedTuple = [name: string, number];
+>NamedTuple : NamedTuple
+
+type NamedArray = NamedTuple[];
+>NamedArray : NamedArray
+
+declare const namedBox: Box<NamedArray>;
+>namedBox : Box<NamedArray>
+
+export const namedArray = namedBox.value;
+>namedArray : NamedArray
+>namedBox.value : NamedArray
+>namedBox : Box<NamedArray>
+>value : NamedArray
+
+export const namedTuple = namedArray[0];
+>namedTuple : NamedTuple
+>namedArray[0] : NamedTuple
+>namedArray : NamedArray
+>0 : 0
+

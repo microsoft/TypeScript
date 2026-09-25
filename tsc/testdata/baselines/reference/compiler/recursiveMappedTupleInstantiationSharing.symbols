@@ -1,0 +1,327 @@
+//// [tests/cases/compiler/recursiveMappedTupleInstantiationSharing.ts] ////
+
+=== recursiveMappedTupleInstantiationSharing.ts ===
+type Deep<T> = T extends object ? { [K in keyof T]: Deep<T[K]> } : T;
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 10))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 10))
+>K : Symbol(K, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 37))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 10))
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 10))
+>K : Symbol(K, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 37))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 10))
+
+type Json = string | [Json];
+>Json : Symbol(Json, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 69))
+>Json : Symbol(Json, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 69))
+
+declare function direct<T>(value: T): Deep<T>;
+>direct : Symbol(direct, Decl(recursiveMappedTupleInstantiationSharing.ts, 1, 28))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 2, 24))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 2, 27))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 2, 24))
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 2, 24))
+
+declare function indirect<T>(value: T): { value: Deep<[T]> };
+>indirect : Symbol(indirect, Decl(recursiveMappedTupleInstantiationSharing.ts, 2, 46))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 26))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 29))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 26))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 41))
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 26))
+
+export const concrete = direct([""] as [string]);
+>concrete : Symbol(concrete, Decl(recursiveMappedTupleInstantiationSharing.ts, 4, 12))
+>direct : Symbol(direct, Decl(recursiveMappedTupleInstantiationSharing.ts, 1, 28))
+
+export const recursive = direct([] as unknown as [Json]);
+>recursive : Symbol(recursive, Decl(recursiveMappedTupleInstantiationSharing.ts, 5, 12))
+>direct : Symbol(direct, Decl(recursiveMappedTupleInstantiationSharing.ts, 1, 28))
+>Json : Symbol(Json, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 69))
+
+export const generic = indirect(1);
+>generic : Symbol(generic, Decl(recursiveMappedTupleInstantiationSharing.ts, 6, 12))
+>indirect : Symbol(indirect, Decl(recursiveMappedTupleInstantiationSharing.ts, 2, 46))
+
+generic.value[0] = "error";
+>generic.value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 41))
+>generic : Symbol(generic, Decl(recursiveMappedTupleInstantiationSharing.ts, 6, 12))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 41))
+>0 : Symbol(0)
+
+function wrap<T>(value: T) {
+>wrap : Symbol(wrap, Decl(recursiveMappedTupleInstantiationSharing.ts, 7, 27))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 8, 14))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 8, 17))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 8, 14))
+
+    return indirect(value);
+>indirect : Symbol(indirect, Decl(recursiveMappedTupleInstantiationSharing.ts, 2, 46))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 8, 17))
+}
+export const twice = wrap(true);
+>twice : Symbol(twice, Decl(recursiveMappedTupleInstantiationSharing.ts, 11, 12))
+>wrap : Symbol(wrap, Decl(recursiveMappedTupleInstantiationSharing.ts, 7, 27))
+
+twice.value[0] = "error";
+>twice.value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 41))
+>twice : Symbol(twice, Decl(recursiveMappedTupleInstantiationSharing.ts, 11, 12))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 3, 41))
+>0 : Symbol(0)
+
+type Left = [string, Right?];
+>Left : Symbol(Left, Decl(recursiveMappedTupleInstantiationSharing.ts, 12, 25))
+>Right : Symbol(Right, Decl(recursiveMappedTupleInstantiationSharing.ts, 14, 29))
+
+type Right = [number, Left?];
+>Right : Symbol(Right, Decl(recursiveMappedTupleInstantiationSharing.ts, 14, 29))
+>Left : Symbol(Left, Decl(recursiveMappedTupleInstantiationSharing.ts, 12, 25))
+
+export const mutual = direct([] as unknown as Left);
+>mutual : Symbol(mutual, Decl(recursiveMappedTupleInstantiationSharing.ts, 16, 12))
+>direct : Symbol(direct, Decl(recursiveMappedTupleInstantiationSharing.ts, 1, 28))
+>Left : Symbol(Left, Decl(recursiveMappedTupleInstantiationSharing.ts, 12, 25))
+
+mutual[0] = 0;
+>mutual : Symbol(mutual, Decl(recursiveMappedTupleInstantiationSharing.ts, 16, 12))
+>0 : Symbol(0)
+
+mutual[1]![0] = "";
+>mutual : Symbol(mutual, Decl(recursiveMappedTupleInstantiationSharing.ts, 16, 12))
+>1 : Symbol(1)
+>0 : Symbol(0)
+
+mutual[1]![1]![0] = 0;
+>mutual : Symbol(mutual, Decl(recursiveMappedTupleInstantiationSharing.ts, 16, 12))
+>1 : Symbol(1)
+>1 : Symbol(1)
+>0 : Symbol(0)
+
+type Grow<T> = { [K in keyof T]: Grow<[T]> };
+>Grow : Symbol(Grow, Decl(recursiveMappedTupleInstantiationSharing.ts, 19, 22))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 21, 10))
+>K : Symbol(K, Decl(recursiveMappedTupleInstantiationSharing.ts, 21, 18))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 21, 10))
+>Grow : Symbol(Grow, Decl(recursiveMappedTupleInstantiationSharing.ts, 19, 22))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 21, 10))
+
+export declare const growing: Grow<[string]>;
+>growing : Symbol(growing, Decl(recursiveMappedTupleInstantiationSharing.ts, 22, 20))
+>Grow : Symbol(Grow, Decl(recursiveMappedTupleInstantiationSharing.ts, 19, 22))
+
+export const next = growing[0];
+>next : Symbol(next, Decl(recursiveMappedTupleInstantiationSharing.ts, 23, 12))
+>growing : Symbol(growing, Decl(recursiveMappedTupleInstantiationSharing.ts, 22, 20))
+>0 : Symbol(0)
+
+export const again = next[0];
+>again : Symbol(again, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 12))
+>next : Symbol(next, Decl(recursiveMappedTupleInstantiationSharing.ts, 23, 12))
+>0 : Symbol(0)
+
+interface Box<T> {
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 14))
+
+    value: T;
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 14))
+
+    self: this;
+>self : Symbol(Box.self, Decl(recursiveMappedTupleInstantiationSharing.ts, 27, 13))
+
+    set(value: T): this;
+>set : Symbol(Box.set, Decl(recursiveMappedTupleInstantiationSharing.ts, 28, 15))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 29, 8))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 14))
+}
+declare const boxed: Box<Deep<Left>>;
+>boxed : Symbol(boxed, Decl(recursiveMappedTupleInstantiationSharing.ts, 31, 13))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+>Left : Symbol(Left, Decl(recursiveMappedTupleInstantiationSharing.ts, 12, 25))
+
+export const boxedValue = boxed.value;
+>boxedValue : Symbol(boxedValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 32, 12))
+>boxed.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>boxed : Symbol(boxed, Decl(recursiveMappedTupleInstantiationSharing.ts, 31, 13))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+
+export const sameBox = boxed.set(boxed.value).self;
+>sameBox : Symbol(sameBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 33, 12))
+>boxed.set(boxed.value).self : Symbol(Box.self, Decl(recursiveMappedTupleInstantiationSharing.ts, 27, 13))
+>boxed.set : Symbol(Box.set, Decl(recursiveMappedTupleInstantiationSharing.ts, 28, 15))
+>boxed : Symbol(boxed, Decl(recursiveMappedTupleInstantiationSharing.ts, 31, 13))
+>set : Symbol(Box.set, Decl(recursiveMappedTupleInstantiationSharing.ts, 28, 15))
+>boxed.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>boxed : Symbol(boxed, Decl(recursiveMappedTupleInstantiationSharing.ts, 31, 13))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>self : Symbol(Box.self, Decl(recursiveMappedTupleInstantiationSharing.ts, 27, 13))
+
+sameBox.value[0] = 0;
+>sameBox.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>sameBox : Symbol(sameBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 33, 12))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>0 : Symbol(0)
+
+sameBox.value[1]![0] = "";
+>sameBox.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>sameBox : Symbol(sameBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 33, 12))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>1 : Symbol(1)
+>0 : Symbol(0)
+
+declare const growingBox: Box<Grow<[string]>>;
+>growingBox : Symbol(growingBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 37, 13))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>Grow : Symbol(Grow, Decl(recursiveMappedTupleInstantiationSharing.ts, 19, 22))
+
+export const boxedGrowing = growingBox.value;
+>boxedGrowing : Symbol(boxedGrowing, Decl(recursiveMappedTupleInstantiationSharing.ts, 38, 12))
+>growingBox.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>growingBox : Symbol(growingBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 37, 13))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+
+export const boxedNext = boxedGrowing[0];
+>boxedNext : Symbol(boxedNext, Decl(recursiveMappedTupleInstantiationSharing.ts, 39, 12))
+>boxedGrowing : Symbol(boxedGrowing, Decl(recursiveMappedTupleInstantiationSharing.ts, 38, 12))
+>0 : Symbol(0)
+
+export function unbox<T>(box: Box<Deep<[T]>>) {
+>unbox : Symbol(unbox, Decl(recursiveMappedTupleInstantiationSharing.ts, 39, 41))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 41, 22))
+>box : Symbol(box, Decl(recursiveMappedTupleInstantiationSharing.ts, 41, 25))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 41, 22))
+
+    return box.value;
+>box.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>box : Symbol(box, Decl(recursiveMappedTupleInstantiationSharing.ts, 41, 25))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+}
+declare const numericBox: Box<Deep<[number]>>;
+>numericBox : Symbol(numericBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 44, 13))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+
+export const unboxed = unbox(numericBox);
+>unboxed : Symbol(unboxed, Decl(recursiveMappedTupleInstantiationSharing.ts, 45, 12))
+>unbox : Symbol(unbox, Decl(recursiveMappedTupleInstantiationSharing.ts, 39, 41))
+>numericBox : Symbol(numericBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 44, 13))
+
+unboxed[0] = "error";
+>unboxed : Symbol(unboxed, Decl(recursiveMappedTupleInstantiationSharing.ts, 45, 12))
+>0 : Symbol(0)
+
+type ArrayJson = string | ArrayJson[];
+>ArrayJson : Symbol(ArrayJson, Decl(recursiveMappedTupleInstantiationSharing.ts, 46, 21))
+>ArrayJson : Symbol(ArrayJson, Decl(recursiveMappedTupleInstantiationSharing.ts, 46, 21))
+
+declare const arrayBox: Box<Deep<ArrayJson[]>>;
+>arrayBox : Symbol(arrayBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 49, 13))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>Deep : Symbol(Deep, Decl(recursiveMappedTupleInstantiationSharing.ts, 0, 0))
+>ArrayJson : Symbol(ArrayJson, Decl(recursiveMappedTupleInstantiationSharing.ts, 46, 21))
+
+export const arrayValue = arrayBox.value;
+>arrayValue : Symbol(arrayValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 50, 12))
+>arrayBox.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>arrayBox : Symbol(arrayBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 49, 13))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+
+arrayValue[0] = 0;
+>arrayValue : Symbol(arrayValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 50, 12))
+
+arrayValue.map(value => {
+>arrayValue.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arrayValue : Symbol(arrayValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 50, 12))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 52, 15))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 52, 15))
+
+        value[0] = 0;
+>value : Symbol(value, Decl(recursiveMappedTupleInstantiationSharing.ts, 52, 15))
+    }
+});
+
+type GrowArray<T> = { [K in keyof T]: GrowArray<T[]> };
+>GrowArray : Symbol(GrowArray, Decl(recursiveMappedTupleInstantiationSharing.ts, 56, 3))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 58, 15))
+>K : Symbol(K, Decl(recursiveMappedTupleInstantiationSharing.ts, 58, 23))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 58, 15))
+>GrowArray : Symbol(GrowArray, Decl(recursiveMappedTupleInstantiationSharing.ts, 56, 3))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 58, 15))
+
+declare const growingArrayBox: Box<GrowArray<number[]>>;
+>growingArrayBox : Symbol(growingArrayBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 59, 13))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>GrowArray : Symbol(GrowArray, Decl(recursiveMappedTupleInstantiationSharing.ts, 56, 3))
+
+export const growingArrayValue = growingArrayBox.value;
+>growingArrayValue : Symbol(growingArrayValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 60, 12))
+>growingArrayBox.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>growingArrayBox : Symbol(growingArrayBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 59, 13))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+
+export const growingArrayNext = growingArrayValue[0];
+>growingArrayNext : Symbol(growingArrayNext, Decl(recursiveMappedTupleInstantiationSharing.ts, 61, 12))
+>growingArrayValue : Symbol(growingArrayValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 60, 12))
+
+export const growingArrayAgain = growingArrayNext[0];
+>growingArrayAgain : Symbol(growingArrayAgain, Decl(recursiveMappedTupleInstantiationSharing.ts, 62, 12))
+>growingArrayNext : Symbol(growingArrayNext, Decl(recursiveMappedTupleInstantiationSharing.ts, 61, 12))
+
+type DeepReadonly<T> = T extends object ? { readonly [K in keyof T]: DeepReadonly<T[K]> } : T;
+>DeepReadonly : Symbol(DeepReadonly, Decl(recursiveMappedTupleInstantiationSharing.ts, 62, 53))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 64, 18))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 64, 18))
+>K : Symbol(K, Decl(recursiveMappedTupleInstantiationSharing.ts, 64, 54))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 64, 18))
+>DeepReadonly : Symbol(DeepReadonly, Decl(recursiveMappedTupleInstantiationSharing.ts, 62, 53))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 64, 18))
+>K : Symbol(K, Decl(recursiveMappedTupleInstantiationSharing.ts, 64, 54))
+>T : Symbol(T, Decl(recursiveMappedTupleInstantiationSharing.ts, 64, 18))
+
+declare const readonlyBox: Box<DeepReadonly<[first: number, ...rest: string[]]>>;
+>readonlyBox : Symbol(readonlyBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 65, 13))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>DeepReadonly : Symbol(DeepReadonly, Decl(recursiveMappedTupleInstantiationSharing.ts, 62, 53))
+
+export const readonlyValue = readonlyBox.value;
+>readonlyValue : Symbol(readonlyValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 66, 12))
+>readonlyBox.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>readonlyBox : Symbol(readonlyBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 65, 13))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+
+readonlyValue[0] = 0;
+>readonlyValue : Symbol(readonlyValue, Decl(recursiveMappedTupleInstantiationSharing.ts, 66, 12))
+>0 : Symbol(0)
+
+type NamedTuple = [name: string, number];
+>NamedTuple : Symbol(NamedTuple, Decl(recursiveMappedTupleInstantiationSharing.ts, 67, 21))
+
+type NamedArray = NamedTuple[];
+>NamedArray : Symbol(NamedArray, Decl(recursiveMappedTupleInstantiationSharing.ts, 69, 41))
+>NamedTuple : Symbol(NamedTuple, Decl(recursiveMappedTupleInstantiationSharing.ts, 67, 21))
+
+declare const namedBox: Box<NamedArray>;
+>namedBox : Symbol(namedBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 71, 13))
+>Box : Symbol(Box, Decl(recursiveMappedTupleInstantiationSharing.ts, 24, 29))
+>NamedArray : Symbol(NamedArray, Decl(recursiveMappedTupleInstantiationSharing.ts, 69, 41))
+
+export const namedArray = namedBox.value;
+>namedArray : Symbol(namedArray, Decl(recursiveMappedTupleInstantiationSharing.ts, 72, 12))
+>namedBox.value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+>namedBox : Symbol(namedBox, Decl(recursiveMappedTupleInstantiationSharing.ts, 71, 13))
+>value : Symbol(Box.value, Decl(recursiveMappedTupleInstantiationSharing.ts, 26, 18))
+
+export const namedTuple = namedArray[0];
+>namedTuple : Symbol(namedTuple, Decl(recursiveMappedTupleInstantiationSharing.ts, 73, 12))
+>namedArray : Symbol(namedArray, Decl(recursiveMappedTupleInstantiationSharing.ts, 72, 12))
+

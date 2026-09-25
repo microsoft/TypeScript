@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/mappedTupleInstantiationSharing.ts] ////
+
+=== mappedTupleInstantiationSharing.ts ===
+type Select<T, I extends (keyof T)[]> = { [K in keyof I]: T[I[K]] };
+>Select : Select<T, I>
+
+interface Box<T extends unknown[]> {
+    value: T;
+>value : T
+
+    callback: (...args: T) => T;
+>callback : (...args: T) => T
+>args : T
+}
+type Boxes<Tag> = Tag extends unknown ? Box<Select<[Tag, string], [1]>> : never;
+>Boxes : Boxes<Tag>
+
+declare const boxes: Boxes<0 | 1 | 2 | 3 | 4 | 5 | 6 | 7>;
+>boxes : Box<Select<[0, string], [1]>> | Box<Select<[1, string], [1]>> | Box<Select<[2, string], [1]>> | Box<Select<[3, string], [1]>> | Box<Select<[4, string], [1]>> | Box<Select<[5, string], [1]>> | Box<Select<[6, string], [1]>> | Box<Select<[7, string], [1]>>
+
+const result: [string] = boxes.callback("hello");
+>result : [string]
+>boxes.callback("hello") : [string]
+>boxes.callback : (args_0: string) => [string]
+>boxes : Box<Select<[0, string], [1]>> | Box<Select<[1, string], [1]>> | Box<Select<[2, string], [1]>> | Box<Select<[3, string], [1]>> | Box<Select<[4, string], [1]>> | Box<Select<[5, string], [1]>> | Box<Select<[6, string], [1]>> | Box<Select<[7, string], [1]>>
+>callback : (args_0: string) => [string]
+>"hello" : "hello"
+
