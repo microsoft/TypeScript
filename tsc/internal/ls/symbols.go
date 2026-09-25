@@ -160,6 +160,9 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 				}
 			}
 		}
+		if node.Parent.Kind == ast.KindSourceFile && ast.IsImportOrImportEqualsDeclaration(node) {
+			return false
+		}
 		switch node.Kind {
 		case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration:
 			if ast.IsClassLike(node) && ast.GetDeclarationName(node) != "" {
