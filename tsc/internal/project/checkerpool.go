@@ -351,7 +351,10 @@ func (p *checkerPool) createRelease(requestID string, index int, c *checker.Chec
 			p.log(fmt.Sprintf("checkerpool: Checker %d for request %s was canceled, disposing", index, holdTag(requestID)))
 			p.disposeCheckerLocked(index, c)
 		} else {
-			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+			// Query checkers can produce incidental errors while serializing types.
+			if index == 0 {
+				p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+			}
 			p.heldBy[index] = ""
 			p.lastReleased[index] = time.Now()
 			if !p.discarded {
@@ -491,8 +494,8 @@ func (p *checkerPool) mergeGlobalDiagnosticsFromCheckerLocked(index int, c *chec
 	}
 }
 
-// GetGlobalDiagnostics returns the accumulated global diagnostics collected from
-// all checkers that have been used so far in this pool's lifetime.
+// GetGlobalDiagnostics returns the global diagnostics accumulated from the dedicated
+// diagnostics checker across its instances during this pool's lifetime.
 func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 	p.mu.Lock()
 	defer p.mu.Unlock()

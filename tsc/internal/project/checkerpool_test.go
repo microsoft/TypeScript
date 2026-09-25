@@ -1157,31 +1157,26 @@ func TestCheckerPoolTakeNewGlobalDiagnostics(t *testing.T) {
 
 	// Use a checker and trigger diagnostics, then release to run the merge.
 	ctx := core.WithRequestID(context.Background(), "global-diag-req")
-	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	sourceFile := pool.program.GetSourceFile("/src/index.ts")
 	c, release := pool.GetChecker(ctx, sourceFile)
 	assert.Assert(t, c != nil)
 	c.GetDiagnostics(ctx, sourceFile)
 	release()
 
-	// Whether globals were produced depends on the program, but the flag
-	// should reflect the merge result.
-	firstTake := pool.TakeNewGlobalDiagnostics()
+	assert.Assert(t, pool.TakeNewGlobalDiagnostics(), "diagnostics checker should publish missing-lib globals")
 
 	// After taking, a second call should always return false (flag is reset).
 	assert.Assert(t, !pool.TakeNewGlobalDiagnostics(), "TakeNewGlobalDiagnostics should reset after first call")
 
 	// Releasing the same checker again with the same state should not set the flag.
 	ctx2 := core.WithRequestID(context.Background(), "global-diag-req-2")
-	ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeTemporary)
+	ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeDiagnostics)
 	c2, release2 := pool.GetChecker(ctx2, sourceFile)
 	assert.Assert(t, c2 != nil)
 	c2.GetDiagnostics(ctx2, sourceFile)
 	release2()
 
-	// If first call produced globals, the count is now stable, so no new change.
-	// If first call produced no globals, still no change.
-	_ = firstTake
 	assert.Assert(t, !pool.TakeNewGlobalDiagnostics(), "should not report new globals when checker state is unchanged")
 }
 
