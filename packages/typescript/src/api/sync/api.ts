@@ -480,7 +480,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "createBuildOrchestrator",
             function (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator {
                 owner.ensureInitialized();
-                const orchestratorResponse = owner.client.apiRequest("createBuildOrchestrator", { ...buildOrchestratorOptions, rootNames });
+                const orchestratorResponse = owner.client.apiRequest("createBuildOrchestrator", {
+                    ...buildOrchestratorOptions,
+                    ...buildOrchestratorOptions.overrideCompilerOptions,
+                    rootNames,
+                });
 
                 const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
                     owner.activeBuildOrchestrators.delete(orchestrator);
@@ -490,7 +494,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             },
             function* (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                const orchestratorResponse = yield* apiRequest("createBuildOrchestrator", { ...buildOrchestratorOptions, rootNames });
+                const orchestratorResponse = yield* apiRequest("createBuildOrchestrator", {
+                    ...buildOrchestratorOptions,
+                    ...buildOrchestratorOptions.overrideCompilerOptions,
+                    rootNames,
+                });
 
                 const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
                     owner.activeBuildOrchestrators.delete(orchestrator);
@@ -3672,12 +3680,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 }
 
-export interface BuildOrchestratorOptions extends OverrideCompilerOptions {
+export interface BuildOrchestratorOptions {
     cwd?: string | undefined;
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
     stopBuildOnErrors?: boolean;
+    overrideCompilerOptions?: OverrideCompilerOptions;
 }
 
 export interface OverrideCompilerOptions {

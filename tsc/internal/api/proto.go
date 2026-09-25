@@ -36,14 +36,14 @@ var (
 type Method string
 
 type (
-	SnapshotID        uint64
-	ModuleResolverID  uint64
-	SourceFileLeaseID uint64
+	SnapshotID          uint64
+	ModuleResolverID    uint64
+	SourceFileLeaseID   uint64
 	BuildOrchestratorID uint64
-	SymbolID          uint64
-	TypeID            uint32
-	SignatureID       uint64
-	NodeHandle        string
+	SymbolID            uint64
+	TypeID              uint32
+	SignatureID         uint64
+	NodeHandle          string
 )
 
 var nextBuildOrchestratorId atomic.Uint64

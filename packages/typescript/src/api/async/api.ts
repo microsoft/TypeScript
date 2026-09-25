@@ -406,7 +406,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     async createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Promise<BuildOrchestrator> {
         await this.ensureInitialized();
-        const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", { ...buildOrchestratorOptions, rootNames });
+        const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
+            ...buildOrchestratorOptions,
+            ...buildOrchestratorOptions.overrideCompilerOptions,
+            rootNames,
+        });
 
         const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
             this.activeBuildOrchestrators.delete(orchestrator);
@@ -1980,12 +1984,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 }
 
-export interface BuildOrchestratorOptions extends OverrideCompilerOptions {
+export interface BuildOrchestratorOptions {
     cwd?: string | undefined;
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
     stopBuildOnErrors?: boolean;
+    overrideCompilerOptions?: OverrideCompilerOptions;
 }
 
 export interface OverrideCompilerOptions {
