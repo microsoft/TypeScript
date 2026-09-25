@@ -2433,6 +2433,28 @@ func TestTscIncremental(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "recursive tagged tuple after incremental edits",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "incremental": true, "noEmit": true, "module": "esnext", "moduleResolution": "bundler"}}`,
+				tscLibPath + "/lib.es2026.full.d.ts":         libWithReadonlyArray,
+				"/home/src/workspaces/project/doc.ts": stringtestutil.Dedent(`
+					type Doc =
+						| string
+						| { [k: string]: Doc }
+						| readonly ["array", Doc]
+						| readonly ["array", Doc, { length: number }]
+						| readonly ["array", Doc, { min?: number; max?: number }]
+						| readonly ["union", Doc, ...Doc[]];
+					export declare const doc: Doc;
+				`),
+				"/home/src/workspaces/project/consumer.ts": stringtestutil.Dedent(`
+					import { doc } from "./doc";
+					export const value = doc;
+				`),
+			},
+			edits: []*tscEdit{noChange},
+		},
+		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
