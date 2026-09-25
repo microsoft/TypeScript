@@ -2,6 +2,13 @@
 
 import getExePath, { getWasmPath } from "#getExePath";
 import { execFileSync } from "node:child_process";
+import {
+    mkdtemp,
+    readFile,
+    rm,
+    writeFile,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 let exe;
@@ -49,27 +56,29 @@ async function runWasi(wasmPath) {
         throw new Error("The WASI fallback requires Node.js 23 or newer.");
     }
 
-    const [{ readFile }, { WASI }] = await Promise.all([
-        import("node:fs/promises"),
-        import("node:wasi"),
-    ]);
+    const { WASI } = await import("node:wasi");
 
-    const { args, cwd, preopens } = getWasiPaths(wasmPath);
-    const wasi = new WASI({
-        version: "preview1",
-        args,
-        env: { ...process.env, PWD: cwd },
-        preopens,
-        returnOnExit: true,
-    });
-    const module = await WebAssembly.compile(await readFile(wasmPath));
-    const instance = await WebAssembly.instantiate(module, {
-        wasi_snapshot_preview1: wasi.wasiImport,
-    });
-    process.exitCode = wasi.start(instance);
+    const { args, cwd, preopens, cleanup } = await getWasiPaths(wasmPath);
+    try {
+        const wasi = new WASI({
+            version: "preview1",
+            args,
+            env: { ...process.env, PWD: cwd },
+            preopens,
+            returnOnExit: true,
+        });
+        const module = await WebAssembly.compile(await readFile(wasmPath));
+        const instance = await WebAssembly.instantiate(module, {
+            wasi_snapshot_preview1: wasi.wasiImport,
+        });
+        process.exitCode = wasi.start(instance);
+    }
+    finally {
+        await cleanup?.();
+    }
 }
 
-function getWasiPaths(wasmPath) {
+async function getWasiPaths(wasmPath) {
     const cwd = process.cwd();
     if (process.platform !== "win32") {
         return {
@@ -98,18 +107,98 @@ function getWasiPaths(wasmPath) {
         return path.posix.join(getGuestRoot(root), relative);
     };
     const translatePath = arg => {
-        if (arg.startsWith("@") && path.isAbsolute(arg.slice(1))) {
-            return `@${toGuestPath(arg.slice(1))}`;
-        }
         return path.isAbsolute(arg) ? toGuestPath(arg) : arg;
     };
+    const responseFiles = new Map();
+    let responseDirectory;
+    const translateResponseFile = async hostPath => {
+        const key = hostPath.toLowerCase();
+        const existing = responseFiles.get(key);
+        if (existing) {
+            return existing;
+        }
+        responseDirectory ??= await mkdtemp(path.join(tmpdir(), "typescript-wasi-"));
+        const translatedPath = path.join(responseDirectory, `${responseFiles.size}.rsp`);
+        const guestPath = toGuestPath(translatedPath);
+        responseFiles.set(key, guestPath);
+        let contents;
+        try {
+            contents = await readFile(hostPath, "utf8");
+        }
+        catch {
+            const fallbackPath = toGuestPath(hostPath);
+            responseFiles.set(key, fallbackPath);
+            return fallbackPath;
+        }
+        const tokens = parseResponseFile(contents);
+        if (tokens) {
+            const replacements = [];
+            for (const token of tokens) {
+                replacements.push({
+                    ...token,
+                    value: await translateArgument(token.value),
+                });
+            }
+            for (let i = replacements.length - 1; i >= 0; i--) {
+                const replacement = replacements[i];
+                contents = contents.slice(0, replacement.start) + replacement.value + contents.slice(replacement.end);
+            }
+        }
+        await writeFile(translatedPath, contents);
+        return guestPath;
+    };
+    const translateArgument = async arg => {
+        if (arg.startsWith("@") && arg.length > 1) {
+            return `@${await translateResponseFile(path.resolve(cwd, arg.slice(1)))}`;
+        }
+        return translatePath(arg);
+    };
+    const args = [];
+    for (const arg of process.argv.slice(2)) {
+        args.push(await translateArgument(arg));
+    }
 
     return {
         args: [
             toGuestPath(wasmPath),
-            ...process.argv.slice(2).map(translatePath),
+            ...args,
         ],
         cwd: toGuestPath(cwd),
         preopens,
+        cleanup: responseDirectory
+            ? () => rm(responseDirectory, { recursive: true, force: true })
+            : undefined,
     };
+}
+
+function parseResponseFile(contents) {
+    const tokens = [];
+    let position = 0;
+    while (position < contents.length) {
+        while (position < contents.length && contents.charCodeAt(position) <= 32) {
+            position++;
+        }
+        if (position >= contents.length) {
+            break;
+        }
+        if (contents[position] === '"') {
+            const start = ++position;
+            while (position < contents.length && contents[position] !== '"') {
+                position++;
+            }
+            if (position >= contents.length) {
+                return undefined;
+            }
+            tokens.push({ start, end: position, value: contents.slice(start, position) });
+            position++;
+        }
+        else {
+            const start = position;
+            while (position < contents.length && contents.charCodeAt(position) > 32) {
+                position++;
+            }
+            tokens.push({ start, end: position, value: contents.slice(start, position) });
+        }
+    }
+    return tokens;
 }

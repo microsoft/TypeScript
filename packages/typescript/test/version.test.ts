@@ -37,10 +37,12 @@ test("the CLI falls back to the WASI package", {
         const libraryDirectory = path.join(packageDirectory, "lib");
         await mkdir(libraryDirectory, { recursive: true });
         const responseFile = path.join(directory, "args.rsp");
+        const sourceFile = path.join(directory, "input.ts");
         await Promise.all([
             cp(new URL("../lib/tsc.js", import.meta.url), path.join(libraryDirectory, "tsc.js")),
             cp(new URL("../lib/getExePath.js", import.meta.url), path.join(libraryDirectory, "getExePath.js")),
             writeFile(responseFile, "--version"),
+            writeFile(sourceFile, "export const value: string = 'value';\n"),
             writeFile(
                 path.join(packageDirectory, "package.json"),
                 JSON.stringify({
@@ -64,6 +66,12 @@ test("the CLI falls back to the WASI package", {
             encoding: "utf8",
         });
         assert.match(output, /^Version \d+\.\d+\.\d+/);
+
+        await writeFile(responseFile, `--noEmit\n"${sourceFile}"\n`);
+        execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
+            cwd: directory,
+            stdio: "inherit",
+        });
     }
     finally {
         await rm(directory, { recursive: true });
