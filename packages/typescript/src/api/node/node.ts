@@ -38,7 +38,7 @@ import { Wtf8Decoder } from "./wtf8.ts";
 
 // Re-export everything consumers need from the other two files.
 export { RemoteNode, RemoteNodeList } from "./node.generated.ts";
-export { readParseOptionsKey, readSourceFileHash, RemoteNodeBase } from "./node.infrastructure.ts";
+export { readParseOptionsKey, readSourceFileHash, readSourceFileLease, RemoteNodeBase } from "./node.infrastructure.ts";
 
 const sourceFileExtendedDataOffsets = {
     Text: 0,

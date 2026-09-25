@@ -48,6 +48,7 @@ import {
     parseNodeHandle,
     readParseOptionsKey,
     readSourceFileHash,
+    readSourceFileLease,
     RemoteSourceFile,
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
@@ -60,14 +61,18 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    BuildResponse,
+    CleanBuildResponse,
     CompilerOptions,
     ConfiguredProjectId,
+    CreateBuildOrchestratorResponse,
     CreateProgramOptions as ProtocolCreateProgramOptions,
     CreateSnapshotParams as ProtocolCreateSnapshotParams,
     CreateSnapshotProgramParams as ProtocolCreateSnapshotProgramParams,
     CreateSnapshotResponse,
     CreateSourceFileOptions,
     Diagnostic,
+    DiagnosticResponse,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
@@ -331,6 +336,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Map<number, Snapshot> = new Map();
+    private activeBuildOrchestrators: Set<BuildOrchestrator> = new Set();
+    private activeSourceFileLeases: Map<number, RetainedSourceFile> = new Map();
     readonly printer: Printer;
     readonly internal: InternalAPI;
 
@@ -401,6 +408,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return "\n";
     }
 
+    async createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Promise<BuildOrchestrator> {
+        await this.ensureInitialized();
+        const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
+            ...buildOrchestratorOptions,
+            ...buildOrchestratorOptions.overrideCompilerOptions,
+            rootNames,
+        });
+
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
+            this.activeBuildOrchestrators.delete(orchestrator);
+        });
+        this.activeBuildOrchestrators.add(orchestrator);
+        return orchestrator;
+    }
+
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
         await this.ensureInitialized();
         return this.client.apiRequest("parseConfigFile", { file });
@@ -426,22 +448,57 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("parseJsonConfigFileContent", { json, ...options });
     }
 
-    async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
+    /**
+     * Create and retain a source file independently of a program.
+     * Dispose the returned lease when the source file no longer needs to remain available remotely.
+     */
+    async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<RetainedSourceFile> {
         await this.ensureInitialized();
         const data = await this.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
         if (!data) {
             throw new Error("createSourceFile returned no source file");
         }
-        return new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+        return this.retainSourceFileResponse(data);
     }
 
-    async createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
+    /**
+     * Read, create, and retain a source file independently of a program.
+     * Dispose the returned lease when the source file no longer needs to remain available remotely.
+     */
+    async createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Promise<RetainedSourceFile> {
         await this.ensureInitialized();
         const data = await this.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
         if (!data) {
             throw new Error("createSourceFileFromFile returned no source file");
         }
-        return new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+        return this.retainSourceFileResponse(data);
+    }
+
+    private retainSourceFileResponse(data: Uint8Array): RetainedSourceFile {
+        const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+        const lease = readSourceFileLease(view);
+        try {
+            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+            const sourceFile = this.sourceFileCache.setForLease(decoded.path, decoded, readParseOptionsKey(view), readSourceFileHash(view), lease);
+            const retained = new RetainedSourceFile(sourceFile, lease, this.client, () => {
+                this.activeSourceFileLeases.delete(lease);
+                this.sourceFileCache.releaseLease(lease);
+            });
+            this.activeSourceFileLeases.set(lease, retained);
+            return retained;
+        }
+        catch (error) {
+            // @sync-skip-block-start
+            void this.client.apiRequest("releaseSourceFile", { lease }).catch(() => {});
+            // @sync-skip-block-end
+            // @sync-only-start
+            // try {
+            //     this.client.apiRequest("releaseSourceFile", { lease });
+            // }
+            // catch {}
+            // @sync-only-end
+            throw error;
+        }
     }
 
     async transpileModule(input: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
@@ -614,15 +671,24 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     async close(): Promise<void> {
         await this.initializing?.catch(() => {}); // @sync-skip
-        // Dispose all active snapshots
         try {
-            for (const snapshot of [...this.activeSnapshots.values()]) {
-                await snapshot.dispose();
+            for (const retained of [...this.activeSourceFileLeases.values()]) {
+                await retained.dispose();
             }
-            this.sourceFileCache.clear();
         }
         finally {
-            await this.client.close(); // always close the underlying connection
+            try {
+                for (const orchestrator of [...this.activeBuildOrchestrators]) {
+                    await orchestrator.dispose();
+                }
+                for (const snapshot of [...this.activeSnapshots.values()]) {
+                    await snapshot.dispose();
+                }
+                this.sourceFileCache.clear();
+            }
+            finally {
+                await this.client.close(); // always close the underlying connection
+            }
         }
     }
 
@@ -740,6 +806,42 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 }
 
 type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
+
+/** An independently retained source file and its disposable remote-lifetime lease. */
+export class RetainedSourceFile {
+    readonly sourceFile: SourceFile;
+    private readonly lease: number;
+    private readonly client: Client;
+    private readonly onDispose: () => void;
+    private disposed = false;
+    private disposePromise: Promise<void> | undefined;
+
+    constructor(sourceFile: SourceFile, lease: number, client: Client, onDispose: () => void) {
+        this.sourceFile = sourceFile;
+        this.lease = lease;
+        this.client = client;
+        this.onDispose = onDispose;
+    }
+
+    [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        return this.dispose(); // @sync: this.dispose();
+    }
+
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            await this.client.apiRequest("releaseSourceFile", { lease: this.lease });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+}
 
 export class InternalAPI {
     private client: Client;
@@ -2061,6 +2163,107 @@ function toEmitResult(response: EmitResponse): EmitResult {
         emittedFiles: response.emittedFiles,
         fileSystem,
     };
+}
+
+export interface BuildOrchestratorOptions {
+    cwd?: string | undefined;
+    dry?: boolean;
+    force?: boolean;
+    verbose?: boolean;
+    stopBuildOnErrors?: boolean;
+    overrideCompilerOptions?: OverrideCompilerOptions;
+}
+
+export interface OverrideCompilerOptions {
+    incremental?: boolean;
+    assumeChangesOnlyAffectDirectDependencies?: boolean;
+    declaration?: boolean;
+    declarationMap?: boolean;
+    emitDeclarationOnly?: boolean;
+    sourceMap?: boolean;
+    inlineSourceMap?: boolean;
+    traceResolution?: boolean;
+}
+
+export class BuildOrchestrator {
+    private client: Client;
+    private id: number;
+    private disposed = false;
+    private disposePromise: Promise<void> | undefined;
+    private onDispose: () => void;
+
+    constructor(
+        client: Client,
+        orchestratorResponse: CreateBuildOrchestratorResponse,
+        onDispose: () => void,
+    ) {
+        this.client = client;
+        this.id = orchestratorResponse.buildOrchestratorID;
+        this.onDispose = onDispose;
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        void this.dispose();
+    }
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            await this.client.apiRequest("disposeBuildOrchestrator", {
+                buildOrchestratorID: this.id,
+            });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+
+    async build(project?: string): Promise<BuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("build", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+    async buildReferences(project: string): Promise<BuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("buildReferences", {
+            buildOrchestratorID: this.id,
+            project,
+        });
+        return response;
+    }
+    async clean(project?: string): Promise<CleanBuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("cleanBuild", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+    async cleanReferences(project?: string): Promise<CleanBuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("cleanReferences", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+
+    isDisposed(): boolean {
+        return this.disposed;
+    }
+
+    private ensureNotDisposed(): void {
+        if (this.disposed) {
+            throw new Error("Build orchestrator is disposed");
+        }
+    }
 }
 
 function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {

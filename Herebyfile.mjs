@@ -492,11 +492,25 @@ export const generateTristate = goGenerateTask("generate:tristate", [
 export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
     {
         file: "tsc/internal/diagnostics/diagnostics.go",
-        inputs: ["generate.go", "diagnosticMessages.json", "extraDiagnosticMessages.json", "../{collections,json}/*.go", "../locale/lcl/*/diagnosticMessages/diagnosticMessages.generated.json.lcl"],
+        inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
-        outputs: ["diagnostics_generated.go", "loc_generated.go", "loc/*.json.gz"],
+        outputs: ["diagnostics_generated.go", "diagnosticMessages.generated.json", "loc_generated.go", "loc/*.json.gz"],
         commands: [
-            ["go", "run", "generate.go", "-diagnostics", "diagnostics_generated.go", "-loc", "loc_generated.go", "-locdir", "loc"],
+            [
+                "go",
+                "run",
+                "generate.go",
+                "-diagnostics",
+                "diagnostics_generated.go",
+                "-loc",
+                "loc_generated.go",
+                "-locdir",
+                "loc",
+                "-locproject",
+                "../../../tools/LocProject.json",
+                "-locsource",
+                "diagnosticMessages.generated.json",
+            ],
             ["dprint", "fmt", "diagnostics_generated.go", "loc_generated.go"],
         ],
     },

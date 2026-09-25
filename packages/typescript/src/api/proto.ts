@@ -92,6 +92,10 @@ export interface CreateSnapshotParams extends CoreCreateSnapshotParams {
     openProject?: string | undefined;
 }
 
+export interface CreateBuildOrchestratorParams {
+    rootNames: readonly string[] | null;
+}
+
 /**
  * Builds the wire request for createSnapshot, applying the deprecated `openProject`
  * compatibility shim: a single `openProject` is folded into `openProjects` and is

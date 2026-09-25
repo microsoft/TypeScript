@@ -23,11 +23,18 @@ export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
 
 export interface APIMethodInfo {
     release: APIMethod<ReleaseParams, void>;
+    releaseSourceFile: APIMethod<ReleaseSourceFileParams, unknown>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
+    createBuildOrchestrator: APIMethod<CreateBuildOrchestratorParams, CreateBuildOrchestratorResponse>;
+    disposeBuildOrchestrator: APIMethod<DisposeBuildOrchestratorParams, unknown>;
+    build: APIMethod<BuildParams, BuildResponse>;
+    buildReferences: APIMethod<BuildParams, BuildResponse>;
+    cleanBuild: APIMethod<CleanBuildParams, CleanBuildResponse>;
+    cleanReferences: APIMethod<CleanBuildParams, CleanBuildResponse>;
     createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
     releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
@@ -204,6 +211,10 @@ export interface ReleaseParams {
     snapshot: number;
 }
 
+export interface ReleaseSourceFileParams {
+    lease: number;
+}
+
 export interface BatchRequestsParams {
     requests: readonly BatchRequest[] | null;
     continuationToken?: string | undefined;
@@ -260,6 +271,42 @@ export interface GetCurrentLanguageServerSnapshotParams {
     changes?: LanguageServerSnapshotChanges | undefined;
 }
 
+export interface CreateBuildOrchestratorParams extends BuildOptions, CompilerOptions {
+    rootNames: readonly string[] | null;
+    cwd?: string | undefined;
+}
+
+export interface CreateBuildOrchestratorResponse {
+    buildOrchestratorID: number;
+}
+
+export interface DisposeBuildOrchestratorParams {
+    buildOrchestratorID: number;
+}
+
+export interface BuildParams {
+    buildOrchestratorID: number;
+    project?: string | undefined;
+}
+
+export interface BuildResponse {
+    status: number;
+    diagnostics?: DiagnosticResponse[] | undefined;
+    statistics: Statistics;
+}
+
+export interface CleanBuildParams {
+    buildOrchestratorID: number;
+    project?: string | undefined;
+}
+
+export interface CleanBuildResponse {
+    status: number;
+    diagnostics?: DiagnosticResponse[] | undefined;
+    statistics: Statistics;
+    filesDeleted?: string[] | undefined;
+}
+
 export interface CreateModuleResolverParams {
     compilerOptions: CompilerOptions;
     moduleResolutions?: ModuleResolutionSpec | undefined;
@@ -292,6 +339,7 @@ export interface ParseCommandLineParams {
 export interface ConfigFileResponse {
     fileNames: string[];
     options: CompilerOptions;
+    buildOptions?: BuildOptions | undefined;
     projectReferences?: ProjectReference[] | undefined;
     typeAcquisition?: TypeAcquisition | undefined;
     compileOnSave?: boolean | undefined;
@@ -1042,10 +1090,16 @@ export interface ProfileResult {
 export interface BatchRequest {
     method:
         | "batchRequests"
+        | "build"
+        | "buildReferences"
+        | "cleanBuild"
+        | "cleanReferences"
+        | "createBuildOrchestrator"
         | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
+        | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1192,6 +1246,7 @@ export interface BatchRequest {
         | "readConfigFile"
         | "release"
         | "releaseModuleResolver"
+        | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
@@ -1211,10 +1266,16 @@ export interface BatchRequest {
 export interface BatchResponse {
     method:
         | "batchRequests"
+        | "build"
+        | "buildReferences"
+        | "cleanBuild"
+        | "cleanReferences"
+        | "createBuildOrchestrator"
         | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
+        | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1361,6 +1422,7 @@ export interface BatchResponse {
         | "readConfigFile"
         | "release"
         | "releaseModuleResolver"
+        | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
@@ -1485,6 +1547,16 @@ export interface SnapshotOperationResponse {
 export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams {
 }
 
+export interface BuildOptions {
+    dry?: boolean | undefined;
+    force?: boolean | undefined;
+    verbose?: boolean | undefined;
+    builders?: number | undefined;
+    stopBuildOnErrors?: boolean | undefined;
+    /** Internal fields */
+    clean?: boolean | undefined;
+}
+
 /** CompilerOptions contains the compiler options exposed by the API. */
 export interface CompilerOptions {
     allowJs?: boolean | undefined;
@@ -1591,6 +1663,12 @@ export interface CompilerOptions {
     maxNodeModuleJsDepth?: number | undefined;
     /** Internal fields */
     configFilePath?: string | undefined;
+}
+
+export interface Statistics {
+    Projects: number;
+    ProjectsBuilt: number;
+    TimestampUpdates: number;
 }
 
 export interface ModuleResolutionSpec {

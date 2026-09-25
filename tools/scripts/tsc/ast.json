@@ -5174,6 +5174,7 @@
                 "NoSubstitutionTemplateLiteral",
                 "ComputedPropertyName",
                 "BindingPattern",
+                "PropertyAccessExpression",
                 "ElementAccessExpression"
             ],
             "ModuleName": [
