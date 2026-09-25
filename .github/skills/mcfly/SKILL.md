@@ -4,7 +4,7 @@ description: Only invoke when explicitly instructed to
 ---
 
 You need to "re-stack" your commits to match the following format:
- * A failing test case (plus its baselines, if applicable)
+ * Testcase(s), including at least one that demonstrate the problem - this could be a test that directly fails, baselines that show the problem, or even both
  * A commit, or series of commits, that fixes the failing test case
  * If needed, a follow-up commit with modified baselines
 
