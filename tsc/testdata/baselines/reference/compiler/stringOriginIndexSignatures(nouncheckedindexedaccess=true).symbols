@@ -1,0 +1,215 @@
+//// [tests/cases/compiler/stringOriginIndexSignatures.ts] ////
+
+=== stringOriginIndexSignatures.ts ===
+type Key = "known" | string;
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+
+interface StringIndex {
+>StringIndex : Symbol(StringIndex, Decl(stringOriginIndexSignatures.ts, 0, 28))
+
+    [key: Key]: number;
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 3, 5))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+}
+
+declare const indexed: StringIndex;
+>indexed : Symbol(indexed, Decl(stringOriginIndexSignatures.ts, 6, 13))
+>StringIndex : Symbol(StringIndex, Decl(stringOriginIndexSignatures.ts, 0, 28))
+
+export const numericAccess = indexed[0];
+>numericAccess : Symbol(numericAccess, Decl(stringOriginIndexSignatures.ts, 7, 12))
+>indexed : Symbol(indexed, Decl(stringOriginIndexSignatures.ts, 6, 13))
+
+export const stringAccess = indexed["other"];
+>stringAccess : Symbol(stringAccess, Decl(stringOriginIndexSignatures.ts, 8, 12))
+>indexed : Symbol(indexed, Decl(stringOriginIndexSignatures.ts, 6, 13))
+
+export const numericKey: keyof StringIndex = 0;
+>numericKey : Symbol(numericKey, Decl(stringOriginIndexSignatures.ts, 9, 12))
+>StringIndex : Symbol(StringIndex, Decl(stringOriginIndexSignatures.ts, 0, 28))
+
+export const stringKey: keyof StringIndex = "other";
+>stringKey : Symbol(stringKey, Decl(stringOriginIndexSignatures.ts, 10, 12))
+>StringIndex : Symbol(StringIndex, Decl(stringOriginIndexSignatures.ts, 0, 28))
+
+interface SpecificIndices {
+>SpecificIndices : Symbol(SpecificIndices, Decl(stringOriginIndexSignatures.ts, 10, 52))
+
+    [key: Key]: any;
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 13, 5))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+
+    [key: number]: number;
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 14, 5))
+
+    [key: `prefix${string}`]: boolean;
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 15, 5))
+}
+
+declare const specific: SpecificIndices;
+>specific : Symbol(specific, Decl(stringOriginIndexSignatures.ts, 18, 13))
+>SpecificIndices : Symbol(SpecificIndices, Decl(stringOriginIndexSignatures.ts, 10, 52))
+
+export const numericIndex = specific[0];
+>numericIndex : Symbol(numericIndex, Decl(stringOriginIndexSignatures.ts, 19, 12))
+>specific : Symbol(specific, Decl(stringOriginIndexSignatures.ts, 18, 13))
+
+export const numericStringIndex = specific["0"];
+>numericStringIndex : Symbol(numericStringIndex, Decl(stringOriginIndexSignatures.ts, 20, 12))
+>specific : Symbol(specific, Decl(stringOriginIndexSignatures.ts, 18, 13))
+
+export const patternIndex = specific["prefixValue"];
+>patternIndex : Symbol(patternIndex, Decl(stringOriginIndexSignatures.ts, 21, 12))
+>specific : Symbol(specific, Decl(stringOriginIndexSignatures.ts, 18, 13))
+
+export const fallbackIndex = specific["other"];
+>fallbackIndex : Symbol(fallbackIndex, Decl(stringOriginIndexSignatures.ts, 22, 12))
+>specific : Symbol(specific, Decl(stringOriginIndexSignatures.ts, 18, 13))
+
+type Remapped<Value> = { [Property in keyof Value as Key]: Value[Property] };
+>Remapped : Symbol(Remapped, Decl(stringOriginIndexSignatures.ts, 22, 47))
+>Value : Symbol(Value, Decl(stringOriginIndexSignatures.ts, 24, 14))
+>Property : Symbol(Property, Decl(stringOriginIndexSignatures.ts, 24, 26))
+>Value : Symbol(Value, Decl(stringOriginIndexSignatures.ts, 24, 14))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+>Value : Symbol(Value, Decl(stringOriginIndexSignatures.ts, 24, 14))
+>Property : Symbol(Property, Decl(stringOriginIndexSignatures.ts, 24, 26))
+
+type RemappedValue = Remapped<{ value: number }>;
+>RemappedValue : Symbol(RemappedValue, Decl(stringOriginIndexSignatures.ts, 24, 77))
+>Remapped : Symbol(Remapped, Decl(stringOriginIndexSignatures.ts, 22, 47))
+>value : Symbol(value, Decl(stringOriginIndexSignatures.ts, 25, 31))
+
+export const remappedNumericKey: keyof RemappedValue = 0;
+>remappedNumericKey : Symbol(remappedNumericKey, Decl(stringOriginIndexSignatures.ts, 26, 12))
+>RemappedValue : Symbol(RemappedValue, Decl(stringOriginIndexSignatures.ts, 24, 77))
+
+declare const remapped: RemappedValue;
+>remapped : Symbol(remapped, Decl(stringOriginIndexSignatures.ts, 27, 13))
+>RemappedValue : Symbol(RemappedValue, Decl(stringOriginIndexSignatures.ts, 24, 77))
+
+export const remappedNumericAccess = remapped[0];
+>remappedNumericAccess : Symbol(remappedNumericAccess, Decl(stringOriginIndexSignatures.ts, 28, 12))
+>remapped : Symbol(remapped, Decl(stringOriginIndexSignatures.ts, 27, 13))
+
+declare const invalidKey: {};
+>invalidKey : Symbol(invalidKey, Decl(stringOriginIndexSignatures.ts, 30, 13))
+
+indexed[invalidKey];
+>indexed : Symbol(indexed, Decl(stringOriginIndexSignatures.ts, 6, 13))
+>invalidKey : Symbol(invalidKey, Decl(stringOriginIndexSignatures.ts, 30, 13))
+
+declare const symbolKey: unique symbol;
+>symbolKey : Symbol(symbolKey, Decl(stringOriginIndexSignatures.ts, 33, 13))
+
+const source = { value: 1, [symbolKey]: "symbol" };
+>source : Symbol(source, Decl(stringOriginIndexSignatures.ts, 34, 5))
+>value : Symbol(value, Decl(stringOriginIndexSignatures.ts, 34, 16))
+>[symbolKey] : Symbol([symbolKey], Decl(stringOriginIndexSignatures.ts, 34, 26))
+>symbolKey : Symbol(symbolKey, Decl(stringOriginIndexSignatures.ts, 33, 13))
+
+export const copied: StringIndex = { ...source };
+>copied : Symbol(copied, Decl(stringOriginIndexSignatures.ts, 35, 12))
+>StringIndex : Symbol(StringIndex, Decl(stringOriginIndexSignatures.ts, 0, 28))
+>source : Symbol(source, Decl(stringOriginIndexSignatures.ts, 34, 5))
+
+declare function inferValue<Value>(value: { [key: string]: Value }): Value;
+>inferValue : Symbol(inferValue, Decl(stringOriginIndexSignatures.ts, 35, 49))
+>Value : Symbol(Value, Decl(stringOriginIndexSignatures.ts, 37, 28))
+>value : Symbol(value, Decl(stringOriginIndexSignatures.ts, 37, 35))
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 37, 45))
+>Value : Symbol(Value, Decl(stringOriginIndexSignatures.ts, 37, 28))
+>Value : Symbol(Value, Decl(stringOriginIndexSignatures.ts, 37, 28))
+
+export const inferredValue = inferValue(indexed);
+>inferredValue : Symbol(inferredValue, Decl(stringOriginIndexSignatures.ts, 38, 12))
+>inferValue : Symbol(inferValue, Decl(stringOriginIndexSignatures.ts, 35, 49))
+>indexed : Symbol(indexed, Decl(stringOriginIndexSignatures.ts, 6, 13))
+
+export const canonicalIndex: { [key: string]: number } = indexed;
+>canonicalIndex : Symbol(canonicalIndex, Decl(stringOriginIndexSignatures.ts, 39, 12))
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 39, 32))
+>indexed : Symbol(indexed, Decl(stringOriginIndexSignatures.ts, 6, 13))
+
+export const clonedIndex: StringIndex = canonicalIndex;
+>clonedIndex : Symbol(clonedIndex, Decl(stringOriginIndexSignatures.ts, 40, 12))
+>StringIndex : Symbol(StringIndex, Decl(stringOriginIndexSignatures.ts, 0, 28))
+>canonicalIndex : Symbol(canonicalIndex, Decl(stringOriginIndexSignatures.ts, 39, 12))
+
+interface AnyIndex {
+>AnyIndex : Symbol(AnyIndex, Decl(stringOriginIndexSignatures.ts, 40, 55))
+
+    [key: Key]: any;
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 43, 5))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+}
+interface ObjectValue {
+>ObjectValue : Symbol(ObjectValue, Decl(stringOriginIndexSignatures.ts, 44, 1))
+
+    value: number;
+>value : Symbol(ObjectValue.value, Decl(stringOriginIndexSignatures.ts, 45, 23))
+}
+declare const objectValue: ObjectValue;
+>objectValue : Symbol(objectValue, Decl(stringOriginIndexSignatures.ts, 48, 13))
+>ObjectValue : Symbol(ObjectValue, Decl(stringOriginIndexSignatures.ts, 44, 1))
+
+export const anyIndex: AnyIndex = objectValue;
+>anyIndex : Symbol(anyIndex, Decl(stringOriginIndexSignatures.ts, 49, 12))
+>AnyIndex : Symbol(AnyIndex, Decl(stringOriginIndexSignatures.ts, 40, 55))
+>objectValue : Symbol(objectValue, Decl(stringOriginIndexSignatures.ts, 48, 13))
+
+declare const wrapped: String;
+>wrapped : Symbol(wrapped, Decl(stringOriginIndexSignatures.ts, 51, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+
+const primitive: Key = wrapped;
+>primitive : Symbol(primitive, Decl(stringOriginIndexSignatures.ts, 52, 5))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+>wrapped : Symbol(wrapped, Decl(stringOriginIndexSignatures.ts, 51, 13))
+
+declare const unionValue: Key | number;
+>unionValue : Symbol(unionValue, Decl(stringOriginIndexSignatures.ts, 54, 13))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+
+export const unionAssignment: Key | number = "value";
+>unionAssignment : Symbol(unionAssignment, Decl(stringOriginIndexSignatures.ts, 55, 12))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+
+export const reducedUnion = typeof unionValue === "string" ? unionValue : "known";
+>reducedUnion : Symbol(reducedUnion, Decl(stringOriginIndexSignatures.ts, 56, 12))
+>unionValue : Symbol(unionValue, Decl(stringOriginIndexSignatures.ts, 54, 13))
+>unionValue : Symbol(unionValue, Decl(stringOriginIndexSignatures.ts, 54, 13))
+
+declare const intersected: { [key: Key]: { first: number } } & { [key: "other" | string]: { second: string } };
+>intersected : Symbol(intersected, Decl(stringOriginIndexSignatures.ts, 58, 13))
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 58, 30))
+>Key : Symbol(Key, Decl(stringOriginIndexSignatures.ts, 0, 0))
+>first : Symbol(first, Decl(stringOriginIndexSignatures.ts, 58, 42))
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 58, 66))
+>second : Symbol(second, Decl(stringOriginIndexSignatures.ts, 58, 91))
+
+export const mergedIndex = intersected["value"]!;
+>mergedIndex : Symbol(mergedIndex, Decl(stringOriginIndexSignatures.ts, 59, 12))
+>intersected : Symbol(intersected, Decl(stringOriginIndexSignatures.ts, 58, 13))
+
+export const first = mergedIndex.first;
+>first : Symbol(first, Decl(stringOriginIndexSignatures.ts, 60, 12))
+>mergedIndex.first : Symbol(first, Decl(stringOriginIndexSignatures.ts, 58, 42))
+>mergedIndex : Symbol(mergedIndex, Decl(stringOriginIndexSignatures.ts, 59, 12))
+>first : Symbol(first, Decl(stringOriginIndexSignatures.ts, 58, 42))
+
+export const second = mergedIndex.second;
+>second : Symbol(second, Decl(stringOriginIndexSignatures.ts, 61, 12))
+>mergedIndex.second : Symbol(second, Decl(stringOriginIndexSignatures.ts, 58, 91))
+>mergedIndex : Symbol(mergedIndex, Decl(stringOriginIndexSignatures.ts, 59, 12))
+>second : Symbol(second, Decl(stringOriginIndexSignatures.ts, 58, 91))
+
+declare const incompatible: { [key: string]: string };
+>incompatible : Symbol(incompatible, Decl(stringOriginIndexSignatures.ts, 63, 13))
+>key : Symbol(key, Decl(stringOriginIndexSignatures.ts, 63, 31))
+
+const rejected: StringIndex = incompatible;
+>rejected : Symbol(rejected, Decl(stringOriginIndexSignatures.ts, 64, 5))
+>StringIndex : Symbol(StringIndex, Decl(stringOriginIndexSignatures.ts, 0, 28))
+>incompatible : Symbol(incompatible, Decl(stringOriginIndexSignatures.ts, 63, 13))
+
