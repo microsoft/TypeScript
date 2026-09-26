@@ -41,10 +41,6 @@ type CommandLineOption struct {
 	// checks that option with number type has value >= minValue
 	minValue int
 
-	// true or undefined
-	// used for configDirTemplateSubstitutionOptions
-	allowConfigDirTemplateSubstitution bool
-
 	// used for filter in compilerrunner
 	AffectsDeclarationPath     bool
 	AffectsProgramStructure    bool

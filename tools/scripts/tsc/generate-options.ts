@@ -164,6 +164,52 @@ function zeroValue(option: CompilerOption): string {
     return kind === "Boolean" ? "core.TSUnknown" : kind === "String" ? '""' : kind === "Enum" ? "0" : "nil";
 }
 
+function configDirSubstitution(): string {
+    const substitutedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => declaration.allowConfigDirTemplateSubstitution ?? declaration.isFilePath));
+    return `${header}
+package tsoptions
+
+import (
+    "github.com/microsoft/TypeScript/tsc/internal/collections"
+    "github.com/microsoft/TypeScript/tsc/internal/core"
+)
+
+func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
+    if compilerOptions == nil { return }
+${
+        substitutedOptions.map(option => {
+            const field = `compilerOptions.${fieldName(option)}`;
+            switch (option.type) {
+                case "string":
+                    return `if startsWithConfigDirTemplate(${field}) {
+    ${field} = getSubstitutedPathWithConfigDirTemplate(${field}, basePath)
+}`;
+                case "[]string":
+                    return `if substitution := getSubstitutedStringArrayWithConfigDirTemplate(${field}, basePath); substitution != nil {
+    ${field} = substitution
+}`;
+                case "*collections.OrderedMap[string, []string]":
+                    return `{
+    var paths *collections.OrderedMap[string, []string]
+    for k, v := range ${field}.Entries() {
+        if substitution := getSubstitutedStringArrayWithConfigDirTemplate(v, basePath); substitution != nil {
+            if paths == nil {
+                paths = ${field}.Clone()
+                ${field} = paths
+            }
+            paths.Set(k, substitution)
+        }
+    }
+}`;
+                default:
+                    throw new Error(`Unsupported configDir substitution type for ${option.name}: ${option.type}`);
+            }
+        }).join("\n")
+    }
+}
+`;
+}
+
 function mergeCompilerOptions(): string {
     return `${header}
 package tsoptions
@@ -285,7 +331,6 @@ ${options.enums.find(enumDef => enumDef.name === "ModuleKind")!.members.filter(m
 const privateMetadata = new Set([
     "extraValidation",
     "minValue",
-    "allowConfigDirTemplateSubstitution",
     "allowJsFlag",
     "strictFlag",
     "transpileOptionValue",
@@ -296,7 +341,7 @@ function declarationLiteral(declaration: Declaration): string {
     const { name, kind, comment, ...metadata } = declaration;
     const properties = [`Name: ${JSON.stringify(name)},`, `Kind: CommandLineOptionType${kind},`];
     for (const [key, value] of Object.entries(metadata)) {
-        if (key === "group" || key === "jsconfigDefault" || key === "field" || key === "variable" || key === "elementOptions" || key === "documentationAnchor" || key === "schemaDescription") continue;
+        if (key === "group" || key === "jsconfigDefault" || key === "field" || key === "variable" || key === "elementOptions" || key === "documentationAnchor" || key === "schemaDescription" || key === "allowConfigDirTemplateSubstitution") continue;
         const goName = privateMetadata.has(key) ? key : key[0].toUpperCase() + key.slice(1);
         properties.push(`${goName}: ${goValue(value)},`);
     }
@@ -501,6 +546,7 @@ export function generateOptions(): Map<string, string> {
         ["tsc/internal/tsoptions/comparisons_generated.go", generateOptionComparisons()],
         ["tsc/internal/tsoptions/buildinfo_generated.go", generateBuildInfoOptions()],
         ["tsc/internal/tsoptions/mergeoptions_generated.go", mergeCompilerOptions()],
+        ["tsc/internal/tsoptions/configdir_generated.go", configDirSubstitution()],
         ["tsc/internal/tsoptions/declarations_generated.go", declarations()],
         ["tsc/internal/tsoptions/rootoptions_generated.go", rootDeclarations()],
         ["tsc/internal/tsoptions/enummaps_generated.go", enumMaps()],

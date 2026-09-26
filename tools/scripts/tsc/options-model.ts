@@ -49,6 +49,7 @@ export interface DeclarationMetadata {
     category?: DiagnosticMessage;
     extraValidation?: { go: string; };
     minValue?: number;
+    /** Defaults to isFilePath for compiler options; false explicitly disables substitution. */
     allowConfigDirTemplateSubstitution?: boolean;
     affectsDeclarationPath?: boolean;
     affectsProgramStructure?: boolean;

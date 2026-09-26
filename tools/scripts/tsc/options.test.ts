@@ -138,6 +138,32 @@ test("option generation is deterministic", () => {
     assert.deepEqual(generateOptions(), generateOptions());
 });
 
+test("configDir substitution preserves eligible fields and explicit opt-outs", () => {
+    const files = generateOptions();
+    const source = files.get("tsc/internal/tsoptions/configdir_generated.go")!;
+    for (const [name, content] of files) {
+        if (name.endsWith(".go")) assert.doesNotMatch(content, /allowConfigDirTemplateSubstitution/, name);
+    }
+    assert.deepEqual([...new Set([...source.matchAll(/compilerOptions\.(\w+)/g)].map(match => match[1]))], [
+        "DeclarationDir",
+        "OutDir",
+        "Paths",
+        "RootDir",
+        "RootDirs",
+        "TsBuildInfoFile",
+        "TypeRoots",
+        "BaseUrl",
+        "OutFile",
+        "GenerateCpuProfile",
+        "GenerateTrace",
+    ]);
+    for (const name of ["project", "pprofDir"]) {
+        const declaration = options.compilerOptions.find(option => option.name === name)!.declarations![0];
+        assert.equal(declaration.isFilePath, true);
+        assert.equal(declaration.allowConfigDirTemplateSubstitution, false);
+    }
+});
+
 test("compiler options preserve the internal fields comment", () => {
     const source = generateOptions().get("tsc/internal/core/compileroptions_generated.go")!;
     assert.match(source, /\/\/ Internal fields\nConfigFilePath /);

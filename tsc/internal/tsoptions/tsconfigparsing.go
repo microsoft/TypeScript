@@ -375,23 +375,20 @@ func convertJsonOptionOfListType(
 
 const configDirTemplate = "${configDir}"
 
-func startsWithConfigDirTemplate(value any) bool {
-	str, ok := value.(string)
-	if !ok {
-		return false
-	}
-	return strings.HasPrefix(strings.ToLower(str), strings.ToLower(configDirTemplate))
+func startsWithConfigDirTemplate(value string) bool {
+	return strings.HasPrefix(strings.ToLower(value), strings.ToLower(configDirTemplate))
 }
 
 func normalizeNonListOptionValue(option *CommandLineOption, basePath string, value any) any {
 	if option.IsFilePath {
-		value = tspath.NormalizeSlashes(value.(string))
-		if !startsWithConfigDirTemplate(value) {
-			value = tspath.GetNormalizedAbsolutePath(value.(string), basePath)
+		path := tspath.NormalizeSlashes(value.(string))
+		if !startsWithConfigDirTemplate(path) {
+			path = tspath.GetNormalizedAbsolutePath(path, basePath)
 		}
-		if value == "" {
-			value = "."
+		if path == "" {
+			path = "."
 		}
+		return path
 	}
 	return value
 }
@@ -1058,7 +1055,7 @@ func parseConfig(
 								if !isString {
 									return path
 								}
-								if startsWithConfigDirTemplate(path) || tspath.IsRootedDiskPath(pathStr) {
+								if startsWithConfigDirTemplate(pathStr) || tspath.IsRootedDiskPath(pathStr) {
 									return pathStr
 								} else {
 									if relativeDifference == "" {
@@ -1721,6 +1718,7 @@ func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast
 }
 
 func getSubstitutedPathWithConfigDirTemplate(value string, basePath string) string {
+	// TODO: Match the case-insensitive prefix check; Replace currently only substitutes "${configDir}" with this exact casing.
 	return tspath.GetNormalizedAbsolutePath(strings.Replace(value, configDirTemplate, "./", 1), basePath)
 }
 
@@ -1738,56 +1736,6 @@ func getSubstitutedStringArrayWithConfigDirTemplate(list []string, basePath stri
 		return result
 	}
 	return nil
-}
-
-func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
-	if compilerOptions == nil {
-		return
-	}
-
-	// !!! don't hardcode this; use options declarations?
-
-	var paths *collections.OrderedMap[string, []string]
-	for k, v := range compilerOptions.Paths.Entries() {
-		if substitution := getSubstitutedStringArrayWithConfigDirTemplate(v, basePath); substitution != nil {
-			if paths == nil {
-				paths = compilerOptions.Paths.Clone()
-				compilerOptions.Paths = paths
-			}
-			paths.Set(k, substitution)
-		}
-	}
-
-	if rootDirs := getSubstitutedStringArrayWithConfigDirTemplate(compilerOptions.RootDirs, basePath); rootDirs != nil {
-		compilerOptions.RootDirs = rootDirs
-	}
-	if typeRoots := getSubstitutedStringArrayWithConfigDirTemplate(compilerOptions.TypeRoots, basePath); typeRoots != nil {
-		compilerOptions.TypeRoots = typeRoots
-	}
-	if startsWithConfigDirTemplate(compilerOptions.GenerateCpuProfile) {
-		compilerOptions.GenerateCpuProfile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.GenerateCpuProfile, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.GenerateTrace) {
-		compilerOptions.GenerateTrace = getSubstitutedPathWithConfigDirTemplate(compilerOptions.GenerateTrace, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.OutFile) {
-		compilerOptions.OutFile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.OutFile, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.OutDir) {
-		compilerOptions.OutDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.OutDir, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.RootDir) {
-		compilerOptions.RootDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.RootDir, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.TsBuildInfoFile) {
-		compilerOptions.TsBuildInfoFile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.TsBuildInfoFile, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.BaseUrl) {
-		compilerOptions.BaseUrl = getSubstitutedPathWithConfigDirTemplate(compilerOptions.BaseUrl, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.DeclarationDir) {
-		compilerOptions.DeclarationDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.DeclarationDir, basePath)
-	}
 }
 
 // hasFileWithHigherPriorityExtension determines whether a literal or wildcard file has already been included that has a higher extension priority.

@@ -1006,6 +1006,7 @@ export const options: OptionsModel = {
                     group: "optionsForCompiler",
                     shortName: "p",
                     isFilePath: true,
+                    allowConfigDirTemplateSubstitution: false,
                     showInSimplifiedHelpView: true,
                     category: diagnostic("Command-line Options"),
                     description: diagnostic("Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'."),
@@ -1798,6 +1799,7 @@ export const options: OptionsModel = {
                 {
                     group: "commonOptionsWithBuild",
                     isFilePath: true,
+                    allowConfigDirTemplateSubstitution: false,
                     category: diagnostic("Command-line Options"),
                     description: diagnostic("Generate pprof CPU/memory profiles to the given directory."),
                 },
