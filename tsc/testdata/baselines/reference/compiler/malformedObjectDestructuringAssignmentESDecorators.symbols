@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/malformedObjectDestructuringAssignmentESDecorators.ts] ////
+
+=== malformedObjectDestructuringAssignmentESDecorators.ts ===
+declare function dec(...args: any[]): any;
+>dec : Symbol(dec, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 0, 0))
+>args : Symbol(args, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 0, 21))
+
+@dec
+>dec : Symbol(dec, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 0, 42))
+
+    static {
+        ({ m() {}, get g() { return 1; }, set s(v) {} } = this);
+>m : Symbol(m, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 5, 10))
+>g : Symbol(g, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 5, 18))
+>s : Symbol(s, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 5, 41))
+>v : Symbol(v, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 5, 48))
+>this : Symbol(C, Decl(malformedObjectDestructuringAssignmentESDecorators.ts, 0, 42))
+    }
+}
+
