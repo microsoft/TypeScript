@@ -2,6 +2,8 @@
 
 package core
 
+import "slices"
+
 type WatchOptions struct {
 	Interval        *int               `json:"watchInterval"`
 	FileKind        WatchFileKind      `json:"watchFile"`
@@ -10,4 +12,36 @@ type WatchOptions struct {
 	SyncWatchDir    Tristate           `json:"synchronousWatchDirectory"`
 	ExcludeDir      []string           `json:"excludeDirectories"`
 	ExcludeFiles    []string           `json:"excludeFiles"`
+}
+
+// Equals compares stored watch options, preserving nil versus empty collections.
+func (options *WatchOptions) Equals(other *WatchOptions) bool {
+	if options == other {
+		return true
+	}
+	if options == nil || other == nil {
+		return false
+	}
+	if options.Interval != other.Interval && (options.Interval == nil || other.Interval == nil || *options.Interval != *other.Interval) {
+		return false
+	}
+	if options.FileKind != other.FileKind {
+		return false
+	}
+	if options.DirectoryKind != other.DirectoryKind {
+		return false
+	}
+	if options.FallbackPolling != other.FallbackPolling {
+		return false
+	}
+	if options.SyncWatchDir != other.SyncWatchDir {
+		return false
+	}
+	if (options.ExcludeDir == nil) != (other.ExcludeDir == nil) || !slices.Equal(options.ExcludeDir, other.ExcludeDir) {
+		return false
+	}
+	if (options.ExcludeFiles == nil) != (other.ExcludeFiles == nil) || !slices.Equal(options.ExcludeFiles, other.ExcludeFiles) {
+		return false
+	}
+	return true
 }

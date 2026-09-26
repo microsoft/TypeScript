@@ -152,15 +152,20 @@ func (options *CompilerOptions) Clone() *CompilerOptions {
 
 // Equals reports whether all stored option values are equal, including nil versus empty collections.
 // Paths are compared by ordered entries, ignoring backing-storage allocation.
-func (options *CompilerOptions) Equals(other *CompilerOptions) bool {
+${optionsEquality("CompilerOptions", options.compilerOptions.map(option => ({ name: fieldName(option), type: option.type })))}
+`;
+}
+
+function optionsEquality(name: string, fields: StoredDeclaration["field"][]): string {
+    return `func (options *${name}) Equals(other *${name}) bool {
     if options == other { return true }
     if options == nil || other == nil { return false }
     ${
-        options.compilerOptions.map(option => {
-            const a = `options.${fieldName(option)}`;
-            const b = `other.${fieldName(option)}`;
+        fields.map(field => {
+            const a = `options.${field.name}`;
+            const b = `other.${field.name}`;
             let differs: string;
-            switch (option.type) {
+            switch (field.type) {
                 case "*int":
                     differs = `${a} != ${b} && (${a} == nil || ${b} == nil || *${a} != *${b})`;
                     break;
@@ -188,10 +193,12 @@ function storedOptions(name: string, declarations: StoredDeclaration[], omitZero
     return `${header}
 package core
 
+${name === "WatchOptions" ? 'import "slices"\n' : ""}
 type ${name} struct {
 ${name === "BuildOptions" ? "_ noCopy\n" : ""}
 ${declarations.map(option => `${option.field.comment ? "\n" + option.field.comment.split("\n").map(line => line ? "// " + line : "").join("\n") + "\n" : ""}${option.field.name} ${option.field.type} \`json:"${option.name}${omitZero ? ",omitzero" : ""}"\``).join("\n")}
 }
+${name === "WatchOptions" ? "\n// Equals compares stored watch options, preserving nil versus empty collections.\n" + optionsEquality(name, declarations.map(option => option.field)) : ""}
 `;
 }
 
