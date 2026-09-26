@@ -1231,6 +1231,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	tx.resultHasScopeMarker = true
 	if ast.IsIdentifier(expression) && (ast.IsSourceFile(input.Parent) || ast.IsModuleBlock(input.Parent)) {
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, expression)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.preserveJsDoc(exportAssignment, input)
 		return exportAssignment
 	}
@@ -1247,6 +1248,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		tx.preserveJsDoc(classDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, classDecl})
 	} else if ast.IsFunctionLike(unwrapped) {
@@ -1260,6 +1262,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		tx.preserveJsDoc(funcDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, funcDecl})
 	}
@@ -1290,6 +1293,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	}
 	statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst))
 	exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+	tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 	// Remove comments from the export declaration and copy them onto the synthetic _default declaration
 	tx.preserveJsDoc(statement, input)
 	return tx.Factory().NewSyntaxList([]*ast.Node{statement, exportAssignment})
