@@ -21448,6 +21448,25 @@ func (c *Checker) isReadonlyArraySymbol(symbol *ast.Symbol) bool {
 // parameters and may differ in return types. When signatures differ in return types, the resulting return
 // type is the union of the constituent return types.
 func (c *Checker) getUnionSignatures(signatureLists [][]*Signature) []*Signature {
+	if core.Some(signatureLists, func(signatures []*Signature) bool { return len(signatures) > 1 }) {
+		signatureLists = core.Map(signatureLists, func(signatures []*Signature) []*Signature {
+			return core.FlatMap(signatures, func(signature *Signature) []*Signature {
+				minArgumentCount := c.getMinArgumentCount(signature)
+				parameterCount := c.getParameterCount(signature)
+				if len(signature.typeParameters) != 0 || c.hasEffectiveRestParameter(signature) || minArgumentCount == parameterCount {
+					return []*Signature{signature}
+				}
+				result := make([]*Signature, 0, parameterCount-minArgumentCount+1)
+				for arity := minArgumentCount; arity < parameterCount; arity++ {
+					variant := c.cloneSignature(signature)
+					variant.parameters = variant.parameters[:arity]
+					variant.minArgumentCount = int32(arity)
+					result = append(result, variant)
+				}
+				return append(result, signature)
+			})
+		})
+	}
 	var result []*Signature
 	var indexWithLengthOverOne int
 	var countLengthOverOne int
