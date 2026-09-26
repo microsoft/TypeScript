@@ -1,0 +1,49 @@
+===================================================================
+JsFile: exportDefault.d.ts
+mapUrl: exportDefault.d.ts.map
+sourceRoot: 
+sources: exportDefault.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:exportDefault.d.ts
+sourceFile:exportDefault.ts
+-------------------------------------------------------------------
+>>>declare const _default: {
+>>>    b: number;
+>>>    d: number;
+>>>};
+>>>export default _default;
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^^^^^^^^^^^->
+1 >const b = 1;
+  >const d = 2;
+  >
+2 >export default { b, d };
+1 >Emitted(5, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 25) Source(3, 25) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=exportDefault.d.ts.map===================================================================
+JsFile: exportEquals.d.ts
+mapUrl: exportEquals.d.ts.map
+sourceRoot: 
+sources: exportEquals.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:exportEquals.d.ts
+sourceFile:exportEquals.ts
+-------------------------------------------------------------------
+>>>declare const _default: {
+>>>    a: number;
+>>>};
+>>>export = _default;
+1 >
+2 >^^^^^^^^^^^^^^^^^^
+3 >                  ^^^^^^^^^^^^^^^^^^^^^^^->
+1 >const a = 1;
+  >
+2 >export = { a };
+1 >Emitted(4, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 19) Source(2, 16) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=exportEquals.d.ts.map
