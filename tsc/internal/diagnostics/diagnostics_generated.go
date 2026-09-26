@@ -2024,6 +2024,8 @@ var Cannot_find_module_or_type_declarations_for_side_effect_import_of_0 = &Messa
 
 var The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_type_annotation_is_necessary = &Message{code: 2883, category: CategoryError, key: "The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_2883", text: "The inferred type of '{0}' cannot be named without a reference to '{2}' from '{1}'. This is likely not portable. A type annotation is necessary."}
 
+var This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement = &Message{code: 2884, category: CategoryError, key: "This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_If_this_file_is_not_intende_2884", text: "This JSX tag requires the module path '{0}' to exist, but none could be found. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement."}
+
 var Import_declaration_0_is_using_private_name_1 = &Message{code: 4000, category: CategoryError, key: "Import_declaration_0_is_using_private_name_1_4000", text: "Import declaration '{0}' is using private name '{1}'."}
 
 var Type_parameter_0_of_exported_class_has_or_is_using_private_name_1 = &Message{code: 4002, category: CategoryError, key: "Type_parameter_0_of_exported_class_has_or_is_using_private_name_1_4002", text: "Type parameter '{0}' of exported class has or is using private name '{1}'."}
@@ -5440,6 +5442,7 @@ var allMessages = [...]**Message{
 	&This_expression_is_never_nullish,
 	&Cannot_find_module_or_type_declarations_for_side_effect_import_of_0,
 	&The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+	&This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement,
 	&Import_declaration_0_is_using_private_name_1,
 	&Type_parameter_0_of_exported_class_has_or_is_using_private_name_1,
 	&Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1,
