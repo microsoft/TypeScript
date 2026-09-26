@@ -1,167 +1,14 @@
 package core
 
 import (
-	"reflect"
 	"slices"
 	"strings"
 
-	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-//go:generate npx hereby generate:compileroptions
-
 type PluginImport struct {
 	Name string `json:"name"`
-}
-
-// CompilerOptions contains the compiler options exposed by the API.
-type CompilerOptions struct {
-	_ noCopy
-
-	AllowJs                                   Tristate                                  `json:"allowJs,omitzero"`
-	AllowArbitraryExtensions                  Tristate                                  `json:"allowArbitraryExtensions,omitzero"`
-	AllowImportingTsExtensions                Tristate                                  `json:"allowImportingTsExtensions,omitzero"`
-	AllowNonTsExtensions                      Tristate                                  `json:"allowNonTsExtensions,omitzero"`
-	AllowUmdGlobalAccess                      Tristate                                  `json:"allowUmdGlobalAccess,omitzero"`
-	AllowUnreachableCode                      Tristate                                  `json:"allowUnreachableCode,omitzero"`
-	AllowUnusedLabels                         Tristate                                  `json:"allowUnusedLabels,omitzero"`
-	AssumeChangesOnlyAffectDirectDependencies Tristate                                  `json:"assumeChangesOnlyAffectDirectDependencies,omitzero"`
-	CheckJs                                   Tristate                                  `json:"checkJs,omitzero"`
-	CustomConditions                          []string                                  `json:"customConditions,omitzero"`
-	Composite                                 Tristate                                  `json:"composite,omitzero"`
-	EmitDeclarationOnly                       Tristate                                  `json:"emitDeclarationOnly,omitzero"`
-	EmitBOM                                   Tristate                                  `json:"emitBOM,omitzero"`
-	EmitDecoratorMetadata                     Tristate                                  `json:"emitDecoratorMetadata,omitzero"`
-	Declaration                               Tristate                                  `json:"declaration,omitzero"`
-	DeclarationDir                            string                                    `json:"declarationDir,omitzero"`
-	DeclarationMap                            Tristate                                  `json:"declarationMap,omitzero"`
-	DeduplicatePackages                       Tristate                                  `json:"deduplicatePackages,omitzero"`
-	DisableSizeLimit                          Tristate                                  `json:"disableSizeLimit,omitzero"`
-	DisableSourceOfProjectReferenceRedirect   Tristate                                  `json:"disableSourceOfProjectReferenceRedirect,omitzero"`
-	DisableSolutionSearching                  Tristate                                  `json:"disableSolutionSearching,omitzero"`
-	DisableReferencedProjectLoad              Tristate                                  `json:"disableReferencedProjectLoad,omitzero"`
-	ErasableSyntaxOnly                        Tristate                                  `json:"erasableSyntaxOnly,omitzero"`
-	ExactOptionalPropertyTypes                Tristate                                  `json:"exactOptionalPropertyTypes,omitzero"`
-	ExperimentalDecorators                    Tristate                                  `json:"experimentalDecorators,omitzero"`
-	ForceConsistentCasingInFileNames          Tristate                                  `json:"forceConsistentCasingInFileNames,omitzero"`
-	IsolatedModules                           Tristate                                  `json:"isolatedModules,omitzero"`
-	IsolatedDeclarations                      Tristate                                  `json:"isolatedDeclarations,omitzero"`
-	IgnoreConfig                              Tristate                                  `json:"ignoreConfig,omitzero"`
-	IgnoreDeprecations                        string                                    `json:"ignoreDeprecations,omitzero"`
-	ImportHelpers                             Tristate                                  `json:"importHelpers,omitzero"`
-	InlineSourceMap                           Tristate                                  `json:"inlineSourceMap,omitzero"`
-	InlineSources                             Tristate                                  `json:"inlineSources,omitzero"`
-	Init                                      Tristate                                  `json:"init,omitzero"`
-	Incremental                               Tristate                                  `json:"incremental,omitzero"`
-	Jsx                                       JsxEmit                                   `json:"jsx,omitzero"`
-	JsxFactory                                string                                    `json:"jsxFactory,omitzero"`
-	JsxFragmentFactory                        string                                    `json:"jsxFragmentFactory,omitzero"`
-	JsxImportSource                           string                                    `json:"jsxImportSource,omitzero"`
-	Lib                                       []string                                  `json:"lib,omitzero"`
-	LibReplacement                            Tristate                                  `json:"libReplacement,omitzero"`
-	Locale                                    string                                    `json:"locale,omitzero"`
-	MapRoot                                   string                                    `json:"mapRoot,omitzero"`
-	Module                                    ModuleKind                                `json:"module,omitzero"`
-	ModuleResolution                          ModuleResolutionKind                      `json:"moduleResolution,omitzero"`
-	ModuleSuffixes                            []string                                  `json:"moduleSuffixes,omitzero"`
-	ModuleDetection                           ModuleDetectionKind                       `json:"moduleDetection,omitzero"`
-	NewLine                                   NewLineKind                               `json:"newLine,omitzero"`
-	NoEmit                                    Tristate                                  `json:"noEmit,omitzero"`
-	NoCheck                                   Tristate                                  `json:"noCheck,omitzero"`
-	NoErrorTruncation                         Tristate                                  `json:"noErrorTruncation,omitzero"`
-	NoFallthroughCasesInSwitch                Tristate                                  `json:"noFallthroughCasesInSwitch,omitzero"`
-	NoImplicitAny                             Tristate                                  `json:"noImplicitAny,omitzero"`
-	NoImplicitThis                            Tristate                                  `json:"noImplicitThis,omitzero"`
-	NoImplicitReturns                         Tristate                                  `json:"noImplicitReturns,omitzero"`
-	NoEmitHelpers                             Tristate                                  `json:"noEmitHelpers,omitzero"`
-	NoLib                                     Tristate                                  `json:"noLib,omitzero"`
-	NoPropertyAccessFromIndexSignature        Tristate                                  `json:"noPropertyAccessFromIndexSignature,omitzero"`
-	NoUncheckedIndexedAccess                  Tristate                                  `json:"noUncheckedIndexedAccess,omitzero"`
-	NoEmitOnError                             Tristate                                  `json:"noEmitOnError,omitzero"`
-	NoUnusedLocals                            Tristate                                  `json:"noUnusedLocals,omitzero"`
-	NoUnusedParameters                        Tristate                                  `json:"noUnusedParameters,omitzero"`
-	NoResolve                                 Tristate                                  `json:"noResolve,omitzero"`
-	NoImplicitOverride                        Tristate                                  `json:"noImplicitOverride,omitzero"`
-	NoUncheckedSideEffectImports              Tristate                                  `json:"noUncheckedSideEffectImports,omitzero"`
-	OutDir                                    string                                    `json:"outDir,omitzero"`
-	Paths                                     *collections.OrderedMap[string, []string] `json:"paths,omitzero"`
-	// Plugins are parsed only so tools can report that native TypeScript does not support them.
-	Plugins                         []PluginImport `json:"plugins,omitzero"`
-	PreserveConstEnums              Tristate       `json:"preserveConstEnums,omitzero"`
-	PreserveSymlinks                Tristate       `json:"preserveSymlinks,omitzero"`
-	Project                         string         `json:"project,omitzero"`
-	ResolveJsonModule               Tristate       `json:"resolveJsonModule,omitzero"`
-	ResolvePackageJsonExports       Tristate       `json:"resolvePackageJsonExports,omitzero"`
-	ResolvePackageJsonImports       Tristate       `json:"resolvePackageJsonImports,omitzero"`
-	RemoveComments                  Tristate       `json:"removeComments,omitzero"`
-	RewriteRelativeImportExtensions Tristate       `json:"rewriteRelativeImportExtensions,omitzero"`
-	ReactNamespace                  string         `json:"reactNamespace,omitzero"`
-	RootDir                         string         `json:"rootDir,omitzero"`
-	RootDirs                        []string       `json:"rootDirs,omitzero"`
-	SkipLibCheck                    Tristate       `json:"skipLibCheck,omitzero"`
-	StableTypeOrdering              Tristate       `json:"stableTypeOrdering,omitzero"`
-	Strict                          Tristate       `json:"strict,omitzero"`
-	StrictBindCallApply             Tristate       `json:"strictBindCallApply,omitzero"`
-	StrictBuiltinIteratorReturn     Tristate       `json:"strictBuiltinIteratorReturn,omitzero"`
-	StrictFunctionTypes             Tristate       `json:"strictFunctionTypes,omitzero"`
-	StrictNullChecks                Tristate       `json:"strictNullChecks,omitzero"`
-	StrictPropertyInitialization    Tristate       `json:"strictPropertyInitialization,omitzero"`
-	StripInternal                   Tristate       `json:"stripInternal,omitzero"`
-	SkipDefaultLibCheck             Tristate       `json:"skipDefaultLibCheck,omitzero"`
-	SourceMap                       Tristate       `json:"sourceMap,omitzero"`
-	SourceRoot                      string         `json:"sourceRoot,omitzero"`
-	SuppressOutputPathCheck         Tristate       `json:"suppressOutputPathCheck,omitzero"`
-	Target                          ScriptTarget   `json:"target,omitzero"`
-	TraceResolution                 Tristate       `json:"traceResolution,omitzero"`
-	TsBuildInfoFile                 string         `json:"tsBuildInfoFile,omitzero"`
-	TypeRoots                       []string       `json:"typeRoots,omitzero"`
-	Types                           []string       `json:"types,omitzero"`
-	UseDefineForClassFields         Tristate       `json:"useDefineForClassFields,omitzero"`
-	UseUnknownInCatchVariables      Tristate       `json:"useUnknownInCatchVariables,omitzero"`
-	VerbatimModuleSyntax            Tristate       `json:"verbatimModuleSyntax,omitzero"`
-	MaxNodeModuleJsDepth            *int           `json:"maxNodeModuleJsDepth,omitzero"`
-
-	// Deprecated: Do not use outside of options parsing and validation.
-	AllowSyntheticDefaultImports Tristate `json:"allowSyntheticDefaultImports,omitzero" deprecated:"true"`
-	// Deprecated: Do not use outside of options parsing and validation.
-	AlwaysStrict Tristate `json:"alwaysStrict,omitzero" deprecated:"true"`
-	// Deprecated: Do not use outside of options parsing and validation.
-	BaseUrl string `json:"baseUrl,omitzero" deprecated:"true"`
-	// Deprecated: Do not use outside of options parsing and validation.
-	DownlevelIteration Tristate `json:"downlevelIteration,omitzero" deprecated:"true"`
-	// Deprecated: Do not use outside of options parsing and validation.
-	ESModuleInterop Tristate `json:"esModuleInterop,omitzero" deprecated:"true"`
-	// Deprecated: Do not use outside of options parsing and validation.
-	OutFile string `json:"outFile,omitzero" deprecated:"true"`
-
-	// Internal fields
-	ConfigFilePath      string   `json:"configFilePath,omitzero"` // internal, but intentionally exposed via API
-	NoDtsResolution     Tristate `json:"noDtsResolution,omitzero" internal:"true"`
-	PathsBasePath       string   `json:"pathsBasePath,omitzero" internal:"true"`
-	Diagnostics         Tristate `json:"diagnostics,omitzero" internal:"true"`
-	ExtendedDiagnostics Tristate `json:"extendedDiagnostics,omitzero" internal:"true"`
-	GenerateCpuProfile  string   `json:"generateCpuProfile,omitzero" internal:"true"`
-	GenerateTrace       string   `json:"generateTrace,omitzero" internal:"true"`
-	ListEmittedFiles    Tristate `json:"listEmittedFiles,omitzero" internal:"true"`
-	ListFiles           Tristate `json:"listFiles,omitzero" internal:"true"`
-	ExplainFiles        Tristate `json:"explainFiles,omitzero" internal:"true"`
-	ListFilesOnly       Tristate `json:"listFilesOnly,omitzero" internal:"true"`
-	NoEmitForJsFiles    Tristate `json:"noEmitForJsFiles,omitzero" internal:"true"`
-	PreserveWatchOutput Tristate `json:"preserveWatchOutput,omitzero" internal:"true"`
-	Pretty              Tristate `json:"pretty,omitzero" internal:"true"`
-	Version             Tristate `json:"version,omitzero" internal:"true"`
-	Watch               Tristate `json:"watch,omitzero" internal:"true"`
-	ShowConfig          Tristate `json:"showConfig,omitzero" internal:"true"`
-	Build               Tristate `json:"build,omitzero" internal:"true"`
-	Help                Tristate `json:"help,omitzero" internal:"true"`
-	All                 Tristate `json:"all,omitzero" internal:"true"`
-	RunExternalCode     Tristate `json:"runExternalCode,omitzero" internal:"true"`
-
-	PprofDir       string   `json:"pprofDir,omitzero"  internal:"true"`
-	SingleThreaded Tristate `json:"singleThreaded,omitzero" internal:"true"`
-	Quiet          Tristate `json:"quiet,omitzero" internal:"true"`
-	Checkers       *int     `json:"checkers,omitzero" internal:"true"`
 }
 
 // noCopy may be embedded into structs which must not be copied
@@ -176,25 +23,6 @@ func (*noCopy) Lock()   {}
 func (*noCopy) Unlock() {}
 
 var EmptyCompilerOptions = &CompilerOptions{}
-
-var optionsType = reflect.TypeFor[CompilerOptions]()
-
-// Clone creates a shallow copy of the CompilerOptions.
-func (options *CompilerOptions) Clone() *CompilerOptions {
-	// TODO: this could be generated code instead of reflection.
-	target := &CompilerOptions{}
-
-	sourceValue := reflect.ValueOf(options).Elem()
-	targetValue := reflect.ValueOf(target).Elem()
-
-	for i := range sourceValue.NumField() {
-		if optionsType.Field(i).IsExported() {
-			targetValue.Field(i).Set(sourceValue.Field(i))
-		}
-	}
-
-	return target
-}
 
 func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
 	if options.Target != ScriptTargetNone {
@@ -376,42 +204,6 @@ func (options *CompilerOptions) GetPathsBasePath(currentDirectory string) string
 	return currentDirectory
 }
 
-type ModuleDetectionKind int32
-
-const (
-	ModuleDetectionKindNone   ModuleDetectionKind = 0
-	ModuleDetectionKindAuto   ModuleDetectionKind = 1
-	ModuleDetectionKindLegacy ModuleDetectionKind = 2
-	ModuleDetectionKindForce  ModuleDetectionKind = 3
-)
-
-type ModuleKind int32
-
-const (
-	ModuleKindNone     ModuleKind = 0
-	ModuleKindCommonJS ModuleKind = 1
-	// Deprecated: Do not use outside of options parsing and validation.
-	ModuleKindAMD ModuleKind = 2
-	// Deprecated: Do not use outside of options parsing and validation.
-	ModuleKindUMD ModuleKind = 3
-	// Deprecated: Do not use outside of options parsing and validation.
-	ModuleKindSystem ModuleKind = 4
-	// NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.
-	//       Non-ES module kinds should not come between ES2015 (the earliest ES module kind) and ESNext (the last ES
-	//       module kind).
-	ModuleKindES2015 ModuleKind = 5
-	ModuleKindES2020 ModuleKind = 6
-	ModuleKindES2022 ModuleKind = 7
-	ModuleKindESNext ModuleKind = 99
-	// Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
-	ModuleKindNode16   ModuleKind = 100
-	ModuleKindNode18   ModuleKind = 101
-	ModuleKindNode20   ModuleKind = 102
-	ModuleKindNodeNext ModuleKind = 199
-	// Emit as written
-	ModuleKindPreserve ModuleKind = 200
-)
-
 func (moduleKind ModuleKind) IsNonNodeESM() bool {
 	return moduleKind >= ModuleKindES2015 && moduleKind <= ModuleKindESNext
 }
@@ -429,29 +221,6 @@ const (
 	ResolutionModeCommonJS = ModuleKindCommonJS
 	ResolutionModeESM      = ModuleKindESNext
 )
-
-type ModuleResolutionKind int32
-
-const (
-	ModuleResolutionKindUnknown ModuleResolutionKind = 0
-	// Deprecated: Do not use outside of options parsing and validation.
-	ModuleResolutionKindClassic ModuleResolutionKind = 1
-	// Deprecated: Do not use outside of options parsing and validation.
-	ModuleResolutionKindNode10 ModuleResolutionKind = 2
-	// Starting with node16, node's module resolver has significant departures from traditional cjs resolution
-	// to better support ECMAScript modules and their use within node - however more features are still being added.
-	// TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
-	// version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMAScript 2022.
-	// In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
-	ModuleResolutionKindNode16   ModuleResolutionKind = 3
-	ModuleResolutionKindNodeNext ModuleResolutionKind = 99 // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
-	ModuleResolutionKindBundler  ModuleResolutionKind = 100
-)
-
-var ModuleKindToModuleResolutionKind = map[ModuleKind]ModuleResolutionKind{
-	ModuleKindNode16:   ModuleResolutionKindNode16,
-	ModuleKindNodeNext: ModuleResolutionKindNodeNext,
-}
 
 // We don't use stringer on this for now, because these values
 // are user-facing in --traceResolution, and stringer currently
@@ -479,14 +248,6 @@ func (m ModuleResolutionKind) String() string {
 	}
 }
 
-type NewLineKind int32
-
-const (
-	NewLineKindNone NewLineKind = 0
-	NewLineKindCRLF NewLineKind = 1
-	NewLineKindLF   NewLineKind = 2
-)
-
 func GetNewLineKind(s string) NewLineKind {
 	switch s {
 	case "\r\n":
@@ -506,40 +267,6 @@ func (newLine NewLineKind) GetNewLineCharacter() string {
 		return "\n"
 	}
 }
-
-type ScriptTarget int32
-
-const (
-	ScriptTargetNone ScriptTarget = 0
-	// Deprecated: Do not use outside of options parsing and validation.
-	ScriptTargetES5            ScriptTarget = 1
-	ScriptTargetES2015         ScriptTarget = 2
-	ScriptTargetES2016         ScriptTarget = 3
-	ScriptTargetES2017         ScriptTarget = 4
-	ScriptTargetES2018         ScriptTarget = 5
-	ScriptTargetES2019         ScriptTarget = 6
-	ScriptTargetES2020         ScriptTarget = 7
-	ScriptTargetES2021         ScriptTarget = 8
-	ScriptTargetES2022         ScriptTarget = 9
-	ScriptTargetES2023         ScriptTarget = 10
-	ScriptTargetES2024         ScriptTarget = 11
-	ScriptTargetES2025         ScriptTarget = 12
-	ScriptTargetESNext         ScriptTarget = 99
-	ScriptTargetJSON           ScriptTarget = 100
-	ScriptTargetLatest         ScriptTarget = ScriptTargetESNext
-	ScriptTargetLatestStandard ScriptTarget = ScriptTargetES2025
-)
-
-type JsxEmit int32
-
-const (
-	JsxEmitNone        JsxEmit = 0
-	JsxEmitPreserve    JsxEmit = 1
-	JsxEmitReact       JsxEmit = 2
-	JsxEmitReactNative JsxEmit = 3
-	JsxEmitReactJSX    JsxEmit = 4
-	JsxEmitReactJSXDev JsxEmit = 5
-)
 
 func (j JsxEmit) String() string {
 	switch j {

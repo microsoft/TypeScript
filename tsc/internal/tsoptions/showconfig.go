@@ -1,18 +1,14 @@
 package tsoptions
 
 import (
-	"reflect"
-
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/debug"
-	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // computeFn wraps a typed getter method so it can be stored in an impliedOption's
 // compute field (which has type func(*core.CompilerOptions) any).
-func computeFn[T any](fn func(*core.CompilerOptions) T) func(*core.CompilerOptions) any {
+func computeFn[T comparable](fn func(*core.CompilerOptions) T) func(*core.CompilerOptions) any {
 	return func(opts *core.CompilerOptions) any {
 		return fn(opts)
 	}
@@ -159,139 +155,30 @@ func getNameOfCompilerOptionValue(value any, enumMap *collections.OrderedMap[str
 	return ""
 }
 
-// serializeCompilerOptions converts CompilerOptions to an ordered map with
-// string names as keys and serialized values (enums as strings, paths as
-// relative paths, etc.) matching the output of tsc --showConfig.
-func serializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
-	result := collections.NewOrderedMapWithSizeHint[string, any](32)
+func serializeCompilerOptionPath(value string, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) string {
 	configDir := tspath.GetDirectoryPath(configFilePath)
+	absolute := tspath.GetNormalizedAbsolutePath(value, configDir)
+	return tspath.GetRelativePathFromFile(configFilePath, absolute, comparePathsOptions)
+}
 
-	optionsValue := reflect.ValueOf(options).Elem()
-	optionsTypeInfo := reflect.TypeFor[core.CompilerOptions]()
-
-	for i := range optionsValue.NumField() {
-		field := optionsTypeInfo.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
-		optionDecl := CommandLineCompilerOptionsMap.Get(field.Name)
-		if optionDecl == nil {
-			continue
-		}
-
-		// Skip command-line-only and output formatting options
-		if optionDecl.Category == diagnostics.Command_line_Options || optionDecl.Category == diagnostics.Output_Formatting {
-			continue
-		}
-
-		fieldValue := optionsValue.Field(i)
-
-		// Skip zero values (unset options)
-		if fieldValue.IsZero() {
-			continue
-		}
-
-		name := optionDecl.Name
-		value := fieldValue.Interface()
-
-		enumMap := optionDecl.EnumMap()
-		if enumMap != nil {
-			// Enum option - convert numeric value to string name
-			serialized := serializeEnumValue(value, enumMap)
-			if serialized != "" {
-				result.Set(name, serialized)
-			}
-			continue
-		}
-
-		switch optionDecl.Kind {
-		case CommandLineOptionTypeListOrElement:
-			debug.Assert(false, "listOrElement option should not reach serialization")
-		case CommandLineOptionTypeList:
-			elem := optionDecl.Elements()
-			if elem != nil && elem.IsFilePath {
-				// List of file paths - make relative
-				if strs, ok := value.([]string); ok {
-					relPaths := make([]string, len(strs))
-					for j, s := range strs {
-						absPath := tspath.GetNormalizedAbsolutePath(s, configDir)
-						relPaths[j] = tspath.GetRelativePathFromFile(configFilePath, absPath, comparePathsOptions)
-					}
-					result.Set(name, relPaths)
-					continue
-				}
-			}
-			if elem != nil && elem.EnumMap() != nil {
-				// List of enum values (e.g., lib)
-				elemMap := elem.EnumMap()
-				if strs, ok := value.([]string); ok {
-					serialized := make([]string, 0, len(strs))
-					for _, s := range strs {
-						// lib values are already stored as the d.ts filename, need to find original key
-						found := getNameOfCompilerOptionValue(s, elemMap)
-						if found != "" {
-							serialized = append(serialized, found)
-						} else {
-							serialized = append(serialized, s)
-						}
-					}
-					result.Set(name, serialized)
-					continue
-				}
-			}
-			result.Set(name, value)
-
-		case CommandLineOptionTypeString:
-			if optionDecl.IsFilePath {
-				// File path option - make relative to config
-				if s, ok := value.(string); ok && s != "" {
-					absPath := tspath.GetNormalizedAbsolutePath(s, configDir)
-					result.Set(name, tspath.GetRelativePathFromFile(configFilePath, absPath, comparePathsOptions))
-					continue
-				}
-			}
-			result.Set(name, value)
-
-		case CommandLineOptionTypeBoolean:
-			if t, ok := value.(core.Tristate); ok {
-				if t.IsTrue() {
-					result.Set(name, true)
-				} else if t.IsFalse() {
-					result.Set(name, false)
-				}
-			} else {
-				result.Set(name, value)
-			}
-
-		case CommandLineOptionTypeNumber:
-			result.Set(name, value)
-
-		default:
-			result.Set(name, value)
-		}
+func serializeCompilerOptionPaths(values []string, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) []string {
+	result := make([]string, len(values))
+	for i, value := range values {
+		result[i] = serializeCompilerOptionPath(value, configFilePath, comparePathsOptions)
 	}
-
 	return result
 }
 
-// serializeEnumValue converts an enum field value to its corresponding string key
-// using the option's enum map. It handles int32-based enum types.
-func serializeEnumValue(value any, enumMap *collections.OrderedMap[string, any]) string {
-	// The enum maps store values as core.ModuleKind, core.ScriptTarget, etc.
-	// But those are all int32 underneath. We need to compare by the underlying int32 value.
-	rv := reflect.ValueOf(value)
-	if rv.CanInt() {
-		intVal := rv.Int()
-		for k, v := range enumMap.Entries() {
-			ev := reflect.ValueOf(v)
-			if ev.CanInt() && ev.Int() == intVal {
-				return k
-			}
+func serializeCompilerOptionEnumList(values []string, enumMap *collections.OrderedMap[string, any]) []string {
+	result := make([]string, len(values))
+	for i, value := range values {
+		if name := getNameOfCompilerOptionValue(value, enumMap); name != "" {
+			result[i] = name
+		} else {
+			result[i] = value
 		}
 	}
-	// Fallback: direct comparison
-	return getNameOfCompilerOptionValue(value, enumMap)
+	return result
 }
 
 // addImpliedOptions adds compiler options that are implied by other explicitly-set options,
@@ -334,7 +221,7 @@ func addImpliedOptions(
 		defaultVal := entry.compute(defaultOpts)
 
 		// If the implied value equals the default, this option doesn't add useful information.
-		if reflect.DeepEqual(implied, defaultVal) {
+		if implied == defaultVal {
 			continue
 		}
 
@@ -368,7 +255,7 @@ func serializeImpliedOptionValue(optionDecl *CommandLineOption, value any) any {
 	}
 	enumMap := optionDecl.EnumMap()
 	if enumMap != nil {
-		s := serializeEnumValue(value, enumMap)
+		s := serializeCompilerOptionEnum(value)
 		if s != "" {
 			return s
 		}

@@ -3,7 +3,6 @@ package execute
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"slices"
 	"time"
 
@@ -664,7 +663,7 @@ func (w *Watcher) recheckTsConfig(force bool) bool {
 	}
 	w.configHasErrors = false
 	w.configFilePaths = append([]string{w.configFileName}, configParseResult.ExtendedSourceFiles()...)
-	if !reflect.DeepEqual(w.config.ParsedConfig, configParseResult.ParsedConfig) {
+	if !w.config.ParsedConfig.Equals(configParseResult.ParsedConfig) {
 		w.configModified = true
 	}
 	w.replaceContentMapperProject(configParseResult)

@@ -212,6 +212,19 @@ func (m *OrderedMap[K, V]) clone() OrderedMap[K, V] {
 	}
 }
 
+// EqualFunc compares keys in insertion order and values using equal.
+// A nil map differs from a non-nil empty map; backing-storage allocation is ignored.
+func (m *OrderedMap[K, V]) EqualFunc(other *OrderedMap[K, V], equal func(V, V) bool) bool {
+	if m == other {
+		return true
+	}
+	if m == nil || other == nil {
+		return false
+	}
+	return slices.Equal(m.keys, other.keys) &&
+		maps.EqualFunc(m.mp, other.mp, equal)
+}
+
 var _ json.MarshalerTo = (*OrderedMap[string, string])(nil)
 
 func (m *OrderedMap[K, V]) MarshalJSONTo(enc *json.Encoder) error {

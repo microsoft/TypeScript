@@ -124,20 +124,7 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 	}
 
 	// Clear options that do not apply to single-file transpilation.
-	opts.Incremental = core.TSUnknown
-	opts.Declaration = core.TSUnknown
-	opts.EmitDeclarationOnly = core.TSUnknown
-	opts.NoEmit = core.TSUnknown
-	opts.Lib = nil
-	opts.OutFile = ""
-	opts.Composite = core.TSUnknown
-	opts.TsBuildInfoFile = ""
-	opts.Paths = nil
-	opts.RootDirs = nil
-	opts.Types = nil
-	opts.AllowImportingTsExtensions = core.TSUnknown
-	opts.NoEmitOnError = core.TSUnknown
-	opts.DeclarationDir = ""
+	clearOptionsForTranspile(opts)
 
 	// Do not set `isolatedModules` if `verbatimModuleSyntax` was supplied, since
 	// it would be redundant.

@@ -10,6 +10,9 @@ import {
     repoRoot as ROOT,
     run,
 } from "../gen/utils.mts";
+import generateOptions from "./generate-options.ts";
+import { options } from "./options.ts";
+import { api } from "./schema.ts";
 
 function runOutput(command: string, args: readonly string[]) {
     return run(command, args, { captureOutput: true, cwd: ROOT });
@@ -21,12 +24,13 @@ interface EnumDef {
     goFile: string;
     outDir: string;
     fileName?: string | undefined;
+    metadata?: { file: string; members: EnumMember[]; } | undefined;
     stringEnum?: boolean | undefined;
     excludeMembers?: readonly string[] | undefined;
     valueReplacements?: Record<string, string> | undefined;
 }
 
-const enumDefs = [
+export const enumDefs = [
     { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "tsc/internal/ast/symbolflags.go", outDir: "packages/typescript/src/enums" },
     { name: "CheckFlags", goPrefix: "CheckFlags", goFile: "tsc/internal/ast/checkflags.go", outDir: "packages/typescript/src/enums" },
     { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
@@ -38,16 +42,27 @@ const enumDefs = [
     { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "TypeFormatFlags", goPrefix: "TypeFormatFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "DiagnosticCategory", goPrefix: "Category", goFile: "tsc/internal/diagnostics/diagnostics.go", outDir: "packages/typescript/src/enums" },
-    { name: "SyntaxKind", goPrefix: "Kind", goFile: "tsc/internal/ast/kind_generated.go", outDir: "packages/typescript/src/enums" },
+    {
+        name: "SyntaxKind",
+        goPrefix: "Kind",
+        goFile: "tsc/internal/ast/kind_generated.go",
+        outDir: "packages/typescript/src/enums",
+        metadata: { file: "tools/scripts/tsc/ast.json", members: syntaxKindMembers() },
+    },
     { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "tsc/internal/ast/nodeflags.go", outDir: "packages/typescript/src/enums" },
     { name: "OuterExpressionKinds", goPrefix: "OEK", goFile: "tsc/internal/ast/utilities.go", outDir: "packages/typescript/src/enums" },
     { name: "JSDeclarationKind", goPrefix: "JSDeclarationKind", goFile: "tsc/internal/ast/utilities.go", outDir: "packages/typescript/src/enums", fileName: "jsDeclarationKind" },
     { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "tsc/internal/ast/modifierflags.go", outDir: "packages/typescript/src/enums" },
-    { name: "ModuleKind", goPrefix: "ModuleKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "ModuleResolutionKind", goPrefix: "ModuleResolutionKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "ModuleDetectionKind", goPrefix: "ModuleDetectionKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "NewLineKind", goPrefix: "NewLineKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
-    { name: "JsxEmit", goPrefix: "JsxEmit", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
+    ...options.enums.filter(enumDef => enumDef.api).map<EnumDef>(enumDef => ({
+        name: enumDef.name,
+        goPrefix: enumDef.name,
+        goFile: "tsc/internal/core/options_generated.go",
+        outDir: "packages/typescript/src/enums",
+        metadata: {
+            file: "tools/scripts/tsc/options.ts",
+            members: enumDef.members.filter(member => !member.excludeFromAPI).map(member => ({ name: member.name, value: String(member.value) })),
+        },
+    })),
     { name: "ScriptKind", goPrefix: "ScriptKind", goFile: "tsc/internal/core/scriptkind.go", outDir: "packages/typescript/src/enums" },
     { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "tsc/internal/ast/tokenflags.go", outDir: "packages/typescript/src/enums" },
     { name: "DiagnosticDirectivePolicy", goPrefix: "MappedDiagnosticDirectivePolicy", goFile: "tsc/internal/ast/ast.go", outDir: "packages/typescript/src/enums" },
@@ -61,6 +76,11 @@ const enumDefs = [
     // form sent over the wire uses "__" (see EscapeSymbolName), so map the sentinel accordingly.
     { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "tsc/internal/ast/symbol.go", outDir: "packages/typescript/src/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
 ] satisfies EnumDef[];
+
+function syntaxKindMembers(): EnumMember[] {
+    const members = api.kindElements().flatMap(element => element.name ? [element.name] : []).map((name, value) => ({ name, value: String(value) }));
+    return [...members, { name: "Count", value: String(members.length) }, ...api.kindMarkers()];
+}
 
 function parseGoConstBlock(block: string, def: EnumDef): EnumMember[] {
     const prefix = def.goPrefix;
@@ -335,10 +355,18 @@ function topoSortMembers(members: EnumMember[]): EnumMember[] {
 }
 
 function renderEnumTS(def: EnumDef, members: EnumMember[]): string {
-    const header = `// Code generated by tools/scripts/tsc/generate-enums.ts from ${def.goFile}. DO NOT EDIT.\n\n`;
+    const source = def.metadata?.file ?? def.goFile;
+    const header = `// Code generated by tools/scripts/tsc/generate-enums.ts from ${source}. DO NOT EDIT.\n\n`;
 
     const lines = members.map(m => `    ${m.name} = ${m.value},`);
     return `${header}export enum ${def.name} {\n${lines.join("\n")}\n}\n`;
+}
+
+export function generateEnum(def: EnumDef): { members: EnumMember[]; code: string; } {
+    const members = def.metadata
+        ? topoSortMembers(def.metadata.members)
+        : parseGoEnum(def);
+    return { members, code: renderEnumTS(def, members) };
 }
 
 const enumValuesGeneratedGoPath = path.join(ROOT, "tsc/internal/api/enum_values_generated.go");
@@ -448,17 +476,23 @@ async function evaluateEnumMembers(enumSource: string, enumName: string): Promis
 }
 
 export default async function generateEnums(force = false) {
+    await generateOptions(force);
     const inputs = [
         import.meta.filename,
+        path.join(import.meta.dirname, "options.ts"),
+        path.join(import.meta.dirname, "options-model.ts"),
+        path.join(import.meta.dirname, "schema.ts"),
         ...goInputs(),
     ];
     const enumFiles = enumDefs.map(def => {
         const camelName = def.fileName ?? def.name.charAt(0).toLowerCase() + def.name.slice(1);
+        const enumInputs = [...inputs, path.join(ROOT, def.goFile)];
+        if (def.metadata) enumInputs.push(path.join(ROOT, def.metadata.file));
         return {
             def,
             camelName,
-            typeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.enum.ts`), [...inputs, path.join(ROOT, def.goFile)]),
-            runtimeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.ts`), [...inputs, path.join(ROOT, def.goFile)]),
+            typeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.enum.ts`), enumInputs),
+            runtimeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.ts`), enumInputs),
         };
     });
     const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => path.join(ROOT, def.goFile))]);
@@ -484,13 +518,12 @@ export default async function generateEnums(force = false) {
         );
     }
 
-    console.log("Generating enums from Go source...");
+    console.log("Generating enums from metadata and Go source...");
     const generatedEnums: GeneratedEnum[] = [];
     for (const { def, camelName, typeFile, runtimeFile } of enumFiles) {
-        const members = parseGoEnum(def);
+        const { members, code: enumTS } = generateEnum(def);
 
         // Generate .enum.ts (TypeScript enum — used for types)
-        const enumTS = renderEnumTS(def, members);
         typeFile.write(enumTS);
 
         // Generate .ts (IIFE — used at runtime)
