@@ -37,10 +37,10 @@ declare namespace MyClass {
     var staticMethod: () => void;
     var staticProperty: number;
 }
-export type DoneCB = (failures: number) => any;
 /**
  * Callback to be invoked when test execution is complete.
  *
  * @callback DoneCB
  * @param {number} failures - Number of failures that occurred.
  */ 
+export type DoneCB = (failures: number) => any;

@@ -53,6 +53,14 @@ type FooOptions = {
      */
     baz: string;
 };
+/**
+ * Multiline
+ * Options
+ * for Foo <------------
+ * @typedef {Object} BarOptions
+ * @property {boolean} bar - Marvin K Mooney
+ * @property {string} baz - Sylvester McMonkey McBean
+ */
 type BarOptions = {
     /**
      * - Marvin K Mooney
@@ -63,11 +71,3 @@ type BarOptions = {
      */
     baz: string;
 };
-/**
- * Multiline
- * Options
- * for Foo <------------
- * @typedef {Object} BarOptions
- * @property {boolean} bar - Marvin K Mooney
- * @property {string} baz - Sylvester McMonkey McBean
- */

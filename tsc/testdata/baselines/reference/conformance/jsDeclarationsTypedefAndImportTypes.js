@@ -67,10 +67,10 @@ module.exports = {
 
 
 //// [conn.d.ts]
+export = Conn;
 /**
  * @typedef {string | number} Whatever
  */
-export = Conn;
 export type Whatever = string | number;
 declare class Conn {
     constructor();
@@ -78,13 +78,13 @@ declare class Conn {
     method(): void;
 }
 //// [usage.d.ts]
-/**
- * @typedef {import("./conn")} Conn
- */
 declare const _exports: {
     Wrap: typeof Wrap;
 };
 export = _exports;
+/**
+ * @typedef {import("./conn")} Conn
+ */
 export type Conn = import("./conn");
 declare class Wrap {
     connItem: number;

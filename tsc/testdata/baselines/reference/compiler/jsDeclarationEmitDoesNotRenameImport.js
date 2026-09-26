@@ -45,13 +45,13 @@ declare class Test {
 export default Test;
 //// [index.d.ts]
 import Test from './test/Test.js';
-export type Options = {
-    test?: typeof import("./Test.js").default;
-};
 /**
  * @typedef {Object} Options
  * @property {typeof import("./Test.js").default} [test]
  */
+export type Options = {
+    test?: typeof import("./Test.js").default;
+};
 declare class X extends Test {
     test: import("./Test.js").default | undefined;
     /**

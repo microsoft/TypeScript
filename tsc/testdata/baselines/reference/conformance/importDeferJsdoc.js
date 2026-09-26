@@ -20,9 +20,6 @@ let a = 2;
 export type X = 1;
 //// [foo.d.ts]
 /**
- * @import defer * as ns from "./types"
- */
-/**
  * @type { ns.X }
  */
 declare let a: ns.X;

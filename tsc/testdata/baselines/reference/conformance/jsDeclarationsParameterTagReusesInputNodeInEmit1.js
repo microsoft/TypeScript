@@ -71,13 +71,13 @@ declare namespace BaseFactory {
     export { Base };
 }
 //// [file.d.ts]
-type BaseFactory = import('./base');
-type BaseFactoryFactory = (factory: import('./base')) => any;
 /** @typedef {import('./base')} BaseFactory */
+type BaseFactory = import('./base');
 /**
  * @callback BaseFactoryFactory
  * @param {import('./base')} factory
  */
+type BaseFactoryFactory = (factory: import('./base')) => any;
 /** @enum {import('./base')} */
 declare const couldntThinkOfAny: {};
 /**
