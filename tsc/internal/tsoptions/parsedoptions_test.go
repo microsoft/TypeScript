@@ -42,6 +42,31 @@ func TestParsedOptionsEquality(t *testing.T) {
 		}
 	}
 	check(t, makeOptions(), makeOptions())
+	for _, object := range []func(*ParsedOptions) any{
+		func(p *ParsedOptions) any { return p },
+		func(p *ParsedOptions) any { return p.ContentMappers[0] },
+	} {
+		typ := reflect.TypeOf(object(makeOptions())).Elem()
+		for _, field := range reflect.VisibleFields(typ) {
+			if field.Anonymous && field.Type.Kind() == reflect.Struct {
+				continue
+			}
+			t.Run("field coverage/"+typ.Name()+"/"+field.Name, func(t *testing.T) {
+				t.Parallel()
+				a, b := makeOptions(), makeOptions()
+				value := reflect.ValueOf(object(b)).Elem().FieldByIndex(field.Index)
+				if !value.CanSet() {
+					t.Fatalf("Add explicit equality coverage for %s.%s", typ.Name(), field.Name)
+				}
+				if value.IsZero() {
+					t.Fatalf("Populate %s.%s in makeOptions so its equality is exercised", typ.Name(), field.Name)
+				}
+				value.SetZero()
+				check(t, a, b)
+				check(t, b, a)
+			})
+		}
+	}
 	for _, test := range []struct {
 		name   string
 		change func(*ParsedOptions)
