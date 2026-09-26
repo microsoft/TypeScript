@@ -61,3 +61,23 @@ const test3: (arg: number) => void = (arg = 1) => {};
 >arg : number
 >1 : 1
 
+const test4: (reader: () => number, value: 1) => void =
+>test4 : (reader: () => number, value: 1) => void
+>reader : () => number
+>value : 1
+
+  (get = () => x, x = 0) => {
+>(get = () => x, x = 0) => {    x.toFixed();  } : (get?: () => number, x?: number) => void
+>get : () => number
+>() => x : () => 1
+>x : number
+>x : number
+>0 : 0
+
+    x.toFixed();
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+  };
