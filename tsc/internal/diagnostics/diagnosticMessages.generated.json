@@ -1942,6 +1942,7 @@
     "The_content_mapper_returned_diagnostic_directives_with_overlapping_virtual_ranges_18108": "The content mapper returned diagnostic directives with overlapping virtual ranges.",
     "The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper_18109": "The invalid diagnostic directive is in supplemental output {0} returned by the content mapper.",
     "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_18110": "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.",
+    "Checking_workspace_18111": "Checking workspace",
     "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010": "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.",
     "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001": "File is a CommonJS module; it may be converted to an ES module.",
     "This_constructor_function_may_be_converted_to_a_class_declaration_80002": "This constructor function may be converted to a class declaration.",

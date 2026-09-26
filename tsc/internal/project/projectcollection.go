@@ -31,6 +31,9 @@ type ProjectCollection struct {
 	// inferredProject is a fallback project that is used when no configured
 	// project can be found for an open file.
 	inferredProject *Project
+	// loadedProjectTrees is the project tree request this collection was last built for. A later
+	// request that it already covers needs no new snapshot to discover that nothing is missing.
+	loadedProjectTrees *ProjectTreeRequest
 	// apiState tracks the projects and files that API clients have explicitly
 	// opened so they are kept loaded across snapshots.
 	apiState APIState
@@ -199,6 +202,22 @@ func (c *ProjectCollection) GetOpenConfiguredProjects() *collections.Set[Configu
 	return c.openConfiguredProjects
 }
 
+// isOpen reports whether the project contains an open file. Configured projects come from the
+// memoized set, which is indexed by default project; the inferred project is not in that set, but
+// there is only ever one and open files are few.
+func (c *ProjectCollection) isOpen(project *Project) bool {
+	if project == c.inferredProject {
+		for path := range c.openFiles.Keys() {
+			if project.containsFile(path) {
+				return true
+			}
+		}
+		return false
+	}
+	configuredID, configured := project.ID().Configured()
+	return configured && c.GetOpenConfiguredProjects().Has(configuredID)
+}
+
 func openFilePaths(overlays map[tspath.Path]*Overlay) collections.Set[tspath.Path] {
 	openFiles := collections.Set[tspath.Path]{M: make(map[tspath.Path]struct{}, len(overlays))}
 	for path := range overlays {
@@ -335,6 +354,7 @@ func (c *ProjectCollection) clone() *ProjectCollection {
 		openFiles:           c.openFiles,
 		inferredProject:     c.inferredProject,
 		fileDefaultProjects: c.fileDefaultProjects,
+		loadedProjectTrees:  c.loadedProjectTrees,
 		apiState:            c.apiState,
 	}
 }

@@ -54,6 +54,14 @@ const (
 	UpdateReasonDidChangeContentMapperContributions
 )
 
+// someoneIsWaiting reports whether a request is held up behind an update made for this reason.
+// Every reason but the idle clean comes from something the user did or something a request asked
+// for; the idle clean is housekeeping on a timer, and a pass over the workspace that stood down
+// for it would be standing down for nobody.
+func (r UpdateReason) someoneIsWaiting() bool {
+	return r != UpdateReasonIdleCleanDiskCache
+}
+
 type ContentMapperContributions struct {
 	Mappers    []*contentmapper.Mapper
 	Extensions []string
@@ -79,6 +87,16 @@ type SessionOptions struct {
 	RunExternalCode    bool
 	DebounceDelay      time.Duration
 	CheckerPoolOptions CheckerPoolOptions
+
+	// workspaceDiagnosticsEnabled tracks whether the workspace pull is switched on, so that a
+	// project only pays for a build's worth of checkers when something is going to check it that
+	// way. Written whenever the user's preferences change and read when a program's pool is built,
+	// so a session that turns the pull on picks it up as programs are rebuilt.
+	workspaceDiagnosticsEnabled atomic.Bool
+
+	// interactiveWork is shared by every checker pool in the session. Set by NewSnapshotHost; see
+	// interactiveWork for what it is for.
+	interactiveWork *interactiveWork
 }
 
 type SessionInit struct {
@@ -292,6 +310,7 @@ func (s *Session) Configure(config lsutil.UserPreferences) {
 	oldConfig := s.workspaceUserPreferences
 	s.workspaceUserPreferences = config
 	s.userConfigRWMu.Unlock()
+	s.options.workspaceDiagnosticsEnabled.Store(config.WorkspaceDiagnosticsScope.Enabled())
 
 	if config.Locale != "" {
 		oldLocale := s.client.GetLocale()
@@ -1053,7 +1072,8 @@ func (s *Session) getSnapshot(
 	var updateReason UpdateReason
 	if len(request.Projects) > 0 {
 		updateReason = UpdateReasonRequestedLanguageServiceProjectDirty
-	} else if request.ProjectTree != nil {
+	} else if request.ProjectTree != nil && !snapshot.ProjectCollection.loadedProjectTrees.covers(request.ProjectTree) {
+		// Only worth a new snapshot if there is something the loaded trees do not already cover.
 		updateReason = UpdateReasonRequestedLoadProjectTree
 	} else if request.AutoImports != "" {
 		updateReason = UpdateReasonRequestedLanguageServiceWithAutoImports
@@ -1354,6 +1374,12 @@ func (s *Session) updateSnapshotRef(ctx context.Context, overlays map[tspath.Pat
 }
 
 func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange, callerRef bool) *Snapshot {
+	// Rebuilding a program holds the snapshot write lock, so every request in the session waits on
+	// it. A workspace pass must not be competing for the machine while it runs.
+	if change.reason.someoneIsWaiting() {
+		defer s.options.interactiveWork.begin()()
+	}
+
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	if !locale.HasLocale(ctx) {
@@ -1847,7 +1873,8 @@ func (s *Session) refreshCodeLensIfNeeded(oldPrefs lsutil.UserPreferences, newPr
 func (s *Session) refreshDiagnosticsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
 	if oldPrefs.CustomConfigFileName != newPrefs.CustomConfigFileName ||
 		oldPrefs.ReportStyleChecksAsWarnings != newPrefs.ReportStyleChecksAsWarnings ||
-		oldPrefs.EnableValidation != newPrefs.EnableValidation {
+		oldPrefs.EnableValidation != newPrefs.EnableValidation ||
+		oldPrefs.WorkspaceDiagnosticsScope != newPrefs.WorkspaceDiagnosticsScope {
 		s.ScheduleDiagnosticsRefresh()
 	}
 }

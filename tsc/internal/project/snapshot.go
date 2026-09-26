@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -211,6 +212,42 @@ func (s *Snapshot) GetLanguageServiceProjectsContainingFile(uri lsproto.Document
 	return s.ProjectCollection.GetLanguageServiceProjectsContainingFile(path)
 }
 
+// OpenProjects returns the projects that contain at least one file open in the editor.
+// ReleaseDiagnosticsCheckers drops the checkers a sweep used on a project. They hold the types of
+// every file in it, which is the largest thing a pull creates, and keeping them buys nothing: a
+// pull that finds the project unchanged answers from the result ids the client already holds
+// without checking anything, and a pull that finds it changed needs new checkers regardless.
+func (s *Snapshot) ReleaseDiagnosticsCheckers(project *Project) bool {
+	if project.checkerPool == nil {
+		return false
+	}
+	return project.checkerPool.releaseDiagnosticsCheckers()
+}
+
+// WaitForInteractiveIdle blocks until nothing a user is waiting on is outstanding, or ctx is done.
+// A caller about to spend minutes on work nobody asked for uses this to let the work they did ask
+// for go first.
+func (s *Snapshot) WaitForInteractiveIdle(ctx context.Context) {
+	s.host.options.interactiveWork.waitForIdle(ctx)
+}
+
+// IncrementalProgram returns a project's program together with the record of which files a change
+// since the previous program reached, so a caller checking the project can skip the files it did
+// not. Built on first use, and shared by every snapshot holding the same program.
+func (s *Snapshot) IncrementalProgram(project *Project) *incremental.Program {
+	return project.incremental.get(project.Program)
+}
+
+func (s *Snapshot) OpenProjects() []*Project {
+	var open []*Project
+	for _, project := range s.ProjectCollection.Projects() {
+		if s.ProjectCollection.isOpen(project) {
+			open = append(open, project)
+		}
+	}
+	return open
+}
+
 func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }
@@ -365,6 +402,24 @@ func (p *ProjectTreeRequest) IsAllProjects() bool {
 
 func (p *ProjectTreeRequest) IsProjectReferenced(projectID tspath.Path) bool {
 	return p.referencedProjects.Has(projectID)
+}
+
+// covers reports whether having loaded p also loaded everything other asks for.
+func (p *ProjectTreeRequest) covers(other *ProjectTreeRequest) bool {
+	switch {
+	case p == nil:
+		return false
+	case p.IsAllProjects():
+		return true
+	case other.IsAllProjects():
+		return false
+	}
+	for project := range other.referencedProjects.Keys() {
+		if !p.referencedProjects.Has(project) {
+			return false
+		}
+	}
+	return true
 }
 
 func (p *ProjectTreeRequest) Projects() []tspath.Path {

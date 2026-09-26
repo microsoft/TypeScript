@@ -164,6 +164,8 @@ type Project struct {
 	contentMapperWatchedFiles *collections.Set[tspath.Path]
 
 	checkerPool *checkerPool
+	// incremental carries what a change reaches from one program to the next; see incrementalState.
+	incremental *incrementalState
 
 	moduleResolverFactory ModuleResolverFactory
 	moduleResolverID      uint64
@@ -282,6 +284,7 @@ func NewProject(
 		id:               id,
 		currentDirectory: currentDirectory,
 		dirty:            true,
+		incremental:      &incrementalState{},
 	}
 
 	project.programFilesWatch = NewWatchedFiles(
@@ -414,6 +417,7 @@ func (p *Project) Clone() *Project {
 		contentMapperWatchedFiles: p.contentMapperWatchedFiles,
 
 		checkerPool: p.checkerPool,
+		incremental: p.incremental,
 
 		moduleResolverFactory: p.moduleResolverFactory,
 		moduleResolverID:      p.moduleResolverID,
@@ -474,6 +478,19 @@ func (p *Project) setPotentialProjectReference(configFilePath tspath.Path) {
 	p.potentialProjectReferences.Add(configFilePath)
 }
 
+// ReferencedProjectPaths returns the config paths of the projects this project references.
+func (p *Project) ReferencedProjectPaths() []tspath.Path {
+	if p.CommandLine == nil {
+		return nil
+	}
+	referenced := p.CommandLine.ResolvedProjectReferencePaths()
+	paths := make([]tspath.Path, 0, len(referenced))
+	for _, path := range referenced {
+		paths = append(paths, p.toPath(path))
+	}
+	return paths
+}
+
 func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRequest) bool {
 	if p.CommandLine != nil {
 		for _, path := range p.CommandLine.ResolvedProjectReferencePaths() {
@@ -506,7 +523,9 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	// the same project never share a captured variable through a stale closure
 	// stored in the old program's options.
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
-		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
+		opts := p.host.sessionOptions.CheckerPoolOptions
+		opts.MatchBuildCheckerCount = p.host.sessionOptions.workspaceDiagnosticsEnabled.Load()
+		return newCheckerPool(opts, program, p.host.sessionOptions.interactiveWork, p.log)
 	}
 	var cleanupModuleResolver func()
 	createModuleResolver := func(options module.ResolverOptions) module.Resolver {
