@@ -1,0 +1,113 @@
+//// [tests/cases/compiler/declarationEmitAlternativeContainingModules.ts] ////
+
+=== model.ts ===
+export interface Model { value: string; }
+>Model : Symbol(Model, Decl(model.ts, 0, 0))
+>value : Symbol(Model.value, Decl(model.ts, 0, 24))
+
+export function make(): Model { return { value: "" }; }
+>make : Symbol(make, Decl(model.ts, 0, 41))
+>Model : Symbol(Model, Decl(model.ts, 0, 0))
+>value : Symbol(value, Decl(model.ts, 1, 40))
+
+=== factory.ts ===
+export { make } from "./model";
+>make : Symbol(make, Decl(factory.ts, 0, 8))
+
+=== aliases.ts ===
+export { Model as First, Model as Second } from "./model";
+>Model : Symbol(Model, Decl(model.ts, 0, 0))
+>First : Symbol(First, Decl(aliases.ts, 0, 8))
+>Model : Symbol(Model, Decl(model.ts, 0, 0))
+>Second : Symbol(Second, Decl(aliases.ts, 0, 24))
+
+=== preferred.ts ===
+export { Model, Model as Renamed } from "./model";
+>Model : Symbol(Model, Decl(preferred.ts, 0, 8))
+>Model : Symbol(Model, Decl(model.ts, 0, 0))
+>Renamed : Symbol(Renamed, Decl(preferred.ts, 0, 15))
+
+=== star.ts ===
+
+export * from "./aliases";
+
+=== direct.ts ===
+import { make } from "./factory";
+>make : Symbol(make, Decl(direct.ts, 0, 8))
+
+export const direct = make();
+>direct : Symbol(direct, Decl(direct.ts, 1, 12))
+>make : Symbol(make, Decl(direct.ts, 0, 8))
+
+export const repeated = make();
+>repeated : Symbol(repeated, Decl(direct.ts, 2, 12))
+>make : Symbol(make, Decl(direct.ts, 0, 8))
+
+=== renamed.ts ===
+import { make } from "./factory";
+>make : Symbol(make, Decl(renamed.ts, 0, 8))
+
+import * as aliases from "./aliases";
+>aliases : Symbol(aliases, Decl(renamed.ts, 1, 6))
+
+export const renamed = make();
+>renamed : Symbol(renamed, Decl(renamed.ts, 2, 12))
+>make : Symbol(make, Decl(renamed.ts, 0, 8))
+
+=== sameName.ts ===
+import { make } from "./factory";
+>make : Symbol(make, Decl(sameName.ts, 0, 8))
+
+import * as preferred from "./preferred";
+>preferred : Symbol(preferred, Decl(sameName.ts, 1, 6))
+
+export const sameName = make();
+>sameName : Symbol(sameName, Decl(sameName.ts, 2, 12))
+>make : Symbol(make, Decl(sameName.ts, 0, 8))
+
+=== starred.ts ===
+import { make } from "./factory";
+>make : Symbol(make, Decl(starred.ts, 0, 8))
+
+import * as star from "./star";
+>star : Symbol(star, Decl(starred.ts, 1, 6))
+
+export const starred = make();
+>starred : Symbol(starred, Decl(starred.ts, 2, 12))
+>make : Symbol(make, Decl(starred.ts, 0, 8))
+
+=== exported.ts ===
+import { Model } from "./model";
+>Model : Symbol(Model, Decl(exported.ts, 0, 8))
+
+export = Model;
+>Model : Symbol(Model, Decl(exported.ts, 0, 8))
+
+=== exportEquals.ts ===
+import { make } from "./factory";
+>make : Symbol(make, Decl(exportEquals.ts, 0, 8))
+
+import Model = require("./exported");
+>Model : Symbol(Model, Decl(exportEquals.ts, 0, 33))
+
+export const exportEquals = make();
+>exportEquals : Symbol(exportEquals, Decl(exportEquals.ts, 2, 12))
+>make : Symbol(make, Decl(exportEquals.ts, 0, 8))
+
+=== index.ts ===
+export { direct, repeated } from "./direct";
+>direct : Symbol(direct, Decl(index.ts, 0, 8))
+>repeated : Symbol(repeated, Decl(index.ts, 0, 16))
+
+export { renamed } from "./renamed";
+>renamed : Symbol(renamed, Decl(index.ts, 1, 8))
+
+export { sameName } from "./sameName";
+>sameName : Symbol(sameName, Decl(index.ts, 2, 8))
+
+export { starred } from "./starred";
+>starred : Symbol(starred, Decl(index.ts, 3, 8))
+
+export { exportEquals } from "./exportEquals";
+>exportEquals : Symbol(exportEquals, Decl(index.ts, 4, 8))
+
