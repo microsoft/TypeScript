@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/mappedTypeHomomorphismWithPriorKeyofTChecks1.ts] ////
+
+=== mappedTypeHomomorphismWithPriorKeyofTChecks1.ts ===
+type SharedUnionFieldsDeep1<T> = [T] extends [unknown[]]
+>SharedUnionFieldsDeep1 : SharedUnionFieldsDeep1<T>
+
+  ? // Keep only tuple positions guaranteed across the union.
+    1 extends T["length"]
+    ? [T[0]]
+    : T
+  : keyof T extends infer CommonKeys
+  ? ([CommonKeys] extends [never] ? true : false) extends false
+>true : true
+>false : false
+>false : false
+
+    ? {
+        [Key in keyof T]: SharedUnionFieldsDeep1<T[Key]>;
+      }
+    : {}
+  : T;
+
+// distributes
+declare const actual1: SharedUnionFieldsDeep1<
+>actual1 : { tuple: [number]; } | { tuple: [number, string]; }
+
+  { tuple: [number] } | { tuple: [number, string] }
+>tuple : [number]
+>tuple : [number, string]
+
+>;
+
+type SharedUnionFieldsDeep2<T> = [T] extends [unknown[]]
+>SharedUnionFieldsDeep2 : SharedUnionFieldsDeep2<T>
+
+  ? // Keep only tuple positions guaranteed across the union.
+    1 extends T["length"]
+    ? [T[0]]
+    : T
+  : keyof T extends infer CommonKeys
+  ? ([CommonKeys] extends [never] ? true : false) extends false
+>true : true
+>false : false
+>false : false
+
+    ? keyof T extends infer Keys extends PropertyKey
+      ? {
+          [Key in Keys]: SharedUnionFieldsDeep2<T[Key & keyof T]>;
+        }
+      : never
+    : {}
+  : T;
+
+// doesn't distribute
+declare const actual2: SharedUnionFieldsDeep2<
+>actual2 : { tuple: [number]; }
+
+  { tuple: [number] } | { tuple: [number, string] }
+>tuple : [number]
+>tuple : [number, string]
+
+>;
+
+// `& unknown` used here just to avoid printing type alias at actual3
+type SharedUnionFieldsDeepMappedType3<T, K extends keyof T = keyof T> = {
+>SharedUnionFieldsDeepMappedType3 : { [Key in K]: SharedUnionFieldsDeep3<T[Key]>; }
+
+  [Key in K]: SharedUnionFieldsDeep3<T[Key]>;
+} & unknown;
+
+type SharedUnionFieldsDeep3<T> = [T] extends [unknown[]]
+>SharedUnionFieldsDeep3 : SharedUnionFieldsDeep3<T>
+
+  ? // Keep only tuple positions guaranteed across the union.
+    1 extends T["length"]
+    ? [T[0]]
+    : T
+  : keyof T extends infer CommonKeys
+  ? ([CommonKeys] extends [never] ? true : false) extends false
+>true : true
+>false : false
+>false : false
+
+    ? SharedUnionFieldsDeepMappedType3<T>
+    : {}
+  : T;
+
+// doesn't distribute either
+declare const actual3: SharedUnionFieldsDeep3<
+>actual3 : { tuple: [number]; }
+
+  { tuple: [number] } | { tuple: [number, string] }
+>tuple : [number]
+>tuple : [number, string]
+
+>;
+
