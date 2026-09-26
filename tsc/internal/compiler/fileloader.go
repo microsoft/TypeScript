@@ -338,8 +338,14 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 }
 
 func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
+	// The mapper is shared with every program cloned from this one (via processedFiles),
+	// so don't retain the factory closures: they can capture the creator of this program
+	// (e.g. the LSP project), which would keep this program and its checkers alive.
+	opts := p.opts
+	opts.CreateCheckerPool = nil
+	opts.CreateModuleResolver = nil
 	p.projectReferenceFileMapper = &projectReferenceFileMapper{
-		opts: p.opts,
+		opts: opts,
 		host: p.opts.Host,
 	}
 	projectReferences := p.opts.Config.ResolvedProjectReferencePaths()
