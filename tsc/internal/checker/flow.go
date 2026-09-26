@@ -700,7 +700,7 @@ func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFa
 }
 
 func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, operator ast.Kind, value *ast.Node, assumeTrue bool) *Type {
-	if (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && t.flags&TypeFlagsUnion != 0 {
+	if (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && t.flags&TypeFlagsUnion != 0 && (!c.strictNullChecks || !c.maybeTypeOfKind(t, TypeFlagsNullable)) {
 		keyPropertyName := c.getKeyPropertyName(t)
 		if keyPropertyName != "" {
 			if accessedName, ok := c.getAccessedPropertyName(access); ok && keyPropertyName == accessedName {
@@ -1229,7 +1229,7 @@ func (c *Checker) narrowTypeBySwitchOptionalChainContainment(t *Type, data *ast.
 }
 
 func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.Node, data *ast.FlowSwitchClauseData) *Type {
-	if data.ClauseStart < data.ClauseEnd && t.flags&TypeFlagsUnion != 0 {
+	if data.ClauseStart < data.ClauseEnd && t.flags&TypeFlagsUnion != 0 && (!c.strictNullChecks || !c.maybeTypeOfKind(t, TypeFlagsNullable)) {
 		accessedName, _ := c.getAccessedPropertyName(access)
 		if accessedName != "" && c.getKeyPropertyName(t) == accessedName {
 			clauseTypes := c.getSwitchClauseTypes(data.SwitchStatement)[data.ClauseStart:data.ClauseEnd]
