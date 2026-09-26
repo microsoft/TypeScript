@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/templateLiteralTypeExcessiveLength.ts] ////
+
+=== templateLiteralTypeExcessiveLength.ts ===
+// Regression test for #63271: `Dec<2>` is `any`, so `Recur` produces both conditional branches and
+// keeps tail-recursing forever. The checker must report an error instead of building an unbounded
+// template literal type.
+
+type Dec<N extends number> =
+>Dec : Symbol(Dec, Decl(templateLiteralTypeExcessiveLength.ts, 0, 0))
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 4, 9))
+
+    N extends 5 ? 4 : N extends 4 ? 3 : N extends 3 ? 2 :
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 4, 9))
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 4, 9))
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 4, 9))
+
+    N extends 2 ? any :
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 4, 9))
+
+    N extends 1 ? 0 : 0;
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 4, 9))
+
+type Recur<N extends number, S extends string> =
+>Recur : Symbol(Recur, Decl(templateLiteralTypeExcessiveLength.ts, 7, 24))
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 9, 11))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 9, 28))
+
+    N extends 0 ? S : Recur<Dec<N>, `${S}_${S}`>;
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 9, 11))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 9, 28))
+>Recur : Symbol(Recur, Decl(templateLiteralTypeExcessiveLength.ts, 7, 24))
+>Dec : Symbol(Dec, Decl(templateLiteralTypeExcessiveLength.ts, 0, 0))
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 9, 11))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 9, 28))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 9, 28))
+
+// The string literal doubles on every iteration.
+type Explode = {
+>Explode : Symbol(Explode, Decl(templateLiteralTypeExcessiveLength.ts, 10, 49))
+
+    [P in Recur<5, "a"> as `${P}_key`]: any;
+>P : Symbol(P, Decl(templateLiteralTypeExcessiveLength.ts, 14, 5))
+>Recur : Symbol(Recur, Decl(templateLiteralTypeExcessiveLength.ts, 7, 24))
+>P : Symbol(P, Decl(templateLiteralTypeExcessiveLength.ts, 14, 5))
+
+};
+
+// The number of placeholders doubles on every iteration.
+type ExplodeSpans = {
+>ExplodeSpans : Symbol(ExplodeSpans, Decl(templateLiteralTypeExcessiveLength.ts, 15, 2))
+
+    [P in Recur<5, string> as `${P}_key`]: any;
+>P : Symbol(P, Decl(templateLiteralTypeExcessiveLength.ts, 19, 5))
+>Recur : Symbol(Recur, Decl(templateLiteralTypeExcessiveLength.ts, 7, 24))
+>P : Symbol(P, Decl(templateLiteralTypeExcessiveLength.ts, 19, 5))
+
+};
+
+// Every text segment stays small, but the number of segments doubles on every iteration,
+// so the combined text length grows without bound.
+type A16 = "aaaaaaaaaaaaaaaa";
+>A16 : Symbol(A16, Decl(templateLiteralTypeExcessiveLength.ts, 20, 2))
+
+type A64 = `${A16}${A16}${A16}${A16}`;
+>A64 : Symbol(A64, Decl(templateLiteralTypeExcessiveLength.ts, 24, 30))
+>A16 : Symbol(A16, Decl(templateLiteralTypeExcessiveLength.ts, 20, 2))
+>A16 : Symbol(A16, Decl(templateLiteralTypeExcessiveLength.ts, 20, 2))
+>A16 : Symbol(A16, Decl(templateLiteralTypeExcessiveLength.ts, 20, 2))
+>A16 : Symbol(A16, Decl(templateLiteralTypeExcessiveLength.ts, 20, 2))
+
+type A256 = `${A64}${A64}${A64}${A64}`;
+>A256 : Symbol(A256, Decl(templateLiteralTypeExcessiveLength.ts, 25, 38))
+>A64 : Symbol(A64, Decl(templateLiteralTypeExcessiveLength.ts, 24, 30))
+>A64 : Symbol(A64, Decl(templateLiteralTypeExcessiveLength.ts, 24, 30))
+>A64 : Symbol(A64, Decl(templateLiteralTypeExcessiveLength.ts, 24, 30))
+>A64 : Symbol(A64, Decl(templateLiteralTypeExcessiveLength.ts, 24, 30))
+
+type A1024 = `${A256}${A256}${A256}${A256}`;
+>A1024 : Symbol(A1024, Decl(templateLiteralTypeExcessiveLength.ts, 26, 39))
+>A256 : Symbol(A256, Decl(templateLiteralTypeExcessiveLength.ts, 25, 38))
+>A256 : Symbol(A256, Decl(templateLiteralTypeExcessiveLength.ts, 25, 38))
+>A256 : Symbol(A256, Decl(templateLiteralTypeExcessiveLength.ts, 25, 38))
+>A256 : Symbol(A256, Decl(templateLiteralTypeExcessiveLength.ts, 25, 38))
+
+type RecurSegments<N extends number, S extends string> =
+>RecurSegments : Symbol(RecurSegments, Decl(templateLiteralTypeExcessiveLength.ts, 27, 44))
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 29, 19))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 29, 36))
+
+    N extends 0 ? S : RecurSegments<Dec<N>, `${S}${string}${S}`>;
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 29, 19))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 29, 36))
+>RecurSegments : Symbol(RecurSegments, Decl(templateLiteralTypeExcessiveLength.ts, 27, 44))
+>Dec : Symbol(Dec, Decl(templateLiteralTypeExcessiveLength.ts, 0, 0))
+>N : Symbol(N, Decl(templateLiteralTypeExcessiveLength.ts, 29, 19))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 29, 36))
+>S : Symbol(S, Decl(templateLiteralTypeExcessiveLength.ts, 29, 36))
+
+type ExplodeSegments = {
+>ExplodeSegments : Symbol(ExplodeSegments, Decl(templateLiteralTypeExcessiveLength.ts, 30, 65))
+
+    [P in RecurSegments<5, A1024> as `${P}_key`]: any;
+>P : Symbol(P, Decl(templateLiteralTypeExcessiveLength.ts, 33, 5))
+>RecurSegments : Symbol(RecurSegments, Decl(templateLiteralTypeExcessiveLength.ts, 27, 44))
+>A1024 : Symbol(A1024, Decl(templateLiteralTypeExcessiveLength.ts, 26, 39))
+>P : Symbol(P, Decl(templateLiteralTypeExcessiveLength.ts, 33, 5))
+
+};
+
