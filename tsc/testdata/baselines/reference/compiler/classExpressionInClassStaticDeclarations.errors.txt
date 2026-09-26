@@ -1,0 +1,9 @@
+classExpressionInClassStaticDeclarations.ts(2,12): error TS5088: The inferred type of 'D' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== classExpressionInClassStaticDeclarations.ts (1 errors) ====
+    class C {
+        static D = class extends C {};
+               ~
+!!! error TS5088: The inferred type of 'D' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    }

@@ -1,4 +1,5 @@
 main.js(2,13): error TS2749: 'K' refers to a value, but is being used as a type here. Did you mean 'typeof K'?
+mod1.js(7,1): error TS5088: The inferred type of 'K' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 
 
 ==== main.js (1 errors) ====
@@ -10,7 +11,7 @@ main.js(2,13): error TS2749: 'K' refers to a value, but is being used as a type 
         k.values()
     }
     
-==== mod1.js (0 errors) ====
+==== mod1.js (1 errors) ====
     var NS = {}
     NS.K =class {
         values() {
@@ -18,4 +19,6 @@ main.js(2,13): error TS2749: 'K' refers to a value, but is being used as a type 
         }
     }
     exports.K = NS.K;
+    ~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of 'K' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     
