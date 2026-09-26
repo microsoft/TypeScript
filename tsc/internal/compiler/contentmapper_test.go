@@ -134,6 +134,65 @@ func TestEvaluationPhaseWasmUsesContentMapper(t *testing.T) {
 	assert.Equal(t, len(collectContentMapperDiagnostics(program)), 0)
 }
 
+func TestContentMapperDirectivesPreserveIncrementalGlobals(t *testing.T) {
+	t.Parallel()
+	for _, policy := range []ast.MappedDiagnosticDirectivePolicy{
+		ast.MappedDiagnosticDirectivePolicyIgnore,
+		ast.MappedDiagnosticDirectivePolicyExpect,
+	} {
+		t.Run(core.IfElse(policy == ast.MappedDiagnosticDirectivePolicyExpect, "expect", "ignore"), func(t *testing.T) {
+			t.Parallel()
+			const text = "export function values() { function* generator() { yield 1; } }"
+			program := newContentMapperProgramWithOptions(t, fakeContentMapperHost{
+				transform: func(fileName string, content string) (contentmapper.Result, error) {
+					// The virtual source is unchanged; the directive covers the entire file, including offset zero.
+					return contentmapper.Result{
+						Text:             content,
+						VirtualExtension: ".ts",
+						Mappings: spanmap.New([]spanmap.Segment{{
+							OriginalEnd: core.TextPos(len(content)),
+							VirtualEnd:  core.TextPos(len(content)),
+							Kind:        spanmap.KindVerbatim,
+							Features:    spanmap.FeatureAll,
+						}}),
+						DiagnosticDirectives: []ast.MappedDiagnosticDirective{{
+							VirtualRange:      core.NewTextRange(0, len(content)),
+							OriginalRange:     core.NewTextRange(0, len(content)),
+							Policy:            policy,
+							Source:            "vue",
+							UnusedCode:        2578,
+							UnusedMessageText: "Unused mapped expect directive.",
+						}},
+					}, nil
+				},
+			}, map[string]string{"/src/Component.vue": text}, []string{"/src/Component.vue"}, &core.CompilerOptions{
+				Lib:              []string{"lib.es5.d.ts"},
+				SkipLibCheck:     core.TSTrue,
+				Module:           core.ModuleKindESNext,
+				ModuleResolution: core.ModuleResolutionKindBundler,
+			})
+			assert.Equal(t, len(program.GetGlobalDiagnostics(t.Context())), 0)
+			file := program.GetSourceFile("/src/Component.vue")
+			diags := program.GetSemanticDiagnosticsForIncremental(t.Context(), []*ast.SourceFile{file})[file]
+			var globals, unused int
+			for _, diag := range diags {
+				if diag.File() == nil {
+					assert.Equal(t, diag.Code(), diagnostics.Cannot_find_global_type_0.Code())
+					assert.Equal(t, diag.MessageArgs()[0], "IterableIterator")
+					globals++
+				} else {
+					assert.Equal(t, diag.File(), file)
+					assert.Equal(t, diag.Source(), "vue")
+					assert.Equal(t, diag.Code(), int32(2578))
+					unused++
+				}
+			}
+			assert.Equal(t, globals, 1)
+			assert.Equal(t, unused, core.IfElse(policy == ast.MappedDiagnosticDirectivePolicyExpect, 1, 0))
+		})
+	}
+}
+
 func TestCompositeProjectContentMapperSupplementalRoots(t *testing.T) {
 	t.Parallel()
 	contentMapperHost := fakeContentMapperHost{transform: func(fileName string, content string) (contentmapper.Result, error) {

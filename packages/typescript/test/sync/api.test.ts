@@ -1193,6 +1193,393 @@ import.source("pkg");`,
     });
 });
 
+describe("BuildOrchestrator", () => {
+    const files = {
+        "/a/tsconfig.json": JSON.stringify({
+            compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
+            files: ["src/index.ts"],
+        }),
+        "/a/src/index.ts": `export const a = 1;`,
+        "/b/tsconfig.json": JSON.stringify({
+            compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
+            files: ["src/index.ts"],
+        }),
+        "/b/src/index.ts": `export const b = 2;`,
+        "/c/tsconfig.json": JSON.stringify({
+            compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
+            files: ["src/index.ts"],
+            references: [{ path: "../a" }, { path: "../b" }],
+        }),
+        "/c/src/index.ts": `export const c = 3;`,
+    };
+
+    test("dispose is idempotent", () => {
+        const { api: disposableApi } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        const options = api.parseCommandLine([]);
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", ...options },
+        );
+
+        const firstDispose = orchestrator.dispose();
+        const secondDispose = orchestrator.dispose();
+        assert.strictEqual(firstDispose, secondDispose);
+        orchestrator.dispose();
+        // Second dispose should not throw
+        orchestrator.dispose();
+        assert.throws(() => orchestrator.build(), /Build orchestrator is disposed/);
+    });
+
+    test("api.close disposes all build orchestrators", () => {
+        const { api } = spawnAPIWithFS({ ...files });
+        const options = api.parseCommandLine([]);
+        const orchestrator1 = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", ...options },
+        );
+        const orchestrator2 = api.createBuildOrchestrator(
+            ["/b/tsconfig.json"],
+            { cwd: "/", ...options },
+        );
+        assert.ok(!orchestrator1.isDisposed());
+        assert.ok(!orchestrator2.isDisposed());
+        api.close();
+        assert.ok(orchestrator1.isDisposed());
+        assert.ok(orchestrator2.isDisposed());
+        orchestrator1.dispose();
+        orchestrator2.dispose();
+    });
+
+    test("builds the configured root projects", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        const defaultOptions = {
+            cwd: "/",
+            dry: false,
+            force: false,
+            verbose: true,
+            stopBuildOnErrors: false,
+            overrideCompilerOptions: {
+                incremental: true,
+                assumeChangesOnlyAffectDirectDependencies: true,
+                declaration: false,
+                declarationMap: true,
+                emitDeclarationOnly: false,
+                sourceMap: false,
+                inlineSourceMap: false,
+                traceResolution: false,
+            },
+        };
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json", "/b/tsconfig.json"],
+            defaultOptions,
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+    });
+
+    test("returns diagnostics in build response information", () => {
+        const source = `export const value: string = 1;`;
+        const { api: disposableApi } = spawnAPIWithFS({
+            "/a/tsconfig.json": JSON.stringify({
+                compilerOptions: { composite: true, noEmitOnError: true, outDir: "dist", rootDir: "src" },
+                files: ["src/index.ts"],
+            }),
+            "/a/src/index.ts": source,
+        });
+        using api = disposableApi;
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        const response = orchestrator.build();
+        assert.equal(response.status, 1);
+        assert.equal(response.statistics.Projects, 1);
+        assert.equal(response.statistics.ProjectsBuilt, 1);
+        assert.deepEqual(response.diagnostics, [{
+            fileName: "/a/src/index.ts",
+            pos: source.indexOf("value"),
+            end: source.indexOf("value") + "value".length,
+            startPosition: { line: 0, character: source.indexOf("value") },
+            endPosition: { line: 0, character: source.indexOf("value") + "value".length },
+            sourceLines: [{ line: 0, text: source }],
+            code: 2322,
+            category: 1,
+            text: "Type 'number' is not assignable to type 'string'.",
+        }]);
+    });
+
+    test("returns build response information after clean", () => {
+        const { api: disposableApi } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        const options = api.parseCommandLine([]);
+        const orchestrator = api.createBuildOrchestrator(
+            ["/c/tsconfig.json"],
+            { cwd: "/", ...options },
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+
+        const cleanResp1 = orchestrator.clean("/a/tsconfig.json");
+        assert.equal(cleanResp1.status, 0);
+        assert.deepEqual(cleanResp1.diagnostics, undefined);
+        assert.deepEqual(cleanResp1.filesDeleted!.sort(), [
+            "/a/dist/index.d.ts",
+            "/a/dist/index.js",
+            "/a/tsconfig.tsbuildinfo",
+        ]);
+        assert.equal(cleanResp1.statistics.Projects, 1);
+        assert.equal(cleanResp1.statistics.ProjectsBuilt, 0);
+        const buildResp1 = orchestrator.build("/a/tsconfig.json");
+        assert.equal(buildResp1.status, 0);
+        assert.deepEqual(buildResp1.diagnostics, undefined);
+        assert.equal(buildResp1.statistics.Projects, 1);
+        assert.equal(buildResp1.statistics.ProjectsBuilt, 1);
+
+        const cleanRefResp = orchestrator.cleanReferences("/c/tsconfig.json");
+        assert.equal(cleanRefResp.status, 0);
+        assert.deepEqual(cleanRefResp.diagnostics, undefined);
+        assert.deepEqual(cleanRefResp.filesDeleted!.sort(), [
+            "/a/dist/index.d.ts",
+            "/a/dist/index.js",
+            "/a/tsconfig.tsbuildinfo",
+            "/b/dist/index.d.ts",
+            "/b/dist/index.js",
+            "/b/tsconfig.tsbuildinfo",
+        ]);
+        assert.equal(cleanRefResp.statistics.Projects, 2);
+        assert.equal(cleanRefResp.statistics.ProjectsBuilt, 0);
+        const buildRefsResp = orchestrator.buildReferences("/c/tsconfig.json");
+        assert.equal(buildRefsResp.status, 0);
+        assert.deepEqual(buildRefsResp.diagnostics, undefined);
+
+        const cleanResp2 = orchestrator.clean();
+        assert.equal(cleanResp2.status, 0);
+        assert.deepEqual(cleanResp2.diagnostics, undefined);
+        assert.deepEqual(cleanResp2.filesDeleted!.sort(), [
+            "/a/dist/index.d.ts",
+            "/a/dist/index.js",
+            "/a/tsconfig.tsbuildinfo",
+            "/b/dist/index.d.ts",
+            "/b/dist/index.js",
+            "/b/tsconfig.tsbuildinfo",
+            "/c/dist/index.d.ts",
+            "/c/dist/index.js",
+            "/c/tsconfig.tsbuildinfo",
+        ]);
+        assert.equal(cleanResp2.statistics.Projects, 3);
+        assert.equal(cleanResp2.statistics.ProjectsBuilt, 0);
+        const buildResp2 = orchestrator.build();
+        assert.equal(buildResp2.status, 0);
+        assert.deepEqual(buildResp2.diagnostics, undefined);
+        assert.equal(buildResp2.statistics.Projects, 3);
+        assert.equal(buildResp2.statistics.ProjectsBuilt, 3);
+    });
+
+    test("returns deleted files from a clean response", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({
+            ...files,
+            "/a/dist/index.d.ts": `export declare const a = 1;`,
+            "/a/dist/index.js": `export const a = 1;`,
+        });
+        using api = disposableApi;
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        const response = orchestrator.clean();
+        assert.equal(response.status, 0);
+        assert.deepEqual(response.diagnostics, undefined);
+        assert.deepEqual(response.filesDeleted!.sort(), [
+            "/a/dist/index.d.ts",
+            "/a/dist/index.js",
+        ]);
+        assert.equal(response.statistics.Projects, 1);
+        assert.equal(response.statistics.ProjectsBuilt, 0);
+        assert.equal(fs.readFile!("/a/dist/index.d.ts"), undefined);
+        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+    });
+
+    test("rebuilds projects after multiple file system changes", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json", "/b/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+
+        fs.writeFile!("/a/src/index.ts", `export const a = 10;`);
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+
+        fs.writeFile!("/b/src/index.ts", `export const b = 20;`);
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 20/);
+
+        fs.writeFile!("/a/src/index.ts", `export const a = 100;`);
+        fs.writeFile!("/b/src/index.ts", `export const b = 200;`);
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 100/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 200/);
+    });
+
+    test("clean removes build outputs", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        const orchestrator = api.createBuildOrchestrator(
+            ["/c/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.ok(fs.readFile!("/c/dist/index.js"));
+        assert.ok(fs.readFile!("/b/dist/index.js"));
+        assert.ok(fs.readFile!("/a/dist/index.js"));
+        assert.equal((orchestrator.clean()).status, 0);
+        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+    });
+
+    test("builds and cleans selected projects after file system changes", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        const orchestrator = api.createBuildOrchestrator(
+            ["/c/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        assert.equal((orchestrator.build("/a/tsconfig.json")).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
+        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+
+        fs.writeFile!("/a/src/index.ts", `export const a = 10;`);
+        assert.equal((orchestrator.build("/b/tsconfig.json")).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+
+        fs.writeFile!("/b/src/index.ts", `export const b = 20;`);
+        assert.equal((orchestrator.clean("/a/tsconfig.json")).status, 0);
+        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+        assert.match(fs.readFile!("/c/dist/index.js")!, /export const c = 3/);
+
+        assert.equal((orchestrator.clean("/b/tsconfig.json")).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
+        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.match(fs.readFile!("/c/dist/index.js")!, /export const c = 3/);
+
+        fs.writeFile!("/b/dist/index.js", `export const b = 2`);
+        assert.equal((orchestrator.clean("/b/tsconfig.json")).status, 0);
+        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+    });
+
+    test("builds only references of a selected project", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({
+            ...files,
+        });
+        using api = disposableApi;
+        const options = api.parseCommandLine([]);
+        const orchestrator = api.createBuildOrchestrator(
+            ["/c/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        assert.equal((orchestrator.buildReferences("/c/tsconfig.json")).status, 0);
+        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
+        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+        assert.equal(fs.readFile!("/c/dist/index.js"), undefined);
+    });
+
+    test("cleans only references of a selected project", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({
+            ...files,
+        });
+        using api = disposableApi;
+        const orchestrator = api.createBuildOrchestrator(
+            ["/c/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.ok(fs.readFile!("/a/dist/index.js"));
+        assert.ok(fs.readFile!("/b/dist/index.js"));
+        assert.ok(fs.readFile!("/c/dist/index.js"));
+
+        assert.equal((orchestrator.cleanReferences("/c/tsconfig.json")).status, 0);
+        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.ok(fs.readFile!("/c/dist/index.js"));
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.ok(fs.readFile!("/a/dist/index.js"));
+        assert.ok(fs.readFile!("/b/dist/index.js"));
+        assert.equal((orchestrator.cleanReferences()).status, 0);
+        assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
+        assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+        assert.ok(fs.readFile!("/c/dist/index.js"));
+    });
+
+    test("handles invalidated projects and cleans the last built configuration", () => {
+        const writes: string[] = [];
+        const { api: disposableApi, fs } = spawnAPIWithFS(
+            {
+                ...files,
+                "/c/src/index.ts": `import { a } from "../../a/src/index"; export const c = a;`,
+                "/d/tsconfig.json": JSON.stringify({
+                    compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
+                    files: ["src/index.ts"],
+                }),
+                "/d/src/index.ts": `export const d = 4;`,
+            },
+            path => writes.push(path),
+        );
+        using api = disposableApi;
+        const orchestrator = api.createBuildOrchestrator(
+            ["/c/tsconfig.json", "/d/tsconfig.json"],
+            { cwd: "/" },
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/d/dist/index.js")!, /export const d = 4/);
+
+        fs.writeFile!(
+            "/d/tsconfig.json",
+            JSON.stringify({
+                compilerOptions: { composite: true, outDir: "lib", rootDir: "src" },
+                files: ["src/index.ts"],
+            }),
+        );
+        fs.writeFile!("/d/lib/index.js", `export const d = 40;`);
+
+        assert.equal((orchestrator.clean("/d/tsconfig.json")).status, 0);
+        assert.equal(fs.readFile!("/d/dist/index.js"), undefined);
+        assert.ok(fs.readFile!("/d/lib/index.js"));
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!("/d/lib/index.js")!, /export const d = 4/);
+        assert.equal(fs.readFile!("/d/dist/index.js"), undefined);
+    });
+});
+
 describe("Checker - getImmediateAliasedSymbol", { concurrency }, () => {
     test("resolves one level of alias indirection", () => {
         using api = spawnAPI({
@@ -8032,8 +8419,15 @@ describe("runWithTemporaryFileUpdate", { concurrency }, () => {
     });
 });
 
-function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: FileSystem; } {
+function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }, onWrite?: (path: string) => void): { api: API; fs: FileSystem; } {
     const fs = createVirtualFileSystem(files);
+    if (onWrite) {
+        const writeFile = fs.writeFile!;
+        fs.writeFile = (path, content) => {
+            onWrite(path);
+            writeFile(path, content);
+        };
+    }
     const api = new API({
         cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
         fs,

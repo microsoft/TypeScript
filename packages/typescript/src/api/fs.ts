@@ -36,7 +36,7 @@ export interface FileSystem {
 }
 
 /** The callback names supported by the Go server for virtual FS delegation. */
-export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile"] as const;
+export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile", "removeFile"] as const;
 
 export interface CreateFileSystemOptions {
     /** Complete directory listings. Full filesystems derive these from `files` when omitted. */
