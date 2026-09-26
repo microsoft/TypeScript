@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/registeredSymbolDeferredKey.ts] ////
+
+=== registeredSymbolDeferredKey.ts ===
+export function make<K extends string>(key: K) {
+>make : <K extends string>(key: K) => RegisteredSymbol<K>
+>key : K
+
+    const registered = Symbol.for(key);
+>registered : RegisteredSymbol<K>
+>Symbol.for(key) : RegisteredSymbol<K>
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>key : K
+
+    const widened: symbol = registered;
+>widened : symbol
+>registered : RegisteredSymbol<K>
+
+    return registered;
+>registered : RegisteredSymbol<K>
+}
+
+export function unreachable(key: never): never {
+>unreachable : (key: never) => never
+>key : never
+
+    return Symbol.for(key);
+>Symbol.for(key) : never
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>key : never
+}
+
+export function read<K extends string>(first: K, second: K) {
+>read : <K extends string>(first: K, second: K) => "first"
+>first : K
+>second : K
+
+    const firstKey = Symbol.for(first);
+>firstKey : RegisteredSymbol<K>
+>Symbol.for(first) : RegisteredSymbol<K>
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>first : K
+
+    const record = { [firstKey]: "first" } as const;
+>record : { readonly [x: symbol]: "first"; }
+>{ [firstKey]: "first" } as const : { readonly [x: symbol]: "first"; }
+>{ [firstKey]: "first" } : { readonly [x: symbol]: "first"; }
+>[firstKey] : "first"
+>firstKey : RegisteredSymbol<K>
+>"first" : "first"
+
+    const secondKey = Symbol.for(second);
+>secondKey : RegisteredSymbol<K>
+>Symbol.for(second) : RegisteredSymbol<K>
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>second : K
+
+    const value: "first" = record[secondKey];
+>value : "first"
+>record[secondKey] : "first" | undefined
+>record : { readonly [x: symbol]: "first"; }
+>secondKey : RegisteredSymbol<K>
+
+    return value;
+>value : "first"
+}
+
+read<"a" | "b">("a", "b");
+>read<"a" | "b">("a", "b") : "first"
+>read : <K extends string>(first: K, second: K) => "first"
+>"a" : "a"
+>"b" : "b"
+

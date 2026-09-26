@@ -159,7 +159,7 @@ func main() {
 			"Intersection":                    toInt32(checker.TypeFlagsIntersection),
 			"Reserved1":                       toInt32(checker.TypeFlagsReserved1),
 			"Reserved2":                       toInt32(checker.TypeFlagsReserved2),
-			"Reserved3":                       toInt32(checker.TypeFlagsReserved3),
+			"RegisteredESSymbol":              toInt32(checker.TypeFlagsRegisteredESSymbol),
 			"AnyOrUnknown":                    toInt32(checker.TypeFlagsAnyOrUnknown),
 			"Nullable":                        toInt32(checker.TypeFlagsNullable),
 			"Literal":                         toInt32(checker.TypeFlagsLiteral),

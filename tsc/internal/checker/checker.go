@@ -22637,7 +22637,7 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		return c.getTemplateLiteralType(t.AsTemplateLiteralType().texts, c.instantiateTypes(t.AsTemplateLiteralType().types, m))
 	case flags&TypeFlagsStringMapping != 0:
 		return c.getStringMappingType(t.symbol, c.instantiateType(t.AsStringMappingType().target, m))
-	case flags&TypeFlagsUniqueESSymbol != 0 && isRegisteredSymbolAlias(t.alias):
+	case flags&TypeFlagsRegisteredESSymbol != 0:
 		newAlias := c.instantiateTypeAlias(t.alias, m)
 		return c.getRegisteredESSymbolType(newAlias.typeArguments[0], newAlias)
 	case flags&TypeFlagsConditional != 0:
@@ -23374,6 +23374,9 @@ func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
 }
 
 func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Type {
+	if keyType.flags&TypeFlagsNever != 0 {
+		return c.neverType
+	}
 	if keyType.flags&TypeFlagsUnion != 0 {
 		members := make([]*Type, 0, len(keyType.Types()))
 		for _, member := range keyType.Types() {
@@ -23385,17 +23388,20 @@ func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Ty
 		}
 		return c.getUnionType(members)
 	}
-	// Keep a type parameter deferred so instantiating Symbol.for's generic
-	// return type can resolve the actual key supplied at the call site.
 	if keyType.flags&(TypeFlagsStringOrNumberLiteral|TypeFlagsTypeParameter) == 0 {
 		return c.esSymbolType
 	}
 	key := c.getRegisteredESSymbolTypeKey(keyType)
 	t := c.registeredESSymbolTypes[key]
 	if t == nil {
-		name := ast.InternalSymbolNamePrefix + "@@" + c.getRegisteredESSymbolNameText(keyType)
-		symbol := c.newSymbol(ast.SymbolFlagsProperty, name)
-		t = c.newUniqueESSymbolType(symbol, name)
+		if keyType.flags&TypeFlagsTypeParameter != 0 {
+			data := &RegisteredESSymbolType{target: keyType}
+			t = c.newType(TypeFlagsRegisteredESSymbol, ObjectFlagsNone, data)
+		} else {
+			name := ast.InternalSymbolNamePrefix + "@@" + c.getRegisteredESSymbolNameText(keyType)
+			symbol := c.newSymbol(ast.SymbolFlagsProperty, name)
+			t = c.newUniqueESSymbolType(symbol, name)
+		}
 		c.registeredESSymbolTypes[key] = t
 	}
 	t.alias = alias
@@ -27913,7 +27919,7 @@ func (c *Checker) getBaseConstraintOrType(t *Type) *Type {
 }
 
 func (c *Checker) getBaseConstraintOfType(t *Type) *Type {
-	if t.flags&(TypeFlagsInstantiableNonPrimitive|TypeFlagsUnionOrIntersection|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsIndex) != 0 || c.isGenericTupleType(t) {
+	if t.flags&(TypeFlagsInstantiableNonPrimitive|TypeFlagsUnionOrIntersection|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsRegisteredESSymbol|TypeFlagsIndex) != 0 || c.isGenericTupleType(t) {
 		constraint := c.getResolvedBaseConstraint(t, nil)
 		if constraint != c.noConstraintType && constraint != c.circularConstraintType {
 			return constraint
@@ -28026,6 +28032,8 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 			return c.getStringMappingType(t.symbol, constraint)
 		}
 		return c.stringType
+	case t.flags&TypeFlagsRegisteredESSymbol != 0:
+		return c.esSymbolType
 	case t.flags&TypeFlagsIndexedAccess != 0:
 		if c.isMappedTypeGenericIndexedAccess(t) {
 			// For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
