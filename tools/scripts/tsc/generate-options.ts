@@ -164,6 +164,87 @@ function zeroValue(option: CompilerOption): string {
     return kind === "Boolean" ? "core.TSUnknown" : kind === "String" ? '""' : kind === "Enum" ? "0" : "nil";
 }
 
+function showConfig(): string {
+    const serializedOptions = options.compilerOptions.filter(option => {
+        const declaration = option.declarations?.[0];
+        return declaration && declaration.category?.go !== "diagnostics.Command_line_Options" && declaration.category?.go !== "diagnostics.Output_Formatting";
+    });
+    const enumOptions = serializedOptions.filter(option => optionKind(option) === "Enum");
+    assert.equal(new Set(enumOptions.map(option => option.type)).size, enumOptions.length, "ShowConfig enum types must have a single option map");
+    return `${header}
+package tsoptions
+
+import (
+    "github.com/microsoft/TypeScript/tsc/internal/collections"
+    "github.com/microsoft/TypeScript/tsc/internal/core"
+    "github.com/microsoft/TypeScript/tsc/internal/tspath"
+)
+
+func serializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
+    result := collections.NewOrderedMapWithSizeHint[string, any](32)
+${
+        serializedOptions.map(option => {
+            const field = `options.${fieldName(option)}`;
+            const name = JSON.stringify(option.name);
+            const declaration = option.declarations![0];
+            let value = field;
+            let condition = `${field} != ${zeroValue(option)}`;
+            switch (optionKind(option)) {
+                case "Enum":
+                    return `if ${condition} {
+    if value := serializeCompilerOptionEnum(${field}); value != "" {
+        result.Set(${name}, value)
+    }
+}`;
+                case "Boolean":
+                    condition = `${field} == core.TSTrue || ${field} == core.TSFalse`;
+                    value = `${field} == core.TSTrue`;
+                    break;
+                case "String":
+                    if (declaration.isFilePath) value = `serializeCompilerOptionPath(${field}, configFilePath, comparePathsOptions)`;
+                    break;
+                case "List": {
+                    const element = options.elements[option.name];
+                    if (element?.isFilePath) {
+                        assert.equal(option.type, "[]string", `Unsupported file path list: ${option.name}`);
+                        value = `serializeCompilerOptionPaths(${field}, configFilePath, comparePathsOptions)`;
+                    }
+                    else if (element?.kind === "Enum") {
+                        assert.equal(option.type, "[]string", `Unsupported enum list: ${option.name}`);
+                        value = `serializeCompilerOptionEnumList(${field}, ${options.enumMaps[option.name].goName})`;
+                    }
+                    break;
+                }
+            }
+            return `if ${condition} {
+    result.Set(${name}, ${value})
+}`;
+        }).join("\n")
+    }
+    return result
+}
+
+func serializeCompilerOptionEnum(value any) string {
+    switch value := value.(type) {
+${
+        enumOptions.map(option => {
+            const seen = new Set<string>();
+            const entries = options.enumMaps[option.name].values.filter(entry => {
+                const value = goValue(entry.value);
+                if (seen.has(value)) return false;
+                seen.add(value);
+                return true;
+            });
+            return `case core.${option.type}:
+${entries.map(entry => `if value == ${goValue(entry.value)} { return ${JSON.stringify(entry.name)} }`).join("\n")}`;
+        }).join("\n")
+    }
+    }
+    return ""
+}
+`;
+}
+
 function configDirSubstitution(): string {
     const substitutedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => declaration.allowConfigDirTemplateSubstitution ?? declaration.isFilePath));
     return `${header}
@@ -547,6 +628,7 @@ export function generateOptions(): Map<string, string> {
         ["tsc/internal/tsoptions/buildinfo_generated.go", generateBuildInfoOptions()],
         ["tsc/internal/tsoptions/mergeoptions_generated.go", mergeCompilerOptions()],
         ["tsc/internal/tsoptions/configdir_generated.go", configDirSubstitution()],
+        ["tsc/internal/tsoptions/showconfig_generated.go", showConfig()],
         ["tsc/internal/tsoptions/declarations_generated.go", declarations()],
         ["tsc/internal/tsoptions/rootoptions_generated.go", rootDeclarations()],
         ["tsc/internal/tsoptions/enummaps_generated.go", enumMaps()],
