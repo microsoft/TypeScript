@@ -4,6 +4,54 @@ import {
 } from "./options-model.ts";
 
 export const options: OptionsModel = {
+    schemaOnlyOptions: [
+        {
+            name: "charset",
+            type: "string",
+            description: "The text encoding used to read source files in early TypeScript versions.",
+        },
+        {
+            name: "out",
+            type: "string",
+            description: "The legacy predecessor of outFile, which combined emitted JavaScript into a single file.",
+        },
+        {
+            name: "noImplicitUseStrict",
+            type: "boolean",
+            description: "Disable adding 'use strict' directives to emitted JavaScript.",
+        },
+        {
+            name: "noStrictGenericChecks",
+            type: "boolean",
+            description: "Disable strict checking of generic signatures in function types.",
+        },
+        {
+            name: "keyofStringsOnly",
+            type: "boolean",
+            description: "Make keyof return only strings instead of strings, numbers, or symbols.",
+        },
+        {
+            name: "suppressExcessPropertyErrors",
+            type: "boolean",
+            description: "Disable excess property errors when creating object literals.",
+        },
+        {
+            name: "suppressImplicitAnyIndexErrors",
+            type: "boolean",
+            description: "Suppress noImplicitAny errors when indexing objects that lack index signatures.",
+        },
+        {
+            name: "preserveValueImports",
+            type: "boolean",
+            description: "Preserve unused imported values in JavaScript output. Superseded by verbatimModuleSyntax.",
+        },
+        {
+            name: "importsNotUsedAsValues",
+            type: "enum",
+            values: ["remove", "preserve", "error"],
+            description: "Control emit and checking for imports used only as types. Superseded by verbatimModuleSyntax.",
+        },
+    ],
     compilerOptions: [
         {
             name: "allowJs",
@@ -2251,6 +2299,7 @@ export const options: OptionsModel = {
     enumMaps: {
         lib: {
             goName: "LibMap",
+            schemaOnlyValues: ["es2022.sharedmemory"],
             values: [
                 { name: "es5", value: "lib.es5.d.ts" },
                 { name: "es6", value: "lib.es2015.d.ts" },
@@ -2379,6 +2428,7 @@ export const options: OptionsModel = {
         },
         module: {
             goName: "moduleOptionMap",
+            schemaOnlyValues: ["none"],
             values: [
                 { name: "commonjs", value: { go: "core.ModuleKindCommonJS" } },
                 { name: "amd", value: { go: "core.ModuleKindAMD" } },
@@ -2404,6 +2454,7 @@ export const options: OptionsModel = {
         },
         target: {
             goName: "targetOptionMap",
+            schemaOnlyValues: ["es3"],
             values: [
                 { name: "es5", value: { go: "core.ScriptTargetES5" } },
                 { name: "es6", value: { go: "core.ScriptTargetES2015" } },

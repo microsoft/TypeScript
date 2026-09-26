@@ -40,11 +40,18 @@ function nullable(schema: JSONSchema): JSONSchema {
 function enumSchema(name: string): JSONSchema {
     const map = options.enumMaps[name];
     assert(map, `Missing enum map: ${name}`);
-    const keys = map.values.map(entry => entry.name);
+    const keys = [...map.values.map(entry => entry.name), ...(map.schemaOnlyValues ?? [])];
+    return stringEnumSchema(keys, [...(map.deprecatedKeys ?? []), ...(map.schemaOnlyValues ?? [])]);
+}
+
+function stringEnumSchema(keys: string[], deprecatedKeys: string[] = []): JSONSchema {
+    assert(keys.length > 0, "Empty schema enum");
+    assert.equal(new Set(keys).size, keys.length, "Duplicate schema enum values");
+    assert(keys.every(key => key === key.toLowerCase()), "Schema enum values must be lowercase");
     const pattern = keys.map(key => [...key].map(char => /[a-z]/.test(char) ? `[${char.toUpperCase()}${char}]` : char.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("")).join("|");
     const suggestions: JSONSchema = { enum: keys };
-    if (map.deprecatedKeys?.length) {
-        suggestions.enumDescriptions = keys.map(key => map.deprecatedKeys!.includes(key) ? "Deprecated." : "");
+    if (deprecatedKeys.length) {
+        suggestions.enumDescriptions = keys.map(key => deprecatedKeys.includes(key) ? "Deprecated." : "");
     }
     // Keep enum completions while accepting every casing supported by the parser.
     return { type: "string", anyOf: [suggestions, { pattern: `^(${pattern})$` }] };
@@ -157,6 +164,14 @@ export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
             schema.deprecationMessage = "This compiler option is deprecated.";
         }
         compilerProperties[option.name] = schema;
+    }
+    for (const option of options.schemaOnlyOptions) {
+        assert(!options.compilerOptions.some(current => current.name === option.name), `Schema-only option also exists in compiler options: ${option.name}`);
+        assert(!Object.hasOwn(compilerProperties, option.name), `Duplicate schema-only option: ${option.name}`);
+        const schema = nullable(option.type === "enum" ? stringEnumSchema(option.values) : { type: option.type });
+        schema.deprecated = true;
+        schema.deprecationMessage = "This option has been removed from TypeScript. It is retained in the schema for historical configurations.";
+        compilerProperties[option.name] = withDescription(schema, option.description, option.name);
     }
     const watchProperties = Object.fromEntries(options.watchOptions.map(option => [option.name, optionSchema(option)]));
     const acquisitionProperties = Object.fromEntries(options.typeAcquisition.map(option => [

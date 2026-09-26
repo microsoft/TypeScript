@@ -101,7 +101,14 @@ export interface EnumMap {
     goName: string;
     values: { name: string; value: GoValue; }[];
     deprecatedKeys?: string[];
+    /** Removed values retained only in configuration schemas, always deprecated. */
+    schemaOnlyValues?: string[];
 }
+
+export type SchemaOnlyOption = {
+    name: string;
+    description: string;
+} & ({ type: "boolean" | "string"; } | { type: "enum"; values: string[]; });
 
 export interface OptionEnum {
     name: string;
@@ -120,6 +127,8 @@ export interface OptionEnum {
 
 export interface OptionsModel {
     compilerOptions: CompilerOption[];
+    /** Removed options retained only in configuration schemas, always deprecated. */
+    schemaOnlyOptions: SchemaOnlyOption[];
     declarationOrder: Record<DeclarationGroup, string[]>;
     watchOptions: StoredDeclaration[];
     typeAcquisition: StoredDeclaration[];

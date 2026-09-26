@@ -253,16 +253,66 @@ test("all generated options artifacts are checked in and current", () => {
     }
 });
 
-test("schema compiler properties are exactly the config-visible declarations", () => {
+test("schema compiler properties are config-visible declarations plus schema-only history", () => {
     const schema = generateConfigSchema("tsconfig");
     const expected = options.compilerOptions.filter(option => {
         const declaration = option.declarations?.[0];
         return declaration && !declaration.isCommandLineOnly && declaration.category?.go !== "diagnostics.Command_line_Options";
     }).map(option => option.name);
-    assert.deepEqual(Object.keys(schema.definitions.compilerOptions.properties), expected);
+    assert.deepEqual(Object.keys(schema.definitions.compilerOptions.properties), [...expected, ...options.schemaOnlyOptions.map(option => option.name)]);
     assert.deepEqual(Object.keys(schema.definitions.watchOptions.properties), options.watchOptions.map(option => option.name));
     assert.deepEqual(Object.keys(schema.definitions.typeAcquisition.properties), options.typeAcquisition.map(option => option.name));
     assert.deepEqual(Object.keys(schema.properties).filter(name => name !== "$schema" && name !== "watchOptions"), options.rootOptions.map(option => option.name));
+});
+
+test("schemas retain historical options as deprecated without restoring native support", () => {
+    const files = generateOptions();
+    const historical = {
+        charset: ["utf8", false],
+        out: ["bundle.js", false],
+        noImplicitUseStrict: [true, "true"],
+        noStrictGenericChecks: [true, "true"],
+        keyofStringsOnly: [true, "true"],
+        suppressExcessPropertyErrors: [true, "true"],
+        suppressImplicitAnyIndexErrors: [true, "true"],
+        preserveValueImports: [true, "true"],
+        importsNotUsedAsValues: ["preserve", "invalid"],
+    };
+    for (const kind of ["tsconfig", "jsconfig"] as const) {
+        const schema = generateConfigSchema(kind);
+        for (const [name, [valid, invalid]] of Object.entries(historical)) {
+            const property = schema.definitions.compilerOptions.properties[name];
+            assert(property, name);
+            assert.equal(property.deprecated, true, name);
+            assert(property.deprecationMessage, name);
+            assert(property.markdownDescription, name);
+            assert(accepts(property, valid, schema), name);
+            assert(accepts(property, null, schema), name);
+            assert(!accepts(property, invalid, schema), name);
+            assert(!options.compilerOptions.some(option => option.name === name), name);
+            for (const [file, content] of files) {
+                if (file.endsWith(".go")) assert(!content.includes(`"${name}"`), `${file}: ${name}`);
+            }
+        }
+        for (const [name, value] of [["target", "es3"], ["target", "es5"], ["module", "none"]]) {
+            const property = schema.definitions.compilerOptions.properties[name];
+            assert(accepts(property, value, schema), `${name}: ${value}`);
+            assert(accepts(property, value.toUpperCase(), schema), `${name}: ${value.toUpperCase()}`);
+            const suggestions = property.anyOf![0].anyOf![0];
+            assert.equal(suggestions.enumDescriptions![suggestions.enum!.indexOf(value)], "Deprecated.");
+        }
+        for (const value of ["remove", "preserve", "error", "REMOVE", "PrEsErVe", "ERROR"]) {
+            assert(accepts(schema.definitions.compilerOptions.properties.importsNotUsedAsValues, value, schema));
+        }
+        const lib = schema.definitions.compilerOptions.properties.lib;
+        assert(accepts(lib, ["es2022.sharedmemory", "ES2022.SharedMemory"], schema));
+        assert(!accepts(lib, ["es2022.sharedmemory.invalid"], schema));
+        const suggestions = lib.anyOf![0].items!.anyOf![0];
+        assert.equal(suggestions.enumDescriptions![suggestions.enum!.indexOf("es2022.sharedmemory")], "Deprecated.");
+    }
+    assert(!options.enumMaps.target.values.some(entry => entry.name === "es3"));
+    assert(!options.enumMaps.module.values.some(entry => entry.name === "none"));
+    assert(!options.enumMaps.lib.values.some(entry => entry.name === "es2022.sharedmemory"));
 });
 
 // Evaluate only the validation keywords emitted by this generator. Unknown keywords
@@ -468,7 +518,9 @@ test("schema hover documentation includes reference links and conditional defaul
         const schema = generateConfigSchema(kind);
         const compiler = schema.definitions.compilerOptions.properties;
         for (const [name, property] of Object.entries(compiler)) {
-            const declaration = options.compilerOptions.find(option => option.name === name)!.declarations![0];
+            const declaration = options.compilerOptions.find(option => option.name === name)?.declarations?.[0]
+                ?? options.schemaOnlyOptions.find(option => option.name === name);
+            assert(declaration, `${kind}: ${name}`);
             if (!declaration.description) {
                 assert.equal(property.markdownDescription, undefined, `${kind}: ${name}`);
                 continue;

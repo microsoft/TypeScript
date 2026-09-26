@@ -771,11 +771,122 @@
                                             "esnext.temporal",
                                             "esnext.typedarrays",
                                             "decorators",
-                                            "decorators.legacy"
+                                            "decorators.legacy",
+                                            "es2022.sharedmemory"
+                                        ],
+                                        "enumDescriptions": [
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "Deprecated."
                                         ]
                                     },
                                     {
-                                        "pattern": "^([Ee][Ss]5|[Ee][Ss]6|[Ee][Ss]2015|[Ee][Ss]7|[Ee][Ss]2016|[Ee][Ss]2017|[Ee][Ss]2018|[Ee][Ss]2019|[Ee][Ss]2020|[Ee][Ss]2021|[Ee][Ss]2022|[Ee][Ss]2023|[Ee][Ss]2024|[Ee][Ss]2025|[Ee][Ss][Nn][Ee][Xx][Tt]|[Dd][Oo][Mm]|[Dd][Oo][Mm]\\.[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Dd][Oo][Mm]\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]\\.[Ii][Mm][Pp][Oo][Rr][Tt][Ss][Cc][Rr][Ii][Pp][Tt][Ss]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]\\.[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ss][Cc][Rr][Ii][Pp][Tt][Hh][Oo][Ss][Tt]|[Ee][Ss]2015\\.[Cc][Oo][Rr][Ee]|[Ee][Ss]2015\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2015\\.[Gg][Ee][Nn][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss]2015\\.[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ee][Ss]2015\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2015\\.[Pp][Rr][Oo][Xx][Yy]|[Ee][Ss]2015\\.[Rr][Ee][Ff][Ll][Ee][Cc][Tt]|[Ee][Ss]2015\\.[Ss][Yy][Mm][Bb][Oo][Ll]|[Ee][Ss]2015\\.[Ss][Yy][Mm][Bb][Oo][Ll]\\.[Ww][Ee][Ll][Ll][Kk][Nn][Oo][Ww][Nn]|[Ee][Ss]2016\\.[Aa][Rr][Rr][Aa][Yy]\\.[Ii][Nn][Cc][Ll][Uu][Dd][Ee]|[Ee][Ss]2016\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2017\\.[Aa][Rr][Rr][Aa][Yy][Bb][Uu][Ff][Ff][Ee][Rr]|[Ee][Ss]2017\\.[Dd][Aa][Tt][Ee]|[Ee][Ss]2017\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2017\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss]2017\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2017\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2017\\.[Tt][Yy][Pp][Ee][Dd][Aa][Rr][Rr][Aa][Yy][Ss]|[Ee][Ss]2018\\.[Aa][Ss][Yy][Nn][Cc][Gg][Ee][Nn][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss]2018\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ee][Ss]2018\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2018\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2018\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss]2019\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss]2019\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2019\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2019\\.[Ss][Yy][Mm][Bb][Oo][Ll]|[Ee][Ss]2019\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2020\\.[Bb][Ii][Gg][Ii][Nn][Tt]|[Ee][Ss]2020\\.[Dd][Aa][Tt][Ee]|[Ee][Ss]2020\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2020\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss]2020\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2020\\.[Ss][Yy][Mm][Bb][Oo][Ll]\\.[Ww][Ee][Ll][Ll][Kk][Nn][Oo][Ww][Nn]|[Ee][Ss]2020\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2020\\.[Nn][Uu][Mm][Bb][Ee][Rr]|[Ee][Ss]2021\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2021\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2021\\.[Ww][Ee][Aa][Kk][Rr][Ee][Ff]|[Ee][Ss]2021\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2022\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss]2022\\.[Ee][Rr][Rr][Oo][Rr]|[Ee][Ss]2022\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2022\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2022\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2022\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss]2023\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss]2023\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2023\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2024\\.[Aa][Rr][Rr][Aa][Yy][Bb][Uu][Ff][Ff][Ee][Rr]|[Ee][Ss]2024\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2024\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2024\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2024\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss]2024\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss]2024\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2025\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2025\\.[Ff][Ll][Oo][Aa][Tt]16|[Ee][Ss]2025\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2025\\.[Ii][Tt][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss]2025\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2025\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ss][Yy][Mm][Bb][Oo][Ll]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Bb][Ii][Gg][Ii][Nn][Tt]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ww][Ee][Aa][Kk][Rr][Ee][Ff]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ff][Ll][Oo][Aa][Tt]16|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ii][Tt][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Dd][Aa][Tt][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Dd][Ii][Ss][Pp][Oo][Ss][Aa][Bb][Ll][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ee][Rr][Rr][Oo][Rr]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ii][Nn][Tt][Ll]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Tt][Ee][Mm][Pp][Oo][Rr][Aa][Ll]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Tt][Yy][Pp][Ee][Dd][Aa][Rr][Rr][Aa][Yy][Ss]|[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss]|[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss]\\.[Ll][Ee][Gg][Aa][Cc][Yy])$"
+                                        "pattern": "^([Ee][Ss]5|[Ee][Ss]6|[Ee][Ss]2015|[Ee][Ss]7|[Ee][Ss]2016|[Ee][Ss]2017|[Ee][Ss]2018|[Ee][Ss]2019|[Ee][Ss]2020|[Ee][Ss]2021|[Ee][Ss]2022|[Ee][Ss]2023|[Ee][Ss]2024|[Ee][Ss]2025|[Ee][Ss][Nn][Ee][Xx][Tt]|[Dd][Oo][Mm]|[Dd][Oo][Mm]\\.[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Dd][Oo][Mm]\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]\\.[Ii][Mm][Pp][Oo][Rr][Tt][Ss][Cc][Rr][Ii][Pp][Tt][Ss]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]\\.[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr]\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ss][Cc][Rr][Ii][Pp][Tt][Hh][Oo][Ss][Tt]|[Ee][Ss]2015\\.[Cc][Oo][Rr][Ee]|[Ee][Ss]2015\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2015\\.[Gg][Ee][Nn][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss]2015\\.[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ee][Ss]2015\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2015\\.[Pp][Rr][Oo][Xx][Yy]|[Ee][Ss]2015\\.[Rr][Ee][Ff][Ll][Ee][Cc][Tt]|[Ee][Ss]2015\\.[Ss][Yy][Mm][Bb][Oo][Ll]|[Ee][Ss]2015\\.[Ss][Yy][Mm][Bb][Oo][Ll]\\.[Ww][Ee][Ll][Ll][Kk][Nn][Oo][Ww][Nn]|[Ee][Ss]2016\\.[Aa][Rr][Rr][Aa][Yy]\\.[Ii][Nn][Cc][Ll][Uu][Dd][Ee]|[Ee][Ss]2016\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2017\\.[Aa][Rr][Rr][Aa][Yy][Bb][Uu][Ff][Ff][Ee][Rr]|[Ee][Ss]2017\\.[Dd][Aa][Tt][Ee]|[Ee][Ss]2017\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2017\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss]2017\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2017\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2017\\.[Tt][Yy][Pp][Ee][Dd][Aa][Rr][Rr][Aa][Yy][Ss]|[Ee][Ss]2018\\.[Aa][Ss][Yy][Nn][Cc][Gg][Ee][Nn][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss]2018\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ee][Ss]2018\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2018\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2018\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss]2019\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss]2019\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2019\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2019\\.[Ss][Yy][Mm][Bb][Oo][Ll]|[Ee][Ss]2019\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2020\\.[Bb][Ii][Gg][Ii][Nn][Tt]|[Ee][Ss]2020\\.[Dd][Aa][Tt][Ee]|[Ee][Ss]2020\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2020\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss]2020\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2020\\.[Ss][Yy][Mm][Bb][Oo][Ll]\\.[Ww][Ee][Ll][Ll][Kk][Nn][Oo][Ww][Nn]|[Ee][Ss]2020\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2020\\.[Nn][Uu][Mm][Bb][Ee][Rr]|[Ee][Ss]2021\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2021\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2021\\.[Ww][Ee][Aa][Kk][Rr][Ee][Ff]|[Ee][Ss]2021\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2022\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss]2022\\.[Ee][Rr][Rr][Oo][Rr]|[Ee][Ss]2022\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2022\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2022\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2022\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss]2023\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss]2023\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2023\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2024\\.[Aa][Rr][Rr][Aa][Yy][Bb][Uu][Ff][Ff][Ee][Rr]|[Ee][Ss]2024\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2024\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss]2024\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2024\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss]2024\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss]2024\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss]2025\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss]2025\\.[Ff][Ll][Oo][Aa][Tt]16|[Ee][Ss]2025\\.[Ii][Nn][Tt][Ll]|[Ee][Ss]2025\\.[Ii][Tt][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss]2025\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss]2025\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ss][Yy][Mm][Bb][Oo][Ll]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Bb][Ii][Gg][Ii][Nn][Tt]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ww][Ee][Aa][Kk][Rr][Ee][Ff]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Oo][Bb][Jj][Ee][Cc][Tt]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Rr][Ee][Gg][Ee][Xx][Pp]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ss][Tt][Rr][Ii][Nn][Gg]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ff][Ll][Oo][Aa][Tt]16|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ii][Tt][Ee][Rr][Aa][Tt][Oo][Rr]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Aa][Rr][Rr][Aa][Yy]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Dd][Aa][Tt][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Dd][Ii][Ss][Pp][Oo][Ss][Aa][Bb][Ll][Ee]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ee][Rr][Rr][Oo][Rr]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ii][Nn][Tt][Ll]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Tt][Ee][Mm][Pp][Oo][Rr][Aa][Ll]|[Ee][Ss][Nn][Ee][Xx][Tt]\\.[Tt][Yy][Pp][Ee][Dd][Aa][Rr][Rr][Aa][Yy][Ss]|[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss]|[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss]\\.[Ll][Ee][Gg][Aa][Cc][Yy]|[Ee][Ss]2022\\.[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy])$"
                                     }
                                 ]
                             }
@@ -832,7 +943,8 @@
                                         "node18",
                                         "node20",
                                         "nodenext",
-                                        "preserve"
+                                        "preserve",
+                                        "none"
                                     ],
                                     "enumDescriptions": [
                                         "",
@@ -848,11 +960,12 @@
                                         "",
                                         "",
                                         "",
-                                        ""
+                                        "",
+                                        "Deprecated."
                                     ]
                                 },
                                 {
-                                    "pattern": "^([Cc][Oo][Mm][Mm][Oo][Nn][Jj][Ss]|[Aa][Mm][Dd]|[Ss][Yy][Ss][Tt][Ee][Mm]|[Uu][Mm][Dd]|[Ee][Ss]6|[Ee][Ss]2015|[Ee][Ss]2020|[Ee][Ss]2022|[Ee][Ss][Nn][Ee][Xx][Tt]|[Nn][Oo][Dd][Ee]16|[Nn][Oo][Dd][Ee]18|[Nn][Oo][Dd][Ee]20|[Nn][Oo][Dd][Ee][Nn][Ee][Xx][Tt]|[Pp][Rr][Ee][Ss][Ee][Rr][Vv][Ee])$"
+                                    "pattern": "^([Cc][Oo][Mm][Mm][Oo][Nn][Jj][Ss]|[Aa][Mm][Dd]|[Ss][Yy][Ss][Tt][Ee][Mm]|[Uu][Mm][Dd]|[Ee][Ss]6|[Ee][Ss]2015|[Ee][Ss]2020|[Ee][Ss]2022|[Ee][Ss][Nn][Ee][Xx][Tt]|[Nn][Oo][Dd][Ee]16|[Nn][Oo][Dd][Ee]18|[Nn][Oo][Dd][Ee]20|[Nn][Oo][Dd][Ee][Nn][Ee][Xx][Tt]|[Pp][Rr][Ee][Ss][Ee][Rr][Vv][Ee]|[Nn][Oo][Nn][Ee])$"
                                 }
                             ]
                         },
@@ -1529,7 +1642,8 @@
                                         "es2023",
                                         "es2024",
                                         "es2025",
-                                        "esnext"
+                                        "esnext",
+                                        "es3"
                                     ],
                                     "enumDescriptions": [
                                         "Deprecated.",
@@ -1545,11 +1659,12 @@
                                         "",
                                         "",
                                         "",
-                                        ""
+                                        "",
+                                        "Deprecated."
                                     ]
                                 },
                                 {
-                                    "pattern": "^([Ee][Ss]5|[Ee][Ss]6|[Ee][Ss]2015|[Ee][Ss]2016|[Ee][Ss]2017|[Ee][Ss]2018|[Ee][Ss]2019|[Ee][Ss]2020|[Ee][Ss]2021|[Ee][Ss]2022|[Ee][Ss]2023|[Ee][Ss]2024|[Ee][Ss]2025|[Ee][Ss][Nn][Ee][Xx][Tt])$"
+                                    "pattern": "^([Ee][Ss]5|[Ee][Ss]6|[Ee][Ss]2015|[Ee][Ss]2016|[Ee][Ss]2017|[Ee][Ss]2018|[Ee][Ss]2019|[Ee][Ss]2020|[Ee][Ss]2021|[Ee][Ss]2022|[Ee][Ss]2023|[Ee][Ss]2024|[Ee][Ss]2025|[Ee][Ss][Nn][Ee][Xx][Tt]|[Ee][Ss]3)$"
                                 }
                             ]
                         },
@@ -1870,6 +1985,144 @@
                     "description": "Enable color and formatting in TypeScript's output to make compiler errors easier to read.",
                     "default": true,
                     "markdownDescription": "Enable color and formatting in TypeScript's output to make compiler errors easier to read.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#pretty)."
+                },
+                "charset": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "The text encoding used to read source files in early TypeScript versions.",
+                    "markdownDescription": "The text encoding used to read source files in early TypeScript versions.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#charset)."
+                },
+                "out": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "The legacy predecessor of outFile, which combined emitted JavaScript into a single file.",
+                    "markdownDescription": "The legacy predecessor of outFile, which combined emitted JavaScript into a single file.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#out)."
+                },
+                "noImplicitUseStrict": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "Disable adding 'use strict' directives to emitted JavaScript.",
+                    "markdownDescription": "Disable adding 'use strict' directives to emitted JavaScript.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#noImplicitUseStrict)."
+                },
+                "noStrictGenericChecks": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "Disable strict checking of generic signatures in function types.",
+                    "markdownDescription": "Disable strict checking of generic signatures in function types.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#noStrictGenericChecks)."
+                },
+                "keyofStringsOnly": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "Make keyof return only strings instead of strings, numbers, or symbols.",
+                    "markdownDescription": "Make keyof return only strings instead of strings, numbers, or symbols.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#keyofStringsOnly)."
+                },
+                "suppressExcessPropertyErrors": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "Disable excess property errors when creating object literals.",
+                    "markdownDescription": "Disable excess property errors when creating object literals.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#suppressExcessPropertyErrors)."
+                },
+                "suppressImplicitAnyIndexErrors": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "Suppress noImplicitAny errors when indexing objects that lack index signatures.",
+                    "markdownDescription": "Suppress noImplicitAny errors when indexing objects that lack index signatures.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#suppressImplicitAnyIndexErrors)."
+                },
+                "preserveValueImports": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "Preserve unused imported values in JavaScript output. Superseded by verbatimModuleSyntax.",
+                    "markdownDescription": "Preserve unused imported values in JavaScript output. Superseded by verbatimModuleSyntax.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#preserveValueImports)."
+                },
+                "importsNotUsedAsValues": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "anyOf": [
+                                {
+                                    "enum": [
+                                        "remove",
+                                        "preserve",
+                                        "error"
+                                    ]
+                                },
+                                {
+                                    "pattern": "^([Rr][Ee][Mm][Oo][Vv][Ee]|[Pp][Rr][Ee][Ss][Ee][Rr][Vv][Ee]|[Ee][Rr][Rr][Oo][Rr])$"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "deprecated": true,
+                    "deprecationMessage": "This option has been removed from TypeScript. It is retained in the schema for historical configurations.",
+                    "description": "Control emit and checking for imports used only as types. Superseded by verbatimModuleSyntax.",
+                    "markdownDescription": "Control emit and checking for imports used only as types. Superseded by verbatimModuleSyntax.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#importsNotUsedAsValues)."
                 }
             },
             "additionalProperties": true
