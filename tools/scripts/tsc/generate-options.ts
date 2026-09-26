@@ -131,7 +131,11 @@ function coreOptions(): string {
     return `${header}
 package core
 
-import "github.com/microsoft/TypeScript/tsc/internal/collections"
+import (
+    "slices"
+
+    "github.com/microsoft/TypeScript/tsc/internal/collections"
+)
 
 // CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {
@@ -144,6 +148,38 @@ func (options *CompilerOptions) Clone() *CompilerOptions {
     return &CompilerOptions{
         ${options.compilerOptions.map(option => `${fieldName(option)}: options.${fieldName(option)},`).join("\n")}
     }
+}
+
+// Equals reports whether all stored option values are equal, including nil versus empty collections.
+// Paths are compared by ordered entries, ignoring backing-storage allocation.
+func (options *CompilerOptions) Equals(other *CompilerOptions) bool {
+    if options == other { return true }
+    if options == nil || other == nil { return false }
+    ${
+        options.compilerOptions.map(option => {
+            const a = `options.${fieldName(option)}`;
+            const b = `other.${fieldName(option)}`;
+            let differs: string;
+            switch (option.type) {
+                case "*int":
+                    differs = `${a} != ${b} && (${a} == nil || ${b} == nil || *${a} != *${b})`;
+                    break;
+                case "[]string":
+                case "[]PluginImport":
+                    differs = `(${a} == nil) != (${b} == nil) || !slices.Equal(${a}, ${b})`;
+                    break;
+                case "*collections.OrderedMap[string, []string]":
+                    differs = `!${a}.EqualFunc(${b}, func(a, b []string) bool {
+    return (a == nil) == (b == nil) && slices.Equal(a, b)
+})`;
+                    break;
+                default:
+                    differs = `${a} != ${b}`;
+            }
+            return `if ${differs} { return false }`;
+        }).join("\n")
+    }
+    return true
 }
 `;
 }

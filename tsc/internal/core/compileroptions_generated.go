@@ -2,7 +2,11 @@
 
 package core
 
-import "github.com/microsoft/TypeScript/tsc/internal/collections"
+import (
+	"slices"
+
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+)
 
 // CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {
@@ -285,4 +289,414 @@ func (options *CompilerOptions) Clone() *CompilerOptions {
 		Quiet:                                   options.Quiet,
 		Checkers:                                options.Checkers,
 	}
+}
+
+// Equals reports whether all stored option values are equal, including nil versus empty collections.
+// Paths are compared by ordered entries, ignoring backing-storage allocation.
+func (options *CompilerOptions) Equals(other *CompilerOptions) bool {
+	if options == other {
+		return true
+	}
+	if options == nil || other == nil {
+		return false
+	}
+	if options.AllowJs != other.AllowJs {
+		return false
+	}
+	if options.AllowArbitraryExtensions != other.AllowArbitraryExtensions {
+		return false
+	}
+	if options.AllowImportingTsExtensions != other.AllowImportingTsExtensions {
+		return false
+	}
+	if options.AllowNonTsExtensions != other.AllowNonTsExtensions {
+		return false
+	}
+	if options.AllowUmdGlobalAccess != other.AllowUmdGlobalAccess {
+		return false
+	}
+	if options.AllowUnreachableCode != other.AllowUnreachableCode {
+		return false
+	}
+	if options.AllowUnusedLabels != other.AllowUnusedLabels {
+		return false
+	}
+	if options.AssumeChangesOnlyAffectDirectDependencies != other.AssumeChangesOnlyAffectDirectDependencies {
+		return false
+	}
+	if options.CheckJs != other.CheckJs {
+		return false
+	}
+	if (options.CustomConditions == nil) != (other.CustomConditions == nil) || !slices.Equal(options.CustomConditions, other.CustomConditions) {
+		return false
+	}
+	if options.Composite != other.Composite {
+		return false
+	}
+	if options.EmitDeclarationOnly != other.EmitDeclarationOnly {
+		return false
+	}
+	if options.EmitBOM != other.EmitBOM {
+		return false
+	}
+	if options.EmitDecoratorMetadata != other.EmitDecoratorMetadata {
+		return false
+	}
+	if options.Declaration != other.Declaration {
+		return false
+	}
+	if options.DeclarationDir != other.DeclarationDir {
+		return false
+	}
+	if options.DeclarationMap != other.DeclarationMap {
+		return false
+	}
+	if options.DeduplicatePackages != other.DeduplicatePackages {
+		return false
+	}
+	if options.DisableSizeLimit != other.DisableSizeLimit {
+		return false
+	}
+	if options.DisableSourceOfProjectReferenceRedirect != other.DisableSourceOfProjectReferenceRedirect {
+		return false
+	}
+	if options.DisableSolutionSearching != other.DisableSolutionSearching {
+		return false
+	}
+	if options.DisableReferencedProjectLoad != other.DisableReferencedProjectLoad {
+		return false
+	}
+	if options.ErasableSyntaxOnly != other.ErasableSyntaxOnly {
+		return false
+	}
+	if options.ExactOptionalPropertyTypes != other.ExactOptionalPropertyTypes {
+		return false
+	}
+	if options.ExperimentalDecorators != other.ExperimentalDecorators {
+		return false
+	}
+	if options.ForceConsistentCasingInFileNames != other.ForceConsistentCasingInFileNames {
+		return false
+	}
+	if options.IsolatedModules != other.IsolatedModules {
+		return false
+	}
+	if options.IsolatedDeclarations != other.IsolatedDeclarations {
+		return false
+	}
+	if options.IgnoreConfig != other.IgnoreConfig {
+		return false
+	}
+	if options.IgnoreDeprecations != other.IgnoreDeprecations {
+		return false
+	}
+	if options.ImportHelpers != other.ImportHelpers {
+		return false
+	}
+	if options.InlineSourceMap != other.InlineSourceMap {
+		return false
+	}
+	if options.InlineSources != other.InlineSources {
+		return false
+	}
+	if options.Init != other.Init {
+		return false
+	}
+	if options.Incremental != other.Incremental {
+		return false
+	}
+	if options.Jsx != other.Jsx {
+		return false
+	}
+	if options.JsxFactory != other.JsxFactory {
+		return false
+	}
+	if options.JsxFragmentFactory != other.JsxFragmentFactory {
+		return false
+	}
+	if options.JsxImportSource != other.JsxImportSource {
+		return false
+	}
+	if (options.Lib == nil) != (other.Lib == nil) || !slices.Equal(options.Lib, other.Lib) {
+		return false
+	}
+	if options.LibReplacement != other.LibReplacement {
+		return false
+	}
+	if options.Locale != other.Locale {
+		return false
+	}
+	if options.MapRoot != other.MapRoot {
+		return false
+	}
+	if options.Module != other.Module {
+		return false
+	}
+	if options.ModuleResolution != other.ModuleResolution {
+		return false
+	}
+	if (options.ModuleSuffixes == nil) != (other.ModuleSuffixes == nil) || !slices.Equal(options.ModuleSuffixes, other.ModuleSuffixes) {
+		return false
+	}
+	if options.ModuleDetection != other.ModuleDetection {
+		return false
+	}
+	if options.NewLine != other.NewLine {
+		return false
+	}
+	if options.NoEmit != other.NoEmit {
+		return false
+	}
+	if options.NoCheck != other.NoCheck {
+		return false
+	}
+	if options.NoErrorTruncation != other.NoErrorTruncation {
+		return false
+	}
+	if options.NoFallthroughCasesInSwitch != other.NoFallthroughCasesInSwitch {
+		return false
+	}
+	if options.NoImplicitAny != other.NoImplicitAny {
+		return false
+	}
+	if options.NoImplicitThis != other.NoImplicitThis {
+		return false
+	}
+	if options.NoImplicitReturns != other.NoImplicitReturns {
+		return false
+	}
+	if options.NoEmitHelpers != other.NoEmitHelpers {
+		return false
+	}
+	if options.NoLib != other.NoLib {
+		return false
+	}
+	if options.NoPropertyAccessFromIndexSignature != other.NoPropertyAccessFromIndexSignature {
+		return false
+	}
+	if options.NoUncheckedIndexedAccess != other.NoUncheckedIndexedAccess {
+		return false
+	}
+	if options.NoEmitOnError != other.NoEmitOnError {
+		return false
+	}
+	if options.NoUnusedLocals != other.NoUnusedLocals {
+		return false
+	}
+	if options.NoUnusedParameters != other.NoUnusedParameters {
+		return false
+	}
+	if options.NoResolve != other.NoResolve {
+		return false
+	}
+	if options.NoImplicitOverride != other.NoImplicitOverride {
+		return false
+	}
+	if options.NoUncheckedSideEffectImports != other.NoUncheckedSideEffectImports {
+		return false
+	}
+	if options.OutDir != other.OutDir {
+		return false
+	}
+	if !options.Paths.EqualFunc(other.Paths, func(a, b []string) bool {
+		return (a == nil) == (b == nil) && slices.Equal(a, b)
+	}) {
+		return false
+	}
+	if (options.Plugins == nil) != (other.Plugins == nil) || !slices.Equal(options.Plugins, other.Plugins) {
+		return false
+	}
+	if options.PreserveConstEnums != other.PreserveConstEnums {
+		return false
+	}
+	if options.PreserveSymlinks != other.PreserveSymlinks {
+		return false
+	}
+	if options.Project != other.Project {
+		return false
+	}
+	if options.ResolveJsonModule != other.ResolveJsonModule {
+		return false
+	}
+	if options.ResolvePackageJsonExports != other.ResolvePackageJsonExports {
+		return false
+	}
+	if options.ResolvePackageJsonImports != other.ResolvePackageJsonImports {
+		return false
+	}
+	if options.RemoveComments != other.RemoveComments {
+		return false
+	}
+	if options.RewriteRelativeImportExtensions != other.RewriteRelativeImportExtensions {
+		return false
+	}
+	if options.ReactNamespace != other.ReactNamespace {
+		return false
+	}
+	if options.RootDir != other.RootDir {
+		return false
+	}
+	if (options.RootDirs == nil) != (other.RootDirs == nil) || !slices.Equal(options.RootDirs, other.RootDirs) {
+		return false
+	}
+	if options.SkipLibCheck != other.SkipLibCheck {
+		return false
+	}
+	if options.StableTypeOrdering != other.StableTypeOrdering {
+		return false
+	}
+	if options.Strict != other.Strict {
+		return false
+	}
+	if options.StrictBindCallApply != other.StrictBindCallApply {
+		return false
+	}
+	if options.StrictBuiltinIteratorReturn != other.StrictBuiltinIteratorReturn {
+		return false
+	}
+	if options.StrictFunctionTypes != other.StrictFunctionTypes {
+		return false
+	}
+	if options.StrictNullChecks != other.StrictNullChecks {
+		return false
+	}
+	if options.StrictPropertyInitialization != other.StrictPropertyInitialization {
+		return false
+	}
+	if options.StripInternal != other.StripInternal {
+		return false
+	}
+	if options.SkipDefaultLibCheck != other.SkipDefaultLibCheck {
+		return false
+	}
+	if options.SourceMap != other.SourceMap {
+		return false
+	}
+	if options.SourceRoot != other.SourceRoot {
+		return false
+	}
+	if options.SuppressOutputPathCheck != other.SuppressOutputPathCheck {
+		return false
+	}
+	if options.Target != other.Target {
+		return false
+	}
+	if options.TraceResolution != other.TraceResolution {
+		return false
+	}
+	if options.TsBuildInfoFile != other.TsBuildInfoFile {
+		return false
+	}
+	if (options.TypeRoots == nil) != (other.TypeRoots == nil) || !slices.Equal(options.TypeRoots, other.TypeRoots) {
+		return false
+	}
+	if (options.Types == nil) != (other.Types == nil) || !slices.Equal(options.Types, other.Types) {
+		return false
+	}
+	if options.UseDefineForClassFields != other.UseDefineForClassFields {
+		return false
+	}
+	if options.UseUnknownInCatchVariables != other.UseUnknownInCatchVariables {
+		return false
+	}
+	if options.VerbatimModuleSyntax != other.VerbatimModuleSyntax {
+		return false
+	}
+	if options.MaxNodeModuleJsDepth != other.MaxNodeModuleJsDepth && (options.MaxNodeModuleJsDepth == nil || other.MaxNodeModuleJsDepth == nil || *options.MaxNodeModuleJsDepth != *other.MaxNodeModuleJsDepth) {
+		return false
+	}
+	if options.AllowSyntheticDefaultImports != other.AllowSyntheticDefaultImports {
+		return false
+	}
+	if options.AlwaysStrict != other.AlwaysStrict {
+		return false
+	}
+	if options.BaseUrl != other.BaseUrl {
+		return false
+	}
+	if options.DownlevelIteration != other.DownlevelIteration {
+		return false
+	}
+	if options.ESModuleInterop != other.ESModuleInterop {
+		return false
+	}
+	if options.OutFile != other.OutFile {
+		return false
+	}
+	if options.ConfigFilePath != other.ConfigFilePath {
+		return false
+	}
+	if options.NoDtsResolution != other.NoDtsResolution {
+		return false
+	}
+	if options.PathsBasePath != other.PathsBasePath {
+		return false
+	}
+	if options.Diagnostics != other.Diagnostics {
+		return false
+	}
+	if options.ExtendedDiagnostics != other.ExtendedDiagnostics {
+		return false
+	}
+	if options.GenerateCpuProfile != other.GenerateCpuProfile {
+		return false
+	}
+	if options.GenerateTrace != other.GenerateTrace {
+		return false
+	}
+	if options.ListEmittedFiles != other.ListEmittedFiles {
+		return false
+	}
+	if options.ListFiles != other.ListFiles {
+		return false
+	}
+	if options.ExplainFiles != other.ExplainFiles {
+		return false
+	}
+	if options.ListFilesOnly != other.ListFilesOnly {
+		return false
+	}
+	if options.NoEmitForJsFiles != other.NoEmitForJsFiles {
+		return false
+	}
+	if options.PreserveWatchOutput != other.PreserveWatchOutput {
+		return false
+	}
+	if options.Pretty != other.Pretty {
+		return false
+	}
+	if options.Version != other.Version {
+		return false
+	}
+	if options.Watch != other.Watch {
+		return false
+	}
+	if options.ShowConfig != other.ShowConfig {
+		return false
+	}
+	if options.Build != other.Build {
+		return false
+	}
+	if options.Help != other.Help {
+		return false
+	}
+	if options.All != other.All {
+		return false
+	}
+	if options.RunExternalCode != other.RunExternalCode {
+		return false
+	}
+	if options.PprofDir != other.PprofDir {
+		return false
+	}
+	if options.SingleThreaded != other.SingleThreaded {
+		return false
+	}
+	if options.Quiet != other.Quiet {
+		return false
+	}
+	if options.Checkers != other.Checkers && (options.Checkers == nil || other.Checkers == nil || *options.Checkers != *other.Checkers) {
+		return false
+	}
+	return true
 }

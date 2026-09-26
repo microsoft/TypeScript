@@ -1316,7 +1316,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	project.ChangeIf(
 		func(p *Project) bool {
 			return !slices.Equal(p.CommandLine.FileNames(), newCommandLine.FileNames()) ||
-				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
+				!p.CommandLine.CompilerOptions().Equals(compilerOptions) ||
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
 				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers()) ||
@@ -1398,7 +1398,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateInferredProject(
 	changed := b.inferredProject.ChangeIf(
 		func(p *Project) bool {
 			return !slices.Equal(p.CommandLine.FileNames(), newCommandLine.FileNames()) ||
-				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
+				!p.CommandLine.CompilerOptions().Equals(compilerOptions) ||
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
 				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
