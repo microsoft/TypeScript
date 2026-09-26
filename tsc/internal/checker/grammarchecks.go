@@ -2229,7 +2229,7 @@ func (c *Checker) checkGrammarImportAttributesType(attributes *ast.TypeLiteralNo
 		}
 
 		typeNode := propertySignature.Type
-		if !ast.IsStringLiteralLikeType(typeNode) {
+		if !ast.IsLiteralTypeNode(typeNode) || !ast.IsStringLiteral(typeNode.AsLiteralTypeNode().Literal) {
 			return c.grammarErrorOnNode(typeNode, diagnostics.An_import_attributes_property_must_have_a_string_literal_type_annotation)
 		}
 	}
