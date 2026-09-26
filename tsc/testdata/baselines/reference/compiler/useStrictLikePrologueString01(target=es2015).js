@@ -7,7 +7,10 @@ export function f() {
 }
 
 //// [useStrictLikePrologueString01.js]
+"use strict";
 "hey!";
 " use strict ";
-export function f() {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = f;
+function f() {
 }

@@ -1,6 +1,7 @@
 package testrunner
 
 import (
+	"fmt"
 	"regexp"
 	"slices"
 	"strings"
@@ -49,12 +50,13 @@ var fourslashDirectives = []string{"emitthisfile", "noopen"}
 // Given a test file containing // @FileName directives,
 // return an array of named units of code to be added to an existing compiler instance.
 func makeUnitsFromTest(code string, fileName string) testCaseContent {
-	testUnits, symlinks, currentDirectory, globalOptions, _ := ParseTestFilesAndSymlinks(
+	testUnits, symlinks, currentDirectory, globalOptions, _ := ParseTestFilesAndSymlinksWithOptions(
 		code,
 		fileName,
 		func(filename string, content string, fileOptions map[string]string) (*testUnit, error) {
 			return &testUnit{content: content, name: filename}, nil
 		},
+		ParseTestFilesOptions{ValidateOptionValues: true},
 	)
 
 	if currentDirectory == "" {
@@ -122,6 +124,13 @@ type ParseTestFilesOptions struct {
 	// In this case, an implicit first file is created using the fileName parameter.
 	// This matches the behavior of the TypeScript fourslash test harness.
 	AllowImplicitFirstFile bool
+	// If true, global directives that name a known enum or boolean compiler option
+	// (e.g. `@target`, `@module`) are checked against that option's legal values, and
+	// an illegal value (e.g. a typo like `@module: commojs`) causes a panic. This is
+	// only enabled for compiler/transpile test parsing; it is not used by consumers
+	// that intentionally parse arbitrary or legacy content, such as the fourslash test
+	// parser or the parser fuzzer.
+	ValidateOptionValues bool
 }
 
 // Given a test file containing // @FileName and // @symlink directives,
@@ -188,8 +197,10 @@ func ParseTestFilesAndSymlinksWithOptions[T any](
 				} else {
 					// Global option
 					if existingValue, ok := globalOptions[metaDataName]; ok && existingValue != metaDataValue {
-						// !!! This would break existing baseline tests
-						// panic("Duplicate global option: " + metaDataName)
+						panic(fmt.Sprintf("Duplicate global option '%s': %q conflicts with previously set value %q", metaDataName, metaDataValue, existingValue))
+					}
+					if options.ValidateOptionValues {
+						validateGlobalOptionValue(metaDataName, strings.TrimSuffix(metaDataValue, ";"))
 					}
 					globalOptions[metaDataName] = metaDataValue
 				}
@@ -296,4 +307,51 @@ func parseSymlinkFromTest(line string, symlinks map[string]string) bool {
 
 	symlinks[strings.TrimSpace(linkMetaData[2])] = strings.TrimSpace(linkMetaData[1])
 	return true
+}
+
+// validateGlobalOptionValue panics if value is not a legal value for a known enum or boolean
+// compiler option (e.g. `@target: es212` or `@module: commojs`). Values that are legal but
+// unsupported-as-of-implementation (e.g. `@module: amd`) are not rejected here; that is handled
+// separately by the test runner. Options not recognized as compiler options (e.g. harness-only
+// directives like `@noImplicitReferences`) are left to downstream harness validation.
+func validateGlobalOptionValue(name string, value string) {
+	option := core.Find(tsoptions.OptionsDeclarations, func(o *tsoptions.CommandLineOption) bool {
+		return strings.EqualFold(o.Name, name)
+	})
+	if option == nil {
+		return
+	}
+
+	var isValid func(token string) bool
+	var legalValues func() []string
+	switch option.Kind {
+	case tsoptions.CommandLineOptionTypeEnum:
+		isValid = func(token string) bool {
+			_, ok := option.EnumMap().Get(strings.ToLower(token))
+			return ok
+		}
+		legalValues = func() []string { return slices.Sorted(option.EnumMap().Keys()) }
+	case tsoptions.CommandLineOptionTypeBoolean:
+		isValid = func(token string) bool {
+			lower := strings.ToLower(token)
+			return lower == "true" || lower == "false"
+		}
+		legalValues = func() []string { return []string{"true", "false"} }
+	default:
+		return
+	}
+
+	// Values may be a comma-separated list used to generate multiple test variations
+	// (e.g. `@target: es5, es2015`), and may include a `*` wildcard or `-`/`!` exclusion prefix.
+	// Excluded values (e.g. `-es3`) are not validated, matching the test runner's tolerance of
+	// exclusions that no longer correspond to a recognized value (e.g. a removed option like "es3").
+	for token := range strings.SplitSeq(value, ",") {
+		token = strings.TrimSpace(token)
+		if token == "" || token == "*" || strings.HasPrefix(token, "-") || strings.HasPrefix(token, "!") {
+			continue
+		}
+		if !isValid(token) {
+			panic(fmt.Sprintf("Illegal value %q for global option '%s'; expected one of: %s", token, name, strings.Join(legalValues(), ", ")))
+		}
+	}
 }
