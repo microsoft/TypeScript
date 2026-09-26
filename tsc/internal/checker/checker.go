@@ -701,6 +701,7 @@ type Checker struct {
 	sourceFileLinks                             core.LinkStore[*ast.SourceFile, SourceFileLinks]
 	regExpScanner                               *scanner.Scanner
 	patternForType                              map[*Type]*ast.Node
+	lazyMemberTables                            map[*Type]*lazyMemberTable
 	contextFreeTypes                            map[*ast.Node]*Type
 	anyType                                     *Type
 	autoType                                    *Type
@@ -981,6 +982,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
 	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
+	c.lazyMemberTables = make(map[*Type]*lazyMemberTable)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
 	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
 	c.autoType = c.newIntrinsicTypeEx(TypeFlagsAny, "any", ObjectFlagsNonInferrableType)
@@ -19238,6 +19240,31 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	t = c.getReducedApparentType(t)
 	switch {
 	case t.flags&TypeFlagsObject != 0:
+		if symbol, ok := c.lookupMemberLazily(t, name); ok {
+			if symbol != nil && c.symbolIsValueEx(symbol, includeTypeOnlyMembers) {
+				return symbol
+			}
+			if skipObjectFunctionPropertyAugment {
+				return nil
+			}
+			if symbol == nil {
+				if shape := c.getLazyShape(t); shape != nil {
+					var functionType *Type
+					switch {
+					case shape.callSignatureCount != 0:
+						functionType = c.globalCallableFunctionType
+					case shape.constructSignatureCount != 0:
+						functionType = c.globalNewableFunctionType
+					}
+					if functionType != nil {
+						if symbol := c.getPropertyOfObjectType(functionType, name); symbol != nil {
+							return symbol
+						}
+					}
+					return c.getPropertyOfObjectType(c.globalObjectType, name)
+				}
+			}
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
 		if symbol != nil {
@@ -19431,13 +19458,12 @@ func (c *Checker) resolveClassOrInterfaceMembers(t *Type) {
 }
 
 func (c *Checker) resolveTypeReferenceMembers(t *Type) {
-	source := t.Target()
-	typeParameters := source.AsInterfaceType().allTypeParameters
-	typeArguments := c.getTypeArguments(t)
-	paddedTypeArguments := typeArguments
-	if len(typeArguments) == len(typeParameters)-1 {
-		paddedTypeArguments = core.Concatenate(typeArguments, []*Type{t})
+	if lm := c.lazyMemberTables[t]; lm != nil && lm.state != lazyMembersResolvingDeclared {
+		c.resolveLazyMembers(t, lm)
+		return
 	}
+	source := t.Target()
+	typeParameters, paddedTypeArguments := c.getReferenceMemberTypeArguments(t, source)
 	c.resolveObjectTypeMembers(t, source, typeParameters, paddedTypeArguments)
 }
 
@@ -21089,24 +21115,36 @@ func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper)
 }
 
 func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symbol {
-	if symbol == nil {
-		return nil
+	if symbol == nil || c.isSymbolUnaffectedByInstantiation(symbol, m) {
+		return symbol
 	}
+	return c.newInstantiatedSymbol(symbol, m)
+}
+
+// isSymbolUnaffectedByInstantiation reports whether instantiateSymbol returns
+// the symbol itself. That depends on whether the type of the symbol has been
+// resolved, so the answer can change from false to true.
+func (c *Checker) isSymbolUnaffectedByInstantiation(symbol *ast.Symbol, m *TypeMapper) bool {
 	links := c.valueSymbolLinks.Get(symbol)
 	if m != nil && m.MapsThisOnly() && isThisless(symbol) {
-		return symbol
+		return true
 	}
 	// If the type of the symbol is already resolved, and if that type could not possibly
 	// be affected by instantiation, simply return the symbol itself.
 	if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
 		if symbol.Flags&ast.SymbolFlagsSetAccessor == 0 {
-			return symbol
+			return true
 		}
 		// If we're a setter, check writeType.
 		if links.writeType != nil && !c.couldContainTypeVariables(links.writeType) {
-			return symbol
+			return true
 		}
 	}
+	return false
+}
+
+func (c *Checker) newInstantiatedSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symbol {
+	links := c.valueSymbolLinks.Get(symbol)
 	if symbol.CheckFlags&ast.CheckFlagsInstantiated != 0 {
 		// If symbol being instantiated is itself a instantiation, fetch the original target and combine the
 		// type mappers. This ensures that original type identities are properly preserved and that aliases
@@ -21740,6 +21778,12 @@ func (c *Checker) includeMixinType(t *Type, types []*Type, mixinFlags []bool, in
  */
 func (c *Checker) getPropertyOfObjectType(t *Type, name string) *ast.Symbol {
 	if t.flags&TypeFlagsObject != 0 {
+		if symbol, ok := c.lookupMemberLazily(t, name); ok {
+			if symbol != nil && c.symbolIsValue(symbol) {
+				return symbol
+			}
+			return nil
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
 		if symbol != nil && c.symbolIsValue(symbol) {

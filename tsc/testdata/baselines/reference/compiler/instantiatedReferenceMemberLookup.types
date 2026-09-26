@@ -1,0 +1,245 @@
+//// [tests/cases/compiler/instantiatedReferenceMemberLookup.ts] ////
+
+=== instantiatedReferenceMemberLookup.ts ===
+// Property lookups on instantiated class and interface references: declared
+// and inherited members, members hidden by redeclarations, accessibility,
+// `this` types, Object and Function members, and base types that change shape
+// when instantiated.
+
+interface Base<T> {
+    value: T;
+>value : T
+
+    method(): T;
+>method : () => T
+
+    shared: string;
+>shared : string
+}
+
+interface Derived<T> extends Base<T[]> {
+    shared: "derived";
+>shared : "derived"
+
+    own: T;
+>own : T
+}
+
+declare const d: Derived<number>;
+>d : Derived<number>
+
+const d1 = d.value;
+>d1 : number[]
+>d.value : number[]
+>d : Derived<number>
+>value : number[]
+
+const d2 = d.method();
+>d2 : number[]
+>d.method() : number[]
+>d.method : () => number[]
+>d : Derived<number>
+>method : () => number[]
+
+const d3 = d.shared;
+>d3 : "derived"
+>d.shared : "derived"
+>d : Derived<number>
+>shared : "derived"
+
+const d4 = d.own;
+>d4 : number
+>d.own : number
+>d : Derived<number>
+>own : number
+
+const d5 = d.toString();
+>d5 : string
+>d.toString() : string
+>d.toString : () => string
+>d : Derived<number>
+>toString : () => string
+
+d.missing;
+>d.missing : any
+>d : Derived<number>
+>missing : any
+
+class Box<T> {
+>Box : Box<T>
+
+    private secret!: T;
+>secret : T
+
+    protected guarded!: T;
+>guarded : T
+
+    contents!: T;
+>contents : T
+
+    self(): this {
+>self : () => this
+
+        return this;
+>this : this
+    }
+}
+
+class NumberBox extends Box<number> {
+>NumberBox : NumberBox
+>Box : Box<number>
+
+    read() {
+>read : () => number
+
+        return this.guarded;
+>this.guarded : number
+>this : this
+>guarded : number
+    }
+}
+
+declare const box: Box<string>;
+>box : Box<string>
+
+const box1 = box.contents;
+>box1 : string
+>box.contents : string
+>box : Box<string>
+>contents : string
+
+const box2 = box.self().contents;
+>box2 : string
+>box.self().contents : string
+>box.self() : Box<string>
+>box.self : () => Box<string>
+>box : Box<string>
+>self : () => Box<string>
+>contents : string
+
+box.secret;
+>box.secret : string
+>box : Box<string>
+>secret : string
+
+box.guarded;
+>box.guarded : string
+>box : Box<string>
+>guarded : string
+
+declare const numberBox: NumberBox;
+>numberBox : NumberBox
+
+const numberBox1 = numberBox.self().read();
+>numberBox1 : number
+>numberBox.self().read() : number
+>numberBox.self().read : () => number
+>numberBox.self() : NumberBox
+>numberBox.self : () => NumberBox
+>numberBox : NumberBox
+>self : () => NumberBox
+>read : () => number
+
+type Callable<T> = { (): void; kind: T } & { kind: "a" };
+>Callable : Callable<T>
+>kind : T
+>kind : "a"
+
+interface Fn<T extends string> extends Callable<T> {}
+
+declare const neverFn: Fn<"b">;
+>neverFn : Fn<"b">
+
+neverFn.bind;
+>neverFn.bind : any
+>neverFn : Fn<"b">
+>bind : any
+
+neverFn.kind;
+>neverFn.kind : any
+>neverFn : Fn<"b">
+>kind : any
+
+declare const fn: Fn<"a">;
+>fn : Fn<"a">
+
+const fn1 = fn.bind;
+>fn1 : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>fn : Fn<"a">
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+
+const fn2 = fn.kind;
+>fn2 : "a"
+>fn.kind : "a"
+>fn : Fn<"a">
+>kind : "a"
+
+interface Newable<T> {
+    new (): T;
+}
+interface NewableBox<T> extends Newable<Box<T>> {}
+
+declare const newable: NewableBox<string>;
+>newable : NewableBox<string>
+
+const newable1 = newable.prototype;
+>newable1 : any
+>newable.prototype : any
+>newable : NewableBox<string>
+>prototype : any
+
+const newable2 = new newable().contents;
+>newable2 : string
+>new newable().contents : string
+>new newable() : Box<string>
+>newable : NewableBox<string>
+>contents : string
+
+interface Wrap<T extends { a: string }> extends T {}
+>a : string
+
+declare const wrap: Wrap<{ a: string; b: number }>;
+>wrap : Wrap<{ a: string; b: number; }>
+>a : string
+>b : number
+
+const wrap1 = wrap.b;
+>wrap1 : number
+>wrap.b : number
+>wrap : Wrap<{ a: string; b: number; }>
+>b : number
+
+wrap.c;
+>wrap.c : any
+>wrap : Wrap<{ a: string; b: number; }>
+>c : any
+
+interface Tree<T> extends Array<Tree<T>> {
+    value: T;
+>value : T
+}
+
+declare const tree: Tree<string>;
+>tree : Tree<string>
+
+const tree1 = tree[0].value;
+>tree1 : string
+>tree[0].value : string
+>tree[0] : Tree<string>
+>tree : Tree<string>
+>0 : 0
+>value : string
+
+const tree2 = tree.map(child => child.value);
+>tree2 : string[]
+>tree.map(child => child.value) : string[]
+>tree.map : <U>(callbackfn: (value: Tree<string>, index: number, array: Tree<string>[]) => U, thisArg?: any) => U[]
+>tree : Tree<string>
+>map : <U>(callbackfn: (value: Tree<string>, index: number, array: Tree<string>[]) => U, thisArg?: any) => U[]
+>child => child.value : (child: Tree<string>) => string
+>child : Tree<string>
+>child.value : string
+>child : Tree<string>
+>value : string
+

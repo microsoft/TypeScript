@@ -1,0 +1,275 @@
+//// [tests/cases/compiler/instantiatedReferenceMemberLookup.ts] ////
+
+=== instantiatedReferenceMemberLookup.ts ===
+// Property lookups on instantiated class and interface references: declared
+// and inherited members, members hidden by redeclarations, accessibility,
+// `this` types, Object and Function members, and base types that change shape
+// when instantiated.
+
+interface Base<T> {
+>Base : Symbol(Base, Decl(instantiatedReferenceMemberLookup.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 5, 15))
+
+    value: T;
+>value : Symbol(Base.value, Decl(instantiatedReferenceMemberLookup.ts, 5, 19))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 5, 15))
+
+    method(): T;
+>method : Symbol(Base.method, Decl(instantiatedReferenceMemberLookup.ts, 6, 13))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 5, 15))
+
+    shared: string;
+>shared : Symbol(Base.shared, Decl(instantiatedReferenceMemberLookup.ts, 7, 16))
+}
+
+interface Derived<T> extends Base<T[]> {
+>Derived : Symbol(Derived, Decl(instantiatedReferenceMemberLookup.ts, 9, 1))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 11, 18))
+>Base : Symbol(Base, Decl(instantiatedReferenceMemberLookup.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 11, 18))
+
+    shared: "derived";
+>shared : Symbol(Derived.shared, Decl(instantiatedReferenceMemberLookup.ts, 11, 40))
+
+    own: T;
+>own : Symbol(Derived.own, Decl(instantiatedReferenceMemberLookup.ts, 12, 22))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 11, 18))
+}
+
+declare const d: Derived<number>;
+>d : Symbol(d, Decl(instantiatedReferenceMemberLookup.ts, 16, 13))
+>Derived : Symbol(Derived, Decl(instantiatedReferenceMemberLookup.ts, 9, 1))
+
+const d1 = d.value;
+>d1 : Symbol(d1, Decl(instantiatedReferenceMemberLookup.ts, 17, 5))
+>d.value : Symbol(Base.value, Decl(instantiatedReferenceMemberLookup.ts, 5, 19))
+>d : Symbol(d, Decl(instantiatedReferenceMemberLookup.ts, 16, 13))
+>value : Symbol(Base.value, Decl(instantiatedReferenceMemberLookup.ts, 5, 19))
+
+const d2 = d.method();
+>d2 : Symbol(d2, Decl(instantiatedReferenceMemberLookup.ts, 18, 5))
+>d.method : Symbol(Base.method, Decl(instantiatedReferenceMemberLookup.ts, 6, 13))
+>d : Symbol(d, Decl(instantiatedReferenceMemberLookup.ts, 16, 13))
+>method : Symbol(Base.method, Decl(instantiatedReferenceMemberLookup.ts, 6, 13))
+
+const d3 = d.shared;
+>d3 : Symbol(d3, Decl(instantiatedReferenceMemberLookup.ts, 19, 5))
+>d.shared : Symbol(Derived.shared, Decl(instantiatedReferenceMemberLookup.ts, 11, 40))
+>d : Symbol(d, Decl(instantiatedReferenceMemberLookup.ts, 16, 13))
+>shared : Symbol(Derived.shared, Decl(instantiatedReferenceMemberLookup.ts, 11, 40))
+
+const d4 = d.own;
+>d4 : Symbol(d4, Decl(instantiatedReferenceMemberLookup.ts, 20, 5))
+>d.own : Symbol(Derived.own, Decl(instantiatedReferenceMemberLookup.ts, 12, 22))
+>d : Symbol(d, Decl(instantiatedReferenceMemberLookup.ts, 16, 13))
+>own : Symbol(Derived.own, Decl(instantiatedReferenceMemberLookup.ts, 12, 22))
+
+const d5 = d.toString();
+>d5 : Symbol(d5, Decl(instantiatedReferenceMemberLookup.ts, 21, 5))
+>d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(instantiatedReferenceMemberLookup.ts, 16, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+d.missing;
+>d : Symbol(d, Decl(instantiatedReferenceMemberLookup.ts, 16, 13))
+
+class Box<T> {
+>Box : Symbol(Box, Decl(instantiatedReferenceMemberLookup.ts, 22, 10))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 24, 10))
+
+    private secret!: T;
+>secret : Symbol(Box.secret, Decl(instantiatedReferenceMemberLookup.ts, 24, 14))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 24, 10))
+
+    protected guarded!: T;
+>guarded : Symbol(Box.guarded, Decl(instantiatedReferenceMemberLookup.ts, 25, 23))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 24, 10))
+
+    contents!: T;
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberLookup.ts, 26, 26))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 24, 10))
+
+    self(): this {
+>self : Symbol(Box.self, Decl(instantiatedReferenceMemberLookup.ts, 27, 17))
+
+        return this;
+>this : Symbol(Box, Decl(instantiatedReferenceMemberLookup.ts, 22, 10))
+    }
+}
+
+class NumberBox extends Box<number> {
+>NumberBox : Symbol(NumberBox, Decl(instantiatedReferenceMemberLookup.ts, 31, 1))
+>Box : Symbol(Box, Decl(instantiatedReferenceMemberLookup.ts, 22, 10))
+
+    read() {
+>read : Symbol(NumberBox.read, Decl(instantiatedReferenceMemberLookup.ts, 33, 37))
+
+        return this.guarded;
+>this.guarded : Symbol(Box.guarded, Decl(instantiatedReferenceMemberLookup.ts, 25, 23))
+>this : Symbol(NumberBox, Decl(instantiatedReferenceMemberLookup.ts, 31, 1))
+>guarded : Symbol(Box.guarded, Decl(instantiatedReferenceMemberLookup.ts, 25, 23))
+    }
+}
+
+declare const box: Box<string>;
+>box : Symbol(box, Decl(instantiatedReferenceMemberLookup.ts, 39, 13))
+>Box : Symbol(Box, Decl(instantiatedReferenceMemberLookup.ts, 22, 10))
+
+const box1 = box.contents;
+>box1 : Symbol(box1, Decl(instantiatedReferenceMemberLookup.ts, 40, 5))
+>box.contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberLookup.ts, 26, 26))
+>box : Symbol(box, Decl(instantiatedReferenceMemberLookup.ts, 39, 13))
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberLookup.ts, 26, 26))
+
+const box2 = box.self().contents;
+>box2 : Symbol(box2, Decl(instantiatedReferenceMemberLookup.ts, 41, 5))
+>box.self().contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberLookup.ts, 26, 26))
+>box.self : Symbol(Box.self, Decl(instantiatedReferenceMemberLookup.ts, 27, 17))
+>box : Symbol(box, Decl(instantiatedReferenceMemberLookup.ts, 39, 13))
+>self : Symbol(Box.self, Decl(instantiatedReferenceMemberLookup.ts, 27, 17))
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberLookup.ts, 26, 26))
+
+box.secret;
+>box.secret : Symbol(Box.secret, Decl(instantiatedReferenceMemberLookup.ts, 24, 14))
+>box : Symbol(box, Decl(instantiatedReferenceMemberLookup.ts, 39, 13))
+>secret : Symbol(Box.secret, Decl(instantiatedReferenceMemberLookup.ts, 24, 14))
+
+box.guarded;
+>box.guarded : Symbol(Box.guarded, Decl(instantiatedReferenceMemberLookup.ts, 25, 23))
+>box : Symbol(box, Decl(instantiatedReferenceMemberLookup.ts, 39, 13))
+>guarded : Symbol(Box.guarded, Decl(instantiatedReferenceMemberLookup.ts, 25, 23))
+
+declare const numberBox: NumberBox;
+>numberBox : Symbol(numberBox, Decl(instantiatedReferenceMemberLookup.ts, 45, 13))
+>NumberBox : Symbol(NumberBox, Decl(instantiatedReferenceMemberLookup.ts, 31, 1))
+
+const numberBox1 = numberBox.self().read();
+>numberBox1 : Symbol(numberBox1, Decl(instantiatedReferenceMemberLookup.ts, 46, 5))
+>numberBox.self().read : Symbol(NumberBox.read, Decl(instantiatedReferenceMemberLookup.ts, 33, 37))
+>numberBox.self : Symbol(Box.self, Decl(instantiatedReferenceMemberLookup.ts, 27, 17))
+>numberBox : Symbol(numberBox, Decl(instantiatedReferenceMemberLookup.ts, 45, 13))
+>self : Symbol(Box.self, Decl(instantiatedReferenceMemberLookup.ts, 27, 17))
+>read : Symbol(NumberBox.read, Decl(instantiatedReferenceMemberLookup.ts, 33, 37))
+
+type Callable<T> = { (): void; kind: T } & { kind: "a" };
+>Callable : Symbol(Callable, Decl(instantiatedReferenceMemberLookup.ts, 46, 43))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 48, 14))
+>kind : Symbol(kind, Decl(instantiatedReferenceMemberLookup.ts, 48, 30))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 48, 14))
+>kind : Symbol(kind, Decl(instantiatedReferenceMemberLookup.ts, 48, 44))
+
+interface Fn<T extends string> extends Callable<T> {}
+>Fn : Symbol(Fn, Decl(instantiatedReferenceMemberLookup.ts, 48, 57))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 49, 13))
+>Callable : Symbol(Callable, Decl(instantiatedReferenceMemberLookup.ts, 46, 43))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 49, 13))
+
+declare const neverFn: Fn<"b">;
+>neverFn : Symbol(neverFn, Decl(instantiatedReferenceMemberLookup.ts, 51, 13))
+>Fn : Symbol(Fn, Decl(instantiatedReferenceMemberLookup.ts, 48, 57))
+
+neverFn.bind;
+>neverFn : Symbol(neverFn, Decl(instantiatedReferenceMemberLookup.ts, 51, 13))
+
+neverFn.kind;
+>neverFn : Symbol(neverFn, Decl(instantiatedReferenceMemberLookup.ts, 51, 13))
+
+declare const fn: Fn<"a">;
+>fn : Symbol(fn, Decl(instantiatedReferenceMemberLookup.ts, 55, 13))
+>Fn : Symbol(Fn, Decl(instantiatedReferenceMemberLookup.ts, 48, 57))
+
+const fn1 = fn.bind;
+>fn1 : Symbol(fn1, Decl(instantiatedReferenceMemberLookup.ts, 56, 5))
+>fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(instantiatedReferenceMemberLookup.ts, 55, 13))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const fn2 = fn.kind;
+>fn2 : Symbol(fn2, Decl(instantiatedReferenceMemberLookup.ts, 57, 5))
+>fn.kind : Symbol(kind, Decl(instantiatedReferenceMemberLookup.ts, 48, 30), Decl(instantiatedReferenceMemberLookup.ts, 48, 44))
+>fn : Symbol(fn, Decl(instantiatedReferenceMemberLookup.ts, 55, 13))
+>kind : Symbol(kind, Decl(instantiatedReferenceMemberLookup.ts, 48, 30), Decl(instantiatedReferenceMemberLookup.ts, 48, 44))
+
+interface Newable<T> {
+>Newable : Symbol(Newable, Decl(instantiatedReferenceMemberLookup.ts, 57, 20))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 59, 18))
+
+    new (): T;
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 59, 18))
+}
+interface NewableBox<T> extends Newable<Box<T>> {}
+>NewableBox : Symbol(NewableBox, Decl(instantiatedReferenceMemberLookup.ts, 61, 1))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 62, 21))
+>Newable : Symbol(Newable, Decl(instantiatedReferenceMemberLookup.ts, 57, 20))
+>Box : Symbol(Box, Decl(instantiatedReferenceMemberLookup.ts, 22, 10))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 62, 21))
+
+declare const newable: NewableBox<string>;
+>newable : Symbol(newable, Decl(instantiatedReferenceMemberLookup.ts, 64, 13))
+>NewableBox : Symbol(NewableBox, Decl(instantiatedReferenceMemberLookup.ts, 61, 1))
+
+const newable1 = newable.prototype;
+>newable1 : Symbol(newable1, Decl(instantiatedReferenceMemberLookup.ts, 65, 5))
+>newable.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>newable : Symbol(newable, Decl(instantiatedReferenceMemberLookup.ts, 64, 13))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+
+const newable2 = new newable().contents;
+>newable2 : Symbol(newable2, Decl(instantiatedReferenceMemberLookup.ts, 66, 5))
+>new newable().contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberLookup.ts, 26, 26))
+>newable : Symbol(newable, Decl(instantiatedReferenceMemberLookup.ts, 64, 13))
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberLookup.ts, 26, 26))
+
+interface Wrap<T extends { a: string }> extends T {}
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceMemberLookup.ts, 66, 40))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 68, 15))
+>a : Symbol(a, Decl(instantiatedReferenceMemberLookup.ts, 68, 26))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 68, 15))
+
+declare const wrap: Wrap<{ a: string; b: number }>;
+>wrap : Symbol(wrap, Decl(instantiatedReferenceMemberLookup.ts, 70, 13))
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceMemberLookup.ts, 66, 40))
+>a : Symbol(a, Decl(instantiatedReferenceMemberLookup.ts, 70, 26))
+>b : Symbol(b, Decl(instantiatedReferenceMemberLookup.ts, 70, 37))
+
+const wrap1 = wrap.b;
+>wrap1 : Symbol(wrap1, Decl(instantiatedReferenceMemberLookup.ts, 71, 5))
+>wrap.b : Symbol(b, Decl(instantiatedReferenceMemberLookup.ts, 70, 37))
+>wrap : Symbol(wrap, Decl(instantiatedReferenceMemberLookup.ts, 70, 13))
+>b : Symbol(b, Decl(instantiatedReferenceMemberLookup.ts, 70, 37))
+
+wrap.c;
+>wrap : Symbol(wrap, Decl(instantiatedReferenceMemberLookup.ts, 70, 13))
+
+interface Tree<T> extends Array<Tree<T>> {
+>Tree : Symbol(Tree, Decl(instantiatedReferenceMemberLookup.ts, 72, 7))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 74, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Tree : Symbol(Tree, Decl(instantiatedReferenceMemberLookup.ts, 72, 7))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 74, 15))
+
+    value: T;
+>value : Symbol(Tree.value, Decl(instantiatedReferenceMemberLookup.ts, 74, 42))
+>T : Symbol(T, Decl(instantiatedReferenceMemberLookup.ts, 74, 15))
+}
+
+declare const tree: Tree<string>;
+>tree : Symbol(tree, Decl(instantiatedReferenceMemberLookup.ts, 78, 13))
+>Tree : Symbol(Tree, Decl(instantiatedReferenceMemberLookup.ts, 72, 7))
+
+const tree1 = tree[0].value;
+>tree1 : Symbol(tree1, Decl(instantiatedReferenceMemberLookup.ts, 79, 5))
+>tree[0].value : Symbol(Tree.value, Decl(instantiatedReferenceMemberLookup.ts, 74, 42))
+>tree : Symbol(tree, Decl(instantiatedReferenceMemberLookup.ts, 78, 13))
+>value : Symbol(Tree.value, Decl(instantiatedReferenceMemberLookup.ts, 74, 42))
+
+const tree2 = tree.map(child => child.value);
+>tree2 : Symbol(tree2, Decl(instantiatedReferenceMemberLookup.ts, 80, 5))
+>tree.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>tree : Symbol(tree, Decl(instantiatedReferenceMemberLookup.ts, 78, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>child : Symbol(child, Decl(instantiatedReferenceMemberLookup.ts, 80, 23))
+>child.value : Symbol(Tree.value, Decl(instantiatedReferenceMemberLookup.ts, 74, 42))
+>child : Symbol(child, Decl(instantiatedReferenceMemberLookup.ts, 80, 23))
+>value : Symbol(Tree.value, Decl(instantiatedReferenceMemberLookup.ts, 74, 42))
+
