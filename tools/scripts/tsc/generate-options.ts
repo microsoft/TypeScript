@@ -159,6 +159,11 @@ ${declarations.map(option => `${option.field.comment ? "\n" + option.field.comme
 `;
 }
 
+function zeroValue(option: CompilerOption): string {
+    const kind = optionKind(option);
+    return kind === "Boolean" ? "core.TSUnknown" : kind === "String" ? '""' : kind === "Enum" ? "0" : "nil";
+}
+
 function transpileOptions(): string {
     const clearedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => typeof declaration.transpileOptionValue === "object" && declaration.transpileOptionValue.go === "core.TSUnknown"));
     return `${header}
@@ -167,14 +172,65 @@ package transpile
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 
 func clearOptionsForTranspile(options *core.CompilerOptions) {
+${clearedOptions.map(option => `options.${fieldName(option)} = ${zeroValue(option)}`).join("\n")}
+}
+`;
+}
+
+export function generateBuildInfoOptions(model = options): string {
+    const storedOptions = model.compilerOptions.filter(option => option.declarations?.some(declaration => declaration.affectsBuildInfo));
+    return `${header}
+package tsoptions
+
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+
+// ForEachCompilerOptionAffectingBuildInfo visits nonzero options in CompilerOptions field order.
+func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn func(option *CommandLineOption, value any)) {
 ${
-        clearedOptions.map(option => {
-            const kind = optionKind(option);
-            const value = kind === "Boolean" ? "core.TSUnknown" : kind === "String" ? '""' : kind === "Enum" ? "0" : "nil";
-            return `options.${fieldName(option)} = ${value}`;
-        }).join("\n")
+        storedOptions.map(option =>
+            `if options.${fieldName(option)} != ${zeroValue(option)} {
+    fn(CommandLineCompilerOptionsMap.Get(${JSON.stringify(option.name)}), options.${fieldName(option)})
+}`
+        ).join("\n")
     }
 }
+`;
+}
+
+export function generateOptionComparisons(model = options): string {
+    const comparisons = [
+        ["SemanticDiagnostics", "affectsSemanticDiagnostics"],
+        ["DeclarationPath", "affectsDeclarationPath"],
+        ["Emit", "affectsEmit"],
+    ] as const;
+    return `${header}
+package tsoptions
+
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+
+${
+        comparisons.map(([name, flag]) => {
+            const expressions = model.compilerOptions.flatMap(option => {
+                const declaration = option.declarations?.find(declaration => declaration[flag]);
+                if (!declaration) return [];
+                const kind = optionKind(option);
+                assert(kind === "Boolean" || kind === "String" || kind === "Enum", `Unsupported comparison type for ${option.name}: ${option.type}`);
+                const value = (receiver: string) => {
+                    const field = `${receiver}.${fieldName(option)}`;
+                    if (declaration.strictFlag) return `${receiver}.GetStrictOptionValue(${field})`;
+                    if (declaration.allowJsFlag) return `${receiver}.GetAllowJS()`;
+                    return field;
+                };
+                return [`${value("oldOptions")} != ${value("newOptions")}`];
+            });
+            return `func CompilerOptionsAffect${name}(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
+    if oldOptions == newOptions { return false }
+    if oldOptions == nil || newOptions == nil { return true }
+    return ${expressions.join(" ||\n") || "false"}
+}
+`;
+        }).join("\n")
+    }
 `;
 }
 
@@ -234,9 +290,15 @@ function declarations(): string {
 package tsoptions
 
 import (
+    "slices"
+
     "github.com/microsoft/TypeScript/tsc/internal/core"
     "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
+
+var OptionsDeclarations = slices.Concat(commonOptionsWithBuild, optionsForCompiler)
+
+var BuildOpts = slices.Concat(commonOptionsWithBuild, OptionsForBuild)
 
 ${arrays.map(([name, values]) => `var ${name} = []*CommandLineOption{\n${values.map(declaration => declarationLiteral(declaration) + ",").join("\n")}\n}`).join("\n\n")}
 
@@ -411,6 +473,8 @@ export function generateOptions(): Map<string, string> {
         ["tsc/internal/core/typeacquisition_generated.go", storedOptions("TypeAcquisition", options.typeAcquisition, true)],
         ["tsc/internal/core/buildoptions_generated.go", storedOptions("BuildOptions", orderByName(buildOptions, options.buildOptionFieldOrder, "BuildOptions fields"), true)],
         ["tsc/internal/transpile/compileroptions_generated.go", transpileOptions()],
+        ["tsc/internal/tsoptions/comparisons_generated.go", generateOptionComparisons()],
+        ["tsc/internal/tsoptions/buildinfo_generated.go", generateBuildInfoOptions()],
         ["tsc/internal/tsoptions/declarations_generated.go", declarations()],
         ["tsc/internal/tsoptions/rootoptions_generated.go", rootDeclarations()],
         ["tsc/internal/tsoptions/enummaps_generated.go", enumMaps()],

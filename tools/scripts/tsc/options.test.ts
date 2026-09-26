@@ -8,7 +8,9 @@ import {
     generateEnum,
 } from "./generate-enums.ts";
 import {
+    generateBuildInfoOptions,
     generateConfigSchema,
+    generateOptionComparisons,
     generateOptions,
     validateOptions,
 } from "./generate-options.ts";
@@ -164,6 +166,42 @@ test("transpilation clears only options marked with an unknown transpile value",
         ["Types", "nil"],
         ["OutFile", '""'],
     ]);
+});
+
+test("option comparisons use effective values and Go field names", () => {
+    const source = generateOptionComparisons();
+    assert.match(source, /oldOptions\.GetStrictOptionValue\(oldOptions\.NoImplicitAny\) != newOptions\.GetStrictOptionValue\(newOptions\.NoImplicitAny\)/);
+    assert.match(source, /oldOptions\.ESModuleInterop != newOptions\.ESModuleInterop/);
+    assert.doesNotMatch(source, /reflect\.|oldOptions\.Strict !=|oldOptions\.NoImplicitAny !=/);
+
+    const model = structuredClone(options);
+    model.compilerOptions.find(option => option.name === "allowJs")!.declarations![0].affectsEmit = true;
+    const withAllowJs = generateOptionComparisons(model);
+    assert.match(withAllowJs, /oldOptions\.GetAllowJS\(\) != newOptions\.GetAllowJS\(\)/);
+    assert.doesNotMatch(withAllowJs, /oldOptions\.AllowJs !=/);
+});
+
+test("option comparisons reject types that require deep equality", () => {
+    for (const name of ["maxNodeModuleJsDepth", "types", "paths", "plugins"]) {
+        const model = structuredClone(options);
+        model.compilerOptions.find(option => option.name === name)!.declarations![0].affectsEmit = true;
+        assert.throws(() => generateOptionComparisons(model), new RegExp(`Unsupported comparison type for ${name}:`));
+    }
+});
+
+test("build info omits zero values without treating empty collections as zero", () => {
+    const model = structuredClone(options);
+    for (const name of ["maxNodeModuleJsDepth", "types", "paths", "plugins"]) {
+        model.compilerOptions.find(option => option.name === name)!.declarations![0].affectsBuildInfo = true;
+    }
+    const source = generateBuildInfoOptions(model);
+    for (const field of ["MaxNodeModuleJsDepth", "Types", "Paths", "Plugins"]) {
+        assert(source.includes(`if options.${field} != nil {`), field);
+    }
+    assert.match(source, /if options\.Strict != core\.TSUnknown \{/);
+    assert.match(source, /if options\.OutDir != "" \{/);
+    assert.match(source, /if options\.Target != 0 \{/);
+    assert.doesNotMatch(source, /reflect\.|len\(|GetStrictOptionValue|GetAllowJS/);
 });
 
 test("all generated options artifacts are checked in and current", () => {

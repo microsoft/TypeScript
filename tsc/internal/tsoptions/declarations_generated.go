@@ -3,9 +3,15 @@
 package tsoptions
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
+
+var OptionsDeclarations = slices.Concat(commonOptionsWithBuild, optionsForCompiler)
+
+var BuildOpts = slices.Concat(commonOptionsWithBuild, OptionsForBuild)
 
 var commonOptionsWithBuild = []*CommandLineOption{
 	{
