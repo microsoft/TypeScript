@@ -2,6 +2,7 @@ package ls
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -13,7 +14,7 @@ import (
 )
 
 type LanguageService struct {
-	projectPath             tspath.Path
+	projectID               autoimport.ProjectID
 	host                    Host
 	activeConfig            lsutil.UserPreferences
 	program                 *compiler.Program
@@ -22,13 +23,13 @@ type LanguageService struct {
 }
 
 func NewLanguageService(
-	projectPath tspath.Path,
+	projectID autoimport.ProjectID,
 	program *compiler.Program,
 	host Host,
 	activeFile string,
 ) *LanguageService {
 	return &LanguageService{
-		projectPath:             projectPath,
+		projectID:               projectID,
 		host:                    host,
 		program:                 program,
 		converters:              host.Converters(),
@@ -91,28 +92,29 @@ func (l *LanguageService) GetECMALineInfo(fileName string) *sourcemap.ECMALineIn
 
 // getPreparedAutoImportView returns an auto-import view for the given file if the registry is prepared
 // to provide up-to-date auto-imports for it. If not, it returns ErrNeedsAutoImports.
-func (l *LanguageService) getPreparedAutoImportView(fromFile *ast.SourceFile) (*autoimport.View, error) {
+func (l *LanguageService) getPreparedAutoImportView(fromFile *ast.SourceFile, typeChecker *checker.Checker) (*autoimport.View, error) {
 	registry := l.host.AutoImportRegistry()
 	registryFile := fromFile
 	if canonical := fromFile.CanonicalSourceFile(); canonical != nil {
 		registryFile = canonical
 	}
-	if !registry.IsPreparedForImportingFile(registryFile.FileName(), l.projectPath, l.UserPreferences()) {
+	if !registry.IsPreparedForImportingFile(registryFile.FileName(), l.projectID, l.UserPreferences()) {
 		return nil, ErrNeedsAutoImports
 	}
 
-	view := autoimport.NewView(registry, fromFile, l.projectPath, l.program, l.UserPreferences().ModuleSpecifierPreferences())
+	view := autoimport.NewView(registry, fromFile, l.projectID, l.program, typeChecker, l.UserPreferences().ModuleSpecifierPreferences())
 	return view, nil
 }
 
 // getCurrentAutoImportView returns an auto-import view for the given file, based on the current state
 // of the auto-import registry, which may or may not be up-to-date.
-func (l *LanguageService) getCurrentAutoImportView(fromFile *ast.SourceFile) *autoimport.View {
+func (l *LanguageService) getCurrentAutoImportView(fromFile *ast.SourceFile, typeChecker *checker.Checker) *autoimport.View {
 	return autoimport.NewView(
 		l.host.AutoImportRegistry(),
 		fromFile,
-		l.projectPath,
+		l.projectID,
 		l.program,
+		typeChecker,
 		l.UserPreferences().ModuleSpecifierPreferences(),
 	)
 }

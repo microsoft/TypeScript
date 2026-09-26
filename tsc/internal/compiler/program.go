@@ -43,6 +43,7 @@ type ProgramOptions struct {
 	TypingsLocation             string
 	ProjectName                 string
 	Tracing                     *tracing.Tracing
+	CreateModuleResolver        func(options module.ResolverOptions) module.Resolver
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
@@ -301,14 +302,22 @@ func NewProgram(opts ProgramOptions) *Program {
 // only if the host cannot locate the file (e.g. it was deleted). Callers that manage
 // host-side parse caches must release this exact pointer when the old program could not be
 // reused, since it was acquired speculatively before that decision was made.
-func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
-	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool); reused {
+func (p *Program) UpdateProgram(
+	changedFilePath tspath.Path,
+	newHost CompilerHost,
+	createCheckerPool func(*Program) CheckerPool,
+	createModuleResolver func(module.ResolverOptions) module.Resolver,
+) (*Program, *ast.SourceFile, bool) {
+	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool, createModuleResolver); reused {
 		return result, newFile, true
 	} else {
 		newOpts := p.opts
 		newOpts.Host = newHost
 		if createCheckerPool != nil {
 			newOpts.CreateCheckerPool = createCheckerPool
+		}
+		if createModuleResolver != nil {
+			newOpts.CreateModuleResolver = createModuleResolver
 		}
 		return NewProgram(newOpts), newFile, false
 	}
@@ -320,13 +329,20 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 // file cannot be replaced in place. Unlike UpdateProgram, it never constructs a
 // full fallback program, so callers that build their own fallback (e.g. with a
 // different host) do not pay for a discarded program build.
-func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
+func (p *Program) ReuseProgram(
+	changedFilePath tspath.Path,
+	newHost CompilerHost,
+	createCheckerPool func(*Program) CheckerPool,
+	createModuleResolver func(module.ResolverOptions) module.Resolver,
+) (*Program, *ast.SourceFile, bool) {
 	newOpts := p.opts
 	newOpts.Host = newHost
 	if createCheckerPool != nil {
 		newOpts.CreateCheckerPool = createCheckerPool
 	}
-
+	if createModuleResolver != nil {
+		newOpts.CreateModuleResolver = createModuleResolver
+	}
 	oldFile := p.filesByPath[changedFilePath]
 	var newFile *ast.SourceFile
 	var oldSupplementalFiles []*ast.SourceFile
@@ -342,6 +358,7 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 		if err != nil {
 			return nil, nil, false
 		}
+
 		oldSupplementalFiles = oldFile.SupplementalSourceFiles()
 		newSupplementalFiles = files.Supplemental
 	} else {
@@ -624,6 +641,10 @@ func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*mo
 	return p.resolvedModules
 }
 
+func (p *Program) ModuleResolutionError() error {
+	return p.moduleResolutionError
+}
+
 // GetPackagesMap returns a lazily-cached map of package names to whether they bundle types.
 // This is used by incremental diagnostic repopulation.
 func (p *Program) GetPackagesMap() map[string]bool {
@@ -778,8 +799,12 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.So
 	return p.collectCheckerDiagnostics(ctx, sourceFile, p.getSemanticDiagnosticsWithChecker)
 }
 
-func (p *Program) GetSemanticDiagnosticsWithoutNoEmitFiltering(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
-	allDiags := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, p.getBindAndCheckDiagnosticsWithChecker)
+// GetSemanticDiagnosticsForIncremental includes newly discovered globals in each
+// file's cached diagnostics and leaves noEmit filtering to the builder.
+func (p *Program) GetSemanticDiagnosticsForIncremental(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
+	allDiags := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, func(ctx context.Context, c *checker.Checker, file *ast.SourceFile) []*ast.Diagnostic {
+		return p.getBindAndCheckDiagnosticsWithChecker(ctx, c, file, true /*includeDeferredGlobals*/)
+	})
 	result := make(map[*ast.SourceFile][]*ast.Diagnostic, len(sourceFiles))
 	for i, diags := range allDiags {
 		result[sourceFiles[i]] = filterAndSortDiagnostics(diags)
@@ -1053,7 +1078,11 @@ func (p *Program) verifyCompilerOptions() {
 		}
 
 		for _, file := range p.files {
-			if sourceFileMayBeEmitted(file, p, false, false) && !rootPaths.Has(file.Path()) {
+			rootPath := file.Path()
+			if canonical := file.CanonicalSourceFile(); canonical != nil {
+				rootPath = canonical.Path()
+			}
+			if sourceFileMayBeEmitted(file, p, false, false) && !rootPaths.Has(rootPath) {
 				p.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
 					kind: processingDiagnosticKindExplainingFileInclude,
 					data: &includeExplainingDiagnostic{
@@ -1450,7 +1479,7 @@ func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *cor
 
 func (p *Program) getSemanticDiagnosticsWithChecker(ctx context.Context, c *checker.Checker, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	return core.Concatenate(
-		FilterNoEmitSemanticDiagnostics(p.getBindAndCheckDiagnosticsWithChecker(ctx, c, sourceFile), p.Options()),
+		FilterNoEmitSemanticDiagnostics(p.getBindAndCheckDiagnosticsWithChecker(ctx, c, sourceFile, false /*includeDeferredGlobals*/), p.Options()),
 		p.GetIncludeProcessorDiagnostics(sourceFile),
 	)
 }
@@ -1458,15 +1487,33 @@ func (p *Program) getSemanticDiagnosticsWithChecker(ctx context.Context, c *chec
 // getBindAndCheckDiagnosticsWithChecker gets semantic diagnostics for a single file using a
 // caller-provided checker, including bind diagnostics, checker diagnostics, and handling
 // of @ts-ignore/@ts-expect-error directives.
-func (p *Program) getBindAndCheckDiagnosticsWithChecker(ctx context.Context, fileChecker *checker.Checker, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+func (p *Program) getBindAndCheckDiagnosticsWithChecker(ctx context.Context, fileChecker *checker.Checker, sourceFile *ast.SourceFile, includeDeferredGlobals bool) []*ast.Diagnostic {
 	compilerOptions := p.Options()
 	if p.SkipTypeChecking(sourceFile, false) {
 		return nil
+	}
+	var previousGlobals []*ast.Diagnostic
+	if includeDeferredGlobals {
+		previousGlobals = fileChecker.GetGlobalDiagnostics()
 	}
 
 	// Checker creation forces binding, so bind diagnostics will be populated.
 	diags := slices.Clip(sourceFile.BindDiagnostics())
 	diags = append(diags, fileChecker.GetDiagnostics(ctx, sourceFile)...)
+
+	if includeDeferredGlobals {
+		if fileChecker.WasCanceled() {
+			return nil
+		}
+		currentGlobals := fileChecker.GetGlobalDiagnostics()
+		if len(currentGlobals) > len(previousGlobals) {
+			for _, diagnostic := range currentGlobals {
+				if _, found := slices.BinarySearchFunc(previousGlobals, diagnostic, ast.CompareDiagnostics); !found {
+					diags = append(diags, diagnostic)
+				}
+			}
+		}
+	}
 
 	isPlainJS := ast.IsPlainJSFile(sourceFile, compilerOptions.CheckJs)
 	if isPlainJS {
@@ -1500,7 +1547,7 @@ func applyContentMapperDiagnosticDirectives(sourceFile *ast.SourceFile, diags []
 	}
 	used := make([]bool, len(directives))
 	markUsed := func(diag *ast.Diagnostic) bool {
-		if diag.Source() != "" {
+		if diag.File() != sourceFile || diag.Source() != "" {
 			return false
 		}
 		for i, directive := range directives {
@@ -1543,6 +1590,10 @@ func (p *Program) getDiagnosticsWithPrecedingDirectives(sourceFile *ast.SourceFi
 	filtered := make([]*ast.Diagnostic, 0, len(diags))
 	for _, diagnostic := range diags {
 		ignoreDiagnostic := false
+		if diagnostic.File() != sourceFile {
+			filtered = append(filtered, diagnostic)
+			continue
+		}
 		for line := scanner.ComputeLineOfPosition(lineStarts, diagnostic.Pos()) - 1; line >= 0; line-- {
 			// If line contains a @ts-ignore or @ts-expect-error directive, ignore this diagnostic and change
 			// the directive kind to @ts-ignore to indicate it was used.
@@ -1703,6 +1754,23 @@ func (p *Program) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.R
 
 func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
 	return getModeForUsageLocation(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.Path()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
+}
+
+func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index int) core.ResolutionMode {
+	imports := sourceFile.Imports()
+	if index < len(imports) {
+		return p.GetModeForUsageLocation(sourceFile, imports[index])
+	}
+	index -= len(imports)
+	for _, augmentation := range sourceFile.ModuleAugmentations {
+		if augmentation.Kind == ast.KindStringLiteral {
+			if index == 0 {
+				return p.GetModeForUsageLocation(sourceFile, augmentation)
+			}
+			index--
+		}
+	}
+	panic("resolution index out of range")
 }
 
 func (p *Program) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName) core.ResolutionMode {
@@ -1981,8 +2049,11 @@ func GetDiagnosticsOfAnyProgram(
 
 			if len(allDiagnostics) == configFileParsingDiagnosticsLength {
 				allDiagnostics = appendDiagnosticsForAllFiles(allDiagnostics, getSemanticDiagnostics)
-				// Ask for the global diagnostics again (they were empty above); we may have found new during checking, e.g. missing globals.
-				allDiagnostics = append(allDiagnostics, program.GetGlobalDiagnostics(ctx)...)
+				if p, ok := program.(*Program); ok {
+					// Incremental programs cache checking globals with file diagnostics;
+					// a late sweep would also collect incidental signature-generation globals.
+					allDiagnostics = append(allDiagnostics, p.GetGlobalDiagnostics(ctx)...)
+				}
 			}
 
 			if (skipNoEmitCheckForDtsDiagnostics || program.Options().NoEmit.IsTrue()) && program.Options().GetEmitDeclarations() && len(allDiagnostics) == configFileParsingDiagnosticsLength {
@@ -2098,8 +2169,12 @@ func (p *Program) GetLibFileFromReference(ref *ast.FileReference) *ast.SourceFil
 }
 
 func (p *Program) GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef *ast.FileReference, sourceFile *ast.SourceFile) *module.ResolvedTypeReferenceDirective {
-	if resolutions, ok := p.typeResolutionsInFile[sourceFile.Path()]; ok {
-		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: typeRef.FileName, Mode: p.getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile)}]; ok {
+	return p.GetResolvedTypeReferenceDirective(sourceFile, typeRef.FileName, p.getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile))
+}
+
+func (p *Program) GetResolvedTypeReferenceDirective(file ast.HasFileName, typeDirectiveName string, mode core.ResolutionMode) *module.ResolvedTypeReferenceDirective {
+	if resolutions, ok := p.typeResolutionsInFile[file.Path()]; ok {
+		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: typeDirectiveName, Mode: mode}]; ok {
 			return resolved
 		}
 	}
@@ -2269,11 +2344,6 @@ func (p *Program) GetSymlinkCache() *symlinks.KnownSymlinks {
 		}
 		return knownSymlinks
 	})
-}
-
-func (p *Program) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
-	resolved, _ := p.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
-	return resolved
 }
 
 func (p *Program) ForEachResolvedModule(callback func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.Path), file *ast.SourceFile) {

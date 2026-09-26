@@ -43,9 +43,15 @@ import {
 } from "../src/api/node/node.ts";
 import {
     HEADER_OFFSET_NODES,
+    HEADER_SIZE,
     NODE_LEN,
     NODE_OFFSET_DATA,
+    PROTOCOL_VERSION,
 } from "../src/api/node/protocol.ts";
+import { Wtf8Decoder } from "../src/api/node/wtf8.ts";
+import { areTestsFiltered } from "./testUtils.ts";
+
+const concurrency = areTestsFiltered();
 
 function makeSF(text: string, fileName: string, statements: readonly Statement[]): SourceFile {
     const endOfFileToken = createToken(SyntaxKind.EndOfFile);
@@ -53,10 +59,10 @@ function makeSF(text: string, fileName: string, statements: readonly Statement[]
 }
 
 function decode(data: Uint8Array): RemoteSourceFile {
-    return new RemoteSourceFile(data, new TextDecoder());
+    return new RemoteSourceFile(data, new Wtf8Decoder());
 }
 
-describe("Encoder", () => {
+describe("Encoder", { concurrency }, () => {
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 
@@ -67,7 +73,8 @@ describe("Encoder", () => {
         // Verify header
         const view = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
         const metadata = view.getUint32(0, true);
-        assert.strictEqual(metadata >>> 24, 8, "protocol version should be 8");
+        assert.strictEqual(metadata >>> 24, PROTOCOL_VERSION);
+        assert.strictEqual(HEADER_SIZE, 64);
 
         // Verify we can decode it
         const decoded = decode(encoded);
@@ -80,6 +87,16 @@ describe("Encoder", () => {
         assert.strictEqual(decoded.diagnosticDirectives, undefined);
         assert.strictEqual(decoded.supplementalSourceFileNames, undefined);
         assert.strictEqual(decoded.canonicalSourceFileName, undefined);
+    });
+
+    test("keeps adjacent surrogate string-table entries separate", () => {
+        const high = String.fromCharCode(0xD800);
+        const low = String.fromCharCode(0xDC00);
+        const sf = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", high, low as Path);
+
+        const decoded = decode(encodeSourceFile(sf));
+        assert.strictEqual(decoded.fileName, high);
+        assert.strictEqual(decoded.path, low);
     });
 
     test("encodes source file with identifier", () => {
@@ -179,11 +196,11 @@ describe("Encoder", () => {
         assert.strictEqual(rootKind, SyntaxKind.IfStatement);
     });
 
-    test("protocol version is 8", () => {
+    test("protocol version matches", () => {
         const sf = makeSF("", "/test.ts", []);
         const encoded = encodeSourceFile(sf);
         const view = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-        assert.strictEqual(view.getUint32(0, true) >>> 24, 8);
+        assert.strictEqual(view.getUint32(0, true) >>> 24, PROTOCOL_VERSION);
     });
 
     test("encodes source files without content mapping metadata", () => {
@@ -337,7 +354,7 @@ describe("Encoder", () => {
     });
 });
 
-describe("UTF-8 vs UTF-16 position encoding", () => {
+describe("UTF-8 vs UTF-16 position encoding", { concurrency }, () => {
     // Positions in the encoded AST must be UTF-16 code unit offsets so that
     // file.text.slice(node.pos, node.end) works correctly on JS strings.
     // This is the same convention TypeScript uses.
@@ -398,7 +415,7 @@ describe("UTF-8 vs UTF-16 position encoding", () => {
     });
 });
 
-describe("Line and character mapping", () => {
+describe("Line and character mapping", { concurrency }, () => {
     function makeSourceFile(text: string): RemoteSourceFile {
         return decode(encodeSourceFile(makeSF(text, "/test.ts", [])));
     }

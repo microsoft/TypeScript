@@ -452,7 +452,7 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		case ast.IsFunctionLike(parent) || ast.IsClassLike(parent) || ast.IsInterfaceDeclaration(parent) || ast.IsTypeOrJSTypeAliasDeclaration(parent):
 			return parent.TypeParameterList()
 		case ast.IsInferTypeNode(parent):
-			break
+			// infer type nodes have no associated type parameter list
 		default:
 			panic(fmt.Sprintf("Unexpected TypeParameter parent: %#v", parent.Kind))
 		}
@@ -603,8 +603,7 @@ func tryGetEnd(node interface{ End() int }) (int, bool) {
 }
 
 func greatestEnd(end int, nodes ...interface{ End() int }) int {
-	for i := len(nodes) - 1; i >= 0; i-- {
-		node := nodes[i]
+	for _, node := range slices.Backward(nodes) {
 		if nodeEnd, ok := tryGetEnd(node); ok && end < nodeEnd {
 			end = nodeEnd
 		}

@@ -152,8 +152,7 @@ func TestCheckerPoolIdleCleanup(t *testing.T) {
 		pool.mu.Unlock()
 
 		// Advance past idle timeout.
-		time.Sleep(5 * time.Second)
-		synctest.Wait()
+		synctest.Sleep(5 * time.Second)
 
 		// After cleanup, both checkers should be disposed.
 		pool.mu.Lock()
@@ -190,8 +189,7 @@ func TestCheckerPoolFileAssociationCleanup(t *testing.T) {
 		assert.Assert(t, hasAssoc, "file should have a checker association")
 
 		// Advance past idle timeout.
-		time.Sleep(5 * time.Second)
-		synctest.Wait()
+		synctest.Sleep(5 * time.Second)
 
 		// File association should be cleared.
 		pool.mu.Lock()
@@ -428,8 +426,7 @@ func TestCheckerPoolDiagnosticsRecreatedAfterIdleDisposal(t *testing.T) {
 		synctest.Wait()
 
 		// Advance past idle timeout — diagnostics checker should be disposed.
-		time.Sleep(5 * time.Second)
-		synctest.Wait()
+		synctest.Sleep(5 * time.Second)
 
 		pool.mu.Lock()
 		assert.Assert(t, pool.checkers[0] == nil, "diagnostics checker should be disposed")
@@ -634,8 +631,7 @@ func TestCheckerPoolDiscardKeepsIdleCheckers(t *testing.T) {
 		pool.mu.Unlock()
 
 		// Even after a long wait, checkers should not be disposed (no timer running).
-		time.Sleep(60 * time.Second)
-		synctest.Wait()
+		synctest.Sleep(60 * time.Second)
 
 		pool.mu.Lock()
 		assert.Assert(t, pool.checkers[0] == c1, "diagnostics checker should persist indefinitely on discarded pool")
@@ -687,8 +683,7 @@ func TestCheckerPoolDiscardHeldCheckerSurvivesRelease(t *testing.T) {
 		pool.mu.Unlock()
 
 		// Even after a long wait, checker persists (no cleanup timer running).
-		time.Sleep(60 * time.Second)
-		synctest.Wait()
+		synctest.Sleep(60 * time.Second)
 
 		pool.mu.Lock()
 		assert.Assert(t, pool.checkers[heldIndex] == c, "checker should persist indefinitely on discarded pool")
@@ -850,8 +845,7 @@ func TestCheckerPoolAPICheckerStableIdentity(t *testing.T) {
 		release2()
 
 		// Should survive idle timeout.
-		time.Sleep(60 * time.Second)
-		synctest.Wait()
+		synctest.Sleep(60 * time.Second)
 
 		c3, release3 := pool.GetChecker(ctx, nil)
 		assert.Assert(t, c3 == c1, "API checker should survive idle timeout")
@@ -1093,8 +1087,7 @@ func TestCheckerPoolStaggeredIdleCleanup(t *testing.T) {
 
 		// Advance past t=16 (when the timer fires). Both should be disposed
 		// because A has been idle 16s and B has been idle 10s.
-		time.Sleep(11 * time.Second)
-		synctest.Wait()
+		synctest.Sleep(11 * time.Second)
 
 		pool.mu.Lock()
 		assert.Assert(t, pool.checkers[idxA] == nil, "checker A should be disposed after timer fires")
@@ -1164,31 +1157,26 @@ func TestCheckerPoolTakeNewGlobalDiagnostics(t *testing.T) {
 
 	// Use a checker and trigger diagnostics, then release to run the merge.
 	ctx := core.WithRequestID(context.Background(), "global-diag-req")
-	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	sourceFile := pool.program.GetSourceFile("/src/index.ts")
 	c, release := pool.GetChecker(ctx, sourceFile)
 	assert.Assert(t, c != nil)
 	c.GetDiagnostics(ctx, sourceFile)
 	release()
 
-	// Whether globals were produced depends on the program, but the flag
-	// should reflect the merge result.
-	firstTake := pool.TakeNewGlobalDiagnostics()
+	assert.Assert(t, pool.TakeNewGlobalDiagnostics(), "diagnostics checker should publish missing-lib globals")
 
 	// After taking, a second call should always return false (flag is reset).
 	assert.Assert(t, !pool.TakeNewGlobalDiagnostics(), "TakeNewGlobalDiagnostics should reset after first call")
 
 	// Releasing the same checker again with the same state should not set the flag.
 	ctx2 := core.WithRequestID(context.Background(), "global-diag-req-2")
-	ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeTemporary)
+	ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeDiagnostics)
 	c2, release2 := pool.GetChecker(ctx2, sourceFile)
 	assert.Assert(t, c2 != nil)
 	c2.GetDiagnostics(ctx2, sourceFile)
 	release2()
 
-	// If first call produced globals, the count is now stable, so no new change.
-	// If first call produced no globals, still no change.
-	_ = firstTake
 	assert.Assert(t, !pool.TakeNewGlobalDiagnostics(), "should not report new globals when checker state is unchanged")
 }
 
