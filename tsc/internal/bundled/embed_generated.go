@@ -207,6 +207,8 @@ var (
 	libs_lib_esnext_full_d_ts string
 	//go:embed libs/lib.esnext.intl.d.ts
 	libs_lib_esnext_intl_d_ts string
+	//go:embed libs/lib.esnext.iterator.d.ts
+	libs_lib_esnext_iterator_d_ts string
 	//go:embed libs/lib.esnext.sharedmemory.d.ts
 	libs_lib_esnext_sharedmemory_d_ts string
 	//go:embed libs/lib.esnext.temporal.d.ts
@@ -326,6 +328,7 @@ var embeddedContents = map[string]string{
 	"libs/lib.esnext.error.d.ts":            libs_lib_esnext_error_d_ts,
 	"libs/lib.esnext.full.d.ts":             libs_lib_esnext_full_d_ts,
 	"libs/lib.esnext.intl.d.ts":             libs_lib_esnext_intl_d_ts,
+	"libs/lib.esnext.iterator.d.ts":         libs_lib_esnext_iterator_d_ts,
 	"libs/lib.esnext.sharedmemory.d.ts":     libs_lib_esnext_sharedmemory_d_ts,
 	"libs/lib.esnext.temporal.d.ts":         libs_lib_esnext_temporal_d_ts,
 	"libs/lib.esnext.typedarrays.d.ts":      libs_lib_esnext_typedarrays_d_ts,
