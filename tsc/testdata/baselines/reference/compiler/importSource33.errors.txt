@@ -1,0 +1,101 @@
+index.ts(19,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(20,15): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(24,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(25,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(26,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(27,15): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(28,15): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(29,15): error TS100075: A declaration file cannot be imported with a source phase import.
+
+
+==== index.ts (8 errors) ====
+    import a from "a.d.ts";
+    import source b from "a.d.ts";
+    import source c from "a.d.ts/b.d.ts";
+    import source d from "a.d.ts/c.d.ts";
+    import source e from "@a/b.d.ts";
+    
+    export const f: string = a;
+    export const g: WebAssembly.Module = b;
+    export const h: WebAssembly.Module = c;
+    export const i: WebAssembly.Module = d;
+    export const j: WebAssembly.Module = e;
+    
+    export const k = import.source("a.d.ts");
+    export const l = import.source("a.d.ts/b.d.ts");
+    export const m = import.source("a.d.ts/c.d.ts");
+    export const n = import.source("@a/b.d.ts");
+    export { a, b, c, d, e };
+    
+    import source o from "a.d.ts/c.d.wasm.ts";
+                         ~~~~~~~~~~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import.source("a.d.ts/c.d.wasm.ts");
+                  ~~~~~~~~~~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    
+    import p from "c";
+    const q: string = p;
+    import source r from "c";
+                         ~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import source s from "c/a";
+                         ~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import source t from "c/b";
+                         ~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import.source("c");
+                  ~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import.source("c/a");
+                  ~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import.source("c/b");
+                  ~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    
+==== node_modules/a.d.ts/package.json (0 errors) ====
+    {
+        "name": "a.d.ts",
+        "exports": {
+            ".": { "types": "./index.d.ts", "default": "./a.wasm" },
+            "./b.d.ts": { "types": "./index.d.ts", "default": "./a.wasm" },
+            "./c.d.ts": "./c.wasm",
+            "./*": "./*"
+        }
+    }
+    
+==== node_modules/a.d.ts/index.d.ts (0 errors) ====
+    declare const a: string;
+    export default a;
+    
+==== node_modules/a.d.ts/a.wasm (0 errors) ====
+    
+==== node_modules/a.d.ts/c.d.wasm.ts (0 errors) ====
+    export {};
+    
+==== node_modules/@a/b.d.ts/package.json (0 errors) ====
+    { "name": "@a/b.d.ts", "exports": "./a.wasm" }
+    
+==== node_modules/@a/b.d.ts/a.wasm (0 errors) ====
+    
+==== node_modules/c/package.json (0 errors) ====
+    {
+        "exports": {
+            ".": "./index.d.ts",
+            "./a": "./index.d.mts",
+            "./b": "./index.d.cts"
+        }
+    }
+    
+==== node_modules/c/index.d.ts (0 errors) ====
+    declare const a: string;
+    export default a;
+    
+==== node_modules/c/index.d.mts (0 errors) ====
+    export {};
+    
+==== node_modules/c/index.d.cts (0 errors) ====
+    export {};
+    

@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/importSource/importSource27.ts] ////
+
+=== e.ts ===
+import source a from "./a.js";
+>a : any
+
+import source b from "./b.mjs";
+>b : any
+
+import source c from "./c.cjs";
+>c : any
+
+import source d from "./d.jsx";
+>d : any
+
+const e = import.source("./a.js");
+>e : Promise<any>
+>import.source("./a.js") : Promise<any>
+>source : any
+>"./a.js" : "./a.js"
+
+const f: any = a;
+>f : any
+>a : any
+
+const g: any = b;
+>g : any
+>b : any
+
+const h: any = c;
+>h : any
+>c : any
+
+const i: any = d;
+>i : any
+>d : any
+
+const j: Promise<any> = e;
+>j : Promise<any>
+>e : Promise<any>
+

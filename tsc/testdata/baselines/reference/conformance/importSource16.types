@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/importSource/importSource16.ts] ////
+
+=== c.ts ===
+import { a, c } from "./b.js";
+>a : WebAssembly.Module
+>c : Promise<WebAssembly.Module>
+
+const e: WebAssembly.Module = a;
+>e : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+
+const f: Promise<WebAssembly.Module> = c;
+>f : Promise<WebAssembly.Module>
+>WebAssembly : any
+>c : Promise<WebAssembly.Module>
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+const b: WebAssembly.Module = a;
+>b : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+
+export type B = typeof a;
+>B : WebAssembly.Module
+>a : WebAssembly.Module
+
+export { a };
+>a : WebAssembly.Module
+
+export const c = import.source("./a.wasm");
+>c : Promise<WebAssembly.Module>
+>import.source("./a.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+const d: Promise<WebAssembly.Module> = c;
+>d : Promise<WebAssembly.Module>
+>WebAssembly : any
+>c : Promise<WebAssembly.Module>
+

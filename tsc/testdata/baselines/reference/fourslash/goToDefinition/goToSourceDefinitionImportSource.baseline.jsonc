@@ -1,0 +1,129 @@
+// === goToDefinition ===
+// === /a.js ===
+// const x = 1;
+// <|export default function [|f|]() {}|>
+// const g = 2;
+// 
+
+// === /b.ts ===
+// import /*GOTO DEF*/[|f|] from "./a.js";
+// f();
+// import source g from "./a.js";
+// g;
+// --- (line: 5) skipped ---
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// const x = 1;
+// <|export default function [|f|]() {}|>
+// const g = 2;
+// 
+
+// === /b.ts ===
+// import f from "./a.js";
+// /*GOTO DEF*/[|f|]();
+// import source g from "./a.js";
+// g;
+// import source h from "./a.wasm";
+// h;
+// import.source("./a.js");
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// import f from "./a.js";
+// f();
+// <|import source /*GOTO DEF*/[|g|] from "./a.js";|>
+// g;
+// import source h from "./a.wasm";
+// h;
+// import.source("./a.js");
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// import f from "./a.js";
+// f();
+// <|import source [|g|] from "./a.js";|>
+// /*GOTO DEF*/g;
+// import source h from "./a.wasm";
+// h;
+// import.source("./a.js");
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// import f from "./a.js";
+// f();
+// import source g from "./a.js";
+// g;
+// <|import source /*GOTO DEF*/[|h|] from "./a.wasm";|>
+// h;
+// import.source("./a.js");
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// import f from "./a.js";
+// f();
+// import source g from "./a.js";
+// g;
+// <|import source [|h|] from "./a.wasm";|>
+// /*GOTO DEF*/h;
+// import.source("./a.js");
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// [||]const x = 1;
+// export default function f() {}
+// const g = 2;
+// 
+
+// === /b.ts ===
+// import f from "./a.js";
+// f();
+// import source g from [|"/*GOTO DEF*/./a.js"|];
+// g;
+// import source h from "./a.wasm";
+// h;
+// import.source("./a.js");
+
+
+
+// === goToDefinition ===
+// === /a.wasm ===
+// [||]wasm
+// 
+
+// === /b.ts ===
+// import f from "./a.js";
+// f();
+// import source g from "./a.js";
+// g;
+// import source h from [|"/*GOTO DEF*/./a.wasm"|];
+// h;
+// import.source("./a.js");
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// [||]const x = 1;
+// export default function f() {}
+// const g = 2;
+// 
+
+// === /b.ts ===
+// --- (line: 3) skipped ---
+// g;
+// import source h from "./a.wasm";
+// h;
+// import.source([|"/*GOTO DEF*/./a.js"|]);

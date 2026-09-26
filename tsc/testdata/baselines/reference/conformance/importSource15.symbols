@@ -1,0 +1,92 @@
+//// [tests/cases/conformance/importSource/importSource15.ts] ////
+
+=== a.js ===
+export default 1;
+export const a = 2;
+>a : Symbol(a, Decl(a.js, 1, 12))
+
+=== b.js ===
+import source * as a from "./a.js";
+>a : Symbol(a, Decl(b.js, 0, 13))
+
+=== c.js ===
+import source { a } from "./a.js";
+>a : Symbol(a, Decl(c.js, 0, 15))
+
+=== d.js ===
+import source a, { a as b } from "./a.js";
+>a : Symbol(a, Decl(d.js, 0, 6))
+>a : Symbol(b, Decl(a.js, 1, 12))
+>b : Symbol(b, Decl(d.js, 0, 18))
+
+=== e.js ===
+
+import source "./a.js";
+
+=== f.js ===
+import.source;
+(import.source)("./a.js");
+Function(import.source);
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+import.source.unknown;
+
+import.source();
+import.source("./a.js", {}, {});
+>"./a.js" : Symbol("./a.js", Decl(a.js, 0, 0))
+
+import.source?.("./a.js");
+>"./a.js" : Symbol("./a.js", Decl(a.js, 0, 0))
+
+import.source<string>("./a.js");
+import.source(...["./a.js"]);
+
+=== g.js ===
+new import.source("./a.js");
+>"./a.js" : Symbol("./a.js", Decl(a.js, 0, 0))
+
+=== h.js ===
+
+typeof import.source;
+
+=== i.js ===
+
+import.a("./a.js");
+
+=== j.js ===
+import source a from "./a.js" with { type: "javascript" };
+>a : Symbol(a, Decl(j.js, 0, 6))
+
+const b = import.source("./a.js", { with: { type: "javascript" } });
+>b : Symbol(b, Decl(j.js, 1, 5))
+>"./a.js" : Symbol("./a.js", Decl(a.js, 0, 0))
+>with : Symbol(with, Decl(j.js, 1, 35))
+>type : Symbol(type, Decl(j.js, 1, 43))
+
+a;
+>a : Symbol(a, Decl(j.js, 0, 6))
+
+b;
+>b : Symbol(b, Decl(j.js, 1, 5))
+
+=== k.js ===
+const a = import.source("./a.js", { with: { type: "javascript" } });
+>a : Symbol(a, Decl(k.js, 0, 5))
+>"./a.js" : Symbol("./a.js", Decl(a.js, 0, 0))
+>with : Symbol(with, Decl(k.js, 0, 35))
+>type : Symbol(type, Decl(k.js, 0, 43))
+
+a;
+>a : Symbol(a, Decl(k.js, 0, 5))
+
+=== l.js ===
+import s\u006furce from "./a.js";
+>s\u006furce : Symbol(s\u006furce, Decl(l.js, 0, 6))
+
+source;
+>source : Symbol(s\u006furce, Decl(l.js, 0, 6))
+
+=== m.js ===
+import.s\u006furce("./a.js");
+>"./a.js" : Symbol("./a.js", Decl(a.js, 0, 0))
+

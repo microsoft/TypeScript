@@ -4428,6 +4428,20 @@ var Sort_Imports = &Message{code: 95208, category: CategoryMessage, key: "Sort_I
 
 var JSDoc_comment = &Message{code: 95209, category: CategoryMessage, key: "JSDoc_comment_95209", text: "JSDoc comment"}
 
+var A_source_phase_import_must_specify_a_local_binding = &Message{code: 100069, category: CategoryError, key: "A_source_phase_import_must_specify_a_local_binding_100069", text: "A source phase import must specify a local binding."}
+
+var Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import = &Message{code: 100070, category: CategoryError, key: "Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import_100070", text: "Named and namespace imports are not allowed in a source phase import."}
+
+var Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve = &Message{code: 100071, category: CategoryError, key: "Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_100071", text: "Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'."}
+
+var Optional_chaining_cannot_be_used_with_import_source = &Message{code: 100072, category: CategoryError, key: "Optional_chaining_cannot_be_used_with_import_source_100072", text: "Optional chaining cannot be used with 'import.source'."}
+
+var X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source = &Message{code: 100073, category: CategoryError, key: "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source_100073", text: "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?"}
+
+var Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls = &Message{code: 100074, category: CategoryError, key: "Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls_100074", text: "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls."}
+
+var A_declaration_file_cannot_be_imported_with_a_source_phase_import = &Message{code: 100075, category: CategoryError, key: "A_declaration_file_cannot_be_imported_with_a_source_phase_import_100075", text: "A declaration file cannot be imported with a source phase import."}
+
 var allMessages = [...]**Message{
 	&Unterminated_string_literal,
 	&Identifier_expected,
@@ -6642,4 +6656,11 @@ var allMessages = [...]**Message{
 	&Remove_Unused_Imports,
 	&Sort_Imports,
 	&JSDoc_comment,
+	&A_source_phase_import_must_specify_a_local_binding,
+	&Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import,
+	&Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve,
+	&Optional_chaining_cannot_be_used_with_import_source,
+	&X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source,
+	&Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls,
+	&A_declaration_file_cannot_be_imported_with_a_source_phase_import,
 }

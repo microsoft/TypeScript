@@ -482,6 +482,7 @@ type ModuleResolutionEntry struct {
 	ModuleName          string                  `json:"moduleName"`
 	ContainingDirectory *DocumentIdentifier     `json:"containingDirectory,omitempty"`
 	ResolutionMode      *ResolutionMode         `json:"resolutionMode,omitempty"`
+	ImportPhase         *module.ImportPhase     `json:"importPhase,omitempty"`
 	Result              *StaticModuleResolution `json:"result" nonnil:"true"`
 }
 
@@ -508,14 +509,16 @@ type ResolveModuleNameParams struct {
 	ModuleName          string             `json:"moduleName"`
 	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
 	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
+	ImportPhase         module.ImportPhase `json:"importPhase,omitempty"`
 }
 
 type ResolveModuleNameCallbackParams struct {
-	ModuleName          string          `json:"moduleName"`
-	ContainingDirectory string          `json:"containingDirectory"`
-	ResolutionMode      *ResolutionMode `json:"resolutionMode,omitempty"`
-	Snapshot            *SnapshotID     `json:"snapshot,omitempty"`
-	InProgressSnapshot  *uint64         `json:"inProgressSnapshot,omitempty"`
+	ModuleName          string             `json:"moduleName"`
+	ContainingDirectory string             `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
+	ImportPhase         module.ImportPhase `json:"importPhase"`
+	Snapshot            *SnapshotID        `json:"snapshot,omitempty"`
+	InProgressSnapshot  *uint64            `json:"inProgressSnapshot,omitempty"`
 }
 
 type ResolveModuleNameResult struct {

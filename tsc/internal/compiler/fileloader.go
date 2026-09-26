@@ -886,10 +886,8 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			}
 
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
-			var resolvedModule *module.ResolvedModule
-			var trace []module.DiagAndArgs
-			var err error
-			resolvedModule, trace, err = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+			phase := module.GetImportPhaseForUsage(entry)
+			resolvedModule, trace, err := p.resolver.ResolveModuleNameWithPhase(moduleName, fileName, mode, phase, redirect)
 			if err != nil {
 				p.moduleResolutionErrorOnce.Do(func() {
 					p.moduleResolutionError = err
@@ -898,10 +896,13 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			if resolvedModule == nil {
 				resolvedModule = &module.ResolvedModule{}
 			}
-			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = resolvedModule
+			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode, Phase: phase}] = resolvedModule
 			resolutionsTrace = append(resolutionsTrace, trace...)
 
 			if !resolvedModule.IsResolved() {
+				continue
+			}
+			if phase == module.ImportPhaseSource && module.IsResolvedModuleForExtension(resolvedModule, tspath.ExtensionWasm) {
 				continue
 			}
 

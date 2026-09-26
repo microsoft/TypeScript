@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 )
 
 type ImpExpKind int32
@@ -88,6 +89,9 @@ func getDirectImportsMap(ctx context.Context, program *compiler.Program, sourceF
 			return result
 		}
 		forEachImport(program, sourceFile, func(importDecl *ast.Node, moduleSpecifier *ast.Node) {
+			if module.GetImportPhaseForUsage(moduleSpecifier) == module.ImportPhaseSource {
+				return
+			}
 			if moduleSymbol := checker.GetSymbolAtLocation(moduleSpecifier); moduleSymbol != nil {
 				result[moduleSymbol] = append(result[moduleSymbol], importDecl)
 			}

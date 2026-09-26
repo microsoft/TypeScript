@@ -1,0 +1,72 @@
+//// [tests/cases/conformance/importSource/importSource32.ts] ////
+
+=== index.ts ===
+/// <reference path="d.d.ts" />
+import source a from "./a.ts";
+>a : WebAssembly.Module
+
+import source b from "./b.ts";
+>b : any
+
+import source c from "./c.ts";
+>c : any
+
+import source d from "./a.ts/index.wasm";
+>d : WebAssembly.Module
+
+import type e from "./b.ts";
+>e : any
+
+export { a, b, c, d };
+>a : WebAssembly.Module
+>b : any
+>c : any
+>d : WebAssembly.Module
+
+export type T = typeof e;
+>T : 1
+>e : 1
+
+export const f = import.source("./a.ts");
+>f : Promise<WebAssembly.Module>
+>import.source("./a.ts") : Promise<WebAssembly.Module>
+>source : any
+>"./a.ts" : "./a.ts"
+
+export const g = import.source("./b.ts");
+>g : Promise<any>
+>import.source("./b.ts") : Promise<any>
+>source : any
+>"./b.ts" : "./b.ts"
+
+export const h = import.source("./c.ts");
+>h : Promise<any>
+>import.source("./c.ts") : Promise<any>
+>source : any
+>"./c.ts" : "./c.ts"
+
+export const i = import.source("./a.ts/index.wasm");
+>i : Promise<WebAssembly.Module>
+>import.source("./a.ts/index.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.ts/index.wasm" : "./a.ts/index.wasm"
+
+=== b.ts/index.js ===
+
+export default 1;
+
+=== c.ts ===
+
+export default 1;
+
+=== d.d.ts ===
+import source a from "./a.ts";
+>a : WebAssembly.Module
+
+import source b from "./b.ts";
+>b : any
+
+export { a, b };
+>a : WebAssembly.Module
+>b : any
+

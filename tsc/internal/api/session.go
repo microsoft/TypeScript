@@ -2241,8 +2241,7 @@ func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: moduleSpecifier must have a SourceFile ancestor or sourceFile must be provided", ErrClientError)
 	}
-	mode := program.GetModeForUsageLocation(sourceFile, node)
-	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, node.Text(), mode)), nil
+	return newResolvedModuleResponse(program.GetResolvedModuleFromModuleSpecifier(sourceFile, node)), nil
 }
 
 // @gen-proto-nullable

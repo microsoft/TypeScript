@@ -13,6 +13,7 @@ type StaticResolutionEntry struct {
 	ModuleName          string
 	ContainingDirectory string
 	ResolutionMode      *core.ResolutionMode
+	ImportPhase         *ImportPhase
 	Result              *ResolvedModule
 }
 
@@ -20,8 +21,10 @@ type staticResolutionKey struct {
 	moduleName   string
 	directory    tspath.Path
 	mode         core.ResolutionMode
+	phase        ImportPhase
 	hasDirectory bool
 	hasMode      bool
+	hasPhase     bool
 }
 
 type StaticResolutions struct {
@@ -56,6 +59,10 @@ func NewStaticResolutions(
 			key.mode = *entry.ResolutionMode
 			key.hasMode = true
 		}
+		if entry.ImportPhase != nil {
+			key.phase = *entry.ImportPhase
+			key.hasPhase = true
+		}
 		if _, exists := resolutions.entries[key]; exists {
 			return nil, fmt.Errorf("duplicate static module resolution for %q", entry.ModuleName)
 		}
@@ -64,7 +71,7 @@ func NewStaticResolutions(
 	return resolutions, nil
 }
 
-func (r *StaticResolutions) lookup(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*ResolvedModule, bool) {
+func (r *StaticResolutions) lookup(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode, importPhase ImportPhase) (*ResolvedModule, bool) {
 	directory := tspath.ToPath(containingDirectory, r.currentDirectory, r.useCaseSensitiveFileNames)
 	keys := [...]staticResolutionKey{
 		{moduleName: moduleName, directory: directory, mode: resolutionMode, hasDirectory: true, hasMode: true},
@@ -73,6 +80,12 @@ func (r *StaticResolutions) lookup(moduleName string, containingDirectory string
 		{moduleName: moduleName},
 	}
 	for _, key := range keys {
+		phaseKey := key
+		phaseKey.phase = importPhase
+		phaseKey.hasPhase = true
+		if result, ok := r.entries[phaseKey]; ok {
+			return result, true
+		}
 		if result, ok := r.entries[key]; ok {
 			return result, true
 		}
@@ -95,37 +108,39 @@ func (r *StaticResolver) ResolveModuleName(
 	resolutionMode core.ResolutionMode,
 	redirectedReference ResolvedProjectReference,
 ) (*ResolvedModule, []DiagAndArgs, error) {
-	return r.resolveModuleName(moduleName, containingFile, tspath.GetDirectoryPath(containingFile), resolutionMode, redirectedReference)
+	return r.ResolveModuleNameWithPhase(moduleName, containingFile, resolutionMode, ImportPhaseEvaluation, redirectedReference)
 }
 
 func (r *StaticResolver) ResolveModuleNameFromDirectory(
 	moduleName string,
 	containingDirectory string,
 	resolutionMode core.ResolutionMode,
+	importPhase ImportPhase,
 ) (*ResolvedModule, []DiagAndArgs, error) {
-	if result, found := r.resolutions.lookup(moduleName, containingDirectory, resolutionMode); found {
+	if result, found := r.resolutions.lookup(moduleName, containingDirectory, resolutionMode, importPhase); found {
 		return result, nil, nil
 	}
 	if !r.resolutions.fallbackToResolver {
 		return nil, nil, nil
 	}
-	return r.fallback.ResolveModuleNameFromDirectory(moduleName, containingDirectory, resolutionMode)
+	return r.fallback.ResolveModuleNameFromDirectory(moduleName, containingDirectory, resolutionMode, importPhase)
 }
 
-func (r *StaticResolver) resolveModuleName(
+func (r *StaticResolver) ResolveModuleNameWithPhase(
 	moduleName string,
 	containingFile string,
-	containingDirectory string,
 	resolutionMode core.ResolutionMode,
+	importPhase ImportPhase,
 	redirectedReference ResolvedProjectReference,
 ) (*ResolvedModule, []DiagAndArgs, error) {
-	if result, found := r.resolutions.lookup(moduleName, containingDirectory, resolutionMode); found {
+	containingDirectory := tspath.GetDirectoryPath(containingFile)
+	if result, found := r.resolutions.lookup(moduleName, containingDirectory, resolutionMode, importPhase); found {
 		return result, nil, nil
 	}
 	if !r.resolutions.fallbackToResolver {
 		return nil, nil, nil
 	}
-	return r.fallback.ResolveModuleName(moduleName, containingFile, resolutionMode, redirectedReference)
+	return r.fallback.ResolveModuleNameWithPhase(moduleName, containingFile, resolutionMode, importPhase, redirectedReference)
 }
 
 func (r *StaticResolver) ResolveTypeReferenceDirective(

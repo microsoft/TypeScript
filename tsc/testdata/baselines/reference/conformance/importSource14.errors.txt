@@ -1,0 +1,18 @@
+b.ts(1,22): error TS6263: Module './a.txt' was resolved to 'a.d.txt.ts', but '--allowArbitraryExtensions' is not set.
+b.ts(2,25): error TS6263: Module './a.txt' was resolved to 'a.d.txt.ts', but '--allowArbitraryExtensions' is not set.
+
+
+==== a.d.txt.ts (0 errors) ====
+    export {};
+    
+==== b.ts (2 errors) ====
+    import source a from "./a.txt";
+                         ~~~~~~~~~
+!!! error TS6263: Module './a.txt' was resolved to 'a.d.txt.ts', but '--allowArbitraryExtensions' is not set.
+    const b = import.source("./a.txt");
+                            ~~~~~~~~~
+!!! error TS6263: Module './a.txt' was resolved to 'a.d.txt.ts', but '--allowArbitraryExtensions' is not set.
+    
+    a;
+    b;
+    

@@ -60,6 +60,7 @@ import {
     EmitOnly,
     type FreshableType,
     type ImportAdderAction,
+    ImportPhase,
     type IndexedAccessType,
     IndexKind,
     type IndexType,
@@ -976,6 +977,87 @@ declare module "augmentation" {}`,
 
         await program.dispose();
     });
+
+    for (const resolverKind of ["native", "callback", "delegating callback", "static"] as const) {
+        test(`Program resolved modules preserve the import phase with ${resolverKind} resolution`, async () => {
+            await using api = spawnAPI({
+                "/src/source.ts": `import source wasm from "pkg";
+import.source("pkg");
+import("pkg");
+import.source("missing");`,
+                "/src/mixed.ts": `import "pkg";
+import source wasm from "pkg";
+import("pkg");
+import.source("pkg");`,
+                "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", exports: { types: "./index.d.ts", default: "./module.wasm" } }),
+                "/node_modules/pkg/index.d.ts": `export {};`,
+                "/node_modules/pkg/module.wasm": "\0asm\x01\0\0\0",
+            });
+
+            const expectedResolutions = {
+                "/src/source.ts": ["/node_modules/pkg/module.wasm", "/node_modules/pkg/module.wasm", "/node_modules/pkg/index.d.ts", undefined],
+                "/src/mixed.ts": ["/node_modules/pkg/index.d.ts", "/node_modules/pkg/module.wasm", "/node_modules/pkg/index.d.ts", "/node_modules/pkg/module.wasm"],
+            };
+            const compilerOptions = { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, allowJs: true, maxNodeModuleJsDepth: 1, noLib: true };
+            const fallback = await api.createModuleResolver(compilerOptions);
+            const moduleResolver = resolverKind === "native" ? fallback : await api.createModuleResolver(compilerOptions, {
+                moduleResolutions: resolverKind === "static" ? {
+                    fallback: "unresolved",
+                    entries: [
+                        { moduleName: "pkg", importPhase: ImportPhase.Evaluation, result: { resolvedFileName: "/node_modules/pkg/index.d.ts" } },
+                        { moduleName: "pkg", importPhase: ImportPhase.Source, result: { resolvedFileName: "/node_modules/pkg/module.wasm" } },
+                    ],
+                } : undefined,
+                resolveModuleName: async (name, directory, mode, options) => {
+                    assert.notEqual(resolverKind, "static");
+                    assert.ok(options.importPhase === ImportPhase.Evaluation || options.importPhase === ImportPhase.Source);
+                    if (resolverKind === "callback") {
+                        return name === "pkg" ? {
+                            resolvedFileName: options.importPhase === ImportPhase.Source ? "/node_modules/pkg/module.wasm" : "/node_modules/pkg/index.d.ts",
+                        } : undefined;
+                    }
+                    return (await fallback.resolveModuleName(name, directory, mode, options)).resolvedModule;
+                },
+            });
+            const program = await api.createProgram(
+                Object.keys(expectedResolutions),
+                compilerOptions,
+                { moduleResolver },
+            );
+            assert.equal(await program.getSourceFile("/node_modules/pkg/module.wasm"), undefined);
+            assert.deepEqual(await program.getSyntacticDiagnostics(), []);
+            for (const [fileName, expected] of Object.entries(expectedResolutions)) {
+                const sourceFile = await program.getSourceFile(fileName);
+                assert.ok(sourceFile);
+                for (const [index, statement] of sourceFile.statements.entries()) {
+                    const specifier = cast(
+                        isImportDeclaration(statement)
+                            ? statement.moduleSpecifier
+                            : cast(cast(statement, isExpressionStatement).expression, isCallExpression).arguments[0],
+                        isStringLiteral,
+                    );
+                    const resolution = await program.getResolvedModuleFromModuleSpecifier(specifier);
+                    assert.equal(resolution?.resolvedFileName, expected[index], `${fileName}, statement ${index}`);
+                    if (resolution?.resolvedFileName.endsWith(".wasm")) {
+                        assert.equal(resolution.extension, ".wasm");
+                    }
+                    const resolutionWithSourceFile = await program.getResolvedModuleFromModuleSpecifier(specifier, fileName);
+                    assert.deepEqual(resolutionWithSourceFile, resolution);
+                }
+            }
+            const snapshot = await api.createSnapshot({});
+            for (const context of [undefined, snapshot]) {
+                for (const importPhase of [ImportPhase.Source, ImportPhase.Evaluation, undefined]) {
+                    const resolution = await moduleResolver.resolveModuleName("pkg", "/src", ModuleKind.ESNext, { snapshot: context, importPhase });
+                    assert.equal(
+                        resolution.resolvedModule?.resolvedFileName,
+                        importPhase === ImportPhase.Source ? "/node_modules/pkg/module.wasm" : "/node_modules/pkg/index.d.ts",
+                    );
+                    assert.equal(resolution.resolvedModule?.extension, importPhase === ImportPhase.Source ? ".wasm" : ".d.ts");
+                }
+            }
+        });
+    }
 
     test("createProgram ignores an on-disk tsconfig", async () => {
         await using api = spawnAPI({

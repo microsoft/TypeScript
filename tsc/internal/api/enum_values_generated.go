@@ -18,6 +18,7 @@ import (
 	core "github.com/microsoft/TypeScript/tsc/internal/core"
 	diagnostics "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	lsproto "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	module "github.com/microsoft/TypeScript/tsc/internal/module"
 	nodebuilder "github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	spanmap "github.com/microsoft/TypeScript/tsc/internal/spanmap"
 )
@@ -493,6 +494,7 @@ func main() {
 			"OverrideKeyword":                              toInt32(ast.KindOverrideKeyword),
 			"OfKeyword":                                    toInt32(ast.KindOfKeyword),
 			"DeferKeyword":                                 toInt32(ast.KindDeferKeyword),
+			"SourceKeyword":                                toInt32(ast.KindSourceKeyword),
 			"QualifiedName":                                toInt32(ast.KindQualifiedName),
 			"ComputedPropertyName":                         toInt32(ast.KindComputedPropertyName),
 			"TypeParameter":                                toInt32(ast.KindTypeParameter),
@@ -844,6 +846,10 @@ func main() {
 			"Node16":   toInt32(core.ModuleResolutionKindNode16),
 			"NodeNext": toInt32(core.ModuleResolutionKindNodeNext),
 			"Bundler":  toInt32(core.ModuleResolutionKindBundler),
+		},
+		"ImportPhase": {
+			"Evaluation": toInt32(module.ImportPhaseEvaluation),
+			"Source":     toInt32(module.ImportPhaseSource),
 		},
 		"ModuleDetectionKind": {
 			"None":   toInt32(core.ModuleDetectionKindNone),

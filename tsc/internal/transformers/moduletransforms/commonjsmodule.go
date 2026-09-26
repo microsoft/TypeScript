@@ -1807,7 +1807,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 			needsRewrite = true
 		}
 	}
-	if ast.IsImportCall(node.AsNode()) && tx.shouldTransformImportCall() {
+	if node.Expression.Kind == ast.KindImportKeyword && tx.shouldTransformImportCall() {
 		return tx.visitImportCallExpression(node, needsRewrite)
 	}
 	if needsRewrite {

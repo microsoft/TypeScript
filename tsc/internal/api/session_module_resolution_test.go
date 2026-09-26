@@ -246,13 +246,43 @@ func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 		CompilerOptions: core.EmptyCompilerOptions,
 	})
 	for range 2 {
-		_, _, err := provider.ResolveModuleNameFromDirectory("pkg", "/src", core.ResolutionModeESM)
+		_, _, err := provider.ResolveModuleNameFromDirectory("pkg", "/src", core.ResolutionModeESM, module.ImportPhaseEvaluation)
 		assert.ErrorContains(t, err, "callback error")
 	}
 	assert.Equal(t, conn.calls, 2)
+	for _, phase := range []module.ImportPhase{module.ImportPhaseEvaluation, module.ImportPhaseSource} {
+		_, _, err := provider.ResolveModuleNameWithPhase("pkg", "/src/index.ts", core.ResolutionModeESM, phase, nil)
+		assert.ErrorContains(t, err, "callback error")
+	}
+	assert.Equal(t, conn.calls, 4)
 	assert.Equal(t, len(session.programResolutionContexts), 1)
 	cleanup()
 	assert.Equal(t, len(session.programResolutionContexts), 0)
+}
+
+func TestModuleResolutionInvalidImportPhase(t *testing.T) {
+	t.Parallel()
+
+	for _, phase := range []module.ImportPhase{-1, 2} {
+		_, err := compileModuleResolutionSpec(&ModuleResolutionSpec{
+			Fallback: ModuleResolutionFallbackUnresolved,
+			Entries: []*ModuleResolutionEntry{{
+				ModuleName:  "pkg",
+				ImportPhase: &phase,
+				Result:      &StaticModuleResolution{},
+			}},
+		}, "/", true)
+		assert.ErrorContains(t, err, "invalid importPhase")
+		assert.Assert(t, errors.Is(err, ErrClientError))
+
+		session := &Session{}
+		_, err = session.handleResolveModuleName(context.Background(), &ResolveModuleNameParams{
+			ModuleName:  "pkg",
+			ImportPhase: phase,
+		})
+		assert.ErrorContains(t, err, "invalid importPhase")
+		assert.Assert(t, errors.Is(err, ErrClientError))
+	}
 }
 
 func TestModuleResolutionCallbackErrorRejectsLanguageServerUpdate(t *testing.T) {

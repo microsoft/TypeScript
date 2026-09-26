@@ -28,6 +28,14 @@ type Resolver interface {
 		moduleName string,
 		containingDirectory string,
 		resolutionMode core.ResolutionMode,
+		importPhase ImportPhase,
+	) (*ResolvedModule, []DiagAndArgs, error)
+	ResolveModuleNameWithPhase(
+		moduleName string,
+		containingFile string,
+		resolutionMode core.ResolutionMode,
+		importPhase ImportPhase,
+		redirectedReference ResolvedProjectReference,
 	) (*ResolvedModule, []DiagAndArgs, error)
 	ResolveTypeReferenceDirective(
 		typeReferenceDirectiveName string,
@@ -46,8 +54,20 @@ type Resolver interface {
 }
 
 type ModeAwareCacheKey struct {
-	Name string
-	Mode core.ResolutionMode
+	Name  string
+	Mode  core.ResolutionMode
+	Phase ImportPhase
+}
+
+type ImportPhase int32
+
+const (
+	ImportPhaseEvaluation ImportPhase = iota
+	ImportPhaseSource
+)
+
+func (phase ImportPhase) IsValid() bool {
+	return phase == ImportPhaseEvaluation || phase == ImportPhaseSource
 }
 
 type ResolvedProjectReference interface {

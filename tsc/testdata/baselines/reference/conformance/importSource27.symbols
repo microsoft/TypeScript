@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/importSource/importSource27.ts] ////
+
+=== e.ts ===
+import source a from "./a.js";
+>a : Symbol(a, Decl(e.ts, 0, 6))
+
+import source b from "./b.mjs";
+>b : Symbol(b, Decl(e.ts, 1, 6))
+
+import source c from "./c.cjs";
+>c : Symbol(c, Decl(e.ts, 2, 6))
+
+import source d from "./d.jsx";
+>d : Symbol(d, Decl(e.ts, 3, 6))
+
+const e = import.source("./a.js");
+>e : Symbol(e, Decl(e.ts, 4, 5))
+
+const f: any = a;
+>f : Symbol(f, Decl(e.ts, 6, 5))
+>a : Symbol(a, Decl(e.ts, 0, 6))
+
+const g: any = b;
+>g : Symbol(g, Decl(e.ts, 7, 5))
+>b : Symbol(b, Decl(e.ts, 1, 6))
+
+const h: any = c;
+>h : Symbol(h, Decl(e.ts, 8, 5))
+>c : Symbol(c, Decl(e.ts, 2, 6))
+
+const i: any = d;
+>i : Symbol(i, Decl(e.ts, 9, 5))
+>d : Symbol(d, Decl(e.ts, 3, 6))
+
+const j: Promise<any> = e;
+>j : Symbol(j, Decl(e.ts, 10, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>e : Symbol(e, Decl(e.ts, 4, 5))
+

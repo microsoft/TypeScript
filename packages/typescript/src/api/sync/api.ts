@@ -20,6 +20,7 @@ import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
+import { ImportPhase } from "#enums/importPhase";
 import { IndexKind } from "#enums/indexKind";
 import { JsxEmit } from "#enums/jsxEmit";
 import { ModuleKind } from "#enums/moduleKind";
@@ -187,7 +188,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ImportPhase, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -272,6 +273,7 @@ export interface ModuleResolverOptions {
 
 export interface ResolveModuleNameCallbackOptions {
     snapshot: Snapshot | InProgressSnapshot | undefined;
+    importPhase: ImportPhase;
 }
 
 declare const inProgressSnapshotBrand: unique symbol;
@@ -297,10 +299,11 @@ let nextModuleResolutionCallbackId = 0;
 function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback, getSnapshot: (id: number) => Snapshot | undefined): { name: string; dispose: () => void; } {
     const name = `resolveModuleName/${++nextModuleResolutionCallbackId}`;
     const dispose = client.registerCallback(name, params => {
-        const { moduleName, containingDirectory, resolutionMode, snapshot: snapshotId, inProgressSnapshot } = params as {
+        const { moduleName, containingDirectory, resolutionMode, importPhase, snapshot: snapshotId, inProgressSnapshot } = params as {
             moduleName: string;
             containingDirectory: string;
             resolutionMode?: ResolutionMode;
+            importPhase: ImportPhase;
             snapshot?: number;
             inProgressSnapshot?: number;
         };
@@ -315,7 +318,7 @@ function registerModuleResolutionCallback(client: Client, callback: ResolveModul
             moduleName,
             containingDirectory,
             resolutionMode,
-            { snapshot },
+            { snapshot, importPhase },
         );
     });
     return { name, dispose };
@@ -1696,14 +1699,23 @@ export class ModuleResolver {
     }
 
     get resolveModuleName(): {
-        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveModuleNameResult;
-        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
+        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: {
+            snapshot?: Snapshot | InProgressSnapshot | undefined;
+            importPhase?: ImportPhase | undefined;
+        }): ResolveModuleNameResult;
+        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: {
+            snapshot?: Snapshot | InProgressSnapshot | undefined;
+            importPhase?: ImportPhase | undefined;
+        }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "resolveModuleName",
-            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveModuleNameResult {
+            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: {
+                snapshot?: Snapshot | InProgressSnapshot | undefined;
+                importPhase?: ImportPhase | undefined;
+            }): ResolveModuleNameResult {
                 owner.ensureNotDisposed();
                 if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
                     throw new Error("Snapshot is disposed");
@@ -1715,9 +1727,13 @@ export class ModuleResolver {
                     moduleName,
                     containingDirectory,
                     resolutionMode,
+                    importPhase: options?.importPhase,
                 });
             },
-            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
+            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: {
+                snapshot?: Snapshot | InProgressSnapshot | undefined;
+                importPhase?: ImportPhase | undefined;
+            }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
                 owner.ensureNotDisposed();
                 if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
                     throw new Error("Snapshot is disposed");
@@ -1729,6 +1745,7 @@ export class ModuleResolver {
                     moduleName,
                     containingDirectory,
                     resolutionMode,
+                    importPhase: options?.importPhase,
                 });
             },
         );
