@@ -30,6 +30,7 @@ import {
     type AllAPIRequestGenerator,
     type AnyAPIRequestGenerator,
     type API,
+    type BuildOrchestrator,
     type ConditionalType,
     defer,
     type DeferredAPIRequestGenerator,
@@ -350,6 +351,10 @@ function assertSnapshotsEquivalent(actual: Snapshot, expected: Snapshot, message
     assertArrayElementsEquivalent(actualProjects, expectedProjects, assertProjectsEquivalent, message);
     assert.deepEqual(actual.operation.createdPrograms?.map(program => program.id), expected.operation.createdPrograms?.map(program => program.id), message);
     assert.deepEqual(actual.operation.openedFiles?.map(result => result.project.id), expected.operation.openedFiles?.map(result => result.project.id), message);
+}
+
+function assertBuildOrchestratorsEquivalent(actual: BuildOrchestrator, expected: BuildOrchestrator, message?: string): void {
+    assert.equal(actual.constructor, expected.constructor, message);
 }
 
 function assertSymbolMapsEquivalent(actual: ReadonlyMap<string, Symbol>, expected: ReadonlyMap<string, Symbol>, message?: string): void {
@@ -1563,6 +1568,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
+                parityCase("API", "createBuildOrchestrator", api.createBuildOrchestrator, assertBuildOrchestratorsEquivalent, ["/tsconfig.json"], { cwd: "/" }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),

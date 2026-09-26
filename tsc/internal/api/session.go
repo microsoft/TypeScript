@@ -5,12 +5,14 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"runtime/debug"
 	"slices"
 	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
@@ -21,6 +23,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
@@ -435,6 +439,9 @@ type Session struct {
 
 	languageServerUpdateMu sync.Mutex
 
+	buildOrchestrators map[BuildOrchestratorID]*build.Orchestrator
+	buildMu            sync.Mutex
+
 	nextModuleResolverID           atomic.Uint64
 	moduleResolvers                map[ModuleResolverID]*moduleResolverRegistration
 	moduleResolversMu              sync.RWMutex
@@ -491,6 +498,7 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		snapshotHost:              snapshotHost,
 		withLocale:                withLocale,
 		snapshots:                 make(map[SnapshotID]*snapshotData),
+		buildOrchestrators:        make(map[BuildOrchestratorID]*build.Orchestrator),
 		moduleResolvers:           make(map[ModuleResolverID]*moduleResolverRegistration),
 		programResolutionContexts: make(map[uint64]*programResolutionContext),
 		sourceFileLeases:          make(map[SourceFileLeaseID]*project.SourceFileLease),
@@ -519,6 +527,13 @@ func (s *Session) FS() vfs.FS {
 		return s.projectSession.FS()
 	}
 	return s.snapshotHost.FS()
+}
+
+func (s *Session) DefaultLibraryPath() string {
+	if s.projectSession != nil {
+		return s.projectSession.DefaultLibraryPath()
+	}
+	return s.snapshotHost.DefaultLibraryPath()
 }
 
 func (s *Session) useCaseSensitiveFileNames() bool {
@@ -726,6 +741,18 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodParseConfigFile):
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
+	case string(MethodCreateBuildOrchestrator):
+		return s.handleCreateBuildOrchestrator(ctx, parsed.(*CreateBuildOrchestratorParams))
+	case string(MethodDisposeBuildOrchestrator):
+		return s.handleDisposeBuildOrchestrator(ctx, parsed.(*DisposeBuildOrchestratorParams))
+	case string(MethodBuild):
+		return s.handleBuild(ctx, parsed.(*BuildParams))
+	case string(MethodBuildReferences):
+		return s.handleBuildReferences(ctx, parsed.(*BuildParams))
+	case string(MethodCleanBuild):
+		return s.handleCleanBuild(ctx, parsed.(*CleanBuildParams))
+	case string(MethodCleanReferences):
+		return s.handleCleanReferences(ctx, parsed.(*CleanBuildParams))
 	case string(MethodCreateSourceFile):
 		return s.handleCreateSourceFile(ctx, parsed.(*CreateSourceFileParams))
 	case string(MethodCreateSourceFileFromFile):
@@ -1590,6 +1617,133 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 
 	return NewProjectResponse(proj), nil
 }
+
+func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *CreateBuildOrchestratorParams) (*CreateBuildOrchestratorResponse, error) {
+	buildSys := s.getBuildSys(params)
+	command := tsoptions.ParseBuildCommandLine(params.RootNames, buildSys)
+	createdOrchestratorResponse := &CreateBuildOrchestratorResponse{}
+	if params.CompilerOptions != nil {
+		command.CompilerOptions = params.CompilerOptions
+	}
+	if params.BuildOptions != nil {
+		command.BuildOptions = params.BuildOptions
+	}
+	orchestrator := build.NewOrchestrator(build.Options{
+		Sys:     buildSys,
+		Command: command,
+	})
+	createdOrchestratorResponse.BuildOrchestratorID = NewBuildOrchestratorID()
+	s.buildMu.Lock()
+	s.buildOrchestrators[createdOrchestratorResponse.BuildOrchestratorID] = orchestrator
+	s.buildMu.Unlock()
+	return createdOrchestratorResponse, nil
+}
+
+func (s *Session) handleDisposeBuildOrchestrator(ctx context.Context, params *DisposeBuildOrchestratorParams) (any, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, errors.New("build orchestrator not found while disposing")
+	}
+	delete(s.buildOrchestrators, params.BuildOrchestratorID)
+	return true, nil
+}
+
+func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while building %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, params.Project)
+
+	return &BuildResponse{
+		Status:      result.Result.Status,
+		Diagnostics: NewDiagnosticResponses(result.Errors),
+		Statistics:  result.Statistics,
+	}, nil
+}
+
+func (s *Session) handleBuildReferences(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found for building references for %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, params.Project)
+
+	return &BuildResponse{
+		Status:      result.Result.Status,
+		Diagnostics: NewDiagnosticResponses(result.Errors),
+		Statistics:  result.Statistics,
+	}, nil
+}
+
+func (s *Session) handleCleanBuild(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while cleaning %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(params.Project)
+	return &CleanBuildResponse{
+		Status:       result.Result.Status,
+		Diagnostics:  NewDiagnosticResponses(result.Errors),
+		Statistics:   result.Statistics,
+		FilesDeleted: result.FilesToDelete,
+	}, nil
+}
+
+func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while cleaning references for %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(params.Project)
+	return &CleanBuildResponse{
+		Status:       result.Result.Status,
+		Diagnostics:  NewDiagnosticResponses(result.Errors),
+		Statistics:   result.Statistics,
+		FilesDeleted: result.FilesToDelete,
+	}, nil
+}
+
+func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
+	currentDirectory := params.Cwd
+	if currentDirectory == "" {
+		currentDirectory = s.GetCurrentDirectory()
+	}
+	return &apiBuildSystem{
+		session:          s,
+		currentDirectory: currentDirectory,
+		start:            time.Now(),
+	}
+}
+
+// Wrapper for the API session for build orchestrator
+type apiBuildSystem struct {
+	session          *Session
+	currentDirectory string
+	start            time.Time
+}
+
+func (s *apiBuildSystem) Writer() io.Writer           { return io.Discard }
+func (s *apiBuildSystem) ErrorWriter() io.Writer      { return io.Discard }
+func (s *apiBuildSystem) FS() vfs.FS                  { return s.session.snapshotHost.FS() }
+func (s *apiBuildSystem) DefaultLibraryPath() string  { return s.session.DefaultLibraryPath() }
+func (s *apiBuildSystem) GetCurrentDirectory() string { return s.currentDirectory }
+func (s *apiBuildSystem) WriteOutputIsTTY() bool      { return false }
+func (s *apiBuildSystem) GetWidthOfTerminal() int     { return 0 }
+func (s *apiBuildSystem) GetEnvironmentVariable(name string) (string, bool) {
+	return "", false
+}
+
+func (s *apiBuildSystem) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+	return nil, errors.New("spawning processes is not supported by the API build orchestrator")
+}
+func (s *apiBuildSystem) Now() time.Time            { return time.Now() }
+func (s *apiBuildSystem) SinceStart() time.Duration { return time.Since(s.start) }
 
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {

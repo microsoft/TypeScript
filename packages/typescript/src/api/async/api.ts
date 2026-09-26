@@ -60,14 +60,18 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    BuildResponse,
+    CleanBuildResponse,
     CompilerOptions,
     ConfiguredProjectId,
+    CreateBuildOrchestratorResponse,
     CreateProgramOptions as ProtocolCreateProgramOptions,
     CreateSnapshotParams as ProtocolCreateSnapshotParams,
     CreateSnapshotProgramParams as ProtocolCreateSnapshotProgramParams,
     CreateSnapshotResponse,
     CreateSourceFileOptions,
     Diagnostic,
+    DiagnosticResponse,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
@@ -328,6 +332,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Map<number, Snapshot> = new Map();
+    private activeBuildOrchestrators: Set<BuildOrchestrator> = new Set();
     private activeSourceFileLeases: Map<number, RetainedSourceFile> = new Map();
     readonly printer: Printer;
     readonly internal: InternalAPI;
@@ -397,6 +402,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     getNewLine(): string {
         return "\n";
+    }
+
+    async createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Promise<BuildOrchestrator> {
+        await this.ensureInitialized();
+        const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
+            ...buildOrchestratorOptions,
+            ...buildOrchestratorOptions.overrideCompilerOptions,
+            rootNames,
+        });
+
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
+            this.activeBuildOrchestrators.delete(orchestrator);
+        });
+        this.activeBuildOrchestrators.add(orchestrator);
+        return orchestrator;
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
@@ -652,6 +672,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         }
         finally {
             try {
+                for (const orchestrator of [...this.activeBuildOrchestrators]) {
+                    await orchestrator.dispose();
+                }
                 for (const snapshot of [...this.activeSnapshots.values()]) {
                     await snapshot.dispose();
                 }
@@ -1958,6 +1981,107 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     getProject(): Project<Id> {
         return this.project;
+    }
+}
+
+export interface BuildOrchestratorOptions {
+    cwd?: string | undefined;
+    dry?: boolean;
+    force?: boolean;
+    verbose?: boolean;
+    stopBuildOnErrors?: boolean;
+    overrideCompilerOptions?: OverrideCompilerOptions;
+}
+
+export interface OverrideCompilerOptions {
+    incremental?: boolean;
+    assumeChangesOnlyAffectDirectDependencies?: boolean;
+    declaration?: boolean;
+    declarationMap?: boolean;
+    emitDeclarationOnly?: boolean;
+    sourceMap?: boolean;
+    inlineSourceMap?: boolean;
+    traceResolution?: boolean;
+}
+
+export class BuildOrchestrator {
+    private client: Client;
+    private id: number;
+    private disposed = false;
+    private disposePromise: Promise<void> | undefined;
+    private onDispose: () => void;
+
+    constructor(
+        client: Client,
+        orchestratorResponse: CreateBuildOrchestratorResponse,
+        onDispose: () => void,
+    ) {
+        this.client = client;
+        this.id = orchestratorResponse.buildOrchestratorID;
+        this.onDispose = onDispose;
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        void this.dispose();
+    }
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            await this.client.apiRequest("disposeBuildOrchestrator", {
+                buildOrchestratorID: this.id,
+            });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+
+    async build(project?: string): Promise<BuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("build", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+    async buildReferences(project: string): Promise<BuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("buildReferences", {
+            buildOrchestratorID: this.id,
+            project,
+        });
+        return response;
+    }
+    async clean(project?: string): Promise<CleanBuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("cleanBuild", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+    async cleanReferences(project?: string): Promise<CleanBuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("cleanReferences", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+
+    isDisposed(): boolean {
+        return this.disposed;
+    }
+
+    private ensureNotDisposed(): void {
+        if (this.disposed) {
+            throw new Error("Build orchestrator is disposed");
+        }
     }
 }
 
