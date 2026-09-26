@@ -7029,3 +7029,26 @@
 >plainDateTimeISO : Symbol(Temporal.Now.plainDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
 }
 
+{
+    // Refused through a widened variable too, not only in an object literal.
+    const zdt = Temporal.ZonedDateTime.from("2019-12-01T12:00+01:00[Europe/Berlin]");
+>zdt : Symbol(zdt, Decl(temporal.ts, 1823, 9))
+>Temporal.ZonedDateTime.from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    const widened: Intl.DateTimeFormatOptions = { timeZone: "Pacific/Auckland" };
+>widened : Symbol(widened, Decl(temporal.ts, 1824, 9))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2025.intl.d.ts, --, --) ... and 1 more)
+>DateTimeFormatOptions : Symbol(Intl.DateTimeFormatOptions, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>timeZone : Symbol(timeZone, Decl(temporal.ts, 1824, 49))
+
+    /* WRONG */ zdt.toLocaleString("de-DE", widened);
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporal.ts, 1823, 9))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>widened : Symbol(widened, Decl(temporal.ts, 1824, 9))
+}
+

@@ -1,10 +1,15 @@
 temporal.ts(25,13): error TS2339: Property 'year' does not exist on type 'Instant'.
+temporal.ts(594,47): error TS2322: Type 'string' is not assignable to type 'undefined'.
 temporal.ts(1504,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
 temporal.ts(1514,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
 temporal.ts(1520,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
+temporal.ts(1826,45): error TS2345: Argument of type 'DateTimeFormatOptions' is not assignable to parameter of type 'ZonedDateTimeToLocaleStringOptions'.
+  Types of property 'timeZone' are incompatible.
+    Type 'string | undefined' is not assignable to type 'undefined'.
+      Type 'string' is not assignable to type 'undefined'.
 
 
-==== temporal.ts (4 errors) ====
+==== temporal.ts (6 errors) ====
     /**
      * Test cases derived from documentation at tc39/proposal-temporal,
      * under the following license:
@@ -601,6 +606,8 @@ temporal.ts(1520,8): error TS2339: Property 'month' does not exist on type 'Plai
         const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" } as const;
         zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. Dezember 2019'
         /* WRONG */ zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland" });
+                                                  ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'undefined'.
         // => RangeError: Time zone option Pacific/Auckland does not match actual time zone Europe/Berlin
         zdt.withTimeZone("Pacific/Auckland").toLocaleString("de-DE"); // => '2.12.2019, 0:00:00 GMT+13'
         zdt.toLocaleString("en-US-u-nu-fullwide-hc-h12"); // => '１２/１/２０１９, １２:００:００ PM GMT+１'
@@ -1832,5 +1839,17 @@ temporal.ts(1520,8): error TS2339: Property 'month' does not exist on type 'Plai
         Temporal.Now.plainDateISO(); // get the current date in the system time zone and ISO-8601 calendar
         Temporal.Now.plainTimeISO(); // get the current wall-clock time in the system time zone and ISO-8601 calendar
         Temporal.Now.plainDateTimeISO(); // same as above, but return the DateTime in the ISO-8601 calendar
+    }
+    
+    {
+        // Refused through a widened variable too, not only in an object literal.
+        const zdt = Temporal.ZonedDateTime.from("2019-12-01T12:00+01:00[Europe/Berlin]");
+        const widened: Intl.DateTimeFormatOptions = { timeZone: "Pacific/Auckland" };
+        /* WRONG */ zdt.toLocaleString("de-DE", widened);
+                                                ~~~~~~~
+!!! error TS2345: Argument of type 'DateTimeFormatOptions' is not assignable to parameter of type 'ZonedDateTimeToLocaleStringOptions'.
+!!! error TS2345:   Types of property 'timeZone' are incompatible.
+!!! error TS2345:     Type 'string | undefined' is not assignable to type 'undefined'.
+!!! error TS2345:       Type 'string' is not assignable to type 'undefined'.
     }
     
