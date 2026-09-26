@@ -62,6 +62,55 @@ foo.bar;`
 	}
 }
 
+func TestGetTypeAtLocationOfTypeOnlyImportClause(t *testing.T) {
+	t.Parallel()
+
+	fs := vfstest.FromMap(map[string]string{
+		"/types.ts": `export type U = number;`,
+		"/main.ts": `import type { U } from "./types";
+import type * as types from "./types";
+import { U as V } from "./types";
+export const u: U = 1;
+export const v: V = 1;
+export type W = types.U;`,
+		"/tsconfig.json": `
+				{
+					"compilerOptions": {},
+					"files": ["types.ts", "main.ts"]
+				}
+			`,
+	}, false /*useCaseSensitiveFileNames*/)
+	fs = bundled.WrapFS(fs)
+
+	cd := "/"
+	host := compiler.NewCompilerHost(cd, fs, bundled.LibPath(), nil, nil, nil)
+
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, host, nil)
+	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
+
+	p := compiler.NewProgram(compiler.ProgramOptions{
+		Config: parsed,
+		Host:   host,
+	})
+	p.BindSourceFiles()
+	c, done := p.GetTypeChecker(t.Context())
+	defer done()
+	file := p.GetSourceFile("/main.ts")
+	importClauseAt := func(index int) *ast.Node {
+		return file.Statements.Nodes[index].AsImportDeclaration().ImportClause
+	}
+	// Import clauses without a default binding have no symbol of its own. A type-only one
+	// should get the same type as the equivalent regular import instead of crashing.
+	regular := c.GetTypeAtLocation(importClauseAt(2))
+	for _, index := range []int{0, 1} {
+		typ := c.GetTypeAtLocation(importClauseAt(index))
+		if typ == nil {
+			t.Fatalf("Expected type of import clause %d to be non-nil", index)
+		}
+		assert.Equal(t, typ, regular)
+	}
+}
+
 func BenchmarkNewChecker(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
 	rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
