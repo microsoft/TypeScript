@@ -164,6 +164,31 @@ function zeroValue(option: CompilerOption): string {
     return kind === "Boolean" ? "core.TSUnknown" : kind === "String" ? '""' : kind === "Enum" ? "0" : "nil";
 }
 
+function mergeCompilerOptions(): string {
+    return `${header}
+package tsoptions
+
+import (
+    "github.com/microsoft/TypeScript/tsc/internal/collections"
+    "github.com/microsoft/TypeScript/tsc/internal/core"
+)
+
+func mergeCompilerOptionFields(targetOptions, sourceOptions *core.CompilerOptions, explicitNullFields collections.Set[string]) {
+${
+        options.compilerOptions.map(option => {
+            const field = fieldName(option);
+            const zero = zeroValue(option);
+            return `if explicitNullFields.Has(${JSON.stringify(option.name)}) {
+    targetOptions.${field} = ${zero}
+} else if sourceOptions.${field} != ${zero} {
+    targetOptions.${field} = sourceOptions.${field}
+}`;
+        }).join("\n")
+    }
+}
+`;
+}
+
 function transpileOptions(): string {
     const clearedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => typeof declaration.transpileOptionValue === "object" && declaration.transpileOptionValue.go === "core.TSUnknown"));
     return `${header}
@@ -475,6 +500,7 @@ export function generateOptions(): Map<string, string> {
         ["tsc/internal/transpile/compileroptions_generated.go", transpileOptions()],
         ["tsc/internal/tsoptions/comparisons_generated.go", generateOptionComparisons()],
         ["tsc/internal/tsoptions/buildinfo_generated.go", generateBuildInfoOptions()],
+        ["tsc/internal/tsoptions/mergeoptions_generated.go", mergeCompilerOptions()],
         ["tsc/internal/tsoptions/declarations_generated.go", declarations()],
         ["tsc/internal/tsoptions/rootoptions_generated.go", rootDeclarations()],
         ["tsc/internal/tsoptions/enummaps_generated.go", enumMaps()],

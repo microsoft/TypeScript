@@ -1,9 +1,6 @@
 package tsoptions
 
 import (
-	"reflect"
-	"strings"
-
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -309,29 +306,7 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
 		}
 	}
 
-	// Do the merge, handling explicit nulls during the normal merge
-	targetValue := reflect.ValueOf(targetOptions).Elem()
-	sourceValue := reflect.ValueOf(sourceOptions).Elem()
-	targetType := targetValue.Type()
-
-	for i := range targetValue.NumField() {
-		targetField := targetValue.Field(i)
-		sourceField := sourceValue.Field(i)
-
-		// Get the JSON field name for this struct field and check if it's explicitly null
-		if jsonTag := targetType.Field(i).Tag.Get("json"); jsonTag != "" {
-			if jsonFieldName, _, _ := strings.Cut(jsonTag, ","); jsonFieldName != "" && explicitNullFields.Has(jsonFieldName) {
-				targetField.SetZero()
-				continue
-			}
-		}
-
-		// Normal merge behavior: copy non-zero fields
-		if !sourceField.IsZero() {
-			targetField.Set(sourceField)
-		}
-	}
-
+	mergeCompilerOptionFields(targetOptions, sourceOptions, explicitNullFields)
 	return targetOptions
 }
 
