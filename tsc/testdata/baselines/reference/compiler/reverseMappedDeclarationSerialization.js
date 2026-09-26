@@ -76,32 +76,32 @@ export const recursiveIndexed = decode(recursiveIndexInput);
 
 //// [finite.d.ts]
 export declare const indexed: {
-    [x: string]: /*elided*/ any;
+    [x: string]: string;
 };
 export declare const explicit: Record<string, string>;
 export declare const shallow: {
     name: string;
 };
 export declare const readonlyIndexed: {
-    readonly [x: string]: /*elided*/ any;
+    readonly [x: string]: string | number;
 };
 export declare const deep: {
     a: {
         b: {
             c: {
-                d: /*elided*/ any;
+                d: string;
             };
         };
     };
 };
 export declare const named: {
     node: {
-        leaf: /*elided*/ any;
+        leaf: string;
     };
 };
 export declare const nestedIndexed: {
     node: {
-        [x: string]: /*elided*/ any;
+        [x: string]: string;
     };
 };
 export declare const namedExplicit: {
@@ -117,28 +117,4 @@ export declare const deepExplicit: {
             };
         };
     };
-};
-//// [recursive.d.ts]
-export declare const recursive: {
-    value: string;
-    next: {
-        value: string;
-        next: {
-            value: string;
-            next: {
-                value: /*elided*/ any;
-                next: /*elided*/ any;
-            };
-        };
-    };
-};
-export declare const growing: {
-    value: string;
-    next: {
-        value: /*elided*/ any;
-        next: /*elided*/ any;
-    };
-};
-export declare const recursiveIndexed: {
-    [x: string]: /*elided*/ any;
 };
