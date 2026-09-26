@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/declarationEmitUnserializableTypes.ts] ////
+
+=== local.ts ===
+export function localArrow() {
+>localArrow : () => () => any
+
+    const inner = () => inner;
+>inner : () => any
+>() => inner : () => any
+>inner : () => any
+
+    return inner;
+>inner : () => any
+}
+export function localDeclaration() {
+>localDeclaration : () => () => any
+
+    function inner() { return inner; }
+>inner : () => any
+>inner : () => any
+
+    return inner;
+>inner : () => any
+}
+export function localInstantiation() {
+>localInstantiation : () => () => () => any
+
+    function inner<T>(): typeof inner<T> { return inner<T>; }
+>inner : <T>() => any
+>inner : <T>() => any
+>inner<T> : () => any
+>inner : <T>() => any
+
+    return inner<number>;
+>inner<number> : () => () => any
+>inner : <T>() => any
+}
+export const object = {
+>object : { self(): any; }
+>{    self() { return object; }} : { self(): { self(): any; }; }
+
+    self() { return object; }
+>self : () => { self(): any; }
+>object : { self(): any; }
+
+};
+export const annotatedObject: { self(): typeof annotatedObject } = {
+>annotatedObject : { self(): typeof annotatedObject; }
+>self : () => typeof annotatedObject
+>annotatedObject : { self(): typeof annotatedObject; }
+>{    self() { return annotatedObject; }} : { self(): { self(): typeof annotatedObject; }; }
+
+    self() { return annotatedObject; }
+>self : () => { self(): typeof annotatedObject; }
+>annotatedObject : { self(): typeof annotatedObject; }
+
+};
+
+=== growing.ts ===
+export function grow<T extends object>(value: T) {
+>grow : <T extends object>(value: T) => { value: T; deeper: <U extends object>(next: U) => { value: T & U; deeper: <U_1 extends object>(next: U_1) => { value: T & U & U_1; deeper: <U_2 extends object>(next: U_2) => { value: T & U & U_1 & U_2; deeper: <U_3 extends object>(next: U_3) => { value: T & U & U_1 & U_2 & U_3; deeper: <U_4 extends object>(next: U_4) => { value: T & U & U_1 & U_2 & U_3 & U_4; deeper: <U_5 extends object>(next: U_5) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5; deeper: <U_6 extends object>(next: U_6) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6; deeper: <U_7 extends object>(next: U_7) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7; deeper: <U_8 extends object>(next: U_8) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8; deeper: <U_9 extends object>(next: U_9) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9; deeper: <U_10 extends object>(next: U_10) => any; }; }; }; }; }; }; }; }; }; }; }
+>value : T
+
+    return {
+>{        value,        deeper: <U extends object>(next: U) => grow<T & U>({ ...value, ...next }),    } : { value: T; deeper: <U extends object>(next: U) => { value: T & U; deeper: <U_1 extends object>(next: U_1) => { value: T & U & U_1; deeper: <U_2 extends object>(next: U_2) => { value: T & U & U_1 & U_2; deeper: <U_3 extends object>(next: U_3) => { value: T & U & U_1 & U_2 & U_3; deeper: <U_4 extends object>(next: U_4) => { value: T & U & U_1 & U_2 & U_3 & U_4; deeper: <U_5 extends object>(next: U_5) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5; deeper: <U_6 extends object>(next: U_6) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6; deeper: <U_7 extends object>(next: U_7) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7; deeper: <U_8 extends object>(next: U_8) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8; deeper: <U_9 extends object>(next: U_9) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9; deeper: <U_10 extends object>(next: U_10) => any; }; }; }; }; }; }; }; }; }; }; }
+
+        value,
+>value : T
+
+        deeper: <U extends object>(next: U) => grow<T & U>({ ...value, ...next }),
+>deeper : <U extends object>(next: U) => { value: T & U; deeper: <U_1 extends object>(next: U_1) => any; }
+><U extends object>(next: U) => grow<T & U>({ ...value, ...next }) : <U extends object>(next: U) => { value: T & U; deeper: <U_1 extends object>(next: U_1) => any; }
+>next : U
+>grow<T & U>({ ...value, ...next }) : { value: T & U; deeper: <U_1 extends object>(next: U_1) => { value: T & U & U_1; deeper: <U_2 extends object>(next: U_2) => { value: T & U & U_1 & U_2; deeper: <U_3 extends object>(next: U_3) => { value: T & U & U_1 & U_2 & U_3; deeper: <U_4 extends object>(next: U_4) => { value: T & U & U_1 & U_2 & U_3 & U_4; deeper: <U_5 extends object>(next: U_5) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5; deeper: <U_6 extends object>(next: U_6) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6; deeper: <U_7 extends object>(next: U_7) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7; deeper: <U_8 extends object>(next: U_8) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8; deeper: <U_9 extends object>(next: U_9) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9; deeper: <U_10 extends object>(next: U_10) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9 & U_10; deeper: <U_11 extends object>(next: U_11) => any; }; }; }; }; }; }; }; }; }; }; }
+>grow : <T extends object>(value: T) => { value: T; deeper: <U extends object>(next: U) => { value: T & U; deeper: <U_1 extends object>(next: U_1) => { value: T & U & U_1; deeper: <U_2 extends object>(next: U_2) => { value: T & U & U_1 & U_2; deeper: <U_3 extends object>(next: U_3) => { value: T & U & U_1 & U_2 & U_3; deeper: <U_4 extends object>(next: U_4) => { value: T & U & U_1 & U_2 & U_3 & U_4; deeper: <U_5 extends object>(next: U_5) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5; deeper: <U_6 extends object>(next: U_6) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6; deeper: <U_7 extends object>(next: U_7) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7; deeper: <U_8 extends object>(next: U_8) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8; deeper: <U_9 extends object>(next: U_9) => { value: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9; deeper: <U_10 extends object>(next: U_10) => any; }; }; }; }; }; }; }; }; }; }; }
+>{ ...value, ...next } : T & U
+>value : T
+>next : U
+
+    };
+}
+
+=== annotatedLocal.ts ===
+interface Recursive {
+    (): Recursive;
+}
+export function local(): Recursive {
+>local : () => Recursive
+
+    const inner = () => inner;
+>inner : () => any
+>() => inner : () => any
+>inner : () => any
+
+    return inner;
+>inner : () => any
+}
+
