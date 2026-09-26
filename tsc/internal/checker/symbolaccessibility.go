@@ -206,21 +206,56 @@ func (c *Checker) getAlternativeContainingModules(symbol *ast.Symbol, enclosingD
 	if links.extendedContainers != nil {
 		return *links.extendedContainers
 	}
-	// No results from files already being imported by this file - expand search (expensive, but not location-specific, so cached)
-	otherFiles := c.program.SourceFiles()
-	for _, file := range otherFiles {
-		if !ast.IsExternalModule(file) {
-			continue
-		}
-		sym := c.getSymbolOfDeclaration(file.AsNode())
-		ref := c.getAliasForSymbolInContainer(sym, symbol)
-		if ref == nil {
-			continue
-		}
-		results = append(results, sym)
-	}
+	results = c.getExternalModuleContainers(symbol)
 	links.extendedContainers = &results
 	return results
+}
+
+func (c *Checker) getExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
+	if c.externalModuleContainers == nil {
+		containers := make(map[*ast.Symbol][]*ast.Symbol)
+		for _, file := range c.program.SourceFiles() {
+			if !ast.IsExternalModule(file) {
+				continue
+			}
+			container := c.getSymbolOfDeclaration(file.AsNode())
+			for target := range c.getExportsByTarget(container) {
+				containers[target] = append(containers[target], container)
+			}
+			if exportEquals := container.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
+				target := c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(exportEquals)))
+				if existing := containers[target]; len(existing) == 0 || existing[len(existing)-1] != container {
+					containers[target] = append(existing, container)
+				}
+			}
+		}
+		c.externalModuleContainers = containers
+	}
+	target := c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(symbol)))
+	containers := c.externalModuleContainers[target]
+	parent := c.getParentOfSymbol(symbol)
+	if parent != nil && core.Some(parent.Declarations, func(d *ast.Node) bool {
+		return ast.IsSourceFile(d) && ast.IsExternalModule(d.AsSourceFile())
+	}) {
+		// A symbol's parent is a container even when the symbol is absent from its exports.
+		if index, found := slices.BinarySearchFunc(containers, parent, c.compareSymbols); !found {
+			containers = slices.Insert(slices.Clone(containers), index, parent)
+		}
+	}
+	return containers
+}
+
+func (c *Checker) getExportsByTarget(container *ast.Symbol) map[*ast.Symbol][]*ast.Symbol {
+	links := c.symbolContainerLinks.Get(container)
+	if links.exportsByTarget == nil {
+		byTarget := make(map[*ast.Symbol][]*ast.Symbol)
+		for _, exported := range c.getExportsOfSymbol(container) {
+			target := c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(exported)))
+			byTarget[target] = append(byTarget[target], exported)
+		}
+		links.exportsByTarget = byTarget
+	}
+	return links.exportsByTarget
 }
 
 func (c *Checker) getVariableDeclarationOfObjectLiteral(symbol *ast.Symbol, meaning ast.SymbolFlags) *ast.Symbol {
@@ -357,12 +392,8 @@ func (c *Checker) getAliasForSymbolInContainer(container *ast.Symbol, symbol *as
 	if ok && quick != nil && c.getSymbolIfSameReference(quick, symbol) != nil {
 		return quick
 	}
-	var candidates []*ast.Symbol
-	for _, exported := range exports {
-		if c.getSymbolIfSameReference(exported, symbol) != nil {
-			candidates = append(candidates, exported)
-		}
-	}
+	target := c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(symbol)))
+	candidates := c.getExportsByTarget(container)[target]
 	if len(candidates) > 0 {
 		c.sortSymbols(candidates) // _must_ sort exports for stable results - symbol table is randomly iterated
 		return candidates[0]
