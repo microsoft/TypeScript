@@ -480,8 +480,8 @@ async function runGenerateOptionDefinitions() {
 
 export const generateCompilerOptions = goGenerateTask("generate:compileroptions", async () => {
     await runGenerateOptionDefinitions();
-    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/optionenums_generated.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"));
-    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/optionenums_generated.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"));
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"));
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"));
     await runGenerateEnums();
     await runGenerateAPI();
 });

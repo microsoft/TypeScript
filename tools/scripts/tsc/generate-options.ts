@@ -128,16 +128,7 @@ function coreOptions(): string {
         const tags = [`json:"${option.name},omitzero"`, ...(option.deprecated ? ['deprecated:"true"'] : []), ...(option.internal ? ['internal:"true"'] : [])];
         return `${comments}${fieldName(option)} ${option.type} \`${tags.join(" ")}\``;
     });
-    return `${header}
-package core
-
-import (
-    "slices"
-
-    "github.com/microsoft/TypeScript/tsc/internal/collections"
-)
-
-// CompilerOptions contains the compiler options exposed by the API.
+    return `// CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {
     _ noCopy
     ${fields.join("\n")}
@@ -190,11 +181,7 @@ function optionsEquality(name: string, fields: StoredDeclaration["field"][]): st
 }
 
 function storedOptions(name: string, declarations: StoredDeclaration[], omitZero: boolean): string {
-    return `${header}
-package core
-
-${name === "WatchOptions" ? 'import "slices"\n' : ""}
-type ${name} struct {
+    return `type ${name} struct {
 ${name === "BuildOptions" ? "_ noCopy\n" : ""}
 ${declarations.map(option => `${option.field.comment ? "\n" + option.field.comment.split("\n").map(line => line ? "// " + line : "").join("\n") + "\n" : ""}${option.field.name} ${option.field.type} \`json:"${option.name}${omitZero ? ",omitzero" : ""}"\``).join("\n")}
 }
@@ -214,16 +201,7 @@ function showConfig(): string {
     });
     const enumOptions = serializedOptions.filter(option => optionKind(option) === "Enum");
     assert.equal(new Set(enumOptions.map(option => option.type)).size, enumOptions.length, "ShowConfig enum types must have a single option map");
-    return `${header}
-package tsoptions
-
-import (
-    "github.com/microsoft/TypeScript/tsc/internal/collections"
-    "github.com/microsoft/TypeScript/tsc/internal/core"
-    "github.com/microsoft/TypeScript/tsc/internal/tspath"
-)
-
-func serializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
+    return `func serializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
     result := collections.NewOrderedMapWithSizeHint[string, any](32)
 ${
         serializedOptions.map(option => {
@@ -290,15 +268,7 @@ ${entries.map(entry => `if value == ${goValue(entry.value)} { return ${JSON.stri
 
 function configDirSubstitution(): string {
     const substitutedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => declaration.allowConfigDirTemplateSubstitution ?? declaration.isFilePath));
-    return `${header}
-package tsoptions
-
-import (
-    "github.com/microsoft/TypeScript/tsc/internal/collections"
-    "github.com/microsoft/TypeScript/tsc/internal/core"
-)
-
-func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
+    return `func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
     if compilerOptions == nil { return }
 ${
         substitutedOptions.map(option => {
@@ -335,15 +305,7 @@ ${
 }
 
 function mergeCompilerOptions(): string {
-    return `${header}
-package tsoptions
-
-import (
-    "github.com/microsoft/TypeScript/tsc/internal/collections"
-    "github.com/microsoft/TypeScript/tsc/internal/core"
-)
-
-func mergeCompilerOptionFields(targetOptions, sourceOptions *core.CompilerOptions, explicitNullFields collections.Set[string]) {
+    return `func mergeCompilerOptionFields(targetOptions, sourceOptions *core.CompilerOptions, explicitNullFields collections.Set[string]) {
 ${
         options.compilerOptions.map(option => {
             const field = fieldName(option);
@@ -374,12 +336,7 @@ ${clearedOptions.map(option => `options.${fieldName(option)} = ${zeroValue(optio
 
 export function generateBuildInfoOptions(model = options): string {
     const storedOptions = model.compilerOptions.filter(option => option.declarations?.some(declaration => declaration.affectsBuildInfo));
-    return `${header}
-package tsoptions
-
-import "github.com/microsoft/TypeScript/tsc/internal/core"
-
-// ForEachCompilerOptionAffectingBuildInfo visits nonzero options in CompilerOptions field order.
+    return `// ForEachCompilerOptionAffectingBuildInfo visits nonzero options in CompilerOptions field order.
 func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn func(option *CommandLineOption, value any)) {
 ${
         storedOptions.map(option =>
@@ -398,12 +355,7 @@ export function generateOptionComparisons(model = options): string {
         ["DeclarationPath", "affectsDeclarationPath"],
         ["Emit", "affectsEmit"],
     ] as const;
-    return `${header}
-package tsoptions
-
-import "github.com/microsoft/TypeScript/tsc/internal/core"
-
-${
+    return `${
         comparisons.map(([name, flag]) => {
             const expressions = model.compilerOptions.flatMap(option => {
                 const declaration = option.declarations?.find(declaration => declaration[flag]);
@@ -430,12 +382,7 @@ ${
 }
 
 function numericEnums(): string {
-    return `${header}
-package core
-
-//go:generate npx hereby generate:compileroptions
-
-${
+    return `${
         options.enums.map(enumDef =>
             `type ${enumDef.name} int32
 
@@ -480,17 +427,7 @@ function declarations(): string {
         ["OptionsForWatch", options.watchOptions],
         ["typeAcquisitionDecls", options.typeAcquisition],
     ];
-    return `${header}
-package tsoptions
-
-import (
-    "slices"
-
-    "github.com/microsoft/TypeScript/tsc/internal/core"
-    "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
-)
-
-var OptionsDeclarations = slices.Concat(commonOptionsWithBuild, optionsForCompiler)
+    return `var OptionsDeclarations = slices.Concat(commonOptionsWithBuild, optionsForCompiler)
 
 var BuildOpts = slices.Concat(commonOptionsWithBuild, OptionsForBuild)
 
@@ -515,12 +452,7 @@ function rootDeclarations(): string {
         typeAcquisition: "commandLineOptionsToMap(typeAcquisitionDecls)",
         extends: `commandLineOptionsToMap([]*CommandLineOption{${declarationLiteral(options.elements.extends)}})`,
     };
-    return `${header}
-package tsoptions
-
-import "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
-
-${
+    return `${
         options.rootOptions.filter(option => option.variable).map(option => {
             let literal = declarationLiteral(option);
             if (option.elementOptions) literal = literal.slice(0, -1) + `ElementOptions: ${elementOptions[option.elementOptions]},\n}`;
@@ -539,15 +471,7 @@ var tsconfigRootOptionsMap = &CommandLineOption{
 }
 
 function enumMaps(): string {
-    return `${header}
-package tsoptions
-
-import (
-    "github.com/microsoft/TypeScript/tsc/internal/collections"
-    "github.com/microsoft/TypeScript/tsc/internal/core"
-)
-
-${Object.values(options.enumMaps).map(map => `var ${map.goName} = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{\n${map.values.map(entry => `{Key: ${JSON.stringify(entry.name)}, Value: ${goValue(entry.value)}},`).join("\n")}\n})`).join("\n\n")}
+    return `${Object.values(options.enumMaps).map(map => `var ${map.goName} = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{\n${map.values.map(entry => `{Key: ${JSON.stringify(entry.name)}, Value: ${goValue(entry.value)}},`).join("\n")}\n})`).join("\n\n")}
 
 var commandLineOptionEnumMap = map[string]*collections.OrderedMap[string, any]{
 ${Object.entries(options.enumMaps).map(([name, map]) => `${JSON.stringify(name)}: ${map.goName},`).join("\n")}
@@ -591,16 +515,7 @@ function parserAssignment(option: CompilerOption): string {
 }
 
 function parser(): string {
-    return `${header}
-package tsoptions
-
-import (
-    "github.com/microsoft/TypeScript/tsc/internal/collections"
-    "github.com/microsoft/TypeScript/tsc/internal/core"
-    "github.com/microsoft/TypeScript/tsc/internal/tspath"
-)
-
-func parseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) (foundKey bool) {
+    return `func parseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) (foundKey bool) {
     if option := CommandLineCompilerOptionsMap.Get(key); option != nil { key = option.Name }
     switch key {
     ${options.compilerOptions.map(option => `case ${[option.name, ...(option.parseAliases ?? [])].map(name => JSON.stringify(name)).join(", ")}:\n${parserAssignment(option)}`).join("\n")}
@@ -661,34 +576,66 @@ export function generateOptions(): Map<string, string> {
     validateOptions(options);
     const buildOptions = options.buildOptions.filter((option): option is StoredDeclaration => option.field !== undefined);
     return new Map([
-        ["tsc/internal/core/compileroptions_generated.go", coreOptions()],
-        ["tsc/internal/core/optionenums_generated.go", numericEnums()],
-        ["tsc/internal/core/watchoptions_generated.go", storedOptions("WatchOptions", options.watchOptions, false)],
-        ["tsc/internal/core/typeacquisition_generated.go", storedOptions("TypeAcquisition", options.typeAcquisition, true)],
-        ["tsc/internal/core/buildoptions_generated.go", storedOptions("BuildOptions", orderByName(buildOptions, options.buildOptionFieldOrder, "BuildOptions fields"), true)],
-        ["tsc/internal/transpile/compileroptions_generated.go", transpileOptions()],
-        ["tsc/internal/tsoptions/comparisons_generated.go", generateOptionComparisons()],
-        ["tsc/internal/tsoptions/buildinfo_generated.go", generateBuildInfoOptions()],
-        ["tsc/internal/tsoptions/mergeoptions_generated.go", mergeCompilerOptions()],
-        ["tsc/internal/tsoptions/configdir_generated.go", configDirSubstitution()],
-        ["tsc/internal/tsoptions/showconfig_generated.go", showConfig()],
-        ["tsc/internal/tsoptions/declarations_generated.go", declarations()],
-        ["tsc/internal/tsoptions/rootoptions_generated.go", rootDeclarations()],
-        ["tsc/internal/tsoptions/enummaps_generated.go", enumMaps()],
-        ["tsc/internal/tsoptions/compileroptions_generated.go", parser()],
         [
-            "tsc/internal/tsoptions/otheroptions_generated.go",
+            "tsc/internal/core/options_generated.go",
+            `${header}
+package core
+
+import (
+    "slices"
+
+    "github.com/microsoft/TypeScript/tsc/internal/collections"
+)
+
+//go:generate npx hereby generate:compileroptions
+
+${coreOptions()}
+${numericEnums()}
+${storedOptions("WatchOptions", options.watchOptions, false)}
+${storedOptions("TypeAcquisition", options.typeAcquisition, true)}
+${storedOptions("BuildOptions", orderByName(buildOptions, options.buildOptionFieldOrder, "BuildOptions fields"), true)}
+`,
+        ],
+        ["tsc/internal/transpile/options_generated.go", transpileOptions()],
+        [
+            "tsc/internal/tsoptions/declarations_generated.go",
+            `${header}
+package tsoptions
+
+import (
+    "slices"
+
+    "github.com/microsoft/TypeScript/tsc/internal/collections"
+    "github.com/microsoft/TypeScript/tsc/internal/core"
+    "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+)
+
+${declarations()}
+${rootDeclarations()}
+${enumMaps()}
+`,
+        ],
+        [
+            "tsc/internal/tsoptions/options_generated.go",
             `${header}
 package tsoptions
 
 import (
     "github.com/microsoft/TypeScript/tsc/internal/ast"
+    "github.com/microsoft/TypeScript/tsc/internal/collections"
     "github.com/microsoft/TypeScript/tsc/internal/core"
+    "github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
+${parser()}
 ${storedParser("WatchOptions", options.watchOptions, false)}
 ${storedParser("TypeAcquisition", options.typeAcquisition, true)}
 ${storedParser("BuildOptions", buildOptions, true)}
+${generateOptionComparisons()}
+${generateBuildInfoOptions()}
+${mergeCompilerOptions()}
+${configDirSubstitution()}
+${showConfig()}
 `,
         ],
         ...(["tsconfig", "jsconfig"] as const).map(name => [`tsc/internal/tsoptions/schemas/${name}.schema.json`, JSON.stringify(generateConfigSchema(name), null, 4) + "\n"] as [string, string]),

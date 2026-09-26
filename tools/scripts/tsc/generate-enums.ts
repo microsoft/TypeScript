@@ -56,7 +56,7 @@ export const enumDefs = [
     ...options.enums.filter(enumDef => enumDef.api).map<EnumDef>(enumDef => ({
         name: enumDef.name,
         goPrefix: enumDef.name,
-        goFile: "tsc/internal/core/optionenums_generated.go",
+        goFile: "tsc/internal/core/options_generated.go",
         outDir: "packages/typescript/src/enums",
         metadata: {
             file: "tools/scripts/tsc/options.ts",

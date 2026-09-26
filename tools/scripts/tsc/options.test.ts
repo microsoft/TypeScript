@@ -69,7 +69,7 @@ test("generated declarations and build fields follow the explicit name lists", (
         );
         assert.deepEqual([...body.matchAll(/\bName: "([^"]+)"/g)].map(match => match[1]), expected);
     }
-    const build = files.get("tsc/internal/core/buildoptions_generated.go")!;
+    const build = files.get("tsc/internal/core/options_generated.go")!.split("type BuildOptions struct {\n")[1].split("\n}\n")[0];
     assert.deepEqual([...build.matchAll(/`json:"([^",]+),omitzero"`/g)].map(match => match[1]), options.buildOptionFieldOrder);
 });
 
@@ -138,9 +138,18 @@ test("option generation is deterministic", () => {
     assert.deepEqual(generateOptions(), generateOptions());
 });
 
+test("generated Go options are grouped by package and responsibility", () => {
+    assert.deepEqual([...generateOptions().keys()].filter(file => file.endsWith(".go")), [
+        "tsc/internal/core/options_generated.go",
+        "tsc/internal/transpile/options_generated.go",
+        "tsc/internal/tsoptions/declarations_generated.go",
+        "tsc/internal/tsoptions/options_generated.go",
+    ]);
+});
+
 test("configDir substitution preserves eligible fields and explicit opt-outs", () => {
     const files = generateOptions();
-    const source = files.get("tsc/internal/tsoptions/configdir_generated.go")!;
+    const source = files.get("tsc/internal/tsoptions/options_generated.go")!.split("func handleOptionConfigDirTemplateSubstitution(")[1].split("\nfunc ")[0];
     for (const [name, content] of files) {
         if (name.endsWith(".go")) assert.doesNotMatch(content, /allowConfigDirTemplateSubstitution/, name);
     }
@@ -165,17 +174,17 @@ test("configDir substitution preserves eligible fields and explicit opt-outs", (
 });
 
 test("compiler options preserve the internal fields comment", () => {
-    const source = generateOptions().get("tsc/internal/core/compileroptions_generated.go")!;
+    const source = generateOptions().get("tsc/internal/core/options_generated.go")!;
     assert.match(source, /\/\/ Internal fields\nConfigFilePath /);
 });
 
 test("build options preserve the compiler options parsing comment", () => {
-    const source = generateOptions().get("tsc/internal/core/buildoptions_generated.go")!;
+    const source = generateOptions().get("tsc/internal/core/options_generated.go")!;
     assert.match(source, /\/\/ CompilerOptions are not parsed here and will be available on ParsedBuildCommandLine\n\n\/\/ Internal fields\nClean /);
 });
 
 test("transpilation clears only options marked with an unknown transpile value", () => {
-    const source = generateOptions().get("tsc/internal/transpile/compileroptions_generated.go")!;
+    const source = generateOptions().get("tsc/internal/transpile/options_generated.go")!;
     assert.deepEqual([...source.matchAll(/options\.(\w+) = ([^\n]+)/g)].map(match => [match[1], match[2]]), [
         ["AllowImportingTsExtensions", "core.TSUnknown"],
         ["Composite", "core.TSUnknown"],
