@@ -1274,6 +1274,10 @@ type extensionOptions struct {
 	importPhase         module.ImportPhase
 }
 
+func (o *extensionOptions) excludesFile(fileName string) bool {
+	return o.importPhase == module.ImportPhaseSource && tspath.FileExtensionIsOneOf(fileName, tspath.SupportedDeclarationExtensions)
+}
+
 type referenceKind int
 
 const (
@@ -1341,6 +1345,9 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 	)
 
 	for _, filePath := range files {
+		if extensionOptions.excludesFile(filePath) {
+			continue
+		}
 		if tspath.ComparePaths(exclude, filePath, tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: program.UseCaseSensitiveFileNames(),
 			CurrentDirectory:          program.GetCurrentDirectory(),
@@ -1761,6 +1768,9 @@ func (l *LanguageService) getModulesForPathsPattern(
 
 		var result []moduleCompletionNameAndKind
 		for _, match := range matches {
+			if extensionOptions.excludesFile(match) {
+				continue
+			}
 			trimmedWithPattern := trimPrefixAndSuffix(match, completePrefix)
 			if trimmedWithPattern != "" {
 				if containsSlash(trimmedWithPattern) {

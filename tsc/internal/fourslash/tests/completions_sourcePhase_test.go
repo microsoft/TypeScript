@@ -1,6 +1,7 @@
 package fourslash_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
@@ -36,6 +37,21 @@ exports.a = 1;
 // @filename: /component.jsx
 export const a = <div />;
 
+// @filename: /b.d.ts
+export {};
+
+// @filename: /c.d.mts
+export {};
+
+// @filename: /d.d.cts
+export {};
+
+// @filename: /e.d.wasm.ts
+export {};
+
+// @filename: /javascript.d.ts
+export {};
+
 // @filename: /index.ts
 import source a from ".//*static*/";
 import.source(".//*dynamic*/");
@@ -52,8 +68,8 @@ import(".//*evaluation*/");`
 				EditRange:        Ignored,
 			},
 			Items: &fourslash.CompletionsExpectedItems{
-				Includes: []fourslash.CompletionsExpectedItem{"a.wasm", "javascript", "module.mjs", "commonjs.cjs", "component"},
-				Excludes: []string{"a.txt"},
+				Includes: []fourslash.CompletionsExpectedItem{"a", "a.wasm", "e.wasm", "javascript", "module.mjs", "commonjs.cjs", "component"},
+				Excludes: []string{"a.txt", "b", "c.mjs", "d.cjs"},
 			},
 		})
 	}
@@ -65,9 +81,108 @@ import(".//*evaluation*/");`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"a.wasm", "a.txt", "javascript", "module.mjs", "commonjs.cjs", "component"},
+			Includes: []fourslash.CompletionsExpectedItem{"b", "c.mjs", "d.cjs", "e.wasm", "javascript"},
+			Excludes: []string{"a.wasm", "a.txt", "module.mjs", "commonjs.cjs", "component"},
 		},
 	})
+}
+
+func TestSourcePhaseImportMappedPathCompletionsExcludeDeclarations(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name      string
+		config    string
+		directory string
+		prefix    string
+	}{
+		{
+			name: "paths",
+			config: `// @filename: /tsconfig.json
+{"compilerOptions":{"module":"esnext","moduleResolution":"bundler","target":"esnext","paths":{"pkg/*":["./a/*"]}}}`,
+			directory: "/a",
+			prefix:    "pkg/",
+		},
+		{
+			name: "exports",
+			config: `// @filename: /tsconfig.json
+{"compilerOptions":{"module":"esnext","moduleResolution":"bundler","target":"esnext"}}
+// @filename: /node_modules/pkg/package.json
+{"name":"pkg","exports":{"./*":"./a/*"}}`,
+			directory: "/node_modules/pkg/a",
+			prefix:    "pkg/",
+		},
+		{
+			name: "imports",
+			config: `// @filename: /tsconfig.json
+{"compilerOptions":{"module":"esnext","moduleResolution":"bundler","target":"esnext"}}
+// @filename: /package.json
+{"imports":{"#a/*":"./a/*"}}`,
+			directory: "/a",
+			prefix:    "#a/",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+			content := fmt.Sprintf(`%[1]s
+
+// @filename: %[2]s/a.d.ts
+export {};
+
+// @filename: %[2]s/b.d.mts
+export {};
+
+// @filename: %[2]s/c.d.cts
+export {};
+
+// @filename: %[2]s/d.d.wasm.ts
+export {};
+
+// @filename: %[2]s/e.wasm
+wasm
+
+// @filename: %[2]s/f.js
+export {};
+
+// @filename: %[2]s/f.d.ts
+export {};
+
+// @filename: /src/index.ts
+import source a from "%[3]s/*static*/";
+import.source("%[3]s/*dynamic*/");
+import("%[3]s/*evaluation*/");`, test.config, test.directory, test.prefix)
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
+			name := "f.js"
+			if test.name == "paths" {
+				name = "f"
+			}
+			for _, marker := range []string{"static", "dynamic"} {
+				f.VerifyCompletions(t, marker, &fourslash.CompletionsExpectedList{
+					IsIncomplete: false,
+					ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+						CommitCharacters: &[]string{},
+						EditRange:        Ignored,
+					},
+					Items: &fourslash.CompletionsExpectedItems{
+						Includes: []fourslash.CompletionsExpectedItem{"d.wasm", "e.wasm", name},
+						Excludes: []string{"a", "a.js", "b.mjs", "c.cjs"},
+					},
+				})
+			}
+			f.VerifyCompletions(t, "evaluation", &fourslash.CompletionsExpectedList{
+				IsIncomplete: false,
+				ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+					CommitCharacters: &[]string{},
+					EditRange:        Ignored,
+				},
+				Items: &fourslash.CompletionsExpectedItems{
+					Includes: []fourslash.CompletionsExpectedItem{"b.mjs", "c.cjs", "d.wasm", name},
+					Excludes: []string{"e.wasm"},
+				},
+			})
+		})
+	}
 }
 
 func TestSourcePhaseImportPackageCompletionsIgnoreTypesVersions(t *testing.T) {
