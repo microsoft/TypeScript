@@ -1,9 +1,9 @@
-// @isolatedDeclarations: true
+// @isolatedDeclarations: true, false
 // @declaration: true
 // @emitDeclarationOnly: true
 declare function foo(): number;
 declare function bar(): { x: number };
-class Base { y = 0; }
+class Base { get y(): number { return 0; } set y(v: number) {} }
 export class C extends Base {
     z = 0;
     a = { p: (this.z = foo()) };
