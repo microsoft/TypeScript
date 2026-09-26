@@ -3,7 +3,10 @@ package project
 import (
 	"context"
 	"fmt"
+	"runtime"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -207,6 +210,51 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, snapshotAfter.ProjectCollection.InferredProject().ProgramUpdateKind, ProgramUpdateKindNewFiles)
 		// host for inferred project should not change
 		assert.Equal(t, snapshotAfter.ProjectCollection.InferredProject().host.sourceFS.source, snapshotBefore.fs)
+	})
+
+	t.Run("cloned program does not retain the program it was cloned from", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": "{}",
+			"/home/projects/TS/p1/index.ts":      "console.log('Hello, world!');",
+		}
+		session := setup(files)
+		uri := lsproto.DocumentUri("file:///home/projects/TS/p1/index.ts")
+		session.DidOpenFile(context.Background(), uri, 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+
+		var collected atomic.Bool
+		func() {
+			oldProgram := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")).GetProgram()
+			runtime.AddCleanup(oldProgram, func(b *atomic.Bool) { b.Store(true) }, &collected)
+		}()
+
+		session.DidChangeFile(context.Background(), uri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+			{
+				Partial: &lsproto.TextDocumentContentChangePartial{
+					Text: "\n",
+					Range: lsproto.Range{
+						Start: lsproto.Position{Line: 0, Character: 24},
+						End:   lsproto.Position{Line: 0, Character: 24},
+					},
+				},
+			},
+		})
+		_, err = session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		assert.Equal(t, session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")).ProgramUpdateKind, ProgramUpdateKindCloned)
+
+		// Cleanups run asynchronously after GC; background snapshot work may also hold a ref briefly.
+		for range 50 {
+			runtime.GC()
+			if collected.Load() {
+				break
+			}
+			time.Sleep(20 * time.Millisecond)
+		}
+		assert.Assert(t, collected.Load(), "program from before the edit should be garbage collected")
+		runtime.KeepAlive(session)
 	})
 
 	t.Run("cached disk files are cleaned up", func(t *testing.T) {
