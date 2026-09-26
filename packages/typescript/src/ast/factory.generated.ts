@@ -268,6 +268,8 @@ import { cloneSourceFileData } from "./utils.ts";
 import {
     forEachChildOfJSDocParameterTag,
     forEachChildOfJSDocPropertyTag,
+    yieldEachChildOfJSDocParameterTag,
+    yieldEachChildOfJSDocPropertyTag,
 } from "./visitor.ts";
 
 export class NodeObject {
@@ -689,6 +691,11 @@ export class NodeObject {
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined {
         const fn = forEachChildTable[this.kind];
         return fn ? fn(this._data, visitor, visitArray) : undefined;
+    }
+
+    childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {
+        const fn = yieldEachChildTable[this.kind];
+        return fn ? fn(this._data) : emptyChildrenIter();
     }
 
     getSourceFile(): SourceFile {
@@ -1688,6 +1695,2231 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
     [SyntaxKind.SourceFile]: (data, cbNode, cbNodes) =>
         visitNodes(cbNode, cbNodes, data.statements) ||
         visitNode(cbNode, data.endOfFileToken),
+};
+
+type YieldEachChildFunction = <T>(data: any) => Generator<Node, T | undefined, T>;
+
+function* emptyChildrenIter<T>(): Generator<Node, T | undefined, T> {
+    return undefined;
+}
+
+const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
+    [SyntaxKind.QualifiedName]: function* (data) {
+        if (data.left) {
+            const res = yield data.left;
+            if (res) return res;
+        }
+        if (data.right) {
+            const res = yield data.right;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ComputedPropertyName]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.Decorator]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.IfStatement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.thenStatement) {
+            const res = yield data.thenStatement;
+            if (res) return res;
+        }
+        if (data.elseStatement) {
+            const res = yield data.elseStatement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.DoStatement]: function* (data) {
+        if (data.statement) {
+            const res = yield data.statement;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.WhileStatement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.statement) {
+            const res = yield data.statement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ForStatement]: function* (data) {
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+        if (data.condition) {
+            const res = yield data.condition;
+            if (res) return res;
+        }
+        if (data.incrementor) {
+            const res = yield data.incrementor;
+            if (res) return res;
+        }
+        if (data.statement) {
+            const res = yield data.statement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.BreakStatement]: function* (data) {
+        if (data.label) {
+            const res = yield data.label;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ContinueStatement]: function* (data) {
+        if (data.label) {
+            const res = yield data.label;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ReturnStatement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.WithStatement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.statement) {
+            const res = yield data.statement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SwitchStatement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.caseBlock) {
+            const res = yield data.caseBlock;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.CaseBlock]: function* (data) {
+        for (const n of data.clauses) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ThrowStatement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TryStatement]: function* (data) {
+        if (data.tryBlock) {
+            const res = yield data.tryBlock;
+            if (res) return res;
+        }
+        if (data.catchClause) {
+            const res = yield data.catchClause;
+            if (res) return res;
+        }
+        if (data.finallyBlock) {
+            const res = yield data.finallyBlock;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.CatchClause]: function* (data) {
+        if (data.variableDeclaration) {
+            const res = yield data.variableDeclaration;
+            if (res) return res;
+        }
+        if (data.block) {
+            const res = yield data.block;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.LabeledStatement]: function* (data) {
+        if (data.label) {
+            const res = yield data.label;
+            if (res) return res;
+        }
+        if (data.statement) {
+            const res = yield data.statement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ExpressionStatement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.Block]: function* (data) {
+        for (const n of data.statements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.VariableStatement]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.declarationList) {
+            const res = yield data.declarationList;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.VariableDeclaration]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.exclamationToken) {
+            const res = yield data.exclamationToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.VariableDeclarationList]: function* (data) {
+        for (const n of data.declarations) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.Parameter]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.dotDotDotToken) {
+            const res = yield data.dotDotDotToken;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.questionToken) {
+            const res = yield data.questionToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.BindingElement]: function* (data) {
+        if (data.dotDotDotToken) {
+            const res = yield data.dotDotDotToken;
+            if (res) return res;
+        }
+        if (data.propertyName) {
+            const res = yield data.propertyName;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.MissingDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.FunctionDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.asteriskToken) {
+            const res = yield data.asteriskToken;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ClassDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.heritageClauses) {
+            for (const n of data.heritageClauses) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.members) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ClassExpression]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.heritageClauses) {
+            for (const n of data.heritageClauses) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.members) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.HeritageClause]: function* (data) {
+        for (const n of data.types) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.InterfaceDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.heritageClauses) {
+            for (const n of data.heritageClauses) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.members) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypeAliasDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSTypeAliasDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.EnumMember]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.EnumDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        for (const n of data.members) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ModuleBlock]: function* (data) {
+        for (const n of data.statements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ImportDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.importClause) {
+            const res = yield data.importClause;
+            if (res) return res;
+        }
+        if (data.moduleSpecifier) {
+            const res = yield data.moduleSpecifier;
+            if (res) return res;
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSImportDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.importClause) {
+            const res = yield data.importClause;
+            if (res) return res;
+        }
+        if (data.moduleSpecifier) {
+            const res = yield data.moduleSpecifier;
+            if (res) return res;
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ExternalModuleReference]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NamespaceImport]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NamedImports]: function* (data) {
+        for (const n of data.elements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ExportAssignment]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NamespaceExportDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NamespaceExport]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NamedExports]: function* (data) {
+        for (const n of data.elements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ExportSpecifier]: function* (data) {
+        if (data.propertyName) {
+            const res = yield data.propertyName;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.CallSignature]: function* (data) {
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ConstructSignature]: function* (data) {
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.Constructor]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.GetAccessor]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SetAccessor]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.IndexSignature]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.MethodSignature]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.postfixToken) {
+            const res = yield data.postfixToken;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.MethodDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.asteriskToken) {
+            const res = yield data.asteriskToken;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.postfixToken) {
+            const res = yield data.postfixToken;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.PropertySignature]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.postfixToken) {
+            const res = yield data.postfixToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.PropertyDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.postfixToken) {
+            const res = yield data.postfixToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ClassStaticBlockDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.BinaryExpression]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.left) {
+            const res = yield data.left;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.operatorToken) {
+            const res = yield data.operatorToken;
+            if (res) return res;
+        }
+        if (data.right) {
+            const res = yield data.right;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.PrefixUnaryExpression]: function* (data) {
+        if (data.operand) {
+            const res = yield data.operand;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.PostfixUnaryExpression]: function* (data) {
+        if (data.operand) {
+            const res = yield data.operand;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.YieldExpression]: function* (data) {
+        if (data.asteriskToken) {
+            const res = yield data.asteriskToken;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ArrowFunction]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.equalsGreaterThanToken) {
+            const res = yield data.equalsGreaterThanToken;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.FunctionExpression]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.asteriskToken) {
+            const res = yield data.asteriskToken;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.AsExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SatisfiesExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ConditionalExpression]: function* (data) {
+        if (data.condition) {
+            const res = yield data.condition;
+            if (res) return res;
+        }
+        if (data.questionToken) {
+            const res = yield data.questionToken;
+            if (res) return res;
+        }
+        if (data.whenTrue) {
+            const res = yield data.whenTrue;
+            if (res) return res;
+        }
+        if (data.colonToken) {
+            const res = yield data.colonToken;
+            if (res) return res;
+        }
+        if (data.whenFalse) {
+            const res = yield data.whenFalse;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.PropertyAccessExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.questionDotToken) {
+            const res = yield data.questionDotToken;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ElementAccessExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.questionDotToken) {
+            const res = yield data.questionDotToken;
+            if (res) return res;
+        }
+        if (data.argumentExpression) {
+            const res = yield data.argumentExpression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.CallExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.questionDotToken) {
+            const res = yield data.questionDotToken;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.arguments) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NewExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.arguments) {
+            for (const n of data.arguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.MetaProperty]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NonNullExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SpreadElement]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TemplateExpression]: function* (data) {
+        if (data.head) {
+            const res = yield data.head;
+            if (res) return res;
+        }
+        for (const n of data.templateSpans) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TemplateSpan]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.literal) {
+            const res = yield data.literal;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TaggedTemplateExpression]: function* (data) {
+        if (data.tag) {
+            const res = yield data.tag;
+            if (res) return res;
+        }
+        if (data.questionDotToken) {
+            const res = yield data.questionDotToken;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.template) {
+            const res = yield data.template;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ParenthesizedExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ArrayLiteralExpression]: function* (data) {
+        for (const n of data.elements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ObjectLiteralExpression]: function* (data) {
+        for (const n of data.properties) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SpreadAssignment]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.PropertyAssignment]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.postfixToken) {
+            const res = yield data.postfixToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ShorthandPropertyAssignment]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.postfixToken) {
+            const res = yield data.postfixToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.equalsToken) {
+            const res = yield data.equalsToken;
+            if (res) return res;
+        }
+        if (data.objectAssignmentInitializer) {
+            const res = yield data.objectAssignmentInitializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.DeleteExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypeOfExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.VoidExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.AwaitExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypeAssertionExpression]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.UnionType]: function* (data) {
+        for (const n of data.types) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.IntersectionType]: function* (data) {
+        for (const n of data.types) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ConditionalType]: function* (data) {
+        if (data.checkType) {
+            const res = yield data.checkType;
+            if (res) return res;
+        }
+        if (data.extendsType) {
+            const res = yield data.extendsType;
+            if (res) return res;
+        }
+        if (data.trueType) {
+            const res = yield data.trueType;
+            if (res) return res;
+        }
+        if (data.falseType) {
+            const res = yield data.falseType;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypeOperator]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.InferType]: function* (data) {
+        if (data.typeParameter) {
+            const res = yield data.typeParameter;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ArrayType]: function* (data) {
+        if (data.elementType) {
+            const res = yield data.elementType;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.IndexedAccessType]: function* (data) {
+        if (data.objectType) {
+            const res = yield data.objectType;
+            if (res) return res;
+        }
+        if (data.indexType) {
+            const res = yield data.indexType;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypeReference]: function* (data) {
+        if (data.typeName) {
+            const res = yield data.typeName;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.ExpressionWithTypeArguments]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.LiteralType]: function* (data) {
+        if (data.literal) {
+            const res = yield data.literal;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypePredicate]: function* (data) {
+        if (data.assertsModifier) {
+            const res = yield data.assertsModifier;
+            if (res) return res;
+        }
+        if (data.parameterName) {
+            const res = yield data.parameterName;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ImportAttribute]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.value) {
+            const res = yield data.value;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ImportAttributes]: function* (data) {
+        for (const n of data.attributes) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypeQuery]: function* (data) {
+        if (data.exprName) {
+            const res = yield data.exprName;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.MappedType]: function* (data) {
+        if (data.readonlyToken) {
+            const res = yield data.readonlyToken;
+            if (res) return res;
+        }
+        if (data.typeParameter) {
+            const res = yield data.typeParameter;
+            if (res) return res;
+        }
+        if (data.nameType) {
+            const res = yield data.nameType;
+            if (res) return res;
+        }
+        if (data.questionToken) {
+            const res = yield data.questionToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.members) {
+            for (const n of data.members) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.TypeLiteral]: function* (data) {
+        for (const n of data.members) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TupleType]: function* (data) {
+        for (const n of data.elements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.NamedTupleMember]: function* (data) {
+        if (data.dotDotDotToken) {
+            const res = yield data.dotDotDotToken;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.questionToken) {
+            const res = yield data.questionToken;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.OptionalType]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.RestType]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ParenthesizedType]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.FunctionType]: function* (data) {
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ConstructorType]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TemplateLiteralType]: function* (data) {
+        if (data.head) {
+            const res = yield data.head;
+            if (res) return res;
+        }
+        for (const n of data.templateSpans) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TemplateLiteralTypeSpan]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+        if (data.literal) {
+            const res = yield data.literal;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SyntheticExpression]: function* (data) {
+        if (data.tupleNameSource) {
+            const res = yield data.tupleNameSource;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.PartiallyEmittedExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxElement]: function* (data) {
+        if (data.openingElement) {
+            const res = yield data.openingElement;
+            if (res) return res;
+        }
+        for (const n of data.children) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.closingElement) {
+            const res = yield data.closingElement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxAttributes]: function* (data) {
+        for (const n of data.properties) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxNamespacedName]: function* (data) {
+        if (data.namespace) {
+            const res = yield data.namespace;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxOpeningElement]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxSelfClosingElement]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxFragment]: function* (data) {
+        if (data.openingFragment) {
+            const res = yield data.openingFragment;
+            if (res) return res;
+        }
+        for (const n of data.children) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.closingFragment) {
+            const res = yield data.closingFragment;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxAttribute]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxSpreadAttribute]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxClosingElement]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JsxExpression]: function* (data) {
+        if (data.dotDotDotToken) {
+            const res = yield data.dotDotDotToken;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SyntaxList]: function* (data) {
+        for (const n of data.children) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDoc]: function* (data) {
+        for (const n of data.comment) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.tags) {
+            for (const n of data.tags) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocTypeExpression]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocNonNullableType]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocNullableType]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocVariadicType]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocOptionalType]: function* (data) {
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocTypeTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocUnknownTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocTemplateTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.constraint) {
+            const res = yield data.constraint;
+            if (res) return res;
+        }
+        for (const n of data.typeParameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocReturnTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocPublicTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocPrivateTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocProtectedTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocReadonlyTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocOverrideTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocDeprecatedTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocSeeTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.nameExpression) {
+            const res = yield data.nameExpression;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocImplementsTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.className) {
+            const res = yield data.className;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocAugmentsTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.className) {
+            const res = yield data.className;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocSatisfiesTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocThrowsTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocThisTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocImportTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.importClause) {
+            const res = yield data.importClause;
+            if (res) return res;
+        }
+        if (data.moduleSpecifier) {
+            const res = yield data.moduleSpecifier;
+            if (res) return res;
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocCallbackTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocOverloadTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocTypedefTag]: function* (data) {
+        if (data.tagName) {
+            const res = yield data.tagName;
+            if (res) return res;
+        }
+        if (data.typeExpression) {
+            const res = yield data.typeExpression;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.JSDocSignature]: function* (data) {
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        for (const n of data.parameters) {
+            const res = yield n;
+            if (res) return res;
+        }
+        if (data.type) {
+            const res = yield data.type;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocNameReference]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ModuleDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+        if (data.body) {
+            const res = yield data.body;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ImportEqualsDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.moduleReference) {
+            const res = yield data.moduleReference;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ExportDeclaration]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.exportClause) {
+            const res = yield data.exportClause;
+            if (res) return res;
+        }
+        if (data.moduleSpecifier) {
+            const res = yield data.moduleSpecifier;
+            if (res) return res;
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ImportType]: function* (data) {
+        if (data.argument) {
+            const res = yield data.argument;
+            if (res) return res;
+        }
+        if (data.attributes) {
+            const res = yield data.attributes;
+            if (res) return res;
+        }
+        if (data.qualifier) {
+            const res = yield data.qualifier;
+            if (res) return res;
+        }
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.ImportClause]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.namedBindings) {
+            const res = yield data.namedBindings;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ImportSpecifier]: function* (data) {
+        if (data.propertyName) {
+            const res = yield data.propertyName;
+            if (res) return res;
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocLink]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocLinkPlain]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocLinkCode]: function* (data) {
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.TypeParameter]: function* (data) {
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+        if (data.name) {
+            const res = yield data.name;
+            if (res) return res;
+        }
+        if (data.constraint) {
+            const res = yield data.constraint;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.defaultType) {
+            const res = yield data.defaultType;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.SyntheticReferenceExpression]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.thisArg) {
+            const res = yield data.thisArg;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocTypeLiteral]: function* (data) {
+        if (data.jsdocPropertyTags) {
+            for (const n of data.jsdocPropertyTags) {
+                const res = yield n;
+                if (res) return res;
+            }
+        }
+    },
+    [SyntaxKind.ForInStatement]: function* (data) {
+        if (data.awaitModifier) {
+            const res = yield data.awaitModifier;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.statement) {
+            const res = yield data.statement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ForOfStatement]: function* (data) {
+        if (data.awaitModifier) {
+            const res = yield data.awaitModifier;
+            if (res) return res;
+        }
+        if (data.initializer) {
+            const res = yield data.initializer;
+            if (res) return res;
+        }
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        if (data.statement) {
+            const res = yield data.statement;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.CaseClause]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        for (const n of data.statements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.DefaultClause]: function* (data) {
+        if (data.expression) {
+            const res = yield data.expression;
+            if (res) return res;
+        }
+        for (const n of data.statements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ObjectBindingPattern]: function* (data) {
+        for (const n of data.elements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.ArrayBindingPattern]: function* (data) {
+        for (const n of data.elements) {
+            const res = yield n;
+            if (res) return res;
+        }
+    },
+    [SyntaxKind.JSDocParameterTag]: yieldEachChildOfJSDocParameterTag,
+    [SyntaxKind.JSDocPropertyTag]: yieldEachChildOfJSDocPropertyTag,
+    [SyntaxKind.SourceFile]: function* (data) {
+        for (const n of data.statements) {
+            const res = yield n;
+            if (res) return res;
+        }
+        const res = yield data.endOfFileToken;
+        if (res) return res;
+    },
 };
 
 function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {

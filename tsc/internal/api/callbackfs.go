@@ -34,6 +34,7 @@ const (
 	callbackGetAccessibleEntries = "getAccessibleEntries"
 	callbackRealpath             = "realpath"
 	callbackWriteFile            = "writeFile"
+	callbackRemoveFile           = "removeFile"
 )
 
 func isCallbackName(name string) bool {
@@ -43,7 +44,8 @@ func isCallbackName(name string) bool {
 		callbackDirectoryExists,
 		callbackGetAccessibleEntries,
 		callbackRealpath,
-		callbackWriteFile:
+		callbackWriteFile,
+		callbackRemoveFile:
 		return true
 	default:
 		return false
@@ -221,8 +223,12 @@ func (fs *callbackFS) AppendFile(path string, data string) error {
 	return fs.base.AppendFile(path, data)
 }
 
-// Remove implements vfs.FS - always delegates to base (no callback support).
+// Remove implements vfs.FS.
 func (fs *callbackFS) Remove(path string) error {
+	if fs.isEnabled(callbackRemoveFile) {
+		_, err := fs.call(callbackRemoveFile, path)
+		return err
+	}
 	return fs.base.Remove(path)
 }
 
@@ -234,9 +240,4 @@ func (fs *callbackFS) Chtimes(path string, aTime time.Time, mTime time.Time) err
 // Stat implements vfs.FS - always delegates to base (no callback support).
 func (fs *callbackFS) Stat(path string) vfs.FileInfo {
 	return fs.base.Stat(path)
-}
-
-// WalkDir implements vfs.FS - always delegates to base (no callback support).
-func (fs *callbackFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return fs.base.WalkDir(root, walkFn)
 }

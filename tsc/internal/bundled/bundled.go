@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-//go:generate go run generate.go
+//go:generate npx hereby generate:bundled
 
 // Define the below here to consolidate documentation.
 

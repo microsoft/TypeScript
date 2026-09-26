@@ -562,7 +562,7 @@ func (w *Watcher) tryUpdateProgram(host *watchCompilerHost) bool {
 		}
 	}
 
-	newProgram, _, reused := oldProgram.ReuseProgram(changedPath, host, nil)
+	newProgram, _, reused := oldProgram.ReuseProgram(changedPath, host, nil, nil)
 	if reused {
 		w.program = incremental.NewProgram(newProgram, w.program, nil, w.sys.Now, w.testing != nil)
 	}

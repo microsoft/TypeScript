@@ -582,6 +582,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		redirectTargetsMap:                   redirectTargetsMap,
 		redirectFilesByPath:                  redirectFilesByPath,
 		contentMapperDiagnostics:             loader.contentMapperDiagnostics,
+		moduleResolutionError:                loader.moduleResolutionError,
 	}
 }
 

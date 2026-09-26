@@ -1,0 +1,68 @@
+/checked.js(3,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/checked.js(8,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/main.ts(5,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/main.ts(10,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/main.ts(15,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+
+
+==== /unchecked.js (0 errors) ====
+    export const uncheckedObject = ({
+        required,
+        optional = false,
+    } = {}) => {};
+    
+    export const uncheckedArray = ([
+        required,
+        optional = false,
+    ] = []) => {};
+    
+==== /checked.js (2 errors) ====
+    // @ts-check
+    export const checkedObject = ({
+        required,
+        ~~~~~~~~
+!!! error TS7031: Binding element 'required' implicitly has an 'any' type.
+        optional = false,
+    } = {}) => {};
+    
+    export const checkedArray = ([
+        required,
+        ~~~~~~~~
+!!! error TS7031: Binding element 'required' implicitly has an 'any' type.
+        optional = false,
+    ] = []) => {};
+    
+==== /main.ts (3 errors) ====
+    import { checkedArray, checkedObject } from "./checked";
+    import { uncheckedArray, uncheckedObject } from "./unchecked";
+    
+    export const typedObject = ({
+        required,
+        ~~~~~~~~
+!!! error TS7031: Binding element 'required' implicitly has an 'any' type.
+        optional = false,
+    } = {}) => {};
+    
+    export const typedArray = ([
+        required,
+        ~~~~~~~~
+!!! error TS7031: Binding element 'required' implicitly has an 'any' type.
+        optional = false,
+    ] = []) => {};
+    
+    export const typedObjectRest = ({
+        required,
+        ~~~~~~~~
+!!! error TS7031: Binding element 'required' implicitly has an 'any' type.
+        ...rest
+    } = {}) => {
+        rest;
+    };
+    
+    uncheckedObject({ required: "value" });
+    uncheckedArray(["value"]);
+    checkedObject({ required: "value" });
+    checkedArray(["value"]);
+    typedObject({ required: "value" });
+    typedArray(["value"]);
+    
