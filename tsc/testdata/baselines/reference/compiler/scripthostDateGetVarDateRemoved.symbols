@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/scripthostDateGetVarDateRemoved.ts] ////
+
+=== scripthostDateGetVarDateRemoved.ts ===
+/// <reference lib="scripthost" />
+
+new Date().getVarDate();
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+
