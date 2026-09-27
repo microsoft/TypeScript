@@ -3,21 +3,7 @@
 === /a.ts ===
 /// <reference path="declarations.d.ts" />
 fooGlobal;
->fooGlobal : string
-
-=== /node_modules/foo/index.d.ts ===
-declare global {
->global : typeof global
-
-    var fooGlobal: string;
->fooGlobal : string
-}
-declare function foo(value: unknown): boolean;
->foo : (value: unknown) => boolean
->value : unknown
-
-export default foo;
->foo : (value: unknown) => boolean
+>fooGlobal : any
 
 === /declarations.d.ts ===
 declare module "foo" {
