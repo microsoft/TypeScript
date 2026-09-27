@@ -368,6 +368,9 @@ const showCodeLensLocationsCommandName = "typescript.showCodeLensLocations"
 func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCapabilities, runExternalCode bool) {
 	initializationOptions := &lsproto.InitializationOptions{
 		CodeLensShowLocationsCommandName: new(showCodeLensLocationsCommandName),
+		// Make every textDocument/diagnostic request also emit the program and fail if the
+		// diagnostics differ before and after emit, e.g. because the emit resolver added some.
+		TrackFlakyDiagnostics: new(lsproto.DiagnosticFlakeLogLevelPanic),
 	}
 	if runExternalCode {
 		initializationOptions.RunExternalCode = new(true)
