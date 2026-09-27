@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
@@ -4786,5 +4788,112 @@ func TestBuildProjectReferenceRedirectWithMultipleSubProjects(t *testing.T) {
 
 	for _, test := range testCases {
 		test.run(t, "projectReferenceRedirect")
+	}
+}
+
+func TestBuildWithSymlinkedCurrentDirectory(t *testing.T) {
+	t.Parallel()
+
+	buildFiles := func(root string) FileMap {
+		return FileMap{
+			root + "/lib/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": { "composite": true, "outDir": "./dist", "rootDir": "./" },
+					"include": ["./index.ts"]
+				}`),
+			root + "/lib/package.json": stringtestutil.Dedent(`
+				{
+					"name": "lib",
+					"version": "1.0.0",
+					"type": "module",
+					"exports": { ".": "./index.ts" }
+				}`),
+			root + "/lib/index.ts": stringtestutil.Dedent(`
+				declare const Something: unique symbol;
+				export interface Duration {
+					readonly [Something]: "Duration";
+				}
+				export declare const dur2: Duration;`),
+			root + "/app/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": { "composite": true, "outDir": "./dist", "rootDir": "./" },
+					"include": ["./index.ts"],
+					"references": [{ "path": "../lib" }]
+				}`),
+			root + "/app/index.ts": stringtestutil.Dedent(`
+				import type { Duration } from "lib";
+				export declare const dur1: Duration`),
+			root + "/app/node_modules/lib": vfstest.Symlink(root + "/lib"),
+			root + "/check.ts": stringtestutil.Dedent(`
+				import { dur1 } from "app";
+				import { dur2 } from "lib";
+
+				console.log(dur1 === dur2)`),
+			root + "/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"include": ["check.ts"],
+					"references": [{ "path": "./lib" }, { "path": "./app" }],
+					"compilerOptions": {
+						"composite": true,
+						"noEmit": true,
+						"paths": { "lib": ["./lib/index.ts"], "app": ["./app/index.ts"] }
+					}
+				}`),
+		}
+	}
+
+	withLinks := func(files FileMap, links map[string]string) FileMap {
+		for path, target := range links {
+			files[path] = vfstest.Symlink(target)
+		}
+		return files
+	}
+
+	for _, test := range []struct {
+		name  string
+		files FileMap
+		cwd   string
+	}{
+		{
+			name:  "real path",
+			files: buildFiles("/home/alice/workspaces/project"),
+			cwd:   "/home/alice/workspaces/project",
+		},
+		{
+			name: "current directory is the symlink",
+			files: withLinks(buildFiles("/home/alice/workspaces/project"), map[string]string{
+				"/home/alice/workspaces/symlinked": "/home/alice/workspaces/project",
+			}),
+			cwd: "/home/alice/workspaces/symlinked",
+		},
+		{
+			name: "parent directory is the symlink",
+			files: withLinks(buildFiles("/home/bob/projects/playground-app"), map[string]string{
+				"/home/alice/projects": "/home/bob/projects",
+			}),
+			cwd: "/home/alice/projects/playground-app",
+		},
+		{
+			name: "symlinked ancestor reached through a symlink chain",
+			files: withLinks(buildFiles("/home/bob/projects/playground-app"), map[string]string{
+				"/home/alice/aliased":        "/home/bob/projects",
+				"/home/alice/nested/aliased": "/home/alice/aliased",
+			}),
+			cwd: "/home/alice/nested/aliased/playground-app",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			sys := newTestSys(&tscInput{files: test.files, cwd: test.cwd}, false)
+			result := execute.CommandLine(t.Context(), sys, []string{"-b"}, sys)
+			assert.Equal(
+				t,
+				result.Status,
+				tsc.ExitStatusSuccess,
+				"building via %s should succeed:\n%s",
+				test.cwd,
+				sys.currentWrite.String(),
+			)
+		})
 	}
 }

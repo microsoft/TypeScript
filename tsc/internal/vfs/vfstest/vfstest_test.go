@@ -9,6 +9,7 @@ import (
 	"sync"
 	"testing"
 	"testing/fstest"
+	"time"
 	"unicode/utf16"
 
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
@@ -656,6 +657,27 @@ func TestWritableFSSymlink(t *testing.T) {
 	content, ok = fs.ReadFile("/does/not/exist")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "hello, world")
+}
+
+func TestChtimesFollowsSymlinks(t *testing.T) {
+	t.Parallel()
+
+	fsys := FromMap(map[string]any{
+		"/some/dir/a.ts": "hello, world",
+		"/some/dirlink":  Symlink("/some/dir"),
+		"/real.ts":       "hello, world",
+		"/link.ts":       Symlink("/real.ts"),
+	}, false)
+
+	modified := time.Unix(123, 0)
+
+	assert.NilError(t, fsys.Chtimes("/some/dirlink/a.ts", modified, modified))
+	assert.Equal(t, fsys.Stat("/some/dir/a.ts").ModTime(), modified)
+
+	assert.NilError(t, fsys.Chtimes("/link.ts", modified, modified))
+	assert.Equal(t, fsys.Stat("/real.ts").ModTime(), modified)
+
+	assert.ErrorIs(t, fsys.Chtimes("/missing.ts", modified, modified), fs.ErrNotExist)
 }
 
 func TestWritableFSSymlinkChain(t *testing.T) {
