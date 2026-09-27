@@ -2863,6 +2863,9 @@ func (c *Checker) checkClassStaticBlockDeclaration(node *ast.Node) {
 	// Grammar checking
 	c.checkGrammarModifiers(node)
 	node.ForEachChild(c.checkSourceElement)
+	if len(node.Locals()) != 0 {
+		c.registerForUnusedIdentifiersCheck(node)
+	}
 }
 
 func (c *Checker) checkConstructorDeclaration(node *ast.Node) {
@@ -7220,7 +7223,7 @@ func (c *Checker) checkUnusedIdentifiers(potentiallyUnusedIdentifiers []*ast.Nod
 			c.checkUnusedClassMembers(node)
 			c.checkUnusedTypeParameters(node)
 		case ast.KindSourceFile, ast.KindModuleDeclaration, ast.KindBlock, ast.KindCaseBlock, ast.KindForStatement, ast.KindForInStatement,
-			ast.KindForOfStatement:
+			ast.KindForOfStatement, ast.KindClassStaticBlockDeclaration:
 			c.checkUnusedLocalsAndParameters(node)
 		case ast.KindConstructor, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindArrowFunction, ast.KindMethodDeclaration,
 			ast.KindGetAccessor, ast.KindSetAccessor:
