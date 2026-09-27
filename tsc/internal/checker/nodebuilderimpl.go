@@ -594,7 +594,7 @@ func (b *NodeBuilderImpl) symbolToNode(symbol *ast.Symbol, meaning ast.SymbolFla
 			if nameType != nil && nameType.flags&(TypeFlagsEnumLiteral|TypeFlagsUniqueESSymbol) != 0 {
 				oldEnclosing := b.ctx.enclosingDeclaration
 				b.ctx.enclosingDeclaration = nameType.symbol.ValueDeclaration
-				result := b.f.NewComputedPropertyName(b.symbolToExpression(nameType.symbol, meaning))
+				result := b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.symbol, meaning))
 				b.ctx.enclosingDeclaration = oldEnclosing
 				return result
 			}
@@ -846,7 +846,12 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 }
 
 func (b *NodeBuilderImpl) symbolToExpression(symbol *ast.Symbol, mask ast.SymbolFlags) *ast.Expression {
-	chain := b.lookupSymbolChain(symbol, mask, false)
+	b.ctx.tracker.TrackSymbol(symbol, b.ctx.enclosingDeclaration, mask)
+	return b.symbolToExpressionWorker(symbol, mask)
+}
+
+func (b *NodeBuilderImpl) symbolToExpressionWorker(symbol *ast.Symbol, mask ast.SymbolFlags) *ast.Expression {
+	chain := b.lookupSymbolChainWorker(symbol, mask, false)
 	return b.createExpressionFromSymbolChain(chain, len(chain)-1)
 }
 
@@ -2563,7 +2568,9 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
 	}
 	if nameType.flags&TypeFlagsUniqueESSymbol != 0 {
-		return b.f.NewComputedPropertyName(b.symbolToExpression(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
+		// The reference was tracked in the destination scope by trackComputedName.
+		// Reconstructing its spelling in the source scope must not paint that scope's declarations visible.
+		return b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
 	}
 	return nil
 }
@@ -3290,14 +3297,6 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 }
 
 func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
-	// Push type onto typeStack for expansion depth tracking
-	if b.ctx.maxExpansionDepth >= 0 && t != nil {
-		b.ctx.typeStack = append(b.ctx.typeStack, t)
-		defer func() {
-			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
-		}()
-	}
-
 	inTypeAlias := b.ctx.flags & nodebuilder.FlagsInTypeAlias
 	b.ctx.flags &^= nodebuilder.FlagsInTypeAlias
 
@@ -3309,6 +3308,16 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 		b.ctx.approximateLength += 3
 		return b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
+	}
+
+	t = getNonDistributedTypeParameter(t)
+
+	// Push type onto typeStack for expansion depth tracking
+	if b.ctx.maxExpansionDepth >= 0 {
+		b.ctx.typeStack = append(b.ctx.typeStack, t)
+		defer func() {
+			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
+		}()
 	}
 
 	if b.ctx.flags&nodebuilder.FlagsNoTypeReduction == 0 {

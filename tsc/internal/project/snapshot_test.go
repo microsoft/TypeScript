@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -35,18 +37,141 @@ func TestSnapshot(t *testing.T) {
 		return session
 	}
 
-	t.Run("temporary file can be added to an empty root snapshot", func(t *testing.T) {
+	t.Run("creates and removes synthetic programs", func(t *testing.T) {
 		t.Parallel()
-		session := setup(map[string]any{})
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+			"/b.ts": "export const b = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		options := &core.CompilerOptions{NoLib: core.TSTrue}
+		createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{
+			{
+				RootFileNames:   []string{"/a.ts"},
+				CompilerOptions: options,
+			},
+			{
+				RootFileNames:   []string{"/b.ts"},
+				CompilerOptions: options,
+			},
+		}}
+		createdSnapshot, err := session.CloneSnapshot(
+			ctx,
+			session.Snapshot(),
+			FileChangeSummary{},
+			createRequest,
+		)
+		assert.NilError(t, err)
+		defer createdSnapshot.Deref()
+		createdPrograms := createdSnapshot.CreatedPrograms()
+		assert.Equal(t, len(createdPrograms), 2)
+		firstProject := createdPrograms[0]
+		secondProject := createdPrograms[1]
+		assert.Equal(t, firstProject.configFilePath, tspath.Path(""))
+		assert.Equal(t, secondProject.configFilePath, tspath.Path(""))
+
+		firstProgramID, ok := firstProject.ID().Synthetic()
+		assert.Assert(t, ok)
+		assert.Equal(t, string(firstProgramID), "/dev/null/synthetic/1")
+		removeRequest := &APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(firstProgramID)}
+		removedSnapshot, err := session.CloneSnapshot(
+			ctx,
+			createdSnapshot,
+			FileChangeSummary{},
+			removeRequest,
+		)
+		assert.NilError(t, err)
+		defer removedSnapshot.Deref()
+
+		assert.Assert(t, firstProject != nil)
+		assert.Assert(t, secondProject != nil)
+		assert.Assert(t, firstProject.ID() != secondProject.ID())
+		assert.DeepEqual(t, firstProject.CommandLine.FileNames(), []string{"/a.ts"})
+		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []string{"/b.ts"})
+		assert.Assert(t, createdSnapshot.ProjectCollection.InferredProject() == nil)
+		assert.Equal(t, len(createdSnapshot.ProjectCollection.SyntheticProjects()), 2)
+		assert.Equal(t, len(createdSnapshot.ProjectCollection.LanguageServiceProjects()), 0)
+		assert.Equal(t, len(createdSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 0)
+		assert.Assert(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")) == nil)
+		assert.Equal(t, createdSnapshot.ProjectCollection.GetProject(firstProject.ID()), firstProject)
+
+		openedSnapshot, err := session.CloneSnapshot(
+			ctx,
+			createdSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{OpenFiles: map[tspath.Path]string{createdSnapshot.toPath("/a.ts"): "/a.ts"}},
+		)
+		assert.NilError(t, err)
+		defer openedSnapshot.Deref()
+		inferredProject := openedSnapshot.ProjectCollection.InferredProject()
+		assert.Assert(t, inferredProject != nil)
+		_, ok = inferredProject.ID().Inferred()
+		assert.Assert(t, ok)
+		assert.Equal(t, inferredProject.configFilePath, tspath.Path(""))
+		assert.Equal(t, len(openedSnapshot.ProjectCollection.LanguageServiceProjects()), 1)
+		assert.Equal(t, len(openedSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 1)
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetDefaultProject(openedSnapshot.toPath("/a.ts")), openedSnapshot.ProjectCollection.InferredProject())
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetProject(firstProject.ID()), firstProject)
+
+		assert.Assert(t, removedSnapshot.ProjectCollection.GetProject(firstProject.ID()) == nil)
+		assert.Equal(t, removedSnapshot.ProjectCollection.GetProject(secondProject.ID()), secondProject)
+		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
+	})
+
+	t.Run("failed API update is not adopted", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+		})
 		defer session.Close()
 
 		baseSnapshot := session.Snapshot()
-		uri := lsproto.DocumentUri("file:///temporary.ts")
-		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, nil, uri, "export const value = 1;")
-		assert.NilError(t, err)
-		defer snapshot.Deref()
+		failedSnapshot, err := session.CloneSnapshot(
+			context.Background(),
+			baseSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(NewSyntheticProjectID(1))},
+		)
+		defer failedSnapshot.Deref()
 
-		assert.Equal(t, snapshot.GetFile(uri.FileName()).Content(), "export const value = 1;")
+		assert.ErrorContains(t, err, "synthetic program not found for removal")
+		assert.Equal(t, session.Snapshot(), baseSnapshot)
+		assert.Assert(t, func() (panicked bool) {
+			defer func() {
+				if recover() != nil {
+					panicked = true
+				}
+			}()
+			_, _ = session.CloneSnapshot(context.Background(), failedSnapshot, FileChangeSummary{}, nil)
+			return false
+		}())
+	})
+
+	t.Run("failed API update preserves flushed host changes", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+		})
+		defer session.Close()
+
+		baseSnapshot := session.Snapshot()
+		session.pendingFileChangesMu.Lock()
+		session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
+			Kind: FileChangeKindWatchChange,
+			URI:  lsproto.DocumentUri("file:///a.ts"),
+		})
+		session.pendingFileChangesMu.Unlock()
+		failedSnapshot, err := session.APIUpdate(
+			context.Background(),
+			FileChangeSummary{},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(NewSyntheticProjectID(1))},
+		)
+
+		assert.ErrorContains(t, err, "synthetic program not found for removal")
+		assert.Assert(t, failedSnapshot == nil)
+		assert.Assert(t, session.Snapshot() != baseSnapshot)
 	})
 
 	t.Run("compilerHost gets frozen with snapshot's FS only once", func(t *testing.T) {
@@ -100,8 +225,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotBefore := session.Snapshot()
 
 		// a.ts and b.ts are cached
-		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p1/a.ts"] != nil)
-		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.cacheFiles["/home/projects/ts/p1/a.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.cacheFiles["/home/projects/ts/p2/b.ts"] != nil)
 
 		// Close p1's only open file
 		session.DidCloseFile(context.Background(), "file:///home/projects/TS/p1/index.ts")
@@ -110,8 +235,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotAfter := session.Snapshot()
 
 		// a.ts is cleaned up, b.ts is still cached
-		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p1/a.ts"] == nil)
-		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotAfter.fs.cacheFiles["/home/projects/ts/p1/a.ts"] == nil)
+		assert.Check(t, snapshotAfter.fs.cacheFiles["/home/projects/ts/p2/b.ts"] != nil)
 	})
 
 	t.Run("GetFile returns nil for non-existent files", func(t *testing.T) {
@@ -202,7 +327,7 @@ func TestSnapshot(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), pkgURI)
 		assert.NilError(t, err)
 
-		err = session.fs.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
+		err = session.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
 		assert.NilError(t, err)
 		session.DidChangeFile(context.Background(), pkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 			{
@@ -285,7 +410,7 @@ func TestSnapshot(t *testing.T) {
 
 		// A watch change that reflects an actual content change on disk must still
 		// rebuild the program.
-		err = session.fs.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
+		err = session.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
 		assert.NilError(t, err)
 		session.pendingFileChangesMu.Lock()
 		session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
@@ -299,6 +424,45 @@ func TestSnapshot(t *testing.T) {
 		programChanged := session.Snapshot().ProjectCollection.ConfiguredProject(configPath).Program
 		assert.Assert(t, programBefore != programChanged, "real watch change should rebuild the program")
 	})
+}
+
+func TestProjectIDNarrowing(t *testing.T) {
+	t.Parallel()
+
+	configured := ID("/project/tsconfig.json")
+	configuredID, ok := configured.Configured()
+	assert.Assert(t, ok)
+	assert.Equal(t, configuredID, ConfiguredProjectID("/project/tsconfig.json"))
+	_, ok = configured.Inferred()
+	assert.Assert(t, !ok)
+	_, ok = configured.Synthetic()
+	assert.Assert(t, !ok)
+
+	inferred := inferredProjectID.AsID()
+	inferredID, ok := inferred.Inferred()
+	assert.Assert(t, ok)
+	assert.Equal(t, inferredID, inferredProjectID)
+	_, ok = inferred.Configured()
+	assert.Assert(t, !ok)
+
+	synthetic := NewSyntheticProjectID(1).AsID()
+	syntheticID, ok := synthetic.Synthetic()
+	assert.Assert(t, ok)
+	assert.Equal(t, syntheticID, NewSyntheticProjectID(1))
+	_, ok = synthetic.Configured()
+	assert.Assert(t, !ok)
+
+	canonicalSyntheticID, ok := ID("/dev/null/synthetic/01").Synthetic()
+	assert.Assert(t, ok)
+	assert.Equal(t, canonicalSyntheticID, NewSyntheticProjectID(1))
+
+	_, ok = ID("/dev/null/synthetic/invalid").Configured()
+	assert.Assert(t, ok)
+
+	_, ok = ParseConfiguredProjectID(inferredProjectName)
+	assert.Assert(t, !ok)
+	_, ok = ParseConfiguredProjectID(tspath.Path(NewSyntheticProjectID(1)))
+	assert.Assert(t, !ok)
 }
 
 func BenchmarkSnapshotCloneRefCost(b *testing.B) {
@@ -366,7 +530,7 @@ func BenchmarkSnapshotCloneRefCost(b *testing.B) {
 				} else {
 					tsconfigContent = `{"compilerOptions": {"strict": false}}`
 				}
-				err := session.fs.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
+				err := session.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
 				if err != nil {
 					b.Fatal(err)
 				}

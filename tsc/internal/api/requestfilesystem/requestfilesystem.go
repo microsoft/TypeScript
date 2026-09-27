@@ -1,9 +1,7 @@
 package requestfilesystem
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"slices"
 	"strings"
 	"time"
@@ -46,7 +44,8 @@ type RequestFileSystem struct {
 	Kind Kind `json:"kind"`
 	// Files maps file names to their complete contents.
 	Files map[string]string `json:"files" nonnil:"true"`
-	// Directories maps directory names to complete listing results.
+	// Directories maps directory names to complete listing results. Directory
+	// structure implied by Files is derived when a listing is omitted.
 	Directories map[string]RequestDirectoryEntries `json:"directories,omitempty"`
 	// Symlinks maps link paths to targets in this filesystem or the host filesystem.
 	Symlinks map[string]RequestSymlink `json:"symlinks,omitempty"`
@@ -99,9 +98,6 @@ func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory strin
 			baseFileSystem = requestBase.base
 		}
 	}
-	if params.Kind == KindLayer {
-		addFileChanges(fileChanges, params, baseFileSystem, currentDirectory)
-	}
 	fileSystem, err := newRequestFileSystemWorker(params, baseFileSystem, currentDirectory)
 	if err != nil {
 		return nil, err
@@ -109,7 +105,10 @@ func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory strin
 	baseRequestFileSystem := getRequestFileSystem(baseFileSystem)
 	if baseRequestFileSystem != nil {
 		compacted := fileSystem.applyTo(*baseRequestFileSystem)
-		return &compacted, nil
+		fileSystem = &compacted
+	}
+	if params.Kind == KindLayer {
+		addFileChanges(fileChanges, params, baseFileSystem, fileSystem, currentDirectory)
 	}
 	return fileSystem, nil
 }
@@ -133,7 +132,13 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		paths:                 &requestPathNode{},
 	}
 	result.registerDirectory(currentDirectory)
-	for fileName, content := range params.Files {
+	fileNames := make([]string, 0, len(params.Files))
+	for fileName := range params.Files {
+		fileNames = append(fileNames, fileName)
+	}
+	slices.Sort(fileNames)
+	for _, fileName := range fileNames {
+		content := params.Files[fileName]
 		absoluteFileName := result.toAbsolutePath(fileName)
 		path := result.toPath(absoluteFileName)
 		node := result.paths.ensure(path)
@@ -201,6 +206,35 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 
 func (s requestFileSystem) baseFileSystem() vfs.FS {
 	return s.base
+}
+
+func (s *requestFileSystem) BaseFileSystem() vfs.FS {
+	return s.base
+}
+
+func (s *requestFileSystem) WithBaseFileSystem(base vfs.FS) project.LayeredFileSystem {
+	clone := *s
+	clone.base = base
+	return &clone
+}
+
+func (s *requestFileSystem) Overlays() map[tspath.Path]*project.Overlay {
+	base, ok := s.base.(project.LayeredFileSystem)
+	if !ok {
+		return nil
+	}
+	var result map[tspath.Path]*project.Overlay
+	for path, overlay := range base.Overlays() {
+		lookup := s.lookupPath(overlay.FileName())
+		if lookup.fileSystem == nil || s.toPath(lookup.path) != path {
+			continue
+		}
+		if result == nil {
+			result = make(map[tspath.Path]*project.Overlay)
+		}
+		result[path] = overlay
+	}
+	return result
 }
 
 func (s requestFileSystem) applyTo(base requestFileSystem) requestFileSystem {
@@ -394,6 +428,30 @@ func (s requestFileSystem) UseCaseSensitiveFileNames() bool {
 	return s.useCaseSensitiveNames
 }
 
+func (s requestFileSystem) GetFile(fileName string) project.FileHandle {
+	return s.GetFileByPath(fileName, s.toPath(fileName))
+}
+
+func (s requestFileSystem) GetFileByPath(fileName string, _ tspath.Path) project.FileHandle {
+	lookup := s.lookupPath(fileName)
+	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
+		return nil
+	}
+	if lookup.fileSystem != nil {
+		if source, ok := lookup.fileSystem.(project.FileHandleSource); ok {
+			return source.GetFile(lookup.path)
+		}
+		if content, ok := lookup.fileSystem.ReadFile(lookup.path); ok {
+			return project.NewCachedFileHandle(fileName, content)
+		}
+		return nil
+	}
+	if file, ok := lookup.info.(*requestFile); ok {
+		return project.NewCachedFileHandle(fileName, file.content)
+	}
+	return nil
+}
+
 func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
 	lookup := s.lookupPath(fileName)
 	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
@@ -549,6 +607,9 @@ func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.E
 			}
 		}
 	}
+	if len(links) == 0 {
+		return result
+	}
 	for _, symlink := range links {
 		name := tspath.GetBaseFileName(symlink.linkName)
 		result.Files = s.deleteEntryName(result.Files, name)
@@ -648,63 +709,6 @@ func statFileSystem(fileSystem vfs.FS, path string) vfs.FileInfo {
 	}
 	if fileSystem.FileExists(path) {
 		return &requestFile{fileName: path}
-	}
-	return nil
-}
-
-func (s requestFileSystem) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	originalRoot := s.toAbsolutePath(root)
-	resolved := s.resolvePath(originalRoot)
-	if !resolved.ok {
-		return walkFn(originalRoot, nil, vfs.ErrNotExist)
-	}
-	info := s.Stat(originalRoot)
-	if info == nil {
-		return walkFn(originalRoot, nil, vfs.ErrNotExist)
-	}
-	visited := map[string]struct{}{}
-	if err := s.walkDir(originalRoot, info, walkFn, visited); errors.Is(err, fs.SkipAll) {
-		return nil
-	} else {
-		return err
-	}
-}
-
-func (s requestFileSystem) walkDir(path string, info vfs.FileInfo, walkFn vfs.WalkDirFunc, visited map[string]struct{}) error {
-	realpath := s.Realpath(path)
-	if _, ok := visited[realpath]; ok {
-		return nil
-	}
-	visited[realpath] = struct{}{}
-	entry, ok := info.(vfs.DirEntry)
-	if !ok {
-		entry = fs.FileInfoToDirEntry(info)
-	}
-	err := walkFn(path, entry, nil)
-	if err != nil {
-		if errors.Is(err, fs.SkipDir) && entry.IsDir() {
-			return nil
-		}
-		return err
-	}
-	if !entry.IsDir() {
-		return nil
-	}
-	entries := s.GetAccessibleEntries(path)
-	names := append(slices.Clone(entries.Directories), entries.Files...)
-	slices.Sort(names)
-	for _, name := range names {
-		childPath := tspath.CombinePaths(path, name)
-		childInfo := s.Stat(childPath)
-		if childInfo == nil {
-			continue
-		}
-		if err := s.walkDir(childPath, childInfo, walkFn, visited); err != nil {
-			if errors.Is(err, fs.SkipDir) {
-				return nil
-			}
-			return err
-		}
 	}
 	return nil
 }

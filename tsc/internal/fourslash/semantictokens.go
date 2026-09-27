@@ -23,7 +23,7 @@ func (f *FourslashTest) VerifySemanticTokens(t *testing.T, expected []SemanticTo
 		},
 	}
 
-	result := sendRequest(t, f, lsproto.TextDocumentSemanticTokensFullInfo, params)
+	result := f.sendRequest(t, lsproto.TextDocumentSemanticTokensFullInfo, params)
 
 	if result.SemanticTokens == nil {
 		if len(expected) == 0 {

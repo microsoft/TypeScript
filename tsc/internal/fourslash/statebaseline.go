@@ -17,7 +17,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/fsbaselineutil"
-	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 	"gotest.tools/v3/assert"
@@ -70,7 +69,7 @@ func (f *FourslashTest) baselineProjectsAfterNotification(t *testing.T, fileName
 		return
 	}
 	// Do hover so we have snapshot to check things on!!
-	_, _, resultOk := lsptestutil.SendRequest(t, f.client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+	_, _, resultOk := f.client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
 			Uri: lsconv.FileNameToDocumentURI(fileName),
 		},
@@ -185,7 +184,7 @@ func (d *diffTableWriter) print(w io.Writer) {
 	}
 }
 
-func areIterSeqEqual(a, b iter.Seq[tspath.Path]) bool {
+func areIterSeqEqual[T ~string](a, b iter.Seq[T]) bool {
 	aSlice := slices.Collect(a)
 	bSlice := slices.Collect(b)
 	slices.Sort(aSlice)
@@ -219,7 +218,7 @@ func printSlicesWithDiffTable(w io.Writer, header string, newSlice []string, get
 	table.print(w, header)
 }
 
-func sliceFromIterSeqPath(seq iter.Seq[tspath.Path]) []string {
+func sliceFromIterSeqString[T ~string](seq iter.Seq[T]) []string {
 	var result []string
 	for path := range seq {
 		result = append(result, string(path))
@@ -228,12 +227,12 @@ func sliceFromIterSeqPath(seq iter.Seq[tspath.Path]) []string {
 	return result
 }
 
-func printPathIterSeqWithDiffTable(w io.Writer, header string, newIterSeq iter.Seq[tspath.Path], getOldIterSeq func() iter.Seq[tspath.Path], options diffTableOptions, topChange string) {
+func printStringIterSeqWithDiffTable[T ~string](w io.Writer, header string, newIterSeq iter.Seq[T], getOldIterSeq func() iter.Seq[T], options diffTableOptions, topChange string) {
 	printSlicesWithDiffTable(
 		w,
 		header,
-		sliceFromIterSeqPath(newIterSeq),
-		func() []string { return sliceFromIterSeqPath(getOldIterSeq()) },
+		sliceFromIterSeqString(newIterSeq),
+		func() []string { return sliceFromIterSeqString(getOldIterSeq()) },
 		options,
 		topChange,
 		nil,
@@ -262,9 +261,9 @@ func (f *FourslashTest) printProjectsDiff(t *testing.T, snapshot *project.Snapsh
 	for _, project := range snapshot.ProjectCollection.Projects() {
 		program := project.GetProgram()
 		var oldProgram *compiler.Program
-		currentProjects[project.Name()] = program
+		currentProjects[string(project.ID())] = program
 		projectChange := ""
-		if existing, ok := f.stateBaseline.serializedProjects[project.Name()]; ok {
+		if existing, ok := f.stateBaseline.serializedProjects[string(project.ID())]; ok {
 			oldProgram = existing
 			if oldProgram != program {
 				projectChange = "*modified*"
@@ -277,8 +276,8 @@ func (f *FourslashTest) printProjectsDiff(t *testing.T, snapshot *project.Snapsh
 			projectsDiffTable.setHasChange()
 		}
 
-		projectsDiffTable.add(project.Name(), func(w io.Writer) {
-			fmt.Fprintf(w, "  [%s] %s\n", project.Name(), projectChange)
+		projectsDiffTable.add(string(project.ID()), func(w io.Writer) {
+			fmt.Fprintf(w, "  [%s] %s\n", project.ID(), projectChange)
 			subDiff := diffTable{options: options}
 			if program != nil {
 				for _, file := range program.GetSourceFiles() {
@@ -344,11 +343,11 @@ func (f *FourslashTest) printOpenFilesDiff(t *testing.T, snapshot *project.Snaps
 		defaultProject := snapshot.ProjectCollection.GetDefaultProject(path)
 		newFileInfo := &openFileInfo{}
 		if defaultProject != nil {
-			newFileInfo.defaultProjectName = defaultProject.Name()
+			newFileInfo.defaultProjectName = string(defaultProject.ID())
 		}
 		for _, project := range snapshot.ProjectCollection.Projects() {
 			if program := project.GetProgram(); program != nil && program.GetSourceFileByPath(path) != nil {
-				newFileInfo.allProjects = append(newFileInfo.allProjects, project.Name())
+				newFileInfo.allProjects = append(newFileInfo.allProjects, string(project.ID()))
 			}
 		}
 		slices.Sort(newFileInfo.allProjects)
@@ -435,9 +434,9 @@ func (f *FourslashTest) printConfigFileRegistryDiff(t *testing.T, snapshot *proj
 					retainingConfigsModified = " *modified*"
 				}
 			}
-			printPathIterSeqWithDiffTable(w, "RetainingProjects:"+retainingProjectsModified, entry.RetainingProjects, func() iter.Seq[tspath.Path] { return oldEntry.RetainingProjects }, options, configChange)
-			printPathIterSeqWithDiffTable(w, "RetainingOpenFiles:"+retainingOpenFilesModified, entry.RetainingOpenFiles, func() iter.Seq[tspath.Path] { return oldEntry.RetainingOpenFiles }, options, configChange)
-			printPathIterSeqWithDiffTable(w, "RetainingConfigs:"+retainingConfigsModified, entry.RetainingConfigs, func() iter.Seq[tspath.Path] { return oldEntry.RetainingConfigs }, options, configChange)
+			printStringIterSeqWithDiffTable(w, "RetainingProjects:"+retainingProjectsModified, entry.RetainingProjects, func() iter.Seq[project.ID] { return oldEntry.RetainingProjects }, options, configChange)
+			printStringIterSeqWithDiffTable(w, "RetainingOpenFiles:"+retainingOpenFilesModified, entry.RetainingOpenFiles, func() iter.Seq[tspath.Path] { return oldEntry.RetainingOpenFiles }, options, configChange)
+			printStringIterSeqWithDiffTable(w, "RetainingConfigs:"+retainingConfigsModified, entry.RetainingConfigs, func() iter.Seq[tspath.Path] { return oldEntry.RetainingConfigs }, options, configChange)
 		})
 	})
 	configFileRegistry.ForEachTestConfigFileNamesEntry(func(path tspath.Path, entry *project.TestConfigFileNamesEntry) {

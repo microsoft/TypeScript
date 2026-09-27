@@ -22,7 +22,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
@@ -47,7 +46,7 @@ func (l *LanguageService) ProvideCompletion(
 		triggerCharacter = context.TriggerCharacter
 	}
 	ctx = format.WithFormatCodeSettings(ctx, l.FormatOptions(), l.FormatOptions().NewLineCharacter)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, LSPPosition, spanmap.FeatureCompletion)
+	positions := l.converters.FromLSPPositionForSourceFile(file, LSPPosition, spanmap.FeatureCompletion)
 	if len(positions) == 0 || !positions[0].Fidelity.IsExact() {
 		// In a content-mapped file the cursor is outside a verbatim span, so any completion committed here
 		// could not be applied to the original text. Offer nothing rather than edits at a bogus location.
@@ -1181,7 +1180,7 @@ func (l *LanguageService) getCompletionData(
 					}
 				}
 				if objectLikeContainer.Kind == ast.KindObjectLiteralExpression && preferences.IncludeCompletionsWithObjectLiteralMethodSnippets.IsTrue() {
-					displayName, _ := getCompletionEntryDisplayNameForSymbol(member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
+					displayName, _ := getCompletionEntryDisplayNameForSymbol(file, preferences, member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
 					if displayName != "" {
 						originalSortText := core.OrElse(symbolToSortTextMap[symbolId], SortTextLocationPriority)
 						symbolToSortTextMap[symbolId] = ObjectLiteralPropertySortText(originalSortText, displayName)
@@ -1976,6 +1975,8 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	for index, symbol := range data.symbols {
 		origin := data.symbolToOriginInfoMap[index]
 		name, needsConvertPropertyAccess := getCompletionEntryDisplayNameForSymbol(
+			file,
+			preferences,
 			symbol,
 			origin,
 			data.completionKind,
@@ -2060,7 +2061,9 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 				preferences,
 				isSnippet,
 			)
-			filterText = autoImport.Fix.Name
+			// The edit range covers the whole import statement typed so far, and clients match that text against the
+			// filter text, so it has to be the statement being inserted (as in Strada), not just the bare name.
+			filterText = insertText
 			sortText = SortTextLocationPriority
 		}
 
@@ -2589,12 +2592,13 @@ func (l *LanguageService) collectObjectLiteralMethodSymbols(ctx context.Context,
 		return nil
 	}
 
+	preferences := l.UserPreferences()
 	var methods []objectLiteralMethodSymbol
 	for _, member := range members {
 		if !isObjectLiteralMethodSymbol(member) {
 			continue
 		}
-		displayName, _ := getCompletionEntryDisplayNameForSymbol(member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
+		displayName, _ := getCompletionEntryDisplayNameForSymbol(file, preferences, member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
 		if displayName == "" {
 			continue
 		}
@@ -3152,6 +3156,8 @@ func shouldIncludeSymbol(
 }
 
 func getCompletionEntryDisplayNameForSymbol(
+	file *ast.SourceFile,
+	preferences lsutil.UserPreferences,
 	symbol *ast.Symbol,
 	origin *symbolOriginInfo,
 	completionKind CompletionKind,
@@ -3194,9 +3200,7 @@ func getCompletionEntryDisplayNameForSymbol(
 		}
 		return "", false
 	case CompletionKindObjectPropertyDeclaration:
-		// TODO: microsoft/TypeScript#18169
-		escapedName, _ := core.StringifyJson(name, "", "")
-		return escapedName, false
+		return quote(file, preferences, name), false
 	case CompletionKindPropertyAccess, CompletionKindGlobal:
 		// For a 'this.' completion it will be in a global context, but may have a non-identifier name.
 		// Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
@@ -5669,7 +5673,7 @@ func (l *LanguageService) getSymbolCompletionFromItemData(
 	// completion entry.
 	for index, symbol := range data.symbols {
 		origin := data.symbolToOriginInfoMap[index]
-		displayName, _ := getCompletionEntryDisplayNameForSymbol(symbol, origin, data.completionKind, data.isJsxIdentifierExpected)
+		displayName, _ := getCompletionEntryDisplayNameForSymbol(file, preferences, symbol, origin, data.completionKind, data.isJsxIdentifierExpected)
 		if displayName == itemData.Name &&
 			(itemData.Source == string(completionSourceClassMemberSnippet) && symbol.Flags&ast.SymbolFlagsClassMember != 0 ||
 				itemData.Source == string(completionSourceObjectLiteralMethodSnippet) && symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod) != 0 ||

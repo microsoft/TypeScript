@@ -1914,8 +1914,8 @@ func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles *c
 	if extensionGroup == nil {
 		return
 	}
-	for i := len(extensionGroup) - 1; i >= 0; i-- {
-		ext := extensionGroup[i]
+	for _, ext := range slices.Backward(extensionGroup) {
+
 		if tspath.FileExtensionIs(file, ext) {
 			return
 		}

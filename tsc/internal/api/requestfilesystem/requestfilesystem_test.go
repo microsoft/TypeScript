@@ -1,18 +1,36 @@
 package requestfilesystem
 
 import (
+	"context"
 	"slices"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type countingLayeredFileSystem struct {
+	project.LayeredFileSystem
+	getFileCalls int
+}
+
+func (fs *countingLayeredFileSystem) GetFile(fileName string) project.FileHandle {
+	fs.getFileCalls++
+	return fs.LayeredFileSystem.GetFile(fileName)
+}
+
+func (fs *countingLayeredFileSystem) GetFileByPath(fileName string, path tspath.Path) project.FileHandle {
+	fs.getFileCalls++
+	return fs.LayeredFileSystem.GetFileByPath(fileName, path)
+}
 
 func newRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
 	return newLayeredRequestFileSystem(params, base, currentDirectory)
@@ -71,28 +89,6 @@ func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, ho
 			Directory bool
 			Sys       any
 		}{info.Name(), info.Size(), uint32(info.Mode()), info.ModTime(), info.IsDir(), info.Sys()}
-	})
-	verify("WalkDir", func(fileSystem vfs.FS, path string) any {
-		var result struct {
-			Paths       []string
-			Directories []bool
-			Errors      []string
-			Error       string
-		}
-		walkResult := fileSystem.WalkDir(path, func(child string, entry vfs.DirEntry, walkErr error) error {
-			result.Paths = append(result.Paths, child)
-			result.Directories = append(result.Directories, entry != nil && entry.IsDir())
-			message := ""
-			if walkErr != nil {
-				message = walkErr.Error()
-			}
-			result.Errors = append(result.Errors, message)
-			return nil
-		})
-		if walkResult != nil {
-			result.Error = walkResult.Error()
-		}
-		return result
 	})
 }
 
@@ -169,6 +165,65 @@ func TestInitializeForUpdate(t *testing.T) {
 func TestRequestFileSystemCompleteDirectoryListingsFullExplicitReplacement(t *testing.T) {
 	t.Parallel()
 	testCompleteDirectoryListing(t, KindFull, true, RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}})
+}
+
+func TestRequestFileSystemPreservesExplicitDirectoryOrder(t *testing.T) {
+	t.Parallel()
+	host := vfstest.FromMap(map[string]string{}, true)
+	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+		Kind: KindFull,
+		Files: map[string]string{
+			"/src/index.ts": "",
+			"/src/foo.ts":   "",
+		},
+		Directories: map[string]RequestDirectoryEntries{
+			"/src": {Files: []string{"index.ts", "foo.ts"}},
+		},
+	}, host, "/")
+	assert.NilError(t, err)
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("/src").Files, []string{"index.ts", "foo.ts"})
+}
+
+func TestRequestFileSystemDerivesDirectoryListingsWithHostCaseSensitivity(t *testing.T) {
+	t.Parallel()
+
+	params := &RequestFileSystem{
+		Kind: KindFull,
+		Files: map[string]string{
+			"C:/Repo/upper.ts": "upper",
+			"c:/repo/lower.ts": "lower",
+		},
+	}
+
+	caseInsensitive := vfstest.FromMap(map[string]string{}, false)
+	fileSystem, err := newRequestFileSystem(params, caseInsensitive, "C:/Workspace")
+	assert.NilError(t, err)
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("C:/REPO").Files, []string{"lower.ts", "upper.ts"})
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("C:/").Directories, []string{"Repo", "Workspace"})
+
+	caseSensitive := vfstest.FromMap(map[string]string{}, true)
+	fileSystem, err = newRequestFileSystem(params, caseSensitive, "C:/Workspace")
+	assert.NilError(t, err)
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("C:/Repo").Files, []string{"upper.ts"})
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("c:/repo").Files, []string{"lower.ts"})
+}
+
+func TestRequestFileSystemOverlaysDoesNotReadFileHandles(t *testing.T) {
+	t.Parallel()
+	session, _ := projecttestutil.Setup(map[string]any{"/index.ts": "host"})
+	defer session.Close()
+	session.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	base := &countingLayeredFileSystem{LayeredFileSystem: session.FS().(project.LayeredFileSystem)}
+	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{"/index.ts"},
+	}, base, "/")
+	assert.NilError(t, err)
+	base.getFileCalls = 0
+
+	assert.Equal(t, len(fileSystem.Overlays()), 0)
+	assert.Equal(t, base.getFileCalls, 0)
 }
 
 func TestRequestFileSystemCompleteDirectoryListingsFullExplicitEmpty(t *testing.T) {
@@ -498,13 +553,7 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		if remove {
 			assert.Assert(t, !fileSystem.FileExists("/dir/removed/sibling.ts"))
 		}
-		var walked []string
-		assert.NilError(t, fileSystem.WalkDir(linkPath, func(path string, entry vfs.DirEntry, err error) error {
-			assert.NilError(t, err)
-			walked = append(walked, path)
-			return nil
-		}))
-		assert.DeepEqual(t, walked, []string{linkPath, linkPath + "/new.ts", linkPath + "/removed", linkPath + "/removed/new.ts"})
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath+"/removed").Files, []string{"new.ts"})
 	}
 	verifyLinked(linked)
 	next, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, linked, "/")

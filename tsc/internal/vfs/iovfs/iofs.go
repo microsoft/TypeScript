@@ -173,10 +173,6 @@ func (vfs *ioFS) ReadFile(path string) (contents string, ok bool) {
 	return vfs.common.ReadFile(path)
 }
 
-func (vfs *ioFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return vfs.common.WalkDir(root, walkFn)
-}
-
 func (vfs *ioFS) Remove(path string) error {
 	_ = internal.RootLength(path) // Assert path is rooted
 	return vfs.remove(path)

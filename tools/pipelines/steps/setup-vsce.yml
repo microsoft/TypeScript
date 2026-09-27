@@ -18,6 +18,6 @@ steps:
     condition: ${{ parameters.condition }}
     displayName: 'Set up npm'
 
-  - bash: npm install --no-save @vscode/vsce@3.9.2
+  - bash: npm install --no-save @vscode/vsce@4.0.0
     condition: ${{ parameters.condition }}
     displayName: 'Install vsce'

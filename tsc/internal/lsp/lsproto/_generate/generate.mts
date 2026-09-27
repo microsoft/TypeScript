@@ -2085,6 +2085,7 @@ function findDiscriminatorField(entries: { fieldName: string; typeName: string; 
                 if (!fieldCandidates.has(prop.name)) {
                     fieldCandidates.set(prop.name, new Map());
                 }
+
                 const mapping = fieldCandidates.get(prop.name)!;
                 if (!mapping.has(prop.type.value)) {
                     mapping.set(prop.type.value, entry);
@@ -2118,6 +2119,10 @@ function findDiscriminatorField(entries: { fieldName: string; typeName: string; 
     const unmapped = entries.filter(e => !mappedEntries.has(e));
 
     return { fieldName: bestField, mapping: bestMapping, unmapped };
+}
+
+function hasCustomStructureCodec(name: string): boolean {
+    return name === "Registration";
 }
 
 /**
@@ -2205,6 +2210,51 @@ function generateCode() {
         }
         writeLine(`${indent}}`);
         return exhaustive;
+    }
+
+    /**
+     * Generate streaming discriminator dispatch for unions with at most one
+     * unmapped fallback arm. Fields after the discriminator decode directly
+     * from the active decoder; fields before it are replayed by the helper.
+     */
+    function generateStreamingDiscriminatorDispatch(
+        name: string,
+        disc: NonNullable<ReturnType<typeof findDiscriminatorField>>,
+        indent: string,
+    ) {
+        writeLine(`${indent}state, err := scanDiscriminatedStruct(dec, "${name}", ${JSON.stringify(disc.fieldName)})`);
+        writeLine(`${indent}if err != nil {`);
+        writeLine(`${indent}\treturn err`);
+        writeLine(`${indent}}`);
+        writeLine(`${indent}switch string(state.discriminatorValue) {`);
+        for (const [value, entry] of disc.mapping) {
+            writeLine(`${indent}case \`"${value}"\`:`);
+            writeLine(`${indent}\treturn unmarshalDiscriminatedArm(state, &o.${entry.fieldName})`);
+        }
+        writeLine(`${indent}default:`);
+        if (disc.unmapped.length === 1) {
+            writeLine(`${indent}\treturn unmarshalDiscriminatedArm(state, &o.${disc.unmapped[0].fieldName})`);
+        }
+        else {
+            writeLine(`${indent}\treturn state.invalidDiscriminator()`);
+        }
+        writeLine(`${indent}}`);
+    }
+
+    function canStreamDiscriminator(
+        disc: NonNullable<ReturnType<typeof findDiscriminatorField>>,
+    ): boolean {
+        if (disc.unmapped.length > 1) {
+            return false;
+        }
+        const entries = [...disc.mapping.values(), ...disc.unmapped];
+        return entries.every(entry => {
+            if (entry.originalType.kind !== "reference") {
+                return false;
+            }
+            const name = entry.originalType.name;
+            return !hasCustomStructureCodec(name) && model.structures.some(structure => structure.name === name);
+        });
     }
 
     /**
@@ -2547,8 +2597,8 @@ function generateCode() {
             writeLine("");
         }
 
-        // Generate UnmarshalJSONFrom method for structure validation
-        // Skip Registration (has custom marshal/unmarshal generated separately)
+        // Generate UnmarshalJSONFrom method for structure validation.
+        // Structures with custom codecs are generated separately.
         // Skip properties marked with omitzeroValue since they're optional by nature
         const requiredProps = structure.properties?.filter(p => {
             if (p.optional) return false;
@@ -2562,7 +2612,7 @@ function generateCode() {
             const resolved = resolveType(p.type);
             return p.optional || resolved.needsPointer || resolved.name.startsWith("[]") || resolved.name.startsWith("map[");
         }) || false;
-        if ((requiredProps.length > 0 || hasNullRejectableFields) && structure.name !== "Registration") {
+        if ((requiredProps.length > 0 || hasNullRejectableFields) && !hasCustomStructureCodec(structure.name)) {
             writeLine(`\tvar _ json.UnmarshalerFrom = (*${structure.name})(nil)`);
             writeLine("");
             writeLine(`func (s *${structure.name}) UnmarshalJSONFrom(dec *json.Decoder) error {`);
@@ -3392,17 +3442,24 @@ function generateCode() {
                     }
                 }
                 else {
-                    // Ambiguous: buffer and dispatch
-                    writeLine(`\t\tdata, err := dec.ReadValue()`);
-                    writeLine(`\t\tif err != nil {`);
-                    writeLine(`\t\t\treturn err`);
-                    writeLine(`\t\t}`);
                     let exhaustive = false;
                     const disc = findDiscriminatorField(entries);
-                    if (disc) {
-                        exhaustive = generateDiscriminatorDispatch(disc, "\t\t");
+                    if (disc && canStreamDiscriminator(disc)) {
+                        generateStreamingDiscriminatorDispatch(name, disc, "\t\t");
+                        exhaustive = true;
                     }
                     else {
+                        // Ambiguous non-discriminated objects need the complete
+                        // value for presence checks or speculative decoding.
+                        writeLine(`\t\tdata, err := dec.ReadValue()`);
+                        writeLine(`\t\tif err != nil {`);
+                        writeLine(`\t\t\treturn err`);
+                        writeLine(`\t\t}`);
+                    }
+                    if (disc && !canStreamDiscriminator(disc)) {
+                        exhaustive = generateDiscriminatorDispatch(disc, "\t\t");
+                    }
+                    else if (!disc) {
                         const pres = findPresenceDiscriminator(entries);
                         if (pres) {
                             exhaustive = generatePresenceDispatch(pres, "\t\t");
@@ -3428,25 +3485,30 @@ function generateCode() {
             writeLine(`\t}`);
         }
         else {
-            // Fallback: unknown kinds present (e.g. `any`), use ReadValue + try-each.
-            writeLine("\tdata, err := dec.ReadValue()");
-            writeLine("\tif err != nil {");
-            writeLine("\t\treturn err");
-            writeLine("\t}");
-
-            if (unionContainedNull) {
-                writeLine(`\tif string(data) == "null" {`);
-                writeLine(`\t\treturn nil`);
-                writeLine(`\t}`);
-                writeLine("");
-            }
-
+            // Fallback for unknown kinds (e.g. `any`). Discriminated object
+            // unions can still stream; other unions use ReadValue + try-each.
             let exhaustive = false;
             const disc = findDiscriminatorField(fieldEntries);
-            if (disc) {
-                exhaustive = generateDiscriminatorDispatch(disc, "\t");
+            if (disc && canStreamDiscriminator(disc)) {
+                generateStreamingDiscriminatorDispatch(name, disc, "\t");
+                exhaustive = true;
             }
             else {
+                writeLine("\tdata, err := dec.ReadValue()");
+                writeLine("\tif err != nil {");
+                writeLine("\t\treturn err");
+                writeLine("\t}");
+                if (unionContainedNull) {
+                    writeLine(`\tif string(data) == "null" {`);
+                    writeLine(`\t\treturn nil`);
+                    writeLine(`\t}`);
+                    writeLine("");
+                }
+            }
+            if (disc && !canStreamDiscriminator(disc)) {
+                exhaustive = generateDiscriminatorDispatch(disc, "\t");
+            }
+            else if (!disc) {
                 const pres = findPresenceDiscriminator(fieldEntries);
                 if (pres) {
                     exhaustive = generatePresenceDispatch(pres, "\t");
@@ -3603,7 +3665,7 @@ function getLocationUriProperty(structure: Structure) {
 /**
  * Main function
  */
-async function main() {
+export default async function generate() {
     collectTypeDefinitions();
     const generatedCode = generateCode();
     fs.writeFileSync(out, generatedCode);
@@ -3616,7 +3678,6 @@ async function main() {
     console.log(`Successfully generated ${out}`);
 }
 
-main().catch(e => {
-    console.error(e);
-    process.exit(1);
-});
+if (process.argv[1] === __filename) {
+    await generate();
+}

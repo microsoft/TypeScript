@@ -490,13 +490,36 @@ func CompareTypes(t1, t2 *Type) int {
 		} else if t2.objectFlags&ObjectFlagsReference != 0 {
 			return 1
 		} else {
-			// Order unnamed non-reference object types by kind associated type mappers. Reverse mapped types have
-			// neither symbols nor mappers so they're ultimately ordered by unstable type IDs, but given their rarity
-			// this should be fine.
+			// Order unnamed non-reference object types by kind and instantiation data.
 			if c := int(t1.objectFlags&ObjectFlagsObjectTypeKindMask) - int(t2.objectFlags&ObjectFlagsObjectTypeKindMask); c != 0 {
 				return c
 			}
-			if c := compareTypeMappers(t1.AsObjectType().mapper, t2.AsObjectType().mapper); c != 0 {
+			if t1.objectFlags&ObjectFlagsReverseMapped != 0 {
+				r1 := t1.AsReverseMappedType()
+				r2 := t2.AsReverseMappedType()
+				if c := CompareTypes(r1.source, r2.source); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.mappedType, r2.mappedType); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.constraintType, r2.constraintType); c != 0 {
+					return c
+				}
+			}
+			m1 := t1.AsObjectType().mapper
+			m2 := t2.AsObjectType().mapper
+			if t1.objectFlags&ObjectFlagsMapped != 0 {
+				// instantiateAnonymousType prepends a fresh type parameter mapping.
+				// Compare the effective instantiation, not the identity of that fresh parameter.
+				if m1 != nil {
+					m1 = m1.data.(*CompositeTypeMapper).m2
+				}
+				if m2 != nil {
+					m2 = m2.data.(*CompositeTypeMapper).m2
+				}
+			}
+			if c := compareTypeMappers(m1, m2); c != 0 {
 				return c
 			}
 		}
@@ -535,6 +558,10 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&TypeFlagsNumberLiteral != 0:
 		// Numeric literal types are ordered by their values.
 		if c := cmp.Compare(t1.AsLiteralType().value.(jsnum.Number), t2.AsLiteralType().value.(jsnum.Number)); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsBigIntLiteral != 0:
+		if c := getBigIntLiteralValue(t1).Compare(getBigIntLiteralValue(t2)); c != 0 {
 			return c
 		}
 	case t1.flags&TypeFlagsBooleanLiteral != 0:
@@ -606,10 +633,7 @@ func compareTypeNames(t1, t2 *Type) int {
 	s1 := getTypeNameSymbol(t1)
 	s2 := getTypeNameSymbol(t2)
 	if s1 == s2 {
-		if t1.alias != nil {
-			return compareTypeLists(t1.alias.typeArguments, t2.alias.typeArguments)
-		}
-		return 0
+		return compareTypeLists(t1.alias.TypeArguments(), t2.alias.TypeArguments())
 	}
 	if s1 == nil {
 		return 1
@@ -617,7 +641,11 @@ func compareTypeNames(t1, t2 *Type) int {
 	if s2 == nil {
 		return -1
 	}
-	return strings.Compare(s1.Name, s2.Name)
+	if c := strings.Compare(s1.Name, s2.Name); c != 0 {
+		return c
+	}
+	// Keep distinct same-named declarations together before comparing alias arguments or structure.
+	return t1.checker.compareSymbols(s1, s2)
 }
 
 func getTypeNameSymbol(t *Type) *ast.Symbol {

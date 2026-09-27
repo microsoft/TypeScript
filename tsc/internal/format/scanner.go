@@ -302,7 +302,7 @@ func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAct
 		s.lastScanAction = actionRescanJsxAttributeValue
 		return s.s.ReScanJsxAttributeValue()
 	case actionScan:
-		break
+		// no rescan needed; the token was already produced by the normal scan
 	default:
 		debug.AssertNever(expectedScanAction, "unhandled scan action kind")
 	}

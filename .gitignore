@@ -129,6 +129,10 @@ tools/custom-gcl
 tools/custom-gcl.exe
 tools/custom-gcl.hash
 tools/custom-gcl.exe.hash
+tools/gotestsum
+tools/gotestsum.exe
+tools/gotestsum.hash
+tools/gotestsum.exe.hash
 
 # Keep tracked text assets that overlap broad output patterns
 !tsc/testdata/baselines/reference/**/*.txt

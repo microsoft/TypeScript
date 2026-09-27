@@ -132,6 +132,8 @@ export interface Type {
     isStringMappingType(): this is StringMappingType;
     /** Whether this type is a type parameter */
     isTypeParameter(): this is TypeParameter;
+    /** Whether this is a mapped type */
+    isMappedType(): this is MappedType;
 }
 
 /**
@@ -180,6 +182,18 @@ export interface ObjectType extends Type {
     readonly objectFlags: ObjectFlags;
 }
 
+/** Mapped types (ObjectFlags.Mapped) */
+export interface MappedType extends ObjectType {
+    /** Get the type parameter iterated by the mapped type */
+    getTypeParameter(): Promise<TypeParameter>;
+    /** Get the constraint over which the mapped type iterates */
+    getConstraintType(): Promise<Type>;
+    /** Get the remapped property name type, if present */
+    getNameType(): Promise<Type | undefined>;
+    /** Get the property value template type */
+    getTemplateType(): Promise<Type>;
+}
+
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
@@ -200,6 +214,8 @@ export interface InterfaceType extends TypeReference {
     getOuterTypeParameters(): Promise<readonly TypeParameter[]>;
     /** Get local type parameters declared on this interface/class */
     getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
+    /** Get the synthetic `this` type of this interface/class */
+    getThisType(): Promise<TypeParameter | undefined>;
 }
 
 /** Generic types */
@@ -421,11 +437,11 @@ export interface EmitOutput {
 export interface ImportSymbolAction {
     readonly kind: "importSymbol";
     readonly symbol: Symbol;
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }
 
 export type ImportAdderAction = ImportSymbolAction;
 
 export interface GetImportEditsForSymbolsOptions {
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }

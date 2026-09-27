@@ -113,11 +113,6 @@ func (fs *projectReferenceDtsFakingVfs) Stat(path string) vfs.FileInfo {
 	panic("should not be called by resolver")
 }
 
-// WalkDir implements vfs.FS.
-func (fs *projectReferenceDtsFakingVfs) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	panic("should not be called by resolver")
-}
-
 // Realpath implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) Realpath(path string) string {
 	result, ok := fs.knownSymlinks.Files().Load(fs.toPath(path))

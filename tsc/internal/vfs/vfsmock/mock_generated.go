@@ -50,9 +50,6 @@ var _ vfs.FS = &FSMock{}
 //			UseCaseSensitiveFileNamesFunc: func() bool {
 //				panic("mock out the UseCaseSensitiveFileNames method")
 //			},
-//			WalkDirFunc: func(root string, walkFn vfs.WalkDirFunc) error {
-//				panic("mock out the WalkDir method")
-//			},
 //			WriteFileFunc: func(path string, data string) error {
 //				panic("mock out the WriteFile method")
 //			},
@@ -92,9 +89,6 @@ type FSMock struct {
 
 	// UseCaseSensitiveFileNamesFunc mocks the UseCaseSensitiveFileNames method.
 	UseCaseSensitiveFileNamesFunc func() bool
-
-	// WalkDirFunc mocks the WalkDir method.
-	WalkDirFunc func(root string, walkFn vfs.WalkDirFunc) error
 
 	// WriteFileFunc mocks the WriteFile method.
 	WriteFileFunc func(path string, data string) error
@@ -154,13 +148,6 @@ type FSMock struct {
 		}
 		// UseCaseSensitiveFileNames holds details about calls to the UseCaseSensitiveFileNames method.
 		UseCaseSensitiveFileNames []struct{}
-		// WalkDir holds details about calls to the WalkDir method.
-		WalkDir []struct {
-			// Root is the root argument value.
-			Root string
-			// WalkFn is the walkFn argument value.
-			WalkFn vfs.WalkDirFunc
-		}
 		// WriteFile holds details about calls to the WriteFile method.
 		WriteFile []struct {
 			// Path is the path argument value.
@@ -179,7 +166,6 @@ type FSMock struct {
 	lockRemove                    sync.RWMutex
 	lockStat                      sync.RWMutex
 	lockUseCaseSensitiveFileNames sync.RWMutex
-	lockWalkDir                   sync.RWMutex
 	lockWriteFile                 sync.RWMutex
 }
 
@@ -504,42 +490,6 @@ func (mock *FSMock) UseCaseSensitiveFileNamesCalls() []struct{} {
 	mock.lockUseCaseSensitiveFileNames.RLock()
 	calls = mock.calls.UseCaseSensitiveFileNames
 	mock.lockUseCaseSensitiveFileNames.RUnlock()
-	return calls
-}
-
-// WalkDir calls WalkDirFunc.
-func (mock *FSMock) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	if mock.WalkDirFunc == nil {
-		panic("FSMock.WalkDirFunc: method is nil but FS.WalkDir was just called")
-	}
-	callInfo := struct {
-		Root   string
-		WalkFn vfs.WalkDirFunc
-	}{
-		Root:   root,
-		WalkFn: walkFn,
-	}
-	mock.lockWalkDir.Lock()
-	mock.calls.WalkDir = append(mock.calls.WalkDir, callInfo)
-	mock.lockWalkDir.Unlock()
-	return mock.WalkDirFunc(root, walkFn)
-}
-
-// WalkDirCalls gets all the calls that were made to WalkDir.
-// Check the length with:
-//
-//	len(mockedFS.WalkDirCalls())
-func (mock *FSMock) WalkDirCalls() []struct {
-	Root   string
-	WalkFn vfs.WalkDirFunc
-} {
-	var calls []struct {
-		Root   string
-		WalkFn vfs.WalkDirFunc
-	}
-	mock.lockWalkDir.RLock()
-	calls = mock.calls.WalkDir
-	mock.lockWalkDir.RUnlock()
 	return calls
 }
 

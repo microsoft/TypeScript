@@ -11,8 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go
-//go:generate npx dprint fmt stringer_generated.go
+//go:generate npx hereby generate:checker
 
 // ParseFlags
 
@@ -32,6 +31,13 @@ type SignatureKind int32
 const (
 	SignatureKindCall SignatureKind = iota
 	SignatureKindConstruct
+)
+
+type IndexKind int32
+
+const (
+	IndexKindString IndexKind = iota
+	IndexKindNumber
 )
 
 type MemberOverrideStatus int32
@@ -1045,6 +1051,10 @@ func (t *InterfaceType) TypeParameters() []*Type {
 	return slices.Clip(t.allTypeParameters[:len(t.allTypeParameters)-1])
 }
 
+func (t *InterfaceType) ThisType() *Type {
+	return t.thisType
+}
+
 // TupleType
 
 type ElementFlags uint32
@@ -1110,6 +1120,17 @@ type MappedType struct {
 	containsError        bool
 }
 
+func (t *MappedType) TypeParameter() *Type  { return t.typeParameter }
+func (t *MappedType) ConstraintType() *Type { return t.constraintType }
+func (t *MappedType) NameType() *Type       { return t.nameType }
+func (t *MappedType) TemplateType() *Type   { return t.templateType }
+func (t *MappedType) ResolveComponents(c *Checker, typ *Type) {
+	c.getTypeParameterFromMappedType(typ)
+	c.getConstraintTypeFromMappedType(typ)
+	c.getNameTypeFromMappedType(typ)
+	c.getTemplateTypeFromMappedType(typ)
+}
+
 // ReverseMappedType
 
 type ReverseMappedType struct {
@@ -1170,7 +1191,9 @@ type TypeParameter struct {
 	target              *Type
 	mapper              *TypeMapper
 	isThisType          bool
+	isDistributed       bool
 	resolvedDefaultType *Type
+	distributedType     *Type
 }
 
 func (t *TypeParameter) IsThisType() bool { return t.isThisType }

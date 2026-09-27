@@ -220,9 +220,9 @@ const doubleSeparator = 123_456__789n;
 const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
 >oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
 >(x: 1n | 2n | 3n): bigint => x ** 2n : (x: 1n | 2n | 3n) => bigint
->x : 1n | 3n | 2n
+>x : 1n | 2n | 3n
 >x ** 2n : bigint
->x : 1n | 3n | 2n
+>x : 1n | 2n | 3n
 >2n : 2n
 
 oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);

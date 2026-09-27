@@ -86,43 +86,10 @@ func (v JSONValue) AsString() string {
 var _ json.UnmarshalerFrom = (*JSONValue)(nil)
 
 func (v *JSONValue) UnmarshalJSONFrom(dec *json.Decoder) error {
-	return unmarshalJSONValueV2[JSONValue](v, dec)
+	return v.unmarshalJSONValueFrom[JSONValue](dec)
 }
 
-func unmarshalJSONValue[T any](v *JSONValue, data []byte) error {
-	if string(data) == "null" {
-		*v = JSONValue{Type: JSONValueTypeNull}
-	} else if data[0] == '"' {
-		v.Type = JSONValueTypeString
-		return json.Unmarshal(data, &v.Value)
-	} else if data[0] == '[' {
-		var elements []T
-		if err := json.Unmarshal(data, &elements); err != nil {
-			return err
-		}
-		v.Type = JSONValueTypeArray
-		v.Value = elements
-	} else if data[0] == '{' {
-		var object collections.OrderedMap[string, T]
-		if err := json.Unmarshal(data, &object); err != nil {
-			return err
-		}
-		v.Type = JSONValueTypeObject
-		v.Value = &object
-	} else if string(data) == "true" {
-		v.Type = JSONValueTypeBoolean
-		v.Value = true
-	} else if string(data) == "false" {
-		v.Type = JSONValueTypeBoolean
-		v.Value = false
-	} else {
-		v.Type = JSONValueTypeNumber
-		return json.Unmarshal(data, &v.Value)
-	}
-	return nil
-}
-
-func unmarshalJSONValueV2[T any](v *JSONValue, dec *json.Decoder) error {
+func (v *JSONValue) unmarshalJSONValueFrom[T any](dec *json.Decoder) error {
 	switch dec.PeekKind() {
 	case 'n': // json.Null.Kind()
 		if _, err := dec.ReadToken(); err != nil {

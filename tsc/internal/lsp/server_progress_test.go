@@ -54,7 +54,7 @@ func TestProgressNotificationsEndToEnd(t *testing.T) {
 
 	client.OnServerNotification = func(_ context.Context, req *lsproto.RequestMessage) {
 		if req.Method == lsproto.MethodProgress {
-			if params, err := lsproto.UnmarshalParams[*lsproto.ProgressParams](req); err == nil && params != nil {
+			if params, err := req.UnmarshalParams[*lsproto.ProgressParams](); err == nil && params != nil {
 				mu.Lock()
 				progressNotifications = append(progressNotifications, params)
 				isEnd := params.Value.End != nil
@@ -71,7 +71,7 @@ func TestProgressNotificationsEndToEnd(t *testing.T) {
 		}
 	}
 
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{
 			Window: &lsproto.WindowClientCapabilities{
 				WorkDoneProgress: new(true),
@@ -79,16 +79,16 @@ func TestProgressNotificationsEndToEnd(t *testing.T) {
 		},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
 	uri := lsproto.DocumentUri("file:///home/projects/index.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: "export const x = 1;"},
 	})
 
 	// Send a request to ensure the server has processed the didOpen and loaded the project.
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok, "expected a response")

@@ -30,17 +30,22 @@ import {
     type AllAPIRequestGenerator,
     type AnyAPIRequestGenerator,
     type API,
+    type BuildOrchestrator,
     type ConditionalType,
     defer,
     type DeferredAPIRequestGenerator,
     type IndexedAccessType,
     type IndexInfo,
+    IndexKind,
     type InterfaceType,
     type LiteralType,
+    type MappedType,
     ModuleKind,
+    ModuleResolutionKind,
     type NodeHandle,
     type Program,
     type Project,
+    type RetainedSourceFile,
     type Signature,
     SignatureKind,
     type Snapshot,
@@ -65,7 +70,7 @@ import {
     type APIRequestGenerator,
     executeRequestGenerators,
 } from "../../src/api/sync/generatorSupport.ts";
-import { runBenchmarks } from "../generators/api.bench.ts";
+import { areTestsFiltered } from "../testUtils.ts";
 import { spawnAPI } from "./api.testUtils.ts";
 
 const parityFiles = {
@@ -102,6 +107,7 @@ export type Keys = keyof Box<Derived>;
 export type Union = Derived | string;
 export enum Choice { First = 1, Second = "second" }
 export class Unimported { value = "extra"; }
+export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
 `,
     "/src/index.ts": `
 /// <reference types="parity" />
@@ -147,6 +153,7 @@ interface ParityCase {
 const exercisedMethods = new Set<string>();
 const publicGeneratorExemptions = new Map<string, string>([
     ["API.fromLSPConnection", "requires an existing LSP API session"],
+    ["API.getCurrentLanguageServerSnapshot", "requires an existing LSP API session"],
     ["InternalAPI.startCPUProfile", "writes a CPU profile and changes process-global profiling state"],
     ["InternalAPI.stopCPUProfile", "requires a matching active CPU profile"],
     ["InternalAPI.saveHeapProfile", "writes a potentially large heap profile to disk"],
@@ -154,8 +161,7 @@ const publicGeneratorExemptions = new Map<string, string>([
 const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
     "API.initializeWorker",
-    "API.updateSnapshotFrom",
-    "API.updateSnapshotWorker",
+    "API.updateSnapshot",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
     "Checker.getWellKnownSymbols",
@@ -310,12 +316,24 @@ function assertSourceFilesEquivalent(actual: SourceFile, expected: SourceFile, m
     assert.equal(actual.text, expected.text, message);
 }
 
+function assertRetainedSourceFilesEquivalent(actual: RetainedSourceFile, expected: RetainedSourceFile, message?: string): void {
+    try {
+        assertSourceFilesEquivalent(actual.sourceFile, expected.sourceFile, message);
+    }
+    finally {
+        actual.dispose();
+        expected.dispose();
+    }
+}
+
 function assertOptionalSourceFilesEquivalent(actual: SourceFile | undefined, expected: SourceFile | undefined, message?: string): void {
     assertOptionalEquivalent(actual, expected, assertSourceFilesEquivalent, message);
 }
 
 function assertProjectsEquivalent(actual: Project, expected: Project, message?: string): void {
+    assert.equal(actual.id, expected.id, message);
     assert.equal(actual.configFileName, expected.configFileName, message);
+    assert.equal(actual.dirty, expected.dirty, message);
     assert.deepEqual(actual.rootFiles, expected.rootFiles, message);
 }
 
@@ -331,6 +349,12 @@ function assertSnapshotsEquivalent(actual: Snapshot, expected: Snapshot, message
     const actualProjects = actual.getProjects();
     const expectedProjects = expected.getProjects();
     assertArrayElementsEquivalent(actualProjects, expectedProjects, assertProjectsEquivalent, message);
+    assert.deepEqual(actual.operation.createdPrograms?.map(program => program.id), expected.operation.createdPrograms?.map(program => program.id), message);
+    assert.deepEqual(actual.operation.openedFiles?.map(result => result.project.id), expected.operation.openedFiles?.map(result => result.project.id), message);
+}
+
+function assertBuildOrchestratorsEquivalent(actual: BuildOrchestrator, expected: BuildOrchestrator, message?: string): void {
+    assert.equal(actual.constructor, expected.constructor, message);
 }
 
 function assertSymbolMapsEquivalent(actual: ReadonlyMap<string, Symbol>, expected: ReadonlyMap<string, Symbol>, message?: string): void {
@@ -409,7 +433,28 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
     assert.deepEqual(missing, [], `Uncovered public generator getters: ${missing.join(", ")}`);
 }
 
-describe("API - generator batching", () => {
+describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("batches source file requests", context => {
+        const api = spawnAPI(parityFiles);
+        context.after(() => api.close());
+        const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
+        const [[fromText, fromFile]] = api.batch(all(
+            api.createSourceFile.gen("/generated.ts", "export const generated = true;"),
+            api.createSourceFileFromFile.gen("/src/index.ts"),
+        ));
+        context.after(() => {
+            fromText.dispose();
+            fromFile.dispose();
+        });
+        assert.equal(fromText.sourceFile.text, "export const generated = true;");
+        assert.equal(fromFile.sourceFile.text, parityFiles["/src/index.ts"]);
+        assert.deepEqual(requestBatches, [
+            ["initialize"],
+            ["createSourceFile", "createSourceFileFromFile"],
+        ]);
+    });
+
     test("all and defer yield discriminated host messages without starting children", () => {
         let started = false;
         function* child() {
@@ -1292,8 +1337,8 @@ describe("API - generator batching", () => {
     test("yields source file metadata requests on cache misses", () => {
         const api = spawnAPI();
         try {
-            using snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const program = snapshot.getProject("/tsconfig.json")!.program;
+            using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
             const sourceFile = program.getSourceFile("/src/index.ts")!;
             const state = program.getSourceFileMetadataByPath.gen(sourceFile.path).next();
 
@@ -1308,8 +1353,8 @@ describe("API - generator batching", () => {
     test("uses generators attached to sync API methods", () => {
         const api = spawnAPI();
         try {
-            using snapshot = api.batch(api.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
-            const project = snapshot.getProject("/tsconfig.json")!;
+            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            const project = snapshot.getConfiguredProject("/tsconfig.json")!;
             const sourceFile = project.program.getSourceFile("/src/index.ts");
             assert.ok(sourceFile);
             const node = cast(
@@ -1360,9 +1405,10 @@ describe("API - generator batching", () => {
     test("keeps every publicly reachable generator-backed method in sync", () => {
         const api = spawnAPI(parityFiles);
         try {
-            using snapshot = api.batch(api.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const { checker, emitter, languageService, program } = project;
+            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+            const { checker, languageService, program } = project;
+            const { printer } = api;
             const indexFile = program.getSourceFile("/src/index.ts")!;
             const modelsFile = program.getSourceFile("/src/models.ts")!;
 
@@ -1405,9 +1451,11 @@ describe("API - generator batching", () => {
             const indexAlias = cast(modelsFile.statements[8], isTypeAliasDeclaration);
             const unionAlias = cast(modelsFile.statements[9], isTypeAliasDeclaration);
             const enumDeclaration = cast(modelsFile.statements[10], isEnumDeclaration);
+            const mappedAlias = cast(modelsFile.statements[12], isTypeAliasDeclaration);
 
             const importedDerivedSymbol = checker.getSymbolAtLocation(importedDerived)!;
             const combineSymbol = checker.getSymbolAtLocation(combineDeclaration.name!)!;
+            const localCombineSymbol = checker.getSymbolsInScope(combineDeclaration, SymbolFlags.Function).find(symbol => symbol.name === "combine")!;
             const derivedSymbol = checker.getSymbolAtLocation(cast(derivedDeclaration.name, isIdentifier))!;
             const interfaceSymbol = checker.getSymbolAtLocation(interfaceDeclaration.name)!;
             const derivedClassSymbol = checker.getSymbolAtLocation(derivedClassDeclaration.name!)!;
@@ -1428,6 +1476,7 @@ describe("API - generator batching", () => {
             const typeParameter = checker.getTypeAtLocation(combineDeclaration.typeParameters![0].name) as TypeParameter;
             const literalType = checker.getTypeAtLocation(enumDeclaration.members[0].name) as LiteralType;
             const substitutionType = conditionalType.getTrueType() as SubstitutionType;
+            const mappedType = checker.getTypeFromTypeNode(mappedAlias.type) as MappedType;
             const signature = checker.getSignatureFromDeclaration(combineDeclaration);
             const predicateDeclaration = indexFile.statements.find(statement => isFunctionDeclaration(statement) && statement.name?.text === "isDerived")!;
             const predicateSignature = checker.getSignatureFromDeclaration(predicateDeclaration);
@@ -1495,22 +1544,37 @@ describe("API - generator batching", () => {
             assert.equal(checker.isArgumentsSymbol(argumentsSymbol), true);
             assert.equal(checker.isUnknownSignature(unknownSignature), true);
 
+            const moduleResolutionSpec = {
+                fallback: "unresolved" as const,
+                entries: [{ moduleName: "models", result: { resolvedFileName: "/src/models.ts" } }],
+            };
+            const moduleResolver = api.batch(api.createModuleResolver.gen(
+                { moduleResolution: ModuleResolutionKind.NodeNext },
+                { moduleResolutions: moduleResolutionSpec },
+            ))[0];
+            exercisedMethods.add("API.createModuleResolver");
+
             const cases: ParityCase[] = [
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { compilerOptions: { strict: true } }, { configDirectory: "/" }),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
+                parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
+                parityCase("API", "createSourceFileFromFile", api.createSourceFileFromFile, assertRetainedSourceFilesEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileModule", api.transpileModule, assertDeepEquivalent, "export const value: number = 1;", { compilerOptions: { module: 99 } }),
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
-                parityCase("API", "updateSnapshot", api.updateSnapshot, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
-                parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { compilerOptions: { noLib: true } }),
+                parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
+                parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
+                parityCase("API", "createBuildOrchestrator", api.createBuildOrchestrator, assertBuildOrchestratorsEquivalent, ["/tsconfig.json"], { cwd: "/" }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
+                parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
+                parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
 
                 parityCase("Project", "getImportAdderEdits", project.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
                 parityCase("Project", "getImportEditsForSymbols", project.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol]),
@@ -1522,6 +1586,8 @@ describe("API - generator batching", () => {
                 parityCase("LanguageService", "getCompletionsAtPosition", languageService.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
 
                 parityCase("Program", "getSourceFile", program.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
+                parityCase("Program", "getModeForUsageLocation", program.getModeForUsageLocation, assertDeepEquivalent, "/src/index.ts", importSpecifier),
+                parityCase("Program", "getModeForResolutionAtIndex", program.getModeForResolutionAtIndex, assertDeepEquivalent, "/src/index.ts", 0),
                 parityCase("Program", "getResolvedModule", program.getResolvedModule, assertDeepEquivalent, "/src/index.ts", "./models.js", ModuleKind.CommonJS),
                 parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
                 parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
@@ -1575,6 +1641,8 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getSymbolsInScope", checker.getSymbolsInScope, assertUnorderedSymbolArraysEquivalent, { document: "/src/index.ts", position: combineDeclaration.pos }, SymbolFlags.Value),
                 parityCase("Checker", "getResolvedSymbol", checker.getResolvedSymbol, assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getContextualType", checker.getContextualType, assertOptionalTypesEquivalent, boxDeclaration.initializer!),
+                parityCase("Checker", "getContextualTypeForArgumentAtIndex", checker.getContextualTypeForArgumentAtIndex, assertOptionalTypesEquivalent, callExpression, 0),
+                parityCase("Checker", "getAwaitedType", checker.getAwaitedType, assertOptionalTypesEquivalent, interfaceType),
                 parityCase("Checker", "getBaseTypeOfLiteralType", checker.getBaseTypeOfLiteralType, assertTypesEquivalent, literalType),
                 parityCase("Checker", "getNonNullableType", checker.getNonNullableType, assertTypesEquivalent, interfaceType),
                 parityCase("Checker", "getTypeFromTypeNode", checker.getTypeFromTypeNode, assertTypesEquivalent, boxedAlias.type),
@@ -1611,10 +1679,13 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getReducedType", checker.getReducedType, assertTypesEquivalent, unionType),
                 parityCase("Checker", "getPropertiesOfType", checker.getPropertiesOfType, assertSymbolArraysEquivalent, interfaceType),
                 parityCase("Checker", "getIndexInfosOfType", checker.getIndexInfosOfType, assertIndexInfosEquivalent, interfaceType),
+                parityCase("Checker", "getIndexInfoOfType", checker.getIndexInfoOfType, assertDeepEquivalent, interfaceType, IndexKind.String),
+                parityCase("Checker", "getIndexTypeOfType", checker.getIndexTypeOfType, assertOptionalTypesEquivalent, interfaceType, IndexKind.Number),
                 parityCase("Checker", "getConstraintOfTypeParameter", checker.getConstraintOfTypeParameter, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getDefaultFromTypeParameter", checker.getDefaultFromTypeParameter, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getBaseConstraintOfType", checker.getBaseConstraintOfType, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getPropertyOfType", checker.getPropertyOfType, assertOptionalSymbolsEquivalent, interfaceType, "value"),
+                parityCase("Checker", "getTypeOfPropertyOfType", checker.getTypeOfPropertyOfType, assertOptionalTypesEquivalent, interfaceType, "value"),
                 parityCase("Checker", "getConstantValue", checker.getConstantValue, assertDeepEquivalent, enumDeclaration.members[0]),
                 parityCase("Checker", "getSignatureFromDeclaration", checker.getSignatureFromDeclaration, assertOptionalSignaturesEquivalent, combineDeclaration),
                 parityCase("Checker", "getExportSpecifierLocalTargetSymbol", checker.getExportSpecifierLocalTargetSymbol, assertOptionalSymbolsEquivalent, exportSpecifier),
@@ -1633,8 +1704,10 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
                 parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
+                parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
 
-                parityCase("Emitter", "printNode", emitter.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
+                parityCase("Printer", "printNode", printer.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
+                parityCase("Printer", "printFile", printer.printFile, assertDeepEquivalent, indexFile, { preserveSourceNewlines: true }),
                 parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent, project),
@@ -1666,7 +1739,12 @@ describe("API - generator batching", () => {
                 parityCase("Type", "getTypeParameters", interfaceType.getTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getOuterTypeParameters", interfaceType.getOuterTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getLocalTypeParameters", interfaceType.getLocalTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Type", "getThisType", interfaceType.getThisType, assertOptionalTypesEquivalent),
                 parityCase("Type", "getAliasTypeArguments", boxedType.getAliasTypeArguments, assertTypeArraysEquivalent),
+                parityCase("Type", "getTypeParameter", mappedType.getTypeParameter, assertTypesEquivalent),
+                parityCase("Type", "getConstraintType", mappedType.getConstraintType, assertTypesEquivalent),
+                parityCase("Type", "getNameType", mappedType.getNameType, assertOptionalTypesEquivalent),
+                parityCase("Type", "getTemplateType", mappedType.getTemplateType, assertTypesEquivalent),
                 parityCase("Type", "getObjectType", indexedType.getObjectType, assertTypesEquivalent),
                 parityCase("Type", "getIndexType", indexedType.getIndexType, assertTypesEquivalent),
                 parityCase("Type", "getCheckType", conditionalType.getCheckType, assertTypesEquivalent),
@@ -1692,10 +1770,10 @@ describe("API - generator batching", () => {
             const snapshotGeneratorAPI = spawnAPI(parityFiles);
             const snapshotSyncAPI = spawnAPI(parityFiles);
             try {
-                const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
-                const syncBase = snapshotSyncAPI.updateSnapshot({ openProject: "/tsconfig.json" });
-                const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen())[0];
-                const syncUpdated = syncBase.update();
+                const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+                const syncBase = snapshotSyncAPI.createSnapshot({ openProject: "/tsconfig.json" });
+                const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen({}))[0];
+                const syncUpdated = syncBase.update({});
                 assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
                 exercisedMethods.add("Snapshot.update");
             }
@@ -1705,16 +1783,20 @@ describe("API - generator batching", () => {
             }
 
             const destructiveAPI = spawnAPI(parityFiles);
-            const disposableSnapshot = destructiveAPI.batch(destructiveAPI.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            const disposableSnapshot = destructiveAPI.batch(destructiveAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             destructiveAPI.batch(disposableSnapshot.dispose.gen());
             assert.equal(disposableSnapshot.isDisposed(), true);
             assert.equal(disposableSnapshot.dispose(), undefined);
             exercisedMethods.add("Snapshot.dispose");
-            const disposableProgram = destructiveAPI.batch(destructiveAPI.createProgram.gen(["/src/index.ts"], { compilerOptions: { noLib: true } }))[0];
+            const disposableProgram = destructiveAPI.batch(destructiveAPI.createProgram.gen(["/src/index.ts"], { noLib: true }))[0];
             destructiveAPI.batch(disposableProgram.dispose.gen());
             assert.throws(() => disposableProgram.getSourceFileNames(), /snapshot .* not found/);
             assert.equal(disposableProgram.dispose(), undefined);
             exercisedMethods.add("Program.dispose");
+            const disposableResolver = destructiveAPI.batch(destructiveAPI.createModuleResolver.gen({}))[0];
+            destructiveAPI.batch(disposableResolver.dispose.gen());
+            assert.equal(disposableResolver.dispose(), undefined);
+            exercisedMethods.add("ModuleResolver.dispose");
             destructiveAPI.batch(destructiveAPI.close.gen());
             assert.equal(destructiveAPI.close(), undefined);
             exercisedMethods.add("API.close");
@@ -1724,11 +1806,12 @@ describe("API - generator batching", () => {
                 { name: "API", value: api.constructor as object, own: true },
                 { name: "InternalAPI", value: api.internal },
                 { name: "Snapshot", value: snapshot },
+                { name: "ModuleResolver", value: moduleResolver },
                 { name: "Project", value: project },
                 { name: "LanguageService", value: languageService },
                 { name: "Program", value: program },
                 { name: "Checker", value: checker },
-                { name: "Emitter", value: emitter },
+                { name: "Printer", value: printer },
                 { name: "SnapshotInternalAPI", value: snapshot.internal },
                 { name: "NodeHandle", value: nodeHandle },
                 { name: "Symbol", value: combineSymbol },
@@ -1740,8 +1823,4 @@ describe("API - generator batching", () => {
             api.close();
         }
     });
-});
-
-test("Generator benchmarks", () => {
-    runBenchmarks({ singleIteration: true });
 });

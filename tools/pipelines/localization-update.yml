@@ -1,0 +1,217 @@
+trigger: none
+pr: none
+
+# Before OneLoc assigns an LCL package ID, this pipeline publishes the initial
+# localization handoff. After the package ID is configured, it applies packaged
+# handbacks, generates deterministic runtime gzip files, and updates a pull request.
+schedules:
+  - cron: '0 7 * * *'
+    displayName: Daily localization update
+    always: true
+    branches:
+      include:
+        - main
+
+variables:
+  # Fill this in after the localization team assigns the LCL package ID.
+  - name: OneLocLclPackageId
+    value: ''
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
+
+jobs:
+  - job: Generate
+    displayName: Generate localization update
+    pool:
+      vmImage: windows-latest
+
+    steps:
+      - checkout: self
+        clean: true
+        fetchDepth: 1
+        fetchTags: false
+        submodules: false
+
+      - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
+
+      - pwsh: |
+          $ErrorActionPreference = "Stop"
+          $match = Select-String -Path tsc/go.mod -Pattern '^go ([0-9]+\.[0-9]+)$'
+          if (!$match) {
+              throw "Unable to determine the Go version from tsc/go.mod"
+          }
+          Write-Host "##vso[task.setvariable variable=GoVersion]$($match.Matches[0].Groups[1].Value)"
+        displayName: Determine Go version
+
+      - task: GoTool@0
+        displayName: Install Go
+        inputs:
+          version: $(GoVersion)
+          goDownloadUrl: https://aka.ms/golang/release/latest
+
+      - task: AzureCLI@2
+        displayName: Create OneLocBuild token
+        inputs:
+          azureSubscription: dnceng-onelocbuild-ceapex
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            $ErrorActionPreference = "Stop"
+            $PSNativeCommandUseErrorActionPreference = $true
+            $token = az account get-access-token --query accessToken --resource 499b84ac-1321-427f-aa17-267ca6975798 -o tsv
+            Write-Host "##vso[task.setvariable variable=OneLocBuildToken;issecret=true]$token"
+
+      - task: OneLocBuild@3
+        displayName: Generate localization handoff
+        condition: and(succeeded(), eq(variables['OneLocLclPackageId'], ''))
+        inputs:
+          locProj: tools/LocProject.json
+          outDir: $(Build.ArtifactStagingDirectory)
+          LclSource: lclFilesInRepo
+          packageSourceAuth: patAuth
+          patVariable: $(OneLocBuildToken)
+          isCreatePrSelected: false
+
+      - task: OneLocBuild@3
+        displayName: Generate localized files
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        inputs:
+          locProj: tools/LocProject.json
+          outDir: $(Build.ArtifactStagingDirectory)
+          LclSource: lclFilesfromPackage
+          LclPackageId: $(OneLocLclPackageId)
+          packageSourceAuth: patAuth
+          patVariable: $(OneLocBuildToken)
+          isCreatePrSelected: false
+
+      - pwsh: |
+          $ErrorActionPreference = "Stop"
+          # OneLoc leaves native files in the artifact directory. Its manifests
+          # pair each generated path with the repository path selected by the
+          # LocProject CopyOption and OutputPath.
+          $locRoot = Join-Path "$(Build.ArtifactStagingDirectory)" "loc"
+          $generatedFiles = @(Get-Content -LiteralPath (Join-Path $locRoot "XLocFileList.txt"))
+          $destinationFiles = @(Get-Content -LiteralPath (Join-Path $locRoot "AllFileList.txt"))
+          if ($generatedFiles.Count -eq 0) {
+              throw "OneLocBuild did not produce any localized files"
+          }
+          if ($generatedFiles.Count -ne $destinationFiles.Count) {
+              throw "OneLocBuild produced mismatched source and destination manifests"
+          }
+
+          $sourceRoot = [IO.Path]::GetFullPath("$(Build.SourcesDirectory)") + [IO.Path]::DirectorySeparatorChar
+          $manifestDestinations = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+          for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
+              $source = [IO.Path]::GetFullPath($generatedFiles[$i])
+              $destination = [IO.Path]::GetFullPath($destinationFiles[$i])
+              if (!$destination.StartsWith($sourceRoot, [StringComparison]::OrdinalIgnoreCase)) {
+                  throw "Refusing to write localized file outside the checkout: $destination"
+              }
+              if (!(Test-Path -LiteralPath $source -PathType Leaf)) {
+                  throw "OneLocBuild did not produce $source"
+              }
+              $null = $manifestDestinations.Add($destination)
+          }
+
+          $handbackDirectory = Join-Path $sourceRoot "tsc/internal/diagnostics/loc"
+          Get-ChildItem -LiteralPath $handbackDirectory -Filter "*.generated.json" -File |
+              Where-Object { !$manifestDestinations.Contains($_.FullName) } |
+              Remove-Item -Force
+
+          for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
+              $source = [IO.Path]::GetFullPath($generatedFiles[$i])
+              $destination = [IO.Path]::GetFullPath($destinationFiles[$i])
+              New-Item -Path (Split-Path -Parent $destination) -ItemType Directory -Force | Out-Null
+              Copy-Item -LiteralPath $source -Destination $destination -Force
+          }
+        displayName: Apply localized files
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+
+      - pwsh: |
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
+          npx hereby generate:diagnostics
+        displayName: Generate localization artifacts
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+
+      - task: CopyFiles@2
+        displayName: Add localization project to handoff
+        inputs:
+          SourceFolder: $(Build.SourcesDirectory)/tools
+          Contents: LocProject.json
+          TargetFolder: $(Build.ArtifactStagingDirectory)/loc
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish localization handoff
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)/loc
+          artifact: Loc
+
+      - template: /tools/pipelines/steps/create-github-app-token.yml
+        parameters:
+          azureSubscription: TypeScript-DevDiv-KeyVault
+          repositories: TypeScript
+          permissions: contents:write,pull_requests:write
+          condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+          revokeCondition: and(always(), ne(variables['OneLocLclPackageId'], ''))
+          insertSteps:
+            - pwsh: |
+                $ErrorActionPreference = "Stop"
+                $PSNativeCommandUseErrorActionPreference = $true
+
+                git add --all -- tsc/internal/diagnostics/loc tsc/internal/diagnostics/loc_generated.go
+                $changes = @(git diff --cached --name-only)
+                if ($changes.Count -eq 0) {
+                    Write-Host "Localization files are already up to date."
+                    exit 0
+                }
+
+                $branch = "localization-update"
+                git switch -c $branch
+                git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+                git config user.name "typescript-automation[bot]"
+                $hooksPath = Join-Path $env:AGENT_TEMPDIRECTORY "empty-git-hooks"
+                New-Item -Path $hooksPath -ItemType Directory -Force | Out-Null
+                git config core.hooksPath $hooksPath
+                git commit -m "Update localization files"
+
+                $basicAuth = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("x-access-token:$env:GH_TOKEN"))
+                Write-Host "##vso[task.setsecret]$basicAuth"
+                git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $basicAuth"
+                git remote set-url origin https://github.com/microsoft/TypeScript.git
+
+                $remoteBranch = git ls-remote --heads origin $branch
+                $branchExists = [bool] $remoteBranch
+                if ($branchExists) {
+                    git fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
+                }
+
+                $shouldPush = $true
+                if ($branchExists) {
+                    $localTree = git rev-parse 'HEAD^{tree}'
+                    $remoteTree = git rev-parse "origin/${branch}^{tree}"
+                    if ($localTree -eq $remoteTree) {
+                        Write-Host "Remote branch already contains the same files."
+                        $shouldPush = $false
+                    }
+                }
+
+                if ($shouldPush) {
+                    git push --force-with-lease --set-upstream origin $branch
+                }
+
+                $existingPr = gh pr list --repo microsoft/TypeScript --base main --head $branch --state open --json url --jq '.[0].url // empty'
+                if ($existingPr) {
+                    Write-Host "Updated existing pull request: $existingPr"
+                }
+                else {
+                    gh pr create --repo microsoft/TypeScript --base main --head $branch --title "Update localization files" --body "Updates localization handbacks and their generated runtime artifacts."
+                }
+              displayName: Create or update localization pull request
+              condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+              env:
+                GH_TOKEN: $(GH_TOKEN)

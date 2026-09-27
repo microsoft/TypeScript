@@ -14,10 +14,14 @@
  *   - Is*() type guard functions
  */
 
-import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { xSync } from "tinyexec";
+import { GeneratedFile } from "../gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+    repoRoot as ROOT,
+} from "../gen/utils.mts";
 import type {
     MemberInfo,
     NodeType,
@@ -31,8 +35,6 @@ import {
 // ────────────────────────────────────────────────────────────────────────────
 // Load schema
 // ────────────────────────────────────────────────────────────────────────────
-
-const ROOT = path.resolve(import.meta.dirname!, "../../..");
 
 // Members that participate in factory/visitor/clone (excludes noFactory)
 function schemaMembers(node: NodeType): MemberInfo[] {
@@ -984,8 +986,7 @@ function generateKind(): string {
     w.write("");
     w.write("package ast");
     w.write("");
-    w.write("//go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -output=kind_stringer_generated.go");
-    w.write("//go:generate npx dprint fmt kind_stringer_generated.go");
+    w.write("//go:generate npx hereby generate:ast-stringer");
     w.write("");
     w.write("type Kind int16");
     w.write("");
@@ -1082,27 +1083,25 @@ function generateKind(): string {
     return w.toString();
 }
 
-function writeAndFormat(filePath: string, content: string) {
-    fs.writeFileSync(filePath, content);
-    xSync("dprint", ["fmt", filePath], {
-        throwOnError: true,
-        nodeOptions: { stdio: "inherit", cwd: ROOT },
-    });
+function writeAndFormat(filePath: string, generateContent: () => string, force: boolean) {
+    const generated = new GeneratedFile(filePath, [import.meta.filename, path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]);
+    if (generated.isCurrent(force)) return;
+    generated.write(generateContent());
+    formatFilesSync([filePath]);
+    generated.markCurrent();
     console.log(`Wrote ${filePath}`);
 }
 
-export default function main() {
+export default function main(force = false) {
     console.log("Generating Go AST code...");
 
-    const code = generate();
     const outPath = path.join(ROOT, "tsc/internal/ast/ast_generated.go");
-    writeAndFormat(outPath, code + "\n");
+    writeAndFormat(outPath, () => generate() + "\n", force);
 
-    const kindCode = generateKind();
     const kindOutPath = path.join(ROOT, "tsc/internal/ast/kind_generated.go");
-    writeAndFormat(kindOutPath, kindCode + "\n");
+    writeAndFormat(kindOutPath, () => generateKind() + "\n", force);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    main();
+    main(parseGeneratorArgs({}).force);
 }

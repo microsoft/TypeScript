@@ -372,20 +372,21 @@
         "bundle": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.bundle.js --sourcemap",
         "test": "tsc -p test && esbuild test/index.test.ts --bundle --platform=node --format=cjs --outfile=dist/test/index.test.cjs && node --test dist/test/index.test.cjs",
         "watch": "npm run bundle -- --watch",
-        "generateLocTest": "npx @vscode/l10n-dev generate-pseudo -o ./l10n/ ./l10n/bundle.l10n.json ./package.nls.json",
-        "generateLocBundle": "npx @vscode/l10n-dev export --outDir ./l10n ./src",
+        "generateLocTest": "vscode-l10n-dev generate-pseudo -o ./l10n/ ./l10n/bundle.l10n.json ./package.nls.json",
+        "generateLocBundle": "vscode-l10n-dev export --outDir ./l10n ./src",
         "//vscode:prepublish": "we do not use this hook; the Herebyfile runs bundle:release once instead",
         "bundle:release": "npm run bundle -- --minify"
     },
     "dependencies": {
         "@vscode/extension-telemetry": "^1.5.2",
-        "vscode-languageclient": "^10.1.0",
-        "vscode-tas-client": "^0.3.1"
+        "vscode-languageclient": "^10.1.1",
+        "vscode-tas-client": "^0.3.3"
     },
     "devDependencies": {
         "@types/vscode": "~1.125.0",
         "@typescript/bundled-typescript": "npm:typescript@7.0.2",
-        "@vscode/vsce": "3.9.2",
+        "@vscode/l10n-dev": "0.0.35",
+        "@vscode/vsce": "4.0.0",
         "esbuild": "^0.28.2"
     }
 }
