@@ -22218,68 +22218,31 @@ func (c *Checker) isNeverReducedProperty(prop *ast.Symbol) bool {
 
 // isNeverReducedIntersection returns
 // core.Some(c.getPropertiesOfUnionOrIntersectionType(t), c.isNeverReducedProperty)
-// without creating the combined properties that can't reduce the intersection
-// to never, which in large intersections are most of them.
+// without creating combined properties for names that only one constituent
+// has, which in large intersections are most of them. The combined property
+// for such a name is the constituent's own, which can only reduce the
+// intersection if it already combines the properties of a union.
 func (c *Checker) isNeverReducedIntersection(t *Type) bool {
 	if props := t.AsUnionOrIntersectionType().resolvedProperties; props != nil {
 		return core.Some(props, c.isNeverReducedProperty)
 	}
-	var checked collections.Set[string]
+	var names []string
+	mayReduce := make(map[string]bool)
 	for _, current := range t.Types() {
 		for _, prop := range c.getPropertiesOfType(current) {
-			if checked.Has(prop.Name) {
-				continue
+			if _, seen := mayReduce[prop.Name]; seen {
+				mayReduce[prop.Name] = true
+			} else {
+				names = append(names, prop.Name)
+				mayReduce[prop.Name] = prop.CheckFlags&(ast.CheckFlagsNonUniformAndLiteral|ast.CheckFlagsContainsPrivate) != 0
 			}
-			checked.Add(prop.Name)
-			if !c.mayBeNeverReducedProperty(t, prop.Name) {
-				continue
-			}
-			if combined := c.getPropertyOfUnionOrIntersectionType(t, prop.Name, true /*skipObjectFunctionPropertyAugment*/); combined != nil && c.isNeverReducedProperty(combined) {
+		}
+	}
+	for _, name := range names {
+		if mayReduce[name] {
+			if prop := c.getPropertyOfUnionOrIntersectionType(t, name, true /*skipObjectFunctionPropertyAugment*/); prop != nil && c.isNeverReducedProperty(prop) {
 				return true
 			}
-		}
-	}
-	return false
-}
-
-// mayBeNeverReducedProperty reports whether the property that
-// createUnionOrIntersectionProperty combines for name in the intersection t
-// can satisfy isNeverReducedProperty. That takes distinct constituent
-// properties where one has a literal type (a discriminant), a private
-// property, or a constituent property that is itself such a combination.
-// Constituent properties are collected as createUnionOrIntersectionProperty
-// does.
-func (c *Checker) mayBeNeverReducedProperty(t *Type, name string) bool {
-	var singleProp *ast.Symbol
-	var propSet collections.OrderedSet[*ast.Symbol]
-	for _, current := range t.Types() {
-		apparent := c.getApparentType(current)
-		if c.isErrorType(apparent) || apparent.flags&TypeFlagsNever != 0 {
-			continue
-		}
-		prop := c.getPropertyOfTypeEx(apparent, name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
-		if prop == nil {
-			continue
-		}
-		if prop.CheckFlags&(ast.CheckFlagsNonUniformAndLiteral|ast.CheckFlagsContainsPrivate) != 0 || getDeclarationModifierFlagsFromSymbol(prop)&ast.ModifierFlagsPrivate != 0 {
-			return true
-		}
-		if singleProp == nil {
-			singleProp = prop
-		} else if prop != singleProp {
-			if c.getTargetSymbol(prop) == c.getTargetSymbol(singleProp) && c.compareProperties(singleProp, prop, compareTypesEqual) == TernaryTrue {
-				continue
-			}
-			if propSet.Size() == 0 {
-				propSet.Add(singleProp)
-			}
-			propSet.Add(prop)
-		}
-	}
-	for prop := range propSet.Values() {
-		propType := c.getTypeOfSymbol(prop)
-		if isLiteralType(propType) || c.isPatternLiteralType(propType) {
-			return true
 		}
 	}
 	return false
