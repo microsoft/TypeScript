@@ -74,7 +74,7 @@ type resolvingMembers struct {
 // generic class or interface (other than the declaration itself) whose members
 // haven't been resolved.
 func isUnresolvedInstantiatedReference(t *Type) bool {
-	if t.flags&TypeFlagsObject == 0 || t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsReference) != ObjectFlagsReference {
+	if t.flags&TypeFlagsObject == 0 || !mayHaveLazyMembers(t) {
 		return false
 	}
 	source := t.Target()
@@ -82,6 +82,13 @@ func isUnresolvedInstantiatedReference(t *Type) bool {
 		return false
 	}
 	return t.symbol == nil || t.symbol.Flags&ast.SymbolFlagsValueModule == 0
+}
+
+// mayHaveLazyMembers is a quick check for isUnresolvedInstantiatedReference
+// that callers on hot paths make first, as most types they see have resolved
+// members.
+func mayHaveLazyMembers(t *Type) bool {
+	return t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsReference) == ObjectFlagsReference
 }
 
 func (c *Checker) getReferenceMemberTypeArguments(t *Type, source *Type) (typeParameters []*Type, typeArguments []*Type) {
@@ -318,6 +325,42 @@ func (c *Checker) lookupMemberLazily(t *Type, name string) (symbol *ast.Symbol, 
 	return result, true
 }
 
+// getPropertyOfObjectTypeLazily returns what getPropertyOfTypeEx returns for
+// the object type t without resolving its members. ok is false when the lazy
+// path can't answer.
+func (c *Checker) getPropertyOfObjectTypeLazily(t *Type, name string, skipObjectFunctionPropertyAugment bool, includeTypeOnlyMembers bool) (symbol *ast.Symbol, ok bool) {
+	symbol, ok = c.lookupMemberLazily(t, name)
+	if !ok {
+		return nil, false
+	}
+	if symbol != nil && c.symbolIsValueEx(symbol, includeTypeOnlyMembers) {
+		return symbol, true
+	}
+	if skipObjectFunctionPropertyAugment {
+		return nil, true
+	}
+	if symbol != nil {
+		return nil, false
+	}
+	shape := c.getLazyShape(t)
+	if shape == nil {
+		return nil, false
+	}
+	var functionType *Type
+	switch {
+	case shape.callSignatureCount != 0:
+		functionType = c.globalCallableFunctionType
+	case shape.constructSignatureCount != 0:
+		functionType = c.globalNewableFunctionType
+	}
+	if functionType != nil {
+		if symbol := c.getPropertyOfObjectType(functionType, name); symbol != nil {
+			return symbol, true
+		}
+	}
+	return c.getPropertyOfObjectType(c.globalObjectType, name), true
+}
+
 // getIndexInfosLazily returns resolveStructuredTypeMembers(t).indexInfos
 // without resolving t's members (e.g. for `arr[i]` on an Array<T>).
 func (c *Checker) getIndexInfosLazily(t *Type) ([]*IndexInfo, bool) {
@@ -370,6 +413,13 @@ func (c *Checker) getNamedPropertyOfType(t *Type, name string) *ast.Symbol {
 // of the prepared base types, which resolveObjectTypeMembers concatenates
 // (signatures) or merges (properties).
 func (c *Checker) getLazyShape(t *Type) *lazyShape {
+	if !mayHaveLazyMembers(t) {
+		return nil
+	}
+	return c.getLazyShapeWorker(t)
+}
+
+func (c *Checker) getLazyShapeWorker(t *Type) *lazyShape {
 	lm := c.getLazyMemberTable(t)
 	if lm == nil || lm.state != lazyMembersReady {
 		return nil

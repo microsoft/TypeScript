@@ -19240,29 +19240,9 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	t = c.getReducedApparentType(t)
 	switch {
 	case t.flags&TypeFlagsObject != 0:
-		if symbol, ok := c.lookupMemberLazily(t, name); ok {
-			if symbol != nil && c.symbolIsValueEx(symbol, includeTypeOnlyMembers) {
+		if mayHaveLazyMembers(t) {
+			if symbol, ok := c.getPropertyOfObjectTypeLazily(t, name, skipObjectFunctionPropertyAugment, includeTypeOnlyMembers); ok {
 				return symbol
-			}
-			if skipObjectFunctionPropertyAugment {
-				return nil
-			}
-			if symbol == nil {
-				if shape := c.getLazyShape(t); shape != nil {
-					var functionType *Type
-					switch {
-					case shape.callSignatureCount != 0:
-						functionType = c.globalCallableFunctionType
-					case shape.constructSignatureCount != 0:
-						functionType = c.globalNewableFunctionType
-					}
-					if functionType != nil {
-						if symbol := c.getPropertyOfObjectType(functionType, name); symbol != nil {
-							return symbol
-						}
-					}
-					return c.getPropertyOfObjectType(c.globalObjectType, name)
-				}
 			}
 		}
 		resolved := c.resolveStructuredTypeMembers(t)
@@ -19345,8 +19325,10 @@ func (c *Checker) getIndexInfosOfType(t *Type) []*IndexInfo {
 
 func (c *Checker) getIndexInfosOfStructuredType(t *Type) []*IndexInfo {
 	if t.flags&TypeFlagsStructuredType != 0 {
-		if indexInfos, ok := c.getIndexInfosLazily(t); ok {
-			return indexInfos
+		if mayHaveLazyMembers(t) {
+			if indexInfos, ok := c.getIndexInfosLazily(t); ok {
+				return indexInfos
+			}
 		}
 		return c.resolveStructuredTypeMembers(t).indexInfos
 	}
@@ -21793,11 +21775,13 @@ func (c *Checker) includeMixinType(t *Type, types []*Type, mixinFlags []bool, in
  */
 func (c *Checker) getPropertyOfObjectType(t *Type, name string) *ast.Symbol {
 	if t.flags&TypeFlagsObject != 0 {
-		if symbol, ok := c.lookupMemberLazily(t, name); ok {
-			if symbol != nil && c.symbolIsValue(symbol) {
-				return symbol
+		if mayHaveLazyMembers(t) {
+			if symbol, ok := c.lookupMemberLazily(t, name); ok {
+				if symbol != nil && c.symbolIsValue(symbol) {
+					return symbol
+				}
+				return nil
 			}
-			return nil
 		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
