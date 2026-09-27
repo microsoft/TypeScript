@@ -37,7 +37,7 @@ type lazyMemberTable struct {
 	state               lazyMembersState
 	mapper              *TypeMapper
 	typeArguments       []*Type
-	unaffected          []string // declared members that instantiate to themselves
+	unaffected          []string // sorted names of declared members that instantiate to themselves
 	callSignatures      []*Signature
 	constructSignatures []*Signature
 	indexInfos          []*IndexInfo
@@ -135,6 +135,7 @@ func (c *Checker) prepareLazyMembers(t *Type, lm *lazyMemberTable) {
 			lm.unaffected = append(lm.unaffected, id)
 		}
 	}
+	slices.Sort(lm.unaffected)
 	lm.callSignatures = c.instantiateSignatures(resolved.declaredCallSignatures, lm.mapper)
 	lm.constructSignatures = c.instantiateSignatures(resolved.declaredConstructSignatures, lm.mapper)
 	lm.indexInfos = c.instantiateIndexInfos(resolved.declaredIndexInfos, lm.mapper)
@@ -207,7 +208,7 @@ func (c *Checker) resolveLazyMembers(t *Type, lm *lazyMemberTable) {
 		members = make(ast.SymbolTable, len(resolved.declaredMembers))
 		for id, symbol := range resolved.declaredMembers {
 			if c.isNamedMember(symbol, id) {
-				members[id] = c.getLazyDeclaredMember(lm, symbol, id)
+				members[id] = c.instantiateLazyDeclaredMember(lm, symbol, id)
 			}
 		}
 	}
@@ -256,14 +257,23 @@ func (c *Checker) inheritBaseTypeMembers(r *resolvingMembers, baseType *Type) {
 func (c *Checker) getLazyDeclaredMember(lm *lazyMemberTable, symbol *ast.Symbol, name string) *ast.Symbol {
 	result := lm.declared[name]
 	if result == nil {
-		if slices.Contains(lm.unaffected, name) {
-			result = symbol
-		} else {
-			result = c.newInstantiatedSymbol(symbol, lm.mapper)
-		}
+		result = c.instantiateLazyDeclaredMember(lm, symbol, name)
 		lm.declared[name] = result
 	}
 	return result
+}
+
+// instantiateLazyDeclaredMember is getLazyDeclaredMember without memoizing
+// the result, for resolving the members in full, after which the table is
+// discarded.
+func (c *Checker) instantiateLazyDeclaredMember(lm *lazyMemberTable, symbol *ast.Symbol, name string) *ast.Symbol {
+	if result := lm.declared[name]; result != nil {
+		return result
+	}
+	if _, unaffected := slices.BinarySearch(lm.unaffected, name); unaffected {
+		return symbol
+	}
+	return c.newInstantiatedSymbol(symbol, lm.mapper)
 }
 
 // lookupMemberLazily returns what resolveStructuredTypeMembers(t).members[name]
