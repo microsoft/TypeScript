@@ -1,0 +1,119 @@
+//// [tests/cases/compiler/declarationEmitAlternativeContainingModules.ts] ////
+
+=== model.ts ===
+export interface Model { value: string; }
+>value : string
+
+export function make(): Model { return { value: "" }; }
+>make : () => Model
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+=== factory.ts ===
+export { make } from "./model";
+>make : () => import("./model").Model
+
+=== aliases.ts ===
+export { Model as First, Model as Second } from "./model";
+>Model : any
+>First : any
+>Model : any
+>Second : any
+
+=== preferred.ts ===
+export { Model, Model as Renamed } from "./model";
+>Model : any
+>Model : any
+>Renamed : any
+
+=== star.ts ===
+
+export * from "./aliases";
+
+=== direct.ts ===
+import { make } from "./factory";
+>make : () => import("./model").Model
+
+export const direct = make();
+>direct : import("./model").Model
+>make() : import("./model").Model
+>make : () => import("./model").Model
+
+export const repeated = make();
+>repeated : import("./model").Model
+>make() : import("./model").Model
+>make : () => import("./model").Model
+
+=== renamed.ts ===
+import { make } from "./factory";
+>make : () => aliases.First
+
+import * as aliases from "./aliases";
+>aliases : typeof aliases
+
+export const renamed = make();
+>renamed : aliases.First
+>make() : aliases.First
+>make : () => aliases.First
+
+=== sameName.ts ===
+import { make } from "./factory";
+>make : () => preferred.Model
+
+import * as preferred from "./preferred";
+>preferred : typeof preferred
+
+export const sameName = make();
+>sameName : preferred.Model
+>make() : preferred.Model
+>make : () => preferred.Model
+
+=== starred.ts ===
+import { make } from "./factory";
+>make : () => star.First
+
+import * as star from "./star";
+>star : typeof star
+
+export const starred = make();
+>starred : star.First
+>make() : star.First
+>make : () => star.First
+
+=== exported.ts ===
+import { Model } from "./model";
+>Model : any
+
+export = Model;
+>Model : Model
+
+=== exportEquals.ts ===
+import { make } from "./factory";
+>make : () => Model
+
+import Model = require("./exported");
+>Model : any
+
+export const exportEquals = make();
+>exportEquals : Model
+>make() : Model
+>make : () => Model
+
+=== index.ts ===
+export { direct, repeated } from "./direct";
+>direct : import("./model").Model
+>repeated : import("./model").Model
+
+export { renamed } from "./renamed";
+>renamed : import("./model").Model
+
+export { sameName } from "./sameName";
+>sameName : import("./model").Model
+
+export { starred } from "./starred";
+>starred : import("./model").Model
+
+export { exportEquals } from "./exportEquals";
+>exportEquals : import("./model").Model
+

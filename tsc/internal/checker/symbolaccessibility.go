@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"cmp"
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -207,21 +208,100 @@ func (c *Checker) getAlternativeContainingModules(symbol *ast.Symbol, enclosingD
 	if links.extendedContainers != nil {
 		return *links.extendedContainers
 	}
-	// No results from files already being imported by this file - expand search (expensive, but not location-specific, so cached)
-	otherFiles := c.program.SourceFiles()
-	for _, file := range otherFiles {
+	results = c.getExternalModuleContainers(symbol)
+	links.extendedContainers = &results
+	return results
+}
+
+type externalModuleContainerIndex struct {
+	complete           bool
+	containersByTarget map[*ast.Symbol][]*ast.Symbol
+	moduleOrder        map[*ast.Symbol]int
+}
+
+func (index *externalModuleContainerIndex) add(target *ast.Symbol, container *ast.Symbol) {
+	// Modules are indexed one at a time, so a repeat of this container is always the last entry.
+	if existing := index.containersByTarget[target]; len(existing) == 0 || existing[len(existing)-1] != container {
+		index.containersByTarget[target] = append(existing, container)
+	}
+}
+
+func (c *Checker) getExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
+	if c.externalModuleContainers == nil {
+		c.buildExternalModuleContainerIndex()
+	}
+	index := c.externalModuleContainers
+	if !index.complete {
+		// Re-entered from an alias resolved while building the index; answer this query without it.
+		return c.scanExternalModuleContainers(symbol)
+	}
+	containers := index.containersByTarget[c.getResolvedTarget(symbol)]
+	parent := c.getParentOfSymbol(symbol)
+	parentOrder, parentIsModule := index.moduleOrder[parent]
+	if !parentIsModule {
+		return containers
+	}
+	// The parent module contains the symbol even when the symbol is absent from its exports.
+	if at, found := slices.BinarySearchFunc(containers, parentOrder, func(container *ast.Symbol, order int) int {
+		return cmp.Compare(index.moduleOrder[container], order)
+	}); !found {
+		return slices.Insert(slices.Clone(containers), at, parent)
+	}
+	return containers
+}
+
+func (c *Checker) buildExternalModuleContainerIndex() {
+	index := &externalModuleContainerIndex{
+		containersByTarget: make(map[*ast.Symbol][]*ast.Symbol),
+		moduleOrder:        make(map[*ast.Symbol]int, len(c.program.SourceFiles())),
+	}
+	c.externalModuleContainers = index
+	for _, file := range c.program.SourceFiles() {
 		if !ast.IsExternalModule(file) {
 			continue
 		}
-		sym := c.getSymbolOfDeclaration(file.AsNode())
-		ref := c.getAliasForSymbolInContainer(sym, symbol)
-		if ref == nil {
+		container := c.getSymbolOfDeclaration(file.AsNode())
+		index.moduleOrder[container] = len(index.moduleOrder)
+		for _, exported := range c.getExportsOfSymbol(container) {
+			index.add(c.getResolvedTarget(exported), container)
+		}
+		if exportEquals := container.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
+			index.add(c.getResolvedTarget(exportEquals), container)
+		}
+	}
+	index.complete = true
+}
+
+func (c *Checker) scanExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
+	var containers []*ast.Symbol
+	for _, file := range c.program.SourceFiles() {
+		if !ast.IsExternalModule(file) {
 			continue
 		}
-		results = append(results, sym)
+		if container := c.getSymbolOfDeclaration(file.AsNode()); c.getAliasForSymbolInContainer(container, symbol) != nil {
+			containers = append(containers, container)
+		}
 	}
-	links.extendedContainers = &results
-	return results
+	return containers
+}
+
+func (c *Checker) getExportsByTarget(container *ast.Symbol) map[*ast.Symbol][]*ast.Symbol {
+	links := c.symbolContainerLinks.Get(container)
+	if links.exportsByTarget == nil {
+		exports := c.getExportsOfSymbol(container)
+		byTarget := make(map[*ast.Symbol][]*ast.Symbol, len(exports))
+		for _, exported := range exports {
+			target := c.getResolvedTarget(exported)
+			byTarget[target] = append(byTarget[target], exported)
+		}
+		for _, candidates := range byTarget {
+			if len(candidates) > 1 {
+				c.sortSymbols(candidates) // symbol tables are randomly iterated
+			}
+		}
+		links.exportsByTarget = byTarget
+	}
+	return links.exportsByTarget
 }
 
 func (c *Checker) getVariableDeclarationOfObjectLiteral(symbol *ast.Symbol, meaning ast.SymbolFlags) *ast.Symbol {
@@ -345,27 +425,21 @@ func (c *Checker) getAliasForSymbolInContainer(container *ast.Symbol, symbol *as
 		// fast path, `symbol` is either already the alias or isn't aliased
 		return symbol
 	}
+	target := c.getResolvedTarget(symbol)
 	// Check if container is a thing with an `export=` which points directly at `symbol`, and if so, return
 	// the container itself as the alias for the symbol
 	if container.Exports != nil {
 		exportEquals, ok := container.Exports[ast.InternalSymbolNameExportEquals]
-		if ok && exportEquals != nil && c.getSymbolIfSameReference(exportEquals, symbol) != nil {
+		if ok && exportEquals != nil && c.getResolvedTarget(exportEquals) == target {
 			return container
 		}
 	}
 	exports := c.getExportsOfSymbol(container)
 	quick, ok := exports[symbol.Name]
-	if ok && quick != nil && c.getSymbolIfSameReference(quick, symbol) != nil {
+	if ok && quick != nil && c.getResolvedTarget(quick) == target {
 		return quick
 	}
-	var candidates []*ast.Symbol
-	for _, exported := range exports {
-		if c.getSymbolIfSameReference(exported, symbol) != nil {
-			candidates = append(candidates, exported)
-		}
-	}
-	if len(candidates) > 0 {
-		c.sortSymbols(candidates) // _must_ sort exports for stable results - symbol table is randomly iterated
+	if candidates := c.getExportsByTarget(container)[target]; len(candidates) > 0 {
 		return candidates[0]
 	}
 	return nil
