@@ -1,0 +1,331 @@
+//// [tests/cases/compiler/intersectionNeverReductionByProperty.ts] ////
+
+=== intersectionNeverReductionByProperty.ts ===
+// Intersections that are and aren't reduced to never because of conflicting
+// discriminants or private properties.
+
+type A1 = { kind: "a"; x: string } & { kind: "b"; y: string };
+>A1 : Symbol(A1, Decl(intersectionNeverReductionByProperty.ts, 0, 0))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 3, 11))
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 3, 22))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 3, 38))
+>y : Symbol(y, Decl(intersectionNeverReductionByProperty.ts, 3, 49))
+
+type A2 = { kind: "a" | "b"; x: string } & { kind: "b"; y: string };
+>A2 : Symbol(A2, Decl(intersectionNeverReductionByProperty.ts, 3, 62))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 4, 11))
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 4, 28))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 4, 44))
+>y : Symbol(y, Decl(intersectionNeverReductionByProperty.ts, 4, 55))
+
+type A3 = { kind?: "a" } & { kind?: "b" };
+>A3 : Symbol(A3, Decl(intersectionNeverReductionByProperty.ts, 4, 68))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 5, 11))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 5, 28))
+
+type A4 = { kind: "a" } & { kind: string };
+>A4 : Symbol(A4, Decl(intersectionNeverReductionByProperty.ts, 5, 42))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 6, 11))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 6, 27))
+
+type A5 = { kind: `a${string}` } & { kind: `b${string}` };
+>A5 : Symbol(A5, Decl(intersectionNeverReductionByProperty.ts, 6, 43))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 7, 11))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 7, 36))
+
+type A6 = { kind: never } & { kind: "a" };
+>A6 : Symbol(A6, Decl(intersectionNeverReductionByProperty.ts, 7, 58))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 8, 11))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 8, 29))
+
+type A7 = { flag: true } & { flag: false };
+>A7 : Symbol(A7, Decl(intersectionNeverReductionByProperty.ts, 8, 42))
+>flag : Symbol(flag, Decl(intersectionNeverReductionByProperty.ts, 9, 11))
+>flag : Symbol(flag, Decl(intersectionNeverReductionByProperty.ts, 9, 28))
+
+type A8 = { tag: 1; a: string } & { b: number } & { tag: 2; c: boolean };
+>A8 : Symbol(A8, Decl(intersectionNeverReductionByProperty.ts, 9, 43))
+>tag : Symbol(tag, Decl(intersectionNeverReductionByProperty.ts, 10, 11))
+>a : Symbol(a, Decl(intersectionNeverReductionByProperty.ts, 10, 19))
+>b : Symbol(b, Decl(intersectionNeverReductionByProperty.ts, 10, 35))
+>tag : Symbol(tag, Decl(intersectionNeverReductionByProperty.ts, 10, 51))
+>c : Symbol(c, Decl(intersectionNeverReductionByProperty.ts, 10, 59))
+
+type A9 = { x: string } & { x: number };
+>A9 : Symbol(A9, Decl(intersectionNeverReductionByProperty.ts, 10, 73))
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 11, 11))
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 11, 27))
+
+declare const a1: A1;
+>a1 : Symbol(a1, Decl(intersectionNeverReductionByProperty.ts, 13, 13))
+>A1 : Symbol(A1, Decl(intersectionNeverReductionByProperty.ts, 0, 0))
+
+declare const a2: A2;
+>a2 : Symbol(a2, Decl(intersectionNeverReductionByProperty.ts, 14, 13))
+>A2 : Symbol(A2, Decl(intersectionNeverReductionByProperty.ts, 3, 62))
+
+declare const a3: A3;
+>a3 : Symbol(a3, Decl(intersectionNeverReductionByProperty.ts, 15, 13))
+>A3 : Symbol(A3, Decl(intersectionNeverReductionByProperty.ts, 4, 68))
+
+declare const a4: A4;
+>a4 : Symbol(a4, Decl(intersectionNeverReductionByProperty.ts, 16, 13))
+>A4 : Symbol(A4, Decl(intersectionNeverReductionByProperty.ts, 5, 42))
+
+declare const a5: A5;
+>a5 : Symbol(a5, Decl(intersectionNeverReductionByProperty.ts, 17, 13))
+>A5 : Symbol(A5, Decl(intersectionNeverReductionByProperty.ts, 6, 43))
+
+declare const a6: A6;
+>a6 : Symbol(a6, Decl(intersectionNeverReductionByProperty.ts, 18, 13))
+>A6 : Symbol(A6, Decl(intersectionNeverReductionByProperty.ts, 7, 58))
+
+declare const a7: A7;
+>a7 : Symbol(a7, Decl(intersectionNeverReductionByProperty.ts, 19, 13))
+>A7 : Symbol(A7, Decl(intersectionNeverReductionByProperty.ts, 8, 42))
+
+declare const a8: A8;
+>a8 : Symbol(a8, Decl(intersectionNeverReductionByProperty.ts, 20, 13))
+>A8 : Symbol(A8, Decl(intersectionNeverReductionByProperty.ts, 9, 43))
+
+declare const a9: A9;
+>a9 : Symbol(a9, Decl(intersectionNeverReductionByProperty.ts, 21, 13))
+>A9 : Symbol(A9, Decl(intersectionNeverReductionByProperty.ts, 10, 73))
+
+a1.kind;
+>a1 : Symbol(a1, Decl(intersectionNeverReductionByProperty.ts, 13, 13))
+
+a2.kind;
+>a2.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 4, 11), Decl(intersectionNeverReductionByProperty.ts, 4, 44))
+>a2 : Symbol(a2, Decl(intersectionNeverReductionByProperty.ts, 14, 13))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 4, 11), Decl(intersectionNeverReductionByProperty.ts, 4, 44))
+
+a3.kind;
+>a3.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 5, 11), Decl(intersectionNeverReductionByProperty.ts, 5, 28))
+>a3 : Symbol(a3, Decl(intersectionNeverReductionByProperty.ts, 15, 13))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 5, 11), Decl(intersectionNeverReductionByProperty.ts, 5, 28))
+
+a4.kind;
+>a4.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 6, 11), Decl(intersectionNeverReductionByProperty.ts, 6, 27))
+>a4 : Symbol(a4, Decl(intersectionNeverReductionByProperty.ts, 16, 13))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 6, 11), Decl(intersectionNeverReductionByProperty.ts, 6, 27))
+
+a5.kind;
+>a5.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 7, 11), Decl(intersectionNeverReductionByProperty.ts, 7, 36))
+>a5 : Symbol(a5, Decl(intersectionNeverReductionByProperty.ts, 17, 13))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 7, 11), Decl(intersectionNeverReductionByProperty.ts, 7, 36))
+
+a6.kind;
+>a6.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 8, 11), Decl(intersectionNeverReductionByProperty.ts, 8, 29))
+>a6 : Symbol(a6, Decl(intersectionNeverReductionByProperty.ts, 18, 13))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 8, 11), Decl(intersectionNeverReductionByProperty.ts, 8, 29))
+
+a7.flag;
+>a7 : Symbol(a7, Decl(intersectionNeverReductionByProperty.ts, 19, 13))
+
+a8.tag;
+>a8 : Symbol(a8, Decl(intersectionNeverReductionByProperty.ts, 20, 13))
+
+a9.x;
+>a9.x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 11, 11), Decl(intersectionNeverReductionByProperty.ts, 11, 27))
+>a9 : Symbol(a9, Decl(intersectionNeverReductionByProperty.ts, 21, 13))
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 11, 11), Decl(intersectionNeverReductionByProperty.ts, 11, 27))
+
+class P1 {
+>P1 : Symbol(P1, Decl(intersectionNeverReductionByProperty.ts, 31, 5))
+
+    private x = 1;
+>x : Symbol(P1.x, Decl(intersectionNeverReductionByProperty.ts, 33, 10))
+}
+class P2 {
+>P2 : Symbol(P2, Decl(intersectionNeverReductionByProperty.ts, 35, 1))
+
+    private x = 1;
+>x : Symbol(P2.x, Decl(intersectionNeverReductionByProperty.ts, 36, 10))
+}
+class Q1 {
+>Q1 : Symbol(Q1, Decl(intersectionNeverReductionByProperty.ts, 38, 1))
+
+    protected x = 1;
+>x : Symbol(Q1.x, Decl(intersectionNeverReductionByProperty.ts, 39, 10))
+}
+class Q2 {
+>Q2 : Symbol(Q2, Decl(intersectionNeverReductionByProperty.ts, 41, 1))
+
+    protected x = 1;
+>x : Symbol(Q2.x, Decl(intersectionNeverReductionByProperty.ts, 42, 10))
+}
+class Generic<T> {
+>Generic : Symbol(Generic, Decl(intersectionNeverReductionByProperty.ts, 44, 1))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 45, 14))
+
+    private value!: T;
+>value : Symbol(Generic.value, Decl(intersectionNeverReductionByProperty.ts, 45, 18))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 45, 14))
+
+    kind!: T;
+>kind : Symbol(Generic.kind, Decl(intersectionNeverReductionByProperty.ts, 46, 22))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 45, 14))
+}
+
+declare const b1: P1 & P2;
+>b1 : Symbol(b1, Decl(intersectionNeverReductionByProperty.ts, 50, 13))
+>P1 : Symbol(P1, Decl(intersectionNeverReductionByProperty.ts, 31, 5))
+>P2 : Symbol(P2, Decl(intersectionNeverReductionByProperty.ts, 35, 1))
+
+declare const b2: Q1 & Q2;
+>b2 : Symbol(b2, Decl(intersectionNeverReductionByProperty.ts, 51, 13))
+>Q1 : Symbol(Q1, Decl(intersectionNeverReductionByProperty.ts, 38, 1))
+>Q2 : Symbol(Q2, Decl(intersectionNeverReductionByProperty.ts, 41, 1))
+
+declare const b3: P1 & { y: string };
+>b3 : Symbol(b3, Decl(intersectionNeverReductionByProperty.ts, 52, 13))
+>P1 : Symbol(P1, Decl(intersectionNeverReductionByProperty.ts, 31, 5))
+>y : Symbol(y, Decl(intersectionNeverReductionByProperty.ts, 52, 24))
+
+declare const b4: Generic<string> & Generic<string>;
+>b4 : Symbol(b4, Decl(intersectionNeverReductionByProperty.ts, 53, 13))
+>Generic : Symbol(Generic, Decl(intersectionNeverReductionByProperty.ts, 44, 1))
+>Generic : Symbol(Generic, Decl(intersectionNeverReductionByProperty.ts, 44, 1))
+
+declare const b5: Generic<string> & Generic<number>;
+>b5 : Symbol(b5, Decl(intersectionNeverReductionByProperty.ts, 54, 13))
+>Generic : Symbol(Generic, Decl(intersectionNeverReductionByProperty.ts, 44, 1))
+>Generic : Symbol(Generic, Decl(intersectionNeverReductionByProperty.ts, 44, 1))
+
+declare const b6: Generic<"a"> & Generic<"b">;
+>b6 : Symbol(b6, Decl(intersectionNeverReductionByProperty.ts, 55, 13))
+>Generic : Symbol(Generic, Decl(intersectionNeverReductionByProperty.ts, 44, 1))
+>Generic : Symbol(Generic, Decl(intersectionNeverReductionByProperty.ts, 44, 1))
+
+b1.x;
+>b1 : Symbol(b1, Decl(intersectionNeverReductionByProperty.ts, 50, 13))
+
+b2.x;
+>b2.x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 39, 10), Decl(intersectionNeverReductionByProperty.ts, 42, 10))
+>b2 : Symbol(b2, Decl(intersectionNeverReductionByProperty.ts, 51, 13))
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 39, 10), Decl(intersectionNeverReductionByProperty.ts, 42, 10))
+
+b3.y;
+>b3.y : Symbol(y, Decl(intersectionNeverReductionByProperty.ts, 52, 24))
+>b3 : Symbol(b3, Decl(intersectionNeverReductionByProperty.ts, 52, 13))
+>y : Symbol(y, Decl(intersectionNeverReductionByProperty.ts, 52, 24))
+
+b4.kind;
+>b4.kind : Symbol(Generic.kind, Decl(intersectionNeverReductionByProperty.ts, 46, 22))
+>b4 : Symbol(b4, Decl(intersectionNeverReductionByProperty.ts, 53, 13))
+>kind : Symbol(Generic.kind, Decl(intersectionNeverReductionByProperty.ts, 46, 22))
+
+b5.kind;
+>b5.kind : Symbol(Generic.kind, Decl(intersectionNeverReductionByProperty.ts, 46, 22))
+>b5 : Symbol(b5, Decl(intersectionNeverReductionByProperty.ts, 54, 13))
+>kind : Symbol(Generic.kind, Decl(intersectionNeverReductionByProperty.ts, 46, 22))
+
+b6.kind;
+>b6 : Symbol(b6, Decl(intersectionNeverReductionByProperty.ts, 55, 13))
+
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Symbol(Tagged, Decl(intersectionNeverReductionByProperty.ts, 62, 8))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 64, 12))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 64, 18))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 64, 12))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 64, 32))
+
+declare const c1: Tagged<"a">;
+>c1 : Symbol(c1, Decl(intersectionNeverReductionByProperty.ts, 65, 13))
+>Tagged : Symbol(Tagged, Decl(intersectionNeverReductionByProperty.ts, 62, 8))
+
+declare const c2: Tagged<"b">;
+>c2 : Symbol(c2, Decl(intersectionNeverReductionByProperty.ts, 66, 13))
+>Tagged : Symbol(Tagged, Decl(intersectionNeverReductionByProperty.ts, 62, 8))
+
+declare const c3: Tagged<string>;
+>c3 : Symbol(c3, Decl(intersectionNeverReductionByProperty.ts, 67, 13))
+>Tagged : Symbol(Tagged, Decl(intersectionNeverReductionByProperty.ts, 62, 8))
+
+c1.kind;
+>c1.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 64, 18), Decl(intersectionNeverReductionByProperty.ts, 64, 32))
+>c1 : Symbol(c1, Decl(intersectionNeverReductionByProperty.ts, 65, 13))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 64, 18), Decl(intersectionNeverReductionByProperty.ts, 64, 32))
+
+c2.kind;
+>c2 : Symbol(c2, Decl(intersectionNeverReductionByProperty.ts, 66, 13))
+
+c3.kind;
+>c3.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 64, 18), Decl(intersectionNeverReductionByProperty.ts, 64, 32))
+>c3 : Symbol(c3, Decl(intersectionNeverReductionByProperty.ts, 67, 13))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 64, 18), Decl(intersectionNeverReductionByProperty.ts, 64, 32))
+
+function f<T extends { kind: "a" } | { kind: "b" }>(x: T & { kind: "c" }, y: T & { kind: "a" }) {
+>f : Symbol(f, Decl(intersectionNeverReductionByProperty.ts, 70, 8))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 72, 11))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 72, 22))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 72, 38))
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 72, 52))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 72, 11))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 72, 60))
+>y : Symbol(y, Decl(intersectionNeverReductionByProperty.ts, 72, 73))
+>T : Symbol(T, Decl(intersectionNeverReductionByProperty.ts, 72, 11))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 72, 82))
+
+    x.kind;
+>x : Symbol(x, Decl(intersectionNeverReductionByProperty.ts, 72, 52))
+
+    y.kind;
+>y.kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 72, 22), Decl(intersectionNeverReductionByProperty.ts, 72, 82))
+>y : Symbol(y, Decl(intersectionNeverReductionByProperty.ts, 72, 73))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 72, 22), Decl(intersectionNeverReductionByProperty.ts, 72, 82))
+}
+
+interface Many {
+>Many : Symbol(Many, Decl(intersectionNeverReductionByProperty.ts, 75, 1))
+
+    p1: string;
+>p1 : Symbol(Many.p1, Decl(intersectionNeverReductionByProperty.ts, 77, 16))
+
+    p2: number;
+>p2 : Symbol(Many.p2, Decl(intersectionNeverReductionByProperty.ts, 78, 15))
+
+    p3: boolean;
+>p3 : Symbol(Many.p3, Decl(intersectionNeverReductionByProperty.ts, 79, 15))
+
+    p4: string[];
+>p4 : Symbol(Many.p4, Decl(intersectionNeverReductionByProperty.ts, 80, 16))
+
+    p5: () => void;
+>p5 : Symbol(Many.p5, Decl(intersectionNeverReductionByProperty.ts, 81, 17))
+
+    kind: "many";
+>kind : Symbol(Many.kind, Decl(intersectionNeverReductionByProperty.ts, 82, 19))
+}
+declare const d1: Many & { kind: "many"; extra: string };
+>d1 : Symbol(d1, Decl(intersectionNeverReductionByProperty.ts, 85, 13))
+>Many : Symbol(Many, Decl(intersectionNeverReductionByProperty.ts, 75, 1))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 85, 26))
+>extra : Symbol(extra, Decl(intersectionNeverReductionByProperty.ts, 85, 40))
+
+declare const d2: Many & { kind: "other" };
+>d2 : Symbol(d2, Decl(intersectionNeverReductionByProperty.ts, 86, 13))
+>Many : Symbol(Many, Decl(intersectionNeverReductionByProperty.ts, 75, 1))
+>kind : Symbol(kind, Decl(intersectionNeverReductionByProperty.ts, 86, 26))
+
+declare const d3: Many & Partial<Many> & { p1: "literal" };
+>d3 : Symbol(d3, Decl(intersectionNeverReductionByProperty.ts, 87, 13))
+>Many : Symbol(Many, Decl(intersectionNeverReductionByProperty.ts, 75, 1))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Many : Symbol(Many, Decl(intersectionNeverReductionByProperty.ts, 75, 1))
+>p1 : Symbol(p1, Decl(intersectionNeverReductionByProperty.ts, 87, 42))
+
+d1.extra;
+>d1.extra : Symbol(extra, Decl(intersectionNeverReductionByProperty.ts, 85, 40))
+>d1 : Symbol(d1, Decl(intersectionNeverReductionByProperty.ts, 85, 13))
+>extra : Symbol(extra, Decl(intersectionNeverReductionByProperty.ts, 85, 40))
+
+d2.p1;
+>d2 : Symbol(d2, Decl(intersectionNeverReductionByProperty.ts, 86, 13))
+
+d3.p1;
+>d3.p1 : Symbol(p1, Decl(intersectionNeverReductionByProperty.ts, 77, 16), Decl(intersectionNeverReductionByProperty.ts, 87, 42))
+>d3 : Symbol(d3, Decl(intersectionNeverReductionByProperty.ts, 87, 13))
+>p1 : Symbol(p1, Decl(intersectionNeverReductionByProperty.ts, 77, 16), Decl(intersectionNeverReductionByProperty.ts, 87, 42))
+

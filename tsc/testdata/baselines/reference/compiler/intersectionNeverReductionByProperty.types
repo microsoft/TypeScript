@@ -1,0 +1,315 @@
+//// [tests/cases/compiler/intersectionNeverReductionByProperty.ts] ////
+
+=== intersectionNeverReductionByProperty.ts ===
+// Intersections that are and aren't reduced to never because of conflicting
+// discriminants or private properties.
+
+type A1 = { kind: "a"; x: string } & { kind: "b"; y: string };
+>A1 : never
+>kind : "a"
+>x : string
+>kind : "b"
+>y : string
+
+type A2 = { kind: "a" | "b"; x: string } & { kind: "b"; y: string };
+>A2 : A2
+>kind : "a" | "b"
+>x : string
+>kind : "b"
+>y : string
+
+type A3 = { kind?: "a" } & { kind?: "b" };
+>A3 : A3
+>kind : "a" | undefined
+>kind : "b" | undefined
+
+type A4 = { kind: "a" } & { kind: string };
+>A4 : A4
+>kind : "a"
+>kind : string
+
+type A5 = { kind: `a${string}` } & { kind: `b${string}` };
+>A5 : A5
+>kind : `a${string}`
+>kind : `b${string}`
+
+type A6 = { kind: never } & { kind: "a" };
+>A6 : A6
+>kind : never
+>kind : "a"
+
+type A7 = { flag: true } & { flag: false };
+>A7 : never
+>flag : true
+>true : true
+>flag : false
+>false : false
+
+type A8 = { tag: 1; a: string } & { b: number } & { tag: 2; c: boolean };
+>A8 : never
+>tag : 1
+>a : string
+>b : number
+>tag : 2
+>c : boolean
+
+type A9 = { x: string } & { x: number };
+>A9 : A9
+>x : string
+>x : number
+
+declare const a1: A1;
+>a1 : never
+
+declare const a2: A2;
+>a2 : A2
+
+declare const a3: A3;
+>a3 : A3
+
+declare const a4: A4;
+>a4 : A4
+
+declare const a5: A5;
+>a5 : A5
+
+declare const a6: A6;
+>a6 : A6
+
+declare const a7: A7;
+>a7 : never
+
+declare const a8: A8;
+>a8 : never
+
+declare const a9: A9;
+>a9 : A9
+
+a1.kind;
+>a1.kind : any
+>a1 : never
+>kind : any
+
+a2.kind;
+>a2.kind : "b"
+>a2 : A2
+>kind : "b"
+
+a3.kind;
+>a3.kind : undefined
+>a3 : A3
+>kind : undefined
+
+a4.kind;
+>a4.kind : "a"
+>a4 : A4
+>kind : "a"
+
+a5.kind;
+>a5.kind : `a${string}` & `b${string}`
+>a5 : A5
+>kind : `a${string}` & `b${string}`
+
+a6.kind;
+>a6.kind : never
+>a6 : A6
+>kind : never
+
+a7.flag;
+>a7.flag : any
+>a7 : never
+>flag : any
+
+a8.tag;
+>a8.tag : any
+>a8 : never
+>tag : any
+
+a9.x;
+>a9.x : never
+>a9 : A9
+>x : never
+
+class P1 {
+>P1 : P1
+
+    private x = 1;
+>x : number
+>1 : 1
+}
+class P2 {
+>P2 : P2
+
+    private x = 1;
+>x : number
+>1 : 1
+}
+class Q1 {
+>Q1 : Q1
+
+    protected x = 1;
+>x : number
+>1 : 1
+}
+class Q2 {
+>Q2 : Q2
+
+    protected x = 1;
+>x : number
+>1 : 1
+}
+class Generic<T> {
+>Generic : Generic<T>
+
+    private value!: T;
+>value : T
+
+    kind!: T;
+>kind : T
+}
+
+declare const b1: P1 & P2;
+>b1 : never
+
+declare const b2: Q1 & Q2;
+>b2 : Q1 & Q2
+
+declare const b3: P1 & { y: string };
+>b3 : P1 & { y: string; }
+>y : string
+
+declare const b4: Generic<string> & Generic<string>;
+>b4 : Generic<string>
+
+declare const b5: Generic<string> & Generic<number>;
+>b5 : Generic<string> & Generic<number>
+
+declare const b6: Generic<"a"> & Generic<"b">;
+>b6 : never
+
+b1.x;
+>b1.x : any
+>b1 : never
+>x : any
+
+b2.x;
+>b2.x : number
+>b2 : Q1 & Q2
+>x : number
+
+b3.y;
+>b3.y : string
+>b3 : P1 & { y: string; }
+>y : string
+
+b4.kind;
+>b4.kind : string
+>b4 : Generic<string>
+>kind : string
+
+b5.kind;
+>b5.kind : never
+>b5 : Generic<string> & Generic<number>
+>kind : never
+
+b6.kind;
+>b6.kind : any
+>b6 : never
+>kind : any
+
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Tagged<T>
+>kind : T
+>kind : "a"
+
+declare const c1: Tagged<"a">;
+>c1 : Tagged<"a">
+
+declare const c2: Tagged<"b">;
+>c2 : never
+
+declare const c3: Tagged<string>;
+>c3 : Tagged<string>
+
+c1.kind;
+>c1.kind : "a"
+>c1 : Tagged<"a">
+>kind : "a"
+
+c2.kind;
+>c2.kind : any
+>c2 : never
+>kind : any
+
+c3.kind;
+>c3.kind : "a"
+>c3 : Tagged<string>
+>kind : "a"
+
+function f<T extends { kind: "a" } | { kind: "b" }>(x: T & { kind: "c" }, y: T & { kind: "a" }) {
+>f : <T extends { kind: "a"; } | { kind: "b"; }>(x: T & { kind: "c"; }, y: T & { kind: "a"; }) => void
+>kind : "a"
+>kind : "b"
+>x : never
+>kind : "c"
+>y : T & { kind: "a"; }
+>kind : "a"
+
+    x.kind;
+>x.kind : any
+>x : never
+>kind : any
+
+    y.kind;
+>y.kind : "a"
+>y : { kind: "a"; } & { kind: "a"; }
+>kind : "a"
+}
+
+interface Many {
+    p1: string;
+>p1 : string
+
+    p2: number;
+>p2 : number
+
+    p3: boolean;
+>p3 : boolean
+
+    p4: string[];
+>p4 : string[]
+
+    p5: () => void;
+>p5 : () => void
+
+    kind: "many";
+>kind : "many"
+}
+declare const d1: Many & { kind: "many"; extra: string };
+>d1 : Many & { kind: "many"; extra: string; }
+>kind : "many"
+>extra : string
+
+declare const d2: Many & { kind: "other" };
+>d2 : never
+>kind : "other"
+
+declare const d3: Many & Partial<Many> & { p1: "literal" };
+>d3 : Many & Partial<Many> & { p1: "literal"; }
+>p1 : "literal"
+
+d1.extra;
+>d1.extra : string
+>d1 : Many & { kind: "many"; extra: string; }
+>extra : string
+
+d2.p1;
+>d2.p1 : any
+>d2 : never
+>p1 : any
+
+d3.p1;
+>d3.p1 : "literal"
+>d3 : Many & Partial<Many> & { p1: "literal"; }
+>p1 : "literal"
+

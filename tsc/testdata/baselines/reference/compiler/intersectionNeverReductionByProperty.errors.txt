@@ -1,0 +1,138 @@
+intersectionNeverReductionByProperty.ts(24,4): error TS2339: Property 'kind' does not exist on type 'never'.
+  The intersection 'A1' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+intersectionNeverReductionByProperty.ts(30,4): error TS2339: Property 'flag' does not exist on type 'never'.
+  The intersection 'A7' was reduced to 'never' because property 'flag' has conflicting types in some constituents.
+intersectionNeverReductionByProperty.ts(31,4): error TS2339: Property 'tag' does not exist on type 'never'.
+  The intersection 'A8' was reduced to 'never' because property 'tag' has conflicting types in some constituents.
+intersectionNeverReductionByProperty.ts(58,4): error TS2339: Property 'x' does not exist on type 'never'.
+  The intersection 'P1 & P2' was reduced to 'never' because property 'x' exists in multiple constituents and is private in some.
+intersectionNeverReductionByProperty.ts(59,4): error TS2445: Property 'x' is protected and only accessible within class 'Q1 & Q2' and its subclasses.
+intersectionNeverReductionByProperty.ts(63,4): error TS2339: Property 'kind' does not exist on type 'never'.
+  The intersection 'Generic<"a"> & Generic<"b">' was reduced to 'never' because property 'value' has conflicting types in some constituents.
+intersectionNeverReductionByProperty.ts(70,4): error TS2339: Property 'kind' does not exist on type 'never'.
+  The intersection 'Tagged<"b">' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+intersectionNeverReductionByProperty.ts(74,7): error TS2339: Property 'kind' does not exist on type 'never'.
+  Property 'kind' does not exist on type 'never'.
+intersectionNeverReductionByProperty.ts(90,4): error TS2339: Property 'p1' does not exist on type 'never'.
+  The intersection 'Many & { kind: "other"; }' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+
+
+==== intersectionNeverReductionByProperty.ts (9 errors) ====
+    // Intersections that are and aren't reduced to never because of conflicting
+    // discriminants or private properties.
+    
+    type A1 = { kind: "a"; x: string } & { kind: "b"; y: string };
+    type A2 = { kind: "a" | "b"; x: string } & { kind: "b"; y: string };
+    type A3 = { kind?: "a" } & { kind?: "b" };
+    type A4 = { kind: "a" } & { kind: string };
+    type A5 = { kind: `a${string}` } & { kind: `b${string}` };
+    type A6 = { kind: never } & { kind: "a" };
+    type A7 = { flag: true } & { flag: false };
+    type A8 = { tag: 1; a: string } & { b: number } & { tag: 2; c: boolean };
+    type A9 = { x: string } & { x: number };
+    
+    declare const a1: A1;
+    declare const a2: A2;
+    declare const a3: A3;
+    declare const a4: A4;
+    declare const a5: A5;
+    declare const a6: A6;
+    declare const a7: A7;
+    declare const a8: A8;
+    declare const a9: A9;
+    
+    a1.kind;
+       ~~~~
+!!! error TS2339: Property 'kind' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'A1' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+    a2.kind;
+    a3.kind;
+    a4.kind;
+    a5.kind;
+    a6.kind;
+    a7.flag;
+       ~~~~
+!!! error TS2339: Property 'flag' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'A7' was reduced to 'never' because property 'flag' has conflicting types in some constituents.
+    a8.tag;
+       ~~~
+!!! error TS2339: Property 'tag' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'A8' was reduced to 'never' because property 'tag' has conflicting types in some constituents.
+    a9.x;
+    
+    class P1 {
+        private x = 1;
+    }
+    class P2 {
+        private x = 1;
+    }
+    class Q1 {
+        protected x = 1;
+    }
+    class Q2 {
+        protected x = 1;
+    }
+    class Generic<T> {
+        private value!: T;
+        kind!: T;
+    }
+    
+    declare const b1: P1 & P2;
+    declare const b2: Q1 & Q2;
+    declare const b3: P1 & { y: string };
+    declare const b4: Generic<string> & Generic<string>;
+    declare const b5: Generic<string> & Generic<number>;
+    declare const b6: Generic<"a"> & Generic<"b">;
+    
+    b1.x;
+       ~
+!!! error TS2339: Property 'x' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'P1 & P2' was reduced to 'never' because property 'x' exists in multiple constituents and is private in some.
+    b2.x;
+       ~
+!!! error TS2445: Property 'x' is protected and only accessible within class 'Q1 & Q2' and its subclasses.
+    b3.y;
+    b4.kind;
+    b5.kind;
+    b6.kind;
+       ~~~~
+!!! error TS2339: Property 'kind' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'Generic<"a"> & Generic<"b">' was reduced to 'never' because property 'value' has conflicting types in some constituents.
+    
+    type Tagged<T> = { kind: T } & { kind: "a" };
+    declare const c1: Tagged<"a">;
+    declare const c2: Tagged<"b">;
+    declare const c3: Tagged<string>;
+    c1.kind;
+    c2.kind;
+       ~~~~
+!!! error TS2339: Property 'kind' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'Tagged<"b">' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+    c3.kind;
+    
+    function f<T extends { kind: "a" } | { kind: "b" }>(x: T & { kind: "c" }, y: T & { kind: "a" }) {
+        x.kind;
+          ~~~~
+!!! error TS2339: Property 'kind' does not exist on type 'never'.
+!!! error TS2339:   Property 'kind' does not exist on type 'never'.
+        y.kind;
+    }
+    
+    interface Many {
+        p1: string;
+        p2: number;
+        p3: boolean;
+        p4: string[];
+        p5: () => void;
+        kind: "many";
+    }
+    declare const d1: Many & { kind: "many"; extra: string };
+    declare const d2: Many & { kind: "other" };
+    declare const d3: Many & Partial<Many> & { p1: "literal" };
+    d1.extra;
+    d2.p1;
+       ~~
+!!! error TS2339: Property 'p1' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'Many & { kind: "other"; }' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+    d3.p1;
+    
