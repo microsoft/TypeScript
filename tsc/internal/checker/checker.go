@@ -21787,10 +21787,23 @@ func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjec
 	return prop
 }
 
-func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
+// unionOrIntersectionPropertyParts is what the constituents of a union or
+// intersection contribute to its property of a given name.
+type unionOrIntersectionPropertyParts struct {
+	singleProp           *ast.Symbol
+	propSet              collections.OrderedSet[*ast.Symbol] // distinct constituent properties, if more than one
+	indexTypes           []*Type
+	propFlags            ast.SymbolFlags
+	checkFlags           ast.CheckFlags
+	optionalFlag         ast.SymbolFlags
+	syntheticFlag        ast.CheckFlags
+	mergedInstantiations bool
+}
+
+func (c *Checker) collectUnionOrIntersectionPropertyParts(containingType *Type, name string, skipObjectFunctionPropertyAugment bool, parts *unionOrIntersectionPropertyParts) {
 	propFlags := ast.SymbolFlagsNone
 	var singleProp *ast.Symbol
-	var propSet collections.OrderedSet[*ast.Symbol]
+	propSet := &parts.propSet
 	var indexTypes []*Type
 	isUnion := containingType.flags&TypeFlagsUnion != 0
 	// Flags we want to propagate to the result if they exist in all source symbols
@@ -21895,6 +21908,16 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 			}
 		}
 	}
+	parts.singleProp, parts.indexTypes, parts.mergedInstantiations = singleProp, indexTypes, mergedInstantiations
+	parts.propFlags, parts.checkFlags, parts.optionalFlag, parts.syntheticFlag = propFlags, checkFlags, optionalFlag, syntheticFlag
+}
+
+func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
+	var parts unionOrIntersectionPropertyParts
+	c.collectUnionOrIntersectionPropertyParts(containingType, name, skipObjectFunctionPropertyAugment, &parts)
+	singleProp, propSet, indexTypes := parts.singleProp, &parts.propSet, parts.indexTypes
+	propFlags, checkFlags, optionalFlag, syntheticFlag := parts.propFlags, parts.checkFlags, parts.optionalFlag, parts.syntheticFlag
+	isUnion := containingType.flags&TypeFlagsUnion != 0
 	if singleProp == nil {
 		// No property was found
 		return nil
@@ -21902,7 +21925,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 	if isUnion &&
 		(propSet.Size() != 0 || checkFlags&ast.CheckFlagsPartial != 0) &&
 		checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected|ast.CheckFlagsContainsWritePrivate|ast.CheckFlagsContainsWriteProtected) != 0 &&
-		!(propSet.Size() != 0 && c.hasCommonDeclaration(&propSet)) {
+		!(propSet.Size() != 0 && c.hasCommonDeclaration(propSet)) {
 		// A property in a union has a private or protected declaration in one constituent, but is missing
 		// or has a different declaration in another constituent. If the private or protected declaration is
 		// for reading, we don't create a property.
@@ -21918,7 +21941,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		}
 	}
 	if propSet.Size() == 0 && checkFlags&ast.CheckFlagsReadPartial == 0 && len(indexTypes) == 0 {
-		if !mergedInstantiations {
+		if !parts.mergedInstantiations {
 			return singleProp
 		}
 		// No symbol from a union/intersection should have a `.parent` set (since unions/intersections don't act as symbol parents)
@@ -21975,7 +21998,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		if t != firstType {
 			checkFlags |= ast.CheckFlagsHasNonUniformType
 		}
-		if isLiteralType(t) || c.isPatternLiteralType(t) {
+		if c.isLiteralOrPatternLiteralType(t) {
 			checkFlags |= ast.CheckFlagsHasLiteralType
 		}
 		if t.flags&TypeFlagsNever != 0 && t != c.uniqueLiteralType {
@@ -22218,8 +22241,8 @@ func (c *Checker) isNeverReducedProperty(prop *ast.Symbol) bool {
 
 // isNeverReducedIntersection returns
 // core.Some(c.getPropertiesOfUnionOrIntersectionType(t), c.isNeverReducedProperty)
-// without creating the combined properties that can't reduce the intersection
-// to never, which in large intersections are most of them.
+// without creating the combined properties that can't satisfy
+// isNeverReducedProperty, which in large intersections are most of them.
 func (c *Checker) isNeverReducedIntersection(t *Type) bool {
 	if props := t.AsUnionOrIntersectionType().resolvedProperties; props != nil {
 		return core.Some(props, c.isNeverReducedProperty)
@@ -22227,14 +22250,21 @@ func (c *Checker) isNeverReducedIntersection(t *Type) bool {
 	var checked collections.Set[string]
 	for _, current := range t.Types() {
 		for _, prop := range c.getPropertiesOfType(current) {
-			if checked.Has(prop.Name) {
+			if !checked.AddIfAbsent(prop.Name) {
 				continue
 			}
-			checked.Add(prop.Name)
-			if !c.mayBeNeverReducedProperty(t, prop.Name) {
-				continue
+			var parts unionOrIntersectionPropertyParts
+			c.collectUnionOrIntersectionPropertyParts(t, prop.Name, true /*skipObjectFunctionPropertyAugment*/, &parts)
+			var combined *ast.Symbol
+			switch {
+			case parts.propSet.Size() == 0 && !parts.mergedInstantiations:
+				// What createUnionOrIntersectionProperty returns. Merged instantiations
+				// get a copy without check flags, which can't reduce.
+				combined = parts.singleProp
+			case parts.propSet.Size() != 0 && c.mayBeNeverReducedProperty(&parts):
+				combined = c.getPropertyOfUnionOrIntersectionType(t, prop.Name, true /*skipObjectFunctionPropertyAugment*/)
 			}
-			if combined := c.getPropertyOfUnionOrIntersectionType(t, prop.Name, true /*skipObjectFunctionPropertyAugment*/); combined != nil && c.isNeverReducedProperty(combined) {
+			if combined != nil && c.isNeverReducedProperty(combined) {
 				return true
 			}
 		}
@@ -22242,47 +22272,24 @@ func (c *Checker) isNeverReducedIntersection(t *Type) bool {
 	return false
 }
 
-// mayBeNeverReducedProperty reports whether the property that
-// createUnionOrIntersectionProperty combines for name in the intersection t
-// can satisfy isNeverReducedProperty. That takes distinct constituent
-// properties where one has a literal type (a discriminant), a private
-// property, or a constituent property that is itself such a combination.
-// Constituent properties are collected as createUnionOrIntersectionProperty
-// does.
-func (c *Checker) mayBeNeverReducedProperty(t *Type, name string) bool {
-	var singleProp *ast.Symbol
-	var propSet collections.OrderedSet[*ast.Symbol]
-	for _, current := range t.Types() {
-		apparent := c.getApparentType(current)
-		if c.isErrorType(apparent) || apparent.flags&TypeFlagsNever != 0 {
-			continue
-		}
-		prop := c.getPropertyOfTypeEx(apparent, name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
-		if prop == nil {
-			continue
-		}
-		if prop.CheckFlags&(ast.CheckFlagsNonUniformAndLiteral|ast.CheckFlagsContainsPrivate) != 0 || getDeclarationModifierFlagsFromSymbol(prop)&ast.ModifierFlagsPrivate != 0 {
-			return true
-		}
-		if singleProp == nil {
-			singleProp = prop
-		} else if prop != singleProp {
-			if c.getTargetSymbol(prop) == c.getTargetSymbol(singleProp) && c.compareProperties(singleProp, prop, compareTypesEqual) == TernaryTrue {
-				continue
-			}
-			if propSet.Size() == 0 {
-				propSet.Add(singleProp)
-			}
-			propSet.Add(prop)
-		}
+// mayBeNeverReducedProperty reports whether the property combined from parts
+// with more than one distinct constituent property can satisfy
+// isNeverReducedProperty, which requires CheckFlagsHasLiteralType or
+// CheckFlagsContainsPrivate.
+func (c *Checker) mayBeNeverReducedProperty(parts *unionOrIntersectionPropertyParts) bool {
+	if parts.checkFlags&ast.CheckFlagsContainsPrivate != 0 {
+		return true
 	}
-	for prop := range propSet.Values() {
-		propType := c.getTypeOfSymbol(prop)
-		if isLiteralType(propType) || c.isPatternLiteralType(propType) {
+	for prop := range parts.propSet.Values() {
+		if c.isLiteralOrPatternLiteralType(c.getTypeOfSymbol(prop)) {
 			return true
 		}
 	}
 	return false
+}
+
+func (c *Checker) isLiteralOrPatternLiteralType(t *Type) bool {
+	return isLiteralType(t) || c.isPatternLiteralType(t)
 }
 
 func (c *Checker) getReducedApparentType(t *Type) *Type {
