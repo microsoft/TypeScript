@@ -1,0 +1,157 @@
+//// [tests/cases/compiler/instantiatedReferenceShapeQueries.ts] ////
+
+=== instantiatedReferenceShapeQueries.ts ===
+// Shape queries (weak types, single signatures, empty object types, string
+// index signature only types, function object types) on instantiated interface
+// references, including ones whose base types change shape when instantiated.
+
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Tagged<T>
+>kind : T
+>kind : "a"
+
+declare const other: { other: number };
+>other : { other: number; }
+>other : number
+
+interface Weak<T extends string> extends Tagged<T> {
+    opt?: number;
+>opt : number | undefined
+}
+const weak1: Weak<"b"> = other;
+>weak1 : Weak<"b">
+>other : { other: number; }
+
+const weak2: Weak<"a"> = other;
+>weak2 : Weak<"a">
+>other : { other: number; }
+
+interface AllOptional<T> {
+    a?: T;
+>a : T | undefined
+
+    b?: T[];
+>b : T[] | undefined
+}
+interface AllOptionalDerived<T> extends AllOptional<T> {
+    c?: T;
+>c : T | undefined
+}
+const weak3: AllOptional<string> = other;
+>weak3 : AllOptional<string>
+>other : { other: number; }
+
+const weak4: AllOptionalDerived<string> = other;
+>weak4 : AllOptionalDerived<string>
+>other : { other: number; }
+
+interface Empty<T extends string> extends Tagged<T> {}
+const empty1: Empty<"b"> = { extra: 1 };
+>empty1 : Empty<"b">
+>{ extra: 1 } : { extra: number; }
+>extra : number
+>1 : 1
+
+const empty2: Empty<"a"> = { kind: "a", extra: 1 };
+>empty2 : Empty<"a">
+>{ kind: "a", extra: 1 } : { kind: "a"; extra: number; }
+>kind : "a"
+>"a" : "a"
+>extra : number
+>1 : 1
+
+type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+>Two : Two<T>
+>x : U
+>y : T
+>x : U
+>y : string
+
+interface Overloads<T> extends Two<T> {}
+
+declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>f : (...args: A) => B
+>args : A
+>args : A
+
+declare const merged: Overloads<string>;
+>merged : Overloads<string>
+
+const piped1: number = pipe(merged);
+>piped1 : number
+>pipe(merged) : <U>(x: U, y: string) => U
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>merged : Overloads<string>
+
+declare const distinct: Overloads<number>;
+>distinct : Overloads<number>
+
+const piped2: number = pipe(distinct);
+>piped2 : number
+>pipe(distinct) : (x: unknown, y: string) => unknown
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>distinct : Overloads<number>
+
+interface Dict<T extends string> extends Tagged<T> {
+    [key: string]: unknown;
+>key : string
+}
+
+declare const dict: Dict<"b">;
+>dict : Dict<"b">
+
+const dict1 = dict["anything"];
+>dict1 : unknown
+>dict["anything"] : unknown
+>dict : Dict<"b">
+>"anything" : "anything"
+
+const dict2: { [key: string]: number } = dict;
+>dict2 : { [key: string]: number; }
+>key : string
+>dict : Dict<"b">
+
+interface Wrap<T extends { a?: string }> extends T {}
+>a : string | undefined
+
+const wrap1: Wrap<{ a?: string; b: number }> = other;
+>wrap1 : Wrap<{ a?: string; b: number; }>
+>a : string | undefined
+>b : number
+>other : { other: number; }
+
+declare const wrap2: Wrap<{ a?: string; (): void }>;
+>wrap2 : Wrap<{ (): void; a?: string; }>
+>a : string | undefined
+
+wrap2.bind;
+>wrap2.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>wrap2 : Wrap<{ (): void; a?: string; }>
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+
+interface CallableBox<T> {
+    (): T;
+}
+interface PlainBox<T> {
+    value: T;
+>value : T
+}
+
+declare const box: CallableBox<string> | PlainBox<string>;
+>box : CallableBox<string> | PlainBox<string>
+
+if (typeof box === "function") {
+>typeof box === "function" : boolean
+>typeof box : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>box : CallableBox<string> | PlainBox<string>
+>"function" : "function"
+
+    box;
+>box : CallableBox<string>
+}
+else {
+    box;
+>box : PlainBox<string>
+}
+

@@ -678,6 +678,9 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 // and no required properties, call/construct signatures or index signatures
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
+		if shape := c.getLazyShape(t); shape != nil {
+			return shape.callSignatureCount+shape.constructSignatureCount == 0 && len(c.getIndexInfosOfStructuredType(t)) == 0 && shape.hasProperties && c.hasOnlyOptionalLazyProperties(t)
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *ast.Symbol) bool {
 			return p.Flags&ast.SymbolFlagsOptional != 0

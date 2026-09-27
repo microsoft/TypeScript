@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
@@ -46,6 +47,8 @@ type lazyMemberTable struct {
 	found               map[string]*ast.Symbol // memoized lookups; nil means no such member
 	resolving           *resolvingMembers
 	shape               *lazyShape
+	allIndexInfos       []*IndexInfo // declared and inherited index infos, once computed
+	allIndexInfosDone   bool
 }
 
 // lazyShape describes the members of a reference whose lazy member table is
@@ -53,6 +56,9 @@ type lazyMemberTable struct {
 type lazyShape struct {
 	callSignatureCount      int
 	constructSignatureCount int
+	hasProperties           bool
+	optionalityDone         bool
+	onlyOptionalProperties  bool
 }
 
 // resolvingMembers holds the members of a lazily prepared type that is being
@@ -302,6 +308,33 @@ func (c *Checker) lookupMemberLazily(t *Type, name string) (symbol *ast.Symbol, 
 	return result, true
 }
 
+// getIndexInfosLazily returns resolveStructuredTypeMembers(t).indexInfos
+// without resolving t's members (e.g. for `arr[i]` on an Array<T>).
+func (c *Checker) getIndexInfosLazily(t *Type) ([]*IndexInfo, bool) {
+	lm := c.getLazyMemberTable(t)
+	if lm == nil || lm.state != lazyMembersReady {
+		return nil, false
+	}
+	if !lm.allIndexInfosDone {
+		// Mirrors resolveObjectTypeMembers.
+		indexInfos := lm.indexInfos
+		for _, baseType := range lm.baseTypes {
+			var inheritedIndexInfos []*IndexInfo
+			if baseType != c.anyType {
+				inheritedIndexInfos = c.getIndexInfosOfType(baseType)
+			} else {
+				inheritedIndexInfos = []*IndexInfo{c.anyBaseTypeIndexInfo}
+			}
+			indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
+				return findIndexInfo(indexInfos, info.keyType) == nil
+			}))
+		}
+		lm.allIndexInfos = indexInfos
+		lm.allIndexInfosDone = true
+	}
+	return lm.allIndexInfos, true
+}
+
 // getNamedPropertyOfType finds name among getPropertiesOfType(t).
 func (c *Checker) getNamedPropertyOfType(t *Type, name string) *ast.Symbol {
 	reduced := c.getReducedApparentType(t)
@@ -323,8 +356,9 @@ func (c *Checker) getNamedPropertyOfType(t *Type, name string) *ast.Symbol {
 }
 
 // getLazyShape returns the shape of t when t has a lazy member table that is
-// ready. It is computed from the declared signatures and those of the
-// prepared base types, which resolveObjectTypeMembers concatenates.
+// ready. It is computed from the declared members and signatures and those
+// of the prepared base types, which resolveObjectTypeMembers concatenates
+// (signatures) or merges (properties).
 func (c *Checker) getLazyShape(t *Type) *lazyShape {
 	lm := c.getLazyMemberTable(t)
 	if lm == nil || lm.state != lazyMembersReady {
@@ -335,16 +369,70 @@ func (c *Checker) getLazyShape(t *Type) *lazyShape {
 			callSignatureCount:      len(lm.callSignatures),
 			constructSignatureCount: len(lm.constructSignatures),
 		}
+		for id, symbol := range c.resolveDeclaredMembers(t.Target()).declaredMembers {
+			if c.isNamedMember(symbol, id) {
+				shape.hasProperties = true
+				break
+			}
+		}
 		for _, baseType := range lm.baseTypes {
 			if baseShape := c.getLazyShape(c.getReducedApparentType(baseType)); baseShape != nil {
 				shape.callSignatureCount += baseShape.callSignatureCount
 				shape.constructSignatureCount += baseShape.constructSignatureCount
+				shape.hasProperties = shape.hasProperties || baseShape.hasProperties
 			} else {
 				shape.callSignatureCount += len(c.getSignaturesOfType(baseType, SignatureKindCall))
 				shape.constructSignatureCount += len(c.getSignaturesOfType(baseType, SignatureKindConstruct))
+				shape.hasProperties = shape.hasProperties || core.Some(c.getPropertiesOfType(baseType), isInheritableProperty)
 			}
 		}
 		lm.shape = shape
 	}
 	return lm.shape
+}
+
+func isInheritableProperty(prop *ast.Symbol) bool {
+	return !isStaticPrivateIdentifierProperty(prop)
+}
+
+// hasOnlyOptionalLazyProperties reports whether every property of t, which
+// has a lazy member table that is ready, is optional.
+func (c *Checker) hasOnlyOptionalLazyProperties(t *Type) bool {
+	shape := c.getLazyShape(t)
+	if !shape.optionalityDone {
+		var seen collections.Set[string]
+		shape.onlyOptionalProperties = c.everyLazyProperty(t, &seen, func(prop *ast.Symbol) bool {
+			return prop.Flags&ast.SymbolFlagsOptional != 0
+		})
+		shape.optionalityDone = true
+	}
+	return shape.onlyOptionalProperties
+}
+
+// everyLazyProperty reports whether f holds for every property of t, which has
+// a lazy member table that is ready. As in addInheritedMembers, a property
+// hides inherited properties of the same name; seen tracks those names. A
+// declared member is passed as declared, which has the same flags as its
+// instantiation.
+func (c *Checker) everyLazyProperty(t *Type, seen *collections.Set[string], f func(prop *ast.Symbol) bool) bool {
+	for id, symbol := range c.resolveDeclaredMembers(t.Target()).declaredMembers {
+		if c.isNamedMember(symbol, id) && seen.AddIfAbsent(id) && !f(symbol) {
+			return false
+		}
+	}
+	for _, baseType := range c.lazyMemberTables[t].baseTypes {
+		reduced := c.getReducedApparentType(baseType)
+		if c.getLazyShape(reduced) != nil {
+			if !c.everyLazyProperty(reduced, seen, f) {
+				return false
+			}
+			continue
+		}
+		for _, prop := range c.getPropertiesOfType(baseType) {
+			if isInheritableProperty(prop) && seen.AddIfAbsent(prop.Name) && !f(prop) {
+				return false
+			}
+		}
+	}
+	return true
 }

@@ -1,0 +1,215 @@
+//// [tests/cases/compiler/instantiatedReferenceShapeQueries.ts] ////
+
+=== instantiatedReferenceShapeQueries.ts ===
+// Shape queries (weak types, single signatures, empty object types, string
+// index signature only types, function object types) on instantiated interface
+// references, including ones whose base types change shape when instantiated.
+
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceShapeQueries.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 4, 12))
+>kind : Symbol(kind, Decl(instantiatedReferenceShapeQueries.ts, 4, 18))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 4, 12))
+>kind : Symbol(kind, Decl(instantiatedReferenceShapeQueries.ts, 4, 32))
+
+declare const other: { other: number };
+>other : Symbol(other, Decl(instantiatedReferenceShapeQueries.ts, 6, 13))
+>other : Symbol(other, Decl(instantiatedReferenceShapeQueries.ts, 6, 22))
+
+interface Weak<T extends string> extends Tagged<T> {
+>Weak : Symbol(Weak, Decl(instantiatedReferenceShapeQueries.ts, 6, 39))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 8, 15))
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceShapeQueries.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 8, 15))
+
+    opt?: number;
+>opt : Symbol(Weak.opt, Decl(instantiatedReferenceShapeQueries.ts, 8, 52))
+}
+const weak1: Weak<"b"> = other;
+>weak1 : Symbol(weak1, Decl(instantiatedReferenceShapeQueries.ts, 11, 5))
+>Weak : Symbol(Weak, Decl(instantiatedReferenceShapeQueries.ts, 6, 39))
+>other : Symbol(other, Decl(instantiatedReferenceShapeQueries.ts, 6, 13))
+
+const weak2: Weak<"a"> = other;
+>weak2 : Symbol(weak2, Decl(instantiatedReferenceShapeQueries.ts, 12, 5))
+>Weak : Symbol(Weak, Decl(instantiatedReferenceShapeQueries.ts, 6, 39))
+>other : Symbol(other, Decl(instantiatedReferenceShapeQueries.ts, 6, 13))
+
+interface AllOptional<T> {
+>AllOptional : Symbol(AllOptional, Decl(instantiatedReferenceShapeQueries.ts, 12, 31))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 14, 22))
+
+    a?: T;
+>a : Symbol(AllOptional.a, Decl(instantiatedReferenceShapeQueries.ts, 14, 26))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 14, 22))
+
+    b?: T[];
+>b : Symbol(AllOptional.b, Decl(instantiatedReferenceShapeQueries.ts, 15, 10))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 14, 22))
+}
+interface AllOptionalDerived<T> extends AllOptional<T> {
+>AllOptionalDerived : Symbol(AllOptionalDerived, Decl(instantiatedReferenceShapeQueries.ts, 17, 1))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 18, 29))
+>AllOptional : Symbol(AllOptional, Decl(instantiatedReferenceShapeQueries.ts, 12, 31))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 18, 29))
+
+    c?: T;
+>c : Symbol(AllOptionalDerived.c, Decl(instantiatedReferenceShapeQueries.ts, 18, 56))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 18, 29))
+}
+const weak3: AllOptional<string> = other;
+>weak3 : Symbol(weak3, Decl(instantiatedReferenceShapeQueries.ts, 21, 5))
+>AllOptional : Symbol(AllOptional, Decl(instantiatedReferenceShapeQueries.ts, 12, 31))
+>other : Symbol(other, Decl(instantiatedReferenceShapeQueries.ts, 6, 13))
+
+const weak4: AllOptionalDerived<string> = other;
+>weak4 : Symbol(weak4, Decl(instantiatedReferenceShapeQueries.ts, 22, 5))
+>AllOptionalDerived : Symbol(AllOptionalDerived, Decl(instantiatedReferenceShapeQueries.ts, 17, 1))
+>other : Symbol(other, Decl(instantiatedReferenceShapeQueries.ts, 6, 13))
+
+interface Empty<T extends string> extends Tagged<T> {}
+>Empty : Symbol(Empty, Decl(instantiatedReferenceShapeQueries.ts, 22, 48))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 24, 16))
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceShapeQueries.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 24, 16))
+
+const empty1: Empty<"b"> = { extra: 1 };
+>empty1 : Symbol(empty1, Decl(instantiatedReferenceShapeQueries.ts, 25, 5))
+>Empty : Symbol(Empty, Decl(instantiatedReferenceShapeQueries.ts, 22, 48))
+>extra : Symbol(extra, Decl(instantiatedReferenceShapeQueries.ts, 25, 28))
+
+const empty2: Empty<"a"> = { kind: "a", extra: 1 };
+>empty2 : Symbol(empty2, Decl(instantiatedReferenceShapeQueries.ts, 26, 5))
+>Empty : Symbol(Empty, Decl(instantiatedReferenceShapeQueries.ts, 22, 48))
+>kind : Symbol(kind, Decl(instantiatedReferenceShapeQueries.ts, 26, 28))
+>extra : Symbol(extra, Decl(instantiatedReferenceShapeQueries.ts, 26, 39))
+
+type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+>Two : Symbol(Two, Decl(instantiatedReferenceShapeQueries.ts, 26, 51))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 28, 9))
+>U : Symbol(U, Decl(instantiatedReferenceShapeQueries.ts, 28, 17))
+>x : Symbol(x, Decl(instantiatedReferenceShapeQueries.ts, 28, 20))
+>U : Symbol(U, Decl(instantiatedReferenceShapeQueries.ts, 28, 17))
+>y : Symbol(y, Decl(instantiatedReferenceShapeQueries.ts, 28, 25))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 28, 9))
+>U : Symbol(U, Decl(instantiatedReferenceShapeQueries.ts, 28, 17))
+>U : Symbol(U, Decl(instantiatedReferenceShapeQueries.ts, 28, 42))
+>x : Symbol(x, Decl(instantiatedReferenceShapeQueries.ts, 28, 45))
+>U : Symbol(U, Decl(instantiatedReferenceShapeQueries.ts, 28, 42))
+>y : Symbol(y, Decl(instantiatedReferenceShapeQueries.ts, 28, 50))
+>U : Symbol(U, Decl(instantiatedReferenceShapeQueries.ts, 28, 42))
+
+interface Overloads<T> extends Two<T> {}
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceShapeQueries.ts, 28, 67))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 29, 20))
+>Two : Symbol(Two, Decl(instantiatedReferenceShapeQueries.ts, 26, 51))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 29, 20))
+
+declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+>pipe : Symbol(pipe, Decl(instantiatedReferenceShapeQueries.ts, 29, 40))
+>A : Symbol(A, Decl(instantiatedReferenceShapeQueries.ts, 31, 22))
+>B : Symbol(B, Decl(instantiatedReferenceShapeQueries.ts, 31, 38))
+>f : Symbol(f, Decl(instantiatedReferenceShapeQueries.ts, 31, 42))
+>args : Symbol(args, Decl(instantiatedReferenceShapeQueries.ts, 31, 46))
+>A : Symbol(A, Decl(instantiatedReferenceShapeQueries.ts, 31, 22))
+>B : Symbol(B, Decl(instantiatedReferenceShapeQueries.ts, 31, 38))
+>args : Symbol(args, Decl(instantiatedReferenceShapeQueries.ts, 31, 66))
+>A : Symbol(A, Decl(instantiatedReferenceShapeQueries.ts, 31, 22))
+>B : Symbol(B, Decl(instantiatedReferenceShapeQueries.ts, 31, 38))
+
+declare const merged: Overloads<string>;
+>merged : Symbol(merged, Decl(instantiatedReferenceShapeQueries.ts, 33, 13))
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceShapeQueries.ts, 28, 67))
+
+const piped1: number = pipe(merged);
+>piped1 : Symbol(piped1, Decl(instantiatedReferenceShapeQueries.ts, 34, 5))
+>pipe : Symbol(pipe, Decl(instantiatedReferenceShapeQueries.ts, 29, 40))
+>merged : Symbol(merged, Decl(instantiatedReferenceShapeQueries.ts, 33, 13))
+
+declare const distinct: Overloads<number>;
+>distinct : Symbol(distinct, Decl(instantiatedReferenceShapeQueries.ts, 36, 13))
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceShapeQueries.ts, 28, 67))
+
+const piped2: number = pipe(distinct);
+>piped2 : Symbol(piped2, Decl(instantiatedReferenceShapeQueries.ts, 37, 5))
+>pipe : Symbol(pipe, Decl(instantiatedReferenceShapeQueries.ts, 29, 40))
+>distinct : Symbol(distinct, Decl(instantiatedReferenceShapeQueries.ts, 36, 13))
+
+interface Dict<T extends string> extends Tagged<T> {
+>Dict : Symbol(Dict, Decl(instantiatedReferenceShapeQueries.ts, 37, 38))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 39, 15))
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceShapeQueries.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 39, 15))
+
+    [key: string]: unknown;
+>key : Symbol(key, Decl(instantiatedReferenceShapeQueries.ts, 40, 5))
+}
+
+declare const dict: Dict<"b">;
+>dict : Symbol(dict, Decl(instantiatedReferenceShapeQueries.ts, 43, 13))
+>Dict : Symbol(Dict, Decl(instantiatedReferenceShapeQueries.ts, 37, 38))
+
+const dict1 = dict["anything"];
+>dict1 : Symbol(dict1, Decl(instantiatedReferenceShapeQueries.ts, 44, 5))
+>dict : Symbol(dict, Decl(instantiatedReferenceShapeQueries.ts, 43, 13))
+
+const dict2: { [key: string]: number } = dict;
+>dict2 : Symbol(dict2, Decl(instantiatedReferenceShapeQueries.ts, 45, 5))
+>key : Symbol(key, Decl(instantiatedReferenceShapeQueries.ts, 45, 16))
+>dict : Symbol(dict, Decl(instantiatedReferenceShapeQueries.ts, 43, 13))
+
+interface Wrap<T extends { a?: string }> extends T {}
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceShapeQueries.ts, 45, 46))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 47, 15))
+>a : Symbol(a, Decl(instantiatedReferenceShapeQueries.ts, 47, 26))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 47, 15))
+
+const wrap1: Wrap<{ a?: string; b: number }> = other;
+>wrap1 : Symbol(wrap1, Decl(instantiatedReferenceShapeQueries.ts, 49, 5))
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceShapeQueries.ts, 45, 46))
+>a : Symbol(a, Decl(instantiatedReferenceShapeQueries.ts, 49, 19))
+>b : Symbol(b, Decl(instantiatedReferenceShapeQueries.ts, 49, 31))
+>other : Symbol(other, Decl(instantiatedReferenceShapeQueries.ts, 6, 13))
+
+declare const wrap2: Wrap<{ a?: string; (): void }>;
+>wrap2 : Symbol(wrap2, Decl(instantiatedReferenceShapeQueries.ts, 50, 13))
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceShapeQueries.ts, 45, 46))
+>a : Symbol(a, Decl(instantiatedReferenceShapeQueries.ts, 50, 27))
+
+wrap2.bind;
+>wrap2.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>wrap2 : Symbol(wrap2, Decl(instantiatedReferenceShapeQueries.ts, 50, 13))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+interface CallableBox<T> {
+>CallableBox : Symbol(CallableBox, Decl(instantiatedReferenceShapeQueries.ts, 51, 11))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 53, 22))
+
+    (): T;
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 53, 22))
+}
+interface PlainBox<T> {
+>PlainBox : Symbol(PlainBox, Decl(instantiatedReferenceShapeQueries.ts, 55, 1))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 56, 19))
+
+    value: T;
+>value : Symbol(PlainBox.value, Decl(instantiatedReferenceShapeQueries.ts, 56, 23))
+>T : Symbol(T, Decl(instantiatedReferenceShapeQueries.ts, 56, 19))
+}
+
+declare const box: CallableBox<string> | PlainBox<string>;
+>box : Symbol(box, Decl(instantiatedReferenceShapeQueries.ts, 60, 13))
+>CallableBox : Symbol(CallableBox, Decl(instantiatedReferenceShapeQueries.ts, 51, 11))
+>PlainBox : Symbol(PlainBox, Decl(instantiatedReferenceShapeQueries.ts, 55, 1))
+
+if (typeof box === "function") {
+>box : Symbol(box, Decl(instantiatedReferenceShapeQueries.ts, 60, 13))
+
+    box;
+>box : Symbol(box, Decl(instantiatedReferenceShapeQueries.ts, 60, 13))
+}
+else {
+    box;
+>box : Symbol(box, Decl(instantiatedReferenceShapeQueries.ts, 60, 13))
+}
+
