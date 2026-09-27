@@ -497,8 +497,24 @@ func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *T
 	if target.flags&(TypeFlagsPrimitive|TypeFlagsNever) != 0 {
 		return false
 	}
+	properties := node.Properties()
+	spreadNamesByIndex := make(map[int]collections.Set[string])
+	for i, prop := range properties {
+		if !ast.IsSpreadAssignment(prop) {
+			continue
+		}
+		spreadType := c.getReducedType(c.checkExpressionEx(prop.Expression(), CheckModeNormal))
+		if !c.isValidSpreadType(spreadType) {
+			continue
+		}
+		names := collections.Set[string]{}
+		for _, p := range c.getPropertiesOfType(spreadType) {
+			names.Add(p.Name)
+		}
+		spreadNamesByIndex[i] = names
+	}
 	reportedError := false
-	for _, prop := range node.Properties() {
+	for i, prop := range properties {
 		if ast.IsSpreadAssignment(prop) {
 			continue
 		}
@@ -506,12 +522,27 @@ func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *T
 		if nameType == nil || nameType.flags&TypeFlagsNever != 0 {
 			continue
 		}
+		anchor := prop.Name()
+		var next *ast.Node
+		if ast.IsPropertyAssignment(prop) {
+			next = prop.Initializer()
+		}
+		if isTypeUsableAsPropertyName(nameType) {
+			name := getPropertyNameFromType(nameType)
+			for j := i + 1; j < len(properties); j++ {
+				if names, ok := spreadNamesByIndex[j]; ok && names.Has(name) {
+					anchor = properties[j].Expression()
+					next = nil
+					break
+				}
+			}
+		}
 		switch prop.Kind {
 		case ast.KindSetAccessor, ast.KindGetAccessor, ast.KindMethodDeclaration, ast.KindShorthandPropertyAssignment:
-			reportedError = c.elaborateElement(source, target, relation, prop.Name(), nil, nameType, nil, nil, diagnosticOutput) || reportedError
+			reportedError = c.elaborateElement(source, target, relation, anchor, nil, nameType, nil, nil, diagnosticOutput) || reportedError
 		case ast.KindPropertyAssignment:
 			message := core.IfElse(ast.IsComputedNonLiteralName(prop.Name()), diagnostics.Type_of_computed_property_s_value_is_0_which_is_not_assignable_to_type_1, nil)
-			reportedError = c.elaborateElement(source, target, relation, prop.Name(), prop.Initializer(), nameType, message, nil, diagnosticOutput) || reportedError
+			reportedError = c.elaborateElement(source, target, relation, anchor, next, nameType, message, nil, diagnosticOutput) || reportedError
 		}
 	}
 	return reportedError
