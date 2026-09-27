@@ -28695,11 +28695,7 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 			// Identifiers in expression contexts are emitted, so we need to follow their referenced aliases and mark them as used
 			// Some non-expression identifiers are also treated as expression identifiers for this purpose, eg, `a` in `b = {a}` or `q` in `import r = q`
 			// This is the exception, rather than the rule - most non-expression identifiers are declaration names.
-			// The names of function and class expressions are classified as expressions by IsExpressionNode, but they
-			// are declaration names, not references. Regular type checking never resolves them as references. Resolving
-			// them here would look up the name from inside the function's scope (e.g. finding a `let f` in the body of
-			// `function f() {}`) and report spurious diagnostics.
-			if (ast.IsExpressionNode(location) && !ast.IsDeclarationName(location) ||
+			if (ast.IsExpressionNode(location) ||
 				ast.IsShorthandPropertyAssignment(location.Parent)) &&
 				shouldMarkIdentifierAliasReferenced(location) {
 				if ast.IsPropertyAccessOrQualifiedName(location.Parent) {
