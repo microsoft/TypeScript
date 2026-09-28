@@ -230,7 +230,10 @@ func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) 
 			dirty.mu.Lock()
 			defer dirty.mu.Unlock()
 			if dirty.delete {
-				return nil, false
+				dirty.value = value
+				dirty.dirty = true
+				dirty.delete = false
+				return dirty, false
 			}
 			return dirty, true
 		}
@@ -253,7 +256,10 @@ func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) 
 		entry.mu.Lock()
 		defer entry.mu.Unlock()
 		if entry.delete {
-			return nil, false
+			entry.value = value
+			entry.dirty = true
+			entry.delete = false
+			return entry, false
 		}
 	}
 	return entry, loaded

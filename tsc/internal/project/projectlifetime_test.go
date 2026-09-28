@@ -239,11 +239,12 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
 
-		// Close foo.ts - configured project should be retained until next file open
+		// Close foo.ts - the configured project should be released
 		session.DidCloseFile(context.Background(), fooUri)
+		session.WaitForBackgroundTasks()
 		snapshot = session.Snapshot()
-		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
-		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p1/tsconfig.json")) == nil)
 	})
 
 	t.Run("file move from inferred to configured via didOpen/didClose sequence", func(t *testing.T) {
