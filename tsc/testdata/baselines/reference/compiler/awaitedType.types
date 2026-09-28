@@ -596,20 +596,20 @@ async function test40330() {
 >async () => {} : () => Promise<void>
 
     const res = await Promise.all([
->res : [number, ...void[]]
->await Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : [number, ...void[]]
->Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : Promise<[number, ...void[]]>
+>res : [number, void]
+>await Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : [number, void]
+>Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : Promise<[number, void]>
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >Promise : PromiseConstructor
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->[        promiseNumber,        ...[promiseVoid()]    ] : [Promise<number>, ...Promise<void>[]]
+>[        promiseNumber,        ...[promiseVoid()]    ] : [Promise<number>, Promise<void>]
 
         promiseNumber,
 >promiseNumber : Promise<number>
 
         ...[promiseVoid()]
 >...[promiseVoid()] : Promise<void>
->[promiseVoid()] : Promise<void>[]
+>[promiseVoid()] : [Promise<void>]
 >promiseVoid() : Promise<void>
 >promiseVoid : () => Promise<void>
 

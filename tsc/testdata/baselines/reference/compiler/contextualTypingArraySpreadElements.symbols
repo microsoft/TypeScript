@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/contextualTypingArraySpreadElements.ts] ////
+
+=== contextualTypingArraySpreadElements.ts ===
+interface Item {
+>Item : Symbol(Item, Decl(contextualTypingArraySpreadElements.ts, 0, 0))
+
+    field: "a" | "b" | "c";
+>field : Symbol(Item.field, Decl(contextualTypingArraySpreadElements.ts, 0, 16))
+}
+
+interface First {
+>First : Symbol(First, Decl(contextualTypingArraySpreadElements.ts, 2, 1))
+
+    kind: "first";
+>kind : Symbol(First.kind, Decl(contextualTypingArraySpreadElements.ts, 4, 17))
+}
+
+interface Last {
+>Last : Symbol(Last, Decl(contextualTypingArraySpreadElements.ts, 6, 1))
+
+    kind: "last";
+>kind : Symbol(Last.kind, Decl(contextualTypingArraySpreadElements.ts, 8, 16))
+}
+
+declare const condition: boolean;
+>condition : Symbol(condition, Decl(contextualTypingArraySpreadElements.ts, 12, 13))
+
+const direct: Item[] = [
+>direct : Symbol(direct, Decl(contextualTypingArraySpreadElements.ts, 14, 5))
+>Item : Symbol(Item, Decl(contextualTypingArraySpreadElements.ts, 0, 0))
+
+    ...[
+        { field: "a" },
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 16, 9))
+
+        { field: "b" },
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 17, 9))
+
+    ],
+];
+
+const conditional: Item[] = [
+>conditional : Symbol(conditional, Decl(contextualTypingArraySpreadElements.ts, 21, 5))
+>Item : Symbol(Item, Decl(contextualTypingArraySpreadElements.ts, 0, 0))
+
+    ...(condition ? [{ field: "a" }] : [{ field: "b" }]),
+>condition : Symbol(condition, Decl(contextualTypingArraySpreadElements.ts, 12, 13))
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 22, 22))
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 22, 41))
+
+];
+
+const tuple: [First, Item, Last] = [
+>tuple : Symbol(tuple, Decl(contextualTypingArraySpreadElements.ts, 25, 5))
+>First : Symbol(First, Decl(contextualTypingArraySpreadElements.ts, 2, 1))
+>Item : Symbol(Item, Decl(contextualTypingArraySpreadElements.ts, 0, 0))
+>Last : Symbol(Last, Decl(contextualTypingArraySpreadElements.ts, 6, 1))
+
+    { kind: "first" },
+>kind : Symbol(kind, Decl(contextualTypingArraySpreadElements.ts, 26, 5))
+
+    ...[{ field: "a" }],
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 27, 9))
+
+    { kind: "last" },
+>kind : Symbol(kind, Decl(contextualTypingArraySpreadElements.ts, 28, 5))
+
+];
+
+const tupleFromSingleSpread: [First, Last] = [
+>tupleFromSingleSpread : Symbol(tupleFromSingleSpread, Decl(contextualTypingArraySpreadElements.ts, 31, 5))
+>First : Symbol(First, Decl(contextualTypingArraySpreadElements.ts, 2, 1))
+>Last : Symbol(Last, Decl(contextualTypingArraySpreadElements.ts, 6, 1))
+
+    ...[
+        { kind: "first" },
+>kind : Symbol(kind, Decl(contextualTypingArraySpreadElements.ts, 33, 9))
+
+        { kind: "last" },
+>kind : Symbol(kind, Decl(contextualTypingArraySpreadElements.ts, 34, 9))
+
+    ],
+];
+
+const multipleSpreads: Item[] = [
+>multipleSpreads : Symbol(multipleSpreads, Decl(contextualTypingArraySpreadElements.ts, 38, 5))
+>Item : Symbol(Item, Decl(contextualTypingArraySpreadElements.ts, 0, 0))
+
+    ...[{ field: "a" }],
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 39, 9))
+
+    ...[{ field: "b" }],
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 40, 9))
+
+];
+
+declare function acceptItems(...items: Item[]): void;
+>acceptItems : Symbol(acceptItems, Decl(contextualTypingArraySpreadElements.ts, 41, 2))
+>items : Symbol(items, Decl(contextualTypingArraySpreadElements.ts, 43, 29))
+>Item : Symbol(Item, Decl(contextualTypingArraySpreadElements.ts, 0, 0))
+
+declare function acceptPair(first: First, last: Last): void;
+>acceptPair : Symbol(acceptPair, Decl(contextualTypingArraySpreadElements.ts, 43, 53))
+>first : Symbol(first, Decl(contextualTypingArraySpreadElements.ts, 44, 28))
+>First : Symbol(First, Decl(contextualTypingArraySpreadElements.ts, 2, 1))
+>last : Symbol(last, Decl(contextualTypingArraySpreadElements.ts, 44, 41))
+>Last : Symbol(Last, Decl(contextualTypingArraySpreadElements.ts, 6, 1))
+
+acceptItems(...[{ field: "a" }, { field: "b" }]);
+>acceptItems : Symbol(acceptItems, Decl(contextualTypingArraySpreadElements.ts, 41, 2))
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 46, 17))
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 46, 33))
+
+acceptItems(...(condition ? [{ field: "a" }] : [{ field: "b" }]));
+>acceptItems : Symbol(acceptItems, Decl(contextualTypingArraySpreadElements.ts, 41, 2))
+>condition : Symbol(condition, Decl(contextualTypingArraySpreadElements.ts, 12, 13))
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 47, 30))
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 47, 49))
+
+acceptPair(...[{ kind: "first" }, { kind: "last" }]);
+>acceptPair : Symbol(acceptPair, Decl(contextualTypingArraySpreadElements.ts, 43, 53))
+>kind : Symbol(kind, Decl(contextualTypingArraySpreadElements.ts, 48, 16))
+>kind : Symbol(kind, Decl(contextualTypingArraySpreadElements.ts, 48, 35))
+
+const invalid: Item[] = [...[{ field: "not-an-item" }]];
+>invalid : Symbol(invalid, Decl(contextualTypingArraySpreadElements.ts, 50, 5))
+>Item : Symbol(Item, Decl(contextualTypingArraySpreadElements.ts, 0, 0))
+>field : Symbol(field, Decl(contextualTypingArraySpreadElements.ts, 50, 30))
+

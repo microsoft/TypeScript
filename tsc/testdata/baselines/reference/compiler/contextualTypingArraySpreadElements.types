@@ -1,0 +1,184 @@
+//// [tests/cases/compiler/contextualTypingArraySpreadElements.ts] ////
+
+=== contextualTypingArraySpreadElements.ts ===
+interface Item {
+    field: "a" | "b" | "c";
+>field : "a" | "b" | "c"
+}
+
+interface First {
+    kind: "first";
+>kind : "first"
+}
+
+interface Last {
+    kind: "last";
+>kind : "last"
+}
+
+declare const condition: boolean;
+>condition : boolean
+
+const direct: Item[] = [
+>direct : Item[]
+>[    ...[        { field: "a" },        { field: "b" },    ],] : ({ field: "a"; } | { field: "b"; })[]
+
+    ...[
+>...[        { field: "a" },        { field: "b" },    ] : { field: "a"; } | { field: "b"; }
+>[        { field: "a" },        { field: "b" },    ] : ({ field: "a"; } | { field: "b"; })[]
+
+        { field: "a" },
+>{ field: "a" } : { field: "a"; }
+>field : "a"
+>"a" : "a"
+
+        { field: "b" },
+>{ field: "b" } : { field: "b"; }
+>field : "b"
+>"b" : "b"
+
+    ],
+];
+
+const conditional: Item[] = [
+>conditional : Item[]
+>[    ...(condition ? [{ field: "a" }] : [{ field: "b" }]),] : ({ field: "a"; } | { field: "b"; })[]
+
+    ...(condition ? [{ field: "a" }] : [{ field: "b" }]),
+>...(condition ? [{ field: "a" }] : [{ field: "b" }]) : { field: "a"; } | { field: "b"; }
+>(condition ? [{ field: "a" }] : [{ field: "b" }]) : { field: "a"; }[] | { field: "b"; }[]
+>condition ? [{ field: "a" }] : [{ field: "b" }] : { field: "a"; }[] | { field: "b"; }[]
+>condition : boolean
+>[{ field: "a" }] : { field: "a"; }[]
+>{ field: "a" } : { field: "a"; }
+>field : "a"
+>"a" : "a"
+>[{ field: "b" }] : { field: "b"; }[]
+>{ field: "b" } : { field: "b"; }
+>field : "b"
+>"b" : "b"
+
+];
+
+const tuple: [First, Item, Last] = [
+>tuple : [First, Item, Last]
+>[    { kind: "first" },    ...[{ field: "a" }],    { kind: "last" },] : [{ kind: "first"; }, { field: "a"; }, { kind: "last"; }]
+
+    { kind: "first" },
+>{ kind: "first" } : { kind: "first"; }
+>kind : "first"
+>"first" : "first"
+
+    ...[{ field: "a" }],
+>...[{ field: "a" }] : { field: "a"; }
+>[{ field: "a" }] : [{ field: "a"; }]
+>{ field: "a" } : { field: "a"; }
+>field : "a"
+>"a" : "a"
+
+    { kind: "last" },
+>{ kind: "last" } : { kind: "last"; }
+>kind : "last"
+>"last" : "last"
+
+];
+
+const tupleFromSingleSpread: [First, Last] = [
+>tupleFromSingleSpread : [First, Last]
+>[    ...[        { kind: "first" },        { kind: "last" },    ],] : [{ kind: "first"; }, { kind: "last"; }]
+
+    ...[
+>...[        { kind: "first" },        { kind: "last" },    ] : { kind: "first"; } | { kind: "last"; }
+>[        { kind: "first" },        { kind: "last" },    ] : [{ kind: "first"; }, { kind: "last"; }]
+
+        { kind: "first" },
+>{ kind: "first" } : { kind: "first"; }
+>kind : "first"
+>"first" : "first"
+
+        { kind: "last" },
+>{ kind: "last" } : { kind: "last"; }
+>kind : "last"
+>"last" : "last"
+
+    ],
+];
+
+const multipleSpreads: Item[] = [
+>multipleSpreads : Item[]
+>[    ...[{ field: "a" }],    ...[{ field: "b" }],] : ({ field: "a"; } | { field: "b"; })[]
+
+    ...[{ field: "a" }],
+>...[{ field: "a" }] : { field: "a"; }
+>[{ field: "a" }] : { field: "a"; }[]
+>{ field: "a" } : { field: "a"; }
+>field : "a"
+>"a" : "a"
+
+    ...[{ field: "b" }],
+>...[{ field: "b" }] : { field: "b"; }
+>[{ field: "b" }] : { field: "b"; }[]
+>{ field: "b" } : { field: "b"; }
+>field : "b"
+>"b" : "b"
+
+];
+
+declare function acceptItems(...items: Item[]): void;
+>acceptItems : (...items: Item[]) => void
+>items : Item[]
+
+declare function acceptPair(first: First, last: Last): void;
+>acceptPair : (first: First, last: Last) => void
+>first : First
+>last : Last
+
+acceptItems(...[{ field: "a" }, { field: "b" }]);
+>acceptItems(...[{ field: "a" }, { field: "b" }]) : void
+>acceptItems : (...items: Item[]) => void
+>...[{ field: "a" }, { field: "b" }] : { field: string; } | { field: string; }
+>[{ field: "a" }, { field: "b" }] : [{ field: string; }, { field: string; }]
+>{ field: "a" } : { field: string; }
+>field : string
+>"a" : "a"
+>{ field: "b" } : { field: string; }
+>field : string
+>"b" : "b"
+
+acceptItems(...(condition ? [{ field: "a" }] : [{ field: "b" }]));
+>acceptItems(...(condition ? [{ field: "a" }] : [{ field: "b" }])) : void
+>acceptItems : (...items: Item[]) => void
+>...(condition ? [{ field: "a" }] : [{ field: "b" }]) : { field: string; }
+>(condition ? [{ field: "a" }] : [{ field: "b" }]) : { field: string; }[]
+>condition ? [{ field: "a" }] : [{ field: "b" }] : { field: string; }[]
+>condition : boolean
+>[{ field: "a" }] : { field: string; }[]
+>{ field: "a" } : { field: string; }
+>field : string
+>"a" : "a"
+>[{ field: "b" }] : { field: string; }[]
+>{ field: "b" } : { field: string; }
+>field : string
+>"b" : "b"
+
+acceptPair(...[{ kind: "first" }, { kind: "last" }]);
+>acceptPair(...[{ kind: "first" }, { kind: "last" }]) : void
+>acceptPair : (first: First, last: Last) => void
+>...[{ kind: "first" }, { kind: "last" }] : { kind: string; } | { kind: string; }
+>[{ kind: "first" }, { kind: "last" }] : [{ kind: string; }, { kind: string; }]
+>{ kind: "first" } : { kind: string; }
+>kind : string
+>"first" : "first"
+>{ kind: "last" } : { kind: string; }
+>kind : string
+>"last" : "last"
+
+const invalid: Item[] = [...[{ field: "not-an-item" }]];
+>invalid : Item[]
+>[...[{ field: "not-an-item" }]] : { field: "not-an-item"; }[]
+>...[{ field: "not-an-item" }] : { field: "not-an-item"; }
+>[{ field: "not-an-item" }] : { field: "not-an-item"; }[]
+>{ field: "not-an-item" } : { field: "not-an-item"; }
+>field : "not-an-item"
+>"not-an-item" : "not-an-item"
+

@@ -1,0 +1,62 @@
+contextualTypingArraySpreadElements.ts(51,26): error TS2322: Type '{ field: "not-an-item"; }' is not assignable to type 'Item'.
+  Types of property 'field' are incompatible.
+    Type '"not-an-item"' is not assignable to type '"a" | "b" | "c"'.
+
+
+==== contextualTypingArraySpreadElements.ts (1 errors) ====
+    interface Item {
+        field: "a" | "b" | "c";
+    }
+    
+    interface First {
+        kind: "first";
+    }
+    
+    interface Last {
+        kind: "last";
+    }
+    
+    declare const condition: boolean;
+    
+    const direct: Item[] = [
+        ...[
+            { field: "a" },
+            { field: "b" },
+        ],
+    ];
+    
+    const conditional: Item[] = [
+        ...(condition ? [{ field: "a" }] : [{ field: "b" }]),
+    ];
+    
+    const tuple: [First, Item, Last] = [
+        { kind: "first" },
+        ...[{ field: "a" }],
+        { kind: "last" },
+    ];
+    
+    const tupleFromSingleSpread: [First, Last] = [
+        ...[
+            { kind: "first" },
+            { kind: "last" },
+        ],
+    ];
+    
+    const multipleSpreads: Item[] = [
+        ...[{ field: "a" }],
+        ...[{ field: "b" }],
+    ];
+    
+    declare function acceptItems(...items: Item[]): void;
+    declare function acceptPair(first: First, last: Last): void;
+    
+    acceptItems(...[{ field: "a" }, { field: "b" }]);
+    acceptItems(...(condition ? [{ field: "a" }] : [{ field: "b" }]));
+    acceptPair(...[{ kind: "first" }, { kind: "last" }]);
+    
+    const invalid: Item[] = [...[{ field: "not-an-item" }]];
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ field: "not-an-item"; }' is not assignable to type 'Item'.
+!!! error TS2322:   Types of property 'field' are incompatible.
+!!! error TS2322:     Type '"not-an-item"' is not assignable to type '"a" | "b" | "c"'.
+    
