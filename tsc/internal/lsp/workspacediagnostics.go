@@ -108,34 +108,20 @@ func (s *Server) pullWorkspaceDiagnostics(ctx context.Context, params *lsproto.W
 	run := newWorkspaceDiagnosticsRun(ctx, s, params)
 
 	scope := s.session.Config().WorkspaceDiagnosticsScope
-	// An empty (non-nil) set loads no trees beyond what is already loaded.
-	var trees *collections.Set[tspath.Path]
-	if scope != lsutil.WorkspaceDiagnosticsScopeAllProjects {
-		trees = &collections.Set[tspath.Path]{}
-		if scope == lsutil.WorkspaceDiagnosticsScopeOpenProjectsAndDependents {
-			for _, open := range s.session.Snapshot().OpenProjects() {
-				trees.Add(tspath.Path(open.Id()))
-			}
-		}
-	}
-
+	openProjects := s.session.Snapshot().OpenProjects()
 	repeat := false
-	s.session.WithSnapshotLoadingProjectTree(ctx, trees, func(snapshot *project.Snapshot) {
-		preferences := snapshot.UserPreferences()
-		settings := workspaceDiagnosticsSettings{preferences: preferences, locale: s.GetLocale().String()}
-		// A program generation cannot see a settings change, so the cache is keyed on them too.
-		s.workspaceDiagnostics.useSettings(settings)
-		if !scope.Enabled() || preferences.EnableValidation.IsFalse() {
-			// Nothing is reported, and the cleanup pass below clears whatever the client holds.
-			return
-		}
-		run.fingerprint = newWorkspaceDiagnosticsFingerprint(snapshot, settings)
-		if s.workspaceDiagnostics.repeatsLastAnswer(run.fingerprint, run.previous) {
-			repeat = true
-			return
-		}
-		run.collect(snapshot, projectsInScope(snapshot, scope))
-	})
+	for loaded := false; !loaded; {
+		loaded = true
+		s.session.WithSnapshotLoadingProjectTree(ctx, workspaceDiagnosticsTrees(scope, openProjects), func(snapshot *project.Snapshot) {
+			// The trees were chosen before this snapshot was taken, for what may no longer be its scope.
+			if snapshot.UserPreferences().WorkspaceDiagnosticsScope != scope {
+				scope, openProjects = snapshot.UserPreferences().WorkspaceDiagnosticsScope, snapshot.OpenProjects()
+				loaded = false
+				return
+			}
+			repeat = run.collectFrom(snapshot, scope)
+		})
+	}
 
 	if repeat {
 		// The client pulls every couple of seconds for as long as it is open, so most pulls have
@@ -229,6 +215,40 @@ func newWorkspaceDiagnosticsRun(ctx context.Context, server *Server, params *lsp
 		lastTick:           time.Now(),
 		cache:              server.workspaceDiagnostics,
 	}
+}
+
+// workspaceDiagnosticsTrees is the project trees a pull in scope has to load. An empty (non-nil)
+// set loads no trees beyond what is already loaded.
+func workspaceDiagnosticsTrees(scope lsutil.WorkspaceDiagnosticsScope, openProjects []*project.Project) *collections.Set[tspath.Path] {
+	if scope == lsutil.WorkspaceDiagnosticsScopeAllProjects {
+		return nil
+	}
+	trees := &collections.Set[tspath.Path]{}
+	if scope == lsutil.WorkspaceDiagnosticsScopeOpenProjectsAndDependents {
+		for _, open := range openProjects {
+			trees.Add(tspath.Path(open.Id()))
+		}
+	}
+	return trees
+}
+
+// collectFrom reports the projects in scope of a snapshot, or reports whether the last answer still
+// stands, in which case it collects nothing.
+func (r *workspaceDiagnosticsRun) collectFrom(snapshot *project.Snapshot, scope lsutil.WorkspaceDiagnosticsScope) (repeat bool) {
+	preferences := snapshot.UserPreferences()
+	settings := workspaceDiagnosticsSettings{preferences: preferences, locale: r.server.GetLocale().String()}
+	// A program generation cannot see a settings change, so the cache is keyed on them too.
+	r.server.workspaceDiagnostics.useSettings(settings)
+	if !scope.Enabled() || preferences.EnableValidation.IsFalse() {
+		// Nothing is reported, and the cleanup pass clears whatever the client holds.
+		return false
+	}
+	r.fingerprint = newWorkspaceDiagnosticsFingerprint(snapshot, settings)
+	if r.server.workspaceDiagnostics.repeatsLastAnswer(r.fingerprint, r.previous) {
+		return true
+	}
+	r.collect(snapshot, projectsInScope(snapshot, scope))
+	return false
 }
 
 // collect reports every file owned by every project in scope. A project's files are shared across
