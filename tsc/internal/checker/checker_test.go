@@ -66,13 +66,16 @@ func TestGetTypeAtLocationOfTypeOnlyImportClause(t *testing.T) {
 	t.Parallel()
 
 	fs := vfstest.FromMap(map[string]string{
-		"/types.ts": `export type U = number;`,
+		"/types.ts": `export type U = number;
+export default interface D { x: number }`,
 		"/main.ts": `import type { U } from "./types";
 import type * as types from "./types";
 import { U as V } from "./types";
+import type D from "./types";
 export const u: U = 1;
 export const v: V = 1;
-export type W = types.U;`,
+export type W = types.U;
+export type E = D;`,
 		"/tsconfig.json": `
 				{
 					"compilerOptions": {},
@@ -109,6 +112,10 @@ export type W = types.U;`,
 		}
 		assert.Equal(t, typ, regular)
 	}
+
+	defaultClause := c.GetTypeAtLocation(importClauseAt(3))
+	defaultReference := c.GetTypeAtLocation(file.Statements.Nodes[7].AsTypeAliasDeclaration().Type)
+	assert.Equal(t, defaultClause, defaultReference)
 }
 
 func BenchmarkNewChecker(b *testing.B) {

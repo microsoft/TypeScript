@@ -32381,10 +32381,7 @@ func (c *Checker) getTypeOfNode(node *ast.Node) *Type {
 	if ast.IsTypeDeclaration(node) {
 		// In this case, we call getSymbolOfDeclaration instead of getSymbolAtLocation because it is a declaration
 		symbol := c.getSymbolOfDeclaration(node)
-		if symbol != nil {
-			return c.getDeclaredTypeOfSymbol(symbol)
-		}
-		return c.errorType
+		return c.getDeclaredTypeOfSymbol(symbol)
 	}
 
 	if ast.IsTypeDeclarationName(node) {
