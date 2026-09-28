@@ -741,7 +741,6 @@ func (p *Printer) writeCommentRangeWorker(text string, lineMap []core.TextPos, k
 
 func (p *Printer) shouldEmitComments(node *ast.Node) bool {
 	return !p.commentsDisabled &&
-		p.currentSourceFile != nil &&
 		!ast.IsSourceFile(node)
 }
 

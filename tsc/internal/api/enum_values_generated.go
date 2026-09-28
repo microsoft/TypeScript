@@ -19,6 +19,7 @@ import (
 	diagnostics "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	lsproto "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	nodebuilder "github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	printer "github.com/microsoft/TypeScript/tsc/internal/printer"
 	spanmap "github.com/microsoft/TypeScript/tsc/internal/spanmap"
 )
 
@@ -1006,6 +1007,33 @@ func main() {
 			"All":     toInt32(compiler.EmitAll),
 			"OnlyJs":  toInt32(compiler.EmitOnlyJs),
 			"OnlyDts": toInt32(compiler.EmitOnlyDts),
+		},
+		"EmitFlags": {
+			"SingleLine":                     toInt32(printer.EFSingleLine),
+			"MultiLine":                      toInt32(printer.EFMultiLine),
+			"NoLeadingSourceMap":             toInt32(printer.EFNoLeadingSourceMap),
+			"NoTrailingSourceMap":            toInt32(printer.EFNoTrailingSourceMap),
+			"NoNestedSourceMaps":             toInt32(printer.EFNoNestedSourceMaps),
+			"NoTokenLeadingSourceMaps":       toInt32(printer.EFNoTokenLeadingSourceMaps),
+			"NoTokenTrailingSourceMaps":      toInt32(printer.EFNoTokenTrailingSourceMaps),
+			"NoLeadingComments":              toInt32(printer.EFNoLeadingComments),
+			"NoTrailingComments":             toInt32(printer.EFNoTrailingComments),
+			"NoNestedComments":               toInt32(printer.EFNoNestedComments),
+			"HelperName":                     toInt32(printer.EFHelperName),
+			"ExportName":                     toInt32(printer.EFExportName),
+			"LocalName":                      toInt32(printer.EFLocalName),
+			"Indented":                       toInt32(printer.EFIndented),
+			"NoIndentation":                  toInt32(printer.EFNoIndentation),
+			"ReuseTempVariableScope":         toInt32(printer.EFReuseTempVariableScope),
+			"CustomPrologue":                 toInt32(printer.EFCustomPrologue),
+			"NoAsciiEscaping":                toInt32(printer.EFNoAsciiEscaping),
+			"ExternalHelpers":                toInt32(printer.EFExternalHelpers),
+			"StartOnNewLine":                 toInt32(printer.EFStartOnNewLine),
+			"IndirectCall":                   toInt32(printer.EFIndirectCall),
+			"AsyncFunctionBody":              toInt32(printer.EFAsyncFunctionBody),
+			"NoLexicalArguments":             toInt32(printer.EFNoLexicalArguments),
+			"TransformPrivateStaticElements": toInt32(printer.EFTransformPrivateStaticElements),
+			"NoLexicalThis":                  toInt32(printer.EFNoLexicalThis),
 		},
 	}
 	if err := json.NewEncoder(os.Stdout).Encode(values); err != nil {

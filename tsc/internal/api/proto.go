@@ -1726,12 +1726,29 @@ type SignatureToSignatureDeclarationParams struct {
 	Flags     int32       `json:"flags,omitempty"`
 }
 
-// PrintNodeParams are the parameters for the printNode method.
+// Extra information for a node used during node printing
+type PrintEmitNode struct {
+	EmitFlags        uint32                    `json:"emitFlags,omitempty"`
+	LeadingComments  []PrintSynthesizedComment `json:"leadingComments,omitempty"`
+	TrailingComments []PrintSynthesizedComment `json:"trailingComments,omitempty"`
+}
+
+// PrintSynthesizedComment is a synthetic comment attached to a node via EmitContext
+type PrintSynthesizedComment struct {
+	Kind               int32  `json:"kind"`
+	Text               string `json:"text"`
+	HasTrailingNewLine bool   `json:"hasTrailingNewLine,omitempty"`
+	HasLeadingNewLine  bool   `json:"hasLeadingNewLine,omitempty"`
+}
+
+// PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
+// specific node (by index) via EmitContext before printing.
 type PrintNodeParams struct {
-	Data                          string `json:"data"` // base64-encoded binary AST data
-	PreserveSourceNewlines        bool   `json:"preserveSourceNewlines,omitempty"`
-	NeverAsciiEscape              bool   `json:"neverAsciiEscape,omitempty"`
-	TerminateUnterminatedLiterals bool   `json:"terminateUnterminatedLiterals,omitempty"`
+	Data                          string                 `json:"data"` // base64-encoded binary AST data
+	PreserveSourceNewlines        bool                   `json:"preserveSourceNewlines,omitempty"`
+	NeverAsciiEscape              bool                   `json:"neverAsciiEscape,omitempty"`
+	TerminateUnterminatedLiterals bool                   `json:"terminateUnterminatedLiterals,omitempty"`
+	EmitNodes                     map[int]*PrintEmitNode `json:"emitNodes,omitempty"`
 }
 
 type EmitParams struct {
