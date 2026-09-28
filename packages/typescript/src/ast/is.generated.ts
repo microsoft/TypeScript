@@ -2129,7 +2129,7 @@ isAccessExpression.Handle = isAccessExpression as any;
 
 export function isDeclarationName(node: Node): node is DeclarationName {
     const kind = node.kind;
-    return kind === SyntaxKind.Identifier || kind === SyntaxKind.PrivateIdentifier || kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || kind === SyntaxKind.BigIntLiteral || kind === SyntaxKind.NoSubstitutionTemplateLiteral || kind === SyntaxKind.ComputedPropertyName || kind === SyntaxKind.ObjectBindingPattern || kind === SyntaxKind.ArrayBindingPattern || kind === SyntaxKind.ElementAccessExpression;
+    return kind === SyntaxKind.Identifier || kind === SyntaxKind.PrivateIdentifier || kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || kind === SyntaxKind.BigIntLiteral || kind === SyntaxKind.NoSubstitutionTemplateLiteral || kind === SyntaxKind.ComputedPropertyName || kind === SyntaxKind.ObjectBindingPattern || kind === SyntaxKind.ArrayBindingPattern || kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.ElementAccessExpression;
 }
 
 export declare namespace isDeclarationName {

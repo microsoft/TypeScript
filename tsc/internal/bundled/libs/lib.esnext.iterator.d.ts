@@ -134,5 +134,12 @@ declare global {
         zipKeyed<T extends object>(iterables: T & IteratorZipKeyedInput<T>, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorZipKeyedResult<T>, undefined, unknown>;
         zipKeyed<T extends object, TPadding extends object>(iterables: T & IteratorZipKeyedInput<T>, options: IteratorZipLongestOptions<TPadding> & { padding: TPadding & NoInfer<IteratorZipPadding<T>>; }): IteratorObject<IteratorZipKeyedResult<T, undefined, TPadding>, undefined, unknown>;
         zipKeyed<T extends object>(iterables: T & IteratorZipKeyedInput<T>, options: IteratorZipOptions<NoInfer<IteratorZipPadding<T> & object>>): IteratorObject<IteratorZipKeyedResult<T, undefined>, undefined, unknown>;
+
+        /**
+         * Accepts objects whose types include inherited or non-enumerable properties.
+         * Property ownership and enumerability are not represented in object types, so the result values are unknown.
+         * Iterator records use the preceding overloads to preserve their inferred result types.
+         */
+        zipKeyed<T extends object>(iterables: T & ([T] extends [IteratorZipKeyedInput<T>] ? never : unknown), options?: IteratorZipOptions<object>): IteratorObject<Record<PropertyKey, unknown>, undefined, unknown>;
     }
 }
