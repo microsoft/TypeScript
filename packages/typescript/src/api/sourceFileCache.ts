@@ -7,8 +7,12 @@ import type { SnapshotChanges } from "./proto.ts";
 /**
  * Builds a composite ref key from a snapshot ID and project ID.
  */
-function refKey(snapshotId: number, projectId: string): string {
-    return `${snapshotId}:${projectId}`;
+function snapshotRefKey(snapshotId: number, projectId: string): string {
+    return `snapshot:${snapshotId}:${projectId}`;
+}
+
+function leaseRefKey(leaseId: number): string {
+    return `lease:${leaseId}`;
 }
 
 /**
@@ -21,20 +25,19 @@ export interface CachedSourceFile {
     contentHash: string;
     /** The parse options key that was used to create this file */
     parseOptionsKey: string;
-    /** Set of (snapshot, project) ref keys that reference this entry */
+    /** Set of snapshot/project or direct-lease ref keys that reference this entry */
     refs: Set<string>;
 }
 
 /**
- * Client-side cache for source files keyed by (path, parseOptionsKey, contentHash).
+ * Client-side cache for source files keyed by (path, fileName, scriptKind, parseOptionsKey, contentHash).
  *
  * Supports multiple versions of the same file at the same path (e.g., from
  * different snapshots with different file contents). Each version is identified
- * by its content hash and parse options key.
+ * by its script kind, content hash, and parse options key.
  *
- * Entries are ref-counted by (snapshot, project) pairs. When a snapshot is
- * disposed, all refs for that snapshot across all projects are released,
- * and entries with no remaining references are evicted.
+ * Entries are ref-counted by (snapshot, project) pairs and direct source-file
+ * leases. Releasing an owner evicts entries with no remaining references.
  *
  * When a new snapshot is created, unchanged cache entries from the previous
  * snapshot are retained per-project. Only files within changed or removed
@@ -45,6 +48,8 @@ export class SourceFileCache {
     private cache: Map<Path, CachedSourceFile[]> = new Map();
     /** Map from snapshotId to (projectId → Set of paths fetched through that project) */
     private snapshotProjectPaths: Map<number, Map<string, Set<Path>>> = new Map();
+    /** Map from direct lease ID to its retained path */
+    private leasePaths: Map<number, Path> = new Map();
 
     /**
      * Get a cached source file already retained for the given (snapshot, project) pair.
@@ -58,7 +63,7 @@ export class SourceFileCache {
     getRetained(path: Path, snapshotId: number, projectId: string): SourceFile | undefined {
         const entries = this.cache.get(path);
         if (!entries) return undefined;
-        const key = refKey(snapshotId, projectId);
+        const key = snapshotRefKey(snapshotId, projectId);
         const entry = entries.find(e => e.refs.has(key));
         return entry?.file;
     }
@@ -68,21 +73,42 @@ export class SourceFileCache {
      * Returns the cached file — which may be an existing entry if the hash matches.
      */
     set(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, snapshotId: number, projectId: string): SourceFile {
+        const result = this.setWithRef(path, file, parseOptionsKey, contentHash, snapshotRefKey(snapshotId, projectId));
+        this.trackPath(snapshotId, projectId, path);
+        return result;
+    }
+
+    /**
+     * Store a source file in the cache and retain it for a direct lease.
+     * Returns the cached file so leased and program-owned files share identity.
+     */
+    setForLease(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, leaseId: number): SourceFile {
+        if (this.leasePaths.has(leaseId)) {
+            throw new Error(`Source file lease ${leaseId} is already cached`);
+        }
+        const result = this.setWithRef(path, file, parseOptionsKey, contentHash, leaseRefKey(leaseId));
+        this.leasePaths.set(leaseId, path);
+        return result;
+    }
+
+    private setWithRef(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, ref: string): SourceFile {
         let entries = this.cache.get(path);
         if (!entries) {
             entries = [];
             this.cache.set(path, entries);
         }
-        const ref = refKey(snapshotId, projectId);
         // Check if we already have this exact version
-        const existing = entries.find(e => e.parseOptionsKey === parseOptionsKey && e.contentHash === contentHash);
+        const existing = entries.find(e =>
+            e.file.fileName === file.fileName &&
+            e.file.scriptKind === file.scriptKind &&
+            e.parseOptionsKey === parseOptionsKey &&
+            e.contentHash === contentHash
+        );
         if (existing) {
             existing.refs.add(ref);
-            this.trackPath(snapshotId, projectId, path);
             return existing.file;
         }
         entries.push({ file, contentHash, parseOptionsKey, refs: new Set([ref]) });
-        this.trackPath(snapshotId, projectId, path);
         return file;
     }
 
@@ -111,8 +137,8 @@ export class SourceFileCache {
                 for (const p of projectChanges.deletedFiles ?? []) invalidPaths.add(p);
             }
 
-            const prevRef = refKey(previousSnapshotId, projectId);
-            const newRef = refKey(newSnapshotId, projectId);
+            const prevRef = snapshotRefKey(previousSnapshotId, projectId);
+            const newRef = snapshotRefKey(newSnapshotId, projectId);
 
             for (const path of paths) {
                 if (invalidPaths?.has(path)) continue;
@@ -137,22 +163,33 @@ export class SourceFileCache {
         const projectMap = this.snapshotProjectPaths.get(snapshotId);
         if (!projectMap) return;
         for (const [projectId, paths] of projectMap) {
-            const key = refKey(snapshotId, projectId);
+            const key = snapshotRefKey(snapshotId, projectId);
             for (const path of paths) {
-                const entries = this.cache.get(path);
-                if (!entries) continue;
-                for (let i = entries.length - 1; i >= 0; i--) {
-                    entries[i].refs.delete(key);
-                    if (entries[i].refs.size === 0) {
-                        entries.splice(i, 1);
-                    }
-                }
-                if (entries.length === 0) {
-                    this.cache.delete(path);
-                }
+                this.releaseRef(path, key);
             }
         }
         this.snapshotProjectPaths.delete(snapshotId);
+    }
+
+    releaseLease(leaseId: number): void {
+        const path = this.leasePaths.get(leaseId);
+        if (path === undefined) return;
+        this.releaseRef(path, leaseRefKey(leaseId));
+        this.leasePaths.delete(leaseId);
+    }
+
+    private releaseRef(path: Path, ref: string): void {
+        const entries = this.cache.get(path);
+        if (!entries) return;
+        for (let i = entries.length - 1; i >= 0; i--) {
+            entries[i].refs.delete(ref);
+            if (entries[i].refs.size === 0) {
+                entries.splice(i, 1);
+            }
+        }
+        if (entries.length === 0) {
+            this.cache.delete(path);
+        }
     }
 
     private trackPath(snapshotId: number, projectId: string, path: Path): void {
@@ -175,6 +212,7 @@ export class SourceFileCache {
     clear(): void {
         this.cache.clear();
         this.snapshotProjectPaths.clear();
+        this.leasePaths.clear();
     }
 
     /**
