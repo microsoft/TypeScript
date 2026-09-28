@@ -14176,6 +14176,7 @@ func (c *Checker) getDiagnostics(ctx context.Context, sourceFile *ast.SourceFile
 
 func (c *Checker) GetGlobalDiagnostics() []*ast.Diagnostic {
 	c.checkNotCanceled()
+	c.produceDeferredDiagnostics()
 	return c.diagnostics.GetGlobalDiagnostics()
 }
 

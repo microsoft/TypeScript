@@ -3,9 +3,12 @@ package project
 import (
 	"context"
 	"slices"
+	"sync"
 	"sync/atomic"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -28,8 +31,35 @@ type SnapshotHost struct {
 	snapshotID atomic.Uint64
 }
 
+type SourceFileLease struct {
+	cache       *ParseCache
+	key         ParseCacheKey
+	sourceFile  *ast.SourceFile
+	releaseOnce sync.Once
+}
+
+func (l *SourceFileLease) SourceFile() *ast.SourceFile {
+	return l.sourceFile
+}
+
+func (l *SourceFileLease) Release() {
+	l.releaseOnce.Do(func() {
+		l.cache.Deref(l.key)
+	})
+}
+
 func (s *SnapshotHost) nextSnapshotID() uint64 {
 	return s.snapshotID.Add(1)
+}
+
+func (s *SnapshotHost) AcquireSourceFile(options ast.SourceFileParseOptions, text string, scriptKind core.ScriptKind) *SourceFileLease {
+	fileHandle := NewCachedFileHandle(options.FileName, text)
+	key := NewParseCacheKey(options, fileHandle.Hash(), scriptKind)
+	return &SourceFileLease{
+		cache:      s.parseCache,
+		key:        key,
+		sourceFile: s.parseCache.Acquire(key, fileHandle),
+	}
 }
 
 func NewSnapshotHost(init *SessionInit) *SnapshotHost {
@@ -145,6 +175,10 @@ func (s *SnapshotHost) FS() vfs.FS {
 
 func (s *SnapshotHost) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
+}
+
+func (s *SnapshotHost) DefaultLibraryPath() string {
+	return s.options.DefaultLibraryPath
 }
 
 func (s *SnapshotHost) Close() {

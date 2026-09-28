@@ -27,6 +27,13 @@ func TestTscCommandline(t *testing.T) {
 	}
 	testCases := []*tscInput{
 		{
+			subScenario: "global diagnostics produced during ordinary semantic checking",
+			files: FileMap{
+				"/home/src/workspaces/project/index.ts": `export function* values() { yield 1; }`,
+			},
+			commandLineArgs: []string{"index.ts", "--noEmit"},
+		},
+		{
 			subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
 			env: map[string]string{
 				"TS_TEST_TERMINAL_WIDTH": "120",
@@ -1349,6 +1356,33 @@ func TestTscIgnoreConfig(t *testing.T) {
 
 func TestTscIncremental(t *testing.T) {
 	t.Parallel()
+	libWithReadonlyArray := strings.Replace(tscDefaultLibContent, "interface ReadonlyArray<T> {}", "interface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }", 1)
+	getRecursiveTypeTest := func(name string, source string) *tscInput {
+		return &tscInput{
+			subScenario: name + " after comment only edit",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts":      stringtestutil.Dedent(source),
+				tscLibPath + "/lib.es2025.full.d.ts":         libWithReadonlyArray,
+			},
+			edits: []*tscEdit{
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+				{
+					caption: "add another comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// another comment\n")
+					},
+				},
+				noChange,
+			},
+		}
+	}
 	getConstEnumTest := func(bdsContents string, changeEnumFile string, testSuffix string) *tscInput {
 		return &tscInput{
 			subScenario: "const enums" + testSuffix,
@@ -2269,6 +2303,85 @@ func TestTscIncremental(t *testing.T) {
 				`),
 			},
 			commandLineArgs: []string{"--noEmit"},
+		},
+		getRecursiveTypeTest("recursive mapped type", `
+			type Json = string | Json[];
+			type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+			declare function wrap<T>(value: T): Parsed<T>;
+			export const value = wrap({ items: [] as Json[] });
+		`),
+		getRecursiveTypeTest("recursive readonly mapped type", `
+			type Json = string | readonly Json[];
+			type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+			declare function wrap<T>(value: T): Parsed<T>;
+			export const value = wrap({ items: [] as readonly Json[] });
+		`),
+		{
+			subScenario: "global diagnostics produced during semantic checking",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts":      `export function* values() { yield 1; }`,
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Like Strada, signature generation produces the missing-global diagnostic before semantic checking, so it is excluded from the file's semantic diagnostics.",
+				},
+				{
+					caption:      "no change",
+					edit:         noChange.edit,
+					expectedDiff: "Like Strada, the cached semantic diagnostics do not include the missing-global diagnostic produced during signature generation.",
+				},
+				{
+					caption: "delete build info to restore the semantic diagnostic",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "global diagnostics from function bodies after incremental edits",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts": stringtestutil.Dedent(`
+					export function values() {
+						// @ts-ignore
+						function* generator() { yield 1; }
+					}
+				`),
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "global diagnostics produced during unchecked javascript checking",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"allowJs": true, "noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.js":      `export function* values() { yield 1; }`,
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "enable javascript checking",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"allowJs": true`, `"allowJs": true, "checkJs": true`)
+					},
+				},
+				noChange,
+			},
 		},
 		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",
