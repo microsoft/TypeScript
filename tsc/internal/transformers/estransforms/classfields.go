@@ -2040,23 +2040,22 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 	}
 
 	staticPropertiesOrClassStaticBlocks := tx.getStaticPropertiesAndClassStaticBlock(node)
+	hasTransformableStatics := (tx.shouldTransformPrivateElementsOrClassStaticBlocks ||
+		tx.nodeHasTransformPrivateStaticElementsFlag(node)) &&
+		core.Some(staticPropertiesOrClassStaticBlocks, func(n *ast.Node) bool {
+			return ast.IsClassStaticBlockDeclaration(n) ||
+				ast.IsPrivateIdentifierClassElementDeclaration(n) ||
+				(tx.shouldTransformInitializers && ast.IsInitializedProperty(n))
+		})
 
 	// Pre-compute whether the class expression will need a temp variable wrapper.
 	// Strada registers class aliases AFTER transformClassMembers (since onSubstituteNode runs
 	// at emit time), but we must predict this before visiting members since we substitute
 	// eagerly. This requires pre-detecting willHavePrivatePendingExpressions.
 	isClassWithConstructorReference := false
-	hasTransformableStatics := false
 	deferTempDeclaration := false
 	if !isDecoratedClassDeclaration {
 		isClassWithConstructorReference = tx.classContainsConstructorReference(node)
-		hasTransformableStatics = (tx.shouldTransformPrivateElementsOrClassStaticBlocks ||
-			tx.nodeHasTransformPrivateStaticElementsFlag(node)) &&
-			core.Some(staticPropertiesOrClassStaticBlocks, func(n *ast.Node) bool {
-				return ast.IsClassStaticBlockDeclaration(n) ||
-					ast.IsPrivateIdentifierClassElementDeclaration(n) ||
-					(tx.shouldTransformInitializers && ast.IsInitializedProperty(n))
-			})
 
 		// Private instance elements (fields, methods, accessors) transformed to
 		// WeakMap/WeakSet will add initialization expressions to pendingExpressions
@@ -2139,7 +2138,7 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 		} else {
 			expressions = append(expressions, classExpression)
 		}
-	} else {
+	} else if hasTransformableStatics || len(tx.pendingExpressions) > 0 {
 		// Decorated class declaration path: emit static properties as separate statements
 		// via pendingStatements, matching the class declaration output structure.
 
@@ -2167,6 +2166,8 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 		} else {
 			expressions = append(expressions, classExpression)
 		}
+	} else {
+		expressions = append(expressions, classExpression)
 	}
 
 	if len(expressions) > 1 {
