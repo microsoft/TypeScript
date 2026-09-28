@@ -2863,6 +2863,9 @@ func (c *Checker) checkClassStaticBlockDeclaration(node *ast.Node) {
 	// Grammar checking
 	c.checkGrammarModifiers(node)
 	node.ForEachChild(c.checkSourceElement)
+	if len(node.Locals()) != 0 {
+		c.registerForUnusedIdentifiersCheck(node)
+	}
 }
 
 func (c *Checker) checkConstructorDeclaration(node *ast.Node) {
@@ -7220,7 +7223,7 @@ func (c *Checker) checkUnusedIdentifiers(potentiallyUnusedIdentifiers []*ast.Nod
 			c.checkUnusedClassMembers(node)
 			c.checkUnusedTypeParameters(node)
 		case ast.KindSourceFile, ast.KindModuleDeclaration, ast.KindBlock, ast.KindCaseBlock, ast.KindForStatement, ast.KindForInStatement,
-			ast.KindForOfStatement:
+			ast.KindForOfStatement, ast.KindClassStaticBlockDeclaration:
 			c.checkUnusedLocalsAndParameters(node)
 		case ast.KindConstructor, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindArrowFunction, ast.KindMethodDeclaration,
 			ast.KindGetAccessor, ast.KindSetAccessor:
@@ -22189,7 +22192,7 @@ func (c *Checker) getReducedType(t *Type) *Type {
 	case t.flags&TypeFlagsIntersection != 0:
 		if t.objectFlags&ObjectFlagsIsNeverIntersectionComputed == 0 {
 			t.objectFlags |= ObjectFlagsIsNeverIntersectionComputed
-			if core.Some(c.getPropertiesOfUnionOrIntersectionType(t), c.isNeverReducedProperty) {
+			if !c.isMappingOfSameObjectType(t.Types()) && c.somePropertyReducesToNever(t) {
 				t.objectFlags |= ObjectFlagsIsNeverIntersection
 			}
 		}
@@ -22198,6 +22201,39 @@ func (c *Checker) getReducedType(t *Type) *Type {
 		}
 	}
 	return t
+}
+
+func (c *Checker) isMappingOfSameObjectType(types []*Type) bool {
+	if len(types) != 0 && types[0].objectFlags&ObjectFlagsMapped != 0 {
+		if firstType := c.getModifiersTypeFromMappedType(types[0]); firstType.flags&TypeFlagsObject != 0 {
+			for _, t := range types[1:] {
+				if t.objectFlags&ObjectFlagsMapped == 0 || c.getModifiersTypeFromMappedType(t) != firstType {
+					return false
+				}
+			}
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Checker) somePropertyReducesToNever(t *Type) bool {
+	// Collect declaration counts for each property across all constituent types of the intersection.
+	counts := make(map[string]int)
+	for _, t := range t.Types() {
+		for _, prop := range c.getPropertiesOfType(t) {
+			counts[prop.Name]++
+		}
+	}
+	// Check if any property appears in more than one constituent type and reduces to 'never'.
+	for propName, count := range counts {
+		if count > 1 {
+			if prop := c.getPropertyOfUnionOrIntersectionType(t, propName, true /*skipObjectFunctionPropertyAugment*/); prop != nil && c.isNeverReducedProperty(prop) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (c *Checker) getReducedUnionType(unionType *Type) *Type {
@@ -29546,6 +29582,14 @@ func (c *Checker) getConstraintDeclaration(t *Type) *ast.Node {
 	return nil
 }
 
+// Limits on the size of a template literal type produced by getTemplateLiteralType. Recursive instantiations
+// such as `Recur<any, `${S}_${S}`>` double the text (or the number of placeholders) on every iteration and
+// exhaust memory long before the tail recursion limit in getConditionalType is reached (see #63271).
+const (
+	maxTemplateLiteralTypeLength = 50_000_000
+	maxTemplateLiteralTypeSpans  = 100_000
+)
+
 func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 	unionIndex := core.FindIndex(types, func(t *Type) bool {
 		return t.flags&(TypeFlagsNever|TypeFlagsUnion) != 0
@@ -29565,6 +29609,8 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 	var newTexts []string
 	var sb strings.Builder
 	sb.WriteString(texts[0])
+	textLength := 0 // combined length of the segments already moved into newTexts
+	tooLarge := false
 	var addSpans func([]string, []*Type) bool
 	addSpans = func(texts []string, types []*Type) bool {
 		for i, t := range types {
@@ -29581,15 +29627,24 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 			case c.isGenericIndexType(t) || c.isPatternLiteralPlaceholderType(t):
 				newTypes = append(newTypes, t)
 				newTexts = append(newTexts, stringutil.CombineSurrogatePairs(sb.String()))
+				textLength += sb.Len()
 				sb.Reset()
 				sb.WriteString(texts[i+1])
 			default:
+				return false
+			}
+			if textLength+sb.Len() > maxTemplateLiteralTypeLength || len(newTypes) > maxTemplateLiteralTypeSpans {
+				tooLarge = true
 				return false
 			}
 		}
 		return true
 	}
 	if !addSpans(texts, types) {
+		if tooLarge {
+			c.error(c.currentNode, diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
+			return c.errorType
+		}
 		return c.stringType
 	}
 	if len(newTypes) == 0 {
