@@ -46,6 +46,6 @@
     "native-preview.workspaceDiagnostics.off": "Only report errors in open files.",
     "native-preview.workspaceDiagnostics.openProjects": "Report errors in every file of the projects that contain an open file.",
     "native-preview.workspaceDiagnostics.openProjectsAndDependents": "Also report errors in the projects that reference those projects.",
-    "native-preview.workspaceDiagnostics.allProjects": "Report errors in every project in the workspace.",
+    "native-preview.workspaceDiagnostics.allProjects": "Report errors in every loaded project and the projects they reference. A tsconfig.json that no open file or loaded project reaches is not loaded.",
     "developer": "Developer"
 }

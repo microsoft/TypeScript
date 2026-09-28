@@ -259,7 +259,8 @@ const (
 	WorkspaceDiagnosticsScopeOpenProjects WorkspaceDiagnosticsScope = "openProjects"
 	// Also the projects that reference them, so an edit surfaces breakage in consumers.
 	WorkspaceDiagnosticsScopeOpenProjectsAndDependents WorkspaceDiagnosticsScope = "openProjectsAndDependents"
-	// Every project in the workspace.
+	// Every loaded project, and the projects they reference. A tsconfig nothing has opened or
+	// referenced is not loaded.
 	WorkspaceDiagnosticsScopeAllProjects WorkspaceDiagnosticsScope = "allProjects"
 )
 
