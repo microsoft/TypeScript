@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
-import * as fs from "fs";
+import { fileURLToPath } from "node:url";
 import * as path from "path";
+import { GeneratedFile } from "../../../../tools/scripts/gen/generatedFile.mts";
+import {
+    formatFiles,
+    parseGeneratorArgs,
+} from "../../../../tools/scripts/gen/utils.mts";
 
 // All Unicode data is sourced from a single version-pinned @unicode/unicode-*
 // package so the generated tables are reproducible regardless of the Node.js
@@ -12,8 +17,6 @@ const UNICODE_VERSION = "15.1.0";
 const PACKAGE = `@unicode/unicode-${UNICODE_VERSION}`;
 
 const scriptDir = import.meta.dirname;
-const CASE_OUTPUT_PATH = path.join(scriptDir, "..", "js_case_generated.go");
-const IDENTIFIER_OUTPUT_PATH = path.join(scriptDir, "..", "identifier_parts_generated.go");
 
 // A *unicode.RangeTable is split into 16-bit (BMP) and 32-bit (astral) ranges,
 // each carrying a stride so arithmetic sequences (e.g. the alternating
@@ -228,20 +231,40 @@ ${renderRangeTable("unicodeESNextIdentifierPart", partTable)}
 `;
 }
 
-async function main() {
+export default async function generateUnicode(force = false, outDir = path.resolve(scriptDir, "..")) {
+    outDir = path.resolve(outDir);
+    const inputs = [
+        import.meta.filename,
+        fileURLToPath(import.meta.resolve(`${PACKAGE}/package.json`)),
+    ];
+    const caseOutput = new GeneratedFile(path.join(outDir, "js_case_generated.go"), inputs);
+    const identifierOutput = new GeneratedFile(path.join(outDir, "identifier_parts_generated.go"), inputs);
+    const generatedFiles = [caseOutput, identifierOutput];
+    if (generatedFiles.every(file => file.isCurrent(force))) {
+        console.log("Unicode tables are up to date.");
+        return;
+    }
+
+    for (const file of generatedFiles) file.invalidate();
     const simpleLowercase = await loadSimpleMapping("Simple_Case_Mapping/Lowercase");
     const simpleUppercase = await loadSimpleMapping("Simple_Case_Mapping/Uppercase");
     const entries = await buildSpecialCasing(simpleLowercase, simpleUppercase);
     const casedTable = toRangeTable(await loadCodePoints("Binary_Property/Cased"));
     const caseIgnorableTable = toRangeTable(await loadCodePoints("Binary_Property/Case_Ignorable"));
-    fs.writeFileSync(CASE_OUTPUT_PATH, renderCaseFile(entries, casedTable, caseIgnorableTable));
+    caseOutput.write(renderCaseFile(entries, casedTable, caseIgnorableTable));
 
     const idStart = await loadCodePoints("Binary_Property/ID_Start");
     const idContinue = await loadCodePoints("Binary_Property/ID_Continue");
     // Other_ID_Start/Other_ID_Continue are already folded into ID_Start/ID_Continue.
     const startTable = toRangeTable(idStart);
     const partTable = toRangeTable([...idContinue, ...idStart]);
-    fs.writeFileSync(IDENTIFIER_OUTPUT_PATH, renderIdentifierFile(startTable, partTable));
+    identifierOutput.write(renderIdentifierFile(startTable, partTable));
+    await formatFiles(generatedFiles.map(file => file.fileName));
+    for (const file of generatedFiles) file.markCurrent();
+    console.log("Generated Unicode tables.");
 }
 
-await main();
+if (process.argv[1] === import.meta.filename) {
+    const { values, force } = parseGeneratorArgs({ outDir: { type: "string" } });
+    await generateUnicode(force, values.outDir);
+}

@@ -86,6 +86,32 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	}
 }
 
+func TestCreateSnapshotPreservesWindowsRootDriveLetterCase(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "D:/repo/index.ts"
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		fileName: "export const value = 1;",
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	init.Options.CurrentDirectory = "D:/repo"
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:       []DocumentIdentifier{{URI: "file:///D%3A/repo/index.ts"}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		}},
+	})
+	assert.NilError(t, err)
+
+	snapshot, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	program, err := snapshot.getProgram(response.Projects[0].Id)
+	assert.NilError(t, err)
+	assert.Equal(t, program.GetSourceFile(fileName).FileName(), fileName)
+}
+
 func TestSnapshotOperationResponseOmitsUnrequestedFields(t *testing.T) {
 	t.Parallel()
 
@@ -158,20 +184,20 @@ func TestReconfigureSyntheticProgramValidation(t *testing.T) {
 	program := &ReconfigureSnapshotProgramParams{Id: "/dev/null/synthetic/1"}
 	var nullReconfigure SnapshotRequestChangesParams
 	assert.NilError(t, json.Unmarshal([]byte(`{"reconfigurePrograms":[null]}`), &nullReconfigure))
-	_, err := session.toAPISnapshotRequest(&nullReconfigure)
+	_, err := session.toAPISnapshotRequest(context.Background(), &nullReconfigure)
 	assert.ErrorContains(t, err, "reconfigurePrograms[0] must not be null")
 
-	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err = session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{Id: "/tsconfig.json"}},
 	})
 	assert.ErrorContains(t, err, "invalid synthetic project handle")
 
-	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err = session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{program, program},
 	})
 	assert.ErrorContains(t, err, "reconfigured more than once")
 
-	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err = session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{program},
 		RemovePrograms:      []project.SyntheticProjectID{program.Id},
 	})
@@ -194,7 +220,7 @@ func TestCreateSyntheticProgramValidation(t *testing.T) {
 
 	var nullCreate SnapshotRequestChangesParams
 	assert.NilError(t, json.Unmarshal([]byte(`{"createPrograms":[null]}`), &nullCreate))
-	_, err := session.toAPISnapshotRequest(&nullCreate)
+	_, err := session.toAPISnapshotRequest(context.Background(), &nullCreate)
 	assert.ErrorContains(t, err, "createPrograms[0] must not be null")
 	assert.ErrorIs(t, err, ErrClientError)
 }

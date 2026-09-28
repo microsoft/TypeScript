@@ -83,8 +83,8 @@ func TestDirWatchSetCanonicalDedup(t *testing.T) {
 
 	dirs := insensitive.Dirs()
 	assert.Equal(t, len(dirs), 1, "differently-cased dirs must collapse to one entry")
-	_, canonical := dirs["/repo/node_modules/pkgname"]
-	assert.Assert(t, canonical, "Dirs must be keyed by the canonicalized path")
+	_, original := dirs["/repo/Node_Modules/PkgName"]
+	assert.Assert(t, original, "Dirs must retain the original spelling used for registration")
 
 	sensitive := NewDirWatchSet(caseSensitiveOpts)
 	sensitive.Set("/repo/Node_Modules/PkgName", false)

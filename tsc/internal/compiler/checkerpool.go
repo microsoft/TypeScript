@@ -207,7 +207,9 @@ func getCheckerAssociationsInOrder(fileWeights []int, adjacentFiles [][]int, fil
 			}
 			oldWeight := float64(checkerWeight)
 			newWeight := float64(checkerWeight + fileWeights[fileIndex])
-			penalty := alpha * (newWeight*math.Sqrt(newWeight) - oldWeight*math.Sqrt(oldWeight))
+			newPenalty := float64(newWeight * math.Sqrt(newWeight))
+			oldPenalty := float64(oldWeight * math.Sqrt(oldWeight))
+			penalty := float64(alpha * (newPenalty - oldPenalty))
 			score := float64(neighborCounts[checkerIndex]) - penalty
 			if score > bestScore || score == bestScore && (bestChecker < 0 || checkerWeight < checkerWeights[bestChecker]) {
 				bestChecker = checkerIndex

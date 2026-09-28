@@ -9,9 +9,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=ModuleKind -trimprefix=ModuleKind -output=modulekind_stringer_generated.go
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=ScriptTarget -trimprefix=ScriptTarget -output=scripttarget_stringer_generated.go
-//go:generate npx dprint fmt modulekind_stringer_generated.go scripttarget_stringer_generated.go
+//go:generate npx hereby generate:compileroptions
+
+type PluginImport struct {
+	Name string `json:"name"`
+}
 
 // CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {
@@ -84,39 +86,41 @@ type CompilerOptions struct {
 	NoUncheckedSideEffectImports              Tristate                                  `json:"noUncheckedSideEffectImports,omitzero"`
 	OutDir                                    string                                    `json:"outDir,omitzero"`
 	Paths                                     *collections.OrderedMap[string, []string] `json:"paths,omitzero"`
-	PreserveConstEnums                        Tristate                                  `json:"preserveConstEnums,omitzero"`
-	PreserveSymlinks                          Tristate                                  `json:"preserveSymlinks,omitzero"`
-	Project                                   string                                    `json:"project,omitzero"`
-	ResolveJsonModule                         Tristate                                  `json:"resolveJsonModule,omitzero"`
-	ResolvePackageJsonExports                 Tristate                                  `json:"resolvePackageJsonExports,omitzero"`
-	ResolvePackageJsonImports                 Tristate                                  `json:"resolvePackageJsonImports,omitzero"`
-	RemoveComments                            Tristate                                  `json:"removeComments,omitzero"`
-	RewriteRelativeImportExtensions           Tristate                                  `json:"rewriteRelativeImportExtensions,omitzero"`
-	ReactNamespace                            string                                    `json:"reactNamespace,omitzero"`
-	RootDir                                   string                                    `json:"rootDir,omitzero"`
-	RootDirs                                  []string                                  `json:"rootDirs,omitzero"`
-	SkipLibCheck                              Tristate                                  `json:"skipLibCheck,omitzero"`
-	StableTypeOrdering                        Tristate                                  `json:"stableTypeOrdering,omitzero"`
-	Strict                                    Tristate                                  `json:"strict,omitzero"`
-	StrictBindCallApply                       Tristate                                  `json:"strictBindCallApply,omitzero"`
-	StrictBuiltinIteratorReturn               Tristate                                  `json:"strictBuiltinIteratorReturn,omitzero"`
-	StrictFunctionTypes                       Tristate                                  `json:"strictFunctionTypes,omitzero"`
-	StrictNullChecks                          Tristate                                  `json:"strictNullChecks,omitzero"`
-	StrictPropertyInitialization              Tristate                                  `json:"strictPropertyInitialization,omitzero"`
-	StripInternal                             Tristate                                  `json:"stripInternal,omitzero"`
-	SkipDefaultLibCheck                       Tristate                                  `json:"skipDefaultLibCheck,omitzero"`
-	SourceMap                                 Tristate                                  `json:"sourceMap,omitzero"`
-	SourceRoot                                string                                    `json:"sourceRoot,omitzero"`
-	SuppressOutputPathCheck                   Tristate                                  `json:"suppressOutputPathCheck,omitzero"`
-	Target                                    ScriptTarget                              `json:"target,omitzero"`
-	TraceResolution                           Tristate                                  `json:"traceResolution,omitzero"`
-	TsBuildInfoFile                           string                                    `json:"tsBuildInfoFile,omitzero"`
-	TypeRoots                                 []string                                  `json:"typeRoots,omitzero"`
-	Types                                     []string                                  `json:"types,omitzero"`
-	UseDefineForClassFields                   Tristate                                  `json:"useDefineForClassFields,omitzero"`
-	UseUnknownInCatchVariables                Tristate                                  `json:"useUnknownInCatchVariables,omitzero"`
-	VerbatimModuleSyntax                      Tristate                                  `json:"verbatimModuleSyntax,omitzero"`
-	MaxNodeModuleJsDepth                      *int                                      `json:"maxNodeModuleJsDepth,omitzero"`
+	// Plugins are parsed only so tools can report that native TypeScript does not support them.
+	Plugins                         []PluginImport `json:"plugins,omitzero"`
+	PreserveConstEnums              Tristate       `json:"preserveConstEnums,omitzero"`
+	PreserveSymlinks                Tristate       `json:"preserveSymlinks,omitzero"`
+	Project                         string         `json:"project,omitzero"`
+	ResolveJsonModule               Tristate       `json:"resolveJsonModule,omitzero"`
+	ResolvePackageJsonExports       Tristate       `json:"resolvePackageJsonExports,omitzero"`
+	ResolvePackageJsonImports       Tristate       `json:"resolvePackageJsonImports,omitzero"`
+	RemoveComments                  Tristate       `json:"removeComments,omitzero"`
+	RewriteRelativeImportExtensions Tristate       `json:"rewriteRelativeImportExtensions,omitzero"`
+	ReactNamespace                  string         `json:"reactNamespace,omitzero"`
+	RootDir                         string         `json:"rootDir,omitzero"`
+	RootDirs                        []string       `json:"rootDirs,omitzero"`
+	SkipLibCheck                    Tristate       `json:"skipLibCheck,omitzero"`
+	StableTypeOrdering              Tristate       `json:"stableTypeOrdering,omitzero"`
+	Strict                          Tristate       `json:"strict,omitzero"`
+	StrictBindCallApply             Tristate       `json:"strictBindCallApply,omitzero"`
+	StrictBuiltinIteratorReturn     Tristate       `json:"strictBuiltinIteratorReturn,omitzero"`
+	StrictFunctionTypes             Tristate       `json:"strictFunctionTypes,omitzero"`
+	StrictNullChecks                Tristate       `json:"strictNullChecks,omitzero"`
+	StrictPropertyInitialization    Tristate       `json:"strictPropertyInitialization,omitzero"`
+	StripInternal                   Tristate       `json:"stripInternal,omitzero"`
+	SkipDefaultLibCheck             Tristate       `json:"skipDefaultLibCheck,omitzero"`
+	SourceMap                       Tristate       `json:"sourceMap,omitzero"`
+	SourceRoot                      string         `json:"sourceRoot,omitzero"`
+	SuppressOutputPathCheck         Tristate       `json:"suppressOutputPathCheck,omitzero"`
+	Target                          ScriptTarget   `json:"target,omitzero"`
+	TraceResolution                 Tristate       `json:"traceResolution,omitzero"`
+	TsBuildInfoFile                 string         `json:"tsBuildInfoFile,omitzero"`
+	TypeRoots                       []string       `json:"typeRoots,omitzero"`
+	Types                           []string       `json:"types,omitzero"`
+	UseDefineForClassFields         Tristate       `json:"useDefineForClassFields,omitzero"`
+	UseUnknownInCatchVariables      Tristate       `json:"useUnknownInCatchVariables,omitzero"`
+	VerbatimModuleSyntax            Tristate       `json:"verbatimModuleSyntax,omitzero"`
+	MaxNodeModuleJsDepth            *int           `json:"maxNodeModuleJsDepth,omitzero"`
 
 	// Deprecated: Do not use outside of options parsing and validation.
 	AllowSyntheticDefaultImports Tristate `json:"allowSyntheticDefaultImports,omitzero" deprecated:"true"`

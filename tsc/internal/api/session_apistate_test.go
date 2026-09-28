@@ -102,7 +102,7 @@ func TestOpenProjectRejectsReservedProjectID(t *testing.T) {
 	session := NewStandaloneSession(init, nil)
 	defer session.Close()
 
-	_, err := session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err := session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/dev/null/inferred"}},
 	})
 	assert.ErrorContains(t, err, "invalid configured project ID")
@@ -272,6 +272,36 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 	assert.NilError(t, err)
 	assert.Equal(t, len(removed.Projects), 0)
 	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
+}
+
+func TestOpenFilePreservesWindowsDriveLetterCase(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "D:/repo/index.ts"
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		"D:/repo/tsconfig.json": "{}",
+		fileName:                "export const value = 1;",
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	init.Options.CurrentDirectory = "D:/repo"
+	projectSession := project.NewSession(init)
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	response, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
+	})
+	assert.NilError(t, err)
+
+	project := response.Projects[0]
+	snapshot, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	program, err := snapshot.getProgram(project.Id)
+	assert.NilError(t, err)
+	assert.Equal(t, program.GetSourceFile(fileName).FileName(), fileName)
 }
 
 func TestClosingAPISessionRemovesCreatedLanguageServerPrograms(t *testing.T) {

@@ -133,10 +133,10 @@ export const value = myValue;
 
 Watch Registrations::
 Directory watches::
-  c:/home/src/tslibs/ts/lib
-  c:/work/project
-  c:/work/project/src (recursive)
-  d:/work/deps
+  C:/home/src/tslibs/TS/Lib
+  C:/work/project
+  C:/work/project/src (recursive)
+  D:/work/deps
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    C:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -257,10 +257,10 @@ Output::
 
 Watch Registrations::
 Directory watches::
-  c:/home/src/tslibs/ts/lib
-  c:/work/project
-  c:/work/project/src (recursive)
-  d:/work/deps
+  C:/home/src/tslibs/TS/Lib
+  C:/work/project
+  C:/work/project/src (recursive)
+  D:/work/deps
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    D:/work/deps/dep.d.ts
