@@ -6030,6 +6030,65 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
         let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
         if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
+            // HEAVY REFACTOR FOR #63814 - export= visibility fix
+            // If symbol is not visible via normal checks, check if it's exported via export= assignment
+            // This handles: export = foo; declare namespace foo { export type T = number; }
+            // where T's container foo is not directly exported but is exported via export= foo
+            // The previous logic would mark foo as not visible, causing T to be reported as private name
+            // This is the root cause of Corsa differences in export= module augmentation
+            if (symbol.flags & SymbolFlags.Namespace) {
+                // Check if this namespace is exported via export= in its parent module
+                for (const decl of symbol.declarations || []) {
+                    const parent = getDeclarationContainer(decl);
+                    if (parent && isSourceFile(parent)) {
+                        const sourceFile = parent as SourceFile;
+                        // Look for export = <this namespace> in the source file
+                        for (const stmt of sourceFile.statements) {
+                            if (isExportAssignment(stmt) && (stmt as ExportAssignment).isExportEquals) {
+                                const exportTarget = getTargetOfExportAssignment(stmt as ExportAssignment, false);
+                                if (exportTarget && exportTarget === symbol) {
+                                    // This namespace is exported via export=, so it's visible
+                                    // Also check if parent source file is visible
+                                    if (isDeclarationVisible(parent)) {
+                                        return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
+                                    }
+                                }
+                                // Also check if export target is alias to this symbol
+                                const resolvedExport = exportTarget ? resolveSymbol(exportTarget) : undefined;
+                                if (resolvedExport && resolvedExport === symbol) {
+                                    if (isDeclarationVisible(parent)) {
+                                        return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Also check if parent is visible via export= in external module
+                    // For // /node_modules/foo/index.d.ts case: export = foo; declare namespace foo {}
+                    // The namespace foo's parent is source file, which has export= foo, so foo should be visible
+                    // even though it doesn't have export modifier
+                    if (decl.parent && isSourceFile(decl.parent)) {
+                        const srcFile = decl.parent as SourceFile;
+                        const hasExportEquals = some(srcFile.statements, s => isExportAssignment(s) && (s as ExportAssignment).isExportEquals);
+                        if (hasExportEquals) {
+                            // If source file has export=, check if this declaration's symbol is the export target
+                            // or is contained in export target's exports
+                            const exportAssignment = find(srcFile.statements, s => isExportAssignment(s) && (s as ExportAssignment).isExportEquals) as ExportAssignment | undefined;
+                            if (exportAssignment) {
+                                const target = getTargetOfExportAssignment(exportAssignment, false);
+                                if (target) {
+                                    // If target is this namespace, or target's exports contain this symbol's name, visible
+                                    if (target === symbol || (target.exports && target.exports.has(symbol.escapedName))) {
+                                        if (isDeclarationVisible(srcFile)) {
+                                            return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return undefined;
         }
         return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
