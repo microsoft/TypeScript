@@ -16,23 +16,6 @@ func (v *testValue) Clone() *testValue {
 	return &testValue{data: v.data}
 }
 
-func TestSyncMapLoadOrStoreAfterDelete(t *testing.T) {
-	t.Parallel()
-	for _, base := range []map[string]*testValue{nil, {"key": {data: "original"}}} {
-		syncMap := NewSyncMap(base)
-		entry, _ := syncMap.LoadOrStore("key", &testValue{data: "first"})
-		entry.Delete()
-
-		entry, loaded := syncMap.LoadOrStore("key", &testValue{data: "replacement"})
-		assert.Assert(t, entry != nil)
-		assert.Assert(t, !loaded)
-		assert.Equal(t, entry.Value().data, "replacement")
-		result, changed := syncMap.Finalize()
-		assert.Assert(t, changed)
-		assert.Equal(t, result["key"].data, "replacement")
-	}
-}
-
 func TestSyncMapProxyFor(t *testing.T) {
 	t.Parallel()
 

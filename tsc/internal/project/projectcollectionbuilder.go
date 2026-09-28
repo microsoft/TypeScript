@@ -459,8 +459,6 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		path := b.toPath(fileName)
 		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
-	} else if summary.Closed.Len() > 0 {
-		b.cleanupConfiguredProjects(nil, logger)
 	}
 }
 
