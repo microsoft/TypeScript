@@ -868,6 +868,7 @@ func main() {
 			"ES2023": toInt32(core.ScriptTargetES2023),
 			"ES2024": toInt32(core.ScriptTargetES2024),
 			"ES2025": toInt32(core.ScriptTargetES2025),
+			"ES2026": toInt32(core.ScriptTargetES2026),
 			"ESNext": toInt32(core.ScriptTargetESNext),
 			"JSON":   toInt32(core.ScriptTargetJSON),
 			"Latest": toInt32(core.ScriptTargetLatest),

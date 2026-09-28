@@ -1872,6 +1872,9 @@ func serializeCompilerOptionEnum(value any) string {
 		if value == core.ScriptTargetES2025 {
 			return "es2025"
 		}
+		if value == core.ScriptTargetES2026 {
+			return "es2026"
+		}
 		if value == core.ScriptTargetESNext {
 			return "esnext"
 		}

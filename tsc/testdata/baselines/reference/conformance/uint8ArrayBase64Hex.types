@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/es2026/uint8ArrayBase64Hex.ts] ////
+
+=== uint8ArrayBase64Hex.ts ===
+const bytes = Uint8Array.fromBase64("AQID", { alphabet: "base64" });
+>bytes : Uint8Array<ArrayBuffer>
+>Uint8Array.fromBase64("AQID", { alphabet: "base64" }) : Uint8Array<ArrayBuffer>
+>Uint8Array.fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => Uint8Array<ArrayBuffer>
+>Uint8Array : Uint8ArrayConstructor
+>fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => Uint8Array<ArrayBuffer>
+>"AQID" : "AQID"
+>{ alphabet: "base64" } : { alphabet: "base64"; }
+>alphabet : "base64"
+>"base64" : "base64"
+
+const base64: string = bytes.toBase64({ alphabet: "base64url", omitPadding: true });
+>base64 : string
+>bytes.toBase64({ alphabet: "base64url", omitPadding: true }) : string
+>bytes.toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; } | undefined) => string
+>bytes : Uint8Array<ArrayBuffer>
+>toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; } | undefined) => string
+>{ alphabet: "base64url", omitPadding: true } : { alphabet: "base64url"; omitPadding: true; }
+>alphabet : "base64url"
+>"base64url" : "base64url"
+>omitPadding : true
+>true : true
+
+const base64Result: { read: number; written: number } = bytes.setFromBase64("BAUG", {
+>base64Result : { read: number; written: number; }
+>read : number
+>written : number
+>bytes.setFromBase64("BAUG", {    lastChunkHandling: "strict",}) : { read: number; written: number; }
+>bytes.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; } | undefined) => { read: number; written: number; }
+>bytes : Uint8Array<ArrayBuffer>
+>setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; } | undefined) => { read: number; written: number; }
+>"BAUG" : "BAUG"
+>{    lastChunkHandling: "strict",} : { lastChunkHandling: "strict"; }
+
+    lastChunkHandling: "strict",
+>lastChunkHandling : "strict"
+>"strict" : "strict"
+
+});
+
+const hexBytes: Uint8Array<ArrayBuffer> = Uint8Array.fromHex("010203");
+>hexBytes : Uint8Array<ArrayBuffer>
+>Uint8Array.fromHex("010203") : Uint8Array<ArrayBuffer>
+>Uint8Array.fromHex : (string: string) => Uint8Array<ArrayBuffer>
+>Uint8Array : Uint8ArrayConstructor
+>fromHex : (string: string) => Uint8Array<ArrayBuffer>
+>"010203" : "010203"
+
+const hex: string = hexBytes.toHex();
+>hex : string
+>hexBytes.toHex() : string
+>hexBytes.toHex : () => string
+>hexBytes : Uint8Array<ArrayBuffer>
+>toHex : () => string
+
+const hexResult: { read: number; written: number } = hexBytes.setFromHex("040506");
+>hexResult : { read: number; written: number; }
+>read : number
+>written : number
+>hexBytes.setFromHex("040506") : { read: number; written: number; }
+>hexBytes.setFromHex : (string: string) => { read: number; written: number; }
+>hexBytes : Uint8Array<ArrayBuffer>
+>setFromHex : (string: string) => { read: number; written: number; }
+>"040506" : "040506"
+
