@@ -5,7 +5,9 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"gotest.tools/v3/assert"
 )
 
@@ -99,4 +101,23 @@ func TestWorkspaceDiagnosticsPullSupersedesTheOneBeforeIt(t *testing.T) {
 
 	s.finishWorkspaceDiagnostics(pulls[2])
 	assert.Assert(t, s.workspaceDiagnosticsPull == nil, "nothing is running once the newest pull finishes")
+}
+
+// A pull that would repeat itself answers with nothing, which leaves the client holding whatever it
+// had; a file the cache no longer tracks is only cleared by answering in full.
+func TestWorkspaceDiagnosticsRepeatNeedsTheClientToHoldExactlyTheCache(t *testing.T) {
+	t.Parallel()
+
+	cache := newWorkspaceDiagnosticsCache()
+	fingerprint := workspaceDiagnosticsFingerprint{snapshot: 1}
+	cache.store("file:///a.ts", workspaceDiagnosticsCacheEntry{project: "/tsconfig.json", generation: 1, resultID: "a"})
+	reported := collections.Set[lsproto.DocumentUri]{}
+	reported.Add("file:///a.ts")
+	cache.retain(&reported, fingerprint)
+
+	assert.Assert(t, cache.repeatsLastAnswer(fingerprint, map[lsproto.DocumentUri]string{"file:///a.ts": "a"}))
+	assert.Assert(t, !cache.repeatsLastAnswer(fingerprint, map[lsproto.DocumentUri]string{}),
+		"a client missing a result id has to be told again")
+	assert.Assert(t, !cache.repeatsLastAnswer(fingerprint, map[lsproto.DocumentUri]string{"file:///a.ts": "a", "file:///gone.ts": "b"}),
+		"a client holding a result id for a file nothing reports any more has to be told to clear it")
 }

@@ -92,6 +92,11 @@ func (c *workspaceDiagnosticsCache) repeatsLastAnswer(fingerprint workspaceDiagn
 	if c.answered == nil || !c.answered.Equal(fingerprint) {
 		return false
 	}
+	// Holding something the cache does not is as much a reason to answer as missing something:
+	// a stale result id is cleared by the full answer's cleanup pass, which this would skip.
+	if len(clientHolds) != len(c.entries) {
+		return false
+	}
 	for uri, entry := range c.entries {
 		if clientHolds[uri] != entry.resultID {
 			return false
