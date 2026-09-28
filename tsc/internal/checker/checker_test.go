@@ -102,7 +102,7 @@ export type E = D;`,
 	importClauseAt := func(index int) *ast.Node {
 		return file.Statements.Nodes[index].AsImportDeclaration().ImportClause
 	}
-	// Import clauses without a default binding have no symbol of its own. A type-only one
+	// An import clause without a default binding has no symbol of its own. A type-only one
 	// should get the same type as the equivalent regular import instead of crashing.
 	regular := c.GetTypeAtLocation(importClauseAt(2))
 	for _, index := range []int{0, 1} {
