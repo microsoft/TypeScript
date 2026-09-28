@@ -1506,7 +1506,7 @@ func TestCheckerPoolIncrementalViewUsesDiagnosticsCheckers(t *testing.T) {
 
 	ctx := core.WithRequestID(t.Context(), "sweep")
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	assert.Assert(t, snapshot.IncrementalProgram(project) != nil)
+	assert.Assert(t, snapshot.IncrementalProgram(t.Context(), project) != nil)
 
 	diagnostics := 0
 	for index := range pool.diagnosticsCount {

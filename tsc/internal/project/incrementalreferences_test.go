@@ -81,7 +81,7 @@ func TestIncrementalReferencesAreReusedAcrossAClonedProgram(t *testing.T) {
 
 	// The first build has nothing to carry over, so it resolves everything itself.
 	snapshot, project := referencesProject(t, session)
-	assert.Assert(t, snapshot.IncrementalProgram(project) != nil)
+	assert.Assert(t, snapshot.IncrementalProgram(t.Context(), project) != nil)
 
 	// The first edit after a load settles the project; the one after it is the ordinary case.
 	session.DidChangeFile(context.Background(), referencesMain, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -90,7 +90,7 @@ func TestIncrementalReferencesAreReusedAcrossAClonedProgram(t *testing.T) {
 		}},
 	})
 	snapshot, project = referencesProject(t, session)
-	assert.Assert(t, snapshot.IncrementalProgram(project) != nil)
+	assert.Assert(t, snapshot.IncrementalProgram(t.Context(), project) != nil)
 
 	// An edit that leaves the imports alone clones the program.
 	session.DidChangeFile(context.Background(), referencesMain, 3, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -102,7 +102,7 @@ func TestIncrementalReferencesAreReusedAcrossAClonedProgram(t *testing.T) {
 	assert.Equal(t, project.ProgramUpdateKind, ProgramUpdateKindCloned, "the edit should have cloned the program")
 
 	before := builtCheckers(project.checkerPool)
-	program := snapshot.IncrementalProgram(project)
+	program := snapshot.IncrementalProgram(t.Context(), project)
 	assert.Assert(t, program != nil)
 	assert.Equal(t, builtCheckers(project.checkerPool), before,
 		"carrying the reference map over must not need a type checker")
@@ -113,4 +113,27 @@ func TestIncrementalReferencesAreReusedAcrossAClonedProgram(t *testing.T) {
 	ctx := core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics)
 	assert.Assert(t, len(program.GetSemanticDiagnostics(ctx, file)) > 0,
 		"the edited file is re-checked and its error reported")
+}
+
+// Building the view resolves every file's imports through a type checker, which a pull that has
+// been cancelled should not wait out. What it gives up on is not kept, so the next pull builds it.
+func TestIncrementalProgramGivesUpWhenCancelled(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	session := referencesSession(t)
+	session.DidOpenFile(context.Background(), referencesMain, 1, referencesFiles()["/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	snapshot, project := referencesProject(t, session)
+
+	cancelled, cancel := context.WithCancel(t.Context())
+	cancel()
+	before := builtCheckers(project.checkerPool)
+	assert.Assert(t, snapshot.IncrementalProgram(cancelled, project) == nil)
+	assert.Equal(t, builtCheckers(project.checkerPool), before, "a cancelled build must not start a type checker")
+
+	program := snapshot.IncrementalProgram(t.Context(), project)
+	assert.Assert(t, program != nil)
+	assert.Assert(t, program.GetProgram() == project.Program)
 }

@@ -97,13 +97,19 @@ func (p *Program) PriorState() *PriorState {
 // the replaced file's imports, module augmentations, ambient module names and reference directives
 // are all unchanged, and no other file moves, so every file resolves to what it did before and the
 // whole map can be carried over instead.
-func NewProgramFromPriorState(program *compiler.Program, prior *PriorState, host Host, reuseReferences bool) *Program {
+//
+// It returns nil if ctx is done before the state is built.
+func NewProgramFromPriorState(ctx context.Context, program *compiler.Program, prior *PriorState, host Host, reuseReferences bool) *Program {
 	var oldSnapshot *snapshot
 	if prior != nil {
 		oldSnapshot = prior.snapshot
 	}
+	snapshot := buildSnapshot(ctx, program, oldSnapshot, false /*hashWithText*/, reuseReferences && oldSnapshot != nil)
+	if snapshot == nil {
+		return nil
+	}
 	return &Program{
-		snapshot: buildSnapshot(program, oldSnapshot, false /*hashWithText*/, reuseReferences && oldSnapshot != nil),
+		snapshot: snapshot,
 		program:  program,
 		host:     host,
 	}

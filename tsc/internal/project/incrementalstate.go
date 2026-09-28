@@ -1,6 +1,7 @@
 package project
 
 import (
+	"context"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
@@ -29,11 +30,11 @@ type incrementalState struct {
 }
 
 // get returns the incremental view of the program, building it from the previous program's
-// bookkeeping the first time it is asked for.
-func (s *incrementalState) get(program *compiler.Program) *incremental.Program {
+// bookkeeping the first time it is asked for. It returns nil if ctx is done first.
+func (s *incrementalState) get(ctx context.Context, program *compiler.Program) *incremental.Program {
 	if s == nil {
 		// A project built before it had any state to carry; nothing to chain from.
-		return incremental.NewProgramFromPriorState(program, nil, nil, false /*reuseReferences*/)
+		return incremental.NewProgramFromPriorState(ctx, program, nil, nil, false /*reuseReferences*/)
 	}
 	for {
 		current, previous, built, mine := s.claimBuild()
@@ -41,10 +42,14 @@ func (s *incrementalState) get(program *compiler.Program) *incremental.Program {
 		case current != nil:
 			return current
 		case mine:
-			return s.publishBuild(incremental.NewProgramFromPriorState(program, previous, nil, s.referencesValid))
+			return s.publishBuild(incremental.NewProgramFromPriorState(ctx, program, previous, nil, s.referencesValid))
 		default:
 			// Waiting on the build rather than the lock is what keeps next() off it.
-			<-built
+			select {
+			case <-built:
+			case <-ctx.Done():
+				return nil
+			}
 		}
 	}
 }

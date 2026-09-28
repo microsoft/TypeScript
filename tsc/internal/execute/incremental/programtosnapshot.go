@@ -21,17 +21,19 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if oldProgram != nil {
 		oldSnapshot = oldProgram.snapshot
 	}
-	return buildSnapshot(program, oldSnapshot, hashWithText, false /*reuseReferences*/)
+	return buildSnapshot(context.TODO(), program, oldSnapshot, hashWithText, false /*reuseReferences*/)
 }
 
-// buildSnapshot works out what a program changed against what the one before it left behind.
-func buildSnapshot(program *compiler.Program, oldSnapshot *snapshot, hashWithText bool, reuseReferences bool) *snapshot {
+// buildSnapshot works out what a program changed against what the one before it left behind. It
+// returns nil if ctx is done first.
+func buildSnapshot(ctx context.Context, program *compiler.Program, oldSnapshot *snapshot, hashWithText bool, reuseReferences bool) *snapshot {
 	snapshot := &snapshot{
 		options:      program.Options(),
 		hashWithText: hashWithText,
 		checkPending: program.Options().NoCheck.IsTrue(),
 	}
 	to := &toProgramSnapshot{
+		ctx:             ctx,
 		program:         program,
 		oldSnapshot:     oldSnapshot,
 		snapshot:        snapshot,
@@ -41,6 +43,10 @@ func buildSnapshot(program *compiler.Program, oldSnapshot *snapshot, hashWithTex
 	if to.snapshot.canUseIncrementalState() {
 		to.reuseFromOldProgram()
 		to.computeProgramFileChanges()
+		if ctx.Err() != nil {
+			// The files it gave up on are missing from the maps, not unchanged.
+			return nil
+		}
 		to.handleFileDelete()
 		to.handleGlobalScopeChange()
 		to.handlePendingEmit()
@@ -50,6 +56,7 @@ func buildSnapshot(program *compiler.Program, oldSnapshot *snapshot, hashWithTex
 }
 
 type toProgramSnapshot struct {
+	ctx         context.Context
 	program     *compiler.Program
 	oldSnapshot *snapshot
 	snapshot    *snapshot
@@ -104,6 +111,11 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 	wg := core.NewWorkGroup(t.program.SingleThreaded())
 	for _, file := range files {
 		wg.Queue(func() {
+			// Resolving a file's references takes a type checker, so there is no point starting
+			// one for a snapshot that will be thrown away.
+			if t.ctx.Err() != nil {
+				return
+			}
 			versionText := file.Text()
 			if file.ContentMapper() != "" {
 				versionText = file.OriginalText() + "\x00" + file.ContentMapperTransformIdentity()

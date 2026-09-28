@@ -23,7 +23,7 @@ func erroringFiles(count int) map[string]any {
 
 func allSemanticDiagnostics(t *testing.T, snapshot *Snapshot, project *Project, ctx context.Context) map[string]int {
 	t.Helper()
-	program := snapshot.IncrementalProgram(project)
+	program := snapshot.IncrementalProgram(t.Context(), project)
 	counts := map[string]int{}
 	for _, file := range project.Program.SourceFiles() {
 		if diags := program.GetSemanticDiagnostics(ctx, file); len(diags) > 0 {
@@ -63,7 +63,7 @@ func TestIncrementalCancelledCheckKeepsOnlyWhatItFinished(t *testing.T) {
 	assert.Assert(t, project != nil)
 	assert.Equal(t, len(project.Program.SourceFiles()), len(fullProject.Program.SourceFiles()))
 
-	program := snapshot.IncrementalProgram(project)
+	program := snapshot.IncrementalProgram(t.Context(), project)
 	cancelCtx, cancel := context.WithCancel(core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics))
 	cancelCtx = WithCheckProgress(cancelCtx, func(checked, total int) {
 		// Stop once it is under way but nowhere near done.
