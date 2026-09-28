@@ -557,7 +557,7 @@ async function runGenerateExtension() {
     const { default: cache } = await import("./tools/scripts/gen/cache.mts");
     await cache({
         cwd: __dirname,
-        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
+        inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
         outputs: ["packages/vscode-typescript/l10n/bundle.l10n.json"],
         commands: [["npm", "run", "-w", "native-preview", "generateLocBundle"]],
         envInputs: [],
@@ -575,7 +575,7 @@ async function runGenerateExtensionTest() {
     const { default: cache } = await import("./tools/scripts/gen/cache.mts");
     await cache({
         cwd: __dirname,
-        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
+        inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
         outputs: ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"],
         commands: [["npm", "run", "-w", "native-preview", "generateLocTest"]],
         envInputs: [],
