@@ -5,6 +5,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -13,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
@@ -34,12 +36,21 @@ var (
 type Method string
 
 type (
-	SnapshotID  uint64
-	SymbolID    uint64
-	TypeID      uint32
-	SignatureID uint64
-	NodeHandle  string
+	SnapshotID          uint64
+	ModuleResolverID    uint64
+	SourceFileLeaseID   uint64
+	BuildOrchestratorID uint64
+	SymbolID            uint64
+	TypeID              uint32
+	SignatureID         uint64
+	NodeHandle          string
 )
+
+var nextBuildOrchestratorId atomic.Uint64
+
+func NewBuildOrchestratorID() BuildOrchestratorID {
+	return BuildOrchestratorID(nextBuildOrchestratorId.Add(1))
+}
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
 	return SymbolID(ast.GetSymbolId(symbol))
@@ -54,14 +65,23 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 }
 
 const (
-	MethodRelease Method = "release"
+	MethodRelease           Method = "release"
+	MethodReleaseSourceFile Method = "releaseSourceFile"
 
-	MethodBatchRequests Method = "batchRequests"
-
+	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
+	MethodCreateBuildOrchestrator                        Method = "createBuildOrchestrator"
+	MethodDisposeBuildOrchestrator                       Method = "disposeBuildOrchestrator"
+	MethodBuild                                          Method = "build"
+	MethodBuildReferences                                Method = "buildReferences"
+	MethodCleanBuild                                     Method = "cleanBuild"
+	MethodCleanReferences                                Method = "cleanReferences"
+	MethodCreateModuleResolver                           Method = "createModuleResolver"
+	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
+	MethodResolveModuleName                              Method = "resolveModuleName"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
@@ -110,23 +130,27 @@ const (
 	MethodGetExportSymbolOfSymbol Method = "getExportSymbolOfSymbol"
 
 	// Type sub-property methods
-	MethodGetSymbolOfType              Method = "getSymbolOfType"
-	MethodGetTargetOfType              Method = "getTargetOfType"
-	MethodGetFreshTypeOfType           Method = "getFreshTypeOfType"
-	MethodGetRegularTypeOfType         Method = "getRegularTypeOfType"
-	MethodGetTypesOfType               Method = "getTypesOfType"
-	MethodGetTypeParametersOfType      Method = "getTypeParametersOfType"
-	MethodGetOuterTypeParametersOfType Method = "getOuterTypeParametersOfType"
-	MethodGetLocalTypeParametersOfType Method = "getLocalTypeParametersOfType"
-	MethodGetThisTypeOfType            Method = "getThisTypeOfType"
-	MethodGetAliasTypeArgumentsOfType  Method = "getAliasTypeArgumentsOfType"
-	MethodGetAliasSymbolOfType         Method = "getAliasSymbolOfType"
-	MethodGetObjectTypeOfType          Method = "getObjectTypeOfType"
-	MethodGetIndexTypeOfType           Method = "getIndexTypeOfType"
-	MethodGetCheckTypeOfType           Method = "getCheckTypeOfType"
-	MethodGetExtendsTypeOfType         Method = "getExtendsTypeOfType"
-	MethodGetBaseTypeOfType            Method = "getBaseTypeOfType"
-	MethodGetConstraintOfType          Method = "getConstraintOfType"
+	MethodGetSymbolOfType               Method = "getSymbolOfType"
+	MethodGetTargetOfType               Method = "getTargetOfType"
+	MethodGetFreshTypeOfType            Method = "getFreshTypeOfType"
+	MethodGetRegularTypeOfType          Method = "getRegularTypeOfType"
+	MethodGetTypesOfType                Method = "getTypesOfType"
+	MethodGetTypeParametersOfType       Method = "getTypeParametersOfType"
+	MethodGetOuterTypeParametersOfType  Method = "getOuterTypeParametersOfType"
+	MethodGetLocalTypeParametersOfType  Method = "getLocalTypeParametersOfType"
+	MethodGetThisTypeOfType             Method = "getThisTypeOfType"
+	MethodGetAliasTypeArgumentsOfType   Method = "getAliasTypeArgumentsOfType"
+	MethodGetAliasSymbolOfType          Method = "getAliasSymbolOfType"
+	MethodGetObjectTypeOfType           Method = "getObjectTypeOfType"
+	MethodGetIndexTypeOfType            Method = "getIndexTypeOfType"
+	MethodGetCheckTypeOfType            Method = "getCheckTypeOfType"
+	MethodGetExtendsTypeOfType          Method = "getExtendsTypeOfType"
+	MethodGetBaseTypeOfType             Method = "getBaseTypeOfType"
+	MethodGetConstraintOfType           Method = "getConstraintOfType"
+	MethodGetTypeParameterOfMappedType  Method = "getTypeParameterOfMappedType"
+	MethodGetConstraintTypeOfMappedType Method = "getConstraintTypeOfMappedType"
+	MethodGetNameTypeOfMappedType       Method = "getNameTypeOfMappedType"
+	MethodGetTemplateTypeOfMappedType   Method = "getTemplateTypeOfMappedType"
 
 	// Signature sub-property methods
 	MethodGetTypeParametersOfSignature Method = "getTypeParametersOfSignature"
@@ -163,7 +187,6 @@ const (
 	MethodGetPropertyOfType                 Method = "getPropertyOfType"
 	MethodGetTypeOfPropertyOfType           Method = "getTypeOfPropertyOfType"
 	MethodGetIndexInfoOfType                Method = "getIndexInfoOfType"
-	MethodGetIndexTypeOfTypeByKind          Method = "getIndexTypeOfTypeByKind"
 	MethodGetIndexInfosOfType               Method = "getIndexInfosOfType"
 	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
 	MethodGetDefaultFromTypeParameter       Method = "getDefaultFromTypeParameter"
@@ -356,6 +379,7 @@ type SnapshotRequestChangesParams struct {
 	// tsconfig that contains it; if found, that configured project is loaded and
 	// becomes the file's default project. Otherwise the file is loaded into the
 	// inferred project (e.g. a node_modules d.ts not in any project's import graph).
+	// If a file cannot be loaded into any project, the request fails.
 	OpenFiles []DocumentIdentifier `json:"openFiles,omitempty"`
 	// CloseFiles lists files to release in the new snapshot. A file is only fully
 	// closed once every API client that opened it closes it.
@@ -436,6 +460,68 @@ type LanguageServerSnapshotChanges struct {
 type CreateProgramOptions struct {
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
+	ModuleResolver               ModuleResolverID         `json:"moduleResolver,omitempty"`
+}
+
+type (
+	ModuleResolutionFallback string
+	ResolutionMode           core.ModuleKind
+)
+
+const (
+	ModuleResolutionFallbackResolve    ModuleResolutionFallback = "resolve"
+	ModuleResolutionFallbackUnresolved ModuleResolutionFallback = "unresolved"
+)
+
+type ModuleResolutionSpec struct {
+	Fallback ModuleResolutionFallback `json:"fallback"`
+	Entries  []*ModuleResolutionEntry `json:"entries" nonnil:"true"`
+}
+
+type ModuleResolutionEntry struct {
+	ModuleName          string                  `json:"moduleName"`
+	ContainingDirectory *DocumentIdentifier     `json:"containingDirectory,omitempty"`
+	ResolutionMode      *ResolutionMode         `json:"resolutionMode,omitempty"`
+	Result              *StaticModuleResolution `json:"result" nonnil:"true"`
+}
+
+type StaticModuleResolution struct {
+	ResolvedFileName *DocumentIdentifier `json:"resolvedFileName,omitempty"`
+	OriginalPath     *DocumentIdentifier `json:"originalPath,omitempty"`
+	PackageID        *PackageId          `json:"packageId,omitempty"`
+}
+
+type CreateModuleResolverParams struct {
+	CompilerOptions           core.CompilerOptions  `json:"compilerOptions"`
+	ModuleResolutions         *ModuleResolutionSpec `json:"moduleResolutions,omitempty"`
+	ResolveModuleNameCallback string                `json:"resolveModuleNameCallback,omitempty"`
+}
+
+type ReleaseModuleResolverParams struct {
+	Resolver ModuleResolverID `json:"resolver"`
+}
+
+type ResolveModuleNameParams struct {
+	Snapshot            SnapshotID         `json:"snapshot,omitempty"`
+	InProgressSnapshot  uint64             `json:"inProgressSnapshot,omitempty"`
+	Resolver            ModuleResolverID   `json:"resolver"`
+	ModuleName          string             `json:"moduleName"`
+	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+type ResolveModuleNameCallbackParams struct {
+	ModuleName          string          `json:"moduleName"`
+	ContainingDirectory string          `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode `json:"resolutionMode,omitempty"`
+	Snapshot            *SnapshotID     `json:"snapshot,omitempty"`
+	InProgressSnapshot  *uint64         `json:"inProgressSnapshot,omitempty"`
+}
+
+type ResolveModuleNameResult struct {
+	ResolvedModule *ResolvedModule `json:"resolvedModule,omitempty"`
+	// Trace is provided when compilerOptions.traceResolution is true.
+	Trace []string `json:"trace,omitempty"`
 }
 
 // ProjectFileChanges describes what source files changed within a single project.
@@ -483,10 +569,20 @@ type OpenedFileOperationResult struct {
 var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodBatchRequests:                                  unmarshallerFor[BatchRequestsParams],
 	MethodRelease:                                        unmarshallerFor[ReleaseParams],
+	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
+	MethodCreateBuildOrchestrator:                        unmarshallerFor[CreateBuildOrchestratorParams],
+	MethodDisposeBuildOrchestrator:                       unmarshallerFor[DisposeBuildOrchestratorParams],
+	MethodBuild:                                          unmarshallerFor[BuildParams],
+	MethodBuildReferences:                                unmarshallerFor[BuildParams],
+	MethodCleanBuild:                                     unmarshallerFor[CleanBuildParams],
+	MethodCleanReferences:                                unmarshallerFor[CleanBuildParams],
+	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
+	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
+	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -550,6 +646,10 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetExtendsTypeOfType:          unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseTypeOfType:             unmarshallerFor[GetTypePropertyParams],
 	MethodGetConstraintOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeParameterOfMappedType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetConstraintTypeOfMappedType: unmarshallerFor[GetTypePropertyParams],
+	MethodGetNameTypeOfMappedType:       unmarshallerFor[GetTypePropertyParams],
+	MethodGetTemplateTypeOfMappedType:   unmarshallerFor[GetTypePropertyParams],
 	MethodGetTrueTypeOfConditionalType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetFalseTypeOfConditionalType: unmarshallerFor[GetTypePropertyParams],
 
@@ -586,7 +686,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetPropertyOfType:                 unmarshallerFor[GetPropertyOfTypeParams],
 	MethodGetTypeOfPropertyOfType:           unmarshallerFor[GetPropertyOfTypeParams],
 	MethodGetIndexInfoOfType:                unmarshallerFor[GetIndexInfoOfTypeParams],
-	MethodGetIndexTypeOfTypeByKind:          unmarshallerFor[GetIndexInfoOfTypeParams],
 	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
 	MethodGetConstraintOfTypeParameter:      unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseConstraintOfType:           unmarshallerFor[CheckerTypeParams],
@@ -791,6 +890,10 @@ type ReleaseParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 }
 
+type ReleaseSourceFileParams struct {
+	Lease SourceFileLeaseID `json:"lease"`
+}
+
 type ProfileParams struct {
 	Dir string `json:"dir"`
 }
@@ -799,9 +902,55 @@ type ProfileResult struct {
 	File string `json:"file"`
 }
 
+type CreateBuildOrchestratorParams struct {
+	RootNames []string `json:"rootNames"`
+	Cwd       string   `json:"cwd,omitempty"`
+	// Only a subset of these options are exposed  the API
+	*core.BuildOptions    `json:"buildOptions,omitempty"`
+	*core.CompilerOptions `json:"compilerOptions,omitempty"`
+}
+
+type CreateBuildOrchestratorResponse struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type DisposeBuildOrchestratorParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type BuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             string              `json:"project,omitempty"`
+}
+
+type BuildResponse struct {
+	Status      tsc.ExitStatus        `json:"status"`
+	Diagnostics []*DiagnosticResponse `json:"diagnostics,omitempty"`
+	Statistics  tsc.Statistics        `json:"statistics"`
+}
+
+type CleanBuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             string              `json:"project,omitempty"`
+}
+
+type CleanBuildResponse struct {
+	Status       tsc.ExitStatus        `json:"status"`
+	Diagnostics  []*DiagnosticResponse `json:"diagnostics,omitempty"`
+	Statistics   tsc.Statistics        `json:"statistics"`
+	FilesDeleted []string              `json:"filesDeleted,omitempty"`
+}
+
+type BuildOrchestrator struct {
+	Build           func(project string) tsc.ExitStatus
+	BuildReferences func(project string) tsc.ExitStatus
+	CleanReferences func(project string) tsc.ExitStatus
+}
+
 type ConfigFileResponse struct {
 	FileNames         []string                 `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
+	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
@@ -1013,6 +1162,12 @@ type TypeResponse struct {
 	// SubstitutionType data
 	BaseType        TypeID `json:"baseType,omitzero"`
 	SubstConstraint TypeID `json:"substConstraint,omitzero"`
+
+	// MappedType data
+	TypeParameter  TypeID `json:"typeParameter,omitzero"`
+	ConstraintType TypeID `json:"constraintType,omitzero"`
+	NameType       TypeID `json:"nameType,omitzero"`
+	TemplateType   TypeID `json:"templateType,omitzero"`
 
 	// TemplateLiteralType text segments
 	Texts []string `json:"texts,omitempty"`

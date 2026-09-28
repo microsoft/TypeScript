@@ -1,21 +1,39 @@
 import type {
+    BinaryExpression,
+    BindingElement,
+    CallExpression,
+    ClassDeclaration,
+    ClassElement,
+    Declaration,
+    ExportAssignment,
     ExpressionStatement,
+    FunctionDeclaration,
     Identifier,
+    InterfaceDeclaration,
     JSDoc,
+    MethodDeclaration,
     Node,
     NodeArray,
+    ObjectBindingPattern,
+    ObjectLiteralElement,
+    ObjectLiteralExpression,
     SourceFile,
     StringLiteralLikeNode,
+    TypeElement,
     VariableStatement,
 } from "@typescript/typescript/unstable/ast";
 import {
+    getCombinedModifierFlags,
+    getNameOfDeclaration,
     getTokenAtPosition,
     isClassDeclaration,
+    isExternalModule,
     isImportDeclaration,
     isInterfaceDeclaration,
     isJSDocLink,
     isNamedImports,
     isValidTypeOnlyAliasUseSite,
+    ModifierFlags,
     NodeFlags,
     SyntaxKind,
     TokenFlags,
@@ -29,6 +47,7 @@ import {
     createBinaryExpression,
     createBlock,
     createExpressionStatement,
+    createFunctionDeclaration,
     createIdentifier,
     createIfStatement,
     createMissingDeclaration,
@@ -56,7 +75,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import { areTestsFiltered } from "../testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
+
+const concurrency = areTestsFiltered();
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -71,7 +93,7 @@ function collectKinds(node: Node): SyntaxKind[] {
     return kinds;
 }
 
-describe("NodeObject + childrenIter", () => {
+describe("NodeObject + childrenIter", { concurrency }, () => {
     test("skips absent optional child lists", () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
@@ -86,7 +108,7 @@ test("Benchmarks", async () => {
 // cloneNode
 // ---------------------------------------------------------------------------
 
-describe("cloneNode", () => {
+describe("cloneNode", { concurrency }, () => {
     test("clones an identifier", () => {
         const id = createIdentifier("hello");
         const clone = cloneNode(id);
@@ -156,7 +178,7 @@ describe("cloneNode", () => {
 // visitNode / visitNodes
 // ---------------------------------------------------------------------------
 
-describe("visitNode", () => {
+describe("visitNode", { concurrency }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: Node | undefined = undefined;
         const result = visitNode(nothing, () => undefined);
@@ -177,7 +199,7 @@ describe("visitNode", () => {
     });
 });
 
-describe("visitNodes", () => {
+describe("visitNodes", { concurrency }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: NodeArray<Node> | undefined = undefined;
         const result = visitNodes(nothing, () => undefined);
@@ -222,7 +244,7 @@ describe("visitNodes", () => {
 // visitEachChild
 // ---------------------------------------------------------------------------
 
-describe("visitEachChild", () => {
+describe("visitEachChild", { concurrency }, () => {
     test("returns same node if nothing changed (identity visitor)", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
@@ -307,7 +329,7 @@ describe("visitEachChild", () => {
 // getSynthesizedDeepClone
 // ---------------------------------------------------------------------------
 
-describe("getSynthesizedDeepClone", () => {
+describe("getSynthesizedDeepClone", { concurrency }, () => {
     test("deeply clones identifier", () => {
         const id = createIdentifier("hello");
         const clone = getSynthesizedDeepClone(id);
@@ -440,7 +462,7 @@ describe("getSynthesizedDeepClone", () => {
 // getSynthesizedDeepClones (NodeArray)
 // ---------------------------------------------------------------------------
 
-describe("getSynthesizedDeepClones", () => {
+describe("getSynthesizedDeepClones", { concurrency }, () => {
     test("deeply clones a NodeArray", () => {
         const a = createIdentifier("a");
         const b = createIdentifier("b");
@@ -475,7 +497,7 @@ describe("getSynthesizedDeepClones", () => {
 // Type-only import use sites
 // ---------------------------------------------------------------------------
 
-describe("isValidTypeOnlyAliasUseSite", () => {
+describe("isValidTypeOnlyAliasUseSite", { concurrency }, () => {
     test("classifies syntactic type-only import use sites", () => {
         const source = `
 type TypeUse = TypeOnlyName;
@@ -527,7 +549,7 @@ class JSDocAugmentsUse {}
 // Integration: visitor transformation
 // ---------------------------------------------------------------------------
 
-describe("visitor transformation", () => {
+describe("visitor transformation", { concurrency }, () => {
     test("rename all identifiers via recursive visitor", () => {
         const a = createIdentifier("oldName");
         const b = createIdentifier("oldName");
@@ -602,7 +624,125 @@ function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
     return getRemoteSourceFileAndChecker(api, configPath, filePath)[0];
 }
 
-describe("RemoteNode + cloneNode", () => {
+describe("declaration utilities", { concurrency }, () => {
+    test("isExternalModule distinguishes external modules from scripts and CommonJS", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, moduleDetection: "legacy" } }),
+            "/src/module.ts": "export const x = 1;",
+            "/src/import.ts": 'import { x } from "./module";',
+            "/src/script.ts": "const y = 1;",
+            "/src/commonjs.js": "module.exports = 1;",
+        });
+        for (
+            const [fileName, expected] of [
+                ["module.ts", true],
+                ["import.ts", true],
+                ["script.ts", false],
+                ["commonjs.js", false],
+            ] as const
+        ) {
+            const sourceFile = getRemoteSourceFile(api, "/tsconfig.json", `/src/${fileName}`);
+            assert.strictEqual(isExternalModule(sourceFile), expected, fileName);
+            assert.strictEqual(isExternalModule(cloneNode(sourceFile)), expected, `cloned ${fileName}`);
+        }
+    });
+
+    test("getCombinedModifierFlags includes modifiers on factory nodes", () => {
+        const declaration = createFunctionDeclaration(
+            [createToken(SyntaxKind.ExportKeyword), createToken(SyntaxKind.AsyncKeyword)],
+            undefined,
+            createIdentifier("f"),
+            undefined,
+            [],
+            undefined,
+            createBlock([]),
+        );
+
+        assert.strictEqual(
+            getCombinedModifierFlags(declaration),
+            ModifierFlags.Export | ModifierFlags.Async,
+        );
+    });
+
+    test("getCombinedModifierFlags includes variable statement flags for binding elements", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": "export const { x } = value;",
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const statement = sf.statements[0] as VariableStatement;
+        const declaration = statement.declarationList.declarations[0];
+        const binding = (declaration.name as ObjectBindingPattern).elements[0] as BindingElement;
+
+        assert.strictEqual(
+            getCombinedModifierFlags(binding),
+            ModifierFlags.Export,
+        );
+    });
+
+    test("element categories are named declarations", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `
+class C { public member = 1; }
+interface I { member?: number; }
+const object = { member: 1 };
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const classElement: ClassElement = (sf.statements[0] as ClassDeclaration).members[0];
+        const typeElement: TypeElement = (sf.statements[1] as InterfaceDeclaration).members[0];
+        const variable = sf.statements[2] as VariableStatement;
+        const objectLiteral = variable.declarationList.declarations[0].initializer as ObjectLiteralExpression;
+        const objectLiteralElement: ObjectLiteralElement = objectLiteral.properties[0];
+        const declarations: readonly Declaration[] = [classElement, typeElement, objectLiteralElement];
+
+        assert.deepStrictEqual(declarations.map(declaration => getNameOfDeclaration(declaration)?.getText()), ["member", "member", "member"]);
+        assert.strictEqual(getCombinedModifierFlags(classElement), ModifierFlags.Public);
+    });
+
+    test("getNameOfDeclaration returns declared and assigned names", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `
+function declared() {}
+const assigned = class {};
+export default declared;
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const variable = sf.statements[1] as VariableStatement;
+        const classExpression = variable.declarationList.declarations[0].initializer!;
+
+        assert.strictEqual(getNameOfDeclaration(sf.statements[0] as FunctionDeclaration)?.getText(), "declared");
+        assert.strictEqual(getNameOfDeclaration(classExpression)?.getText(), "assigned");
+        assert.strictEqual(getNameOfDeclaration(sf.statements[2] as ExportAssignment)?.getText(), "declared");
+        assert.strictEqual(getNameOfDeclaration(undefined), undefined);
+    });
+
+    test("getNameOfDeclaration returns JavaScript assignment declaration names", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true } }),
+            "/src/index.js": `
+exports.foo = () => {};
+Object.defineProperty(exports, "bar", { value: 1 });
+class C { #x; method() { this.#x = 1; } }
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.js");
+        const assignment = (sf.statements[0] as ExpressionStatement).expression as BinaryExpression;
+        const defineProperty = (sf.statements[1] as ExpressionStatement).expression as CallExpression;
+        const classDeclaration = sf.statements[2] as ClassDeclaration;
+        const method = classDeclaration.members[1] as MethodDeclaration;
+        const privateAssignment = (method.body!.statements[0] as ExpressionStatement).expression as BinaryExpression;
+
+        assert.strictEqual(getNameOfDeclaration(assignment)?.getText(), "foo");
+        assert.strictEqual(getNameOfDeclaration(defineProperty)?.getText(), '"bar"');
+        assert.strictEqual(getNameOfDeclaration(privateAssignment), privateAssignment.left);
+    });
+});
+
+describe("RemoteNode + cloneNode", { concurrency }, () => {
     test("does not read a sibling as an invalid JSDoc link name", () => {
         const api = spawnAPI({
             "/tsconfig.json": "{}",
@@ -718,7 +858,7 @@ interface I extends Parent<boolean> {}
     });
 });
 
-describe("RemoteNode + visitEachChild", () => {
+describe("RemoteNode + visitEachChild", { concurrency }, () => {
     test("identity visitor returns same remote node", () => {
         const api = spawnAPI();
         try {
@@ -760,7 +900,7 @@ describe("RemoteNode + visitEachChild", () => {
     });
 });
 
-describe("RemoteNodeList inherited array methods", () => {
+describe("RemoteNodeList inherited array methods", { concurrency }, () => {
     test("filter/map/slice return plain arrays without throwing", () => {
         const api = spawnAPI();
         try {
@@ -793,7 +933,7 @@ describe("RemoteNodeList inherited array methods", () => {
     });
 });
 
-describe("RemoteNode + getSynthesizedDeepClone", () => {
+describe("RemoteNode + getSynthesizedDeepClone", { concurrency }, () => {
     test("deep clones a remote import declaration", () => {
         const api = spawnAPI();
         try {
@@ -907,7 +1047,7 @@ function assertGetterInvariants(node: Node, sf: SourceFile) {
     });
 }
 
-describe("RemoteNode + position/text getters", () => {
+describe("RemoteNode + position/text getters", { concurrency }, () => {
     const source = "/* lead */ const value = 123;";
     const files = {
         "/tsconfig.json": "{}",
@@ -1060,7 +1200,7 @@ describe("RemoteNode + position/text getters", () => {
 // RemoteNode: child/token getters
 // ---------------------------------------------------------------------------
 
-describe("RemoteNode + child/token getters", () => {
+describe("RemoteNode + child/token getters", { concurrency }, () => {
     function withFirstStatement(source: string, fn: (stmt: Node, sf: SourceFile) => void) {
         const api = spawnAPI({ "/tsconfig.json": "{}", "/src/children.ts": source });
         try {

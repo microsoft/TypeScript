@@ -230,9 +230,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	}
 
 	if apiRequest.OpenFiles != nil {
-		for uri := range apiRequest.OpenFiles.Keys() {
-			fileName := uri.FileName()
-			path := b.toPath(fileName)
+		for path, fileName := range apiRequest.OpenFiles {
 			if b.apiState.openFiles == nil {
 				b.apiState.openFiles = make(map[tspath.Path]apiOpenedFile)
 			}
@@ -261,9 +259,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	if apiRequest.OpenFiles != nil {
 		var retain collections.Set[tspath.Path]
 		ensureInferredProject := false
-		for uri := range apiRequest.OpenFiles.Keys() {
-			fileName := uri.FileName()
-			path := b.toPath(fileName)
+		for path, fileName := range apiRequest.OpenFiles {
 			if b.isOpenFile(path) {
 				if b.findDefaultConfiguredProject(fileName, path) == nil && !b.isSupportedInInferredProject(fileName) {
 					return fmt.Errorf("no project found for opened file: %s", fileName)
@@ -315,6 +311,8 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
+			request.ModuleResolverFactory,
+			request.ModuleResolverID,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -328,6 +326,8 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
+			request.ModuleResolverFactory,
+			request.ModuleResolverID,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -350,8 +350,11 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	}
 	wg.Wait()
 	b.createdPrograms = createdPrograms
-	for uri := range apiRequest.EnsureFiles.Keys() {
-		b.DidRequestFile(uri, false /*configuredProjectsOnly*/, logger)
+	for path, fileName := range apiRequest.EnsureFiles {
+		b.didRequestFile(fileName, path, false /*configuredProjectsOnly*/, logger)
+		if b.findDefaultProject(fileName, path) == nil {
+			return fmt.Errorf("no project found for opened file: %s", fileName)
+		}
 	}
 	for projectID := range apiRequest.EnsurePrograms.Keys() {
 		b.DidRequestProject(projectID, logger)
@@ -362,7 +365,15 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			return true
 		})
 	}
-	return nil
+	var moduleResolutionError error
+	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		project := entry.Value()
+		if project.Program != nil {
+			moduleResolutionError = project.Program.ModuleResolutionError()
+		}
+		return moduleResolutionError == nil
+	})
+	return moduleResolutionError
 }
 
 func (b *ProjectCollectionBuilder) nextSyntheticProjectID() SyntheticProjectID {
@@ -626,9 +637,13 @@ func (b *ProjectCollectionBuilder) ensureInferredProjectIncludesClosedFile(fileN
 // If configuredProjectsOnly is true, only configured projects are loaded; no inferred project is created
 // and it is not guaranteed that there will be any project containing the file in the resulting snapshot.
 func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, configuredProjectsOnly bool, logger *logging.LogTree) {
-	startTime := time.Now()
 	fileName := uri.FileName()
 	path := b.toPath(fileName)
+	b.didRequestFile(fileName, path, configuredProjectsOnly, logger)
+}
+
+func (b *ProjectCollectionBuilder) didRequestFile(fileName string, path tspath.Path, configuredProjectsOnly bool, logger *logging.LogTree) {
+	startTime := time.Now()
 	if b.defaultProjectsInvalidated {
 		b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		if !b.isOpenFile(path) {
@@ -1274,6 +1289,8 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
+	moduleResolverFactory ModuleResolverFactory,
+	moduleResolverID uint64,
 	contentMappers []*contentmapper.Mapper,
 	logger *logging.LogTree,
 ) *dirty.SyncMapEntry[SyntheticProjectID, *Project] {
@@ -1281,6 +1298,8 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	if !loaded {
 		syntheticProject := newSyntheticProject(projectID, b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
 		syntheticProject.CommandLine.Errors = configFileParsingDiagnostics
+		syntheticProject.moduleResolverFactory = moduleResolverFactory
+		syntheticProject.moduleResolverID = moduleResolverID
 		project, _ = b.syntheticProjects.LoadOrStore(projectID, syntheticProject)
 		return project
 	}
@@ -1300,13 +1319,16 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
-				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
+				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers()) ||
+				p.moduleResolverID != moduleResolverID
 		},
 		func(p *Project) {
 			if logger != nil {
 				logger.Log(fmt.Sprintf("Updating synthetic project config with %d root files", len(rootFileNames)))
 			}
 			p.SetCommandLine(newCommandLine)
+			p.moduleResolverFactory = moduleResolverFactory
+			p.moduleResolverID = moduleResolverID
 		},
 	)
 	return project
