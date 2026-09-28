@@ -106,6 +106,45 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Equal(t, len(utils.Client().UnwatchFilesCalls()), 0)
 	})
 
+	t.Run("configured projects are released after their last file closes", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": `{"compilerOptions":{"noLib":true}}`,
+			"/home/projects/TS/p1/a.ts":          `export const a = 1;`,
+			"/home/projects/TS/p1/b.ts":          `export const b = 1;`,
+			"/home/projects/TS/p2/tsconfig.json": `{"compilerOptions":{"noLib":true}}`,
+			"/home/projects/TS/p2/index.ts":      `export const c = 1;`,
+		}
+		session, _ := projecttestutil.Setup(files)
+		uriA := lsproto.DocumentUri("file:///home/projects/TS/p1/a.ts")
+		uriB := lsproto.DocumentUri("file:///home/projects/TS/p1/b.ts")
+		uriC := lsproto.DocumentUri("file:///home/projects/TS/p2/index.ts")
+		for _, uri := range []lsproto.DocumentUri{uriA, uriB, uriC} {
+			session.DidOpenFile(context.Background(), uri, 1, files[uri.FileName()].(string), lsproto.LanguageKindTypeScript)
+			_, err := session.GetLanguageService(context.Background(), uri)
+			assert.NilError(t, err)
+		}
+		session.WaitForBackgroundTasks()
+		assert.Equal(t, len(session.Snapshot().ProjectCollection.Projects()), 2)
+
+		session.DidCloseFile(context.Background(), uriA)
+		session.WaitForBackgroundTasks()
+		assert.Equal(t, len(session.Snapshot().ProjectCollection.Projects()), 2)
+
+		session.DidCloseFile(context.Background(), uriB)
+		session.WaitForBackgroundTasks()
+		snapshot := session.Snapshot()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")) == nil)
+		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p1/tsconfig.json")) == nil)
+
+		session.DidCloseFile(context.Background(), uriC)
+		session.WaitForBackgroundTasks()
+		snapshot = session.Snapshot()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p2/tsconfig.json")) == nil)
+	})
+
 	t.Run("unrooted inferred projects", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
