@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-/// <reference lib="es2025.iterator" />
+/// <reference lib="es2026.iterator" />
 
 export {};
 
