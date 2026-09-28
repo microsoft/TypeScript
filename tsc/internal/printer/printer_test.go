@@ -2622,3 +2622,45 @@ func TestOmitTrailingSemicolon(t *testing.T) {
 		t.Fatalf("omit EmitSourceFile(for) = %q, want %q", got, "for (;;) { }")
 	}
 }
+
+func TestSynthesizedCommentsIgnoreNoCommentsEmitFlags(t *testing.T) {
+	t.Parallel()
+
+	// EFNoLeadingComments/EFNoTrailingComments only suppress comments from the source text.
+	// Synthesized comments should still be emitted, so a transformer can replace a source comment.
+	data := []struct {
+		title    string
+		input    string
+		flags    printer.EmitFlags
+		leading  bool
+		trailing bool
+		output   string
+	}{
+		{title: "Leading/NoFlags", input: "/* original */ x;", leading: true, output: "/* original */ /* rewritten */ x;"},
+		{title: "Leading/NoLeadingComments", input: "/* original */ x;", flags: printer.EFNoLeadingComments, leading: true, output: "/* rewritten */ x;"},
+		{title: "Leading/NoComments", input: "/* original */ x;", flags: printer.EFNoComments, leading: true, output: "/* rewritten */ x;"},
+		{title: "Trailing/NoFlags", input: "x; /* original */", trailing: true, output: "x; /* rewritten */ /* original */"},
+		{title: "Trailing/NoTrailingComments", input: "x; /* original */", flags: printer.EFNoTrailingComments, trailing: true, output: "x; /* rewritten */"},
+		{title: "Trailing/NoComments", input: "x; /* original */", flags: printer.EFNoComments, trailing: true, output: "x; /* rewritten */"},
+	}
+
+	for _, rec := range data {
+		t.Run(rec.title, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(rec.input, false /*jsx*/)
+			parsetestutil.CheckDiagnostics(t, file)
+
+			emitContext := printer.NewEmitContext()
+			statement := file.Statements.Nodes[0]
+			emitContext.SetEmitFlags(statement, rec.flags)
+			if rec.leading {
+				emitContext.AddSyntheticLeadingComment(statement, ast.KindMultiLineCommentTrivia, " rewritten ", false /*hasTrailingNewLine*/)
+			}
+			if rec.trailing {
+				emitContext.AddSyntheticTrailingComment(statement, ast.KindMultiLineCommentTrivia, " rewritten ", false /*hasTrailingNewLine*/)
+			}
+
+			emittestutil.CheckEmit(t, emitContext, file, rec.output)
+		})
+	}
+}
