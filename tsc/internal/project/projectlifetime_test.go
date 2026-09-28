@@ -2,6 +2,7 @@ package project_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -104,6 +105,54 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p3/tsconfig.json")) == nil)
 		assert.Equal(t, len(utils.Client().WatchFilesCalls()), 1)
 		assert.Equal(t, len(utils.Client().UnwatchFilesCalls()), 0)
+	})
+
+	t.Run("closed configured projects stay loaded until the next file opens", func(t *testing.T) {
+		t.Parallel()
+		const projectCount = 12
+		files := make(map[string]any)
+		uris := make([]lsproto.DocumentUri, projectCount)
+		for i := range projectCount + 1 {
+			directory := fmt.Sprintf("/home/projects/TS/p%d", i)
+			files[directory+"/tsconfig.json"] = `{"compilerOptions":{"noLib":true}}`
+			files[directory+"/index.ts"] = `export const value = 1;`
+			if i < projectCount {
+				uris[i] = lsproto.DocumentUri("file://" + directory + "/index.ts")
+			}
+		}
+		session, _ := projecttestutil.Setup(files)
+		ctx := context.Background()
+		for _, uri := range uris {
+			session.DidOpenFile(ctx, uri, 1, files[uri.FileName()].(string), lsproto.LanguageKindTypeScript)
+			service, err := session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			_, err = service.ProvideHover(ctx, &lsproto.HoverParams{
+				TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+				Position:     lsproto.Position{Line: 0, Character: 13},
+			})
+			assert.NilError(t, err)
+		}
+		session.WaitForBackgroundTasks()
+		assert.Equal(t, len(session.Snapshot().ProjectCollection.ConfiguredProjects()), projectCount)
+
+		for _, uri := range uris {
+			session.DidCloseFile(ctx, uri)
+		}
+		session.WaitForBackgroundTasks()
+		// Closing files does not sweep projects; the next open does.
+		collection := session.Snapshot().ProjectCollection
+		assert.Equal(t, len(collection.ConfiguredProjects()), projectCount)
+		assert.Equal(t, collection.GetOpenConfiguredProjects().Len(), 0)
+		for _, project := range collection.ConfiguredProjects() {
+			assert.Assert(t, project.GetProgram() != nil)
+		}
+
+		nextURI := lsproto.DocumentUri("file:///home/projects/TS/p12/index.ts")
+		session.DidOpenFile(ctx, nextURI, 1, files[nextURI.FileName()].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+		assert.Equal(t, len(session.Snapshot().ProjectCollection.ConfiguredProjects()), 1)
+		assert.Assert(t, session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p12/tsconfig.json")) != nil)
+		assert.Assert(t, session.Snapshot().ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p0/tsconfig.json")) == nil)
 	})
 
 	t.Run("unrooted inferred projects", func(t *testing.T) {
