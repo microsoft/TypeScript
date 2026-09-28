@@ -1,0 +1,82 @@
+negatedDoubleExclusion.ts(9,42): error TS2322: Type '"b"' is not assignable to type '"a"'.
+negatedDoubleExclusion.ts(9,53): error TS2322: Type '1' is not assignable to type '0'.
+negatedDoubleExclusion.ts(10,54): error TS2322: Type '0' is not assignable to type '1'.
+negatedDoubleExclusion.ts(21,7): error TS2322: Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type 'Allowed'.
+  Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; } & not Blocked'.
+    Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; }'.
+      Types of property 'kind' are incompatible.
+        Type '"a" | "b"' is not assignable to type '"b"'.
+          Type '"a"' is not assignable to type '"b"'.
+negatedDoubleExclusion.ts(28,7): error TS2322: Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "a"; } | ({ kind: "b"; } & not Blocked)'.
+  Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; } & not Blocked'.
+    Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; }'.
+      Types of property 'kind' are incompatible.
+        Type '"a" | "b"' is not assignable to type '"b"'.
+          Type '"a"' is not assignable to type '"b"'.
+negatedDoubleExclusion.ts(33,11): error TS2322: Type '{ kind: "a"; value: 0; }' is not assignable to type 'Difference<Product, { kind: Kind; }>'.
+  Type '{ kind: "a"; value: 0; }' is not assignable to type '{ kind: "a"; value: 0; } & not { kind: Kind; }'.
+    Type '{ kind: "a"; value: 0; }' is not assignable to type 'not { kind: Kind; }'.
+
+
+==== negatedDoubleExclusion.ts (6 errors) ====
+    type Difference<T, U> = T & not U;
+    type Product = { kind: "a"; value: 0 } | { kind: "b"; value: 1 };
+    type DoubleExcluded = {
+        [Kind in Product["kind"]]: Difference<Product, Difference<Product, { kind: Kind }>>;
+    };
+    const productA: DoubleExcluded["a"] = { kind: "a", value: 0 };
+    const productB: DoubleExcluded["b"] = { kind: "b", value: 1 };
+    
+    const wrongKind: DoubleExcluded["a"] = { kind: "b", value: 1 };
+                                             ~~~~
+!!! error TS2322: Type '"b"' is not assignable to type '"a"'.
+!!! related TS6500 negatedDoubleExclusion.ts:2:18: The expected type comes from property 'kind' which is declared here on type '{ kind: "a"; value: 0; }'
+                                                        ~~~~~
+!!! error TS2322: Type '1' is not assignable to type '0'.
+!!! related TS6500 negatedDoubleExclusion.ts:2:29: The expected type comes from property 'value' which is declared here on type '{ kind: "a"; value: 0; }'
+    const wrongValue: DoubleExcluded["b"] = { kind: "b", value: 0 };
+                                                         ~~~~~
+!!! error TS2322: Type '0' is not assignable to type '1'.
+!!! related TS6500 negatedDoubleExclusion.ts:2:55: The expected type comes from property 'value' which is declared here on type '{ kind: "b"; value: 1; }'
+    
+    type Selected<Kind extends Product["kind"]> = Difference<Product, Difference<Product, { kind: Kind }>>;
+    const selectedA: Selected<"a"> = productA;
+    const selectedB: Selected<"b"> = productB;
+    const selectedBoth: Selected<"a" | "b"> = productA;
+    
+    type Tagged = { kind: "a" } | { kind: "b" };
+    interface Blocked { blocked: true; }
+    type Allowed = Difference<Tagged, Blocked>;
+    declare const excluded: { kind: "a" | "b"; blocked: true };
+    const rejected: Allowed = excluded;
+          ~~~~~~~~
+!!! error TS2322: Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type 'Allowed'.
+!!! error TS2322:   Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; } & not Blocked'.
+!!! error TS2322:     Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; }'.
+!!! error TS2322:       Types of property 'kind' are incompatible.
+!!! error TS2322:         Type '"a" | "b"' is not assignable to type '"b"'.
+!!! error TS2322:           Type '"a"' is not assignable to type '"b"'.
+    
+    declare const allowed: { kind: "a" | "b" } & not Blocked;
+    const accepted: Allowed = allowed;
+    
+    declare const ordinary: { kind: "a" | "b" };
+    const plain: Tagged = ordinary;
+    const partiallyExcluded: (Tagged & not Blocked) | { kind: "a" } = excluded;
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "a"; } | ({ kind: "b"; } & not Blocked)'.
+!!! error TS2322:   Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; } & not Blocked'.
+!!! error TS2322:     Type '{ kind: "a" | "b"; blocked: true; }' is not assignable to type '{ kind: "b"; }'.
+!!! error TS2322:       Types of property 'kind' are incompatible.
+!!! error TS2322:         Type '"a" | "b"' is not assignable to type '"b"'.
+!!! error TS2322:           Type '"a"' is not assignable to type '"b"'.
+    declare const alternative: { kind: "a"; blocked: true };
+    const acceptedAlternative: (Tagged & not Blocked) | { kind: "a" } = alternative;
+    
+    function generic<Kind extends "a" | "b">(value: { kind: "a"; value: 0 }) {
+        const rejected: Difference<Product, { kind: Kind }> = value;
+              ~~~~~~~~
+!!! error TS2322: Type '{ kind: "a"; value: 0; }' is not assignable to type 'Difference<Product, { kind: Kind; }>'.
+!!! error TS2322:   Type '{ kind: "a"; value: 0; }' is not assignable to type '{ kind: "a"; value: 0; } & not { kind: Kind; }'.
+!!! error TS2322:     Type '{ kind: "a"; value: 0; }' is not assignable to type 'not { kind: Kind; }'.
+    }

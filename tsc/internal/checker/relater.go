@@ -3917,6 +3917,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			return TernaryFalse
 		}
 		sourceIsPrimitive := source.flags&TypeFlagsPrimitive != 0
+		originalSource := source
 		if r.relation != r.c.identityRelation {
 			source = r.c.getApparentType(source)
 		} else if r.c.isGenericMappedType(source) {
@@ -3995,7 +3996,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		if source.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 && target.flags&TypeFlagsUnion != 0 {
 			objectOnlyTarget := r.c.extractTypesOfKind(target, TypeFlagsObject|TypeFlagsIntersection|TypeFlagsSubstitution)
 			if objectOnlyTarget.flags&TypeFlagsUnion != 0 {
-				result := r.typeRelatedToDiscriminatedType(source, objectOnlyTarget)
+				result := r.typeRelatedToDiscriminatedType(originalSource, objectOnlyTarget)
 				if result != TernaryFalse {
 					return result
 				}
@@ -4091,7 +4092,7 @@ func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors b
 	return TernaryFalse
 }
 
-func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ternary {
+func (r *Relater) typeRelatedToDiscriminatedType(originalSource *Type, target *Type) Ternary {
 	// 1. Generate the combinations of discriminant properties & types 'source' can satisfy.
 	//    a. If the number of combinations is above a set limit, the comparison is too complex.
 	// 2. Filter 'target' to the subset of types whose discriminants exist in the matrix.
@@ -4101,6 +4102,7 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 	//
 	// NOTE: See ~/tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts
 	//       for examples.
+	source := r.c.getApparentType(originalSource)
 	sourceProperties := r.c.getPropertiesOfType(source)
 	sourcePropertiesFiltered := r.c.findDiscriminantProperties(sourceProperties, target)
 	if len(sourcePropertiesFiltered) == 0 {
@@ -4152,6 +4154,13 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 		hasMatch := false
 	outer:
 		for _, t := range target.Types() {
+			if t.flags&TypeFlagsIntersection != 0 {
+				for _, constituent := range t.Types() {
+					if isNegatedType(constituent) && r.isRelatedTo(originalSource, constituent, RecursionFlagsTarget, false /*reportErrors*/) == TernaryFalse {
+						continue outer
+					}
+				}
+			}
 			for i := range sourcePropertiesFiltered {
 				sourceProperty := sourcePropertiesFiltered[i]
 				targetProperty := r.c.getPropertyOfType(t, sourceProperty.Name)
