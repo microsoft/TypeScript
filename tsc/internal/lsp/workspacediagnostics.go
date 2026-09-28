@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"sync/atomic"
+	"sync"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -191,7 +191,11 @@ type workspaceDiagnosticsRun struct {
 	// The projects being checked, so progress can be totalled from wherever it is reported.
 	work []*workspaceDiagnosticsProject
 	// The last percentage sent, so progress never goes backwards and unchanged ticks say nothing.
-	lastPercentage atomic.Int64
+	// Guarded by progressMu, as is begun.
+	lastPercentage int64
+	// progressMu is held from choosing a percentage until it is sent, so reports leave in the order
+	// their percentages were chosen rather than overtaking one another on the way out.
+	progressMu sync.Mutex
 	// Whether a sweep actually ran, so a disabled pull does not prune the cache.
 	collected bool
 	// What this answer was computed from, recorded with it so the next pull can tell whether it
@@ -517,20 +521,17 @@ func (r *workspaceDiagnosticsRun) filesChecked() int {
 // the checkers as they finish a file, and as reports are added, so it only ever moves forwards and
 // says nothing when it has not.
 func (r *workspaceDiagnosticsRun) reportProgress() {
+	r.progressMu.Lock()
+	defer r.progressMu.Unlock()
 	if !r.begun || r.filesTotal == 0 {
 		return
 	}
 	done := min(r.filesChecked(), r.filesTotal)
 	percentage := int64(done * 100 / r.filesTotal)
-	for {
-		last := r.lastPercentage.Load()
-		if percentage <= last {
-			return
-		}
-		if r.lastPercentage.CompareAndSwap(last, percentage) {
-			break
-		}
+	if percentage <= r.lastPercentage {
+		return
 	}
+	r.lastPercentage = percentage
 	r.sendProgress(lsproto.WorkDoneProgressBeginOrReportOrEnd{
 		Report: &lsproto.WorkDoneProgressReport{
 			Message:    new(fmt.Sprintf("%d/%d", done, r.filesTotal)),
@@ -540,6 +541,8 @@ func (r *workspaceDiagnosticsRun) reportProgress() {
 }
 
 func (r *workspaceDiagnosticsRun) endProgress() {
+	r.progressMu.Lock()
+	defer r.progressMu.Unlock()
 	if !r.begun {
 		return
 	}
