@@ -5657,6 +5657,40 @@ const cast = /** @type {number} */ (someValue);
         assert.deepEqual(getJSDocCommentsAndTags(castDecl), []);
     });
 
+    test("returns an individual JSDocTag for a parameter matched by name", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, checkJs: true } }),
+            "/src/main.js": `
+/**
+ * @param {string} name the name to measure
+ * @returns {number} the length
+ */
+var measure = function (name) {
+    return name.length;
+};
+`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.js");
+        assert.ok(sourceFile);
+        const variable = sourceFile.statements.find(isVariableStatement);
+        assert.ok(variable);
+        const funcExpr = variable.declarationList.declarations[0].initializer;
+        assert.ok(funcExpr);
+        const param = (funcExpr as unknown as { parameters: NodeArray<Node>; }).parameters[0];
+
+        // A Parameter host node returns its matching @param tag directly as a
+        // JSDocTag, not wrapped in the enclosing JSDoc comment.
+        const commentsAndTags = getJSDocCommentsAndTags(param);
+        assert.equal(commentsAndTags.length, 1);
+        const [tag] = commentsAndTags;
+        assert.ok(isJSDocParameterTag(tag));
+        assert.ok(isIdentifier(tag.name));
+        assert.equal(tag.name.text, "name");
+    });
+
     test("returns the whole JSDoc comment when the host node owns multiple tags", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

@@ -8565,7 +8565,7 @@ describe("Timing", { concurrency }, () => {
         assert.equal(info.totals.sourceFilesFetched, 1);
         assert.ok(
             info.totals.nodesMaterialized > 0
-            && info.totals.nodesMaterialized <= info.totals.nodesFetched,
+                && info.totals.nodesMaterialized <= info.totals.nodesFetched,
             "materialized nodes should be in (0, nodesFetched]",
         );
 
