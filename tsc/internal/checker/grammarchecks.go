@@ -1459,11 +1459,48 @@ func (c *Checker) checkGrammarMethod(node *ast.Node /*Union[MethodDeclaration, M
 	return false
 }
 
+// functionContainsLabel reports whether a label with the given name is declared
+// anywhere within the given function-like node, without crossing into nested
+// functions or class static blocks.
+func functionContainsLabel(fn *ast.Node, name string) bool {
+	found := false
+	var visit func(node *ast.Node)
+	visit = func(node *ast.Node) {
+		if found || node == nil {
+			return
+		}
+		if node != fn && ast.IsFunctionLikeOrClassStaticBlockDeclaration(node) {
+			return
+		}
+		if node.Kind == ast.KindLabeledStatement && node.Label().Text() == name {
+			found = true
+			return
+		}
+		node.ForEachChild(func(child *ast.Node) bool {
+			visit(child)
+			return found
+		})
+	}
+	visit(fn)
+	return found
+}
+
 func (c *Checker) checkGrammarBreakOrContinueStatement(node *ast.Node) bool {
 	targetLabel := node.Label()
 	var current *ast.Node = node
 	for current != nil {
 		if ast.IsFunctionLikeOrClassStaticBlockDeclaration(current) {
+			// The label may be declared in the same function without enclosing
+			// this statement (e.g. a label placed after the loop). In that case
+			// "cannot cross function boundary" is misleading, so report the
+			// more specific message instead.
+			// See https://github.com/microsoft/TypeScript/issues/30408
+			if targetLabel != nil && functionContainsLabel(current, targetLabel.Text()) {
+				if node.Kind == ast.KindBreakStatement {
+					return c.grammarErrorOnNode(node, diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement)
+				}
+				return c.grammarErrorOnNode(node, diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement)
+			}
 			return c.grammarErrorOnNode(node, diagnostics.Jump_target_cannot_cross_function_boundary)
 		}
 
