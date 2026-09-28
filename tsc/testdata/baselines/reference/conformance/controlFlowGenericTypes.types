@@ -68,15 +68,15 @@ function f2<T>(x: Extract<T, string | undefined> | null): string {
 >x : Extract<T, string | undefined> | null
 
         x;
->x : NonNullable<Extract<T, string | undefined>>
+>x : T & string
 
         x.length;
 >x.length : number
->x : string
+>x : T & string
 >length : number
 
         return x;
->x : string
+>x : T & string
     }
     return "hello";
 >"hello" : "hello"
