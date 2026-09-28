@@ -177,6 +177,10 @@ func (s *SnapshotHost) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
 }
 
+func (s *SnapshotHost) DefaultLibraryPath() string {
+	return s.options.DefaultLibraryPath
+}
+
 func (s *SnapshotHost) Close() {
 	if s.contentMapperHost != nil {
 		_ = s.contentMapperHost.Close()
