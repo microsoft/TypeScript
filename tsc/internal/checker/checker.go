@@ -22192,7 +22192,7 @@ func (c *Checker) getReducedType(t *Type) *Type {
 	case t.flags&TypeFlagsIntersection != 0:
 		if t.objectFlags&ObjectFlagsIsNeverIntersectionComputed == 0 {
 			t.objectFlags |= ObjectFlagsIsNeverIntersectionComputed
-			if c.somePropertyReducesToNever(t) {
+			if !c.isMappingOfSameObjectType(t.Types()) && c.somePropertyReducesToNever(t) {
 				t.objectFlags |= ObjectFlagsIsNeverIntersection
 			}
 		}
@@ -22201,6 +22201,20 @@ func (c *Checker) getReducedType(t *Type) *Type {
 		}
 	}
 	return t
+}
+
+func (c *Checker) isMappingOfSameObjectType(types []*Type) bool {
+	if len(types) != 0 && types[0].objectFlags&ObjectFlagsMapped != 0 {
+		if firstType := c.getModifiersTypeFromMappedType(types[0]); firstType.flags&TypeFlagsObject != 0 {
+			for _, t := range types[1:] {
+				if t.objectFlags&ObjectFlagsMapped == 0 || c.getModifiersTypeFromMappedType(t) != firstType {
+					return false
+				}
+			}
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Checker) somePropertyReducesToNever(t *Type) bool {
