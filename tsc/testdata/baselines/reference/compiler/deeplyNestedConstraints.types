@@ -19,7 +19,7 @@ class BufferPool<E extends Enum, M extends TypeMap<E>> {
 
         array.length; // Requires exploration of >5 levels of constraints
 >array.length : number
->array : string | number[]
+>array : (string | number | boolean | number[]) & ArrayLike<any>
 >length : number
     }
 }
