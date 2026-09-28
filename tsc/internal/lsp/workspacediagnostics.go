@@ -51,9 +51,8 @@ func (handlers handlerMap) registerWorkspaceDiagnosticHandler() {
 			if lsErr != nil {
 				return lsErr
 			}
-			if ctx.Err() != nil {
-				return ctx.Err()
-			}
+			// A response is only returned once complete, so it is still worth sending if the pull
+			// was cancelled since.
 			return s.sendResult(req.ID, resp)
 		}, nil
 	}
