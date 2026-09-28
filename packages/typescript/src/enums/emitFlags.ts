@@ -26,4 +26,8 @@ export var EmitFlags: any;
     EmitFlags[EmitFlags["NoLexicalArguments"] = 4194304] = "NoLexicalArguments";
     EmitFlags[EmitFlags["TransformPrivateStaticElements"] = 8388608] = "TransformPrivateStaticElements";
     EmitFlags[EmitFlags["NoLexicalThis"] = 16777216] = "NoLexicalThis";
+    EmitFlags[EmitFlags["None"] = 0] = "None";
+    EmitFlags[EmitFlags["NoSourceMap"] = 12] = "NoSourceMap";
+    EmitFlags[EmitFlags["NoTokenSourceMaps"] = 96] = "NoTokenSourceMaps";
+    EmitFlags[EmitFlags["NoComments"] = 384] = "NoComments";
 })(EmitFlags || (EmitFlags = {}));

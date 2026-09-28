@@ -6192,7 +6192,7 @@ export interface PrintNodeOptions {
     preserveSourceNewlines?: boolean | undefined;
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
-    emitContext?: EmitContext;
+    emitContext?: EmitContext | undefined;
 }
 type CommentKind = SyntaxKind.MultiLineCommentTrivia | SyntaxKind.SingleLineCommentTrivia;
 export interface SynthesizedComment {

@@ -3561,7 +3561,7 @@ func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode) (*ast.Nod
 	usedEmitNodes := 0
 	node, err := encoder.DecodeNodesWithCallback(data, func(node *ast.Node, index int) {
 		emitNode, ok := emitNodes[index]
-		if !ok {
+		if !ok || emitNode == nil {
 			return
 		}
 		usedEmitNodes++

@@ -1034,6 +1034,10 @@ func main() {
 			"NoLexicalArguments":             toInt32(printer.EFNoLexicalArguments),
 			"TransformPrivateStaticElements": toInt32(printer.EFTransformPrivateStaticElements),
 			"NoLexicalThis":                  toInt32(printer.EFNoLexicalThis),
+			"None":                           toInt32(printer.EFNone),
+			"NoSourceMap":                    toInt32(printer.EFNoSourceMap),
+			"NoTokenSourceMaps":              toInt32(printer.EFNoTokenSourceMaps),
+			"NoComments":                     toInt32(printer.EFNoComments),
 		},
 	}
 	if err := json.NewEncoder(os.Stdout).Encode(values); err != nil {

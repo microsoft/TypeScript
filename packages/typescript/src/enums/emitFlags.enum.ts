@@ -26,4 +26,8 @@ export enum EmitFlags {
     NoLexicalArguments = 1 << 22,
     TransformPrivateStaticElements = 1 << 23,
     NoLexicalThis = 1 << 24,
+    None = 0,
+    NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap,
+    NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps,
+    NoComments = NoLeadingComments | NoTrailingComments,
 }
