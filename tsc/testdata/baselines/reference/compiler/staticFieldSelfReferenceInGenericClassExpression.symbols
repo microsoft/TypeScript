@@ -31,3 +31,12 @@ const Ok = class {
 
 };
 
+class Circular {
+>Circular : Symbol(Circular, Decl(staticFieldSelfReferenceInGenericClassExpression.ts, 10, 2))
+
+    static foo = Circular.foo;
+>foo : Symbol(Circular.foo, Decl(staticFieldSelfReferenceInGenericClassExpression.ts, 12, 16))
+>Circular.foo : Symbol(Circular.foo, Decl(staticFieldSelfReferenceInGenericClassExpression.ts, 12, 16))
+>Circular : Symbol(Circular, Decl(staticFieldSelfReferenceInGenericClassExpression.ts, 10, 2))
+>foo : Symbol(Circular.foo, Decl(staticFieldSelfReferenceInGenericClassExpression.ts, 12, 16))
+}

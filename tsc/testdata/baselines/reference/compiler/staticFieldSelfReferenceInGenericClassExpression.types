@@ -35,3 +35,12 @@ const Ok = class {
 
 };
 
+class Circular {
+>Circular : Circular
+
+    static foo = Circular.foo;
+>foo : any
+>Circular.foo : any
+>Circular : typeof Circular
+>foo : any
+}

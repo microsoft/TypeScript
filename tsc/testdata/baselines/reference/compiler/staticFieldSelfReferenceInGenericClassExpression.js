@@ -13,6 +13,9 @@ const Ok = class {
     static readonly foo = id(42);
 };
 
+class Circular {
+    static foo = Circular.foo;
+}
 
 //// [staticFieldSelfReferenceInGenericClassExpression.js]
 "use strict";
@@ -25,3 +28,6 @@ const Foo = id(class {
 const Ok = class {
     static foo = id(42);
 };
+class Circular {
+    static foo = Circular.foo;
+}
