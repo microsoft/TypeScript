@@ -2,12 +2,12 @@
 
 === intersectionConstraintReduction.ts ===
 type Test1<K1 extends keyof any, K2 extends keyof any> =
->Test1 : Extract<K1, string | number | symbol> & K1 & K2
+>Test1 : K1 & K2
 
     MustBeKey<Extract<K1, keyof any> & K1 & K2>;
 
 type Test2<K1 extends keyof any, K2 extends keyof any> =
->Test2 : K1 & K2 & Extract<K1, string | number | symbol>
+>Test2 : K1 & K2
 
     MustBeKey<K1 & K2 & Extract<K1, keyof any>>;
 

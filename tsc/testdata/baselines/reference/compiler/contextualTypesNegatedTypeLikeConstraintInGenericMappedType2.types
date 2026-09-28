@@ -36,20 +36,20 @@ const matcher = typeTags<Value>();
 matcher({
 >matcher({  A: (_) => _.a,  B: (_) => "fail",}) : unknown
 >matcher : <P extends { readonly [Tag in Tags<"_tag", Value> & string]: (_: Extract<Value, { readonly _tag: Tag; }>) => any; } & { readonly [Tag in Exclude<keyof P, Tags<"_tag", Value>>]: never; }>(fields: P) => unknown
->{  A: (_) => _.a,  B: (_) => "fail",} : { A: (_: { _tag: "A"; a: number; }) => number; B: (_: { _tag: "B"; b: number; }) => string; }
+>{  A: (_) => _.a,  B: (_) => "fail",} : { A: (_: { _tag: "A"; a: number; } & { readonly _tag: "A"; }) => number; B: (_: { _tag: "B"; b: number; } & { readonly _tag: "B"; }) => string; }
 
   A: (_) => _.a,
->A : (_: { _tag: "A"; a: number; }) => number
->(_) => _.a : (_: { _tag: "A"; a: number; }) => number
->_ : { _tag: "A"; a: number; }
+>A : (_: { _tag: "A"; a: number; } & { readonly _tag: "A"; }) => number
+>(_) => _.a : (_: { _tag: "A"; a: number; } & { readonly _tag: "A"; }) => number
+>_ : { _tag: "A"; a: number; } & { readonly _tag: "A"; }
 >_.a : number
->_ : { _tag: "A"; a: number; }
+>_ : { _tag: "A"; a: number; } & { readonly _tag: "A"; }
 >a : number
 
   B: (_) => "fail",
->B : (_: { _tag: "B"; b: number; }) => string
->(_) => "fail" : (_: { _tag: "B"; b: number; }) => string
->_ : { _tag: "B"; b: number; }
+>B : (_: { _tag: "B"; b: number; } & { readonly _tag: "B"; }) => string
+>(_) => "fail" : (_: { _tag: "B"; b: number; } & { readonly _tag: "B"; }) => string
+>_ : { _tag: "B"; b: number; } & { readonly _tag: "B"; }
 >"fail" : "fail"
 
 });
@@ -57,20 +57,20 @@ matcher({
 matcher({
 >matcher({  A: (_) => _.a,  B: (_) => "fail",  C: (_) => "fail",}) : unknown
 >matcher : <P extends { readonly [Tag in Tags<"_tag", Value> & string]: (_: Extract<Value, { readonly _tag: Tag; }>) => any; } & { readonly [Tag in Exclude<keyof P, Tags<"_tag", Value>>]: never; }>(fields: P) => unknown
->{  A: (_) => _.a,  B: (_) => "fail",  C: (_) => "fail",} : { A: (_: { _tag: "A"; a: number; }) => number; B: (_: { _tag: "B"; b: number; }) => string; C: (_: any) => string; }
+>{  A: (_) => _.a,  B: (_) => "fail",  C: (_) => "fail",} : { A: (_: { _tag: "A"; a: number; } & { readonly _tag: "A"; }) => number; B: (_: { _tag: "B"; b: number; } & { readonly _tag: "B"; }) => string; C: (_: any) => string; }
 
   A: (_) => _.a,
->A : (_: { _tag: "A"; a: number; }) => number
->(_) => _.a : (_: { _tag: "A"; a: number; }) => number
->_ : { _tag: "A"; a: number; }
+>A : (_: { _tag: "A"; a: number; } & { readonly _tag: "A"; }) => number
+>(_) => _.a : (_: { _tag: "A"; a: number; } & { readonly _tag: "A"; }) => number
+>_ : { _tag: "A"; a: number; } & { readonly _tag: "A"; }
 >_.a : number
->_ : { _tag: "A"; a: number; }
+>_ : { _tag: "A"; a: number; } & { readonly _tag: "A"; }
 >a : number
 
   B: (_) => "fail",
->B : (_: { _tag: "B"; b: number; }) => string
->(_) => "fail" : (_: { _tag: "B"; b: number; }) => string
->_ : { _tag: "B"; b: number; }
+>B : (_: { _tag: "B"; b: number; } & { readonly _tag: "B"; }) => string
+>(_) => "fail" : (_: { _tag: "B"; b: number; } & { readonly _tag: "B"; }) => string
+>_ : { _tag: "B"; b: number; } & { readonly _tag: "B"; }
 >"fail" : "fail"
 
   C: (_) => "fail",

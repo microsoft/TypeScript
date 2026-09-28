@@ -90,9 +90,9 @@ class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass
 
             entry.numExclusive(); // works
 >entry.numExclusive() : void
->entry.numExclusive : () => void
+>entry.numExclusive : (() => void) & (() => void)
 >entry : Extract<Entries[EntryId], NumClass<any>>
->numExclusive : () => void
+>numExclusive : (() => void) & (() => void)
 
             return entry;
 >entry : Extract<Entries[EntryId], NumClass<any>>
@@ -151,16 +151,16 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 
             item.numExclusive(); // works only since version 4.2
 >item.numExclusive() : void
->item.numExclusive : () => void
+>item.numExclusive : (() => void) & (() => void)
 >item : Extract<Slices[SliceId][SliceKey], NumClass<any>>
->numExclusive : () => void
+>numExclusive : (() => void) & (() => void)
         }
 
         item.get();
 >item.get() : string | number
->item.get : (() => number) | (() => string)
->item : NumClass<number> | StrClass<string>
->get : (() => number) | (() => string)
+>item.get : (() => number) | (() => string) | ((() => number) & (() => any))
+>item : NumClass<number> | StrClass<string> | Extract<Slices[SliceId][SliceKey], NumClass<any>>
+>get : (() => number) | (() => string) | ((() => number) & (() => any))
 
         // unfortunately, doesn't work completely.
         // it seems like item's predicated type leaks outside the bracket...

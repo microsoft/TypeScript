@@ -5,13 +5,13 @@ type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
 >T00 : T00
 
 type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
->T01 : T01
+>T01 : "a" | "c"
 
 type T02 = Exclude<string | number | (() => void), Function>;  // string | number
 >T02 : T02
 
 type T03 = Extract<string | number | (() => void), Function>;  // () => void
->T03 : () => void
+>T03 : T03
 
 type T04 = NonNullable<string | number | undefined>;  // string | number
 >T04 : T04
@@ -114,7 +114,7 @@ type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
 >k : "a" | "b"
 
 type T11 = Extract<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
->T11 : T11
+>T11 : ({ k: "a"; a: number; } & { k: "a" | "b"; }) | ({ k: "b"; b: string; } & { k: "a" | "b"; })
 >k : "a" | "b"
 
 type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
@@ -123,7 +123,7 @@ type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
 >k : "b"
 
 type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
->T13 : T13
+>T13 : ({ k: "a"; a: number; } & { k: "a"; }) | ({ k: "b"; b: string; } & { k: "b"; })
 >k : "a"
 >k : "b"
 
@@ -132,7 +132,7 @@ type T14 = Exclude<Options, { q: "a" }>;  // Options
 >q : "a"
 
 type T15 = Extract<Options, { q: "a" }>;  // never
->T15 : never
+>T15 : T15
 >q : "a"
 
 declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
@@ -141,8 +141,8 @@ declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: 
 >k : K
 
 let x0 = f5("a");  // { k: "a", a: number }
->x0 : { k: "a"; a: number; }
->f5("a") : { k: "a"; a: number; }
+>x0 : { k: "a"; a: number; } & { k: "a"; }
+>f5("a") : { k: "a"; a: number; } & { k: "a"; }
 >f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
 >"a" : "a"
 
@@ -151,13 +151,13 @@ type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 >k : K
 
 type T16 = OptionsOfKind<"a" | "b">;  // { k: "a", a: number } | { k: "b", b: string }
->T16 : T16
+>T16 : ({ k: "a"; a: number; } & { k: "a" | "b"; }) | ({ k: "b"; b: string; } & { k: "a" | "b"; })
 
 type Select<T, K extends keyof T, V extends T[K]> = Extract<T, { [P in K]: V }>;
 >Select : Select<T, K, V>
 
 type T17 = Select<Options, "k", "a" | "b">;  // // { k: "a", a: number } | { k: "b", b: string }
->T17 : T17
+>T17 : ({ k: "a"; a: number; } & { k: "a" | "b"; }) | ({ k: "b"; b: string; } & { k: "a" | "b"; })
 
 type TypeName<T> =
 >TypeName : TypeName<T>

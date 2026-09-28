@@ -49,10 +49,10 @@ const loader = <AsyncLoader
 >load : () => Promise<{ success: true; } | ErrorResult>
 
     prop2={result => result}
->prop2 : (result: { success: true; }) => { success: true; }
->result => result : (result: { success: true; }) => { success: true; }
->result : { success: true; }
->result : { success: true; }
+>prop2 : (result: { success: true; } & not ErrorResult) => { success: true; } & not ErrorResult
+>result => result : (result: { success: true; } & not ErrorResult) => { success: true; } & not ErrorResult
+>result : { success: true; } & not ErrorResult
+>result : { success: true; } & not ErrorResult
 
 />;
 

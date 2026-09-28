@@ -37,9 +37,9 @@ class BufferPool<E extends Enum, M extends TypeMap<E>> {
 >ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
 
         array.length; // Requires exploration of >5 levels of constraints
->array.length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>array.length : Symbol(ArrayLike.length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(deeplyNestedConstraints.ts, 7, 41))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>length : Symbol(ArrayLike.length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
 }
 

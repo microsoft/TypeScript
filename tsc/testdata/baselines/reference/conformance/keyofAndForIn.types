@@ -28,14 +28,14 @@ function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
 >k1 : K
     }
     for (let k2 in obj) {
->k2 : Extract<K, string>
+>k2 : K
 >obj : { [P in K]: T; }
 
         let x2 = obj[k2];
->x2 : { [P in K]: T; }[Extract<K, string>]
->obj[k2] : { [P in K]: T; }[Extract<K, string>]
+>x2 : { [P in K]: T; }[K]
+>obj[k2] : { [P in K]: T; }[K]
 >obj : { [P in K]: T; }
->k2 : Extract<K, string>
+>k2 : K
     }
 }
 
