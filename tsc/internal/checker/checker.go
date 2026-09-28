@@ -30526,7 +30526,8 @@ func (c *Checker) getEffectiveCallArguments(node *ast.Node, contextualSignature 
 				var spreadType *Type
 				if ast.IsSpreadElement(arg) {
 					if contextualSignature != nil && isContextuallyTypableSpreadExpression(arg.Expression()) {
-						contextualType := c.getRestTypeAtPosition(contextualSignature, i, false /*readonly*/)
+						argumentPosition := len(effectiveArgs)
+						contextualType := c.getRestTypeAtPosition(contextualSignature, argumentPosition, false /*readonly*/)
 						spreadType = c.checkExpressionWithContextualType(arg.Expression(), contextualType, nil /*inferenceContext*/, CheckModeNormal)
 					} else if len(c.flowLoopStack) != 0 {
 						spreadType = c.checkExpression(arg.Expression())
@@ -30574,7 +30575,7 @@ func isContextuallyTypableSpreadExpression(node *ast.Node) bool {
 	case ast.KindBinaryExpression:
 		binary := node.AsBinaryExpression()
 		return ast.NodeKindIs(binary.OperatorToken, ast.KindBarBarToken, ast.KindQuestionQuestionToken) &&
-			isContextuallyTypableSpreadExpression(binary.Left) && isContextuallyTypableSpreadExpression(binary.Right)
+			(isContextuallyTypableSpreadExpression(binary.Left) || isContextuallyTypableSpreadExpression(binary.Right))
 	}
 	return false
 }

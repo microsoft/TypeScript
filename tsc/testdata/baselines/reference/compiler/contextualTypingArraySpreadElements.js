@@ -14,6 +14,8 @@ interface Last {
 }
 
 declare const condition: boolean;
+declare const optionalItems: Item[] | undefined;
+declare const nullableItems: Item[] | null;
 
 const direct: Item[] = [
     ...[
@@ -46,12 +48,19 @@ const multipleSpreads: Item[] = [
 
 declare function acceptItems(...items: Item[]): void;
 declare function acceptPair(first: First, last: Last): void;
+declare function acceptTriple(first: First, item: Item, last: Last): void;
 
 acceptItems(...[{ field: "a" }, { field: "b" }]);
 acceptItems(...(condition ? [{ field: "a" }] : [{ field: "b" }]));
 acceptPair(...[{ kind: "first" }, { kind: "last" }]);
+acceptTriple(...[{ kind: "first" }, { field: "a" }], ...[{ kind: "last" }]);
+
+acceptItems(...(optionalItems || [{ field: "a" }]));
+acceptItems(...(nullableItems ?? [{ field: "b" }]));
 
 const invalid: Item[] = [...[{ field: "not-an-item" }]];
+acceptItems(...(optionalItems || [{ field: "not-an-item" }]));
+acceptItems(...(nullableItems ?? [{ field: "not-an-item" }]));
 
 
 //// [contextualTypingArraySpreadElements.js]
@@ -83,4 +92,9 @@ const multipleSpreads = [
 acceptItems(...[{ field: "a" }, { field: "b" }]);
 acceptItems(...(condition ? [{ field: "a" }] : [{ field: "b" }]));
 acceptPair(...[{ kind: "first" }, { kind: "last" }]);
+acceptTriple(...[{ kind: "first" }, { field: "a" }], ...[{ kind: "last" }]);
+acceptItems(...(optionalItems || [{ field: "a" }]));
+acceptItems(...(nullableItems ?? [{ field: "b" }]));
 const invalid = [...[{ field: "not-an-item" }]];
+acceptItems(...(optionalItems || [{ field: "not-an-item" }]));
+acceptItems(...(nullableItems ?? [{ field: "not-an-item" }]));
