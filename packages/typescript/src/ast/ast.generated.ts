@@ -469,10 +469,10 @@ export interface TemplateLiteralLikeNodeBase extends LiteralLikeNodeBase {
     readonly rawText: string;
     readonly templateFlags: TokenFlags;
 }
-export interface TypeElementBase extends Node {
+export interface TypeElementBase extends DeclarationBase {
     readonly _typeElementBrand: any;
 }
-export interface ClassElementBase extends Node {
+export interface ClassElementBase extends DeclarationBase {
     readonly _classElementBrand: any;
 }
 export interface NamedMemberBase extends ModifiersBase {
@@ -480,7 +480,7 @@ export interface NamedMemberBase extends ModifiersBase {
     readonly name: PropertyName;
     readonly postfixToken?: QuestionToken | ExclamationToken;
 }
-export interface ObjectLiteralElementBase extends Node {
+export interface ObjectLiteralElementBase extends DeclarationBase {
     readonly _objectLiteralBrand: any;
 }
 export interface UnionOrIntersectionTypeNodeBase extends TypeNodeBase {
@@ -1343,7 +1343,7 @@ export type HeritageClauseElement = ExpressionWithTypeArguments | TypeReferenceN
 export type BlockOrExpression = Block | Expression;
 export type NodeBody = Block | Expression | ModuleBlock | ModuleDeclaration;
 export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
-export type DeclarationName = Identifier | PrivateIdentifier | StringLiteral | NumericLiteral | BigIntLiteral | NoSubstitutionTemplateLiteral | ComputedPropertyName | BindingPattern | ElementAccessExpression;
+export type DeclarationName = Identifier | PrivateIdentifier | StringLiteral | NumericLiteral | BigIntLiteral | NoSubstitutionTemplateLiteral | ComputedPropertyName | BindingPattern | PropertyAccessExpression | ElementAccessExpression;
 export type ModuleName = Identifier | StringLiteral;
 export type ModuleExportName = Identifier | StringLiteral;
 export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral;

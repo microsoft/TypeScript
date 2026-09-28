@@ -101,7 +101,7 @@ func TestSnapshot(t *testing.T) {
 			ctx,
 			createdSnapshot,
 			FileChangeSummary{},
-			&APISnapshotRequest{OpenFiles: collections.NewSetFromItems(lsproto.DocumentUri("file:///a.ts"))},
+			&APISnapshotRequest{OpenFiles: map[tspath.Path]string{createdSnapshot.toPath("/a.ts"): "/a.ts"}},
 		)
 		assert.NilError(t, err)
 		defer openedSnapshot.Deref()

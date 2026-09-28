@@ -1,0 +1,153 @@
+package casebody
+
+var X int
+
+func Switch() {
+	switch X {
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		println(`oops`)
+	}
+}
+
+func SwitchCommented() {
+	switch X {
+	case 1:
+		// do nothing
+	case 2:
+	case 3:
+	case 4:
+		println(`oops`)
+	}
+}
+
+func SwitchSingleCase() {
+	switch X {
+	case 1:
+	}
+}
+
+func SwitchDefaultCase() {
+	switch X {
+	case 1:
+	default:
+	}
+}
+
+func SwitchBreak() {
+	switch X {
+	case 1:
+		break
+	case 2:
+		// intentionally empty
+		break
+	case 3:
+		println(`oops`)
+		break
+	case 4:
+		for {
+			break
+		}
+	case 5:
+		break
+		println(`unreachable`)
+		break
+	case 6:
+		if X != 0 {
+			goto afterBreak
+		}
+		break
+	afterBreak:
+		println(`reachable via goto`)
+	}
+}
+
+func SwitchLabeledBreak() {
+outer:
+	for {
+		switch X {
+		case 1:
+			break outer
+		}
+	}
+}
+
+func SwitchCodeAfterLabeledBreak() {
+outer:
+	for {
+		switch X {
+		case 1:
+			break outer
+			println(`unreachable`)
+		}
+	}
+}
+
+func TypeSwitch(x any) {
+	switch x.(type) {
+	case int:
+	case string:
+		// intentionally empty
+	case bool:
+		break
+	case float64:
+		println(`oops`)
+		break
+	case complex64:
+		break
+		println(`unreachable`)
+	}
+}
+
+func SelectBreak() {
+	select {
+	case <-ch:
+		break
+	default:
+		println(`oops`)
+		break
+	case <-ch2:
+		break
+		println(`unreachable`)
+	}
+}
+
+var (
+	ch  = make(chan int)
+	ch2 = make(chan int)
+	ch3 = make(chan int)
+	ch4 = make(chan int)
+)
+
+func Select() {
+	select {
+	case <-ch:
+	case <-ch2:
+	case <-ch3:
+	case <-ch4:
+		println(`oops`)
+	}
+}
+
+func SelectCommented() {
+	select {
+	case <-ch:
+		// do nothing
+	}
+}
+
+func SelectSingleCase() {
+	select {
+	case <-ch:
+	}
+}
+
+func SelectDefaultCase() {
+	select {
+	case x := <-ch:
+		println(x)
+	default:
+	}
+}

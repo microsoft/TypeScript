@@ -199,6 +199,14 @@ export class Client {
         return result;
     }
 
+    registerCallback(name: string, callback: (params: unknown) => unknown | Promise<unknown>): () => void {
+        if (!this.connection) {
+            throw new Error("Connection not established");
+        }
+        const disposable = this.connection.onRequest(new RequestType<unknown, unknown, void>(name), callback);
+        return () => disposable.dispose();
+    }
+
     private async doBatch(): Promise<void> {
         this.nextBatch = undefined;
         if (!this.batchedRequests.length) return;

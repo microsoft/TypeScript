@@ -21,6 +21,12 @@ parameters:
   - name: tokenVariable
     type: string
     default: 'GH_TOKEN'
+  - name: condition
+    type: string
+    default: succeeded()
+  - name: revokeCondition
+    type: string
+    default: always()
   - name: insertSteps
     type: stepList
     default: []
@@ -28,12 +34,13 @@ parameters:
 steps:
   - task: AzureCLI@2
     displayName: Create GitHub App token
+    condition: ${{ parameters.condition }}
     inputs:
       azureSubscription: ${{ parameters.azureSubscription }}
-      scriptType: bash
+      scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        cat << 'GITHUB_APP_TOKEN_CLI_EOF' > /tmp/create-github-app-token.cjs
+        @'
         "use strict";
 
         // src/api.ts
@@ -589,8 +596,8 @@ steps:
           reportError(error);
           process.exitCode = 1;
         });
-        GITHUB_APP_TOKEN_CLI_EOF
-        node /tmp/create-github-app-token.cjs
+        '@ | Set-Content -LiteralPath "$(Agent.TempDirectory)/create-github-app-token.cjs" -Encoding utf8NoBOM
+        node "$(Agent.TempDirectory)/create-github-app-token.cjs"
     env:
       APP_CLIENT_ID: $(TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID)
       KEY_ID: $(TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID)
@@ -603,12 +610,13 @@ steps:
   - ${{ each step in parameters.insertSteps }}:
       - ${{ step }}
 
-  - task: Bash@3
+  - task: PowerShell@2
     displayName: Revoke GitHub App token
-    condition: always()
+    condition: ${{ parameters.revokeCondition }}
     continueOnError: true
     inputs:
       targetType: inline
-      script: node /tmp/create-github-app-token.cjs
+      pwsh: true
+      script: node "$(Agent.TempDirectory)/create-github-app-token.cjs"
     env:
       REVOKE_TOKEN: $(${{ parameters.tokenVariable }})
