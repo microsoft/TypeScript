@@ -1613,14 +1613,14 @@ type Record<K extends keyof any, T> = {
 };
 
 /**
- * Exclude from T those types that are assignable to U
+ * Construct the type of values in T that are not in U
  */
-type Exclude<T, U> = T extends U ? never : T;
+type Exclude<T, U> = T & not U;
 
 /**
- * Extract from T those types that are assignable to U
+ * Construct the type of values common to T and U
  */
-type Extract<T, U> = T extends U ? T : never;
+type Extract<T, U> = T & U;
 
 /**
  * Construct a type with the properties of T except for those in type K.

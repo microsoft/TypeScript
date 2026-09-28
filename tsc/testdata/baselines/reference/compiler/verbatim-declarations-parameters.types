@@ -16,7 +16,7 @@ export class Foo {
 >reuseTypeNode : { [x: string]: any; } | undefined
 
     public reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">,
->reuseTypeNode2 : { [x: string]: any; } | undefined
+>reuseTypeNode2 : Exclude<MapOrUndefined, "dummy">
 
     // Resolve type node, requires adding | undefined
     public resolveType?: Map,
@@ -34,7 +34,7 @@ export function foo1(
 >{} : {}
 
     reuseTypeNode2: Exclude<MapOrUndefined, "dummy">  = {},
->reuseTypeNode2 : { [x: string]: any; } | undefined
+>reuseTypeNode2 : Exclude<MapOrUndefined, "dummy">
 >{} : {}
 
     // Resolve type node, requires adding | undefined

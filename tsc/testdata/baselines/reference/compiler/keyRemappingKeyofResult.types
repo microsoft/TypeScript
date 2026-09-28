@@ -15,7 +15,7 @@ type Orig = { [k: string]: any, str: any, [sym]: any }
 >sym : unique symbol
 
 type Okay = Exclude<keyof Orig, never>
->Okay : Okay
+>Okay : keyof Orig
 
 // type Okay = string | number | typeof sym
 
@@ -29,19 +29,19 @@ type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: an
 // no string index signature, right?
 
 type Oops = Exclude<keyof Remapped, never>
->Oops : Oops
+>Oops : "str" | unique symbol
 
 declare let x: Oops;
->x : Oops
+>x : "str" | unique symbol
 
 x = sym;
 >x = sym : unique symbol
->x : Oops
+>x : "str" | unique symbol
 >sym : unique symbol
 
 x = "str";
 >x = "str" : "str"
->x : Oops
+>x : "str" | unique symbol
 >"str" : "str"
 
 // type Oops = typeof sym <-- what happened to "str"?

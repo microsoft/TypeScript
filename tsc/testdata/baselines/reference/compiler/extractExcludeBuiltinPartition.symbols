@@ -1,0 +1,168 @@
+//// [tests/cases/compiler/extractExcludeBuiltinPartition.ts] ////
+
+=== extractExcludeBuiltinPartition.ts ===
+type Partition<T, U> = Extract<T, U> | Exclude<T, U>;
+>Partition : Symbol(Partition, Decl(extractExcludeBuiltinPartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 0, 15))
+>U : Symbol(U, Decl(extractExcludeBuiltinPartition.ts, 0, 17))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 0, 15))
+>U : Symbol(U, Decl(extractExcludeBuiltinPartition.ts, 0, 17))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 0, 15))
+>U : Symbol(U, Decl(extractExcludeBuiltinPartition.ts, 0, 17))
+
+function partition<T, U>(value: T): Partition<T, U> {
+>partition : Symbol(partition, Decl(extractExcludeBuiltinPartition.ts, 0, 53))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 2, 19))
+>U : Symbol(U, Decl(extractExcludeBuiltinPartition.ts, 2, 21))
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 2, 25))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 2, 19))
+>Partition : Symbol(Partition, Decl(extractExcludeBuiltinPartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 2, 19))
+>U : Symbol(U, Decl(extractExcludeBuiltinPartition.ts, 2, 21))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 2, 25))
+}
+
+function identity<T, U>(value: Partition<T, U>): T {
+>identity : Symbol(identity, Decl(extractExcludeBuiltinPartition.ts, 4, 1))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 6, 18))
+>U : Symbol(U, Decl(extractExcludeBuiltinPartition.ts, 6, 20))
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 6, 24))
+>Partition : Symbol(Partition, Decl(extractExcludeBuiltinPartition.ts, 0, 0))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 6, 18))
+>U : Symbol(U, Decl(extractExcludeBuiltinPartition.ts, 6, 20))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 6, 18))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 6, 24))
+}
+
+function unionPartition<T, A, B>(value: T): Extract<T, A | B> | Exclude<T, A | B> {
+>unionPartition : Symbol(unionPartition, Decl(extractExcludeBuiltinPartition.ts, 8, 1))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 10, 24))
+>A : Symbol(A, Decl(extractExcludeBuiltinPartition.ts, 10, 26))
+>B : Symbol(B, Decl(extractExcludeBuiltinPartition.ts, 10, 29))
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 10, 33))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 10, 24))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 10, 24))
+>A : Symbol(A, Decl(extractExcludeBuiltinPartition.ts, 10, 26))
+>B : Symbol(B, Decl(extractExcludeBuiltinPartition.ts, 10, 29))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 10, 24))
+>A : Symbol(A, Decl(extractExcludeBuiltinPartition.ts, 10, 26))
+>B : Symbol(B, Decl(extractExcludeBuiltinPartition.ts, 10, 29))
+
+    return value;
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 10, 33))
+}
+
+const extractedUnknown: Extract<unknown, string> = "chosen";
+>extractedUnknown : Symbol(extractedUnknown, Decl(extractExcludeBuiltinPartition.ts, 14, 5))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+
+const extractedLiteral: Extract<string, "chosen"> = "chosen";
+>extractedLiteral : Symbol(extractedLiteral, Decl(extractExcludeBuiltinPartition.ts, 15, 5))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+
+const excludedLiteral: Exclude<string, "chosen"> = "other";
+>excludedLiteral : Symbol(excludedLiteral, Decl(extractExcludeBuiltinPartition.ts, 16, 5))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+
+const excludedChosen: Exclude<string, "chosen"> = "chosen";
+>excludedChosen : Symbol(excludedChosen, Decl(extractExcludeBuiltinPartition.ts, 17, 5))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+
+const extractedAny: Extract<any, string> = 123;
+>extractedAny : Symbol(extractedAny, Decl(extractExcludeBuiltinPartition.ts, 19, 5))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+
+const excludedAny: Exclude<any, string> = "chosen";
+>excludedAny : Symbol(excludedAny, Decl(extractExcludeBuiltinPartition.ts, 20, 5))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+
+const extractedNever: Extract<string, never> = "chosen";
+>extractedNever : Symbol(extractedNever, Decl(extractExcludeBuiltinPartition.ts, 21, 5))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+
+const excludedUnknown: Exclude<string, unknown> = "chosen";
+>excludedUnknown : Symbol(excludedUnknown, Decl(extractExcludeBuiltinPartition.ts, 22, 5))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+
+type Props = { owner: string; count: number };
+>Props : Symbol(Props, Decl(extractExcludeBuiltinPartition.ts, 22, 59))
+>owner : Symbol(owner, Decl(extractExcludeBuiltinPartition.ts, 24, 14))
+>count : Symbol(count, Decl(extractExcludeBuiltinPartition.ts, 24, 29))
+
+const omitted: Omit<Props, "owner"> = { count: 1 };
+>omitted : Symbol(omitted, Decl(extractExcludeBuiltinPartition.ts, 25, 5))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(extractExcludeBuiltinPartition.ts, 22, 59))
+>count : Symbol(count, Decl(extractExcludeBuiltinPartition.ts, 25, 39))
+
+const restored: Props = { ...omitted, owner: "chosen" };
+>restored : Symbol(restored, Decl(extractExcludeBuiltinPartition.ts, 26, 5))
+>Props : Symbol(Props, Decl(extractExcludeBuiltinPartition.ts, 22, 59))
+>omitted : Symbol(omitted, Decl(extractExcludeBuiltinPartition.ts, 25, 5))
+>owner : Symbol(owner, Decl(extractExcludeBuiltinPartition.ts, 26, 37))
+
+declare function withOwner<T extends { owner: string }>(props: Omit<T, "owner"> & { owner: string }): T;
+>withOwner : Symbol(withOwner, Decl(extractExcludeBuiltinPartition.ts, 26, 56))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 28, 27))
+>owner : Symbol(owner, Decl(extractExcludeBuiltinPartition.ts, 28, 38))
+>props : Symbol(props, Decl(extractExcludeBuiltinPartition.ts, 28, 56))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 28, 27))
+>owner : Symbol(owner, Decl(extractExcludeBuiltinPartition.ts, 28, 83))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 28, 27))
+
+function render<T extends { owner: string }>(props: T): T {
+>render : Symbol(render, Decl(extractExcludeBuiltinPartition.ts, 28, 104))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 30, 16))
+>owner : Symbol(owner, Decl(extractExcludeBuiltinPartition.ts, 30, 27))
+>props : Symbol(props, Decl(extractExcludeBuiltinPartition.ts, 30, 45))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 30, 16))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 30, 16))
+
+    return withOwner<T>(props);
+>withOwner : Symbol(withOwner, Decl(extractExcludeBuiltinPartition.ts, 26, 56))
+>T : Symbol(T, Decl(extractExcludeBuiltinPartition.ts, 30, 16))
+>props : Symbol(props, Decl(extractExcludeBuiltinPartition.ts, 30, 45))
+}
+
+type Product = { kind: "a"; value: 0 } | { kind: "b"; value: 1 };
+>Product : Symbol(Product, Decl(extractExcludeBuiltinPartition.ts, 32, 1))
+>kind : Symbol(kind, Decl(extractExcludeBuiltinPartition.ts, 34, 16))
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 34, 27))
+>kind : Symbol(kind, Decl(extractExcludeBuiltinPartition.ts, 34, 42))
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 34, 53))
+
+type DoubleExcluded = {
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(extractExcludeBuiltinPartition.ts, 34, 65))
+
+    [Kind in Product["kind"]]: Exclude<Product, Exclude<Product, { kind: Kind }>>;
+>Kind : Symbol(Kind, Decl(extractExcludeBuiltinPartition.ts, 36, 5))
+>Product : Symbol(Product, Decl(extractExcludeBuiltinPartition.ts, 32, 1))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Product : Symbol(Product, Decl(extractExcludeBuiltinPartition.ts, 32, 1))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Product : Symbol(Product, Decl(extractExcludeBuiltinPartition.ts, 32, 1))
+>kind : Symbol(kind, Decl(extractExcludeBuiltinPartition.ts, 36, 66))
+>Kind : Symbol(Kind, Decl(extractExcludeBuiltinPartition.ts, 36, 5))
+
+};
+const productA: DoubleExcluded["a"] = { kind: "a", value: 0 };
+>productA : Symbol(productA, Decl(extractExcludeBuiltinPartition.ts, 38, 5))
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(extractExcludeBuiltinPartition.ts, 34, 65))
+>kind : Symbol(kind, Decl(extractExcludeBuiltinPartition.ts, 38, 39))
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 38, 50))
+
+const productB: DoubleExcluded["b"] = { kind: "b", value: 1 };
+>productB : Symbol(productB, Decl(extractExcludeBuiltinPartition.ts, 39, 5))
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(extractExcludeBuiltinPartition.ts, 34, 65))
+>kind : Symbol(kind, Decl(extractExcludeBuiltinPartition.ts, 39, 39))
+>value : Symbol(value, Decl(extractExcludeBuiltinPartition.ts, 39, 50))
+

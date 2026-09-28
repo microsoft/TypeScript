@@ -1,8 +1,23 @@
 deepComparisons.ts(2,9): error TS2322: Type 'T' is not assignable to type 'Extract<T, string>'.
+  Type 'T' is not assignable to type 'string'.
 deepComparisons.ts(3,9): error TS2322: Type 'T[K1]' is not assignable to type 'Extract<T[K1], string>'.
   Type 'T[keyof T]' is not assignable to type 'Extract<T[K1], string>'.
     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'Extract<T[K1], string>'.
       Type 'T[string]' is not assignable to type 'Extract<T[K1], string>'.
+        Type 'T[string]' is not assignable to type 'T[K1]'.
+          Type 'string' is not assignable to type 'K1'.
+            'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+              Type 'T[keyof T]' is not assignable to type 'T[K1]'.
+                Type 'keyof T' is not assignable to type 'K1'.
+                  'keyof T' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                    Type 'string | number | symbol' is not assignable to type 'K1'.
+                      'string | number | symbol' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                        Type 'string' is not assignable to type 'K1'.
+                          'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                            Type 'T[K1]' is not assignable to type 'string'.
+                              Type 'T[keyof T]' is not assignable to type 'string'.
+                                Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'string'.
+                                  Type 'T[string]' is not assignable to type 'string'.
 deepComparisons.ts(4,9): error TS2322: Type 'T[K1][K2]' is not assignable to type 'Extract<T[K1][K2], string>'.
   Type 'T[K1][keyof T[K1]]' is not assignable to type 'Extract<T[K1][K2], string>'.
     Type 'T[K1][string] | T[K1][number] | T[K1][symbol]' is not assignable to type 'Extract<T[K1][K2], string>'.
@@ -10,6 +25,35 @@ deepComparisons.ts(4,9): error TS2322: Type 'T[K1][K2]' is not assignable to typ
         Type 'T[keyof T][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
           Type 'T[string][string] | T[number][string] | T[symbol][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
             Type 'T[string][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+              Type 'T[string][string]' is not assignable to type 'T[K1][K2]'.
+                Type 'T[string]' is not assignable to type 'T[K1]'.
+                  Type 'string' is not assignable to type 'K1'.
+                    'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                      Type 'T[keyof T][string]' is not assignable to type 'T[K1][K2]'.
+                        Type 'T[keyof T]' is not assignable to type 'T[K1]'.
+                          Type 'keyof T' is not assignable to type 'K1'.
+                            'keyof T' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                              Type 'string | number | symbol' is not assignable to type 'K1'.
+                                'string | number | symbol' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                                  Type 'string' is not assignable to type 'K1'.
+                                    'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                                      Type 'T[K1][string]' is not assignable to type 'T[K1][K2]'.
+                                        Type 'string' is not assignable to type 'K2'.
+                                          'string' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                                            Type 'T[K1][keyof T[K1]]' is not assignable to type 'T[K1][K2]'.
+                                              Type 'keyof T[K1]' is not assignable to type 'K2'.
+                                                'keyof T[K1]' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                                                  Type 'string | number | symbol' is not assignable to type 'K2'.
+                                                    'string | number | symbol' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                                                      Type 'string' is not assignable to type 'K2'.
+                                                        'string' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                                                          Type 'T[K1][K2]' is not assignable to type 'string'.
+                                                            Type 'T[K1][keyof T[K1]]' is not assignable to type 'string'.
+                                                              Type 'T[K1][string] | T[K1][number] | T[K1][symbol]' is not assignable to type 'string'.
+                                                                Type 'T[K1][string]' is not assignable to type 'string'.
+                                                                  Type 'T[keyof T][string]' is not assignable to type 'string'.
+                                                                    Type 'T[string][string] | T[number][string] | T[symbol][string]' is not assignable to type 'string'.
+                                                                      Type 'T[string][string]' is not assignable to type 'string'.
 
 
 ==== deepComparisons.ts (3 errors) ====
@@ -17,12 +61,29 @@ deepComparisons.ts(4,9): error TS2322: Type 'T[K1][K2]' is not assignable to typ
         let v1: Extract<T, string> = 0 as any as T;  // Error
             ~~
 !!! error TS2322: Type 'T' is not assignable to type 'Extract<T, string>'.
+!!! error TS2322:   Type 'T' is not assignable to type 'string'.
+!!! related TS2208 deepComparisons.ts:1:13: This type parameter might need an `extends string` constraint.
+!!! related TS2208 deepComparisons.ts:1:13: This type parameter might need an `extends Extract<T, string>` constraint.
         let v2: Extract<T[K1], string> = 0 as any as T[K1];  // Error
             ~~
 !!! error TS2322: Type 'T[K1]' is not assignable to type 'Extract<T[K1], string>'.
 !!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'Extract<T[K1], string>'.
 !!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'Extract<T[K1], string>'.
 !!! error TS2322:       Type 'T[string]' is not assignable to type 'Extract<T[K1], string>'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'T[K1]'.
+!!! error TS2322:           Type 'string' is not assignable to type 'K1'.
+!!! error TS2322:             'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:               Type 'T[keyof T]' is not assignable to type 'T[K1]'.
+!!! error TS2322:                 Type 'keyof T' is not assignable to type 'K1'.
+!!! error TS2322:                   'keyof T' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                     Type 'string | number | symbol' is not assignable to type 'K1'.
+!!! error TS2322:                       'string | number | symbol' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                         Type 'string' is not assignable to type 'K1'.
+!!! error TS2322:                           'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                             Type 'T[K1]' is not assignable to type 'string'.
+!!! error TS2322:                               Type 'T[keyof T]' is not assignable to type 'string'.
+!!! error TS2322:                                 Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'string'.
+!!! error TS2322:                                   Type 'T[string]' is not assignable to type 'string'.
         let v3: Extract<T[K1][K2], string> = 0 as any as T[K1][K2];  // No error
             ~~
 !!! error TS2322: Type 'T[K1][K2]' is not assignable to type 'Extract<T[K1][K2], string>'.
@@ -32,6 +93,35 @@ deepComparisons.ts(4,9): error TS2322: Type 'T[K1][K2]' is not assignable to typ
 !!! error TS2322:         Type 'T[keyof T][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
 !!! error TS2322:           Type 'T[string][string] | T[number][string] | T[symbol][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
 !!! error TS2322:             Type 'T[string][string]' is not assignable to type 'Extract<T[K1][K2], string>'.
+!!! error TS2322:               Type 'T[string][string]' is not assignable to type 'T[K1][K2]'.
+!!! error TS2322:                 Type 'T[string]' is not assignable to type 'T[K1]'.
+!!! error TS2322:                   Type 'string' is not assignable to type 'K1'.
+!!! error TS2322:                     'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                       Type 'T[keyof T][string]' is not assignable to type 'T[K1][K2]'.
+!!! error TS2322:                         Type 'T[keyof T]' is not assignable to type 'T[K1]'.
+!!! error TS2322:                           Type 'keyof T' is not assignable to type 'K1'.
+!!! error TS2322:                             'keyof T' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                               Type 'string | number | symbol' is not assignable to type 'K1'.
+!!! error TS2322:                                 'string | number | symbol' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                                   Type 'string' is not assignable to type 'K1'.
+!!! error TS2322:                                     'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                                       Type 'T[K1][string]' is not assignable to type 'T[K1][K2]'.
+!!! error TS2322:                                         Type 'string' is not assignable to type 'K2'.
+!!! error TS2322:                                           'string' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                                             Type 'T[K1][keyof T[K1]]' is not assignable to type 'T[K1][K2]'.
+!!! error TS2322:                                               Type 'keyof T[K1]' is not assignable to type 'K2'.
+!!! error TS2322:                                                 'keyof T[K1]' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                                                   Type 'string | number | symbol' is not assignable to type 'K2'.
+!!! error TS2322:                                                     'string | number | symbol' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                                                       Type 'string' is not assignable to type 'K2'.
+!!! error TS2322:                                                         'string' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                                                           Type 'T[K1][K2]' is not assignable to type 'string'.
+!!! error TS2322:                                                             Type 'T[K1][keyof T[K1]]' is not assignable to type 'string'.
+!!! error TS2322:                                                               Type 'T[K1][string] | T[K1][number] | T[K1][symbol]' is not assignable to type 'string'.
+!!! error TS2322:                                                                 Type 'T[K1][string]' is not assignable to type 'string'.
+!!! error TS2322:                                                                   Type 'T[keyof T][string]' is not assignable to type 'string'.
+!!! error TS2322:                                                                     Type 'T[string][string] | T[number][string] | T[symbol][string]' is not assignable to type 'string'.
+!!! error TS2322:                                                                       Type 'T[string][string]' is not assignable to type 'string'.
     }
     
     type Foo<T> = { x: Foo<T> };
