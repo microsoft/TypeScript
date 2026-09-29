@@ -56,7 +56,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -106,7 +106,7 @@ export type { Kind } from "dep-a";
 export {};
 
 //// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[3,4],6],"packageJsons":["../node_modules/dep-a/package.json","../node_modules/dep-b/package.json"],"fileNames":["lib.es2025.full.d.ts","../node_modules/dep-a/index.d.ts","../src/middle.ts","../src/consumer.ts","../node_modules/dep-b/index.d.ts","../src/env.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"7285be383f876947b8aaab3a6c0cb768-export type Kind = \"a\" | \"b\";",{"version":"c4e56d4d984b8f64c79f77ff5567b1ee-export type { Kind } from \"dep-a\";","signature":"df2d778f658765e085183f887f4c1fae-export type { Kind } from \"dep-a\";\n","impliedNodeFormat":1},{"version":"0bb05d7e49a1dc35d9c9a5249d6aefec-import type { Kind } from \"./middle\";\nexport function describe(kind: Kind): string {\n    switch (kind) {\n        case \"a\":\n            return \"first\";\n        case \"b\":\n            return \"second\";\n    }\n}","signature":"8b084aefefe47768ddf637170d0ce7f9-import type { Kind } from \"./middle\";\nexport declare function describe(kind: Kind): string;\n","impliedNodeFormat":1},{"version":"a94fea4b430695b9dbaf2f04eab64c1e-declare global {\n    interface DepBGlobal {\n        marker: string;\n    }\n}\nexport {};","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"fcc1d4c4b073cc5a548e7244f608884c-import \"dep-b\";","signature":"9fb8fd76a089f5d7d03937148c718fd8-import \"dep-b\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[5],[2]],"options":{"composite":true,"outDir":"./","strict":true},"referencedMap":[[4,1],[6,2],[3,3]],"latestChangedDtsFile":"./src/env.d.ts"}
+{"version":"FakeTSVersion","root":[[3,4],6],"packageJsons":["../node_modules/dep-a/package.json","../node_modules/dep-b/package.json"],"fileNames":["lib.es2026.full.d.ts","../node_modules/dep-a/index.d.ts","../src/middle.ts","../src/consumer.ts","../node_modules/dep-b/index.d.ts","../src/env.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"7285be383f876947b8aaab3a6c0cb768-export type Kind = \"a\" | \"b\";",{"version":"c4e56d4d984b8f64c79f77ff5567b1ee-export type { Kind } from \"dep-a\";","signature":"df2d778f658765e085183f887f4c1fae-export type { Kind } from \"dep-a\";\n","impliedNodeFormat":1},{"version":"0bb05d7e49a1dc35d9c9a5249d6aefec-import type { Kind } from \"./middle\";\nexport function describe(kind: Kind): string {\n    switch (kind) {\n        case \"a\":\n            return \"first\";\n        case \"b\":\n            return \"second\";\n    }\n}","signature":"8b084aefefe47768ddf637170d0ce7f9-import type { Kind } from \"./middle\";\nexport declare function describe(kind: Kind): string;\n","impliedNodeFormat":1},{"version":"a94fea4b430695b9dbaf2f04eab64c1e-declare global {\n    interface DepBGlobal {\n        marker: string;\n    }\n}\nexport {};","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"fcc1d4c4b073cc5a548e7244f608884c-import \"dep-b\";","signature":"9fb8fd76a089f5d7d03937148c718fd8-import \"dep-b\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[5],[2]],"options":{"composite":true,"outDir":"./","strict":true},"referencedMap":[[4,1],[6,2],[3,3]],"latestChangedDtsFile":"./src/env.d.ts"}
 //// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -133,7 +133,7 @@ export {};
     "../node_modules/dep-b/package.json"
   ],
   "fileNames": [
-    "lib.es2025.full.d.ts",
+    "lib.es2026.full.d.ts",
     "../node_modules/dep-a/index.d.ts",
     "../src/middle.ts",
     "../src/consumer.ts",
@@ -142,7 +142,7 @@ export {};
   ],
   "fileInfos": [
     {
-      "fileName": "lib.es2025.full.d.ts",
+      "fileName": "lib.es2026.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -238,7 +238,7 @@ export {};
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/node_modules/dep-a/index.d.ts
 *refresh*    /home/src/workspaces/project/src/middle.ts
 *refresh*    /home/src/workspaces/project/src/consumer.ts
@@ -284,7 +284,7 @@ Found 1 error in src/consumer.ts[90m:2[0m
 //// [/home/src/workspaces/project/dist/src/env.js] *rewrite with same content*
 //// [/home/src/workspaces/project/dist/src/middle.js] *rewrite with same content*
 //// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[3,4],6],"packageJsons":["../node_modules/dep-a/package.json","../node_modules/dep-b/package.json"],"fileNames":["lib.es2025.full.d.ts","../node_modules/dep-a/index.d.ts","../src/middle.ts","../src/consumer.ts","../node_modules/dep-b/index.d.ts","../src/env.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"a4e0198c11df73a2e4b2aeeeedc6b0df-export type Kind = \"a\" | \"b\" | \"c\";",{"version":"c4e56d4d984b8f64c79f77ff5567b1ee-export type { Kind } from \"dep-a\";","signature":"df2d778f658765e085183f887f4c1fae-export type { Kind } from \"dep-a\";\n","impliedNodeFormat":1},{"version":"0bb05d7e49a1dc35d9c9a5249d6aefec-import type { Kind } from \"./middle\";\nexport function describe(kind: Kind): string {\n    switch (kind) {\n        case \"a\":\n            return \"first\";\n        case \"b\":\n            return \"second\";\n    }\n}","signature":"8b084aefefe47768ddf637170d0ce7f9-import type { Kind } from \"./middle\";\nexport declare function describe(kind: Kind): string;\n","impliedNodeFormat":1},{"version":"5364f0cc80bb7f0d214b5e9af5f5dc54-declare global {\n    interface DepBGlobal {\n        marker: string;\n        extra: number;\n    }\n}\nexport {};","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"fcc1d4c4b073cc5a548e7244f608884c-import \"dep-b\";","signature":"9fb8fd76a089f5d7d03937148c718fd8-import \"dep-b\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[5],[2]],"options":{"composite":true,"outDir":"./","strict":true},"referencedMap":[[4,1],[6,2],[3,3]],"semanticDiagnosticsPerFile":[[4,[{"pos":76,"end":82,"code":2366,"category":1,"messageKey":"Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined_2366"}]]],"latestChangedDtsFile":"./src/env.d.ts"}
+{"version":"FakeTSVersion","root":[[3,4],6],"packageJsons":["../node_modules/dep-a/package.json","../node_modules/dep-b/package.json"],"fileNames":["lib.es2026.full.d.ts","../node_modules/dep-a/index.d.ts","../src/middle.ts","../src/consumer.ts","../node_modules/dep-b/index.d.ts","../src/env.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"a4e0198c11df73a2e4b2aeeeedc6b0df-export type Kind = \"a\" | \"b\" | \"c\";",{"version":"c4e56d4d984b8f64c79f77ff5567b1ee-export type { Kind } from \"dep-a\";","signature":"df2d778f658765e085183f887f4c1fae-export type { Kind } from \"dep-a\";\n","impliedNodeFormat":1},{"version":"0bb05d7e49a1dc35d9c9a5249d6aefec-import type { Kind } from \"./middle\";\nexport function describe(kind: Kind): string {\n    switch (kind) {\n        case \"a\":\n            return \"first\";\n        case \"b\":\n            return \"second\";\n    }\n}","signature":"8b084aefefe47768ddf637170d0ce7f9-import type { Kind } from \"./middle\";\nexport declare function describe(kind: Kind): string;\n","impliedNodeFormat":1},{"version":"5364f0cc80bb7f0d214b5e9af5f5dc54-declare global {\n    interface DepBGlobal {\n        marker: string;\n        extra: number;\n    }\n}\nexport {};","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"fcc1d4c4b073cc5a548e7244f608884c-import \"dep-b\";","signature":"9fb8fd76a089f5d7d03937148c718fd8-import \"dep-b\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[5],[2]],"options":{"composite":true,"outDir":"./","strict":true},"referencedMap":[[4,1],[6,2],[3,3]],"semanticDiagnosticsPerFile":[[4,[{"pos":76,"end":82,"code":2366,"category":1,"messageKey":"Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined_2366"}]]],"latestChangedDtsFile":"./src/env.d.ts"}
 //// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -311,7 +311,7 @@ Found 1 error in src/consumer.ts[90m:2[0m
     "../node_modules/dep-b/package.json"
   ],
   "fileNames": [
-    "lib.es2025.full.d.ts",
+    "lib.es2026.full.d.ts",
     "../node_modules/dep-a/index.d.ts",
     "../src/middle.ts",
     "../src/consumer.ts",
@@ -320,7 +320,7 @@ Found 1 error in src/consumer.ts[90m:2[0m
   ],
   "fileInfos": [
     {
-      "fileName": "lib.es2025.full.d.ts",
+      "fileName": "lib.es2026.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -430,7 +430,7 @@ Found 1 error in src/consumer.ts[90m:2[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/node_modules/dep-a/index.d.ts
 *refresh*    /home/src/workspaces/project/src/middle.ts
 *refresh*    /home/src/workspaces/project/src/consumer.ts
