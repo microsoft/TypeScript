@@ -8895,5 +8895,37 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 18110
+    },
+    "Your application tried to access '{0}'. While this module is usually interpreted as a Node builtin, your resolver is running inside a non-Node resolution context where such builtins are ignored. Since '{0}' isn't otherwise declared in your dependencies, this makes the require call ambiguous and unsound.\n\nRequired package: {0}{1}\nRequired by: {2}": {
+        "category": "Error",
+        "code": 20001
+    },
+    "{0} tried to access '{1}'. While this module is usually interpreted as a Node builtin, your resolver is running inside a non-Node resolution context where such builtins are ignored. Since '{1}' isn't otherwise declared in {0}'s dependencies, this makes the require call ambiguous and unsound.\n\nRequired package: {1}{2}\nRequired by: {3}": {
+        "category": "Error",
+        "code": 20002
+    },
+    "Your application tried to access '{0}', but it isn't declared in your dependencies; this makes the require call ambiguous and unsound.\n\nRequired package: {0}{1}\nRequired by: {2}": {
+        "category": "Error",
+        "code": 20003
+    },
+    "Your application tried to access '{0}' (a peer dependency); this isn't allowed as there is no ancestor to satisfy the requirement. Use a devDependency if needed.\n\nRequired package: {0}\nRequired by: {1}": {
+        "category": "Error",
+        "code": 20004
+    },
+    "{0} tried to access '{1}' (a peer dependency) but it isn't provided by its ancestors/your application; this makes the require call ambiguous and unsound.\n\nRequired package: {1}\nRequired by: {2}": {
+        "category": "Error",
+        "code": 20005
+    },
+    "no package found for path '{0}'": {
+        "category": "Error",
+        "code": 20006
+    },
+    "Empty specifier: '{0}'": {
+        "category": "Error",
+        "code": 20007
+    },
+    "Invalid specifier: '{0}'": {
+        "category": "Error",
+        "code": 20008
     }
 }

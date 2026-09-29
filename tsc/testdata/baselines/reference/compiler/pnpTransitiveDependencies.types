@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/pnpTransitiveDependencies.ts] ////
+
+=== /packages/package-a/index.ts ===
+import type { ConfigOptions } from 'package-b';
+>ConfigOptions : ConfigOptions
+
+export interface HelperResult {
+  message: string;
+>message : string
+
+  config: ConfigOptions;
+>config : ConfigOptions
+}
+
+export function helperA(value: string, config: ConfigOptions): HelperResult {
+>helperA : (value: string, config: ConfigOptions) => HelperResult
+>value : string
+>config : ConfigOptions
+
+  return {
+>{    message: "Helper A: " + value,    config: config  } : { message: string; config: ConfigOptions; }
+
+    message: "Helper A: " + value,
+>message : string
+>"Helper A: " + value : string
+>"Helper A: " : "Helper A: "
+>value : string
+
+    config: config
+>config : ConfigOptions
+>config : ConfigOptions
+
+  };
+}
+
+=== /packages/package-b/index.ts ===
+export interface ConfigOptions {
+  enabled: boolean;
+>enabled : boolean
+
+  timeout: number;
+>timeout : number
+}
+
+export function helperB(value: number): string {
+>helperB : (value: number) => string
+>value : number
+
+  return "Helper B: " + value;
+>"Helper B: " + value : string
+>"Helper B: " : "Helper B: "
+>value : number
+}
+
+=== /src/index.ts ===
+// Test that the project can import package-a directly
+// package-a's types depend on package-b's types (ConfigOptions)
+import { helperA } from 'package-a';
+>helperA : (value: string, config: import("../packages/package-b").ConfigOptions) => HelperResult
+
+import type { HelperResult } from 'package-a';
+>HelperResult : HelperResult
+
+import type { ConfigOptions } from 'package-b'; // This should error - package-b is not a direct dependency
+>ConfigOptions : any
+
+export function useDirectDependency(text: string): HelperResult {
+>useDirectDependency : (text: string) => HelperResult
+>text : string
+
+  const config: ConfigOptions = { enabled: true, timeout: 5000 };
+>config : ConfigOptions
+>{ enabled: true, timeout: 5000 } : { enabled: boolean; timeout: number; }
+>enabled : boolean
+>true : true
+>timeout : number
+>5000 : 5000
+
+  return helperA(text, config);
+>helperA(text, config) : HelperResult
+>helperA : (value: string, config: import("../packages/package-b").ConfigOptions) => HelperResult
+>text : string
+>config : ConfigOptions
+}
+
+// Test that the project CANNOT import package-b directly even though package-a uses it
+// This should cause an error since package-b is not in project's dependencies
+export function attemptDirectImport(): ConfigOptions {
+>attemptDirectImport : () => ConfigOptions
+
+  return { enabled: false, timeout: 1000 };
+>{ enabled: false, timeout: 1000 } : { enabled: boolean; timeout: number; }
+>enabled : boolean
+>false : false
+>timeout : number
+>1000 : 1000
+}
+

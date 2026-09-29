@@ -1140,6 +1140,10 @@ func HasExtension(fileName string) bool {
 	return strings.Contains(GetBaseFileName(fileName), ".")
 }
 
+func IsZipPath(path string) bool {
+	return strings.Contains(path, ".zip/") || strings.HasSuffix(path, ".zip")
+}
+
 func SplitVolumePath(path string) (volume string, rest string, ok bool) {
 	if len(path) >= 2 && IsVolumeCharacter(path[0]) && path[1] == ':' {
 		return strings.ToLower(path[0:2]), path[2:], true

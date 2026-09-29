@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -41,6 +42,11 @@ func (h *projectReferenceDtsFakingHost) FS() vfs.FS {
 // GetCurrentDirectory implements module.ResolutionHost.
 func (h *projectReferenceDtsFakingHost) GetCurrentDirectory() string {
 	return h.host.GetCurrentDirectory()
+}
+
+// PnpApi implements module.ResolutionHost.
+func (h *projectReferenceDtsFakingHost) PnpApi() *pnp.PnpApi {
+	return h.host.PnpApi()
 }
 
 type projectReferenceDtsFakingVfs struct {

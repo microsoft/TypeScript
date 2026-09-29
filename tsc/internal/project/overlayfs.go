@@ -487,6 +487,8 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			} else {
 				events.deleted = true
 			}
+		case FileChangeKindPnpInstall:
+			result.InvalidateAll = true
 		}
 	}
 

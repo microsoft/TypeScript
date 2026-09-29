@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -42,6 +43,7 @@ type ProjectCollectionBuilder struct {
 
 	ctx                                context.Context
 	fs                                 *snapshotFSBuilder
+	pnpApi                             *pnp.PnpApi
 	overlays                           map[tspath.Path]*Overlay
 	base                               *ProjectCollection
 	compilerOptionsForInferredProjects *core.CompilerOptions
@@ -69,6 +71,7 @@ func newProjectCollectionBuilder(
 	ctx context.Context,
 	newSnapshotID uint64,
 	fs *snapshotFSBuilder,
+	pnpApi *pnp.PnpApi,
 	overlays map[tspath.Path]*Overlay,
 	oldProjectCollection *ProjectCollection,
 	oldConfigFileRegistry *ConfigFileRegistry,
@@ -88,6 +91,7 @@ func newProjectCollectionBuilder(
 	return &ProjectCollectionBuilder{
 		ctx:                                ctx,
 		fs:                                 fs,
+		pnpApi:                             pnpApi,
 		overlays:                           overlays,
 		toPath:                             fs.toPath,
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
@@ -99,7 +103,7 @@ func newProjectCollectionBuilder(
 		extendedConfigCache:                extendedConfigCache,
 		contentMapperHost:                  contentMapperHost,
 		base:                               oldProjectCollection,
-		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, func(path tspath.Path) bool { _, ok := overlays[path]; return ok }, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
+		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, func(path tspath.Path) bool { _, ok := overlays[path]; return ok }, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, pnpApi, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
 		openFilesChanged:                   !openFiles.Equals(&oldProjectCollection.openFiles),
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
@@ -1520,6 +1524,14 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				if result.UpdateKind == ProgramUpdateKindNewFiles {
 					filesChanged = true
 					project.programFilesWatch = project.CloneWatchers()
+					if project.pnpManifestWatch != nil && b.pnpApi != nil {
+						pnpManifestPath := b.pnpApi.GetManifestPath()
+						if pnpManifestPath != "" {
+							project.pnpManifestWatch = project.pnpManifestWatch.Clone(PatternsAndIgnored{
+								patternsInsideWorkspace: []string{pnpManifestPath},
+							})
+						}
+					}
 				}
 				project.dirty = false
 				project.dirtyFilePath = ""

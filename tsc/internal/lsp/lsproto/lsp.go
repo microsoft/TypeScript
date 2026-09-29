@@ -20,7 +20,7 @@ func (uri DocumentUri) FileName() string {
 	if bundled.IsBundled(string(uri)) {
 		return string(uri)
 	}
-	if strings.HasPrefix(string(uri), "file://") {
+	if strings.HasPrefix(string(uri), "file://") || strings.HasPrefix(string(uri), "zip:") {
 		parsed, err := url.Parse(string(uri))
 		if err != nil {
 			panic(fmt.Sprintf("invalid file URI: %s", uri))

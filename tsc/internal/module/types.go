@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -15,6 +16,7 @@ import (
 type ResolutionHost interface {
 	FS() vfs.FS
 	GetCurrentDirectory() string
+	PnpApi() *pnp.PnpApi
 }
 
 type Resolver interface {

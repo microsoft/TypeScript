@@ -306,6 +306,13 @@ func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (
 	if options.TypeRoots != nil {
 		return options.TypeRoots, true
 	}
+	baseDir := options.GetBaseDirFromOptions(currentDirectory)
+
+	nmTypes, nmFromConfig := options.GetNodeModulesTypeRoots(baseDir)
+	return nmTypes, nmFromConfig
+}
+
+func (options *CompilerOptions) GetBaseDirFromOptions(currentDirectory string) string {
 	var baseDir string
 	if options.ConfigFilePath != "" {
 		baseDir = tspath.GetDirectoryPath(options.ConfigFilePath)
@@ -317,7 +324,10 @@ func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (
 			panic("cannot get effective type roots without a config file path or current directory")
 		}
 	}
+	return baseDir
+}
 
+func (options *CompilerOptions) GetNodeModulesTypeRoots(baseDir string) (result []string, fromConfig bool) {
 	typeRoots := make([]string, 0, strings.Count(baseDir, "/"))
 	tspath.ForEachAncestorDirectory(baseDir, func(dir string) (any, bool) {
 		typeRoots = append(typeRoots, tspath.CombinePaths(dir, "node_modules", "@types"))

@@ -1,9 +1,11 @@
 package tsoptionstest
 
 import (
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
@@ -21,6 +23,7 @@ func fixRoot(path string) string {
 type VfsParseConfigHost struct {
 	Vfs              vfs.FS
 	CurrentDirectory string
+	pnpApi           *pnp.PnpApi
 }
 
 var _ tsoptions.ParseConfigHost = (*VfsParseConfigHost)(nil)
@@ -33,10 +36,21 @@ func (h *VfsParseConfigHost) GetCurrentDirectory() string {
 	return h.CurrentDirectory
 }
 
+func (h *VfsParseConfigHost) PnpApi() *pnp.PnpApi {
+	return h.pnpApi
+}
+
 func NewVFSParseConfigHost(files map[string]string, currentDirectory string, useCaseSensitiveFileNames bool) *VfsParseConfigHost {
+	var fs vfs.FS = vfstest.FromMap(files, useCaseSensitiveFileNames)
+	pnpApi := pnp.InitPnpApi(fs, currentDirectory)
+	if pnpApi != nil {
+		fs = pnpvfs.From(fs)
+	}
+
 	return &VfsParseConfigHost{
-		Vfs:              vfstest.FromMap(files, useCaseSensitiveFileNames),
+		Vfs:              fs,
 		CurrentDirectory: currentDirectory,
+		pnpApi:           pnpApi,
 	}
 }
 

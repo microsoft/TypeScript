@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -26,6 +27,7 @@ func (h *fakeCloneHost) GetCurrentDirectory() string { return "/" }
 func (h *fakeCloneHost) GetDefaultProject(path tspath.Path) (ProjectID, *compiler.Program) {
 	return nil, nil
 }
+func (h *fakeCloneHost) PnpApi() *pnp.PnpApi { return nil }
 
 func (h *fakeCloneHost) GetProgramForProject(projectID ProjectID) *compiler.Program {
 	return nil

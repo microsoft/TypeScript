@@ -9,10 +9,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -203,9 +205,13 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 		// with different casing on a case-insensitive FS.
 		fsFromMap := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
 		fs := bundled.WrapFS(fsFromMap)
+		pnpApi := pnp.InitPnpApi(fs, "/")
+		if pnpApi != nil {
+			fs = pnpvfs.From(fs)
+		}
 
 		// Minimal ParseConfigHost implementation.
-		h := &testParseConfigHost{fs: fs, cwd: "/"}
+		h := &testParseConfigHost{fs: fs, cwd: "/", pnpApi: pnpApi}
 		cmd, diags := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, h, nil /*extendedConfigCache*/)
 		assert.Equal(t, len(diags), 0)
 		assert.Assert(t, cmd != nil)
@@ -314,10 +320,13 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 }
 
 type testParseConfigHost struct {
-	fs  vfs.FS
-	cwd string
+	fs     vfs.FS
+	cwd    string
+	pnpApi *pnp.PnpApi
 }
 
 func (h *testParseConfigHost) FS() vfs.FS { return h.fs }
 
 func (h *testParseConfigHost) GetCurrentDirectory() string { return h.cwd }
+
+func (h *testParseConfigHost) PnpApi() *pnp.PnpApi { return h.pnpApi }

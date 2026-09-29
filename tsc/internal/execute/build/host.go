@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -45,6 +46,10 @@ func (h *host) DefaultLibraryPath() string {
 
 func (h *host) GetCurrentDirectory() string {
 	return h.host.GetCurrentDirectory()
+}
+
+func (h *host) PnpApi() *pnp.PnpApi {
+	return h.host.PnpApi()
 }
 
 func (h *host) Trace(msg *diagnostics.Message, args ...any) {

@@ -26,6 +26,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/background"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -88,6 +89,7 @@ type SessionInit struct {
 	Client        Client
 	Logger        logging.Logger
 	NpmExecutor   ata.NpmExecutor
+	PnpApi        *pnp.PnpApi
 	// Spawner launches content mapper processes. It is nil when the host cannot spawn processes.
 	Spawner                 contentmapper.Spawner
 	ContentMapperLogger     contentmapper.Logger
@@ -114,6 +116,8 @@ type Session struct {
 	// contentMapperTimings is the cumulative host snapshot at the most recent session snapshot adoption.
 	contentMapperTimings   contentmapper.Timings
 	contentMapperTimingsMu sync.Mutex
+
+	pnpApi *pnp.PnpApi
 
 	// registeredContentMapperSnapshotID is the ID of the newest snapshot whose registration has been
 	// applied. Registration runs from background tasks that may finish out of order, so
@@ -222,6 +226,7 @@ func NewSession(init *SessionInit) *Session {
 		client:          init.Client,
 		npmExecutor:     init.NpmExecutor,
 		fs:              newOverlayFS(snapshotHost.fs, make(map[tspath.Path]*Overlay), init.Options.PositionEncoding, snapshotHost.toPath),
+		pnpApi:                  init.PnpApi,
 		backgroundQueue: background.NewQueue(),
 		startTime:       time.Now(),
 		snapshot: snapshotHost.newRootSnapshot(
@@ -255,6 +260,11 @@ func (s *Session) FS() vfs.FS {
 // GetCurrentDirectory implements module.ResolutionHost
 func (s *Session) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
+}
+
+// PnpApi implements module.ResolutionHost
+func (s *Session) PnpApi() *pnp.PnpApi {
+	return s.pnpApi
 }
 
 func (s *Session) DefaultLibraryPath() string {
@@ -430,7 +440,11 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 		case lsproto.FileChangeTypeCreated:
 			kind = FileChangeKindWatchCreate
 		case lsproto.FileChangeTypeChanged:
-			kind = FileChangeKindWatchChange
+			if s.pnpApi != nil && strings.HasSuffix(change.Uri.FileName(), ".pnp.cjs") {
+				kind = FileChangeKindPnpInstall
+			} else {
+				kind = FileChangeKindWatchChange
+			}
 		case lsproto.FileChangeTypeDeleted:
 			kind = FileChangeKindWatchDelete
 		default:
@@ -1635,11 +1649,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 			errors = append(errors, s.updateWatch(ctx, nil, addedProject.programFilesWatch)...)
 			errors = append(errors, s.updateWatch(ctx, nil, addedProject.typingsWatch)...)
 			errors = append(errors, s.updateWatch(ctx, nil, addedProject.contentMapperWatch)...)
+			errors = append(errors, s.updateWatch(ctx, nil, addedProject.pnpManifestWatch)...)
 		},
 		func(_ ID, removedProject *Project) {
 			errors = append(errors, s.updateWatch(ctx, removedProject.programFilesWatch, nil)...)
 			errors = append(errors, s.updateWatch(ctx, removedProject.typingsWatch, nil)...)
 			errors = append(errors, s.updateWatch(ctx, removedProject.contentMapperWatch, nil)...)
+			errors = append(errors, s.updateWatch(ctx, removedProject.pnpManifestWatch, nil)...)
 		},
 		func(_ ID, oldProject, newProject *Project) {
 			if oldProject.programFilesWatch.ID() != newProject.programFilesWatch.ID() {
@@ -1660,6 +1676,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 				errors = append(errors, s.updateWatch(ctx, oldProject.contentMapperWatch, newProject.contentMapperWatch)...)
 			} else if s.watches.IsPending(newProject.contentMapperWatch.ID()) {
 				errors = append(errors, s.updateWatch(ctx, nil, newProject.contentMapperWatch)...)
+			}
+			if oldProject.pnpManifestWatch.ID() != newProject.pnpManifestWatch.ID() {
+				errors = append(errors, s.updateWatch(ctx, oldProject.pnpManifestWatch, newProject.pnpManifestWatch)...)
+			} else {
+				if s.watches.IsPending(newProject.pnpManifestWatch.ID()) {
+					errors = append(errors, s.updateWatch(ctx, nil, newProject.pnpManifestWatch)...)
+				}
 			}
 		},
 	)

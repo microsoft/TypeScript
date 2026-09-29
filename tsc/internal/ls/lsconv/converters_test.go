@@ -40,6 +40,9 @@ func TestDocumentURIToFileName(t *testing.T) {
 		{"file://localhost/c%24/GitDevelopment/express", "//localhost/c$/GitDevelopment/express"},
 		{"file:///c%3A/test%20with%20%2525/c%23code", "c:/test with %25/c#code"},
 
+		{"zip:///path/to/archive.zip/file.ts", "/path/to/archive.zip/file.ts"},
+		{"zip:///d:/work/tsgo932/lib/archive.zip/utils.ts", "d:/work/tsgo932/lib/archive.zip/utils.ts"},
+
 		{"untitled:Untitled-1", "^/untitled/ts-nul-authority/Untitled-1"},
 		{"untitled:Untitled-1#fragment", "^/untitled/ts-nul-authority/Untitled-1#fragment"},
 		{"untitled:c:/Users/jrieken/Code/abc.txt", "^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt"},
@@ -77,6 +80,9 @@ func TestFileNameToDocumentURI(t *testing.T) {
 		{"/users/me/c#-projects/", "file:///users/me/c%23-projects/"},
 		{"//localhost/c$/GitDevelopment/express", "file://localhost/c%24/GitDevelopment/express"},
 		{"c:/test with %25/c#code", "file:///c%3A/test%20with%20%2525/c%23code"},
+
+		{"/path/to/archive.zip/file.ts", "zip:///path/to/archive.zip/file.ts"},
+		{"d:/work/tsgo932/lib/archive.zip/utils.ts", "zip:///d%3A/work/tsgo932/lib/archive.zip/utils.ts"},
 
 		{"^/untitled/ts-nul-authority/Untitled-1", "untitled:Untitled-1"},
 		{"^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt", "untitled:c:/Users/jrieken/Code/abc.txt"},

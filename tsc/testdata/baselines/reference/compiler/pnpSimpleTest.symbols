@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/pnpSimpleTest.ts] ////
+
+=== /src/index.ts ===
+// Workspace package that imports both third-party dependencies
+import { helperA } from 'package-a';
+>helperA : Symbol(helperA, Decl(index.ts, 1, 8))
+
+import { helperB } from 'package-b';
+>helperB : Symbol(helperB, Decl(index.ts, 2, 8))
+
+export function processData(text: string, num: number): string {
+>processData : Symbol(processData, Decl(index.ts, 2, 36))
+>text : Symbol(text, Decl(index.ts, 4, 28))
+>num : Symbol(num, Decl(index.ts, 4, 41))
+
+  const resultA = helperA(text);
+>resultA : Symbol(resultA, Decl(index.ts, 5, 7))
+>helperA : Symbol(helperA, Decl(index.ts, 1, 8))
+>text : Symbol(text, Decl(index.ts, 4, 28))
+
+  const resultB = helperB(num);
+>resultB : Symbol(resultB, Decl(index.ts, 6, 7))
+>helperB : Symbol(helperB, Decl(index.ts, 2, 8))
+>num : Symbol(num, Decl(index.ts, 4, 41))
+
+  return `${resultA} | ${resultB}`;
+>resultA : Symbol(resultA, Decl(index.ts, 5, 7))
+>resultB : Symbol(resultB, Decl(index.ts, 6, 7))
+}
+=== /.yarn/cache/package-a-npm-1.0.0-abcd1234/node_modules/package-a/index.d.ts ===
+export declare function helperA(value: string): string;
+>helperA : Symbol(helperA, Decl(index.d.ts, 0, 0))
+>value : Symbol(value, Decl(index.d.ts, 0, 32))
+
+=== /.yarn/cache/package-b-npm-2.0.0-efgh5678/node_modules/package-b/index.d.ts ===
+export declare function helperB(value: number): string;
+>helperB : Symbol(helperB, Decl(index.d.ts, 0, 0))
+>value : Symbol(value, Decl(index.d.ts, 0, 32))
+

@@ -1006,6 +1006,7 @@ func NewOrchestrator(opts Options) *Orchestrator {
 			orchestrator.opts.Sys.FS(),
 			orchestrator.opts.Sys.DefaultLibraryPath(),
 			nil,
+			orchestrator.opts.Sys.PnpApi(),
 			nil,
 			nil,
 		),

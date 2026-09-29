@@ -50,7 +50,7 @@ func TestImplementationsWorklistDoesNotBlowUp(t *testing.T) {
 		}, false /*useCaseSensitiveFileNames*/)
 		fs = bundled.WrapFS(fs)
 
-		host := compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil, nil)
+		host := compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil, nil, nil)
 		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, host, nil)
 		assert.Equal(t, len(errors), 0)
 		program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})

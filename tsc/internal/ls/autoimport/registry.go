@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
@@ -500,6 +501,7 @@ type RegistryChange struct {
 type RegistryCloneHost interface {
 	module.ResolutionHost
 	FS() vfs.FS
+	PnpApi() *pnp.PnpApi
 	GetDefaultProject(path tspath.Path) (ProjectID, *compiler.Program)
 	GetProgramForProject(projectID ProjectID) *compiler.Program
 	GetPackageJson(fileName string) *packagejson.InfoCacheEntry
@@ -1269,10 +1271,18 @@ func (b *registryBuilder) buildProjectBucket(
 			skippedFileCount++
 			continue
 		}
-		// Ordinary node_modules files are owned by node_modules buckets. Content-mapped files are not
-		// discovered by those buckets, but files already transformed in the Program can be indexed here.
-		if file.ContentMapper() == "" &&
-			(strings.Contains(file.FileName(), "/node_modules/") || hasSymlinkToNodeModules(file.Path(), projectRootPath, symlinkCache)) {
+
+		// If pnp is available, node_modules buckets won't be built as all packages are located in `.yarn/cache`
+		// This is why we need to handle all files, except the ones that are not importable in the project
+		pnpApi := b.host.PnpApi()
+		if pnpApi != nil {
+			if !pnpApi.IsImportable(string(projectRootPath), file.FileName()) {
+				continue
+			}
+
+			// Ordinary node_modules files are owned by node_modules buckets. Content-mapped files are not
+			// discovered by those buckets, but files already transformed in the Program can be indexed here.
+		} else if file.ContentMapper() == "" && (strings.Contains(file.FileName(), "/node_modules/") || hasSymlinkToNodeModules(file.Path(), projectRootPath, symlinkCache)) {
 			continue
 		}
 		wg.Go(func() {

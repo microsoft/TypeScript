@@ -64,7 +64,7 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 	}
 	return compiler.NewProgram(compiler.ProgramOptions{
 		Config: config,
-		Host:   compiler.NewCompilerHost("/src", fs, bundled.LibPath(), nil, nil, contentMapperProject),
+		Host:   compiler.NewCompilerHost("/src", fs, bundled.LibPath(), nil, nil, nil, contentMapperProject),
 		// Load files on the calling goroutine for deterministic diagnostics ordering.
 		SingleThreaded: core.TSTrue,
 	})
