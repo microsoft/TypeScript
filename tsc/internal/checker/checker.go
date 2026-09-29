@@ -19543,25 +19543,10 @@ type lazyMemberTable struct {
 	indexInfos          []*IndexInfo
 	baseTypes           []*Type // instantiated base types
 	declared            map[string]*ast.Symbol
-	found               map[string]*ast.Symbol // memoized lookups; nil means no such member
 }
 
-// isUnresolvedInstantiatedReference reports whether t is a reference to a
-// generic class or interface (other than the declaration itself) whose members
-// haven't been resolved.
-func isUnresolvedInstantiatedReference(t *Type) bool {
-	if t.flags&TypeFlagsObject == 0 || !mayHaveLazyMembers(t) {
-		return false
-	}
-	source := t.Target()
-	if source == nil || source == t || source.objectFlags&ObjectFlagsClassOrInterface == 0 || source.objectFlags&ObjectFlagsTuple != 0 {
-		return false
-	}
-	return t.symbol == nil || t.symbol.Flags&ast.SymbolFlagsValueModule == 0
-}
-
-// mayHaveLazyMembers is a quick check for isUnresolvedInstantiatedReference
-// for hot paths, as most types they see have resolved members.
+// mayHaveLazyMembers is a quick check for hot paths, as most types they see
+// have resolved members.
 func mayHaveLazyMembers(t *Type) bool {
 	return t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsReference) == ObjectFlagsReference
 }
@@ -19586,7 +19571,11 @@ func (c *Checker) getReadyLazyMemberTable(t *Type) *lazyMemberTable {
 }
 
 func (c *Checker) getReadyLazyMemberTableWorker(t *Type) *lazyMemberTable {
-	if !isUnresolvedInstantiatedReference(t) {
+	// Only references to generic classes and interfaces, other than the
+	// declaration itself, have lazy member tables.
+	source := t.Target()
+	if t.flags&TypeFlagsObject == 0 || source == nil || source == t || source.objectFlags&ObjectFlagsClassOrInterface == 0 ||
+		source.objectFlags&ObjectFlagsTuple != 0 || t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsValueModule != 0 {
 		return nil
 	}
 	lm := c.lazyMemberTables[t]
@@ -19599,7 +19588,6 @@ func (c *Checker) getReadyLazyMemberTableWorker(t *Type) *lazyMemberTable {
 			mapper:        newTypeMapper(typeParameters, typeArguments),
 			typeArguments: typeArguments,
 			declared:      map[string]*ast.Symbol{},
-			found:         map[string]*ast.Symbol{},
 		}
 		c.lazyMemberTables[t] = lm
 		c.prepareLazyMembers(t, lm)
@@ -19656,7 +19644,7 @@ func (c *Checker) resolveLazyMembers(t *Type, lm *lazyMemberTable) {
 		members = make(ast.SymbolTable, len(resolved.declaredMembers))
 		for id, symbol := range resolved.declaredMembers {
 			if c.isNamedMember(symbol, id) {
-				members[id] = c.instantiateLazyDeclaredMember(lm, symbol, id)
+				members[id] = c.getLazyDeclaredMember(lm, symbol, id)
 			}
 		}
 	}
@@ -19672,23 +19660,13 @@ func (c *Checker) resolveLazyMembers(t *Type, lm *lazyMemberTable) {
 func (c *Checker) getLazyDeclaredMember(lm *lazyMemberTable, symbol *ast.Symbol, name string) *ast.Symbol {
 	result := lm.declared[name]
 	if result == nil {
-		result = c.instantiateLazyDeclaredMember(lm, symbol, name)
+		result = symbol
+		if _, unaffected := slices.BinarySearch(lm.unaffected, name); !unaffected {
+			result = c.newInstantiatedSymbol(symbol, lm.mapper)
+		}
 		lm.declared[name] = result
 	}
 	return result
-}
-
-// instantiateLazyDeclaredMember is getLazyDeclaredMember without memoizing
-// the result, for resolving the members in full, after which the table is
-// discarded.
-func (c *Checker) instantiateLazyDeclaredMember(lm *lazyMemberTable, symbol *ast.Symbol, name string) *ast.Symbol {
-	if result := lm.declared[name]; result != nil {
-		return result
-	}
-	if _, unaffected := slices.BinarySearch(lm.unaffected, name); unaffected {
-		return symbol
-	}
-	return c.newInstantiatedSymbol(symbol, lm.mapper)
 }
 
 // getMemberOfStructuredType returns c.resolveStructuredTypeMembers(t).members[name]
@@ -19701,22 +19679,13 @@ func (c *Checker) getMemberOfStructuredType(t *Type, name string) *ast.Symbol {
 }
 
 func (c *Checker) getMemberOfUnresolvedStructuredType(t *Type, name string) *ast.Symbol {
-	if !isReservedMemberName(name) {
-		if lm := c.getReadyLazyMemberTable(t); lm != nil {
-			return c.lookupLazyMember(t, lm, name)
-		}
+	lm := c.getReadyLazyMemberTable(t)
+	if lm == nil || isReservedMemberName(name) {
+		return c.resolveStructuredTypeMembers(t).members[name]
 	}
-	return c.resolveStructuredTypeMembers(t).members[name]
-}
-
-// lookupLazyMember returns what resolveStructuredTypeMembers(t).members[name]
-// would hold: the declared member, or else the property inherited from the
-// first base type that has one, where a base may only fill a missing or
-// non-value entry (addInheritedMembers).
-func (c *Checker) lookupLazyMember(t *Type, lm *lazyMemberTable, name string) *ast.Symbol {
-	if symbol, ok := lm.found[name]; ok {
-		return symbol
-	}
+	// As in resolveObjectTypeMembers: the declared member, or else the property
+	// inherited from the first base type that has one, where a base may only
+	// fill a missing or non-value entry (addInheritedMembers).
 	var result *ast.Symbol
 	if decl := c.resolveDeclaredMembers(t.Target()).declaredMembers[name]; decl != nil && c.isNamedMember(decl, name) {
 		result = c.getLazyDeclaredMember(lm, decl, name)
@@ -19725,29 +19694,11 @@ func (c *Checker) lookupLazyMember(t *Type, lm *lazyMemberTable, name string) *a
 		if result != nil && result.Flags&ast.SymbolFlagsValue != 0 {
 			break
 		}
-		if prop := c.getNamedPropertyOfType(baseType, name); prop != nil && isInheritableProperty(prop) {
+		if prop := c.getPropertyOfTypeEx(baseType, name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/); prop != nil && !isStaticPrivateIdentifierProperty(prop) {
 			result = prop
 		}
 	}
-	lm.found[name] = result
 	return result
-}
-
-// getNamedPropertyOfType finds name among getPropertiesOfType(t).
-func (c *Checker) getNamedPropertyOfType(t *Type, name string) *ast.Symbol {
-	reduced := c.getReducedApparentType(t)
-	if reduced.flags&TypeFlagsObject != 0 {
-		if symbol := c.getMemberOfStructuredType(reduced, name); symbol != nil && c.isNamedMember(symbol, name) {
-			return symbol
-		}
-		return nil
-	}
-	for _, prop := range c.getPropertiesOfType(t) {
-		if prop.Name == name {
-			return prop
-		}
-	}
-	return nil
 }
 
 // everyPropertyOfStructuredType is core.Every(c.resolveStructuredTypeMembers(t).properties, f),
@@ -19783,16 +19734,12 @@ func (c *Checker) everyLazyProperty(t *Type, lm *lazyMemberTable, seen *collecti
 			continue
 		}
 		for _, prop := range c.getPropertiesOfType(baseType) {
-			if isInheritableProperty(prop) && seen.AddIfAbsent(prop.Name) && !f(prop) {
+			if !isStaticPrivateIdentifierProperty(prop) && seen.AddIfAbsent(prop.Name) && !f(prop) {
 				return false
 			}
 		}
 	}
 	return true
-}
-
-func isInheritableProperty(prop *ast.Symbol) bool {
-	return !isStaticPrivateIdentifierProperty(prop)
 }
 
 func (c *Checker) getBaseTypes(t *Type) []*Type {
