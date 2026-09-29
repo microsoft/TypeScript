@@ -146,6 +146,7 @@ const (
 	MethodGetIndexTypeOfType            Method = "getIndexTypeOfType"
 	MethodGetCheckTypeOfType            Method = "getCheckTypeOfType"
 	MethodGetExtendsTypeOfType          Method = "getExtendsTypeOfType"
+	MethodGetInferTypeParametersOfType  Method = "getInferTypeParametersOfType"
 	MethodGetBaseTypeOfType             Method = "getBaseTypeOfType"
 	MethodGetConstraintOfType           Method = "getConstraintOfType"
 	MethodGetTypeParameterOfMappedType  Method = "getTypeParameterOfMappedType"
@@ -647,6 +648,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetIndexTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetCheckTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetExtendsTypeOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetInferTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseTypeOfType:             unmarshallerFor[GetTypePropertyParams],
 	MethodGetConstraintOfType:           unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypeParameterOfMappedType:  unmarshallerFor[GetTypePropertyParams],
@@ -1160,8 +1162,9 @@ type TypeResponse struct {
 	IndexType  TypeID `json:"indexType,omitzero"`
 
 	// ConditionalType data
-	CheckType   TypeID `json:"checkType,omitzero"`
-	ExtendsType TypeID `json:"extendsType,omitzero"`
+	CheckType           TypeID   `json:"checkType,omitzero"`
+	ExtendsType         TypeID   `json:"extendsType,omitzero"`
+	InferTypeParameters []TypeID `json:"inferTypeParameters,omitempty"`
 
 	// SubstitutionType data
 	BaseType        TypeID `json:"baseType,omitzero"`
@@ -1276,6 +1279,7 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		data := t.AsConditionalType()
 		resp.CheckType = TypeHandle(data.CheckType())
 		resp.ExtendsType = TypeHandle(data.ExtendsType())
+		resp.InferTypeParameters = typeHandles(data.InferTypeParameters())
 	case flags&checker.TypeFlagsSubstitution != 0:
 		data := t.AsSubstitutionType()
 		resp.BaseType = TypeHandle(data.BaseType())

@@ -291,6 +291,8 @@ export interface ConditionalType extends Type {
     getTrueType(): Promise<Type>;
     /** Get the false type Y in `T extends U ? X : Y` */
     getFalseType(): Promise<Type>;
+    /** Get the type parameters introduced by `infer` declarations in the extends clause */
+    getInferTypeParameters(): Promise<readonly TypeParameter[]>;
 }
 
 /** Substitution types (TypeFlags.Substitution) */

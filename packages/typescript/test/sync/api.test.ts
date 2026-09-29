@@ -3388,6 +3388,7 @@ export const intersection: { a: number } & { b: string } = { a: 1, b: "hi" };
 export type KeyOf<T> = keyof T;
 export type Lookup<T, K extends keyof T> = T[K];
 export type Cond<T> = T extends string ? "yes" : "no";
+export type InferCond<T> = T extends Array<infer U> ? U : never;
 export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
 export type MappedUnion<T> = Mapped<T> | string;
 export const tpl: \`hello \${string}\` = "hello world";
@@ -3578,6 +3579,25 @@ export declare const value: AB | "c";
         assert.ok(checkType);
         const extendsType = cond.getExtendsType();
         assert.ok(extendsType);
+    });
+
+    test("ConditionalType.getInferTypeParameters()", () => {
+        using api = spawnAPI(typeFiles);
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = project.checker.resolveName("InferCond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const type = project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
+        const cond = type as ConditionalType;
+
+        const inferTypeParameters = cond.getInferTypeParameters();
+        assert.equal(inferTypeParameters.length, 1);
+        assert.ok(inferTypeParameters[0].flags & TypeFlags.TypeParameter, `Expected TypeParameter, got flags ${inferTypeParameters[0].flags}`);
+        const typeParamSymbol = inferTypeParameters[0].getSymbol();
+        assert.equal(typeParamSymbol?.name, "U");
     });
 
     test("ConditionalType.getTrueType() and getFalseType()", () => {

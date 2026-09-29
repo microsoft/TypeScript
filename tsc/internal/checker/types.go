@@ -1284,8 +1284,9 @@ type ConditionalType struct {
 	combinedMapper                   *TypeMapper
 }
 
-func (t *ConditionalType) CheckType() *Type   { return t.checkType }
-func (t *ConditionalType) ExtendsType() *Type { return t.extendsType }
+func (t *ConditionalType) CheckType() *Type             { return t.checkType }
+func (t *ConditionalType) ExtendsType() *Type           { return t.extendsType }
+func (t *ConditionalType) InferTypeParameters() []*Type { return t.root.inferTypeParameters }
 
 // SignatureFlags
 

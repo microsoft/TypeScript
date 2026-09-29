@@ -96,6 +96,7 @@ export interface APIMethodInfo {
     getIndexTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getCheckTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getExtendsTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getInferTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getBaseTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getConstraintOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParameterOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
@@ -505,6 +506,7 @@ export interface TypeResponse {
     /** ConditionalType data */
     checkType?: number | undefined;
     extendsType?: number | undefined;
+    inferTypeParameters?: number[] | undefined;
     /** SubstitutionType data */
     baseType?: number | undefined;
     substConstraint?: number | undefined;
@@ -1162,6 +1164,7 @@ export interface BatchRequest {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
+        | "getInferTypeParametersOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1339,6 +1342,7 @@ export interface BatchResponse {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
+        | "getInferTypeParametersOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"

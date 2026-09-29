@@ -865,6 +865,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetCheckTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetExtendsTypeOfType):
 		return s.handleGetExtendsTypeOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetInferTypeParametersOfType):
+		return s.handleGetInferTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetBaseTypeOfType):
 		return s.handleGetBaseTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetConstraintOfType):
@@ -2797,6 +2799,11 @@ func (s *Session) handleGetCheckTypeOfType(ctx context.Context, params *GetTypeP
 
 func (s *Session) handleGetExtendsTypeOfType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	return s.resolveTypePropertyOfType(ctx, params, func(t *checker.Type) *checker.Type { return t.AsConditionalType().ExtendsType() })
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetInferTypeParametersOfType(ctx context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
+	return s.resolveTypeArrayPropertyOfType(ctx, params, func(t *checker.Type) []*checker.Type { return t.AsConditionalType().InferTypeParameters() })
 }
 
 func (s *Session) handleGetBaseTypeOfType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {

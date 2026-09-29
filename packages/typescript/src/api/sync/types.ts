@@ -421,6 +421,11 @@ export interface ConditionalType extends Type {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     };
+    /** Get the type parameters introduced by `infer` declarations in the extends clause */
+    getInferTypeParameters: {
+        (): readonly TypeParameter[];
+        gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+    };
 }
 
 /** Substitution types (TypeFlags.Substitution) */

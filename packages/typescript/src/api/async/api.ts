@@ -3194,6 +3194,7 @@ class TypeObject implements Type {
     readonly indexType!: number;
     readonly checkType!: number;
     readonly extendsType!: number;
+    readonly inferTypeParameters!: readonly number[];
     readonly baseType!: number;
     readonly substConstraint!: number;
     readonly typeParameter!: number;
@@ -3280,6 +3281,7 @@ class TypeObject implements Type {
         if (data.indexType !== undefined) this.indexType = data.indexType;
         if (data.checkType !== undefined) this.checkType = data.checkType;
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
+        this.inferTypeParameters = data.inferTypeParameters ?? [];
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
         if (data.typeParameter !== undefined) this.typeParameter = data.typeParameter;
@@ -3476,6 +3478,10 @@ class TypeObject implements Type {
 
     async getExtendsType(): Promise<Type> {
         return this.objectRegistry.fetchType(this, "getExtendsTypeOfType", this.extendsType);
+    }
+
+    async getInferTypeParameters(): Promise<readonly TypeParameter[]> {
+        return this.objectRegistry.fetchTypes(this, "getInferTypeParametersOfType", this.inferTypeParameters) as Promise<readonly TypeParameter[]>;
     }
 
     async getBaseType(): Promise<Type> {

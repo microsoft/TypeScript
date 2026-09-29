@@ -6653,6 +6653,7 @@ class TypeObject implements Type {
     readonly indexType!: number;
     readonly checkType!: number;
     readonly extendsType!: number;
+    readonly inferTypeParameters!: readonly number[];
     readonly baseType!: number;
     readonly substConstraint!: number;
     readonly typeParameter!: number;
@@ -6739,6 +6740,7 @@ class TypeObject implements Type {
         if (data.indexType !== undefined) this.indexType = data.indexType;
         if (data.checkType !== undefined) this.checkType = data.checkType;
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
+        this.inferTypeParameters = data.inferTypeParameters ?? [];
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
         if (data.typeParameter !== undefined) this.typeParameter = data.typeParameter;
@@ -7403,6 +7405,23 @@ class TypeObject implements Type {
             },
             function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 return yield* owner.objectRegistry.fetchType.gen(owner, "getExtendsTypeOfType", owner.extendsType);
+            },
+        );
+    }
+
+    get getInferTypeParameters(): {
+        (): readonly TypeParameter[];
+        gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getInferTypeParameters",
+            function (): readonly TypeParameter[] {
+                return owner.objectRegistry.fetchTypes(owner, "getInferTypeParametersOfType", owner.inferTypeParameters) as readonly TypeParameter[];
+            },
+            function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
+                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getInferTypeParametersOfType", owner.inferTypeParameters)) as readonly TypeParameter[];
             },
         );
     }
