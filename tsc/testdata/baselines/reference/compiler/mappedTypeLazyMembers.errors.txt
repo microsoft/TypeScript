@@ -1,0 +1,119 @@
+mappedTypeLazyMembers.ts(11,9): error TS2540: Cannot assign to 'name' because it is a read-only property.
+mappedTypeLazyMembers.ts(12,9): error TS2339: Property 'missing' does not exist on type 'Partial<Options>'.
+mappedTypeLazyMembers.ts(23,7): error TS2322: Type 'string[]' is not assignable to type 'number'.
+mappedTypeLazyMembers.ts(33,7): error TS2322: Type 'Boxed<Dictionary>' is not assignable to type 'Record<string, { value: string; }>'.
+  'string' index signatures are incompatible.
+    Type '{ value: number; }' is not assignable to type '{ value: string; }'.
+      Types of property 'value' are incompatible.
+        Type 'number' is not assignable to type 'string'.
+mappedTypeLazyMembers.ts(48,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+mappedTypeLazyMembers.ts(51,11): error TS2339: Property 'missing' does not exist on type 'Assertion<number>'.
+mappedTypeLazyMembers.ts(56,8): error TS2339: Property 'other' does not exist on type 'never'.
+  The intersection 'Kinded<{ kind: "a"; other: number; }>' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+mappedTypeLazyMembers.ts(61,6): error TS2456: Type alias 'SelfMapped' circularly references itself.
+mappedTypeLazyMembers.ts(61,27): error TS2313: Type parameter 'K' has a circular constraint.
+mappedTypeLazyMembers.ts(65,21): error TS2313: Type parameter 'K' has a circular constraint.
+mappedTypeLazyMembers.ts(66,11): error TS2310: Type 'Y' recursively references itself as a base type.
+
+
+==== mappedTypeLazyMembers.ts (11 errors) ====
+    // Member lookups, index signatures and never reduction on { [P in keyof T]: X }
+    // mapped types whose members aren't otherwise resolved.
+    
+    interface Options {
+        readonly name: string;
+        size?: number;
+        tags: string[];
+    }
+    declare const partial: Partial<Options>;
+    const partial1 = partial.size;
+    partial.name = "x";
+            ~~~~
+!!! error TS2540: Cannot assign to 'name' because it is a read-only property.
+    partial.missing;
+            ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Partial<Options>'.
+    
+    declare const required: Required<Options>;
+    const required1: number = required.size;
+    
+    declare const mutable: { -readonly [K in keyof Options]: Options[K] };
+    mutable.name = "y";
+    
+    type Boxed<T> = { [K in keyof T]: { value: T[K] } };
+    declare const boxed: Boxed<Options>;
+    const boxed1: string = boxed.name.value;
+    const boxed2: number = boxed.tags.value;
+          ~~~~~~
+!!! error TS2322: Type 'string[]' is not assignable to type 'number'.
+    
+    // Index signatures of the modifiers type become index signatures of the mapped type.
+    interface Dictionary {
+        [key: string]: number;
+        fixed: number;
+    }
+    declare const dict: Boxed<Dictionary>;
+    const dict1 = dict.fixed.value;
+    const dict2 = dict.anything.value;
+    const dict3: Record<string, { value: string }> = dict;
+          ~~~~~
+!!! error TS2322: Type 'Boxed<Dictionary>' is not assignable to type 'Record<string, { value: string; }>'.
+!!! error TS2322:   'string' index signatures are incompatible.
+!!! error TS2322:     Type '{ value: number; }' is not assignable to type '{ value: string; }'.
+!!! error TS2322:       Types of property 'value' are incompatible.
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.
+    
+    // Assertion chains in the style of test frameworks, where the base type is an
+    // intersection of a mapped type and a call signature.
+    interface ChaiLike {
+        equal(value: unknown): void;
+        deep: ChaiLike;
+    }
+    type Chain<A, T> = { [K in keyof A]: A[K] extends ChaiLike ? Assertion<T> : A[K] } & ((message?: string) => Assertion<T>);
+    interface Matchers<T> {
+        toBe(value: T): void;
+    }
+    interface Assertion<T> extends Chain<ChaiLike, T>, Matchers<T> {}
+    declare function expect<T>(value: T): Assertion<T>;
+    expect(1).toBe(2);
+    expect("a").toBe(1);
+                     ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    expect(true).deep.equal(false);
+    expect(1)("message").toBe(3);
+    expect(1).missing;
+              ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Assertion<number>'.
+    
+    // Intersections with mapped types that reduce to never.
+    type Kinded<T> = { [K in keyof T]: T[K] } & { kind: "b" };
+    declare const kinded: Kinded<{ kind: "a"; other: number }>;
+    kinded.other;
+           ~~~~~
+!!! error TS2339: Property 'other' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'Kinded<{ kind: "a"; other: number; }>' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
+    declare const compatible: Kinded<{ kind: "b"; other: number }>;
+    const compatible1: number = compatible.other;
+    
+    // Circular mapped types.
+    type SelfMapped = { [K in keyof SelfMapped]: string };
+         ~~~~~~~~~~
+!!! error TS2456: Type alias 'SelfMapped' circularly references itself.
+                              ~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'K' has a circular constraint.
+    declare const selfMapped: SelfMapped;
+    selfMapped.anything;
+    
+    type X<T> = { [K in keyof T]: string } & { b: string };
+                        ~~~~~~~
+!!! error TS2313: Type parameter 'K' has a circular constraint.
+!!! related TS2751 mappedTypeLazyMembers.ts:66:11: Circularity originates in type at this location.
+    interface Y extends X<Y> {
+              ~
+!!! error TS2310: Type 'Y' recursively references itself as a base type.
+        a: "";
+    }
+    declare const y: Y;
+    const y1 = y.a;
+    const y2 = y.b;
+    

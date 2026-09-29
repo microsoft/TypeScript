@@ -1,0 +1,281 @@
+//// [tests/cases/compiler/mappedTypeLazyMembers.ts] ////
+
+=== mappedTypeLazyMembers.ts ===
+// Member lookups, index signatures and never reduction on { [P in keyof T]: X }
+// mapped types whose members aren't otherwise resolved.
+
+interface Options {
+>Options : Symbol(Options, Decl(mappedTypeLazyMembers.ts, 0, 0))
+
+    readonly name: string;
+>name : Symbol(Options.name, Decl(mappedTypeLazyMembers.ts, 3, 19))
+
+    size?: number;
+>size : Symbol(Options.size, Decl(mappedTypeLazyMembers.ts, 4, 26))
+
+    tags: string[];
+>tags : Symbol(Options.tags, Decl(mappedTypeLazyMembers.ts, 5, 18))
+}
+declare const partial: Partial<Options>;
+>partial : Symbol(partial, Decl(mappedTypeLazyMembers.ts, 8, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Options : Symbol(Options, Decl(mappedTypeLazyMembers.ts, 0, 0))
+
+const partial1 = partial.size;
+>partial1 : Symbol(partial1, Decl(mappedTypeLazyMembers.ts, 9, 5))
+>partial.size : Symbol(size, Decl(mappedTypeLazyMembers.ts, 4, 26))
+>partial : Symbol(partial, Decl(mappedTypeLazyMembers.ts, 8, 13))
+>size : Symbol(size, Decl(mappedTypeLazyMembers.ts, 4, 26))
+
+partial.name = "x";
+>partial.name : Symbol(name, Decl(mappedTypeLazyMembers.ts, 3, 19))
+>partial : Symbol(partial, Decl(mappedTypeLazyMembers.ts, 8, 13))
+>name : Symbol(name, Decl(mappedTypeLazyMembers.ts, 3, 19))
+
+partial.missing;
+>partial : Symbol(partial, Decl(mappedTypeLazyMembers.ts, 8, 13))
+
+declare const required: Required<Options>;
+>required : Symbol(required, Decl(mappedTypeLazyMembers.ts, 13, 13))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Options : Symbol(Options, Decl(mappedTypeLazyMembers.ts, 0, 0))
+
+const required1: number = required.size;
+>required1 : Symbol(required1, Decl(mappedTypeLazyMembers.ts, 14, 5))
+>required.size : Symbol(size, Decl(mappedTypeLazyMembers.ts, 4, 26))
+>required : Symbol(required, Decl(mappedTypeLazyMembers.ts, 13, 13))
+>size : Symbol(size, Decl(mappedTypeLazyMembers.ts, 4, 26))
+
+declare const mutable: { -readonly [K in keyof Options]: Options[K] };
+>mutable : Symbol(mutable, Decl(mappedTypeLazyMembers.ts, 16, 13))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 16, 36))
+>Options : Symbol(Options, Decl(mappedTypeLazyMembers.ts, 0, 0))
+>Options : Symbol(Options, Decl(mappedTypeLazyMembers.ts, 0, 0))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 16, 36))
+
+mutable.name = "y";
+>mutable.name : Symbol(name, Decl(mappedTypeLazyMembers.ts, 3, 19))
+>mutable : Symbol(mutable, Decl(mappedTypeLazyMembers.ts, 16, 13))
+>name : Symbol(name, Decl(mappedTypeLazyMembers.ts, 3, 19))
+
+type Boxed<T> = { [K in keyof T]: { value: T[K] } };
+>Boxed : Symbol(Boxed, Decl(mappedTypeLazyMembers.ts, 17, 19))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 19, 11))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 19, 19))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 19, 11))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 19, 11))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 19, 19))
+
+declare const boxed: Boxed<Options>;
+>boxed : Symbol(boxed, Decl(mappedTypeLazyMembers.ts, 20, 13))
+>Boxed : Symbol(Boxed, Decl(mappedTypeLazyMembers.ts, 17, 19))
+>Options : Symbol(Options, Decl(mappedTypeLazyMembers.ts, 0, 0))
+
+const boxed1: string = boxed.name.value;
+>boxed1 : Symbol(boxed1, Decl(mappedTypeLazyMembers.ts, 21, 5))
+>boxed.name.value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+>boxed.name : Symbol(name, Decl(mappedTypeLazyMembers.ts, 3, 19))
+>boxed : Symbol(boxed, Decl(mappedTypeLazyMembers.ts, 20, 13))
+>name : Symbol(name, Decl(mappedTypeLazyMembers.ts, 3, 19))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+
+const boxed2: number = boxed.tags.value;
+>boxed2 : Symbol(boxed2, Decl(mappedTypeLazyMembers.ts, 22, 5))
+>boxed.tags.value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+>boxed.tags : Symbol(tags, Decl(mappedTypeLazyMembers.ts, 5, 18))
+>boxed : Symbol(boxed, Decl(mappedTypeLazyMembers.ts, 20, 13))
+>tags : Symbol(tags, Decl(mappedTypeLazyMembers.ts, 5, 18))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+
+// Index signatures of the modifiers type become index signatures of the mapped type.
+interface Dictionary {
+>Dictionary : Symbol(Dictionary, Decl(mappedTypeLazyMembers.ts, 22, 40))
+
+    [key: string]: number;
+>key : Symbol(key, Decl(mappedTypeLazyMembers.ts, 26, 5))
+
+    fixed: number;
+>fixed : Symbol(Dictionary.fixed, Decl(mappedTypeLazyMembers.ts, 26, 26))
+}
+declare const dict: Boxed<Dictionary>;
+>dict : Symbol(dict, Decl(mappedTypeLazyMembers.ts, 29, 13))
+>Boxed : Symbol(Boxed, Decl(mappedTypeLazyMembers.ts, 17, 19))
+>Dictionary : Symbol(Dictionary, Decl(mappedTypeLazyMembers.ts, 22, 40))
+
+const dict1 = dict.fixed.value;
+>dict1 : Symbol(dict1, Decl(mappedTypeLazyMembers.ts, 30, 5))
+>dict.fixed.value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+>dict.fixed : Symbol(fixed, Decl(mappedTypeLazyMembers.ts, 26, 26))
+>dict : Symbol(dict, Decl(mappedTypeLazyMembers.ts, 29, 13))
+>fixed : Symbol(fixed, Decl(mappedTypeLazyMembers.ts, 26, 26))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+
+const dict2 = dict.anything.value;
+>dict2 : Symbol(dict2, Decl(mappedTypeLazyMembers.ts, 31, 5))
+>dict.anything.value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+>dict : Symbol(dict, Decl(mappedTypeLazyMembers.ts, 29, 13))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 19, 35))
+
+const dict3: Record<string, { value: string }> = dict;
+>dict3 : Symbol(dict3, Decl(mappedTypeLazyMembers.ts, 32, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 32, 29))
+>dict : Symbol(dict, Decl(mappedTypeLazyMembers.ts, 29, 13))
+
+// Assertion chains in the style of test frameworks, where the base type is an
+// intersection of a mapped type and a call signature.
+interface ChaiLike {
+>ChaiLike : Symbol(ChaiLike, Decl(mappedTypeLazyMembers.ts, 32, 54))
+
+    equal(value: unknown): void;
+>equal : Symbol(ChaiLike.equal, Decl(mappedTypeLazyMembers.ts, 36, 20))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 37, 10))
+
+    deep: ChaiLike;
+>deep : Symbol(ChaiLike.deep, Decl(mappedTypeLazyMembers.ts, 37, 32))
+>ChaiLike : Symbol(ChaiLike, Decl(mappedTypeLazyMembers.ts, 32, 54))
+}
+type Chain<A, T> = { [K in keyof A]: A[K] extends ChaiLike ? Assertion<T> : A[K] } & ((message?: string) => Assertion<T>);
+>Chain : Symbol(Chain, Decl(mappedTypeLazyMembers.ts, 39, 1))
+>A : Symbol(A, Decl(mappedTypeLazyMembers.ts, 40, 11))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 40, 13))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 40, 22))
+>A : Symbol(A, Decl(mappedTypeLazyMembers.ts, 40, 11))
+>A : Symbol(A, Decl(mappedTypeLazyMembers.ts, 40, 11))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 40, 22))
+>ChaiLike : Symbol(ChaiLike, Decl(mappedTypeLazyMembers.ts, 32, 54))
+>Assertion : Symbol(Assertion, Decl(mappedTypeLazyMembers.ts, 43, 1))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 40, 13))
+>A : Symbol(A, Decl(mappedTypeLazyMembers.ts, 40, 11))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 40, 22))
+>message : Symbol(message, Decl(mappedTypeLazyMembers.ts, 40, 87))
+>Assertion : Symbol(Assertion, Decl(mappedTypeLazyMembers.ts, 43, 1))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 40, 13))
+
+interface Matchers<T> {
+>Matchers : Symbol(Matchers, Decl(mappedTypeLazyMembers.ts, 40, 122))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 41, 19))
+
+    toBe(value: T): void;
+>toBe : Symbol(Matchers.toBe, Decl(mappedTypeLazyMembers.ts, 41, 23))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 42, 9))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 41, 19))
+}
+interface Assertion<T> extends Chain<ChaiLike, T>, Matchers<T> {}
+>Assertion : Symbol(Assertion, Decl(mappedTypeLazyMembers.ts, 43, 1))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 44, 20))
+>Chain : Symbol(Chain, Decl(mappedTypeLazyMembers.ts, 39, 1))
+>ChaiLike : Symbol(ChaiLike, Decl(mappedTypeLazyMembers.ts, 32, 54))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 44, 20))
+>Matchers : Symbol(Matchers, Decl(mappedTypeLazyMembers.ts, 40, 122))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 44, 20))
+
+declare function expect<T>(value: T): Assertion<T>;
+>expect : Symbol(expect, Decl(mappedTypeLazyMembers.ts, 44, 65))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 45, 24))
+>value : Symbol(value, Decl(mappedTypeLazyMembers.ts, 45, 27))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 45, 24))
+>Assertion : Symbol(Assertion, Decl(mappedTypeLazyMembers.ts, 43, 1))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 45, 24))
+
+expect(1).toBe(2);
+>expect(1).toBe : Symbol(Matchers.toBe, Decl(mappedTypeLazyMembers.ts, 41, 23))
+>expect : Symbol(expect, Decl(mappedTypeLazyMembers.ts, 44, 65))
+>toBe : Symbol(Matchers.toBe, Decl(mappedTypeLazyMembers.ts, 41, 23))
+
+expect("a").toBe(1);
+>expect("a").toBe : Symbol(Matchers.toBe, Decl(mappedTypeLazyMembers.ts, 41, 23))
+>expect : Symbol(expect, Decl(mappedTypeLazyMembers.ts, 44, 65))
+>toBe : Symbol(Matchers.toBe, Decl(mappedTypeLazyMembers.ts, 41, 23))
+
+expect(true).deep.equal(false);
+>expect(true).deep.equal : Symbol(equal, Decl(mappedTypeLazyMembers.ts, 36, 20))
+>expect(true).deep : Symbol(deep, Decl(mappedTypeLazyMembers.ts, 37, 32))
+>expect : Symbol(expect, Decl(mappedTypeLazyMembers.ts, 44, 65))
+>deep : Symbol(deep, Decl(mappedTypeLazyMembers.ts, 37, 32))
+>equal : Symbol(equal, Decl(mappedTypeLazyMembers.ts, 36, 20))
+
+expect(1)("message").toBe(3);
+>expect(1)("message").toBe : Symbol(Matchers.toBe, Decl(mappedTypeLazyMembers.ts, 41, 23))
+>expect : Symbol(expect, Decl(mappedTypeLazyMembers.ts, 44, 65))
+>toBe : Symbol(Matchers.toBe, Decl(mappedTypeLazyMembers.ts, 41, 23))
+
+expect(1).missing;
+>expect : Symbol(expect, Decl(mappedTypeLazyMembers.ts, 44, 65))
+
+// Intersections with mapped types that reduce to never.
+type Kinded<T> = { [K in keyof T]: T[K] } & { kind: "b" };
+>Kinded : Symbol(Kinded, Decl(mappedTypeLazyMembers.ts, 50, 18))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 53, 12))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 53, 20))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 53, 12))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 53, 12))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 53, 20))
+>kind : Symbol(kind, Decl(mappedTypeLazyMembers.ts, 53, 45))
+
+declare const kinded: Kinded<{ kind: "a"; other: number }>;
+>kinded : Symbol(kinded, Decl(mappedTypeLazyMembers.ts, 54, 13))
+>Kinded : Symbol(Kinded, Decl(mappedTypeLazyMembers.ts, 50, 18))
+>kind : Symbol(kind, Decl(mappedTypeLazyMembers.ts, 54, 30))
+>other : Symbol(other, Decl(mappedTypeLazyMembers.ts, 54, 41))
+
+kinded.other;
+>kinded : Symbol(kinded, Decl(mappedTypeLazyMembers.ts, 54, 13))
+
+declare const compatible: Kinded<{ kind: "b"; other: number }>;
+>compatible : Symbol(compatible, Decl(mappedTypeLazyMembers.ts, 56, 13))
+>Kinded : Symbol(Kinded, Decl(mappedTypeLazyMembers.ts, 50, 18))
+>kind : Symbol(kind, Decl(mappedTypeLazyMembers.ts, 56, 34))
+>other : Symbol(other, Decl(mappedTypeLazyMembers.ts, 56, 45))
+
+const compatible1: number = compatible.other;
+>compatible1 : Symbol(compatible1, Decl(mappedTypeLazyMembers.ts, 57, 5))
+>compatible.other : Symbol(other, Decl(mappedTypeLazyMembers.ts, 56, 45))
+>compatible : Symbol(compatible, Decl(mappedTypeLazyMembers.ts, 56, 13))
+>other : Symbol(other, Decl(mappedTypeLazyMembers.ts, 56, 45))
+
+// Circular mapped types.
+type SelfMapped = { [K in keyof SelfMapped]: string };
+>SelfMapped : Symbol(SelfMapped, Decl(mappedTypeLazyMembers.ts, 57, 45))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 60, 21))
+>SelfMapped : Symbol(SelfMapped, Decl(mappedTypeLazyMembers.ts, 57, 45))
+
+declare const selfMapped: SelfMapped;
+>selfMapped : Symbol(selfMapped, Decl(mappedTypeLazyMembers.ts, 61, 13))
+>SelfMapped : Symbol(SelfMapped, Decl(mappedTypeLazyMembers.ts, 57, 45))
+
+selfMapped.anything;
+>selfMapped : Symbol(selfMapped, Decl(mappedTypeLazyMembers.ts, 61, 13))
+
+type X<T> = { [K in keyof T]: string } & { b: string };
+>X : Symbol(X, Decl(mappedTypeLazyMembers.ts, 62, 20))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 64, 7))
+>K : Symbol(K, Decl(mappedTypeLazyMembers.ts, 64, 15))
+>T : Symbol(T, Decl(mappedTypeLazyMembers.ts, 64, 7))
+>b : Symbol(b, Decl(mappedTypeLazyMembers.ts, 64, 42))
+
+interface Y extends X<Y> {
+>Y : Symbol(Y, Decl(mappedTypeLazyMembers.ts, 64, 55))
+>X : Symbol(X, Decl(mappedTypeLazyMembers.ts, 62, 20))
+>Y : Symbol(Y, Decl(mappedTypeLazyMembers.ts, 64, 55))
+
+    a: "";
+>a : Symbol(Y.a, Decl(mappedTypeLazyMembers.ts, 65, 26))
+}
+declare const y: Y;
+>y : Symbol(y, Decl(mappedTypeLazyMembers.ts, 68, 13))
+>Y : Symbol(Y, Decl(mappedTypeLazyMembers.ts, 64, 55))
+
+const y1 = y.a;
+>y1 : Symbol(y1, Decl(mappedTypeLazyMembers.ts, 69, 5))
+>y.a : Symbol(Y.a, Decl(mappedTypeLazyMembers.ts, 65, 26))
+>y : Symbol(y, Decl(mappedTypeLazyMembers.ts, 68, 13))
+>a : Symbol(Y.a, Decl(mappedTypeLazyMembers.ts, 65, 26))
+
+const y2 = y.b;
+>y2 : Symbol(y2, Decl(mappedTypeLazyMembers.ts, 70, 5))
+>y.b : Symbol(b, Decl(mappedTypeLazyMembers.ts, 64, 42))
+>y : Symbol(y, Decl(mappedTypeLazyMembers.ts, 68, 13))
+>b : Symbol(b, Decl(mappedTypeLazyMembers.ts, 64, 42))
+

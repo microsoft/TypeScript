@@ -1,0 +1,243 @@
+//// [tests/cases/compiler/mappedTypeLazyMembers.ts] ////
+
+=== mappedTypeLazyMembers.ts ===
+// Member lookups, index signatures and never reduction on { [P in keyof T]: X }
+// mapped types whose members aren't otherwise resolved.
+
+interface Options {
+    readonly name: string;
+>name : string
+
+    size?: number;
+>size : number | undefined
+
+    tags: string[];
+>tags : string[]
+}
+declare const partial: Partial<Options>;
+>partial : Partial<Options>
+
+const partial1 = partial.size;
+>partial1 : number | undefined
+>partial.size : number | undefined
+>partial : Partial<Options>
+>size : number | undefined
+
+partial.name = "x";
+>partial.name = "x" : "x"
+>partial.name : any
+>partial : Partial<Options>
+>name : any
+>"x" : "x"
+
+partial.missing;
+>partial.missing : any
+>partial : Partial<Options>
+>missing : any
+
+declare const required: Required<Options>;
+>required : Required<Options>
+
+const required1: number = required.size;
+>required1 : number
+>required.size : number
+>required : Required<Options>
+>size : number
+
+declare const mutable: { -readonly [K in keyof Options]: Options[K] };
+>mutable : { name: string; size?: number; tags: string[]; }
+
+mutable.name = "y";
+>mutable.name = "y" : "y"
+>mutable.name : string
+>mutable : { name: string; size?: number; tags: string[]; }
+>name : string
+>"y" : "y"
+
+type Boxed<T> = { [K in keyof T]: { value: T[K] } };
+>Boxed : Boxed<T>
+>value : T[K]
+
+declare const boxed: Boxed<Options>;
+>boxed : Boxed<Options>
+
+const boxed1: string = boxed.name.value;
+>boxed1 : string
+>boxed.name.value : string
+>boxed.name : { value: string; }
+>boxed : Boxed<Options>
+>name : { value: string; }
+>value : string
+
+const boxed2: number = boxed.tags.value;
+>boxed2 : number
+>boxed.tags.value : string[]
+>boxed.tags : { value: string[]; }
+>boxed : Boxed<Options>
+>tags : { value: string[]; }
+>value : string[]
+
+// Index signatures of the modifiers type become index signatures of the mapped type.
+interface Dictionary {
+    [key: string]: number;
+>key : string
+
+    fixed: number;
+>fixed : number
+}
+declare const dict: Boxed<Dictionary>;
+>dict : Boxed<Dictionary>
+
+const dict1 = dict.fixed.value;
+>dict1 : number
+>dict.fixed.value : number
+>dict.fixed : { value: number; }
+>dict : Boxed<Dictionary>
+>fixed : { value: number; }
+>value : number
+
+const dict2 = dict.anything.value;
+>dict2 : number
+>dict.anything.value : number
+>dict.anything : { value: number; }
+>dict : Boxed<Dictionary>
+>anything : { value: number; }
+>value : number
+
+const dict3: Record<string, { value: string }> = dict;
+>dict3 : Record<string, { value: string; }>
+>value : string
+>dict : Boxed<Dictionary>
+
+// Assertion chains in the style of test frameworks, where the base type is an
+// intersection of a mapped type and a call signature.
+interface ChaiLike {
+    equal(value: unknown): void;
+>equal : (value: unknown) => void
+>value : unknown
+
+    deep: ChaiLike;
+>deep : ChaiLike
+}
+type Chain<A, T> = { [K in keyof A]: A[K] extends ChaiLike ? Assertion<T> : A[K] } & ((message?: string) => Assertion<T>);
+>Chain : Chain<A, T>
+>message : string | undefined
+
+interface Matchers<T> {
+    toBe(value: T): void;
+>toBe : (value: T) => void
+>value : T
+}
+interface Assertion<T> extends Chain<ChaiLike, T>, Matchers<T> {}
+declare function expect<T>(value: T): Assertion<T>;
+>expect : <T>(value: T) => Assertion<T>
+>value : T
+
+expect(1).toBe(2);
+>expect(1).toBe(2) : void
+>expect(1).toBe : (value: number) => void
+>expect(1) : Assertion<number>
+>expect : <T>(value: T) => Assertion<T>
+>1 : 1
+>toBe : (value: number) => void
+>2 : 2
+
+expect("a").toBe(1);
+>expect("a").toBe(1) : void
+>expect("a").toBe : (value: string) => void
+>expect("a") : Assertion<string>
+>expect : <T>(value: T) => Assertion<T>
+>"a" : "a"
+>toBe : (value: string) => void
+>1 : 1
+
+expect(true).deep.equal(false);
+>expect(true).deep.equal(false) : void
+>expect(true).deep.equal : (value: unknown) => void
+>expect(true).deep : Assertion<boolean>
+>expect(true) : Assertion<boolean>
+>expect : <T>(value: T) => Assertion<T>
+>true : true
+>deep : Assertion<boolean>
+>equal : (value: unknown) => void
+>false : false
+
+expect(1)("message").toBe(3);
+>expect(1)("message").toBe(3) : void
+>expect(1)("message").toBe : (value: number) => void
+>expect(1)("message") : Assertion<number>
+>expect(1) : Assertion<number>
+>expect : <T>(value: T) => Assertion<T>
+>1 : 1
+>"message" : "message"
+>toBe : (value: number) => void
+>3 : 3
+
+expect(1).missing;
+>expect(1).missing : any
+>expect(1) : Assertion<number>
+>expect : <T>(value: T) => Assertion<T>
+>1 : 1
+>missing : any
+
+// Intersections with mapped types that reduce to never.
+type Kinded<T> = { [K in keyof T]: T[K] } & { kind: "b" };
+>Kinded : Kinded<T>
+>kind : "b"
+
+declare const kinded: Kinded<{ kind: "a"; other: number }>;
+>kinded : never
+>kind : "a"
+>other : number
+
+kinded.other;
+>kinded.other : any
+>kinded : never
+>other : any
+
+declare const compatible: Kinded<{ kind: "b"; other: number }>;
+>compatible : Kinded<{ kind: "b"; other: number; }>
+>kind : "b"
+>other : number
+
+const compatible1: number = compatible.other;
+>compatible1 : number
+>compatible.other : number
+>compatible : Kinded<{ kind: "b"; other: number; }>
+>other : number
+
+// Circular mapped types.
+type SelfMapped = { [K in keyof SelfMapped]: string };
+>SelfMapped : any
+
+declare const selfMapped: SelfMapped;
+>selfMapped : any
+
+selfMapped.anything;
+>selfMapped.anything : any
+>selfMapped : any
+>anything : any
+
+type X<T> = { [K in keyof T]: string } & { b: string };
+>X : X<T>
+>b : string
+
+interface Y extends X<Y> {
+    a: "";
+>a : ""
+}
+declare const y: Y;
+>y : Y
+
+const y1 = y.a;
+>y1 : ""
+>y.a : ""
+>y : Y
+>a : ""
+
+const y2 = y.b;
+>y2 : string
+>y.b : string
+>y : Y
+>b : string
+
