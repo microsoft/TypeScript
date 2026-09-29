@@ -67,6 +67,8 @@ func getCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Cont
 }
 
 func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
+	allDiags := getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile)
+
 	typeChecker, done := fixContext.Program.GetTypeCheckerForFile(context, fixContext.SourceFile)
 	defer done()
 
@@ -78,7 +80,7 @@ func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.C
 
 	seenClassDeclarations := collections.Set[*ast.Node]{}
 
-	for _, diag := range getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile) {
+	for _, diag := range allDiags {
 		if isFixableDiagnostic(diag, fixClassIncorrectlyImplementsInterfaceErrorCodes) {
 			classDeclaration := getClass(fixContext.SourceFile, core.NewTextRange(diag.Pos(), diag.End()))
 			if classDeclaration == nil {
