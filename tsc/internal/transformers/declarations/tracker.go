@@ -61,7 +61,13 @@ func (s *SymbolTrackerImpl) isBoundExpando(node *ast.Node) bool {
 	if !(ast.IsExpandoPropertyDeclaration(node) && ast.IsPropertyAccessExpression(node.AsBinaryExpression().Left)) {
 		return false
 	}
-	ref := s.resolver.GetReferencedValueDeclarationUnsafe(ast.GetLeftmostExpression(node.AsBinaryExpression().Left, true))
+	// Match transformExpandoAssignment: only an assignment rooted at an identifier (`f.x = ...`) can bind an expando
+	// property; `this.x = ...`, `super.x = ...`, `f().x = ...` and the like have no referenced declaration.
+	ns := ast.GetLeftmostAccessExpression(node.AsBinaryExpression().Left)
+	if !ast.IsIdentifier(ns) {
+		return false
+	}
+	ref := s.resolver.GetReferencedValueDeclarationUnsafe(ns)
 	if ref == nil {
 		return false
 	}

@@ -15,3 +15,9 @@ runs:
         go-version: ${{ inputs.go-version }}
         go-download-base-url: https://aka.ms/golang/release/latest
         cache: false
+
+    - name: Cache Go modules
+      uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+      with:
+        path: ~/go/pkg/mod
+        key: go-modules-${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ inputs.go-version }}-${{ hashFiles('**/go.mod', '**/go.sum', 'go.work', 'go.work.sum', '.custom-gcl.yml') }}
