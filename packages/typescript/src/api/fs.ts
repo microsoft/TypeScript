@@ -15,7 +15,7 @@ export interface FileSystemEntries {
     files: string[];
     directories: string[];
     /** Names from `files` or `directories` that are symbolic links. */
-    symlinks?: string[] | undefined;
+    symlinks: string[] | undefined;
 }
 
 export interface FileSystemStat {

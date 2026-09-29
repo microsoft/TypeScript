@@ -137,7 +137,7 @@ export function createVirtualFileSystem(files: Record<string, string>): TestFile
                 directories.push(name);
             }
         }
-        return { files: fileEntries, directories };
+        return { files: fileEntries, directories, symlinks: undefined };
     }
 
     function readFile(fileName: string): any {
