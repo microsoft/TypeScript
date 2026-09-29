@@ -22215,14 +22215,15 @@ func (c *Checker) isMappingOfSameObjectType(types []*Type) bool {
 
 func (c *Checker) somePropertyReducesToNever(t *Type) bool {
 	// Collect declaration counts for each property across all constituent types of the intersection.
-	counts := make(map[string]int)
+	var counts collections.OrderedMap[string, int]
 	for _, t := range t.Types() {
 		for _, prop := range c.getPropertiesOfType(t) {
-			counts[prop.Name]++
+			counts.Set(prop.Name, counts.GetOrZero(prop.Name)+1)
 		}
 	}
 	// Check if any property appears in more than one constituent type and reduces to 'never'.
-	for propName, count := range counts {
+	// Go in the order the properties were found so the combined properties are created in the same order every time.
+	for propName, count := range counts.Entries() {
 		if count > 1 {
 			if prop := c.getPropertyOfUnionOrIntersectionType(t, propName, true /*skipObjectFunctionPropertyAugment*/); prop != nil && c.isNeverReducedProperty(prop) {
 				return true
