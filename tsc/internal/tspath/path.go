@@ -1237,7 +1237,11 @@ func getCommonParentsWorker(componentGroups [][]string, minComponents int, optio
 						group := newGroups[key]
 						subResults := getCommonParentsWorker(group.tails, minComponents-(lastCommonIndex+1), options)
 						for _, sr := range subResults {
-							result = append(result, slices.Concat(group.head, sr))
+							if len(sr) == 0 {
+								result = append(result, slices.Clip(group.head))
+							} else {
+								result = append(result, slices.Concat(group.head, sr))
+							}
 						}
 					}
 					return result
