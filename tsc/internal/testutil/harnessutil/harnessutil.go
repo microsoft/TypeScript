@@ -663,11 +663,11 @@ func compileFilesWithHost(
 	preErrors = append(preErrors, preProgram.GetSyntacticDiagnostics(ctx, nil)...)
 	preErrors = append(preErrors, preProgram.GetSemanticDiagnostics(ctx, nil)...)
 	preErrors = append(preErrors, preProgram.GetGlobalDiagnostics(ctx)...)
-	if preProgram.Options().GetEmitDeclarations() {
-		preErrors = append(preErrors, preProgram.GetDeclarationDiagnostics(ctx, nil)...)
-	}
 	if harnessOptions.CaptureSuggestions {
 		preErrors = append(preErrors, preProgram.GetSuggestionDiagnostics(ctx, nil)...)
+	}
+	if preProgram.Options().GetEmitDeclarations() {
+		preErrors = append(preErrors, preProgram.GetDeclarationDiagnostics(ctx, nil)...)
 	}
 	preErrors = compiler.SortAndDeduplicateDiagnostics(preErrors)
 
