@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/checkJsExtensionPriority.ts] ////
+
+=== /a.js ===
+export const n = 1;
+>n : Symbol(n, Decl(a.js, 0, 12))
+
+const bad = null;
+>bad : Symbol(bad, Decl(a.js, 1, 5))
+
+bad.a.b.c();
+>bad : Symbol(bad, Decl(a.js, 1, 5))
+
+=== /a.d.ts ===
+export declare const n: number;
+>n : Symbol(n, Decl(a.d.ts, 0, 20))
+
+=== /b.mjs ===
+export const n = 1;
+>n : Symbol(n, Decl(b.mjs, 0, 12))
+
+const bad = null;
+>bad : Symbol(bad, Decl(b.mjs, 1, 5))
+
+bad.a.b.c();
+>bad : Symbol(bad, Decl(b.mjs, 1, 5))
+
+=== /b.d.mts ===
+export declare const n: number;
+>n : Symbol(n, Decl(b.d.mts, 0, 20))
+
+=== /c.cjs ===
+export const n = 1;
+>n : Symbol(n, Decl(c.cjs, 0, 12))
+
+const bad = null;
+>bad : Symbol(bad, Decl(c.cjs, 1, 5))
+
+bad.a.b.c();
+>bad : Symbol(bad, Decl(c.cjs, 1, 5))
+
+=== /c.d.cts ===
+export declare const n: number;
+>n : Symbol(n, Decl(c.d.cts, 0, 20))
+

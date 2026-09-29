@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/checkJsExtensionPriority.ts] ////
+
+=== /a.js ===
+export const n = 1;
+>n : 1
+>1 : 1
+
+const bad = null;
+>bad : null
+
+bad.a.b.c();
+>bad.a.b.c() : any
+>bad.a.b.c : any
+>bad.a.b : any
+>bad.a : any
+>bad : null
+>a : any
+>b : any
+>c : any
+
+=== /a.d.ts ===
+export declare const n: number;
+>n : number
+
+=== /b.mjs ===
+export const n = 1;
+>n : 1
+>1 : 1
+
+const bad = null;
+>bad : null
+
+bad.a.b.c();
+>bad.a.b.c() : any
+>bad.a.b.c : any
+>bad.a.b : any
+>bad.a : any
+>bad : null
+>a : any
+>b : any
+>c : any
+
+=== /b.d.mts ===
+export declare const n: number;
+>n : number
+
+=== /c.cjs ===
+export const n = 1;
+>n : 1
+>1 : 1
+
+const bad = null;
+>bad : null
+
+bad.a.b.c();
+>bad.a.b.c() : any
+>bad.a.b.c : any
+>bad.a.b : any
+>bad.a : any
+>bad : null
+>a : any
+>b : any
+>c : any
+
+=== /c.d.cts ===
+export declare const n: number;
+>n : number
+
