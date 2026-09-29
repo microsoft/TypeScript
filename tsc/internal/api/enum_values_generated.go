@@ -237,7 +237,6 @@ func main() {
 			"IsClassInstanceClone":              toInt32(checker.ObjectFlagsIsClassInstanceClone),
 			"IdenticalBaseTypeCalculated":       toInt32(checker.ObjectFlagsIdenticalBaseTypeCalculated),
 			"IdenticalBaseTypeExists":           toInt32(checker.ObjectFlagsIdenticalBaseTypeExists),
-			"UnresolvedMembers":                 toInt32(checker.ObjectFlagsUnresolvedMembers),
 			"FromTypeNode":                      toInt32(checker.ObjectFlagsFromTypeNode),
 			"IsGenericTypeComputed":             toInt32(checker.ObjectFlagsIsGenericTypeComputed),
 			"IsGenericObjectType":               toInt32(checker.ObjectFlagsIsGenericObjectType),
@@ -770,6 +769,15 @@ func main() {
 			"All":                          toInt32(ast.OEKAll),
 			"AllExceptAssertionsOrExpressionsWithTypeArguments": toInt32(ast.OEKAllExceptAssertionsOrExpressionsWithTypeArguments),
 			"ExpressionTypePassthrough":                         toInt32(ast.OEKExpressionTypePassthrough),
+		},
+		"JSDeclarationKind": {
+			"None":                        toInt32(ast.JSDeclarationKindNone),
+			"ModuleExports":               toInt32(ast.JSDeclarationKindModuleExports),
+			"ExportsProperty":             toInt32(ast.JSDeclarationKindExportsProperty),
+			"ThisProperty":                toInt32(ast.JSDeclarationKindThisProperty),
+			"Property":                    toInt32(ast.JSDeclarationKindProperty),
+			"ObjectDefinePropertyValue":   toInt32(ast.JSDeclarationKindObjectDefinePropertyValue),
+			"ObjectDefinePropertyExports": toInt32(ast.JSDeclarationKindObjectDefinePropertyExports),
 		},
 		"ModifierFlags": {
 			"None":                           toInt32(ast.ModifierFlagsNone),

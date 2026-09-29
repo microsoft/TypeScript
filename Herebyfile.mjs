@@ -492,11 +492,25 @@ export const generateTristate = goGenerateTask("generate:tristate", [
 export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
     {
         file: "tsc/internal/diagnostics/diagnostics.go",
-        inputs: ["generate.go", "diagnosticMessages.json", "extraDiagnosticMessages.json", "../{collections,json}/*.go", "../locale/lcl/*/diagnosticMessages/diagnosticMessages.generated.json.lcl"],
+        inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
-        outputs: ["diagnostics_generated.go", "loc_generated.go", "loc/*.json.gz"],
+        outputs: ["diagnostics_generated.go", "diagnosticMessages.generated.json", "loc_generated.go", "loc/*.json.gz"],
         commands: [
-            ["go", "run", "generate.go", "-diagnostics", "diagnostics_generated.go", "-loc", "loc_generated.go", "-locdir", "loc"],
+            [
+                "go",
+                "run",
+                "generate.go",
+                "-diagnostics",
+                "diagnostics_generated.go",
+                "-loc",
+                "loc_generated.go",
+                "-locdir",
+                "loc",
+                "-locproject",
+                "../../../tools/LocProject.json",
+                "-locsource",
+                "diagnosticMessages.generated.json",
+            ],
             ["dprint", "fmt", "diagnostics_generated.go", "loc_generated.go"],
         ],
     },
@@ -543,7 +557,7 @@ async function runGenerateExtension() {
     const { default: cache } = await import("./tools/scripts/gen/cache.mts");
     await cache({
         cwd: __dirname,
-        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
+        inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
         outputs: ["packages/vscode-typescript/l10n/bundle.l10n.json"],
         commands: [["npm", "run", "-w", "native-preview", "generateLocBundle"]],
         envInputs: [],
@@ -561,7 +575,7 @@ async function runGenerateExtensionTest() {
     const { default: cache } = await import("./tools/scripts/gen/cache.mts");
     await cache({
         cwd: __dirname,
-        inputs: [__filename, "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
+        inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
         outputs: ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"],
         commands: [["npm", "run", "-w", "native-preview", "generateLocTest"]],
         envInputs: [],

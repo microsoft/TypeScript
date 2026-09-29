@@ -884,4 +884,13 @@ func TestGetCommonParents(t *testing.T) {
 		expected := []string{"/a/b"}
 		assert.DeepEqual(t, got, expected)
 	})
+
+	t.Run("nested fan-out keeps every result", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/x/1/p", "/a/x/2/q", "/a/y/3/r"}
+		got, ignored := GetCommonParents(paths, 4, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/a/x/1/p", "/a/x/2/q", "/a/y/3/r"}
+		assert.DeepEqual(t, got, expected)
+	})
 }

@@ -9,8 +9,9 @@ import {
     describe,
     test,
 } from "node:test";
+import { areTestsFiltered } from "./testUtils.ts";
 
-describe("diagnosticFormatter", () => {
+describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
     test("formats diagnostics with a configured program host", async () => {
         const source = `const x: number = "oops";\n`;
         const api = spawnAPI({
