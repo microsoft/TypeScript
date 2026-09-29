@@ -19500,8 +19500,6 @@ func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
 	return nil
 }
 
-// appendInheritedSignaturesAndIndexInfos appends the signatures and index infos
-// a class or interface inherits from baseType.
 func (c *Checker) appendInheritedSignaturesAndIndexInfos(callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo, baseType *Type) ([]*Signature, []*Signature, []*IndexInfo) {
 	callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(baseType, SignatureKindCall))
 	constructSignatures = core.Concatenate(constructSignatures, c.getSignaturesOfType(baseType, SignatureKindConstruct))
@@ -19517,36 +19515,22 @@ func (c *Checker) appendInheritedSignaturesAndIndexInfos(callSignatures []*Signa
 	return callSignatures, constructSignatures, indexInfos
 }
 
-// Resolving the members of an instantiated class or interface reference
-// instantiates every declared member and merges every inherited one, even when
-// the checker only needs one of them (`expect(x).toBe`, `arr.map`) or asks
-// about the shape of the type (isWeakType, getSingleSignature). In large
-// programs most of those symbols are never used.
-//
-// Such a reference instead gets a lazy member table on first use. Preparing
-// the table does what resolveObjectTypeMembers does, in the same order, except
-// creating member symbols: signatures and index infos are instantiated and
-// inherited as usual, and getSignaturesOfStructuredType and
-// getIndexInfosOfStructuredType answer from the table. Member lookups
-// instantiate only the requested member, the way resolveObjectTypeMembers
-// would have when the table was prepared, and resolving the members in full
-// later reuses the symbols already handed out. While a table is being
-// prepared, the type resolves its members as usual.
+// Instantiated class and interface references get a lazy member table in place of
+// resolved members. It has the signatures and index infos, but only instantiates the
+// members that are looked up, and reuses them if the members are later resolved in full.
 
 type lazyMemberTable struct {
 	ready               bool
 	mapper              *TypeMapper
 	typeArguments       []*Type
-	unaffected          []string     // sorted names of declared members that instantiate to themselves
-	callSignatures      []*Signature // declared and inherited
+	unaffected          []string // sorted names of declared members that instantiate to themselves
+	callSignatures      []*Signature
 	constructSignatures []*Signature
 	indexInfos          []*IndexInfo
-	baseTypes           []*Type // instantiated base types
+	baseTypes           []*Type
 	declared            map[string]*ast.Symbol
 }
 
-// mayHaveLazyMembers is a quick check for hot paths, as most types they see
-// have resolved members.
 func mayHaveLazyMembers(t *Type) bool {
 	return t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsReference) == ObjectFlagsReference
 }
@@ -19560,9 +19544,7 @@ func (c *Checker) getReferenceMemberTypeArguments(t *Type, source *Type) (typePa
 	return typeParameters, typeArguments
 }
 
-// getReadyLazyMemberTable returns the lazy member table of t, preparing it
-// first if needed, or nil if t's members aren't resolved lazily or the table
-// is still being prepared.
+// Returns nil if t has no lazy member table or it is still being prepared.
 func (c *Checker) getReadyLazyMemberTable(t *Type) *lazyMemberTable {
 	if !mayHaveLazyMembers(t) {
 		return nil
@@ -19571,8 +19553,6 @@ func (c *Checker) getReadyLazyMemberTable(t *Type) *lazyMemberTable {
 }
 
 func (c *Checker) getReadyLazyMemberTableWorker(t *Type) *lazyMemberTable {
-	// Only references to generic classes and interfaces, other than the
-	// declaration itself, have lazy member tables.
 	source := t.Target()
 	if t.flags&TypeFlagsObject == 0 || source == nil || source == t || source.objectFlags&ObjectFlagsClassOrInterface == 0 ||
 		source.objectFlags&ObjectFlagsTuple != 0 || t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsValueModule != 0 {
@@ -19598,13 +19578,11 @@ func (c *Checker) getReadyLazyMemberTableWorker(t *Type) *lazyMemberTable {
 	return lm
 }
 
-// prepareLazyMembers mirrors resolveObjectTypeMembers, except that it records
-// which declared members would instantiate to themselves instead of
-// instantiating them, and doesn't inherit members from base types with lazy
-// member tables.
+// Mirrors resolveObjectTypeMembers without creating member symbols.
 func (c *Checker) prepareLazyMembers(t *Type, lm *lazyMemberTable) {
 	source := t.Target()
 	resolved := c.resolveDeclaredMembers(source)
+	// Whether instantiateSymbol returns a member itself depends on what is resolved now.
 	for id, symbol := range resolved.declaredMembers {
 		if c.isNamedMember(symbol, id) && c.isSymbolUnaffectedByInstantiation(symbol, lm.mapper) {
 			lm.unaffected = append(lm.unaffected, id)
@@ -19629,14 +19607,11 @@ func (c *Checker) prepareLazyMembers(t *Type, lm *lazyMemberTable) {
 	lm.callSignatures, lm.constructSignatures, lm.indexInfos = callSignatures, constructSignatures, indexInfos
 	lm.ready = true
 	if t.objectFlags&ObjectFlagsMembersResolved != 0 {
-		// Preparing the table led to t being resolved in full, and
-		// resolveObjectTypeMembers would now replace those members.
+		// t was resolved while preparing; resolveObjectTypeMembers would now replace its members.
 		c.resolveLazyMembers(t, lm)
 	}
 }
 
-// resolveLazyMembers resolves the members of t from its lazy member table, as
-// resolveObjectTypeMembers does.
 func (c *Checker) resolveLazyMembers(t *Type, lm *lazyMemberTable) {
 	resolved := c.resolveDeclaredMembers(t.Target())
 	var members ast.SymbolTable
@@ -19655,8 +19630,6 @@ func (c *Checker) resolveLazyMembers(t *Type, lm *lazyMemberTable) {
 	delete(c.lazyMemberTables, t)
 }
 
-// getLazyDeclaredMember instantiates the declared member symbol named name as
-// resolveObjectTypeMembers would have when the table was prepared.
 func (c *Checker) getLazyDeclaredMember(lm *lazyMemberTable, symbol *ast.Symbol, name string) *ast.Symbol {
 	result := lm.declared[name]
 	if result == nil {
@@ -19669,8 +19642,6 @@ func (c *Checker) getLazyDeclaredMember(lm *lazyMemberTable, symbol *ast.Symbol,
 	return result
 }
 
-// getMemberOfStructuredType returns c.resolveStructuredTypeMembers(t).members[name]
-// without resolving the members of t if they are resolved lazily.
 func (c *Checker) getMemberOfStructuredType(t *Type, name string) *ast.Symbol {
 	if t.objectFlags&ObjectFlagsMembersResolved != 0 {
 		return t.AsStructuredType().members[name]
@@ -19683,9 +19654,7 @@ func (c *Checker) getMemberOfUnresolvedStructuredType(t *Type, name string) *ast
 	if lm == nil || isReservedMemberName(name) {
 		return c.resolveStructuredTypeMembers(t).members[name]
 	}
-	// As in resolveObjectTypeMembers: the declared member, or else the property
-	// inherited from the first base type that has one, where a base may only
-	// fill a missing or non-value entry (addInheritedMembers).
+	// The declared member, else the first base type's property (see addInheritedMembers).
 	var result *ast.Symbol
 	if decl := c.resolveDeclaredMembers(t.Target()).declaredMembers[name]; decl != nil && c.isNamedMember(decl, name) {
 		result = c.getLazyDeclaredMember(lm, decl, name)
@@ -19701,9 +19670,7 @@ func (c *Checker) getMemberOfUnresolvedStructuredType(t *Type, name string) *ast
 	return result
 }
 
-// everyPropertyOfStructuredType is core.Every(c.resolveStructuredTypeMembers(t).properties, f),
-// without resolving the members of t if they are resolved lazily. f may see a
-// declared member instead of its instantiation, which has the same flags.
+// f may see a declared member instead of its instantiation, which has the same flags.
 func (c *Checker) everyPropertyOfStructuredType(t *Type, f func(prop *ast.Symbol) bool) bool {
 	if lm := c.getReadyLazyMemberTable(t); lm != nil {
 		var seen collections.Set[string]
@@ -19716,9 +19683,7 @@ func (c *Checker) hasPropertiesOfStructuredType(t *Type) bool {
 	return !c.everyPropertyOfStructuredType(t, func(*ast.Symbol) bool { return false })
 }
 
-// everyLazyProperty reports whether f holds for every property of t. As in
-// addInheritedMembers, a property hides inherited properties of the same
-// name; seen tracks those names.
+// seen has the names of properties that hide inherited ones, as in addInheritedMembers.
 func (c *Checker) everyLazyProperty(t *Type, lm *lazyMemberTable, seen *collections.Set[string], f func(prop *ast.Symbol) bool) bool {
 	for id, symbol := range c.resolveDeclaredMembers(t.Target()).declaredMembers {
 		if c.isNamedMember(symbol, id) && seen.AddIfAbsent(id) && !f(symbol) {
@@ -21336,9 +21301,7 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 	return c.newInstantiatedSymbol(symbol, m)
 }
 
-// isSymbolUnaffectedByInstantiation reports whether instantiateSymbol returns
-// the symbol itself. That depends on whether the type of the symbol has been
-// resolved, so the answer can change from false to true.
+// Can change from false to true once the type of the symbol is resolved.
 func (c *Checker) isSymbolUnaffectedByInstantiation(symbol *ast.Symbol, m *TypeMapper) bool {
 	links := c.valueSymbolLinks.Get(symbol)
 	if m != nil && m.MapsThisOnly() && isThisless(symbol) {
