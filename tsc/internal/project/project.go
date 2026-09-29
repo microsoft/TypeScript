@@ -513,7 +513,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		if p.moduleResolverFactory == nil {
 			return module.NewResolver(options)
 		}
-		resolver, cleanup := p.moduleResolverFactory.NewResolver(options)
+		resolver, cleanup := p.moduleResolverFactory.NewResolver(p.host.builder.ctx, options)
 		cleanupModuleResolver = cleanup
 		return resolver
 	}

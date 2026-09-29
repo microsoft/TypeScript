@@ -20,7 +20,6 @@ type moduleResolverFactory struct {
 	registration     *moduleResolverRegistration
 	session          *Session
 	conn             ipc.Conn
-	ctx              context.Context
 	currentDirectory string
 }
 
@@ -41,6 +40,7 @@ type callbackModuleResolver struct {
 }
 
 func (f *moduleResolverFactory) NewResolver(
+	ctx context.Context,
 	options module.ResolverOptions,
 ) (module.Resolver, func()) {
 	options.CompilerOptions = f.registration.compilerOptions
@@ -55,7 +55,7 @@ func (f *moduleResolverFactory) NewResolver(
 	var resolver module.Resolver = &callbackModuleResolver{
 		registration:               f.registration,
 		conn:                       f.conn,
-		ctx:                        f.ctx,
+		ctx:                        ctx,
 		currentDirectory:           f.currentDirectory,
 		programResolutionContextID: contextID,
 		fallbackResolver:           fallback,
@@ -226,7 +226,7 @@ func moduleResolutionTraceToStrings(trace []module.DiagAndArgs) []string {
 	})
 }
 
-func (s *Session) moduleResolverFactory(ctx context.Context, options *CreateProgramOptions) (project.ModuleResolverFactory, error) {
+func (s *Session) moduleResolverFactory(options *CreateProgramOptions) (project.ModuleResolverFactory, error) {
 	if options.ModuleResolver == 0 {
 		return nil, nil
 	}
@@ -243,7 +243,6 @@ func (s *Session) moduleResolverFactory(ctx context.Context, options *CreateProg
 		registration:     data,
 		session:          s,
 		conn:             s.conn,
-		ctx:              ctx,
 		currentDirectory: s.GetCurrentDirectory(),
 	}, nil
 }
