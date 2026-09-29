@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
@@ -137,19 +136,6 @@ func (r *StaticResolver) ResolveTypeReferenceDirective(
 	return r.fallback.ResolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, resolutionMode, redirectedReference)
 }
 
-func (r *StaticResolver) GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry {
-	return r.fallback.GetPackageScopeForPath(directory)
-}
-
-func (r *StaticResolver) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
-	r.fallback.PackageJsonCacheEntries(f)
-}
-
-func (r *StaticResolver) ResolvePackageDirectory(
-	moduleName string,
-	containingFile string,
-	resolutionMode core.ResolutionMode,
-	redirectedReference ResolvedProjectReference,
-) *ResolvedModule {
-	return r.fallback.ResolvePackageDirectory(moduleName, containingFile, resolutionMode, redirectedReference)
+func (r *StaticResolver) GetResolutionData() *ResolutionData {
+	return r.fallback.GetResolutionData()
 }

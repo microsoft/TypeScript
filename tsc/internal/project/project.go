@@ -501,10 +501,6 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	var programCloned bool
 	var newProgram *compiler.Program
 
-	// Define a fresh CreateCheckerPool closure for this call. Each invocation of
-	// CreateProgram must use its own closure so that concurrent goroutines cloning
-	// the same project never share a captured variable through a stale closure
-	// stored in the old program's options.
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
 		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
 	}
@@ -513,7 +509,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		if p.moduleResolverFactory == nil {
 			return module.NewResolver(options)
 		}
-		resolver, cleanup := p.moduleResolverFactory.NewResolver(options)
+		resolver, cleanup := p.moduleResolverFactory.NewResolver(p.host.builder.ctx, options)
 		cleanupModuleResolver = cleanup
 		return resolver
 	}

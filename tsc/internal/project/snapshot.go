@@ -329,7 +329,7 @@ type APICreateProgramRequest struct {
 }
 
 type ModuleResolverFactory interface {
-	NewResolver(options module.ResolverOptions) (module.Resolver, func())
+	NewResolver(ctx context.Context, options module.ResolverOptions) (module.Resolver, func())
 }
 
 type APIReconfigureProgramRequest struct {
