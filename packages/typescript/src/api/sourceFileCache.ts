@@ -1,6 +1,9 @@
 import type { Path } from "../ast/index.ts";
 import type { RemoteSourceFile } from "./node/node.ts";
-import type { SnapshotChanges } from "./proto.ts";
+import type {
+    SnapshotChanges,
+    SourceFileDescriptor,
+} from "./proto.ts";
 
 /**
  * Builds a composite ref key from a snapshot ID and project ID.
@@ -13,14 +16,38 @@ function leaseRefKey(leaseId: number): string {
     return `lease:${leaseId}`;
 }
 
+function descriptorFromFile(file: RemoteSourceFile): SourceFileDescriptor {
+    return {
+        fileName: file.fileName,
+        path: file.path,
+        contentHash: file.contentHash,
+        parseOptionsKey: file.parseOptionsKey,
+        scriptKind: file.scriptKind,
+        nodeId: file.nodeId,
+    };
+}
+
+function descriptorsEqual(left: SourceFileDescriptor, right: SourceFileDescriptor): boolean {
+    return left.fileName === right.fileName &&
+        left.path === right.path &&
+        left.contentHash === right.contentHash &&
+        left.parseOptionsKey === right.parseOptionsKey &&
+        left.scriptKind === right.scriptKind &&
+        left.nodeId === right.nodeId;
+}
+
 /**
  * A cached source file entry, identified by content hash.
  */
-export interface CachedSourceFile {
-    /** The cached source file object */
-    file: RemoteSourceFile;
+export interface CachedSourceFile<TSymbol> {
+    /** The cached source file object, once its AST has been requested. */
+    file?: RemoteSourceFile | undefined;
+    /** Complete identity available before an AST response is materialized. */
+    readonly descriptor: SourceFileDescriptor;
     /** Set of snapshot/project or direct-lease ref keys that reference this entry */
     refs: Set<string>;
+    /** Binder symbols owned by this exact source-file incarnation. */
+    readonly symbols: Map<number, TSymbol>;
 }
 
 /**
@@ -37,13 +64,15 @@ export interface CachedSourceFile {
  * snapshot are retained per-project. Only files within changed or removed
  * projects are invalidated.
  */
-export class SourceFileCache {
+export class SourceFileCache<TSymbol> {
     /** Map from path to all cached versions of that file */
-    private cache: Map<Path, CachedSourceFile[]> = new Map();
+    private cache: Map<Path, CachedSourceFile<TSymbol>[]> = new Map();
     /** Map from snapshotId to (projectId → Set of paths fetched through that project) */
     private snapshotProjectPaths: Map<number, Map<string, Set<Path>>> = new Map();
     /** Map from direct lease ID to its retained path */
     private leasePaths: Map<number, Path> = new Map();
+    /** Map from source-file node ID to its record, for resolving compact symbol references */
+    private recordsByNodeId: Map<string, CachedSourceFile<TSymbol>> = new Map();
 
     /**
      * Get a cached source file already retained for the given (snapshot, project) pair.
@@ -64,6 +93,47 @@ export class SourceFileCache {
 
     get(file: RemoteSourceFile): RemoteSourceFile | undefined {
         return this.find(file)?.file;
+    }
+
+    getOrCreateRecord(file: SourceFileDescriptor, snapshotId: number, projectId: string): CachedSourceFile<TSymbol> {
+        const ref = snapshotRefKey(snapshotId, projectId);
+        let entries = this.cache.get(file.path);
+        if (!entries) {
+            entries = [];
+            this.cache.set(file.path, entries);
+        }
+        let record = this.findDescriptor(file, entries);
+        if (!record) {
+            record = this.addRecord(entries, { descriptor: file, refs: new Set(), symbols: new Map() });
+        }
+        record.refs.add(ref);
+        this.trackPath(snapshotId, projectId, file.path as Path);
+        return record;
+    }
+
+    /** Find the live record for a source-file node ID without creating or retaining one. */
+    findRecord(nodeId: string): CachedSourceFile<TSymbol> | undefined {
+        return this.recordsByNodeId.get(nodeId);
+    }
+
+    /** Attach a source file fetched by its descriptor to its existing record. */
+    attachFile(record: CachedSourceFile<TSymbol>, file: RemoteSourceFile): RemoteSourceFile {
+        if (!descriptorsEqual(descriptorFromFile(file), record.descriptor)) {
+            throw new Error(`Source file does not match cached record '${record.descriptor.fileName}'`);
+        }
+        return record.file ??= file;
+    }
+
+    getOrCreateSymbol(record: CachedSourceFile<TSymbol>, file: SourceFileDescriptor, id: number, create: () => TSymbol): TSymbol {
+        if (!descriptorsEqual(file, record.descriptor)) {
+            throw new Error(`Symbol ${id} does not belong to '${record.descriptor.fileName}'`);
+        }
+        let symbol = record.symbols.get(id);
+        if (!symbol) {
+            symbol = create();
+            record.symbols.set(id, symbol);
+        }
+        return symbol;
     }
 
     /**
@@ -98,20 +168,25 @@ export class SourceFileCache {
         const existing = this.find(file, entries);
         if (existing) {
             existing.refs.add(ref);
+            existing.file ??= file;
             return existing.file;
         }
-        entries.push({ file, refs: new Set([ref]) });
+        this.addRecord(entries, { file, descriptor: descriptorFromFile(file), refs: new Set([ref]), symbols: new Map() });
         return file;
     }
 
-    private find(file: RemoteSourceFile, entries = this.cache.get(file.path)): CachedSourceFile | undefined {
-        return entries?.find(entry =>
-            entry.file.fileName === file.fileName &&
-            entry.file.scriptKind === file.scriptKind &&
-            entry.file.parseOptionsKey === file.parseOptionsKey &&
-            entry.file.contentHash === file.contentHash &&
-            entry.file.nodeId === file.nodeId
-        );
+    private addRecord(entries: CachedSourceFile<TSymbol>[], record: CachedSourceFile<TSymbol>): CachedSourceFile<TSymbol> {
+        entries.push(record);
+        this.recordsByNodeId.set(record.descriptor.nodeId, record);
+        return record;
+    }
+
+    private find(file: RemoteSourceFile, entries = this.cache.get(file.path)): CachedSourceFile<TSymbol> | undefined {
+        return this.findDescriptor(descriptorFromFile(file), entries);
+    }
+
+    private findDescriptor(file: SourceFileDescriptor, entries = this.cache.get(file.path)): CachedSourceFile<TSymbol> | undefined {
+        return entries?.find(entry => descriptorsEqual(entry.descriptor, file));
     }
 
     /**
@@ -186,7 +261,10 @@ export class SourceFileCache {
         for (let i = entries.length - 1; i >= 0; i--) {
             entries[i].refs.delete(ref);
             if (entries[i].refs.size === 0) {
-                entries.splice(i, 1);
+                const [evicted] = entries.splice(i, 1);
+                if (this.recordsByNodeId.get(evicted.descriptor.nodeId) === evicted) {
+                    this.recordsByNodeId.delete(evicted.descriptor.nodeId);
+                }
             }
         }
         if (entries.length === 0) {
@@ -215,6 +293,7 @@ export class SourceFileCache {
         this.cache.clear();
         this.snapshotProjectPaths.clear();
         this.leasePaths.clear();
+        this.recordsByNodeId.clear();
     }
 
     /**
