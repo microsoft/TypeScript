@@ -16426,7 +16426,7 @@ func (c *Checker) addDeclarationToLateBoundSymbol(symbol *ast.Symbol, member *as
 		// Remove all replacable-by-method members, along with their flags.
 		symbol.Declarations = append(core.Filter(symbol.Declarations, isNotReplacableByMethod), member)
 		oldFlags := symbol.Flags
-		symbol.Flags = ast.SymbolFlagsNone
+		symbol.Flags = ast.SymbolFlagsTransient
 		for _, d := range symbol.Declarations {
 			symbol.Flags |= d.Symbol().Flags
 		}

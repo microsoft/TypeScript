@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"os"
 
+	api "github.com/microsoft/TypeScript/tsc/internal/api"
 	ast "github.com/microsoft/TypeScript/tsc/internal/ast"
 	checker "github.com/microsoft/TypeScript/tsc/internal/checker"
 	compiler "github.com/microsoft/TypeScript/tsc/internal/compiler"
@@ -125,6 +126,10 @@ func main() {
 			"Synthetic":              toInt32(ast.CheckFlagsSynthetic),
 			"NonUniformAndLiteral":   toInt32(ast.CheckFlagsNonUniformAndLiteral),
 			"Partial":                toInt32(ast.CheckFlagsPartial),
+		},
+		"SymbolOwnerKind": {
+			"File":     toInt32(api.SymbolOwnerKindFile),
+			"Snapshot": toInt32(api.SymbolOwnerKindSnapshot),
 		},
 		"TypeFlags": {
 			"None":                            toInt32(checker.TypeFlagsNone),

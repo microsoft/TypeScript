@@ -9,6 +9,7 @@ import {
     getTextOfJSDocComment,
     InternalSymbolName,
     isCallExpression,
+    isClassDeclaration,
     isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
@@ -43,6 +44,7 @@ import {
     createKeywordTypeNode,
     createNumericLiteral,
     createParameterDeclaration,
+    createSourceFile,
     createToken,
     createTypeAliasDeclaration,
     createTypeReferenceNode,
@@ -518,6 +520,27 @@ describe("API", { concurrency }, () => {
         const project = snapshot.getProjects()[0];
         assert.strictEqual(await project.program.getSourceFile("/component.d.ts"), retained.sourceFile);
         await snapshot.dispose();
+    });
+
+    test("retainSourceFile keeps a borrowed program file available", async () => {
+        const sourceText = "export declare const value: number;";
+        await using api = spawnAPI({
+            "/retained.d.ts": sourceText,
+        });
+        const snapshot = await api.createSnapshot({ openFiles: ["/retained.d.ts"] });
+        const project = snapshot.getProjects()[0];
+        const sourceFile = await project.program.getSourceFile("/retained.d.ts");
+        assert.ok(sourceFile);
+
+        await using retained = await api.retainSourceFile(sourceFile);
+        assert.strictEqual(retained.sourceFile, sourceFile);
+        await snapshot.dispose();
+
+        await using recreated = await api.createSourceFile("/retained.d.ts", sourceText);
+        assert.strictEqual(recreated.sourceFile, sourceFile);
+
+        const local = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", "/local.ts", "/local.ts" as Path);
+        await assert.rejects(api.retainSourceFile(local), /Only remote source files can be retained/); // @sync: assert.throws(() => api.retainSourceFile(local), /Only remote source files can be retained/);
     });
 
     test("createSourceFileFromFile", async () => {
@@ -2011,7 +2034,11 @@ describe("LanguageService - imports", { concurrency }, () => {
             /Debug Failure\. Illegal value: "unknown"/,
         );
         await assert.rejects( // @sync: assert.throws(
-            () => project.languageService.getImportAdderEdits("/src/index.ts", [{ kind: "importSymbol", symbol: { ...symbol, id: 999_999_999 } } as unknown as ImportAdderAction]),
+            () =>
+                project.languageService.getImportAdderEdits("/src/index.ts", [{
+                    kind: "importSymbol",
+                    symbol: { ...symbol, reference: { ...symbol.reference, id: 999_999_999 } },
+                } as unknown as ImportAdderAction]),
             /symbol handle \d+ not found/,
         );
     });
@@ -3585,6 +3612,165 @@ export const value = 1;
         const checkFlags: CheckFlags = symbol.checkFlags;
         assert.equal(checkFlags & CheckFlags.Readonly, 0);
     });
+
+    test("binder symbols are shared by file before the AST is fetched", async () => {
+        await using api = spawnAPI(symbolFiles, { collectTiming: true });
+        const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const firstProject = firstSnapshot.getConfiguredProject("/tsconfig.json")!;
+        const secondSnapshot = await firstSnapshot.update({});
+        const secondProject = secondSnapshot.getConfiguredProject("/tsconfig.json")!;
+        const position = symbolFiles["/src/mod.ts"].indexOf("Animal");
+
+        await api.resetTimingInfo();
+        const first = await firstProject.checker.getSymbolAtPosition("/src/mod.ts", position);
+        const second = await secondProject.checker.getSymbolAtPosition("/src/mod.ts", position);
+        assert.ok(first);
+        assert.strictEqual(second, first);
+        assert.equal((await api.getTimingInfo()).totals.sourceFilesFetched, 0);
+
+        const declaration = await first.declarations[0].resolve(secondProject);
+        assert.ok(declaration);
+        assert.equal(declaration.getSourceFile().fileName, "/src/mod.ts");
+        assert.equal((await api.getTimingInfo()).totals.sourceFilesFetched, 1);
+    });
+
+    test("file-owned symbol properties do not require a snapshot or project", async () => {
+        await using api = spawnAPI(symbolFiles);
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/mod.ts");
+        assert.ok(sourceFile);
+        await using retained = await api.retainSourceFile(sourceFile);
+        const animal = await project.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
+        assert.ok(animal);
+
+        await snapshot.dispose();
+        const members = await animal.getMembers();
+        assert.deepEqual([...members.values()].map(symbol => symbol.name), ["name", "speak"]);
+        assert.strictEqual(await members.get("name" as __String)?.getParent(), animal);
+    });
+
+    test("checker-created merged symbols remain snapshot-owned", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/a.ts", "/src/b.ts"] }),
+            "/src/a.ts": `namespace Merged { export const a = 1; }`,
+            "/src/b.ts": `namespace Merged { export const b = 1; }`,
+        });
+        const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const firstProject = firstSnapshot.getConfiguredProject("/tsconfig.json")!;
+        const secondSnapshot = await firstSnapshot.update({});
+        const secondProject = secondSnapshot.getConfiguredProject("/tsconfig.json")!;
+
+        const first = await firstProject.checker.getSymbolAtPosition("/src/a.ts", 10);
+        const second = await secondProject.checker.getSymbolAtPosition("/src/a.ts", 10);
+        assert.ok(first);
+        assert.ok(second);
+        assert.notStrictEqual(second, first);
+    });
+
+    test("snapshot-owned symbols resolve cached file-owned parents", async () => {
+        const source = `interface Box<T> { value: T; }\ndeclare const box: Box<string>;\nbox;`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/box.ts"] }),
+            "/src/box.ts": source,
+        }, { collectTiming: true });
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const box = await project.checker.getSymbolAtPosition("/src/box.ts", source.indexOf("Box"));
+        assert.ok(box);
+        const boxType = await project.checker.getTypeAtPosition("/src/box.ts", source.lastIndexOf("box"));
+        assert.ok(boxType);
+        const [value] = await boxType.getProperties();
+        assert.ok(value);
+        assert.ok(value.checkFlags & CheckFlags.Instantiated);
+
+        await api.resetTimingInfo();
+        assert.strictEqual(await value.getParent(), box);
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 0);
+    });
+
+    test("compact symbol references retain reused file-owned symbols", async () => {
+        const source = `interface Box<T> { value: T; }\ndeclare const box: Box<string>;\nbox;`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/box.ts"] }),
+            "/src/box.ts": source,
+        });
+        const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const firstProject = firstSnapshot.getConfiguredProject("/tsconfig.json")!;
+        // Create the second snapshot before the first symbol response populates
+        // the client cache. This ensures its registry has no direct retain on
+        // the record that will be discovered through the compact reference.
+        const secondSnapshot = await firstSnapshot.update({});
+        const secondProject = secondSnapshot.getConfiguredProject("/tsconfig.json")!;
+
+        const box = await firstProject.checker.getSymbolAtPosition("/src/box.ts", source.indexOf("Box"));
+        assert.ok(box);
+        const boxType = await secondProject.checker.getTypeAtPosition("/src/box.ts", source.lastIndexOf("box"));
+        assert.ok(boxType);
+        const [value] = await boxType.getProperties();
+        assert.ok(value);
+        assert.ok(value.checkFlags & CheckFlags.Instantiated);
+
+        // The instantiated property belongs to the second snapshot, but its
+        // compact parent reference finds `box` in the record retained only by
+        // the first snapshot. Resolving the reference borrows the wrapper into
+        // the second registry and must retain its record for that registry's
+        // lifetime.
+        const boxFromSecondSnapshot = await value.getParent();
+        assert.strictEqual(boxFromSecondSnapshot, box);
+        await firstSnapshot.dispose();
+
+        // If the compact lookup did not establish ownership, disposing the
+        // first snapshot evicts the record. The next lookup then interns a new
+        // wrapper for the same binder symbol instead of returning the wrapper
+        // already obtained through the still-live second snapshot.
+        const parentAfterDisposal = await value.getParent();
+        await secondSnapshot.dispose();
+        assert.strictEqual(parentAfterDisposal, boxFromSecondSnapshot);
+        await assert.rejects(value.getParent(), /Project object registry is disposed/); // @sync: assert.throws(() => value.getParent(), /Project object registry is disposed/);
+    });
+
+    test("file-owned declarations resolve without the snapshot that observed them", async () => {
+        await using api = spawnAPI(symbolFiles);
+        const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const firstProject = firstSnapshot.getConfiguredProject("/tsconfig.json")!;
+        // Keeps the server AST alive after the observing snapshot is disposed.
+        await using _secondSnapshot = await firstSnapshot.update({});
+        const animal = await firstProject.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
+        assert.ok(animal);
+        await firstSnapshot.dispose();
+
+        const declaration = await animal.declarations[0].resolve();
+        assert.ok(declaration && isClassDeclaration(declaration));
+        assert.equal(declaration.name?.text, "Animal");
+    });
+
+    test("file-owned symbols are accepted by later checkers while their file is unchanged", async () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ ...symbolFiles, "/src/other.ts": `export const other = 1;` });
+        await using api = disposableAPI;
+        const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const animal = await firstSnapshot.getConfiguredProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
+        assert.ok(animal);
+
+        fs.writeFile!("/src/other.ts", `export const other = 2;`);
+        const secondSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json", fileNotifications: { changed: ["/src/other.ts"] } });
+        const type = await secondSnapshot.getConfiguredProject("/tsconfig.json")!.checker.getTypeOfSymbol(animal);
+        assert.ok(type);
+        assert.strictEqual(await type.getSymbol(), animal);
+    });
+
+    test("file-owned symbols are rejected by checkers whose program has a different version of their file", async () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS(symbolFiles);
+        await using api = disposableAPI;
+        const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const animal = await firstSnapshot.getConfiguredProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
+        assert.ok(animal);
+
+        fs.writeFile!("/src/mod.ts", `${symbolFiles["/src/mod.ts"]}\nexport const added = 2;`);
+        const secondSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json", fileNotifications: { changed: ["/src/mod.ts"] } });
+        const secondProject = secondSnapshot.getConfiguredProject("/tsconfig.json")!;
+        await assert.rejects(secondProject.checker.getTypeOfSymbol(animal), /source file is not part of the requested program/); // @sync: assert.throws(() => secondProject.checker.getTypeOfSymbol(animal), /source file is not part of the requested program/);
+    });
 });
 
 describe("Type - getSymbol", { concurrency }, () => {
@@ -3610,6 +3796,8 @@ export const instance: Foo = new Foo();
         const typeSymbol = await type.getSymbol();
         assert.ok(typeSymbol);
         assert.equal(typeSymbol.name, "Foo");
+        const fooSymbol = await project.checker.getSymbolAtPosition("/src/types.ts", src.indexOf("Foo"));
+        assert.strictEqual(typeSymbol, fooSymbol);
     });
 });
 
@@ -4623,27 +4811,39 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         assert.equal(await program.isSourceFileDefaultLibrary(defaultLibrary), true);
     });
 
-    test("full file system accepts paths decoded from VS Code document URIs", async () => {
+    test("full file system accepts and caches paths decoded from VS Code document URIs", async () => {
         const fileDocument = { uri: "file:///workspace/file%20name.ts" };
         const remoteDocument = { uri: "vscode-remote://ssh-remote+host/workspace/src/remote%20name.ts" };
         const notebookDocument = { uri: "vscode-notebook-cell:/workspace/notebook.ipynb/cell%20name.ts" };
+        const untitledDocument = { uri: "untitled:Untitled-1" };
+        const files: [DocumentIdentifier, string][] = [
+            [fileDocument, `export const file = true;`],
+            [remoteDocument, `export const remote = true;`],
+            [notebookDocument, `export const cell = true;`],
+            [untitledDocument, `export const untitled = true;`],
+        ];
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            collectTiming: true,
         });
         using snapshot = await api.createSnapshot({
-            openFiles: [fileDocument, remoteDocument, notebookDocument],
-            fileSystem: createFileSystem([
-                [fileDocument, `export const file = true;`],
-                [remoteDocument, `export const remote = true;`],
-                [notebookDocument, `export const cell = true;`],
-            ]),
+            openFiles: files.map(([document]) => document),
+            fileSystem: createFileSystem(files),
         });
-        const fileProject = await snapshot.getDefaultProjectForFile(fileDocument);
-        const remoteProject = await snapshot.getDefaultProjectForFile(remoteDocument);
-        const notebookProject = await snapshot.getDefaultProjectForFile(notebookDocument);
-        assert.equal((await fileProject?.program.getSourceFile(fileDocument))?.text, `export const file = true;`);
-        assert.equal((await remoteProject?.program.getSourceFile(remoteDocument))?.text, `export const remote = true;`);
-        assert.equal((await notebookProject?.program.getSourceFile(notebookDocument))?.text, `export const cell = true;`);
+        for (const [document, text] of files) {
+            const project = await snapshot.getDefaultProjectForFile(document);
+            assert.ok(project);
+            await api.resetTimingInfo();
+            const sourceFile = await project.program.getSourceFile(document);
+            assert.ok(sourceFile);
+            assert.equal(sourceFile.text, text);
+            assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
+
+            assert.strictEqual(await project.program.getSourceFile(document), sourceFile);
+            assert.strictEqual(await project.program.getSourceFile(sourceFile.fileName), sourceFile);
+            assert.strictEqual(await project.program.getSourceFile(sourceFile.path), sourceFile);
+            assert.equal((await api.getTimingInfo()).totals.requestCount, 1, sourceFile.fileName);
+        }
     });
 
     test("file system layer bypasses callbacks on hits and falls back on misses", async () => {
