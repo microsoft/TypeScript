@@ -3490,6 +3490,7 @@ export const value = 1;
         const parentAfterDisposal = value.getParent();
         secondSnapshot.dispose();
         assert.strictEqual(parentAfterDisposal, boxFromSecondSnapshot);
+        assert.throws(() => value.getParent(), /Project object registry is disposed/);
     });
 
     test("file-owned declarations resolve without the snapshot that observed them", () => {

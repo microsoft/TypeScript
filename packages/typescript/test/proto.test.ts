@@ -70,3 +70,29 @@ test("source file cache resolves references without creating records", () => {
     cache.releaseSnapshot(1);
     assert.strictEqual(cache.findRecord("7"), undefined);
 });
+
+test("source file cache transfers record ownership between snapshots", () => {
+    const cache = new SourceFileCache<object>();
+    const file = {
+        fileName: "/file.ts",
+        path: "/file.ts" as Path,
+        contentHash: "0".repeat(32),
+        parseOptionsKey: "0",
+        scriptKind: 3,
+        nodeId: "7",
+    };
+    const record = cache.getOrCreateRecord(file, 1, "/tsconfig.json");
+
+    // Reusing an object from this record in another snapshot gives that
+    // snapshot an independent owner. Releasing the original owner must not
+    // evict the shared record.
+    cache.retainRecord(record, 2, "/tsconfig.json");
+    cache.releaseSnapshot(1);
+    assert.strictEqual(cache.findRecord("7"), record);
+
+    // The record is evicted once its final snapshot owner is released, and a
+    // stale wrapper cannot resurrect the evicted record.
+    cache.releaseSnapshot(2);
+    assert.strictEqual(cache.findRecord("7"), undefined);
+    assert.throws(() => cache.retainRecord(record, 3, "/tsconfig.json"), /is no longer cached/);
+});

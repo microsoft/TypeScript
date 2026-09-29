@@ -96,7 +96,6 @@ export class SourceFileCache<TSymbol> {
     }
 
     getOrCreateRecord(file: SourceFileDescriptor, snapshotId: number, projectId: string): CachedSourceFile<TSymbol> {
-        const ref = snapshotRefKey(snapshotId, projectId);
         let entries = this.cache.get(file.path);
         if (!entries) {
             entries = [];
@@ -106,14 +105,21 @@ export class SourceFileCache<TSymbol> {
         if (!record) {
             record = this.addRecord(entries, { descriptor: file, refs: new Set(), symbols: new Map() });
         }
-        record.refs.add(ref);
-        this.trackPath(snapshotId, projectId, file.path as Path);
+        this.retainRecordForSnapshot(record, snapshotId, projectId);
         return record;
     }
 
     /** Find the live record for a source-file node ID without creating or retaining one. */
     findRecord(nodeId: string): CachedSourceFile<TSymbol> | undefined {
         return this.recordsByNodeId.get(nodeId);
+    }
+
+    /** Retain an existing record for a snapshot/project that reused one of its cached objects. */
+    retainRecord(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: string): void {
+        if (this.recordsByNodeId.get(record.descriptor.nodeId) !== record) {
+            throw new Error(`Source file record '${record.descriptor.fileName}' is no longer cached`);
+        }
+        this.retainRecordForSnapshot(record, snapshotId, projectId);
     }
 
     /** Attach a source file fetched by its descriptor to its existing record. */
@@ -179,6 +185,11 @@ export class SourceFileCache<TSymbol> {
         entries.push(record);
         this.recordsByNodeId.set(record.descriptor.nodeId, record);
         return record;
+    }
+
+    private retainRecordForSnapshot(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: string): void {
+        record.refs.add(snapshotRefKey(snapshotId, projectId));
+        this.trackPath(snapshotId, projectId, record.descriptor.path);
     }
 
     private find(file: RemoteSourceFile, entries = this.cache.get(file.path)): CachedSourceFile<TSymbol> | undefined {

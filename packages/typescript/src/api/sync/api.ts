@@ -1873,6 +1873,7 @@ class ProjectObjectRegistry {
     private sourceFileCache: SourceFileCache<Symbol>;
     private types: Map<number, TypeObject> = new Map();
     private signatures: Map<number, Signature> = new Map();
+    private disposed = false;
 
     constructor(
         client: Client,
@@ -1890,6 +1891,7 @@ class ProjectObjectRegistry {
     }
 
     getOrCreateSymbol(data: ProtocolSymbolResponse): Symbol {
+        this.ensureNotDisposed();
         validateSymbolResponse(data);
         const reference = data.reference;
         if (reference.kind === SymbolOwnerKind.Snapshot) {
@@ -1903,11 +1905,18 @@ class ProjectObjectRegistry {
             }));
     }
 
-    /** Find an already-interned symbol without creating or retaining any cache entry. */
+    /** Find an already-interned symbol and retain its file record for this registry. */
     getCachedSymbol(reference: CompactSymbolReference): Symbol | undefined {
-        return reference.file !== undefined
-            ? this.sourceFileCache.findRecord(reference.file)?.symbols.get(reference.id)
-            : this.snapshotRegistry.getSymbol(reference.id);
+        this.ensureNotDisposed();
+        if (reference.file === undefined) {
+            return this.snapshotRegistry.getSymbol(reference.id);
+        }
+        const record = this.sourceFileCache.findRecord(reference.file);
+        const symbol = record?.symbols.get(reference.id);
+        if (record && symbol) {
+            this.sourceFileCache.retainRecord(record, this.snapshotId, this.project.id);
+        }
+        return symbol;
     }
 
     getOrCreateType(data: TypeResponse): TypeObject {
@@ -1941,8 +1950,13 @@ class ProjectObjectRegistry {
     }
 
     clear(): void {
+        this.disposed = true;
         this.types.clear();
         this.signatures.clear();
+    }
+
+    private ensureNotDisposed(): void {
+        if (this.disposed) throw new Error("Project object registry is disposed");
     }
 
     get fetchOptionalType(): {

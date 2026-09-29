@@ -3656,6 +3656,7 @@ export const value = 1;
         const parentAfterDisposal = await value.getParent();
         await secondSnapshot.dispose();
         assert.strictEqual(parentAfterDisposal, boxFromSecondSnapshot);
+        await assert.rejects(value.getParent(), /Project object registry is disposed/); // @sync: assert.throws(() => value.getParent(), /Project object registry is disposed/);
     });
 
     test("file-owned declarations resolve without the snapshot that observed them", async () => {
