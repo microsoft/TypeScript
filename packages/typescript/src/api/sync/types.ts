@@ -155,6 +155,8 @@ export interface Type {
     isObjectType(): this is ObjectType;
     /** Whether this type is an intrinsic primitive type */
     isIntrinsicType(): this is IntrinsicType;
+    /** Whether this type is a unique symbol type (`unique symbol`) */
+    isUniqueESSymbolType(): this is UniqueESSymbolType;
     /**
      * Whether this is the error type — the placeholder produced when a type
      * cannot be determined (e.g. an unresolved reference).
@@ -344,6 +346,11 @@ export interface UnionOrIntersectionType extends Type {
 
 /** Union types (TypeFlags.Union) */
 export interface UnionType extends UnionOrIntersectionType {
+    /** Get the denormalized union, intersection, or index type this union originates from, if any */
+    getOrigin: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
 }
 
 /** Intersection types (TypeFlags.Intersection) */
@@ -414,6 +421,11 @@ export interface ConditionalType extends Type {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     };
+    /** Get the type parameters introduced by `infer` declarations in the extends clause */
+    getInferTypeParameters: {
+        (): readonly TypeParameter[];
+        gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+    };
 }
 
 /** Substitution types (TypeFlags.Substitution) */
@@ -452,6 +464,12 @@ export interface StringMappingType extends Type {
 export interface IntrinsicType extends Type {
     /** The intrinsic type name (e.g. "any", "string", "never") */
     readonly intrinsicName: string;
+}
+
+/** Unique symbol types — `unique symbol` (TypeFlags.UniqueESSymbol) */
+export interface UniqueESSymbolType extends Type {
+    /** The escaped name of the unique symbol, e.g. `"__@startWork@7"` */
+    readonly escapedName: string;
 }
 
 /** Base for all type predicates */

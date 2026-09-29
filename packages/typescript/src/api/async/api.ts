@@ -14,6 +14,7 @@ import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
+import { SymbolFormatFlags } from "#enums/symbolFormatFlags";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
@@ -166,11 +167,12 @@ import type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UniqueESSymbolType,
 } from "./types.ts";
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -246,6 +248,7 @@ export type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UniqueESSymbolType,
 };
 
 export interface ModuleResolverOptions {
@@ -2569,6 +2572,19 @@ export class Checker {
         return result;
     }
 
+    async symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Promise<string> {
+        const result = await this.client.apiRequest("symbolToString", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            meaning,
+            flags,
+        });
+        if (typeof result !== "string") throw new TypeError("symbolToString returned a non-string result");
+        return result;
+    }
+
     async isContextSensitive(node: Node): Promise<boolean> {
         return this.client.apiRequest("isContextSensitive", {
             snapshot: this.snapshotId,
@@ -3156,9 +3172,11 @@ class TypeObject implements Type {
     readonly symbol!: number;
     readonly value!: string | number | boolean | bigint;
     readonly intrinsicName!: string;
+    readonly escapedName!: string;
     readonly isThisType!: boolean;
     readonly freshType!: number;
     readonly regularType!: number;
+    readonly origin!: number;
     readonly target!: number;
     private readonly tupleType: boolean;
     readonly typeParameters!: readonly number[];
@@ -3176,6 +3194,7 @@ class TypeObject implements Type {
     readonly indexType!: number;
     readonly checkType!: number;
     readonly extendsType!: number;
+    readonly inferTypeParameters!: readonly number[];
     readonly baseType!: number;
     readonly substConstraint!: number;
     readonly typeParameter!: number;
@@ -3236,9 +3255,11 @@ class TypeObject implements Type {
             }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
+        if (data.escapedName !== undefined) this.escapedName = data.escapedName;
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
+        if (data.origin !== undefined) this.origin = data.origin;
         if (data.target !== undefined) this.target = data.target;
         this.tupleType = data.isTupleType ?? false;
         this.typeParameters = data.typeParameters ?? [];
@@ -3260,6 +3281,7 @@ class TypeObject implements Type {
         if (data.indexType !== undefined) this.indexType = data.indexType;
         if (data.checkType !== undefined) this.checkType = data.checkType;
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
+        this.inferTypeParameters = data.inferTypeParameters ?? [];
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
         if (data.typeParameter !== undefined) this.typeParameter = data.typeParameter;
@@ -3386,6 +3408,13 @@ class TypeObject implements Type {
         return this.objectRegistry.fetchOptionalType(this, "getRegularTypeOfType", this.regularType);
     }
 
+    async getOrigin(): Promise<Type | undefined> {
+        if (!(this.flags & TypeFlags.Union)) {
+            return undefined;
+        }
+        return this.objectRegistry.fetchOptionalType(this, "getOriginOfType", this.origin);
+    }
+
     async getTypes(): Promise<readonly Type[] | undefined> {
         // Only union, intersection, and template literal types have constituent
         // types; any other kind has none, so return undefined rather than sending
@@ -3449,6 +3478,10 @@ class TypeObject implements Type {
 
     async getExtendsType(): Promise<Type> {
         return this.objectRegistry.fetchType(this, "getExtendsTypeOfType", this.extendsType);
+    }
+
+    async getInferTypeParameters(): Promise<readonly TypeParameter[]> {
+        return this.objectRegistry.fetchTypes(this, "getInferTypeParametersOfType", this.inferTypeParameters) as Promise<readonly TypeParameter[]>;
     }
 
     async getBaseType(): Promise<Type> {
@@ -3516,6 +3549,10 @@ class TypeObject implements Type {
 
     isIntrinsicType(): this is IntrinsicType {
         return isIntrinsicType(this);
+    }
+
+    isUniqueESSymbolType(): this is UniqueESSymbolType {
+        return isUniqueESSymbolType(this);
     }
 
     isErrorType(): boolean {
@@ -3605,6 +3642,10 @@ export function isClassOrInterfaceType(type: Type): type is InterfaceType {
 
 export function isIntrinsicType(type: Type): type is IntrinsicType {
     return (type.flags & TypeFlags.Intrinsic) !== 0;
+}
+
+export function isUniqueESSymbolType(type: Type): type is UniqueESSymbolType {
+    return (type.flags & TypeFlags.UniqueESSymbol) !== 0;
 }
 
 /**

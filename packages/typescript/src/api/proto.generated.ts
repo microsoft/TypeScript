@@ -84,6 +84,7 @@ export interface APIMethodInfo {
     getTargetOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getFreshTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getRegularTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
+    getOriginOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getTypesOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getOuterTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
@@ -95,6 +96,7 @@ export interface APIMethodInfo {
     getIndexTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getCheckTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getExtendsTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getInferTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getBaseTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getConstraintOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParameterOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
@@ -121,6 +123,7 @@ export interface APIMethodInfo {
     typeToTypeNode: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
     signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;
     typeToString: APIMethod<TypeToTypeNodeParams, unknown>;
+    symbolToString: APIMethod<SymbolToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
     getRestTypeOfSignature: APIMethod<CheckerSignatureParams, TypeResponse>;
@@ -503,6 +506,7 @@ export interface TypeResponse {
     /** ConditionalType data */
     checkType?: number | undefined;
     extendsType?: number | undefined;
+    inferTypeParameters?: number[] | undefined;
     /** SubstitutionType data */
     baseType?: number | undefined;
     substConstraint?: number | undefined;
@@ -516,12 +520,16 @@ export interface TypeResponse {
     /** FreshableType data (LiteralType and computed enum types) */
     freshType?: number | undefined;
     regularType?: number | undefined;
+    /** UnionType data */
+    origin?: number | undefined;
     /** TypeParameter data */
     isThisType?: boolean | undefined;
     /** InterfaceType data */
     thisType?: number | undefined;
     /** IntrinsicType data */
     intrinsicName?: string | undefined;
+    /** UniqueESSymbolType data */
+    escapedName?: string | undefined;
     /** TypeAlias data */
     aliasTypeArguments?: number[] | undefined;
     aliasSymbol?: number | undefined;
@@ -817,6 +825,16 @@ export interface SignatureToSignatureDeclarationParams {
     signature: number;
     kind: number;
     location?: string | undefined;
+    flags?: number | undefined;
+}
+
+/** SymbolToStringParams are the parameters for the symbolToString method. */
+export interface SymbolToStringParams {
+    snapshot: number;
+    project: ProjectId;
+    symbol: number;
+    location?: string | undefined;
+    meaning?: number | undefined;
     flags?: number | undefined;
 }
 
@@ -1146,6 +1164,7 @@ export interface BatchRequest {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
+        | "getInferTypeParametersOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1161,6 +1180,7 @@ export interface BatchRequest {
         | "getNullType"
         | "getNumberType"
         | "getObjectTypeOfType"
+        | "getOriginOfType"
         | "getOuterTypeParametersOfType"
         | "getParameterType"
         | "getParametersOfSignature"
@@ -1247,6 +1267,7 @@ export interface BatchRequest {
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"
@@ -1321,6 +1342,7 @@ export interface BatchResponse {
         | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
+        | "getInferTypeParametersOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1336,6 +1358,7 @@ export interface BatchResponse {
         | "getNullType"
         | "getNumberType"
         | "getObjectTypeOfType"
+        | "getOriginOfType"
         | "getOuterTypeParametersOfType"
         | "getParameterType"
         | "getParametersOfSignature"
@@ -1422,6 +1445,7 @@ export interface BatchResponse {
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"
