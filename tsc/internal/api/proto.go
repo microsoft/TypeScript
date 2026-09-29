@@ -1192,6 +1192,9 @@ type TypeResponse struct {
 	// IntrinsicType data
 	IntrinsicName string `json:"intrinsicName,omitempty"`
 
+	// UniqueESSymbolType data
+	EscapedName string `json:"escapedName,omitempty"`
+
 	// TypeAlias data
 	AliasTypeArguments []TypeID `json:"aliasTypeArguments,omitempty"`
 	AliasSymbol        SymbolID `json:"aliasSymbol,omitzero"`
@@ -1287,6 +1290,8 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		resp.IsThisType = t.AsTypeParameter().IsThisType()
 	case flags&checker.TypeFlagsIntrinsic != 0:
 		resp.IntrinsicName = t.AsIntrinsicType().IntrinsicName()
+	case flags&checker.TypeFlagsUniqueESSymbol != 0:
+		resp.EscapedName = ast.EscapeInternalSymbolName(t.AsUniqueESSymbolType().Name())
 	}
 
 	return resp

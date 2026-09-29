@@ -184,6 +184,7 @@ import type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UniqueESSymbolType,
 } from "./types.ts";
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
@@ -264,6 +265,7 @@ export type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UniqueESSymbolType,
 };
 
 export interface ModuleResolverOptions {
@@ -6629,6 +6631,7 @@ class TypeObject implements Type {
     readonly symbol!: number;
     readonly value!: string | number | boolean | bigint;
     readonly intrinsicName!: string;
+    readonly escapedName!: string;
     readonly isThisType!: boolean;
     readonly freshType!: number;
     readonly regularType!: number;
@@ -6710,6 +6713,7 @@ class TypeObject implements Type {
             }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
+        if (data.escapedName !== undefined) this.escapedName = data.escapedName;
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
@@ -7567,6 +7571,10 @@ class TypeObject implements Type {
         return isIntrinsicType(this);
     }
 
+    isUniqueESSymbolType(): this is UniqueESSymbolType {
+        return isUniqueESSymbolType(this);
+    }
+
     isErrorType(): boolean {
         return isErrorType(this);
     }
@@ -7654,6 +7662,10 @@ export function isClassOrInterfaceType(type: Type): type is InterfaceType {
 
 export function isIntrinsicType(type: Type): type is IntrinsicType {
     return (type.flags & TypeFlags.Intrinsic) !== 0;
+}
+
+export function isUniqueESSymbolType(type: Type): type is UniqueESSymbolType {
+    return (type.flags & TypeFlags.UniqueESSymbol) !== 0;
 }
 
 /**

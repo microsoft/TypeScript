@@ -155,6 +155,8 @@ export interface Type {
     isObjectType(): this is ObjectType;
     /** Whether this type is an intrinsic primitive type */
     isIntrinsicType(): this is IntrinsicType;
+    /** Whether this type is a unique symbol type (`unique symbol`) */
+    isUniqueESSymbolType(): this is UniqueESSymbolType;
     /**
      * Whether this is the error type — the placeholder produced when a type
      * cannot be determined (e.g. an unresolved reference).
@@ -457,6 +459,12 @@ export interface StringMappingType extends Type {
 export interface IntrinsicType extends Type {
     /** The intrinsic type name (e.g. "any", "string", "never") */
     readonly intrinsicName: string;
+}
+
+/** Unique symbol types — `unique symbol` (TypeFlags.UniqueESSymbol) */
+export interface UniqueESSymbolType extends Type {
+    /** The escaped name of the unique symbol, e.g. `"__@startWork@7"` */
+    readonly escapedName: string;
 }
 
 /** Base for all type predicates */

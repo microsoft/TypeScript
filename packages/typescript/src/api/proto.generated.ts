@@ -526,6 +526,8 @@ export interface TypeResponse {
     thisType?: number | undefined;
     /** IntrinsicType data */
     intrinsicName?: string | undefined;
+    /** UniqueESSymbolType data */
+    escapedName?: string | undefined;
     /** TypeAlias data */
     aliasTypeArguments?: number[] | undefined;
     aliasSymbol?: number | undefined;

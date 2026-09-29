@@ -922,6 +922,8 @@ type UniqueESSymbolType struct {
 	name string
 }
 
+func (t *UniqueESSymbolType) Name() string { return t.name }
+
 // ConstrainedType (type with computed base constraint)
 
 type ConstrainedType struct {
