@@ -8,6 +8,10 @@ x++;
 export let x\u0078 = 10;
 xx++;
 
+//// [identifierVariableWithEscape3.ts]
+export let a\u0062c\u0064e = 10;
+abcde++;
+
 //// [identifierVariableWithExtendedEscape1.ts]
 export let \u{78} = 10;
 x++;
@@ -15,6 +19,10 @@ x++;
 //// [identifierVariableWithExtendedEscape2.ts]
 export let x\u{78} = 10;
 xx++;
+
+//// [identifierVariableWithExtendedEscape3.ts]
+export let a\u{62}c\u{64}e = 10;
+abcde++;
 
 //// [IdentifierNameWithEscape1.ts]
 export class IdentifierNameWithEscape1 {
@@ -39,6 +47,19 @@ export class IdentifierNameWithEscape2 {
 
     doThing() {
         this.xx = 42;
+    }
+}
+
+//// [IdentifierNameWithEscape3.ts]
+export class IdentifierNameWithEscape3 {
+    a\u0062c\u0064e: number;
+
+    constructor() {
+        this.a\u0062c\u0064e = 0;
+    }
+
+    doThing() {
+        this.abcde = 42;
     }
 }
 
@@ -68,6 +89,19 @@ export class IdentifierNameWithExtendedEscape2 {
     }
 }
 
+//// [IdentifierNameWithExtendedEscape3.ts]
+export class IdentifierNameWithExtendedEscape3 {
+    a\u{62}c\u{64}e: number;
+
+    constructor() {
+        this.a\u{62}c\u{64}e = 0;
+    }
+
+    doThing() {
+        this.abcde = 42;
+    }
+}
+
 //// [PrivateIdentifierNameWithEscape1.ts]
 export class PrivateIdentifierWithEscape1 {
     #\u0078: number;
@@ -91,6 +125,19 @@ export class PrivateIdentifierWithEscape2 {
 
     doThing() {
         this.#xx = 42;
+    }
+}
+
+//// [PrivateIdentifierNameWithEscape3.ts]
+export class PrivateIdentifierWithEscape3 {
+    #a\u0062c\u0064e: number;
+
+    constructor() {
+        this.#a\u0062c\u0064e = 0;
+    }
+
+    doThing() {
+        this.#abcde = 42;
     }
 }
 
@@ -120,6 +167,19 @@ export class PrivateIdentifierWithExtendedEscape2 {
     }
 }
 
+//// [PrivateIdentifierNameWithExtendedEscape3.ts]
+export class PrivateIdentifierWithExtendedEscape3 {
+    #a\u{62}c\u{64}e: number;
+
+    constructor() {
+        this.#a\u{62}c\u{64}e = 0;
+    }
+
+    doThing() {
+        this.#abcde = 42;
+    }
+}
+
 
 //// [identifierVariableWithEscape1.js]
 export let \u0078 = 10;
@@ -129,6 +189,10 @@ x++;
 export let x\u0078 = 10;
 xx++;
 //# sourceMappingURL=identifierVariableWithEscape2.js.map
+//// [identifierVariableWithEscape3.js]
+export let a\u0062c\u0064e = 10;
+abcde++;
+//# sourceMappingURL=identifierVariableWithEscape3.js.map
 //// [identifierVariableWithExtendedEscape1.js]
 export let \u{78} = 10;
 x++;
@@ -137,6 +201,10 @@ x++;
 export let x\u{78} = 10;
 xx++;
 //# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map
+//// [identifierVariableWithExtendedEscape3.js]
+export let a\u{62}c\u{64}e = 10;
+abcde++;
+//# sourceMappingURL=identifierVariableWithExtendedEscape3.js.map
 //// [IdentifierNameWithEscape1.js]
 export class IdentifierNameWithEscape1 {
     constructor() {
@@ -157,6 +225,16 @@ export class IdentifierNameWithEscape2 {
     }
 }
 //# sourceMappingURL=IdentifierNameWithEscape2.js.map
+//// [IdentifierNameWithEscape3.js]
+export class IdentifierNameWithEscape3 {
+    constructor() {
+        this.a\u0062c\u0064e = 0;
+    }
+    doThing() {
+        this.abcde = 42;
+    }
+}
+//# sourceMappingURL=IdentifierNameWithEscape3.js.map
 //// [IdentifierNameWithExtendedEscape1.js]
 export class IdentifierNameWithExtendedEscape1 {
     constructor() {
@@ -177,6 +255,16 @@ export class IdentifierNameWithExtendedEscape2 {
     }
 }
 //# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map
+//// [IdentifierNameWithExtendedEscape3.js]
+export class IdentifierNameWithExtendedEscape3 {
+    constructor() {
+        this.a\u{62}c\u{64}e = 0;
+    }
+    doThing() {
+        this.abcde = 42;
+    }
+}
+//# sourceMappingURL=IdentifierNameWithExtendedEscape3.js.map
 //// [PrivateIdentifierNameWithEscape1.js]
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
@@ -215,6 +303,25 @@ export class PrivateIdentifierWithEscape2 {
 }
 _PrivateIdentifierWithEscape2_xx = new WeakMap();
 //# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map
+//// [PrivateIdentifierNameWithEscape3.js]
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _PrivateIdentifierWithEscape3_abcde;
+export class PrivateIdentifierWithEscape3 {
+    constructor() {
+        _PrivateIdentifierWithEscape3_abcde.set(this, void 0);
+        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape3_abcde, 0, "f");
+    }
+    doThing() {
+        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape3_abcde, 42, "f");
+    }
+}
+_PrivateIdentifierWithEscape3_abcde = new WeakMap();
+//# sourceMappingURL=PrivateIdentifierNameWithEscape3.js.map
 //// [PrivateIdentifierNameWithExtendedEscape1.js]
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
@@ -253,3 +360,22 @@ export class PrivateIdentifierWithExtendedEscape2 {
 }
 _PrivateIdentifierWithExtendedEscape2_xx = new WeakMap();
 //# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map
+//// [PrivateIdentifierNameWithExtendedEscape3.js]
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _PrivateIdentifierWithExtendedEscape3_abcde;
+export class PrivateIdentifierWithExtendedEscape3 {
+    constructor() {
+        _PrivateIdentifierWithExtendedEscape3_abcde.set(this, void 0);
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape3_abcde, 0, "f");
+    }
+    doThing() {
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape3_abcde, 42, "f");
+    }
+}
+_PrivateIdentifierWithExtendedEscape3_abcde = new WeakMap();
+//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape3.js.map

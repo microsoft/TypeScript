@@ -2,14 +2,13 @@ package fourslash
 
 import (
 	"cmp"
-	"errors"
 	"fmt"
-	"io/fs"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -188,32 +187,16 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 
 		baselineEntries = append(baselineEntries, f.getBaselineContentForFile(path, content, ranges, spanToContextId, options))
 	}
-	walkDirFn := func(path string, d vfs.DirEntry, e error) error {
-		if e != nil {
-			return e
-		}
-
-		if !d.Type().IsRegular() {
-			return nil
-		}
-
-		addFileEntry(path)
-		return nil
-	}
-
 	if options.preserveResultOrder {
 		for _, uri := range options.orderedFiles {
 			addFileEntry(uri.FileName())
 		}
 	} else {
-		err := f.vfs.WalkDir("/", walkDirFn)
-		if err != nil && !errors.Is(err, fs.ErrNotExist) {
-			panic("walkdir error during fourslash baseline: " + err.Error())
+		for _, path := range getAccessibleFilePaths(f.vfs, "/") {
+			addFileEntry(path)
 		}
-
-		err = f.vfs.WalkDir("bundled:///", walkDirFn)
-		if err != nil && !errors.Is(err, fs.ErrNotExist) {
-			panic("walkdir error during fourslash baseline: " + err.Error())
+		for _, path := range getAccessibleFilePaths(f.vfs, bundled.LibPath()) {
+			addFileEntry(path)
 		}
 	}
 
@@ -243,6 +226,26 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	// !!! skipDocumentContainingOnlyMarker
 
 	return strings.Join(baselineEntries, "\n\n")
+}
+
+func getAccessibleFilePaths(fileSystem vfs.FS, root string) []string {
+	if !fileSystem.DirectoryExists(root) {
+		return nil
+	}
+	var files []string
+	err := vfs.WalkDir(fileSystem, root, func(path string, entry vfs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.Type().IsRegular() {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		panic("walkdir error during fourslash baseline: " + err.Error())
+	}
+	return files
 }
 
 func uniqueFilesInSpanOrder(spans []documentSpan) []lsproto.DocumentUri {
@@ -665,9 +668,8 @@ type markerAndItem[T any] struct {
 	Item   T       `json:"item"`
 }
 
-func annotateContentWithTooltips[T comparable](
+func (f *FourslashTest) annotateContentWithTooltips[T comparable](
 	t *testing.T,
-	f *FourslashTest,
 	markersAndItems []markerAndItem[T],
 	opName string,
 	getRange func(item T) *lsproto.Range,

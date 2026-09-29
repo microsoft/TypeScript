@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-// @module: amd
+// @module: commonjs
 
 // @filename: file1.d.ts
 declare module "file1" {

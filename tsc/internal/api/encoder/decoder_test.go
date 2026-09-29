@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -33,6 +34,39 @@ func TestDecodeSourceFile_Basic(t *testing.T) {
 	assert.Equal(t, decoded.Text(), "let x = 1;")
 	assert.Assert(t, decoded.Statements != nil)
 	assert.Assert(t, decoded.EndOfFileToken != nil)
+}
+
+func TestDecodeSourceFile_Metadata(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		fileName   string
+		scriptKind core.ScriptKind
+		code       string
+	}{
+		{"JSON", "/test.json", core.ScriptKindJSON, `{"x": 1}`},
+		{"JSX", "/test.jsx", core.ScriptKindJSX, `const x = <div />;`},
+		{"declaration", "/test.d.ts", core.ScriptKindTS, `declare const x: number;`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: tt.fileName,
+				Path:     tspath.Path(tt.fileName),
+			}, tt.code, tt.scriptKind)
+			buf, _, err := encoder.EncodeSourceFile(sourceFile)
+			assert.NilError(t, err)
+
+			decoded, err := encoder.DecodeSourceFile(buf)
+			assert.NilError(t, err)
+			assert.Equal(t, decoded.ScriptKind, sourceFile.ScriptKind)
+			assert.Equal(t, decoded.LanguageVariant, sourceFile.LanguageVariant)
+			assert.Equal(t, decoded.IsDeclarationFile, sourceFile.IsDeclarationFile)
+		})
+	}
 }
 
 func TestDecodeSourceFile_Statements(t *testing.T) {

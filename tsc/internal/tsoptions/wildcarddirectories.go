@@ -118,8 +118,7 @@ func getWildcardDirectoryFromSpec(spec string, useCaseSensitiveFileNames bool) *
 		}
 	}
 
-	if lastSepIndex := strings.LastIndexByte(spec, tspath.DirectorySeparator); lastSepIndex != -1 {
-		lastSegment := spec[lastSepIndex+1:]
+	if _, lastSegment, found := strings.CutLast(spec, string(tspath.DirectorySeparator)); found {
 		if vfsmatch.IsImplicitGlob(lastSegment) {
 			path := tspath.RemoveTrailingDirectorySeparator(spec)
 			return &wildcardDirectoryMatch{

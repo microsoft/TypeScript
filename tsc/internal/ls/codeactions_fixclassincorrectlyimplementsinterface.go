@@ -229,7 +229,7 @@ func getInheritedMembers(typeChecker *checker.Checker, classDeclaration *ast.Nod
 }
 
 func createImportAdder(context context.Context, fixContext *CodeFixContext, typeChecker *checker.Checker) (autoimport.ImportAdder, error) {
-	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile)
+	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile, typeChecker)
 	if err != nil {
 		return nil, err
 	}

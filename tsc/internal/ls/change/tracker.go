@@ -66,7 +66,7 @@ const (
 
 type trackerEdit struct {
 	kind trackerEditKind
-	lsproto.Range
+	core.TextRange
 
 	NewText string // kind == text
 
@@ -148,10 +148,27 @@ func (t *Tracker) GetChanges() (map[string][]*lsproto.TextEdit, []string) {
 	return changes, unmappable
 }
 
-// toLSPEditRange converts a transformed-text range to an LSP range for an edit, mapping through the
-// content mapper's span map when the file is content-mapped. If the range does not fall entirely within a
-// single verbatim span the edit cannot be represented safely in the original text: the file is recorded so
-// GetChanges drops its edits, and a best-effort range is returned so the accumulated edits stay well-formed.
+// fromLSPEditRange converts an LSP range to a source file range. For a content-mapped file, an original
+// range may have several projections; this selects the one belonging to sourceFile. A range with no exact
+// projection cannot be written back and marks the file unmappable.
+func (t *Tracker) fromLSPEditRange(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range) core.TextRange {
+	spans := t.converters.FromLSPRangeForSourceFile(sourceFile, lsprotoRange, spanmap.FeatureAll)
+	for _, span := range spans {
+		if span.Fidelity.IsExact() && span.Script == sourceFile {
+			return span.Span
+		}
+	}
+	t.unmappableFiles.Add(sourceFile.OriginalFileName())
+	if len(spans) > 0 {
+		return spans[0].Span
+	}
+	return core.NewTextRange(0, 0)
+}
+
+// toLSPEditRange converts a source file range to an LSP range. For a content-mapped file, the range is
+// mapped back to the original document. If it does not fall entirely within a single verbatim span, the
+// edit cannot be represented safely: the file is recorded so GetChanges drops its edits, and a best-effort
+// range is returned so the accumulated edits stay well-formed.
 func (t *Tracker) toLSPEditRange(sourceFile *ast.SourceFile, textRange core.TextRange) lsproto.Range {
 	r, fidelity := t.converters.ToLSPRange(sourceFile, textRange)
 	if !fidelity.IsExact() {
@@ -161,12 +178,6 @@ func (t *Tracker) toLSPEditRange(sourceFile *ast.SourceFile, textRange core.Text
 		t.unmappableFiles.Add(sourceFile.OriginalFileName())
 	}
 	return r
-}
-
-// toLSPEditPos converts a transformed-text offset to an LSP position for a zero-length edit (an insertion),
-// applying the same content-mapping safety check as toLSPEditRange.
-func (t *Tracker) toLSPEditPos(sourceFile *ast.SourceFile, pos core.TextPos) lsproto.Position {
-	return t.toLSPEditRange(sourceFile, core.NewTextRange(int(pos), int(pos))).Start
 }
 
 func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, newNode *ast.Node, options *NodeOptions) {
@@ -190,41 +201,48 @@ func (t *Tracker) ReplaceNodeWithNodes(sourceFile *ast.SourceFile, oldNode *ast.
 	t.ReplaceRangeWithNodes(sourceFile, t.GetAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption), newNodes, *options)
 }
 
-func (t *Tracker) ReplaceRange(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range, newNode *ast.Node, options NodeOptions) {
-	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithSingleNode, Range: lsprotoRange, options: options, Node: newNode})
+// ReplaceRange replaces textRange in sourceFile with newNode.
+func (t *Tracker) ReplaceRange(sourceFile *ast.SourceFile, textRange core.TextRange, newNode *ast.Node, options NodeOptions) {
+	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithSingleNode, TextRange: textRange, options: options, Node: newNode})
 }
 
+// ReplaceRangeWithText replaces an LSP range with text. For a content-mapped file, the LSP range is in the
+// original document; text may be placed at any exact projection because it does not need formatting context.
 func (t *Tracker) ReplaceRangeWithText(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range, text string) {
-	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindText, Range: lsprotoRange, NewText: text})
+	t.ReplaceTextRangeWithText(sourceFile, t.fromLSPEditRange(sourceFile, lsprotoRange), text)
 }
 
-// ReplaceTextRangeWithText replaces textRange (in transformed-text coordinates) with text, mapping the
-// range through the content-mapping guard so an edit that cannot be represented in the original text marks
-// the file unmappable and is dropped by GetChanges.
+// ReplaceTextRangeWithText replaces textRange in sourceFile with text. For a content-mapped file, GetChanges
+// maps the range back to the original document and drops the file if the edit cannot be represented there.
 func (t *Tracker) ReplaceTextRangeWithText(sourceFile *ast.SourceFile, textRange core.TextRange, text string) {
-	t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, textRange), text)
+	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindText, TextRange: textRange, NewText: text})
 }
 
-func (t *Tracker) ReplaceRangeWithNodes(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range, newNodes []*ast.Node, options NodeOptions) {
+// ReplaceRangeWithNodes replaces textRange in sourceFile with newNodes.
+func (t *Tracker) ReplaceRangeWithNodes(sourceFile *ast.SourceFile, textRange core.TextRange, newNodes []*ast.Node, options NodeOptions) {
 	if len(newNodes) == 1 {
-		t.ReplaceRange(sourceFile, lsprotoRange, newNodes[0], options)
+		t.ReplaceRange(sourceFile, textRange, newNodes[0], options)
 		return
 	}
-	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithMultipleNodes, Range: lsprotoRange, nodes: newNodes, options: options})
+	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithMultipleNodes, TextRange: textRange, nodes: newNodes, options: options})
 }
 
+// insertTextAt inserts text at an offset in sourceFile.
+func (t *Tracker) insertTextAt(sourceFile *ast.SourceFile, pos core.TextPos, text string) {
+	t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(int(pos), int(pos)), text)
+}
+
+// InsertText inserts text at an LSP position.
 func (t *Tracker) InsertText(sourceFile *ast.SourceFile, pos lsproto.Position, text string) {
 	t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: pos, End: pos}, text)
 }
 
 func (t *Tracker) InsertNodeAt(sourceFile *ast.SourceFile, pos core.TextPos, newNode *ast.Node, options NodeOptions) {
-	lsPos := t.toLSPEditPos(sourceFile, pos)
-	t.ReplaceRange(sourceFile, lsproto.Range{Start: lsPos, End: lsPos}, newNode, options)
+	t.ReplaceRange(sourceFile, core.NewTextRange(int(pos), int(pos)), newNode, options)
 }
 
 func (t *Tracker) InsertNodesAt(sourceFile *ast.SourceFile, pos core.TextPos, newNodes []*ast.Node, options NodeOptions) {
-	lsPos := t.toLSPEditPos(sourceFile, pos)
-	t.ReplaceRangeWithNodes(sourceFile, lsproto.Range{Start: lsPos, End: lsPos}, newNodes, options)
+	t.ReplaceRangeWithNodes(sourceFile, core.NewTextRange(int(pos), int(pos)), newNodes, options)
 }
 
 func (t *Tracker) InsertNodeAfter(sourceFile *ast.SourceFile, after *ast.Node, newNode *ast.Node) {
@@ -294,8 +312,8 @@ func (t *Tracker) ParenthesizeArrowParameters(sourceFile *ast.SourceFile, arrowF
 	firstParam := params[0]
 	lastParam := params[len(params)-1]
 	startPos := astnav.GetStartOfNode(firstParam, sourceFile, false)
-	t.InsertText(sourceFile, t.toLSPEditPos(sourceFile, core.TextPos(startPos)), "(")
-	t.InsertText(sourceFile, t.toLSPEditPos(sourceFile, core.TextPos(lastParam.End())), ")")
+	t.insertTextAt(sourceFile, core.TextPos(startPos), "(")
+	t.insertTextAt(sourceFile, core.TextPos(lastParam.End()), ")")
 }
 
 // InsertModifierBefore inserts a modifier token (like 'type') before a node with a trailing space.
@@ -315,22 +333,20 @@ func (t *Tracker) Delete(sourceFile *ast.SourceFile, node *ast.Node) {
 
 // DeleteRange deletes a text range from the source file.
 func (t *Tracker) DeleteRange(sourceFile *ast.SourceFile, textRange core.TextRange) {
-	lspRange := t.toLSPEditRange(sourceFile, textRange)
-	t.ReplaceRangeWithText(sourceFile, lspRange, "")
+	t.ReplaceTextRangeWithText(sourceFile, textRange, "")
 }
 
 // DeleteNode deletes a node immediately with specified trivia options.
 // Stop! Consider using Delete instead, which has logic for deleting nodes from delimited lists.
 func (t *Tracker) DeleteNode(sourceFile *ast.SourceFile, node *ast.Node, leadingTrivia LeadingTriviaOption, trailingTrivia TrailingTriviaOption) {
-	rng := t.GetAdjustedRange(sourceFile, node, node, leadingTrivia, trailingTrivia)
-	t.ReplaceRangeWithText(sourceFile, rng, "")
+	t.ReplaceTextRangeWithText(sourceFile, t.GetAdjustedRange(sourceFile, node, node, leadingTrivia, trailingTrivia), "")
 }
 
 // DeleteNodeRange deletes a range of nodes with specified trivia options.
 func (t *Tracker) DeleteNodeRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingTrivia LeadingTriviaOption, trailingTrivia TrailingTriviaOption) {
 	startPosition := t.getAdjustedStartPosition(sourceFile, startNode, leadingTrivia, false)
 	endPosition := t.getAdjustedEndPosition(sourceFile, endNode, trailingTrivia)
-	t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(startPosition, endPosition)), "")
+	t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(startPosition, endPosition), "")
 }
 
 // finishDeleteDeclarations processes all queued deletions with smart handling for lists and trailing commas.
@@ -373,7 +389,7 @@ func (t *Tracker) finishDeleteDeclarations() {
 		if lastNonDeletedIndex != -1 {
 			start := list.Nodes[lastNonDeletedIndex].End()
 			end := t.startPositionToDeleteNodeInList(sourceFile, list.Nodes[lastNonDeletedIndex+1])
-			t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(start, end)), "")
+			t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(start, end), "")
 		}
 	}
 }
@@ -382,13 +398,13 @@ func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *as
 	if needSemicolonBetween(after, newNode) && (rune(sourceFile.Text()[after.End()-1]) != ';') {
 		// check if previous statement ends with semicolon
 		// if not - insert semicolon to preserve the code from changing the meaning due to ASI
-		endPos := t.toLSPEditPos(sourceFile, core.TextPos(after.End()))
+		endPos := core.TextPos(after.End())
 		semicolon := t.NewToken(ast.KindSemicolonToken)
 		semicolon.Loc = core.NewTextRange(after.End(), after.End())
 		semicolon.Parent = after.Parent
 		t.ReplaceRange(
 			sourceFile,
-			lsproto.Range{Start: endPos, End: endPos},
+			core.NewTextRange(int(endPos), int(endPos)),
 			semicolon,
 			NodeOptions{},
 		)
@@ -475,8 +491,8 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		separatorString := scanner.TokenToString(separator)
 		separatorToken.Loc = core.NewTextRange(end, end+len(separatorString))
 		separatorToken.Parent = after.Parent
-		endPos := t.toLSPEditPos(sourceFile, core.TextPos(end))
-		t.ReplaceRange(sourceFile, lsproto.Range{Start: endPos, End: endPos}, separatorToken, NodeOptions{})
+		endPos := core.TextPos(end)
+		t.ReplaceRange(sourceFile, core.NewTextRange(int(endPos), int(endPos)), separatorToken, NodeOptions{})
 		// use the same indentation as 'after' item
 		indentation := format.FindFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, t.formatSettings)
 		// insert element before the line break on the line that contains 'after' element
@@ -485,10 +501,10 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		for insertPos != end && stringutil.IsLineBreak(rune(sourceFile.Text()[insertPos-1])) {
 			insertPos--
 		}
-		insertLSPos := t.toLSPEditPos(sourceFile, core.TextPos(insertPos))
+		insertLSPos := core.TextPos(insertPos)
 		t.ReplaceRange(
 			sourceFile,
-			lsproto.Range{Start: insertLSPos, End: insertLSPos},
+			core.NewTextRange(int(insertLSPos), int(insertLSPos)),
 			newNode,
 			NodeOptions{
 				indentation: &indentation,
@@ -497,8 +513,8 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		)
 	} else {
 		separatorString := scanner.TokenToString(separator)
-		endPos := t.toLSPEditPos(sourceFile, core.TextPos(end))
-		t.ReplaceRange(sourceFile, lsproto.Range{Start: endPos, End: endPos}, newNode, NodeOptions{Prefix: separatorString + " "})
+		endPos := core.TextPos(end)
+		t.ReplaceRange(sourceFile, core.NewTextRange(int(endPos), int(endPos)), newNode, NodeOptions{Prefix: separatorString + " "})
 	}
 }
 
@@ -764,7 +780,7 @@ func (t *Tracker) finishNodesWithInsertionsAtStart() {
 		}
 
 		if isSingleLine {
-			t.InsertText(state.sourceFile, t.toLSPEditPos(state.sourceFile, core.TextPos(closeBrace.End()-1)), t.newLine)
+			t.insertTextAt(state.sourceFile, core.TextPos(closeBrace.End()-1), t.newLine)
 		}
 	}
 }

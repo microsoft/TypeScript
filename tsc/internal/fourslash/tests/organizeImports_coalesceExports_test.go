@@ -20,7 +20,7 @@ void 0;`
 		t,
 		`export { B, default as M, a as n, Z as O, y } from "lib";
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -37,7 +37,7 @@ void 0;`
 		t,
 		`export * from "lib";
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -56,7 +56,7 @@ void 0;`
 		`const x = 1, z = 2;
 export { x, z as y };
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -73,7 +73,7 @@ void 0;`
 		t,
 		`export { x, y as z } from "lib";
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -94,7 +94,7 @@ void 0;`
 export * from "lib";
 export { y } from "lib";
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -114,7 +114,7 @@ void 0;`
 		`const x = 1, w = 2, z = 3, q = 4;
 export { z as default, q as w, x, w as y };
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -133,7 +133,7 @@ void 0;`
 		`export * from "lib";
 export { x as a, z as b, y } from "lib";
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -158,7 +158,7 @@ export { z } from "aaa";
 export { x };
 export type { y };
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -179,7 +179,7 @@ void 0;`
 type y = number;
 export type { x, y };
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }

@@ -8,6 +8,10 @@ x++;
 export let x\u0078 = 10;
 xx++;
 
+//// [identifierVariableWithEscape3.ts]
+export let a\u0062c\u0064e = 10;
+abcde++;
+
 //// [identifierVariableWithExtendedEscape1.ts]
 export let \u{78} = 10;
 x++;
@@ -15,6 +19,10 @@ x++;
 //// [identifierVariableWithExtendedEscape2.ts]
 export let x\u{78} = 10;
 xx++;
+
+//// [identifierVariableWithExtendedEscape3.ts]
+export let a\u{62}c\u{64}e = 10;
+abcde++;
 
 //// [IdentifierNameWithEscape1.ts]
 export class IdentifierNameWithEscape1 {
@@ -39,6 +47,19 @@ export class IdentifierNameWithEscape2 {
 
     doThing() {
         this.xx = 42;
+    }
+}
+
+//// [IdentifierNameWithEscape3.ts]
+export class IdentifierNameWithEscape3 {
+    a\u0062c\u0064e: number;
+
+    constructor() {
+        this.a\u0062c\u0064e = 0;
+    }
+
+    doThing() {
+        this.abcde = 42;
     }
 }
 
@@ -68,6 +89,19 @@ export class IdentifierNameWithExtendedEscape2 {
     }
 }
 
+//// [IdentifierNameWithExtendedEscape3.ts]
+export class IdentifierNameWithExtendedEscape3 {
+    a\u{62}c\u{64}e: number;
+
+    constructor() {
+        this.a\u{62}c\u{64}e = 0;
+    }
+
+    doThing() {
+        this.abcde = 42;
+    }
+}
+
 //// [PrivateIdentifierNameWithEscape1.ts]
 export class PrivateIdentifierWithEscape1 {
     #\u0078: number;
@@ -91,6 +125,19 @@ export class PrivateIdentifierWithEscape2 {
 
     doThing() {
         this.#xx = 42;
+    }
+}
+
+//// [PrivateIdentifierNameWithEscape3.ts]
+export class PrivateIdentifierWithEscape3 {
+    #a\u0062c\u0064e: number;
+
+    constructor() {
+        this.#a\u0062c\u0064e = 0;
+    }
+
+    doThing() {
+        this.#abcde = 42;
     }
 }
 
@@ -120,6 +167,19 @@ export class PrivateIdentifierWithExtendedEscape2 {
     }
 }
 
+//// [PrivateIdentifierNameWithExtendedEscape3.ts]
+export class PrivateIdentifierWithExtendedEscape3 {
+    #a\u{62}c\u{64}e: number;
+
+    constructor() {
+        this.#a\u{62}c\u{64}e = 0;
+    }
+
+    doThing() {
+        this.#abcde = 42;
+    }
+}
+
 
 //// [identifierVariableWithEscape1.js]
 export let \u0078 = 10;
@@ -129,6 +189,10 @@ x++;
 export let x\u0078 = 10;
 xx++;
 //# sourceMappingURL=identifierVariableWithEscape2.js.map
+//// [identifierVariableWithEscape3.js]
+export let a\u0062c\u0064e = 10;
+abcde++;
+//# sourceMappingURL=identifierVariableWithEscape3.js.map
 //// [identifierVariableWithExtendedEscape1.js]
 export let \u{78} = 10;
 x++;
@@ -137,6 +201,10 @@ x++;
 export let x\u{78} = 10;
 xx++;
 //# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map
+//// [identifierVariableWithExtendedEscape3.js]
+export let a\u{62}c\u{64}e = 10;
+abcde++;
+//# sourceMappingURL=identifierVariableWithExtendedEscape3.js.map
 //// [IdentifierNameWithEscape1.js]
 export class IdentifierNameWithEscape1 {
     \u0078;
@@ -159,6 +227,17 @@ export class IdentifierNameWithEscape2 {
     }
 }
 //# sourceMappingURL=IdentifierNameWithEscape2.js.map
+//// [IdentifierNameWithEscape3.js]
+export class IdentifierNameWithEscape3 {
+    a\u0062c\u0064e;
+    constructor() {
+        this.a\u0062c\u0064e = 0;
+    }
+    doThing() {
+        this.abcde = 42;
+    }
+}
+//# sourceMappingURL=IdentifierNameWithEscape3.js.map
 //// [IdentifierNameWithExtendedEscape1.js]
 export class IdentifierNameWithExtendedEscape1 {
     \u{78};
@@ -181,6 +260,17 @@ export class IdentifierNameWithExtendedEscape2 {
     }
 }
 //# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map
+//// [IdentifierNameWithExtendedEscape3.js]
+export class IdentifierNameWithExtendedEscape3 {
+    a\u{62}c\u{64}e;
+    constructor() {
+        this.a\u{62}c\u{64}e = 0;
+    }
+    doThing() {
+        this.abcde = 42;
+    }
+}
+//# sourceMappingURL=IdentifierNameWithExtendedEscape3.js.map
 //// [PrivateIdentifierNameWithEscape1.js]
 export class PrivateIdentifierWithEscape1 {
     #\u0078;
@@ -203,6 +293,17 @@ export class PrivateIdentifierWithEscape2 {
     }
 }
 //# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map
+//// [PrivateIdentifierNameWithEscape3.js]
+export class PrivateIdentifierWithEscape3 {
+    #a\u0062c\u0064e;
+    constructor() {
+        this.#a\u0062c\u0064e = 0;
+    }
+    doThing() {
+        this.#abcde = 42;
+    }
+}
+//# sourceMappingURL=PrivateIdentifierNameWithEscape3.js.map
 //// [PrivateIdentifierNameWithExtendedEscape1.js]
 export class PrivateIdentifierWithExtendedEscape1 {
     #\u{78};
@@ -225,3 +326,14 @@ export class PrivateIdentifierWithExtendedEscape2 {
     }
 }
 //# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map
+//// [PrivateIdentifierNameWithExtendedEscape3.js]
+export class PrivateIdentifierWithExtendedEscape3 {
+    #a\u{62}c\u{64}e;
+    constructor() {
+        this.#a\u{62}c\u{64}e = 0;
+    }
+    doThing() {
+        this.#abcde = 42;
+    }
+}
+//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape3.js.map

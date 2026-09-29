@@ -1,6 +1,6 @@
 // @target: es2015
 //@filename: ambientExternalModuleMerging_use.ts
-//@module: amd
+//@module: commonjs
 import M = require("M");
 // Should be strings
 var x = M.x;

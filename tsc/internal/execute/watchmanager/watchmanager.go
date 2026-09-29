@@ -293,14 +293,16 @@ func (wm *WatchManager) createDirWatches(updates []dirWatchUpdate) error {
 // already present in the set, or when it is contained within a recursive watch
 // directory already in the set.
 type DirWatchSet struct {
-	opts tspath.ComparePathsOptions
-	dirs map[string]bool
+	opts  tspath.ComparePathsOptions
+	dirs  map[string]bool
+	names map[string]string
 }
 
 func NewDirWatchSet(opts tspath.ComparePathsOptions) *DirWatchSet {
 	return &DirWatchSet{
-		opts: opts,
-		dirs: make(map[string]bool),
+		opts:  opts,
+		dirs:  make(map[string]bool),
+		names: make(map[string]string),
 	}
 }
 
@@ -309,7 +311,11 @@ func (s *DirWatchSet) canonical(dir string) string {
 }
 
 func (s *DirWatchSet) Set(dir string, recursive bool) {
+	original := dir
 	dir = s.canonical(dir)
+	if _, exists := s.names[dir]; !exists {
+		s.names[dir] = original
+	}
 	s.dirs[dir] = s.dirs[dir] || recursive
 }
 
@@ -329,7 +335,11 @@ func (s *DirWatchSet) Covered(dir string) bool {
 }
 
 func (s *DirWatchSet) Dirs() map[string]bool {
-	return s.dirs
+	dirs := make(map[string]bool, len(s.dirs))
+	for key, recursive := range s.dirs {
+		dirs[s.names[key]] = recursive
+	}
+	return dirs
 }
 
 func (wm *WatchManager) IsPathUnderWatch(path string, opts tspath.ComparePathsOptions) bool {

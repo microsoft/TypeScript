@@ -1,0 +1,90 @@
+// === QuickInfo ===
+=== /quickInfoPatternAmbientModuleWithImportAttributes.ts ===
+// declare module "*.css" with { type: "css" } {
+//                 ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.css" with { type: "css"; } {
+// |     let styles: {
+// |         readonly [className: string]: string;
+// |     };
+// |     export { styles as default };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                 ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.css" with { type: "css"; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     const styles: { readonly [className: string]: string };
+//     export default styles;
+// }
+[
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 0,
+        "character": 22
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nmodule \"*.css\" with { type: \"css\"; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 16
+          },
+          "end": {
+            "line": 0,
+            "character": 21
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 0,
+        "character": 22
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nmodule \"*.css\" with { type: \"css\"; } {\n    let styles: {\n        readonly [className: string]: string;\n    };\n    export { styles as default };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 16
+          },
+          "end": {
+            "line": 0,
+            "character": 21
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

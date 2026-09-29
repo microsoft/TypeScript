@@ -15,11 +15,8 @@ limit
 //// [a.js]
 "use strict";
 const a = !;
-!;
 const b = !;
-!;
-!;
-!OK;
+OK;
 HERE;
 's A shouty thing;
 GOTTA;

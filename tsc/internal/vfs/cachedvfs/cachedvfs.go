@@ -141,10 +141,6 @@ func (fsys *FS) UseCaseSensitiveFileNames() bool {
 	return fsys.fs.UseCaseSensitiveFileNames()
 }
 
-func (fsys *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return fsys.fs.WalkDir(root, walkFn)
-}
-
 func (fsys *FS) WriteFile(path string, data string) error {
 	return fsys.fs.WriteFile(path, data)
 }

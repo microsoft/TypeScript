@@ -98,7 +98,9 @@ func (h *affectedFilesHandler) updateShapeSignature(file *ast.SourceFile, useFil
 
 	info, _ := h.program.snapshot.fileInfos.Load(file.Path())
 	prevSignature := info.signature
-	if !file.IsDeclarationFile && !useFileVersionAsSignature {
+	// JSON files have no declaration output from which to compute a shape
+	// signature, so use the file version to conservatively invalidate dependents.
+	if !file.IsDeclarationFile && !ast.IsJsonSourceFile(file) && !useFileVersionAsSignature {
 		update.signature = h.computeDtsSignature(file)
 	}
 	// Default is to use file version as signature

@@ -9,7 +9,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
-	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
@@ -114,7 +113,11 @@ func GetQuotePreference(sourceFile *ast.SourceFile, preferences UserPreferences)
 }
 
 func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, forceCapitalize bool) string {
-	return ModuleSpecifierToValidIdentifier(stringutil.StripQuotes(moduleSymbol.Name), forceCapitalize)
+	moduleName := moduleSymbol.Name
+	if ambientModuleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(moduleName); ok {
+		moduleName = ambientModuleName
+	}
+	return ModuleSpecifierToValidIdentifier(moduleName, forceCapitalize)
 }
 
 func ModuleSpecifierToValidIdentifier(moduleSpecifier string, forceCapitalize bool) string {

@@ -25,7 +25,7 @@ import * as AnotherThingElse from "someotherpath";`
 	defer done()
 	f.VerifyOrganizeImports(t,
 		``,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

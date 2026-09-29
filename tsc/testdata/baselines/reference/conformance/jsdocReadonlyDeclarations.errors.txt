@@ -1,0 +1,31 @@
+jsdocReadonlyDeclarations.js(4,9): error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+
+
+==== jsdocReadonlyDeclarations.js (1 errors) ====
+    class C {
+        /** @readonly */
+        x = 6
+        /** @readonly */
+            ~~~~~~~~~~
+!!! error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+        constructor(n) {
+            this.x = n
+            /**
+             * @readonly
+             * @type {number}
+             */
+            this.y = n
+        }
+    }
+    new C().x
+    
+    function F() {
+        /** @readonly */
+        this.z = 1
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/38401
+    class D {
+        constructor(/** @readonly */ x) {}
+    }
+    

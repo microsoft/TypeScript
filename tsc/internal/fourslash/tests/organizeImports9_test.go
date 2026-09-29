@@ -18,7 +18,7 @@ a(b, d);`
 	f.VerifyOrganizeImports(t,
 		`import { a, b, d } from "foo";
 a(b, d);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

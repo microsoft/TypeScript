@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 export namespace require { // no error 
     export interface I {
     }

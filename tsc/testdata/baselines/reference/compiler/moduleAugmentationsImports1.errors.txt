@@ -1,0 +1,65 @@
+b.ts(1,17): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+d.ts(7,1): error TS2322: Type '() => undefined' is not assignable to type '() => B'.
+  Type 'undefined' is not assignable to type 'B'.
+d.ts(8,1): error TS2322: Type '() => undefined' is not assignable to type '() => Cls'.
+  Type 'undefined' is not assignable to type 'Cls'.
+main.ts(2,8): error TS2882: Cannot find module or type declarations for side-effect import of 'd'.
+main.ts(5,9): error TS2454: Variable 'a' is used before being assigned.
+main.ts(6,9): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== a.ts (0 errors) ====
+    export class A {}
+    
+==== b.ts (1 errors) ====
+    export class B {x: number;}
+                    ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    
+==== c.d.ts (0 errors) ====
+    declare module "C" {
+        class Cls {y: string; }
+    }
+    
+==== d.ts (2 errors) ====
+    /// <reference path="c.d.ts"/>
+    
+    import {A} from "./a";
+    import {B} from "./b";
+    import {Cls} from "C";
+    
+    A.prototype.getB = function () { return undefined; }
+    ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '() => undefined' is not assignable to type '() => B'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'B'.
+    A.prototype.getCls = function () { return undefined; }
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '() => undefined' is not assignable to type '() => Cls'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'Cls'.
+    
+    declare module "./a" {
+        interface A {
+            getB(): B;
+        }
+    }
+    
+    declare module "./a" {
+        interface A {
+            getCls(): Cls;
+        }
+    }
+    
+==== main.ts (3 errors) ====
+    import {A} from "./a";
+    import "d";
+           ~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'd'.
+    
+    let a: A;
+    let b = a.getB().x.toFixed();
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    let c = a.getCls().y.toLowerCase();
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    

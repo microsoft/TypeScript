@@ -2,6 +2,7 @@ package compiler_test
 
 import (
 	"fmt"
+	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
@@ -9,7 +10,10 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -39,6 +43,7 @@ var esnextLibs = []string{
 	"lib.es2023.d.ts",
 	"lib.es2024.d.ts",
 	"lib.es2025.d.ts",
+	"lib.es2026.d.ts",
 	"lib.esnext.d.ts",
 	"lib.dom.d.ts",
 	"lib.dom.iterable.d.ts",
@@ -107,16 +112,19 @@ var esnextLibs = []string{
 	"lib.es2025.iterator.d.ts",
 	"lib.es2025.promise.d.ts",
 	"lib.es2025.regexp.d.ts",
-	"lib.esnext.array.d.ts",
-	"lib.esnext.collection.d.ts",
+	"lib.es2026.array.d.ts",
+	"lib.es2026.collection.d.ts",
+	"lib.es2026.error.d.ts",
+	"lib.es2026.iterator.d.ts",
+	"lib.es2026.json.d.ts",
+	"lib.es2026.math.d.ts",
+	"lib.es2026.typedarrays.d.ts",
 	"lib.esnext.date.d.ts",
 	"lib.esnext.decorators.d.ts",
 	"lib.esnext.disposable.d.ts",
-	"lib.esnext.error.d.ts",
 	"lib.esnext.intl.d.ts",
 	"lib.esnext.sharedmemory.d.ts",
 	"lib.esnext.temporal.d.ts",
-	"lib.esnext.typedarrays.d.ts",
 	"lib.decorators.d.ts",
 	"lib.decorators.legacy.d.ts",
 	"lib.esnext.full.d.ts",
@@ -337,4 +345,20 @@ func BenchmarkNewProgram(b *testing.B) {
 			}
 		})
 	}
+
+	b.Run("compiler", func(b *testing.B) {
+		rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+		fs := bundled.WrapFS(osvfs.FS())
+		host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil, nil)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), nil, nil, host, nil)
+		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
+		opts := compiler.ProgramOptions{
+			Config: parsed,
+			Host:   host,
+		}
+
+		for b.Loop() {
+			compiler.NewProgram(opts)
+		}
+	})
 }
