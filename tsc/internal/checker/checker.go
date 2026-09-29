@@ -1796,7 +1796,6 @@ var primitiveTypeAliasSuggestions = sync.OnceValue(func() map[string]*ast.Symbol
 	} {
 		sym := &ast.Symbol{}
 		sym.Flags = ast.SymbolFlagsTypeAlias | ast.SymbolFlagsTransient
-		sym.CheckFlags = ast.CheckFlagsNonFileOwned
 		sym.Name = e.primitive
 		result[e.builtin] = sym
 	}
@@ -14307,7 +14306,6 @@ func (c *Checker) newSymbol(flags ast.SymbolFlags, name string) *ast.Symbol {
 	c.SymbolCount++
 	result := c.symbolArena.New()
 	result.Flags = flags | ast.SymbolFlagsTransient
-	result.CheckFlags = ast.CheckFlagsNonFileOwned
 	result.Name = name
 	return result
 }
@@ -16425,7 +16423,7 @@ func (c *Checker) addDeclarationToLateBoundSymbol(symbol *ast.Symbol, member *as
 		// Remove all replacable-by-method members, along with their flags.
 		symbol.Declarations = append(core.Filter(symbol.Declarations, isNotReplacableByMethod), member)
 		oldFlags := symbol.Flags
-		symbol.Flags = ast.SymbolFlagsNone
+		symbol.Flags = ast.SymbolFlagsTransient
 		for _, d := range symbol.Declarations {
 			symbol.Flags |= d.Symbol().Flags
 		}

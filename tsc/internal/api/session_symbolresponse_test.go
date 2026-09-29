@@ -54,6 +54,24 @@ func TestFileOwnedSymbolsAreNotRegisteredInSnapshot(t *testing.T) {
 	assert.Equal(t, len(sd.symbolCanonicalProjects), 0)
 }
 
+func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
+	t.Parallel()
+	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)
+	class := sourceFile.Statements.Nodes[0]
+	symbol := &ast.Symbol{
+		Flags:        ast.SymbolFlagsClass | ast.SymbolFlagsTransient,
+		Name:         "C",
+		Declarations: []*ast.Node{class},
+	}
+	sd := newTestSnapshotData()
+
+	response := sd.newSymbolResponse(symbol, "/tsconfig.json")
+	assert.Equal(t, response.Reference.Kind, SymbolOwnerKindSnapshot)
+	resolved, err := sd.resolveSymbolHandle(response.Reference.Id)
+	assert.NilError(t, err)
+	assert.Equal(t, resolved, symbol)
+}
+
 func TestSymbolReferencesIdentifyOwnerWithoutDescriptor(t *testing.T) {
 	t.Parallel()
 	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)

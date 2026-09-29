@@ -442,7 +442,7 @@ func (r *NameResolver) lookup(symbols ast.SymbolTable, name string, meaning ast.
 func (r *NameResolver) argumentsSymbol() *ast.Symbol {
 	if r.ArgumentsSymbol == nil {
 		// Default implementation synthesizes a transient symbol for `arguments`
-		r.ArgumentsSymbol = &ast.Symbol{Name: "arguments", Flags: ast.SymbolFlagsProperty | ast.SymbolFlagsTransient, CheckFlags: ast.CheckFlagsNonFileOwned}
+		r.ArgumentsSymbol = &ast.Symbol{Name: "arguments", Flags: ast.SymbolFlagsProperty | ast.SymbolFlagsTransient}
 	}
 	return r.ArgumentsSymbol
 }

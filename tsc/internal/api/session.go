@@ -57,7 +57,7 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 		index := make(map[SymbolID]*ast.Symbol, file.SymbolCount)
 		var addSymbol func(*ast.Symbol)
 		addSymbol = func(symbol *ast.Symbol) {
-			if symbol == nil || symbol.CheckFlags&ast.CheckFlagsNonFileOwned != 0 {
+			if symbol == nil || symbol.Flags&ast.SymbolFlagsTransient != 0 {
 				return
 			}
 			compilerdebug.Assert(ast.GetSourceFileOfSymbol(symbol) == file)
@@ -204,7 +204,7 @@ func (sd *snapshotData) getOrCreateProjectRegistry(projectID project.ID) *projec
 // symbol is owned by its snapshot. Content-mapped outputs live in a cache that cannot yet be
 // addressed by file key, so their binder symbols remain snapshot-owned.
 func symbolOwnerFile(symbol *ast.Symbol) *ast.SourceFile {
-	if symbol.CheckFlags&ast.CheckFlagsNonFileOwned != 0 {
+	if symbol.Flags&ast.SymbolFlagsTransient != 0 {
 		return nil
 	}
 	file := ast.GetSourceFileOfSymbol(symbol)
@@ -4111,9 +4111,9 @@ func (s *Session) handleGetWellKnownSymbols(ctx context.Context, params *GetIntr
 	unknownSymbol := setup.checker.GetUnknownSymbol()
 	undefinedSymbol := setup.checker.GetUndefinedSymbol()
 	argumentsSymbol := setup.checker.GetArgumentsSymbol()
-	compilerdebug.Assert(unknownSymbol.CheckFlags&ast.CheckFlagsNonFileOwned != 0)
-	compilerdebug.Assert(undefinedSymbol.CheckFlags&ast.CheckFlagsNonFileOwned != 0)
-	compilerdebug.Assert(argumentsSymbol.CheckFlags&ast.CheckFlagsNonFileOwned != 0)
+	compilerdebug.Assert(unknownSymbol.Flags&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(undefinedSymbol.Flags&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(argumentsSymbol.Flags&ast.SymbolFlagsTransient != 0)
 	unknown, _ := setup.sd.registerSymbol(unknownSymbol, setup.projectID)
 	undefined, _ := setup.sd.registerSymbol(undefinedSymbol, setup.projectID)
 	arguments, _ := setup.sd.registerSymbol(argumentsSymbol, setup.projectID)

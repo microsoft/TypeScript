@@ -11,7 +11,7 @@ import (
 
 type Symbol struct {
 	Flags            SymbolFlags
-	CheckFlags       CheckFlags // Non-zero only in symbols not created by BindSourceFile
+	CheckFlags       CheckFlags // Non-zero only in transient symbols
 	Name             string
 	Declarations     []*Node
 	ValueDeclaration *Node
@@ -27,7 +27,7 @@ type Symbol struct {
 // Ownership recovery walks only the first declaration's AST parents.
 func GetSourceFileOfSymbol(symbol *Symbol) *SourceFile {
 	debug.Assert(symbol != nil, "Expected a symbol")
-	if symbol.CheckFlags&CheckFlagsNonFileOwned != 0 {
+	if symbol.Flags&SymbolFlagsTransient != 0 {
 		return nil
 	}
 	if len(symbol.Declarations) == 0 {
@@ -35,7 +35,7 @@ func GetSourceFileOfSymbol(symbol *Symbol) *SourceFile {
 		debug.Assert(symbol.Flags&SymbolFlagsPrototype != 0, "File-bound symbol has no declarations")
 		debug.Assert(symbol.Parent != nil && symbol.Parent.Flags&SymbolFlagsClass != 0, "Prototype has no declaring class")
 		symbol = symbol.Parent
-		debug.Assert(symbol.CheckFlags&CheckFlagsNonFileOwned == 0, "Prototype parent is not file-bound")
+		debug.Assert(symbol.Flags&SymbolFlagsTransient == 0, "Prototype parent is not file-bound")
 		debug.Assert(len(symbol.Declarations) != 0, "Prototype parent has no declarations")
 	}
 	file := GetSourceFileOfNode(symbol.Declarations[0])
