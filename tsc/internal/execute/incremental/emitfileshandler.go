@@ -36,6 +36,9 @@ func (h *emitFilesHandler) getPendingEmitKindForEmitOptions(emitKind FileEmitKin
 	if options.EmitOnly == compiler.EmitOnlyDts {
 		pendingKind &= FileEmitKindAllDts
 	}
+	if options.EmitOnly == compiler.EmitOnlyJs {
+		pendingKind &= FileEmitKindAllJs
+	}
 	if h.isForDtsErrors {
 		pendingKind &= FileEmitKindDtsErrors
 	}

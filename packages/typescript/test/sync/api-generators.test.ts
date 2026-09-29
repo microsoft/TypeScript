@@ -1409,6 +1409,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             const project = snapshot.getConfiguredProject("/tsconfig.json")!;
             const { checker, languageService, program } = project;
             const { printer } = api;
+            const incrementalProgram = api.createIncrementalProgram([], { incremental: true, noLib: true, tsBuildInfoFile: "/build.tsbuildinfo" });
             const indexFile = program.getSourceFile("/src/index.ts")!;
             const modelsFile = program.getSourceFile("/src/models.ts")!;
 
@@ -1568,6 +1569,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
+                parityCase("API", "createIncrementalProgram", api.createIncrementalProgram, assertProgramsEquivalent, [], { incremental: true, noLib: true, tsBuildInfoFile: "/build.tsbuildinfo" }),
                 parityCase("API", "createBuildOrchestrator", api.createBuildOrchestrator, assertBuildOrchestratorsEquivalent, ["/tsconfig.json"], { cwd: "/" }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
@@ -1615,6 +1617,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "emitToString", program.emitToString, assertDeepEquivalent),
                 parityCase("Program", "getJavaScriptEmit", program.getJavaScriptEmit, assertDeepEquivalent, ["/src/index.ts"]),
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
+                parityCase("IncrementalProgram", "getBuildInfoEmit", incrementalProgram.getBuildInfoEmit, assertDeepEquivalent),
 
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
@@ -1766,6 +1769,23 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
             runParityBatch(api, cases);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
+
+            for (
+                const [methodName, method] of [
+                    ["emit", incrementalProgram.emit],
+                    ["emitBuildInfo", incrementalProgram.emitBuildInfo],
+                ] as const
+            ) {
+                const generated = api.batch(method.gen())[0];
+                const direct = method();
+                assert.deepEqual(generated.emittedFiles, direct.emittedFiles);
+                assert.deepEqual(generated.diagnostics, direct.diagnostics);
+                assert.deepEqual(generated.fileSystem, direct.fileSystem);
+                assertProgramsEquivalent(generated.program, direct.program);
+                generated.snapshot.dispose();
+                direct.snapshot.dispose();
+                exercisedMethods.add(`IncrementalProgram.${methodName}`);
+            }
 
             const snapshotGeneratorAPI = spawnAPI(parityFiles);
             const snapshotSyncAPI = spawnAPI(parityFiles);

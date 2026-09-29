@@ -302,6 +302,26 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 		b.deleteProject(project, logger)
 	}
+	seenIncrementalOperations := collections.Set[SyntheticProjectID]{}
+	for _, request := range apiRequest.IncrementalOperations {
+		if seenIncrementalOperations.Has(request.ProgramID) {
+			return fmt.Errorf("incremental program operated on more than once: %s", request.ProgramID)
+		}
+		seenIncrementalOperations.Add(request.ProgramID)
+		if apiRequest.RemovePrograms.Has(request.ProgramID) {
+			return fmt.Errorf("incremental program cannot be operated on and removed: %s", request.ProgramID)
+		}
+		if request.Kind != APIIncrementalOperationKindEmit && request.Kind != APIIncrementalOperationKindEmitBuildInfo {
+			return fmt.Errorf("unsupported incremental operation: %s", request.Kind)
+		}
+		entry, ok := b.syntheticProjects.Load(request.ProgramID)
+		if !ok {
+			return fmt.Errorf("incremental program not found: %s", request.ProgramID)
+		}
+		if entry.Value().incrementalProgram == nil {
+			return fmt.Errorf("project is not incremental: %s", request.ProgramID)
+		}
+	}
 	createdPrograms := make([]*Project, len(apiRequest.CreatePrograms))
 	createdEntries := make([]dirty.Value[*Project], len(apiRequest.CreatePrograms))
 	for i, request := range apiRequest.CreatePrograms {
@@ -314,6 +334,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.ModuleResolverFactory,
 			request.ModuleResolverID,
 			b.inferredContentMappers,
+			&request.Incremental,
 			logger,
 		)
 		createdEntries[i] = entry
@@ -329,6 +350,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.ModuleResolverFactory,
 			request.ModuleResolverID,
 			b.inferredContentMappers,
+			nil,
 			logger,
 		)
 	}
@@ -364,6 +386,37 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			b.updateProgram(entry, logger)
 			return true
 		})
+	}
+	for _, request := range apiRequest.IncrementalOperations {
+		entry, _ := b.syntheticProjects.Load(request.ProgramID)
+		if entry.Value().dirty {
+			b.updateProgram(entry, logger)
+		}
+		var operationError error
+		entry.Change(func(project *Project) {
+			program := project.incrementalProgram.Fork()
+			options := compiler.EmitOptions{
+				EmitOnly:  request.EmitOnly,
+				WriteFile: request.WriteFile,
+			}
+			switch request.Kind {
+			case APIIncrementalOperationKindEmit:
+				request.Result = program.Emit(b.ctx, options)
+			case APIIncrementalOperationKindEmitBuildInfo:
+				request.Result = program.EmitBuildInfo(b.ctx, options)
+			}
+			if request.Result == nil {
+				operationError = b.ctx.Err()
+				if operationError == nil {
+					operationError = fmt.Errorf("incremental operation returned no result: %s", request.Kind)
+				}
+				return
+			}
+			project.incrementalProgram = program
+		})
+		if operationError != nil {
+			return operationError
+		}
 	}
 	var moduleResolutionError error
 	b.forEachProject(func(entry dirty.Value[*Project]) bool {
@@ -1292,11 +1345,13 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	moduleResolverFactory ModuleResolverFactory,
 	moduleResolverID uint64,
 	contentMappers []*contentmapper.Mapper,
+	incremental *bool,
 	logger *logging.LogTree,
 ) *dirty.SyncMapEntry[SyntheticProjectID, *Project] {
 	project, loaded := b.syntheticProjects.Load(projectID)
 	if !loaded {
 		syntheticProject := newSyntheticProject(projectID, b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
+		syntheticProject.incremental = incremental != nil && *incremental
 		syntheticProject.CommandLine.Errors = configFileParsingDiagnostics
 		syntheticProject.moduleResolverFactory = moduleResolverFactory
 		syntheticProject.moduleResolverID = moduleResolverID

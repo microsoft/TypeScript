@@ -3,6 +3,7 @@ package incremental
 import (
 	"encoding/hex"
 	"fmt"
+	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -349,6 +350,64 @@ type snapshot struct {
 
 	// Used with testing to add text of hash for better comparison
 	hashWithText bool
+}
+
+func (s *snapshot) clone() *snapshot {
+	clone := &snapshot{
+		options:                         s.options,
+		latestChangedDtsFile:            s.latestChangedDtsFile,
+		hasErrors:                       s.hasErrors,
+		hasSemanticErrors:               s.hasSemanticErrors,
+		checkPending:                    s.checkPending,
+		packageJsons:                    slices.Clone(s.packageJsons),
+		missingPackageJsons:             slices.Clone(s.missingPackageJsons),
+		hasErrorsFromOldState:           s.hasErrorsFromOldState,
+		hasSemanticErrorsFromOldState:   s.hasSemanticErrorsFromOldState,
+		packageJsonsFromOldState:        slices.Clone(s.packageJsonsFromOldState),
+		missingPackageJsonsFromOldState: slices.Clone(s.missingPackageJsonsFromOldState),
+		hasChangedDtsFile:               s.hasChangedDtsFile,
+		hasEmitDiagnostics:              s.hasEmitDiagnostics,
+		hashWithText:                    s.hashWithText,
+	}
+	s.referencedMap.cloneInto(&clone.referencedMap)
+	clone.buildInfoEmitPending.Store(s.buildInfoEmitPending.Load())
+	s.fileInfos.Range(func(path tspath.Path, info *FileInfo) bool {
+		infoClone := *info
+		clone.fileInfos.Store(path, &infoClone)
+		return true
+	})
+	cloneDiagnosticsMap(&s.semanticDiagnosticsPerFile, &clone.semanticDiagnosticsPerFile)
+	cloneDiagnosticsMap(&s.emitDiagnosticsPerFile, &clone.emitDiagnosticsPerFile)
+	s.changedFilesSet.Range(func(path tspath.Path) bool {
+		clone.changedFilesSet.Add(path)
+		return true
+	})
+	s.affectedFilesPendingEmit.Range(func(path tspath.Path, kind FileEmitKind) bool {
+		clone.affectedFilesPendingEmit.Store(path, kind)
+		return true
+	})
+	s.emitSignatures.Range(func(path tspath.Path, signature *emitSignature) bool {
+		signatureClone := &emitSignature{
+			signature:                     signature.signature,
+			signatureWithDifferentOptions: slices.Clone(signature.signatureWithDifferentOptions),
+		}
+		clone.emitSignatures.Store(path, signatureClone)
+		return true
+	})
+	return clone
+}
+
+func cloneDiagnosticsMap(
+	source *collections.SyncMap[tspath.Path, *DiagnosticsOrBuildInfoDiagnosticsWithFileName],
+	target *collections.SyncMap[tspath.Path, *DiagnosticsOrBuildInfoDiagnosticsWithFileName],
+) {
+	source.Range(func(path tspath.Path, value *DiagnosticsOrBuildInfoDiagnosticsWithFileName) bool {
+		target.Store(path, &DiagnosticsOrBuildInfoDiagnosticsWithFileName{
+			diagnostics:          value.diagnostics,
+			buildInfoDiagnostics: value.buildInfoDiagnostics,
+		})
+		return true
+	})
 }
 
 func (s *snapshot) addFileToChangeSet(filePath tspath.Path) {
