@@ -3618,6 +3618,46 @@ export const value = 1;
         assert.equal((await api.getTimingInfo()).totals.requestCount, 0);
     });
 
+    test("compact symbol references retain reused file-owned symbols", async () => {
+        const source = `interface Box<T> { value: T; }\ndeclare const box: Box<string>;\nbox;`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/box.ts"] }),
+            "/src/box.ts": source,
+        });
+        const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const firstProject = firstSnapshot.getConfiguredProject("/tsconfig.json")!;
+        // Create the second snapshot before the first symbol response populates
+        // the client cache. This ensures its registry has no direct retain on
+        // the record that will be discovered through the compact reference.
+        const secondSnapshot = await firstSnapshot.update({});
+        const secondProject = secondSnapshot.getConfiguredProject("/tsconfig.json")!;
+
+        const box = await firstProject.checker.getSymbolAtPosition("/src/box.ts", source.indexOf("Box"));
+        assert.ok(box);
+        const boxType = await secondProject.checker.getTypeAtPosition("/src/box.ts", source.lastIndexOf("box"));
+        assert.ok(boxType);
+        const [value] = await boxType.getProperties();
+        assert.ok(value);
+        assert.ok(value.checkFlags & CheckFlags.Instantiated);
+
+        // The instantiated property belongs to the second snapshot, but its
+        // compact parent reference finds `box` in the record retained only by
+        // the first snapshot. Resolving the reference borrows the wrapper into
+        // the second registry and must retain its record for that registry's
+        // lifetime.
+        const boxFromSecondSnapshot = await value.getParent();
+        assert.strictEqual(boxFromSecondSnapshot, box);
+        await firstSnapshot.dispose();
+
+        // If the compact lookup did not establish ownership, disposing the
+        // first snapshot evicts the record. The next lookup then interns a new
+        // wrapper for the same binder symbol instead of returning the wrapper
+        // already obtained through the still-live second snapshot.
+        const parentAfterDisposal = await value.getParent();
+        await secondSnapshot.dispose();
+        assert.strictEqual(parentAfterDisposal, boxFromSecondSnapshot);
+    });
+
     test("file-owned declarations resolve without the snapshot that observed them", async () => {
         await using api = spawnAPI(symbolFiles);
         const firstSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
