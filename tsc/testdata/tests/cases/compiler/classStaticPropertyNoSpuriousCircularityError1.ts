@@ -31,3 +31,11 @@ const Foo4 = id(
 );
 
 Foo4.foo // {}
+
+class Circular {
+  static foo = Circular.foo; // error
+}
+
+const Circular2 = id(class C {
+  static foo = C.foo; // error
+});

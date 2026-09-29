@@ -84,3 +84,28 @@ Foo4.foo // {}
 >Foo4 : typeof A
 >foo : {}
 
+class Circular {
+>Circular : Circular
+
+  static foo = Circular.foo; // error
+>foo : any
+>Circular.foo : any
+>Circular : typeof Circular
+>foo : any
+}
+
+const Circular2 = id(class C {
+>Circular2 : typeof C
+>id(class C {  static foo = C.foo; // error}) : typeof C
+>id : <T>(x: T) => T
+>class C {  static foo = C.foo; // error} : typeof C
+>C : typeof C
+
+  static foo = C.foo; // error
+>foo : any
+>C.foo : any
+>C : typeof C
+>foo : any
+
+});
+
