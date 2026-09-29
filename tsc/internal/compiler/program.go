@@ -675,12 +675,26 @@ func (p *Program) collectDiagnostics(ctx context.Context, sourceFile *ast.Source
 	return filterAndSortDiagnostics(result)
 }
 
+// getWorkerContext returns the context for the per-file workers of a whole-program operation.
+// Workers that run on their own goroutines must not act as the request itself,
+// or the checker pool would let all of them reuse the one checker the request
+// holds at the same time (see core.WithoutRequestID). Single-threaded workers
+// run on the caller's goroutine, so they keep the request's identity.
+func getWorkerContext(ctx context.Context, singleThreaded bool) context.Context {
+	if singleThreaded {
+		return ctx
+	}
+	return core.WithoutRequestID(ctx)
+}
+
 func (p *Program) collectDiagnosticsFromFiles(ctx context.Context, sourceFiles []*ast.SourceFile, concurrent bool, collect func(context.Context, *ast.SourceFile) []*ast.Diagnostic) [][]*ast.Diagnostic {
 	diagnostics := make([][]*ast.Diagnostic, len(sourceFiles))
-	wg := core.NewWorkGroup(!concurrent || p.SingleThreaded())
+	singleThreaded := !concurrent || p.SingleThreaded()
+	wg := core.NewWorkGroup(singleThreaded)
+	workerCtx := getWorkerContext(ctx, singleThreaded)
 	for i, file := range sourceFiles {
 		wg.Queue(func() {
-			diagnostics[i] = collect(ctx, file)
+			diagnostics[i] = collect(workerCtx, file)
 		})
 	}
 	wg.RunAndWait()
@@ -725,13 +739,14 @@ func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, source
 		})
 	} else {
 		wg := core.NewWorkGroup(p.SingleThreaded())
+		workerCtx := getWorkerContext(ctx, p.SingleThreaded())
 		for i, file := range sourceFiles {
 			if p.SkipTypeChecking(file, false) {
 				continue
 			}
 			wg.Queue(func() {
-				c, done := p.checkerPool.GetChecker(ctx, file)
-				diagnostics[i] = collect(ctx, c, file)
+				c, done := p.checkerPool.GetChecker(workerCtx, file)
+				diagnostics[i] = collect(workerCtx, c, file)
 				done()
 			})
 		}
@@ -1892,6 +1907,7 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 	forceDtsEmit := options.EmitOnly == EmitOnlyBuilderSignature || options.ForceEmit && options.EmitOnly == EmitOnlyDts
 	forceJsEmit := options.ForceEmit && options.EmitOnly == EmitOnlyJs
 	sourceFiles := p.getSourceFilesToEmit(options.TargetSourceFiles, forceDtsEmit, forceJsEmit)
+	workerCtx := getWorkerContext(ctx, p.SingleThreaded())
 
 	for _, sourceFile := range sourceFiles {
 		emitter := &emitter{
@@ -1904,7 +1920,7 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 		}
 		emitters = append(emitters, emitter)
 		wg.Queue(func() {
-			host, done := newEmitHost(ctx, p, sourceFile)
+			host, done := newEmitHost(workerCtx, p, sourceFile)
 			defer done()
 			emitter.host = host
 
