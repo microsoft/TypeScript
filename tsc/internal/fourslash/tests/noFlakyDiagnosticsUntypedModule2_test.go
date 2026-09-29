@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
@@ -18,7 +19,9 @@ exports.x = 1;
 // @ts-expect-error
 import { x } from "./untyped";
 x;`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslashWithOptions(t, content, &fourslash.FourslashOptions{
+		TrackFlakyDiagnostics: new(lsproto.DiagnosticFlakeLogLevelPanic),
+	})
 	defer done()
 	f.GoToFile(t, "/index.ts")
 	f.VerifySuggestionDiagnostics(t, nil)

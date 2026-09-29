@@ -166,6 +166,9 @@ type FourslashOptions struct {
 	Capabilities         *lsproto.ClientCapabilities
 	ContentMapperSpawner contentmapper.Spawner
 	RunExternalCode      bool
+	// Makes every textDocument/diagnostic request also emit the program and compare
+	// the diagnostics before and after emit, e.g. to catch ones added by the emit resolver.
+	TrackFlakyDiagnostics *lsproto.DiagnosticFlakeLogLevel
 }
 
 func NewFourslashWithOptions(t *testing.T, content string, options *FourslashOptions) (*FourslashTest, func()) {
@@ -260,7 +263,7 @@ func newFourslash(t *testing.T, content string, options *FourslashOptions, testP
 	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
 	// !!! replace with a proper request *after initialize*
 	client.SetCompilerOptionsForInferredProjects(compilerOptions)
-	f.initialize(t, options.Capabilities, options.RunExternalCode)
+	f.initialize(t, options)
 
 	if testData.isStateBaseliningEnabled() {
 		// Single baseline, so initialize project state baseline too
@@ -365,14 +368,12 @@ func getBaseFileNameFromTest(t *testing.T) string {
 
 const showCodeLensLocationsCommandName = "typescript.showCodeLensLocations"
 
-func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCapabilities, runExternalCode bool) {
+func (f *FourslashTest) initialize(t *testing.T, options *FourslashOptions) {
 	initializationOptions := &lsproto.InitializationOptions{
 		CodeLensShowLocationsCommandName: new(showCodeLensLocationsCommandName),
-		// Make every textDocument/diagnostic request also emit the program and fail if the
-		// diagnostics differ before and after emit, e.g. because the emit resolver added some.
-		TrackFlakyDiagnostics: new(lsproto.DiagnosticFlakeLogLevelPanic),
+		TrackFlakyDiagnostics:            options.TrackFlakyDiagnostics,
 	}
-	if runExternalCode {
+	if options.RunExternalCode {
 		initializationOptions.RunExternalCode = new(true)
 	}
 	params := &lsproto.InitializeParams{
@@ -381,7 +382,7 @@ func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCap
 			InitializationOptions: initializationOptions,
 		},
 	}
-	params.Capabilities = getCapabilitiesWithDefaults(capabilities)
+	params.Capabilities = getCapabilitiesWithDefaults(options.Capabilities)
 	f.capabilities = params.Capabilities
 	resp, _, ok := f.client.SendRequest(t, lsproto.InitializeInfo, params)
 	if !ok {
