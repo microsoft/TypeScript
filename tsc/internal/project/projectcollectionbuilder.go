@@ -51,7 +51,9 @@ type ProjectCollectionBuilder struct {
 
 	client Client // optional; used for project loading notifications
 
-	newSnapshotID              uint64
+	newSnapshotID uint64
+	// loadedProjectTrees is what this build has loaded trees for, carried from the base collection.
+	loadedProjectTrees         *ProjectTreeRequest
 	programStructureChanged    bool
 	defaultProjectsInvalidated bool
 	openFilesChanged           bool
@@ -102,6 +104,7 @@ func newProjectCollectionBuilder(
 		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, func(path tspath.Path) bool { _, ok := overlays[path]; return ok }, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
 		openFilesChanged:                   !openFiles.Equals(&oldProjectCollection.openFiles),
+		loadedProjectTrees:                 oldProjectCollection.loadedProjectTrees,
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
 		syntheticProjects:                  dirty.NewSyncMap(oldProjectCollection.syntheticProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
@@ -132,6 +135,11 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if syntheticProjects, syntheticProjectsChanged := b.syntheticProjects.Finalize(); syntheticProjectsChanged {
 		ensureCloned()
 		newProjectCollection.syntheticProjects = syntheticProjects
+	}
+
+	if newProjectCollection.loadedProjectTrees != b.loadedProjectTrees {
+		ensureCloned()
+		newProjectCollection.loadedProjectTrees = b.loadedProjectTrees
 	}
 
 	if b.openFilesChanged {
@@ -729,6 +737,11 @@ func (b *ProjectCollectionBuilder) DidRequestProject(projectID ID, logger *loggi
 
 func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *ProjectTreeRequest, logger *logging.LogTree) {
 	startTime := time.Now()
+	// Recorded so a later request this one covers can be answered without building a snapshot to
+	// discover there was nothing to load.
+	if !b.loadedProjectTrees.covers(projectTreeRequest) {
+		b.loadedProjectTrees = projectTreeRequest
+	}
 
 	var currentProjects []ConfiguredProjectID
 	b.configuredProjects.Range(func(sme *dirty.SyncMapEntry[ConfiguredProjectID, *Project]) bool {
@@ -1487,6 +1500,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				oldHost := project.host
 				oldProgram := project.Program
 				oldCheckerPool := project.checkerPool
+				oldIncremental := project.incremental
 				project.host = newCompilerHost(project.currentDirectory, project, b, logger.Fork("CompilerHost"))
 				result := project.CreateProgram()
 				var watchedFiles []string
@@ -1527,6 +1541,9 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				if oldCheckerPool != nil {
 					oldCheckerPool.Discard()
 				}
+				// Carries what the old program worked out about its files, without carrying the
+				// program. Built here rather than on first use so the old one can be let go of now.
+				project.incremental = oldIncremental.next(result.UpdateKind == ProgramUpdateKindCloned)
 			})
 		})
 	}
