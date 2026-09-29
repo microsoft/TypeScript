@@ -701,6 +701,7 @@ type Checker struct {
 	regExpScanner                               *scanner.Scanner
 	patternForType                              map[*Type]*ast.Node
 	lazyMemberTables                            map[*Type]*lazyMemberTable
+	lazyMappedTables                            map[*Type]*lazyMappedTable
 	contextFreeTypes                            map[*ast.Node]*Type
 	anyType                                     *Type
 	autoType                                    *Type
@@ -982,6 +983,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.lazyMemberTables = make(map[*Type]*lazyMemberTable)
+	c.lazyMappedTables = make(map[*Type]*lazyMappedTable)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
 	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
 	c.autoType = c.newIntrinsicTypeEx(TypeFlagsAny, "any", ObjectFlagsNonInferrableType)
@@ -19311,6 +19313,10 @@ func (c *Checker) getSignaturesOfStructuredType(t *Type, kind SignatureKind) []*
 		}
 		return lm.constructSignatures
 	}
+	if t.objectFlags&ObjectFlagsMapped != 0 {
+		// Mapped types have no signatures.
+		return nil
+	}
 	resolved := c.resolveStructuredTypeMembers(t)
 	if kind == SignatureKindCall {
 		return resolved.signatures[:resolved.callSignatureCount]
@@ -19326,6 +19332,9 @@ func (c *Checker) getIndexInfosOfStructuredType(t *Type) []*IndexInfo {
 	if t.flags&TypeFlagsStructuredType != 0 {
 		if lm := c.getReadyLazyMemberTable(t); lm != nil {
 			return lm.indexInfos
+		}
+		if lazy := c.getLazyMappedTable(t); lazy != nil {
+			return c.getLazyMappedTypeIndexInfos(t, lazy)
 		}
 		return c.resolveStructuredTypeMembers(t).indexInfos
 	}
@@ -19599,7 +19608,7 @@ func (c *Checker) prepareLazyMembers(t *Type, lm *lazyMemberTable) {
 			instantiatedBaseType = c.getTypeWithThisArgument(c.instantiateType(baseType, lm.mapper), thisArgument, false /*needsApparentType*/)
 		}
 		lm.baseTypes = append(lm.baseTypes, instantiatedBaseType)
-		if c.getReadyLazyMemberTable(c.getReducedApparentType(instantiatedBaseType)) == nil {
+		if reduced := c.getReducedApparentType(instantiatedBaseType); reduced.flags&TypeFlagsIntersection == 0 && c.getReadyLazyMemberTable(reduced) == nil {
 			c.getPropertiesOfType(instantiatedBaseType)
 		}
 		callSignatures, constructSignatures, indexInfos = c.appendInheritedSignaturesAndIndexInfos(callSignatures, constructSignatures, indexInfos, instantiatedBaseType)
@@ -19650,6 +19659,13 @@ func (c *Checker) getMemberOfStructuredType(t *Type, name string) *ast.Symbol {
 }
 
 func (c *Checker) getMemberOfUnresolvedStructuredType(t *Type, name string) *ast.Symbol {
+	if t.objectFlags&ObjectFlagsMapped != 0 && !isReservedMemberName(name) {
+		if lazy := c.getLazyMappedTable(t); lazy != nil {
+			if member, ok := c.getLazyMappedTypeMember(t, lazy, name); ok {
+				return member
+			}
+		}
+	}
 	lm := c.getReadyLazyMemberTable(t)
 	if lm == nil || isReservedMemberName(name) {
 		return c.resolveStructuredTypeMembers(t).members[name]
@@ -21462,6 +21478,8 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 	// The 'T' in 'keyof T'
 	templateModifiers := getMappedTypeModifiers(t)
 	include := TypeFlagsStringOrNumberLiteralOrUnique
+	lazy := c.lazyMappedTables[t]
+	delete(c.lazyMappedTables, t)
 	addMemberForKeyTypeWorker := func(keyType *Type, propNameType *Type) {
 		// If the current iteration type constituent is a string literal type, create a property.
 		// Otherwise, for type string create a string index signature.
@@ -21475,46 +21493,13 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 				valueLinks.nameType = c.getUnionType([]*Type{valueLinks.nameType, propNameType})
 				mappedLinks := c.mappedSymbolLinks.Get(existingProp)
 				mappedLinks.keyType = c.getUnionType([]*Type{mappedLinks.keyType, keyType})
+			} else if lazy != nil && lazy.members[propName] != nil {
+				members[propName] = lazy.members[propName]
 			} else {
-				var modifiersProp *ast.Symbol
-				if isTypeUsableAsPropertyName(keyType) {
-					modifiersProp = c.getPropertyOfType(modifiersType, getPropertyNameFromType(keyType))
-				}
-				isOptional := templateModifiers&MappedTypeModifiersIncludeOptional != 0 || templateModifiers&MappedTypeModifiersExcludeOptional == 0 && modifiersProp != nil && modifiersProp.Flags&ast.SymbolFlagsOptional != 0
-				isReadonly := templateModifiers&MappedTypeModifiersIncludeReadonly != 0 || templateModifiers&MappedTypeModifiersExcludeReadonly == 0 && modifiersProp != nil && c.isReadonlySymbol(modifiersProp)
-				stripOptional := c.strictNullChecks && !isOptional && modifiersProp != nil && modifiersProp.Flags&ast.SymbolFlagsOptional != 0
-				var lateFlag ast.CheckFlags
-				if modifiersProp != nil {
-					lateFlag = modifiersProp.CheckFlags & ast.CheckFlagsLate
-				}
-				prop := c.newSymbol(ast.SymbolFlagsProperty|core.IfElse(isOptional, ast.SymbolFlagsOptional, 0), propName)
-				prop.CheckFlags = lateFlag | ast.CheckFlagsMapped | core.IfElse(isReadonly, ast.CheckFlagsReadonly, 0) | core.IfElse(stripOptional, ast.CheckFlagsStripOptional, 0)
-				valueLinks := c.valueSymbolLinks.Get(prop)
-				valueLinks.containingType = t
-				valueLinks.nameType = propNameType
-				mappedLinks := c.mappedSymbolLinks.Get(prop)
-				mappedLinks.keyType = keyType
-				if modifiersProp != nil {
-					mappedLinks.syntheticOrigin = modifiersProp
-					if shouldLinkPropDeclarations {
-						prop.Declarations = modifiersProp.Declarations
-					}
-				}
-				members[propName] = prop
+				members[propName] = c.newMappedTypeMember(t, modifiersType, templateModifiers, shouldLinkPropDeclarations, keyType, propNameType, propName)
 			}
-		} else if c.isValidIndexKeyType(propNameType) || propNameType.flags&(TypeFlagsAny|TypeFlagsEnum) != 0 {
-			indexKeyType := propNameType
-			switch {
-			case propNameType.flags&(TypeFlagsAny|TypeFlagsString) != 0:
-				indexKeyType = c.stringType
-			case propNameType.flags&(TypeFlagsNumber|TypeFlagsEnum) != 0:
-				indexKeyType = c.numberType
-			}
-			propType := c.instantiateType(templateType, appendTypeMapping(t.AsMappedType().mapper, typeParameter, keyType))
-			modifiersIndexInfo := c.getApplicableIndexInfo(modifiersType, propNameType)
-			isReadonly := templateModifiers&MappedTypeModifiersIncludeReadonly != 0 || templateModifiers&MappedTypeModifiersExcludeReadonly == 0 && modifiersIndexInfo != nil && modifiersIndexInfo.isReadonly
-			indexInfo := c.newIndexInfo(indexKeyType, propType, isReadonly, nil, nil)
-			indexInfos = c.appendIndexInfo(indexInfos, indexInfo, true /*union*/)
+		} else if lazy == nil || !lazy.indexInfosReady {
+			indexInfos = c.appendMappedTypeIndexInfo(indexInfos, t, modifiersType, typeParameter, templateType, templateModifiers, keyType, propNameType)
 		}
 	}
 	addMemberForKeyType := func(keyType *Type) {
@@ -21532,7 +21517,147 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 	} else {
 		forEachType(c.getLowerBoundOfKeyType(constraintType), addMemberForKeyType)
 	}
+	if lazy != nil && lazy.indexInfosReady {
+		indexInfos = lazy.indexInfos
+	}
 	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
+}
+
+func (c *Checker) appendMappedTypeIndexInfo(indexInfos []*IndexInfo, t *Type, modifiersType *Type, typeParameter *Type, templateType *Type, templateModifiers MappedTypeModifiers, keyType *Type, propNameType *Type) []*IndexInfo {
+	if !c.isValidIndexKeyType(propNameType) && propNameType.flags&(TypeFlagsAny|TypeFlagsEnum) == 0 {
+		return indexInfos
+	}
+	indexKeyType := propNameType
+	switch {
+	case propNameType.flags&(TypeFlagsAny|TypeFlagsString) != 0:
+		indexKeyType = c.stringType
+	case propNameType.flags&(TypeFlagsNumber|TypeFlagsEnum) != 0:
+		indexKeyType = c.numberType
+	}
+	propType := c.instantiateType(templateType, appendTypeMapping(t.AsMappedType().mapper, typeParameter, keyType))
+	modifiersIndexInfo := c.getApplicableIndexInfo(modifiersType, propNameType)
+	isReadonly := templateModifiers&MappedTypeModifiersIncludeReadonly != 0 || templateModifiers&MappedTypeModifiersExcludeReadonly == 0 && modifiersIndexInfo != nil && modifiersIndexInfo.isReadonly
+	indexInfo := c.newIndexInfo(indexKeyType, propType, isReadonly, nil, nil)
+	return c.appendIndexInfo(indexInfos, indexInfo, true /*union*/)
+}
+
+func (c *Checker) newMappedTypeMember(t *Type, modifiersType *Type, templateModifiers MappedTypeModifiers, shouldLinkPropDeclarations bool, keyType *Type, propNameType *Type, propName string) *ast.Symbol {
+	var modifiersProp *ast.Symbol
+	if isTypeUsableAsPropertyName(keyType) {
+		modifiersProp = c.getPropertyOfType(modifiersType, getPropertyNameFromType(keyType))
+	}
+	isOptional := templateModifiers&MappedTypeModifiersIncludeOptional != 0 || templateModifiers&MappedTypeModifiersExcludeOptional == 0 && modifiersProp != nil && modifiersProp.Flags&ast.SymbolFlagsOptional != 0
+	isReadonly := templateModifiers&MappedTypeModifiersIncludeReadonly != 0 || templateModifiers&MappedTypeModifiersExcludeReadonly == 0 && modifiersProp != nil && c.isReadonlySymbol(modifiersProp)
+	stripOptional := c.strictNullChecks && !isOptional && modifiersProp != nil && modifiersProp.Flags&ast.SymbolFlagsOptional != 0
+	var lateFlag ast.CheckFlags
+	if modifiersProp != nil {
+		lateFlag = modifiersProp.CheckFlags & ast.CheckFlagsLate
+	}
+	prop := c.newSymbol(ast.SymbolFlagsProperty|core.IfElse(isOptional, ast.SymbolFlagsOptional, 0), propName)
+	prop.CheckFlags = lateFlag | ast.CheckFlagsMapped | core.IfElse(isReadonly, ast.CheckFlagsReadonly, 0) | core.IfElse(stripOptional, ast.CheckFlagsStripOptional, 0)
+	valueLinks := c.valueSymbolLinks.Get(prop)
+	valueLinks.containingType = t
+	valueLinks.nameType = propNameType
+	mappedLinks := c.mappedSymbolLinks.Get(prop)
+	mappedLinks.keyType = keyType
+	if modifiersProp != nil {
+		mappedLinks.syntheticOrigin = modifiersProp
+		if shouldLinkPropDeclarations {
+			prop.Declarations = modifiersProp.Declarations
+		}
+	}
+	return prop
+}
+
+// Mapped types { [P in keyof T]: X } where T is an object type get a lazy table that creates
+// members and index infos as they are asked for, the way resolveMappedTypeMembers would.
+type lazyMappedTable struct {
+	typeParameter              *Type
+	templateType               *Type
+	modifiersType              *Type
+	templateModifiers          MappedTypeModifiers
+	shouldLinkPropDeclarations bool
+	members                    ast.SymbolTable
+	indexInfos                 []*IndexInfo
+	indexInfosReady            bool
+	resolving                  bool
+}
+
+func (c *Checker) getLazyMappedTable(t *Type) *lazyMappedTable {
+	if t.objectFlags&(ObjectFlagsMapped|ObjectFlagsMembersResolved) != ObjectFlagsMapped {
+		return nil
+	}
+	if lazy := c.lazyMappedTables[t]; lazy != nil {
+		return lazy
+	}
+	if !c.isMappedTypeWithKeyofConstraintDeclaration(t) {
+		return nil
+	}
+	// The same steps as resolveMappedTypeMembers before it creates members.
+	typeParameter := c.getTypeParameterFromMappedType(t)
+	c.getConstraintTypeFromMappedType(t)
+	mappedType := core.OrElse(t.AsMappedType().target, t)
+	if c.getNameTypeFromMappedType(mappedType) != nil {
+		return nil
+	}
+	shouldLinkPropDeclarations := c.getMappedTypeNameTypeKind(mappedType) != MappedTypeNameTypeKindRemapping
+	templateType := c.getTemplateTypeFromMappedType(mappedType)
+	modifiersType := c.getApparentType(c.getModifiersTypeFromMappedType(t))
+	if modifiersType.flags&TypeFlagsObject == 0 || t.objectFlags&ObjectFlagsMembersResolved != 0 {
+		return nil
+	}
+	lazy := &lazyMappedTable{
+		typeParameter:              typeParameter,
+		templateType:               templateType,
+		modifiersType:              modifiersType,
+		templateModifiers:          getMappedTypeModifiers(t),
+		shouldLinkPropDeclarations: shouldLinkPropDeclarations,
+		members:                    make(ast.SymbolTable),
+	}
+	c.lazyMappedTables[t] = lazy
+	return lazy
+}
+
+func (c *Checker) getLazyMappedTypeMember(t *Type, lazy *lazyMappedTable, name string) (member *ast.Symbol, ok bool) {
+	if existing, ok := lazy.members[name]; ok {
+		return existing, true
+	}
+	// Recursive lookups see no member, as they would while resolveMappedTypeMembers runs.
+	lazy.members[name] = nil
+	modifiersProp := c.getMemberOfStructuredType(lazy.modifiersType, name)
+	if t.objectFlags&ObjectFlagsMembersResolved != 0 {
+		return t.AsStructuredType().members[name], true
+	}
+	if modifiersProp != nil && c.isNamedMember(modifiersProp, name) {
+		keyType := c.getLiteralTypeFromProperty(modifiersProp, TypeFlagsStringOrNumberLiteralOrUnique, false)
+		if !isTypeUsableAsPropertyName(keyType) || getPropertyNameFromType(keyType) != name {
+			delete(lazy.members, name)
+			return nil, false
+		}
+		member = c.newMappedTypeMember(t, lazy.modifiersType, lazy.templateModifiers, lazy.shouldLinkPropDeclarations, keyType, keyType, name)
+	}
+	lazy.members[name] = member
+	return member, true
+}
+
+func (c *Checker) getLazyMappedTypeIndexInfos(t *Type, lazy *lazyMappedTable) []*IndexInfo {
+	if !lazy.indexInfosReady {
+		if lazy.resolving {
+			// Recursive requests see no index infos, as they would while resolveMappedTypeMembers runs.
+			return nil
+		}
+		lazy.resolving = true
+		defer func() { lazy.resolving = false }()
+		var indexInfos []*IndexInfo
+		for _, info := range c.getIndexInfosOfType(lazy.modifiersType) {
+			indexInfos = c.appendMappedTypeIndexInfo(indexInfos, t, lazy.modifiersType, lazy.typeParameter, lazy.templateType, lazy.templateModifiers, info.keyType, info.keyType)
+		}
+		if t.objectFlags&ObjectFlagsMembersResolved != 0 {
+			return t.AsStructuredType().indexInfos
+		}
+		lazy.indexInfos, lazy.indexInfosReady = indexInfos, true
+	}
+	return lazy.indexInfos
 }
 
 func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {
@@ -22432,10 +22557,25 @@ func (c *Checker) isMappingOfSameObjectType(types []*Type) bool {
 
 func (c *Checker) somePropertyReducesToNever(t *Type) bool {
 	// Collect declaration counts for each property across all constituent types of the intersection.
+	// A name that occurs in more than one constituent occurs in one other than skipped, so skipped
+	// only needs its members looked up, which may not resolve them.
+	types := t.Types()
+	skipped := slices.IndexFunc(types, func(t *Type) bool {
+		return t.objectFlags&(ObjectFlagsMapped|ObjectFlagsMembersResolved) == ObjectFlagsMapped || mayHaveLazyMembers(t) && t.flags&TypeFlagsObject != 0
+	})
 	counts := make(map[string]int)
-	for _, t := range t.Types() {
-		for _, prop := range c.getPropertiesOfType(t) {
-			counts[prop.Name]++
+	for i, t := range types {
+		if i != skipped {
+			for _, prop := range c.getPropertiesOfType(t) {
+				counts[prop.Name]++
+			}
+		}
+	}
+	if skipped >= 0 {
+		for propName := range counts {
+			if c.getPropertyOfTypeEx(types[skipped], propName, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/) != nil {
+				counts[propName]++
+			}
 		}
 	}
 	// Check if any property appears in more than one constituent type and reduces to 'never'.
