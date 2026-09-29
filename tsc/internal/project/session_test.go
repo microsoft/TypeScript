@@ -1724,7 +1724,7 @@ export const value = content;`,
 		jsURI := lsproto.DocumentUri("file:///home/projects/TS/p1/app.js")
 		defaultProject := snapshot.GetDefaultProject(jsURI)
 		assert.Assert(t, defaultProject != nil, "JS file should have a default project")
-		assert.Equal(t, defaultProject.Name(), "/home/projects/TS/p1/jsconfig.json", "JS file should belong to jsconfig.json project, not tsconfig.json")
+		assert.Equal(t, defaultProject.ConfigFileName(), "/home/projects/TS/p1/jsconfig.json", "JS file should belong to jsconfig.json project, not tsconfig.json")
 
 		// Open the TS file - it should be assigned to tsconfig.json project
 		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
@@ -1733,6 +1733,6 @@ export const value = content;`,
 		tsURI := lsproto.DocumentUri("file:///home/projects/TS/p1/index.ts")
 		defaultTSProject := snapshot.GetDefaultProject(tsURI)
 		assert.Assert(t, defaultTSProject != nil, "TS file should have a default project")
-		assert.Equal(t, defaultTSProject.Name(), "/home/projects/TS/p1/tsconfig.json", "TS file should belong to tsconfig.json project")
+		assert.Equal(t, defaultTSProject.ConfigFileName(), "/home/projects/TS/p1/tsconfig.json", "TS file should belong to tsconfig.json project")
 	})
 }

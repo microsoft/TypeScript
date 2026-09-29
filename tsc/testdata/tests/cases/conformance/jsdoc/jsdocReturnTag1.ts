@@ -1,7 +1,7 @@
 // @target: es2015
 // @allowJs: true
 // @filename: returns.js
-// @outFile: dummy.js
+// @outDir: out
 /**
  * @returns {string} This comment is not currently exposed
  */

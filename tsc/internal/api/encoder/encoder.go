@@ -59,11 +59,16 @@ const (
 	HeaderOffsetExtendedData
 	HeaderOffsetStructuredData
 	HeaderOffsetNodes
+	HeaderOffsetSourceFileID
+	_
+	HeaderOffsetSourceFileLease
+	_
+	HeaderOffsetBinderData
 	HeaderSize
 )
 
 const (
-	ProtocolVersion uint8 = 7
+	ProtocolVersion uint8 = 9
 )
 
 // Source File Binary Format
@@ -79,14 +84,14 @@ const (
 //
 // | Section            | Length             | Description                                                                                     |
 // | ------------------ | ------------------ | ----------------------------------------------------------------------------------------------- |
-// | Header             | 44 bytes           | Contains the content hash, parse options, flags, and byte offsets to the start of each section. |
+// | Header             | 64 bytes           | Contains the content hash, parse options, flags, file metadata, and byte offsets to the start of each section. |
 // | String offsets     | 8 bytes per string | Pairs of starting byte offsets and ending byte offsets into the **string data** section.        |
 // | String data        | variable           | UTF-8 encoded string data.                                                                      |
 // | Extended node data | variable           | Extra data for some kinds of nodes.                                                             |
 // | Structured data    | variable           | Msgpack-encoded metadata blobs (e.g. file references).                                         |
 // | Nodes              | 28 bytes per node  | Defines the AST structure of the file, with references to strings and extended data.            |
 //
-// Header (44 bytes)
+// Header (64 bytes)
 // -----------------
 //
 // The header contains the following fields:
@@ -102,6 +107,9 @@ const (
 // | 32-35       | uint32    | Byte offset to extended node data section         |
 // | 36-39       | uint32    | Byte offset to structured data section            |
 // | 40-43       | uint32    | Byte offset to nodes section                      |
+// | 44-51       | uint64    | Source file ID (0 = none)                          |
+// | 52-59       | uint64    | Source file lease ID (0 = none)                    |
+// | 60-63       | uint32    | Byte offset to binder data (0 = none)              |
 //
 // String offsets (8 bytes per string)
 // -----------------------------------
@@ -202,7 +210,8 @@ const (
 // NodeLists are represented as normal nodes with the special `kind` value `0xff_ff_ff_ff`. They are considered the parent
 // of their contents in the encoded format. A client reconstructing an AST similar to TypeScript's internal representation
 // should instead set the `parent` pointers of a NodeList's children to the NodeList's parent. A NodeList's `data` field
-// is the uint32 length of the list, and does not use one of the data types described below.
+// is the uint32 length of the list, and does not use one of the data types described below. A NodeList's `flags` field
+// is not used for AST node flags (NodeLists have none); bit 0 instead encodes `HasTrailingComma`.
 //
 // For node types other than NodeList, the node data field encodes one of the following, determined by the first 2 bits of
 // the field:
@@ -405,7 +414,7 @@ func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 }
 
 func GetNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
-	return ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, BuildNodeIndexTable)
+	return sourceFile.GetOrComputeData(nodeIndexTableKey, BuildNodeIndexTable)
 }
 
 // EncodeSourceFile encodes an entire source file AST into the binary format.
@@ -415,10 +424,15 @@ func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, erro
 	if err != nil {
 		return nil, nil, err
 	}
-	nodeTable = ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, func(*ast.SourceFile) *NodeIndexTable {
+	nodeTable = sourceFile.GetOrComputeData(nodeIndexTableKey, func(*ast.SourceFile) *NodeIndexTable {
 		return nodeTable
 	})
 	return data, nodeTable, nil
+}
+
+// SetSourceFileLease sets the session-scoped lease ID in an encoded source file.
+func SetSourceFileLease(data []byte, lease uint64) {
+	binary.LittleEndian.PutUint64(data[HeaderOffsetSourceFileLease:], lease)
 }
 
 // EncodeNode encodes an arbitrary AST node and its descendants into the binary format.
@@ -502,7 +516,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 					nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 				}
 
-				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), 0)
+				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), uint32(boolToByte(nodeList.HasTrailingComma())))
 
 				saveParentIndex := parentIndex
 
@@ -620,6 +634,9 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 		uint32(offsetExtendedData),
 		uint32(offsetStructuredData),
 		uint32(offsetNodes),
+		0, 0, // source file ID
+		0, 0, // source file lease ID
+		0, // binder data offset
 	}
 
 	var headerBytes, strsBytes []byte

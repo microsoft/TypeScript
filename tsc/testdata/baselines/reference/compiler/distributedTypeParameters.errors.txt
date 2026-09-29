@@ -1,0 +1,138 @@
+distributedTypeParameters.ts(8,17): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(15,17): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(29,17): error TS2344: Type 'A & B' does not satisfy the constraint 'A'.
+  'A & B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(41,13): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(45,13): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(50,13): error TS2344: Type 'C' does not satisfy the constraint 'A'.
+  'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(56,15): error TS2344: Type 'C' does not satisfy the constraint 'A'.
+  'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(57,15): error TS2344: Type 'C' does not satisfy the constraint 'B'.
+  'C' is only assignable to the non-distributed 'B', but 'B' has been distributed here.
+
+
+==== distributedTypeParameters.ts (8 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63708
+    
+    type Show<A, B extends A> = [A, B] & {};
+    
+    type Issue1<A, B extends A> =
+      A extends unknown ?
+        B extends unknown ?
+            Show<A, B> :  // Error
+                    ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+            never :
+        never;
+    
+    type Issue2<A, B extends A> =
+      B extends unknown ?
+        A extends unknown ?
+            Show<A, B> :  // Error
+                    ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+            never :
+        never;
+    
+    type Issue3<A, B> =
+      A extends B ?
+        B extends A ?
+            Show<A, B> :
+            never :
+        never;
+    
+    type Issue4<A, B> =
+      B extends A ?
+        A extends B ?
+            Show<A, B> :  // Error
+                    ~
+!!! error TS2344: Type 'A & B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'A & B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+            never :
+        never;
+    
+    type X1 = Issue1<0 | 1, 0 | 1>;
+    type X2 = Issue2<0 | 1, 0 | 1>;
+    type X3 = Issue3<0 | 1, 0 | 1>;
+    type X4 = Issue4<0 | 1, 0 | 1>;
+    
+    type T1<A extends number, B extends A> =
+      A extends B ?
+        never :
+        Show<A, B>;  // Error
+                ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+    
+    type T2<A extends number, B extends A> =
+      A extends B ?
+        Show<A, B> :  // Error
+                ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+        never;
+    
+    type T3<A, B extends A, C extends B> =
+      A extends unknown ?
+        Show<A, C> :  // Error
+                ~
+!!! error TS2344: Type 'C' does not satisfy the constraint 'A'.
+!!! error TS2344:   'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+        Show<B, C>;
+    
+    type T4<A, B extends A, C extends B> =
+      A extends unknown ?
+        B extends unknown ?
+          Show<A, C> :  // Error
+                  ~
+!!! error TS2344: Type 'C' does not satisfy the constraint 'A'.
+!!! error TS2344:   'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+          Show<B, C> :  // Error
+                  ~
+!!! error TS2344: Type 'C' does not satisfy the constraint 'B'.
+!!! error TS2344:   'C' is only assignable to the non-distributed 'B', but 'B' has been distributed here.
+        never;
+    
+    type T5<A extends number, B extends A> =
+      [A] extends [B] ?
+        Show<A, B> :
+        never;
+    
+    // Ensure mapped type modifiers are computed correctly, example from type-fest
+    
+    type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
+    	IsAny<Type | Key> extends true ? never
+    		: Key extends unknown // For distributing `Key`
+    			? Type extends unknown // For distributing `Type`
+    				? IsEqual<
+    					{[K in Key]: Type[Key]},
+    					{readonly [K in Key]: Type[Key]}
+    				>
+    				: never // Should never happen
+    			: never; // Should never happen
+    
+    type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false;
+    
+    type IsEqual<A, B> =
+    	[A] extends [B]
+    		? [B] extends [A]
+    			? _IsEqual<A, B>
+    			: false
+    		: false;
+    
+    type _IsEqual<A, B> =
+    	(<G>() => G extends A & G | G ? 1 : 2) extends
+    	(<G>() => G extends B & G | G ? 1 : 2)
+    		? true
+    		: false;
+    
+    type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
+    type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
+    

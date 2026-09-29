@@ -17,7 +17,6 @@ type Replacements struct {
 	DirectoryExists           func(string) bool
 	GetAccessibleEntries      func(string) vfs.Entries
 	Stat                      func(string) vfs.FileInfo
-	WalkDir                   func(string, vfs.WalkDirFunc) error
 	Realpath                  func(string) string
 }
 
@@ -111,14 +110,6 @@ func (w *wrappedFS) Stat(path string) vfs.FileInfo {
 		return w.replacements.Stat(path)
 	}
 	return w.fs.Stat(path)
-}
-
-// WalkDir implements [vfs.FS].
-func (w *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	if w.replacements.WalkDir != nil {
-		return w.replacements.WalkDir(root, walkFn)
-	}
-	return w.fs.WalkDir(root, walkFn)
 }
 
 // Realpath implements [vfs.FS].

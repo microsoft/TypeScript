@@ -1,5 +1,5 @@
 // @target: es2015
-// @module: amd
+// @module: commonjs
 // @Filename: foo_0.ts
 function foo() {
 	return "test";

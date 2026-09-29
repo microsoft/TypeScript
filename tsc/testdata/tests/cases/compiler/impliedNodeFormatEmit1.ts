@@ -2,7 +2,7 @@
 // @allowJs: true
 // @checkJs: true
 // @outDir: dist
-// @module: esnext, commonjs, amd, system, umd, preserve
+// @module: esnext, commonjs, system, umd, preserve
 // @moduleResolution: bundler
 // @noTypesAndSymbols: true
 

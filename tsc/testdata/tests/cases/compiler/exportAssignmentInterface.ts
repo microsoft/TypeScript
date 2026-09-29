@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: exportAssignmentInterface_A.ts
 interface A {
 	p1: number;

@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: exportAssignmentClass_A.ts
 class C { public p = 0; }
 

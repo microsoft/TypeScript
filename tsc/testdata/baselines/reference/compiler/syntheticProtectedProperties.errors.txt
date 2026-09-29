@@ -1,0 +1,168 @@
+syntheticProtectedProperties.ts(65,6): error TS2445: Property 'foo' is protected and only accessible within class 'C1 | C2' and its subclasses.
+syntheticProtectedProperties.ts(68,6): error TS2339: Property 'foo' does not exist on type 'C1 | C3'.
+syntheticProtectedProperties.ts(69,6): error TS2339: Property 'foo' does not exist on type 'C1 | C3'.
+syntheticProtectedProperties.ts(72,6): error TS2339: Property 'foo' does not exist on type 'C2 | C3'.
+syntheticProtectedProperties.ts(73,6): error TS2339: Property 'foo' does not exist on type 'C2 | C3'.
+syntheticProtectedProperties.ts(77,6): error TS2341: Property 'foo' is private and only accessible within class 'P1 | P2'.
+syntheticProtectedProperties.ts(80,6): error TS2339: Property 'foo' does not exist on type 'P1 | P3'.
+syntheticProtectedProperties.ts(81,6): error TS2339: Property 'foo' does not exist on type 'P1 | P3'.
+syntheticProtectedProperties.ts(84,6): error TS2339: Property 'foo' does not exist on type 'P2 | P3'.
+syntheticProtectedProperties.ts(85,6): error TS2339: Property 'foo' does not exist on type 'P2 | P3'.
+syntheticProtectedProperties.ts(99,6): error TS2445: Property 'foo' is protected and only accessible within class 'C2 & C3' and its subclasses.
+syntheticProtectedProperties.ts(106,6): error TS2339: Property 'foo' does not exist on type 'never'.
+  The intersection 'P1 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+syntheticProtectedProperties.ts(107,6): error TS2339: Property 'foo' does not exist on type 'never'.
+  The intersection 'P1 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+syntheticProtectedProperties.ts(110,6): error TS2339: Property 'foo' does not exist on type 'never'.
+  The intersection 'P2 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+syntheticProtectedProperties.ts(111,6): error TS2339: Property 'foo' does not exist on type 'never'.
+  The intersection 'P2 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+
+
+==== syntheticProtectedProperties.ts (15 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63749
+    
+    declare class Dummy {
+        a: number;
+    }
+    
+    type Public = Base | Dummy;
+    
+    declare class Base {
+        protected get content(): string;
+        protected set content(value: string);
+    }
+    
+    declare class Mock {
+        get content(): string;
+        set content(value: string);
+    }
+    
+    declare const w: Public
+    if (w instanceof Mock) {
+        w.content;
+    }
+    declare const w2: Mock & Public
+    w2.content;
+    
+    declare const w3: Public & Mock
+    w3.content;
+    
+    // private/protected set accessors are tracked in unions and intersections
+    
+    declare class C1 {
+        get foo(): number;
+        set foo(value: number);
+    }
+    
+    declare class C2 {
+        get foo(): number;
+        protected set foo(value: number);
+    }
+    
+    declare class C3 {
+        protected get foo(): number;
+        protected set foo(value: number);
+    }
+    
+    declare class P1 {
+        get foo(): number;
+        set foo(value: number);
+    }
+    
+    declare class P2 {
+        get foo(): number;
+        private set foo(value: number);
+    }
+    
+    declare class P3 {
+        private get foo(): number;
+        private set foo(value: number);
+    }
+    
+    // Unions properties have most restricted accessibility
+    
+    declare const cu12: C1 | C2;
+    cu12.foo;
+    cu12.foo = 123;  // Error, protected
+         ~~~
+!!! error TS2445: Property 'foo' is protected and only accessible within class 'C1 | C2' and its subclasses.
+    
+    declare const cu13: C1 | C3;
+    cu13.foo;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'C1 | C3'.
+    cu13.foo = 123;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'C1 | C3'.
+    
+    declare const cu23: C2 | C3;
+    cu23.foo;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'C2 | C3'.
+    cu23.foo = 123;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'C2 | C3'.
+    
+    declare const pu12: P1 | P2;
+    pu12.foo;
+    pu12.foo = 123;  // Error, private
+         ~~~
+!!! error TS2341: Property 'foo' is private and only accessible within class 'P1 | P2'.
+    
+    declare const pu13: P1 | P3;
+    pu13.foo;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'P1 | P3'.
+    pu13.foo = 123;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'P1 | P3'.
+    
+    declare const pu23: P2 | P3;
+    pu23.foo;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'P2 | P3'.
+    pu23.foo = 123;  // Error, no property
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'P2 | P3'.
+    
+    // Intersection properties have most permissive accessibility
+    
+    declare const ci12: C1 & C2;
+    ci12.foo;
+    ci12.foo = 123;
+    
+    declare const ci13: C1 & C3;
+    ci13.foo;
+    ci13.foo = 123;
+    
+    declare const ci23: C2 & C3;
+    ci23.foo;
+    ci23.foo = 123;  // Error, protected
+         ~~~
+!!! error TS2445: Property 'foo' is protected and only accessible within class 'C2 & C3' and its subclasses.
+    
+    declare const pi12: P1 & P2;
+    pi12.foo;
+    pi12.foo = 123;
+    
+    declare const pi13: P1 & P3;
+    pi13.foo;  // Error, reduced to never
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'P1 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+    pi13.foo = 123;  // Error, reduced to never
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'P1 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+    
+    declare const pi23: P2 & P3;
+    pi23.foo;  // Error, reduced to never
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'P2 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+    pi23.foo = 123;  // Error, reduced to never
+         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'P2 & P3' was reduced to 'never' because property 'foo' exists in multiple constituents and is private in some.
+    

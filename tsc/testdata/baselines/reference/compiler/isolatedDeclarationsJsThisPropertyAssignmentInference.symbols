@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/isolatedDeclarationsJsThisPropertyAssignmentInference.ts] ////
+
+=== a.js ===
+function foo() { return 1; }
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+
+export class C {
+>C : Symbol(C, Decl(a.js, 0, 28))
+
+    constructor() {
+        this.x = foo();
+>this.x : Symbol(C.x, Decl(a.js, 2, 19))
+>this : Symbol(C, Decl(a.js, 0, 28))
+>x : Symbol(C.x, Decl(a.js, 2, 19))
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+    }
+}
+

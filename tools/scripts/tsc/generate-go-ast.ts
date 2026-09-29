@@ -1,7 +1,7 @@
 /**
  * Go AST code generator: reads tools/scripts/tsc/ast.json and produces internal/ast/ast_generated.go
  *
- * Usage: node --experimental-strip-types tools/scripts/tsc/generate-go-ast.ts
+ * Usage: node tools/scripts/tsc/generate-go-ast.ts
  *
  * Generates:
  *   - Struct definitions for each node kind
@@ -14,10 +14,14 @@
  *   - Is*() type guard functions
  */
 
-import { execaSync } from "execa";
-import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import { GeneratedFile } from "../gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+    repoRoot as ROOT,
+} from "../gen/utils.mts";
 import type {
     MemberInfo,
     NodeType,
@@ -31,8 +35,6 @@ import {
 // ────────────────────────────────────────────────────────────────────────────
 // Load schema
 // ────────────────────────────────────────────────────────────────────────────
-
-const ROOT = path.resolve(import.meta.dirname!, "../../..");
 
 // Members that participate in factory/visitor/clone (excludes noFactory)
 function schemaMembers(node: NodeType): MemberInfo[] {
@@ -140,25 +142,25 @@ function generateHeader(w: CodeWriter) {
 // ── Generate struct definitions ────────────────────────────────────────────
 
 /**
- * Verifies that nothing inherits a base along more than one path.
+ * Verifies that the generated Go structs do not embed a base along more than one path.
  */
 function verifyNoDuplicateBases(): void {
     const problems: string[] = [];
-    const check = (name: string, extendsKeys: string[]) => {
+    const check = (name: string, goExtends: string[]) => {
         const copies = new Map<string, number>();
         const walk = (keys: string[]) => {
             for (const key of keys) {
                 copies.set(key, (copies.get(key) ?? 0) + 1);
-                walk(api.getBase(key)?.extendsKeys ?? []);
+                walk(baseGoEmbeds(api.getBase(key)));
             }
         };
-        walk(extendsKeys);
+        walk(goExtends);
         for (const [base, count] of copies) {
             if (count > 1) problems.push(`${name} inherits ${base} ${count} times`);
         }
     };
-    for (const base of api.bases()) check(base.key, base.extendsKeys);
-    for (const node of api.nodes()) check(node.name, node.extendsKeys);
+    for (const base of api.bases()) check(base.key, baseGoEmbeds(base));
+    for (const node of api.nodes()) check(node.name, goEmbeds(node.extendsKeys));
 
     if (problems.length > 0) {
         throw new Error(`ast.json declares duplicate embedded bases:\n  ${problems.sort().join("\n  ")}`);
@@ -171,20 +173,23 @@ function verifyNoDuplicateBases(): void {
 function verifyNodeBaseAtOffsetZero(): void {
     const containsNodeBase = (key: string): boolean => {
         if (key === "NodeBase") return true;
-        return api.getBase(key)?.extendsKeys.some(containsNodeBase) ?? false;
+        return baseGoEmbeds(api.getBase(key)).some(containsNodeBase);
     };
     const problems: string[] = [];
-    const check = (name: string, extendsKeys: string[], requireNodeBase: boolean) => {
-        const nodeBaseIndex = extendsKeys.findIndex(containsNodeBase);
+    const check = (name: string, goExtends: string[], requireNodeBase: boolean) => {
+        const nodeBaseIndex = goExtends.findIndex(containsNodeBase);
         if (nodeBaseIndex < 0 && requireNodeBase) {
             problems.push(`${name} does not embed NodeBase`);
         }
         else if (nodeBaseIndex > 0) {
-            problems.push(`${name} embeds ${extendsKeys[nodeBaseIndex]} after ${extendsKeys.slice(0, nodeBaseIndex).join(", ")}`);
+            const preceding = goExtends.slice(0, nodeBaseIndex).filter(key => !isZeroSizeBase(key));
+            if (preceding.length > 0) {
+                problems.push(`${name} embeds ${goExtends[nodeBaseIndex]} after ${preceding.join(", ")}`);
+            }
         }
     };
-    for (const base of api.bases()) check(base.key, base.extendsKeys, false);
-    for (const node of api.nodes()) check(node.name, node.extendsKeys, true);
+    for (const base of api.bases()) check(base.key, baseGoEmbeds(base), false);
+    for (const node of api.nodes()) check(node.name, goEmbeds(node.extendsKeys), true);
 
     if (problems.length > 0) {
         throw new Error(`ast.json does not embed NodeBase at offset zero:\n  ${problems.sort().join("\n  ")}`);
@@ -194,18 +199,48 @@ function verifyNodeBaseAtOffsetZero(): void {
 verifyNoDuplicateBases();
 verifyNodeBaseAtOffsetZero();
 
-// A base with no fields and no extends is a struct{} marker. Go pads a struct whose last field is
+// A base generated without fields or embeddings is a struct{} marker. Go pads a struct whose last field is
 // zero-size (so the field's address stays in bounds), so markers are embedded first, never last; being
 // zero-size, they don't move NodeBase off offset zero.
 function isZeroSizeBase(key: string): boolean {
     const base = api.getBase(key);
-    return !!base && base.extendsKeys.length === 0 && base.fields.length === 0;
+    return !!base && base.fields.length === 0 && (base.extendsKeys.length === 0 || isInheritedDeclarationMarker(base));
+}
+
+function isInheritedDeclarationMarker(base: NodeType | undefined): boolean {
+    return !!base &&
+        base.fields.length === 0 &&
+        base.extendsKeys.length === 1 &&
+        base.extendsKeys[0] === "DeclarationBase";
+}
+
+function baseGoEmbeds(base: NodeType | undefined): string[] {
+    return base && !isInheritedDeclarationMarker(base) ? goEmbeds(base.extendsKeys) : [];
+}
+
+function expandGoExtends(extendsKeys: string[]): string[] {
+    const result: string[] = [];
+    const seen = new Set<string>();
+    for (const key of extendsKeys) {
+        const base = api.getBase(key);
+        // Go cannot embed multiple category bases that share DeclarationBase without
+        // introducing ambiguous promoted fields and methods. Keep each empty category
+        // marker and flatten its inherited storage alongside it.
+        const keys = isInheritedDeclarationMarker(base) ? [key, ...(base?.extendsKeys ?? [])] : [key];
+        for (const expanded of keys) {
+            if (!seen.has(expanded)) {
+                seen.add(expanded);
+                result.push(expanded);
+            }
+        }
+    }
+    return result;
 }
 
 function goEmbeds(extendsKeys: string[]): string[] {
     const zeroSized: string[] = [];
     const nonZeroSized: string[] = [];
-    for (const key of extendsKeys) {
+    for (const key of expandGoExtends(extendsKeys)) {
         if (isZeroSizeBase(key)) {
             zeroSized.push(key);
         }
@@ -309,7 +344,7 @@ function generateBaseStructDefs(w: CodeWriter) {
 
         const structName = base.key;
 
-        const goExts = goEmbeds(base.extendsKeys);
+        const goExts = baseGoEmbeds(base);
 
         w.write(`type ${structName} struct {`);
         w.push();
@@ -984,8 +1019,7 @@ function generateKind(): string {
     w.write("");
     w.write("package ast");
     w.write("");
-    w.write("//go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -output=kind_stringer_generated.go");
-    w.write("//go:generate npx dprint fmt kind_stringer_generated.go");
+    w.write("//go:generate npx hereby generate:ast-stringer");
     w.write("");
     w.write("type Kind int16");
     w.write("");
@@ -1082,24 +1116,25 @@ function generateKind(): string {
     return w.toString();
 }
 
-function writeAndFormat(filePath: string, content: string) {
-    fs.writeFileSync(filePath, content);
-    execaSync("dprint", ["fmt", filePath], { stdio: "inherit", cwd: ROOT });
+function writeAndFormat(filePath: string, generateContent: () => string, force: boolean) {
+    const generated = new GeneratedFile(filePath, [import.meta.filename, path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]);
+    if (generated.isCurrent(force)) return;
+    generated.write(generateContent());
+    formatFilesSync([filePath]);
+    generated.markCurrent();
     console.log(`Wrote ${filePath}`);
 }
 
-export default function main() {
+export default function main(force = false) {
     console.log("Generating Go AST code...");
 
-    const code = generate();
     const outPath = path.join(ROOT, "tsc/internal/ast/ast_generated.go");
-    writeAndFormat(outPath, code + "\n");
+    writeAndFormat(outPath, () => generate() + "\n", force);
 
-    const kindCode = generateKind();
     const kindOutPath = path.join(ROOT, "tsc/internal/ast/kind_generated.go");
-    writeAndFormat(kindOutPath, kindCode + "\n");
+    writeAndFormat(kindOutPath, () => generateKind() + "\n", force);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    main();
+    main(parseGeneratorArgs({}).force);
 }

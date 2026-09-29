@@ -1130,8 +1130,8 @@ func ForEachAncestorDirectory[T any](directory string, callback func(directory s
 	}
 }
 
-func ForEachAncestorDirectoryPath[T any](directory Path, callback func(directory Path) (result T, stop bool)) (result T, ok bool) {
-	return ForEachAncestorDirectory(string(directory), func(directory string) (T, bool) {
+func (p Path) ForEachAncestorDirectory[T any](callback func(directory Path) (result T, stop bool)) (result T, ok bool) {
+	return ForEachAncestorDirectory(string(p), func(directory string) (T, bool) {
 		return callback(Path(directory))
 	})
 }
@@ -1237,7 +1237,11 @@ func getCommonParentsWorker(componentGroups [][]string, minComponents int, optio
 						group := newGroups[key]
 						subResults := getCommonParentsWorker(group.tails, minComponents-(lastCommonIndex+1), options)
 						for _, sr := range subResults {
-							result = append(result, append(group.head, sr...))
+							if len(sr) == 0 {
+								result = append(result, slices.Clip(group.head))
+							} else {
+								result = append(result, slices.Concat(group.head, sr))
+							}
 						}
 					}
 					return result

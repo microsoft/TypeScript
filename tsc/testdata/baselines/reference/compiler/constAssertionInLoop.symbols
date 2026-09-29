@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/constAssertionInLoop.ts] ////
+
+=== constAssertionInLoop.ts ===
+// https://github.com/microsoft/TypeScript/issues/64012
+
+type Candidate = { mode: "a"; output: unknown } | { mode: "b" };
+>Candidate : Symbol(Candidate, Decl(constAssertionInLoop.ts, 0, 0))
+>mode : Symbol(mode, Decl(constAssertionInLoop.ts, 2, 18))
+>output : Symbol(output, Decl(constAssertionInLoop.ts, 2, 29))
+>mode : Symbol(mode, Decl(constAssertionInLoop.ts, 2, 51))
+
+export function run(): never {
+>run : Symbol(run, Decl(constAssertionInLoop.ts, 2, 64))
+
+    let lastCandidate: Candidate | null = null;
+>lastCandidate : Symbol(lastCandidate, Decl(constAssertionInLoop.ts, 5, 7))
+>Candidate : Symbol(Candidate, Decl(constAssertionInLoop.ts, 0, 0))
+
+    while (true) {
+        const candidate: Candidate = {
+>candidate : Symbol(candidate, Decl(constAssertionInLoop.ts, 7, 13))
+>Candidate : Symbol(Candidate, Decl(constAssertionInLoop.ts, 0, 0))
+
+            mode: "a",
+>mode : Symbol(mode, Decl(constAssertionInLoop.ts, 7, 38))
+
+            output: lastCandidate,
+>output : Symbol(output, Decl(constAssertionInLoop.ts, 8, 22))
+>lastCandidate : Symbol(lastCandidate, Decl(constAssertionInLoop.ts, 5, 7))
+
+        } as const;
+>const : Symbol(const)
+
+        lastCandidate = candidate;
+>lastCandidate : Symbol(lastCandidate, Decl(constAssertionInLoop.ts, 5, 7))
+>candidate : Symbol(candidate, Decl(constAssertionInLoop.ts, 7, 13))
+    }
+}
+

@@ -366,7 +366,7 @@ func (r *projectRecord) toHandles() ProjectHandle {
 	files := make([]ProjectFileHandle, len(r.sourceFiles))
 	for i, file := range r.sourceFiles {
 		files[i] = ProjectFileHandle{
-			FileHandle:       FileHandle{fileName: file.FileName, content: file.Content},
+			fileName: file.FileName, content: file.Content,
 			exportIdentifier: file.ExportIdentifier,
 		}
 	}

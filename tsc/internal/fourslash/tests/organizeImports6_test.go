@@ -35,7 +35,7 @@ import * as anotherThing from "someopath"; /* small comment */ // single line on
 */
 
 anotherThing;`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

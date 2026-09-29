@@ -4,34 +4,40 @@
 /**
  * @param {number} \u0061
  * @param {number} a\u0061
+ * @param {number} a\u0062c\u0064e
  */
-function foo(a, aa) {
+function foo(a, aa, abcde) {
 >foo : Symbol(foo, Decl(file.js, 0, 0))
->a : Symbol(a, Decl(file.js, 4, 13))
->aa : Symbol(aa, Decl(file.js, 4, 15))
+>a : Symbol(a, Decl(file.js, 5, 13))
+>aa : Symbol(aa, Decl(file.js, 5, 15))
+>abcde : Symbol(abcde, Decl(file.js, 5, 19))
 
-    console.log(a + aa);
+    console.log(a + aa + abcde);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->a : Symbol(a, Decl(file.js, 4, 13))
->aa : Symbol(aa, Decl(file.js, 4, 15))
+>a : Symbol(a, Decl(file.js, 5, 13))
+>aa : Symbol(aa, Decl(file.js, 5, 15))
+>abcde : Symbol(abcde, Decl(file.js, 5, 19))
 }
 
 /**
  * @param {number} \u{0061}
  * @param {number} a\u{0061}
+ * @param {number} a\u{62}c\u{64}e
  */
-function bar(a, aa) {
->bar : Symbol(bar, Decl(file.js, 6, 1))
->a : Symbol(a, Decl(file.js, 12, 13))
->aa : Symbol(aa, Decl(file.js, 12, 15))
+function bar(a, aa, abcde) {
+>bar : Symbol(bar, Decl(file.js, 7, 1))
+>a : Symbol(a, Decl(file.js, 14, 13))
+>aa : Symbol(aa, Decl(file.js, 14, 15))
+>abcde : Symbol(abcde, Decl(file.js, 14, 19))
 
-    console.log(a + aa);
+    console.log(a + aa + abcde);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->a : Symbol(a, Decl(file.js, 12, 13))
->aa : Symbol(aa, Decl(file.js, 12, 15))
+>a : Symbol(a, Decl(file.js, 14, 13))
+>aa : Symbol(aa, Decl(file.js, 14, 15))
+>abcde : Symbol(abcde, Decl(file.js, 14, 19))
 }
 

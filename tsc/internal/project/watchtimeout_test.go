@@ -69,8 +69,7 @@ func TestUpdateWatchTimeoutAndRollback(t *testing.T) {
 			// Let the background goroutine block on WatchFiles, then advance
 			// fake time past the 1s watchRequestTimeout.
 			synctest.Wait()
-			time.Sleep(2 * time.Second)
-			synctest.Wait()
+			synctest.Sleep(2 * time.Second)
 
 			mu.Lock()
 			firstAttemptIDs := append([]project.WatcherID(nil), attemptedIDs...)
@@ -108,8 +107,7 @@ func TestUpdateWatchTimeoutAndRollback(t *testing.T) {
 
 			// Let the background task run updateWatches.
 			synctest.Wait()
-			time.Sleep(2 * time.Second)
-			synctest.Wait()
+			synctest.Sleep(2 * time.Second)
 
 			// Verify: WatchFiles was called again with the same watcher IDs,
 			// and this time the calls succeeded.
