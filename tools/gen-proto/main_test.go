@@ -33,6 +33,11 @@ func TestGenerate(t *testing.T) {
 		`export interface UpdateSnapshotParams`,
 		`export interface CreateSnapshotParams extends SnapshotRequestChangesParams`,
 		`export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams`,
+		`export interface UserPreferences extends FormatCodeSettings, CompletionPreferences, InlayHintsPreferences, CodeLensUserPreferences`,
+		`userPreferences?: UserPreferences | undefined;`,
+		`prepareAutoImports?: DocumentIdentifier | undefined;`,
+		`includeCompletionsForModuleExports?: boolean | undefined;`,
+		`quotePreference?: "auto" | "double" | "single" | undefined;`,
 		`openProjects?: readonly DocumentIdentifier[] | undefined;`,
 		`export type EnsurePrograms = true | readonly ProjectId[];`,
 		`export type InferredProjectId = string & { __inferredProjectIdBrand: any; };`,
@@ -97,6 +102,10 @@ export interface CompilerOptions`,
 	}
 	if strings.Contains(generated, "projects: readonly ProjectResponse[];") {
 		t.Error("response array fields must remain mutable")
+	}
+	languageServerChanges := generated[strings.Index(generated, "export interface LanguageServerSnapshotChanges"):strings.Index(generated, "export interface BuildOptions")]
+	if strings.Contains(languageServerChanges, "userPreferences") || strings.Contains(languageServerChanges, "prepareAutoImports") {
+		t.Error("language server snapshot changes must not configure independent snapshot state")
 	}
 
 	err = generate(input, output)

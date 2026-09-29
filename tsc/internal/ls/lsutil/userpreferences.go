@@ -14,14 +14,12 @@ import (
 )
 
 func NewDefaultUserPreferences() UserPreferences {
-	return UserPreferences{
+	preferences := UserPreferences{
 		FormatCodeSettings: GetDefaultFormatCodeSettings(),
 
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-		EnableAutoClosingTags:                 core.TSTrue,
-		EnableJSDocCompletions:                core.TSTrue,
-		GenerateReturnInDocTemplate:           core.TSTrue,
+		EnableAutoClosingTags:       core.TSTrue,
+		EnableJSDocCompletions:      core.TSTrue,
+		GenerateReturnInDocTemplate: core.TSTrue,
 
 		AllowRenameOfImportPath:            core.TSTrue,
 		ProvideRefactorNotApplicableReason: core.TSTrue,
@@ -33,19 +31,16 @@ func NewDefaultUserPreferences() UserPreferences {
 
 		ExcludeLibrarySymbolsInNavTo: core.TSTrue,
 		WorkspaceSymbolsScope:        WorkspaceSymbolsScopeAllOpenProjects,
+
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
+	return preferences
 }
 
 // UserPreferences represents TypeScript language service preferences.
-//
-// Fields are populated using two tags:
-//   - `raw:"name"` or `raw:"name,invert"` - TypeScript/raw name for unstable section lookup
-//   - `config:"path.to.setting"` or `config:"path.to.setting,invert"` - VS Code nested config path
-//
-// At least one tag must be present on each preference field.
-// The `,invert` modifier inverts boolean values (e.g., VS Code's "suppress" -> our "include").
 type UserPreferences struct {
-	FormatCodeSettings FormatCodeSettings
+	FormatCodeSettings
 
 	QuotePreference                           QuotePreference `raw:"quotePreference" config:"preferences.quoteStyle"`
 	LazyConfiguredProjectsFromExternalProject core.Tristate   `raw:"lazyConfiguredProjectsFromExternalProject"` // !!!
@@ -55,32 +50,10 @@ type UserPreferences struct {
 	// Default: `500`
 	MaximumHoverLength int `raw:"maximumHoverLength"` // !!!
 
-	// ------- Completions -------
-
-	// If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-	// This affects lone identifier completions but not completions on the right hand side of `obj.`.
-	IncludeCompletionsForModuleExports core.Tristate `raw:"includeCompletionsForModuleExports" config:"suggest.autoImports"`
-	// Enables auto-import-style completions on partially-typed import statements. E.g., allows
-	// `import write|` to be completed to `import { writeFile } from "fs"`.
-	IncludeCompletionsForImportStatements core.Tristate `raw:"includeCompletionsForImportStatements" config:"suggest.includeCompletionsForImportStatements"`
-	// Unless this option is `false`,  member completion lists triggered with `.` will include entries
-	// on potentially-null and potentially-undefined values, with insertion text to replace
-	// preceding `.` tokens with `?.`.
-	IncludeAutomaticOptionalChainCompletions core.Tristate `raw:"includeAutomaticOptionalChainCompletions" config:"suggest.includeAutomaticOptionalChainCompletions"`
-	// If enabled, completions for class members (e.g. methods and properties) will include
-	// a whole declaration for the member.
-	// E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
-	// `class A { foo }`.
-	IncludeCompletionsWithClassMemberSnippets core.Tristate `raw:"includeCompletionsWithClassMemberSnippets" config:"suggest.classMemberSnippets.enabled"`
-	// If enabled, object literal methods will have a method declaration completion entry in addition
-	// to the regular completion entry containing just the method name.
-	// E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
-	// in addition to `const objectLiteral: T = { foo }`.
-	IncludeCompletionsWithObjectLiteralMethodSnippets core.Tristate               `raw:"includeCompletionsWithObjectLiteralMethodSnippets" config:"suggest.objectLiteralMethodSnippets.enabled"`
-	JsxAttributeCompletionStyle                       JsxAttributeCompletionStyle `raw:"jsxAttributeCompletionStyle" config:"preferences.jsxAttributeCompletionStyle"`
-	EnableAutoClosingTags                             core.Tristate               `raw:"autoClosingTags" config:"autoClosingTags.enabled" fallbackConfig:"autoClosingTags"`
-	EnableJSDocCompletions                            core.Tristate               `raw:"completeJSDocs" config:"suggest.jsdoc.enabled" fallbackConfig:"suggest.completeJSDocs"`
-	GenerateReturnInDocTemplate                       core.Tristate               `raw:"generateReturnInDocTemplate" config:"suggest.jsdoc.generateReturns"`
+	CompletionPreferences
+	EnableAutoClosingTags       core.Tristate `raw:"autoClosingTags" config:"autoClosingTags.enabled" fallbackConfig:"autoClosingTags"`
+	EnableJSDocCompletions      core.Tristate `raw:"completeJSDocs" config:"suggest.jsdoc.enabled" fallbackConfig:"suggest.completeJSDocs"`
+	GenerateReturnInDocTemplate core.Tristate `raw:"generateReturnInDocTemplate" config:"suggest.jsdoc.generateReturns"`
 
 	// ------- AutoImports --------
 
@@ -169,7 +142,7 @@ type UserPreferences struct {
 	// ------- Symbols -------
 
 	ExcludeLibrarySymbolsInNavTo core.Tristate         `raw:"excludeLibrarySymbolsInNavTo" config:"workspaceSymbols.excludeLibrarySymbols"`
-	WorkspaceSymbolsScope        WorkspaceSymbolsScope `config:"workspaceSymbols.scope"`
+	WorkspaceSymbolsScope        WorkspaceSymbolsScope `raw:"workspaceSymbolsScope" config:"workspaceSymbols.scope"`
 
 	// ------- Misc -------
 
@@ -179,7 +152,7 @@ type UserPreferences struct {
 	DisableLineTextInReferences core.Tristate `raw:"disableLineTextInReferences"` // !!!
 	DisplayPartsForJSDoc        core.Tristate `raw:"displayPartsForJSDoc"`        // !!!
 	ReportStyleChecksAsWarnings core.Tristate `raw:"reportStyleChecksAsWarnings" config:"reportStyleChecksAsWarnings"`
-	Locale                      string        `config:"locale"`
+	Locale                      string        `raw:"locale" config:"locale"`
 
 	// ------- ATA -------
 
@@ -194,6 +167,57 @@ type UserPreferences struct {
 
 	// CustomConfigFileName specifies a custom config file name to use before defaulting to tsconfig.json/jsconfig.json.
 	CustomConfigFileName string `raw:"customConfigFileName" config:"customConfigFileName"`
+}
+
+// CompletionPreferences contains preferences used while producing completions.
+type CompletionPreferences struct {
+	// If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+	// This affects lone identifier completions but not completions on the right hand side of `obj.`.
+	IncludeCompletionsForModuleExports core.Tristate `json:"includeCompletionsForModuleExports,omitempty" raw:"includeCompletionsForModuleExports" config:"suggest.autoImports"`
+	// Enables auto-import-style completions on partially-typed import statements. E.g., allows
+	// `import write|` to be completed to `import { writeFile } from "fs"`.
+	IncludeCompletionsForImportStatements core.Tristate `json:"includeCompletionsForImportStatements,omitempty" raw:"includeCompletionsForImportStatements" config:"suggest.includeCompletionsForImportStatements"`
+	// Unless this option is `false`, member completion lists triggered with `.` will include entries
+	// on potentially-null and potentially-undefined values, with insertion text to replace
+	// preceding `.` tokens with `?.`.
+	IncludeAutomaticOptionalChainCompletions core.Tristate `json:"includeAutomaticOptionalChainCompletions,omitempty" raw:"includeAutomaticOptionalChainCompletions" config:"suggest.includeAutomaticOptionalChainCompletions"`
+	// If enabled, completions for class members (e.g. methods and properties) will include
+	// a whole declaration for the member.
+	IncludeCompletionsWithClassMemberSnippets core.Tristate `json:"includeCompletionsWithClassMemberSnippets,omitempty" raw:"includeCompletionsWithClassMemberSnippets" config:"suggest.classMemberSnippets.enabled"`
+	// If enabled, object literal methods will have a method declaration completion entry in addition
+	// to the regular completion entry containing just the method name.
+	IncludeCompletionsWithObjectLiteralMethodSnippets core.Tristate               `json:"includeCompletionsWithObjectLiteralMethodSnippets,omitempty" raw:"includeCompletionsWithObjectLiteralMethodSnippets" config:"suggest.objectLiteralMethodSnippets.enabled"`
+	JsxAttributeCompletionStyle                       JsxAttributeCompletionStyle `json:"jsxAttributeCompletionStyle,omitempty" raw:"jsxAttributeCompletionStyle" config:"preferences.jsxAttributeCompletionStyle"`
+}
+
+func (p *CompletionPreferences) UnmarshalJSONFrom(dec *json.Decoder) error {
+	var values map[string]any
+	if err := json.UnmarshalDecode(dec, &values); err != nil {
+		return err
+	}
+	v := reflect.ValueOf(p).Elem()
+	for _, info := range collectFieldInfos(reflect.TypeFor[CompletionPreferences](), nil) {
+		if value, ok := values[info.rawName]; ok {
+			setFieldFromValue(getFieldByPath(v, info.fieldPath), value)
+		}
+	}
+	return nil
+}
+
+func (p UserPreferences) WithCompletionPreferences(overrides CompletionPreferences) UserPreferences {
+	source := reflect.ValueOf(overrides)
+	target := reflect.ValueOf(&p).Elem()
+	userPreferenceFields := fieldInfoCache()
+	userPreferenceIndex := unstableNameIndex()
+	for _, info := range collectFieldInfos(reflect.TypeFor[CompletionPreferences](), nil) {
+		sourceField := getFieldByPath(source, info.fieldPath)
+		if serializeField(sourceField) == nil {
+			continue
+		}
+		targetInfo := userPreferenceFields[userPreferenceIndex[info.rawName]]
+		getFieldByPath(target, targetInfo.fieldPath).Set(sourceField)
+	}
+	return p
 }
 
 // IsATADisabled returns whether Automatic Type Acquisition is disabled based on user preferences.

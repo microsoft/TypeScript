@@ -9,6 +9,7 @@ import type {
     ParameterDeclaration,
 } from "../../ast/ast.ts";
 import type {
+    CompletionPreferences,
     Diagnostic,
     RequestFileSystem,
 } from "../proto.ts";
@@ -388,6 +389,8 @@ export interface CompletionOptions {
     triggerCharacter?: string | undefined;
     /** Include a `symbol` property on each completion entry. Only populated for symbol-based completions (not keywords or literals). */
     includeSymbol?: boolean | undefined;
+    /** Overrides the snapshot preferences used to produce this completion list. */
+    preferences?: CompletionPreferences | undefined;
 }
 
 /** A single completion item returned by {@link LanguageService.getCompletionsAtPosition}. */

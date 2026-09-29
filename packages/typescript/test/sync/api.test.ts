@@ -1949,6 +1949,48 @@ describe("LanguageService - getCompletionsAtPosition", { concurrency }, () => {
         assert.ok(nameEntry.symbol, "Expected symbol to be set on 'name' entry when includeSymbol: true");
         assert.equal(nameEntry.symbol.name, "name", "Symbol name should match completion name");
     });
+
+    test("auto-import completions with symbols require a prepared snapshot", () => {
+        const src = "someV";
+        using api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "module": "esnext", "target": "esnext" }, "include": ["src"] }`,
+            "/src/export.ts": "export const someValue = 1;",
+            "/src/main.ts": src,
+        });
+
+        const unprepared = api.createSnapshot({
+            openProject: "/tsconfig.json",
+            userPreferences: { includeCompletionsForModuleExports: true },
+        });
+        const unpreparedProject = unprepared.getConfiguredProject("/tsconfig.json")!;
+        assert.throws(() => unpreparedProject.languageService.getCompletionsAtPosition("/src/main.ts", src.length, { includeSymbol: true }), /snapshot is not prepared for auto-imports/);
+
+        const prepared = unprepared.update({ prepareAutoImports: "/src/main.ts" });
+        const preparedProject = prepared.getConfiguredProject("/tsconfig.json")!;
+        const completions = preparedProject.languageService.getCompletionsAtPosition("/src/main.ts", src.length, { includeSymbol: true });
+        assert.ok(completions?.entries.some(entry => entry.name === "someValue"));
+    });
+
+    test("completion preferences override snapshot preferences", () => {
+        const src = "someV";
+        using api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "module": "esnext", "target": "esnext" }, "include": ["src"] }`,
+            "/src/export.ts": "export const someValue = 1;",
+            "/src/main.ts": src,
+        });
+
+        const snapshot = api.createSnapshot({
+            openProject: "/tsconfig.json",
+            prepareAutoImports: "/src/main.ts",
+            userPreferences: { includeCompletionsForModuleExports: true },
+        });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const completions = project.languageService.getCompletionsAtPosition("/src/main.ts", src.length, {
+            preferences: { includeCompletionsForModuleExports: false },
+        });
+        assert.ok(completions);
+        assert.ok(!completions.entries.some(entry => entry.name === "someValue"));
+    });
 });
 
 describe("LanguageService - getReferencedSymbolsForNode", { concurrency }, () => {

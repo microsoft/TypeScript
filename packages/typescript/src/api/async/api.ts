@@ -1533,6 +1533,7 @@ export class LanguageService {
             position,
             triggerCharacter: options?.triggerCharacter,
             includeSymbol: options?.includeSymbol,
+            preferences: options?.preferences,
         });
         if (!data) return undefined;
         return {

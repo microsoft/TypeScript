@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
@@ -420,6 +421,10 @@ func (e *EnsurePrograms) UnmarshalJSONFrom(dec *json.Decoder) error {
 // CreateSnapshotParams are the parameters for creating a new independent snapshot.
 type CreateSnapshotParams struct {
 	SnapshotRequestChangesParams
+	// UserPreferences configures language service behavior in the new snapshot.
+	UserPreferences *lsutil.UserPreferences `json:"userPreferences,omitempty"`
+	// PrepareAutoImports identifies the file whose auto-import indexes should be ready in the new snapshot.
+	PrepareAutoImports *DocumentIdentifier `json:"prepareAutoImports,omitempty"`
 	// FileNotifications describes host file system changes to invalidate while creating the snapshot.
 	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
@@ -1538,12 +1543,13 @@ type SignatureUsageResponse struct {
 
 // GetCompletionsAtPositionParams are the parameters for the getCompletionsAtPosition method.
 type GetCompletionsAtPositionParams struct {
-	Snapshot         SnapshotID         `json:"snapshot"`
-	Project          project.ID         `json:"project"`
-	File             DocumentIdentifier `json:"file"`
-	Position         uint32             `json:"position"`
-	TriggerCharacter *string            `json:"triggerCharacter,omitempty"`
-	IncludeSymbol    bool               `json:"includeSymbol,omitempty"`
+	Snapshot         SnapshotID                    `json:"snapshot"`
+	Project          project.ID                    `json:"project"`
+	File             DocumentIdentifier            `json:"file"`
+	Position         uint32                        `json:"position"`
+	TriggerCharacter *string                       `json:"triggerCharacter,omitempty"`
+	IncludeSymbol    bool                          `json:"includeSymbol,omitempty"`
+	Preferences      *lsutil.CompletionPreferences `json:"preferences,omitempty"`
 }
 
 // CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry.

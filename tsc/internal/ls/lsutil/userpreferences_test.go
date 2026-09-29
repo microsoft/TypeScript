@@ -10,6 +10,17 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestCompletionPreferencesUnmarshal(t *testing.T) {
+	t.Parallel()
+	var preferences CompletionPreferences
+	assert.NilError(t, json.Unmarshal([]byte(`{"includeCompletionsForModuleExports":false}`), &preferences))
+	assert.Equal(t, preferences.IncludeCompletionsForModuleExports, core.TSFalse)
+
+	userPreferences := NewDefaultUserPreferences().WithCompletionPreferences(preferences)
+	assert.Equal(t, userPreferences.IncludeCompletionsForModuleExports, core.TSFalse)
+	assert.Equal(t, userPreferences.IncludeCompletionsForImportStatements, core.TSTrue)
+}
+
 func fillNonZeroValues(v reflect.Value) {
 	t := v.Type()
 	for i := range t.NumField() {

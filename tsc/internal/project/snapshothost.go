@@ -115,6 +115,11 @@ func (s *SnapshotHost) CloneSnapshot(
 		change.fs = apiRequest.FileSystem
 		change.fileSystemOverride = apiRequest.FileSystem != nil
 		change.replaceFileSystem = apiRequest.ReplaceFileSystem
+		change.newConfig = apiRequest.UserPreferences
+		if apiRequest.PrepareAutoImports != "" {
+			change.ResourceRequest = baseSnapshot.resourceRequestForDocument(apiRequest.PrepareAutoImports)
+			change.AutoImports = apiRequest.PrepareAutoImports
+		}
 	}
 	snapshot := s.update(ctx, baseSnapshot, change)
 	return snapshot, snapshot.apiError
