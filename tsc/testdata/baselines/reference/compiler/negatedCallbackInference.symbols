@@ -1,0 +1,189 @@
+//// [tests/cases/compiler/negatedCallbackInference.ts] ////
+
+=== negatedCallbackInference.ts ===
+interface Failure { readonly error: true; }
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+>error : Symbol(Failure.error, Decl(negatedCallbackInference.ts, 0, 19))
+
+interface Box<Value> { value: Value; }
+>Box : Symbol(Box, Decl(negatedCallbackInference.ts, 0, 43))
+>Value : Symbol(Value, Decl(negatedCallbackInference.ts, 1, 14))
+>value : Symbol(Box.value, Decl(negatedCallbackInference.ts, 1, 22))
+>Value : Symbol(Value, Decl(negatedCallbackInference.ts, 1, 14))
+
+interface LoaderProps<Result extends {}> {
+>LoaderProps : Symbol(LoaderProps, Decl(negatedCallbackInference.ts, 1, 38))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 2, 22))
+
+    readonly load: () => Box<Result>;
+>load : Symbol(LoaderProps.load, Decl(negatedCallbackInference.ts, 2, 42))
+>Box : Symbol(Box, Decl(negatedCallbackInference.ts, 0, 43))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 2, 22))
+
+    readonly children: (result: Result & not Failure) => string;
+>children : Symbol(LoaderProps.children, Decl(negatedCallbackInference.ts, 3, 37))
+>result : Symbol(result, Decl(negatedCallbackInference.ts, 4, 24))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 2, 22))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+}
+class Loader<Result extends {}> {
+>Loader : Symbol(Loader, Decl(negatedCallbackInference.ts, 5, 1))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 6, 13))
+
+    constructor(name: string, context: any);
+>name : Symbol(name, Decl(negatedCallbackInference.ts, 7, 16))
+>context : Symbol(context, Decl(negatedCallbackInference.ts, 7, 29))
+
+    constructor(props: LoaderProps<Result>);
+>props : Symbol(props, Decl(negatedCallbackInference.ts, 8, 16))
+>LoaderProps : Symbol(LoaderProps, Decl(negatedCallbackInference.ts, 1, 38))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 6, 13))
+
+    constructor(...args: any[]) {}
+>args : Symbol(args, Decl(negatedCallbackInference.ts, 9, 16))
+}
+function load(): Box<{ success: true } | Failure> {
+>load : Symbol(load, Decl(negatedCallbackInference.ts, 10, 1))
+>Box : Symbol(Box, Decl(negatedCallbackInference.ts, 0, 43))
+>success : Symbol(success, Decl(negatedCallbackInference.ts, 11, 22))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+
+    return null as any;
+}
+
+const loader = new Loader({
+>loader : Symbol(loader, Decl(negatedCallbackInference.ts, 15, 5))
+>Loader : Symbol(Loader, Decl(negatedCallbackInference.ts, 5, 1))
+
+    load,
+>load : Symbol(load, Decl(negatedCallbackInference.ts, 15, 27))
+
+    children: result => result.success as any,
+>children : Symbol(children, Decl(negatedCallbackInference.ts, 16, 9))
+>result : Symbol(result, Decl(negatedCallbackInference.ts, 17, 13))
+>result.success : Symbol(success, Decl(negatedCallbackInference.ts, 11, 22))
+>result : Symbol(result, Decl(negatedCallbackInference.ts, 17, 13))
+>success : Symbol(success, Decl(negatedCallbackInference.ts, 11, 22))
+
+});
+
+declare function inferInput<Result>(callback: (value: Result & not string) => void): Result;
+>inferInput : Symbol(inferInput, Decl(negatedCallbackInference.ts, 18, 3))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 20, 28))
+>callback : Symbol(callback, Decl(negatedCallbackInference.ts, 20, 36))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 20, 47))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 20, 28))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 20, 28))
+
+const input = inferInput((value: number) => {});
+>input : Symbol(input, Decl(negatedCallbackInference.ts, 21, 5))
+>inferInput : Symbol(inferInput, Decl(negatedCallbackInference.ts, 18, 3))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 21, 26))
+
+const inputUnion: number | string = input;
+>inputUnion : Symbol(inputUnion, Decl(negatedCallbackInference.ts, 22, 5))
+>input : Symbol(input, Decl(negatedCallbackInference.ts, 21, 5))
+
+const inputNumber: number = input;
+>inputNumber : Symbol(inputNumber, Decl(negatedCallbackInference.ts, 23, 5))
+>input : Symbol(input, Decl(negatedCallbackInference.ts, 21, 5))
+
+declare function inferFilteredInput<Result>(callback: (value: Result & not Failure) => void): Result;
+>inferFilteredInput : Symbol(inferFilteredInput, Decl(negatedCallbackInference.ts, 23, 34))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 25, 36))
+>callback : Symbol(callback, Decl(negatedCallbackInference.ts, 25, 44))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 25, 55))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 25, 36))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 25, 36))
+
+const filteredInput = inferFilteredInput((value: { success: true } & not Failure) => {});
+>filteredInput : Symbol(filteredInput, Decl(negatedCallbackInference.ts, 26, 5))
+>inferFilteredInput : Symbol(inferFilteredInput, Decl(negatedCallbackInference.ts, 23, 34))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 26, 42))
+>success : Symbol(success, Decl(negatedCallbackInference.ts, 26, 50))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+
+const filteredUnion: { success: true } | Failure = filteredInput;
+>filteredUnion : Symbol(filteredUnion, Decl(negatedCallbackInference.ts, 27, 5))
+>success : Symbol(success, Decl(negatedCallbackInference.ts, 27, 22))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+>filteredInput : Symbol(filteredInput, Decl(negatedCallbackInference.ts, 26, 5))
+
+const filteredSuccess: { success: true } = filteredInput;
+>filteredSuccess : Symbol(filteredSuccess, Decl(negatedCallbackInference.ts, 28, 5))
+>success : Symbol(success, Decl(negatedCallbackInference.ts, 28, 24))
+>filteredInput : Symbol(filteredInput, Decl(negatedCallbackInference.ts, 26, 5))
+
+declare function inferOutput<Result>(callback: () => Result & not string): Result;
+>inferOutput : Symbol(inferOutput, Decl(negatedCallbackInference.ts, 28, 57))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 30, 29))
+>callback : Symbol(callback, Decl(negatedCallbackInference.ts, 30, 37))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 30, 29))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 30, 29))
+
+const output = inferOutput(() => 1);
+>output : Symbol(output, Decl(negatedCallbackInference.ts, 31, 5))
+>inferOutput : Symbol(inferOutput, Decl(negatedCallbackInference.ts, 28, 57))
+
+const outputNumber: number = output;
+>outputNumber : Symbol(outputNumber, Decl(negatedCallbackInference.ts, 32, 5))
+>output : Symbol(output, Decl(negatedCallbackInference.ts, 31, 5))
+
+declare const response: { success: true } | Failure;
+>response : Symbol(response, Decl(negatedCallbackInference.ts, 34, 13))
+>success : Symbol(success, Decl(negatedCallbackInference.ts, 34, 25))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+
+declare function inferFiltered<Result>(value: Result, callback: (value: Result & not Failure) => void): Result;
+>inferFiltered : Symbol(inferFiltered, Decl(negatedCallbackInference.ts, 34, 52))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 35, 31))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 35, 39))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 35, 31))
+>callback : Symbol(callback, Decl(negatedCallbackInference.ts, 35, 53))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 35, 65))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 35, 31))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 35, 31))
+
+const explicitFiltered = inferFiltered(response, (value: { success: true } & not Failure) => {});
+>explicitFiltered : Symbol(explicitFiltered, Decl(negatedCallbackInference.ts, 36, 5))
+>inferFiltered : Symbol(inferFiltered, Decl(negatedCallbackInference.ts, 34, 52))
+>response : Symbol(response, Decl(negatedCallbackInference.ts, 34, 13))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 36, 50))
+>success : Symbol(success, Decl(negatedCallbackInference.ts, 36, 58))
+>Failure : Symbol(Failure, Decl(negatedCallbackInference.ts, 0, 0))
+
+const incompatibleFiltered = inferFiltered(response, (value: number) => {});
+>incompatibleFiltered : Symbol(incompatibleFiltered, Decl(negatedCallbackInference.ts, 37, 5))
+>inferFiltered : Symbol(inferFiltered, Decl(negatedCallbackInference.ts, 34, 52))
+>response : Symbol(response, Decl(negatedCallbackInference.ts, 34, 13))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 37, 54))
+
+interface Tagged { tag: true; }
+>Tagged : Symbol(Tagged, Decl(negatedCallbackInference.ts, 37, 76))
+>tag : Symbol(Tagged.tag, Decl(negatedCallbackInference.ts, 39, 18))
+
+declare const maybeValue: { count: number } | undefined;
+>maybeValue : Symbol(maybeValue, Decl(negatedCallbackInference.ts, 40, 13))
+>count : Symbol(count, Decl(negatedCallbackInference.ts, 40, 27))
+
+declare function inferTagged<Result>(value: Result, callback: (value: Result & Tagged) => void): Result;
+>inferTagged : Symbol(inferTagged, Decl(negatedCallbackInference.ts, 40, 56))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 41, 29))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 41, 37))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 41, 29))
+>callback : Symbol(callback, Decl(negatedCallbackInference.ts, 41, 51))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 41, 63))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 41, 29))
+>Tagged : Symbol(Tagged, Decl(negatedCallbackInference.ts, 37, 76))
+>Result : Symbol(Result, Decl(negatedCallbackInference.ts, 41, 29))
+
+const tagged = inferTagged(maybeValue, (value: { count: number } & Tagged) => {});
+>tagged : Symbol(tagged, Decl(negatedCallbackInference.ts, 42, 5))
+>inferTagged : Symbol(inferTagged, Decl(negatedCallbackInference.ts, 40, 56))
+>maybeValue : Symbol(maybeValue, Decl(negatedCallbackInference.ts, 40, 13))
+>value : Symbol(value, Decl(negatedCallbackInference.ts, 42, 40))
+>count : Symbol(count, Decl(negatedCallbackInference.ts, 42, 48))
+>Tagged : Symbol(Tagged, Decl(negatedCallbackInference.ts, 37, 76))
+

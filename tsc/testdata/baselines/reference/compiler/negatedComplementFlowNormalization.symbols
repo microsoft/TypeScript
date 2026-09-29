@@ -1,0 +1,307 @@
+//// [tests/cases/compiler/negatedComplementFlowNormalization.ts] ////
+
+=== negatedComplementFlowNormalization.ts ===
+type Full = string | not string;
+>Full : Symbol(Full, Decl(negatedComplementFlowNormalization.ts, 0, 0))
+
+declare const numericCase: number;
+>numericCase : Symbol(numericCase, Decl(negatedComplementFlowNormalization.ts, 1, 13))
+
+declare const objectCase: { value: string };
+>objectCase : Symbol(objectCase, Decl(negatedComplementFlowNormalization.ts, 2, 13))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 2, 27))
+
+declare function isFull(value: unknown): value is Full;
+>isFull : Symbol(isFull, Decl(negatedComplementFlowNormalization.ts, 2, 44))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 3, 24))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 3, 24))
+>Full : Symbol(Full, Decl(negatedComplementFlowNormalization.ts, 0, 0))
+
+declare function assertFull(value: unknown): asserts value is Full;
+>assertFull : Symbol(assertFull, Decl(negatedComplementFlowNormalization.ts, 3, 55))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 4, 28))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 4, 28))
+>Full : Symbol(Full, Decl(negatedComplementFlowNormalization.ts, 0, 0))
+
+declare function assertCondition(value: unknown): asserts value;
+>assertCondition : Symbol(assertCondition, Decl(negatedComplementFlowNormalization.ts, 4, 67))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 5, 33))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 5, 33))
+
+function complementFlow(value: Full, condition: boolean) {
+>complementFlow : Symbol(complementFlow, Decl(negatedComplementFlowNormalization.ts, 5, 64))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+>Full : Symbol(Full, Decl(negatedComplementFlowNormalization.ts, 0, 0))
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 7, 36))
+
+    switch (value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+        case numericCase:
+>numericCase : Symbol(numericCase, Decl(negatedComplementFlowNormalization.ts, 1, 13))
+
+            const numeric: number = value;
+>numeric : Symbol(numeric, Decl(negatedComplementFlowNormalization.ts, 10, 17))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+            break;
+        case objectCase:
+>objectCase : Symbol(objectCase, Decl(negatedComplementFlowNormalization.ts, 2, 13))
+
+            const objectValue: object = value;
+>objectValue : Symbol(objectValue, Decl(negatedComplementFlowNormalization.ts, 13, 17))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+            break;
+    }
+    if (value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+        const nonNull: {} = value;
+>nonNull : Symbol(nonNull, Decl(negatedComplementFlowNormalization.ts, 17, 13))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+    }
+    if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+        const text: string = value;
+>text : Symbol(text, Decl(negatedComplementFlowNormalization.ts, 20, 13))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+    }
+    if (typeof value === "object" && value !== null && "value" in value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+        const member: unknown = value.value;
+>member : Symbol(member, Decl(negatedComplementFlowNormalization.ts, 23, 13))
+>value.value : Symbol(value)
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+>value : Symbol(value)
+    }
+    value = 42;
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+    // Error: An exhaustive complement behaves like unknown after assignment.
+    const assigned: number = value;
+>assigned : Symbol(assigned, Decl(negatedComplementFlowNormalization.ts, 27, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+    if (condition) {
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 7, 36))
+
+        value = "42";
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+    }
+    // Error: Joining assignments must retain unknown.
+    const joined: string | number = value;
+>joined : Symbol(joined, Decl(negatedComplementFlowNormalization.ts, 32, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+
+    while (condition) {
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 7, 36))
+
+        value = condition ? "42" : 42;
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 7, 36))
+
+        condition = false;
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 7, 36))
+    }
+    // Error: The loop result must also retain unknown.
+    const looped: string | number = value;
+>looped : Symbol(looped, Decl(negatedComplementFlowNormalization.ts, 38, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 7, 24))
+}
+
+function unknownFlow(value: unknown, condition: boolean) {
+>unknownFlow : Symbol(unknownFlow, Decl(negatedComplementFlowNormalization.ts, 39, 1))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 41, 36))
+
+    switch (value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+        case numericCase:
+>numericCase : Symbol(numericCase, Decl(negatedComplementFlowNormalization.ts, 1, 13))
+
+            const numeric: number = value;
+>numeric : Symbol(numeric, Decl(negatedComplementFlowNormalization.ts, 44, 17))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+            break;
+        case objectCase:
+>objectCase : Symbol(objectCase, Decl(negatedComplementFlowNormalization.ts, 2, 13))
+
+            const objectValue: object = value;
+>objectValue : Symbol(objectValue, Decl(negatedComplementFlowNormalization.ts, 47, 17))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+            break;
+    }
+    if (value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+        const nonNull: {} = value;
+>nonNull : Symbol(nonNull, Decl(negatedComplementFlowNormalization.ts, 51, 13))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+    }
+    if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+        const text: string = value;
+>text : Symbol(text, Decl(negatedComplementFlowNormalization.ts, 54, 13))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+    }
+    if (typeof value === "object" && value !== null && "value" in value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+        const member: unknown = value.value;
+>member : Symbol(member, Decl(negatedComplementFlowNormalization.ts, 57, 13))
+>value.value : Symbol(value)
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+>value : Symbol(value)
+    }
+    value = 42;
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+    // Error: Unknown is not assignment-narrowed.
+    const assigned: number = value;
+>assigned : Symbol(assigned, Decl(negatedComplementFlowNormalization.ts, 61, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+    if (condition) {
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 41, 36))
+
+        value = "42";
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+    }
+    // Error: Joining assignments must retain unknown.
+    const joined: string | number = value;
+>joined : Symbol(joined, Decl(negatedComplementFlowNormalization.ts, 66, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+
+    while (condition) {
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 41, 36))
+
+        value = condition ? "42" : 42;
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 41, 36))
+
+        condition = false;
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 41, 36))
+    }
+    // Error: The loop result must also retain unknown.
+    const looped: string | number = value;
+>looped : Symbol(looped, Decl(negatedComplementFlowNormalization.ts, 72, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 41, 21))
+}
+
+function predicateFlow(value: unknown) {
+>predicateFlow : Symbol(predicateFlow, Decl(negatedComplementFlowNormalization.ts, 73, 1))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 75, 23))
+
+    if (isFull(value)) {
+>isFull : Symbol(isFull, Decl(negatedComplementFlowNormalization.ts, 2, 44))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 75, 23))
+
+        switch (value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 75, 23))
+
+            case objectCase:
+>objectCase : Symbol(objectCase, Decl(negatedComplementFlowNormalization.ts, 2, 13))
+
+                const objectValue: object = value;
+>objectValue : Symbol(objectValue, Decl(negatedComplementFlowNormalization.ts, 79, 21))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 75, 23))
+
+                break;
+        }
+    }
+}
+
+function assertionFlow(value: unknown) {
+>assertionFlow : Symbol(assertionFlow, Decl(negatedComplementFlowNormalization.ts, 83, 1))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 85, 23))
+
+    assertFull(value);
+>assertFull : Symbol(assertFull, Decl(negatedComplementFlowNormalization.ts, 3, 55))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 85, 23))
+
+    switch (value) {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 85, 23))
+
+        case objectCase:
+>objectCase : Symbol(objectCase, Decl(negatedComplementFlowNormalization.ts, 2, 13))
+
+            const objectValue: object = value;
+>objectValue : Symbol(objectValue, Decl(negatedComplementFlowNormalization.ts, 89, 17))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 85, 23))
+
+            break;
+    }
+    assertCondition(value == 42);
+>assertCondition : Symbol(assertCondition, Decl(negatedComplementFlowNormalization.ts, 4, 67))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 85, 23))
+
+    if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 85, 23))
+
+        // Error: Assertion narrowing must preserve the reachable string branch.
+        const impossible: never = value;
+>impossible : Symbol(impossible, Decl(negatedComplementFlowNormalization.ts, 95, 13))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 85, 23))
+    }
+}
+
+function compoundAssertionFlow(value: unknown) {
+>compoundAssertionFlow : Symbol(compoundAssertionFlow, Decl(negatedComplementFlowNormalization.ts, 97, 1))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 99, 31))
+
+    assertCondition(isFull(value) && value == 42 && typeof value === "string");
+>assertCondition : Symbol(assertCondition, Decl(negatedComplementFlowNormalization.ts, 4, 67))
+>isFull : Symbol(isFull, Decl(negatedComplementFlowNormalization.ts, 2, 44))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 99, 31))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 99, 31))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 99, 31))
+
+    const text: string = value;
+>text : Symbol(text, Decl(negatedComplementFlowNormalization.ts, 101, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 99, 31))
+
+    // Error: Narrowing steps within one assertion must also preserve strings.
+    const impossible: never = value;
+>impossible : Symbol(impossible, Decl(negatedComplementFlowNormalization.ts, 103, 9))
+>value : Symbol(value, Decl(negatedComplementFlowNormalization.ts, 99, 31))
+}
+
+function evolvingArray(condition: boolean) {
+>evolvingArray : Symbol(evolvingArray, Decl(negatedComplementFlowNormalization.ts, 104, 1))
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 106, 23))
+
+    const values = [];
+>values : Symbol(values, Decl(negatedComplementFlowNormalization.ts, 107, 9))
+
+    if (condition) {
+>condition : Symbol(condition, Decl(negatedComplementFlowNormalization.ts, 106, 23))
+
+        values.push(42);
+>values.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(negatedComplementFlowNormalization.ts, 107, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    } else {
+        values.push("42");
+>values.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(negatedComplementFlowNormalization.ts, 107, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    const result: (string | number)[] = values;
+>result : Symbol(result, Decl(negatedComplementFlowNormalization.ts, 113, 9))
+>values : Symbol(values, Decl(negatedComplementFlowNormalization.ts, 107, 9))
+
+    return result;
+>result : Symbol(result, Decl(negatedComplementFlowNormalization.ts, 113, 9))
+}

@@ -1,0 +1,97 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiteralMatching.ts] ////
+
+=== negatedTypesInPatternLiteralMatching.ts ===
+// Matching actual string literal types against pattern literal types that
+// contain negated holes. `"foobaz"` should match `foo${string & not "bar"}`
+// but `"foobar"` should not, because the hole excludes exactly "bar".
+
+type Pattern = `foo${string & not "bar"}`;
+>Pattern : Symbol(Pattern, Decl(negatedTypesInPatternLiteralMatching.ts, 0, 0))
+
+// Direct assignment of literals to the pattern type.
+declare let pat: Pattern;
+>pat : Symbol(pat, Decl(negatedTypesInPatternLiteralMatching.ts, 7, 11))
+>Pattern : Symbol(Pattern, Decl(negatedTypesInPatternLiteralMatching.ts, 0, 0))
+
+pat = "foobaz"; // should be ok
+>pat : Symbol(pat, Decl(negatedTypesInPatternLiteralMatching.ts, 7, 11))
+
+pat = "foobar"; // should error
+>pat : Symbol(pat, Decl(negatedTypesInPatternLiteralMatching.ts, 7, 11))
+
+pat = "foo";    // should be ok (the hole can match the empty string)
+>pat : Symbol(pat, Decl(negatedTypesInPatternLiteralMatching.ts, 7, 11))
+
+pat = "baz";    // should error (missing "foo" prefix)
+>pat : Symbol(pat, Decl(negatedTypesInPatternLiteralMatching.ts, 7, 11))
+
+// Assignability from a literal-typed value.
+declare const foobaz: "foobaz";
+>foobaz : Symbol(foobaz, Decl(negatedTypesInPatternLiteralMatching.ts, 14, 13))
+
+declare const foobar: "foobar";
+>foobar : Symbol(foobar, Decl(negatedTypesInPatternLiteralMatching.ts, 15, 13))
+
+pat = foobaz; // should be ok
+>pat : Symbol(pat, Decl(negatedTypesInPatternLiteralMatching.ts, 7, 11))
+>foobaz : Symbol(foobaz, Decl(negatedTypesInPatternLiteralMatching.ts, 14, 13))
+
+pat = foobar; // should error
+>pat : Symbol(pat, Decl(negatedTypesInPatternLiteralMatching.ts, 7, 11))
+>foobar : Symbol(foobar, Decl(negatedTypesInPatternLiteralMatching.ts, 15, 13))
+
+// Matching via a conditional type (extends check).
+type MatchFoobaz = "foobaz" extends Pattern ? true : false; // should be true
+>MatchFoobaz : Symbol(MatchFoobaz, Decl(negatedTypesInPatternLiteralMatching.ts, 17, 13))
+>Pattern : Symbol(Pattern, Decl(negatedTypesInPatternLiteralMatching.ts, 0, 0))
+
+type MatchFoobar = "foobar" extends Pattern ? true : false; // should be false
+>MatchFoobar : Symbol(MatchFoobar, Decl(negatedTypesInPatternLiteralMatching.ts, 20, 59))
+>Pattern : Symbol(Pattern, Decl(negatedTypesInPatternLiteralMatching.ts, 0, 0))
+
+// Matching a union of literals: only the members that don't collapse the hole
+// to never should be retained.
+type FilterMatches<T> = T extends Pattern ? T : never;
+>FilterMatches : Symbol(FilterMatches, Decl(negatedTypesInPatternLiteralMatching.ts, 21, 59))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralMatching.ts, 25, 19))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralMatching.ts, 25, 19))
+>Pattern : Symbol(Pattern, Decl(negatedTypesInPatternLiteralMatching.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralMatching.ts, 25, 19))
+
+type Filtered = FilterMatches<"foobaz" | "foobar" | "fooqux">; // should be "foobaz" | "fooqux"
+>Filtered : Symbol(Filtered, Decl(negatedTypesInPatternLiteralMatching.ts, 25, 54))
+>FilterMatches : Symbol(FilterMatches, Decl(negatedTypesInPatternLiteralMatching.ts, 21, 59))
+
+// Inference through a generic function whose parameter is the pattern.
+declare function take<T extends string>(s: `foo${T & not "bar"}`): T;
+>take : Symbol(take, Decl(negatedTypesInPatternLiteralMatching.ts, 26, 62))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralMatching.ts, 29, 22))
+>s : Symbol(s, Decl(negatedTypesInPatternLiteralMatching.ts, 29, 40))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralMatching.ts, 29, 22))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralMatching.ts, 29, 22))
+
+const okBaz = take("foobaz"); // should be ok, T = "baz"
+>okBaz : Symbol(okBaz, Decl(negatedTypesInPatternLiteralMatching.ts, 30, 5))
+>take : Symbol(take, Decl(negatedTypesInPatternLiteralMatching.ts, 26, 62))
+
+const errBar = take("foobar"); // should error, "bar" is excluded
+>errBar : Symbol(errBar, Decl(negatedTypesInPatternLiteralMatching.ts, 31, 5))
+>take : Symbol(take, Decl(negatedTypesInPatternLiteralMatching.ts, 26, 62))
+
+// Excluding a union of holes.
+type Pattern2 = `foo${string & not ("bar" | "qux")}`;
+>Pattern2 : Symbol(Pattern2, Decl(negatedTypesInPatternLiteralMatching.ts, 31, 30))
+
+declare let pat2: Pattern2;
+>pat2 : Symbol(pat2, Decl(negatedTypesInPatternLiteralMatching.ts, 35, 11))
+>Pattern2 : Symbol(Pattern2, Decl(negatedTypesInPatternLiteralMatching.ts, 31, 30))
+
+pat2 = "foobaz"; // should be ok
+>pat2 : Symbol(pat2, Decl(negatedTypesInPatternLiteralMatching.ts, 35, 11))
+
+pat2 = "foobar"; // should error
+>pat2 : Symbol(pat2, Decl(negatedTypesInPatternLiteralMatching.ts, 35, 11))
+
+pat2 = "fooqux"; // should error
+>pat2 : Symbol(pat2, Decl(negatedTypesInPatternLiteralMatching.ts, 35, 11))
+

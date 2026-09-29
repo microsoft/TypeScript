@@ -1,0 +1,197 @@
+//// [tests/cases/compiler/negatedTypeSmokeTypeof.ts] ////
+
+=== negatedTypeSmokeTypeof.ts ===
+export function comboProtection(combo: { protection: unknown }): number | boolean | undefined {
+>comboProtection : (combo: { protection: unknown; }) => number | boolean | undefined
+>combo : { protection: unknown; }
+>protection : unknown
+
+    return typeof combo.protection === "boolean" || typeof combo.protection === "number"
+>typeof combo.protection === "boolean" || typeof combo.protection === "number"        ? combo.protection : undefined : number | boolean | undefined
+>typeof combo.protection === "boolean" || typeof combo.protection === "number" : boolean
+>typeof combo.protection === "boolean" : boolean
+>typeof combo.protection : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>combo.protection : unknown
+>combo : { protection: unknown; }
+>protection : unknown
+>"boolean" : "boolean"
+>typeof combo.protection === "number" : boolean
+>typeof combo.protection : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>combo.protection : not false & not true
+>combo : { protection: unknown; }
+>protection : not false & not true
+>"number" : "number"
+
+        ? combo.protection : undefined;
+>combo.protection : number | boolean
+>combo : { protection: unknown; }
+>protection : number | boolean
+>undefined : undefined
+}
+
+export function scalar(value: unknown) {
+>scalar : (value: unknown) => string | number | boolean | null
+>value : unknown
+
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+>typeof value === "string" || typeof value === "number" || typeof value === "boolean" : boolean
+>typeof value === "string" || typeof value === "number" : boolean
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not string
+>"number" : "number"
+>typeof value === "boolean" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not string & not number
+>"boolean" : "boolean"
+
+        const result: string | number | boolean = value;
+>result : string | number | boolean
+>value : string | number | boolean
+
+        return result;
+>result : string | number | boolean
+    }
+    return null;
+}
+
+export function sequential(value: unknown) {
+>sequential : (value: unknown) => any
+>value : unknown
+
+    if (typeof value === "boolean") return +value;
+>typeof value === "boolean" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"boolean" : "boolean"
+>+value : number
+>value : boolean
+
+    if (typeof value === "string") return parseFloat(value);
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not false & not true
+>"string" : "string"
+>parseFloat(value) : number
+>parseFloat : (string: string) => number
+>value : string
+
+    if (typeof value === "bigint") return value + 1n;
+>typeof value === "bigint" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not false & not true & not string
+>"bigint" : "bigint"
+>value + 1n : bigint
+>value : bigint
+>1n : 1n
+
+    if (typeof value === "number") return value.toFixed();
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not false & not true & not string & not bigint
+>"number" : "number"
+>value.toFixed() : string
+>value.toFixed : (fractionDigits?: number) => string
+>value : number
+>toFixed : (fractionDigits?: number) => string
+
+    if (typeof value === "object" && value !== null) return Object.keys(value);
+>typeof value === "object" && value !== null : boolean
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not false & not true & not string & not bigint & not number
+>"object" : "object"
+>value !== null : boolean
+>value : object | null
+>Object.keys(value) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>value : object
+
+    if (typeof value === "function") return value();
+>typeof value === "function" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : (not false & not true & not string & not bigint & not number) | null
+>"function" : "function"
+>value() : any
+>value : Function
+
+    return undefined;
+>undefined : undefined
+}
+
+export function nullableString(value: unknown): string | null {
+>nullableString : (value: unknown) => string | null
+>value : unknown
+
+    if (value === null || typeof value === "string") return value;
+>value === null || typeof value === "string" : boolean
+>value === null : boolean
+>value : unknown
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : {} | undefined
+>"string" : "string"
+>value : string | null
+
+    return null;
+}
+
+export function literalChoice(value: unknown): "read" | "write" | undefined {
+>literalChoice : (value: unknown) => "read" | "write" | undefined
+>value : unknown
+
+    return value === "read" || value === "write" ? value : undefined;
+>value === "read" || value === "write" ? value : undefined : "read" | "write" | undefined
+>value === "read" || value === "write" : boolean
+>value === "read" : boolean
+>value : unknown
+>"read" : "read"
+>value === "write" : boolean
+>value : not "read"
+>"write" : "write"
+>value : "read" | "write"
+>undefined : undefined
+}
+
+export function trimmed(value: unknown) {
+>trimmed : (value: unknown) => string
+>value : unknown
+
+    if (typeof value === "number") return String(value);
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"number" : "number"
+>String(value) : string
+>String : StringConstructor
+>value : number
+
+    if (typeof value !== "string") return "";
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not number
+>"string" : "string"
+>"" : ""
+
+    if (value === "1" || value === "2") return value;
+>value === "1" || value === "2" : boolean
+>value === "1" : boolean
+>value : string
+>"1" : "1"
+>value === "2" : boolean
+>value : string & not "1"
+>"2" : "2"
+>value : "1" | "2"
+
+    return value.trim();
+>value.trim() : string
+>value.trim : () => string
+>value : string & not "1" & not "2"
+>trim : () => string
+}

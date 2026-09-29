@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/negatedRecursiveComponentStatics.ts] ////
+
+=== negatedRecursiveComponentStatics.ts ===
+type Component = (props: any) => any;
+>Component : Symbol(Component, Decl(negatedRecursiveComponentStatics.ts, 0, 0))
+>props : Symbol(props, Decl(negatedRecursiveComponentStatics.ts, 0, 18))
+
+type Statics<Value> = {
+>Statics : Symbol(Statics, Decl(negatedRecursiveComponentStatics.ts, 0, 37))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 1, 13))
+
+    [Key in keyof Value & not (Value extends { kind: "memo" } ? "kind" : "name")]: Value[Key];
+>Key : Symbol(Key, Decl(negatedRecursiveComponentStatics.ts, 2, 5))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 1, 13))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 1, 13))
+>kind : Symbol(kind, Decl(negatedRecursiveComponentStatics.ts, 2, 46))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 1, 13))
+>Key : Symbol(Key, Decl(negatedRecursiveComponentStatics.ts, 2, 5))
+
+};
+type Styled<Value extends Component> = string & StyledBase<Value> & Statics<Value>;
+>Styled : Symbol(Styled, Decl(negatedRecursiveComponentStatics.ts, 3, 2))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 4, 12))
+>Component : Symbol(Component, Decl(negatedRecursiveComponentStatics.ts, 0, 0))
+>StyledBase : Symbol(StyledBase, Decl(negatedRecursiveComponentStatics.ts, 4, 83))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 4, 12))
+>Statics : Symbol(Statics, Decl(negatedRecursiveComponentStatics.ts, 0, 37))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 4, 12))
+
+interface StyledBase<Value extends Component> {
+>StyledBase : Symbol(StyledBase, Decl(negatedRecursiveComponentStatics.ts, 4, 83))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 5, 21))
+>Component : Symbol(Component, Decl(negatedRecursiveComponentStatics.ts, 0, 0))
+
+    (props: Parameters<Value>[0]): void;
+>props : Symbol(props, Decl(negatedRecursiveComponentStatics.ts, 6, 5))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 5, 21))
+
+    withComponent<Other extends Styled<any>>(other: Other): Styled<Inner<Other>>;
+>withComponent : Symbol(StyledBase.withComponent, Decl(negatedRecursiveComponentStatics.ts, 6, 40))
+>Other : Symbol(Other, Decl(negatedRecursiveComponentStatics.ts, 7, 18))
+>Styled : Symbol(Styled, Decl(negatedRecursiveComponentStatics.ts, 3, 2))
+>other : Symbol(other, Decl(negatedRecursiveComponentStatics.ts, 7, 45))
+>Other : Symbol(Other, Decl(negatedRecursiveComponentStatics.ts, 7, 18))
+>Styled : Symbol(Styled, Decl(negatedRecursiveComponentStatics.ts, 3, 2))
+>Inner : Symbol(Inner, Decl(negatedRecursiveComponentStatics.ts, 8, 1))
+>Other : Symbol(Other, Decl(negatedRecursiveComponentStatics.ts, 7, 18))
+}
+type Inner<Value extends Component> = Value extends Styled<infer Result> ? Result : Value;
+>Inner : Symbol(Inner, Decl(negatedRecursiveComponentStatics.ts, 8, 1))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 9, 11))
+>Component : Symbol(Component, Decl(negatedRecursiveComponentStatics.ts, 0, 0))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 9, 11))
+>Styled : Symbol(Styled, Decl(negatedRecursiveComponentStatics.ts, 3, 2))
+>Result : Symbol(Result, Decl(negatedRecursiveComponentStatics.ts, 9, 64))
+>Result : Symbol(Result, Decl(negatedRecursiveComponentStatics.ts, 9, 64))
+>Value : Symbol(Value, Decl(negatedRecursiveComponentStatics.ts, 9, 11))
+
+declare const component: Styled<(props: { count: number }) => void>;
+>component : Symbol(component, Decl(negatedRecursiveComponentStatics.ts, 11, 13))
+>Styled : Symbol(Styled, Decl(negatedRecursiveComponentStatics.ts, 3, 2))
+>props : Symbol(props, Decl(negatedRecursiveComponentStatics.ts, 11, 33))
+>count : Symbol(count, Decl(negatedRecursiveComponentStatics.ts, 11, 41))
+
+component({ count: 1 });
+>component : Symbol(component, Decl(negatedRecursiveComponentStatics.ts, 11, 13))
+>count : Symbol(count, Decl(negatedRecursiveComponentStatics.ts, 12, 11))
+
+// Error: The original component parameter type must be preserved.
+component({ count: "wrong" });
+>component : Symbol(component, Decl(negatedRecursiveComponentStatics.ts, 11, 13))
+>count : Symbol(count, Decl(negatedRecursiveComponentStatics.ts, 14, 11))
+

@@ -905,6 +905,18 @@ func (s *orderedSet[T]) add(value T) {
 	s.valuesByKey[value] = struct{}{}
 }
 
+func (s *orderedSet[T]) replace(oldValue T, newValue T) bool {
+	if !s.contains(oldValue) {
+		return false
+	}
+	s.values[slices.Index(s.values, oldValue)] = newValue
+	if s.valuesByKey != nil {
+		delete(s.valuesByKey, oldValue)
+		s.valuesByKey[newValue] = struct{}{}
+	}
+	return true
+}
+
 func getContainingFunctionOrClassStaticBlock(node *ast.Node) *ast.Node {
 	return ast.FindAncestor(node.Parent, ast.IsFunctionLikeOrClassStaticBlockDeclaration)
 }

@@ -1,0 +1,126 @@
+//// [tests/cases/compiler/negatedTypeSmokeTypeof.ts] ////
+
+=== negatedTypeSmokeTypeof.ts ===
+export function comboProtection(combo: { protection: unknown }): number | boolean | undefined {
+>comboProtection : Symbol(comboProtection, Decl(negatedTypeSmokeTypeof.ts, 0, 0))
+>combo : Symbol(combo, Decl(negatedTypeSmokeTypeof.ts, 0, 32))
+>protection : Symbol(protection, Decl(negatedTypeSmokeTypeof.ts, 0, 40))
+
+    return typeof combo.protection === "boolean" || typeof combo.protection === "number"
+>combo.protection : Symbol(protection, Decl(negatedTypeSmokeTypeof.ts, 0, 40))
+>combo : Symbol(combo, Decl(negatedTypeSmokeTypeof.ts, 0, 32))
+>protection : Symbol(protection, Decl(negatedTypeSmokeTypeof.ts, 0, 40))
+>combo.protection : Symbol(protection, Decl(negatedTypeSmokeTypeof.ts, 0, 40))
+>combo : Symbol(combo, Decl(negatedTypeSmokeTypeof.ts, 0, 32))
+>protection : Symbol(protection, Decl(negatedTypeSmokeTypeof.ts, 0, 40))
+
+        ? combo.protection : undefined;
+>combo.protection : Symbol(protection, Decl(negatedTypeSmokeTypeof.ts, 0, 40))
+>combo : Symbol(combo, Decl(negatedTypeSmokeTypeof.ts, 0, 32))
+>protection : Symbol(protection, Decl(negatedTypeSmokeTypeof.ts, 0, 40))
+>undefined : Symbol(undefined)
+}
+
+export function scalar(value: unknown) {
+>scalar : Symbol(scalar, Decl(negatedTypeSmokeTypeof.ts, 3, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 5, 23))
+
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 5, 23))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 5, 23))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 5, 23))
+
+        const result: string | number | boolean = value;
+>result : Symbol(result, Decl(negatedTypeSmokeTypeof.ts, 7, 13))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 5, 23))
+
+        return result;
+>result : Symbol(result, Decl(negatedTypeSmokeTypeof.ts, 7, 13))
+    }
+    return null;
+}
+
+export function sequential(value: unknown) {
+>sequential : Symbol(sequential, Decl(negatedTypeSmokeTypeof.ts, 11, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+
+    if (typeof value === "boolean") return +value;
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+
+    if (typeof value === "string") return parseFloat(value);
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>parseFloat : Symbol(parseFloat, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+
+    if (typeof value === "bigint") return value + 1n;
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+
+    if (typeof value === "number") return value.toFixed();
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>value.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    if (typeof value === "object" && value !== null) return Object.keys(value);
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+
+    if (typeof value === "function") return value();
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 13, 27))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+export function nullableString(value: unknown): string | null {
+>nullableString : Symbol(nullableString, Decl(negatedTypeSmokeTypeof.ts, 21, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 23, 31))
+
+    if (value === null || typeof value === "string") return value;
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 23, 31))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 23, 31))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 23, 31))
+
+    return null;
+}
+
+export function literalChoice(value: unknown): "read" | "write" | undefined {
+>literalChoice : Symbol(literalChoice, Decl(negatedTypeSmokeTypeof.ts, 26, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 28, 30))
+
+    return value === "read" || value === "write" ? value : undefined;
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 28, 30))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 28, 30))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 28, 30))
+>undefined : Symbol(undefined)
+}
+
+export function trimmed(value: unknown) {
+>trimmed : Symbol(trimmed, Decl(negatedTypeSmokeTypeof.ts, 30, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+
+    if (typeof value === "number") return String(value);
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+
+    if (typeof value !== "string") return "";
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+
+    if (value === "1" || value === "2") return value;
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+
+    return value.trim();
+>value.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedTypeSmokeTypeof.ts, 32, 24))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+}

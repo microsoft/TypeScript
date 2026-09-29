@@ -1,0 +1,214 @@
+//// [tests/cases/compiler/freshNegatedTypeWidening.ts] ////
+
+=== freshNegatedTypeWidening.ts ===
+interface BaseNode {
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+    kind: number;
+>kind : Symbol(BaseNode.kind, Decl(freshNegatedTypeWidening.ts, 0, 20))
+}
+
+interface WrappedNode extends BaseNode {
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+    expression: BaseNode;
+>expression : Symbol(WrappedNode.expression, Decl(freshNegatedTypeWidening.ts, 4, 40))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+}
+
+declare function isWrappedNode(node: BaseNode): node is WrappedNode;
+>isWrappedNode : Symbol(isWrappedNode, Decl(freshNegatedTypeWidening.ts, 6, 1))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 8, 31))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 8, 31))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+
+function assertWrappedNode(node: BaseNode) {
+>assertWrappedNode : Symbol(assertWrappedNode, Decl(freshNegatedTypeWidening.ts, 8, 68))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 10, 27))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+    if (!isWrappedNode(node)) {
+>isWrappedNode : Symbol(isWrappedNode, Decl(freshNegatedTypeWidening.ts, 6, 1))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 10, 27))
+
+        return node as WrappedNode;
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 10, 27))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+    }
+    return node;
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 10, 27))
+}
+
+declare const explicitlyUnwrapped: BaseNode & not WrappedNode;
+>explicitlyUnwrapped : Symbol(explicitlyUnwrapped, Decl(freshNegatedTypeWidening.ts, 17, 13))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+
+explicitlyUnwrapped as WrappedNode;
+>explicitlyUnwrapped : Symbol(explicitlyUnwrapped, Decl(freshNegatedTypeWidening.ts, 17, 13))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+
+function skipWrappers(node: WrappedNode): WrappedNode;
+>skipWrappers : Symbol(skipWrappers, Decl(freshNegatedTypeWidening.ts, 18, 35), Decl(freshNegatedTypeWidening.ts, 20, 54), Decl(freshNegatedTypeWidening.ts, 21, 48))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 20, 22))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+
+function skipWrappers(node: BaseNode): BaseNode;
+>skipWrappers : Symbol(skipWrappers, Decl(freshNegatedTypeWidening.ts, 18, 35), Decl(freshNegatedTypeWidening.ts, 20, 54), Decl(freshNegatedTypeWidening.ts, 21, 48))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 21, 22))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+function skipWrappers(node: BaseNode) {
+>skipWrappers : Symbol(skipWrappers, Decl(freshNegatedTypeWidening.ts, 18, 35), Decl(freshNegatedTypeWidening.ts, 20, 54), Decl(freshNegatedTypeWidening.ts, 21, 48))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 22, 22))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+    while (isWrappedNode(node)) {
+>isWrappedNode : Symbol(isWrappedNode, Decl(freshNegatedTypeWidening.ts, 6, 1))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 22, 22))
+
+        node = node.expression;
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 22, 22))
+>node.expression : Symbol(WrappedNode.expression, Decl(freshNegatedTypeWidening.ts, 4, 40))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 22, 22))
+>expression : Symbol(WrappedNode.expression, Decl(freshNegatedTypeWidening.ts, 4, 40))
+    }
+    return node;
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 22, 22))
+}
+
+interface NamedNode extends BaseNode {
+>NamedNode : Symbol(NamedNode, Decl(freshNegatedTypeWidening.ts, 27, 1))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+    name: string;
+>name : Symbol(NamedNode.name, Decl(freshNegatedTypeWidening.ts, 29, 38))
+}
+
+declare function isSpecialNode(node: BaseNode): node is WrappedNode | NamedNode;
+>isSpecialNode : Symbol(isSpecialNode, Decl(freshNegatedTypeWidening.ts, 31, 1))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 33, 31))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 33, 31))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+>NamedNode : Symbol(NamedNode, Decl(freshNegatedTypeWidening.ts, 27, 1))
+
+function skipSpecialNodes(node: WrappedNode): WrappedNode;
+>skipSpecialNodes : Symbol(skipSpecialNodes, Decl(freshNegatedTypeWidening.ts, 33, 80), Decl(freshNegatedTypeWidening.ts, 35, 58), Decl(freshNegatedTypeWidening.ts, 36, 52))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 35, 26))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+>WrappedNode : Symbol(WrappedNode, Decl(freshNegatedTypeWidening.ts, 2, 1))
+
+function skipSpecialNodes(node: BaseNode): BaseNode;
+>skipSpecialNodes : Symbol(skipSpecialNodes, Decl(freshNegatedTypeWidening.ts, 33, 80), Decl(freshNegatedTypeWidening.ts, 35, 58), Decl(freshNegatedTypeWidening.ts, 36, 52))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 36, 26))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+function skipSpecialNodes(node: BaseNode) {
+>skipSpecialNodes : Symbol(skipSpecialNodes, Decl(freshNegatedTypeWidening.ts, 33, 80), Decl(freshNegatedTypeWidening.ts, 35, 58), Decl(freshNegatedTypeWidening.ts, 36, 52))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 37, 26))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+    while (isSpecialNode(node)) {
+>isSpecialNode : Symbol(isSpecialNode, Decl(freshNegatedTypeWidening.ts, 31, 1))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 37, 26))
+
+        node = { kind: 0 };
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 37, 26))
+>kind : Symbol(kind, Decl(freshNegatedTypeWidening.ts, 39, 16))
+    }
+    return node;
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 37, 26))
+}
+
+function isOrdinaryNode(node: BaseNode) {
+>isOrdinaryNode : Symbol(isOrdinaryNode, Decl(freshNegatedTypeWidening.ts, 42, 1))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 44, 24))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+    return !isSpecialNode(node);
+>isSpecialNode : Symbol(isSpecialNode, Decl(freshNegatedTypeWidening.ts, 31, 1))
+>node : Symbol(node, Decl(freshNegatedTypeWidening.ts, 44, 24))
+}
+
+declare const candidate: BaseNode;
+>candidate : Symbol(candidate, Decl(freshNegatedTypeWidening.ts, 48, 13))
+>BaseNode : Symbol(BaseNode, Decl(freshNegatedTypeWidening.ts, 0, 0))
+
+if (!isOrdinaryNode(candidate)) {
+>isOrdinaryNode : Symbol(isOrdinaryNode, Decl(freshNegatedTypeWidening.ts, 42, 1))
+>candidate : Symbol(candidate, Decl(freshNegatedTypeWidening.ts, 48, 13))
+
+    candidate.kind;
+>candidate.kind : Symbol(BaseNode.kind, Decl(freshNegatedTypeWidening.ts, 0, 20))
+>candidate : Symbol(candidate, Decl(freshNegatedTypeWidening.ts, 48, 13))
+>kind : Symbol(BaseNode.kind, Decl(freshNegatedTypeWidening.ts, 0, 20))
+}
+
+function assertString(value: {}) {
+>assertString : Symbol(assertString, Decl(freshNegatedTypeWidening.ts, 51, 1))
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 53, 22))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 53, 22))
+
+        return value as string;
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 53, 22))
+    }
+    return value;
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 53, 22))
+}
+
+declare const explicitlyNotString: {} & not string;
+>explicitlyNotString : Symbol(explicitlyNotString, Decl(freshNegatedTypeWidening.ts, 60, 13))
+
+explicitlyNotString as string;
+>explicitlyNotString : Symbol(explicitlyNotString, Decl(freshNegatedTypeWidening.ts, 60, 13))
+
+function skipStrings(value: string): string;
+>skipStrings : Symbol(skipStrings, Decl(freshNegatedTypeWidening.ts, 61, 30), Decl(freshNegatedTypeWidening.ts, 63, 44), Decl(freshNegatedTypeWidening.ts, 64, 36))
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 63, 21))
+
+function skipStrings(value: {}): {};
+>skipStrings : Symbol(skipStrings, Decl(freshNegatedTypeWidening.ts, 61, 30), Decl(freshNegatedTypeWidening.ts, 63, 44), Decl(freshNegatedTypeWidening.ts, 64, 36))
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 64, 21))
+
+function skipStrings(value: {}) {
+>skipStrings : Symbol(skipStrings, Decl(freshNegatedTypeWidening.ts, 61, 30), Decl(freshNegatedTypeWidening.ts, 63, 44), Decl(freshNegatedTypeWidening.ts, 64, 36))
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 65, 21))
+
+    while (typeof value === "string") {
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 65, 21))
+
+        value = {};
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 65, 21))
+    }
+    return value;
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 65, 21))
+}
+
+function isNotString(value: {}) {
+>isNotString : Symbol(isNotString, Decl(freshNegatedTypeWidening.ts, 70, 1))
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 72, 21))
+
+    return typeof value !== "string";
+>value : Symbol(value, Decl(freshNegatedTypeWidening.ts, 72, 21))
+}
+
+declare const nonNullValue: {};
+>nonNullValue : Symbol(nonNullValue, Decl(freshNegatedTypeWidening.ts, 76, 13))
+
+if (!isNotString(nonNullValue)) {
+>isNotString : Symbol(isNotString, Decl(freshNegatedTypeWidening.ts, 70, 1))
+>nonNullValue : Symbol(nonNullValue, Decl(freshNegatedTypeWidening.ts, 76, 13))
+
+    nonNullValue.toString();
+>nonNullValue.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>nonNullValue : Symbol(nonNullValue, Decl(freshNegatedTypeWidening.ts, 76, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}

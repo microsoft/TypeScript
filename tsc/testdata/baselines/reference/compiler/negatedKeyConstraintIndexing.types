@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/negatedKeyConstraintIndexing.ts] ////
+
+=== negatedKeyConstraintIndexing.ts ===
+type StringNumberKeys<T> = keyof T & not symbol;
+>StringNumberKeys : StringNumberKeys<T>
+
+type MyExclude<T, U> = T & not U;
+>MyExclude : MyExclude<T, U>
+
+function readAlias<T>(key: MyExclude<keyof T, symbol>, values: { [key: string]: boolean }, stringKey: string, numberKey: number) {
+>readAlias : <T>(key: MyExclude<keyof T, symbol>, values: { [key: string]: boolean; }, stringKey: string, numberKey: number) => { [key: string]: boolean; }[MyExclude<keyof T, symbol>]
+>key : MyExclude<keyof T, symbol>
+>values : { [key: string]: boolean; }
+>key : string
+>stringKey : string
+>numberKey : number
+
+    const stringResult = values[stringKey];
+>stringResult : boolean
+>values[stringKey] : boolean
+>values : { [key: string]: boolean; }
+>stringKey : string
+
+    const numberResult = values[numberKey];
+>numberResult : boolean
+>values[numberKey] : boolean
+>values : { [key: string]: boolean; }
+>numberKey : number
+
+    const result = values[key];
+>result : { [key: string]: boolean; }[MyExclude<keyof T, symbol>]
+>values[key] : { [key: string]: boolean; }[MyExclude<keyof T, symbol>]
+>values : { [key: string]: boolean; }
+>key : MyExclude<keyof T, symbol>
+
+    return result;
+>result : { [key: string]: boolean; }[MyExclude<keyof T, symbol>]
+}
+
+function readAliasConstrained<T, Key extends MyExclude<keyof T, symbol>>(key: Key, values: { [key: string]: boolean }) {
+>readAliasConstrained : <T, Key extends MyExclude<keyof T, symbol>>(key: Key, values: { [key: string]: boolean; }) => boolean
+>key : Key
+>values : { [key: string]: boolean; }
+>key : string
+
+    const result: boolean = values[key];
+>result : boolean
+>values[key] : boolean
+>values : { [key: string]: boolean; }
+>key : Key
+
+    return result;
+>result : boolean
+}
+
+function read<T>(key: StringNumberKeys<T>, values: { [key: string]: boolean }) {
+>read : <T>(key: StringNumberKeys<T>, values: { [key: string]: boolean; }) => boolean
+>key : StringNumberKeys<T>
+>values : { [key: string]: boolean; }
+>key : string
+
+    const result: boolean = values[key];
+>result : boolean
+>values[key] : boolean
+>values : { [key: string]: boolean; }
+>key : StringNumberKeys<T>
+
+    return result;
+>result : boolean
+}
+
+function readConstrained<T, Key extends StringNumberKeys<T>>(key: Key, values: { [key: string]: boolean }) {
+>readConstrained : <T, Key extends StringNumberKeys<T>>(key: Key, values: { [key: string]: boolean; }) => boolean
+>key : Key
+>values : { [key: string]: boolean; }
+>key : string
+
+    const result: boolean = values[key];
+>result : boolean
+>values[key] : boolean
+>values : { [key: string]: boolean; }
+>key : Key
+
+    return result;
+>result : boolean
+}
+
+function readStringOnly<T>(key: keyof T & not number & not symbol, values: { [key: string]: boolean }) {
+>readStringOnly : <T>(key: keyof T & not number & not symbol, values: { [key: string]: boolean; }) => boolean
+>key : keyof T & not number & not symbol
+>values : { [key: string]: boolean; }
+>key : string
+
+    const result: boolean = values[key];
+>result : boolean
+>values[key] : boolean
+>values : { [key: string]: boolean; }
+>key : keyof T & not number & not symbol
+
+    return result;
+>result : boolean
+}
+
+declare const symbolKey: unique symbol;
+>symbolKey : unique symbol
+
+// Error: Symbol keys are excluded.
+read<{ [symbolKey]: boolean }>(symbolKey, {});
+>read<{ [symbolKey]: boolean }>(symbolKey, {}) : boolean
+>read : <T>(key: StringNumberKeys<T>, values: { [key: string]: boolean; }) => boolean
+>[symbolKey] : boolean
+>symbolKey : unique symbol
+>symbolKey : unique symbol
+>{} : {}
+

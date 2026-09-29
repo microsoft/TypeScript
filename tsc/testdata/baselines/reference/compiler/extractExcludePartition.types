@@ -1,0 +1,480 @@
+//// [tests/cases/compiler/extractExcludePartition.ts] ////
+
+=== extractExcludePartition.ts ===
+type MyExtract<T, U> = T & U;
+>MyExtract : MyExtract<T, U>
+
+type MyExclude<T, U> = T & not U;
+>MyExclude : MyExclude<T, U>
+
+type MyOmit<T, K extends keyof any> = Pick<T, MyExclude<keyof T, K>>;
+>MyOmit : MyOmit<T, K>
+
+type Partition<T, U> = MyExtract<T, U> | MyExclude<T, U>;
+>Partition : T
+
+function partition<T, U>(value: T): Partition<T, U> {
+>partition : <T, U>(value: T) => Partition<T, U>
+>value : T
+
+    return value;
+>value : T
+}
+
+function identity<T, U>(value: Partition<T, U>): T {
+>identity : <T, U>(value: Partition<T, U>) => T
+>value : T
+
+    return value;
+>value : T
+}
+
+type UnionPartition<T, A, B> = MyExtract<T, A | B> | MyExclude<T, A | B>;
+>UnionPartition : T
+
+function unionPartition<T, A, B>(value: T): UnionPartition<T, A, B> {
+>unionPartition : <T, A, B>(value: T) => UnionPartition<T, A, B>
+>value : T
+
+    return value;
+>value : T
+}
+
+function unionIdentity<T, A, B>(value: UnionPartition<T, A, B>): T {
+>unionIdentity : <T, A, B>(value: UnionPartition<T, A, B>) => T
+>value : T
+
+    return value;
+>value : T
+}
+
+type RepeatedPartition<T, U, W> = Partition<T, U> | Partition<T, W>;
+>RepeatedPartition : T
+
+function repeatedPartition<T, U, W>(value: T): RepeatedPartition<T, U, W> {
+>repeatedPartition : <T, U, W>(value: T) => RepeatedPartition<T, U, W>
+>value : T
+
+    return value;
+>value : T
+}
+
+function repeatedIdentity<T, U, W>(value: RepeatedPartition<T, U, W>): T {
+>repeatedIdentity : <T, U, W>(value: RepeatedPartition<T, U, W>) => T
+>value : T
+
+    return value;
+>value : T
+}
+
+type DifferentBasePartitions<T, Q, U> = Partition<T, U> | Partition<Q, U>;
+>DifferentBasePartitions : Q | T
+
+function differentBasePartitions<T, Q, U>(value: T | Q): DifferentBasePartitions<T, Q, U> {
+>differentBasePartitions : <T, Q, U>(value: T | Q) => DifferentBasePartitions<T, Q, U>
+>value : Q | T
+
+    return value;
+>value : Q | T
+}
+
+function differentBaseIdentity<T, Q, U>(value: DifferentBasePartitions<T, Q, U>): T | Q {
+>differentBaseIdentity : <T, Q, U>(value: DifferentBasePartitions<T, Q, U>) => T | Q
+>value : Q | T
+
+    return value;
+>value : Q | T
+}
+
+type UnionBasePartition<T, U, A, B> = Partition<T | U, A | B>;
+>UnionBasePartition : T | U
+
+function unionBasePartition<T, U, A, B>(value: T | U): UnionBasePartition<T, U, A, B> {
+>unionBasePartition : <T, U, A, B>(value: T | U) => UnionBasePartition<T, U, A, B>
+>value : T | U
+
+    return value;
+>value : T | U
+}
+
+function unionBaseIdentity<T, U, A, B>(value: UnionBasePartition<T, U, A, B>): T | U {
+>unionBaseIdentity : <T, U, A, B>(value: UnionBasePartition<T, U, A, B>) => T | U
+>value : T | U
+
+    return value;
+>value : T | U
+}
+
+type RepeatedUnionPartition<T, A, B, C, D> = Partition<T, A | B> | Partition<T, C | D>;
+>RepeatedUnionPartition : T
+
+function repeatedUnionPartition<T, A, B, C, D>(value: T): RepeatedUnionPartition<T, A, B, C, D> {
+>repeatedUnionPartition : <T, A, B, C, D>(value: T) => RepeatedUnionPartition<T, A, B, C, D>
+>value : T
+
+    return value;
+>value : T
+}
+
+function repeatedUnionIdentity<T, A, B, C, D>(value: RepeatedUnionPartition<T, A, B, C, D>): T {
+>repeatedUnionIdentity : <T, A, B, C, D>(value: RepeatedUnionPartition<T, A, B, C, D>) => T
+>value : T
+
+    return value;
+>value : T
+}
+
+type BooleanPartition<T, A, B> =
+>BooleanPartition : T
+
+    | MyExtract<MyExtract<T, A>, B>
+    | MyExclude<MyExtract<T, A>, B>
+    | MyExtract<MyExclude<T, A>, B>
+    | MyExclude<MyExclude<T, A>, B>;
+
+function booleanPartition<T, A, B>(value: T): BooleanPartition<T, A, B> {
+>booleanPartition : <T, A, B>(value: T) => BooleanPartition<T, A, B>
+>value : T
+
+    return value;
+>value : T
+}
+
+function booleanIdentity<T, A, B>(value: BooleanPartition<T, A, B>): T {
+>booleanIdentity : <T, A, B>(value: BooleanPartition<T, A, B>) => T
+>value : T
+
+    return value;
+>value : T
+}
+
+type PartitionWithRemainder<T, U, R> = MyExtract<T, U> | MyExclude<T, U> | R;
+>PartitionWithRemainder : R | T
+
+function partitionWithRemainder<T, U, R>(value: T | R): PartitionWithRemainder<T, U, R> {
+>partitionWithRemainder : <T, U, R>(value: T | R) => PartitionWithRemainder<T, U, R>
+>value : R | T
+
+    return value;
+>value : R | T
+}
+
+function remainderIdentity<T, U, R>(value: PartitionWithRemainder<T, U, R>): T | R {
+>remainderIdentity : <T, U, R>(value: PartitionWithRemainder<T, U, R>) => T | R
+>value : R | T
+
+    return value;
+>value : R | T
+}
+
+type IntersectionBasePartition<T, Q, U> = MyExtract<T & Q, U> | MyExclude<T & Q, U>;
+>IntersectionBasePartition : T & Q
+
+function intersectionBasePartition<T, Q, U>(value: T & Q): IntersectionBasePartition<T, Q, U> {
+>intersectionBasePartition : <T, Q, U>(value: T & Q) => IntersectionBasePartition<T, Q, U>
+>value : T & Q
+
+    return value;
+>value : T & Q
+}
+
+function intersectionBaseIdentity<T, Q, U>(value: IntersectionBasePartition<T, Q, U>): T & Q {
+>intersectionBaseIdentity : <T, Q, U>(value: IntersectionBasePartition<T, Q, U>) => T & Q
+>value : T & Q
+
+    return value;
+>value : T & Q
+}
+
+type NeverPartition<T> = MyExtract<T, never> | MyExclude<T, never>;
+>NeverPartition : T
+
+type UnknownPartition<T> = MyExtract<T, unknown> | MyExclude<T, unknown>;
+>UnknownPartition : T
+
+function degeneratePartitions<T>(neverPartition: NeverPartition<T>, unknownPartition: UnknownPartition<T>): T {
+>degeneratePartitions : <T>(neverPartition: NeverPartition<T>, unknownPartition: UnknownPartition<T>) => T
+>neverPartition : T
+>unknownPartition : T
+
+    return Math.random() ? neverPartition : unknownPartition;
+>Math.random() ? neverPartition : unknownPartition : T
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>neverPartition : T
+>unknownPartition : T
+}
+
+type IncompletePartition<T, A, B> = MyExtract<T, A> | MyExclude<T, A | B>;
+>IncompletePartition : MyExtract<T, A> | (T & not B)
+
+function incompletePartition<T, A, B>(value: T): IncompletePartition<T, A, B> {
+>incompletePartition : <T, A, B>(value: T) => IncompletePartition<T, A, B>
+>value : T
+
+    // Error: The positive branch does not cover B.
+    return value;
+>value : T
+}
+
+function incompleteIdentity<T, A, B>(value: IncompletePartition<T, A, B>): T {
+>incompleteIdentity : <T, A, B>(value: IncompletePartition<T, A, B>) => T
+>value : MyExtract<T, A> | (T & not B)
+
+    return value;
+>value : MyExtract<T, A> | (T & not B)
+}
+
+type MismatchedPartition<T, Q, U> = MyExtract<T, U> | MyExclude<Q, U>;
+>MismatchedPartition : MismatchedPartition<T, Q, U>
+
+function mismatchedPartition<T, Q, U>(value: T | Q): MismatchedPartition<T, Q, U> {
+>mismatchedPartition : <T, Q, U>(value: T | Q) => MismatchedPartition<T, Q, U>
+>value : Q | T
+
+    // Error: The positive and negative branches have different bases.
+    return value;
+>value : Q | T
+}
+
+function mismatchedIdentity<T, Q, U>(value: MismatchedPartition<T, Q, U>): T | Q {
+>mismatchedIdentity : <T, Q, U>(value: MismatchedPartition<T, Q, U>) => T | Q
+>value : MismatchedPartition<T, Q, U>
+
+    return value;
+>value : MismatchedPartition<T, Q, U>
+}
+
+type InjectedProps = {
+>InjectedProps : InjectedProps
+
+    owner: string;
+>owner : string
+
+};
+
+declare function withOwner<T extends InjectedProps>(props: MyOmit<T, keyof InjectedProps> & InjectedProps): T;
+>withOwner : <T extends InjectedProps>(props: MyOmit<T, keyof InjectedProps> & InjectedProps) => T
+>props : MyOmit<T, "owner"> & InjectedProps
+
+function render<T extends InjectedProps>(props: T) {
+>render : <T extends InjectedProps>(props: T) => T
+>props : T
+
+    return withOwner<T>(props);
+>withOwner<T>(props) : T
+>withOwner : <T_1 extends InjectedProps>(props: MyOmit<T_1, keyof InjectedProps> & InjectedProps) => T_1
+>props : T
+}
+
+type NegatedBasePartition<T, U, V> = MyExtract<MyExclude<T, V>, U> | MyExclude<MyExclude<T, V>, U>;
+>NegatedBasePartition : T & not V
+
+function negatedBasePartition<T, U, V>(value: T & not V): NegatedBasePartition<T, U, V> {
+>negatedBasePartition : <T, U, V>(value: T & not V) => NegatedBasePartition<T, U, V>
+>value : T & not V
+
+    return value;
+>value : T & not V
+}
+
+function negatedBaseIdentity<T, U, V>(value: NegatedBasePartition<T, U, V>): T & not V {
+>negatedBaseIdentity : <T, U, V>(value: NegatedBasePartition<T, U, V>) => T & not V
+>value : T & not V
+
+    return value;
+>value : T & not V
+}
+
+type DeferredPartition<T, U, V> = MyExtract<T, U> | MyExclude<T, V>;
+>DeferredPartition : DeferredPartition<T, U, V>
+
+function instantiatedPartition<T, U>(value: T): DeferredPartition<T, U, U> {
+>instantiatedPartition : <T, U>(value: T) => DeferredPartition<T, U, U>
+>value : T
+
+    return value;
+>value : T
+}
+
+function instantiatedIdentity<T, U>(value: DeferredPartition<T, U, U>): T {
+>instantiatedIdentity : <T, U>(value: DeferredPartition<T, U, U>) => T
+>value : T
+
+    return value;
+>value : T
+}
+
+type RecursivePartition =
+>RecursivePartition : RecursivePartition
+
+    | { next: RecursivePartition; value: string }
+>next : RecursivePartition
+>value : string
+
+    | ({ next: unknown } & not { value: string });
+>next : unknown
+>value : string
+
+declare const recursivePartition: RecursivePartition;
+>recursivePartition : RecursivePartition
+
+const recursiveNext: unknown = recursivePartition.next;
+>recursiveNext : unknown
+>recursivePartition.next : unknown
+>recursivePartition : RecursivePartition
+>next : unknown
+
+// Error: The recursive union is not a number.
+const recursiveNumber: number = recursivePartition;
+>recursiveNumber : number
+>recursivePartition : RecursivePartition
+
+type PartitionWithPositiveRemainder<T, U, V> = (T & U) | (T & not U & V);
+>PartitionWithPositiveRemainder : (T & U) | (T & V)
+
+function positiveRemainder<T, U, V>(value: T & U): PartitionWithPositiveRemainder<T, U, V> {
+>positiveRemainder : <T, U, V>(value: T & U) => PartitionWithPositiveRemainder<T, U, V>
+>value : T & U
+
+    return value;
+>value : T & U
+}
+
+function reducedBase<T, U, V>(value: T & V): PartitionWithPositiveRemainder<T, U, V> {
+>reducedBase : <T, U, V>(value: T & V) => PartitionWithPositiveRemainder<T, U, V>
+>value : T & V
+
+    return value;
+>value : T & V
+}
+
+function positiveRemainderIdentity<T, U, V>(value: PartitionWithPositiveRemainder<T, U, V>): (T & U) | (T & V) {
+>positiveRemainderIdentity : <T, U, V>(value: PartitionWithPositiveRemainder<T, U, V>) => (T & U) | (T & V)
+>value : (T & U) | (T & V)
+
+    return value;
+>value : (T & U) | (T & V)
+}
+
+type PartitionContainer<Value> = { value: Value };
+>PartitionContainer : PartitionContainer<Value>
+>value : Value
+
+type OuterPartition = PartitionContainer<InnerPartition>;
+>OuterPartition : OuterPartition
+
+type InnerPartition = "chosen" | (string & not "chosen");
+>InnerPartition : string
+
+function nestedPartition(value: string): InnerPartition {
+>nestedPartition : (value: string) => InnerPartition
+>value : string
+
+    return value;
+>value : string
+}
+
+function nestedPartitionElement(value: string): OuterPartition["value"] {
+>nestedPartitionElement : (value: string) => OuterPartition["value"]
+>value : string
+
+    return value;
+>value : string
+}
+
+type ComplementPartition =
+>ComplementPartition : ComplementPartition
+
+    | { next: ComplementPartition; value: string }
+>next : ComplementPartition
+>value : string
+
+    | ({ next: unknown } & not { value: string })
+>next : unknown
+>value : string
+
+    | { next: unknown; value: string };
+>next : unknown
+>value : string
+
+function recursiveComplement(value: { next: unknown }): ComplementPartition {
+>recursiveComplement : (value: { next: unknown; }) => ComplementPartition
+>value : { next: unknown; }
+>next : unknown
+
+    // Error: Recursive reduction commits to the unreduced union.
+    return value;
+>value : { next: unknown; }
+}
+
+function recursiveComplementMember(value: unknown): ComplementPartition["next"] {
+>recursiveComplementMember : (value: unknown) => ComplementPartition["next"]
+>value : unknown
+
+    return value;
+>value : unknown
+}
+
+declare const complementPartition: ComplementPartition;
+>complementPartition : ComplementPartition
+
+const complementNode: unknown = complementPartition.next;
+>complementNode : unknown
+>complementPartition.next : unknown
+>complementPartition : ComplementPartition
+>next : unknown
+
+// Error: Reduction must not turn a recursive member into any.
+const complementNumber: number = complementPartition.next;
+>complementNumber : number
+>complementPartition.next : unknown
+>complementPartition : ComplementPartition
+>next : unknown
+
+type ForwardComplementMember = ForwardComplementPartition["next"];
+>ForwardComplementMember : unknown
+
+type ForwardComplementPartition =
+>ForwardComplementPartition : ForwardComplementPartition
+
+    | { next: ForwardComplementPartition; value: string }
+>next : ForwardComplementPartition
+>value : string
+
+    | ({ next: unknown } & not { value: string })
+>next : unknown
+>value : string
+
+    | { next: unknown; value: string };
+>next : unknown
+>value : string
+
+function forwardComplement(value: { next: unknown }): ForwardComplementPartition {
+>forwardComplement : (value: { next: unknown; }) => ForwardComplementPartition
+>value : { next: unknown; }
+>next : unknown
+
+    // Error: Recursive reduction commits to the unreduced union.
+    return value;
+>value : { next: unknown; }
+}
+
+function forwardComplementMember(value: unknown): ForwardComplementMember {
+>forwardComplementMember : (value: unknown) => ForwardComplementMember
+>value : unknown
+
+    return value;
+>value : unknown
+}
+
+declare const forwardComplementValue: ForwardComplementMember;
+>forwardComplementValue : unknown
+
+// Error: Resolving the indexed access first must still produce unknown.
+const forwardComplementNumber: number = forwardComplementValue;
+>forwardComplementNumber : number
+>forwardComplementValue : unknown
+

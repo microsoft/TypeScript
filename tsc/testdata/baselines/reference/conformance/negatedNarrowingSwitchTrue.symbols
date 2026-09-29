@@ -1,0 +1,108 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingSwitchTrue.ts] ////
+
+=== negatedNarrowingSwitchTrue.ts ===
+// `switch (true)` narrowing evaluates each case's condition against the reference. Each subsequent
+// case sees the negation of the preceding conditions. This exercises the interaction between the
+// fresh CFA negations introduced by instanceof/typeof and the switch-on-true clause narrowing.
+
+class A {
+>A : Symbol(A, Decl(negatedNarrowingSwitchTrue.ts, 0, 0))
+
+    a = 1;
+>a : Symbol(A.a, Decl(negatedNarrowingSwitchTrue.ts, 4, 9))
+}
+class B {
+>B : Symbol(B, Decl(negatedNarrowingSwitchTrue.ts, 6, 1))
+
+    b = 2;
+>b : Symbol(B.b, Decl(negatedNarrowingSwitchTrue.ts, 7, 9))
+}
+class C {
+>C : Symbol(C, Decl(negatedNarrowingSwitchTrue.ts, 9, 1))
+
+    c = 3;
+>c : Symbol(C.c, Decl(negatedNarrowingSwitchTrue.ts, 10, 9))
+}
+
+declare const x: A | B | C;
+>x : Symbol(x, Decl(negatedNarrowingSwitchTrue.ts, 14, 13))
+>A : Symbol(A, Decl(negatedNarrowingSwitchTrue.ts, 0, 0))
+>B : Symbol(B, Decl(negatedNarrowingSwitchTrue.ts, 6, 1))
+>C : Symbol(C, Decl(negatedNarrowingSwitchTrue.ts, 9, 1))
+
+switch (true) {
+    case x instanceof A:
+>x : Symbol(x, Decl(negatedNarrowingSwitchTrue.ts, 14, 13))
+>A : Symbol(A, Decl(negatedNarrowingSwitchTrue.ts, 0, 0))
+
+        x; // A
+>x : Symbol(x, Decl(negatedNarrowingSwitchTrue.ts, 14, 13))
+
+        break;
+    case x instanceof B:
+>x : Symbol(x, Decl(negatedNarrowingSwitchTrue.ts, 14, 13))
+>B : Symbol(B, Decl(negatedNarrowingSwitchTrue.ts, 6, 1))
+
+        x; // B
+>x : Symbol(x, Decl(negatedNarrowingSwitchTrue.ts, 14, 13))
+
+        break;
+    default:
+        x; // C
+>x : Symbol(x, Decl(negatedNarrowingSwitchTrue.ts, 14, 13))
+}
+
+// typeof-based switch(true).
+declare const y: {};
+>y : Symbol(y, Decl(negatedNarrowingSwitchTrue.ts, 27, 13))
+
+switch (true) {
+    case typeof y === "string":
+>y : Symbol(y, Decl(negatedNarrowingSwitchTrue.ts, 27, 13))
+
+        y; // string
+>y : Symbol(y, Decl(negatedNarrowingSwitchTrue.ts, 27, 13))
+
+        break;
+    case typeof y === "number":
+>y : Symbol(y, Decl(negatedNarrowingSwitchTrue.ts, 27, 13))
+
+        y; // number
+>y : Symbol(y, Decl(negatedNarrowingSwitchTrue.ts, 27, 13))
+
+        break;
+    default:
+        y; // {} & not string & not number
+>y : Symbol(y, Decl(negatedNarrowingSwitchTrue.ts, 27, 13))
+}
+
+// A guard-based switch(true).
+interface Cat {
+>Cat : Symbol(Cat, Decl(negatedNarrowingSwitchTrue.ts, 37, 1))
+
+    meow(): void;
+>meow : Symbol(Cat.meow, Decl(negatedNarrowingSwitchTrue.ts, 40, 15))
+}
+declare function isCat(v: unknown): v is Cat;
+>isCat : Symbol(isCat, Decl(negatedNarrowingSwitchTrue.ts, 42, 1))
+>v : Symbol(v, Decl(negatedNarrowingSwitchTrue.ts, 43, 23))
+>v : Symbol(v, Decl(negatedNarrowingSwitchTrue.ts, 43, 23))
+>Cat : Symbol(Cat, Decl(negatedNarrowingSwitchTrue.ts, 37, 1))
+
+declare const z: {};
+>z : Symbol(z, Decl(negatedNarrowingSwitchTrue.ts, 44, 13))
+
+switch (true) {
+    case isCat(z):
+>isCat : Symbol(isCat, Decl(negatedNarrowingSwitchTrue.ts, 42, 1))
+>z : Symbol(z, Decl(negatedNarrowingSwitchTrue.ts, 44, 13))
+
+        z; // {} & Cat
+>z : Symbol(z, Decl(negatedNarrowingSwitchTrue.ts, 44, 13))
+
+        break;
+    default:
+        z; // {} & not Cat
+>z : Symbol(z, Decl(negatedNarrowingSwitchTrue.ts, 44, 13))
+}
+

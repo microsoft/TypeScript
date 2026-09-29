@@ -1,0 +1,283 @@
+//// [tests/cases/conformance/types/negated/negatedPromiseRepr.ts] ////
+
+=== negatedPromiseRepr.ts ===
+// inspired by a comment in https://github.com/Microsoft/TypeScript/issues/4196
+
+type AnyPromiseLikeObject = object & MyPromiseLike<any, any>;
+>AnyPromiseLikeObject : Symbol(AnyPromiseLikeObject, Decl(negatedPromiseRepr.ts, 0, 0))
+>MyPromiseLike : Symbol(MyPromiseLike, Decl(negatedPromiseRepr.ts, 2, 61))
+
+interface MyPromiseLike<T extends not AnyPromiseLikeObject, E = Error> {
+>MyPromiseLike : Symbol(MyPromiseLike, Decl(negatedPromiseRepr.ts, 2, 61))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 3, 24))
+>AnyPromiseLikeObject : Symbol(AnyPromiseLikeObject, Decl(negatedPromiseRepr.ts, 0, 0))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 3, 59))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    then(onResolve: (value: T) => any, onReject: (error: E) => any): any;
+>then : Symbol(MyPromiseLike.then, Decl(negatedPromiseRepr.ts, 3, 72))
+>onResolve : Symbol(onResolve, Decl(negatedPromiseRepr.ts, 4, 9))
+>value : Symbol(value, Decl(negatedPromiseRepr.ts, 4, 21))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 3, 24))
+>onReject : Symbol(onReject, Decl(negatedPromiseRepr.ts, 4, 38))
+>error : Symbol(error, Decl(negatedPromiseRepr.ts, 4, 50))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 3, 59))
+}
+
+type AwaitValue<T, E = any> = T extends MyPromiseLike<infer U, E> ? U : T; 
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 7, 16))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 7, 18))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 7, 16))
+>MyPromiseLike : Symbol(MyPromiseLike, Decl(negatedPromiseRepr.ts, 2, 61))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 7, 59))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 7, 18))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 7, 59))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 7, 16))
+
+type CoercePromiseLike<T> = MyPromise<T extends MyPromiseLike<any, any> ? AwaitValue<T> : T, never>;
+>CoercePromiseLike : Symbol(CoercePromiseLike, Decl(negatedPromiseRepr.ts, 7, 74))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 9, 23))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 9, 23))
+>MyPromiseLike : Symbol(MyPromiseLike, Decl(negatedPromiseRepr.ts, 2, 61))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 9, 23))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 9, 23))
+
+interface MyPromiseConstructor {
+>MyPromiseConstructor : Symbol(MyPromiseConstructor, Decl(negatedPromiseRepr.ts, 9, 100))
+
+    resolve<T>(value: T): CoercePromiseLike<T>;
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 12, 12))
+>value : Symbol(value, Decl(negatedPromiseRepr.ts, 12, 15))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 12, 12))
+>CoercePromiseLike : Symbol(CoercePromiseLike, Decl(negatedPromiseRepr.ts, 7, 74))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 12, 12))
+
+    reject<E = Error>(value: E): MyPromise<never, E>;
+>reject : Symbol(MyPromiseConstructor.reject, Decl(negatedPromiseRepr.ts, 12, 47))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 13, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedPromiseRepr.ts, 13, 22))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 13, 11))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 13, 11))
+
+    all<T, E = Error>(values: Iterable<T>): MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>;
+>all : Symbol(MyPromiseConstructor.all, Decl(negatedPromiseRepr.ts, 13, 53))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 14, 8))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 14, 10))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(negatedPromiseRepr.ts, 14, 22))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 14, 8))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 14, 8))
+>AnyPromiseLikeObject : Symbol(AnyPromiseLikeObject, Decl(negatedPromiseRepr.ts, 0, 0))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 14, 10))
+
+    race<T, E = Error>(values: Iterable<T>): MyPromise<AwaitValue<T>, E>;
+>race : Symbol(MyPromiseConstructor.race, Decl(negatedPromiseRepr.ts, 14, 101))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 15, 9))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 15, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(negatedPromiseRepr.ts, 15, 23))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 15, 9))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 15, 9))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 15, 11))
+}
+declare var MyPromise: MyPromiseConstructor;
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>MyPromiseConstructor : Symbol(MyPromiseConstructor, Decl(negatedPromiseRepr.ts, 9, 100))
+
+interface MyPromise<T extends not AnyPromiseLikeObject, E = Error> {
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>AnyPromiseLikeObject : Symbol(AnyPromiseLikeObject, Decl(negatedPromiseRepr.ts, 0, 0))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    then(onResolve?: not Function, onReject?: not Function): MyPromise<T, E>;
+>then : Symbol(MyPromise.then, Decl(negatedPromiseRepr.ts, 19, 68), Decl(negatedPromiseRepr.ts, 21, 52), Decl(negatedPromiseRepr.ts, 25, 42), Decl(negatedPromiseRepr.ts, 29, 42))
+>onResolve : Symbol(onResolve, Decl(negatedPromiseRepr.ts, 20, 9))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>onReject : Symbol(onReject, Decl(negatedPromiseRepr.ts, 20, 34))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+
+    catch(onReject?: not Function): MyPromise<T, E>;
+>catch : Symbol(MyPromise.catch, Decl(negatedPromiseRepr.ts, 20, 77), Decl(negatedPromiseRepr.ts, 33, 38))
+>onReject : Symbol(onReject, Decl(negatedPromiseRepr.ts, 21, 10))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+
+    then<U, F = E>(
+>then : Symbol(MyPromise.then, Decl(negatedPromiseRepr.ts, 19, 68), Decl(negatedPromiseRepr.ts, 21, 52), Decl(negatedPromiseRepr.ts, 25, 42), Decl(negatedPromiseRepr.ts, 29, 42))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 22, 9))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 22, 11))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+
+        onResolve: (value: AwaitValue<T>) => U,
+>onResolve : Symbol(onResolve, Decl(negatedPromiseRepr.ts, 22, 19))
+>value : Symbol(value, Decl(negatedPromiseRepr.ts, 23, 20))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 22, 9))
+
+        onReject?: not Function,
+>onReject : Symbol(onReject, Decl(negatedPromiseRepr.ts, 23, 47))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    ): MyPromise<AwaitValue<U, F>, E | F>;
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 22, 9))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 22, 11))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 22, 11))
+
+    then<U, F = E>(
+>then : Symbol(MyPromise.then, Decl(negatedPromiseRepr.ts, 19, 68), Decl(negatedPromiseRepr.ts, 21, 52), Decl(negatedPromiseRepr.ts, 25, 42), Decl(negatedPromiseRepr.ts, 29, 42))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 26, 9))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 26, 11))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+
+        onResolve: not Function,
+>onResolve : Symbol(onResolve, Decl(negatedPromiseRepr.ts, 26, 19))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        onReject: (error: E) => U,
+>onReject : Symbol(onReject, Decl(negatedPromiseRepr.ts, 27, 32))
+>error : Symbol(error, Decl(negatedPromiseRepr.ts, 28, 19))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 26, 9))
+
+    ): MyPromise<T | AwaitValue<U, F>, F>;
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 26, 9))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 26, 11))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 26, 11))
+
+    then<U, F = E>(
+>then : Symbol(MyPromise.then, Decl(negatedPromiseRepr.ts, 19, 68), Decl(negatedPromiseRepr.ts, 21, 52), Decl(negatedPromiseRepr.ts, 25, 42), Decl(negatedPromiseRepr.ts, 29, 42))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 30, 9))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 30, 11))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+
+        onResolve: (value: AwaitValue<T>) => U,
+>onResolve : Symbol(onResolve, Decl(negatedPromiseRepr.ts, 30, 19))
+>value : Symbol(value, Decl(negatedPromiseRepr.ts, 31, 20))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 30, 9))
+
+        onReject: (error: E) => AwaitValue<U, F>,
+>onReject : Symbol(onReject, Decl(negatedPromiseRepr.ts, 31, 47))
+>error : Symbol(error, Decl(negatedPromiseRepr.ts, 32, 19))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 30, 9))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 30, 11))
+
+    ): MyPromise<AwaitValue<U, F>, F>;
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 30, 9))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 30, 11))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 30, 11))
+
+    catch<U, F = E>(
+>catch : Symbol(MyPromise.catch, Decl(negatedPromiseRepr.ts, 20, 77), Decl(negatedPromiseRepr.ts, 33, 38))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 34, 10))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 34, 12))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+
+        onReject: (error: E) => U,
+>onReject : Symbol(onReject, Decl(negatedPromiseRepr.ts, 34, 20))
+>error : Symbol(error, Decl(negatedPromiseRepr.ts, 35, 19))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 34, 10))
+
+    ): MyPromise<T | AwaitValue<U, F>, F>;
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>AwaitValue : Symbol(AwaitValue, Decl(negatedPromiseRepr.ts, 5, 1))
+>U : Symbol(U, Decl(negatedPromiseRepr.ts, 34, 10))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 34, 12))
+>F : Symbol(F, Decl(negatedPromiseRepr.ts, 34, 12))
+
+    finally(onSettled: () => AnyPromiseLikeObject): MyPromise<T, E>;
+>finally : Symbol(MyPromise.finally, Decl(negatedPromiseRepr.ts, 36, 42))
+>onSettled : Symbol(onSettled, Decl(negatedPromiseRepr.ts, 37, 12))
+>AnyPromiseLikeObject : Symbol(AnyPromiseLikeObject, Decl(negatedPromiseRepr.ts, 0, 0))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>T : Symbol(T, Decl(negatedPromiseRepr.ts, 19, 20))
+>E : Symbol(E, Decl(negatedPromiseRepr.ts, 19, 55))
+}
+
+const a = MyPromise.resolve(0);
+>a : Symbol(a, Decl(negatedPromiseRepr.ts, 40, 5))
+>MyPromise.resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+
+const b = MyPromise.resolve(MyPromise.resolve(0));
+>b : Symbol(b, Decl(negatedPromiseRepr.ts, 42, 5))
+>MyPromise.resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise.resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+
+const d = MyPromise.resolve(MyPromise.resolve(MyPromise.resolve(0)));
+>d : Symbol(d, Decl(negatedPromiseRepr.ts, 44, 5))
+>MyPromise.resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise.resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise.resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+
+const e = MyPromise.resolve(0).then(x => "ok");
+>e : Symbol(e, Decl(negatedPromiseRepr.ts, 46, 5))
+>MyPromise.resolve(0).then : Symbol(MyPromise.then, Decl(negatedPromiseRepr.ts, 19, 68), Decl(negatedPromiseRepr.ts, 21, 52), Decl(negatedPromiseRepr.ts, 25, 42), Decl(negatedPromiseRepr.ts, 29, 42))
+>MyPromise.resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>resolve : Symbol(MyPromiseConstructor.resolve, Decl(negatedPromiseRepr.ts, 11, 32))
+>then : Symbol(MyPromise.then, Decl(negatedPromiseRepr.ts, 19, 68), Decl(negatedPromiseRepr.ts, 21, 52), Decl(negatedPromiseRepr.ts, 25, 42), Decl(negatedPromiseRepr.ts, 29, 42))
+>x : Symbol(x, Decl(negatedPromiseRepr.ts, 46, 36))
+
+const f = MyPromise.all([1, 2, 3, Promise.resolve("ok")]);
+>f : Symbol(f, Decl(negatedPromiseRepr.ts, 48, 5))
+>MyPromise.all : Symbol(MyPromiseConstructor.all, Decl(negatedPromiseRepr.ts, 13, 53))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>all : Symbol(MyPromiseConstructor.all, Decl(negatedPromiseRepr.ts, 13, 53))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+const g = MyPromise.race([1, 2, 3, Promise.resolve("ok")]);
+>g : Symbol(g, Decl(negatedPromiseRepr.ts, 50, 5))
+>MyPromise.race : Symbol(MyPromiseConstructor.race, Decl(negatedPromiseRepr.ts, 14, 101))
+>MyPromise : Symbol(MyPromise, Decl(negatedPromiseRepr.ts, 17, 11), Decl(negatedPromiseRepr.ts, 17, 44))
+>race : Symbol(MyPromiseConstructor.race, Decl(negatedPromiseRepr.ts, 14, 101))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+

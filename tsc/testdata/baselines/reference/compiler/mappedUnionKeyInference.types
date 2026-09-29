@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/mappedUnionKeyInference.ts] ////
+
+=== mappedUnionKeyInference.ts ===
+declare function inferMapped<Value>(source: { [Key in keyof Value | "fixed"]: Value }): Value;
+>inferMapped : <Value>(source: { [Key in keyof Value | "fixed"]: Value; }) => Value
+>source : { [Key in "fixed" | keyof Value]: Value; }
+
+const mapped = inferMapped({
+>mapped : { fixed: unknown; other: unknown; }
+>inferMapped({    fixed: { fixed: 1, other: "text" },    other: { fixed: "text", other: 1 },}) : { fixed: unknown; other: unknown; }
+>inferMapped : <Value>(source: { [Key in keyof Value | "fixed"]: Value; }) => Value
+>{    fixed: { fixed: 1, other: "text" },    other: { fixed: "text", other: 1 },} : { fixed: { fixed: number; other: string; }; other: { fixed: string; other: number; }; }
+
+    fixed: { fixed: 1, other: "text" },
+>fixed : { fixed: number; other: string; }
+>{ fixed: 1, other: "text" } : { fixed: number; other: string; }
+>fixed : number
+>1 : 1
+>other : string
+>"text" : "text"
+
+    other: { fixed: "text", other: 1 },
+>other : { fixed: string; other: number; }
+>{ fixed: "text", other: 1 } : { fixed: string; other: number; }
+>fixed : string
+>"text" : "text"
+>other : number
+>1 : 1
+
+});
+
+const fixed: unknown = mapped.fixed;
+>fixed : unknown
+>mapped.fixed : unknown
+>mapped : { fixed: unknown; other: unknown; }
+>fixed : unknown
+
+const other: unknown = mapped.other;
+>other : unknown
+>mapped.other : unknown
+>mapped : { fixed: unknown; other: unknown; }
+>other : unknown
+
+declare function inferFixed<Value, Extra>(source: {
+>inferFixed : <Value, Extra>(source: { [Key in keyof Extra | "fixed"]: Key extends "fixed" ? Value : Extra[Key & keyof Extra]; }) => Value
+>source : { [Key in "fixed" | keyof Extra]: Key extends "fixed" ? Value : Extra[Key & keyof Extra]; }
+
+    [Key in keyof Extra | "fixed"]: Key extends "fixed" ? Value : Extra[Key & keyof Extra];
+}): Value;
+
+const fixedValue = inferFixed({ fixed: { count: 1 }, other: "text" });
+>fixedValue : { count: number; }
+>inferFixed({ fixed: { count: 1 }, other: "text" }) : { count: number; }
+>inferFixed : <Value, Extra>(source: { [Key in keyof Extra | "fixed"]: Key extends "fixed" ? Value : Extra[Key & keyof Extra]; }) => Value
+>{ fixed: { count: 1 }, other: "text" } : { fixed: { count: number; }; other: string; }
+>fixed : { count: number; }
+>{ count: 1 } : { count: number; }
+>count : number
+>1 : 1
+>other : string
+>"text" : "text"
+
+const count: number = fixedValue.count;
+>count : number
+>fixedValue.count : number
+>fixedValue : { count: number; }
+>count : number
+
+declare function inferWithCallback<Value>(source: {
+>inferWithCallback : <Value>(source: { [Key in keyof Value | "fixed"]: { value: Value; callback?: (value: Value) => void; }; }) => Value
+>source : { [Key in "fixed" | keyof Value]: { value: Value; callback?: (value: Value) => void; }; }
+
+    [Key in keyof Value | "fixed"]: { value: Value; callback?: (value: Value) => void };
+>value : Value
+>callback : ((value: Value) => void) | undefined
+>value : Value
+
+}): Value;
+
+const withCallback = inferWithCallback({
+>withCallback : { fixed: unknown; other: unknown; }
+>inferWithCallback({    fixed: {        value: { fixed: 1, other: "text" },        callback: value => { const fixed: unknown = value.fixed; },    },    other: { value: { fixed: "text", other: 1 } },}) : { fixed: unknown; other: unknown; }
+>inferWithCallback : <Value>(source: { [Key in keyof Value | "fixed"]: { value: Value; callback?: (value: Value) => void; }; }) => Value
+>{    fixed: {        value: { fixed: 1, other: "text" },        callback: value => { const fixed: unknown = value.fixed; },    },    other: { value: { fixed: "text", other: 1 } },} : { fixed: { value: { fixed: number; other: string; }; callback: (value: { fixed: unknown; other: unknown; }) => void; }; other: { value: { fixed: string; other: number; }; }; }
+
+    fixed: {
+>fixed : { value: { fixed: number; other: string; }; callback: (value: { fixed: unknown; other: unknown; }) => void; }
+>{        value: { fixed: 1, other: "text" },        callback: value => { const fixed: unknown = value.fixed; },    } : { value: { fixed: number; other: string; }; callback: (value: { fixed: unknown; other: unknown; }) => void; }
+
+        value: { fixed: 1, other: "text" },
+>value : { fixed: number; other: string; }
+>{ fixed: 1, other: "text" } : { fixed: number; other: string; }
+>fixed : number
+>1 : 1
+>other : string
+>"text" : "text"
+
+        callback: value => { const fixed: unknown = value.fixed; },
+>callback : (value: { fixed: unknown; other: unknown; }) => void
+>value => { const fixed: unknown = value.fixed; } : (value: { fixed: unknown; other: unknown; }) => void
+>value : { fixed: unknown; other: unknown; }
+>fixed : unknown
+>value.fixed : unknown
+>value : { fixed: unknown; other: unknown; }
+>fixed : unknown
+
+    },
+    other: { value: { fixed: "text", other: 1 } },
+>other : { value: { fixed: string; other: number; }; }
+>{ value: { fixed: "text", other: 1 } } : { value: { fixed: string; other: number; }; }
+>value : { fixed: string; other: number; }
+>{ fixed: "text", other: 1 } : { fixed: string; other: number; }
+>fixed : string
+>"text" : "text"
+>other : number
+>1 : 1
+
+});
+const callbackFixed: unknown = withCallback.fixed;
+>callbackFixed : unknown
+>withCallback.fixed : unknown
+>withCallback : { fixed: unknown; other: unknown; }
+>fixed : unknown
+

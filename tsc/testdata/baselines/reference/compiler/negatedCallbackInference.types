@@ -1,0 +1,173 @@
+//// [tests/cases/compiler/negatedCallbackInference.ts] ////
+
+=== negatedCallbackInference.ts ===
+interface Failure { readonly error: true; }
+>error : true
+>true : true
+
+interface Box<Value> { value: Value; }
+>value : Value
+
+interface LoaderProps<Result extends {}> {
+    readonly load: () => Box<Result>;
+>load : () => Box<Result>
+
+    readonly children: (result: Result & not Failure) => string;
+>children : (result: Result & not Failure) => string
+>result : Result & not Failure
+}
+class Loader<Result extends {}> {
+>Loader : Loader<Result>
+
+    constructor(name: string, context: any);
+>name : string
+>context : any
+
+    constructor(props: LoaderProps<Result>);
+>props : LoaderProps<Result>
+
+    constructor(...args: any[]) {}
+>args : any[]
+}
+function load(): Box<{ success: true } | Failure> {
+>load : () => Box<{ success: true; } | Failure>
+>success : true
+>true : true
+
+    return null as any;
+>null as any : any
+}
+
+const loader = new Loader({
+>loader : Loader<Failure | { success: true; }>
+>new Loader({    load,    children: result => result.success as any,}) : Loader<Failure | { success: true; }>
+>Loader : typeof Loader
+>{    load,    children: result => result.success as any,} : { load: () => Box<{ success: true; } | Failure>; children: (result: { success: true; } & not Failure) => any; }
+
+    load,
+>load : () => Box<{ success: true; } | Failure>
+
+    children: result => result.success as any,
+>children : (result: { success: true; } & not Failure) => any
+>result => result.success as any : (result: { success: true; } & not Failure) => any
+>result : { success: true; } & not Failure
+>result.success as any : any
+>result.success : true
+>result : { success: true; } & not Failure
+>success : true
+
+});
+
+declare function inferInput<Result>(callback: (value: Result & not string) => void): Result;
+>inferInput : <Result>(callback: (value: Result & not string) => void) => Result
+>callback : (value: Result & not string) => void
+>value : Result & not string
+
+const input = inferInput((value: number) => {});
+>input : number
+>inferInput((value: number) => {}) : number
+>inferInput : <Result>(callback: (value: Result & not string) => void) => Result
+>(value: number) => {} : (value: number) => void
+>value : number
+
+const inputUnion: number | string = input;
+>inputUnion : string | number
+>input : number
+
+const inputNumber: number = input;
+>inputNumber : number
+>input : number
+
+declare function inferFilteredInput<Result>(callback: (value: Result & not Failure) => void): Result;
+>inferFilteredInput : <Result>(callback: (value: Result & not Failure) => void) => Result
+>callback : (value: Result & not Failure) => void
+>value : Result & not Failure
+
+const filteredInput = inferFilteredInput((value: { success: true } & not Failure) => {});
+>filteredInput : { success: true; }
+>inferFilteredInput((value: { success: true } & not Failure) => {}) : { success: true; }
+>inferFilteredInput : <Result>(callback: (value: Result & not Failure) => void) => Result
+>(value: { success: true } & not Failure) => {} : (value: { success: true; } & not Failure) => void
+>value : { success: true; } & not Failure
+>success : true
+>true : true
+
+const filteredUnion: { success: true } | Failure = filteredInput;
+>filteredUnion : Failure | { success: true; }
+>success : true
+>true : true
+>filteredInput : { success: true; }
+
+const filteredSuccess: { success: true } = filteredInput;
+>filteredSuccess : { success: true; }
+>success : true
+>true : true
+>filteredInput : { success: true; }
+
+declare function inferOutput<Result>(callback: () => Result & not string): Result;
+>inferOutput : <Result>(callback: () => Result & not string) => Result
+>callback : () => Result & not string
+
+const output = inferOutput(() => 1);
+>output : number
+>inferOutput(() => 1) : number
+>inferOutput : <Result>(callback: () => Result & not string) => Result
+>() => 1 : () => number
+>1 : 1
+
+const outputNumber: number = output;
+>outputNumber : number
+>output : number
+
+declare const response: { success: true } | Failure;
+>response : Failure | { success: true; }
+>success : true
+>true : true
+
+declare function inferFiltered<Result>(value: Result, callback: (value: Result & not Failure) => void): Result;
+>inferFiltered : <Result>(value: Result, callback: (value: Result & not Failure) => void) => Result
+>value : Result
+>callback : (value: Result & not Failure) => void
+>value : Result & not Failure
+
+const explicitFiltered = inferFiltered(response, (value: { success: true } & not Failure) => {});
+>explicitFiltered : Failure | { success: true; }
+>inferFiltered(response, (value: { success: true } & not Failure) => {}) : Failure | { success: true; }
+>inferFiltered : <Result>(value: Result, callback: (value: Result & not Failure) => void) => Result
+>response : Failure | { success: true; }
+>(value: { success: true } & not Failure) => {} : (value: { success: true; } & not Failure) => void
+>value : { success: true; } & not Failure
+>success : true
+>true : true
+
+const incompatibleFiltered = inferFiltered(response, (value: number) => {});
+>incompatibleFiltered : Failure | { success: true; }
+>inferFiltered(response, (value: number) => {}) : Failure | { success: true; }
+>inferFiltered : <Result>(value: Result, callback: (value: Result & not Failure) => void) => Result
+>response : Failure | { success: true; }
+>(value: number) => {} : (value: number) => void
+>value : number
+
+interface Tagged { tag: true; }
+>tag : true
+>true : true
+
+declare const maybeValue: { count: number } | undefined;
+>maybeValue : { count: number; } | undefined
+>count : number
+
+declare function inferTagged<Result>(value: Result, callback: (value: Result & Tagged) => void): Result;
+>inferTagged : <Result>(value: Result, callback: (value: Result & Tagged) => void) => Result
+>value : Result
+>callback : (value: Result & Tagged) => void
+>value : Result & Tagged
+
+const tagged = inferTagged(maybeValue, (value: { count: number } & Tagged) => {});
+>tagged : { count: number; } | undefined
+>inferTagged(maybeValue, (value: { count: number } & Tagged) => {}) : { count: number; } | undefined
+>inferTagged : <Result>(value: Result, callback: (value: Result & Tagged) => void) => Result
+>maybeValue : { count: number; } | undefined
+>(value: { count: number } & Tagged) => {} : (value: { count: number; } & Tagged) => void
+>value : { count: number; } & Tagged
+>count : number
+

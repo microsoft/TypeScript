@@ -180,7 +180,7 @@ function test3<T extends A>(y: T extends C ? number : string) {
     }
     else {
         y;  // T extends C ? number : string
->y : T extends C ? number : string
+>y : (T extends C ? number : string) & not string
     }
     const newY: string | number = y;
 >newY : string | number
@@ -205,7 +205,7 @@ function test4<T extends A>(y: T extends C ? string : number) {
     }
     else {
         y;  // T extends C ? string : number
->y : T extends C ? string : number
+>y : (T extends C ? string : number) & not string
     }
     const newY: string | number = y;
 >newY : string | number

@@ -3413,7 +3413,7 @@ define(function () {
 >window : Window & typeof globalThis
 >'undefined' : "undefined"
 >window.screen : Screen
->window : Window & typeof globalThis
+>window : Window & typeof globalThis & not undefined
 >screen : Screen
 
         MobileDetect.isPhoneSized = function (maxPhoneWidth) {

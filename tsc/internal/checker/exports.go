@@ -313,6 +313,10 @@ func (c *Checker) GetReducedType(t *Type) *Type {
 	return c.getReducedType(t)
 }
 
+func (c *Checker) GetNegatedType(t *Type) *Type {
+	return c.getNegatedType(t)
+}
+
 // GetFullyQualifiedName returns the fully qualified name of a symbol, walking up
 // its parent chain (e.g. `"/path/to/module".Namespace.Name`).
 func (c *Checker) GetFullyQualifiedName(symbol *ast.Symbol) string {

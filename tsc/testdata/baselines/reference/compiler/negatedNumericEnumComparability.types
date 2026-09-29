@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/negatedNumericEnumComparability.ts] ////
+
+=== negatedNumericEnumComparability.ts ===
+enum Position {
+>Position : Position
+
+    Invalid = -1,
+>Invalid : Position.Invalid
+>-1 : -1
+>1 : 1
+
+    Start = 0,
+>Start : Position.Start
+>0 : 0
+}
+
+function comparePositions(position: number, other: number) {
+>comparePositions : (position: number, other: number) => void
+>position : number
+>other : number
+
+    if (position !== Position.Invalid) {
+>position !== Position.Invalid : boolean
+>position : number
+>Position.Invalid : Position.Invalid
+>Position : typeof Position
+>Invalid : Position.Invalid
+
+        position === other;
+>position === other : boolean
+>position : number & not Position.Invalid
+>other : number
+
+        other === position;
+>other === position : boolean
+>other : number
+>position : number & not Position.Invalid
+
+        position === Position.Invalid;
+>position === Position.Invalid : boolean
+>position : number & not Position.Invalid
+>Position.Invalid : Position.Invalid
+>Position : typeof Position
+>Invalid : Position.Invalid
+    }
+}
+
+declare const position: number & not Position.Invalid;
+>position : number & not Position.Invalid
+>Position : any
+
+declare const other: number;
+>other : number
+
+position === other;
+>position === other : boolean
+>position : number & not Position.Invalid
+>other : number
+
+other === position;
+>other === position : boolean
+>other : number
+>position : number & not Position.Invalid
+
+position === Position.Invalid;
+>position === Position.Invalid : boolean
+>position : number & not Position.Invalid
+>Position.Invalid : Position.Invalid
+>Position : typeof Position
+>Invalid : Position.Invalid
+

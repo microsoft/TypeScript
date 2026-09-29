@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/negatedGenericForIn.ts] ////
+
+=== negatedGenericForIn.ts ===
+interface NodeBase {
+>NodeBase : Symbol(NodeBase, Decl(negatedGenericForIn.ts, 0, 0))
+
+    kind: number;
+>kind : Symbol(NodeBase.kind, Decl(negatedGenericForIn.ts, 0, 20))
+}
+
+interface NamedNode extends NodeBase {
+>NamedNode : Symbol(NamedNode, Decl(negatedGenericForIn.ts, 2, 1))
+>NodeBase : Symbol(NodeBase, Decl(negatedGenericForIn.ts, 0, 0))
+
+    name: string;
+>name : Symbol(NamedNode.name, Decl(negatedGenericForIn.ts, 4, 38))
+}
+
+declare function isNamedNode(node: NodeBase): node is NamedNode;
+>isNamedNode : Symbol(isNamedNode, Decl(negatedGenericForIn.ts, 6, 1))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 8, 29))
+>NodeBase : Symbol(NodeBase, Decl(negatedGenericForIn.ts, 0, 0))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 8, 29))
+>NamedNode : Symbol(NamedNode, Decl(negatedGenericForIn.ts, 2, 1))
+
+function copyNodeProperties<NodeType extends NodeBase>(node: NodeType, clone: NodeType) {
+>copyNodeProperties : Symbol(copyNodeProperties, Decl(negatedGenericForIn.ts, 8, 64))
+>NodeType : Symbol(NodeType, Decl(negatedGenericForIn.ts, 10, 28))
+>NodeBase : Symbol(NodeBase, Decl(negatedGenericForIn.ts, 0, 0))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 10, 55))
+>NodeType : Symbol(NodeType, Decl(negatedGenericForIn.ts, 10, 28))
+>clone : Symbol(clone, Decl(negatedGenericForIn.ts, 10, 70))
+>NodeType : Symbol(NodeType, Decl(negatedGenericForIn.ts, 10, 28))
+
+    if (isNamedNode(node)) {
+>isNamedNode : Symbol(isNamedNode, Decl(negatedGenericForIn.ts, 6, 1))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 10, 55))
+
+        return;
+    }
+    for (const key in node) {
+>key : Symbol(key, Decl(negatedGenericForIn.ts, 14, 14))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 10, 55))
+
+        clone[key] = node[key];
+>clone : Symbol(clone, Decl(negatedGenericForIn.ts, 10, 70))
+>key : Symbol(key, Decl(negatedGenericForIn.ts, 14, 14))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 10, 55))
+>key : Symbol(key, Decl(negatedGenericForIn.ts, 14, 14))
+    }
+}
+
+function copyNonCallableProperties<NodeType extends NodeBase>(node: NodeType, clone: NodeType) {
+>copyNonCallableProperties : Symbol(copyNonCallableProperties, Decl(negatedGenericForIn.ts, 17, 1))
+>NodeType : Symbol(NodeType, Decl(negatedGenericForIn.ts, 19, 35))
+>NodeBase : Symbol(NodeBase, Decl(negatedGenericForIn.ts, 0, 0))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 19, 62))
+>NodeType : Symbol(NodeType, Decl(negatedGenericForIn.ts, 19, 35))
+>clone : Symbol(clone, Decl(negatedGenericForIn.ts, 19, 77))
+>NodeType : Symbol(NodeType, Decl(negatedGenericForIn.ts, 19, 35))
+
+    if (typeof node === "function") {
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 19, 62))
+
+        return;
+    }
+    for (const key in node) {
+>key : Symbol(key, Decl(negatedGenericForIn.ts, 23, 14))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 19, 62))
+
+        clone[key] = node[key];
+>clone : Symbol(clone, Decl(negatedGenericForIn.ts, 19, 77))
+>key : Symbol(key, Decl(negatedGenericForIn.ts, 23, 14))
+>node : Symbol(node, Decl(negatedGenericForIn.ts, 19, 62))
+>key : Symbol(key, Decl(negatedGenericForIn.ts, 23, 14))
+    }
+}

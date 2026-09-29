@@ -102,13 +102,13 @@ function union3<T>(thing: T | string | number) {
 >"string" : "string"
 >typeof thing !== "number" : boolean
 >typeof thing : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->thing : number | T
+>thing : number | (T & not string)
 >"number" : "number"
 
     "key" in thing; // Ok (because further narrowing is impossible)
 >"key" in thing : boolean
 >"key" : "key"
->thing : T
+>thing : T & not string & not number
   }
 }
 

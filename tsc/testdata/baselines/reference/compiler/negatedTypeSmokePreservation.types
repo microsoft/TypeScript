@@ -1,0 +1,364 @@
+//// [tests/cases/compiler/negatedTypeSmokePreservation.ts] ////
+
+=== negatedTypeSmokePreservation.ts ===
+export function repeatedComparison(value: string) {
+>repeatedComparison : (value: string) => 1 | 2 | 3
+>value : string
+
+    if (value === "first") return 1;
+>value === "first" : boolean
+>value : string
+>"first" : "first"
+>1 : 1
+
+    if (value === "first") return 2;
+>value === "first" : boolean
+>value : string & not "first"
+>"first" : "first"
+>2 : 2
+
+    return 3;
+>3 : 3
+}
+
+export function repeatedTypeof(value: { text: unknown }) {
+>repeatedTypeof : (value: { text: unknown; }) => any
+>value : { text: unknown; }
+>text : unknown
+
+    if (typeof value.text === "string") return value.text.trim();
+>typeof value.text === "string" : boolean
+>typeof value.text : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value.text : unknown
+>value : { text: unknown; }
+>text : unknown
+>"string" : "string"
+>value.text.trim() : string
+>value.text.trim : () => string
+>value.text : string
+>value : { text: unknown; }
+>text : string
+>trim : () => string
+
+    if (typeof value.text === "string") return value.text.trim();
+>typeof value.text === "string" : boolean
+>typeof value.text : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value.text : not string
+>value : { text: unknown; }
+>text : not string
+>"string" : "string"
+>value.text.trim() : any
+>value.text.trim : any
+>value.text : never
+>value : { text: unknown; }
+>text : never
+>trim : any
+
+    return "";
+>"" : ""
+}
+
+export function repeatedCase(value: number) {
+>repeatedCase : (value: number) => void
+>value : number
+
+    if (value === 25) return;
+>value === 25 : boolean
+>value : number
+>25 : 25
+
+    switch (value) {
+>value : number & not 25
+
+        case 25: return;
+>25 : 25
+    }
+}
+
+export function numericToken(value: number) {
+>numericToken : (value: number) => number
+>value : number
+
+    if (value === 0) return value;
+>value === 0 : boolean
+>value : number
+>0 : 0
+>value : 0
+
+    if (value === 1 || value === 2) {
+>value === 1 || value === 2 : boolean
+>value === 1 : boolean
+>value : number & not 0
+>1 : 1
+>value === 2 : boolean
+>value : number & not 0 & not 1
+>2 : 2
+
+        let copy = value;
+>copy : number
+>value : 1 | 2
+
+        copy = 3;
+>copy = 3 : 3
+>copy : number
+>3 : 3
+
+        return copy;
+>copy : number
+    }
+    return value;
+>value : number & not 0 & not 1 & not 2
+}
+
+export function bigintToken(value: bigint) {
+>bigintToken : (value: bigint) => bigint
+>value : bigint
+
+    if (value === 0n) return value;
+>value === 0n : boolean
+>value : bigint
+>0n : 0n
+>value : 0n
+
+    if (value === 1n || value === 2n) {
+>value === 1n || value === 2n : boolean
+>value === 1n : boolean
+>value : bigint & not 0n
+>1n : 1n
+>value === 2n : boolean
+>value : bigint & not 0n & not 1n
+>2n : 2n
+
+        let copy = value;
+>copy : bigint
+>value : 1n | 2n
+
+        copy = 3n;
+>copy = 3n : 3n
+>copy : bigint
+>3n : 3n
+
+        return copy;
+>copy : bigint
+    }
+    return value;
+>value : bigint & not 0n & not 1n & not 2n
+}
+
+export function declaredLiteral(value: "first" | "second" | "third") {
+>declaredLiteral : (value: "first" | "second" | "third") => "second" | "third" | undefined
+>value : "first" | "second" | "third"
+
+    if (value === "first") return;
+>value === "first" : boolean
+>value : "first" | "second" | "third"
+>"first" : "first"
+
+    let copy = value;
+>copy : "second" | "third"
+>value : "second" | "third"
+
+    copy = "fourth";
+>copy = "fourth" : "fourth"
+>copy : "second" | "third"
+>"fourth" : "fourth"
+
+    return copy;
+>copy : "second" | "third"
+}
+
+export function explicitBounds(value: not string) {
+>explicitBounds : (value: not string) => (not string & {}) | null | undefined
+>value : not string
+
+    if (value === null) {
+>value === null : boolean
+>value : not string
+
+        const result: null = value;
+>result : null
+>value : null
+
+        return result;
+>result : null
+    }
+    if (value === undefined) {
+>value === undefined : boolean
+>value : (not string & {}) | undefined
+>undefined : undefined
+
+        const result: undefined = value;
+>result : undefined
+>value : undefined
+
+        return result;
+>result : undefined
+    }
+    if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not string & {}
+>"string" : "string"
+
+        const result: never = value;
+>result : never
+>value : never
+
+        return result;
+>result : never
+    }
+    return value;
+>value : not string & {}
+}
+
+export function symbolValue(value: unknown): symbol | undefined {
+>symbolValue : (value: unknown) => symbol | undefined
+>value : unknown
+
+    if (typeof value === "boolean" || typeof value === "number") return;
+>typeof value === "boolean" || typeof value === "number" : boolean
+>typeof value === "boolean" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"boolean" : "boolean"
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not false & not true
+>"number" : "number"
+
+    if (typeof value === "symbol") return value;
+>typeof value === "symbol" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : not false & not true & not number
+>"symbol" : "symbol"
+>value : symbol
+}
+
+export function permission(input: { mode: unknown }): { mode?: "read" | "write" } {
+>permission : (input: { mode: unknown; }) => { mode?: "read" | "write"; }
+>input : { mode: unknown; }
+>mode : unknown
+>mode : "read" | "write" | undefined
+
+    const mode = input.mode;
+>mode : unknown
+>input.mode : unknown
+>input : { mode: unknown; }
+>mode : unknown
+
+    if (mode !== undefined && mode !== "read" && mode !== "write") throw new Error();
+>mode !== undefined && mode !== "read" && mode !== "write" : boolean
+>mode !== undefined && mode !== "read" : boolean
+>mode !== undefined : boolean
+>mode : unknown
+>undefined : undefined
+>mode !== "read" : boolean
+>mode : {} | null
+>"read" : "read"
+>mode !== "write" : boolean
+>mode : ({} & not "read") | null
+>"write" : "write"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    return mode === undefined ? {} : { mode };
+>mode === undefined ? {} : { mode } : {} | { mode: "read" | "write"; }
+>mode === undefined : boolean
+>mode : "read" | "write" | undefined
+>undefined : undefined
+>{} : {}
+>{ mode } : { mode: "read" | "write"; }
+>mode : "read" | "write"
+}
+
+export function release(input: { asset: unknown }) {
+>release : (input: { asset: unknown; }) => boolean
+>input : { asset: unknown; }
+>asset : unknown
+
+    return (typeof input.asset === "string" || input.asset === null) &&
+>(typeof input.asset === "string" || input.asset === null) &&        (input.asset === null || /^asset/.test(input.asset)) : boolean
+>(typeof input.asset === "string" || input.asset === null) : boolean
+>typeof input.asset === "string" || input.asset === null : boolean
+>typeof input.asset === "string" : boolean
+>typeof input.asset : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>input.asset : unknown
+>input : { asset: unknown; }
+>asset : unknown
+>"string" : "string"
+>input.asset === null : boolean
+>input.asset : not string
+>input : { asset: unknown; }
+>asset : not string
+
+        (input.asset === null || /^asset/.test(input.asset));
+>(input.asset === null || /^asset/.test(input.asset)) : boolean
+>input.asset === null || /^asset/.test(input.asset) : boolean
+>input.asset === null : boolean
+>input.asset : string | null
+>input : { asset: unknown; }
+>asset : string | null
+>/^asset/.test(input.asset) : boolean
+>/^asset/.test : (string: string) => boolean
+>/^asset/ : RegExp
+>test : (string: string) => boolean
+>input.asset : string
+>input : { asset: unknown; }
+>asset : string
+}
+
+export function notString(value: unknown) {
+>notString : (value: unknown) => boolean
+>value : unknown
+
+    return typeof value !== "string";
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+}
+
+export function inferredContainer(value: unknown) {
+>inferredContainer : (value: unknown) => { value: unknown; values: unknown[]; } | undefined
+>value : unknown
+
+    if (typeof value === "string") return undefined;
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>undefined : undefined
+
+    return { value, values: [value] };
+>{ value, values: [value] } : { value: unknown; values: unknown[]; }
+>value : unknown
+>values : unknown[]
+>[value] : unknown[]
+>value : not string
+}
+
+export function matchingLiteral(value: unknown): "read" | "write" {
+>matchingLiteral : (value: unknown) => "read" | "write"
+>value : unknown
+
+    if (typeof value === "undefined") return "read";
+>typeof value === "undefined" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"undefined" : "undefined"
+>"read" : "read"
+
+    if (value === "read" || value === "write") return value;
+>value === "read" || value === "write" : boolean
+>value === "read" : boolean
+>value : {} | null
+>"read" : "read"
+>value === "write" : boolean
+>value : ({} & not "read") | null
+>"write" : "write"
+>value : "read" | "write"
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}

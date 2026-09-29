@@ -252,7 +252,7 @@ function f5b() {
 >x : number
 >1 : 1
 >x === 2 : boolean
->x : number
+>x : number & not 1
 >2 : 2
 
             action(() => { x /* 1 | 2 */ })

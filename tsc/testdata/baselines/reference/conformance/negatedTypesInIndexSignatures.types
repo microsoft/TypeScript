@@ -1,0 +1,130 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInIndexSignatures.ts] ////
+
+=== negatedTypesInIndexSignatures.ts ===
+// Negated types used to build index signature key types.
+
+// The canonical example: a string index that excludes a specific key.
+type NoMethod = {
+>NoMethod : NoMethod
+
+    [idx: string & not "method"]: number;
+>idx : string & not "method"
+
+};
+
+declare let noMethod: NoMethod;
+>noMethod : NoMethod
+
+noMethod.foo = 1;      // ok
+>noMethod.foo = 1 : 1
+>noMethod.foo : number
+>noMethod : NoMethod
+>foo : number
+>1 : 1
+
+noMethod.method = 1;   // excluded key
+>noMethod.method = 1 : 1
+>noMethod.method : any
+>noMethod : NoMethod
+>method : any
+>1 : 1
+
+noMethod["bar"] = 2;   // ok
+>noMethod["bar"] = 2 : 2
+>noMethod["bar"] : number
+>noMethod : NoMethod
+>"bar" : "bar"
+>2 : 2
+
+// Excluding a union of keys.
+type NoAB = {
+>NoAB : NoAB
+
+    [idx: string & not ("a" | "b")]: number;
+>idx : string & not "a" & not "b"
+
+};
+
+declare let noAB: NoAB;
+>noAB : NoAB
+
+noAB.c = 1;   // ok
+>noAB.c = 1 : 1
+>noAB.c : number
+>noAB : NoAB
+>c : number
+>1 : 1
+
+noAB.a = 1;   // excluded key
+>noAB.a = 1 : 1
+>noAB.a : any
+>noAB : NoAB
+>a : any
+>1 : 1
+
+noAB.b = 1;   // excluded key
+>noAB.b = 1 : 1
+>noAB.b : any
+>noAB : NoAB
+>b : any
+>1 : 1
+
+// Mapped-type form that produces the same key type.
+type Config = {
+>Config : Config
+
+    foo: number;
+>foo : number
+
+    bar: number;
+>bar : number
+
+} & {
+    [k in (string & not ("foo" | "bar"))]: string;
+};
+
+const conf: Config = {
+>conf : Config
+>{    foo: 12,    bar: 12,    other: "string",} : { foo: number; bar: number; other: string; }
+
+    foo: 12,
+>foo : number
+>12 : 12
+
+    bar: 12,
+>bar : number
+>12 : 12
+
+    other: "string",
+>other : string
+>"string" : "string"
+
+}; // ok
+
+const conf2: Config = {
+>conf2 : Config
+>{    foo: 12,    bar: 12,    other: 0,} : { foo: number; bar: number; other: number; }
+
+    foo: 12,
+>foo : number
+>12 : 12
+
+    bar: 12,
+>bar : number
+>12 : 12
+
+    other: 0,
+>other : number
+>0 : 0
+
+}; // other should be a string
+
+// A bare negated type as an index key (not intersected with string).
+type BareNegated = {
+>BareNegated : BareNegated
+
+    [idx: not "method"]: number;
+>idx : not "method"
+
+};
+

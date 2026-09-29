@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiteralsStringMappingAndIndexSignatures.ts] ////
+
+=== negatedTypesInPatternLiteralsStringMappingAndIndexSignatures.ts ===
+// Combination: negated types with pattern literal types, string mapping types, AND index signatures.
+
+// Index signature whose key is a string mapping of a template literal containing a negated placeholder.
+type AllCombined = {
+>AllCombined : AllCombined
+
+    [idx: Uppercase<`foo${string & not "bar"}`>]: number;
+>idx : `FOO${Uppercase<`${string & not "bar"}`>}`
+
+};
+
+declare let allCombined: AllCombined;
+>allCombined : AllCombined
+
+allCombined["FOOBAZ"] = 1; // depends on representation
+>allCombined["FOOBAZ"] = 1 : 1
+>allCombined["FOOBAZ"] : number
+>allCombined : AllCombined
+>"FOOBAZ" : "FOOBAZ"
+>1 : 1
+
+allCombined["foobaz"] = 1; // depends on representation
+>allCombined["foobaz"] = 1 : 1
+>allCombined["foobaz"] : any
+>allCombined : AllCombined
+>"foobaz" : "foobaz"
+>1 : 1
+
+allCombined["FOOBAR"] = 1; // depends on representation
+>allCombined["FOOBAR"] = 1 : 1
+>allCombined["FOOBAR"] : number
+>allCombined : AllCombined
+>"FOOBAR" : "FOOBAR"
+>1 : 1
+
+// Index signature whose key is a template literal whose placeholder is a string mapping of a negated type.
+type AllCombined2 = {
+>AllCombined2 : AllCombined2
+
+    [idx: `foo${Uppercase<string & not "bar">}`]: number;
+>idx : `foo${Uppercase<`${string & not "bar"}`>}`
+
+};
+
+declare let allCombined2: AllCombined2;
+>allCombined2 : AllCombined2
+
+allCombined2["fooBAZ"] = 1; // depends on representation
+>allCombined2["fooBAZ"] = 1 : 1
+>allCombined2["fooBAZ"] : number
+>allCombined2 : AllCombined2
+>"fooBAZ" : "fooBAZ"
+>1 : 1
+
+allCombined2["foobaz"] = 1; // depends on representation
+>allCombined2["foobaz"] = 1 : 1
+>allCombined2["foobaz"] : any
+>allCombined2 : AllCombined2
+>"foobaz" : "foobaz"
+>1 : 1
+
+// Mapped type form combining all three.
+type MappedAll = {
+>MappedAll : MappedAll
+
+    [k in Uppercase<`foo${string & not "bar"}`>]: number;
+};
+
+// Generic composition of all three.
+type WrapAll<T extends string> = {
+>WrapAll : WrapAll<T>
+
+    [idx: Uppercase<`foo${T & not "bar"}`>]: number;
+>idx : `FOO${Uppercase<T & not "bar">}`
+
+};
+type WrapAllString = WrapAll<string>;
+>WrapAllString : WrapAllString
+
+type WrapAllLiteral = WrapAll<"baz">;
+>WrapAllLiteral : WrapAllLiteral
+

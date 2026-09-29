@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/negatedTypeSmokeNullable.ts] ////
+
+=== negatedTypeSmokeNullable.ts ===
+export function nullable(value: unknown): string | null {
+>nullable : Symbol(nullable, Decl(negatedTypeSmokeNullable.ts, 0, 0))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 0, 25))
+
+    if (typeof value === "string" || value === null) return value;
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 0, 25))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 0, 25))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 0, 25))
+
+    return null;
+}
+
+export function reply(value: unknown, conditional: boolean): "OK" | null {
+>reply : Symbol(reply, Decl(negatedTypeSmokeNullable.ts, 3, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 5, 22))
+>conditional : Symbol(conditional, Decl(negatedTypeSmokeNullable.ts, 5, 37))
+
+    if (value === "OK" || (conditional && value === null)) return value;
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 5, 22))
+>conditional : Symbol(conditional, Decl(negatedTypeSmokeNullable.ts, 5, 37))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 5, 22))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 5, 22))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function optional(value: unknown): number | undefined {
+>optional : Symbol(optional, Decl(negatedTypeSmokeNullable.ts, 8, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 10, 25))
+
+    if (typeof value === "number" || value === undefined) return value;
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 10, 25))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 10, 25))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 10, 25))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+export function nullish(value: unknown): boolean | null | undefined {
+>nullish : Symbol(nullish, Decl(negatedTypeSmokeNullable.ts, 13, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 15, 24))
+
+    if (typeof value === "boolean" || value == null) return value;
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 15, 24))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 15, 24))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 15, 24))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+export function selected(value: unknown): "read" | "write" | undefined {
+>selected : Symbol(selected, Decl(negatedTypeSmokeNullable.ts, 18, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 20, 25))
+
+    if (value === undefined) return undefined;
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 20, 25))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+    if (value === "read" || value === "write") return value;
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 20, 25))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 20, 25))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 20, 25))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function phase(value: unknown): "read" | "write" {
+>phase : Symbol(phase, Decl(negatedTypeSmokeNullable.ts, 24, 1))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 26, 22))
+
+    if (value === undefined || value === false) return "read";
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 26, 22))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 26, 22))
+
+    if (value === "read" || value === "write") return value;
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 26, 22))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 26, 22))
+>value : Symbol(value, Decl(negatedTypeSmokeNullable.ts, 26, 22))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function property(input: { path: unknown }) {
+>property : Symbol(property, Decl(negatedTypeSmokeNullable.ts, 30, 1))
+>input : Symbol(input, Decl(negatedTypeSmokeNullable.ts, 32, 25))
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 32, 33))
+
+    const path = typeof input.path === "string" || input.path === null ? input.path : undefined;
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 33, 9))
+>input.path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 32, 33))
+>input : Symbol(input, Decl(negatedTypeSmokeNullable.ts, 32, 25))
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 32, 33))
+>input.path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 32, 33))
+>input : Symbol(input, Decl(negatedTypeSmokeNullable.ts, 32, 25))
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 32, 33))
+>input.path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 32, 33))
+>input : Symbol(input, Decl(negatedTypeSmokeNullable.ts, 32, 25))
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 32, 33))
+>undefined : Symbol(undefined)
+
+    if (path === undefined) throw new Error();
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 33, 9))
+>undefined : Symbol(undefined)
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    const result: { path: string | null } = { path };
+>result : Symbol(result, Decl(negatedTypeSmokeNullable.ts, 35, 9))
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 35, 19))
+>path : Symbol(path, Decl(negatedTypeSmokeNullable.ts, 35, 45))
+
+    return result;
+>result : Symbol(result, Decl(negatedTypeSmokeNullable.ts, 35, 9))
+}

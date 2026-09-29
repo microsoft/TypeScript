@@ -106,6 +106,12 @@ export interface Type {
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     };
 
+    /** Get the negation of this type. */
+    getNegatedType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
+
     /** Get this type's string index value type, if present. */
     getStringIndexType: {
         (): Type | undefined;

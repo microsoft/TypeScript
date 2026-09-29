@@ -421,7 +421,7 @@ function zeroOf<T extends number | string | boolean>(value: T) {
 >typeof value === "string" ? "" : false : "" | false
 >typeof value === "string" : boolean
 >typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->value : T
+>value : T & not number
 >"string" : "string"
 >"" : ""
 >false : false

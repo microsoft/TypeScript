@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/types/negated/negatedTypesComparability.ts] ////
+
+=== negatedTypesComparability.ts ===
+declare const stringValue: string;
+>stringValue : Symbol(stringValue, Decl(negatedTypesComparability.ts, 0, 13))
+
+declare const excludedStringValue: string & not "excluded";
+>excludedStringValue : Symbol(excludedStringValue, Decl(negatedTypesComparability.ts, 1, 13))
+
+stringValue === excludedStringValue;
+>stringValue : Symbol(stringValue, Decl(negatedTypesComparability.ts, 0, 13))
+>excludedStringValue : Symbol(excludedStringValue, Decl(negatedTypesComparability.ts, 1, 13))
+
+excludedStringValue === stringValue;
+>excludedStringValue : Symbol(excludedStringValue, Decl(negatedTypesComparability.ts, 1, 13))
+>stringValue : Symbol(stringValue, Decl(negatedTypesComparability.ts, 0, 13))
+
+declare const zero: 0;
+>zero : Symbol(zero, Decl(negatedTypesComparability.ts, 6, 13))
+
+declare const nonzeroNumber: number & not 0;
+>nonzeroNumber : Symbol(nonzeroNumber, Decl(negatedTypesComparability.ts, 7, 13))
+
+zero === nonzeroNumber; // error
+>zero : Symbol(zero, Decl(negatedTypesComparability.ts, 6, 13))
+>nonzeroNumber : Symbol(nonzeroNumber, Decl(negatedTypesComparability.ts, 7, 13))
+
+nonzeroNumber === zero; // error
+>nonzeroNumber : Symbol(nonzeroNumber, Decl(negatedTypesComparability.ts, 7, 13))
+>zero : Symbol(zero, Decl(negatedTypesComparability.ts, 6, 13))
+

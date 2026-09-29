@@ -1,0 +1,116 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingTypeof.ts] ////
+
+=== negatedNarrowingTypeof.ts ===
+// Control flow narrowing by `typeof x === "..."`. In the false branch a fresh `not <primitive>`
+// is intersected in, but only survives where the base type overlaps the removed primitive.
+
+declare function wantsNotStr(x: not string): void;
+>wantsNotStr : Symbol(wantsNotStr, Decl(negatedNarrowingTypeof.ts, 0, 0))
+>x : Symbol(x, Decl(negatedNarrowingTypeof.ts, 3, 29))
+
+declare function wantsNotNum(x: not number): void;
+>wantsNotNum : Symbol(wantsNotNum, Decl(negatedNarrowingTypeof.ts, 3, 50))
+>x : Symbol(x, Decl(negatedNarrowingTypeof.ts, 4, 29))
+
+// `{}` overlaps every primitive, so the negation is retained.
+declare const a: {};
+>a : Symbol(a, Decl(negatedNarrowingTypeof.ts, 7, 13))
+
+if (typeof a === "string") {
+>a : Symbol(a, Decl(negatedNarrowingTypeof.ts, 7, 13))
+
+    a; // string
+>a : Symbol(a, Decl(negatedNarrowingTypeof.ts, 7, 13))
+
+} else {
+    a; // {} & not string
+>a : Symbol(a, Decl(negatedNarrowingTypeof.ts, 7, 13))
+
+    wantsNotStr(a);
+>wantsNotStr : Symbol(wantsNotStr, Decl(negatedNarrowingTypeof.ts, 0, 0))
+>a : Symbol(a, Decl(negatedNarrowingTypeof.ts, 7, 13))
+}
+
+// `!==` flips the branches.
+declare const b: {};
+>b : Symbol(b, Decl(negatedNarrowingTypeof.ts, 16, 13))
+
+if (typeof b !== "number") {
+>b : Symbol(b, Decl(negatedNarrowingTypeof.ts, 16, 13))
+
+    b; // {} & not number
+>b : Symbol(b, Decl(negatedNarrowingTypeof.ts, 16, 13))
+
+    wantsNotNum(b);
+>wantsNotNum : Symbol(wantsNotNum, Decl(negatedNarrowingTypeof.ts, 3, 50))
+>b : Symbol(b, Decl(negatedNarrowingTypeof.ts, 16, 13))
+
+} else {
+    b; // number
+>b : Symbol(b, Decl(negatedNarrowingTypeof.ts, 16, 13))
+}
+
+// A disjoint union: `not number` is redundant and reduces away.
+declare const c: string | number;
+>c : Symbol(c, Decl(negatedNarrowingTypeof.ts, 25, 13))
+
+if (typeof c === "number") {
+>c : Symbol(c, Decl(negatedNarrowingTypeof.ts, 25, 13))
+
+    c; // number
+>c : Symbol(c, Decl(negatedNarrowingTypeof.ts, 25, 13))
+
+} else {
+    c; // string
+>c : Symbol(c, Decl(negatedNarrowingTypeof.ts, 25, 13))
+}
+
+// A bare type parameter retains the negation on each branch.
+function generic<T>(x: T) {
+>generic : Symbol(generic, Decl(negatedNarrowingTypeof.ts, 30, 1))
+>T : Symbol(T, Decl(negatedNarrowingTypeof.ts, 33, 17))
+>x : Symbol(x, Decl(negatedNarrowingTypeof.ts, 33, 20))
+>T : Symbol(T, Decl(negatedNarrowingTypeof.ts, 33, 17))
+
+    if (typeof x === "boolean") {
+>x : Symbol(x, Decl(negatedNarrowingTypeof.ts, 33, 20))
+
+        x; // T & boolean
+>x : Symbol(x, Decl(negatedNarrowingTypeof.ts, 33, 20))
+
+    } else {
+        x; // T & not boolean
+>x : Symbol(x, Decl(negatedNarrowingTypeof.ts, 33, 20))
+    }
+}
+
+// `unknown` narrows to the primitive on the true branch and keeps a negation on the false branch.
+declare const u: unknown;
+>u : Symbol(u, Decl(negatedNarrowingTypeof.ts, 42, 13))
+
+if (typeof u === "string") {
+>u : Symbol(u, Decl(negatedNarrowingTypeof.ts, 42, 13))
+
+    u; // string
+>u : Symbol(u, Decl(negatedNarrowingTypeof.ts, 42, 13))
+
+} else {
+    u; // (unknown narrowed) & not string
+>u : Symbol(u, Decl(negatedNarrowingTypeof.ts, 42, 13))
+}
+
+// `==` / `!=` behave like their strict counterparts here.
+declare const d: {};
+>d : Symbol(d, Decl(negatedNarrowingTypeof.ts, 50, 13))
+
+if (typeof d == "bigint") {
+>d : Symbol(d, Decl(negatedNarrowingTypeof.ts, 50, 13))
+
+    d; // bigint
+>d : Symbol(d, Decl(negatedNarrowingTypeof.ts, 50, 13))
+
+} else {
+    d; // {} & not bigint
+>d : Symbol(d, Decl(negatedNarrowingTypeof.ts, 50, 13))
+}
+

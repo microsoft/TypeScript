@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/functionIntersectionUnionCalls.ts] ////
+
+=== functionIntersectionUnionCalls.ts ===
+declare const untyped: (Function & { tag: string }) | (() => string);
+>untyped : Symbol(untyped, Decl(functionIntersectionUnionCalls.ts, 0, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>tag : Symbol(tag, Decl(functionIntersectionUnionCalls.ts, 0, 36))
+
+const result = untyped();
+>result : Symbol(result, Decl(functionIntersectionUnionCalls.ts, 1, 5))
+>untyped : Symbol(untyped, Decl(functionIntersectionUnionCalls.ts, 0, 13))
+
+declare const primitive: (string & Function) | (() => string);
+>primitive : Symbol(primitive, Decl(functionIntersectionUnionCalls.ts, 3, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const primitiveResult = primitive();
+>primitiveResult : Symbol(primitiveResult, Decl(functionIntersectionUnionCalls.ts, 4, 5))
+>primitive : Symbol(primitive, Decl(functionIntersectionUnionCalls.ts, 3, 13))
+
+declare const typed: (Function & ((value: number) => number)) | ((value: number) => string);
+>typed : Symbol(typed, Decl(functionIntersectionUnionCalls.ts, 6, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(functionIntersectionUnionCalls.ts, 6, 35))
+>value : Symbol(value, Decl(functionIntersectionUnionCalls.ts, 6, 66))
+
+const typedResult: number | string = typed(1);
+>typedResult : Symbol(typedResult, Decl(functionIntersectionUnionCalls.ts, 7, 5))
+>typed : Symbol(typed, Decl(functionIntersectionUnionCalls.ts, 6, 13))
+
+typed("wrong");
+>typed : Symbol(typed, Decl(functionIntersectionUnionCalls.ts, 6, 13))
+
+declare const incompatible: ((value: number) => void) | ((value: string) => void);
+>incompatible : Symbol(incompatible, Decl(functionIntersectionUnionCalls.ts, 10, 13))
+>value : Symbol(value, Decl(functionIntersectionUnionCalls.ts, 10, 30))
+>value : Symbol(value, Decl(functionIntersectionUnionCalls.ts, 10, 58))
+
+incompatible(1);
+>incompatible : Symbol(incompatible, Decl(functionIntersectionUnionCalls.ts, 10, 13))
+
+declare const nonCallable: { tag: string } | (() => void);
+>nonCallable : Symbol(nonCallable, Decl(functionIntersectionUnionCalls.ts, 13, 13))
+>tag : Symbol(tag, Decl(functionIntersectionUnionCalls.ts, 13, 28))
+
+nonCallable();
+>nonCallable : Symbol(nonCallable, Decl(functionIntersectionUnionCalls.ts, 13, 13))
+
+declare const constructor: (Function & (new () => object)) | (() => void);
+>constructor : Symbol(constructor, Decl(functionIntersectionUnionCalls.ts, 16, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+constructor();
+>constructor : Symbol(constructor, Decl(functionIntersectionUnionCalls.ts, 16, 13))
+

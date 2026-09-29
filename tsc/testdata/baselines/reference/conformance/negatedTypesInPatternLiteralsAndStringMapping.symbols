@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiteralsAndStringMapping.ts] ////
+
+=== negatedTypesInPatternLiteralsAndStringMapping.ts ===
+// Combination: negated types with BOTH pattern literal types and string mapping types.
+
+// String mapping wrapping a template literal that contains a negated placeholder.
+type UpperTemplate = Uppercase<`foo${string & not "bar"}`>;
+>UpperTemplate : Symbol(UpperTemplate, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 0, 0))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+// Template literal whose placeholder is a string mapping of a negated type.
+type TemplateUpper = `foo${Uppercase<string & not "bar">}`;
+>TemplateUpper : Symbol(TemplateUpper, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 3, 59))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+// Template literal whose placeholder is a negation of a string mapping type.
+type TemplateNotUpper = `foo${not Uppercase<"BAR">}`;
+>TemplateNotUpper : Symbol(TemplateNotUpper, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 6, 59))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+// Negation of a template literal that contains a string mapping placeholder.
+type NotTemplateUpper = not `foo${Uppercase<string>}`;
+>NotTemplateUpper : Symbol(NotTemplateUpper, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 9, 53))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+// Generic composition.
+type Compose<T extends string> = Uppercase<`foo${T & not "bar"}`>;
+>Compose : Symbol(Compose, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 12, 54))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 15, 13))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 15, 13))
+
+type ComposeString = Compose<string>;
+>ComposeString : Symbol(ComposeString, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 15, 66))
+>Compose : Symbol(Compose, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 12, 54))
+
+type ComposeLiteral = Compose<"baz">;
+>ComposeLiteral : Symbol(ComposeLiteral, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 16, 37))
+>Compose : Symbol(Compose, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 12, 54))
+
+type ComposeBar = Compose<"bar">;
+>ComposeBar : Symbol(ComposeBar, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 17, 37))
+>Compose : Symbol(Compose, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 12, 54))
+
+// Assignability probes.
+declare let upperTemplate: UpperTemplate;
+>upperTemplate : Symbol(upperTemplate, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 21, 11))
+>UpperTemplate : Symbol(UpperTemplate, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 0, 0))
+
+declare let templateUpper: TemplateUpper;
+>templateUpper : Symbol(templateUpper, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 22, 11))
+>TemplateUpper : Symbol(TemplateUpper, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 3, 59))
+
+upperTemplate = "FOOBAZ"; // depends on representation
+>upperTemplate : Symbol(upperTemplate, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 21, 11))
+
+upperTemplate = "foobaz"; // depends on representation
+>upperTemplate : Symbol(upperTemplate, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 21, 11))
+
+templateUpper = "fooBAZ"; // depends on representation
+>templateUpper : Symbol(templateUpper, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 22, 11))
+
+templateUpper = "foobar"; // depends on representation
+>templateUpper : Symbol(templateUpper, Decl(negatedTypesInPatternLiteralsAndStringMapping.ts, 22, 11))
+

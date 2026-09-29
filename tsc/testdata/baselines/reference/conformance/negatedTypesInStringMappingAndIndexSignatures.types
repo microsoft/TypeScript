@@ -1,0 +1,78 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInStringMappingAndIndexSignatures.ts] ////
+
+=== negatedTypesInStringMappingAndIndexSignatures.ts ===
+// Combination: negated types with BOTH string mapping types and index signatures.
+
+// Index signature whose key is a string mapping of a negated type.
+type UpperKey = {
+>UpperKey : UpperKey
+
+    [idx: Uppercase<string & not "bar">]: number;
+>idx : Uppercase<`${string & not "bar"}`>
+
+};
+
+declare let upperKey: UpperKey;
+>upperKey : UpperKey
+
+upperKey["FOO"] = 1; // depends on representation
+>upperKey["FOO"] = 1 : 1
+>upperKey["FOO"] : number
+>upperKey : UpperKey
+>"FOO" : "FOO"
+>1 : 1
+
+upperKey["foo"] = 1; // depends on representation
+>upperKey["foo"] = 1 : 1
+>upperKey["foo"] : any
+>upperKey : UpperKey
+>"foo" : "foo"
+>1 : 1
+
+// Index signature whose key is a negation of a string mapping type.
+type NotUpperKey = {
+>NotUpperKey : NotUpperKey
+
+    [idx: string & not Uppercase<string>]: number;
+>idx : string & not Uppercase<string>
+
+};
+
+declare let notUpperKey: NotUpperKey;
+>notUpperKey : NotUpperKey
+
+notUpperKey["foo"] = 1; // depends on representation
+>notUpperKey["foo"] = 1 : 1
+>notUpperKey["foo"] : number
+>notUpperKey : NotUpperKey
+>"foo" : "foo"
+>1 : 1
+
+notUpperKey["FOO"] = 1; // depends on representation
+>notUpperKey["FOO"] = 1 : 1
+>notUpperKey["FOO"] : any
+>notUpperKey : NotUpperKey
+>"FOO" : "FOO"
+>1 : 1
+
+// Mapped type over a string-mapping key type that uses a negated placeholder.
+type MappedUpper = {
+>MappedUpper : MappedUpper
+
+    [k in Uppercase<string & not "bar">]: number;
+};
+
+// Generic index signature combination.
+type WrapUpperKey<T extends string> = {
+>WrapUpperKey : WrapUpperKey<T>
+
+    [idx: Uppercase<T & not "bar">]: number;
+>idx : Uppercase<T & not "bar">
+
+};
+type WrapUpperKeyString = WrapUpperKey<string>;
+>WrapUpperKeyString : WrapUpperKeyString
+
+type WrapUpperKeyLiteral = WrapUpperKey<"baz">;
+>WrapUpperKeyLiteral : WrapUpperKeyLiteral
+

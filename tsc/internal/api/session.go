@@ -949,6 +949,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetApparentType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetReducedType):
 		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetNegatedType):
+		return s.handleGetNegatedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetTypeOfPropertyOfType):
@@ -4039,6 +4041,22 @@ func (s *Session) handleGetReducedType(ctx context.Context, params *GetTypePrope
 	}
 
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetReducedType(t), setup.checker), nil
+}
+
+// handleGetNegatedType returns the negation of a type.
+func (s *Session) handleGetNegatedType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetNegatedType(t), setup.checker), nil
 }
 
 // handleGetIndexInfosOfType returns the index infos of a type.

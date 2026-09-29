@@ -1,0 +1,65 @@
+negatedTypesDeMorgan.ts(30,1): error TS2322: Type 'NotAorNotB' is not assignable to type 'not A & not B'.
+  Type 'not A' is not assignable to type 'not A & not B'.
+    Type 'unknown' is not assignable to type 'not A & not B'.
+      Type 'unknown' is not assignable to type 'not A'.
+        Type 'not A' is not assignable to type 'not B'.
+          Property 'a' is missing in type 'B' but required in type 'A'.
+negatedTypesDeMorgan.ts(36,1): error TS2322: Type 'A & B' is not assignable to type 'not A & not B'.
+  Type 'A & B' is not assignable to type 'not A'.
+negatedTypesDeMorgan.ts(37,1): error TS2322: Type 'A' is not assignable to type 'not A & not B'.
+  Type 'A' is not assignable to type 'not A'.
+
+
+==== negatedTypesDeMorgan.ts (3 errors) ====
+    // De Morgan behavior and union/intersection interaction for negated types.
+    
+    type A = { a: number };
+    type B = { b: number };
+    
+    // not (A | B) is distributed to not A & not B.
+    type NotAorB = not (A | B);
+    
+    // not (A & B) stays as a single negation of the intersection.
+    type NotAandB = not (A & B);
+    
+    // A union of negations (not simplified by De Morgan in this direction).
+    type NotAorNotB = not A | not B;
+    
+    // An intersection of negations equals the negation of the union.
+    type NotAandNotB = not A & not B;
+    
+    // Primitive forms.
+    type NotStringOrNumber = not (string | number); // not string & not number
+    type NotStringAndNever = not string | not never; // not never => unknown, so union widens
+    
+    // Assignability relationships between the forms.
+    declare let notAorB: NotAorB;       // not A & not B
+    declare let notAandNotB: NotAandNotB; // not A & not B
+    
+    notAorB = notAandNotB; // should be ok (same type)
+    notAandNotB = notAorB; // should be ok (same type)
+    
+    declare let notAorNotB: NotAorNotB; // not A | not B
+    notAorB = notAorNotB; // relationship probe
+    ~~~~~~~
+!!! error TS2322: Type 'NotAorNotB' is not assignable to type 'not A & not B'.
+!!! error TS2322:   Type 'not A' is not assignable to type 'not A & not B'.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'not A & not B'.
+!!! error TS2322:       Type 'unknown' is not assignable to type 'not A'.
+!!! error TS2322:         Type 'not A' is not assignable to type 'not B'.
+!!! error TS2322:           Property 'a' is missing in type 'B' but required in type 'A'.
+!!! related TS2728 negatedTypesDeMorgan.ts:3:12: 'a' is declared here.
+    notAorNotB = notAorB; // relationship probe
+    
+    // Concrete values against the distributed intersection.
+    declare let ab: A & B;
+    declare let aOnly: A;
+    notAorB = ab;    // probe: A & B excluded by both negations?
+    ~~~~~~~
+!!! error TS2322: Type 'A & B' is not assignable to type 'not A & not B'.
+!!! error TS2322:   Type 'A & B' is not assignable to type 'not A'.
+    notAorB = aOnly; // probe: A excluded by not A
+    ~~~~~~~
+!!! error TS2322: Type 'A' is not assignable to type 'not A & not B'.
+!!! error TS2322:   Type 'A' is not assignable to type 'not A'.
+    

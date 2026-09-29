@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/negatedNumericEnumComparability.ts] ////
+
+=== negatedNumericEnumComparability.ts ===
+enum Position {
+>Position : Symbol(Position, Decl(negatedNumericEnumComparability.ts, 0, 0))
+
+    Invalid = -1,
+>Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+
+    Start = 0,
+>Start : Symbol(Position.Start, Decl(negatedNumericEnumComparability.ts, 1, 17))
+}
+
+function comparePositions(position: number, other: number) {
+>comparePositions : Symbol(comparePositions, Decl(negatedNumericEnumComparability.ts, 3, 1))
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 5, 26))
+>other : Symbol(other, Decl(negatedNumericEnumComparability.ts, 5, 43))
+
+    if (position !== Position.Invalid) {
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 5, 26))
+>Position.Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+>Position : Symbol(Position, Decl(negatedNumericEnumComparability.ts, 0, 0))
+>Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+
+        position === other;
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 5, 26))
+>other : Symbol(other, Decl(negatedNumericEnumComparability.ts, 5, 43))
+
+        other === position;
+>other : Symbol(other, Decl(negatedNumericEnumComparability.ts, 5, 43))
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 5, 26))
+
+        position === Position.Invalid;
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 5, 26))
+>Position.Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+>Position : Symbol(Position, Decl(negatedNumericEnumComparability.ts, 0, 0))
+>Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+    }
+}
+
+declare const position: number & not Position.Invalid;
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 13, 13))
+>Position : Symbol(Position, Decl(negatedNumericEnumComparability.ts, 0, 0))
+>Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+
+declare const other: number;
+>other : Symbol(other, Decl(negatedNumericEnumComparability.ts, 14, 13))
+
+position === other;
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 13, 13))
+>other : Symbol(other, Decl(negatedNumericEnumComparability.ts, 14, 13))
+
+other === position;
+>other : Symbol(other, Decl(negatedNumericEnumComparability.ts, 14, 13))
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 13, 13))
+
+position === Position.Invalid;
+>position : Symbol(position, Decl(negatedNumericEnumComparability.ts, 13, 13))
+>Position.Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+>Position : Symbol(Position, Decl(negatedNumericEnumComparability.ts, 0, 0))
+>Invalid : Symbol(Position.Invalid, Decl(negatedNumericEnumComparability.ts, 0, 15))
+
