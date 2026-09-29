@@ -35,21 +35,33 @@ import (
 )
 
 type ProgramOptions struct {
-	Host                        CompilerHost
+	ProgramConfig
+	ProgramHosts
+	ProgramFactories
+}
+
+type ProgramConfig struct {
 	Config                      *tsoptions.ParsedCommandLine
 	UseSourceOfProjectReference bool
 	SingleThreaded              core.Tristate
-	CreateCheckerPool           func(*Program) CheckerPool
 	TypingsLocation             string
 	ProjectName                 string
-	Tracing                     *tracing.Tracing
-	CreateModuleResolver        func(options module.ResolverOptions) module.Resolver
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
 }
 
-func (p *ProgramOptions) canUseProjectReferenceSource() bool {
+type ProgramHosts struct {
+	Host    CompilerHost
+	Tracing *tracing.Tracing
+}
+
+type ProgramFactories struct {
+	CreateCheckerPool    func(*Program) CheckerPool
+	CreateModuleResolver func(module.ResolverOptions) module.Resolver
+}
+
+func (p *ProgramConfig) canUseProjectReferenceSource() bool {
 	return p.UseSourceOfProjectReference && !p.Config.CompilerOptions().DisableSourceOfProjectReferenceRedirect.IsTrue()
 }
 
@@ -83,7 +95,8 @@ type packageNamesInfo struct {
 }
 
 type Program struct {
-	opts             ProgramOptions
+	opts             ProgramConfig
+	hosts            ProgramHosts
 	checkerPool      CheckerPool // always set; used as fallback for project system pools
 	includeProcessor includeProcessor
 
@@ -137,7 +150,7 @@ func (p *Program) GetCurrentDirectory() string {
 }
 
 func (p *Program) ContentMapperProject() contentmapper.Project {
-	return p.opts.Host.ContentMapperProject()
+	return p.hosts.Host.ContentMapperProject()
 }
 
 // GetGlobalTypingsCacheLocation implements checker.Program.
@@ -284,12 +297,12 @@ func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.Fi
 }
 
 func NewProgram(opts ProgramOptions) *Program {
-	p := &Program{opts: opts}
-	if p.opts.Tracing != nil {
-		defer p.opts.Tracing.Push(tracing.PhaseProgram, "createProgram", map[string]any{"configFilePath": opts.Config.CompilerOptions().ConfigFilePath}, true)()
+	p := &Program{opts: opts.ProgramConfig, hosts: opts.ProgramHosts}
+	if opts.Tracing != nil {
+		defer opts.Tracing.Push(tracing.PhaseProgram, "createProgram", map[string]any{"configFilePath": opts.Config.CompilerOptions().ConfigFilePath}, true)()
 	}
-	p.processedFiles = processAllProgramFiles(p.opts, p.SingleThreaded())
-	p.initCheckerPool()
+	p.processedFiles = processAllProgramFiles(opts, p.SingleThreaded())
+	p.initCheckerPool(opts.CreateCheckerPool)
 	p.verifyCompilerOptions()
 	p.collectContentMapperOptionDiagnostics()
 	return p
@@ -297,8 +310,6 @@ func NewProgram(opts ProgramOptions) *Program {
 
 // Return an updated program for which it is known that only the file with the given path has changed.
 // In addition to a new program, return a boolean indicating whether the data of the old program was reused.
-// createCheckerPool, if non-nil, overrides the CreateCheckerPool stored in the old program's options,
-// ensuring each caller uses a fresh closure and avoiding data races on captured variables.
 // The returned *ast.SourceFile is the changed file as acquired through newHost; it is nil
 // only if the host cannot locate the file (e.g. it was deleted). Callers that manage
 // host-side parse caches must release this exact pointer when the old program could not be
@@ -312,15 +323,12 @@ func (p *Program) UpdateProgram(
 	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool, createModuleResolver); reused {
 		return result, newFile, true
 	} else {
-		newOpts := p.opts
-		newOpts.Host = newHost
-		if createCheckerPool != nil {
-			newOpts.CreateCheckerPool = createCheckerPool
-		}
-		if createModuleResolver != nil {
-			newOpts.CreateModuleResolver = createModuleResolver
-		}
-		return NewProgram(newOpts), newFile, false
+		return NewProgram(ProgramOptions{
+			ProgramConfig:        p.opts,
+			Host:                 newHost,
+			CreateCheckerPool:    createCheckerPool,
+			CreateModuleResolver: createModuleResolver,
+		}), newFile, false
 	}
 }
 
@@ -336,14 +344,6 @@ func (p *Program) ReuseProgram(
 	createCheckerPool func(*Program) CheckerPool,
 	createModuleResolver func(module.ResolverOptions) module.Resolver,
 ) (*Program, *ast.SourceFile, bool) {
-	newOpts := p.opts
-	newOpts.Host = newHost
-	if createCheckerPool != nil {
-		newOpts.CreateCheckerPool = createCheckerPool
-	}
-	if createModuleResolver != nil {
-		newOpts.CreateModuleResolver = createModuleResolver
-	}
 	oldFile := p.filesByPath[changedFilePath]
 	var newFile *ast.SourceFile
 	var oldSupplementalFiles []*ast.SourceFile
@@ -352,7 +352,7 @@ func (p *Program) ReuseProgram(
 		// Content-mapped files are produced by running an external transform, which a plain reparse can't
 		// reproduce. Re-run the transform through the host; any failure (or a missing file) falls back to
 		// a full rebuild so the file loader's failure policy runs.
-		mapper := newOpts.Config.GetContentMapperForFileName(oldFile.FileName())
+		mapper := p.opts.Config.GetContentMapperForFileName(oldFile.FileName())
 		var err error
 		files, transformErr := newHost.GetContentMappedSourceFiles(oldFile.ParseOptions(), mapper)
 		newFile, err = files.Canonical, transformErr
@@ -404,7 +404,8 @@ func (p *Program) ReuseProgram(
 	}
 	// TODO: reverify compiler options when config has changed?
 	result := &Program{
-		opts:                           newOpts,
+		opts:                           p.opts,
+		hosts:                          ProgramHosts{Host: newHost},
 		comparePathsOptions:            p.comparePathsOptions,
 		processedFiles:                 p.processedFiles,
 		usesUriStyleNodeCoreModules:    p.usesUriStyleNodeCoreModules,
@@ -415,7 +416,6 @@ func (p *Program) ReuseProgram(
 	result.unresolvedImports.tryReuse(&p.unresolvedImports)
 	result.knownSymlinks.tryReuse(&p.knownSymlinks)
 	result.packageNames.tryReuse(&p.packageNames)
-	result.initCheckerPool()
 	index := core.FindIndex(result.files, func(file *ast.SourceFile) bool { return file.Path() == newFile.Path() })
 	result.files = slices.Clone(result.files)
 	result.files[index] = newFile
@@ -429,18 +429,19 @@ func (p *Program) ReuseProgram(
 			result.filesByPath[newSupplemental.Path()] = newSupplemental
 		}
 	}
+	result.initCheckerPool(createCheckerPool)
 	return result, newFile, true
 }
 
-func (p *Program) initCheckerPool() {
+func (p *Program) initCheckerPool(create func(*Program) CheckerPool) {
 	if !p.finishedProcessing {
 		panic("Program must finish processing files before initializing checker pool")
 	}
 
-	if p.opts.CreateCheckerPool != nil {
-		p.checkerPool = p.opts.CreateCheckerPool(p)
+	if create != nil {
+		p.checkerPool = create(p)
 	} else {
-		pool := newCheckerPoolWithTracing(p, p.opts.Tracing)
+		pool := newCheckerPoolWithTracing(p, p.hosts.Tracing)
 		p.checkerPool = pool
 		p.compilerCheckerPool = pool
 	}
@@ -527,8 +528,8 @@ func (p *Program) GetContentMapper(file *ast.SourceFile) *contentmapper.Mapper {
 
 func (p *Program) ContentMapperExtensions() []string         { return p.opts.Config.ContentMapperExtensions() }
 func (p *Program) CommandLine() *tsoptions.ParsedCommandLine { return p.opts.Config }
-func (p *Program) Host() CompilerHost                        { return p.opts.Host }
-func (p *Program) Tracing() *tracing.Tracing                 { return p.opts.Tracing }
+func (p *Program) Host() CompilerHost                        { return p.hosts.Host }
+func (p *Program) Tracing() *tracing.Tracing                 { return p.hosts.Tracing }
 func (p *Program) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {
 	return slices.Clip(p.opts.Config.GetConfigFileParsingDiagnostics())
 }
@@ -576,8 +577,8 @@ func (p *Program) BindSourceFiles() {
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
-				if p.opts.Tracing != nil {
-					defer p.opts.Tracing.Push(tracing.PhaseBind, "bindSourceFile", map[string]any{"path": string(file.Path())}, true)()
+				if p.hosts.Tracing != nil {
+					defer p.hosts.Tracing.Push(tracing.PhaseBind, "bindSourceFile", map[string]any{"path": string(file.Path())}, true)()
 				}
 				binder.BindSourceFile(file)
 			})
@@ -1865,7 +1866,7 @@ type SourceMapEmitResult struct {
 }
 
 func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
-	if tr := p.opts.Tracing; tr != nil {
+	if tr := p.hosts.Tracing; tr != nil {
 		defer tr.Push(tracing.PhaseEmit, "emit", nil, true)()
 	}
 
@@ -1900,7 +1901,7 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 			emitOnly:   options.EmitOnly,
 			forceEmit:  options.ForceEmit,
 			writeFile:  options.WriteFile,
-			tr:         p.opts.Tracing,
+			tr:         p.hosts.Tracing,
 		}
 		emitters = append(emitters, emitter)
 		wg.Queue(func() {

@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"fmt"
+	"maps"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -9,7 +10,9 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
+	"github.com/microsoft/TypeScript/tsc/internal/tracing"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
@@ -19,7 +22,7 @@ import (
 
 func TestIncludeReasonDiagnosticsAreProgramLocal(t *testing.T) {
 	t.Parallel()
-	opts := ProgramOptions{Config: &tsoptions.ParsedCommandLine{}}
+	opts := ProgramConfig{Config: &tsoptions.ParsedCommandLine{}}
 	oldProgram := &Program{opts: opts}
 	newProgram := &Program{opts: opts}
 	reason := &FileIncludeReason{kind: fileIncludeKindRootFile}
@@ -30,6 +33,94 @@ func TestIncludeReasonDiagnosticsAreProgramLocal(t *testing.T) {
 		assert.Equal(t, reason.toDiagnostic(newProgram, relative), newDiagnostic)
 		assert.Assert(t, oldDiagnostic != newDiagnostic)
 	}
+}
+
+func TestProgramHostsAndFactories(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{
+		"/src/tsconfig.json": `{"compilerOptions":{"noLib":true,"module":"nodenext"},"files":["index.ts"]}`,
+		"/src/index.ts": `/// <reference types="dep" />
+import { value } from "./dep.js"; export const result = value;`,
+		"/src/dep.ts": "export const value = 1;",
+		"/src/node_modules/@types/dep/index.d.ts": "export {};",
+	}
+	host := NewCompilerHost("/", vfstest.FromMap(files, true), "", nil, nil, nil)
+	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, host, nil)
+	assert.Equal(t, len(diagnostics), 0)
+	var pools, resolvers int
+	tr := new(tracing.Tracing)
+	p := NewProgram(ProgramOptions{
+		Config:  config,
+		Host:    host,
+		Tracing: tr,
+		CreateCheckerPool: func(p *Program) CheckerPool {
+			pools++
+			assert.Equal(t, p.Tracing(), tr)
+			return newCheckerPoolWithTracing(p, p.Tracing())
+		},
+		CreateModuleResolver: func(options module.ResolverOptions) module.Resolver {
+			resolvers++
+			return module.NewResolver(options)
+		},
+	})
+	assert.Equal(t, pools, 1)
+	assert.Equal(t, resolvers, 1)
+	assert.Equal(t, p.Tracing(), tr)
+	oldFile := p.GetSourceFile("/src/index.ts")
+	resolved := p.GetResolvedModuleFromModuleSpecifier(oldFile, oldFile.Imports()[0])
+	assert.Assert(t, resolved.IsResolved())
+	resolvedTypeRef := p.GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(oldFile.TypeReferenceDirectives[0], oldFile)
+	assert.Assert(t, resolvedTypeRef.IsResolved())
+
+	newFiles := maps.Clone(files)
+	newFiles["/src/index.ts"] = "\n" + files["/src/index.ts"].(string)
+	newHost := NewCompilerHost("/", vfstest.FromMap(newFiles, true), "", nil, nil, nil)
+	cloned, changed, reused := p.ReuseProgram("/src/index.ts", newHost,
+		func(p *Program) CheckerPool {
+			pools++
+			assert.Equal(t, p.Host(), newHost)
+			assert.Assert(t, p.Tracing() == nil)
+			assert.Equal(t, p.GetSourceFile("/src/index.ts").Text(), newFiles["/src/index.ts"].(string))
+			return newCheckerPoolWithTracing(p, p.Tracing())
+		},
+		func(module.ResolverOptions) module.Resolver {
+			t.Fatal("cloning must reuse resolution data without invoking construction callbacks")
+			return nil
+		},
+	)
+	assert.Assert(t, reused)
+	assert.Assert(t, cloned.Tracing() == nil)
+	assert.Equal(t, p.Tracing(), tr)
+	assert.Equal(t, changed, cloned.GetSourceFile("/src/index.ts"))
+	assert.Equal(t, cloned.GetResolvedModuleFromModuleSpecifier(changed, changed.Imports()[0]), resolved)
+	assert.Equal(t, cloned.GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(changed.TypeReferenceDirectives[0], changed), resolvedTypeRef)
+	assert.Assert(t, cloned.GetCheckerPool() != p.GetCheckerPool())
+	assert.Equal(t, pools, 2)
+	assert.Equal(t, resolvers, 1)
+
+	defaults, _, reused := cloned.ReuseProgram("/src/index.ts", newHost, nil, nil)
+	assert.Assert(t, reused)
+	assert.Assert(t, defaults.compilerCheckerPool != nil)
+	assert.Assert(t, defaults.Tracing() == nil)
+	assert.Assert(t, defaults.compilerCheckerPool.tracing == nil)
+	assert.Equal(t, pools, 2)
+
+	traced := NewProgram(ProgramOptions{Config: config, Host: newHost, Tracing: tr})
+	assert.Equal(t, traced.Tracing(), tr)
+	assert.Equal(t, traced.compilerCheckerPool.tracing, tr)
+
+	newFiles["/src/index.ts"] = `import "./other.js";`
+	newFiles["/src/other.ts"] = "export {};"
+	rebuildHost := NewCompilerHost("/", vfstest.FromMap(newFiles, true), "", nil, nil, nil)
+	rebuilt, _, reused := p.UpdateProgram("/src/index.ts", rebuildHost, nil, nil)
+	assert.Assert(t, !reused)
+	assert.Assert(t, rebuilt.compilerCheckerPool != nil)
+	assert.Equal(t, rebuilt.Host(), rebuildHost)
+	assert.Assert(t, rebuilt.Tracing() == nil)
+	assert.Assert(t, rebuilt.compilerCheckerPool.tracing == nil)
+	assert.Assert(t, rebuilt.GetSourceFile("/src/other.ts") != nil)
+	assert.Equal(t, pools, 2)
+	assert.Equal(t, resolvers, 1)
 }
 
 type testFile struct {

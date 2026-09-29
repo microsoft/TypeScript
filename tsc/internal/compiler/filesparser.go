@@ -67,10 +67,10 @@ func (t *parseTask) load(loader *fileLoader) {
 		// exists only to carry its processing diagnostic, so nothing is parsed.
 		return
 	}
-	if loader.opts.Tracing != nil {
-		defer loader.opts.Tracing.Push(tracing.PhaseProgram, "findSourceFile", map[string]any{"fileName": t.normalizedFilePath}, false)()
+	if loader.tracing != nil {
+		defer loader.tracing.Push(tracing.PhaseProgram, "findSourceFile", map[string]any{"fileName": t.normalizedFilePath}, false)()
 	}
-	redirect := loader.projectReferenceFileMapper.getParseFileRedirect(t)
+	redirect := loader.projectReferences.getParseFileRedirect(t)
 	if redirect != "" {
 		t.redirect(loader, redirect)
 		return
@@ -80,7 +80,7 @@ func (t *parseTask) load(loader *fileLoader) {
 		compilerOptions := loader.opts.Config.CompilerOptions()
 		allowNonTsExtensions := compilerOptions.AllowNonTsExtensions.IsTrue()
 		if !allowNonTsExtensions {
-			canonicalFileName := tspath.GetCanonicalFileName(t.normalizedFilePath, loader.opts.Host.FS().UseCaseSensitiveFileNames())
+			canonicalFileName := tspath.GetCanonicalFileName(t.normalizedFilePath, loader.host.FS().UseCaseSensitiveFileNames())
 			if !loader.isSupportedExtension(canonicalFileName) {
 				if tspath.HasJSFileExtension(canonicalFileName) {
 					t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
@@ -193,8 +193,8 @@ func (t *parseTask) redirect(loader *fileLoader, fileName string) {
 }
 
 func (t *parseTask) loadAutomaticTypeDirectives(loader *fileLoader) {
-	if loader.opts.Tracing != nil {
-		defer loader.opts.Tracing.Push(tracing.PhaseProgram, "processTypeReferences", nil, false)()
+	if loader.tracing != nil {
+		defer loader.tracing.Push(tracing.PhaseProgram, "processTypeReferences", nil, false)()
 	}
 	toParseTypeRefs, typeResolutionsInFile, typeResolutionsTrace, pDiagnostics := loader.resolveAutomaticTypeDirectives(t.normalizedFilePath)
 	t.typeResolutionsInFile = typeResolutionsInFile
@@ -438,10 +438,10 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			}
 
 			for _, trace := range task.typeResolutionsTrace {
-				loader.opts.Host.Trace(trace.Message, trace.Args...)
+				loader.host.Trace(trace.Message, trace.Args...)
 			}
 			for _, trace := range task.resolutionsTrace {
-				loader.opts.Host.Trace(trace.Message, trace.Args...)
+				loader.host.Trace(trace.Message, trace.Args...)
 			}
 
 			file := task.file
@@ -558,7 +558,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			module.ModeAwareCacheKey{Name: value.libraryName, Mode: core.ModuleKindCommonJS}: value.resolution,
 		}
 		for _, trace := range value.trace {
-			loader.opts.Host.Trace(trace.Message, trace.Args...)
+			loader.host.Trace(trace.Message, trace.Args...)
 		}
 	}
 
@@ -568,7 +568,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		files:                                allFiles,
 		duplicateSourceFiles:                 duplicateSourceFiles,
 		filesByPath:                          filesByPath,
-		projectReferenceFileMapper:           loader.projectReferenceFileMapper,
+		projectReferenceFileMapper:           loader.projectReferences.projectReferenceFileMapper,
 		resolvedModules:                      resolvedModules,
 		typeResolutionsInFile:                typeResolutionsInFile,
 		sourceFileMetaDatas:                  sourceFileMetaDatas,
