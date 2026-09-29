@@ -2798,7 +2798,7 @@ async function runSignVsixExtensions() {
         ],
     });
 
-    if (!process.env.MBSIGN_APPFOLDER && !isCI) {
+    if (!process.env.MBSIGN_APPFOLDER) {
         console.log("Skipping VSIX signature verification because signing was faked.");
         return;
     }
