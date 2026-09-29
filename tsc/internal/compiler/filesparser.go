@@ -564,7 +564,6 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 
 	return processedFiles{
 		finishedProcessing:                   true,
-		resolver:                             loader.resolver,
 		files:                                allFiles,
 		duplicateSourceFiles:                 duplicateSourceFiles,
 		filesByPath:                          filesByPath,
@@ -582,7 +581,6 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		redirectTargetsMap:                   redirectTargetsMap,
 		redirectFilesByPath:                  redirectFilesByPath,
 		contentMapperDiagnostics:             loader.contentMapperDiagnostics,
-		moduleResolutionError:                loader.moduleResolutionError,
 	}
 }
 

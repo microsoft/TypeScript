@@ -95,10 +95,12 @@ type packageNamesInfo struct {
 }
 
 type Program struct {
-	opts             ProgramConfig
-	hosts            ProgramHosts
-	checkerPool      CheckerPool // always set; used as fallback for project system pools
-	includeProcessor includeProcessor
+	opts                  ProgramConfig
+	hosts                 ProgramHosts
+	resolutionData        *module.ResolutionData
+	checkerPool           CheckerPool // always set; used as fallback for project system pools
+	includeProcessor      includeProcessor
+	moduleResolutionError error
 
 	// compilerCheckerPool is set only when the built-in compiler checker pool is in use
 	// (i.e. CreateCheckerPool was not provided). It enables grouped parallel iteration,
@@ -160,7 +162,7 @@ func (p *Program) GetGlobalTypingsCacheLocation() string {
 
 // GetNearestAncestorDirectoryWithPackageJson implements checker.Program.
 func (p *Program) GetNearestAncestorDirectoryWithPackageJson(dirname string) string {
-	scoped := p.resolver.GetPackageScopeForPath(dirname)
+	scoped := p.newResolver().GetPackageScopeForPath(dirname)
 	if scoped != nil && scoped.Exists() {
 		return scoped.PackageDirectory
 	}
@@ -170,7 +172,7 @@ func (p *Program) GetNearestAncestorDirectoryWithPackageJson(dirname string) str
 // GetPackageJsonInfo implements checker.Program.
 func (p *Program) GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheEntry {
 	directory := tspath.GetDirectoryPath(pkgJsonPath)
-	scoped := p.resolver.GetPackageScopeForPath(directory)
+	scoped := p.newResolver().GetPackageScopeForPath(directory)
 	if scoped != nil && scoped.Exists() && scoped.PackageDirectory == directory {
 		return scoped
 	}
@@ -179,7 +181,11 @@ func (p *Program) GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheE
 
 // PackageJsonCacheEntries iterates on all package json cache entries.
 func (p *Program) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
-	p.resolver.PackageJsonCacheEntries(f)
+	p.resolutionData.PackageJsonCacheEntries(f)
+}
+
+func (p *Program) newResolver() *module.DefaultResolver {
+	return p.resolutionData.NewResolver(p.projectReferenceFileMapper.resolutionHost(p.hosts.Host))
 }
 
 // GetRedirectTargets returns the list of file paths that redirect to the given path.
@@ -301,7 +307,7 @@ func NewProgram(opts ProgramOptions) *Program {
 	if opts.Tracing != nil {
 		defer opts.Tracing.Push(tracing.PhaseProgram, "createProgram", map[string]any{"configFilePath": opts.Config.CompilerOptions().ConfigFilePath}, true)()
 	}
-	p.processedFiles = processAllProgramFiles(opts, p.SingleThreaded())
+	p.processedFiles, p.resolutionData, p.moduleResolutionError = processAllProgramFiles(opts, p.SingleThreaded())
 	p.initCheckerPool(opts.CreateCheckerPool)
 	p.verifyCompilerOptions()
 	p.collectContentMapperOptionDiagnostics()
@@ -375,7 +381,7 @@ func (p *Program) ReuseProgram(
 		return nil, newFile, false
 	}
 
-	if !p.canReplaceFileInProgram(oldFile, newFile) {
+	if p.moduleResolutionError != nil || !p.canReplaceFileInProgram(oldFile, newFile) {
 		return nil, newFile, false
 	}
 	// Cloning does not recompute synthetic helper or JSX-runtime import bookkeeping. Fall back to a full
@@ -406,6 +412,7 @@ func (p *Program) ReuseProgram(
 	result := &Program{
 		opts:                           p.opts,
 		hosts:                          ProgramHosts{Host: newHost},
+		resolutionData:                 p.resolutionData.Clone(),
 		comparePathsOptions:            p.comparePathsOptions,
 		processedFiles:                 p.processedFiles,
 		usesUriStyleNodeCoreModules:    p.usesUriStyleNodeCoreModules,
@@ -2226,6 +2233,7 @@ func (p *Program) DeepImportPackageNames() *collections.Set[string] {
 
 func (p *Program) collectPackageNames() *packageNamesInfo {
 	return p.packageNames.getValue(func() *packageNamesInfo {
+		resolver := p.newResolver()
 		packageNames := &packageNamesInfo{&collections.Set[string]{}, &collections.Set[string]{}, &collections.Set[string]{}}
 		for _, file := range p.files {
 			if p.IsSourceFileDefaultLibrary(file.Path()) || p.IsSourceFileFromExternalLibrary(file) || strings.Contains(file.FileName(), "/node_modules/") {
@@ -2248,7 +2256,7 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 						name := resolvedModule.PackageId.Name
 						if name == "" {
 							// 2. GetPackageScopeForPath - get name from package.json in the package directory
-							if packageScope := p.resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); packageScope != nil && packageScope.Exists() {
+							if packageScope := resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); packageScope != nil && packageScope.Exists() {
 								if scopeName, ok := packageScope.Contents.Name.GetValue(); ok {
 									name = scopeName
 								}
@@ -2266,7 +2274,7 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 							// map, so auto-import can only find them via recursive directory search.
 							_, rest := module.ParsePackageName(imp.Text())
 							if rest != "" {
-								if scope := p.resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); scope != nil && scope.Exists() && !scope.Contents.Exports.IsPresent() {
+								if scope := resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); scope != nil && scope.Exists() && !scope.Contents.Exports.IsPresent() {
 									packageNames.deepImportPackages.Add(module.GetPackageNameFromTypesPackageName(name))
 								}
 							}
@@ -2300,6 +2308,7 @@ func (p *Program) HasTSFile() bool {
 
 func (p *Program) GetSymlinkCache() *symlinks.KnownSymlinks {
 	return p.knownSymlinks.getValue(func() *symlinks.KnownSymlinks {
+		resolver := p.newResolver()
 		knownSymlinks := symlinks.NewKnownSymlink(p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
 
 		// Resolved modules store realpath information when they're resolved inside node_modules
@@ -2335,7 +2344,7 @@ func (p *Program) GetSymlinkCache() *symlinks.KnownSymlinks {
 					}
 				}
 
-				if packageResolution := p.resolver.ResolvePackageDirectory(dep, packageJsonName, core.ResolutionModeCommonJS, nil); packageResolution.IsResolved() && packageResolution.OriginalPath != "" {
+				if packageResolution := resolver.ResolvePackageDirectory(dep, packageJsonName, core.ResolutionModeCommonJS, nil); packageResolution.IsResolved() && packageResolution.OriginalPath != "" {
 					knownSymlinks.ProcessResolution(
 						tspath.CombinePaths(packageResolution.OriginalPath, "package.json"),
 						tspath.CombinePaths(packageResolution.ResolvedFileName, "package.json"),

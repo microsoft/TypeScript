@@ -4,14 +4,20 @@ import (
 	"fmt"
 	"maps"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
+	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -19,6 +25,57 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+func TestProgramSharedData(t *testing.T) {
+	t.Parallel()
+	// These types use tagged or JSON payloads.
+	leaves := []reflect.Type{
+		reflect.TypeFor[ast.Node](),
+		reflect.TypeFor[ast.SourceFile](),
+		reflect.TypeFor[ast.Diagnostic](),
+		reflect.TypeFor[tsoptions.ParsedCommandLine](),
+		reflect.TypeFor[packagejson.PackageJson](),
+	}
+	for _, typ := range []reflect.Type{
+		reflect.TypeFor[ProgramConfig](),
+		reflect.TypeFor[module.ResolutionData](),
+		reflect.TypeFor[processedFiles](),
+		reflect.TypeFor[lazyValue[collections.Set[string]]](),
+		reflect.TypeFor[lazyValue[symlinks.KnownSymlinks]](),
+		reflect.TypeFor[lazyValue[packageNamesInfo]](),
+	} {
+		assert.NilError(t, testutil.CheckDataOnly(typ, leaves))
+	}
+	for _, typ := range []reflect.Type{
+		reflect.TypeFor[ProgramOptions](),
+		reflect.TypeFor[ProgramHosts](),
+		reflect.TypeFor[ProgramFactories](),
+		reflect.TypeFor[module.DefaultResolver](),
+		reflect.TypeFor[fileLoader](),
+		reflect.TypeFor[projectReferenceFileMapperBuilder](),
+		reflect.TypeFor[func()](),
+		reflect.TypeFor[any](),
+		reflect.TypeFor[chan int](),
+		reflect.TypeFor[collections.SyncMap[string, func()]](),
+		reflect.TypeFor[map[string][]struct{ owner any }](),
+	} {
+		assert.ErrorContains(t, testutil.CheckDataOnly(typ, leaves), "shared data must not retain hosts")
+	}
+	// Retained state may contain these runtime dependencies, but not factories.
+	retainedLeaves := append(leaves,
+		reflect.TypeFor[CompilerHost](),
+		reflect.TypeFor[tracing.Tracing](),
+		reflect.TypeFor[CheckerPool](),
+		reflect.TypeFor[checkerPool](),
+		reflect.TypeFor[error](),
+	)
+	assert.NilError(t, testutil.CheckDataOnly(reflect.TypeFor[Program](), retainedLeaves))
+	assert.ErrorContains(t, testutil.CheckDataOnly(reflect.TypeFor[ProgramOptions](), retainedLeaves), "shared data must not retain hosts")
+	assert.ErrorContains(t, testutil.CheckDataOnly(reflect.TypeFor[ProgramFactories](), retainedLeaves), "shared data must not retain hosts")
+	for field := range reflect.TypeFor[ProgramFactories]().Fields() {
+		assert.Equal(t, field.Type.Kind(), reflect.Func, "factory field %s must not hold retained hosts", field.Name)
+	}
+}
 
 func TestIncludeReasonDiagnosticsAreProgramLocal(t *testing.T) {
 	t.Parallel()
@@ -60,12 +117,16 @@ import { value } from "./dep.js"; export const result = value;`,
 		},
 		CreateModuleResolver: func(options module.ResolverOptions) module.Resolver {
 			resolvers++
+			resolverFiles := maps.Clone(files)
+			resolverFiles["/factory-only/package.json"] = `{"name":"factory-host"}`
+			options.Host = NewCompilerHost("/", vfstest.FromMap(resolverFiles, true), "", nil, nil, nil)
 			return module.NewResolver(options)
 		},
 	})
 	assert.Equal(t, pools, 1)
 	assert.Equal(t, resolvers, 1)
 	assert.Equal(t, p.Tracing(), tr)
+	assert.Assert(t, p.GetPackageJsonInfo("/factory-only/package.json") == nil, "lazy lookups must not retain the factory's host")
 	oldFile := p.GetSourceFile("/src/index.ts")
 	resolved := p.GetResolvedModuleFromModuleSpecifier(oldFile, oldFile.Imports()[0])
 	assert.Assert(t, resolved.IsResolved())
@@ -74,6 +135,7 @@ import { value } from "./dep.js"; export const result = value;`,
 
 	newFiles := maps.Clone(files)
 	newFiles["/src/index.ts"] = "\n" + files["/src/index.ts"].(string)
+	newFiles["/probe/package.json"] = `{"name":"new-host"}`
 	newHost := NewCompilerHost("/", vfstest.FromMap(newFiles, true), "", nil, nil, nil)
 	cloned, changed, reused := p.ReuseProgram("/src/index.ts", newHost,
 		func(p *Program) CheckerPool {
@@ -94,7 +156,10 @@ import { value } from "./dep.js"; export const result = value;`,
 	assert.Equal(t, changed, cloned.GetSourceFile("/src/index.ts"))
 	assert.Equal(t, cloned.GetResolvedModuleFromModuleSpecifier(changed, changed.Imports()[0]), resolved)
 	assert.Equal(t, cloned.GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(changed.TypeReferenceDirectives[0], changed), resolvedTypeRef)
+	assert.Assert(t, cloned.resolutionData != p.resolutionData)
 	assert.Assert(t, cloned.GetCheckerPool() != p.GetCheckerPool())
+	assert.Assert(t, cloned.GetPackageJsonInfo("/probe/package.json") != nil)
+	assert.Assert(t, p.GetPackageJsonInfo("/probe/package.json") == nil, "new lazy lookups must not populate the old generation's cache")
 	assert.Equal(t, pools, 2)
 	assert.Equal(t, resolvers, 1)
 
@@ -121,6 +186,45 @@ import { value } from "./dep.js"; export const result = value;`,
 	assert.Assert(t, rebuilt.GetSourceFile("/src/other.ts") != nil)
 	assert.Equal(t, pools, 2)
 	assert.Equal(t, resolvers, 1)
+}
+
+func TestClonedProgramProjectReferenceResolution(t *testing.T) {
+	t.Parallel()
+	for _, preserveSymlinks := range []bool{false, true} {
+		t.Run(map[bool]string{false: "realpaths", true: "preserveSymlinks"}[preserveSymlinks], func(t *testing.T) {
+			t.Parallel()
+			files := map[string]any{
+				"/src/tsconfig.json":          `{"compilerOptions":{"noLib":true,"module":"nodenext"},"files":["index.ts"],"references":[{"path":"../reference"}]}`,
+				"/src/index.ts":               `import { value } from "reference"; export const result = value;`,
+				"/src/node_modules/reference": vfstest.Symlink("/reference"),
+				"/reference/tsconfig.json":    `{"compilerOptions":{"composite":true,"outDir":"dist"},"files":["index.ts"]}`,
+				"/reference/package.json":     `{"name":"reference","version":"1.0.0","types":"dist/index.d.ts"}`,
+				"/reference/index.ts":         "export const value = 1;",
+			}
+			host := NewCompilerHost("/", vfstest.FromMap(files, true), "", nil, nil, nil)
+			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", &core.CompilerOptions{
+				PreserveSymlinks: core.BoolToTristate(preserveSymlinks),
+			}, nil, host, nil)
+			assert.Equal(t, len(diagnostics), 0)
+			p := NewProgram(ProgramOptions{Config: config, Host: host, UseSourceOfProjectReference: true})
+			assert.Assert(t, p.GetSourceFile("/reference/index.ts") != nil)
+			assert.Assert(t, !host.FS().FileExists("/reference/dist/index.d.ts"))
+			newFiles := maps.Clone(files)
+			newFiles["/src/index.ts"] = "\n" + files["/src/index.ts"].(string)
+			newFiles["/probe/package.json"] = `{"name":"new-host"}`
+			newHost := NewCompilerHost("/", vfstest.FromMap(newFiles, true), "", nil, nil, nil)
+			cloned, _, reused := p.ReuseProgram("/src/index.ts", newHost, nil, nil)
+			assert.Assert(t, reused)
+			assert.Equal(t, cloned.projectReferenceFileMapper, p.projectReferenceFileMapper)
+			assert.Assert(t, cloned.GetSourceFile("/reference/index.ts") != nil)
+			assert.Assert(t, cloned.GetPackageJsonInfo("/probe/package.json") != nil)
+			// Resolve again to exercise the new .d.ts-faking host.
+			resolved, _, err := cloned.newResolver().ResolveModuleName("reference", "/src/nested/probe.ts", core.ModuleKindCommonJS, nil)
+			assert.NilError(t, err)
+			assert.Assert(t, resolved.IsResolved())
+			assert.Assert(t, strings.HasSuffix(resolved.ResolvedFileName, "/dist/index.d.ts"))
+		})
+	}
 }
 
 type testFile struct {

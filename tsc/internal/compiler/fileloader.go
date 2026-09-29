@@ -112,8 +112,7 @@ func (r *redirectsFile) Path() tspath.Path {
 }
 
 type processedFiles struct {
-	resolver module.Resolver
-	files    []*ast.SourceFile
+	files []*ast.SourceFile
 	// duplicateSourceFiles tracks parsed files loaded during program construction
 	// that were later dropped from the final program, such as losing filename
 	// casing variants for the same path or files hidden behind package redirect
@@ -141,7 +140,6 @@ type processedFiles struct {
 	redirectFilesByPath map[tspath.Path]*redirectsFile
 	// Program-level diagnostics reported when a content mapper fails fatally (reported once per mapper).
 	contentMapperDiagnostics []*ast.Diagnostic
-	moduleResolutionError    error
 	finishedProcessing       bool
 }
 
@@ -153,7 +151,7 @@ type jsxRuntimeImportSpecifier struct {
 func processAllProgramFiles(
 	opts ProgramOptions,
 	singleThreaded bool,
-) processedFiles {
+) (processedFiles, *module.ResolutionData, error) {
 	compilerOptions := opts.Config.CompilerOptions()
 	rootFiles := opts.Config.FileNames()
 	supportedExtensions := tsoptions.GetSupportedExtensions(compilerOptions, opts.Config.ContentMapperExtensions())
@@ -222,7 +220,7 @@ func processAllProgramFiles(
 
 	loader.filesParser.parse(&loader, loader.rootTasks)
 
-	return loader.filesParser.getProcessedFiles(&loader)
+	return loader.filesParser.getProcessedFiles(&loader), loader.resolver.GetResolutionData(), loader.moduleResolutionError
 }
 
 func (p *fileLoader) toPath(file string) tspath.Path {
@@ -390,7 +388,7 @@ func (p *fileLoader) loadSourceFileMetaData(fileName string) ast.SourceFileMetaD
 		}
 	}
 
-	packageJsonScope := p.resolver.GetPackageScopeForPath(tspath.GetDirectoryPath(fileName))
+	packageJsonScope := p.resolver.GetResolutionData().NewResolver(p.projectReferences.host).GetPackageScopeForPath(tspath.GetDirectoryPath(fileName))
 	moduleResolutionKind := p.opts.Config.CompilerOptions().GetModuleResolutionKind()
 
 	var packageJsonType, packageJsonDirectory string

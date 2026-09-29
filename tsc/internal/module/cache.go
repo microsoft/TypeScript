@@ -4,6 +4,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type ModeAwareCache[T any] map[ModeAwareCacheKey]T
@@ -59,26 +60,42 @@ func (c *parsedPatternsCache) Get(pathMappings *collections.OrderedMap[string, [
 	return patterns
 }
 
-type caches struct {
+type ResolutionData struct {
+	compilerOptions *core.CompilerOptions
+	typingsLocation string
+	projectName     string
+	extraExtensions []string
+
 	packageJsonInfoCache *packagejson.InfoCache
-
-	moduleResolutionCache           moduleResolutionCache
-	typeRefDirectiveResolutionCache typeRefDirectiveResolutionCache
-
-	// Cached representations for `core.CompilerOptions.paths`, keyed by the
-	// path mappings themselves. This does not handle other path patterns such
-	// as `typesVersions`.
-	parsedPatternsForPaths parsedPatternsCache
 }
 
-func newCaches(
-	currentDirectory string,
-	useCaseSensitiveFileNames bool,
-	options *core.CompilerOptions,
-) caches {
-	return caches{
-		packageJsonInfoCache: packagejson.NewInfoCache(currentDirectory, useCaseSensitiveFileNames),
+func newResolutionData(opts ResolverOptions) *ResolutionData {
+	data := &ResolutionData{
+		compilerOptions:      opts.CompilerOptions,
+		typingsLocation:      opts.TypingsLocation,
+		projectName:          opts.ProjectName,
+		extraExtensions:      opts.ExtraExtensions,
+		packageJsonInfoCache: opts.PackageJsonCache,
 	}
+	if data.packageJsonInfoCache == nil {
+		data.packageJsonInfoCache = packagejson.NewInfoCache(opts.Host.GetCurrentDirectory(), opts.Host.FS().UseCaseSensitiveFileNames())
+	}
+	return data
+}
+
+// Clone copies the package-json cache table without copying its entries.
+func (c *ResolutionData) Clone() *ResolutionData {
+	return &ResolutionData{
+		compilerOptions:      c.compilerOptions,
+		typingsLocation:      c.typingsLocation,
+		projectName:          c.projectName,
+		extraExtensions:      c.extraExtensions,
+		packageJsonInfoCache: c.packageJsonInfoCache.Clone(),
+	}
+}
+
+func (c *ResolutionData) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
+	c.packageJsonInfoCache.Range(f)
 }
 
 func getRedirectConfigName(redirect ResolvedProjectReference) string {

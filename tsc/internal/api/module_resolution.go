@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
-	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -128,21 +127,8 @@ func (p *callbackModuleResolver) ResolveTypeReferenceDirective(
 	return p.fallbackResolver.ResolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, resolutionMode, redirectedReference)
 }
 
-func (p *callbackModuleResolver) GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry {
-	return p.fallbackResolver.GetPackageScopeForPath(directory)
-}
-
-func (p *callbackModuleResolver) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
-	p.fallbackResolver.PackageJsonCacheEntries(f)
-}
-
-func (p *callbackModuleResolver) ResolvePackageDirectory(
-	moduleName string,
-	containingFile string,
-	resolutionMode core.ResolutionMode,
-	redirectedReference module.ResolvedProjectReference,
-) *module.ResolvedModule {
-	return p.fallbackResolver.ResolvePackageDirectory(moduleName, containingFile, resolutionMode, redirectedReference)
+func (p *callbackModuleResolver) GetResolutionData() *module.ResolutionData {
+	return p.fallbackResolver.GetResolutionData()
 }
 
 func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory string, useCaseSensitive bool) (*module.StaticResolutions, error) {
