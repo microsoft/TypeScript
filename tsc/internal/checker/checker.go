@@ -17402,10 +17402,17 @@ func (c *Checker) getConstraintFromTypeParameter(t *Type) *Type {
 			constraintDeclaration := c.getConstraintDeclaration(t)
 			if constraintDeclaration != nil {
 				constraint = c.getTypeFromTypeNode(constraintDeclaration)
-				if constraint.flags&TypeFlagsAny != 0 && !c.isErrorType(constraint) {
+				isMappedTypeConstraint := ast.IsMappedTypeNode(constraintDeclaration.Parent.Parent)
+				if isMappedTypeConstraint && c.isTypeParameterReferenced(t, constraintDeclaration) {
+					// A mapped type parameter that is referenced in its own constraint, as in { [P in keyof P]: X }, has a
+					// circular constraint. Base constraint resolution doesn't reveal this because the base constraint of
+					// keyof P doesn't depend on P, so we check it here.
+					c.error(constraintDeclaration, diagnostics.Type_parameter_0_has_a_circular_constraint, c.TypeToString(t))
+					constraint = c.errorType
+				} else if constraint.flags&TypeFlagsAny != 0 && !c.isErrorType(constraint) {
 					// use stringNumberSymbolType as the base constraint for mapped type key constraints (unknown isn;t assignable to that, but `any` was),
 					// use unknown otherwise
-					if ast.IsMappedTypeNode(constraintDeclaration.Parent.Parent) {
+					if isMappedTypeConstraint {
 						constraint = c.stringNumberSymbolType
 					} else {
 						constraint = c.unknownType
@@ -22874,6 +22881,17 @@ func (c *Checker) isTypeParameterPossiblyReferenced(tp *Type, node *ast.Node) bo
 		return containsReference(node)
 	}
 	return true
+}
+
+// Return true if the given node contains a type reference that resolves to the given type parameter.
+func (c *Checker) isTypeParameterReferenced(tp *Type, node *ast.Node) bool {
+	var containsReference func(*ast.Node) bool
+	containsReference = func(node *ast.Node) bool {
+		// Check the name first to avoid resolving unrelated type references
+		return isSimpleIdentifierTypeReference(node) && node.AsTypeReferenceNode().TypeName.Text() == tp.symbol.Name && c.getTypeFromTypeReference(node).symbol == tp.symbol ||
+			node.ForEachChild(containsReference)
+	}
+	return containsReference(node)
 }
 
 func (c *Checker) instantiateAnonymousType(t *Type, m *TypeMapper, alias *TypeAlias) *Type {
