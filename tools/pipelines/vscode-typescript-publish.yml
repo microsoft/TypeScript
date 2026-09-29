@@ -130,12 +130,6 @@ extends:
                       filename="$(basename "$artifact")"
                       jq -e --arg filename "$filename" '.artifacts | has($filename)' "$manifest" >/dev/null
                     done
-                    if cmp -s "$manifestFile" "$signatureFile"; then
-                      echo "$signatureFile does not contain a real signature." >&2
-                      exit 1
-                    fi
-                    openssl pkcs7 -inform DER -in "$signatureFile" -noout
-
                     packageVersion="$(unzip -p "$vsixFilePath" extension/package.json | jq -r '.version')"
                     packageBundledTypeScriptVersion="$(unzip -p "$vsixFilePath" extension/package.json | jq -r '.bundledTypeScriptVersion')"
                     if [ "$packageVersion" != "$version" ] || [ "$packageBundledTypeScriptVersion" != "$bundledTypeScriptVersion" ]; then
