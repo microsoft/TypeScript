@@ -1,6 +1,6 @@
 // @target: es2015
 // @moduleResolution: classic
-// @module: amd
+// @module: commonjs
 // @traceResolution: true
 
 // baseUrl set via command line

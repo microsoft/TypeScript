@@ -208,7 +208,7 @@ func createCheckerPool(program checker.Program) (getChecker func() (*checker.Che
 			case ch := <-pool:
 				return ch, func() { pool <- ch }
 			default:
-				break
+				// pool is empty; fall through to try creating a new checker
 			}
 			// Try to create a new one if under limit
 			for {
@@ -320,11 +320,13 @@ func (rh *resolutionHost) PnpApi() *pnp.PnpApi {
 	return rh.pnpApi
 }
 
-func getModuleResolver(host RegistryCloneHost, realpath func(string) string, opts module.ResolverOptions) *module.Resolver {
+func getModuleResolver(host RegistryCloneHost, realpath func(string) string, opts module.ResolverOptions) *module.DefaultResolver {
 	rh := &resolutionHost{
 		fs:               wrapvfs.Wrap(host.FS(), wrapvfs.Replacements{Realpath: realpath}),
 		currentDirectory: host.GetCurrentDirectory(),
 		pnpApi:           host.PnpApi(),
 	}
-	return module.NewResolverWithOptions(rh, core.EmptyCompilerOptions, "", "", opts)
+	opts.Host = rh
+	opts.CompilerOptions = core.EmptyCompilerOptions
+	return module.NewResolver(opts)
 }

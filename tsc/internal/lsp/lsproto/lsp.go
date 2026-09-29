@@ -56,8 +56,8 @@ func (uri DocumentUri) Path(useCaseSensitiveFileNames bool) tspath.Path {
 
 func fixWindowsURIPath(path string) string {
 	if rest, ok := strings.CutPrefix(path, "/"); ok {
-		if volume, rest, ok := tspath.SplitVolumePath(rest); ok {
-			return volume + rest
+		if len(rest) >= 2 && tspath.IsVolumeCharacter(rest[0]) && rest[1] == ':' {
+			return rest
 		}
 	}
 	return path
@@ -142,11 +142,11 @@ func jsonObjectRawField(data []byte, field string) json.Value {
 			return nil
 		}
 		if jsonKeyCheck(name, field) {
-			val, err := dec.ReadValue()
+			value, err := dec.ReadValue()
 			if err != nil {
 				return nil
 			}
-			return val
+			return value
 		}
 		if err := dec.SkipValue(); err != nil {
 			return nil
@@ -232,13 +232,13 @@ func (info NotificationInfo[Params]) NewNotificationMessage(params Params) *Requ
 //
 // A [NoParams] method must be given no params; every other method must be given
 // params as an object or array. A violation returns [ErrorCodeInvalidParams].
-func UnmarshalParams[T any](req *RequestMessage) (T, error) {
+func (r *RequestMessage) UnmarshalParams[T any]() (T, error) {
 	var params T
 	var raw json.Value
-	if req.Params != nil {
-		v, ok := req.Params.(json.Value)
+	if r.Params != nil {
+		v, ok := r.Params.(json.Value)
 		if !ok {
-			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, req.Params)
+			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, r.Params)
 		}
 		raw = v
 	}

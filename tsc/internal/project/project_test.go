@@ -2,6 +2,7 @@ package project_test
 
 import (
 	"context"
+	"fmt"
 	"slices"
 	"strings"
 	"testing"
@@ -9,9 +10,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -78,6 +81,34 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindCloned)
+	})
+
+	t.Run("compiler options update inferred project", func(t *testing.T) {
+		t.Parallel()
+		const fileName = "/src/index.ts"
+		session, _ := projecttestutil.Setup(map[string]any{
+			fileName: "export const x = 1;",
+		})
+		uri := lsproto.DocumentUri("file://" + fileName)
+		session.DidOpenFile(context.Background(), uri, 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		oldProject := session.Snapshot().ProjectCollection.InferredProject()
+		assert.Assert(t, oldProject != nil)
+		oldProgram := oldProject.Program
+		assert.Equal(t, oldProgram.Options().Strict, core.TSUnknown)
+
+		session.DidChangeCompilerOptionsForInferredProjects(context.Background(), &core.CompilerOptions{
+			NoLib:  core.TSTrue,
+			Strict: core.TSTrue,
+		})
+		_, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+
+		updatedProject := session.Snapshot().ProjectCollection.InferredProject()
+		assert.Assert(t, updatedProject != nil)
+		assert.Equal(t, updatedProject.CommandLine.CompilerOptions().Strict, core.TSTrue)
+		assert.Assert(t, updatedProject.Program != oldProgram)
+		assert.Equal(t, updatedProject.Program.Options().Strict, core.TSTrue)
+		assert.Equal(t, oldProgram.Options().Strict, core.TSUnknown)
 	})
 
 	t.Run("NewFiles when import resolution mode changes", func(t *testing.T) {
@@ -595,8 +626,27 @@ func TestPushDiagnostics(t *testing.T) {
 		// before triggering global diagnostics, to avoid racing with publishGlobalDiagnostics.
 		session.WaitForBackgroundTasks()
 
-		_, err = ls.ProvideDiagnostics(projecttestutil.WithRequestID(context.Background()), lsproto.DocumentUri("file:///src/index.ts"))
-		assert.NilError(t, err)
+		for range 2 {
+			program := ls.GetProgram()
+			file := program.GetSourceFile("/src/index.ts")
+			diags := program.GetSemanticDiagnostics(core.WithCheckerLifetime(projecttestutil.WithRequestID(context.Background()), core.CheckerLifetimeDiagnostics), file)
+			assert.Assert(t, len(diags) > 0)
+			for _, diag := range diags {
+				assert.Equal(t, diag.File(), file)
+			}
+
+			report, err := ls.ProvideDiagnostics(core.WithCheckerLifetime(projecttestutil.WithRequestID(context.Background()), core.CheckerLifetimeDiagnostics), lsproto.DocumentUri("file:///src/index.ts"))
+			assert.NilError(t, err)
+			assert.Assert(t, report.FullDocumentDiagnosticReport != nil)
+			hasSourceDiag := false
+			for _, diag := range report.FullDocumentDiagnosticReport.Items {
+				assert.Assert(t, !strings.Contains(diag.Message.AsString(), "Cannot find global"), "global diagnostic should only be published on tsconfig.json")
+				if diag.Code != nil && diag.Code.Integer != nil && *diag.Code.Integer == 2550 {
+					hasSourceDiag = true
+				}
+			}
+			assert.Assert(t, hasSourceDiag, "expected the source diagnostic about Symbol.dispose")
+		}
 		// Enqueue global diagnostics publishing (normally done by the LSP server after each request).
 		session.EnqueuePublishGlobalDiagnostics()
 		session.WaitForBackgroundTasks()
@@ -624,6 +674,61 @@ func TestPushDiagnostics(t *testing.T) {
 		}
 		assert.Assert(t, hasGlobalDiag, "expected a 'Cannot find global' diagnostic on tsconfig.json, got: %v", lastTsconfigCall.Params.Diagnostics)
 	})
+
+	for _, checkFirst := range []bool{false, true} {
+		name := core.IfElse(checkFirst, "query globals after semantic checking", "query globals before semantic checking")
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			const uri lsproto.DocumentUri = "file:///src/repro.ts"
+			const source = `type Json = string | Json[];
+type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+declare function wrap<T>(value: T): Parsed<T>;
+export const value = wrap({ items: [] as Json[] });`
+			files := map[string]any{
+				"/src/tsconfig.json": `{"compilerOptions":{"strict":true,"noEmit":true}}`,
+				"/src/repro.ts":      source,
+			}
+			ctx := t.Context()
+			session, utils := projecttestutil.Setup(files)
+			session.DidOpenFile(ctx, uri, 1, source, lsproto.LanguageKindTypeScript)
+			service, err := session.GetLanguageService(projecttestutil.WithRequestID(ctx), uri)
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			var output strings.Builder
+			record := func(caption string, value any) {
+				data, marshalErr := json.MarshalIndent(value, "", "  ")
+				assert.NilError(t, marshalErr)
+				fmt.Fprintf(&output, "// %s\n%s\n\n", caption, data)
+			}
+			check := func() {
+				report, diagnosticsErr := service.ProvideDiagnostics(core.WithCheckerLifetime(projecttestutil.WithRequestID(ctx), core.CheckerLifetimeDiagnostics), uri)
+				assert.NilError(t, diagnosticsErr)
+				record("Document diagnostics", report.FullDocumentDiagnosticReport)
+			}
+			if checkFirst {
+				check()
+			}
+			for range 2 {
+				before := len(utils.Client().PublishDiagnosticsCalls())
+				hover, err := service.ProvideHover(projecttestutil.WithRequestID(ctx), &lsproto.HoverParams{
+					TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+					Position:     lsproto.Position{Line: 3, Character: 14},
+				})
+				assert.NilError(t, err)
+				record("Hover on value", hover.Hover)
+				session.EnqueuePublishGlobalDiagnostics()
+				session.WaitForBackgroundTasks()
+				published := []*lsproto.PublishDiagnosticsParams{}
+				for _, call := range utils.Client().PublishDiagnosticsCalls()[before:] {
+					published = append(published, call.Params)
+				}
+				record("Published after hover", published)
+			}
+			check()
+			baseline.Run(t, strings.ReplaceAll(name, " ", "-")+".jsonc", output.String(), baseline.Options{Subfolder: "project"})
+		})
+	}
 
 	t.Run("cleans tsconfig diagnostics after TS files close and restores them after TS file is reopened", func(t *testing.T) {
 		t.Parallel()
@@ -709,6 +814,22 @@ func TestDisplayName(t *testing.T) {
 		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/sub/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.DisplayName("/home/projects"), "sub/tsconfig.json")
+	})
+
+	t.Run("configured project preserves config path casing", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/Project/tsconfig.json": `{}`,
+			"/home/projects/Project/index.ts":      "export const x = 1;",
+		}
+		session, _ := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/Project/index.ts", 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/Project/index.ts"))
+		assert.NilError(t, err)
+
+		configured := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/project/tsconfig.json"))
+		assert.Assert(t, configured != nil)
+		assert.Equal(t, configured.DisplayName("/home/projects"), "Project/tsconfig.json")
 	})
 
 	t.Run("inferred project returns directory base name", func(t *testing.T) {

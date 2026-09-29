@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: externalModuleAssignToVar_ext.ts
 class D { foo: string; }
 export = D;

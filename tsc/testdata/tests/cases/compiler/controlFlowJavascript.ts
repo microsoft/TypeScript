@@ -1,7 +1,7 @@
 // @target: es2015
 // @allowJs: true
 // @Filename: controlFlowJavascript.js
-// @outFile: out.js
+// @outDir: out
 
 let cond = true;
 

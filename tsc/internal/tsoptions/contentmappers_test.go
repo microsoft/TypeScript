@@ -21,8 +21,8 @@ type resolveContentMapperHost struct {
 
 func TestGetContentMapperForFileNameUsesLongestExtension(t *testing.T) {
 	t.Parallel()
-	zMapper := &contentmapper.Mapper{Definition: contentmapper.Definition{Package: "z", Extensions: []string{".z"}}}
-	yzMapper := &contentmapper.Mapper{Definition: contentmapper.Definition{Package: "yz", Extensions: []string{".y.z"}}}
+	zMapper := &contentmapper.Mapper{Package: "z", Extensions: []string{".z"}}
+	yzMapper := &contentmapper.Mapper{Package: "yz", Extensions: []string{".y.z"}}
 	commandLine := &ParsedCommandLine{ParsedConfig: &ParsedOptions{ContentMappers: []*contentmapper.Mapper{zMapper, yzMapper}}}
 
 	assert.Equal(t, commandLine.GetContentMapperForFileName("/src/Component.y.z"), yzMapper)
@@ -31,7 +31,7 @@ func TestGetContentMapperForFileNameUsesLongestExtension(t *testing.T) {
 
 func TestGetContentMapperForFileNameUsesHostCaseSensitivity(t *testing.T) {
 	t.Parallel()
-	mapper := &contentmapper.Mapper{Definition: contentmapper.Definition{Extensions: []string{".vue"}}}
+	mapper := &contentmapper.Mapper{Extensions: []string{".vue"}}
 	insensitive := &ParsedCommandLine{
 		ParsedConfig:        &ParsedOptions{ContentMappers: []*contentmapper.Mapper{mapper}},
 		comparePathsOptions: tspath.ComparePathsOptions{UseCaseSensitiveFileNames: false},
@@ -47,7 +47,7 @@ func TestGetContentMapperForFileNameUsesHostCaseSensitivity(t *testing.T) {
 
 func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 	t.Parallel()
-	mapper := &contentmapper.Mapper{Definition: contentmapper.Definition{Extensions: []string{".vue"}}}
+	mapper := &contentmapper.Mapper{Extensions: []string{".vue"}}
 	commandLine := NewParsedCommandLine(
 		&core.CompilerOptions{
 			OutDir:         "/dist",
@@ -56,6 +56,7 @@ func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 			SourceMap:      core.TSTrue,
 		},
 		[]string{"/src/Component.vue"},
+		nil,
 		tspath.ComparePathsOptions{CurrentDirectory: "/", UseCaseSensitiveFileNames: true},
 	)
 	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}

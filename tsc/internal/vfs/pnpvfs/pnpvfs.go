@@ -101,16 +101,6 @@ func (pnpFS *pnpFS) UseCaseSensitiveFileNames() bool {
 	return true
 }
 
-func (pnpFS *pnpFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	root, hash, basePath := resolveVirtual(root)
-
-	fs, formattedPath, zipPath := getMatchingFS(pnpFS, root)
-	return fs.WalkDir(formattedPath, (func(path string, d vfs.DirEntry, err error) error {
-		fullPath := zipPath + path
-		return walkFn(makeVirtualPath(basePath, hash, fullPath), d, err)
-	}))
-}
-
 func (pnpFS *pnpFS) WriteFile(path string, data string) error {
 	path, _, _ = resolveVirtual(path)
 

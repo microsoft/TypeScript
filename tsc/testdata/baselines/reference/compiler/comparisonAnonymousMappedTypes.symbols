@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/comparisonAnonymousMappedTypes.ts] ////
+
+=== comparisonAnonymousMappedTypes.ts ===
+declare function mapped<T>(): { [K in "value"]: T };
+>mapped : Symbol(mapped, Decl(comparisonAnonymousMappedTypes.ts, 0, 0))
+>T : Symbol(T, Decl(comparisonAnonymousMappedTypes.ts, 0, 24))
+>K : Symbol(K, Decl(comparisonAnonymousMappedTypes.ts, 0, 33))
+>T : Symbol(T, Decl(comparisonAnonymousMappedTypes.ts, 0, 24))
+
+declare function object<T>(): { value: T };
+>object : Symbol(object, Decl(comparisonAnonymousMappedTypes.ts, 0, 52))
+>T : Symbol(T, Decl(comparisonAnonymousMappedTypes.ts, 1, 24))
+>value : Symbol(value, Decl(comparisonAnonymousMappedTypes.ts, 1, 31))
+>T : Symbol(T, Decl(comparisonAnonymousMappedTypes.ts, 1, 24))
+
+declare function homomorphic<T>(): { [K in keyof T]: T[K] };
+>homomorphic : Symbol(homomorphic, Decl(comparisonAnonymousMappedTypes.ts, 1, 43))
+>T : Symbol(T, Decl(comparisonAnonymousMappedTypes.ts, 2, 29))
+>K : Symbol(K, Decl(comparisonAnonymousMappedTypes.ts, 2, 38))
+>T : Symbol(T, Decl(comparisonAnonymousMappedTypes.ts, 2, 29))
+>T : Symbol(T, Decl(comparisonAnonymousMappedTypes.ts, 2, 29))
+>K : Symbol(K, Decl(comparisonAnonymousMappedTypes.ts, 2, 38))
+
+export const mappedValues = [mapped<number>(), mapped<string>(), mapped<boolean>()];
+>mappedValues : Symbol(mappedValues, Decl(comparisonAnonymousMappedTypes.ts, 4, 12))
+>mapped : Symbol(mapped, Decl(comparisonAnonymousMappedTypes.ts, 0, 0))
+>mapped : Symbol(mapped, Decl(comparisonAnonymousMappedTypes.ts, 0, 0))
+>mapped : Symbol(mapped, Decl(comparisonAnonymousMappedTypes.ts, 0, 0))
+
+export const objectValues = [object<number>(), object<string>(), object<boolean>()];
+>objectValues : Symbol(objectValues, Decl(comparisonAnonymousMappedTypes.ts, 5, 12))
+>object : Symbol(object, Decl(comparisonAnonymousMappedTypes.ts, 0, 52))
+>object : Symbol(object, Decl(comparisonAnonymousMappedTypes.ts, 0, 52))
+>object : Symbol(object, Decl(comparisonAnonymousMappedTypes.ts, 0, 52))
+
+export const reversedMappedValues = [mapped<boolean>(), mapped<string>(), mapped<number>()];
+>reversedMappedValues : Symbol(reversedMappedValues, Decl(comparisonAnonymousMappedTypes.ts, 6, 12))
+>mapped : Symbol(mapped, Decl(comparisonAnonymousMappedTypes.ts, 0, 0))
+>mapped : Symbol(mapped, Decl(comparisonAnonymousMappedTypes.ts, 0, 0))
+>mapped : Symbol(mapped, Decl(comparisonAnonymousMappedTypes.ts, 0, 0))
+
+interface StringValue { value: string }
+>StringValue : Symbol(StringValue, Decl(comparisonAnonymousMappedTypes.ts, 6, 92))
+>value : Symbol(StringValue.value, Decl(comparisonAnonymousMappedTypes.ts, 8, 23))
+
+interface NumberValue { value: number }
+>NumberValue : Symbol(NumberValue, Decl(comparisonAnonymousMappedTypes.ts, 8, 39))
+>value : Symbol(NumberValue.value, Decl(comparisonAnonymousMappedTypes.ts, 9, 23))
+
+interface BooleanValue { value: boolean }
+>BooleanValue : Symbol(BooleanValue, Decl(comparisonAnonymousMappedTypes.ts, 9, 39))
+>value : Symbol(BooleanValue.value, Decl(comparisonAnonymousMappedTypes.ts, 10, 24))
+
+export const homomorphicValues = [
+>homomorphicValues : Symbol(homomorphicValues, Decl(comparisonAnonymousMappedTypes.ts, 12, 12))
+
+    homomorphic<NumberValue>(),
+>homomorphic : Symbol(homomorphic, Decl(comparisonAnonymousMappedTypes.ts, 1, 43))
+>NumberValue : Symbol(NumberValue, Decl(comparisonAnonymousMappedTypes.ts, 8, 39))
+
+    homomorphic<StringValue>(),
+>homomorphic : Symbol(homomorphic, Decl(comparisonAnonymousMappedTypes.ts, 1, 43))
+>StringValue : Symbol(StringValue, Decl(comparisonAnonymousMappedTypes.ts, 6, 92))
+
+    homomorphic<BooleanValue>()
+>homomorphic : Symbol(homomorphic, Decl(comparisonAnonymousMappedTypes.ts, 1, 43))
+>BooleanValue : Symbol(BooleanValue, Decl(comparisonAnonymousMappedTypes.ts, 9, 39))
+
+];
+export const reversedHomomorphicValues = [
+>reversedHomomorphicValues : Symbol(reversedHomomorphicValues, Decl(comparisonAnonymousMappedTypes.ts, 17, 12))
+
+    homomorphic<BooleanValue>(),
+>homomorphic : Symbol(homomorphic, Decl(comparisonAnonymousMappedTypes.ts, 1, 43))
+>BooleanValue : Symbol(BooleanValue, Decl(comparisonAnonymousMappedTypes.ts, 9, 39))
+
+    homomorphic<StringValue>(),
+>homomorphic : Symbol(homomorphic, Decl(comparisonAnonymousMappedTypes.ts, 1, 43))
+>StringValue : Symbol(StringValue, Decl(comparisonAnonymousMappedTypes.ts, 6, 92))
+
+    homomorphic<NumberValue>()
+>homomorphic : Symbol(homomorphic, Decl(comparisonAnonymousMappedTypes.ts, 1, 43))
+>NumberValue : Symbol(NumberValue, Decl(comparisonAnonymousMappedTypes.ts, 8, 39))
+
+];
+

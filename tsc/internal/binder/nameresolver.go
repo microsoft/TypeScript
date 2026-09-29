@@ -45,13 +45,18 @@ loop:
 			lastLocation = location
 			location = location.Parent
 		}
+		isModuleAttributes := ast.IsModuleDeclaration(location) &&
+			location.AsModuleDeclaration().Attributes != nil &&
+			lastLocation == location.AsModuleDeclaration().Attributes
 		locals := location.Locals()
 		// Locals of a source file are not in scope (because they get merged into the global symbol table)
 		if locals != nil && !ast.IsGlobalSourceFile(location) {
 			result = r.lookup(locals, name, meaning)
 			if result != nil {
 				useResult := true
-				if ast.IsFunctionLike(location) && lastLocation != nil && lastLocation != location.Body() {
+				if isModuleAttributes {
+					useResult = false
+				} else if ast.IsFunctionLike(location) && lastLocation != nil && lastLocation != location.Body() {
 					// symbol lookup restrictions for function-like declarations
 					// - Type parameters of a function are in scope in the entire function declaration, including the parameter
 					//   list and return type. However, local types are only in scope in the function body.
@@ -102,6 +107,9 @@ loop:
 			}
 			fallthrough
 		case ast.KindModuleDeclaration:
+			if isModuleAttributes {
+				break
+			}
 			moduleSymbol := r.getSymbolOfDeclaration(location)
 			if moduleSymbol == nil {
 				break

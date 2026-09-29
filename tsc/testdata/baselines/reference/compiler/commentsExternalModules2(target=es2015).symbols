@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/commentsExternalModules2.ts] ////
+
+=== commentsExternalModules_1.ts ===
+/**This is on import declaration*/
+import extMod = require("commentsExternalModules2_0"); // trailing comment 1
+>extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
+
+extMod.m1.fooExport();
+>extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
+
+export var newVar = new extMod.m1.m2.c();
+>newVar : Symbol(newVar, Decl(commentsExternalModules_1.ts, 3, 10))
+>extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
+
+extMod.m4.fooExport();
+>extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
+
+export var newVar2 = new extMod.m4.m2.c();
+>newVar2 : Symbol(newVar2, Decl(commentsExternalModules_1.ts, 5, 10))
+>extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
+

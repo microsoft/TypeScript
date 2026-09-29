@@ -8,7 +8,7 @@ declare module "ITest" {
 }
 
 // @Filename: a.ts
-//@module: amd
+//@module: commonjs
 /// <reference path="b.ts" />
 import ITest = require('ITest');
 var testData: ITest[];

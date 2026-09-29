@@ -381,8 +381,8 @@ func mergeExpandos(symbols []*lsproto.DocumentSymbol) []*lsproto.DocumentSymbol 
 		// Merge expandos.
 		if symbol.Kind == lsproto.SymbolKindProperty {
 			symbolsWithSameName := nameToExpandoTargetIndex.Get(symbol.Name)
-			for j := len(symbolsWithSameName) - 1; j >= 0; j-- {
-				targetIndex := symbolsWithSameName[j]
+			for _, targetIndex := range slices.Backward(symbolsWithSameName) {
+
 				targetSymbol := symbols[targetIndex]
 				mergeChildren(targetSymbol, symbol)
 				// Mark this symbol as merged.

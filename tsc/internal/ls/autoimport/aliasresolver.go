@@ -22,7 +22,7 @@ type pathAndFileName struct {
 type aliasResolver struct {
 	toPath         func(fileName string) tspath.Path
 	host           RegistryCloneHost
-	moduleResolver *module.Resolver
+	moduleResolver *module.DefaultResolver
 
 	rootFiles []*ast.SourceFile
 	// symlinks maps from realpath to symlinked path and file name
@@ -35,7 +35,7 @@ func newAliasResolver(
 	rootFiles []*ast.SourceFile,
 	symlinks map[tspath.Path]pathAndFileName,
 	host RegistryCloneHost,
-	moduleResolver *module.Resolver,
+	moduleResolver *module.DefaultResolver,
 	toPath func(fileName string) tspath.Path,
 	onFailedAmbientModuleLookup func(source ast.HasFileName, moduleName string),
 ) *aliasResolver {
@@ -119,7 +119,7 @@ func (r *aliasResolver) GetResolvedModule(currentSourceFile ast.HasFileName, mod
 	if resolved, ok := cache.Load(module.ModeAwareCacheKey{Name: moduleReference, Mode: mode}); ok {
 		return resolved
 	}
-	resolved, _ := r.moduleResolver.ResolveModuleName(moduleReference, currentSourceFile.FileName(), mode, nil)
+	resolved, _, _ := r.moduleResolver.ResolveModuleName(moduleReference, currentSourceFile.FileName(), mode, nil)
 	resolved, _ = cache.LoadOrStore(module.ModeAwareCacheKey{Name: moduleReference, Mode: mode}, resolved)
 	if !resolved.IsResolved() && !tspath.PathIsRelative(moduleReference) {
 		r.onFailedAmbientModuleLookup(currentSourceFile, moduleReference)
@@ -177,7 +177,7 @@ func (r *aliasResolver) GetImportHelpersImportSpecifier(path tspath.Path) *ast.N
 
 // GetJSXRuntimeImportSpecifier implements checker.Program.
 func (r *aliasResolver) GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node) {
-	panic("unimplemented")
+	return "", nil
 }
 
 // GetNearestAncestorDirectoryWithPackageJson implements checker.Program.

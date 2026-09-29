@@ -15,7 +15,7 @@ import (
 )
 
 type Project interface {
-	Id() tspath.Path
+	Id() string
 	GetProgram() *compiler.Program
 	HasFile(fileName string) bool
 }
@@ -43,8 +43,7 @@ type CrossProjectOrchestrator interface {
 	GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[Project]
 }
 
-func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
-	defaultLs *LanguageService,
+func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 	ctx context.Context,
 	params Req,
 	orchestrator CrossProjectOrchestrator,
@@ -71,7 +70,7 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 
 	defaultProject := orchestrator.GetDefaultProject()
 	allProjects := orchestrator.GetAllProjectsForInitialRequest()
-	var results collections.SyncMap[tspath.Path, *response[Resp]]
+	var results collections.SyncMap[string, *response[Resp]]
 	var defaultDefinition *nonLocalDefinition
 	canSearchProject := func(project Project) bool {
 		_, searched := results.Load(project.Id())
@@ -80,7 +79,7 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 	wg := core.NewWorkGroup(false)
 	var errMu sync.Mutex
 	var enqueueItem func(item projectAndTextDocumentPosition)
-	var panicsOccured []string
+	var panicsOccurred []string
 	var panicMu sync.Mutex
 	enqueueItem = func(item projectAndTextDocumentPosition) {
 		var response response[Resp]
@@ -94,9 +93,9 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 			defer func() {
 				if r := recover(); r != nil {
 					stack := debug.Stack()
-					panicOccured := fmt.Sprintf("panic handling request: %v\n%s", r, string(stack))
+					panicOccurred := fmt.Sprintf("panic handling request: %v\n%s", r, string(stack))
 					panicMu.Lock()
-					panicsOccured = append(panicsOccured, panicOccured)
+					panicsOccurred = append(panicsOccurred, panicOccurred)
 					panicMu.Unlock()
 				}
 			}()
@@ -184,7 +183,7 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 
 	getResultsIterator := func() iter.Seq[Resp] {
 		return func(yield func(Resp) bool) {
-			var seenProjects collections.SyncSet[tspath.Path]
+			var seenProjects collections.SyncSet[string]
 			if response, loaded := results.Load(defaultProject.Id()); loaded && response.complete {
 				if !yield(response.result) {
 					return
@@ -201,14 +200,14 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 				}
 			}
 			// Prefer the searches from locations for default definition
-			results.Range(func(key tspath.Path, response *response[Resp]) bool {
+			results.Range(func(key string, response *response[Resp]) bool {
 				if !response.forOriginalLocation && seenProjects.AddIfAbsent(key) && response.complete {
 					return yield(response.result)
 				}
 				return true
 			})
 			// Then the searches from original locations
-			results.Range(func(key tspath.Path, response *response[Resp]) bool {
+			results.Range(func(key string, response *response[Resp]) bool {
 				if response.forOriginalLocation && seenProjects.AddIfAbsent(key) && response.complete {
 					return yield(response.result)
 				}
@@ -222,8 +221,8 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 		// Process existing known projects first
 		wg.RunAndWait()
 		// No need to use mu here since we are not in parallel at this point
-		if panicsOccured != nil {
-			panic(fmt.Sprintf("Panics occurred during cross-project handling: %v", panicsOccured))
+		if panicsOccurred != nil {
+			panic(fmt.Sprintf("Panics occurred during cross-project handling: %v", panicsOccurred))
 		}
 		if ctx.Err() != nil {
 			return resp, ctx.Err()
@@ -236,9 +235,9 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 		hasMoreWork := false
 		if defaultDefinition != nil {
 			var requestedProjectTrees collections.Set[tspath.Path]
-			results.Range(func(key tspath.Path, response *response[Resp]) bool {
+			results.Range(func(key string, response *response[Resp]) bool {
 				if response.complete {
-					requestedProjectTrees.Add(key)
+					requestedProjectTrees.Add(tspath.Path(key))
 				}
 				return true
 			})

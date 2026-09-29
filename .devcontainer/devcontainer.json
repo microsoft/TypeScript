@@ -1,6 +1,6 @@
 {
     "name": "TypeScript Compiler Development",
-    "image": "mcr.microsoft.com/devcontainers/go:dev-1.26-bookworm",
+    "image": "mcr.microsoft.com/devcontainers/go:1.27-bookworm",
     "features": {
         "ghcr.io/devcontainers/features/node:2": {
             "version": "24",
@@ -13,9 +13,9 @@
         "ghcr.io/devcontainers/features/github-cli:1": {}
     },
     "postCreateCommand": {
-        "Install dependencies": "npm ci; go -C ./tsc mod download; go -C ./tools mod download",
-        "Install repository tools": "npx hereby install-tools; go install github.com/google/pprof@latest",
-        "Install Graphviz": "sudo apt update -y; sudo apt install -y graphviz"
+        "Install Go Dependencies": "go -C ./tsc mod download && go -C ./tools mod download",
+        "Install npm Dependencies & Go Tools": "npm ci && npx hereby install-tools",
+        "Install Graphviz": "sudo apt update -y && sudo apt install -y graphviz"
     },
     "customizations": {
         "vscode": {

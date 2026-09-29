@@ -1,4 +1,4 @@
-//@module: *
+//@module: *, -amd
 //@target: ES2022
 //@declaration: true
 

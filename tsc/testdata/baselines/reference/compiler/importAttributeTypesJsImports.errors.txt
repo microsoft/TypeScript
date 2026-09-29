@@ -1,0 +1,36 @@
+/index.js(13,23): error TS2339: Property 'textOnly' does not exist on type 'typeof import("*.asset", { with: { type: "css" } })'.
+/index.js(15,24): error TS2339: Property 'cssOnly' does not exist on type 'typeof import("*.asset", { with: { type: "text" } })'.
+
+
+==== /types.d.ts (0 errors) ====
+    declare module "*.asset" with { type: "css" } {
+        export const shared: "css";
+        export const cssOnly: "css-only";
+    }
+    
+    declare module "*.asset" with { type: "text" } {
+        export const shared: "text";
+        export const textOnly: "text-only";
+    }
+    
+==== /index.js (2 errors) ====
+    /** @import * as css from "./file.asset" with { type: "css" } */
+    /** @import * as text from "./file.asset" with { type: "text" } */
+    
+    /** @type {typeof css.shared} */
+    const cssShared = "css";
+    /** @type {typeof text.shared} */
+    const textShared = "text";
+    
+    /** @type {typeof css.cssOnly} */
+    const cssOnly = "css-only";
+    /** @type {typeof text.textOnly} */
+    const textOnly = "text-only";
+    /** @type {typeof css.textOnly} */
+                          ~~~~~~~~
+!!! error TS2339: Property 'textOnly' does not exist on type 'typeof import("*.asset", { with: { type: "css" } })'.
+    const cssTextOnly = "text-only";
+    /** @type {typeof text.cssOnly} */
+                           ~~~~~~~
+!!! error TS2339: Property 'cssOnly' does not exist on type 'typeof import("*.asset", { with: { type: "text" } })'.
+    const textCssOnly = "css-only";

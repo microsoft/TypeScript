@@ -27,7 +27,7 @@ import type {
 
 interface StdioHandle {
     fd: number;
-    setBlocking?: (value: boolean) => void;
+    setBlocking?: ((value: boolean) => void) | undefined;
 }
 
 interface StdoutWithHandle extends Readable {
@@ -242,6 +242,10 @@ export class SyncRpcChannel {
     /** Register a string→string callback that the child may invoke. */
     registerCallback(name: string, callback: (name: string, payload: string) => string): void {
         this.callbacks.set(name, callback);
+    }
+
+    unregisterCallback(name: string): void {
+        this.callbacks.delete(name);
     }
 
     /** Kill the child process and release resources. */

@@ -3,10 +3,14 @@ import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
+import { IndexKind } from "#enums/indexKind";
+import { JsxEmit } from "#enums/jsxEmit";
 import { ModuleKind } from "#enums/moduleKind";
+import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
+import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
@@ -15,14 +19,19 @@ import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
+    type CallLikeExpression,
     type Declaration,
     type Expression,
+    type FileReference,
     type Identifier,
     type IndexSignatureDeclaration,
     ModifierFlags,
+    type NamedTupleMember,
     type Node,
+    type ParameterDeclaration,
     type Path,
     type SourceFile,
+    type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
     unescapeLeadingUnderscores,
@@ -38,6 +47,7 @@ import {
     parseNodeHandle,
     readParseOptionsKey,
     readSourceFileHash,
+    readSourceFileLease,
     RemoteSourceFile,
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
@@ -50,35 +60,56 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    BuildResponse,
+    CleanBuildResponse,
     CompilerOptions,
+    ConfiguredProjectId,
+    CreateBuildOrchestratorResponse,
+    CreateProgramOptions as ProtocolCreateProgramOptions,
+    CreateSnapshotParams as ProtocolCreateSnapshotParams,
+    CreateSnapshotProgramParams as ProtocolCreateSnapshotProgramParams,
+    CreateSnapshotResponse,
+    CreateSourceFileOptions,
     Diagnostic,
+    DiagnosticResponse,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
+    FileNotifications,
     ImportAdderAction,
+    InferredProjectId,
     IntrinsicTypeMethod,
-    LSPUpdateSnapshotParams,
+    LanguageServerSnapshotChanges as ProtocolLanguageServerSnapshotChanges,
+    ModuleResolutionEntry,
+    ModuleResolutionSpec,
+    PackageId,
     ParsedCommandLine,
+    ProjectId,
     ProjectReference,
     ProjectResponse,
     ReadConfigFileResponse,
+    ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
+    ResolutionMode,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
+    ResolveModuleNameResult,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
+    StaticModuleResolution,
     SymbolPropertyMethod,
     SymbolResponse,
     SymbolsPropertyMethod,
+    SyntheticProjectId,
     TextEdit,
     TypeAcquisition,
     TypePropertyMethod,
     TypeResponse,
     TypesPropertyMethod,
-    UpdateSnapshotParams,
-    UpdateSnapshotResponse,
 } from "../proto.ts";
 import {
     resolveFileName,
-    toUpdateSnapshotRequest,
+    toCreateSnapshotRequest,
 } from "../proto.ts";
 import { SourceFileCache } from "../sourceFileCache.ts";
 import type {
@@ -105,6 +136,7 @@ import type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     ImportAdderAction as APIImportAdderAction,
@@ -116,6 +148,7 @@ import type {
     IntrinsicType,
     JSDocTagInfo,
     LiteralType,
+    MappedType,
     NumberLiteralType,
     ObjectType,
     StringLiteralType,
@@ -125,6 +158,7 @@ import type {
     TemplateLiteralType,
     ThisTypePredicate,
     TupleType,
+    TupleTypeReference,
     Type,
     TypeParameter,
     TypePredicate,
@@ -136,7 +170,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -151,42 +185,59 @@ export type {
     CompletionInfo,
     CompletionOptions,
     ConditionalType,
+    ConfiguredProjectId,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutput,
     EmitOutputFile,
     EmitResult,
+    FileNotifications,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     IndexedAccessType,
     IndexInfo,
     IndexType,
+    InferredProjectId,
     InterfaceType,
     IntersectionType,
     IntrinsicType,
     JSDocTagInfo,
     LiteralType,
     LSPConnectionOptions,
+    MappedType,
+    ModuleResolutionEntry,
+    ModuleResolutionSpec,
     NumberLiteralType,
     ObjectType,
+    PackageId,
     ParsedCommandLine,
+    ProjectId,
     ProjectReference,
     ReadConfigFileResponse,
     RequestTiming,
+    ResolutionMode,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
+    ResolveModuleNameResult,
     SourceFileMetadata,
+    StaticModuleResolution,
     StringLiteralType,
     StringMappingType,
     StructuredType,
     SubstitutionType,
+    SyntheticProjectId,
     TemplateLiteralType,
     TextEdit,
     ThisTypePredicate,
     TimingAccumulators,
     TimingInfo,
     TupleType,
+    TupleTypeReference,
     Type,
     TypeAcquisition,
     TypeParameter,
@@ -197,21 +248,78 @@ export type {
     UnionType,
 };
 
+export interface ModuleResolverOptions {
+    moduleResolutions?: ModuleResolutionSpec | undefined;
+    resolveModuleName?: ResolveModuleNameCallback | undefined;
+}
+
+export interface ResolveModuleNameCallbackOptions {
+    snapshot: Snapshot | InProgressSnapshot | undefined;
+}
+
+declare const inProgressSnapshotBrand: unique symbol;
+export type InProgressSnapshot = number & { readonly [inProgressSnapshotBrand]: never; };
+
+export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => StaticModuleResolution | undefined | Promise<StaticModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => StaticModuleResolution | undefined;
+
+export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
+    moduleResolver?: ModuleResolver | undefined;
+};
+export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
+export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
+export type CreateSnapshotParams = Omit<ProtocolCreateSnapshotParams, "createPrograms" | "reconfigurePrograms"> & {
+    createPrograms?: readonly CreateSnapshotProgramParams[] | undefined;
+    reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
+};
+export type LanguageServerSnapshotChanges = Omit<ProtocolLanguageServerSnapshotChanges, "createPrograms" | "reconfigurePrograms"> & {
+    createPrograms?: readonly CreateSnapshotProgramParams[] | undefined;
+    reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
+};
+
+let nextModuleResolutionCallbackId = 0;
+function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback, getSnapshot: (id: number) => Snapshot | undefined): { name: string; dispose: () => void; } {
+    const name = `resolveModuleName/${++nextModuleResolutionCallbackId}`;
+    const dispose = client.registerCallback(name, params => {
+        const { moduleName, containingDirectory, resolutionMode, snapshot: snapshotId, inProgressSnapshot } = params as {
+            moduleName: string;
+            containingDirectory: string;
+            resolutionMode?: ResolutionMode;
+            snapshot?: number;
+            inProgressSnapshot?: number;
+        };
+        let snapshot: Snapshot | InProgressSnapshot | undefined = snapshotId === undefined ? undefined : getSnapshot(snapshotId);
+        if (snapshotId !== undefined && snapshot === undefined) {
+            throw new Error(`Snapshot ${snapshotId} is inactive`);
+        }
+        if (inProgressSnapshot !== undefined) {
+            snapshot = -inProgressSnapshot as InProgressSnapshot;
+        }
+        return callback(
+            moduleName,
+            containingDirectory,
+            resolutionMode,
+            { snapshot },
+        );
+    });
+    return { name, dispose };
+}
+
 export interface TranspileOptions {
-    compilerOptions?: CompilerOptions;
-    fileName?: string;
-    reportDiagnostics?: boolean;
+    compilerOptions?: CompilerOptions | undefined;
+    fileName?: string | undefined;
+    reportDiagnostics?: boolean | undefined;
 }
 
 export interface TranspileOutput {
     outputText: string;
-    diagnostics?: readonly Diagnostic[];
-    sourceMapText?: string;
+    diagnostics?: readonly Diagnostic[] | undefined;
+    sourceMapText?: string | undefined;
 }
 
 // @sync-only-start
-// export { all } from "./generatorSupport.ts";
-// import {all, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
+// export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
+// import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
+// import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -219,15 +327,20 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
     private currentDirectory: string | undefined;
+    private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
-    private activeSnapshots: Set<Snapshot> = new Set();
-    private latestSnapshot: Snapshot | undefined;
+    private initializing: Promise<void> | undefined;
+    private activeSnapshots: Map<number, Snapshot> = new Map();
+    private activeBuildOrchestrators: Set<BuildOrchestrator> = new Set();
+    private activeSourceFileLeases: Map<number, RetainedSourceFile> = new Map();
+    readonly printer: Printer;
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
+        this.printer = new Printer(this.client);
         this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
     }
 
@@ -247,18 +360,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
     // @sync-skip-block-end
     // @sync-only-start
-    // batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-    //     const batches = all(...requestGenerators);
-    //     let state = batches.next();
-    //     while (!state.done) {
-    //         state = batches.next(this.client.batchRequests(state.value).responses);
-    //     }
-    //     return state.value;
+    // batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+    //     return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
     // }
     // @sync-only-end
 
     private async ensureInitialized(): Promise<void> {
-        if (!this.initialized) {
+        if (this.initialized) return;
+        return this.initializing ??= this.initializeWorker();
+    }
+
+    private async initializeWorker(): Promise<void> {
+        try {
             const response = await this.client.apiRequest("initialize", null);
             const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
             const currentDirectory = response.currentDirectory;
@@ -266,6 +379,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             this.currentDirectory = currentDirectory;
             this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
             this.initialized = true;
+        }
+        catch (error) {
+            this.initializing = undefined;
+            throw error;
         }
     }
 
@@ -285,6 +402,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     getNewLine(): string {
         return "\n";
+    }
+
+    async createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Promise<BuildOrchestrator> {
+        await this.ensureInitialized();
+        const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
+            ...buildOrchestratorOptions,
+            ...buildOrchestratorOptions.overrideCompilerOptions,
+            rootNames,
+        });
+
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
+            this.activeBuildOrchestrators.delete(orchestrator);
+        });
+        this.activeBuildOrchestrators.add(orchestrator);
+        return orchestrator;
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
@@ -312,14 +444,67 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("parseJsonConfigFileContent", { json, ...options });
     }
 
+    /**
+     * Create and retain a source file independently of a program.
+     * Dispose the returned lease when the source file no longer needs to remain available remotely.
+     */
+    async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<RetainedSourceFile> {
+        await this.ensureInitialized();
+        const data = await this.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
+        if (!data) {
+            throw new Error("createSourceFile returned no source file");
+        }
+        return this.retainSourceFileResponse(data);
+    }
+
+    /**
+     * Read, create, and retain a source file independently of a program.
+     * Dispose the returned lease when the source file no longer needs to remain available remotely.
+     */
+    async createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Promise<RetainedSourceFile> {
+        await this.ensureInitialized();
+        const data = await this.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
+        if (!data) {
+            throw new Error("createSourceFileFromFile returned no source file");
+        }
+        return this.retainSourceFileResponse(data);
+    }
+
+    private retainSourceFileResponse(data: Uint8Array): RetainedSourceFile {
+        const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+        const lease = readSourceFileLease(view);
+        try {
+            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+            const sourceFile = this.sourceFileCache.setForLease(decoded.path, decoded, readParseOptionsKey(view), readSourceFileHash(view), lease);
+            const retained = new RetainedSourceFile(sourceFile, lease, this.client, () => {
+                this.activeSourceFileLeases.delete(lease);
+                this.sourceFileCache.releaseLease(lease);
+            });
+            this.activeSourceFileLeases.set(lease, retained);
+            return retained;
+        }
+        catch (error) {
+            // @sync-skip-block-start
+            void this.client.apiRequest("releaseSourceFile", { lease }).catch(() => {});
+            // @sync-skip-block-end
+            // @sync-only-start
+            // try {
+            //     this.client.apiRequest("releaseSourceFile", { lease });
+            // }
+            // catch {}
+            // @sync-only-end
+            throw error;
+        }
+    }
+
     async transpileModule(input: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
         await this.ensureInitialized();
         return this.client.apiRequest("transpileModule", { input, options });
     }
 
-    async transpileModuleFromFile(fileName: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
+    async transpileModuleFromFile(file: DocumentIdentifier, options: TranspileOptions = {}): Promise<TranspileOutput> {
         await this.ensureInitialized();
-        return this.client.apiRequest("transpileModuleFromFile", { fileName, options });
+        return this.client.apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
     }
 
     async transpileDeclaration(input: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
@@ -327,24 +512,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("transpileDeclaration", { input, options });
     }
 
-    async transpileDeclarationFromFile(fileName: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
+    async transpileDeclarationFromFile(file: DocumentIdentifier, options: TranspileOptions = {}): Promise<TranspileOutput> {
         await this.ensureInitialized();
-        return this.client.apiRequest("transpileDeclarationFromFile", { fileName, options });
+        return this.client.apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
     }
 
-    async updateSnapshot(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Promise<Snapshot> {
+    createSnapshot<
+        const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
+        const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
+    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
+    createSnapshot(): Promise<Snapshot>;
+    async createSnapshot(params?: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
 
-        const requestParams = toUpdateSnapshotRequest(params);
-        const data = await this.client.apiRequest("updateSnapshot", requestParams);
-
-        // Retain cached source files from previous snapshot for unchanged files
-        if (this.latestSnapshot) {
-            this.sourceFileCache.retainForSnapshot(data.snapshot, this.latestSnapshot.id, data.changes);
-            if (this.latestSnapshot.isDisposed()) {
-                this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
-            }
-        }
+        const requestParams = toCreateSnapshotRequest(this.prepareCreateSnapshotParams(params));
+        const data = await this.client.apiRequest("createSnapshot", requestParams);
 
         const snapshot = new Snapshot(
             data,
@@ -353,30 +535,174 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             this.toPath!,
             this,
             () => {
-                this.activeSnapshots.delete(snapshot);
-                if (snapshot !== this.latestSnapshot) {
-                    this.sourceFileCache.releaseSnapshot(snapshot.id);
-                }
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
+            this.createSnapshotUpdater(() => snapshot),
+            undefined,
         );
-        this.latestSnapshot = snapshot;
-        this.activeSnapshots.add(snapshot);
+        this.activeSnapshots.set(snapshot.id, snapshot);
 
         return snapshot;
     }
 
+    private async updateSnapshot(baseSnapshot: Snapshot, params: CreateSnapshotParams): Promise<Snapshot> {
+        await this.ensureInitialized();
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
+            throw new Error("Cannot update an inactive snapshot");
+        }
+
+        const data = await this.client.apiRequest("updateSnapshot", {
+            snapshot: baseSnapshot.id,
+            changes: toCreateSnapshotRequest(this.prepareCreateSnapshotParams(params)),
+        });
+        if (data.snapshot === baseSnapshot.id) {
+            await this.client.apiRequest("release", { snapshot: data.snapshot });
+            return baseSnapshot;
+        }
+        this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+        const snapshot = new Snapshot(
+            data,
+            this.client,
+            this.sourceFileCache,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+        return snapshot;
+    }
+
+    private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams | undefined {
+        if (!params) return undefined;
+        const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
+            if (!options) return undefined;
+            const { moduleResolver, ...rest } = options;
+            moduleResolver?.ensureNotDisposed();
+            return {
+                ...rest,
+                moduleResolver: moduleResolver?.id,
+            };
+        };
+        return {
+            ...params,
+            createPrograms: params.createPrograms?.map(program => ({ ...program, options: prepareOptions(program.options) })),
+            reconfigurePrograms: params.reconfigurePrograms?.map(program => ({ ...program, options: prepareOptions(program.options) })),
+        };
+    }
+
+    private prepareLanguageServerSnapshotChanges(changes: LanguageServerSnapshotChanges | undefined): ProtocolLanguageServerSnapshotChanges | undefined {
+        if (!changes) return undefined;
+        const prepared = this.prepareCreateSnapshotParams(changes);
+        return prepared;
+    }
+
+    private createSnapshotUpdater(getSnapshot: () => Snapshot): SnapshotUpdater {
+        const update: SnapshotUpdater = params => this.updateSnapshot(getSnapshot(), params); // @sync: const update = ((params: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
+        // @sync-only-start
+        // const owner = this;
+        // update.gen = function* (params: CreateSnapshotParams) { return yield* owner.updateSnapshot.gen(getSnapshot(), params); };
+        // @sync-only-end
+        return update;
+    }
+
+    /**
+     * Returns the language server's current canonical snapshot after atomically
+     * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
+     */
+    getCurrentLanguageServerSnapshot<
+        const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined,
+        const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined,
+    >(
+        ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+            : [changes: never, baseSnapshot?: never]
+    ): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
+    getCurrentLanguageServerSnapshot(
+        ...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]
+    ): Promise<Snapshot>;
+    async getCurrentLanguageServerSnapshot(
+        ...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]
+    ): Promise<Snapshot> {
+        await this.ensureInitialized();
+
+        const changes = args[0] as LanguageServerSnapshotChanges | undefined;
+        const baseSnapshot = args[1] as Snapshot | undefined;
+        if (baseSnapshot && (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
+            throw new Error("Cannot use an inactive snapshot as a response base");
+        }
+        const data = await this.client.apiRequest("getCurrentLanguageServerSnapshot", {
+            baseSnapshot: baseSnapshot?.id,
+            changes: this.prepareLanguageServerSnapshotChanges(changes),
+        });
+        if (baseSnapshot) {
+            this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+        }
+        const snapshot = new Snapshot(
+            data,
+            this.client,
+            this.sourceFileCache,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+        return snapshot;
+    }
+
+    async [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        await this.close(); // @sync: this.close();
+    }
+
     async close(): Promise<void> {
-        // Dispose all active snapshots
-        for (const snapshot of [...this.activeSnapshots]) {
-            await snapshot.dispose();
+        await this.initializing?.catch(() => {}); // @sync-skip
+        try {
+            for (const retained of [...this.activeSourceFileLeases.values()]) {
+                await retained.dispose();
+            }
         }
-        // Release the latest snapshot's cache refs if still held
-        if (this.latestSnapshot) {
-            this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
-            this.latestSnapshot = undefined;
+        finally {
+            try {
+                for (const orchestrator of [...this.activeBuildOrchestrators]) {
+                    await orchestrator.dispose();
+                }
+                for (const snapshot of [...this.activeSnapshots.values()]) {
+                    await snapshot.dispose();
+                }
+                this.sourceFileCache.clear();
+            }
+            finally {
+                await this.client.close(); // always close the underlying connection
+            }
         }
-        await this.client.close();
-        this.sourceFileCache.clear();
+    }
+
+    async createModuleResolver(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
+        await this.ensureInitialized();
+        const callback = options?.resolveModuleName
+            ? registerModuleResolutionCallback(this.client, options.resolveModuleName, id => this.activeSnapshots.get(id))
+            : undefined;
+        try {
+            const id = await this.client.apiRequest("createModuleResolver", {
+                compilerOptions,
+                moduleResolutions: options?.moduleResolutions,
+                resolveModuleNameCallback: callback?.name,
+            });
+            return new ModuleResolver(id, this.client, callback?.dispose);
+        }
+        catch (error) {
+            callback?.dispose();
+            throw error;
+        }
     }
 
     clearSourceFileCache(): void {
@@ -386,28 +712,16 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     async runWithTemporaryFileUpdate(baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void | Promise<void>): Promise<void> {
         await this.ensureInitialized();
 
-        if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
             throw new Error("Cannot run a temporary file update on an inactive snapshot");
         }
-        const data = await this.client.apiRequest("updateTemporarySnapshot", { snapshot: baseSnapshot.id, file, newText });
-
-        // Retain cached source files from the base snapshot for files unchanged by
-        // the temporary update. The temporary snapshot is not the latest snapshot, so
-        // we never release the latest snapshot's cache here.
-        this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-
-        const snapshot = new Snapshot(
-            data,
-            this.client,
-            this.sourceFileCache,
-            this.toPath!,
-            this,
-            () => {
-                this.activeSnapshots.delete(snapshot);
-                this.sourceFileCache.releaseSnapshot(snapshot.id);
+        const snapshot = await baseSnapshot.update({
+            fileSystem: {
+                kind: "layer",
+                files: { [resolveFileName(file)]: newText },
             },
-        );
-        this.activeSnapshots.add(snapshot);
+            ensurePrograms: true,
+        });
 
         try {
             await cb(snapshot);
@@ -436,9 +750,65 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     resetTimingInfo(): Promise<void> {
         return this.client.resetTimingInfo();
     }
+
+    /** Creates a program from current filesystem state. */
+    async createProgram(
+        rootFiles: readonly DocumentIdentifier[],
+        compilerOptions: CompilerOptions,
+        createProgramOptions?: CreateProgramOptions,
+    ): Promise<Program> {
+        await this.ensureInitialized();
+
+        const snapshot = await this.createSnapshot({
+            createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
+        });
+        const program = snapshot.operation.createdPrograms![0];
+        if (!program) {
+            await snapshot.dispose();
+            throw new Error("createProgram did not return a project");
+        }
+        program.setOwnedSnapshot(snapshot);
+        return program;
+    }
 }
 
 type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
+
+/** An independently retained source file and its disposable remote-lifetime lease. */
+export class RetainedSourceFile {
+    readonly sourceFile: SourceFile;
+    private readonly lease: number;
+    private readonly client: Client;
+    private readonly onDispose: () => void;
+    private disposed = false;
+    private disposePromise: Promise<void> | undefined;
+
+    constructor(sourceFile: SourceFile, lease: number, client: Client, onDispose: () => void) {
+        this.sourceFile = sourceFile;
+        this.lease = lease;
+        this.client = client;
+        this.onDispose = onDispose;
+    }
+
+    [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        return this.dispose(); // @sync: this.dispose();
+    }
+
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            await this.client.apiRequest("releaseSourceFile", { lease: this.lease });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+}
 
 export class InternalAPI {
     private client: Client;
@@ -468,35 +838,115 @@ export class InternalAPI {
     }
 }
 
+type SnapshotUpdater = (params: CreateSnapshotParams) => Promise<Snapshot>; // @sync: type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
+
+export interface SnapshotOperation {
+    readonly createdPrograms?: readonly Program<SyntheticProjectId>[] | undefined;
+    readonly openedFiles?: readonly SnapshotOpenedFileOperation[] | undefined;
+}
+
+export interface SnapshotOpenedFileOperation {
+    readonly project: Project;
+}
+
+/** Replaces every element of a tuple while preserving its length and index structure. */
+type MapTupleTo<Tuple extends readonly unknown[], Result> = {
+    readonly [Index in keyof Tuple]: Result;
+};
+
+/**
+ * Keeps `Tuple` as an inference target while contextually typing each element from
+ * `Elements`. The mapped intersection supplies nested completions and excess-property
+ * checks without widening an inferred tuple to an array.
+ */
+type ContextualizeTuple<
+    Tuple extends readonly unknown[] | undefined,
+    Elements extends readonly unknown[] | undefined,
+> =
+    & Tuple
+    & {
+        readonly [Index in keyof Tuple]: NonNullable<Elements>[number];
+    };
+
+/** Substitutes the operation arrays with contextually typed, tuple-preserving versions. */
+type SnapshotOperationParams<
+    Params extends { createPrograms?: readonly unknown[] | undefined; openFiles?: readonly unknown[] | undefined; },
+    CreatePrograms extends Params["createPrograms"],
+    OpenFiles extends Params["openFiles"],
+> = Omit<Params, "createPrograms" | "openFiles"> & {
+    createPrograms?: ContextualizeTuple<CreatePrograms, Params["createPrograms"]> | undefined;
+    openFiles?: ContextualizeTuple<OpenFiles, Params["openFiles"]> | undefined;
+};
+
+/**
+ * Refines a snapshot's operation results to required tuples when the corresponding
+ * operation arrays were supplied, preserving their lengths for indexed access.
+ */
+type SnapshotForOperationResults<
+    CreatePrograms extends readonly unknown[] | undefined,
+    OpenFiles extends readonly unknown[] | undefined,
+> = Snapshot & {
+    readonly operation:
+        & SnapshotOperation
+        & (CreatePrograms extends readonly unknown[] ? { readonly createdPrograms: MapTupleTo<CreatePrograms, Program<SyntheticProjectId>>; } : unknown)
+        & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
+};
+
+/** Derives the refined snapshot result type from a complete operation parameter type. */
+export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
+    Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
+    Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined
+>;
+
 export class Snapshot {
     readonly id: number;
-    private projectMap: Map<Path, Project>;
+    readonly operation: SnapshotOperation;
+    private projectMap: Map<ProjectId, Project>;
     private toPath: (fileName: string) => Path;
     private client: Client;
     private disposed: boolean = false;
+    private disposePromise: Promise<void> | undefined;
     private onDispose: () => void;
     private snapshotRegistry: SnapshotObjectRegistry;
+    private projectDataMap: Map<ProjectId, ProjectResponse>;
+    private updateSnapshot: SnapshotUpdater;
     readonly internal: SnapshotInternalAPI;
 
     constructor(
-        data: UpdateSnapshotResponse,
+        data: CreateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
+        updateSnapshot: SnapshotUpdater,
+        baseSnapshot?: Snapshot,
     ) {
         this.id = data.snapshot;
         this.client = client;
         this.toPath = toPath;
         this.onDispose = onDispose;
+        this.updateSnapshot = updateSnapshot;
         this.projectMap = new Map();
+        const projectDataMap = new Map(baseSnapshot?.projectDataMap);
+        for (const projectId of data.changes?.removedProjects ?? []) {
+            projectDataMap.delete(projectId);
+        }
+        for (const projectData of data.projects) {
+            projectDataMap.set(projectData.id, projectData);
+        }
+        this.projectDataMap = new Map([...projectDataMap].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
-        for (const projData of data.projects) {
+        for (const projData of this.projectDataMap.values()) {
             const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
-            this.projectMap.set(toPath(projData.configFileName), project);
+            this.projectMap.set(projData.id, project);
         }
+
+        this.operation = {
+            createdPrograms: data.operation.createdPrograms?.map(projectId => this.requireProject(projectId).program),
+            openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
+        };
 
         this.internal = new SnapshotInternalAPI(this.id, client);
     }
@@ -506,11 +956,36 @@ export class Snapshot {
         return [...this.projectMap.values()];
     }
 
-    getProject(configFileName: string): Project | undefined {
+    getConfiguredProject(configFileName: string): Project<ConfiguredProjectId> | undefined {
         this.ensureNotDisposed();
-        return this.projectMap.get(this.toPath(configFileName));
+        return this.projectMap.get(this.toPath(configFileName) as ConfiguredProjectId) as Project<ConfiguredProjectId> | undefined;
     }
 
+    getProject<Id extends ProjectId>(projectId: Id): Project<Id> | undefined {
+        this.ensureNotDisposed();
+        return this.projectMap.get(projectId) as Project<Id> | undefined;
+    }
+
+    getProgram<Id extends ProjectId>(projectId: Id): Program<Id> | undefined {
+        return this.getProject(projectId)?.program;
+    }
+
+    update<
+        const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
+        const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
+    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
+    update(params: CreateSnapshotParams): Promise<Snapshot>;
+    update(params: CreateSnapshotParams): Promise<Snapshot> {
+        this.ensureNotDisposed();
+        return this.updateSnapshot(params);
+    }
+
+    /**
+     * Gets the default project for a given file from the configured projects and
+     * inferred project already loaded in the snapshot. Synthetic projects are not
+     * considered. Files that have been opened with `openFiles` are guaranteed to
+     * have a result.
+     */
     async getDefaultProjectForFile(file: DocumentIdentifier): Promise<Project | undefined> {
         this.ensureNotDisposed();
         const data = await this.client.apiRequest("getDefaultProjectForFile", {
@@ -518,14 +993,17 @@ export class Snapshot {
             file,
         });
         if (!data) return undefined;
-        return this.projectMap.get(this.toPath(data.configFileName));
+        return this.projectMap.get(data.id);
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        void this.dispose();
+    }
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
     }
 
-    async dispose(): Promise<void> {
+    private async disposeWorker(): Promise<void> {
         if (this.disposed) return;
         this.disposed = true;
         for (const project of this.projectMap.values()) {
@@ -533,8 +1011,12 @@ export class Snapshot {
         }
         this.projectMap.clear();
         this.snapshotRegistry.clear();
-        this.onDispose();
-        await this.client.apiRequest("release", { snapshot: this.id });
+        try {
+            await this.client.apiRequest("release", { snapshot: this.id });
+        }
+        finally {
+            this.onDispose();
+        }
     }
 
     isDisposed(): boolean {
@@ -546,22 +1028,79 @@ export class Snapshot {
             throw new Error("Snapshot is disposed");
         }
     }
+
+    private requireProject<Id extends ProjectId>(projectId: Id): Project<Id> {
+        const project = this.projectMap.get(projectId);
+        if (!project) {
+            throw new Error(`Snapshot operation returned unknown project '${projectId}'`);
+        }
+        return project as Project<Id>;
+    }
+}
+
+export class ModuleResolver {
+    readonly id: number;
+    private readonly client: Client;
+    private readonly disposeCallback: (() => void) | undefined;
+    private disposed = false;
+
+    constructor(id: number, client: Client, disposeCallback: (() => void) | undefined) {
+        this.id = id;
+        this.client = client;
+        this.disposeCallback = disposeCallback;
+    }
+
+    async resolveModuleName(
+        moduleName: string,
+        containingDirectory: DocumentIdentifier,
+        resolutionMode?: ResolutionMode,
+        options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; },
+    ): Promise<ResolveModuleNameResult> {
+        this.ensureNotDisposed();
+        if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+            throw new Error("Snapshot is disposed");
+        }
+        return this.client.apiRequest("resolveModuleName", {
+            snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+            inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+            resolver: this.id,
+            moduleName,
+            containingDirectory,
+            resolutionMode,
+        });
+    }
+
+    [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        return this.dispose();
+    }
+
+    async dispose(): Promise<void> {
+        if (this.disposed) return;
+        await this.client.apiRequest("releaseModuleResolver", { resolver: this.id });
+        this.disposed = true;
+        this.disposeCallback?.();
+    }
+
+    /** @internal */
+    ensureNotDisposed(): void {
+        if (this.disposed) throw new Error("ModuleResolver is disposed");
+    }
 }
 
 class SnapshotObjectRegistry {
     private readonly symbols: Map<number, Symbol> = new Map();
     private readonly client: Client;
     private readonly snapshotId: number;
-    private readonly resolveProject: (projectId: Path) => Project | undefined;
+    private readonly resolveProject: (projectId: ProjectId) => Project | undefined;
 
-    constructor(client: Client, snapshotId: number, resolveProject: (projectId: Path) => Project | undefined) {
+    constructor(client: Client, snapshotId: number, resolveProject: (projectId: ProjectId) => Project | undefined) {
         this.client = client;
         this.snapshotId = snapshotId;
         this.resolveProject = resolveProject;
     }
 
-    /** Resolve a project id (a config file path) to its Project within this snapshot. */
-    getProject(projectId: Path): Project | undefined {
+    /** Resolve a project ID to its Project within this snapshot. */
+    getProject(projectId: ProjectId): Project | undefined {
         return this.resolveProject(projectId);
     }
 
@@ -582,7 +1121,7 @@ class SnapshotObjectRegistry {
         this.symbols.clear();
     }
 
-    async fetchSymbol(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Promise<Symbol> {
+    async fetchSymbol(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Promise<Symbol> {
         if (!handle) return undefined as unknown as Symbol;
         const cached = this.getSymbol(handle);
         if (cached) return cached;
@@ -596,7 +1135,7 @@ class SnapshotObjectRegistry {
         return this.getOrCreateSymbol(data);
     }
 
-    async fetchSymbols(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): Promise<readonly Symbol[]> {
+    async fetchSymbols(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): Promise<readonly Symbol[]> {
         if (handles) {
             const result = new Array<Symbol>(handles.length);
             let allCached = true;
@@ -659,6 +1198,10 @@ class ProjectObjectRegistry {
 
     getType(id: number): TypeObject | undefined {
         return this.types.get(id);
+    }
+
+    createNodeHandle<T extends Node>(handle: string): NodeHandle<T> {
+        return new NodeHandle<T>(handle, this.project);
     }
 
     getOrCreateSignature(data: SignatureResponse): Signature {
@@ -822,19 +1365,19 @@ class ProjectObjectRegistry {
     }
 }
 
-export class Project {
-    readonly id: Path;
+export class Project<Id extends ProjectId = ProjectId> {
+    readonly id: Id;
     readonly configFileName: string;
     readonly currentDirectory: string;
+    readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
     /** @deprecated Use `parsedCommandLine.fileNames`. */
     readonly rootFiles: readonly string[];
 
-    readonly program: Program;
+    readonly program: Program<Id>;
     readonly checker: Checker;
-    readonly emitter: Emitter;
     readonly languageService: LanguageService;
     private client: Client;
     private snapshotId: number;
@@ -848,9 +1391,10 @@ export class Project {
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
-        this.id = data.id as Path;
+        this.id = data.id as Id;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
+        this.dirty = data.dirty;
         if (!data.parsedCommandLine?.options) {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
@@ -874,7 +1418,6 @@ export class Project {
             client,
             objectRegistry,
         );
-        this.emitter = new Emitter(client);
         this.languageService = new LanguageService(snapshotId, this, client, objectRegistry);
     }
 
@@ -988,8 +1531,8 @@ export class LanguageService {
             project: this.project.id,
             file: document,
             position,
-            ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-            ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+            triggerCharacter: options?.triggerCharacter,
+            includeSymbol: options?.includeSymbol,
         });
         if (!data) return undefined;
         return {
@@ -1002,25 +1545,30 @@ export class LanguageService {
     }
 }
 
-export class Program implements FormatDiagnosticsHost {
-    private snapshotId: number;
-    private project: Project;
-    private client: Client;
-    private sourceFileCache: SourceFileCache;
-    private toPath: (fileName: string) => Path;
-    private formatDiagnosticsHost: FormatDiagnosticsHost;
-    private decoder = new Wtf8Decoder();
-    private sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
+export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
+    /** @internal */
+    readonly snapshotId: number;
+    readonly id: Id;
+    private readonly project: Project<Id>;
+    private readonly client: Client;
+    private readonly sourceFileCache: SourceFileCache;
+    private readonly toPath: (fileName: string) => Path;
+    private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
+    private readonly decoder = new Wtf8Decoder();
+    private readonly sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
+    private ownedSnapshot: Snapshot | undefined;
+    private disposePromise: Promise<void> | undefined;
 
     constructor(
         snapshotId: number,
-        project: Project,
+        project: Project<Id>,
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
+        this.id = project.id;
         this.project = project;
         this.client = client;
         this.sourceFileCache = sourceFileCache;
@@ -1038,6 +1586,25 @@ export class Program implements FormatDiagnosticsHost {
 
     getNewLine(): string {
         return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
+    }
+
+    /** @internal */
+    setOwnedSnapshot(snapshot: Snapshot): void {
+        this.ownedSnapshot = snapshot;
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        void this.dispose();
+    }
+
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
+        const snapshot = this.ownedSnapshot;
+        this.ownedSnapshot = undefined;
+        if (snapshot) await snapshot.dispose();
     }
 
     getCompilerOptions(): CompilerOptions {
@@ -1073,6 +1640,81 @@ export class Program implements FormatDiagnosticsHost {
         return this.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, this.snapshotId, this.project.id);
     }
 
+    async getResolvedModule(
+        file: DocumentIdentifier,
+        moduleName: string,
+        mode: ModuleKind,
+    ): Promise<ResolvedModule | undefined> {
+        const result = await this.client.apiRequest("getResolvedModule", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            moduleName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    async getModeForUsageLocation(file: DocumentIdentifier, usage: StringLiteralLikeNode): Promise<ModuleKind> {
+        return this.client.apiRequest("getModeForUsageLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            usage: getNodeId(usage),
+        });
+    }
+
+    async getModeForResolutionAtIndex(file: DocumentIdentifier, index: number): Promise<ModuleKind> {
+        return this.client.apiRequest("getModeForResolutionAtIndex", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            index,
+        });
+    }
+
+    async getResolvedModuleFromModuleSpecifier(
+        moduleSpecifier: StringLiteralLikeNode,
+        sourceFile?: DocumentIdentifier,
+    ): Promise<ResolvedModule | undefined> {
+        const result = await this.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            moduleSpecifier: getNodeId(moduleSpecifier),
+            sourceFile,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedTypeReferenceDirective(
+        file: DocumentIdentifier,
+        typeDirectiveName: string,
+        mode: ModuleKind,
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
+        const result = await this.client.apiRequest("getResolvedTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            typeDirectiveName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
+        typeReferenceDirective: FileReference,
+        sourceFile: DocumentIdentifier,
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
+        const result = await this.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            sourceFile,
+            typeDirectiveName: typeReferenceDirective.fileName,
+            resolutionMode: typeReferenceDirective.resolutionMode,
+        });
+        return result ?? undefined;
+    }
+
     async getSourceFileNames(): Promise<readonly string[]> {
         const data = await this.client.apiRequest("getSourceFileNames", {
             snapshot: this.snapshotId,
@@ -1086,8 +1728,8 @@ export class Program implements FormatDiagnosticsHost {
      * is not part of the program. Metadata is fetched lazily per file and cached on this
      * `Program` instance.
      */
-    getSourceFileMetadata(fileName: string): Promise<SourceFileMetadata | undefined> {
-        return this.getSourceFileMetadataByPath(this.toPath(fileName));
+    getSourceFileMetadata(file: DocumentIdentifier): Promise<SourceFileMetadata | undefined> {
+        return this.getSourceFileMetadataByPath(this.toPath(resolveFileName(file)));
     }
 
     /**
@@ -1174,7 +1816,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getSyntacticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1190,7 +1832,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getBindDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1206,7 +1848,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getSemanticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1222,7 +1864,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getSuggestionDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1238,7 +1880,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getDeclarationDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1277,21 +1919,27 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     /**
-     * Emits files to the configured filesystem.
-     *
-     * When the API has a virtual filesystem with a `writeFile` callback, output
-     * is written there. Otherwise, the server writes directly to the host filesystem.
+     * Emits files to the configured filesystem. Layer and host filesystems are
+     * written through; full filesystems remain immutable and return emitted
+     * files in {@link EmitResult.fileSystem}.
      */
     async emit(emitOnly?: EmitOnly): Promise<EmitResult> {
         const response = await this.client.apiRequest("emit", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(emitOnly !== undefined ? { emitOnly } : {}),
+            emitOnly,
         });
+        const fileSystem = response.emittedFilesContents.length
+            ? {
+                kind: "layer" as const,
+                files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+            }
+            : undefined;
         return {
             emitSkipped: response.emitSkipped,
             diagnostics: response.diagnostics,
             emittedFiles: response.emittedFiles,
+            fileSystem,
         };
     }
 
@@ -1302,7 +1950,7 @@ export class Program implements FormatDiagnosticsHost {
         const response = await this.client.apiRequest("emitToString", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(emitOnly !== undefined ? { emitOnly } : {}),
+            emitOnly,
         });
         return toEmitOutput(response);
     }
@@ -1329,6 +1977,111 @@ export class Program implements FormatDiagnosticsHost {
             files,
         });
         return toEmitOutput(response);
+    }
+
+    getProject(): Project<Id> {
+        return this.project;
+    }
+}
+
+export interface BuildOrchestratorOptions {
+    cwd?: string | undefined;
+    dry?: boolean;
+    force?: boolean;
+    verbose?: boolean;
+    stopBuildOnErrors?: boolean;
+    overrideCompilerOptions?: OverrideCompilerOptions;
+}
+
+export interface OverrideCompilerOptions {
+    incremental?: boolean;
+    assumeChangesOnlyAffectDirectDependencies?: boolean;
+    declaration?: boolean;
+    declarationMap?: boolean;
+    emitDeclarationOnly?: boolean;
+    sourceMap?: boolean;
+    inlineSourceMap?: boolean;
+    traceResolution?: boolean;
+}
+
+export class BuildOrchestrator {
+    private client: Client;
+    private id: number;
+    private disposed = false;
+    private disposePromise: Promise<void> | undefined;
+    private onDispose: () => void;
+
+    constructor(
+        client: Client,
+        orchestratorResponse: CreateBuildOrchestratorResponse,
+        onDispose: () => void,
+    ) {
+        this.client = client;
+        this.id = orchestratorResponse.buildOrchestratorID;
+        this.onDispose = onDispose;
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        void this.dispose();
+    }
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            await this.client.apiRequest("disposeBuildOrchestrator", {
+                buildOrchestratorID: this.id,
+            });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+
+    async build(project?: string): Promise<BuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("build", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+    async buildReferences(project: string): Promise<BuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("buildReferences", {
+            buildOrchestratorID: this.id,
+            project,
+        });
+        return response;
+    }
+    async clean(project?: string): Promise<CleanBuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("cleanBuild", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+    async cleanReferences(project?: string): Promise<CleanBuildResponse> {
+        this.ensureNotDisposed();
+        const response = await this.client.apiRequest("cleanReferences", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+
+    isDisposed(): boolean {
+        return this.disposed;
+    }
+
+    private ensureNotDisposed(): void {
+        if (this.disposed) {
+            throw new Error("Build orchestrator is disposed");
+        }
     }
 }
 
@@ -1581,14 +2334,10 @@ export class Checker {
             project: this.project.id,
             name,
             meaning,
-            ...(isNode ? { location: getNodeId(location as Node) } : {}),
-            ...(!isNode && location
-                ? {
-                    file: (location as DocumentPosition).document,
-                    position: (location as DocumentPosition).position,
-                }
-                : {}),
-            ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+            location: isNode ? getNodeId(location as Node) : undefined,
+            file: !isNode && location ? (location as DocumentPosition).document : undefined,
+            position: !isNode && location ? (location as DocumentPosition).position : undefined,
+            excludeGlobals,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
@@ -1603,12 +2352,9 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             meaning,
-            ...(isNode
-                ? { location: getNodeId(location as Node) }
-                : {
-                    file: (location as DocumentPosition).document,
-                    position: (location as DocumentPosition).position,
-                }),
+            location: isNode ? getNodeId(location as Node) : undefined,
+            file: isNode ? undefined : (location as DocumentPosition).document,
+            position: isNode ? undefined : (location as DocumentPosition).position,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
@@ -1624,6 +2370,25 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getContextualTypeForArgumentAtIndex(node: CallLikeExpression, argIndex: number): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getContextualTypeForArgument", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            location: getNodeId(node),
+            index: argIndex,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getAwaitedType(type: Type): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getAwaitedType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
@@ -1772,8 +2537,8 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as TypeNode;
@@ -1785,8 +2550,8 @@ export class Checker {
             project: this.project.id,
             signature: signature.id,
             kind,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as Node;
@@ -1797,8 +2562,8 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
         return result;
@@ -1821,11 +2586,11 @@ export class Checker {
     }
 
     async isTupleType(type: Type): Promise<boolean> {
-        return this.client.apiRequest("isTupleType", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            type: type.id,
-        });
+        return type.isTupleType();
+    }
+
+    async isTupleTypeTarget(type: Type): Promise<boolean> {
+        return type.isTupleTypeTarget();
     }
 
     /**
@@ -1904,6 +2669,35 @@ export class Checker {
         return type.getIndexInfos();
     }
 
+    async getIndexInfoOfType(type: Type, kind: IndexKind): Promise<IndexInfo | undefined> {
+        const data = await this.client.apiRequest("getIndexInfoOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            kind,
+        });
+        return data ? {
+            keyType: this.objectRegistry.getOrCreateType(data.keyType),
+            valueType: this.objectRegistry.getOrCreateType(data.valueType),
+            isReadonly: data.isReadonly ?? false,
+            declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, this.project) : undefined,
+        } : undefined;
+    }
+
+    async getIndexTypeOfType(type: Type, kind: IndexKind): Promise<Type | undefined> {
+        return kind === IndexKind.String ? type.getStringIndexType() : type.getNumberIndexType();
+    }
+
+    async getTypeOfPropertyOfType(type: Type, propertyName: string): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getTypeOfPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            name: propertyName,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
     /**
      * Get the constraint of a type parameter (the `T` in `<U extends T>`), or
      * undefined if it has none.
@@ -1941,7 +2735,19 @@ export class Checker {
             project: this.project.id,
             location: getNodeId(node),
         });
-        return typeof data === "string" || typeof data === "number" ? data : undefined;
+        if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
+            return undefined;
+        }
+        if (data.isNumber && typeof data.value === "string") {
+            if (data.value === "+Infinity") {
+                return Infinity;
+            }
+            else if (data.value === "-Infinity") {
+                return -Infinity;
+            }
+            return NaN;
+        }
+        return data.value;
     }
 
     /** Get the signature of a function-like declaration. Always returns a signature. */
@@ -2011,6 +2817,15 @@ export class Checker {
             return this.objectRegistry.getOrCreateSymbol(data);
         }
         return symbol;
+    }
+
+    async getExportSymbolOfSymbol(symbol: Symbol): Promise<Symbol> {
+        const data = await this.client.apiRequest("getExportSymbolOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
     }
 
     /**
@@ -2124,7 +2939,7 @@ export interface PrintNodeOptions {
     terminateUnterminatedLiterals?: boolean | undefined;
 }
 
-export class Emitter {
+export class Printer {
     private client: Client;
 
     constructor(client: Client) {
@@ -2136,9 +2951,20 @@ export class Emitter {
         const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
             data: base64,
-            ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-            ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-            ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+        });
+    }
+
+    async printFile(sourceFile: SourceFile, options: PrintNodeOptions = {}): Promise<string> {
+        const encoded = encodeNode(sourceFile);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest("printNode", {
+            data: base64,
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
         });
     }
 }
@@ -2264,7 +3090,7 @@ export class Symbol {
         this.name = unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags;
-        const canonicalProject = objectRegistry.getProject(data.project as Path);
+        const canonicalProject = objectRegistry.getProject(data.project);
         if (!canonicalProject) {
             throw new Error(`Symbol ${data.id} references unknown canonical project '${data.project}'`);
         }
@@ -2334,14 +3160,17 @@ class TypeObject implements Type {
     readonly freshType!: number;
     readonly regularType!: number;
     readonly target!: number;
+    private readonly tupleType: boolean;
     readonly typeParameters!: readonly number[];
     readonly outerTypeParameters!: readonly number[];
     readonly localTypeParameters!: readonly number[];
+    readonly thisType!: number;
     readonly aliasTypeArguments!: readonly number[];
     readonly aliasSymbol!: number;
     readonly elementFlags!: readonly ElementFlags[];
     readonly fixedLength!: number;
     readonly readonly!: boolean;
+    readonly labeledElementDeclarations?: readonly (NodeHandle<NamedTupleMember | ParameterDeclaration> | undefined)[];
     readonly texts!: readonly string[];
     readonly objectType!: number;
     readonly indexType!: number;
@@ -2349,6 +3178,10 @@ class TypeObject implements Type {
     readonly extendsType!: number;
     readonly baseType!: number;
     readonly substConstraint!: number;
+    readonly typeParameter!: number;
+    readonly constraintType!: number;
+    readonly nameType!: number;
+    readonly templateType!: number;
 
     // Cached results of lazy fetches, not included in TypeResponse
     // (typically because they require some amount of computation or
@@ -2368,6 +3201,7 @@ class TypeObject implements Type {
     private constructSignatures: readonly Signature[] | false;
     private indexInfos: readonly IndexInfo[] | false;
     private baseTypes: readonly Type[] | false;
+    private types: readonly Type[] | false;
     private stringIndexType: Type | undefined | false;
     private numberIndexType: Type | undefined | false;
 
@@ -2382,21 +3216,45 @@ class TypeObject implements Type {
             // BigInt literal values are serialized as decimal strings (e.g. "-123") because
             // JSON cannot represent bigint. Decode them back into a real bigint here.
             const value = data.value as string | number | boolean;
-            this.value = (data.flags & TypeFlags.BigIntLiteral) ? BigInt(value as string) : value;
+            if (data.flags & TypeFlags.BigIntLiteral) {
+                this.value = BigInt(value as string);
+            }
+            // JSON cannot represent infinities, so the API serializes them as strings.
+            else if (data.flags & TypeFlags.NumberLiteral && typeof value === "string") {
+                if (value === "+Infinity") {
+                    this.value = Infinity;
+                }
+                else if (value === "-Infinity") {
+                    this.value = -Infinity;
+                }
+                else {
+                    this.value = NaN;
+                }
+            }
+            else {
+                this.value = value;
+            }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
         if (data.target !== undefined) this.target = data.target;
+        this.tupleType = data.isTupleType ?? false;
         this.typeParameters = data.typeParameters ?? [];
         this.outerTypeParameters = data.outerTypeParameters ?? [];
         this.localTypeParameters = data.localTypeParameters ?? [];
+        if (data.thisType !== undefined) this.thisType = data.thisType;
         this.aliasTypeArguments = data.aliasTypeArguments ?? [];
         if (data.aliasSymbol !== undefined) this.aliasSymbol = data.aliasSymbol;
-        if (data.elementFlags !== undefined) this.elementFlags = data.elementFlags;
-        if (data.fixedLength !== undefined) this.fixedLength = data.fixedLength;
+        if (data.fixedLength !== undefined) {
+            this.elementFlags = data.elementFlags ?? [];
+            this.fixedLength = data.fixedLength;
+        }
         if (data.readonly !== undefined) this.readonly = data.readonly;
+        if (data.labeledElementDeclarations !== undefined) {
+            this.labeledElementDeclarations = data.labeledElementDeclarations.map(handle => handle ? objectRegistry.createNodeHandle<NamedTupleMember | ParameterDeclaration>(handle) : undefined);
+        }
         if (data.texts !== undefined) this.texts = data.texts;
         if (data.objectType !== undefined) this.objectType = data.objectType;
         if (data.indexType !== undefined) this.indexType = data.indexType;
@@ -2404,6 +3262,10 @@ class TypeObject implements Type {
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
+        if (data.typeParameter !== undefined) this.typeParameter = data.typeParameter;
+        if (data.constraintType !== undefined) this.constraintType = data.constraintType;
+        if (data.nameType !== undefined) this.nameType = data.nameType;
+        if (data.templateType !== undefined) this.templateType = data.templateType;
 
         this.trueType = false;
         this.falseType = false;
@@ -2418,6 +3280,7 @@ class TypeObject implements Type {
         this.constructSignatures = false;
         this.indexInfos = false;
         this.baseTypes = false;
+        this.types = false;
         this.stringIndexType = false;
         this.numberIndexType = false;
     }
@@ -2530,7 +3393,10 @@ class TypeObject implements Type {
         if (!(this.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
             return undefined;
         }
-        return this.objectRegistry.fetchTypes(this, "getTypesOfType");
+        if (this.types === false) {
+            this.types = await this.objectRegistry.fetchTypes(this, "getTypesOfType");
+        }
+        return this.types;
     }
 
     async getTypeParameters(): Promise<readonly TypeParameter[]> {
@@ -2545,8 +3411,28 @@ class TypeObject implements Type {
         return this.objectRegistry.fetchTypes(this, "getLocalTypeParametersOfType", this.localTypeParameters) as Promise<readonly TypeParameter[]>;
     }
 
+    async getThisType(): Promise<TypeParameter | undefined> {
+        return this.objectRegistry.fetchOptionalType(this, "getThisTypeOfType", this.thisType) as Promise<TypeParameter | undefined>;
+    }
+
     async getAliasTypeArguments(): Promise<readonly Type[]> {
         return this.objectRegistry.fetchTypes(this, "getAliasTypeArgumentsOfType", this.aliasTypeArguments);
+    }
+
+    async getTypeParameter(): Promise<TypeParameter> {
+        return this.objectRegistry.fetchType(this, "getTypeParameterOfMappedType", this.typeParameter);
+    }
+
+    async getConstraintType(): Promise<Type> {
+        return this.objectRegistry.fetchType(this, "getConstraintTypeOfMappedType", this.constraintType);
+    }
+
+    async getNameType(): Promise<Type | undefined> {
+        return this.objectRegistry.fetchOptionalType(this, "getNameTypeOfMappedType", this.nameType);
+    }
+
+    async getTemplateType(): Promise<Type> {
+        return this.objectRegistry.fetchType(this, "getTemplateTypeOfMappedType", this.templateType);
     }
 
     async getObjectType(): Promise<Type> {
@@ -2660,8 +3546,12 @@ class TypeObject implements Type {
         return isTypeReference(this);
     }
 
-    isTupleType(): this is TupleType {
-        return isTupleType(this);
+    isTupleType(): this is TupleTypeReference {
+        return this.tupleType;
+    }
+
+    isTupleTypeTarget(): this is TupleType {
+        return this.fixedLength !== undefined;
     }
 
     isIndexType(): this is IndexType {
@@ -2690,6 +3580,10 @@ class TypeObject implements Type {
 
     isTypeParameter(): this is TypeParameter {
         return isTypeParameter(this);
+    }
+
+    isMappedType(): this is MappedType {
+        return !!(this.flags & TypeFlags.Object) && !!(this.objectFlags & ObjectFlags.Mapped);
     }
 }
 
@@ -2747,8 +3641,12 @@ export function isTypeReference(type: Type): type is TypeReference {
     return isObjectType(type) && (type.objectFlags & ObjectFlags.Reference) !== 0;
 }
 
-export function isTupleType(type: Type): type is TupleType {
-    return isObjectType(type) && (type.objectFlags & ObjectFlags.Tuple) !== 0;
+export function isTupleType(type: Type): type is TupleTypeReference {
+    return type.isTupleType();
+}
+
+export function isTupleTypeTarget(type: Type): type is TupleType {
+    return type.isTupleTypeTarget();
 }
 
 export function isIndexType(type: Type): type is IndexType {

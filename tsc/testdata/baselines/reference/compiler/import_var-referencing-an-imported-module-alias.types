@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/import_var-referencing-an-imported-module-alias.ts] ////
+
+=== consumer.ts ===
+import host = require("host");
+>host : any
+
+var hostVar = host;
+>hostVar : any
+>host : any
+
+var v = new hostVar.Host();
+>v : any
+>new hostVar.Host() : any
+>hostVar.Host : any
+>hostVar : any
+>Host : any
+ 

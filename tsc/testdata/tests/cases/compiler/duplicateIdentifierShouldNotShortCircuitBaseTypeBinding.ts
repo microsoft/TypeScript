@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @FileName: duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts
 export interface IPoint {}
 

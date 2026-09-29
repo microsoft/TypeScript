@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/importAttributeArbitraryExtension.ts] ////
+
+=== /types.d.ts ===
+declare module "*.ext" with { type: "custom" } {
+>"*.ext" : Symbol("*.ext", Decl(types.d.ts, 0, 0))
+>type : Symbol(type, Decl(types.d.ts, 0, 29))
+
+    export const ambient: "ambient";
+>ambient : Symbol(ambient, Decl(types.d.ts, 1, 16))
+}
+
+declare module "*" with { type: "text" } {
+>"*" : Symbol("*", Decl(types.d.ts, 2, 1))
+>type : Symbol(type, Decl(types.d.ts, 4, 25))
+
+    const content: string;
+>content : Symbol(content, Decl(types.d.ts, 5, 9))
+
+    export default content;
+>content : Symbol(content, Decl(types.d.ts, 5, 9))
+}
+
+=== /file.d.ext.ts ===
+export const physical: "physical";
+>physical : Symbol(physical, Decl(file.d.ext.ts, 0, 12))
+
+=== /index.ts ===
+import * as value from "./file.ext";
+>value : Symbol(value, Decl(index.ts, 0, 6))
+
+import * as valueAttr from "./file.ext" with { type: "custom" };
+>valueAttr : Symbol(valueAttr, Decl(index.ts, 1, 6))
+
+value.physical;
+>value.physical : Symbol(value.physical, Decl(file.d.ext.ts, 0, 12))
+>value : Symbol(value, Decl(index.ts, 0, 6))
+>physical : Symbol(value.physical, Decl(file.d.ext.ts, 0, 12))
+
+value.ambient;
+>value : Symbol(value, Decl(index.ts, 0, 6))
+
+valueAttr.physical;
+>valueAttr : Symbol(valueAttr, Decl(index.ts, 1, 6))
+
+valueAttr.ambient;
+>valueAttr.ambient : Symbol(valueAttr.ambient, Decl(types.d.ts, 1, 16))
+>valueAttr : Symbol(valueAttr, Decl(index.ts, 1, 6))
+>ambient : Symbol(valueAttr.ambient, Decl(types.d.ts, 1, 16))
+
+=== /foo.ts ===
+const someConstant: number = 42;
+>someConstant : Symbol(someConstant, Decl(foo.ts, 0, 5))
+
+export default someConstant;
+>someConstant : Symbol(someConstant, Decl(foo.ts, 0, 5))
+
+=== /bar.ts ===
+import someConstant from "./foo.ts";
+>someConstant : Symbol(someConstant, Decl(bar.ts, 0, 6))
+
+import someText from "./foo.ts" with { type: "text" };
+>someText : Symbol(someText, Decl(bar.ts, 1, 6))
+
+someConstant;
+>someConstant : Symbol(someConstant, Decl(bar.ts, 0, 6))
+
+someText;
+>someText : Symbol(someText, Decl(bar.ts, 1, 6))
+

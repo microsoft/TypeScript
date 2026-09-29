@@ -102,10 +102,6 @@ func (host *emitHost) SourceFileMayBeEmitted(file *ast.SourceFile, forceDtsEmit 
 	return sourceFileMayBeEmitted(file, host, forceDtsEmit, false)
 }
 
-func (host *emitHost) GetResolutionModeOverride(node *ast.Node) core.ResolutionMode {
-	return host.GetEmitResolver().GetResolutionModeOverride(node)
-}
-
 func (host *emitHost) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile {
 	return host.program.GetSourceFileFromReference(origin, ref)
 }
@@ -146,6 +142,6 @@ func (host *emitHost) GetSymlinkCache() *symlinks.KnownSymlinks {
 }
 
 func (host *emitHost) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
-	resolved, _ := host.program.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
+	resolved, _, _ := host.program.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
 	return resolved
 }

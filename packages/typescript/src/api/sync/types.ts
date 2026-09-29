@@ -16,8 +16,15 @@ import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
-import type { IndexSignatureDeclaration } from "../../ast/ast.ts";
-import type { Diagnostic } from "../proto.ts";
+import type {
+    IndexSignatureDeclaration,
+    NamedTupleMember,
+    ParameterDeclaration,
+} from "../../ast/ast.ts";
+import type {
+    Diagnostic,
+    RequestFileSystem,
+} from "../proto.ts";
 import type {
     NodeHandle,
     Signature,
@@ -165,8 +172,10 @@ export interface Type {
     isBooleanLiteralType(): this is BooleanLiteralType;
     /** Whether this type is a type reference */
     isTypeReference(): this is TypeReference;
-    /** Whether this type is a tuple type */
-    isTupleType(): this is TupleType;
+    /** Whether this type is a tuple type reference */
+    isTupleType(): this is TupleTypeReference;
+    /** Whether this type owns tuple metadata */
+    isTupleTypeTarget(): this is TupleType;
     /** Whether this type is an index type (`keyof T`) */
     isIndexType(): this is IndexType;
     /** Whether this type is an indexed access type (`T[K]`) */
@@ -181,6 +190,8 @@ export interface Type {
     isStringMappingType(): this is StringMappingType;
     /** Whether this type is a type parameter */
     isTypeParameter(): this is TypeParameter;
+    /** Whether this is a mapped type */
+    isMappedType(): this is MappedType;
 }
 
 /**
@@ -235,12 +246,45 @@ export interface ObjectType extends Type {
     readonly objectFlags: ObjectFlags;
 }
 
+/** Mapped types (ObjectFlags.Mapped) */
+export interface MappedType extends ObjectType {
+    /** Get the type parameter iterated by the mapped type */
+    getTypeParameter: {
+        (): TypeParameter;
+        gen(): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]>;
+    };
+    /** Get the constraint over which the mapped type iterates */
+    getConstraintType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
+    /** Get the remapped property name type, if present */
+    getNameType: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
+    /** Get the property value template type */
+    getTemplateType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
+}
+
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
     getTarget: {
-        (): Type;
-        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+        (): GenericType;
+        gen(): Generator<ProtocolRequest, GenericType, ProtocolResponse["result"]>;
+    };
+}
+
+/** References to tuple types */
+export interface TupleTypeReference extends TypeReference {
+    /** Get the tuple type that describes this reference's shape */
+    getTarget: {
+        (): TupleType;
+        gen(): Generator<ProtocolRequest, TupleType, ProtocolResponse["result"]>;
     };
 }
 
@@ -261,16 +305,32 @@ export interface InterfaceType extends TypeReference {
         (): readonly TypeParameter[];
         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
     };
+    /** Get the synthetic `this` type of this interface/class */
+    getThisType: {
+        (): TypeParameter | undefined;
+        gen(): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]>;
+    };
 }
 
-/** Tuple types (ObjectFlags.Tuple) */
-export interface TupleType extends InterfaceType {
+/** Generic types */
+export interface GenericType extends InterfaceType, TypeReference {
+}
+
+/** Tuple type targets (ObjectFlags.Tuple) */
+export interface TupleType extends GenericType {
+    /** Get this tuple target */
+    getTarget: {
+        (): TupleType;
+        gen(): Generator<ProtocolRequest, TupleType, ProtocolResponse["result"]>;
+    };
     /** Per-element flags (Required, Optional, Rest, Variadic) */
     readonly elementFlags: readonly ElementFlags[];
     /** Number of initial required or optional elements */
     readonly fixedLength: number;
     /** Whether the tuple is readonly */
     readonly readonly: boolean;
+    /** Declarations providing tuple element names */
+    readonly labeledElementDeclarations?: readonly (NodeHandle<NamedTupleMember | ParameterDeclaration> | undefined)[];
 }
 
 /** Union or intersection types (TypeFlags.Union | TypeFlags.Intersection) */
@@ -503,6 +563,8 @@ export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
     readonly emittedFiles: readonly string[];
+    /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
+    readonly fileSystem?: RequestFileSystem | undefined;
 }
 
 export interface EmitOutput {
@@ -514,11 +576,11 @@ export interface EmitOutput {
 export interface ImportSymbolAction {
     readonly kind: "importSymbol";
     readonly symbol: Symbol;
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }
 
 export type ImportAdderAction = ImportSymbolAction;
 
 export interface GetImportEditsForSymbolsOptions {
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }

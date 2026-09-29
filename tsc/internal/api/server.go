@@ -93,7 +93,7 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		fs = callbackFS
 	}
 
-	projectSession := project.NewSession(&project.SessionInit{
+	sessionInit := &project.SessionInit{
 		BackgroundCtx: ctx,
 		Logger:        nil, // TODO: Add logging support
 		FS:            fs,
@@ -106,9 +106,9 @@ func (s *StdioServer) Run(ctx context.Context) error {
 			RunExternalCode:    s.options.RunExternalCode,
 		},
 		Spawner: s.options.ContentMapperSpawner,
-	})
+	}
 
-	session := NewSession(projectSession, &SessionOptions{
+	session := NewStandaloneSession(sessionInit, &SessionOptions{
 		UseBinaryResponses: !s.options.Async, // Only msgpack uses binary responses
 	})
 	defer session.Close()
@@ -137,6 +137,14 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	if callbackFS != nil {
 		callbackFS.SetConnection(ctx, conn)
 	}
+	session.SetConnection(conn)
 
-	return conn.Run(ctx)
+	return serverRunError(ctx, conn.Run(ctx))
+}
+
+func serverRunError(ctx context.Context, err error) error {
+	if ctx.Err() != nil {
+		return nil
+	}
+	return err
 }

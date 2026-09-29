@@ -1,0 +1,33 @@
+// === findRenameLocations ===
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css./*RENAME*/[|sharedRENAME|];
+// text.shared;
+
+// === /types.d.ts ===
+// declare module "*.asset" with { type: "css" } {
+//     export interface CssPayload { kind: "css" }
+//     export const [|sharedRENAME|]: CssPayload;
+// }
+// declare module "*.asset" with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+// --- (line: 7) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css.shared;
+// text./*RENAME*/[|sharedRENAME|];
+
+// === /types.d.ts ===
+// --- (line: 3) skipped ---
+// }
+// declare module "*.asset" with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+//     export const [|sharedRENAME|]: TextPayload;
+// }
+// 

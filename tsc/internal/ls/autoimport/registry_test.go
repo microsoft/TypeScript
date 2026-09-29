@@ -189,14 +189,12 @@ export const bar = 2;`,
 	t.Run("node_modules buckets get deleted when no open files can reference them", func(t *testing.T) {
 		t.Parallel()
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
-			Root: monorepoProjectRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name:            "monorepo",
-				NodeModuleNames: []string{"pkg-root"},
-			},
+			Root:            monorepoProjectRoot,
+			Name:            "monorepo",
+			NodeModuleNames: []string{"pkg-root"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
-				{FileCount: 1, MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{Name: "package-a", NodeModuleNames: []string{"pkg-a"}}},
-				{FileCount: 1, MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{Name: "package-b", NodeModuleNames: []string{"pkg-b"}}},
+				{FileCount: 1, Name: "package-a", NodeModuleNames: []string{"pkg-a"}},
+				{FileCount: 1, Name: "package-b", NodeModuleNames: []string{"pkg-b"}},
 			},
 		})
 		session := fixture.Session()
@@ -250,8 +248,8 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		projectID := defaultProject.ID()
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// Simulate the user deleting node_modules: remove the directory from disk
@@ -271,7 +269,7 @@ export const bar = 2;`,
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences),
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences),
 			"registry should be prepared after node_modules is deleted")
 		// The node_modules bucket should be removed entirely, not left behind as an
 		// empty bucket.
@@ -299,7 +297,7 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// In a single changeset, edit package.json AND delete node_modules. The
@@ -317,7 +315,7 @@ export const bar = 2;`,
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 0)
 	})
 
@@ -338,7 +336,7 @@ export const bar = 2;`,
 
 		// Delete just the package directory, leaving node_modules itself in place. The
 		// package's files are read transiently by the registry, so they are never tracked
-		// in diskFiles/diskDirectories; only the directory deletion event is reported, and
+		// in cacheFiles/cacheDirectories; only the directory deletion event is reported, and
 		// it must survive snapshotfs filtering to invalidate the bucket.
 		assert.NilError(t, sessionUtils.FS().Remove(nodePackage.Directory))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
@@ -358,19 +356,15 @@ export const bar = 2;`,
 		packageAIndex := tspath.CombinePaths(packageADir, "index.js")
 
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
-			Root: monorepoRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name:            "monorepo",
-				NodeModuleNames: []string{"pkg1", "pkg2", "pkg3"},
-				DependencyNames: []string{"pkg1"},
-			},
+			Root:            monorepoRoot,
+			Name:            "monorepo",
+			NodeModuleNames: []string{"pkg1", "pkg2", "pkg3"},
+			DependencyNames: []string{"pkg1"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
 				{
-					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name:            "a",
-						DependencyNames: []string{"pkg1", "pkg2"},
-					},
+					FileCount:       0,
+					Name:            "a",
+					DependencyNames: []string{"pkg1", "pkg2"},
 				},
 			},
 			ExtraFiles: []autoimporttestutil.TextFileSpec{
@@ -434,29 +428,23 @@ export const bar = 2;`,
 
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
 			Root: monorepoRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name: "monorepo",
-				// Both pkg-listed and pkg-unlisted exist in node_modules
-				NodeModuleNames: []string{"pkg-listed", "pkg-unlisted"},
-				// But only pkg-listed is in the root package.json dependencies
-				DependencyNames: []string{"pkg-listed"},
-			},
+			Name: "monorepo",
+			// Both pkg-listed and pkg-unlisted exist in node_modules
+			NodeModuleNames: []string{"pkg-listed", "pkg-unlisted"},
+			// But only pkg-listed is in the root package.json dependencies
+			DependencyNames: []string{"pkg-listed"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
 				{
 					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name: "a",
-						// package-a only lists pkg-listed in its package.json
-						DependencyNames: []string{"pkg-listed"},
-					},
+					Name:      "a",
+					// package-a only lists pkg-listed in its package.json
+					DependencyNames: []string{"pkg-listed"},
 				},
 				{
 					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name: "b",
-						// package-b also only lists pkg-listed in its package.json
-						DependencyNames: []string{"pkg-listed"},
-					},
+					Name:      "b",
+					// package-b also only lists pkg-listed in its package.json
+					DependencyNames: []string{"pkg-listed"},
 				},
 			},
 			ExtraFiles: []autoimporttestutil.TextFileSpec{
@@ -865,11 +853,11 @@ export const b = a;
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		preferences := lsutil.NewDefaultUserPreferences()
 		preferences.IncludeCompletionsForModuleExports = core.TSTrue
 		preferences.IncludeCompletionsForImportStatements = core.TSTrue
-		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences)
+		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences)
 		assert.Assert(t, isPrepared)
 
 		// Change the file exclude patterns preference
@@ -881,7 +869,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return false since exclude patterns changed
 		snapshot2 := session.Snapshot()
-		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, newPreferences)
 		assert.Assert(t, !isPrepared2)
 
 		// After GetCurrentLanguageServiceWithAutoImports, buckets should be rebuilt
@@ -890,7 +878,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return true now that buckets are rebuilt
 		snapshot3 := session.Snapshot()
-		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, newPreferences)
 		assert.Assert(t, isPrepared3, "IsPreparedForImportingFile should return true after bucket rebuild with new fileExcludePatterns")
 	})
 
@@ -1182,9 +1170,9 @@ func TestAutoImportEntrypointDirectorySearch(t *testing.T) {
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(indexURI)
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(
-			projectRoot+"/index.ts", projectPath, prefs,
+			projectRoot+"/index.ts", projectID, prefs,
 		)
 		assert.Assert(t, !isPrepared, "registry should not be prepared after preference change")
 

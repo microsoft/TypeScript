@@ -4,7 +4,7 @@
 // @checkJs: true
 // @strict: true
 // @noEmit: true
-// @outFile: foo.js
+// @outDir: out
 someFunction(function(BaseClass) {
     'use strict';
     const DEFAULT_MESSAGE = "nop!";

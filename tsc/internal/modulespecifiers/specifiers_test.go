@@ -333,10 +333,8 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 					"/pkg",
 					"./src/things/*",
 					packagejson.ExportsOrImports{
-						JSONValue: packagejson.JSONValue{
-							Type:  packagejson.JSONValueTypeString,
-							Value: "./src/things/*/index.js",
-						},
+						Type:  packagejson.JSONValueTypeString,
+						Value: "./src/things/*/index.js",
 					},
 					[]string{},
 					MatchingModePattern,

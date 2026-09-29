@@ -187,7 +187,7 @@ func (c *Checker) getAlternativeContainingModules(symbol *ast.Symbol, enclosingD
 				// Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
 				continue
 			}
-			resolvedModule := c.resolveExternalModuleName(enclosingDeclaration, importRef /*ignoreErrors*/, true)
+			resolvedModule := c.resolveExternalModuleName(enclosingDeclaration, importRef /*ignoreErrors*/, true, c.getImportAttributesTypeForModuleSpecifier(importRef))
 			if resolvedModule == nil {
 				continue
 			}

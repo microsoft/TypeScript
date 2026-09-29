@@ -62,18 +62,7 @@ func TestPnpVfs_BasicFileOperations(t *testing.T) {
 	assert.Assert(t, fs.DirectoryExists("/project/src"))
 	assert.Assert(t, !fs.DirectoryExists("/project/nonexistent"))
 
-	var files []string
-	err := fs.WalkDir("/", func(path string, d vfs.DirEntry, err error) error {
-		if !d.IsDir() {
-			files = append(files, path)
-		}
-		return nil
-	})
-
-	assert.NilError(t, err)
-	assert.DeepEqual(t, files, []string{"/project/package.json", "/project/src/index.ts"})
-
-	err = fs.WriteFile("/project/src/index.ts", "export const hello = 'world2';")
+	err := fs.WriteFile("/project/src/index.ts", "export const hello = 'world2';")
 	assert.NilError(t, err)
 
 	content, ok = fs.ReadFile("/project/src/index.ts")
@@ -221,19 +210,6 @@ func TestPnpVfs_VirtualPathHandling(t *testing.T) {
 		"package.json",
 	})
 	assert.DeepEqual(t, entries.Directories, []string(nil))
-
-	files := []string{}
-	err := fs.WalkDir("/project/packages/__virtual__/packageB-virtual-123456/0/packageB", func(path string, d vfs.DirEntry, err error) error {
-		if !d.IsDir() {
-			files = append(files, path)
-		}
-		return nil
-	})
-	assert.NilError(t, err)
-	assert.DeepEqual(t, files, []string{
-		"/project/packages/__virtual__/packageB-virtual-123456/0/packageB/indexB.ts",
-		"/project/packages/__virtual__/packageB-virtual-123456/0/packageB/package.json",
-	})
 }
 
 func TestPnpVfs_RealZipIntegration(t *testing.T) {
@@ -273,16 +249,6 @@ func TestPnpVfs_RealZipIntegration(t *testing.T) {
 	assert.DeepEqual(t, entries.Directories, []string{"utils"})
 
 	assert.Equal(t, fs.Realpath(indexPath), indexPath)
-
-	files := []string{}
-	err := fs.WalkDir(zipPath, func(path string, d vfs.DirEntry, err error) error {
-		if !d.IsDir() {
-			files = append(files, path)
-		}
-		return nil
-	})
-	assert.NilError(t, err)
-	assert.DeepEqual(t, files, []string{zipPath + "/package.json", zipPath + "/src/index.ts", zipPath + "/src/utils/helpers.ts", zipPath + "/tsconfig.json"})
 
 	assert.Assert(t, fs.FileExists(zipPath+"/src/__virtual__/src-virtual-123456/0/index.ts"))
 
