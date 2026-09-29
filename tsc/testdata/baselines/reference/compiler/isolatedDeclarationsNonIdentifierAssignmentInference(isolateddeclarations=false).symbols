@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/isolatedDeclarationsNonIdentifierAssignmentInference.ts] ////
+
+=== isolatedDeclarationsNonIdentifierAssignmentInference.ts ===
+declare function foo(): number;
+>foo : Symbol(foo, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 0))
+
+declare function bar(): { x: number };
+>bar : Symbol(bar, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 31))
+>x : Symbol(x, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 25))
+
+class Base { get y(): number { return 0; } set y(v: number) {} }
+>Base : Symbol(Base, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 38))
+>y : Symbol(Base.y, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 12), Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 42))
+>y : Symbol(Base.y, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 12), Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 42))
+>v : Symbol(v, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 49))
+
+export class C extends Base {
+>C : Symbol(C, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 64))
+>Base : Symbol(Base, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 38))
+
+    z = 0;
+>z : Symbol(C.z, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 3, 29))
+
+    a = { p: (this.z = foo()) };
+>a : Symbol(C.a, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 4, 10))
+>p : Symbol(p, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 5, 9))
+>this.z : Symbol(C.z, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 3, 29))
+>this : Symbol(C, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 64))
+>z : Symbol(C.z, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 3, 29))
+>foo : Symbol(foo, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 0))
+
+    b = { p: (super.y = foo()) };
+>b : Symbol(C.b, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 5, 32))
+>p : Symbol(p, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 6, 9))
+>super.y : Symbol(Base.y, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 12), Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 42))
+>super : Symbol(Base, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 38))
+>y : Symbol(Base.y, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 12), Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 2, 42))
+>foo : Symbol(foo, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 0))
+
+    c = { p: (bar().x = foo()) };
+>c : Symbol(C.c, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 6, 33))
+>p : Symbol(p, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 7, 9))
+>bar().x : Symbol(x, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 25))
+>bar : Symbol(bar, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 31))
+>x : Symbol(x, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 25))
+>foo : Symbol(foo, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 0))
+}
+export const d = { p: (bar().x = foo()) };
+>d : Symbol(d, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 9, 12))
+>p : Symbol(p, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 9, 18))
+>bar().x : Symbol(x, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 25))
+>bar : Symbol(bar, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 31))
+>x : Symbol(x, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 1, 25))
+>foo : Symbol(foo, Decl(isolatedDeclarationsNonIdentifierAssignmentInference.ts, 0, 0))
+

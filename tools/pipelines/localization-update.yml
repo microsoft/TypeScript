@@ -51,6 +51,23 @@ jobs:
           version: $(GoVersion)
           goDownloadUrl: https://aka.ms/golang/release/latest
 
+      - task: Cache@2
+        displayName: Cache Go modules
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+        inputs:
+          key: '"go-modules" | "$(Agent.OS)" | "$(GoVersion)" | **/go.mod,**/go.sum | go.work | go.work.sum'
+          path: $(Pipeline.Workspace)/go/pkg/mod
+          cacheHitVar: GO_MODULES_CACHE_HIT
+
+      - pwsh: |
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
+          go -C ./tsc mod download
+        displayName: Download Go modules
+        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''), ne(variables['GO_MODULES_CACHE_HIT'], 'true'))
+        env:
+          GOMODCACHE: $(Pipeline.Workspace)/go/pkg/mod
+
       - task: AzureCLI@2
         displayName: Create OneLocBuild token
         inputs:
@@ -137,6 +154,8 @@ jobs:
           npx hereby generate:diagnostics
         displayName: Generate localization artifacts
         condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+        env:
+          GOMODCACHE: $(Pipeline.Workspace)/go/pkg/mod
 
       - task: CopyFiles@2
         displayName: Add localization project to handoff
