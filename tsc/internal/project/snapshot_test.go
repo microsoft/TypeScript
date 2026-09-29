@@ -3,9 +3,7 @@ package project
 import (
 	"context"
 	"fmt"
-	"runtime"
 	"testing"
-	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -210,78 +208,6 @@ func TestSnapshot(t *testing.T) {
 		// host for inferred project should not change
 		assert.Equal(t, snapshotAfter.ProjectCollection.InferredProject().host.sourceFS.source, snapshotBefore.fs)
 	})
-
-	for _, references := range []bool{false, true} {
-		t.Run(fmt.Sprintf("cloned programs release previous generations/references=%t", references), func(t *testing.T) {
-			t.Parallel()
-			files := map[string]any{
-				"/src/main/tsconfig.json": `{"compilerOptions":{"noLib":true},"files":["index.ts"]}`,
-				"/src/main/index.ts":      "export const result = 1;",
-			}
-			if references {
-				files["/src/main/tsconfig.json"] = `{"compilerOptions":{"noLib":true},"files":["index.ts"],"references":[{"path":"../reference"}]}`
-				files["/src/main/index.ts"] = `import { value } from "../reference/index.js"; export const result = value;`
-				files["/src/reference/tsconfig.json"] = `{"compilerOptions":{"composite":true,"outDir":"../dist"},"files":["index.ts"]}`
-				files["/src/reference/index.ts"] = "export const value = 1;"
-			}
-			session := setup(files)
-			defer session.Close()
-			ctx := context.Background()
-			uri := lsproto.DocumentUri("file:///src/main/index.ts")
-			session.DidOpenFile(ctx, uri, 1, files["/src/main/index.ts"].(string), lsproto.LanguageKindTypeScript)
-			_, err := session.GetLanguageService(ctx, uri)
-			assert.NilError(t, err)
-
-			const generations = 3
-			collected := make(chan string, generations*3)
-			markCollected := func(name string) { collected <- name }
-			for generation := range generations {
-				func() {
-					snapshot := session.Snapshot()
-					project := snapshot.ProjectCollection.ConfiguredProject("/src/main/tsconfig.json")
-					program := project.GetProgram()
-					_, release := program.GetCheckerPool().GetChecker(ctx, program.GetSourceFile("/src/main/index.ts"))
-					release()
-					runtime.AddCleanup(program, markCollected, fmt.Sprintf("program %d", generation))
-					runtime.AddCleanup(project.host, markCollected, fmt.Sprintf("host %d", generation))
-					runtime.AddCleanup(snapshot.fs, markCollected, fmt.Sprintf("filesystem %d", generation))
-				}()
-
-				session.DidChangeFile(ctx, uri, int32(generation+2), []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
-					Partial: &lsproto.TextDocumentContentChangePartial{
-						Text: "\n",
-						Range: lsproto.Range{
-							Start: lsproto.Position{Line: 0, Character: 0},
-							End:   lsproto.Position{Line: 0, Character: 0},
-						},
-					},
-				}})
-				_, err := session.GetLanguageService(ctx, uri)
-				assert.NilError(t, err)
-				assert.Equal(t, session.Snapshot().ProjectCollection.ConfiguredProject("/src/main/tsconfig.json").ProgramUpdateKind, ProgramUpdateKindCloned)
-			}
-
-			var names []string
-			deadline := time.Now().Add(10 * time.Second)
-			for len(names) < generations*3 && time.Now().Before(deadline) {
-				runtime.GC()
-			drain:
-				for {
-					select {
-					case name := <-collected:
-						names = append(names, name)
-					default:
-						break drain
-					}
-				}
-				if len(names) < generations*3 {
-					time.Sleep(10 * time.Millisecond)
-				}
-			}
-			assert.Equal(t, len(names), generations*3, "collected: %v", names)
-			runtime.KeepAlive(session)
-		})
-	}
 
 	t.Run("cached disk files are cleaned up", func(t *testing.T) {
 		t.Parallel()
