@@ -95,3 +95,15 @@ const Circular2 = id(class C {
 
 });
 
+const Circular3 = id(class {
+>Circular3 : Symbol(Circular3, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 39, 5))
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+
+  static foo = Circular3.foo; // error
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 39, 28))
+>Circular3.foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 39, 28))
+>Circular3 : Symbol(Circular3, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 39, 5))
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 39, 28))
+
+});
+

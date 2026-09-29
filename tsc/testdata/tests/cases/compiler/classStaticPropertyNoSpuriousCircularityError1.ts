@@ -39,3 +39,7 @@ class Circular {
 const Circular2 = id(class C {
   static foo = C.foo; // error
 });
+
+const Circular3 = id(class {
+  static foo = Circular3.foo; // error
+});

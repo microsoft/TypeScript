@@ -109,3 +109,17 @@ const Circular2 = id(class C {
 
 });
 
+const Circular3 = id(class {
+>Circular3 : typeof (Anonymous class)
+>id(class {  static foo = Circular3.foo; // error}) : typeof (Anonymous class)
+>id : <T>(x: T) => T
+>class {  static foo = Circular3.foo; // error} : typeof (Anonymous class)
+
+  static foo = Circular3.foo; // error
+>foo : any
+>Circular3.foo : any
+>Circular3 : typeof (Anonymous class)
+>foo : any
+
+});
+
