@@ -83,8 +83,9 @@ type packageNamesInfo struct {
 }
 
 type Program struct {
-	opts        ProgramOptions
-	checkerPool CheckerPool // always set; used as fallback for project system pools
+	opts             ProgramOptions
+	checkerPool      CheckerPool // always set; used as fallback for project system pools
+	includeProcessor includeProcessor
 
 	// compilerCheckerPool is set only when the built-in compiler checker pool is in use
 	// (i.e. CreateCheckerPool was not provided). It enables grouped parallel iteration,
@@ -428,7 +429,6 @@ func (p *Program) ReuseProgram(
 			result.filesByPath[newSupplemental.Path()] = newSupplemental
 		}
 	}
-	updateFileIncludeProcessor(result)
 	return result, newFile, true
 }
 
@@ -1083,12 +1083,12 @@ func (p *Program) verifyCompilerOptions() {
 				rootPath = canonical.Path()
 			}
 			if sourceFileMayBeEmitted(file, p, false, false) && !rootPaths.Has(rootPath) {
-				p.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
+				p.addProcessingDiagnostic(&processingDiagnostic{
 					kind: processingDiagnosticKindExplainingFileInclude,
-					data: &includeExplainingDiagnostic{
+					explanation: &includeExplainingDiagnostic{
 						file:    file.Path(),
 						message: diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern,
-						args:    []any{file.FileName(), configFilePath()},
+						args:    []string{file.FileName(), configFilePath()},
 					},
 				})
 			}
@@ -1819,12 +1819,12 @@ func (p *Program) checkSourceFilesBelongToPath(sourceFiles []string, rootDirecto
 	for _, file := range sourceFiles {
 		absoluteSourceFilePath := tspath.GetCanonicalFileName(tspath.GetNormalizedAbsolutePath(file, p.GetCurrentDirectory()), p.UseCaseSensitiveFileNames())
 		if !tspath.ContainsPath(rootDirectory, file, p.comparePathsOptions) {
-			p.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
+			p.addProcessingDiagnostic(&processingDiagnostic{
 				kind: processingDiagnosticKindExplainingFileInclude,
-				data: &includeExplainingDiagnostic{
+				explanation: &includeExplainingDiagnostic{
 					file:    tspath.Path(absoluteSourceFilePath),
 					message: diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files,
-					args:    []any{file, rootDirectory},
+					args:    []string{file, rootDirectory},
 				},
 			})
 			allFilesBelongToPath = false
@@ -2107,7 +2107,7 @@ func (p *Program) GetSourceFiles() []*ast.SourceFile {
 
 // Testing only
 func (p *Program) GetIncludeReasons() map[tspath.Path][]*FileIncludeReason {
-	return p.includeProcessor.fileIncludeReasons
+	return p.fileIncludeReasons
 }
 
 // Testing only
@@ -2124,7 +2124,7 @@ func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale) {
 	filesExplained := 0
 	explainFile := func(file ast.HasFileName) {
 		fmt.Fprintln(w, toRelativeFileName(file.FileName()))
-		for _, reason := range p.includeProcessor.fileIncludeReasons[file.Path()] {
+		for _, reason := range p.fileIncludeReasons[file.Path()] {
 			fmt.Fprintln(w, "  ", reason.toDiagnostic(p, true).Localize(locale))
 		}
 		for _, diag := range p.includeProcessor.explainRedirectAndImpliedFormat(p, file.Path(), toRelativeFileName) {

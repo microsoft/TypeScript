@@ -1,4 +1,4 @@
-package compiler_test
+package compiler
 
 import (
 	"fmt"
@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
-	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -17,6 +16,21 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+func TestIncludeReasonDiagnosticsAreProgramLocal(t *testing.T) {
+	t.Parallel()
+	opts := ProgramOptions{Config: &tsoptions.ParsedCommandLine{}}
+	oldProgram := &Program{opts: opts}
+	newProgram := &Program{opts: opts}
+	reason := &FileIncludeReason{kind: fileIncludeKindRootFile}
+	for _, relative := range []bool{false, true} {
+		oldDiagnostic := reason.toDiagnostic(oldProgram, relative)
+		newDiagnostic := reason.toDiagnostic(newProgram, relative)
+		assert.Equal(t, reason.toDiagnostic(oldProgram, relative), oldDiagnostic)
+		assert.Equal(t, reason.toDiagnostic(newProgram, relative), newDiagnostic)
+		assert.Assert(t, oldDiagnostic != newDiagnostic)
+	}
+}
 
 type testFile struct {
 	fileName string
@@ -248,14 +262,14 @@ func TestProgram(t *testing.T) {
 
 			opts := core.CompilerOptions{Target: testCase.target}
 
-			program := compiler.NewProgram(compiler.ProgramOptions{
+			program := NewProgram(ProgramOptions{
 				Config: &tsoptions.ParsedCommandLine{
 					ParsedConfig: &tsoptions.ParsedOptions{
 						FileNames:       []string{"c:/dev/src/index.ts"},
 						CompilerOptions: &opts,
 					},
 				},
-				Host: compiler.NewCompilerHost("c:/dev/src", fs, bundled.LibPath(), nil, nil, nil),
+				Host: NewCompilerHost("c:/dev/src", fs, bundled.LibPath(), nil, nil, nil),
 			})
 
 			actualFiles := []string{}
@@ -288,14 +302,14 @@ func TestIncludeProcessorDiagnosticsWithMissingFileCasing(t *testing.T) {
 
 	// List both casings as root files. The first one (/src/MyFile.ts) will fail
 	// to load because it does not exist on the case-sensitive filesystem.
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program := NewProgram(ProgramOptions{
 		Config: &tsoptions.ParsedCommandLine{
 			ParsedConfig: &tsoptions.ParsedOptions{
 				FileNames:       []string{"/src/MyFile.ts", "/src/myFile.ts"},
 				CompilerOptions: &opts,
 			},
 		},
-		Host: compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil, nil),
+		Host: NewCompilerHost("/", fs, bundled.LibPath(), nil, nil, nil),
 	})
 
 	// GetProgramDiagnostics triggers getDiagnostics which processes all
@@ -330,18 +344,18 @@ func BenchmarkNewProgram(b *testing.B) {
 			}
 
 			opts := core.CompilerOptions{Target: testCase.target}
-			programOpts := compiler.ProgramOptions{
+			programOpts := ProgramOptions{
 				Config: &tsoptions.ParsedCommandLine{
 					ParsedConfig: &tsoptions.ParsedOptions{
 						FileNames:       []string{"c:/dev/src/index.ts"},
 						CompilerOptions: &opts,
 					},
 				},
-				Host: compiler.NewCompilerHost("c:/dev/src", fs, bundled.LibPath(), nil, nil, nil),
+				Host: NewCompilerHost("c:/dev/src", fs, bundled.LibPath(), nil, nil, nil),
 			}
 
 			for b.Loop() {
-				compiler.NewProgram(programOpts)
+				NewProgram(programOpts)
 			}
 		})
 	}
@@ -349,16 +363,16 @@ func BenchmarkNewProgram(b *testing.B) {
 	b.Run("compiler", func(b *testing.B) {
 		rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 		fs := bundled.WrapFS(osvfs.FS())
-		host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil, nil)
+		host := NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil, nil)
 		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), nil, nil, host, nil)
 		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
-		opts := compiler.ProgramOptions{
+		opts := ProgramOptions{
 			Config: parsed,
 			Host:   host,
 		}
 
 		for b.Loop() {
-			compiler.NewProgram(opts)
+			NewProgram(opts)
 		}
 	})
 }

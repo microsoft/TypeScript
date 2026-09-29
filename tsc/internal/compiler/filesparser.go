@@ -85,19 +85,19 @@ func (t *parseTask) load(loader *fileLoader) {
 				if tspath.HasJSFileExtension(canonicalFileName) {
 					t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
 						kind: processingDiagnosticKindExplainingFileInclude,
-						data: &includeExplainingDiagnostic{
+						explanation: &includeExplainingDiagnostic{
 							diagnosticReason: t.includeReason,
 							message:          diagnostics.File_0_is_a_JavaScript_file_Did_you_mean_to_enable_the_allowJs_option,
-							args:             []any{t.normalizedFilePath},
+							args:             []string{t.normalizedFilePath},
 						},
 					})
 				} else {
 					t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
 						kind: processingDiagnosticKindExplainingFileInclude,
-						data: &includeExplainingDiagnostic{
+						explanation: &includeExplainingDiagnostic{
 							diagnosticReason: t.includeReason,
 							message:          diagnostics.File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1,
-							args:             []any{t.normalizedFilePath, "'" + strings.Join(core.Flatten(loader.supportedExtensions), "', '") + "'"},
+							args:             []string{t.normalizedFilePath, "'" + strings.Join(core.Flatten(loader.supportedExtensions), "', '") + "'"},
 						},
 					})
 				}
@@ -148,7 +148,7 @@ func (t *parseTask) load(loader *fileLoader) {
 		for index, lib := range file.LibReferenceDirectives {
 			includeReason := &FileIncludeReason{
 				kind: fileIncludeKindLibReferenceDirective,
-				data: &referencedFileData{
+				referencedFile: &referencedFileData{
 					file:  t.path,
 					index: index,
 				},
@@ -161,8 +161,8 @@ func (t *parseTask) load(loader *fileLoader) {
 				}, libFile)
 			} else {
 				t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
-					kind: processingDiagnosticKindUnknownReference,
-					data: includeReason,
+					kind:   processingDiagnosticKindUnknownReference,
+					reason: includeReason,
 				})
 			}
 		}
@@ -175,8 +175,8 @@ func (t *parseTask) load(loader *fileLoader) {
 			file:                        supplemental,
 			isContentMapperSupplemental: true,
 			includeReason: &FileIncludeReason{
-				kind: fileIncludeKindContentMapperSupplemental,
-				data: t.path,
+				kind:                fileIncludeKindContentMapperSupplemental,
+				canonicalSourceFile: t.path,
 			},
 		})
 	}
@@ -344,7 +344,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		tasksSeenByNameIgnoreCase = make(map[string]*parseTask, totalFileCount)
 	}
 
-	includeProcessor := &includeProcessor{
+	includeData := &fileIncludeData{
 		fileIncludeReasons: make(map[tspath.Path][]*FileIncludeReason, totalFileCount),
 	}
 	var outputFileToProjectReferenceSource map[tspath.Path]string
@@ -386,7 +386,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 				if task.loadedTask != nil {
 					task = task.loadedTask
 				}
-				w.addIncludeReason(includeProcessor, task, includeReason)
+				w.addIncludeReason(includeData, task, includeReason)
 			}
 			data, _ := w.taskDataByPath.Load(task.path)
 			if !task.loaded {
@@ -420,7 +420,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 					checkedAbsolutePath := tspath.GetNormalizedAbsolutePathWithoutRoot(checkedName, loader.comparePathsOptions.CurrentDirectory)
 					inputAbsolutePath := tspath.GetNormalizedAbsolutePathWithoutRoot(task.normalizedFilePath, loader.comparePathsOptions.CurrentDirectory)
 					if checkedAbsolutePath != inputAbsolutePath {
-						includeProcessor.addProcessingDiagnosticsForFileCasing(task.path, checkedName, task.normalizedFilePath, includeReason)
+						includeData.addProcessingDiagnosticsForFileCasing(task.path, checkedName, task.normalizedFilePath, includeReason)
 					}
 				}
 				continue
@@ -431,7 +431,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			if tasksSeenByNameIgnoreCase != nil {
 				pathLowerCase := tspath.ToFileNameLowerCase(string(task.path))
 				if taskByIgnoreCase, ok := tasksSeenByNameIgnoreCase[pathLowerCase]; ok {
-					includeProcessor.addProcessingDiagnosticsForFileCasing(taskByIgnoreCase.path, taskByIgnoreCase.normalizedFilePath, task.normalizedFilePath, includeReason)
+					includeData.addProcessingDiagnosticsForFileCasing(taskByIgnoreCase.path, taskByIgnoreCase.normalizedFilePath, task.normalizedFilePath, includeReason)
 				} else {
 					tasksSeenByNameIgnoreCase[pathLowerCase] = task
 				}
@@ -497,7 +497,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			if task.isForAutomaticTypeDirective {
 				typeResolutionsInFile[task.path] = task.typeResolutionsInFile
 				if len(task.processingDiagnostics) > 0 {
-					includeProcessor.processingDiagnostics = append(includeProcessor.processingDiagnostics, task.processingDiagnostics...)
+					includeData.processingDiagnostics = append(includeData.processingDiagnostics, task.processingDiagnostics...)
 				}
 				continue
 			}
@@ -505,7 +505,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			path := task.path
 
 			if len(task.processingDiagnostics) > 0 {
-				includeProcessor.processingDiagnostics = append(includeProcessor.processingDiagnostics, task.processingDiagnostics...)
+				includeData.processingDiagnostics = append(includeData.processingDiagnostics, task.processingDiagnostics...)
 			}
 
 			if file == nil {
@@ -577,7 +577,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		sourceFilesFoundSearchingNodeModules: sourceFilesFoundSearchingNodeModules,
 		libFiles:                             libFilesMap,
 		missingFiles:                         missingFiles,
-		includeProcessor:                     includeProcessor,
+		fileIncludeData:                      *includeData,
 		outputFileToProjectReferenceSource:   outputFileToProjectReferenceSource,
 		redirectTargetsMap:                   redirectTargetsMap,
 		redirectFilesByPath:                  redirectFilesByPath,
@@ -586,7 +586,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	}
 }
 
-func (w *filesParser) addIncludeReason(includeProcessor *includeProcessor, task *parseTask, reason *FileIncludeReason) {
+func (w *filesParser) addIncludeReason(includeProcessor *fileIncludeData, task *parseTask, reason *FileIncludeReason) {
 	if task.redirectedParseTask != nil {
 		w.addIncludeReason(includeProcessor, task.redirectedParseTask, reason)
 	} else if task.loaded {
