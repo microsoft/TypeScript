@@ -26,12 +26,21 @@ func TestGenerate(t *testing.T) {
 
 	for _, expected := range []string{
 		`release: APIMethod<ReleaseParams, void>;`,
-		`updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;`,
+		`updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;`,
 		`initialize: APIMethod<null, InitializeResponse>;`,
 		`export type DocumentIdentifier = string | { uri: string; };`,
 		`export interface ReleaseParams`,
 		`export interface UpdateSnapshotParams`,
+		`export interface CreateSnapshotParams extends SnapshotRequestChangesParams`,
+		`export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams`,
 		`openProjects?: readonly DocumentIdentifier[] | undefined;`,
+		`export type EnsurePrograms = true | readonly ProjectId[];`,
+		`export type InferredProjectId = string & { __inferredProjectIdBrand: any; };`,
+		`export type ConfiguredProjectId = Path & { __configuredProjectIdBrand: any; };`,
+		`export type SyntheticProjectId = string & { __syntheticProjectIdBrand: any; };`,
+		`export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProjectId;`,
+		`ensurePrograms?: EnsurePrograms | undefined;`,
+		`reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;`,
 		`snapshot: number;`,
 		`file: DocumentIdentifier;`,
 		`jsx?: JsxEmit | undefined;`,
@@ -41,6 +50,7 @@ func TestGenerate(t *testing.T) {
 		`newLine?: NewLineKind | undefined;`,
 		`paths?: Record<string, string[]> | undefined;`,
 		`target?: ScriptTarget | undefined;`,
+		`scriptKind?: ScriptKind | undefined;`,
 		`/** InitializeResponse is returned by the initialize method. */
 export interface InitializeResponse`,
 		`/** UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive. */
@@ -55,6 +65,8 @@ export interface CompilerOptions`,
 		`getTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;`,
 		`getTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;`,
 		`getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;`,
+		`createSourceFile: APIMethod<CreateSourceFileParams, SourceFileResponse>;`,
+		`createSourceFileFromFile: APIMethod<CreateSourceFileFromFileParams, SourceFileResponse>;`,
 		`getConfigSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;`,
 		`typeToTypeNode: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;`,
 		`signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;`,
@@ -63,12 +75,14 @@ export interface CompilerOptions`,
     data: string;
 }`,
 		`projects: ProjectResponse[];`,
+		`operation: SnapshotOperationResponse;`,
+		`createdPrograms?: SyntheticProjectId[] | undefined;`,
+		`openedFiles?: OpenedFileOperationResult[] | undefined;`,
+		`dirty: boolean;`,
 		`entries: CompletionEntryResponse[];`,
 		`outputFiles: EmitOutputFile[];`,
 		`/** Path is a normalized path on disk. */
     path: string;`,
-		`/** Snapshot is the current client snapshot on which to layer the temporary update. */
-    snapshot: number;`,
 		`kind: "importSymbol";`,
 	} {
 		if !strings.Contains(generated, expected) {

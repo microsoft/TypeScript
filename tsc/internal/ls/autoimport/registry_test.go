@@ -248,8 +248,8 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		projectID := defaultProject.ID()
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// Simulate the user deleting node_modules: remove the directory from disk
@@ -269,7 +269,7 @@ export const bar = 2;`,
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences),
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences),
 			"registry should be prepared after node_modules is deleted")
 		// The node_modules bucket should be removed entirely, not left behind as an
 		// empty bucket.
@@ -297,7 +297,7 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// In a single changeset, edit package.json AND delete node_modules. The
@@ -315,7 +315,7 @@ export const bar = 2;`,
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 0)
 	})
 
@@ -853,11 +853,11 @@ export const b = a;
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		preferences := lsutil.NewDefaultUserPreferences()
 		preferences.IncludeCompletionsForModuleExports = core.TSTrue
 		preferences.IncludeCompletionsForImportStatements = core.TSTrue
-		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences)
+		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences)
 		assert.Assert(t, isPrepared)
 
 		// Change the file exclude patterns preference
@@ -869,7 +869,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return false since exclude patterns changed
 		snapshot2 := session.Snapshot()
-		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, newPreferences)
 		assert.Assert(t, !isPrepared2)
 
 		// After GetCurrentLanguageServiceWithAutoImports, buckets should be rebuilt
@@ -878,7 +878,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return true now that buckets are rebuilt
 		snapshot3 := session.Snapshot()
-		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, newPreferences)
 		assert.Assert(t, isPrepared3, "IsPreparedForImportingFile should return true after bucket rebuild with new fileExcludePatterns")
 	})
 
@@ -1170,9 +1170,9 @@ func TestAutoImportEntrypointDirectorySearch(t *testing.T) {
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(indexURI)
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(
-			projectRoot+"/index.ts", projectPath, prefs,
+			projectRoot+"/index.ts", projectID, prefs,
 		)
 		assert.Assert(t, !isPrepared, "registry should not be prepared after preference change")
 

@@ -21,18 +21,17 @@
  *   node generateSync.ts
  */
 
+import { readFileSync } from "node:fs";
 import {
-    mkdirSync,
-    readFileSync,
-    writeFileSync,
-} from "node:fs";
-import {
-    dirname,
     join,
     relative,
 } from "node:path";
-import { xSync } from "tinyexec";
 import ts from "typescript";
+import { GeneratedFile } from "../../../tools/scripts/gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+} from "../../../tools/scripts/gen/utils.mts";
 
 function generatedHeader(asyncSourceRelPath: string): string {
     return [
@@ -59,8 +58,11 @@ function generateSyncFile(
     srcPath: string,
     destPath: string,
     transform: SourceTransform,
+    force: boolean,
     variant: SyncVariant = "sync",
-): string {
+): GeneratedFile | undefined {
+    const generated = new GeneratedFile(destPath, [import.meta.filename, srcPath]);
+    if (generated.isCurrent(force)) return;
     const source = readFileSync(srcPath, "utf-8");
 
     // Normalize line endings to LF
@@ -77,12 +79,11 @@ function generateSyncFile(
     const srcRelPath = relative(ROOT, srcPath).replaceAll("\\", "/");
     result = generatedHeader(srcRelPath) + result;
 
-    mkdirSync(dirname(destPath), { recursive: true });
-    writeFileSync(destPath, result);
+    generated.write(result);
     const label = relative(ROOT, srcPath).replaceAll("\\", "/");
     const destLabel = relative(ROOT, destPath).replaceAll("\\", "/");
     console.log(`  ${label} → ${destLabel}`);
-    return destPath;
+    return generated;
 }
 
 // ── Directive processing ─────────────────────────────────────────
@@ -412,7 +413,10 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         const [method, params] = call.arguments;
         const methodText = getTextWithOwner(method);
         const paramsText = params ? getTextWithOwner(params) : "undefined";
-        return `yield* apiRequest(${methodText}, ${paramsText})`;
+        const request = `yield* apiRequest(${methodText}, ${paramsText})`;
+        return ts.isPropertyAccessExpression(call.expression) && call.expression.name.text === "apiRequestBinary"
+            ? `sourceFileResponseToUint8Array((${request}))`
+            : request;
     }
 
     function getGeneratorCallText(call: ts.CallExpression): string {
@@ -462,7 +466,9 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function isAPIRequestCall(node: ts.Expression): node is ts.CallExpression & { expression: ts.PropertyAccessExpression; } {
-        return ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === "apiRequest";
+        return ts.isCallExpression(node)
+            && ts.isPropertyAccessExpression(node.expression)
+            && (node.expression.name.text === "apiRequest" || node.expression.name.text === "apiRequestBinary");
     }
 
     function getCallExpression(node: ts.Expression): ts.CallExpression | undefined {
@@ -621,15 +627,11 @@ function getIndent(source: string, position: number): string {
 
 // ── Formatting ───────────────────────────────────────────────────
 
-function formatFiles(paths: string[]): void {
-    xSync("dprint", ["fmt", ...paths], { throwOnError: true });
-}
-
 // ── Main ─────────────────────────────────────────────────────────
 
-export function generateSync(): void {
+export function generateSync(force = false): void {
     console.log("Generating sync API from async source...");
-    const generatedFiles: string[] = [];
+    const generatedFiles: (GeneratedFile | undefined)[] = [];
 
     // Source files
     for (const relPath of ["types.ts", "api.ts"]) {
@@ -650,6 +652,7 @@ export function generateSync(): void {
                         "",
                         transformAsyncSource(source, fileName, true),
                     ].join("\n"),
+            force,
         ));
     }
 
@@ -659,6 +662,7 @@ export function generateSync(): void {
             join(TEST, "async", relPath),
             join(TEST, "sync", relPath),
             (source, fileName) => transformAsyncSource(source, fileName, false),
+            force,
         ));
     }
 
@@ -666,14 +670,21 @@ export function generateSync(): void {
         join(TEST, "async", "api.bench.ts"),
         join(TEST, "generators", "api.bench.ts"),
         (source, fileName) => transformAsyncSource(source, fileName, false),
+        force,
         "generators",
     ));
 
+    const changedFiles = generatedFiles.filter(file => file !== undefined);
+    if (!changedFiles.length) {
+        console.log("Sync API is up to date.");
+        return;
+    }
     console.log("Formatting...");
-    formatFiles(generatedFiles);
+    formatFilesSync(changedFiles.map(file => file.fileName));
+    for (const file of changedFiles) file.markCurrent();
     console.log("Done.");
 }
 
 if (process.argv[1] === import.meta.filename) {
-    generateSync();
+    generateSync(parseGeneratorArgs({}).force);
 }

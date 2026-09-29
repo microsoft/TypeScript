@@ -83,7 +83,7 @@ constrainedTotal -= 1;
 
 declare const values: Map<string, string>;
 >values : Symbol(values, Decl(negatedRealWorldControlFlowRegressions.ts, 37, 13))
->Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
 
 if (values.size !== 0) {
 >values.size : Symbol(Map.size, Decl(lib.es2015.collection.d.ts, --, --))

@@ -6,9 +6,9 @@ type ProjectReference struct {
 	// Path is a normalized path on disk.
 	Path string `json:"path"`
 	// OriginalPath is the path as it was originally written.
-	OriginalPath string `json:"originalPath"`
+	OriginalPath string `json:"originalPath,omitempty"`
 	// Circular indicates that this reference is intended to form a circularity.
-	Circular bool `json:"circular"`
+	Circular bool `json:"circular,omitempty"`
 }
 
 func ResolveProjectReferencePath(ref *ProjectReference) string {

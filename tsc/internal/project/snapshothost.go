@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 	"slices"
+	"sync"
 	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -30,8 +31,35 @@ type SnapshotHost struct {
 	snapshotID atomic.Uint64
 }
 
+type SourceFileLease struct {
+	cache       *ParseCache
+	key         ParseCacheKey
+	sourceFile  *ast.SourceFile
+	releaseOnce sync.Once
+}
+
+func (l *SourceFileLease) SourceFile() *ast.SourceFile {
+	return l.sourceFile
+}
+
+func (l *SourceFileLease) Release() {
+	l.releaseOnce.Do(func() {
+		l.cache.Deref(l.key)
+	})
+}
+
 func (s *SnapshotHost) nextSnapshotID() uint64 {
 	return s.snapshotID.Add(1)
+}
+
+func (s *SnapshotHost) AcquireSourceFile(options ast.SourceFileParseOptions, text string, scriptKind core.ScriptKind) *SourceFileLease {
+	fileHandle := NewCachedFileHandle(options.FileName, text)
+	key := NewParseCacheKey(options, fileHandle.Hash(), scriptKind)
+	return &SourceFileLease{
+		cache:      s.parseCache,
+		key:        key,
+		sourceFile: s.parseCache.Acquire(key, fileHandle),
+	}
 }
 
 func NewSnapshotHost(init *SessionInit) *SnapshotHost {
@@ -61,8 +89,8 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 	}
 }
 
-// NewStandaloneRootSnapshot creates the compatibility root for a standalone API session.
-func (s *SnapshotHost) NewStandaloneRootSnapshot() *Snapshot {
+// NewRootSnapshot creates an independent root snapshot.
+func (s *SnapshotHost) NewRootSnapshot() *Snapshot {
 	return s.newRootSnapshot(0, false)
 }
 
@@ -95,44 +123,7 @@ func (s *SnapshotHost) CloneSnapshot(
 // update derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
 func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), nil)
-}
-
-// CloneSnapshotWithTemporaryFile derives a snapshot with a temporary file content override.
-func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
-	ctx context.Context,
-	baseSnapshot *Snapshot,
-	fileSystem vfs.FS,
-	uri lsproto.DocumentUri,
-	newText string,
-) (*Snapshot, error) {
-	return baseSnapshot.cloneWithTemporaryFile(ctx, fileSystem, uri, newText)
-}
-
-// CloneSnapshotForProgram derives an isolated snapshot containing one synthetic
-// project. The base snapshot is not adopted as canonical state.
-func (s *SnapshotHost) CloneSnapshotForProgram(
-	ctx context.Context,
-	baseSnapshot *Snapshot,
-	fileSystem vfs.FS,
-	rootFileNames []string,
-	options *core.CompilerOptions,
-	projectReferences []*core.ProjectReference,
-	configFileParsingDiagnostics []*ast.Diagnostic,
-	oldProject *Project,
-	fileChanges FileChangeSummary,
-) *Snapshot {
-	return baseSnapshot.cloneForProgram(
-		ctx,
-		fileSystem,
-		rootFileNames,
-		options,
-		projectReferences,
-		configFileParsingDiagnostics,
-		oldProject,
-		fileChanges,
-		nil,
-	)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), nil, nil)
 }
 
 // CloneSnapshotWithAutoImports derives a snapshot with auto-import preparation without
@@ -142,10 +133,10 @@ func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSna
 		reason:             UpdateReasonRequestedLanguageServiceWithAutoImports,
 		fs:                 baseSnapshot.fs.fs,
 		fileSystemOverride: baseSnapshot.fileSystemOverride,
-		Documents:          []lsproto.DocumentUri{uri},
-		AutoImports:        uri,
+		ResourceRequest:    baseSnapshot.resourceRequestForDocument(uri),
 	}
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), logger)
+	change.AutoImports = uri
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), logger, nil)
 }
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
@@ -184,6 +175,10 @@ func (s *SnapshotHost) FS() vfs.FS {
 
 func (s *SnapshotHost) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
+}
+
+func (s *SnapshotHost) DefaultLibraryPath() string {
+	return s.options.DefaultLibraryPath
 }
 
 func (s *SnapshotHost) Close() {

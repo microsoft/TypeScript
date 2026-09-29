@@ -802,7 +802,7 @@ func (l *LanguageService) symbolAndEntriesToVSReferences(ctx context.Context, pa
 	vsCapability := caps.VSSupportsVisualStudioExtensions
 	var items []*lsproto.VSReferenceItem
 	id := int32(0)
-	projectName := string(l.projectPath)
+	projectName := l.projectID.String()
 
 	for _, s := range data.SymbolsAndEntries {
 		if s.definition == nil {

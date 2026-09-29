@@ -14,7 +14,7 @@ import (
 )
 
 type LanguageService struct {
-	projectPath             tspath.Path
+	projectID               autoimport.ProjectID
 	host                    Host
 	activeConfig            lsutil.UserPreferences
 	program                 *compiler.Program
@@ -23,13 +23,13 @@ type LanguageService struct {
 }
 
 func NewLanguageService(
-	projectPath tspath.Path,
+	projectID autoimport.ProjectID,
 	program *compiler.Program,
 	host Host,
 	activeFile string,
 ) *LanguageService {
 	return &LanguageService{
-		projectPath:             projectPath,
+		projectID:               projectID,
 		host:                    host,
 		program:                 program,
 		converters:              host.Converters(),
@@ -98,11 +98,11 @@ func (l *LanguageService) getPreparedAutoImportView(fromFile *ast.SourceFile, ty
 	if canonical := fromFile.CanonicalSourceFile(); canonical != nil {
 		registryFile = canonical
 	}
-	if !registry.IsPreparedForImportingFile(registryFile.FileName(), l.projectPath, l.UserPreferences()) {
+	if !registry.IsPreparedForImportingFile(registryFile.FileName(), l.projectID, l.UserPreferences()) {
 		return nil, ErrNeedsAutoImports
 	}
 
-	view := autoimport.NewView(registry, fromFile, l.projectPath, l.program, typeChecker, l.UserPreferences().ModuleSpecifierPreferences())
+	view := autoimport.NewView(registry, fromFile, l.projectID, l.program, typeChecker, l.UserPreferences().ModuleSpecifierPreferences())
 	return view, nil
 }
 
@@ -112,7 +112,7 @@ func (l *LanguageService) getCurrentAutoImportView(fromFile *ast.SourceFile, typ
 	return autoimport.NewView(
 		l.host.AutoImportRegistry(),
 		fromFile,
-		l.projectPath,
+		l.projectID,
 		l.program,
 		typeChecker,
 		l.UserPreferences().ModuleSpecifierPreferences(),

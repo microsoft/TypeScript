@@ -42,7 +42,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
@@ -114,7 +114,7 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
@@ -160,7 +160,7 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
@@ -209,7 +209,7 @@ func TestCompletionWithSymbolsAndExistingImportDoesNotDeadlock(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)

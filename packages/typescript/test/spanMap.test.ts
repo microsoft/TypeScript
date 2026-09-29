@@ -9,8 +9,9 @@ import {
     describe,
     test,
 } from "node:test";
+import { areTestsFiltered } from "./testUtils.ts";
 
-describe("SpanMap", () => {
+describe("SpanMap", { concurrency: areTestsFiltered() }, () => {
     const map = new SpanMap([
         { virtualStart: 2, virtualEnd: 6, originalStart: 10, originalEnd: 14, kind: SpanMapKind.Verbatim },
         { virtualStart: 8, virtualEnd: 11, originalStart: 20, originalEnd: 27, kind: SpanMapKind.Atom },

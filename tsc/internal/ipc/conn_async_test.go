@@ -285,7 +285,7 @@ func TestAsyncConnRunWaitsForRequestAfterPeerCloses(t *testing.T) {
 	assert.NilError(t, clientProtocol.WriteRequest(jsonrpc.NewIDInt(1), "transform", nil))
 	select {
 	case <-handler.started:
-		break
+		// Request handler started.
 	case <-time.After(time.Second):
 		t.Fatal("request handler did not start")
 	}

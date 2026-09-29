@@ -196,6 +196,8 @@ export interface Type {
     isStringMappingType(): this is StringMappingType;
     /** Whether this type is a type parameter */
     isTypeParameter(): this is TypeParameter;
+    /** Whether this is a mapped type */
+    isMappedType(): this is MappedType;
 }
 
 /**
@@ -248,6 +250,30 @@ export interface BooleanLiteralType extends LiteralType {
 export interface ObjectType extends Type {
     /** Object flags — use to determine the specific kind of object type. */
     readonly objectFlags: ObjectFlags;
+}
+
+/** Mapped types (ObjectFlags.Mapped) */
+export interface MappedType extends ObjectType {
+    /** Get the type parameter iterated by the mapped type */
+    getTypeParameter: {
+        (): TypeParameter;
+        gen(): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]>;
+    };
+    /** Get the constraint over which the mapped type iterates */
+    getConstraintType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
+    /** Get the remapped property name type, if present */
+    getNameType: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
+    /** Get the property value template type */
+    getTemplateType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
@@ -556,11 +582,11 @@ export interface EmitOutput {
 export interface ImportSymbolAction {
     readonly kind: "importSymbol";
     readonly symbol: Symbol;
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }
 
 export type ImportAdderAction = ImportSymbolAction;
 
 export interface GetImportEditsForSymbolsOptions {
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }

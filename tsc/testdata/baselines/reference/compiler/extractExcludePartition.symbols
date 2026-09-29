@@ -496,7 +496,7 @@ function degeneratePartitions<T>(neverPartition: NeverPartition<T>, unknownParti
 
     return Math.random() ? neverPartition : unknownPartition;
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >neverPartition : Symbol(neverPartition, Decl(extractExcludePartition.ts, 100, 33))
 >unknownPartition : Symbol(unknownPartition, Decl(extractExcludePartition.ts, 100, 67))
