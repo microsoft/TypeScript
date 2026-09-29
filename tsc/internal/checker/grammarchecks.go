@@ -1459,30 +1459,37 @@ func (c *Checker) checkGrammarMethod(node *ast.Node /*Union[MethodDeclaration, M
 	return false
 }
 
-// functionContainsLabel reports whether a label with the given name is declared
-// anywhere within the given function-like node, without crossing into nested
-// functions or class static blocks.
-func functionContainsLabel(fn *ast.Node, name string) bool {
-	found := false
+// labelsInFunction returns the set of label names declared anywhere within the
+// given function-like node, without crossing into nested functions or class
+// static blocks. Results are cached on the checker since a function body is
+// walked at most once no matter how many break/continue statements it holds.
+func (c *Checker) labelsInFunction(fn *ast.Node) map[string]struct{} {
+	if c.enclosingLabelCache == nil {
+		c.enclosingLabelCache = make(map[*ast.Node]map[string]struct{})
+	}
+	if labels, ok := c.enclosingLabelCache[fn]; ok {
+		return labels
+	}
+	labels := make(map[string]struct{})
 	var visit func(node *ast.Node)
 	visit = func(node *ast.Node) {
-		if found || node == nil {
+		if node == nil {
 			return
 		}
 		if node != fn && ast.IsFunctionLikeOrClassStaticBlockDeclaration(node) {
 			return
 		}
-		if node.Kind == ast.KindLabeledStatement && node.Label().Text() == name {
-			found = true
-			return
+		if node.Kind == ast.KindLabeledStatement {
+			labels[node.Label().Text()] = struct{}{}
 		}
 		node.ForEachChild(func(child *ast.Node) bool {
 			visit(child)
-			return found
+			return false
 		})
 	}
 	visit(fn)
-	return found
+	c.enclosingLabelCache[fn] = labels
+	return labels
 }
 
 func (c *Checker) checkGrammarBreakOrContinueStatement(node *ast.Node) bool {
@@ -1495,11 +1502,13 @@ func (c *Checker) checkGrammarBreakOrContinueStatement(node *ast.Node) bool {
 			// "cannot cross function boundary" is misleading, so report the
 			// more specific message instead.
 			// See https://github.com/microsoft/TypeScript/issues/30408
-			if targetLabel != nil && functionContainsLabel(current, targetLabel.Text()) {
-				if node.Kind == ast.KindBreakStatement {
-					return c.grammarErrorOnNode(node, diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement)
+			if targetLabel != nil {
+				if _, ok := c.labelsInFunction(current)[targetLabel.Text()]; ok {
+					if node.Kind == ast.KindBreakStatement {
+						return c.grammarErrorOnNode(node, diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement)
+					}
+					return c.grammarErrorOnNode(node, diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement)
 				}
-				return c.grammarErrorOnNode(node, diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement)
 			}
 			return c.grammarErrorOnNode(node, diagnostics.Jump_target_cannot_cross_function_boundary)
 		}
