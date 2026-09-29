@@ -15382,7 +15382,10 @@ func (c *Checker) getExternalModuleFileFromDeclaration(declaration *ast.Node) *a
 	if ast.HasImportAttributes(declaration) {
 		importAttributesType = c.getTypeFromImportAttributes(ast.GetImportAttributes(declaration))
 	}
-	moduleSymbol := c.resolveExternalModuleNameWorker(specifier, specifier /*moduleNotFoundError*/, nil, false, false, importAttributesType) // TODO: GH#18217
+	// This is only used by emit and type printing, after checking has already reported any
+	// resolution errors for this specifier. Resolve with ignoreErrors so that these queries
+	// don't add new diagnostics (e.g. an implicit-any-module suggestion) as a side effect.
+	moduleSymbol := c.resolveExternalModuleNameWorker(specifier, specifier, nil /*moduleNotFoundError*/, true /*ignoreErrors*/, false /*isForAugmentation*/, importAttributesType)
 	if moduleSymbol == nil {
 		return nil
 	}
