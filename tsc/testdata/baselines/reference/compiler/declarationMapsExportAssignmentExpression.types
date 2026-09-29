@@ -23,3 +23,19 @@ export = { a };
 >{ a } : { a: number; }
 >a : number
 
+=== exportEqualsClass.ts ===
+export = class {
+>class {    x = 1;} : typeof (Anonymous class)
+
+    x = 1;
+>x : number
+>1 : 1
+
+};
+
+=== exportDefaultArrow.ts ===
+export default (x: number) => x;
+>(x: number) => x : (x: number) => number
+>x : number
+>x : number
+
