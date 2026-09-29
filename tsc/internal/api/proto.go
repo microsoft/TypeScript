@@ -176,6 +176,7 @@ const (
 	MethodTypeToTypeNode                    Method = "typeToTypeNode"
 	MethodSignatureToSignatureDeclaration   Method = "signatureToSignatureDeclaration"
 	MethodTypeToString                      Method = "typeToString"
+	MethodSymbolToString                    Method = "symbolToString"
 	MethodIsContextSensitive                Method = "isContextSensitive"
 	MethodGetReturnTypeOfSignature          Method = "getReturnTypeOfSignature"
 	MethodGetRestTypeOfSignature            Method = "getRestTypeOfSignature"
@@ -676,6 +677,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
 	MethodSignatureToSignatureDeclaration:   unmarshallerFor[SignatureToSignatureDeclarationParams],
 	MethodTypeToString:                      unmarshallerFor[TypeToTypeNodeParams],
+	MethodSymbolToString:                    unmarshallerFor[SymbolToStringParams],
 	MethodIsContextSensitive:                unmarshallerFor[GetContextualTypeParams],
 	MethodGetReturnTypeOfSignature:          unmarshallerFor[GetSignaturePropertyParams],
 	MethodGetRestTypeOfSignature:            unmarshallerFor[CheckerSignatureParams],
@@ -1723,6 +1725,16 @@ type TypeToTypeNodeParams struct {
 	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 	Location NodeHandle `json:"location,omitempty"`
+	Flags    int32      `json:"flags,omitempty"`
+}
+
+// SymbolToStringParams are the parameters for the symbolToString method.
+type SymbolToStringParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Project  project.ID `json:"project"`
+	Symbol   SymbolID   `json:"symbol"`
+	Location NodeHandle `json:"location,omitempty"`
+	Meaning  uint32     `json:"meaning,omitempty"`
 	Flags    int32      `json:"flags,omitempty"`
 }
 

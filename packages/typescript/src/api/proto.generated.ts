@@ -122,6 +122,7 @@ export interface APIMethodInfo {
     typeToTypeNode: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
     signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;
     typeToString: APIMethod<TypeToTypeNodeParams, unknown>;
+    symbolToString: APIMethod<SymbolToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
     getRestTypeOfSignature: APIMethod<CheckerSignatureParams, TypeResponse>;
@@ -823,6 +824,16 @@ export interface SignatureToSignatureDeclarationParams {
     flags?: number | undefined;
 }
 
+/** SymbolToStringParams are the parameters for the symbolToString method. */
+export interface SymbolToStringParams {
+    snapshot: number;
+    project: ProjectId;
+    symbol: number;
+    location?: string | undefined;
+    meaning?: number | undefined;
+    flags?: number | undefined;
+}
+
 /** CheckerSignatureParams are parameters for checker methods that operate on a signature. */
 export interface CheckerSignatureParams {
     snapshot: number;
@@ -1251,6 +1262,7 @@ export interface BatchRequest {
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"
@@ -1427,6 +1439,7 @@ export interface BatchResponse {
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"

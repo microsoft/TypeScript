@@ -1667,6 +1667,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "typeToTypeNode", checker.typeToTypeNode, assertOptionalNodesEquivalent, interfaceType, interfaceDeclaration),
                 parityCase("Checker", "signatureToSignatureDeclaration", checker.signatureToSignatureDeclaration, assertOptionalNodesEquivalent, signature, SyntaxKind.FunctionDeclaration, combineDeclaration),
                 parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),
+                parityCase("Checker", "symbolToString", checker.symbolToString, assertDeepEquivalent, interfaceSymbol, interfaceDeclaration),
                 parityCase("Checker", "isContextSensitive", checker.isContextSensitive, assertDeepEquivalent, boxDeclaration.initializer!),
                 parityCase("Checker", "isArrayType", checker.isArrayType, assertDeepEquivalent, arrayType),
                 parityCase("Checker", "isTupleType", checker.isTupleType, assertDeepEquivalent, tupleType),

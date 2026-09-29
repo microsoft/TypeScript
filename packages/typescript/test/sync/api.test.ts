@@ -104,6 +104,7 @@ import {
     type Snapshot,
     type StringMappingType,
     SymbolFlags,
+    SymbolFormatFlags,
     type SyntheticProjectId,
     type TemplateLiteralType,
     type TextEdit,
@@ -7111,6 +7112,35 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(type);
         const text = checker.typeToString(type, undefined, TypeFormatFlags.WriteArrayAsGenericType);
         assert.strictEqual(text, "(name: string) => Array<string>");
+    });
+
+    test("symbolToString", () => {
+        using api = spawnAPI(emitterFiles);
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const src = emitterFiles["/src/main.ts"];
+
+        const greetPos = src.indexOf("greet(");
+        const symbol = checker.getSymbolAtPosition("/src/main.ts", greetPos);
+        assert.ok(symbol);
+        const text = checker.symbolToString(symbol);
+        assert.strictEqual(text, "greet");
+    });
+
+    test("symbolToString with SymbolFormatFlags", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export namespace NS { export function greet(name: string): string { return name; } }`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const greetPos = "export namespace NS { export function greet".indexOf("greet");
+        const symbol = checker.getSymbolAtPosition("/src/main.ts", greetPos);
+        assert.ok(symbol);
+        const text = checker.symbolToString(symbol, undefined, undefined, SymbolFormatFlags.AllowAnyNodeKind);
+        assert.strictEqual(text, "greet");
     });
 
     test("printNode with terminateUnterminatedLiterals option", () => {

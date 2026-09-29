@@ -921,6 +921,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleSignatureToSignatureDeclaration(ctx, parsed.(*SignatureToSignatureDeclarationParams))
 	case string(MethodTypeToString):
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
+	case string(MethodSymbolToString):
+		return s.handleSymbolToString(ctx, parsed.(*SymbolToStringParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
 	case string(MethodFormatNodeForInsertion):
@@ -3531,6 +3533,43 @@ func (s *Session) handleTypeToString(ctx context.Context, params *TypeToTypeNode
 		return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlags(params.Flags), nil), nil
 	}
 	return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlagsAllowUniqueESSymbolType|checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil), nil
+}
+
+// handleSymbolToString converts a Symbol to its string representation.
+func (s *Session) handleSymbolToString(ctx context.Context, params *SymbolToStringParams) (string, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return "", err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return "", err
+	}
+	if symbol == nil {
+		return "", nil
+	}
+
+	var enclosingDeclaration *ast.Node
+	if params.Location != "" {
+		enclosingDeclaration, err = setup.sd.resolveNodeHandle(setup.program, params.Location)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	meaning := ast.SymbolFlags(params.Meaning)
+	if params.Meaning == 0 {
+		meaning = ast.SymbolFlagsAll
+	}
+
+	flags := checker.SymbolFormatFlags(params.Flags)
+	if params.Flags == 0 {
+		flags = checker.SymbolFormatFlagsAllowAnyNodeKind
+	}
+
+	return setup.checker.SymbolToStringEx(symbol, enclosingDeclaration, meaning, flags), nil
 }
 
 // handlePrintNode decodes a binary-encoded AST node and prints it to text.

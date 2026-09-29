@@ -31,6 +31,7 @@ import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
+import { SymbolFormatFlags } from "#enums/symbolFormatFlags";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
@@ -187,7 +188,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -5170,6 +5171,41 @@ export class Checker {
                     flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
+                return result;
+            },
+        );
+    }
+
+    get symbolToString(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToString",
+            function (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string {
+                const result = owner.client.apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
+                if (typeof result !== "string") throw new TypeError("symbolToString returned a non-string result");
+                return result;
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
+                if (typeof result !== "string") throw new TypeError("symbolToString returned a non-string result");
                 return result;
             },
         );
