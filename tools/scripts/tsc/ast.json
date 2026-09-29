@@ -1073,11 +1073,15 @@
         },
         "TypeElementBase": {
             "brand": "_typeElementBrand",
-            "extends": []
+            "extends": [
+                "DeclarationBase"
+            ]
         },
         "ClassElementBase": {
             "brand": "_classElementBrand",
-            "extends": []
+            "extends": [
+                "DeclarationBase"
+            ]
         },
         "NamedMemberBase": {
             "brand": "_declarationBrand",
@@ -1101,7 +1105,9 @@
         },
         "ObjectLiteralElementBase": {
             "brand": "_objectLiteralBrand",
-            "extends": []
+            "extends": [
+                "DeclarationBase"
+            ]
         },
         "AccessorDeclarationBase": {
             "extends": [
