@@ -237,7 +237,6 @@ func main() {
 			"IsClassInstanceClone":              toInt32(checker.ObjectFlagsIsClassInstanceClone),
 			"IdenticalBaseTypeCalculated":       toInt32(checker.ObjectFlagsIdenticalBaseTypeCalculated),
 			"IdenticalBaseTypeExists":           toInt32(checker.ObjectFlagsIdenticalBaseTypeExists),
-			"UnresolvedMembers":                 toInt32(checker.ObjectFlagsUnresolvedMembers),
 			"FromTypeNode":                      toInt32(checker.ObjectFlagsFromTypeNode),
 			"IsGenericTypeComputed":             toInt32(checker.ObjectFlagsIsGenericTypeComputed),
 			"IsGenericObjectType":               toInt32(checker.ObjectFlagsIsGenericObjectType),
