@@ -8,7 +8,15 @@
         "checkJs": true,
         "strict": true,
         "noEmit": true
-    }
+    },
+    "include": [
+        "**/*.js",
+        "**/*.d.ts",
+        "**/*.mjs",
+        "**/*.d.mts",
+        "**/*.cjs",
+        "**/*.d.cts"
+    ]
 }
 
 // @Filename: /package.json
@@ -17,26 +25,22 @@
 }
 
 // @Filename: /a.js
-export const n = 1;
 const bad = null;
-bad.a.b.c();
+bad.a();
 
 // @Filename: /a.d.ts
 export declare const n: number;
 
 // @Filename: /b.mjs
-export const n = 1;
 const bad = null;
-bad.a.b.c();
+bad.b();
 
 // @Filename: /b.d.mts
 export declare const n: number;
 
 // @Filename: /c.cjs
-export const n = 1;
 const bad = null;
-bad.a.b.c();
+bad.c();
 
 // @Filename: /c.d.cts
 export declare const n: number;
-
