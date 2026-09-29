@@ -42,9 +42,13 @@ import {
     createIdentifier,
     createKeywordTypeNode,
     createNumericLiteral,
+    createObjectLiteralExpression,
     createParameterDeclaration,
+    createPropertyAssignment,
+    createPropertySignatureDeclaration,
     createToken,
     createTypeAliasDeclaration,
+    createTypeLiteralNode,
     createTypeReferenceNode,
     createUnionTypeNode,
     createVariableDeclaration,
@@ -60,6 +64,7 @@ import {
     type ConfiguredProjectId,
     DiagnosticCategory,
     type DocumentIdentifier,
+    EmitFlags,
     EmitOnly,
     type FreshableType,
     type ImportAdderAction,
@@ -7261,6 +7266,150 @@ export const obj = { m: 1, s: "hi", b: true };
         // With the option, the closing slash is added
         const textWith = await api.printer.printNode(regexNode, { terminateUnterminatedLiterals: true });
         assert.strictEqual(textWith, "/asdfasf/");
+    });
+
+    test("printNode with emitContext synthetic comments on the root node and on nested members", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const emitContext = api.printer.createEmitContext();
+        const stringProp = createPropertySignatureDeclaration(undefined, createIdentifier("a"), undefined, createKeywordTypeNode(SyntaxKind.StringKeyword), undefined!);
+        const numberProp = createPropertySignatureDeclaration(undefined, createIdentifier("b"), undefined, createKeywordTypeNode(SyntaxKind.NumberKeyword), undefined!);
+        const typeLiteral = createTypeLiteralNode([stringProp, numberProp]);
+
+        emitContext.addSyntheticLeadingComment(typeLiteral, SyntaxKind.SingleLineCommentTrivia, " top", true, false);
+        emitContext.addSyntheticLeadingComment(stringProp, SyntaxKind.SingleLineCommentTrivia, " nested a", true, false);
+        emitContext.addSyntheticLeadingComment(stringProp, SyntaxKind.SingleLineCommentTrivia, " nested a again", true, false);
+        emitContext.addSyntheticTrailingComment(numberProp, SyntaxKind.MultiLineCommentTrivia, " nested b ", false, false);
+
+        assert.deepStrictEqual(
+            emitContext.getSyntheticLeadingComments(stringProp)?.map(c => c.text),
+            [" nested a", " nested a again"],
+        );
+        assert.deepStrictEqual(emitContext.getSyntheticTrailingComments(numberProp)?.map(c => c.text), [" nested b "]);
+
+        assert.deepStrictEqual(emitContext.getSyntheticLeadingComments(numberProp), undefined);
+        assert.deepStrictEqual(emitContext.getSyntheticTrailingComments(stringProp), undefined);
+        assert.strictEqual(emitContext.getSyntheticLeadingComments(createIdentifier("untouched")), undefined);
+        assert.strictEqual(emitContext.getEmitFlags(typeLiteral), 0);
+
+        const text = await api.printer.printNode(typeLiteral, { emitContext });
+        assert.strictEqual(
+            text,
+            `// top
+{
+    // nested a
+    // nested a again
+    a: string;
+    b: number; /* nested b */
+}`,
+        );
+    });
+
+    test("printNode with emitContext bulk-set synthetic leading and trailing comments", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const emitContext = api.printer.createEmitContext();
+        const stringProp = createPropertySignatureDeclaration(undefined, createIdentifier("a"), undefined, createKeywordTypeNode(SyntaxKind.StringKeyword), undefined!);
+        const typeLiteral = createTypeLiteralNode([stringProp]);
+
+        emitContext.addSyntheticLeadingComment(stringProp, SyntaxKind.SingleLineCommentTrivia, " will be replaced", true, false);
+        emitContext.setSyntheticLeadingComments(stringProp, [
+            { kind: SyntaxKind.SingleLineCommentTrivia, text: " bulk leading 1", hasTrailingNewLine: true, hasLeadingNewLine: false },
+            { kind: SyntaxKind.SingleLineCommentTrivia, text: " bulk leading 2", hasTrailingNewLine: true, hasLeadingNewLine: false },
+        ]);
+        emitContext.setSyntheticTrailingComments(stringProp, [
+            { kind: SyntaxKind.SingleLineCommentTrivia, text: " bulk trailing", hasTrailingNewLine: false, hasLeadingNewLine: false },
+        ]);
+
+        assert.deepStrictEqual(
+            emitContext.getSyntheticLeadingComments(stringProp)?.map(c => c.text),
+            [" bulk leading 1", " bulk leading 2"],
+        );
+        assert.deepStrictEqual(emitContext.getSyntheticTrailingComments(stringProp)?.map(c => c.text), [" bulk trailing"]);
+
+        const text = await api.printer.printNode(typeLiteral, { emitContext });
+        assert.strictEqual(
+            text,
+            `{
+    // bulk leading 1
+    // bulk leading 2
+    a: string; // bulk trailing
+}`,
+        );
+    });
+
+    test("printNode with emitContext SingleLine flag collapses a multi-member type literal", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const typeLiteral = createTypeLiteralNode([
+            createPropertySignatureDeclaration(undefined, createIdentifier("a"), undefined, createKeywordTypeNode(SyntaxKind.StringKeyword), undefined!),
+            createPropertySignatureDeclaration(undefined, createIdentifier("b"), undefined, createKeywordTypeNode(SyntaxKind.NumberKeyword), undefined!),
+        ]);
+
+        assert.strictEqual(await api.printer.printNode(typeLiteral), "{\n    a: string;\n    b: number;\n}");
+        const emitContext = api.printer.createEmitContext();
+        emitContext.setEmitFlags(typeLiteral, EmitFlags.SingleLine);
+        assert.strictEqual(emitContext.getEmitFlags(typeLiteral), EmitFlags.SingleLine);
+
+        assert.strictEqual(await api.printer.printNode(typeLiteral, { emitContext }), "{ a: string; b: number; }");
+
+        emitContext.setEmitFlags(typeLiteral, EmitFlags.MultiLine);
+        assert.strictEqual(emitContext.getEmitFlags(typeLiteral), EmitFlags.MultiLine);
+        assert.strictEqual(await api.printer.printNode(typeLiteral, { emitContext }), "{\n    a: string;\n    b: number;\n}");
+    });
+
+    test("printNode with emitContext MultiLine flag expands a single-line object literal", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const multiLineObject = createObjectLiteralExpression([
+            createPropertyAssignment(undefined, createIdentifier("a"), undefined, undefined!, createNumericLiteral("1", 0)),
+        ]);
+        assert.strictEqual(await api.printer.printNode(multiLineObject), "{ a: 1 }");
+
+        const emitContext = api.printer.createEmitContext();
+        emitContext.setEmitFlags(multiLineObject, EmitFlags.MultiLine);
+        assert.strictEqual(emitContext.getEmitFlags(multiLineObject), EmitFlags.MultiLine);
+
+        const text = await api.printer.printNode(multiLineObject, { emitContext });
+        assert.strictEqual(text, "{\n    a: 1\n}");
+    });
+
+    test("printNode with emitContext only affects the node it was attached to", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const emitContext = api.printer.createEmitContext();
+        const commentedProp = createPropertySignatureDeclaration(undefined, createIdentifier("a"), undefined, createKeywordTypeNode(SyntaxKind.StringKeyword), undefined!);
+        const typeLiteral = createTypeLiteralNode([
+            commentedProp,
+            createPropertySignatureDeclaration(undefined, createIdentifier("b"), undefined, createKeywordTypeNode(SyntaxKind.NumberKeyword), undefined!),
+        ]);
+        emitContext.addSyntheticLeadingComment(commentedProp, SyntaxKind.SingleLineCommentTrivia, " only on a", true, false);
+
+        // Both members are part of the same printed tree. The comment attached to
+        // `commentedProp` should not leak onto its sibling.
+        const text = await api.printer.printNode(typeLiteral, { emitContext });
+        assert.strictEqual(
+            text,
+            `{
+    // only on a
+    a: string;
+    b: number;
+}`,
+        );
+    });
+
+    test("printFile applies emitContext synthetic leading comment on a top-level statement", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const sourceFile = await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert(sourceFile);
+
+        const emitContext = api.printer.createEmitContext();
+        emitContext.addSyntheticLeadingComment(sourceFile.statements[0], SyntaxKind.SingleLineCommentTrivia, " printFile honors emitContext", true, false);
+
+        const text = await api.printer.printFile(sourceFile, { emitContext });
+        assert.match(text, /printFile honors emitContext/);
     });
 });
 

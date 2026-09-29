@@ -1005,6 +1005,7 @@ export interface PrintNodeParams {
     preserveSourceNewlines?: boolean | undefined;
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
+    emitNodes?: Record<string, PrintEmitNode | null> | undefined;
 }
 
 /** FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method. */
@@ -1727,6 +1728,13 @@ export interface DiagnosticSourceLineResponse {
     text: string;
 }
 
+/** Extra information for a node used during node printing */
+export interface PrintEmitNode {
+    emitFlags?: number | undefined;
+    leadingComments?: PrintSynthesizedComment[] | undefined;
+    trailingComments?: PrintSynthesizedComment[] | undefined;
+}
+
 export interface EmitOutputFile {
     fileName: string;
     text: string;
@@ -1796,6 +1804,14 @@ export interface ModuleResolutionEntry {
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
     description?: string | undefined;
+}
+
+/** Synthetic comment added during node printing */
+export interface PrintSynthesizedComment {
+    kind: number;
+    text: string;
+    hasTrailingNewLine?: boolean | undefined;
+    hasLeadingNewLine?: boolean | undefined;
 }
 
 export interface CreateProgramOptions {
