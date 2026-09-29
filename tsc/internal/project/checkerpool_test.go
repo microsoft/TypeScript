@@ -2,6 +2,8 @@ package project
 
 import (
 	"context"
+	"fmt"
+	"maps"
 	"sync/atomic"
 	"testing"
 	"testing/synctest"
@@ -11,20 +13,25 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
-func setupCheckerPoolSession(t *testing.T, opts CheckerPoolOptions) (*Session, *checkerPool) {
+func setupCheckerPoolSession(t *testing.T, opts CheckerPoolOptions, compilerOptions map[string]any) (*Session, *checkerPool) {
 	t.Helper()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
 
+	tsconfigOptions := map[string]any{"noLib": true}
+	maps.Copy(tsconfigOptions, compilerOptions)
+	tsconfig, err := json.Marshal(map[string]any{"compilerOptions": tsconfigOptions})
+	assert.NilError(t, err)
 	files := map[string]any{
-		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/tsconfig.json": string(tsconfig),
 		"/src/index.ts":      "export const x: number = 1;",
 	}
 	fs := bundled.WrapFS(vfstest.FromMap(files, false))
@@ -58,7 +65,7 @@ func newTestCheckerPool(program *compiler.Program, opts CheckerPoolOptions) *che
 
 func TestCheckerPoolDiagnosticsRouting(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 
 	// Diagnostics requests should get checker at index 0.
 	ctx := core.WithRequestID(context.Background(), "diag-req-1")
@@ -71,7 +78,7 @@ func TestCheckerPoolDiagnosticsRouting(t *testing.T) {
 
 func TestCheckerPoolQueryRouting(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 
 	// Query requests should get a checker at index > 0.
 	ctx := core.WithRequestID(context.Background(), "query-req-1")
@@ -86,7 +93,7 @@ func TestCheckerPoolQueryRouting(t *testing.T) {
 
 func TestCheckerPoolRequestAffinity(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 
 	ctx, cancel := context.WithCancel(t.Context())
 	defer cancel()
@@ -114,7 +121,7 @@ func TestCheckerPoolIdleCleanup(t *testing.T) {
 	t.Parallel()
 	// Get a real program to use for checker creation, then test the pool
 	// with fake time via synctest.
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -164,7 +171,7 @@ func TestCheckerPoolIdleCleanup(t *testing.T) {
 
 func TestCheckerPoolFileAssociationCleanup(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -202,7 +209,7 @@ func TestCheckerPoolFileAssociationCleanup(t *testing.T) {
 func TestCheckerPoolMinCheckers(t *testing.T) {
 	t.Parallel()
 	// Requesting maxCheckers=1 should be clamped to 2.
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 1, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 1, IdleTimeout: 10 * time.Second}, nil)
 	assert.Equal(t, pool.opts.MaxCheckers, 2)
 	assert.Equal(t, len(pool.checkers), 2)
 }
@@ -210,14 +217,14 @@ func TestCheckerPoolMinCheckers(t *testing.T) {
 func TestCheckerPoolDefaultIdleTimeout(t *testing.T) {
 	t.Parallel()
 	// Zero idle timeout should default to 30s.
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4}, nil)
 	assert.Equal(t, pool.opts.IdleTimeout, 30*time.Second)
 }
 
 func TestCheckerPoolQueryContention(t *testing.T) {
 	t.Parallel()
 	// maxCheckers=2 means 1 diagnostics + 1 query checker slot.
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -255,7 +262,7 @@ func TestCheckerPoolQueryContention(t *testing.T) {
 
 func TestCheckerPoolDiagnosticsContention(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -300,7 +307,7 @@ func TestCheckerPoolDiagnosticsContention(t *testing.T) {
 
 func TestCheckerPoolCanceledCheckerDisposal(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -336,7 +343,7 @@ func TestCheckerPoolCanceledCheckerDisposal(t *testing.T) {
 
 func TestCheckerPoolRequestAssociationCleanupOnDisposal(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -372,7 +379,7 @@ func TestCheckerPoolRequestAssociationCleanupOnDisposal(t *testing.T) {
 
 func TestCheckerPoolRequestAssociationCleanupOnContextDone(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -409,7 +416,7 @@ func TestCheckerPoolRequestAssociationCleanupOnContextDone(t *testing.T) {
 
 func TestCheckerPoolDiagnosticsRecreatedAfterIdleDisposal(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -445,7 +452,7 @@ func TestCheckerPoolDiagnosticsRecreatedAfterIdleDisposal(t *testing.T) {
 func TestCheckerPoolCrossReleaseAffinityWithContention(t *testing.T) {
 	t.Parallel()
 	// maxCheckers=2: 1 diagnostics + 1 query slot.
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -501,7 +508,7 @@ func TestCheckerPoolLifetimeMismatchIgnoresAssociation(t *testing.T) {
 	// Verify that if a request first uses a diagnostics checker, then switches
 	// to a temporary lifetime (or vice versa), the stale association is ignored
 	// rather than returning a checker from the wrong category.
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -539,7 +546,7 @@ func TestCheckerPoolLifetimeMismatchIgnoresAssociation(t *testing.T) {
 
 func TestCheckerPoolNoRequestID(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 
 	// Calls without a request ID should still work (e.g., callhierarchy uses context.Background()).
 	ctx := context.Background()
@@ -557,7 +564,7 @@ func TestCheckerPoolNoRequestID(t *testing.T) {
 
 func TestCheckerPoolDiagnosticsCrossReleaseAffinity(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -585,7 +592,7 @@ func TestCheckerPoolDiagnosticsCrossReleaseAffinity(t *testing.T) {
 
 func TestCheckerPoolDiscardKeepsIdleCheckers(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -641,7 +648,7 @@ func TestCheckerPoolDiscardKeepsIdleCheckers(t *testing.T) {
 
 func TestCheckerPoolDiscardHeldCheckerSurvivesRelease(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -693,7 +700,7 @@ func TestCheckerPoolDiscardHeldCheckerSurvivesRelease(t *testing.T) {
 
 func TestCheckerPoolDiscardStillFunctional(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -739,7 +746,7 @@ func TestCheckerPoolDiscardStillFunctional(t *testing.T) {
 
 func TestCheckerPoolDiagnosticsCheckerStableIdentity(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -766,7 +773,7 @@ func TestCheckerPoolDiagnosticsCheckerStableIdentity(t *testing.T) {
 
 func TestCheckerPoolDiagnosticsCheckerSurvivesDiscard(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -800,7 +807,7 @@ func TestCheckerPoolDiagnosticsCheckerSurvivesDiscard(t *testing.T) {
 
 func TestCheckerPoolDiagnosticsCheckerIndependentFromQuery(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -827,7 +834,7 @@ func TestCheckerPoolDiagnosticsCheckerIndependentFromQuery(t *testing.T) {
 
 func TestCheckerPoolAPICheckerStableIdentity(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -855,7 +862,7 @@ func TestCheckerPoolAPICheckerStableIdentity(t *testing.T) {
 
 func TestCheckerPoolAPICheckerSurvivesDiscard(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -882,7 +889,7 @@ func TestCheckerPoolAPICheckerSurvivesDiscard(t *testing.T) {
 
 func TestCheckerPoolAllThreeIndependent(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -912,7 +919,7 @@ func TestCheckerPoolAllThreeIndependent(t *testing.T) {
 
 func TestCheckerPoolFileAffinity(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -943,7 +950,7 @@ func TestCheckerPoolFileAffinity(t *testing.T) {
 func TestCheckerPoolMultipleConcurrentQueryCheckers(t *testing.T) {
 	t.Parallel()
 	// maxCheckers=4: 1 diagnostics + 3 query slots.
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -1003,7 +1010,7 @@ func TestCheckerPoolMultipleConcurrentQueryCheckers(t *testing.T) {
 
 func TestCheckerPoolDoubleReleaseSafe(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 
 	ctx := core.WithRequestID(context.Background(), "double-release")
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
@@ -1026,7 +1033,7 @@ func TestCheckerPoolDoubleReleaseSafe(t *testing.T) {
 func TestCheckerPoolDefaultMaxCheckers(t *testing.T) {
 	t.Parallel()
 	// Zero MaxCheckers should default to 4.
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 0, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 0, IdleTimeout: 10 * time.Second}, nil)
 	assert.Equal(t, pool.opts.MaxCheckers, 4)
 	assert.Equal(t, len(pool.checkers), 4)
 	assert.Equal(t, cap(pool.querySem), 3, "querySem capacity should be MaxCheckers-1")
@@ -1034,7 +1041,7 @@ func TestCheckerPoolDefaultMaxCheckers(t *testing.T) {
 
 func TestCheckerPoolStaggeredIdleCleanup(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -1098,7 +1105,7 @@ func TestCheckerPoolStaggeredIdleCleanup(t *testing.T) {
 
 func TestCheckerPoolDiscardIdempotent(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -1141,7 +1148,7 @@ func TestCheckerPoolDiscardIdempotent(t *testing.T) {
 
 func TestCheckerPoolGetGlobalDiagnosticsEmpty(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 
 	// Before any checker is used, global diagnostics should be empty.
 	diags := pool.GetGlobalDiagnostics()
@@ -1150,7 +1157,7 @@ func TestCheckerPoolGetGlobalDiagnosticsEmpty(t *testing.T) {
 
 func TestCheckerPoolTakeNewGlobalDiagnostics(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 
 	// Initially, no new globals.
 	assert.Assert(t, !pool.TakeNewGlobalDiagnostics(), "should report no new globals initially")
@@ -1182,7 +1189,7 @@ func TestCheckerPoolTakeNewGlobalDiagnostics(t *testing.T) {
 
 func TestCheckerPoolAPICheckerDisposedOnCancel(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -1219,7 +1226,7 @@ func TestCheckerPoolAPICheckerDisposedOnCancel(t *testing.T) {
 
 func TestCheckerPoolNonCancelableContextNoAffinity(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -1247,7 +1254,7 @@ func TestCheckerPoolNonCancelableContextNoAffinity(t *testing.T) {
 
 func TestCheckerPoolCleanupAfterDiscardIsNoop(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, nil)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
@@ -1280,4 +1287,84 @@ func TestCheckerPoolCleanupAfterDiscardIsNoop(t *testing.T) {
 		assert.Assert(t, hasChecker, "idle checkers must survive cleanup on a discarded pool")
 		pool.mu.Unlock()
 	})
+}
+
+func TestCheckerPoolWholeProgramOperationWhileRequestHoldsChecker(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name string
+		run  func(ctx context.Context, program *compiler.Program)
+	}{
+		{
+			name: "semantic diagnostics",
+			run: func(ctx context.Context, program *compiler.Program) {
+				program.GetSemanticDiagnostics(ctx, nil)
+			},
+		},
+		{
+			name: "declaration diagnostics",
+			run: func(ctx context.Context, program *compiler.Program) {
+				program.GetDeclarationDiagnostics(ctx, nil)
+			},
+		},
+		{
+			name: "emit",
+			run: func(ctx context.Context, program *compiler.Program) {
+				program.Emit(ctx, compiler.EmitOptions{
+					WriteFile: func(string, string, *compiler.WriteFileData) error { return nil },
+				})
+			},
+		},
+	} {
+		for _, kind := range []struct {
+			name     string
+			lifetime core.CheckerLifetime
+		}{
+			{name: "diagnostics checker", lifetime: core.CheckerLifetimeDiagnostics},
+			{name: "query checker", lifetime: core.CheckerLifetimeTemporary},
+		} {
+			for _, singleThreaded := range []bool{false, true} {
+				t.Run(fmt.Sprintf("%s/%s/singleThreaded=%t", test.name, kind.name, singleThreaded), func(t *testing.T) {
+					t.Parallel()
+					synctest.Test(t, func(t *testing.T) {
+						// maxCheckers=2: 1 diagnostics + 1 query slot, so the checker the request
+						// holds is the only one of its kind.
+						session, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second}, map[string]any{"singleThreaded": singleThreaded})
+						ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+						assert.NilError(t, err)
+						program := ls.GetProgram()
+
+						reqCtx, reqCancel := context.WithCancel(context.Background())
+						defer reqCancel()
+						ctx := core.WithRequestID(reqCtx, "req")
+						ctx = core.WithCheckerLifetime(ctx, kind.lifetime)
+
+						// The request holds the checker.
+						c, release := pool.GetChecker(ctx, nil)
+						defer release()
+						assert.Assert(t, c != nil)
+
+						// The request runs the operation, which processes each file in a worker.
+						var finished atomic.Bool
+						go func() {
+							test.run(ctx, program)
+							finished.Store(true)
+						}()
+
+						// The checker is in use, so parallel workers, which run on their own
+						// goroutines, must wait for it rather than use it at the same time.
+						// Single-threaded work runs on the request's own goroutine as the
+						// request itself, so it reuses the checker.
+						synctest.Wait()
+						assert.Equal(t, finished.Load(), singleThreaded)
+
+						// Release the checker. The operation should finish either way.
+						release()
+						synctest.Wait()
+						assert.Assert(t, finished.Load(), "operation should finish after the checker is released")
+					})
+				})
+			}
+		}
+	}
 }
