@@ -3,17 +3,23 @@ import type {
     BindingElement,
     CallExpression,
     ClassDeclaration,
+    ClassElement,
+    Declaration,
     ExportAssignment,
     ExpressionStatement,
     FunctionDeclaration,
     Identifier,
+    InterfaceDeclaration,
     JSDoc,
     MethodDeclaration,
     Node,
     NodeArray,
     ObjectBindingPattern,
+    ObjectLiteralElement,
+    ObjectLiteralExpression,
     SourceFile,
     StringLiteralLikeNode,
+    TypeElement,
     VariableStatement,
 } from "@typescript/typescript/unstable/ast";
 import {
@@ -57,7 +63,6 @@ import {
     visitNode,
     visitNodes,
 } from "@typescript/typescript/unstable/ast/visitor";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import {
     API,
     Checker,
@@ -69,7 +74,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
-import { areTestsFiltered } from "../testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
@@ -672,6 +680,27 @@ describe("declaration utilities", { concurrency }, () => {
             getCombinedModifierFlags(binding),
             ModifierFlags.Export,
         );
+    });
+
+    test("element categories are named declarations", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `
+class C { public member = 1; }
+interface I { member?: number; }
+const object = { member: 1 };
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const classElement: ClassElement = (sf.statements[0] as ClassDeclaration).members[0];
+        const typeElement: TypeElement = (sf.statements[1] as InterfaceDeclaration).members[0];
+        const variable = sf.statements[2] as VariableStatement;
+        const objectLiteral = variable.declarationList.declarations[0].initializer as ObjectLiteralExpression;
+        const objectLiteralElement: ObjectLiteralElement = objectLiteral.properties[0];
+        const declarations: readonly Declaration[] = [classElement, typeElement, objectLiteralElement];
+
+        assert.deepStrictEqual(declarations.map(declaration => getNameOfDeclaration(declaration)?.getText()), ["member", "member", "member"]);
+        assert.strictEqual(getCombinedModifierFlags(classElement), ModifierFlags.Public);
     });
 
     test("getNameOfDeclaration returns declared and assigned names", () => {

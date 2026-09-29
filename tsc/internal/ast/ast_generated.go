@@ -2492,6 +2492,7 @@ func IsNotEmittedStatement(node *Node) bool {
 type NotEmittedTypeElement struct {
 	TypeElementBase
 	NodeBase
+	DeclarationBase
 }
 
 func (f *NodeFactory) NewNotEmittedTypeElement() *Node {
@@ -6692,6 +6693,7 @@ func IsJsxAttribute(node *Node) bool {
 type JsxSpreadAttribute struct {
 	ObjectLiteralElementBase
 	NodeBase
+	DeclarationBase
 	Expression *Expression
 }
 
