@@ -98,6 +98,7 @@ import {
     TypePredicateKind,
     type TypeReference,
     type UnionOrIntersectionType,
+    type UnionType,
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import {
     createFileSystem,
@@ -3644,6 +3645,52 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         const uType = await project.checker.getTypeOfSymbol(uSymbol);
         assert.ok(uType);
         assert.equal((await (uType as UnionOrIntersectionType).getTypes()).length, 2);
+    });
+
+    test("UnionType.getOrigin() returns undefined for a plain union", async () => {
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "union:");
+        await using api = disposableAPI;
+
+        assert.ok(type.flags & TypeFlags.Union);
+        const union = type as UnionType;
+        assert.equal(await union.getOrigin(), undefined);
+    });
+
+    test("UnionType.getOrigin() returns undefined for a non-union type without hitting the server", async () => {
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "arr:");
+        await using api = disposableAPI;
+
+        assert.ok(!(type.flags & TypeFlags.Union));
+        assert.equal(await (type as unknown as UnionType).getOrigin(), undefined);
+    });
+
+    test("UnionType.getOrigin() recovers the denormalized union when combining named unions", async () => {
+        const src = `
+export type AB = "a" | "b";
+export declare const value: AB | "c";
+`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value:"));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Union, `Expected Union, got flags ${type.flags}`);
+        const union = type as UnionType;
+
+        const origin = await union.getOrigin();
+        assert.ok(origin, "Expected getOrigin() to return the denormalized union");
+        assert.ok(origin.flags & TypeFlags.Union, "Origin should itself be a union");
+        const originTypes = await (origin as unknown as UnionOrIntersectionType).getTypes();
+        assert.equal(originTypes.length, 2, 'Origin should preserve the AB named union and "c" as two constituents');
+
+        const flattenedTypes = await union.getTypes();
+        assert.equal(flattenedTypes.length, 3, "The normalized union should be fully flattened to three constituents");
     });
 
     test("IndexType.getTarget() returns the target type", async () => {

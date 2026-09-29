@@ -244,6 +244,8 @@ export interface UnionOrIntersectionType extends Type {
 
 /** Union types (TypeFlags.Union) */
 export interface UnionType extends UnionOrIntersectionType {
+    /** Get the denormalized union, intersection, or index type this union originates from, if any */
+    getOrigin(): Promise<Type | undefined>;
 }
 
 /** Intersection types (TypeFlags.Intersection) */

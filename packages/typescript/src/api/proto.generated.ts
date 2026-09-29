@@ -84,6 +84,7 @@ export interface APIMethodInfo {
     getTargetOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getFreshTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getRegularTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
+    getOriginOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getTypesOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getOuterTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
@@ -516,6 +517,8 @@ export interface TypeResponse {
     /** FreshableType data (LiteralType and computed enum types) */
     freshType?: number | undefined;
     regularType?: number | undefined;
+    /** UnionType data */
+    origin?: number | undefined;
     /** TypeParameter data */
     isThisType?: boolean | undefined;
     /** InterfaceType data */
@@ -1161,6 +1164,7 @@ export interface BatchRequest {
         | "getNullType"
         | "getNumberType"
         | "getObjectTypeOfType"
+        | "getOriginOfType"
         | "getOuterTypeParametersOfType"
         | "getParameterType"
         | "getParametersOfSignature"
@@ -1336,6 +1340,7 @@ export interface BatchResponse {
         | "getNullType"
         | "getNumberType"
         | "getObjectTypeOfType"
+        | "getOriginOfType"
         | "getOuterTypeParametersOfType"
         | "getParameterType"
         | "getParametersOfSignature"

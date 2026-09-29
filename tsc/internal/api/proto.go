@@ -134,6 +134,7 @@ const (
 	MethodGetTargetOfType               Method = "getTargetOfType"
 	MethodGetFreshTypeOfType            Method = "getFreshTypeOfType"
 	MethodGetRegularTypeOfType          Method = "getRegularTypeOfType"
+	MethodGetOriginOfType               Method = "getOriginOfType"
 	MethodGetTypesOfType                Method = "getTypesOfType"
 	MethodGetTypeParametersOfType       Method = "getTypeParametersOfType"
 	MethodGetOuterTypeParametersOfType  Method = "getOuterTypeParametersOfType"
@@ -633,6 +634,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTargetOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetFreshTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetRegularTypeOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetOriginOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypesOfType:                unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypeParametersOfType:       unmarshallerFor[GetTypePropertyParams],
 	MethodGetOuterTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
@@ -1176,6 +1178,9 @@ type TypeResponse struct {
 	FreshType   TypeID `json:"freshType,omitzero"`
 	RegularType TypeID `json:"regularType,omitzero"`
 
+	// UnionType data
+	Origin TypeID `json:"origin,omitzero"`
+
 	// TypeParameter data
 	IsThisType bool `json:"isThisType,omitempty"`
 
@@ -1251,6 +1256,11 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		}
 	case flags&checker.TypeFlagsUnionOrIntersection != 0:
 		// types omitted; fetched via separate request
+		if flags&checker.TypeFlagsUnion != 0 {
+			if origin := t.AsUnionType().Origin(); origin != nil {
+				resp.Origin = TypeHandle(origin)
+			}
+		}
 	case flags&checker.TypeFlagsIndex != 0:
 		resp.Target = TypeHandle(t.AsIndexType().Target())
 	case flags&checker.TypeFlagsIndexedAccess != 0:

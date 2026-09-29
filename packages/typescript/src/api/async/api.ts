@@ -3159,6 +3159,7 @@ class TypeObject implements Type {
     readonly isThisType!: boolean;
     readonly freshType!: number;
     readonly regularType!: number;
+    readonly origin!: number;
     readonly target!: number;
     private readonly tupleType: boolean;
     readonly typeParameters!: readonly number[];
@@ -3239,6 +3240,7 @@ class TypeObject implements Type {
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
+        if (data.origin !== undefined) this.origin = data.origin;
         if (data.target !== undefined) this.target = data.target;
         this.tupleType = data.isTupleType ?? false;
         this.typeParameters = data.typeParameters ?? [];
@@ -3384,6 +3386,13 @@ class TypeObject implements Type {
 
     async getRegularType(): Promise<FreshableType | undefined> {
         return this.objectRegistry.fetchOptionalType(this, "getRegularTypeOfType", this.regularType);
+    }
+
+    async getOrigin(): Promise<Type | undefined> {
+        if (!(this.flags & TypeFlags.Union)) {
+            return undefined;
+        }
+        return this.objectRegistry.fetchOptionalType(this, "getOriginOfType", this.origin);
     }
 
     async getTypes(): Promise<readonly Type[] | undefined> {

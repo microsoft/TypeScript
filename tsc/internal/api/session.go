@@ -841,6 +841,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetFreshTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetRegularTypeOfType):
 		return s.handleGetRegularTypeOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetOriginOfType):
+		return s.handleGetOriginOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypesOfType):
 		return s.handleGetTypesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypeParametersOfType):
@@ -2727,6 +2729,11 @@ func (s *Session) handleGetFreshTypeOfType(ctx context.Context, params *GetTypeP
 // @gen-proto-nullable
 func (s *Session) handleGetRegularTypeOfType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	return s.resolveTypePropertyOfType(ctx, params, func(t *checker.Type) *checker.Type { return t.AsLiteralType().RegularType() })
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetOriginOfType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypePropertyOfType(ctx, params, func(t *checker.Type) *checker.Type { return t.AsUnionType().Origin() })
 }
 
 // @gen-proto-nullable

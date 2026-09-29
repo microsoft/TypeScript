@@ -6596,6 +6596,7 @@ class TypeObject implements Type {
     readonly isThisType!: boolean;
     readonly freshType!: number;
     readonly regularType!: number;
+    readonly origin!: number;
     readonly target!: number;
     private readonly tupleType: boolean;
     readonly typeParameters!: readonly number[];
@@ -6676,6 +6677,7 @@ class TypeObject implements Type {
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
+        if (data.origin !== undefined) this.origin = data.origin;
         if (data.target !== undefined) this.target = data.target;
         this.tupleType = data.isTupleType ?? false;
         this.typeParameters = data.typeParameters ?? [];
@@ -7082,6 +7084,29 @@ class TypeObject implements Type {
             },
             function* (): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]> {
                 return yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getRegularTypeOfType", owner.regularType);
+            },
+        );
+    }
+
+    get getOrigin(): {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getOrigin",
+            function (): Type | undefined {
+                if (!(owner.flags & TypeFlags.Union)) {
+                    return undefined;
+                }
+                return owner.objectRegistry.fetchOptionalType(owner, "getOriginOfType", owner.origin);
+            },
+            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                if (!(owner.flags & TypeFlags.Union)) {
+                    return undefined;
+                }
+                return yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getOriginOfType", owner.origin);
             },
         );
     }

@@ -1174,6 +1174,8 @@ type UnionType struct {
 	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
 }
 
+func (t *UnionType) Origin() *Type { return t.origin }
+
 // IntersectionType
 
 type IntersectionType struct {
