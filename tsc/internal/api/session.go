@@ -1370,7 +1370,7 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
 			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
-			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
+			factory, err := s.moduleResolverFactory(programParams.Options)
 			if err != nil {
 				return nil, err
 			}
@@ -1405,7 +1405,7 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
 			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
-			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
+			factory, err := s.moduleResolverFactory(programParams.Options)
 			if err != nil {
 				return nil, err
 			}
