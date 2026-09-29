@@ -11,7 +11,7 @@ import (
 
 type Symbol struct {
 	Flags            SymbolFlags
-	CheckFlags       CheckFlags // Non-zero only in transient symbols
+	CheckFlags       CheckFlags // Non-zero only in transient symbols created by Checker
 	Name             string
 	Declarations     []*Node
 	ValueDeclaration *Node

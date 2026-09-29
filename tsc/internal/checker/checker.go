@@ -14312,7 +14312,7 @@ func (c *Checker) newSymbol(flags ast.SymbolFlags, name string) *ast.Symbol {
 
 func (c *Checker) newSymbolEx(flags ast.SymbolFlags, name string, checkFlags ast.CheckFlags) *ast.Symbol {
 	result := c.newSymbol(flags, name)
-	result.CheckFlags |= checkFlags
+	result.CheckFlags = checkFlags
 	return result
 }
 
@@ -21120,7 +21120,7 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 	// Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
 	// also transient so that we can just store data on it directly.
 	result := c.newSymbol(symbol.Flags, symbol.Name)
-	result.CheckFlags |= ast.CheckFlagsInstantiated | symbol.CheckFlags&(ast.CheckFlagsReadonly|ast.CheckFlagsLate|ast.CheckFlagsOptionalParameter|ast.CheckFlagsRestParameter)
+	result.CheckFlags = ast.CheckFlagsInstantiated | symbol.CheckFlags&(ast.CheckFlagsReadonly|ast.CheckFlagsLate|ast.CheckFlagsOptionalParameter|ast.CheckFlagsRestParameter)
 	result.Declarations = symbol.Declarations
 	result.Parent = symbol.Parent
 	result.ValueDeclaration = symbol.ValueDeclaration
@@ -21275,7 +21275,7 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 					lateFlag = modifiersProp.CheckFlags & ast.CheckFlagsLate
 				}
 				prop := c.newSymbol(ast.SymbolFlagsProperty|core.IfElse(isOptional, ast.SymbolFlagsOptional, 0), propName)
-				prop.CheckFlags |= lateFlag | ast.CheckFlagsMapped | core.IfElse(isReadonly, ast.CheckFlagsReadonly, 0) | core.IfElse(stripOptional, ast.CheckFlagsStripOptional, 0)
+				prop.CheckFlags = lateFlag | ast.CheckFlagsMapped | core.IfElse(isReadonly, ast.CheckFlagsReadonly, 0) | core.IfElse(stripOptional, ast.CheckFlagsStripOptional, 0)
 				valueLinks := c.valueSymbolLinks.Get(prop)
 				valueLinks.containingType = t
 				valueLinks.nameType = propNameType
