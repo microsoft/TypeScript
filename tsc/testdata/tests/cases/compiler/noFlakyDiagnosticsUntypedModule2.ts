@@ -1,12 +1,7 @@
+// @noImplicitAny: true
+// @declaration: true
+// @noImplicitReferences: true
 // @captureSuggestions: true
-// @Filename: /tsconfig.json
-{
-    "compilerOptions": {
-        "noImplicitAny": true,
-        "declaration": true
-    },
-    "files": ["/index.ts"]
-}
 // @Filename: /untyped.js
 exports.x = 1;
 // @Filename: /index.ts
