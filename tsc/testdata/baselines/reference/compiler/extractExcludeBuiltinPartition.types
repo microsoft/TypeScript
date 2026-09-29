@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/extractExcludeBuiltinPartition.ts] ////
+
+=== extractExcludeBuiltinPartition.ts ===
+type Partition<T, U> = Extract<T, U> | Exclude<T, U>;
+>Partition : T
+
+function partition<T, U>(value: T): Partition<T, U> {
+>partition : <T, U>(value: T) => Partition<T, U>
+>value : T
+
+    return value;
+>value : T
+}
+
+function identity<T, U>(value: Partition<T, U>): T {
+>identity : <T, U>(value: Partition<T, U>) => T
+>value : T
+
+    return value;
+>value : T
+}
+
+function unionPartition<T, A, B>(value: T): Extract<T, A | B> | Exclude<T, A | B> {
+>unionPartition : <T, A, B>(value: T) => Extract<T, A | B> | Exclude<T, A | B>
+>value : T
+
+    return value;
+>value : T
+}
+
+const extractedUnknown: Extract<unknown, string> = "chosen";
+>extractedUnknown : string
+>"chosen" : "chosen"
+
+const extractedLiteral: Extract<string, "chosen"> = "chosen";
+>extractedLiteral : "chosen"
+>"chosen" : "chosen"
+
+const excludedLiteral: Exclude<string, "chosen"> = "other";
+>excludedLiteral : Exclude<string, "chosen">
+>"other" : "other"
+
+const excludedChosen: Exclude<string, "chosen"> = "chosen";
+>excludedChosen : Exclude<string, "chosen">
+>"chosen" : "chosen"
+
+const extractedAny: Extract<any, string> = 123;
+>extractedAny : any
+>123 : 123
+
+const excludedAny: Exclude<any, string> = "chosen";
+>excludedAny : any
+>"chosen" : "chosen"
+
+const extractedNever: Extract<string, never> = "chosen";
+>extractedNever : never
+>"chosen" : "chosen"
+
+const excludedUnknown: Exclude<string, unknown> = "chosen";
+>excludedUnknown : never
+>"chosen" : "chosen"
+
+type Props = { owner: string; count: number };
+>Props : Props
+>owner : string
+>count : number
+
+const omitted: Omit<Props, "owner"> = { count: 1 };
+>omitted : Omit<Props, "owner">
+>{ count: 1 } : { count: number; }
+>count : number
+>1 : 1
+
+const restored: Props = { ...omitted, owner: "chosen" };
+>restored : Props
+>{ ...omitted, owner: "chosen" } : { count: number; owner: string; }
+>omitted : Omit<Props, "owner">
+>owner : string
+>"chosen" : "chosen"
+
+declare function withOwner<T extends { owner: string }>(props: Omit<T, "owner"> & { owner: string }): T;
+>withOwner : <T extends { owner: string; }>(props: Omit<T, "owner"> & { owner: string; }) => T
+>owner : string
+>props : Omit<T, "owner"> & { owner: string; }
+>owner : string
+
+function render<T extends { owner: string }>(props: T): T {
+>render : <T extends { owner: string; }>(props: T) => T
+>owner : string
+>props : T
+
+    return withOwner<T>(props);
+>withOwner<T>(props) : T
+>withOwner : <T_1 extends { owner: string; }>(props: Omit<T_1, "owner"> & { owner: string; }) => T_1
+>props : T
+}
+
+type Product = { kind: "a"; value: 0 } | { kind: "b"; value: 1 };
+>Product : Product
+>kind : "a"
+>value : 0
+>kind : "b"
+>value : 1
+
+type DoubleExcluded = {
+>DoubleExcluded : DoubleExcluded
+
+    [Kind in Product["kind"]]: Exclude<Product, Exclude<Product, { kind: Kind }>>;
+>kind : Kind
+
+};
+const productA: DoubleExcluded["a"] = { kind: "a", value: 0 };
+>productA : { kind: "a"; value: 0; }
+>{ kind: "a", value: 0 } : { kind: "a"; value: 0; }
+>kind : "a"
+>"a" : "a"
+>value : 0
+>0 : 0
+
+const productB: DoubleExcluded["b"] = { kind: "b", value: 1 };
+>productB : { kind: "b"; value: 1; }
+>{ kind: "b", value: 1 } : { kind: "b"; value: 1; }
+>kind : "b"
+>"b" : "b"
+>value : 1
+>1 : 1
+

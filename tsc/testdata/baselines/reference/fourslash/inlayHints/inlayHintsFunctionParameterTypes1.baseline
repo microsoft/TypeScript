@@ -87,6 +87,31 @@ foo2((a) => { })
       "value": ": "
     },
     {
+      "value": "Exclude",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "1"
+    },
+    {
+      "value": " | "
+    },
+    {
       "value": "2"
     },
     {
@@ -94,6 +119,15 @@ foo2((a) => { })
     },
     {
       "value": "3"
+    },
+    {
+      "value": ","
+    },
+    {
+      "value": "1"
+    },
+    {
+      "value": ">"
     }
   ],
   "kind": 1,
@@ -156,6 +190,31 @@ foo3(a => {
       "value": ": "
     },
     {
+      "value": "Exclude",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "1"
+    },
+    {
+      "value": " | "
+    },
+    {
       "value": "2"
     },
     {
@@ -163,6 +222,15 @@ foo3(a => {
     },
     {
       "value": "3"
+    },
+    {
+      "value": ","
+    },
+    {
+      "value": "1"
+    },
+    {
+      "value": ">"
     },
     {
       "value": ")"
@@ -199,6 +267,31 @@ foo3(a => {
       "value": ": "
     },
     {
+      "value": "Exclude",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "1"
+    },
+    {
+      "value": " | "
+    },
+    {
       "value": "2"
     },
     {
@@ -206,6 +299,15 @@ foo3(a => {
     },
     {
       "value": "3"
+    },
+    {
+      "value": ","
+    },
+    {
+      "value": "1"
+    },
+    {
+      "value": ">"
     }
   ],
   "kind": 1,
