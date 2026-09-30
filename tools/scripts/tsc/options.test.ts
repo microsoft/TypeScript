@@ -283,6 +283,14 @@ test("all generated options artifacts are checked in and current", () => {
     }
 });
 
+test("schemas are generated directly in the TypeScript package", () => {
+    const files = generateOptions();
+    assert.deepEqual([...files.keys()].filter(file => file.endsWith(".schema.json")), [
+        "packages/typescript/schemas/tsconfig.schema.json",
+        "packages/typescript/schemas/jsconfig.schema.json",
+    ]);
+});
+
 test("schema compiler properties are config-visible declarations plus schema-only history", () => {
     const schema = generateConfigSchema("tsconfig");
     const expected = options.compilerOptions.filter(option => {

@@ -355,7 +355,7 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const generate = () => x("npx", ["hereby", "generate:go"], { throwOnError: true, nodeOptions: { cwd: root } });
     const first = await generate();
     assert.doesNotMatch(first.stdout, /\$ go generate|npm run --silent cache|\$ node .*generate-unicode-data/);
-    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/*.generated.ts", "packages/typescript/src/enums/*.ts", "tsc/internal/tsoptions/schemas/*.schema.json"], { cwd: root });
+    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/*.generated.ts", "packages/typescript/src/enums/*.ts", "packages/typescript/schemas/*.schema.json"], { cwd: root });
     const timestamps = files.map(file => fs.statSync(path.join(root, file)).mtimeMs);
     const current = await generate();
     assert.doesNotMatch(current.stdout, /Generated codegen outputs|Generated Unicode tables/);

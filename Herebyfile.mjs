@@ -2249,7 +2249,6 @@ async function runBuildNativePreviewPackages() {
     // Copy package contents excluding node_modules and dist (dist is copied separately after build).
     // The package.json "files" field controls what npm pack actually includes.
     await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
-    await cpRecursive("tsc/internal/tsoptions/schemas", path.join(mainPackageDir, "schemas"));
     if (publishAsTypescript) {
         await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
         await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
@@ -2376,7 +2375,7 @@ async function testNativePreviewPackage(platforms) {
             assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
             assert.deepEqual(
                 await fs.promises.readFile(path.join(mainPackageDir, schemaPath)),
-                await fs.promises.readFile(path.join("tsc/internal/tsoptions/schemas", `${name}.schema.json`)),
+                await fs.promises.readFile(path.join("packages/typescript", schemaPath)),
             );
             assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
         }

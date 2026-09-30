@@ -724,7 +724,7 @@ ${configDirSubstitution()}
 ${showConfig()}
 `,
         ],
-        ...(["tsconfig", "jsconfig"] as const).map(name => [`tsc/internal/tsoptions/schemas/${name}.schema.json`, JSON.stringify(generateConfigSchema(name), null, 4) + "\n"] as [string, string]),
+        ...(["tsconfig", "jsconfig"] as const).map(name => [`packages/typescript/schemas/${name}.schema.json`, JSON.stringify(generateConfigSchema(name), null, 4) + "\n"] as [string, string]),
     ]);
 }
 
