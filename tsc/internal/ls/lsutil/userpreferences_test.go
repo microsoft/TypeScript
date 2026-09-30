@@ -19,6 +19,98 @@ func TestCompletionPreferencesUnmarshal(t *testing.T) {
 	userPreferences := NewDefaultUserPreferences().WithCompletionPreferences(preferences)
 	assert.Equal(t, userPreferences.IncludeCompletionsForModuleExports, core.TSFalse)
 	assert.Equal(t, userPreferences.IncludeCompletionsForImportStatements, core.TSTrue)
+	userPreferences = userPreferences.WithCompletionPreferences(CompletionPreferences{
+		IncludeCompletionsForModuleExports: core.Tristate(99),
+	})
+	assert.Equal(t, userPreferences.IncludeCompletionsForModuleExports, core.TSFalse)
+}
+
+func TestUserPreferencesParsingEdgeCases(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name     string
+		config   map[string]any
+		expected func(*UserPreferences)
+	}{
+		{
+			name: "null raw values leave preferences unchanged",
+			config: map[string]any{
+				"quotePreference": nil, "maximumHoverLength": nil, "includeCompletionsForModuleExports": nil,
+			},
+			expected: func(*UserPreferences) {},
+		},
+		{
+			name:     "invalid boolean becomes unknown",
+			config:   map[string]any{"includeCompletionsForModuleExports": "invalid"},
+			expected: func(p *UserPreferences) { p.IncludeCompletionsForModuleExports = core.TSUnknown },
+		},
+		{
+			name: "case-insensitive enums",
+			config: map[string]any{
+				"quotePreference": "SINGLE", "jsxAttributeCompletionStyle": "BRACES",
+				"organizeImportsCaseFirst": "LOWER", "includeInlayParameterNameHints": "ALL",
+				"organizeImportsTypeOrder": "FIRST", "workspaceSymbolsScope": "CURRENTPROJECT",
+			},
+			expected: func(p *UserPreferences) {
+				p.QuotePreference = QuotePreferenceSingle
+				p.JsxAttributeCompletionStyle = JsxAttributeCompletionStyleBraces
+				p.OrganizeImportsCaseFirst = OrganizeImportsCaseFirstLower
+				p.InlayHintsPreferences.IncludeInlayParameterNameHints = IncludeInlayParameterNameHintsAll
+				p.OrganizeImportsTypeOrder = OrganizeImportsTypeOrderFirst
+				p.WorkspaceSymbolsScope = WorkspaceSymbolsScopeCurrentProject
+			},
+		},
+		{
+			name: "present null primary path prevents fallback",
+			config: map[string]any{
+				"suggest": map[string]any{"jsdoc": map[string]any{"enabled": nil}, "completeJSDocs": false},
+			},
+			expected: func(*UserPreferences) {},
+		},
+		{
+			name: "null case sensitivity becomes unknown",
+			config: map[string]any{
+				"preferences": map[string]any{"organizeImports": map[string]any{"caseSensitivity": nil}},
+			},
+			expected: func(p *UserPreferences) { p.OrganizeImportsIgnoreCase = core.TSUnknown },
+		},
+		{
+			name: "numeric conversion and array filtering",
+			config: map[string]any{
+				"maximumHoverLength": float64(9.8), "indentStyle": float64(1.7),
+				"autoImportFileExcludePatterns": []any{"first", false, 3, "second"},
+			},
+			expected: func(p *UserPreferences) {
+				p.MaximumHoverLength = 9
+				p.IndentStyle = IndentStyleBlock
+				p.AutoImportFileExcludePatterns = []string{"first", "second"}
+			},
+		},
+		{
+			name:     "empty array is not nil",
+			config:   map[string]any{"autoImportFileExcludePatterns": []any{}},
+			expected: func(p *UserPreferences) { p.AutoImportFileExcludePatterns = []string{} },
+		},
+		{
+			name:   "invalid module specifier preference uses its default",
+			config: map[string]any{"importModuleSpecifierPreference": true},
+			expected: func(p *UserPreferences) {
+				p.ImportModuleSpecifierPreference = modulespecifiers.ImportModuleSpecifierPreferenceShortest
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			base := NewDefaultUserPreferences()
+			base.QuotePreference = QuotePreferenceDouble
+			base.MaximumHoverLength = 17
+			base.OrganizeImportsIgnoreCase = core.TSTrue
+			expected := base
+			test.expected(&expected)
+			assert.DeepEqual(t, base.withConfig(test.config), expected)
+		})
+	}
 }
 
 func fillNonZeroValues(v reflect.Value) {
@@ -53,6 +145,8 @@ func getValidStringValue(t reflect.Type) string {
 	switch typeName {
 	case "lsutil.QuotePreference":
 		return string(QuotePreferenceSingle)
+	case "lsutil.WorkspaceSymbolsScope":
+		return string(WorkspaceSymbolsScopeAllOpenProjects)
 	case "lsutil.JsxAttributeCompletionStyle":
 		return string(JsxAttributeCompletionStyleBraces)
 	case "lsutil.IncludeInlayParameterNameHints":
@@ -133,10 +227,8 @@ func TestUserPreferencesSerialize(t *testing.T) {
 	t.Run("inlay hint inversion on serialize", func(t *testing.T) {
 		t.Parallel()
 		prefs := &UserPreferences{
-			InlayHints: InlayHintsPreferences{
-				IncludeInlayParameterNameHints:                        IncludeInlayParameterNameHintsAll,
-				IncludeInlayParameterNameHintsWhenArgumentMatchesName: core.TSTrue,
-			},
+			IncludeInlayParameterNameHints:                        IncludeInlayParameterNameHintsAll,
+			IncludeInlayParameterNameHintsWhenArgumentMatchesName: core.TSTrue,
 		}
 		jsonBytes, err := json.Marshal(prefs)
 		assert.NilError(t, err)
@@ -206,8 +298,8 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 				}
 			}`,
 			expected: UserPreferences{
-				QuotePreference:     QuotePreferenceSingle,
-				UseAliasesForRename: core.TSTrue,
+				QuotePreference:                     QuotePreferenceSingle,
+				ProvidePrefixAndSuffixTextForRename: core.TSTrue,
 			},
 		},
 		{
@@ -234,7 +326,7 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 				}
 			}`,
 			expected: UserPreferences{
-				InlayHints: InlayHintsPreferences{
+				InlayHintsPreferences: InlayHintsPreferences{
 					IncludeInlayParameterNameHints:                        IncludeInlayParameterNameHintsAll,
 					IncludeInlayParameterNameHintsWhenArgumentMatchesName: core.TSFalse, // inverted
 				},
@@ -313,11 +405,11 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 				}
 			}`,
 			expected: UserPreferences{
-				IncludeCompletionsForModuleExports: core.TSTrue,
-				QuotePreference:                    QuotePreferenceSingle,
-				UseAliasesForRename:                core.TSTrue,
-				OrganizeImportsLocale:              "en",
-				InlayHints: InlayHintsPreferences{
+				IncludeCompletionsForModuleExports:  core.TSTrue,
+				QuotePreference:                     QuotePreferenceSingle,
+				ProvidePrefixAndSuffixTextForRename: core.TSTrue,
+				OrganizeImportsLocale:               "en",
+				InlayHintsPreferences: InlayHintsPreferences{
 					IncludeInlayParameterNameHints: IncludeInlayParameterNameHintsAll,
 				},
 			},
@@ -498,9 +590,9 @@ func TestUserPreferencesParseServerFeaturePreferences(t *testing.T) {
 				},
 			},
 		})
-		assert.Equal(t, prefs.EnableValidation, core.TSFalse)
-		assert.Equal(t, prefs.EnableFormatting, core.TSFalse)
-		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSFalse)
+		assert.Equal(t, prefs.ValidateEnabled, core.TSFalse)
+		assert.Equal(t, prefs.FormatEnabled, core.TSFalse)
+		assert.Equal(t, prefs.AutoClosingTags, core.TSFalse)
 	})
 
 	t.Run("legacy server feature fallbacks", func(t *testing.T) {
@@ -512,9 +604,9 @@ func TestUserPreferencesParseServerFeaturePreferences(t *testing.T) {
 				"autoClosingTags": false,
 			},
 		})
-		assert.Equal(t, prefs.EnableValidation, core.TSFalse)
-		assert.Equal(t, prefs.EnableFormatting, core.TSFalse)
-		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSFalse)
+		assert.Equal(t, prefs.ValidateEnabled, core.TSFalse)
+		assert.Equal(t, prefs.FormatEnabled, core.TSFalse)
+		assert.Equal(t, prefs.AutoClosingTags, core.TSFalse)
 	})
 
 	t.Run("preferred settings take precedence over fallbacks", func(t *testing.T) {
@@ -533,9 +625,9 @@ func TestUserPreferencesParseServerFeaturePreferences(t *testing.T) {
 				},
 			},
 		})
-		assert.Equal(t, prefs.EnableValidation, core.TSTrue)
-		assert.Equal(t, prefs.EnableFormatting, core.TSTrue)
-		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSTrue)
+		assert.Equal(t, prefs.ValidateEnabled, core.TSTrue)
+		assert.Equal(t, prefs.FormatEnabled, core.TSTrue)
+		assert.Equal(t, prefs.AutoClosingTags, core.TSTrue)
 	})
 }
 
@@ -568,7 +660,7 @@ func TestUserPreferencesParseJSDocCompletionPreferences(t *testing.T) {
 				},
 			},
 		})
-		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSFalse)
+		assert.Equal(t, prefs.CompleteJSDocs, core.TSFalse)
 	})
 
 	t.Run("language fallback completeJSDocs setting", func(t *testing.T) {
@@ -580,7 +672,7 @@ func TestUserPreferencesParseJSDocCompletionPreferences(t *testing.T) {
 				},
 			},
 		})
-		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSFalse)
+		assert.Equal(t, prefs.CompleteJSDocs, core.TSFalse)
 	})
 
 	t.Run("unified jsdoc enabled takes precedence over language fallback", func(t *testing.T) {
@@ -599,7 +691,7 @@ func TestUserPreferencesParseJSDocCompletionPreferences(t *testing.T) {
 				},
 			},
 		})
-		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSTrue)
+		assert.Equal(t, prefs.CompleteJSDocs, core.TSTrue)
 	})
 
 	t.Run("unified jsdoc generateReturns setting", func(t *testing.T) {

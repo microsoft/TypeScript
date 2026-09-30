@@ -403,10 +403,7 @@ func (r *typeRenderer) indexPackage(pkg *packages.Package) {
 
 func (r *typeRenderer) recordDoc(obj types.Object, doc *ast.CommentGroup) {
 	if obj != nil && doc != nil {
-		text := strings.TrimSpace(doc.Text())
-		if text != "!!!" {
-			r.docs[obj] = text
-		}
+		r.docs[obj] = strings.TrimSpace(doc.Text())
 	}
 }
 
@@ -516,22 +513,9 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/core.Tristate":
 		return "boolean"
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.IndentStyle":
-		return `"none" | "block" | "smart"`
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.QuotePreference":
-		return `"auto" | "double" | "single"`
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.JsxAttributeCompletionStyle":
-		return `"auto" | "braces" | "none"`
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.IncludeInlayParameterNameHints":
-		return `"none" | "literals" | "all"`
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.OrganizeImportsSort":
-		return `"auto" | "ordinal" | "ordinalIgnoreCase" | "natural" | "naturalIgnoreCase"`
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.OrganizeImportsCollation":
-		return `"ordinal" | "unicode"`
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.OrganizeImportsCaseFirst":
-		return `"default" | "lower" | "upper"`
-	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.OrganizeImportsTypeOrder":
-		return `"auto" | "last" | "inline" | "first"`
+	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.UserPreferences",
+		"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.CompletionPreferences":
+		return r.importTypeOnly(obj.Name(), "./userPreferences.generated.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.JsxEmit":
 		return r.importType("JsxEmit", "#enums/jsxEmit")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleDetectionKind":
@@ -546,10 +530,6 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importType("ScriptTarget", "#enums/scriptTarget")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptKind":
 		return r.importType("ScriptKind", "#enums/scriptKind")
-	case "github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.ImportModuleSpecifierPreference":
-		return `"shortest" | "project-relative" | "relative" | "non-relative"`
-	case "github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.ImportModuleSpecifierEndingPreference":
-		return `"auto" | "minimal" | "index" | "js"`
 	case "github.com/microsoft/TypeScript/tsc/internal/collections.OrderedMap":
 		if named.TypeArgs().Len() != 2 {
 			return "Record<string, unknown>"
@@ -652,10 +632,6 @@ func (r *typeRenderer) declarations() (string, error) {
 		for field := range structType.Fields() {
 			if field.Embedded() {
 				embedded = append(embedded, r.typeString(field.Type(), false))
-			} else if named.Obj().Pkg().Path() == "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil" &&
-				named.Obj().Name() == "UserPreferences" &&
-				(field.Name() == "InlayHints" || field.Name() == "CodeLens") {
-				embedded = append(embedded, r.typeString(field.Type(), false))
 			}
 		}
 		fmt.Fprintf(&out, "export interface %s", exportedName(named.Obj().Name()))
@@ -664,11 +640,7 @@ func (r *typeRenderer) declarations() (string, error) {
 		}
 		out.WriteString(" {\n")
 		for i := range structType.NumFields() {
-			fieldName := structType.Field(i).Name()
-			if structType.Field(i).Embedded() ||
-				named.Obj().Pkg().Path() == "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil" &&
-					named.Obj().Name() == "UserPreferences" &&
-					(fieldName == "InlayHints" || fieldName == "CodeLens") {
+			if structType.Field(i).Embedded() {
 				continue
 			}
 			field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
@@ -773,9 +745,7 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 	if !field.Exported() {
 		return "", false, false, false, false, false
 	}
-	structTag := reflect.StructTag(structType.Tag(index))
-	tag := structTag.Get("json")
-	rawTag := structTag.Get("raw")
+	tag := reflect.StructTag(structType.Tag(index)).Get("json")
 	noniltag := reflect.StructTag(structType.Tag(index)).Get("nonnil")
 	deprecatedtag := reflect.StructTag(structType.Tag(index)).Get("deprecated")
 	internaltag := reflect.StructTag(structType.Tag(index)).Get("internal")
@@ -785,15 +755,7 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 		return "", false, false, noniltag == "true", deprecatedtag == "true", internaltag == "true"
 	}
 	if name == "" {
-		if rawName, _, ok := strings.Cut(rawTag, ","); ok {
-			name = rawName
-			optional = true
-		} else if rawTag != "" {
-			name = rawTag
-			optional = true
-		} else {
-			name = field.Name()
-		}
+		name = field.Name()
 	}
 	for _, option := range parts[1:] {
 		if option == "omitempty" || option == "omitzero" {

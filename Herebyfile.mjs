@@ -655,7 +655,28 @@ export const generateSync = task({
     run: runGenerateSync,
 });
 
+async function runGeneratePreferences() {
+    await runGoGenerator("generate:preferences", {
+        file: "tsc/internal/ls/lsutil/userpreferences.go",
+        cwd: __dirname,
+        inputs: ["tools/userPreferences.schema.json", "tools/gen-preferences/*.go"],
+        exclude: ["**/*_test.go"],
+        envInputs: [],
+        outputs: [
+            "tsc/internal/ls/lsutil/userpreferences_generated.go",
+            "packages/typescript/src/api/userPreferences.generated.ts",
+        ],
+        commands: [
+            ["go", "-C", "./tools", "run", "./gen-preferences", "./userPreferences.schema.json", "../tsc/internal/ls/lsutil/userpreferences_generated.go", "../packages/typescript/src/api/userPreferences.generated.ts"],
+            ["dprint", "fmt", "tsc/internal/ls/lsutil/userpreferences_generated.go", "packages/typescript/src/api/userPreferences.generated.ts"],
+        ],
+    });
+}
+
+export const generatePreferences = goGenerateTask("generate:preferences", runGeneratePreferences);
+
 async function runGenerateAPI() {
+    await runGeneratePreferences();
     await runGoGenerator("generate:api", {
         file: "tsc/internal/api/proto.go",
         cwd: __dirname,

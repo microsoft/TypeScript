@@ -8,6 +8,10 @@ import { NewLineKind } from "#enums/newLineKind";
 import { ScriptKind } from "#enums/scriptKind";
 import { ScriptTarget } from "#enums/scriptTarget";
 import type { Path } from "../ast/index.ts";
+import type {
+    CompletionPreferences,
+    UserPreferences,
+} from "./userPreferences.generated.ts";
 
 export { JsxEmit } from "#enums/jsxEmit";
 export { ModuleDetectionKind } from "#enums/moduleDetectionKind";
@@ -1477,113 +1481,6 @@ export interface SnapshotRequestChangesParams {
     ensurePrograms?: EnsurePrograms | undefined;
 }
 
-/** UserPreferences represents TypeScript language service preferences. */
-export interface UserPreferences extends FormatCodeSettings, CompletionPreferences, InlayHintsPreferences, CodeLensUserPreferences {
-    quotePreference?: "auto" | "double" | "single" | undefined;
-    lazyConfiguredProjectsFromExternalProject?: boolean | undefined;
-    /**
-     * A positive integer indicating the maximum length of a hover text before it is truncated.
-     *
-     * Default: `500`
-     */
-    maximumHoverLength?: number | undefined;
-    autoClosingTags?: boolean | undefined;
-    completeJSDocs?: boolean | undefined;
-    generateReturnInDocTemplate?: boolean | undefined;
-    importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative" | undefined;
-    /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
-    importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js" | undefined;
-    autoImportSpecifierExcludeRegexes?: string[] | undefined;
-    autoImportFileExcludePatterns?: string[] | undefined;
-    autoImportEntrypointDirectorySearch?: boolean | undefined;
-    preferTypeOnlyAutoImports?: boolean | undefined;
-    /**
-     * Indicates which deterministic preset should be used to sort imports.
-     * "auto" detects the existing ordinal case sensitivity where possible.
-     */
-    organizeImportsSort?: "auto" | "ordinal" | "ordinalIgnoreCase" | "natural" | "naturalIgnoreCase" | undefined;
-    /**
-     * Indicates whether imports should be organized in a case-insensitive manner.
-     *
-     * Default: TSUnknown ("auto" in strada), will perform detection
-     */
-    organizeImportsIgnoreCase?: boolean | undefined;
-    /**
-     * Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value of their
-     * code points, or via "unicode" natural sorting. This implementation is locale-agnostic and approximates the practical
-     * import-sorting behavior rather than the full Unicode Collation Algorithm.
-     *
-     * Default: Ordinal
-     */
-    organizeImportsCollation?: "ordinal" | "unicode" | undefined;
-    /**
-     * Indicates the locale to use for "unicode" collation in legacy clients. This is accepted for compatibility, but
-     * currently ignored because organize-import sorting is deterministic and locale-agnostic.
-     *
-     * This preference is ignored if organizeImportsCollation is not `unicode`.
-     *
-     * Default: `"en"`
-     */
-    organizeImportsLocale?: string | undefined;
-    /**
-     * Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate
-     * strings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.
-     *
-     * This preference is ignored if organizeImportsCollation is not `unicode`.
-     *
-     * Default: `false`
-     */
-    organizeImportsNumericCollation?: boolean | undefined;
-    /**
-     * Indicates whether accents and other diacritic marks are considered unequal for the purpose of sorting.
-     *
-     * This preference is ignored if organizeImportsCollation is not `unicode`.
-     *
-     * Default: `true`
-     */
-    organizeImportsAccentCollation?: boolean | undefined;
-    /**
-     * Indicates whether upper case or lower case should sort first.
-     *
-     * This permission is ignored if:
-     * 	- organizeImportsCollation is not `unicode`
-     * 	- organizeImportsIgnoreCase is `true`
-     * 	- organizeImportsIgnoreCase is `auto` and the auto-detected case sensitivity is case-insensitive.
-     *
-     * Default: `false`
-     */
-    organizeImportsCaseFirst?: "default" | "lower" | "upper" | undefined;
-    /**
-     * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is type-only.
-     *
-     * Default: `auto`, which defaults to `last`
-     */
-    organizeImportsTypeOrder?: "auto" | "last" | "inline" | "first" | undefined;
-    allowTextChangesInNewFiles?: boolean | undefined;
-    providePrefixAndSuffixTextForRename?: boolean | undefined;
-    allowRenameOfImportPath?: boolean | undefined;
-    provideRefactorNotApplicableReason?: boolean | undefined;
-    preferGoToSourceDefinition?: boolean | undefined;
-    excludeLibrarySymbolsInNavTo?: boolean | undefined;
-    workspaceSymbolsScope?: "allOpenProjects" | "currentProject" | undefined;
-    formatEnabled?: boolean | undefined;
-    validateEnabled?: boolean | undefined;
-    disableSuggestions?: boolean | undefined;
-    disableLineTextInReferences?: boolean | undefined;
-    displayPartsForJSDoc?: boolean | undefined;
-    reportStyleChecksAsWarnings?: boolean | undefined;
-    locale?: string | undefined;
-    /** DisableAutomaticTypeAcquisition is the deprecated setting from typescript.disableAutomaticTypeAcquisition. */
-    disableAutomaticTypeAcquisition?: boolean | undefined;
-    /**
-     * AutomaticTypeAcquisitionEnabled is the unified setting from tsserver.automaticTypeAcquisition.enabled under the js/ts section.
-     * When set, it takes precedence over DisableAutomaticTypeAcquisition.
-     */
-    automaticTypeAcquisitionEnabled?: boolean | undefined;
-    /** CustomConfigFileName specifies a custom config file name to use before defaulting to tsconfig.json/jsconfig.json. */
-    customConfigFileName?: string | undefined;
-}
-
 /**
  * FileNotifications describes changes to files that have occurred on the host
  * file system, used to notify the session to reload cached files and reevaluate
@@ -1817,37 +1714,6 @@ export interface ImportAdderAction {
     isValidTypeOnlyUseSite?: boolean | undefined;
 }
 
-/** CompletionPreferences contains preferences used while producing completions. */
-export interface CompletionPreferences {
-    /**
-     * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-     * This affects lone identifier completions but not completions on the right hand side of `obj.`.
-     */
-    includeCompletionsForModuleExports?: boolean | undefined;
-    /**
-     * Enables auto-import-style completions on partially-typed import statements. E.g., allows
-     * `import write|` to be completed to `import { writeFile } from "fs"`.
-     */
-    includeCompletionsForImportStatements?: boolean | undefined;
-    /**
-     * Unless this option is `false`, member completion lists triggered with `.` will include entries
-     * on potentially-null and potentially-undefined values, with insertion text to replace
-     * preceding `.` tokens with `?.`.
-     */
-    includeAutomaticOptionalChainCompletions?: boolean | undefined;
-    /**
-     * If enabled, completions for class members (e.g. methods and properties) will include
-     * a whole declaration for the member.
-     */
-    includeCompletionsWithClassMemberSnippets?: boolean | undefined;
-    /**
-     * If enabled, object literal methods will have a method declaration completion entry in addition
-     * to the regular completion entry containing just the method name.
-     */
-    includeCompletionsWithObjectLiteralMethodSnippets?: boolean | undefined;
-    jsxAttributeCompletionStyle?: "auto" | "braces" | "none" | undefined;
-}
-
 /** CompletionEntryResponse represents a single completion item. */
 export interface CompletionEntryResponse {
     name: string;
@@ -1887,48 +1753,6 @@ export interface ReconfigureSnapshotProgramParams {
     rootFiles: readonly DocumentIdentifier[] | null;
     compilerOptions: CompilerOptions;
     options?: CreateProgramOptions | undefined;
-}
-
-export interface FormatCodeSettings extends EditorSettings {
-    insertSpaceAfterCommaDelimiter?: boolean | undefined;
-    insertSpaceAfterSemicolonInForStatements?: boolean | undefined;
-    insertSpaceBeforeAndAfterBinaryOperators?: boolean | undefined;
-    insertSpaceAfterConstructor?: boolean | undefined;
-    insertSpaceAfterKeywordsInControlFlowStatements?: boolean | undefined;
-    insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean | undefined;
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean | undefined;
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean | undefined;
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean | undefined;
-    insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean | undefined;
-    insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean | undefined;
-    insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean | undefined;
-    insertSpaceAfterTypeAssertion?: boolean | undefined;
-    insertSpaceBeforeFunctionParenthesis?: boolean | undefined;
-    placeOpenBraceOnNewLineForFunctions?: boolean | undefined;
-    placeOpenBraceOnNewLineForControlBlocks?: boolean | undefined;
-    insertSpaceBeforeTypeAnnotation?: boolean | undefined;
-    indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean | undefined;
-    semicolons?: "ignore" | "insert" | "remove" | undefined;
-    indentSwitchCase?: boolean | undefined;
-}
-
-export interface InlayHintsPreferences {
-    includeInlayParameterNameHints?: "none" | "literals" | "all" | undefined;
-    includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean | undefined;
-    includeInlayFunctionParameterTypeHints?: boolean | undefined;
-    includeInlayVariableTypeHints?: boolean | undefined;
-    includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean | undefined;
-    includeInlayPropertyDeclarationTypeHints?: boolean | undefined;
-    includeInlayFunctionLikeReturnTypeHints?: boolean | undefined;
-    includeInlayEnumMemberValueHints?: boolean | undefined;
-}
-
-export interface CodeLensUserPreferences {
-    referencesCodeLensEnabled?: boolean | undefined;
-    implementationsCodeLensEnabled?: boolean | undefined;
-    referencesCodeLensShowOnAllFunctions?: boolean | undefined;
-    implementationsCodeLensShowOnInterfaceMethods?: boolean | undefined;
-    implementationsCodeLensShowOnAllClassMethods?: boolean | undefined;
 }
 
 /**
@@ -1987,16 +1811,6 @@ export interface CreateProgramOptions {
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
     moduleResolver?: number | undefined;
-}
-
-export interface EditorSettings {
-    baseIndentSize?: number | undefined;
-    indentSize?: number | undefined;
-    tabSize?: number | undefined;
-    newLineCharacter?: string | undefined;
-    convertTabsToSpaces?: boolean | undefined;
-    indentStyle?: "none" | "block" | "smart" | undefined;
-    trimTrailingWhitespace?: boolean | undefined;
 }
 
 export interface StaticModuleResolution {
