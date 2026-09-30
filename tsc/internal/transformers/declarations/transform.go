@@ -1231,9 +1231,18 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	tx.resultHasScopeMarker = true
 	if ast.IsIdentifier(expression) && (ast.IsSourceFile(input.Parent) || ast.IsModuleBlock(input.Parent)) {
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, expression)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.preserveJsDoc(exportAssignment, input)
 		return exportAssignment
 	}
+
+	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+		return &SymbolAccessibilityDiagnostic{
+			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+			errorNode:         input,
+		}
+	}
+	tx.tracker.PushErrorFallbackNode(assignment)
 
 	// Check if the expression is a class expression - emit as a class declaration + export assignment
 	unwrapped := ast.SkipOuterExpressions(expression, ast.OEKExpressionTypePassthrough)
@@ -1244,9 +1253,11 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
 		classDecl := tx.transformClassExpressionToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods))
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(classDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, classDecl})
 	} else if ast.IsFunctionLike(unwrapped) {
@@ -1257,22 +1268,17 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		}
 		fullSignatureType := assignment.Type()
 		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods), fullSignatureType)
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(funcDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, funcDecl})
 	}
 
 	// expression is non-identifier, create _default typed variable to reference
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
-		return &SymbolAccessibilityDiagnostic{
-			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-			errorNode:         input,
-		}
-	}
 	tx.cjsExportAssignmentName = newId
-	tx.tracker.PushErrorFallbackNode(assignment)
 	var type_, initializer *ast.Node
 	if ast.IsPrimitiveLiteralValue(unwrapParenthesizedExpression(expression), true) {
 		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(assignment), tx.tracker)
@@ -1290,6 +1296,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	}
 	statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst))
 	exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+	tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 	// Remove comments from the export declaration and copy them onto the synthetic _default declaration
 	tx.preserveJsDoc(statement, input)
 	return tx.Factory().NewSyntaxList([]*ast.Node{statement, exportAssignment})

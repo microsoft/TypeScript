@@ -2825,6 +2825,23 @@ async function runSignVsixExtensions() {
             },
         ],
     });
+
+    if (!process.env.MBSIGN_APPFOLDER) {
+        console.log("Skipping VSIX signature verification because signing was faked.");
+        return;
+    }
+
+    for (const { vsixPath, vsixManifestPath, vsixSignaturePath } of extensions) {
+        await run("vsce", [
+            "verify-signature",
+            "--packagePath",
+            vsixPath,
+            "--manifestPath",
+            vsixManifestPath,
+            "--signaturePath",
+            vsixSignaturePath,
+        ]);
+    }
 }
 
 async function runWriteVscodeTypeScriptReleaseManifest() {

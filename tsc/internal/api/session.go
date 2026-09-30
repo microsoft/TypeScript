@@ -1,6 +1,7 @@
 package api
 
 import (
+	"cmp"
 	"context"
 	"encoding/base64"
 	"errors"
@@ -22,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	compilerdebug "github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
@@ -42,15 +44,63 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/zeebo/xxh3"
 )
 
-var sessionIDCounter atomic.Uint64
+var (
+	sessionIDCounter         atomic.Uint64
+	sourceFileSymbolIndexKey = ast.NewSourceFileDataKey[map[SymbolID]*ast.Symbol]()
+)
+
+func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symbol {
+	return sourceFile.GetOrComputeData(sourceFileSymbolIndexKey, func(file *ast.SourceFile) map[SymbolID]*ast.Symbol {
+		index := make(map[SymbolID]*ast.Symbol, file.SymbolCount)
+		var addSymbol func(*ast.Symbol)
+		addSymbol = func(symbol *ast.Symbol) {
+			if symbol == nil || symbol.Flags&ast.SymbolFlagsTransient != 0 {
+				return
+			}
+			compilerdebug.Assert(ast.GetSourceFileOfSymbol(symbol) == file)
+			id := SymbolHandle(symbol)
+			if existing := index[id]; existing != nil {
+				compilerdebug.Assert(existing == symbol)
+				return
+			}
+			index[id] = symbol
+			addSymbol(symbol.Parent)
+			addSymbol(symbol.ExportSymbol)
+			for _, table := range []ast.SymbolTable{symbol.Members, symbol.Exports} {
+				for _, child := range table {
+					addSymbol(child)
+				}
+			}
+		}
+		for _, node := range encoder.GetNodeIndexTable(file).Nodes {
+			if node == nil {
+				continue
+			}
+			addSymbol(node.Symbol())
+			addSymbol(node.LocalSymbol())
+			for _, symbol := range node.Locals() {
+				addSymbol(symbol)
+			}
+		}
+		for _, symbol := range file.GlobalExports {
+			addSymbol(symbol)
+		}
+		for _, module := range file.PatternAmbientModules {
+			addSymbol(module.Symbol)
+		}
+		return index
+	})
+}
 
 // snapshotData holds the per-snapshot state including the snapshot itself
 // and symbol/type registries scoped to this snapshot.
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
+	handle     SnapshotID
 	snapshot   *project.Snapshot
 	fileSystem vfs.FS
 	refCount   int
@@ -123,11 +173,7 @@ func (sd *snapshotData) getProject(projectHandle project.ID) (*project.Project, 
 // nodeHandleFrom creates an index-based node handle (index.kind.path), building a node index table
 // for the file on-demand if needed.
 func (sd *snapshotData) nodeHandleFrom(node *ast.Node) NodeHandle {
-	sourceFile := ast.GetSourceFileOfNode(node)
-	path := sourceFile.Path()
-	table := encoder.GetNodeIndexTable(sourceFile)
-	idx := table.GetIndex(node)
-	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, path))
+	return nodeHandleFrom(node)
 }
 
 // getOrCreateProjectRegistry returns the registry for the given project, creating it if needed.
@@ -154,44 +200,103 @@ func (sd *snapshotData) getOrCreateProjectRegistry(projectID project.ID) *projec
 	return sd.projectRegistries[projectID]
 }
 
-// newSymbolResponse registers a symbol in the snapshot's registry and returns the response.
-// canonicalProject is the project the symbol was observed in and must be non-empty; it is recorded
-// as the symbol's canonical project (first writer wins) and returned to the client so it can default
-// project-scoped follow-up lookups (members/exports, node resolution) to it.
+// symbolOwnerFile returns the source file that owns a symbol's client identity, or nil when the
+// symbol is owned by its snapshot. Content-mapped outputs live in a cache that cannot yet be
+// addressed by file key, so their binder symbols remain snapshot-owned.
+func symbolOwnerFile(symbol *ast.Symbol) *ast.SourceFile {
+	if symbol.Flags&ast.SymbolFlagsTransient != 0 {
+		return nil
+	}
+	file := ast.GetSourceFileOfSymbol(symbol)
+	if file.IsContentMapped() {
+		return nil
+	}
+	return file
+}
+
+// newSymbolResponse classifies a symbol's ownership before exposing its identity to a client.
+// Only snapshot-owned symbols are registered in the snapshot; file-owned symbols are resolved
+// through their source file.
 func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject project.ID) *SymbolResponse {
 	if symbol == nil {
 		return nil
 	}
-
-	id, project := sd.registerSymbol(symbol, canonicalProject)
-	resp := &SymbolResponse{
-		Id:         id,
-		Project:    project,
-		Name:       ast.EscapeSymbolName(symbol.Name),
-		Flags:      uint32(symbol.Flags),
-		CheckFlags: uint32(symbol.CheckFlags),
+	if symbolOwnerFile(symbol) != nil {
+		return newFileSymbolResponse(symbol)
 	}
+	id, project := sd.registerSymbol(symbol, canonicalProject)
+	reference := SymbolReference{
+		Id:       id,
+		Kind:     SymbolOwnerKindSnapshot,
+		Snapshot: sd.handle,
+		Project:  project,
+	}
+	return buildSymbolResponse(symbol, reference, nil)
+}
 
+func newFileSymbolResponse(symbol *ast.Symbol) *SymbolResponse {
+	file := symbolOwnerFile(symbol)
+	compilerdebug.Assert(file != nil, "Expected a file-owned symbol")
+	descriptor := newSourceFileDescriptor(file)
+	reference := SymbolReference{
+		Id:   SymbolHandle(symbol),
+		Kind: SymbolOwnerKindFile,
+		File: &descriptor,
+	}
+	return buildSymbolResponse(symbol, reference, file)
+}
+
+func buildSymbolResponse(symbol *ast.Symbol, reference SymbolReference, owner *ast.SourceFile) *SymbolResponse {
+	resp := &SymbolResponse{
+		Reference:    reference,
+		Name:         ast.EscapeSymbolName(symbol.Name),
+		Flags:        uint32(symbol.Flags),
+		CheckFlags:   uint32(symbol.CheckFlags),
+		Parent:       newSymbolReference(symbol.Parent),
+		ExportSymbol: newSymbolReference(symbol.ExportSymbol),
+	}
+	if owner != nil {
+		// A client resolves a file-owned symbol's relationships through its own source file.
+		compilerdebug.Assert(symbol.Parent == nil || symbolOwnerFile(symbol.Parent) == owner, "File-owned symbol parent belongs to another owner")
+		compilerdebug.Assert(symbol.ExportSymbol == nil || symbolOwnerFile(symbol.ExportSymbol) == owner, "File-owned export symbol belongs to another owner")
+	}
 	if len(symbol.Declarations) > 0 {
 		resp.Declarations = make([]NodeHandle, len(symbol.Declarations))
 		for i, decl := range symbol.Declarations {
-			resp.Declarations[i] = sd.nodeHandleFrom(decl)
+			resp.Declarations[i] = symbolNodeHandleFrom(decl, owner)
 		}
 	}
-
 	if symbol.ValueDeclaration != nil {
-		resp.ValueDeclaration = sd.nodeHandleFrom(symbol.ValueDeclaration)
+		resp.ValueDeclaration = symbolNodeHandleFrom(symbol.ValueDeclaration, owner)
 	}
-
-	if symbol.Parent != nil {
-		resp.Parent = SymbolHandle(symbol.Parent)
-	}
-
-	if symbol.ExportSymbol != nil {
-		resp.ExportSymbol = SymbolHandle(symbol.ExportSymbol)
-	}
-
 	return resp
+}
+
+// newSymbolReference creates a compact reference to a symbol without registering it. Clients resolve
+// it from their caches or fetch the full response through the corresponding property method.
+func newSymbolReference(symbol *ast.Symbol) *CompactSymbolReference {
+	if symbol == nil {
+		return nil
+	}
+	reference := &CompactSymbolReference{Id: SymbolHandle(symbol)}
+	if file := symbolOwnerFile(symbol); file != nil {
+		reference.File = strconv.FormatUint(sourceFileNodeID(file), 10)
+	}
+	return reference
+}
+
+func symbolNodeHandleFrom(node *ast.Node, owner *ast.SourceFile) NodeHandle {
+	if owner != nil {
+		compilerdebug.Assert(ast.GetSourceFileOfNode(node) == owner, "File-owned symbol declaration belongs to another source file")
+	}
+	return nodeHandleFrom(node)
+}
+
+func nodeHandleFrom(node *ast.Node) NodeHandle {
+	sourceFile := ast.GetSourceFileOfNode(node)
+	table := encoder.GetNodeIndexTable(sourceFile)
+	idx := table.GetIndex(node)
+	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, sourceFile.Path()))
 }
 
 // registerSymbol registers a symbol in the snapshot's registry and returns its handle along with
@@ -231,6 +336,10 @@ func (sd *snapshotData) newTypeResponse(projectID project.ID, t *checker.Type, c
 		return nil
 	}
 	resp := newTypeResponse(t, sd.registerType(projectID, t))
+	resp.Symbol = newSymbolReference(t.Symbol())
+	if t.Alias() != nil {
+		resp.AliasSymbol = newSymbolReference(t.Alias().Symbol())
+	}
 	if t.ObjectFlags()&checker.ObjectFlagsMapped != 0 {
 		mapped := t.AsMappedType()
 		mapped.ResolveComponents(c, t)
@@ -273,7 +382,7 @@ func (sd *snapshotData) registerType(projectID project.ID, t *checker.Type) Type
 	return id
 }
 
-// resolveSymbolHandle resolves a symbol handle within the snapshot's registry.
+// resolveSymbolHandle resolves a snapshot-owned symbol handle within the snapshot's registry.
 func (sd *snapshotData) resolveSymbolHandle(handle SymbolID) (*ast.Symbol, error) {
 	if handle == 0 {
 		return nil, fmt.Errorf("%w: empty symbol handle", ErrClientError)
@@ -288,6 +397,43 @@ func (sd *snapshotData) resolveSymbolHandle(handle SymbolID) (*ast.Symbol, error
 	}
 
 	return symbol, nil
+}
+
+// resolveSymbolReference resolves a symbol without a semantic context. A file reference holds the
+// exact cached AST until the returned release function is called; a snapshot reference also returns
+// the snapshot and canonical project that own the symbol.
+func (s *Session) resolveSymbolReference(ref SymbolReference) (*ast.Symbol, *snapshotData, project.ID, func(), error) {
+	switch ref.Kind {
+	case SymbolOwnerKindFile:
+		if ref.File == nil || ref.Snapshot != 0 || ref.Project != "" {
+			return nil, nil, "", nil, fmt.Errorf("%w: invalid file symbol reference", ErrClientError)
+		}
+		lease, err := s.acquireCachedSourceFile(*ref.File)
+		if err != nil {
+			return nil, nil, "", nil, err
+		}
+		symbol := getSourceFileSymbolIndex(lease.SourceFile())[ref.Id]
+		if symbol == nil {
+			lease.Release()
+			return nil, nil, "", nil, fmt.Errorf("%w: symbol %d not found in source file", ErrClientError, ref.Id)
+		}
+		return symbol, nil, "", lease.Release, nil
+	case SymbolOwnerKindSnapshot:
+		if ref.File != nil || ref.Snapshot == 0 || ref.Project == "" {
+			return nil, nil, "", nil, fmt.Errorf("%w: invalid snapshot symbol reference", ErrClientError)
+		}
+		sd, err := s.getSnapshotData(ref.Snapshot)
+		if err != nil {
+			return nil, nil, "", nil, err
+		}
+		symbol, err := sd.resolveSymbolHandle(ref.Id)
+		if err != nil {
+			return nil, nil, "", nil, err
+		}
+		return symbol, sd, ref.Project, func() {}, nil
+	default:
+		return nil, nil, "", nil, fmt.Errorf("%w: invalid symbol reference kind %d", ErrClientError, ref.Kind)
+	}
 }
 
 // resolveTypeHandle resolves a type handle within the project's registry.
@@ -365,11 +511,14 @@ func (sd *snapshotData) newSignatureResponse(projectID project.ID, sig *checker.
 	}
 
 	if len(sig.Parameters()) > 0 {
-		resp.Parameters = symbolHandles(sig.Parameters())
+		resp.Parameters = make([]CompactSymbolReference, len(sig.Parameters()))
+		for i, parameter := range sig.Parameters() {
+			resp.Parameters[i] = *newSymbolReference(parameter)
+		}
 	}
 
 	if sig.ThisParameter() != nil {
-		resp.ThisParameter = SymbolHandle(sig.ThisParameter())
+		resp.ThisParameter = newSymbolReference(sig.ThisParameter())
 	}
 
 	if sig.Target() != nil {
@@ -591,6 +740,7 @@ func (s *Session) releaseSnapshot(handle SnapshotID) error {
 // checkerSetup holds the common context needed by handlers that require a type checker.
 type checkerSetup struct {
 	sd        *snapshotData
+	snapshot  SnapshotID
 	program   *compiler.Program
 	checker   *checker.Checker
 	done      func()
@@ -624,8 +774,28 @@ func (setup checkerSetup) resolveTypeHandle(id TypeID) (*checker.Type, error) {
 	return setup.sd.resolveTypeHandle(setup.projectID, id)
 }
 
-func (setup checkerSetup) resolveSymbolHandle(id SymbolID) (*ast.Symbol, error) {
-	return setup.sd.resolveSymbolHandle(id)
+func (setup checkerSetup) resolveSymbolHandle(ref SymbolReference) (*ast.Symbol, error) {
+	if ref.Kind == SymbolOwnerKindSnapshot {
+		if ref.Snapshot != setup.snapshot || ref.File != nil {
+			return nil, fmt.Errorf("%w: snapshot symbol reference does not match the requested checker", ErrClientError)
+		}
+		return setup.sd.resolveSymbolHandle(ref.Id)
+	} else if ref.Kind == SymbolOwnerKindFile {
+		if ref.File == nil || ref.Snapshot != 0 || ref.Project != "" {
+			return nil, fmt.Errorf("%w: invalid file symbol reference", ErrClientError)
+		}
+		sourceFile := setup.program.GetSourceFileByPath(ref.File.Path)
+		if sourceFile == nil || newSourceFileDescriptor(sourceFile) != *ref.File {
+			return nil, fmt.Errorf("%w: source file is not part of the requested program", ErrClientError)
+		}
+		symbol := getSourceFileSymbolIndex(sourceFile)[ref.Id]
+		if symbol == nil {
+			return nil, fmt.Errorf("%w: symbol handle %d not found in source file", ErrClientError, ref.Id)
+		}
+		return symbol, nil
+	} else {
+		return nil, fmt.Errorf("%w: invalid symbol reference kind %d", ErrClientError, ref.Kind)
+	}
 }
 
 func (setup checkerSetup) resolveSignatureHandle(id SignatureID) (*checker.Signature, error) {
@@ -664,6 +834,7 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 	c, done := program.GetTypeChecker(core.WithCheckerLifetime(ctx, core.CheckerLifetimeAPI))
 	return checkerSetup{
 		sd:        sd,
+		snapshot:  snapshot,
 		program:   program,
 		checker:   c,
 		done:      done,
@@ -719,6 +890,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleRelease(ctx, parsed.(*ReleaseParams))
 	case string(MethodReleaseSourceFile):
 		return s.handleReleaseSourceFile(parsed.(*ReleaseSourceFileParams))
+	case string(MethodRetainSourceFile):
+		return s.handleRetainSourceFile(parsed.(*RetainSourceFileParams))
+	case string(MethodGetCachedSourceFile):
+		return s.handleGetCachedSourceFile(parsed.(*GetCachedSourceFileParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
 	case string(MethodCreateSnapshot):
@@ -1171,6 +1346,7 @@ func isSourceFileResponseMethod(method Method) bool {
 	case MethodCreateSourceFile,
 		MethodCreateSourceFileFromFile,
 		MethodGetSourceFile,
+		MethodGetCachedSourceFile,
 		MethodGetConfigSourceFile,
 		MethodTypeToTypeNode,
 		MethodSignatureToSignatureDeclaration:
@@ -1370,7 +1546,7 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
 			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
-			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
+			factory, err := s.moduleResolverFactory(programParams.Options)
 			if err != nil {
 				return nil, err
 			}
@@ -1405,7 +1581,7 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
 			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
-			factory, err := s.moduleResolverFactory(ctx, programParams.Options)
+			factory, err := s.moduleResolverFactory(programParams.Options)
 			if err != nil {
 				return nil, err
 			}
@@ -1536,6 +1712,7 @@ func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapsho
 		sd.refCount++
 	} else {
 		sd = &snapshotData{
+			handle:                  handle,
 			snapshot:                snapshot,
 			fileSystem:              fileSystem,
 			refCount:                1,
@@ -1879,15 +2056,117 @@ func (s *Session) encodeLeasedSourceFile(lease *project.SourceFileLease) (any, e
 		lease.Release()
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
-	id := SourceFileLeaseID(s.nextSourceFileLeaseID.Add(1))
+	encoder.SetSourceFileID(data, sourceFileNodeID(lease.SourceFile()))
+	id := s.registerSourceFileLease(lease)
 	encoder.SetSourceFileLease(data, uint64(id))
-	s.sourceFileLeasesMu.Lock()
-	s.sourceFileLeases[id] = lease
-	s.sourceFileLeasesMu.Unlock()
 	if s.useBinaryResponses {
 		return RawBinary(data), nil
 	}
 	return &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}, nil
+}
+
+func (s *Session) handleRetainSourceFile(params *RetainSourceFileParams) (*RetainSourceFileResponse, error) {
+	lease, err := s.acquireCachedSourceFile(params.File)
+	if err != nil {
+		return nil, err
+	}
+	return &RetainSourceFileResponse{
+		Lease: s.registerSourceFileLease(lease),
+	}, nil
+}
+
+// @gen-proto-result: SourceFileResponse
+func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (any, error) {
+	lease, err := s.acquireCachedSourceFile(params.File)
+	if err != nil {
+		return nil, err
+	}
+	defer lease.Release()
+	return s.encodeSourceFileResponse(lease.SourceFile())
+}
+
+// acquireCachedSourceFile holds a reference to the exact ordinary cached AST identified by a
+// descriptor. It never parses; the caller must release the returned lease.
+func (s *Session) acquireCachedSourceFile(descriptor SourceFileDescriptor) (*project.SourceFileLease, error) {
+	key, err := descriptor.parseCacheKey()
+	if err != nil {
+		return nil, fmt.Errorf("%w: invalid source file descriptor: %w", ErrClientError, err)
+	}
+	lease := s.snapshotHost.AcquireExistingSourceFile(key)
+	if lease == nil {
+		return nil, fmt.Errorf("%w: source file is not available", ErrClientError)
+	}
+	// The parse-cache key addresses a live ordinary file, but an equal key can identify a new
+	// AST after the original entry is evicted. The node ID verifies that this is the exact AST
+	// observed by the client; it is not used to address or retain the file.
+	if newSourceFileDescriptor(lease.SourceFile()) != descriptor {
+		lease.Release()
+		return nil, fmt.Errorf("%w: source file descriptor no longer identifies the cached source file", ErrClientError)
+	}
+	return lease, nil
+}
+
+func (s *Session) registerSourceFileLease(lease *project.SourceFileLease) SourceFileLeaseID {
+	id := SourceFileLeaseID(s.nextSourceFileLeaseID.Add(1))
+	s.sourceFileLeasesMu.Lock()
+	s.sourceFileLeases[id] = lease
+	s.sourceFileLeasesMu.Unlock()
+	return id
+}
+
+func newSourceFileDescriptor(sourceFile *ast.SourceFile) SourceFileDescriptor {
+	parseOptions := sourceFile.ParseOptions()
+	var parseOptionsKey uint32
+	if parseOptions.ExternalModuleIndicatorOptions.JSX {
+		parseOptionsKey |= 1
+	}
+	if parseOptions.ExternalModuleIndicatorOptions.Force {
+		parseOptionsKey |= 2
+	}
+	return SourceFileDescriptor{
+		FileName:        parseOptions.FileName,
+		Path:            parseOptions.Path,
+		ContentHash:     encoder.SourceFileHash(sourceFile),
+		ParseOptionsKey: strconv.FormatUint(uint64(parseOptionsKey), 10),
+		ScriptKind:      sourceFile.ScriptKind,
+		NodeID:          strconv.FormatUint(sourceFileNodeID(sourceFile), 10),
+	}
+}
+
+// sourceFileNodeID is stable for one Go AST and changes when an equal parse-cache key is
+// recreated, making it suitable for validating remote references without introducing another
+// source-file identity or ownership registry.
+func sourceFileNodeID(sourceFile *ast.SourceFile) uint64 {
+	return uint64(ast.GetNodeId(sourceFile.AsNode()))
+}
+
+func (d SourceFileDescriptor) parseCacheKey() (project.ParseCacheKey, error) {
+	if len(d.ContentHash) != 32 {
+		return project.ParseCacheKey{}, errors.New("content hash must contain 32 hexadecimal digits")
+	}
+	hi, err := strconv.ParseUint(d.ContentHash[:16], 16, 64)
+	if err != nil {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid content hash: %w", err)
+	}
+	lo, err := strconv.ParseUint(d.ContentHash[16:], 16, 64)
+	if err != nil {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid content hash: %w", err)
+	}
+	parseOptionsKey, err := strconv.ParseUint(d.ParseOptionsKey, 10, 32)
+	if err != nil || parseOptionsKey&^3 != 0 {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid parse options key %q", d.ParseOptionsKey)
+	}
+	if !isValidCreateSourceFileScriptKind(d.ScriptKind) {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid script kind %d", d.ScriptKind)
+	}
+	return project.NewParseCacheKey(ast.SourceFileParseOptions{
+		FileName: d.FileName,
+		Path:     d.Path,
+		ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
+			JSX:   parseOptionsKey&1 != 0,
+			Force: parseOptionsKey&2 != 0,
+		},
+	}, xxh3.Uint128{Hi: hi, Lo: lo}, d.ScriptKind), nil
 }
 
 func (s *Session) handleReleaseSourceFile(params *ReleaseSourceFileParams) (any, error) {
@@ -2062,6 +2341,7 @@ func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, err
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
+	encoder.SetSourceFileID(data, sourceFileNodeID(sourceFile))
 
 	if s.useBinaryResponses {
 		return RawBinary(data), nil
@@ -2460,8 +2740,8 @@ func (s *Session) handleGetTypesOfSymbols(ctx context.Context, params *GetTypesO
 	defer setup.done()
 
 	results := make([]*TypeResponse, len(params.Symbols))
-	for i, symHandle := range params.Symbols {
-		symbol, err := setup.resolveSymbolHandle(symHandle)
+	for i, symbolReference := range params.Symbols {
+		symbol, err := setup.resolveSymbolHandle(symbolReference)
 		if err != nil {
 			return nil, err
 		}
@@ -2909,10 +3189,12 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	for i, action := range params.Actions {
 		switch action.Kind {
 		case ImportAdderActionKindImportSymbol:
-			if action.Symbol == 0 {
+			if action.Symbol == nil {
 				return nil, fmt.Errorf("%w: import adder action %d missing symbol", ErrClientError, i)
 			}
-			symbol, err := sd.resolveSymbolHandle(action.Symbol)
+			symbol, err := (checkerSetup{
+				sd: sd, snapshot: params.Snapshot, program: program, projectID: params.Project,
+			}).resolveSymbolHandle(*action.Symbol)
 			if err != nil {
 				return nil, err
 			}
@@ -3034,36 +3316,31 @@ func (s *Session) resolveSymbolPropertyOfType(params *GetTypePropertyParams, get
 
 // resolveSymbolTablePropertyOfSymbol resolves a symbol property of type `Symbol` and returns a symbol response.
 func (s *Session) resolveSymbolPropertyOfSymbol(params *GetSymbolPropertyParams, getter func(*ast.Symbol) *ast.Symbol) (*SymbolResponse, error) {
-	sd, err := s.getSnapshotData(params.Snapshot)
+	symbol, sd, projectID, release, err := s.resolveSymbolReference(params.Symbol)
 	if err != nil {
 		return nil, err
 	}
-
-	symbol, err := sd.resolveSymbolHandle(params.Symbol)
-	if err != nil {
-		return nil, err
-	}
+	defer release()
 
 	result := getter(symbol)
 	if result == nil {
 		return nil, nil
 	}
-	return sd.newSymbolResponse(result, params.Project), nil
+	if sd == nil {
+		return newFileSymbolResponse(result), nil
+	}
+	return sd.newSymbolResponse(result, projectID), nil
 }
 
 // resolveSymbolTablePropertyOfSymbol resolves a symbol property of type `SymbolTable` and returns an array of symbol responses.
 // Results are sorted using the checker's canonical symbol ordering so that API consumers receive
 // a stable, deterministic order instead of Go's randomized map iteration order.
 func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params *GetSymbolPropertyParams, getter func(*ast.Symbol) ast.SymbolTable) ([]*SymbolResponse, error) {
-	sd, err := s.getSnapshotData(params.Snapshot)
+	symbol, sd, projectID, release, err := s.resolveSymbolReference(params.Symbol)
 	if err != nil {
 		return nil, err
 	}
-
-	symbol, err := sd.resolveSymbolHandle(params.Symbol)
-	if err != nil {
-		return nil, err
-	}
+	defer release()
 
 	symbolTable := getter(symbol)
 	if len(symbolTable) == 0 {
@@ -3071,21 +3348,57 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 	}
 	if len(symbolTable) == 1 {
 		for _, sub := range symbolTable {
-			return []*SymbolResponse{sd.newSymbolResponse(sub, params.Project)}, nil
+			if sd == nil {
+				return []*SymbolResponse{newFileSymbolResponse(sub)}, nil
+			}
+			return []*SymbolResponse{sd.newSymbolResponse(sub, projectID)}, nil
 		}
 	}
-
-	// More than one symbol, need a checker to sort
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
 
 	symbols := make([]*ast.Symbol, 0, len(symbolTable))
 	for _, sub := range symbolTable {
 		symbols = append(symbols, sub)
 	}
+	if sd == nil {
+		// Binder tables of a file-owned symbol only contain symbols from the same file, so they
+		// can be ordered by declaration position without a checker.
+		file := ast.GetSourceFileOfSymbol(symbol)
+		slices.SortFunc(symbols, func(left *ast.Symbol, right *ast.Symbol) int {
+			compilerdebug.Assert(ast.GetSourceFileOfSymbol(left) == file)
+			compilerdebug.Assert(ast.GetSourceFileOfSymbol(right) == file)
+			leftHasDeclaration := len(left.Declarations) != 0
+			rightHasDeclaration := len(right.Declarations) != 0
+			if leftHasDeclaration != rightHasDeclaration {
+				if leftHasDeclaration {
+					return -1
+				}
+				return 1
+			}
+			if leftHasDeclaration {
+				if order := cmp.Compare(left.Declarations[0].Pos(), right.Declarations[0].Pos()); order != 0 {
+					return order
+				}
+			}
+			if order := cmp.Compare(left.Name, right.Name); order != 0 {
+				return order
+			}
+			return cmp.Compare(ast.GetSymbolId(left), ast.GetSymbolId(right))
+		})
+		results := make([]*SymbolResponse, len(symbols))
+		for i, sub := range symbols {
+			results[i] = newFileSymbolResponse(sub)
+		}
+		return results, nil
+	}
+
+	// Tables of snapshot-owned symbols may contain symbols from several files, so they use the
+	// checker's ordering.
+	setup, err := s.setupChecker(ctx, params.Symbol.Snapshot, params.Symbol.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
 	slices.SortFunc(symbols, setup.checker.CompareSymbols)
 
 	results := make([]*SymbolResponse, len(symbols))
@@ -3795,9 +4108,15 @@ func (s *Session) handleGetWellKnownSymbols(ctx context.Context, params *GetIntr
 	}
 	defer setup.done()
 
-	unknown, _ := setup.sd.registerSymbol(setup.checker.GetUnknownSymbol(), setup.projectID)
-	undefined, _ := setup.sd.registerSymbol(setup.checker.GetUndefinedSymbol(), setup.projectID)
-	arguments, _ := setup.sd.registerSymbol(setup.checker.GetArgumentsSymbol(), setup.projectID)
+	unknownSymbol := setup.checker.GetUnknownSymbol()
+	undefinedSymbol := setup.checker.GetUndefinedSymbol()
+	argumentsSymbol := setup.checker.GetArgumentsSymbol()
+	compilerdebug.Assert(unknownSymbol.Flags&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(undefinedSymbol.Flags&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(argumentsSymbol.Flags&ast.SymbolFlagsTransient != 0)
+	unknown, _ := setup.sd.registerSymbol(unknownSymbol, setup.projectID)
+	undefined, _ := setup.sd.registerSymbol(undefinedSymbol, setup.projectID)
+	arguments, _ := setup.sd.registerSymbol(argumentsSymbol, setup.projectID)
 	return &WellKnownSymbolsResponse{
 		Unknown:   unknown,
 		Undefined: undefined,
