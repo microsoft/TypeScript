@@ -67,9 +67,6 @@ extends:
                   signType: real
                   zipSources: false
                 mbpresteps:
-                  - bash: echo "##vso[build.addbuildtag]Build.Reason.Schedule"
-                    displayName: 'Set build tag "Build.Reason.Schedule"'
-                    condition: eq(variables['Build.Reason'], 'Schedule')
                   # Needed for ESRP. https://dev.azure.com/devdiv/DevDiv/_wiki/wikis/DevDiv.wiki/46279/Real-signing-with-PME-Enforcement
                   - task: UseDotNet@2
                     displayName: Use .NET Core sdk 8.0.x
@@ -84,6 +81,10 @@ extends:
                   artifactName: vsix
 
             steps:
+              - bash: echo "##vso[build.addbuildtag]Build.Reason.Schedule"
+                displayName: 'Set build tag "Build.Reason.Schedule"'
+                condition: eq(variables['Build.Reason'], 'Schedule')
+
               - checkout: self
                 clean: true
                 submodules: false
