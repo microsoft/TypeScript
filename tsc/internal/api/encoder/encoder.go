@@ -435,6 +435,11 @@ func SetSourceFileLease(data []byte, lease uint64) {
 	binary.LittleEndian.PutUint64(data[HeaderOffsetSourceFileLease:], lease)
 }
 
+// SetSourceFileID sets the source file node ID used to validate remote references.
+func SetSourceFileID(data []byte, id uint64) {
+	binary.LittleEndian.PutUint64(data[HeaderOffsetSourceFileID:], id)
+}
+
 // EncodeNode encodes an arbitrary AST node and its descendants into the binary format.
 // The sourceFile is needed to provide the source text for efficient string encoding.
 // When encoding a non-SourceFile node, the header hash and parse options fields will be zero.

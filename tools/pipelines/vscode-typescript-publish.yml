@@ -153,6 +153,10 @@ extends:
                 dependsOn: Validate
                 pool: server
                 timeoutInMinutes: 5760
+                templateContext:
+                  mb:
+                    publish:
+                      enabled: false
                 steps:
                   - task: ManualValidation@1
                     timeoutInMinutes: 4320

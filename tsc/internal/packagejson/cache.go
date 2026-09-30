@@ -179,6 +179,15 @@ func NewInfoCache(currentDirectory string, useCaseSensitiveFileNames bool) *Info
 	}
 }
 
+func (p *InfoCache) Clone() *InfoCache {
+	clone := NewInfoCache(p.currentDirectory, p.useCaseSensitiveFileNames)
+	p.cache.Range(func(key tspath.Path, value *InfoCacheEntry) bool {
+		clone.cache.Store(key, value)
+		return true
+	})
+	return clone
+}
+
 func (p *InfoCache) Get(packageJsonPath string) *InfoCacheEntry {
 	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.useCaseSensitiveFileNames)
 	if value, ok := p.cache.Load(key); ok {
