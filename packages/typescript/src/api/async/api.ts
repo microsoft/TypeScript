@@ -356,9 +356,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     /**
-     * Returns the declaration's stored binder symbol, or undefined for synthesized or configuration ASTs.
-     * Successful lookups, including missing symbols, are cached. An uncached lookup requires
-     * the exact source file to remain available on the server.
+     * Looks up the declaration's symbol.
      */
     async getSymbol(declaration: Declaration): Promise<Symbol | undefined> {
         const file = getRemoteSourceFile(declaration);
@@ -877,7 +875,7 @@ function getNodeAPI(node: Node): API<boolean> | undefined {
     return api;
 }
 
-/** Looks up the declaration's symbol through its owning API, or returns undefined for ASTs without symbol state. */
+/** Looks up the declaration's symbol. */
 export async function getSymbol(declaration: Declaration): Promise<Symbol | undefined> {
     const api = getNodeAPI(declaration);
     return api?.getSymbol(declaration);

@@ -375,9 +375,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     /**
-     * Returns the declaration's stored binder symbol, or undefined for synthesized or configuration ASTs.
-     * Successful lookups, including missing symbols, are cached. An uncached lookup requires
-     * the exact source file to remain available on the server.
+     * Looks up the declaration's symbol.
      */
     get getSymbol(): {
         (declaration: Declaration): Symbol | undefined;
@@ -1259,21 +1257,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    /**
-     * Drops this API's local source-file cache to reduce memory usage, for example after
-     * a one-time analysis of every file. Snapshots, programs, and explicit source-file
-     * leases remain active on the server; checker operations that do not take AST nodes
-     * and other server-side operations can continue.
-     *
-     * The cache normally preserves source-file and node identity across repeated fetches
-     * and program updates that reuse unchanged files, including ASTs fetched by resolving
-     * symbol node handles. Clearing it relinquishes reference-equality guarantees with
-     * previously obtained ASTs and file-owned symbols; subsequent fetches may create new objects.
-     *
-     * Objects still referenced by the caller are not freed or stripped of locally cached
-     * data. Access requiring a server request remains subject to server-side availability.
-     * Release those references as well to allow their memory to be reclaimed.
-     */
     clearSourceFileCache(): void {
         this.sourceFileCache.clear();
     }
@@ -1444,7 +1427,7 @@ function getNodeAPI(node: Node): API<boolean> | undefined {
     return api;
 }
 
-/** Looks up the declaration's symbol through its owning API, or returns undefined for ASTs without symbol state. */
+/** Looks up the declaration's symbol. */
 export function getSymbol(declaration: Declaration): Symbol | undefined {
     const api = getNodeAPI(declaration);
     return api?.getSymbol(declaration);
