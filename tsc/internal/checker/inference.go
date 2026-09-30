@@ -1378,7 +1378,8 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 		constraint := c.getConstraintOfTypeParameter(inference.typeParameter)
 		if constraint != nil {
 			instantiatedConstraint := c.instantiateType(constraint, n.nonFixingMapper)
-			if inferredType != nil && n.flags&InferenceFlagsNoConstraintChecks == 0 {
+			// A pure return type inference is still filtered in a recursive call resolution, whose result can become the type of the enclosing declaration.
+			if inferredType != nil && (n.flags&InferenceFlagsNoConstraintChecks == 0 || inference.priority == InferencePriorityReturnType) {
 				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)
 				if n.compareTypes(inferredType, constraintWithThis, false) == TernaryFalse {
 					var filteredByConstraint *Type
