@@ -1890,14 +1890,6 @@ func hasFileWithHigherPriorityExtension(file string, extensions [][]string, hasF
 			return false
 		}
 		if hasFile(tspath.ChangeExtension(file, ext)) {
-			if (ext == tspath.ExtensionDts && (tspath.FileExtensionIs(file, tspath.ExtensionJs) || tspath.FileExtensionIs(file, tspath.ExtensionJsx))) ||
-				(ext == tspath.ExtensionDmts && tspath.FileExtensionIs(file, tspath.ExtensionMjs)) ||
-				(ext == tspath.ExtensionDcts && tspath.FileExtensionIs(file, tspath.ExtensionCjs)) {
-				// LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
-				// files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
-				// prevent breakage.
-				continue
-			}
 			return true
 		}
 	}
@@ -1920,11 +1912,6 @@ func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles *c
 
 		if tspath.FileExtensionIs(file, ext) {
 			return
-		}
-		if (tspath.FileExtensionIs(file, tspath.ExtensionDts) && (ext == tspath.ExtensionJs || ext == tspath.ExtensionJsx)) ||
-			(tspath.FileExtensionIs(file, tspath.ExtensionDmts) && ext == tspath.ExtensionMjs) ||
-			(tspath.FileExtensionIs(file, tspath.ExtensionDcts) && ext == tspath.ExtensionCjs) {
-			continue
 		}
 		lowerPriorityPath := keyMapper(tspath.ChangeExtension(file, ext))
 		wildcardFiles.Delete(lowerPriorityPath)

@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/checkJsExtensionPriority.ts] ////
+//// [tests/cases/compiler/checkJsExtensionPriority_includeOrder.ts] ////
 
 === /a.d.ts ===
 export declare const n: number;
@@ -11,5 +11,4 @@ export declare const n: number;
 === /c.d.cts ===
 export declare const n: number;
 >n : Symbol(n, Decl(c.d.cts, 0, 20))
-
 
