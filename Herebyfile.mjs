@@ -2224,12 +2224,11 @@ async function runBuildNativePreviewPackages() {
             await buildNativePreviewPlatform(platform);
             // Build machines have too little space.
             // Clear the Go build cache between platforms.
-            await $`go clean -cache`;
+            await run("go", ["clean", "-cache"]);
         }
     }
     else {
-        const buildLimit = pLimit(os.availableParallelism());
-        await Promise.all(platforms.map(platform => buildLimit(() => buildNativePreviewPlatform(platform))));
+        await runWithConcurrencyLimit(platforms.map(platform => () => buildNativePreviewPlatform(platform)), os.availableParallelism());
     }
 }
 
@@ -2275,9 +2274,9 @@ export const buildNativePreviewPlatformMatrix = task({
     hiddenFromTaskList: true,
     run: () => {
         const matrix = Object.fromEntries(
-            getPlatforms().map(({ nodeOs, nodeArch }) => {
+            getPlatforms().map(({ nodeOs, nodeArch, npmDirName }) => {
                 const platform = `${nodeOs}-${nodeArch}`;
-                return [platform.replaceAll("-", "_"), { platform }];
+                return [platform.replaceAll("-", "_"), { platform, npmDirName }];
             }),
         );
         console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
