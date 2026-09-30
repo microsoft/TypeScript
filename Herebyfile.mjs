@@ -1625,8 +1625,8 @@ function assertMsbuildXmlValue(value) {
 async function sign(filelist, unchangedOutputOkay = false) {
     console.log("filelist:", JSON.stringify(filelist, undefined, 4));
 
-    if (!process.env.MBSIGN_APPFOLDER) {
-        console.log(styleText("yellow", "Faking signing because MBSIGN_APPFOLDER is not set."));
+    if (!process.env.MICROBUILD_PLUGIN_DIRECTORY) {
+        console.log(styleText("yellow", "Faking signing because MICROBUILD_PLUGIN_DIRECTORY is not set."));
 
         // Fake signing for testing.
 
@@ -1762,7 +1762,7 @@ ${items}
             "-p:SignType=real",
             `-p:SignFilesDir=${path.resolve("built")}`,
             `-p:FilesToSignPropsFile=${propsPath}`,
-            `-p:MicroBuildOverridePluginDirectory=${path.dirname(path.dirname(process.env.MBSIGN_APPFOLDER))}`,
+            `-p:MicroBuildOverridePluginDirectory=${process.env.MICROBUILD_PLUGIN_DIRECTORY}`,
         ]);
     }
     finally {
@@ -2831,7 +2831,7 @@ async function runSignVsixExtensions() {
         ],
     });
 
-    if (!process.env.MBSIGN_APPFOLDER) {
+    if (!process.env.MICROBUILD_PLUGIN_DIRECTORY) {
         console.log("Skipping VSIX signature verification because signing was faked.");
         return;
     }

@@ -145,6 +145,7 @@ extends:
               - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Sign packages'
                 env:
+                  MICROBUILD_PLUGIN_DIRECTORY: $(Agent.TempDirectory)/MicroBuild/Plugins
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
@@ -157,6 +158,7 @@ extends:
               - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Sign extensions'
                 env:
+                  MICROBUILD_PLUGIN_DIRECTORY: $(Agent.TempDirectory)/MicroBuild/Plugins
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 

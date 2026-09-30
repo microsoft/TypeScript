@@ -118,6 +118,7 @@ extends:
               - bash: npx hereby vscode-typescript:release --forRelease --vscodeTypescriptRelease
                 displayName: Build and sign extensions
                 env:
+                  MICROBUILD_PLUGIN_DIRECTORY: $(Agent.TempDirectory)/MicroBuild/Plugins
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
                   VSCODE_TYPESCRIPT_SIGN_TYPE: real
 
