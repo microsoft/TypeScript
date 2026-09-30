@@ -332,6 +332,7 @@ var esnextLibs = []string{
 	"lib.esnext.decorators.d.ts",
 	"lib.esnext.disposable.d.ts",
 	"lib.esnext.intl.d.ts",
+	"lib.esnext.modulesource.d.ts",
 	"lib.esnext.sharedmemory.d.ts",
 	"lib.esnext.temporal.d.ts",
 	"lib.decorators.d.ts",
@@ -473,6 +474,62 @@ func TestProgram(t *testing.T) {
 			}
 
 			assert.DeepEqual(t, testCase.expectedFiles, actualFiles)
+		})
+	}
+}
+
+func TestImportSourceProgram(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name       string
+		source     string
+		evaluation string
+	}{
+		{"static", `import source a from "./a.js";`, `import { a as value } from "./a.js";`},
+		{"dynamic", `import.source("./a.js");`, `import("./a.js");`},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			content := test.source + `import source b from "missing"; import.source("other");`
+			files := map[string]any{
+				"/src/tsconfig.json": `{"compilerOptions":{"module":"esnext","noLib":true},"files":["index.ts"]}`,
+				"/src/index.ts":      content,
+				"/src/a.ts":          "export const a = 1;",
+			}
+			host := NewCompilerHost("/", vfstest.FromMap(files, true), "", nil, nil, nil)
+			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, host, nil)
+			assert.Equal(t, len(diagnostics), 0)
+			program := NewProgram(ProgramOptions{Config: config, Host: host})
+			file := program.GetSourceFile("/src/index.ts")
+			assert.Assert(t, program.GetSourceFile("/src/a.ts") == nil)
+			assert.Equal(t, len(program.GetResolvedModules()[file.Path()]), 0)
+			assert.Equal(t, program.GetUnresolvedImports().Len(), 0)
+			assert.Equal(t, program.collectPackageNames().unresolved.Len(), 0)
+
+			files["/src/index.ts"] = test.evaluation + strings.TrimPrefix(content, test.source)
+			host = NewCompilerHost("/", vfstest.FromMap(files, true), "", nil, nil, nil)
+			program, file, reused := program.UpdateProgram("/src/index.ts", host, nil, nil)
+			assert.Assert(t, !reused)
+			assert.Assert(t, program.GetSourceFile("/src/a.ts") != nil)
+			for _, specifier := range file.Imports() {
+				resolved := program.GetResolvedModuleFromModuleSpecifier(file, specifier)
+				assert.Equal(t, resolved.IsResolved(), !ast.IsSourcePhaseImport(specifier.Parent))
+			}
+
+			files["/src/index.ts"] = content
+			host = NewCompilerHost("/", vfstest.FromMap(files, true), "", nil, nil, nil)
+			program, _, reused = program.UpdateProgram("/src/index.ts", host, nil, nil)
+			assert.Assert(t, !reused)
+			assert.Assert(t, program.GetSourceFile("/src/a.ts") == nil)
+
+			files["/src/index.ts"] = test.evaluation + content
+			host = NewCompilerHost("/", vfstest.FromMap(files, true), "", nil, nil, nil)
+			program = NewProgram(ProgramOptions{Config: config, Host: host})
+			file = program.GetSourceFile("/src/index.ts")
+			for _, specifier := range file.Imports() {
+				resolved := program.GetResolvedModuleFromModuleSpecifier(file, specifier)
+				assert.Equal(t, resolved.IsResolved(), !ast.IsSourcePhaseImport(specifier.Parent))
+			}
 		})
 	}
 }

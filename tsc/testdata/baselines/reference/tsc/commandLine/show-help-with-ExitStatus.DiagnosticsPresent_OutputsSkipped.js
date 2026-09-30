@@ -141,8 +141,8 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
                          s2025.iterator, es2025.promise/esnext.promise, es2025.regexp, es2026.array/esnext.array, es2026
                          .collection/esnext.collection, es2026.error/esnext.error, es2026.iterator/esnext.iterator, es20
                          26.json, es2026.math, es2026.typedarrays/esnext.typedarrays, esnext.date, esnext.decorators, es
-                         next.disposable, esnext.intl, esnext.sharedmemory, esnext.temporal, decorators, decorators.lega
-                         cy
+                         next.disposable, esnext.intl, esnext.modulesource, esnext.sharedmemory, esnext.temporal, decora
+                         tors, decorators.legacy
 
                default:  undefined
 
