@@ -1606,9 +1606,9 @@ let signCount = 0;
 /**
  * @param {string} value
  */
-function escapeMsbuildXml(value) {
-    return value.replaceAll("%", "%25").replaceAll("$", "%24").replaceAll("@", "%40").replaceAll(";", "%3B")
-        .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+function assertMsbuildXmlValue(value) {
+    assert(value.length > 0 && !/[^\w./\\: -]/.test(value), `Unsupported MSBuild XML value: ${JSON.stringify(value)}`);
+    return value;
 }
 
 /**
@@ -1735,11 +1735,11 @@ async function sign(filelist, unchangedOutputOkay = false) {
     const propsPath = path.resolve(tmp, `signing-items-${signCount++}.props`);
     const signingItems = signingFilelist.SignFileRecordList.flatMap(record => record.SignFileList.map(file => ({ path: file.SrcPath, cert: record.Certs, macAppName: record.MacAppName })));
     const items = signingItems.map(({ path: filePath, cert, macAppName }) =>
-        `    <FilesToSign Include="${escapeMsbuildXml(filePath)}">
-      <Authenticode>${escapeMsbuildXml(cert)}</Authenticode>
+        `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
+      <Authenticode>${assertMsbuildXmlValue(cert)}</Authenticode>
       <StrongName>None</StrongName>${
             macAppName ? `
-      <MacAppName>${escapeMsbuildXml(macAppName)}</MacAppName>` : ""
+      <MacAppName>${assertMsbuildXmlValue(macAppName)}</MacAppName>` : ""
         }
     </FilesToSign>`
     ).join("\n");
