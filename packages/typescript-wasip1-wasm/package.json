@@ -5,7 +5,7 @@
     "license": "Apache-2.0",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "description": "TypeScript compiler, language server, and API transport for wasip1/wasm",
+    "description": "Experimental TypeScript support for wasip1/wasm",
     "type": "module",
     "files": [
         "dist",
