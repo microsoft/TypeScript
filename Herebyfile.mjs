@@ -1758,6 +1758,7 @@ ${items}
             "build",
             path.resolve("tools/signing/Sign.csproj"),
             "--target:AfterBuild",
+            "--verbosity:normal",
             "-p:SignType=real",
             `-p:SignFilesDir=${path.resolve("built")}`,
             `-p:FilesToSignPropsFile=${propsPath}`,
