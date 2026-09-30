@@ -54,6 +54,9 @@ extends:
             displayName: Validate vscode-typescript release
 
             templateContext:
+              mb:
+                publish:
+                  enabled: false
               inputs:
                 - input: pipelineArtifact
                   pipeline: TypeScript_VS_Code_Extension_Release_Build
@@ -177,6 +180,9 @@ extends:
                 templateContext:
                   type: releaseJob
                   isProduction: true
+                  mb:
+                    publish:
+                      enabled: false
                   inputs:
                     - input: pipelineArtifact
                       pipeline: TypeScript_VS_Code_Extension_Release_Build

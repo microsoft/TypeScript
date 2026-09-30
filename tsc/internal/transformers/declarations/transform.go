@@ -2806,14 +2806,18 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
 	defer cleanupDiagnosticContext()
 
+	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
+
 	if ast.IsIdentifier(node.Right) {
+		if !preexistingExpandoHasExport {
+			tx.addExportModifierToExpandoMembers(hostId)
+		}
 		// alias-like, emit an `export {name}` or `export {name as alias}`
 		result := tx.transformBinaryExpressionToExportDeclaration(node.AsNode(), exportName)
 		tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], result)
 		return
 	}
 
-	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 	var varModifiers *ast.ModifierList
 
 	if preexistingExpandoHasExport {
@@ -2853,16 +2857,22 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 			},
 		))
 		statements = append(statements, tx.Factory().NewExportDeclaration(nil /*modifiers*/, false /*isTypeOnly*/, namedExports, nil /*moduleSpecifier*/, nil /*attributes*/))
-	}
-
-	if len(statements) > 1 && !preexistingExpandoHasExport {
-		// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
-		for _, decl := range tx.expandoMembers[hostId] {
-			modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
-			decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
+		if !preexistingExpandoHasExport {
+			// Done before adding statements to expando members to keep the initial variable statement, before we rename anything, private
+			tx.addExportModifierToExpandoMembers(hostId)
 		}
 	}
+
 	tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], statements...)
+}
+
+func (tx *DeclarationTransformer) addExportModifierToExpandoMembers(hostId ast.NodeId) {
+	// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
+	for _, decl := range tx.expandoMembers[hostId] {
+		// only invoked when `tx.expandoMembers` does not *yet* contain an `export` declaration, so no need to skip one here to prevent `export export {}`
+		modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
+		decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
+	}
 }
 
 func (tx *DeclarationTransformer) getExpandoHostId(declaration *ast.Declaration) ast.NodeId {
