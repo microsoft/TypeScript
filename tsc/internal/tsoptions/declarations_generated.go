@@ -122,7 +122,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		ShortName:               "i",
 		Category:                diagnostics.Projects,
 		Description:             diagnostics.Save_tsbuildinfo_files_to_allow_for_incremental_compilation_of_projects,
-		transpileOptionValue:    core.TSUnknown,
 		DefaultValueDescription: diagnostics.X_false_unless_composite_is_set,
 	},
 	// Full emit is calculated separately, so this does not set affectsEmit.
@@ -133,7 +132,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		AffectsBuildInfo:         true,
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
-		transpileOptionValue:     core.TSUnknown,
 		Description:              diagnostics.Generate_d_ts_files_from_TypeScript_and_JavaScript_files_in_your_project,
 		DefaultValueDescription:  diagnostics.X_false_unless_composite_is_set,
 	},
@@ -155,7 +153,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
 		Description:              diagnostics.Only_output_d_ts_files_and_not_JavaScript_files,
-		transpileOptionValue:     core.TSUnknown,
 		DefaultValueDescription:  false,
 	},
 	// Full emit is calculated separately, so this does not set affectsEmit.
@@ -184,7 +181,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		ShowInSimplifiedHelpView: false,
 		Category:                 diagnostics.Compiler_Diagnostics,
 		Description:              diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
-		transpileOptionValue:     core.TSTrue,
 		DefaultValueDescription:  false,
 	},
 	{
@@ -201,7 +197,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
 		Description:              diagnostics.Disable_emitting_files_from_a_compilation,
-		transpileOptionValue:     core.TSUnknown,
 		DefaultValueDescription:  false,
 	},
 	{
@@ -354,7 +349,6 @@ var optionsForCompiler = []*CommandLineOption{
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Language_and_Environment,
 		Description:              diagnostics.Specify_a_set_of_bundled_library_declaration_files_that_describe_the_target_runtime_environment,
-		transpileOptionValue:     core.TSUnknown,
 	},
 	{
 		Name:                     "allowJs",
@@ -401,7 +395,6 @@ var optionsForCompiler = []*CommandLineOption{
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
 		Description:              diagnostics.Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designates_a_file_that_bundles_all_d_ts_output,
-		transpileOptionValue:     core.TSUnknown,
 	},
 	{
 		Name:                     "outDir",
@@ -431,7 +424,6 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsBuildInfo:        true,
 		IsTSConfigOnly:          true,
 		Category:                diagnostics.Projects,
-		transpileOptionValue:    core.TSUnknown,
 		DefaultValueDescription: false,
 		Description:             diagnostics.Enable_constraints_that_allow_a_TypeScript_project_to_be_used_with_project_references,
 	},
@@ -442,7 +434,6 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsBuildInfo:        true,
 		IsFilePath:              true,
 		Category:                diagnostics.Projects,
-		transpileOptionValue:    core.TSUnknown,
 		DefaultValueDescription: ".tsbuildinfo",
 		Description:             diagnostics.Specify_the_path_to_tsbuildinfo_incremental_compilation_file,
 	},
@@ -480,7 +471,6 @@ var optionsForCompiler = []*CommandLineOption{
 		Kind:                    CommandLineOptionTypeBoolean,
 		Category:                diagnostics.Interop_Constraints,
 		Description:             diagnostics.Ensure_that_each_file_can_be_safely_transpiled_without_relying_on_other_imports,
-		transpileOptionValue:    core.TSTrue,
 		DefaultValueDescription: false,
 	},
 	{
@@ -725,7 +715,6 @@ var optionsForCompiler = []*CommandLineOption{
 		IsTSConfigOnly:          true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Specify_a_set_of_entries_that_re_map_imports_to_additional_lookup_locations,
-		transpileOptionValue:    core.TSUnknown,
 	},
 	{
 		Name:                    "rootDirs",
@@ -734,7 +723,6 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsModuleResolution: true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Allow_multiple_folders_to_be_treated_as_one_when_resolving_modules,
-		transpileOptionValue:    core.TSUnknown,
 		DefaultValueDescription: diagnostics.Computed_from_the_list_of_input_files,
 	},
 	{
@@ -751,7 +739,6 @@ var optionsForCompiler = []*CommandLineOption{
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Modules,
 		Description:              diagnostics.Specify_type_package_names_to_be_included_without_being_referenced_in_a_source_file,
-		transpileOptionValue:     core.TSUnknown,
 	},
 	{
 		Name:                       "allowSyntheticDefaultImports",
@@ -805,7 +792,6 @@ var optionsForCompiler = []*CommandLineOption{
 		Category:                   diagnostics.Modules,
 		Description:                diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_bundler_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
 		DefaultValueDescription:    false,
-		transpileOptionValue:       core.TSUnknown,
 	},
 	{
 		Name:                       "rewriteRelativeImportExtensions",
@@ -987,7 +973,6 @@ var optionsForCompiler = []*CommandLineOption{
 		Category:                diagnostics.Language_and_Environment,
 		AffectsProgramStructure: true,
 		Description:             diagnostics.Disable_including_any_library_files_including_the_default_lib_d_ts,
-		transpileOptionValue:    core.TSTrue,
 		DefaultValueDescription: false,
 	},
 	// Transpilation does not resolve the full program, so noResolve avoids reporting missing files.
@@ -997,7 +982,6 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsModuleResolution: true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Disallow_import_s_require_s_or_reference_s_from_expanding_the_number_of_files_TypeScript_should_add_to_a_project,
-		transpileOptionValue:    core.TSTrue,
 		DefaultValueDescription: false,
 	},
 	{
@@ -1056,7 +1040,6 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsEmit:             true,
 		AffectsBuildInfo:        true,
 		Category:                diagnostics.Emit,
-		transpileOptionValue:    core.TSUnknown,
 		Description:             diagnostics.Disable_emitting_files_if_any_type_checking_errors_are_reported,
 		DefaultValueDescription: false,
 	},
@@ -1077,7 +1060,6 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsDeclarationPath: true,
 		IsFilePath:             true,
 		Category:               diagnostics.Emit,
-		transpileOptionValue:   core.TSUnknown,
 		Description:            diagnostics.Specify_the_output_directory_for_generated_declaration_files,
 	},
 	// Store this in build info to determine whether library files need to be rechecked.

@@ -89,6 +89,7 @@ export const options: OptionsModel = {
         },
         {
             name: "allowImportingTsExtensions",
+            transpile: { value: "clear" },
             type: "Tristate",
             declarations: [
                 {
@@ -98,12 +99,12 @@ export const options: OptionsModel = {
                     category: diagnostic("Modules"),
                     description: diagnostic("Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set."),
                     defaultValueDescription: false,
-                    transpileOptionValue: { go: "core.TSUnknown" },
                 },
             ],
         },
         {
             name: "allowNonTsExtensions",
+            transpile: { value: true },
             type: "Tristate",
         },
         {
@@ -195,6 +196,7 @@ export const options: OptionsModel = {
         },
         {
             name: "composite",
+            transpile: { value: "clear" },
             type: "Tristate",
             declarations: [
                 {
@@ -202,7 +204,6 @@ export const options: OptionsModel = {
                     affectsBuildInfo: true,
                     isTSConfigOnly: true,
                     category: diagnostic("Projects"),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     defaultValueDescription: false,
                     description: diagnostic("Enable constraints that allow a TypeScript project to be used with project references."),
                 },
@@ -210,6 +211,7 @@ export const options: OptionsModel = {
         },
         {
             name: "emitDeclarationOnly",
+            transpile: { value: "clear", declarationValue: true },
             type: "Tristate",
             declarations: [
                 {
@@ -219,7 +221,6 @@ export const options: OptionsModel = {
                     showInSimplifiedHelpView: true,
                     category: diagnostic("Emit"),
                     description: diagnostic("Only output d.ts files and not JavaScript files."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     defaultValueDescription: false,
                 },
             ],
@@ -255,6 +256,7 @@ export const options: OptionsModel = {
         },
         {
             name: "declaration",
+            transpile: { value: false, declarationValue: true },
             type: "Tristate",
             declarations: [
                 {
@@ -264,7 +266,6 @@ export const options: OptionsModel = {
                     affectsBuildInfo: true,
                     showInSimplifiedHelpView: true,
                     category: diagnostic("Emit"),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     description: diagnostic("Generate .d.ts files from TypeScript and JavaScript files in your project."),
                     defaultValueDescription: diagnostic("`false`, unless `composite` is set"),
                 },
@@ -272,6 +273,7 @@ export const options: OptionsModel = {
         },
         {
             name: "declarationDir",
+            transpile: { value: "clear" },
             type: "string",
             declarations: [
                 {
@@ -281,13 +283,13 @@ export const options: OptionsModel = {
                     affectsDeclarationPath: true,
                     isFilePath: true,
                     category: diagnostic("Emit"),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     description: diagnostic("Specify the output directory for generated declaration files."),
                 },
             ],
         },
         {
             name: "declarationMap",
+            transpile: { value: false, declarationValue: "preserve" },
             type: "Tristate",
             declarations: [
                 {
@@ -425,19 +427,20 @@ export const options: OptionsModel = {
         },
         {
             name: "isolatedModules",
+            transpile: { value: true, unless: "verbatimModuleSyntax" },
             type: "Tristate",
             declarations: [
                 {
                     group: "optionsForCompiler",
                     category: diagnostic("Interop Constraints"),
                     description: diagnostic("Ensure that each file can be safely transpiled without relying on other imports."),
-                    transpileOptionValue: { go: "core.TSTrue" },
                     defaultValueDescription: false,
                 },
             ],
         },
         {
             name: "isolatedDeclarations",
+            transpile: { value: false, declarationValue: true },
             type: "Tristate",
             declarations: [
                 {
@@ -532,6 +535,7 @@ export const options: OptionsModel = {
         },
         {
             name: "incremental",
+            transpile: { value: "clear" },
             type: "Tristate",
             declarations: [
                 {
@@ -539,7 +543,6 @@ export const options: OptionsModel = {
                     shortName: "i",
                     category: diagnostic("Projects"),
                     description: diagnostic("Save .tsbuildinfo files to allow for incremental compilation of projects."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     defaultValueDescription: diagnostic("`false`, unless `composite` is set"),
                 },
             ],
@@ -606,6 +609,7 @@ export const options: OptionsModel = {
         },
         {
             name: "lib",
+            transpile: { value: "clear" },
             type: "[]string",
             parser: "lib",
             declarations: [
@@ -615,7 +619,6 @@ export const options: OptionsModel = {
                     showInSimplifiedHelpView: true,
                     category: diagnostic("Language and Environment"),
                     description: diagnostic("Specify a set of bundled library declaration files that describe the target runtime environment."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                 },
             ],
         },
@@ -735,6 +738,7 @@ export const options: OptionsModel = {
         },
         {
             name: "noEmit",
+            transpile: { value: "clear" },
             type: "Tristate",
             jsconfigDefault: true,
             declarations: [
@@ -743,13 +747,13 @@ export const options: OptionsModel = {
                     showInSimplifiedHelpView: true,
                     category: diagnostic("Emit"),
                     description: diagnostic("Disable emitting files from a compilation."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     defaultValueDescription: false,
                 },
             ],
         },
         {
             name: "noCheck",
+            transpile: { value: true },
             type: "Tristate",
             declarations: [
                 {
@@ -758,7 +762,6 @@ export const options: OptionsModel = {
                     showInSimplifiedHelpView: false,
                     category: diagnostic("Compiler Diagnostics"),
                     description: diagnostic("Disable full type checking (only critical parse and emit errors will be reported)."),
-                    transpileOptionValue: { go: "core.TSTrue" },
                     defaultValueDescription: false,
                 },
             ],
@@ -852,6 +855,7 @@ export const options: OptionsModel = {
         },
         {
             name: "noLib",
+            transpile: { value: true, declarationValue: false },
             type: "Tristate",
             declarations: [
                 {
@@ -860,7 +864,6 @@ export const options: OptionsModel = {
                     category: diagnostic("Language and Environment"),
                     affectsProgramStructure: true,
                     description: diagnostic("Disable including any library files, including the default lib.d.ts."),
-                    transpileOptionValue: { go: "core.TSTrue" },
                     defaultValueDescription: false,
                 },
             ],
@@ -896,6 +899,7 @@ export const options: OptionsModel = {
         },
         {
             name: "noEmitOnError",
+            transpile: { value: "clear" },
             type: "Tristate",
             declarations: [
                 {
@@ -903,7 +907,6 @@ export const options: OptionsModel = {
                     affectsEmit: true,
                     affectsBuildInfo: true,
                     category: diagnostic("Emit"),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     description: diagnostic("Disable emitting files if any type checking errors are reported."),
                     defaultValueDescription: false,
                 },
@@ -939,6 +942,7 @@ export const options: OptionsModel = {
         },
         {
             name: "noResolve",
+            transpile: { value: true },
             type: "Tristate",
             declarations: [
                 {
@@ -947,7 +951,6 @@ export const options: OptionsModel = {
                     affectsModuleResolution: true,
                     category: diagnostic("Modules"),
                     description: diagnostic("Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project."),
-                    transpileOptionValue: { go: "core.TSTrue" },
                     defaultValueDescription: false,
                 },
             ],
@@ -998,6 +1001,7 @@ export const options: OptionsModel = {
         },
         {
             name: "paths",
+            transpile: { value: "clear" },
             type: "*collections.OrderedMap[string, []string]",
             declarations: [
                 {
@@ -1007,7 +1011,6 @@ export const options: OptionsModel = {
                     isTSConfigOnly: true,
                     category: diagnostic("Modules"),
                     description: diagnostic("Specify a set of entries that re-map imports to additional lookup locations."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                 },
             ],
         },
@@ -1166,6 +1169,7 @@ export const options: OptionsModel = {
         },
         {
             name: "rootDirs",
+            transpile: { value: "clear" },
             type: "[]string",
             declarations: [
                 {
@@ -1175,7 +1179,6 @@ export const options: OptionsModel = {
                     allowConfigDirTemplateSubstitution: true,
                     category: diagnostic("Modules"),
                     description: diagnostic("Allow multiple folders to be treated as one when resolving modules."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     defaultValueDescription: diagnostic("Computed from the list of input files"),
                 },
             ],
@@ -1358,6 +1361,7 @@ export const options: OptionsModel = {
         },
         {
             name: "suppressOutputPathCheck",
+            transpile: { value: true },
             type: "Tristate",
         },
         {
@@ -1392,6 +1396,7 @@ export const options: OptionsModel = {
         },
         {
             name: "tsBuildInfoFile",
+            transpile: { value: "clear" },
             type: "string",
             declarations: [
                 {
@@ -1400,7 +1405,6 @@ export const options: OptionsModel = {
                     affectsBuildInfo: true,
                     isFilePath: true,
                     category: diagnostic("Projects"),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                     defaultValueDescription: ".tsbuildinfo",
                     description: diagnostic("Specify the path to .tsbuildinfo incremental compilation file."),
                 },
@@ -1421,6 +1425,7 @@ export const options: OptionsModel = {
         },
         {
             name: "types",
+            transpile: { value: "clear" },
             type: "[]string",
             declarations: [
                 {
@@ -1429,7 +1434,6 @@ export const options: OptionsModel = {
                     showInSimplifiedHelpView: true,
                     category: diagnostic("Modules"),
                     description: diagnostic("Specify type package names to be included without being referenced in a source file."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                 },
             ],
         },
@@ -1572,6 +1576,7 @@ export const options: OptionsModel = {
         },
         {
             name: "outFile",
+            transpile: { value: "clear" },
             type: "string",
             deprecated: true,
             declarations: [
@@ -1584,7 +1589,6 @@ export const options: OptionsModel = {
                     showInSimplifiedHelpView: true,
                     category: diagnostic("Emit"),
                     description: diagnostic("Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output."),
-                    transpileOptionValue: { go: "core.TSUnknown" },
                 },
             ],
         },

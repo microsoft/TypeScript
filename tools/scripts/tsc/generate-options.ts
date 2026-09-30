@@ -79,6 +79,12 @@ export function validateOptions(model: OptionsModel): void {
         }
         assert(!fields.has(fieldName(option)), `Duplicate compiler field: ${fieldName(option)}`);
         fields.add(fieldName(option));
+        if (option.transpile) {
+            const { value, declarationValue, unless } = option.transpile;
+            assert(value === "clear" || option.type === "Tristate", `Non-boolean transpile value: ${option.name}`);
+            assert(declarationValue === undefined || option.type === "Tristate", `Non-boolean declaration value: ${option.name}`);
+            if (unless) assert(model.compilerOptions.some(option => option.name === unless && option.type === "Tristate"), `Unknown transpile condition: ${unless}`);
+        }
         if (optionKind(option) === "Enum") assert(enumNames.has(option.type), `Unknown enum type: ${option.type}`);
         if (option.jsconfigDefault !== undefined) {
             const expected = option.type === "Tristate" ? "boolean" : option.type === "*int" ? "number" : "string";
@@ -373,14 +379,25 @@ ${
 }
 
 function transpileOptions(): string {
-    const clearedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => typeof declaration.transpileOptionValue === "object" && declaration.transpileOptionValue.go === "core.TSUnknown"));
+    const transformedOptions = options.compilerOptions.filter(option => option.transpile);
     return `${header}
 package transpile
 
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 
-func clearOptionsForTranspile(options *core.CompilerOptions) {
-${clearedOptions.map(option => `options.${fieldName(option)} = ${zeroValue(option)}`).join("\n")}
+func setOptionsForTranspile(options *core.CompilerOptions, declaration bool) {
+${
+        transformedOptions.map(option => {
+            const { value, declarationValue, unless } = option.transpile!;
+            const field = `options.${fieldName(option)}`;
+            const assigned = value === "clear" ? zeroValue(option) : value ? "core.TSTrue" : "core.TSFalse";
+            let code = `${field} = ${assigned}`;
+            if (declarationValue === "preserve") code = `if !declaration { ${code} }`;
+            else if (declarationValue !== undefined) code = `if declaration { ${field} = ${declarationValue ? "core.TSTrue" : "core.TSFalse"} } else { ${code} }`;
+            if (unless) code = `if !options.${fieldName(options.compilerOptions.find(option => option.name === unless)!)}.IsTrue() { ${code} }`;
+            return code;
+        }).join("\n")
+    }
 }
 `;
 }
@@ -478,7 +495,6 @@ const privateMetadata = new Set([
     "minValue",
     "allowJsFlag",
     "strictFlag",
-    "transpileOptionValue",
     "listPreserveFalsyValues",
 ]);
 

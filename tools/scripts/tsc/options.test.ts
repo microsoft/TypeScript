@@ -215,24 +215,14 @@ test("build options preserve the compiler options parsing comment", () => {
     assert.match(source, /\/\/ CompilerOptions are not parsed here and will be available on ParsedBuildCommandLine\n\n\/\/ Internal fields\nClean /);
 });
 
-test("transpilation clears only options marked with an unknown transpile value", () => {
+test("transpilation settings remain generation-only and preserve conditional overrides", () => {
     const source = generateOptions().get("tsc/internal/transpile/options_generated.go")!;
-    assert.deepEqual([...source.matchAll(/options\.(\w+) = ([^\n]+)/g)].map(match => [match[1], match[2]]), [
-        ["AllowImportingTsExtensions", "core.TSUnknown"],
-        ["Composite", "core.TSUnknown"],
-        ["EmitDeclarationOnly", "core.TSUnknown"],
-        ["Declaration", "core.TSUnknown"],
-        ["DeclarationDir", '""'],
-        ["Incremental", "core.TSUnknown"],
-        ["Lib", "nil"],
-        ["NoEmit", "core.TSUnknown"],
-        ["NoEmitOnError", "core.TSUnknown"],
-        ["Paths", "nil"],
-        ["RootDirs", "nil"],
-        ["TsBuildInfoFile", '""'],
-        ["Types", "nil"],
-        ["OutFile", '""'],
-    ]);
+    assert.match(source, /options.NoCheck = core.TSTrue/);
+    assert.match(source, /options.NoResolve = core.TSTrue/);
+    assert.match(source, /if !options.VerbatimModuleSyntax.IsTrue\(\) \{ options.IsolatedModules = core.TSTrue \}/);
+    assert.match(source, /if !declaration \{ options.DeclarationMap = core.TSFalse \}/);
+    assert.match(source, /if declaration \{ options.NoLib = core.TSFalse \} else \{ options.NoLib = core.TSTrue \}/);
+    assert.doesNotMatch(generateOptions().get("tsc/internal/tsoptions/declarations_generated.go")!, /transpileOptionValue:/);
 });
 
 test("option comparisons use effective values and Go field names", () => {
@@ -595,6 +585,9 @@ test("invalid metadata is rejected before generating files", () => {
     const invalidAlias = structuredClone(options);
     invalidAlias.enums[0].members[0].value = "Missing";
     assert.throws(() => validateOptions(invalidAlias), /Unknown enum alias/);
+    const invalidTranspile = structuredClone(options);
+    invalidTranspile.compilerOptions[0].transpile = { value: true, unless: "missing" };
+    assert.throws(() => validateOptions(invalidTranspile), /Unknown transpile condition/);
 });
 
 test("schemas include config options, not API-only or command-line-only fields", () => {

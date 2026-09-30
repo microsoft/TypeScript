@@ -2,7 +2,6 @@ package tsoptions
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
-	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
 
@@ -53,10 +52,6 @@ type CommandLineOption struct {
 
 	allowJsFlag bool
 	strictFlag  bool
-
-	// used in transpileoptions worker
-	// todo: revisit to see if this can be reduced to boolean
-	transpileOptionValue core.Tristate
 
 	// used for CommandLineOptionTypeList
 	listPreserveFalsyValues bool

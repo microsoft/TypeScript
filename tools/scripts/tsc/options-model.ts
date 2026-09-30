@@ -58,7 +58,6 @@ export interface DeclarationMetadata {
     affectsEmit?: boolean;
     allowJsFlag?: boolean;
     strictFlag?: boolean;
-    transpileOptionValue?: { go: string; };
     listPreserveFalsyValues?: boolean;
 }
 
@@ -92,6 +91,12 @@ export interface CompilerOption {
         group: DeclarationGroup;
     })[];
     jsconfigDefault?: string | number | boolean;
+    transpile?: {
+        value: boolean | "clear";
+        declarationValue?: boolean | "preserve";
+        /** Preserve the caller's value when the named boolean option is true. */
+        unless?: string;
+    };
 }
 
 export interface EnumMap {
