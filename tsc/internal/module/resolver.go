@@ -146,13 +146,17 @@ func GetCompilerOptionsWithRedirect(compilerOptions *core.CompilerOptions, redir
 }
 
 type DefaultResolver struct {
-	caches
-	host            ResolutionHost
-	compilerOptions *core.CompilerOptions
-	typingsLocation string
-	projectName     string
-	extraExtensions []string
+	*ResolutionData
+	host ResolutionHost
 	// reportDiagnostic: DiagnosticReporter
+
+	moduleResolutionCache           moduleResolutionCache
+	typeRefDirectiveResolutionCache typeRefDirectiveResolutionCache
+
+	// Cached representations for `core.CompilerOptions.paths`, keyed by the
+	// path mappings themselves. This does not handle other path patterns such
+	// as `typesVersions`.
+	parsedPatternsForPaths parsedPatternsCache
 }
 
 type ResolverOptions struct {
@@ -165,19 +169,18 @@ type ResolverOptions struct {
 }
 
 func NewResolver(opts ResolverOptions) *DefaultResolver {
-	r := &DefaultResolver{
-		host:            opts.Host,
-		compilerOptions: opts.CompilerOptions,
-		typingsLocation: opts.TypingsLocation,
-		projectName:     opts.ProjectName,
-		extraExtensions: opts.ExtraExtensions,
+	return newResolutionData(opts).NewResolver(opts.Host)
+}
+
+func (r *DefaultResolver) GetResolutionData() *ResolutionData {
+	return r.ResolutionData
+}
+
+func (d *ResolutionData) NewResolver(host ResolutionHost) *DefaultResolver {
+	return &DefaultResolver{
+		ResolutionData: d,
+		host:           host,
 	}
-	if opts.PackageJsonCache != nil {
-		r.packageJsonInfoCache = opts.PackageJsonCache
-	} else {
-		r.caches = newCaches(opts.Host.GetCurrentDirectory(), opts.Host.FS().UseCaseSensitiveFileNames(), opts.CompilerOptions)
-	}
-	return r
 }
 
 func (r *DefaultResolver) newTraceBuilder() *tracer {
@@ -189,10 +192,6 @@ func (r *DefaultResolver) newTraceBuilder() *tracer {
 
 func (r *DefaultResolver) GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry {
 	return (&resolutionState{compilerOptions: r.compilerOptions, resolver: r}).getPackageScopeForPath(directory)
-}
-
-func (r *DefaultResolver) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
-	r.caches.packageJsonInfoCache.Range(f)
 }
 
 func (r *tracer) traceResolutionUsingProjectReference(redirectedReference ResolvedProjectReference) {

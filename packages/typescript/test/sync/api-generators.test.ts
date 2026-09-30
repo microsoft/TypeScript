@@ -30,6 +30,7 @@ import {
     type AllAPIRequestGenerator,
     type AnyAPIRequestGenerator,
     type API,
+    type BuildOrchestrator,
     type ConditionalType,
     defer,
     type DeferredAPIRequestGenerator,
@@ -164,9 +165,12 @@ const privateGeneratorGetters = new Set([
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
     "Checker.getWellKnownSymbols",
+    "NodeHandle.fetchOwnerFile",
     "Program.disposeWorker",
     "Program.fetchSourceFileMetadata",
     "Snapshot.disposeWorker",
+    "Symbol.fetchSymbol",
+    "Symbol.fetchSymbols",
     "Symbol.fetchSymbolTable",
     "Type.getNumberIndexTypeWorker",
     "Type.getStringIndexTypeWorker",
@@ -352,6 +356,10 @@ function assertSnapshotsEquivalent(actual: Snapshot, expected: Snapshot, message
     assert.deepEqual(actual.operation.openedFiles?.map(result => result.project.id), expected.operation.openedFiles?.map(result => result.project.id), message);
 }
 
+function assertBuildOrchestratorsEquivalent(actual: BuildOrchestrator, expected: BuildOrchestrator, message?: string): void {
+    assert.equal(actual.constructor, expected.constructor, message);
+}
+
 function assertSymbolMapsEquivalent(actual: ReadonlyMap<string, Symbol>, expected: ReadonlyMap<string, Symbol>, message?: string): void {
     assert.deepEqual([...actual.keys()], [...expected.keys()], message);
     for (const key of actual.keys()) {
@@ -442,11 +450,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             fromText.dispose();
             fromFile.dispose();
         });
+        const [[retained]] = api.batch(all(api.retainSourceFile.gen(fromFile.sourceFile)));
+        context.after(() => retained.dispose());
         assert.equal(fromText.sourceFile.text, "export const generated = true;");
         assert.equal(fromFile.sourceFile.text, parityFiles["/src/index.ts"]);
+        assert.strictEqual(retained.sourceFile, fromFile.sourceFile);
         assert.deepEqual(requestBatches, [
             ["initialize"],
             ["createSourceFile", "createSourceFileFromFile"],
+            ["retainSourceFile"],
         ]);
     });
 
@@ -1557,12 +1569,14 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
                 parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
                 parityCase("API", "createSourceFileFromFile", api.createSourceFileFromFile, assertRetainedSourceFilesEquivalent, "/src/index.ts"),
+                parityCase("API", "retainSourceFile", api.retainSourceFile, assertRetainedSourceFilesEquivalent, indexFile),
                 parityCase("API", "transpileModule", api.transpileModule, assertDeepEquivalent, "export const value: number = 1;", { compilerOptions: { module: 99 } }),
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
+                parityCase("API", "createBuildOrchestrator", api.createBuildOrchestrator, assertBuildOrchestratorsEquivalent, ["/tsconfig.json"], { cwd: "/" }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),

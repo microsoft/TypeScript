@@ -20,6 +20,9 @@ import {
 } from "./node.generated.ts";
 import {
     NODE_EXTENDED_DATA_MASK,
+    readParseOptionsKey,
+    readSourceFileHash,
+    readSourceFileNodeId,
     type SourceFileInfo,
     type TextDecoder,
 } from "./node.infrastructure.ts";
@@ -38,7 +41,7 @@ import { Wtf8Decoder } from "./wtf8.ts";
 
 // Re-export everything consumers need from the other two files.
 export { RemoteNode, RemoteNodeList } from "./node.generated.ts";
-export { readParseOptionsKey, readSourceFileHash, readSourceFileLease, RemoteNodeBase } from "./node.infrastructure.ts";
+export { readParseOptionsKey, readSourceFileHash, readSourceFileLease, readSourceFileNodeId, RemoteNodeBase } from "./node.infrastructure.ts";
 
 const sourceFileExtendedDataOffsets = {
     Text: 0,
@@ -114,6 +117,21 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         // Every node slot is materializable on demand except the nil sentinel at
         // index 0 and the source-file node at index 1, which is pre-materialized.
         timing?.recordSourceFileFetched(Math.max(0, this.nodes.length - 2));
+    }
+
+    /** @internal */
+    get contentHash(): string {
+        return readSourceFileHash(this.view);
+    }
+
+    /** @internal */
+    get parseOptionsKey(): string {
+        return readParseOptionsKey(this.view);
+    }
+
+    /** @internal */
+    get nodeId(): string {
+        return readSourceFileNodeId(this.view);
     }
 
     readFileReferences(structuredDataOffset: number): readonly FileReference[] {
@@ -201,9 +219,9 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         return this.getString(stringIndex);
     }
 
-    get path(): string {
+    get path(): Path {
         const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Path, true);
-        return this.getString(stringIndex);
+        return this.getString(stringIndex) as Path;
     }
 
     get languageVariant(): number {

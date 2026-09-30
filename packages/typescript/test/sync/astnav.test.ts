@@ -17,7 +17,6 @@ import type {
     Node,
     SourceFile,
 } from "@typescript/typescript/unstable/ast";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import { API } from "@typescript/typescript/unstable/sync";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
@@ -29,7 +28,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
-import { areTestsFiltered } from "../testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 
 // ---------------------------------------------------------------------------
 // Go JSON baseline format

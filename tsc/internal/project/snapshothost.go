@@ -62,6 +62,18 @@ func (s *SnapshotHost) AcquireSourceFile(options ast.SourceFileParseOptions, tex
 	}
 }
 
+func (s *SnapshotHost) AcquireExistingSourceFile(key ParseCacheKey) *SourceFileLease {
+	sourceFile, ok := s.parseCache.AcquireExisting(key)
+	if !ok {
+		return nil
+	}
+	return &SourceFileLease{
+		cache:      s.parseCache,
+		key:        key,
+		sourceFile: sourceFile,
+	}
+}
+
 func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 	currentDirectory := init.Options.CurrentDirectory
 	useCaseSensitiveFileNames := init.FS.UseCaseSensitiveFileNames()
@@ -175,6 +187,10 @@ func (s *SnapshotHost) FS() vfs.FS {
 
 func (s *SnapshotHost) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
+}
+
+func (s *SnapshotHost) DefaultLibraryPath() string {
+	return s.options.DefaultLibraryPath
 }
 
 func (s *SnapshotHost) Close() {

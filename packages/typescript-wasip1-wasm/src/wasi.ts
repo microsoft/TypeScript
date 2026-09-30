@@ -17,7 +17,7 @@ export interface InstantiateWasmOptions {
 }
 
 export interface WasmFileSystem {
-    writeFile?: ((path: string, data: string) => void) | undefined;
+    writeFile?: ((path: string, data: string) => unknown) | symbol | undefined;
 }
 
 interface WasmHost {
@@ -239,7 +239,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
     function hostWriteFile(iovsPointer: number, iovsLength: number, writtenPointer: number): number {
         iovsPointer >>>= 0;
         writtenPointer >>>= 0;
-        if (!fileSystem?.writeFile) return errnoBadFileDescriptor;
+        if (typeof fileSystem?.writeFile !== "function") return errnoBadFileDescriptor;
         if (iovsLength !== 1) return errnoInvalidArgument;
         const memory = getMemory();
         const view = new DataView(memory.buffer);

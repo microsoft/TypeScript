@@ -1,9 +1,9 @@
 import {
     type FileReference,
-    ModifierFlags,
     type Node,
     SyntaxKind,
 } from "../../ast/index.ts";
+export { modifierToFlag } from "../../ast/modifiers.ts";
 import type { TimingCollector } from "../timing.ts";
 import {
     HEADER_OFFSET_HASH_HI0,
@@ -11,6 +11,7 @@ import {
     HEADER_OFFSET_HASH_LO0,
     HEADER_OFFSET_HASH_LO1,
     HEADER_OFFSET_PARSE_OPTIONS,
+    HEADER_OFFSET_SOURCE_FILE_ID,
     HEADER_OFFSET_SOURCE_FILE_LEASE,
     NODE_DATA_TYPE_CHILDREN,
     NODE_DATA_TYPE_EXTENDED,
@@ -102,47 +103,16 @@ export function readSourceFileLease(data: DataView): number {
     return Number(lease);
 }
 
-function hex8(n: number): string {
-    return (n >>> 0).toString(16).padStart(8, "0");
+export function readSourceFileNodeId(data: DataView): string {
+    const nodeId = data.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true);
+    if (nodeId === 0n) {
+        throw new Error("Source file response has no node ID");
+    }
+    return nodeId.toString();
 }
 
-export function modifierToFlag(kind: SyntaxKind): ModifierFlags {
-    switch (kind) {
-        case SyntaxKind.StaticKeyword:
-            return ModifierFlags.Static;
-        case SyntaxKind.PublicKeyword:
-            return ModifierFlags.Public;
-        case SyntaxKind.ProtectedKeyword:
-            return ModifierFlags.Protected;
-        case SyntaxKind.PrivateKeyword:
-            return ModifierFlags.Private;
-        case SyntaxKind.AbstractKeyword:
-            return ModifierFlags.Abstract;
-        case SyntaxKind.AccessorKeyword:
-            return ModifierFlags.Accessor;
-        case SyntaxKind.ExportKeyword:
-            return ModifierFlags.Export;
-        case SyntaxKind.DeclareKeyword:
-            return ModifierFlags.Ambient;
-        case SyntaxKind.ConstKeyword:
-            return ModifierFlags.Const;
-        case SyntaxKind.DefaultKeyword:
-            return ModifierFlags.Default;
-        case SyntaxKind.AsyncKeyword:
-            return ModifierFlags.Async;
-        case SyntaxKind.ReadonlyKeyword:
-            return ModifierFlags.Readonly;
-        case SyntaxKind.OverrideKeyword:
-            return ModifierFlags.Override;
-        case SyntaxKind.InKeyword:
-            return ModifierFlags.In;
-        case SyntaxKind.OutKeyword:
-            return ModifierFlags.Out;
-        case SyntaxKind.Decorator:
-            return ModifierFlags.Decorator;
-        default:
-            return ModifierFlags.None;
-    }
+function hex8(n: number): string {
+    return (n >>> 0).toString(16).padStart(8, "0");
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

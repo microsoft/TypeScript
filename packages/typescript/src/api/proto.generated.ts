@@ -7,6 +7,7 @@ import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
 import { ScriptKind } from "#enums/scriptKind";
 import { ScriptTarget } from "#enums/scriptTarget";
+import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
 import type { Path } from "../ast/index.ts";
 
 export { JsxEmit } from "#enums/jsxEmit";
@@ -16,17 +17,26 @@ export { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 export { NewLineKind } from "#enums/newLineKind";
 export { ScriptKind } from "#enums/scriptKind";
 export { ScriptTarget } from "#enums/scriptTarget";
+export { SymbolOwnerKind } from "#enums/symbolOwnerKind";
 
 export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
 
 export interface APIMethodInfo {
     release: APIMethod<ReleaseParams, void>;
     releaseSourceFile: APIMethod<ReleaseSourceFileParams, unknown>;
+    retainSourceFile: APIMethod<RetainSourceFileParams, RetainSourceFileResponse>;
+    getCachedSourceFile: APIMethod<GetCachedSourceFileParams, SourceFileResponse>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
+    createBuildOrchestrator: APIMethod<CreateBuildOrchestratorParams, CreateBuildOrchestratorResponse>;
+    disposeBuildOrchestrator: APIMethod<DisposeBuildOrchestratorParams, unknown>;
+    build: APIMethod<BuildParams, BuildResponse>;
+    buildReferences: APIMethod<BuildParams, BuildResponse>;
+    cleanBuild: APIMethod<CleanBuildParams, CleanBuildResponse>;
+    cleanReferences: APIMethod<CleanBuildParams, CleanBuildResponse>;
     createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
     releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
@@ -206,6 +216,31 @@ export interface ReleaseSourceFileParams {
     lease: number;
 }
 
+export interface RetainSourceFileParams {
+    file: SourceFileDescriptor;
+}
+
+export interface RetainSourceFileResponse {
+    lease: number;
+}
+
+/**
+ * GetCachedSourceFileParams address an ordinary cached source file by its complete identity,
+ * independent of any snapshot or lease.
+ */
+export interface GetCachedSourceFileParams {
+    file: SourceFileDescriptor;
+}
+
+/**
+ * SourceFileResponse contains the binary-encoded AST data for a source file.
+ * The Data field is base64-encoded binary data in the encoder's format.
+ */
+export interface SourceFileResponse {
+    /** Data is the base64-encoded binary AST data in the encoder's format. */
+    data: string;
+}
+
 export interface BatchRequestsParams {
     requests: readonly BatchRequest[] | null;
     continuationToken?: string | undefined;
@@ -262,6 +297,42 @@ export interface GetCurrentLanguageServerSnapshotParams {
     changes?: LanguageServerSnapshotChanges | undefined;
 }
 
+export interface CreateBuildOrchestratorParams extends BuildOptions, CompilerOptions {
+    rootNames: readonly string[] | null;
+    cwd?: string | undefined;
+}
+
+export interface CreateBuildOrchestratorResponse {
+    buildOrchestratorID: number;
+}
+
+export interface DisposeBuildOrchestratorParams {
+    buildOrchestratorID: number;
+}
+
+export interface BuildParams {
+    buildOrchestratorID: number;
+    project?: string | undefined;
+}
+
+export interface BuildResponse {
+    status: number;
+    diagnostics?: DiagnosticResponse[] | undefined;
+    statistics: Statistics;
+}
+
+export interface CleanBuildParams {
+    buildOrchestratorID: number;
+    project?: string | undefined;
+}
+
+export interface CleanBuildResponse {
+    status: number;
+    diagnostics?: DiagnosticResponse[] | undefined;
+    statistics: Statistics;
+    filesDeleted?: string[] | undefined;
+}
+
 export interface CreateModuleResolverParams {
     compilerOptions: CompilerOptions;
     moduleResolutions?: ModuleResolutionSpec | undefined;
@@ -294,6 +365,7 @@ export interface ParseCommandLineParams {
 export interface ConfigFileResponse {
     fileNames: string[];
     options: CompilerOptions;
+    buildOptions?: BuildOptions | undefined;
     projectReferences?: ProjectReference[] | undefined;
     typeAcquisition?: TypeAcquisition | undefined;
     compileOnSave?: boolean | undefined;
@@ -324,15 +396,6 @@ export interface CreateSourceFileParams {
     fileName: string;
     sourceText: string;
     options: CreateSourceFileOptions;
-}
-
-/**
- * SourceFileResponse contains the binary-encoded AST data for a source file.
- * The Data field is base64-encoded binary data in the encoder's format.
- */
-export interface SourceFileResponse {
-    /** Data is the base64-encoded binary AST data in the encoder's format. */
-    data: string;
 }
 
 export interface CreateSourceFileFromFileParams {
@@ -381,19 +444,14 @@ export interface GetSymbolAtPositionParams {
 }
 
 export interface SymbolResponse {
-    id: number;
-    /**
-     * Project is the project in which the symbol was first observed. It is the
-     * default project for follow-up lookups whose results can vary by project.
-     */
-    project: ProjectId;
+    reference: SymbolReference;
     name: string;
     flags: number;
     checkFlags: number;
     declarations?: string[] | undefined;
     valueDeclaration?: string | undefined;
-    parent?: number | undefined;
-    exportSymbol?: number | undefined;
+    parent?: CompactSymbolReference | undefined;
+    exportSymbol?: CompactSymbolReference | undefined;
 }
 
 export interface GetSymbolsAtPositionsParams {
@@ -430,7 +488,7 @@ export interface GetSymbolsOfSourceFilesParams {
 export interface GetTypeOfSymbolParams {
     snapshot: number;
     project: ProjectId;
-    symbol: number;
+    symbol: SymbolReference;
 }
 
 export interface TypeResponse {
@@ -481,15 +539,15 @@ export interface TypeResponse {
     intrinsicName?: string | undefined;
     /** TypeAlias data */
     aliasTypeArguments?: number[] | undefined;
-    aliasSymbol?: number | undefined;
+    aliasSymbol?: CompactSymbolReference | undefined;
     /** Symbol associated with structured types */
-    symbol?: number | undefined;
+    symbol?: CompactSymbolReference | undefined;
 }
 
 export interface GetTypesOfSymbolsParams {
     snapshot: number;
     project: ProjectId;
-    symbols: readonly number[] | null;
+    symbols: readonly SymbolReference[] | null;
 }
 
 export interface GetSourceFileParams {
@@ -627,8 +685,8 @@ export interface SignatureResponse {
     flags: number;
     declaration?: string | undefined;
     typeParameters?: number[] | undefined;
-    parameters?: number[] | undefined;
-    thisParameter?: number | undefined;
+    parameters?: CompactSymbolReference[] | undefined;
+    thisParameter?: CompactSymbolReference | undefined;
     target?: number | undefined;
 }
 
@@ -666,9 +724,7 @@ export interface GetTypesAtPositionsParams {
 
 /** GetSymbolPropertyParams is used for all symbol sub-property endpoints. */
 export interface GetSymbolPropertyParams {
-    snapshot: number;
-    project: ProjectId;
-    objectId: number;
+    symbol: SymbolReference;
 }
 
 /** GetTypePropertyParams is used for all type sub-property endpoints. */
@@ -754,7 +810,7 @@ export interface IsTypeAssignableToParams {
 export interface GetTypeOfSymbolAtLocationParams {
     snapshot: number;
     project: ProjectId;
-    symbol: number;
+    symbol: SymbolReference;
     location: string;
 }
 
@@ -844,14 +900,14 @@ export interface ConstantValueResponse {
 export interface CheckerSymbolParams {
     snapshot: number;
     project: ProjectId;
-    symbol: number;
+    symbol: SymbolReference;
 }
 
 /** GetMemberInModuleExportsParams are parameters for getMemberInModuleExports. */
 export interface GetMemberInModuleExportsParams {
     snapshot: number;
     project: ProjectId;
-    symbol: number;
+    symbol: SymbolReference;
     name: string;
 }
 
@@ -869,7 +925,7 @@ export interface GetReferencesToSymbolInFileParams {
     snapshot: number;
     project: ProjectId;
     file: DocumentIdentifier;
-    symbol: number;
+    symbol: SymbolReference;
 }
 
 /** GetReferencedSymbolsForNodeParams are the parameters for the getReferencedSymbolsForNode method. */
@@ -1039,13 +1095,28 @@ export interface ProfileResult {
     file: string;
 }
 
+export interface SourceFileDescriptor {
+    fileName: string;
+    path: Path;
+    contentHash: string;
+    parseOptionsKey: string;
+    scriptKind: ScriptKind;
+    nodeId: string;
+}
+
 export interface BatchRequest {
     method:
         | "batchRequests"
+        | "build"
+        | "buildReferences"
+        | "cleanBuild"
+        | "cleanReferences"
+        | "createBuildOrchestrator"
         | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
+        | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1063,6 +1134,7 @@ export interface BatchRequest {
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
+        | "getCachedSourceFile"
         | "getCheckTypeOfType"
         | "getCompletionsAtPosition"
         | "getConfigFileNames"
@@ -1194,6 +1266,7 @@ export interface BatchRequest {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"
@@ -1211,10 +1284,16 @@ export interface BatchRequest {
 export interface BatchResponse {
     method:
         | "batchRequests"
+        | "build"
+        | "buildReferences"
+        | "cleanBuild"
+        | "cleanReferences"
+        | "createBuildOrchestrator"
         | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
+        | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1232,6 +1311,7 @@ export interface BatchResponse {
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
+        | "getCachedSourceFile"
         | "getCheckTypeOfType"
         | "getCompletionsAtPosition"
         | "getConfigFileNames"
@@ -1363,6 +1443,7 @@ export interface BatchResponse {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
         | "startCPUProfile"
@@ -1482,6 +1563,16 @@ export interface SnapshotOperationResponse {
 export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams {
 }
 
+export interface BuildOptions {
+    dry?: boolean | undefined;
+    force?: boolean | undefined;
+    verbose?: boolean | undefined;
+    builders?: number | undefined;
+    stopBuildOnErrors?: boolean | undefined;
+    /** Internal fields */
+    clean?: boolean | undefined;
+}
+
 /** CompilerOptions contains the compiler options exposed by the API. */
 export interface CompilerOptions {
     allowJs?: boolean | undefined;
@@ -1590,6 +1681,12 @@ export interface CompilerOptions {
     configFilePath?: string | undefined;
 }
 
+export interface Statistics {
+    Projects: number;
+    ProjectsBuilt: number;
+    TimestampUpdates: number;
+}
+
 export interface ModuleResolutionSpec {
     fallback: "resolve" | "unresolved";
     entries: ModuleResolutionEntry[];
@@ -1621,6 +1718,22 @@ export interface TranspileOptions {
     reportDiagnostics?: boolean | undefined;
 }
 
+/** SymbolReference identifies a symbol and its server-resolvable owner. */
+export interface SymbolReference extends SymbolOwner {
+    id: number;
+}
+
+/**
+ * CompactSymbolReference is embedded in other responses. It identifies a cached
+ * symbol without repeating its owning file's full descriptor: File is the owning source file's
+ * node ID, or empty for a symbol owned by the response's snapshot. When the client has not cached
+ * the symbol, it fetches a full SymbolResponse through the corresponding property method.
+ */
+export interface CompactSymbolReference {
+    id: number;
+    file?: string | undefined;
+}
+
 export interface PackageId {
     name: string;
     subModuleName: string;
@@ -1630,7 +1743,7 @@ export interface PackageId {
 
 export interface ImportAdderAction {
     kind: "importSymbol";
-    symbol?: number | undefined;
+    symbol?: SymbolReference | undefined;
     isValidTypeOnlyUseSite?: boolean | undefined;
 }
 
@@ -1701,9 +1814,9 @@ export interface RequestSymlink {
 /** ProjectFileChanges describes what source files changed within a single project. */
 export interface ProjectFileChanges {
     /** ChangedFiles lists source file paths whose content differs. */
-    changedFiles?: string[] | undefined;
+    changedFiles?: Path[] | undefined;
     /** DeletedFiles lists source file paths removed from the project's program. */
-    deletedFiles?: string[] | undefined;
+    deletedFiles?: Path[] | undefined;
 }
 
 export interface OpenedFileOperationResult {
@@ -1719,6 +1832,13 @@ export interface ModuleResolutionEntry {
     containingDirectory?: DocumentIdentifier | undefined;
     resolutionMode?: ResolutionMode | undefined;
     result: StaticModuleResolution;
+}
+
+export interface SymbolOwner {
+    kind: SymbolOwnerKind;
+    file?: SourceFileDescriptor | undefined;
+    snapshot?: number | undefined;
+    project?: ProjectId | undefined;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */

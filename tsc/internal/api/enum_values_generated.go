@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"os"
 
+	api "github.com/microsoft/TypeScript/tsc/internal/api"
 	ast "github.com/microsoft/TypeScript/tsc/internal/ast"
 	checker "github.com/microsoft/TypeScript/tsc/internal/checker"
 	compiler "github.com/microsoft/TypeScript/tsc/internal/compiler"
@@ -126,6 +127,10 @@ func main() {
 			"NonUniformAndLiteral":   toInt32(ast.CheckFlagsNonUniformAndLiteral),
 			"Partial":                toInt32(ast.CheckFlagsPartial),
 		},
+		"SymbolOwnerKind": {
+			"File":     toInt32(api.SymbolOwnerKindFile),
+			"Snapshot": toInt32(api.SymbolOwnerKindSnapshot),
+		},
 		"TypeFlags": {
 			"None":                            toInt32(checker.TypeFlagsNone),
 			"Any":                             toInt32(checker.TypeFlagsAny),
@@ -237,7 +242,6 @@ func main() {
 			"IsClassInstanceClone":              toInt32(checker.ObjectFlagsIsClassInstanceClone),
 			"IdenticalBaseTypeCalculated":       toInt32(checker.ObjectFlagsIdenticalBaseTypeCalculated),
 			"IdenticalBaseTypeExists":           toInt32(checker.ObjectFlagsIdenticalBaseTypeExists),
-			"UnresolvedMembers":                 toInt32(checker.ObjectFlagsUnresolvedMembers),
 			"FromTypeNode":                      toInt32(checker.ObjectFlagsFromTypeNode),
 			"IsGenericTypeComputed":             toInt32(checker.ObjectFlagsIsGenericTypeComputed),
 			"IsGenericObjectType":               toInt32(checker.ObjectFlagsIsGenericObjectType),
@@ -770,6 +774,15 @@ func main() {
 			"All":                          toInt32(ast.OEKAll),
 			"AllExceptAssertionsOrExpressionsWithTypeArguments": toInt32(ast.OEKAllExceptAssertionsOrExpressionsWithTypeArguments),
 			"ExpressionTypePassthrough":                         toInt32(ast.OEKExpressionTypePassthrough),
+		},
+		"JSDeclarationKind": {
+			"None":                        toInt32(ast.JSDeclarationKindNone),
+			"ModuleExports":               toInt32(ast.JSDeclarationKindModuleExports),
+			"ExportsProperty":             toInt32(ast.JSDeclarationKindExportsProperty),
+			"ThisProperty":                toInt32(ast.JSDeclarationKindThisProperty),
+			"Property":                    toInt32(ast.JSDeclarationKindProperty),
+			"ObjectDefinePropertyValue":   toInt32(ast.JSDeclarationKindObjectDefinePropertyValue),
+			"ObjectDefinePropertyExports": toInt32(ast.JSDeclarationKindObjectDefinePropertyExports),
 		},
 		"ModifierFlags": {
 			"None":                           toInt32(ast.ModifierFlagsNone),

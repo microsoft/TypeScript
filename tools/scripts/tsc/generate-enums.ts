@@ -20,6 +20,7 @@ interface EnumDef {
     goPrefix: string;
     goFile: string;
     outDir: string;
+    fileName?: string | undefined;
     stringEnum?: boolean | undefined;
     excludeMembers?: readonly string[] | undefined;
     valueReplacements?: Record<string, string> | undefined;
@@ -28,6 +29,7 @@ interface EnumDef {
 const enumDefs = [
     { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "tsc/internal/ast/symbolflags.go", outDir: "packages/typescript/src/enums" },
     { name: "CheckFlags", goPrefix: "CheckFlags", goFile: "tsc/internal/ast/checkflags.go", outDir: "packages/typescript/src/enums" },
+    { name: "SymbolOwnerKind", goPrefix: "SymbolOwnerKind", goFile: "tsc/internal/api/proto.go", outDir: "packages/typescript/src/enums" },
     { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "ObjectFlags", goPrefix: "ObjectFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
@@ -40,6 +42,7 @@ const enumDefs = [
     { name: "SyntaxKind", goPrefix: "Kind", goFile: "tsc/internal/ast/kind_generated.go", outDir: "packages/typescript/src/enums" },
     { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "tsc/internal/ast/nodeflags.go", outDir: "packages/typescript/src/enums" },
     { name: "OuterExpressionKinds", goPrefix: "OEK", goFile: "tsc/internal/ast/utilities.go", outDir: "packages/typescript/src/enums" },
+    { name: "JSDeclarationKind", goPrefix: "JSDeclarationKind", goFile: "tsc/internal/ast/utilities.go", outDir: "packages/typescript/src/enums", fileName: "jsDeclarationKind" },
     { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "tsc/internal/ast/modifierflags.go", outDir: "packages/typescript/src/enums" },
     { name: "ModuleKind", goPrefix: "ModuleKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
     { name: "ModuleResolutionKind", goPrefix: "ModuleResolutionKind", goFile: "tsc/internal/core/compileroptions.go", outDir: "packages/typescript/src/enums" },
@@ -451,7 +454,7 @@ export default async function generateEnums(force = false) {
         ...goInputs(),
     ];
     const enumFiles = enumDefs.map(def => {
-        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
+        const camelName = def.fileName ?? def.name.charAt(0).toLowerCase() + def.name.slice(1);
         return {
             def,
             camelName,

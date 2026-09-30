@@ -2050,6 +2050,9 @@ func IsInExpressionContext(node *Node) bool {
 		return parent.Expression() == node && !IsPartOfTypeNode(parent)
 	case KindShorthandPropertyAssignment:
 		return parent.AsShorthandPropertyAssignment().ObjectAssignmentInitializer == node
+	case KindFunctionExpression, KindClassExpression:
+		// The name of a function or class expression is a declaration name, not an expression.
+		return parent.Name() != node
 	default:
 		return IsExpressionNode(parent)
 	}
@@ -3629,7 +3632,7 @@ func IsTypeDeclaration(node *Node) bool {
 	case KindTypeParameter, KindClassDeclaration, KindInterfaceDeclaration, KindTypeAliasDeclaration, KindJSTypeAliasDeclaration, KindEnumDeclaration:
 		return true
 	case KindImportClause:
-		return node.IsTypeOnly()
+		return node.IsTypeOnly() && node.AsImportClause().Name() != nil
 	case KindImportSpecifier, KindExportSpecifier:
 		return node.Parent.Parent.IsTypeOnly()
 	default:

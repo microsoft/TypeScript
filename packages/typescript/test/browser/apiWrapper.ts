@@ -3,7 +3,7 @@ import {
     type WasmReactorInstance,
     WasmTransport,
 } from "@typescript/typescript-wasip1-wasm";
-import type { FileSystem } from "@typescript/typescript/unstable/fs";
+import type { FileSystemCallbacks } from "@typescript/typescript/unstable/fs";
 import {
     type DocumentIdentifier,
     type FileNotifications,
@@ -12,7 +12,7 @@ import {
 
 interface BrowserAPIOptions {
     cwd?: string | undefined;
-    fs?: FileSystem | undefined;
+    fs?: FileSystemCallbacks | undefined;
     collectTiming?: boolean | undefined;
     maxResponseBytesPerPage?: number | undefined;
     transport?: object | undefined;
@@ -61,7 +61,7 @@ export function createBrowserAPIOptions(options: BrowserAPIOptions): {
     if (!instance) {
         throw new Error("No initialized TypeScript WASM reactor is available");
     }
-    const writeFile = options.fs?.writeFile;
+    const writeFile = typeof options.fs?.writeFile === "function" ? options.fs.writeFile : undefined;
     const transport = new BrowserWasmTransport(instance, {
         instance,
         cwd: options.cwd ?? "/",
@@ -82,7 +82,7 @@ export function createBrowserAPIOptions(options: BrowserAPIOptions): {
     };
 }
 
-export function wrapFileUpdates<T extends object>(api: T, fs: FileSystem | undefined, transport: WasmTransport | undefined): void {
+export function wrapFileUpdates<T extends object>(api: T, fs: FileSystemCallbacks | undefined, transport: WasmTransport | undefined): void {
     if (!fs || !transport) return;
     wrapMethod("createSnapshot", args => {
         const params = args[0] as BrowserSnapshotChanges | undefined;
@@ -120,13 +120,13 @@ export function wrapFileUpdates<T extends object>(api: T, fs: FileSystem | undef
 }
 
 function syncOpenFiles(
-    fs: FileSystem,
+    fs: FileSystemCallbacks,
     transport: WasmTransport,
     changes: BrowserSnapshotChanges | undefined,
 ): void {
     for (const file of changes?.openFiles ?? []) {
         const fileName = resolveFileName(file);
-        const content = fs.readFile?.(fileName);
+        const content = typeof fs.readFile === "function" ? fs.readFile(fileName) : undefined;
         if (typeof content === "string") {
             transport.setFile(fileName, content);
             mirroredFiles.get(transport)?.add(fileName);
@@ -138,7 +138,7 @@ function syncOpenFiles(
     }
 }
 
-function synchronizeFileSystem(fs: FileSystem, transport: WasmTransport): void {
+function synchronizeFileSystem(fs: FileSystemCallbacks, transport: WasmTransport): void {
     const previous = mirroredFiles.get(transport) ?? new Set<string>();
     const current = new Set<string>();
     visit("/");
@@ -150,12 +150,12 @@ function synchronizeFileSystem(fs: FileSystem, transport: WasmTransport): void {
     mirroredFiles.set(transport, current);
 
     function visit(directory: string): void {
-        const entries = fs.getAccessibleEntries?.(directory);
-        if (!entries) return;
+        const entries = typeof fs.getAccessibleEntries === "function" ? fs.getAccessibleEntries(directory) : undefined;
+        if (!entries || typeof entries !== "object") return;
         for (const file of entries.files) {
             const path = join(directory, file);
             current.add(path);
-            const content = fs.readFile?.(path);
+            const content = typeof fs.readFile === "function" ? fs.readFile(path) : undefined;
             if (typeof content === "string") {
                 transport.setFile(path, content);
             }
@@ -167,7 +167,7 @@ function synchronizeFileSystem(fs: FileSystem, transport: WasmTransport): void {
 }
 
 function syncFileChanges(
-    fs: FileSystem,
+    fs: FileSystemCallbacks,
     transport: WasmTransport,
     changes: FileNotifications | undefined,
 ): void {
@@ -176,7 +176,7 @@ function syncFileChanges(
     }
     for (const file of [...changes?.changed ?? [], ...changes?.created ?? []]) {
         const fileName = resolveFileName(file);
-        const content = fs.readFile?.(fileName);
+        const content = typeof fs.readFile === "function" ? fs.readFile(fileName) : undefined;
         if (typeof content === "string") {
             transport.setFile(fileName, content);
             mirroredFiles.get(transport)?.add(fileName);

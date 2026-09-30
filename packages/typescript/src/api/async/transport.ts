@@ -20,7 +20,7 @@ export interface AsyncTransport {
      */
     registerCallback?(name: string, callback: (name: string, payload: string) => string): void;
     unregisterCallback?(name: string): void;
-    setFileSystem?(fs: FileSystem | undefined): void;
+    setFileSystem?(fs: FileSystemCallbacks | undefined): void;
     close(): void | PromiseLike<void>;
 }
-import type { FileSystem } from "../fs.ts";
+import type { FileSystemCallbacks } from "../fs.ts";
