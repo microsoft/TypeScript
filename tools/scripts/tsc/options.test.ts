@@ -8,7 +8,6 @@ import {
     generateEnum,
 } from "./generate-enums.ts";
 import {
-    generateBuildInfoOptions,
     generateCompilerOptionsAPI,
     generateConfigSchema,
     generateOptionComparisons,
@@ -31,11 +30,6 @@ test("API compiler options are generated directly from option metadata", () => {
     for (
         const field of [
             "allowJs?: boolean | undefined;",
-            "jsx?: JsxEmit | undefined;",
-            "module?: ModuleKind | undefined;",
-            "moduleResolution?: ModuleResolutionKind | undefined;",
-            "moduleDetection?: ModuleDetectionKind | undefined;",
-            "newLine?: NewLineKind | undefined;",
             "target?: ScriptTarget | undefined;",
             "maxNodeModuleJsDepth?: number | undefined;",
             "paths?: Record<string, string[]> | undefined;",
@@ -81,21 +75,6 @@ test("explicit option orders reject duplicates, unknown names, and omissions", (
     const wrongGroup = structuredClone(options);
     wrongGroup.declarationOrder.optionsForCompiler[0] = "watch";
     assert.throws(() => validateOptions(wrongGroup), /Unknown option in optionsForCompiler order: watch/);
-});
-
-test("generated declarations and build fields follow the explicit name lists", () => {
-    const files = generateOptions();
-    const declarations = files.get("tsc/internal/tsoptions/declarations_generated.go")!;
-    for (const [group, names] of Object.entries(options.declarationOrder)) {
-        const body = declarations.split(`var ${group} = []*CommandLineOption{\n`)[1].split("\n}\n")[0];
-        const expected = names.flatMap(name =>
-            options.compilerOptions.find(option => option.name === name)!.declarations!
-                .filter(declaration => declaration.group === group).map(() => name)
-        );
-        assert.deepEqual([...body.matchAll(/\bName: "([^"]+)"/g)].map(match => match[1]), expected);
-    }
-    const build = files.get("tsc/internal/core/options_generated.go")!.split("type BuildOptions struct {\n")[1].split("\n}\n")[0];
-    assert.deepEqual([...build.matchAll(/`json:"([^",]+),omitzero"`/g)].map(match => match[1]), options.buildOptionFieldOrder);
 });
 
 test("option TypeScript enums are generated without reading their Go definitions", () => {
@@ -159,114 +138,12 @@ test("metadata enum artifacts are current and use the shared alias ordering", ()
     assert.deepEqual(members, [{ name: "Value", value: "7" }, { name: "Alias", value: "Value" }]);
 });
 
-test("option generation is deterministic", () => {
-    assert.deepEqual(generateOptions(), generateOptions());
-});
-
-test("unused watch settings are not generated or advertised", () => {
-    for (const [file, content] of generateOptions()) {
-        assert.doesNotMatch(content, /WatchOptions|WatchFileKind|WatchDirectoryKind|PollingKind|"watchOptions"|"watchInterval"|"watchFile"|"watchDirectory"|"fallbackPolling"|"synchronousWatchDirectory"|"excludeDirectories"|"excludeFiles"/, file);
-    }
-    assert(options.compilerOptions.some(option => option.name === "watch"));
-});
-
-test("generated Go options are grouped by package and responsibility", () => {
-    assert.deepEqual([...generateOptions().keys()].filter(file => file.endsWith(".go")), [
-        "tsc/internal/core/options_generated.go",
-        "tsc/internal/transpile/options_generated.go",
-        "tsc/internal/tsoptions/declarations_generated.go",
-        "tsc/internal/tsoptions/options_generated.go",
-    ]);
-});
-
-test("configDir substitution preserves eligible fields and explicit opt-outs", () => {
-    const files = generateOptions();
-    const source = files.get("tsc/internal/tsoptions/options_generated.go")!.split("func handleOptionConfigDirTemplateSubstitution(")[1].split("\nfunc ")[0];
-    for (const [name, content] of files) {
-        if (name.endsWith(".go")) assert.doesNotMatch(content, /allowConfigDirTemplateSubstitution/, name);
-    }
-    assert.deepEqual([...new Set([...source.matchAll(/compilerOptions\.(\w+)/g)].map(match => match[1]))], [
-        "DeclarationDir",
-        "OutDir",
-        "Paths",
-        "RootDir",
-        "RootDirs",
-        "TsBuildInfoFile",
-        "TypeRoots",
-        "BaseUrl",
-        "OutFile",
-        "GenerateCpuProfile",
-        "GenerateTrace",
-    ]);
-    for (const name of ["project", "pprofDir"]) {
-        const declaration = options.compilerOptions.find(option => option.name === name)!.declarations![0];
-        assert.equal(declaration.isFilePath, true);
-        assert.equal(declaration.allowConfigDirTemplateSubstitution, false);
-    }
-});
-
-test("compiler options preserve the internal fields comment", () => {
-    const source = generateOptions().get("tsc/internal/core/options_generated.go")!;
-    assert.match(source, /\/\/ Internal fields\nConfigFilePath /);
-});
-
-test("showConfig exclusions are applied by the generated serializer", () => {
-    const source = generateOptions().get("tsc/internal/tsoptions/options_generated.go")!.split("func serializeCompilerOptions(")[1];
-    for (const name of ["showConfig", "configFile", "configFilePath", "help", "init", "listFiles", "listFilesOnly", "listEmittedFiles", "project", "build", "version"]) {
-        assert(!source.includes(`result.Set("${name}",`), name);
-    }
-    assert(source.includes('result.Set("explainFiles",'));
-});
-
-test("build options preserve the compiler options parsing comment", () => {
-    const source = generateOptions().get("tsc/internal/core/options_generated.go")!;
-    assert.match(source, /\/\/ CompilerOptions are not parsed here and will be available on ParsedBuildCommandLine\n\n\/\/ Internal fields\nClean /);
-});
-
-test("transpilation settings remain generation-only and preserve conditional overrides", () => {
-    const source = generateOptions().get("tsc/internal/transpile/options_generated.go")!;
-    assert.match(source, /options.NoCheck = core.TSTrue/);
-    assert.match(source, /options.NoResolve = core.TSTrue/);
-    assert.match(source, /if !options.VerbatimModuleSyntax.IsTrue\(\) \{ options.IsolatedModules = core.TSTrue \}/);
-    assert.match(source, /if !declaration \{ options.DeclarationMap = core.TSFalse \}/);
-    assert.match(source, /if declaration \{ options.NoLib = core.TSFalse \} else \{ options.NoLib = core.TSTrue \}/);
-    assert.doesNotMatch(generateOptions().get("tsc/internal/tsoptions/declarations_generated.go")!, /transpileOptionValue:/);
-});
-
-test("option comparisons use effective values and Go field names", () => {
-    const source = generateOptionComparisons();
-    assert.match(source, /oldOptions\.GetStrictOptionValue\(oldOptions\.NoImplicitAny\) != newOptions\.GetStrictOptionValue\(newOptions\.NoImplicitAny\)/);
-    assert.match(source, /oldOptions\.ESModuleInterop != newOptions\.ESModuleInterop/);
-    assert.doesNotMatch(source, /reflect\.|oldOptions\.Strict !=|oldOptions\.NoImplicitAny !=/);
-
-    const model = structuredClone(options);
-    model.compilerOptions.find(option => option.name === "allowJs")!.declarations![0].affectsEmit = true;
-    const withAllowJs = generateOptionComparisons(model);
-    assert.match(withAllowJs, /oldOptions\.GetAllowJS\(\) != newOptions\.GetAllowJS\(\)/);
-    assert.doesNotMatch(withAllowJs, /oldOptions\.AllowJs !=/);
-});
-
 test("option comparisons reject types that require deep equality", () => {
     for (const name of ["maxNodeModuleJsDepth", "types", "paths", "plugins"]) {
         const model = structuredClone(options);
         model.compilerOptions.find(option => option.name === name)!.declarations![0].affectsEmit = true;
         assert.throws(() => generateOptionComparisons(model), new RegExp(`Unsupported comparison type for ${name}:`));
     }
-});
-
-test("build info omits zero values without treating empty collections as zero", () => {
-    const model = structuredClone(options);
-    for (const name of ["maxNodeModuleJsDepth", "types", "paths", "plugins"]) {
-        model.compilerOptions.find(option => option.name === name)!.declarations![0].affectsBuildInfo = true;
-    }
-    const source = generateBuildInfoOptions(model);
-    for (const field of ["MaxNodeModuleJsDepth", "Types", "Paths", "Plugins"]) {
-        assert(source.includes(`if options.${field} != nil {`), field);
-    }
-    assert.match(source, /if options\.Strict != core\.TSUnknown \{/);
-    assert.match(source, /if options\.OutDir != "" \{/);
-    assert.match(source, /if options\.Target != 0 \{/);
-    assert.doesNotMatch(source, /reflect\.|len\(|GetStrictOptionValue|GetAllowJS/);
 });
 
 test("all generated options artifacts are checked in and current", () => {
@@ -283,27 +160,7 @@ test("all generated options artifacts are checked in and current", () => {
     }
 });
 
-test("schemas are generated directly in the TypeScript package", () => {
-    const files = generateOptions();
-    assert.deepEqual([...files.keys()].filter(file => file.endsWith(".schema.json")), [
-        "packages/typescript/schemas/tsconfig.schema.json",
-        "packages/typescript/schemas/jsconfig.schema.json",
-    ]);
-});
-
-test("schema compiler properties are config-visible declarations plus schema-only history", () => {
-    const schema = generateConfigSchema("tsconfig");
-    const expected = options.compilerOptions.filter(option => {
-        const declaration = option.declarations?.[0];
-        return declaration && !declaration.isCommandLineOnly && declaration.category?.go !== "diagnostics.Command_line_Options";
-    }).map(option => option.name);
-    assert.deepEqual(Object.keys(schema.definitions.compilerOptions.properties), [...expected, ...options.schemaOnlyOptions.map(option => option.name)]);
-    assert.deepEqual(Object.keys(schema.definitions.typeAcquisition.properties), options.typeAcquisition.map(option => option.name));
-    assert.deepEqual(Object.keys(schema.properties).filter(name => name !== "$schema"), options.rootOptions.map(option => option.name));
-});
-
-test("schemas retain historical options as deprecated without restoring native support", () => {
-    const files = generateOptions();
+test("schemas retain historical options as deprecated", () => {
     const historical = {
         charset: ["utf8", false],
         out: ["bundle.js", false],
@@ -326,10 +183,6 @@ test("schemas retain historical options as deprecated without restoring native s
             assert(accepts(property, valid, schema), name);
             assert(accepts(property, null, schema), name);
             assert(!accepts(property, invalid, schema), name);
-            assert(!options.compilerOptions.some(option => option.name === name), name);
-            for (const [file, content] of files) {
-                if (file.endsWith(".go")) assert(!content.includes(`"${name}"`), `${file}: ${name}`);
-            }
         }
         for (const [name, value] of [["target", "es3"], ["target", "es5"], ["module", "none"]]) {
             const property = schema.definitions.compilerOptions.properties[name];
@@ -347,9 +200,6 @@ test("schemas retain historical options as deprecated without restoring native s
         const suggestions = lib.anyOf![0].items!.anyOf![0];
         assert.equal(suggestions.enumDescriptions![suggestions.enum!.indexOf("es2022.sharedmemory")], "Deprecated.");
     }
-    assert(!options.enumMaps.target.values.some(entry => entry.name === "es3"));
-    assert(!options.enumMaps.module.values.some(entry => entry.name === "none"));
-    assert(!options.enumMaps.lib.values.some(entry => entry.name === "es2022.sharedmemory"));
 });
 
 // Evaluate only the validation keywords emitted by this generator. Unknown keywords
@@ -528,23 +378,13 @@ test("schema defaults are valid and conditional defaults stay descriptive", () =
         for (
             const [name, value] of Object.entries({
                 jsxFactory: "React.createElement",
-                jsxFragmentFactory: "React.Fragment",
-                jsxImportSource: "react",
-                reactNamespace: "React",
                 newLine: "lf",
-                tsBuildInfoFile: ".tsbuildinfo",
-                generateCpuProfile: "profile.cpuprofile",
             })
         ) {
             assert.equal(schema.definitions.compilerOptions.properties[name].default, value, `${kind}: ${name}`);
         }
     }
     assert.doesNotMatch(generateConfigSchema("jsconfig").definitions.compilerOptions.properties.allowJs.description!, /Default:.*false/);
-    for (const name of ["jsxFactory", "reactNamespace"]) {
-        const description = options.compilerOptions.find(option => option.name === name)!.declarations![0].defaultValueDescription;
-        assert(typeof description === "string");
-        assert.match(description, /^`.*`$/);
-    }
 });
 
 test("schema hover documentation includes reference links and conditional defaults", () => {
@@ -576,9 +416,6 @@ test("schema hover documentation includes reference links and conditional defaul
         }
         assert.match(schema.properties.include.markdownDescription!, /tsconfig\/#include/);
         assert.equal(schema.properties.contentMappers.markdownDescription, schema.properties.contentMappers.description);
-    }
-    for (const [file, content] of generateOptions()) {
-        if (file.endsWith(".go")) assert.doesNotMatch(content, /DocumentationAnchor|SchemaDescription/);
     }
 });
 

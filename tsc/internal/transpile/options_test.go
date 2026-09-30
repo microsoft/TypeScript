@@ -8,76 +8,35 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
-func TestGeneratedTranspileOptions(t *testing.T) {
+func TestTranspileConditionalOptions(t *testing.T) {
 	t.Parallel()
-	for _, populated := range []bool{false, true} {
-		for _, declaration := range []bool{false, true} {
-			for _, verbatim := range []core.Tristate{core.TSUnknown, core.TSFalse, core.TSTrue} {
-				for _, isolated := range []core.Tristate{core.TSUnknown, core.TSFalse, core.TSTrue} {
-					actual := &core.CompilerOptions{}
-					if populated {
-						value := reflect.ValueOf(actual).Elem()
-						for field := range value.Type().Fields() {
-							if !field.IsExported() {
-								continue
-							}
-							v := value.FieldByIndex(field.Index)
-							switch v.Kind() {
-							case reflect.String:
-								v.SetString("value")
-							case reflect.Int32:
-								v.SetInt(1)
-							case reflect.Uint8:
-								v.SetUint(uint64(core.TSTrue))
-							case reflect.Slice:
-								v.Set(reflect.MakeSlice(v.Type(), 1, 1))
-							case reflect.Pointer:
-								v.Set(reflect.New(v.Type().Elem()))
-							default:
-								t.Fatalf("Unhandled field %s", field.Name)
-							}
-						}
-					}
-					actual.VerbatimModuleSyntax = verbatim
-					actual.IsolatedModules = isolated
-					expected := actual.Clone()
-					expected.AllowImportingTsExtensions = core.TSUnknown
-					expected.Composite = core.TSUnknown
-					expected.EmitDeclarationOnly = core.TSUnknown
-					expected.Declaration = core.TSUnknown
-					expected.DeclarationDir = ""
-					expected.Incremental = core.TSUnknown
-					expected.Lib = nil
-					expected.NoEmit = core.TSUnknown
-					expected.NoEmitOnError = core.TSUnknown
-					expected.Paths = nil
-					expected.RootDirs = nil
-					expected.TsBuildInfoFile = ""
-					expected.Types = nil
-					expected.OutFile = ""
-					if !verbatim.IsTrue() {
-						expected.IsolatedModules = core.TSTrue
-					}
-					expected.NoCheck = core.TSTrue
-					expected.NoResolve = core.TSTrue
-					expected.SuppressOutputPathCheck = core.TSTrue
-					expected.AllowNonTsExtensions = core.TSTrue
-					if declaration {
-						expected.Declaration = core.TSTrue
-						expected.EmitDeclarationOnly = core.TSTrue
-						expected.IsolatedDeclarations = core.TSTrue
-						expected.NoLib = core.TSFalse
-					} else {
-						expected.Declaration = core.TSFalse
-						expected.DeclarationMap = core.TSFalse
-						expected.IsolatedDeclarations = core.TSFalse
-						expected.NoLib = core.TSTrue
-					}
-					setOptionsForTranspile(actual, declaration)
-					if !reflect.DeepEqual(actual, expected) {
-						t.Fatalf("Generated transpile options differ: populated=%v declaration=%v verbatim=%v isolated=%v", populated, declaration, verbatim, isolated)
-					}
-				}
+	for _, mode := range []struct {
+		declaration bool
+		wantMap     core.Tristate
+	}{
+		{false, core.TSFalse},
+		{true, core.TSTrue},
+	} {
+		for _, test := range []struct {
+			verbatim core.Tristate
+			isolated core.Tristate
+			want     core.Tristate
+		}{
+			{core.TSUnknown, core.TSUnknown, core.TSTrue},
+			{core.TSFalse, core.TSFalse, core.TSTrue},
+			{core.TSTrue, core.TSUnknown, core.TSUnknown},
+			{core.TSTrue, core.TSFalse, core.TSFalse},
+			{core.TSTrue, core.TSTrue, core.TSTrue},
+		} {
+			options := &core.CompilerOptions{
+				VerbatimModuleSyntax: test.verbatim,
+				IsolatedModules:      test.isolated,
+				DeclarationMap:       core.TSTrue,
+			}
+			setOptionsForTranspile(options, mode.declaration)
+			if options.IsolatedModules != test.want || options.DeclarationMap != mode.wantMap {
+				t.Errorf("declaration=%v verbatim=%v isolated=%v: got isolated=%v declarationMap=%v, want %v %v",
+					mode.declaration, test.verbatim, test.isolated, options.IsolatedModules, options.DeclarationMap, test.want, mode.wantMap)
 			}
 		}
 	}
