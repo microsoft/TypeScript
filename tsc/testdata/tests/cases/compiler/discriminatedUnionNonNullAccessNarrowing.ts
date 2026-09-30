@@ -27,6 +27,8 @@ type Large =
     | { type: "10" }
     | undefined;
 
+type LargeWithNull = Exclude<Large, undefined> | null;
+
 // Strict equality, both branches.
 
 declare let smallEqual: Small;
@@ -79,15 +81,37 @@ switch (largeSwitch!.type) {
         break;
 }
 
+// `null` constituents are preserved just like `undefined`.
+
+declare let largeNullEqual: LargeWithNull;
+if (largeNullEqual!.type === "1") {
+    // @ts-expect-error
+    largeNullEqual.type;
+}
+
+declare let largeNullSwitch: LargeWithNull;
+switch (largeNullSwitch!.type) {
+    case "1":
+        // @ts-expect-error
+        largeNullSwitch.type;
+        break;
+}
+
 // Control: optional chaining is unaffected and remains the idiomatic way to narrow the
 // reference itself, for both union sizes.
 
 declare let smallOptional: Small;
 if (smallOptional?.type === "1") {
     smallOptional.type;
+} else {
+    // @ts-expect-error
+    smallOptional.type;
 }
 
 declare let largeOptional: Large;
 if (largeOptional?.type === "1") {
+    largeOptional.type;
+} else {
+    // @ts-expect-error
     largeOptional.type;
 }

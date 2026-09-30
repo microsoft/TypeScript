@@ -700,14 +700,14 @@ func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFa
 }
 
 func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, operator ast.Kind, value *ast.Node, assumeTrue bool) *Type {
-	if (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && t.flags&TypeFlagsUnion != 0 && (!c.strictNullChecks || !c.maybeTypeOfKind(t, TypeFlagsNullable)) {
+	if (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && t.flags&TypeFlagsUnion != 0 {
 		keyPropertyName := c.getKeyPropertyName(t)
 		if keyPropertyName != "" {
 			if accessedName, ok := c.getAccessedPropertyName(access); ok && keyPropertyName == accessedName {
 				candidate := c.getConstituentTypeForKeyType(t, c.getTypeOfExpression(value))
 				if candidate != nil {
 					if assumeTrue && operator == ast.KindEqualsEqualsEqualsToken || !assumeTrue && operator == ast.KindExclamationEqualsEqualsToken {
-						return candidate
+						return c.addNullableConstituents(candidate, t)
 					}
 					if propType := c.getTypeOfPropertyOfType(candidate, keyPropertyName); propType != nil && isUnitType(propType) {
 						return c.removeType(t, candidate)
@@ -720,6 +720,13 @@ func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, op
 	return c.narrowTypeByDiscriminant(t, access, func(t *Type) *Type {
 		return c.narrowTypeByEquality(t, operator, value, assumeTrue)
 	})
+}
+
+// Nullable constituents have no key property, so the general discriminant narrowing logic in
+// narrowTypeByDiscriminant always retains them in branches where the discriminant can match. Add
+// them back to a constituent selected through the key property map to produce the same result.
+func (c *Checker) addNullableConstituents(candidate *Type, t *Type) *Type {
+	return c.getUnionType([]*Type{candidate, c.filterType(t, func(t *Type) bool { return t.flags&TypeFlagsNullable != 0 })})
 }
 
 func (c *Checker) narrowTypeByDiscriminant(t *Type, access *ast.Node, narrowType func(t *Type) *Type) *Type {
@@ -1229,7 +1236,7 @@ func (c *Checker) narrowTypeBySwitchOptionalChainContainment(t *Type, data *ast.
 }
 
 func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.Node, data *ast.FlowSwitchClauseData) *Type {
-	if data.ClauseStart < data.ClauseEnd && t.flags&TypeFlagsUnion != 0 && (!c.strictNullChecks || !c.maybeTypeOfKind(t, TypeFlagsNullable)) {
+	if data.ClauseStart < data.ClauseEnd && t.flags&TypeFlagsUnion != 0 {
 		accessedName, _ := c.getAccessedPropertyName(access)
 		if accessedName != "" && c.getKeyPropertyName(t) == accessedName {
 			clauseTypes := c.getSwitchClauseTypes(data.SwitchStatement)[data.ClauseStart:data.ClauseEnd]
@@ -1241,7 +1248,7 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.
 				return c.unknownType
 			}))
 			if candidate != c.unknownType {
-				return candidate
+				return c.addNullableConstituents(candidate, t)
 			}
 		}
 	}
