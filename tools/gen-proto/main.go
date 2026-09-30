@@ -498,9 +498,13 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return "ResolutionMode"
 	case r.apiPackagePath + ".EnsurePrograms":
 		return "EnsurePrograms"
+	case r.apiPackagePath + ".SymbolOwnerKind":
+		return r.importType("SymbolOwnerKind", "#enums/symbolOwnerKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/project.ID":
 		r.importTypeOnly("Path", "../ast/index.ts")
 		return "ProjectId"
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.Path":
+		return r.importTypeOnly("Path", "../ast/index.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/project.SyntheticProjectID":
 		return "SyntheticProjectId"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":

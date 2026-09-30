@@ -66,8 +66,10 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 }
 
 const (
-	MethodRelease           Method = "release"
-	MethodReleaseSourceFile Method = "releaseSourceFile"
+	MethodRelease             Method = "release"
+	MethodReleaseSourceFile   Method = "releaseSourceFile"
+	MethodRetainSourceFile    Method = "retainSourceFile"
+	MethodGetCachedSourceFile Method = "getCachedSourceFile"
 
 	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
@@ -575,6 +577,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodBatchRequests:                                  unmarshallerFor[BatchRequestsParams],
 	MethodRelease:                                        unmarshallerFor[ReleaseParams],
 	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
+	MethodRetainSourceFile:                               unmarshallerFor[RetainSourceFileParams],
+	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
@@ -899,6 +903,29 @@ type ReleaseSourceFileParams struct {
 	Lease SourceFileLeaseID `json:"lease"`
 }
 
+type SourceFileDescriptor struct {
+	FileName        string          `json:"fileName"`
+	Path            tspath.Path     `json:"path"`
+	ContentHash     string          `json:"contentHash"`
+	ParseOptionsKey string          `json:"parseOptionsKey"`
+	ScriptKind      core.ScriptKind `json:"scriptKind"`
+	NodeID          string          `json:"nodeId"`
+}
+
+type RetainSourceFileParams struct {
+	File SourceFileDescriptor `json:"file"`
+}
+
+type RetainSourceFileResponse struct {
+	Lease SourceFileLeaseID `json:"lease"`
+}
+
+// GetCachedSourceFileParams address an ordinary cached source file by its complete identity,
+// independent of any snapshot or lease.
+type GetCachedSourceFileParams struct {
+	File SourceFileDescriptor `json:"file"`
+}
+
 type ProfileParams struct {
 	Dir string `json:"dir"`
 }
@@ -1096,40 +1123,55 @@ type GetSymbolsAtLocationsParams struct {
 }
 
 type SymbolResponse struct {
-	Id SymbolID `json:"id"`
-	// Project is the project in which the symbol was first observed. It is the
-	// default project for follow-up lookups whose results can vary by project.
-	Project          project.ID   `json:"project"`
-	Name             string       `json:"name"`
-	Flags            uint32       `json:"flags"`
-	CheckFlags       uint32       `json:"checkFlags"`
-	Declarations     []NodeHandle `json:"declarations,omitempty"`
-	ValueDeclaration NodeHandle   `json:"valueDeclaration,omitempty"`
-	Parent           SymbolID     `json:"parent,omitzero"`
-	ExportSymbol     SymbolID     `json:"exportSymbol,omitzero"`
+	Reference        SymbolReference         `json:"reference"`
+	Name             string                  `json:"name"`
+	Flags            uint32                  `json:"flags"`
+	CheckFlags       uint32                  `json:"checkFlags"`
+	Declarations     []NodeHandle            `json:"declarations,omitempty"`
+	ValueDeclaration NodeHandle              `json:"valueDeclaration,omitempty"`
+	Parent           *CompactSymbolReference `json:"parent,omitempty"`
+	ExportSymbol     *CompactSymbolReference `json:"exportSymbol,omitempty"`
 }
 
-func symbolHandles(symbols []*ast.Symbol) []SymbolID {
-	if len(symbols) == 0 {
-		return nil
-	}
-	handles := make([]SymbolID, len(symbols))
-	for i, t := range symbols {
-		handles[i] = SymbolHandle(t)
-	}
-	return handles
+type SymbolOwnerKind uint32
+
+const (
+	SymbolOwnerKindFile SymbolOwnerKind = iota
+	SymbolOwnerKindSnapshot
+)
+
+type SymbolOwner struct {
+	Kind     SymbolOwnerKind       `json:"kind"`
+	File     *SourceFileDescriptor `json:"file,omitempty"`
+	Snapshot SnapshotID            `json:"snapshot,omitzero"`
+	Project  project.ID            `json:"project,omitempty"`
+}
+
+// SymbolReference identifies a symbol and its server-resolvable owner.
+type SymbolReference struct {
+	SymbolOwner
+	Id SymbolID `json:"id"`
+}
+
+// CompactSymbolReference is embedded in other responses. It identifies a cached
+// symbol without repeating its owning file's full descriptor: File is the owning source file's
+// node ID, or empty for a symbol owned by the response's snapshot. When the client has not cached
+// the symbol, it fetches a full SymbolResponse through the corresponding property method.
+type CompactSymbolReference struct {
+	Id   SymbolID `json:"id"`
+	File string   `json:"file,omitempty"`
 }
 
 type GetTypeOfSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
 }
 
 type GetTypesOfSymbolsParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbols  []SymbolID `json:"symbols"`
+	Snapshot SnapshotID        `json:"snapshot"`
+	Project  project.ID        `json:"project"`
+	Symbols  []SymbolReference `json:"symbols"`
 }
 
 type TypeResponse struct {
@@ -1191,11 +1233,11 @@ type TypeResponse struct {
 	IntrinsicName string `json:"intrinsicName,omitempty"`
 
 	// TypeAlias data
-	AliasTypeArguments []TypeID `json:"aliasTypeArguments,omitempty"`
-	AliasSymbol        SymbolID `json:"aliasSymbol,omitzero"`
+	AliasTypeArguments []TypeID                `json:"aliasTypeArguments,omitempty"`
+	AliasSymbol        *CompactSymbolReference `json:"aliasSymbol,omitempty"`
 
 	// Symbol associated with structured types
-	Symbol SymbolID `json:"symbol,omitzero"`
+	Symbol *CompactSymbolReference `json:"symbol,omitempty"`
 }
 
 func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
@@ -1204,15 +1246,8 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		Flags: uint32(t.Flags()),
 	}
 
-	if t.Symbol() != nil {
-		resp.Symbol = SymbolHandle(t.Symbol())
-	}
-
 	if t.Alias() != nil {
 		resp.AliasTypeArguments = typeHandles(t.Alias().TypeArguments())
-		if t.Alias().Symbol() != nil {
-			resp.AliasSymbol = SymbolHandle(t.Alias().Symbol())
-		}
 	}
 
 	switch flags := t.Flags(); {
@@ -1328,13 +1363,13 @@ type ConstantValueResponse struct {
 }
 
 type SignatureResponse struct {
-	Id             SignatureID `json:"id"`
-	Flags          uint32      `json:"flags"`
-	Declaration    NodeHandle  `json:"declaration,omitempty"`
-	TypeParameters []TypeID    `json:"typeParameters,omitempty"`
-	Parameters     []SymbolID  `json:"parameters,omitempty"`
-	ThisParameter  SymbolID    `json:"thisParameter,omitzero"`
-	Target         SignatureID `json:"target,omitzero"`
+	Id             SignatureID              `json:"id"`
+	Flags          uint32                   `json:"flags"`
+	Declaration    NodeHandle               `json:"declaration,omitempty"`
+	TypeParameters []TypeID                 `json:"typeParameters,omitempty"`
+	Parameters     []CompactSymbolReference `json:"parameters,omitempty"`
+	ThisParameter  *CompactSymbolReference  `json:"thisParameter,omitempty"`
+	Target         SignatureID              `json:"target,omitzero"`
 }
 
 type GetSourceFileParams struct {
@@ -1471,9 +1506,7 @@ type GetTypePropertyParams struct {
 
 // GetSymbolPropertyParams is used for all symbol sub-property endpoints.
 type GetSymbolPropertyParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"objectId"`
+	Symbol SymbolReference `json:"symbol"`
 }
 
 // GetSignaturePropertyParams is used for all signature sub-property endpoints.
@@ -1499,10 +1532,10 @@ type GetContextualTypeForArgumentParams struct {
 
 // GetTypeOfSymbolAtLocationParams returns the narrowed type of a symbol at a specific location.
 type GetTypeOfSymbolAtLocationParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
-	Location NodeHandle `json:"location"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Location NodeHandle      `json:"location"`
 }
 
 // GetReferencesToSymbolInFileParams are the parameters for the getReferencesToSymbolInFile method.
@@ -1510,7 +1543,7 @@ type GetReferencesToSymbolInFileParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
 	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
-	Symbol   SymbolID           `json:"symbol"`
+	Symbol   SymbolReference    `json:"symbol"`
 }
 
 // GetReferencedSymbolsForNodeParams are the parameters for the getReferencedSymbolsForNode method.
@@ -1695,7 +1728,7 @@ const (
 
 type ImportAdderAction struct {
 	Kind                   ImportAdderActionKind `json:"kind"`
-	Symbol                 SymbolID              `json:"symbol,omitempty"`
+	Symbol                 *SymbolReference      `json:"symbol,omitempty"`
 	IsValidTypeOnlyUseSite *bool                 `json:"isValidTypeOnlyUseSite,omitempty"`
 }
 
@@ -1805,10 +1838,10 @@ type GetIndexInfoOfTypeParams struct {
 
 // GetMemberInModuleExportsParams are parameters for getMemberInModuleExports.
 type GetMemberInModuleExportsParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
-	Name     string     `json:"name"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Name     string          `json:"name"`
 }
 
 // CheckerNodeParams are parameters for checker methods that operate on a node location.
@@ -1820,9 +1853,9 @@ type CheckerNodeParams struct {
 
 // CheckerSymbolParams are parameters for checker methods that operate on a symbol.
 type CheckerSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
 }
 
 // JSDocTagInfo is a single JSDoc tag, mirroring Strada's JSDocTagInfo but with the tag text

@@ -31,6 +31,7 @@ import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
+import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
@@ -62,8 +63,6 @@ import {
     decodeNode,
     getNodeId,
     parseNodeHandle,
-    readParseOptionsKey,
-    readSourceFileHash,
     readSourceFileLease,
     RemoteSourceFile,
 } from "../node/node.ts";
@@ -79,6 +78,7 @@ import {
 import type {
     BuildResponse,
     CleanBuildResponse,
+    CompactSymbolReference,
     CompilerOptions,
     CompletionPreferences,
     ConfiguredProjectId,
@@ -105,6 +105,7 @@ import type {
     ProjectId,
     ProjectReference,
     ProjectResponse,
+    ProtocolSymbolResponse,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
     ResolutionMode,
@@ -113,9 +114,11 @@ import type {
     ResolveModuleNameResult,
     SignaturePropertyMethod,
     SignatureResponse,
+    SourceFileDescriptor,
     SourceFileMetadata,
     StaticModuleResolution,
     SymbolPropertyMethod,
+    SymbolReference,
     SymbolResponse,
     SymbolsPropertyMethod,
     SyntheticProjectId,
@@ -129,8 +132,12 @@ import type {
 import {
     resolveFileName,
     toCreateSnapshotRequest,
+    validateSymbolResponse,
 } from "../proto.ts";
-import { SourceFileCache } from "../sourceFileCache.ts";
+import {
+    type CachedSourceFile,
+    SourceFileCache,
+} from "../sourceFileCache.ts";
 import type {
     RequestTiming,
     TimingAccumulators,
@@ -189,7 +196,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -347,7 +354,7 @@ import {
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
-    private sourceFileCache: SourceFileCache;
+    private sourceFileCache: SourceFileCache<Symbol>;
     private toPath: ((fileName: string) => Path) | undefined;
     private currentDirectory: string | undefined;
     private readonly decoder = new Wtf8Decoder();
@@ -362,7 +369,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
-        this.sourceFileCache = new SourceFileCache();
+        this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
         this.internal = new InternalAPI(this.client, this.ensureInitialized);
     }
@@ -671,18 +678,50 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    /**
+     * Retain an ordinary remote source file independently of the snapshot or lease that produced it.
+     */
+    get retainSourceFile(): {
+        (sourceFile: SourceFile): RetainedSourceFile;
+        gen(sourceFile: SourceFile): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "retainSourceFile",
+            function (sourceFile: SourceFile): RetainedSourceFile {
+                owner.ensureInitialized();
+                if (!(sourceFile instanceof RemoteSourceFile)) {
+                    throw new TypeError("Only remote source files can be retained");
+                }
+                const cached = owner.sourceFileCache.get(sourceFile);
+                if (cached && cached !== sourceFile) {
+                    throw new Error("Source file is no longer the canonical cached instance");
+                }
+                const result = owner.client.apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
+                return owner.addSourceFileLease(sourceFile, result.lease);
+            },
+            function* (sourceFile: SourceFile): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                if (!(sourceFile instanceof RemoteSourceFile)) {
+                    throw new TypeError("Only remote source files can be retained");
+                }
+                const cached = owner.sourceFileCache.get(sourceFile);
+                if (cached && cached !== sourceFile) {
+                    throw new Error("Source file is no longer the canonical cached instance");
+                }
+                const result = yield* apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
+                return owner.addSourceFileLease(sourceFile, result.lease);
+            },
+        );
+    }
+
     private retainSourceFileResponse(data: Uint8Array): RetainedSourceFile {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const lease = readSourceFileLease(view);
         try {
-            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
-            const sourceFile = this.sourceFileCache.setForLease(decoded.path, decoded, readParseOptionsKey(view), readSourceFileHash(view), lease);
-            const retained = new RetainedSourceFile(sourceFile, lease, this.client, () => {
-                this.activeSourceFileLeases.delete(lease);
-                this.sourceFileCache.releaseLease(lease);
-            });
-            this.activeSourceFileLeases.set(lease, retained);
-            return retained;
+            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector());
+            return this.addSourceFileLease(decoded, lease);
         }
         catch (error) {
             try {
@@ -691,6 +730,16 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             catch {}
             throw error;
         }
+    }
+
+    private addSourceFileLease(sourceFile: RemoteSourceFile, lease: number): RetainedSourceFile {
+        const cached = this.sourceFileCache.setForLease(sourceFile, lease);
+        const retained = new RetainedSourceFile(cached as unknown as SourceFile, lease, this.client, () => {
+            this.activeSourceFileLeases.delete(lease);
+            this.sourceFileCache.releaseLease(lease);
+        });
+        this.activeSourceFileLeases.set(lease, retained);
+        return retained;
     }
 
     get transpileModule(): {
@@ -1277,6 +1326,17 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
 type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
 
+function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescriptor {
+    return {
+        fileName: sourceFile.fileName,
+        path: sourceFile.path,
+        contentHash: sourceFile.contentHash,
+        parseOptionsKey: sourceFile.parseOptionsKey,
+        scriptKind: sourceFile.scriptKind,
+        nodeId: sourceFile.nodeId,
+    };
+}
+
 /** An independently retained source file and its disposable remote-lifetime lease. */
 export class RetainedSourceFile {
     readonly sourceFile: SourceFile;
@@ -1495,7 +1555,7 @@ export class Snapshot {
     constructor(
         data: CreateSnapshotResponse,
         client: Client,
-        sourceFileCache: SourceFileCache,
+        sourceFileCache: SourceFileCache<Symbol>,
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
@@ -1516,7 +1576,7 @@ export class Snapshot {
             projectDataMap.set(projectData.id, projectData);
         }
         this.projectDataMap = new Map([...projectDataMap].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));
-        this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
+        this.snapshotRegistry = new SnapshotObjectRegistry(this.id);
 
         for (const projData of this.projectDataMap.values()) {
             const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
@@ -1773,26 +1833,29 @@ export class ModuleResolver {
 
 class SnapshotObjectRegistry {
     private readonly symbols: Map<number, Symbol> = new Map();
-    private readonly client: Client;
+    private readonly projectRegistries: Map<ProjectId, ProjectObjectRegistry> = new Map();
     private readonly snapshotId: number;
-    private readonly resolveProject: (projectId: ProjectId) => Project | undefined;
 
-    constructor(client: Client, snapshotId: number, resolveProject: (projectId: ProjectId) => Project | undefined) {
-        this.client = client;
+    constructor(snapshotId: number) {
         this.snapshotId = snapshotId;
-        this.resolveProject = resolveProject;
     }
 
-    /** Resolve a project ID to its Project within this snapshot. */
-    getProject(projectId: ProjectId): Project | undefined {
-        return this.resolveProject(projectId);
+    addProjectRegistry(registry: ProjectObjectRegistry): void {
+        this.projectRegistries.set(registry.project.id, registry);
     }
 
     getOrCreateSymbol(data: SymbolResponse): Symbol {
-        let symbol = this.symbols.get(data.id);
+        const reference = data.reference;
+        if (reference.kind !== SymbolOwnerKind.Snapshot) throw new Error(`Symbol ${reference.id} is not snapshot-owned`);
+        let symbol = this.symbols.get(reference.id);
         if (!symbol) {
-            symbol = new Symbol(data, this);
-            this.symbols.set(data.id, symbol);
+            if (reference.snapshot !== this.snapshotId) {
+                throw new Error(`Symbol ${reference.id} belongs to snapshot ${reference.snapshot}, not ${this.snapshotId}`);
+            }
+            const registry = this.projectRegistries.get(reference.project);
+            if (!registry) throw new Error(`Symbol ${reference.id} references unknown project '${reference.project}'`);
+            symbol = new Symbol(data, { kind: SymbolOwnerKind.Snapshot, registry });
+            this.symbols.set(reference.id, symbol);
         }
         return symbol;
     }
@@ -1804,126 +1867,60 @@ class SnapshotObjectRegistry {
     clear(): void {
         this.symbols.clear();
     }
-
-    get fetchSymbol(): {
-        (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Symbol;
-        gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbol",
-            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Symbol {
-                if (!handle) return undefined as unknown as Symbol;
-                const cached = owner.getSymbol(handle);
-                if (cached) return cached;
-
-                const data = owner.client.apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: projectId,
-                    objectId: source.id,
-                });
-                if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
-                return owner.getOrCreateSymbol(data);
-            },
-            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                if (!handle) return undefined as unknown as Symbol;
-                const cached = owner.getSymbol(handle);
-                if (cached) return cached;
-
-                const data = yield* apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: projectId,
-                    objectId: source.id,
-                });
-                if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
-                return owner.getOrCreateSymbol(data);
-            },
-        );
-    }
-
-    get fetchSymbols(): {
-        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): readonly Symbol[];
-        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbols",
-            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): readonly Symbol[] {
-                if (handles) {
-                    const result = new Array<Symbol>(handles.length);
-                    let allCached = true;
-                    for (let i = 0; i < handles.length; i++) {
-                        const cached = owner.getSymbol(handles[i]);
-                        if (!cached) {
-                            allCached = false;
-                            break;
-                        }
-                        result[i] = cached;
-                    }
-                    if (allCached) return result;
-                }
-                const symbolData = owner.client.apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: projectId,
-                    objectId: source.id,
-                });
-                if (symbolData == null) return [];
-                else return symbolData.map(data => owner.getOrCreateSymbol(data));
-            },
-            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                if (handles) {
-                    const result = new Array<Symbol>(handles.length);
-                    let allCached = true;
-                    for (let i = 0; i < handles.length; i++) {
-                        const cached = owner.getSymbol(handles[i]);
-                        if (!cached) {
-                            allCached = false;
-                            break;
-                        }
-                        result[i] = cached;
-                    }
-                    if (allCached) return result;
-                }
-                const symbolData = yield* apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: projectId,
-                    objectId: source.id,
-                });
-                if (symbolData == null) return [];
-                else return symbolData.map(data => owner.getOrCreateSymbol(data));
-            },
-        );
-    }
 }
 
 class ProjectObjectRegistry {
     private client: Client;
     private snapshotId: number;
-    private project: Project;
+    readonly project: Project;
     private snapshotRegistry: SnapshotObjectRegistry;
+    private sourceFileCache: SourceFileCache<Symbol>;
     private types: Map<number, TypeObject> = new Map();
     private signatures: Map<number, Signature> = new Map();
+    private disposed = false;
 
     constructor(
         client: Client,
         snapshotId: number,
         project: Project,
         snapshotRegistry: SnapshotObjectRegistry,
+        sourceFileCache: SourceFileCache<Symbol>,
     ) {
         this.client = client;
         this.snapshotId = snapshotId;
         this.project = project;
         this.snapshotRegistry = snapshotRegistry;
+        this.sourceFileCache = sourceFileCache;
+        snapshotRegistry.addProjectRegistry(this);
     }
 
-    getOrCreateSymbol(data: SymbolResponse): Symbol {
-        return this.snapshotRegistry.getOrCreateSymbol(data);
+    getOrCreateSymbol(data: ProtocolSymbolResponse): Symbol {
+        this.ensureNotDisposed();
+        validateSymbolResponse(data);
+        const reference = data.reference;
+        if (reference.kind === SymbolOwnerKind.Snapshot) {
+            return this.snapshotRegistry.getOrCreateSymbol(data);
+        }
+        const record = this.sourceFileCache.getOrCreateRecord(reference.file, this.snapshotId, this.project.id);
+        return this.sourceFileCache.getOrCreateSymbol(record, reference.file, reference.id, () =>
+            new Symbol(data, {
+                kind: SymbolOwnerKind.File,
+                owner: { record, cache: this.sourceFileCache, client: this.client },
+            }));
     }
 
-    getSymbol(id: number): Symbol | undefined {
-        return this.snapshotRegistry.getSymbol(id);
+    /** Find an already-interned symbol and retain its file record for this registry. */
+    getCachedSymbol(reference: CompactSymbolReference): Symbol | undefined {
+        this.ensureNotDisposed();
+        if (reference.file === undefined) {
+            return this.snapshotRegistry.getSymbol(reference.id);
+        }
+        const record = this.sourceFileCache.findRecord(reference.file);
+        const symbol = record?.symbols.get(reference.id);
+        if (record && symbol) {
+            this.sourceFileCache.retainRecord(record, this.snapshotId, this.project.id);
+        }
+        return symbol;
     }
 
     getOrCreateType(data: TypeResponse): TypeObject {
@@ -1957,8 +1954,13 @@ class ProjectObjectRegistry {
     }
 
     clear(): void {
+        this.disposed = true;
         this.types.clear();
         this.signatures.clear();
+    }
+
+    private ensureNotDisposed(): void {
+        if (this.disposed) throw new Error("Project object registry is disposed");
     }
 
     get fetchOptionalType(): {
@@ -2024,18 +2026,40 @@ class ProjectObjectRegistry {
     }
 
     get fetchSymbol(): {
-        (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined): Symbol;
-        gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+        (source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Symbol;
+        gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchSymbol",
-            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined): Symbol {
-                return owner.snapshotRegistry.fetchSymbol(source, method, handle, owner.project.id);
+            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Symbol {
+                if (!reference) return undefined as unknown as Symbol;
+                const cached = owner.getCachedSymbol(reference);
+                if (cached) return cached;
+                const data = source instanceof Symbol
+                    ? owner.client.apiRequest(method, { symbol: source.reference })
+                    : owner.client.apiRequest(method, {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        objectId: source.id,
+                    });
+                if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
+                return owner.getOrCreateSymbol(data);
             },
-            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                return yield* owner.snapshotRegistry.fetchSymbol.gen(source, method, handle, owner.project.id);
+            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+                if (!reference) return undefined as unknown as Symbol;
+                const cached = owner.getCachedSymbol(reference);
+                if (cached) return cached;
+                const data = source instanceof Symbol
+                    ? yield* apiRequest(method, { symbol: source.reference })
+                    : yield* apiRequest(method, {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        objectId: source.id,
+                    });
+                if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
+                return owner.getOrCreateSymbol(data);
             },
         );
     }
@@ -2133,18 +2157,71 @@ class ProjectObjectRegistry {
     }
 
     get fetchSymbols(): {
-        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles?: readonly number[]): readonly Symbol[];
-        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles?: readonly number[]): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): readonly Symbol[];
+        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchSymbols",
-            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles?: readonly number[]): readonly Symbol[] {
-                return owner.snapshotRegistry.fetchSymbols(source, method, handles, owner.project.id);
+            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): readonly Symbol[] {
+                if (references) {
+                    const result = new Array<Symbol>(references.length);
+                    for (let i = 0; i < references.length; i++) {
+                        const cached = owner.getCachedSymbol(references[i]);
+                        if (!cached) {
+                            return owner.fetchSymbolsFromServer(source, method);
+                        }
+                        result[i] = cached;
+                    }
+                    return result;
+                }
+                return owner.fetchSymbolsFromServer(source, method);
             },
-            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles?: readonly number[]): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                return yield* owner.snapshotRegistry.fetchSymbols.gen(source, method, handles, owner.project.id);
+            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                if (references) {
+                    const result = new Array<Symbol>(references.length);
+                    for (let i = 0; i < references.length; i++) {
+                        const cached = owner.getCachedSymbol(references[i]);
+                        if (!cached) {
+                            return yield* owner.fetchSymbolsFromServer.gen(source, method);
+                        }
+                        result[i] = cached;
+                    }
+                    return result;
+                }
+                return yield* owner.fetchSymbolsFromServer.gen(source, method);
+            },
+        );
+    }
+
+    private get fetchSymbolsFromServer(): {
+        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod): readonly Symbol[];
+        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "fetchSymbolsFromServer",
+            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod): readonly Symbol[] {
+                const data = source instanceof Symbol
+                    ? owner.client.apiRequest(method, { symbol: source.reference })
+                    : owner.client.apiRequest(method, {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        objectId: source.id,
+                    });
+                return data?.map(symbol => owner.getOrCreateSymbol(symbol)) ?? [];
+            },
+            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                const data = source instanceof Symbol
+                    ? yield* apiRequest(method, { symbol: source.reference })
+                    : yield* apiRequest(method, {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        objectId: source.id,
+                    });
+                return data?.map(symbol => owner.getOrCreateSymbol(symbol)) ?? [];
             },
         );
     }
@@ -2382,7 +2459,7 @@ export class Project<Id extends ProjectId = ProjectId> {
         data: ProjectResponse,
         snapshotId: number,
         client: Client,
-        sourceFileCache: SourceFileCache,
+        sourceFileCache: SourceFileCache<Symbol>,
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
@@ -2407,7 +2484,7 @@ export class Project<Id extends ProjectId = ProjectId> {
             toPath,
             formatDiagnosticsHost,
         );
-        const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
+        const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry, sourceFileCache);
         this.checker = new Checker(
             snapshotId,
             this,
@@ -2490,7 +2567,7 @@ export class LanguageService {
                         case "importSymbol":
                             const importSymbolAction: ImportAdderAction = {
                                 kind: "importSymbol",
-                                symbol: action.symbol.id,
+                                symbol: action.symbol.reference,
                             };
                             if (action.isValidTypeOnlyUseSite !== undefined) {
                                 importSymbolAction.isValidTypeOnlyUseSite = action.isValidTypeOnlyUseSite;
@@ -2515,7 +2592,7 @@ export class LanguageService {
                         case "importSymbol":
                             const importSymbolAction: ImportAdderAction = {
                                 kind: "importSymbol",
-                                symbol: action.symbol.id,
+                                symbol: action.symbol.reference,
                             };
                             if (action.isValidTypeOnlyUseSite !== undefined) {
                                 importSymbolAction.isValidTypeOnlyUseSite = action.isValidTypeOnlyUseSite;
@@ -2708,7 +2785,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     readonly id: Id;
     private readonly project: Project<Id>;
     private readonly client: Client;
-    private readonly sourceFileCache: SourceFileCache;
+    private readonly sourceFileCache: SourceFileCache<Symbol>;
     private readonly toPath: (fileName: string) => Path;
     private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
     private readonly decoder = new Wtf8Decoder();
@@ -2720,7 +2797,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         snapshotId: number,
         project: Project<Id>,
         client: Client,
-        sourceFileCache: SourceFileCache,
+        sourceFileCache: SourceFileCache<Symbol>,
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
@@ -2811,7 +2888,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
                 if (retained) {
-                    return retained;
+                    return retained as unknown as SourceFile;
                 }
 
                 // Fetch from server
@@ -2824,13 +2901,9 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     return undefined;
                 }
 
-                const view = new DataView(binaryData.buffer, binaryData.byteOffset, binaryData.byteLength);
-                const contentHash = readSourceFileHash(view);
-                const parseOptionsKey = readParseOptionsKey(view);
-
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
-                return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
+                const decoded = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector());
+                return owner.sourceFileCache.set(decoded, owner.snapshotId, owner.project.id) as unknown as SourceFile;
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
                 const fileName = resolveFileName(file);
@@ -2839,7 +2912,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
                 if (retained) {
-                    return retained;
+                    return retained as unknown as SourceFile;
                 }
 
                 // Fetch from server
@@ -2854,13 +2927,9 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     return undefined;
                 }
 
-                const view = new DataView(binaryData.buffer, binaryData.byteOffset, binaryData.byteLength);
-                const contentHash = readSourceFileHash(view);
-                const parseOptionsKey = readParseOptionsKey(view);
-
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
-                return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
+                const decoded = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector());
+                return owner.sourceFileCache.set(decoded, owner.snapshotId, owner.project.id) as unknown as SourceFile;
             },
         );
     }
@@ -4089,14 +4158,14 @@ export class Checker {
                 const data = owner.client.apiRequest("getTypesOfSymbols", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbols: symbolOrSymbols.map(s => s.id),
+                    symbols: symbolOrSymbols.map(symbol => symbol.reference),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = owner.client.apiRequest("getTypeOfSymbol", {
                 snapshot: owner.snapshotId,
                 project: owner.project.id,
-                symbol: (symbolOrSymbols as Symbol).id,
+                symbol: (symbolOrSymbols as Symbol).reference,
             });
             return owner.objectRegistry.getOrCreateType(data);
         }
@@ -4107,14 +4176,14 @@ export class Checker {
                 const data = yield* apiRequest("getTypesOfSymbols", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbols: symbolOrSymbols.map(s => s.id),
+                    symbols: symbolOrSymbols.map(symbol => symbol.reference),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = yield* apiRequest("getTypeOfSymbol", {
                 snapshot: owner.snapshotId,
                 project: owner.project.id,
-                symbol: (symbolOrSymbols as Symbol).id,
+                symbol: (symbolOrSymbols as Symbol).reference,
             });
             return owner.objectRegistry.getOrCreateType(data);
         }
@@ -4138,7 +4207,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getDeclaredTypeOfSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -4146,7 +4215,7 @@ export class Checker {
                 const data = yield* apiRequest("getDeclaredTypeOfSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -4171,7 +4240,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getNonMissingTypeOfSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -4179,7 +4248,7 @@ export class Checker {
                 const data = yield* apiRequest("getNonMissingTypeOfSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -4199,7 +4268,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     file,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return (data ?? []).map(h => new NodeHandle(h, owner.project));
             },
@@ -4208,7 +4277,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     file,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return (data ?? []).map(h => new NodeHandle(h, owner.project));
             },
@@ -4839,7 +4908,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getTypeOfSymbolAtLocation", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                     location: getNodeId(location),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -4848,7 +4917,7 @@ export class Checker {
                 const data = yield* apiRequest("getTypeOfSymbolAtLocation", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                     location: getNodeId(location),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -5284,14 +5353,14 @@ export class Checker {
                 return owner.client.apiRequest("isReadonlySymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
             },
             function* (symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return yield* apiRequest("isReadonlySymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
             },
         );
@@ -5778,7 +5847,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getAliasedSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
             },
@@ -5786,7 +5855,7 @@ export class Checker {
                 const data = yield* apiRequest("getAliasedSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
             },
@@ -5809,14 +5878,14 @@ export class Checker {
                 return owner.client.apiRequest("getFullyQualifiedName", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
             },
             function* (symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 return yield* apiRequest("getFullyQualifiedName", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
             },
         );
@@ -5834,7 +5903,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getImmediateAliasedSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -5842,7 +5911,7 @@ export class Checker {
                 const data = yield* apiRequest("getImmediateAliasedSymbol", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -5865,7 +5934,7 @@ export class Checker {
                     const data = owner.client.apiRequest("getTargetSymbol", {
                         snapshot: owner.snapshotId,
                         project: owner.project.id,
-                        symbol: symbol.id,
+                        symbol: symbol.reference,
                     });
                     return owner.objectRegistry.getOrCreateSymbol(data);
                 }
@@ -5876,7 +5945,7 @@ export class Checker {
                     const data = yield* apiRequest("getTargetSymbol", {
                         snapshot: owner.snapshotId,
                         project: owner.project.id,
-                        symbol: symbol.id,
+                        symbol: symbol.reference,
                     });
                     return owner.objectRegistry.getOrCreateSymbol(data);
                 }
@@ -5897,7 +5966,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getExportSymbolOfSymbolForChecker", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
             },
@@ -5905,7 +5974,7 @@ export class Checker {
                 const data = yield* apiRequest("getExportSymbolOfSymbolForChecker", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
             },
@@ -6064,7 +6133,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getExportsOfModule", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -6072,7 +6141,7 @@ export class Checker {
                 const data = yield* apiRequest("getExportsOfModule", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -6091,7 +6160,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getMemberInModuleExports", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                     name,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -6100,7 +6169,7 @@ export class Checker {
                 const data = yield* apiRequest("getMemberInModuleExports", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                     name,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -6120,7 +6189,7 @@ export class Checker {
                 const data = owner.client.apiRequest("getJsDocTags", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return data ?? [];
             },
@@ -6128,7 +6197,7 @@ export class Checker {
                 const data = yield* apiRequest("getJsDocTags", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
                 return data ?? [];
             },
@@ -6147,14 +6216,14 @@ export class Checker {
                 return owner.client.apiRequest("getDocumentationComment", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
             },
             function* (symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 return yield* apiRequest("getDocumentationComment", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    symbol: symbol.id,
+                    symbol: symbol.reference,
                 });
             },
         );
@@ -6341,45 +6410,80 @@ export class NodeHandle<out T extends Node = Node> {
      * Node handles are only meaningful within a project's program, so the producing project
      * is remembered so callers don't have to pass it explicitly.
      */
-    private readonly canonicalProject: Project;
+    private readonly canonicalProject: Project | undefined;
+    /** The owning source file of a file-owned symbol's declaration. */
+    private readonly fileOwner: SourceFileOwner | undefined;
     readonly index: number;
     readonly kind: SyntaxKind;
     readonly path: Path;
 
-    constructor(handle: string, canonicalProject: Project) {
+    constructor(handle: string, canonicalProject: Project | undefined, fileOwner?: SourceFileOwner) {
         const parsed = parseNodeHandle(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
         this.path = parsed.path;
         this.canonicalProject = canonicalProject;
+        this.fileOwner = fileOwner;
     }
 
     /**
      * Resolve this handle to the actual AST node by fetching the source file from a project
      * and looking up the node by index. If no project is passed, the project that produced
-     * the handle is used.
+     * the handle is used. Declarations of file-owned symbols identify an exact source file and
+     * resolve through it, independently of any project.
      */
     get resolve(): {
-        (project?: Project): T | undefined;
-        gen(project?: Project): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]>;
+        (project?: Project | undefined): T | undefined;
+        gen(project?: Project | undefined): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "resolve",
-            function (project: Project = owner.canonicalProject): T | undefined {
+            function (project: Project | undefined = owner.canonicalProject): T | undefined {
+                if (owner.fileOwner) {
+                    const sourceFile = owner.fileOwner.record.file ?? owner.fetchOwnerFile(owner.fileOwner);
+                    return sourceFile.getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                }
+                if (!project) throw new Error(`Node handle for '${owner.path}' has no project context`);
                 const sourceFile = project.program.getSourceFile(owner.path);
                 if (!sourceFile) {
                     return undefined;
                 }
                 return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
             },
-            function* (project: Project = owner.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
+            function* (project: Project | undefined = owner.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
+                if (owner.fileOwner) {
+                    const sourceFile = owner.fileOwner.record.file ?? (yield* owner.fetchOwnerFile.gen(owner.fileOwner));
+                    return sourceFile.getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                }
+                if (!project) throw new Error(`Node handle for '${owner.path}' has no project context`);
                 const sourceFile = yield* project.program.getSourceFile.gen(owner.path);
                 if (!sourceFile) {
                     return undefined;
                 }
                 return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
+            },
+        );
+    }
+
+    private get fetchOwnerFile(): {
+        (fileOwner: SourceFileOwner): RemoteSourceFile;
+        gen(fileOwner: SourceFileOwner): Generator<ProtocolRequest, RemoteSourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "fetchOwnerFile",
+            function (fileOwner: SourceFileOwner): RemoteSourceFile {
+                const data = fileOwner.client.apiRequestBinary("getCachedSourceFile", { file: fileOwner.record.descriptor });
+                if (!data) throw new Error(`Source file '${fileOwner.record.descriptor.fileName}' is not available`);
+                return fileOwner.cache.attachFile(fileOwner.record, new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.client.getTimingCollector()));
+            },
+            function* (fileOwner: SourceFileOwner): Generator<ProtocolRequest, RemoteSourceFile, ProtocolResponse["result"]> {
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("getCachedSourceFile", { file: fileOwner.record.descriptor }));
+                if (!data) throw new Error(`Source file '${fileOwner.record.descriptor.fileName}' is not available`);
+                return fileOwner.cache.attachFile(fileOwner.record, new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.client.getTimingCollector()));
             },
         );
     }
@@ -6403,44 +6507,54 @@ export interface SignatureUsage {
     call?: NodeHandle | undefined;
 }
 
-export class Symbol {
-    private objectRegistry: SnapshotObjectRegistry;
-    /**
-     * The project this symbol was first observed in, used as the default project for
-     * lookups that need a project context (members/exports/parent). Symbols are shared
-     * snapshot-wide, so these lookups can otherwise be ambiguous about which project to use.
-     */
-    private readonly canonicalProject: Project;
+/** A cached source-file record and the dependencies needed to materialize or extend it. */
+interface SourceFileOwner {
+    readonly record: CachedSourceFile<Symbol>;
+    readonly cache: SourceFileCache<Symbol>;
+    readonly client: Client;
+}
 
-    readonly id: number;
+type SymbolStorage =
+    | { readonly kind: typeof SymbolOwnerKind.File; readonly owner: SourceFileOwner; }
+    | { readonly kind: typeof SymbolOwnerKind.Snapshot; readonly registry: ProjectObjectRegistry; };
+
+export class Symbol {
+    private readonly storage: SymbolStorage;
+
+    get id(): number {
+        return this.reference.id;
+    }
     /** The escaped (`__String`) name, used as the key in member/export tables. */
     readonly escapedName: __String;
     /** The display name (escaped underscores removed). */
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: CheckFlags;
+    /** @internal */
+    readonly reference: SymbolReference;
     readonly declarations: readonly NodeHandle<Declaration>[];
     readonly valueDeclaration: NodeHandle<Declaration> | undefined;
-    private readonly parent!: number;
-    private readonly exportSymbol!: number;
+    private readonly parent!: CompactSymbolReference;
+    private readonly exportSymbol!: CompactSymbolReference;
     private membersCache: ReadonlyMap<__String, Symbol> | undefined;
     private exportsCache: ReadonlyMap<__String, Symbol> | undefined;
 
-    constructor(data: SymbolResponse, objectRegistry: SnapshotObjectRegistry) {
-        this.objectRegistry = objectRegistry;
+    constructor(data: SymbolResponse, storage: SymbolStorage) {
+        if (data.reference.kind !== storage.kind) throw new Error(`Symbol ${data.reference.id} has mismatched ownership and storage`);
+        this.storage = storage;
+        this.reference = data.reference;
 
-        this.id = data.id;
         this.escapedName = data.name as __String;
         this.name = unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags;
-        const canonicalProject = objectRegistry.getProject(data.project);
-        if (!canonicalProject) {
-            throw new Error(`Symbol ${data.id} references unknown canonical project '${data.project}'`);
-        }
-        this.canonicalProject = canonicalProject;
-        this.declarations = (data.declarations ?? []).map(d => new NodeHandle<Declaration>(d, canonicalProject));
-        this.valueDeclaration = data.valueDeclaration ? new NodeHandle<Declaration>(data.valueDeclaration, canonicalProject) : undefined;
+        // A file-owned symbol has no canonical project; its declarations resolve through its file.
+        const project = storage.kind === SymbolOwnerKind.Snapshot ? storage.registry.project : undefined;
+        const fileOwner = storage.kind === SymbolOwnerKind.File ? storage.owner : undefined;
+        this.declarations = (data.declarations ?? []).map(handle => new NodeHandle<Declaration>(handle, project, fileOwner));
+        this.valueDeclaration = data.valueDeclaration
+            ? new NodeHandle<Declaration>(data.valueDeclaration, project, fileOwner)
+            : undefined;
 
         if (data.parent !== undefined) this.parent = data.parent;
         if (data.exportSymbol !== undefined) this.exportSymbol = data.exportSymbol;
@@ -6455,10 +6569,12 @@ export class Symbol {
             owner,
             "getParent",
             function (): Symbol | undefined {
-                return owner.objectRegistry.fetchSymbol(owner, "getParentOfSymbol", owner.parent, owner.canonicalProject.id);
+                if (!owner.parent) return undefined;
+                return owner.fetchSymbol("getParentOfSymbol", owner.parent);
             },
             function* (): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchSymbol.gen(owner, "getParentOfSymbol", owner.parent, owner.canonicalProject.id);
+                if (!owner.parent) return undefined;
+                return yield* owner.fetchSymbol.gen("getParentOfSymbol", owner.parent);
             },
         );
     }
@@ -6514,7 +6630,7 @@ export class Symbol {
             owner,
             "fetchSymbolTable",
             function (method: SymbolsPropertyMethod): ReadonlyMap<__String, Symbol> {
-                const symbols = owner.objectRegistry.fetchSymbols(owner, method, undefined, owner.canonicalProject.id);
+                const symbols = owner.fetchSymbols(method);
                 const table = new Map<__String, Symbol>();
                 for (const symbol of symbols) {
                     table.set(symbol.escapedName, symbol);
@@ -6522,7 +6638,7 @@ export class Symbol {
                 return table;
             },
             function* (method: SymbolsPropertyMethod): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
-                const symbols = yield* owner.objectRegistry.fetchSymbols.gen(owner, method, undefined, owner.canonicalProject.id);
+                const symbols = yield* owner.fetchSymbols.gen(method);
                 const table = new Map<__String, Symbol>();
                 for (const symbol of symbols) {
                     table.set(symbol.escapedName, symbol);
@@ -6542,11 +6658,11 @@ export class Symbol {
             "getExportSymbol",
             function (): Symbol {
                 if (!owner.exportSymbol) return owner;
-                return owner.objectRegistry.fetchSymbol(owner, "getExportSymbolOfSymbol", owner.exportSymbol, owner.canonicalProject.id);
+                return owner.fetchSymbol("getExportSymbolOfSymbol", owner.exportSymbol);
             },
             function* (): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 if (!owner.exportSymbol) return owner;
-                return yield* owner.objectRegistry.fetchSymbol.gen(owner, "getExportSymbolOfSymbol", owner.exportSymbol, owner.canonicalProject.id);
+                return yield* owner.fetchSymbol.gen("getExportSymbolOfSymbol", owner.exportSymbol);
             },
         );
     }
@@ -6584,6 +6700,75 @@ export class Symbol {
             },
         );
     }
+
+    private get fetchSymbol(): {
+        (method: SymbolPropertyMethod, reference: CompactSymbolReference): Symbol;
+        gen(method: SymbolPropertyMethod, reference: CompactSymbolReference): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "fetchSymbol",
+            function (method: SymbolPropertyMethod, reference: CompactSymbolReference): Symbol {
+                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
+                    return owner.storage.registry.fetchSymbol(owner, method, reference);
+                }
+                const fileOwner = owner.storage.owner;
+                // A file-owned symbol's relationships are always owned by the same file.
+                const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbols.get(reference.id) : undefined;
+                if (cached) return cached;
+                const data = fileOwner.client.apiRequest(method, { symbol: owner.reference });
+                if (!data) throw new Error(`${method} returned null symbol for Symbol ${owner.id}`);
+                return owner.internFileSymbol(fileOwner, data);
+            },
+            function* (method: SymbolPropertyMethod, reference: CompactSymbolReference): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
+                    return yield* owner.storage.registry.fetchSymbol.gen(owner, method, reference);
+                }
+                const fileOwner = owner.storage.owner;
+                // A file-owned symbol's relationships are always owned by the same file.
+                const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbols.get(reference.id) : undefined;
+                if (cached) return cached;
+                const data = yield* apiRequest(method, { symbol: owner.reference });
+                if (!data) throw new Error(`${method} returned null symbol for Symbol ${owner.id}`);
+                return owner.internFileSymbol(fileOwner, data);
+            },
+        );
+    }
+
+    private get fetchSymbols(): {
+        (method: SymbolsPropertyMethod): readonly Symbol[];
+        gen(method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "fetchSymbols",
+            function (method: SymbolsPropertyMethod): readonly Symbol[] {
+                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
+                    return owner.storage.registry.fetchSymbols(owner, method);
+                }
+                const fileOwner = owner.storage.owner;
+                const data = fileOwner.client.apiRequest(method, { symbol: owner.reference });
+                return data?.map(symbol => owner.internFileSymbol(fileOwner, symbol)) ?? [];
+            },
+            function* (method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
+                    return yield* owner.storage.registry.fetchSymbols.gen(owner, method);
+                }
+                const fileOwner = owner.storage.owner;
+                const data = yield* apiRequest(method, { symbol: owner.reference });
+                return data?.map(symbol => owner.internFileSymbol(fileOwner, symbol)) ?? [];
+            },
+        );
+    }
+
+    private internFileSymbol(fileOwner: SourceFileOwner, data: ProtocolSymbolResponse): Symbol {
+        validateSymbolResponse(data);
+        const reference = data.reference;
+        if (reference.kind !== SymbolOwnerKind.File) throw new Error(`Symbol ${reference.id} is not file-owned`);
+        return fileOwner.cache.getOrCreateSymbol(fileOwner.record, reference.file, reference.id, () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }));
+    }
 }
 
 class TypeObject implements Type {
@@ -6594,7 +6779,7 @@ class TypeObject implements Type {
     readonly id: number;
     readonly flags: TypeFlags;
     readonly objectFlags!: ObjectFlags;
-    readonly symbol!: number;
+    readonly symbol!: CompactSymbolReference;
     readonly value!: string | number | boolean | bigint;
     readonly intrinsicName!: string;
     readonly isThisType!: boolean;
@@ -6607,7 +6792,7 @@ class TypeObject implements Type {
     readonly localTypeParameters!: readonly number[];
     readonly thisType!: number;
     readonly aliasTypeArguments!: readonly number[];
-    readonly aliasSymbol!: number;
+    readonly aliasSymbol!: CompactSymbolReference;
     readonly elementFlags!: readonly ElementFlags[];
     readonly fixedLength!: number;
     readonly readonly!: boolean;
@@ -7676,8 +7861,8 @@ export class Signature {
     readonly id: number;
     readonly declaration?: NodeHandle<Declaration> | undefined;
     readonly typeParameters?: readonly number[] | undefined;
-    readonly parameters: readonly number[];
-    readonly thisParameter?: number | undefined;
+    readonly parameters: readonly CompactSymbolReference[];
+    readonly thisParameter?: CompactSymbolReference | undefined;
     readonly target?: number | undefined;
     private returnType: number | false;
 

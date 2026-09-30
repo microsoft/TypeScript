@@ -54,6 +54,9 @@ extends:
             displayName: Validate vscode-typescript release
 
             templateContext:
+              mb:
+                publish:
+                  enabled: false
               inputs:
                 - input: pipelineArtifact
                   pipeline: TypeScript_VS_Code_Extension_Release_Build
@@ -153,6 +156,10 @@ extends:
                 dependsOn: Validate
                 pool: server
                 timeoutInMinutes: 5760
+                templateContext:
+                  mb:
+                    publish:
+                      enabled: false
                 steps:
                   - task: ManualValidation@1
                     timeoutInMinutes: 4320
@@ -173,6 +180,9 @@ extends:
                 templateContext:
                   type: releaseJob
                   isProduction: true
+                  mb:
+                    publish:
+                      enabled: false
                   inputs:
                     - input: pipelineArtifact
                       pipeline: TypeScript_VS_Code_Extension_Release_Build

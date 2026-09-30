@@ -1,0 +1,71 @@
+classStaticPropertyNoSpuriousCircularityError1.ts(33,10): error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+classStaticPropertyNoSpuriousCircularityError1.ts(33,25): error TS2729: Property 'foo' is used before its initialization.
+classStaticPropertyNoSpuriousCircularityError1.ts(37,10): error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+classStaticPropertyNoSpuriousCircularityError1.ts(37,18): error TS2729: Property 'foo' is used before its initialization.
+classStaticPropertyNoSpuriousCircularityError1.ts(41,10): error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+classStaticPropertyNoSpuriousCircularityError1.ts(41,16): error TS2448: Block-scoped variable 'Circular3' used before its declaration.
+classStaticPropertyNoSpuriousCircularityError1.ts(41,26): error TS2729: Property 'foo' is used before its initialization.
+
+
+==== classStaticPropertyNoSpuriousCircularityError1.ts (7 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59271
+    // https://github.com/microsoft/TypeScript/issues/62552
+    
+    function id<T>(x: T): T {
+      return x
+    }
+    
+    const Foo = id(class {
+      static readonly foo = id(42) // ok
+    })
+    
+    Foo.foo // 42
+    
+    const Foo2 = id(class {
+      static foo = id(42) // ok
+    })
+    
+    Foo2.foo // number
+    
+    const Foo3 = id(class {
+      static readonly foo = [42];
+    });
+    
+    const Foo4 = id(
+      class A {
+        static foo = {};
+      },
+    );
+    
+    Foo4.foo // {}
+    
+    class Circular {
+      static foo = Circular.foo; // error
+             ~~~
+!!! error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                            ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 classStaticPropertyNoSpuriousCircularityError1.ts:33:10: 'foo' is declared here.
+    }
+    
+    const Circular2 = id(class C {
+      static foo = C.foo; // error
+             ~~~
+!!! error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                     ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 classStaticPropertyNoSpuriousCircularityError1.ts:37:10: 'foo' is declared here.
+    });
+    
+    const Circular3 = id(class {
+      static foo = Circular3.foo; // error
+             ~~~
+!!! error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                   ~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'Circular3' used before its declaration.
+!!! related TS2728 classStaticPropertyNoSpuriousCircularityError1.ts:40:7: 'Circular3' is declared here.
+                             ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 classStaticPropertyNoSpuriousCircularityError1.ts:41:10: 'foo' is declared here.
+    });
+    
