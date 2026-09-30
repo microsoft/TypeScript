@@ -1,12 +1,13 @@
 import assert from "node:assert";
 import { test as nodeTest } from "node:test";
-import {
+import defaultTest, {
     describe,
     runRegisteredTests,
     test,
 } from "./harness.ts";
 
 nodeTest("browser test harness preserves skip options", async () => {
+    assert.strictEqual(defaultTest, test);
     test("skipped test", { skip: "test reason" }, () => assert.fail("skipped test ran"));
     describe("skipped suite", { skip: "suite reason" }, () => {
         test("nested test", () => assert.fail("skipped suite ran"));

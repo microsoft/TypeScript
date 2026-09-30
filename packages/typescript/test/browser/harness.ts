@@ -82,6 +82,8 @@ export function test(
     });
 }
 
+export default test;
+
 export async function runRegisteredTests(exclusions: readonly BrowserTestExclusion[], timeoutMs = 10_000): Promise<BrowserTestResults> {
     const failures: BrowserTestFailure[] = [];
     const skipped: BrowserTestSkip[] = [];
