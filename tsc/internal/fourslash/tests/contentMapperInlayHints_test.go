@@ -37,6 +37,6 @@ const value = () => 1;
 
 	f.GoToFile(t, "/app.vue")
 	f.VerifyBaselineInlayHints(t, nil, &lsutil.UserPreferences{
-		InlayHints: lsutil.InlayHintsPreferences{IncludeInlayVariableTypeHints: core.TSTrue},
+		IncludeInlayVariableTypeHints: core.TSTrue,
 	})
 }
