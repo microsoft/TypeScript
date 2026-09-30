@@ -54,6 +54,11 @@ extends:
           - job: SetupBuildMatrix
             displayName: Set up platform build matrix
 
+            templateContext:
+              mb:
+                signing:
+                  enabled: false
+
             steps:
               - checkout: self
                 clean: true
@@ -74,6 +79,9 @@ extends:
               matrix: $[ dependencies.SetupBuildMatrix.outputs['buildMatrix.matrix'] ]
 
             templateContext:
+              mb:
+                signing:
+                  enabled: false
               outputs:
                 - output: pipelineArtifact
                   targetPath: $(Build.SourcesDirectory)/built/npm/typescript-$(platform)
