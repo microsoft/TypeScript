@@ -26,7 +26,7 @@ type CompletionPreferences struct {
 	// preceding `.` tokens with `?.`.
 	IncludeAutomaticOptionalChainCompletions core.Tristate `json:"includeAutomaticOptionalChainCompletions,omitempty"`
 	// Enables auto-import-style completions on partially-typed import statements. E.g., allows
-	// `import write|` to be completed to `import { writeFile } from "fs"`.
+	// `import write|` to be completed to `import { writeResult } from "./utils.js"`.
 	IncludeCompletionsForImportStatements core.Tristate `json:"includeCompletionsForImportStatements,omitempty"`
 	// If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
 	// This affects lone identifier completions but not completions on the right hand side of `obj.`.

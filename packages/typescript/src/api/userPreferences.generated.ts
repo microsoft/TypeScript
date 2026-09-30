@@ -20,7 +20,7 @@ export interface CompletionPreferences {
     includeAutomaticOptionalChainCompletions?: boolean | undefined;
     /**
      * Enables auto-import-style completions on partially-typed import statements. E.g., allows
-     * `import write|` to be completed to `import { writeFile } from "fs"`.
+     * `import write|` to be completed to `import { writeResult } from "./utils.js"`.
      */
     includeCompletionsForImportStatements?: boolean | undefined;
     /**

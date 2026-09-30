@@ -35,7 +35,7 @@
                     "x-config": "suggest.includeAutomaticOptionalChainCompletions"
                 },
                 "includeCompletionsForImportStatements": {
-                    "description": "Enables auto-import-style completions on partially-typed import statements. E.g., allows\n`import write|` to be completed to `import { writeFile } from \"fs\"`.",
+                    "description": "Enables auto-import-style completions on partially-typed import statements. E.g., allows\n`import write|` to be completed to `import { writeResult } from \"./utils.js\"`.",
                     "type": "boolean",
                     "x-config": "suggest.includeCompletionsForImportStatements"
                 },
