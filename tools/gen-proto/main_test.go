@@ -33,7 +33,7 @@ func TestGenerate(t *testing.T) {
 		`export interface UpdateSnapshotParams`,
 		`export interface CreateSnapshotParams extends SnapshotRequestChangesParams`,
 		`export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams`,
-		`import type { CompletionPreferences, UserPreferences } from "./userPreferences.generated.ts";`,
+		`import type { UserPreferences } from "./userPreferences.generated.ts";`,
 		`userPreferences?: UserPreferences | undefined;`,
 		`prepareAutoImports?: DocumentIdentifier | undefined;`,
 		`openProjects?: readonly DocumentIdentifier[] | undefined;`,

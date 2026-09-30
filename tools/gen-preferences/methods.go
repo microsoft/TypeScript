@@ -37,9 +37,6 @@ func (s schema) writePreferenceMethods(out *bytes.Buffer, imports map[string]str
 	if root != "UserPreferences" {
 		return errors.New("preference schema must define UserPreferences as its root")
 	}
-	if _, ok := s.Defs["CompletionPreferences"]; !ok {
-		return errors.New("preference schema must define CompletionPreferences")
-	}
 	imports["json"] = "github.com/microsoft/TypeScript/tsc/internal/json"
 	fields := s.flattenedFields(root, "")
 	enumTypes := map[string]property{}
@@ -64,15 +61,13 @@ func (s schema) writePreferenceMethods(out *bytes.Buffer, imports map[string]str
 		}
 	}
 
-	for _, name := range []string{root, "CompletionPreferences"} {
-		fmt.Fprintf(out, "func (p *%s) applyRawPreferences(settings map[string]any) {\n", name)
-		out.WriteString("for name, value := range settings {\nif value == nil { continue }\nswitch name {\n")
-		for _, field := range s.flattenedFields(name, "") {
-			fmt.Fprintf(out, "case %q:\n", field.name)
-			writeAssignment(out, "p."+field.selector, field.property)
-		}
-		out.WriteString("}\n}\n}\n\n")
+	fmt.Fprintf(out, "func (p *%s) applyRawPreferences(settings map[string]any) {\n", root)
+	out.WriteString("for name, value := range settings {\nif value == nil { continue }\nswitch name {\n")
+	for _, field := range fields {
+		fmt.Fprintf(out, "case %q:\n", field.name)
+		writeAssignment(out, "p."+field.selector, field.property)
 	}
+	out.WriteString("}\n}\n}\n\n")
 
 	out.WriteString("func (p UserPreferences) withConfig(config map[string]any) UserPreferences {\n")
 	out.WriteString("p.applyRawPreferences(config)\nif unstable, ok := config[\"unstable\"].(map[string]any); ok { p.applyRawPreferences(unstable) }\n")
@@ -100,17 +95,6 @@ func (s schema) writePreferenceMethods(out *bytes.Buffer, imports map[string]str
 		if field.Validator != "" {
 			fmt.Fprintf(out, "p.%s = %s(p.%s)\n", field.selector, field.Validator, field.selector)
 		}
-	}
-	out.WriteString("return p\n}\n\n")
-
-	out.WriteString("func (p *CompletionPreferences) UnmarshalJSONFrom(dec *json.Decoder) error {\nvar settings map[string]any\nif err := json.UnmarshalDecode(dec, &settings); err != nil { return err }\np.applyRawPreferences(settings)\nreturn nil\n}\n\n")
-	out.WriteString("func (p UserPreferences) WithCompletionPreferences(overrides CompletionPreferences) UserPreferences {\n")
-	for _, field := range s.flattenedFields("CompletionPreferences", "") {
-		rootFieldIndex := slices.IndexFunc(fields, func(candidate preferenceField) bool { return candidate.name == field.name })
-		if rootFieldIndex < 0 {
-			return fmt.Errorf("completion preference %s is not inherited by UserPreferences", field.name)
-		}
-		fmt.Fprintf(out, "if %s {\np.%s = overrides.%s\n}\n", presentCondition("overrides."+field.selector, field.property), fields[rootFieldIndex].selector, field.selector)
 	}
 	out.WriteString("return p\n}\n\n")
 

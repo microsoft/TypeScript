@@ -50,10 +50,6 @@ func (l *LanguageService) UserPreferences() lsutil.UserPreferences {
 	return l.activeConfig
 }
 
-func (l *LanguageService) SetUserPreferences(preferences lsutil.UserPreferences) {
-	l.activeConfig = preferences
-}
-
 func (l *LanguageService) FormatOptions() lsutil.FormatCodeSettings {
 	return l.activeConfig.FormatCodeSettings
 }

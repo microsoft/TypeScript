@@ -1543,13 +1543,12 @@ type SignatureUsageResponse struct {
 
 // GetCompletionsAtPositionParams are the parameters for the getCompletionsAtPosition method.
 type GetCompletionsAtPositionParams struct {
-	Snapshot         SnapshotID                    `json:"snapshot"`
-	Project          project.ID                    `json:"project"`
-	File             DocumentIdentifier            `json:"file"`
-	Position         uint32                        `json:"position"`
-	TriggerCharacter *string                       `json:"triggerCharacter,omitempty"`
-	IncludeSymbol    bool                          `json:"includeSymbol,omitempty"`
-	Preferences      *lsutil.CompletionPreferences `json:"preferences,omitempty"`
+	Snapshot         SnapshotID         `json:"snapshot"`
+	Project          project.ID         `json:"project"`
+	File             DocumentIdentifier `json:"file"`
+	Position         uint32             `json:"position"`
+	TriggerCharacter *string            `json:"triggerCharacter,omitempty"`
+	IncludeSymbol    bool               `json:"includeSymbol,omitempty"`
 }
 
 // CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry.

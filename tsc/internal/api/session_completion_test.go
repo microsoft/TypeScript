@@ -279,7 +279,7 @@ func TestCompletionWithSymbolsUsesPreparedSnapshot(t *testing.T) {
 	t.Fatal("expected auto-import completion for someValue")
 }
 
-func TestCompletionPreferencesOverrideSnapshot(t *testing.T) {
+func TestCompletionUsesSnapshotPreferences(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
@@ -298,10 +298,9 @@ func TestCompletionPreferencesOverrideSnapshot(t *testing.T) {
 	defer session.Close()
 
 	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
-		OpenFiles:          []DocumentIdentifier{{FileName: fileName}},
-		PrepareAutoImports: &DocumentIdentifier{FileName: fileName},
+		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 		UserPreferences: &lsutil.UserPreferences{
-			IncludeCompletionsForModuleExports: core.TSTrue,
+			IncludeCompletionsForModuleExports: core.TSFalse,
 		},
 	})
 	assert.NilError(t, err)
@@ -312,18 +311,16 @@ func TestCompletionPreferencesOverrideSnapshot(t *testing.T) {
 	assert.NilError(t, err)
 
 	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
-		Snapshot: snapshotResp.Snapshot,
-		Project:  proj.Id,
-		File:     DocumentIdentifier{FileName: fileName},
-		Position: uint32(len(content)),
-		Preferences: &lsutil.CompletionPreferences{
-			IncludeCompletionsForModuleExports: core.TSFalse,
-		},
+		Snapshot:      snapshotResp.Snapshot,
+		Project:       proj.Id,
+		File:          DocumentIdentifier{FileName: fileName},
+		Position:      uint32(len(content)),
+		IncludeSymbol: true,
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, completions != nil)
 	for _, entry := range completions.Entries {
-		assert.Assert(t, entry.Name != "someValue", "per-call preferences should disable auto-import completions")
+		assert.Assert(t, entry.Name != "someValue", "snapshot preferences should disable auto-import completions")
 	}
 }
 

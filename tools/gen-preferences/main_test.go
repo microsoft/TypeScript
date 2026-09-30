@@ -29,7 +29,6 @@ func TestGenerate(t *testing.T) {
 		`getPreferenceConfigValue(config, "suggest.jsdoc.enabled", "suggest.completeJSDocs")`,
 		"func (p UserPreferences) withConfig(config map[string]any) UserPreferences",
 		"func (p *UserPreferences) MarshalJSONTo(enc *json.Encoder) error",
-		"func (p UserPreferences) WithCompletionPreferences(overrides CompletionPreferences) UserPreferences",
 	} {
 		if !strings.Contains(strings.Join(strings.Fields(string(goOutput)), " "), expected) {
 			t.Errorf("Go output does not contain %q", expected)
@@ -54,6 +53,9 @@ func TestGenerate(t *testing.T) {
 	}
 	if bytes.Contains(goOutput, []byte("reflect.")) {
 		t.Error("generated preferences must use typed field access")
+	}
+	if bytes.Contains(goOutput, []byte("WithCompletionPreferences")) {
+		t.Error("generated preferences must not provide per-call completion overrides")
 	}
 }
 

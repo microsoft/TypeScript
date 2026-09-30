@@ -80,6 +80,7 @@ import type {
     BuildResponse,
     CleanBuildResponse,
     CompilerOptions,
+    CompletionPreferences,
     ConfiguredProjectId,
     CreateBuildOrchestratorResponse,
     CreateProgramOptions as ProtocolCreateProgramOptions,
@@ -123,6 +124,7 @@ import type {
     TypePropertyMethod,
     TypeResponse,
     TypesPropertyMethod,
+    UserPreferences,
 } from "../proto.ts";
 import {
     resolveFileName,
@@ -201,6 +203,7 @@ export type {
     CompletionEntry,
     CompletionInfo,
     CompletionOptions,
+    CompletionPreferences,
     ConditionalType,
     ConfiguredProjectId,
     CreateSourceFileOptions,
@@ -263,6 +266,7 @@ export type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UserPreferences,
 };
 
 export interface ModuleResolverOptions {
@@ -2666,7 +2670,6 @@ export class LanguageService {
                     position,
                     triggerCharacter: options?.triggerCharacter,
                     includeSymbol: options?.includeSymbol,
-                    preferences: options?.preferences,
                 });
                 if (!data) return undefined;
                 return {
@@ -2685,7 +2688,6 @@ export class LanguageService {
                     position,
                     triggerCharacter: options?.triggerCharacter,
                     includeSymbol: options?.includeSymbol,
-                    preferences: options?.preferences,
                 });
                 if (!data) return undefined;
                 return {

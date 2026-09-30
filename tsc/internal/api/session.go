@@ -5028,12 +5028,9 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 		if sourceFile == nil {
 			return nil, nil
 		}
-		langSvc, e := s.setupLanguageService(snapshot, program, params.Project, "")
+		langSvc, e := s.setupLanguageService(snapshot, program, params.Project, sourceFile.FileName())
 		if e != nil {
 			return nil, e
-		}
-		if params.Preferences != nil {
-			langSvc.SetUserPreferences(langSvc.UserPreferences().WithCompletionPreferences(*params.Preferences))
 		}
 		internalPos := sourceFile.GetPositionMap().UTF16ToUTF8(int(params.Position))
 		return langSvc.GetCompletionsAtPosition(ctx, sourceFile, internalPos, params.TriggerCharacter, params.IncludeSymbol)

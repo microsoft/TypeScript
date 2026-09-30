@@ -98,6 +98,7 @@ import {
     TypePredicateKind,
     type TypeReference,
     type UnionOrIntersectionType,
+    type UserPreferences,
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import {
     createFileSystem,
@@ -2093,7 +2094,7 @@ describe("LanguageService - getCompletionsAtPosition", { concurrency }, () => {
 
         const unprepared = await api.createSnapshot({
             openProject: "/tsconfig.json",
-            userPreferences: { includeCompletionsForModuleExports: true },
+            userPreferences: { includeCompletionsForModuleExports: true } satisfies UserPreferences,
         });
         const unpreparedProject = unprepared.getConfiguredProject("/tsconfig.json")!;
         // @sync-skip-block-start
@@ -2112,7 +2113,7 @@ describe("LanguageService - getCompletionsAtPosition", { concurrency }, () => {
         assert.ok(completions?.entries.some(entry => entry.name === "someValue"));
     });
 
-    test("completion preferences override snapshot preferences", async () => {
+    test("snapshot preferences disable auto-import completions", async () => {
         const src = "someV";
         await using api = spawnAPI({
             "/tsconfig.json": `{ "compilerOptions": { "module": "esnext", "target": "esnext" }, "include": ["src"] }`,
@@ -2122,15 +2123,21 @@ describe("LanguageService - getCompletionsAtPosition", { concurrency }, () => {
 
         const snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
-            prepareAutoImports: "/src/main.ts",
-            userPreferences: { includeCompletionsForModuleExports: true },
+            userPreferences: { includeCompletionsForModuleExports: false } satisfies UserPreferences,
         });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const completions = await project.languageService.getCompletionsAtPosition("/src/main.ts", src.length, {
-            preferences: { includeCompletionsForModuleExports: false },
+            includeSymbol: true,
         });
         assert.ok(completions);
         assert.ok(!completions.entries.some(entry => entry.name === "someValue"));
+        const prepared = await snapshot.update({
+            userPreferences: { includeCompletionsForModuleExports: true },
+            prepareAutoImports: "/src/main.ts",
+        });
+        const preparedProject = prepared.getConfiguredProject("/tsconfig.json")!;
+        const enabled = await preparedProject.languageService.getCompletionsAtPosition("/src/main.ts", src.length, { includeSymbol: true });
+        assert.ok(enabled?.entries.some(entry => entry.name === "someValue"));
     });
 });
 

@@ -8,10 +8,7 @@ import { NewLineKind } from "#enums/newLineKind";
 import { ScriptKind } from "#enums/scriptKind";
 import { ScriptTarget } from "#enums/scriptTarget";
 import type { Path } from "../ast/index.ts";
-import type {
-    CompletionPreferences,
-    UserPreferences,
-} from "./userPreferences.generated.ts";
+import type { UserPreferences } from "./userPreferences.generated.ts";
 
 export { JsxEmit } from "#enums/jsxEmit";
 export { ModuleDetectionKind } from "#enums/moduleDetectionKind";
@@ -959,7 +956,6 @@ export interface GetCompletionsAtPositionParams {
     position: number;
     triggerCharacter?: string | undefined;
     includeSymbol?: boolean | undefined;
-    preferences?: CompletionPreferences | undefined;
 }
 
 /** CompletionInfoResponse wraps a list of completion entries. */

@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"encoding/json" //nolint:depguard // The tools module cannot import tsc/internal/json.
+	"encoding/json"
 	"errors"
 	"fmt"
 	"go/format"

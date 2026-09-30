@@ -634,28 +634,6 @@ func (p *UserPreferences) applyRawPreferences(settings map[string]any) {
 	}
 }
 
-func (p *CompletionPreferences) applyRawPreferences(settings map[string]any) {
-	for name, value := range settings {
-		if value == nil {
-			continue
-		}
-		switch name {
-		case "includeAutomaticOptionalChainCompletions":
-			p.IncludeAutomaticOptionalChainCompletions = parsePreferenceTristate(value)
-		case "includeCompletionsForImportStatements":
-			p.IncludeCompletionsForImportStatements = parsePreferenceTristate(value)
-		case "includeCompletionsForModuleExports":
-			p.IncludeCompletionsForModuleExports = parsePreferenceTristate(value)
-		case "includeCompletionsWithClassMemberSnippets":
-			p.IncludeCompletionsWithClassMemberSnippets = parsePreferenceTristate(value)
-		case "includeCompletionsWithObjectLiteralMethodSnippets":
-			p.IncludeCompletionsWithObjectLiteralMethodSnippets = parsePreferenceTristate(value)
-		case "jsxAttributeCompletionStyle":
-			p.JsxAttributeCompletionStyle = parsePreferenceJsxAttributeCompletionStyle(value)
-		}
-	}
-}
-
 func (p UserPreferences) withConfig(config map[string]any) UserPreferences {
 	p.applyRawPreferences(config)
 	if unstable, ok := config["unstable"].(map[string]any); ok {
@@ -1069,37 +1047,6 @@ func (p UserPreferences) withConfig(config map[string]any) UserPreferences {
 		}
 	}
 	p.CustomConfigFileName = normalizeCustomConfigFileName(p.CustomConfigFileName)
-	return p
-}
-
-func (p *CompletionPreferences) UnmarshalJSONFrom(dec *json.Decoder) error {
-	var settings map[string]any
-	if err := json.UnmarshalDecode(dec, &settings); err != nil {
-		return err
-	}
-	p.applyRawPreferences(settings)
-	return nil
-}
-
-func (p UserPreferences) WithCompletionPreferences(overrides CompletionPreferences) UserPreferences {
-	if overrides.IncludeAutomaticOptionalChainCompletions.IsTrue() || overrides.IncludeAutomaticOptionalChainCompletions.IsFalse() {
-		p.CompletionPreferences.IncludeAutomaticOptionalChainCompletions = overrides.IncludeAutomaticOptionalChainCompletions
-	}
-	if overrides.IncludeCompletionsForImportStatements.IsTrue() || overrides.IncludeCompletionsForImportStatements.IsFalse() {
-		p.CompletionPreferences.IncludeCompletionsForImportStatements = overrides.IncludeCompletionsForImportStatements
-	}
-	if overrides.IncludeCompletionsForModuleExports.IsTrue() || overrides.IncludeCompletionsForModuleExports.IsFalse() {
-		p.CompletionPreferences.IncludeCompletionsForModuleExports = overrides.IncludeCompletionsForModuleExports
-	}
-	if overrides.IncludeCompletionsWithClassMemberSnippets.IsTrue() || overrides.IncludeCompletionsWithClassMemberSnippets.IsFalse() {
-		p.CompletionPreferences.IncludeCompletionsWithClassMemberSnippets = overrides.IncludeCompletionsWithClassMemberSnippets
-	}
-	if overrides.IncludeCompletionsWithObjectLiteralMethodSnippets.IsTrue() || overrides.IncludeCompletionsWithObjectLiteralMethodSnippets.IsFalse() {
-		p.CompletionPreferences.IncludeCompletionsWithObjectLiteralMethodSnippets = overrides.IncludeCompletionsWithObjectLiteralMethodSnippets
-	}
-	if overrides.JsxAttributeCompletionStyle != "" {
-		p.CompletionPreferences.JsxAttributeCompletionStyle = overrides.JsxAttributeCompletionStyle
-	}
 	return p
 }
 
