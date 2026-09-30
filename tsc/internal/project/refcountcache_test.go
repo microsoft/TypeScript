@@ -89,6 +89,137 @@ func TestParseCacheBindsBeforePublishing(t *testing.T) {
 	assert.Assert(t, file.CommonJSModuleIndicator != nil)
 }
 
+func TestParseCacheAcquireExistingUsesFullKey(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/index.ts"
+	fileHandle := NewCachedFileHandle(fileName, "export {};")
+	key := NewParseCacheKey(ast.SourceFileParseOptions{
+		FileName: fileName,
+		Path:     tspath.Path(fileName),
+	}, fileHandle.Hash(), core.ScriptKindTS)
+	cache := NewParseCache(RefCountCacheOptions{})
+	file := cache.Acquire(key, fileHandle)
+
+	acquired, ok := cache.AcquireExisting(key)
+	assert.Assert(t, ok)
+	assert.Assert(t, acquired == file)
+	cache.Deref(key)
+
+	mismatches := map[string]ParseCacheKey{
+		"file name": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: "/INDEX.ts", Path: key.Path},
+			Hash:                   key.Hash,
+			ScriptKind:             key.ScriptKind,
+		},
+		"path": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: key.FileName, Path: "/INDEX.ts"},
+			Hash:                   key.Hash,
+			ScriptKind:             key.ScriptKind,
+		},
+		"hash": {
+			SourceFileParseOptions: key.SourceFileParseOptions,
+			Hash:                   xxh3.Hash128([]byte("different")),
+			ScriptKind:             key.ScriptKind,
+		},
+		"script kind": {
+			SourceFileParseOptions: key.SourceFileParseOptions,
+			Hash:                   key.Hash,
+			ScriptKind:             core.ScriptKindTSX,
+		},
+		"jsx parse option": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{
+				FileName: key.FileName,
+				Path:     key.Path,
+				ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
+					JSX: true,
+				},
+			},
+			Hash:       key.Hash,
+			ScriptKind: key.ScriptKind,
+		},
+		"force parse option": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{
+				FileName: key.FileName,
+				Path:     key.Path,
+				ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
+					Force: true,
+				},
+			},
+			Hash:       key.Hash,
+			ScriptKind: key.ScriptKind,
+		},
+	}
+	for name, mismatch := range mismatches {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			_, found := cache.AcquireExisting(mismatch)
+			assert.Assert(t, !found)
+			assert.Assert(t, !cache.Has(mismatch))
+		})
+	}
+
+	cache.Deref(key)
+	assert.Assert(t, !cache.Has(key))
+}
+
+func TestRefCountCacheAcquireExisting(t *testing.T) {
+	t.Parallel()
+
+	parseCount := 0
+	cache := NewRefCountCache(RefCountCacheOptions{}, func(key string, value int) int {
+		parseCount++
+		return value
+	})
+
+	value, ok := cache.AcquireExisting("missing")
+	assert.Equal(t, value, 0)
+	assert.Assert(t, !ok)
+	assert.Equal(t, parseCount, 0)
+
+	assert.Equal(t, cache.Acquire("key", 1), 1)
+	value, ok = cache.AcquireExisting("key")
+	assert.Assert(t, ok)
+	assert.Equal(t, value, 1)
+	assert.Equal(t, parseCount, 1)
+
+	cache.Deref("key")
+	assert.Assert(t, cache.Has("key"))
+	cache.Deref("key")
+	assert.Assert(t, !cache.Has("key"))
+
+	value, ok = cache.AcquireExisting("key")
+	assert.Equal(t, value, 0)
+	assert.Assert(t, !ok)
+	assert.Equal(t, parseCount, 1)
+}
+
+func TestRefCountCacheAcquireExistingRacesFinalRelease(t *testing.T) {
+	t.Parallel()
+
+	for range 100 {
+		cache := NewRefCountCache(RefCountCacheOptions{}, func(_ string, value *int) *int {
+			return value
+		})
+		value := 1
+		cache.Acquire("key", &value)
+
+		start := make(chan struct{})
+		acquired := make(chan bool)
+		go func() {
+			<-start
+			_, ok := cache.AcquireExisting("key")
+			acquired <- ok
+		}()
+		close(start)
+		cache.Deref("key")
+		if <-acquired {
+			cache.Deref("key")
+		}
+		assert.Assert(t, !cache.Has("key"))
+	}
+}
+
 func TestRefCountingCaches(t *testing.T) {
 	t.Parallel()
 

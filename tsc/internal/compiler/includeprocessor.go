@@ -12,10 +12,13 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-type includeProcessor struct {
+type fileIncludeData struct {
 	fileIncludeReasons    map[tspath.Path][]*FileIncludeReason
 	processingDiagnostics []*processingDiagnostic
+}
 
+type includeProcessor struct {
+	reasonDiagnostics          collections.SyncMap[includeReasonDiagnosticKey, *ast.Diagnostic]
 	reasonToReferenceLocation  collections.SyncMap[*FileIncludeReason, *referenceFileLocation]
 	includeReasonToRelatedInfo collections.SyncMap[*FileIncludeReason, *ast.Diagnostic]
 	redirectAndFileFormat      collections.SyncMap[tspath.Path, []*ast.Diagnostic]
@@ -25,17 +28,15 @@ type includeProcessor struct {
 	compilerOptionsSyntaxOnce  sync.Once
 }
 
-func updateFileIncludeProcessor(p *Program) {
-	p.includeProcessor = &includeProcessor{
-		fileIncludeReasons:    p.includeProcessor.fileIncludeReasons,
-		processingDiagnostics: p.includeProcessor.processingDiagnostics,
-	}
+type includeReasonDiagnosticKey struct {
+	reason           *FileIncludeReason
+	relativeFileName bool
 }
 
 func (i *includeProcessor) getDiagnostics(p *Program) *ast.DiagnosticsCollection {
 	i.computedDiagnosticsOnce.Do(func() {
 		i.computedDiagnostics = &ast.DiagnosticsCollection{}
-		for _, d := range i.processingDiagnostics {
+		for _, d := range p.processingDiagnostics {
 			i.computedDiagnostics.Add(d.toDiagnostic(p))
 		}
 		for _, resolutions := range p.resolvedModules {
@@ -56,31 +57,31 @@ func (i *includeProcessor) getDiagnostics(p *Program) *ast.DiagnosticsCollection
 	return i.computedDiagnostics
 }
 
-func (i *includeProcessor) addProcessingDiagnostic(d ...*processingDiagnostic) {
+func (i *fileIncludeData) addProcessingDiagnostic(d ...*processingDiagnostic) {
 	i.processingDiagnostics = append(i.processingDiagnostics, d...)
 }
 
-func (i *includeProcessor) addProcessingDiagnosticsForFileCasing(file tspath.Path, existingCasing string, currentCasing string, reason *FileIncludeReason) {
+func (i *fileIncludeData) addProcessingDiagnosticsForFileCasing(file tspath.Path, existingCasing string, currentCasing string, reason *FileIncludeReason) {
 	if !reason.isReferencedFile() && slices.ContainsFunc(i.fileIncludeReasons[file], func(r *FileIncludeReason) bool {
 		return r.isReferencedFile()
 	}) {
 		i.addProcessingDiagnostic(&processingDiagnostic{
 			kind: processingDiagnosticKindExplainingFileInclude,
-			data: &includeExplainingDiagnostic{
+			explanation: &includeExplainingDiagnostic{
 				file:             file,
 				diagnosticReason: reason,
 				message:          diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
-				args:             []any{existingCasing, currentCasing},
+				args:             []string{existingCasing, currentCasing},
 			},
 		})
 	} else {
 		i.addProcessingDiagnostic(&processingDiagnostic{
 			kind: processingDiagnosticKindExplainingFileInclude,
-			data: &includeExplainingDiagnostic{
+			explanation: &includeExplainingDiagnostic{
 				file:             file,
 				diagnosticReason: reason,
 				message:          diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-				args:             []any{currentCasing, existingCasing},
+				args:             []string{currentCasing, existingCasing},
 			},
 		})
 	}
