@@ -1192,6 +1192,8 @@
     "Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information_5111": "Visit https://aka.ms/ts6 for migration information.",
     "tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112": "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.",
     "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113": "'{0}' is only assignable to the non-distributed '{1}', but '{1}' has been distributed here.",
+    "Instantiations_of_type_0_appear_infinitely_circular_5114": "Instantiations of type '{0}' appear infinitely circular.",
+    "Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0_5115": "Instantiations of the following types appear infinitely circular: {0}.",
     "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000": "Generates a sourcemap for each corresponding '.d.ts' file.",
     "Concatenate_and_emit_output_to_single_file_6001": "Concatenate and emit output to single file.",
     "Generates_corresponding_d_ts_file_6002": "Generates corresponding '.d.ts' file.",

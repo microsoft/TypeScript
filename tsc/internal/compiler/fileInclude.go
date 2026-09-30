@@ -2,7 +2,6 @@ package compiler
 
 import (
 	"fmt"
-	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -28,16 +27,12 @@ const (
 )
 
 type FileIncludeReason struct {
-	kind fileIncludeKind
-	data any
-
-	// Uses relative file name
-	relativeFileNameDiag     *ast.Diagnostic
-	relativeFileNameDiagOnce sync.Once
-
-	// Uses file name as is
-	diag     *ast.Diagnostic
-	diagOnce sync.Once
+	kind                   fileIncludeKind
+	index                  int
+	isDefaultLib           bool
+	referencedFile         *referencedFileData
+	automaticTypeDirective *automaticTypeDirectiveFileData
+	canonicalSourceFile    tspath.Path
 }
 
 type referencedFileData struct {
@@ -80,12 +75,11 @@ type automaticTypeDirectiveFileData struct {
 }
 
 func (r *FileIncludeReason) asIndex() int {
-	return r.data.(int)
+	return r.index
 }
 
 func (r *FileIncludeReason) asLibFileIndex() (int, bool) {
-	index, ok := r.data.(int)
-	return index, ok
+	return r.index, !r.isDefaultLib
 }
 
 func (r *FileIncludeReason) isReferencedFile() bool {
@@ -93,11 +87,11 @@ func (r *FileIncludeReason) isReferencedFile() bool {
 }
 
 func (r *FileIncludeReason) asReferencedFileData() *referencedFileData {
-	return r.data.(*referencedFileData)
+	return r.referencedFile
 }
 
 func (r *FileIncludeReason) asAutomaticTypeDirectiveFileData() *automaticTypeDirectiveFileData {
-	return r.data.(*automaticTypeDirectiveFileData)
+	return r.automaticTypeDirective
 }
 
 func (r *FileIncludeReason) getReferencedLocation(program *Program) *referenceFileLocation {
@@ -152,19 +146,18 @@ func (r *FileIncludeReason) getReferencedLocation(program *Program) *referenceFi
 }
 
 func (r *FileIncludeReason) toDiagnostic(program *Program, relativeFileName bool) *ast.Diagnostic {
-	if relativeFileName {
-		r.relativeFileNameDiagOnce.Do(func() {
-			r.relativeFileNameDiag = r.computeDiagnostic(program, func(fileName string) string {
-				return tspath.GetRelativePathFromDirectory(program.GetCurrentDirectory(), fileName, program.comparePathsOptions)
-			})
-		})
-		return r.relativeFileNameDiag
-	} else {
-		r.diagOnce.Do(func() {
-			r.diag = r.computeDiagnostic(program, func(fileName string) string { return fileName })
-		})
-		return r.diag
+	key := includeReasonDiagnosticKey{reason: r, relativeFileName: relativeFileName}
+	if diagnostic, ok := program.includeProcessor.reasonDiagnostics.Load(key); ok {
+		return diagnostic
 	}
+	diagnostic := r.computeDiagnostic(program, func(fileName string) string {
+		if relativeFileName {
+			return tspath.GetRelativePathFromDirectory(program.GetCurrentDirectory(), fileName, program.comparePathsOptions)
+		}
+		return fileName
+	})
+	diagnostic, _ = program.includeProcessor.reasonDiagnostics.LoadOrStore(key, diagnostic)
+	return diagnostic
 }
 
 func (r *FileIncludeReason) computeDiagnostic(program *Program, toFileName func(string) string) *ast.Diagnostic {
@@ -214,7 +207,7 @@ func (r *FileIncludeReason) computeDiagnostic(program *Program, toFileName func(
 			return ast.NewCompilerDiagnostic(diagnostics.Default_library)
 		}
 	case fileIncludeKindContentMapperSupplemental:
-		canonical := program.GetSourceFileByPath(r.data.(tspath.Path))
+		canonical := program.GetSourceFileByPath(r.canonicalSourceFile)
 		return ast.NewCompilerDiagnostic(diagnostics.Supplemental_virtual_file_produced_by_the_content_mapper_for_file_0, toFileName(canonical.FileName()))
 	default:
 		panic(fmt.Sprintf("unknown reason: %v", r.kind))

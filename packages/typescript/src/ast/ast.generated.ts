@@ -469,10 +469,10 @@ export interface TemplateLiteralLikeNodeBase extends LiteralLikeNodeBase {
     readonly rawText: string;
     readonly templateFlags: TokenFlags;
 }
-export interface TypeElementBase extends Node {
+export interface TypeElementBase extends DeclarationBase {
     readonly _typeElementBrand: any;
 }
-export interface ClassElementBase extends Node {
+export interface ClassElementBase extends DeclarationBase {
     readonly _classElementBrand: any;
 }
 export interface NamedMemberBase extends ModifiersBase {
@@ -480,7 +480,7 @@ export interface NamedMemberBase extends ModifiersBase {
     readonly name: PropertyName;
     readonly postfixToken?: QuestionToken | ExclamationToken;
 }
-export interface ObjectLiteralElementBase extends Node {
+export interface ObjectLiteralElementBase extends DeclarationBase {
     readonly _objectLiteralBrand: any;
 }
 export interface UnionOrIntersectionTypeNodeBase extends TypeNodeBase {

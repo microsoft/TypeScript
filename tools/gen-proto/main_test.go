@@ -51,6 +51,11 @@ func TestGenerate(t *testing.T) {
 		`paths?: Record<string, string[]> | undefined;`,
 		`target?: ScriptTarget | undefined;`,
 		`scriptKind?: ScriptKind | undefined;`,
+		`export interface SourceFileDescriptor {
+    fileName: string;
+    path: Path;`,
+		`import { SymbolOwnerKind } from "#enums/symbolOwnerKind";`,
+		`kind: SymbolOwnerKind;`,
 		`/** InitializeResponse is returned by the initialize method. */
 export interface InitializeResponse`,
 		`/** UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive. */

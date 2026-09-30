@@ -2570,6 +2570,11 @@ func (node *SourceFile) SpanMap() *spanmap.SpanMap {
 	return node.contentMapperInfo.SpanMap
 }
 
+// IsContentMapped reports whether this file was produced by a content mapper.
+func (node *SourceFile) IsContentMapped() bool {
+	return node.contentMapperInfo != nil
+}
+
 // ContentMapper returns the identity of the content mapper that produced this file, or "" if the file
 // was not produced by a content mapper (or the mapper did not identify itself).
 func (node *SourceFile) ContentMapper() string {
