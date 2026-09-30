@@ -63,6 +63,7 @@ import type {
     CleanBuildResponse,
     CompactSymbolReference,
     CompilerOptions,
+    CompletionPreferences,
     ConfiguredProjectId,
     CreateBuildOrchestratorResponse,
     CreateProgramOptions as ProtocolCreateProgramOptions,
@@ -109,6 +110,7 @@ import type {
     TypePropertyMethod,
     TypeResponse,
     TypesPropertyMethod,
+    UserPreferences,
 } from "../proto.ts";
 import {
     resolveFileName,
@@ -191,6 +193,7 @@ export type {
     CompletionEntry,
     CompletionInfo,
     CompletionOptions,
+    CompletionPreferences,
     ConditionalType,
     ConfiguredProjectId,
     CreateSourceFileOptions,
@@ -253,6 +256,7 @@ export type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UserPreferences,
 };
 
 export interface ModuleResolverOptions {

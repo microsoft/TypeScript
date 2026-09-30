@@ -485,11 +485,12 @@ func (r *Registry) GetCacheStats() *CacheStats {
 }
 
 type RegistryChange struct {
-	RequestedFile tspath.Path
-	OpenFiles     map[tspath.Path]string
-	Changed       collections.Set[lsproto.DocumentUri]
-	Created       collections.Set[lsproto.DocumentUri]
-	Deleted       collections.Set[lsproto.DocumentUri]
+	RequestedFile     tspath.Path
+	RequestedFileName string
+	OpenFiles         map[tspath.Path]string
+	Changed           collections.Set[lsproto.DocumentUri]
+	Created           collections.Set[lsproto.DocumentUri]
+	Deleted           collections.Set[lsproto.DocumentUri]
 	// RebuiltPrograms maps from project ID to:
 	//   - true: the program was rebuilt with a different set of file names
 	//   - false: the program was rebuilt but the set of file names is unchanged
@@ -554,12 +555,9 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 	start := time.Now()
 	neededProjects := make(map[ProjectID]struct{})
 	neededDirectories := make(map[tspath.Path]string)
-	for path, fileName := range change.OpenFiles {
-		if projectID, _ := b.host.GetDefaultProject(path); projectID != nil {
-			neededProjects[projectID] = struct{}{}
-		}
+	addNeededDirectories := func(path tspath.Path, fileName string) {
 		if tspath.IsDynamicFileName(fileName) {
-			continue
+			return
 		}
 		dir := fileName
 		dirPath := path
@@ -575,6 +573,15 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 			}
 			neededDirectories[dirPath] = dir
 		}
+	}
+	for path, fileName := range change.OpenFiles {
+		if projectID, _ := b.host.GetDefaultProject(path); projectID != nil {
+			neededProjects[projectID] = struct{}{}
+		}
+		if tspath.IsDynamicFileName(fileName) {
+			continue
+		}
+		addNeededDirectories(path, fileName)
 
 		if !b.specifierCache.Has(path) {
 			b.specifierCache.Set(path, &collections.SyncMap[tspath.Path, string]{})
@@ -582,6 +589,7 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 	}
 
 	if change.RequestedFile != "" {
+		addNeededDirectories(change.RequestedFile, change.RequestedFileName)
 		if projectID, _ := b.host.GetDefaultProject(change.RequestedFile); projectID != nil {
 			neededProjects[projectID] = struct{}{}
 		}

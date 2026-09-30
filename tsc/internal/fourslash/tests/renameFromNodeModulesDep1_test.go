@@ -27,8 +27,8 @@ export interface Foo {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToMarker(t, "okWithAlias")
-	f.VerifyRenameSucceeded(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue})
-	f.VerifyRenameFailed(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSFalse})
+	f.VerifyRenameSucceeded(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue})
+	f.VerifyRenameFailed(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSFalse})
 	f.GoToMarker(t, "notOk")
 	f.VerifyRenameFailed(t, nil /*preferences*/)
 }
