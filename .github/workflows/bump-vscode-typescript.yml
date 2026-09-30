@@ -60,6 +60,7 @@ jobs:
           npm version "$BUMP" \
             --workspace native-preview \
             --no-git-tag-version \
+            --package-lock-only
 
           packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
           lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"

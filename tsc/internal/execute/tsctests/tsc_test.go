@@ -1363,7 +1363,7 @@ func TestTscIncremental(t *testing.T) {
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "noEmit": true, "incremental": true}}`,
 				"/home/src/workspaces/project/repro.ts":      stringtestutil.Dedent(source),
-				tscLibPath + "/lib.es2025.full.d.ts":         libWithReadonlyArray,
+				tscLibPath + "/lib.es2026.full.d.ts":         libWithReadonlyArray,
 			},
 			edits: []*tscEdit{
 				{

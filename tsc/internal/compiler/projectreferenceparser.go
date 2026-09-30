@@ -18,10 +18,10 @@ type projectReferenceParseTask struct {
 
 func (t *projectReferenceParseTask) parse(projectReferenceParser *projectReferenceParser) {
 	loader := projectReferenceParser.loader
-	if tr := loader.opts.Tracing; tr != nil {
+	if tr := loader.tracing; tr != nil {
 		defer tr.Push(tracing.PhaseParse, "parseJsonSourceFileConfigFileContent", map[string]any{"path": t.configName}, false)()
 	}
-	t.resolved = loader.opts.Host.GetResolvedProjectReference(t.configName, loader.toPath(t.configName))
+	t.resolved = loader.host.GetResolvedProjectReference(t.configName, loader.toPath(t.configName))
 	if t.resolved == nil {
 		return
 	}
@@ -46,7 +46,6 @@ type projectReferenceParser struct {
 }
 
 func (p *projectReferenceParser) parse(tasks []*projectReferenceParseTask) {
-	p.loader.projectReferenceFileMapper.loader = p.loader
 	p.start(tasks)
 	p.wg.RunAndWait()
 	p.initMapper(tasks)
@@ -69,14 +68,12 @@ func (p *projectReferenceParser) start(tasks []*projectReferenceParseTask) {
 
 func (p *projectReferenceParser) initMapper(tasks []*projectReferenceParseTask) {
 	totalReferences := p.tasksByFileName.Size() + 1
-	p.loader.projectReferenceFileMapper.configToProjectReference = make(map[tspath.Path]*tsoptions.ParsedCommandLine, totalReferences)
-	p.loader.projectReferenceFileMapper.referencesInConfigFile = make(map[tspath.Path][]tspath.Path, totalReferences)
-	p.loader.projectReferenceFileMapper.sourceToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
-	p.loader.projectReferenceFileMapper.outputDtsToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
-	p.loader.projectReferenceFileMapper.referencesInConfigFile[p.loader.projectReferenceFileMapper.rootConfigPath()] = p.initMapperWorker(tasks, &collections.Set[*projectReferenceParseTask]{})
-	if p.loader.projectReferenceFileMapper.opts.canUseProjectReferenceSource() && len(p.loader.projectReferenceFileMapper.outputDtsToProjectReference) != 0 {
-		p.loader.projectReferenceFileMapper.host = newProjectReferenceDtsFakingHost(p.loader)
-	}
+	p.loader.projectReferences.configToProjectReference = make(map[tspath.Path]*tsoptions.ParsedCommandLine, totalReferences)
+	p.loader.projectReferences.referencesInConfigFile = make(map[tspath.Path][]tspath.Path, totalReferences)
+	p.loader.projectReferences.sourceToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
+	p.loader.projectReferences.outputDtsToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
+	p.loader.projectReferences.referencesInConfigFile[p.loader.projectReferences.rootConfigPath()] = p.initMapperWorker(tasks, &collections.Set[*projectReferenceParseTask]{})
+	p.loader.projectReferences.host = p.loader.projectReferences.resolutionHost(p.loader.host)
 }
 
 func (p *projectReferenceParser) initMapperWorker(tasks []*projectReferenceParseTask, seen *collections.Set[*projectReferenceParseTask]) []tspath.Path {
@@ -91,25 +88,25 @@ func (p *projectReferenceParser) initMapperWorker(tasks []*projectReferenceParse
 		if !seen.AddIfAbsent(task) {
 			continue
 		}
-		p.loader.projectReferenceFileMapper.configToProjectReference[path] = task.resolved
-		if task.resolved != nil && p.loader.projectReferenceFileMapper.opts.Config.ConfigFile != task.resolved.ConfigFile {
+		p.loader.projectReferences.configToProjectReference[path] = task.resolved
+		if task.resolved != nil && p.loader.projectReferences.config.ConfigFile != task.resolved.ConfigFile {
 			// Map current task's files first, before recursing into subtasks.
 			// This matches TypeScript's behavior where child project references
 			// overwrite parent entries when a file belongs to multiple projects.
-			maps.Copy(p.loader.projectReferenceFileMapper.sourceToProjectReference, task.resolved.SourceToProjectReference())
-			maps.Copy(p.loader.projectReferenceFileMapper.outputDtsToProjectReference, task.resolved.OutputDtsToProjectReference())
-			if p.loader.projectReferenceFileMapper.opts.canUseProjectReferenceSource() {
+			maps.Copy(p.loader.projectReferences.sourceToProjectReference, task.resolved.SourceToProjectReference())
+			maps.Copy(p.loader.projectReferences.outputDtsToProjectReference, task.resolved.OutputDtsToProjectReference())
+			if p.loader.projectReferences.useSourceOfProjectReference {
 				declDir := task.resolved.CompilerOptions().DeclarationDir
 				if declDir == "" {
 					declDir = task.resolved.CompilerOptions().OutDir
 				}
 				if declDir != "" {
-					p.loader.dtsDirectories.Add(p.loader.toPath(declDir))
+					p.loader.projectReferences.dtsDirectories.Add(p.loader.toPath(declDir))
 				}
 			}
 		}
 		referencesInConfig := p.initMapperWorker(task.subTasks, seen)
-		p.loader.projectReferenceFileMapper.referencesInConfigFile[path] = referencesInConfig
+		p.loader.projectReferences.referencesInConfigFile[path] = referencesInConfig
 	}
 	return results
 }
