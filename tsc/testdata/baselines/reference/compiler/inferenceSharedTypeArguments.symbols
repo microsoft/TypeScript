@@ -1,0 +1,856 @@
+//// [tests/cases/compiler/inferenceSharedTypeArguments.ts] ////
+
+=== inferenceSharedTypeArguments.ts ===
+type T1 = { p1: "a" } | { p1: "b"; p2?: unknown };
+>T1 : Symbol(T1, Decl(inferenceSharedTypeArguments.ts, 0, 0))
+>p1 : Symbol(p1, Decl(inferenceSharedTypeArguments.ts, 0, 11))
+>p1 : Symbol(p1, Decl(inferenceSharedTypeArguments.ts, 0, 25))
+>p2 : Symbol(p2, Decl(inferenceSharedTypeArguments.ts, 0, 34))
+
+type T2 = { p3: string };
+>T2 : Symbol(T2, Decl(inferenceSharedTypeArguments.ts, 0, 50))
+>p3 : Symbol(p3, Decl(inferenceSharedTypeArguments.ts, 1, 11))
+
+type T3 = { readonly p4: string; readonly p5: unknown };
+>T3 : Symbol(T3, Decl(inferenceSharedTypeArguments.ts, 1, 25))
+>p4 : Symbol(p4, Decl(inferenceSharedTypeArguments.ts, 2, 11))
+>p5 : Symbol(p5, Decl(inferenceSharedTypeArguments.ts, 2, 32))
+
+type T4<N1 extends string, N2> = { readonly p4: N1; readonly p5: N2 };
+>T4 : Symbol(T4, Decl(inferenceSharedTypeArguments.ts, 2, 56))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 3, 8))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 3, 26))
+>p4 : Symbol(p4, Decl(inferenceSharedTypeArguments.ts, 3, 34))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 3, 8))
+>p5 : Symbol(p5, Decl(inferenceSharedTypeArguments.ts, 3, 51))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 3, 26))
+
+type T5<N> = { p6: string; p7: boolean; p8: number; p9: string };
+>T5 : Symbol(T5, Decl(inferenceSharedTypeArguments.ts, 3, 70))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 4, 8))
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>p7 : Symbol(p7, Decl(inferenceSharedTypeArguments.ts, 4, 26))
+>p8 : Symbol(p8, Decl(inferenceSharedTypeArguments.ts, 4, 39))
+>p9 : Symbol(p9, Decl(inferenceSharedTypeArguments.ts, 4, 51))
+
+type T6<N> = N extends { f1: string } ? T5<N> : { p6: string; p7: boolean };
+>T6 : Symbol(T6, Decl(inferenceSharedTypeArguments.ts, 4, 65))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 5, 8))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 5, 8))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 5, 24))
+>T5 : Symbol(T5, Decl(inferenceSharedTypeArguments.ts, 3, 70))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 5, 8))
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 5, 49))
+>p7 : Symbol(p7, Decl(inferenceSharedTypeArguments.ts, 5, 61))
+
+type T7<N1 extends readonly T3[]> = T2 & {
+>T7 : Symbol(T7, Decl(inferenceSharedTypeArguments.ts, 5, 76))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 6, 8))
+>T3 : Symbol(T3, Decl(inferenceSharedTypeArguments.ts, 1, 25))
+>T2 : Symbol(T2, Decl(inferenceSharedTypeArguments.ts, 0, 50))
+
+    [N2 in N1[number] as N2["p4"] & string]?: T6<N2["p5"]>;
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 7, 5))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 6, 8))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 7, 5))
+>T6 : Symbol(T6, Decl(inferenceSharedTypeArguments.ts, 4, 65))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 7, 5))
+
+};
+type T8<N1 extends readonly T3[], N2 extends boolean> = T7<N1> &
+>T8 : Symbol(T8, Decl(inferenceSharedTypeArguments.ts, 8, 2))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 9, 8))
+>T3 : Symbol(T3, Decl(inferenceSharedTypeArguments.ts, 1, 25))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 9, 33))
+>T7 : Symbol(T7, Decl(inferenceSharedTypeArguments.ts, 5, 76))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 9, 8))
+
+    (N2 extends true ? { [x1: string]: unknown } : {});
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 9, 33))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 10, 26))
+
+type T9<N1 extends readonly T3[]> = {
+>T9 : Symbol(T9, Decl(inferenceSharedTypeArguments.ts, 10, 55))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 11, 8))
+>T3 : Symbol(T3, Decl(inferenceSharedTypeArguments.ts, 1, 25))
+
+    readonly [N2 in N1[number] as N2["p4"]]: unknown;
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 12, 14))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 11, 8))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 12, 14))
+
+};
+type T10<N1, N2, N3 extends Record<string, unknown>, N4 extends Record<string, T1>> = {
+>T10 : Symbol(T10, Decl(inferenceSharedTypeArguments.ts, 13, 2))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 14, 9))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 14, 12))
+>N3 : Symbol(N3, Decl(inferenceSharedTypeArguments.ts, 14, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>N4 : Symbol(N4, Decl(inferenceSharedTypeArguments.ts, 14, 52))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(inferenceSharedTypeArguments.ts, 0, 0))
+
+    p11: string;
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 14, 87))
+
+    f1: string;
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 15, 16))
+
+    p12?: (x1: N2) => N3;
+>p12 : Symbol(p12, Decl(inferenceSharedTypeArguments.ts, 16, 15))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 17, 11))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 14, 12))
+>N3 : Symbol(N3, Decl(inferenceSharedTypeArguments.ts, 14, 16))
+
+    p13?: N4;
+>p13 : Symbol(p13, Decl(inferenceSharedTypeArguments.ts, 17, 25))
+>N4 : Symbol(N4, Decl(inferenceSharedTypeArguments.ts, 14, 52))
+
+    p14?: (x1: N3, x2: N1) => readonly string[];
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 18, 13))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 19, 11))
+>N3 : Symbol(N3, Decl(inferenceSharedTypeArguments.ts, 14, 16))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 19, 18))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 14, 9))
+
+} & { [x1: string]: unknown };
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 20, 7))
+
+interface I1<
+>I1 : Symbol(I1, Decl(inferenceSharedTypeArguments.ts, 20, 30))
+
+    N1 extends readonly T3[] = readonly [],
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 22, 13))
+>T3 : Symbol(T3, Decl(inferenceSharedTypeArguments.ts, 1, 25))
+
+    N2 = {},
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 23, 43))
+
+    N3 extends boolean = false,
+>N3 : Symbol(N3, Decl(inferenceSharedTypeArguments.ts, 24, 12))
+
+    N4 extends boolean = false,
+>N4 : Symbol(N4, Decl(inferenceSharedTypeArguments.ts, 25, 31))
+
+    N5 extends readonly T3[] = readonly [],
+>N5 : Symbol(N5, Decl(inferenceSharedTypeArguments.ts, 26, 31))
+>T3 : Symbol(T3, Decl(inferenceSharedTypeArguments.ts, 1, 25))
+
+> {
+    readonly p15?: N3;
+>p15 : Symbol(I1.p15, Decl(inferenceSharedTypeArguments.ts, 28, 3))
+>N3 : Symbol(N3, Decl(inferenceSharedTypeArguments.ts, 24, 12))
+
+    readonly p16?: N4;
+>p16 : Symbol(I1.p16, Decl(inferenceSharedTypeArguments.ts, 29, 22))
+>N4 : Symbol(N4, Decl(inferenceSharedTypeArguments.ts, 25, 31))
+
+    readonly p17?: N5;
+>p17 : Symbol(I1.p17, Decl(inferenceSharedTypeArguments.ts, 30, 22))
+>N5 : Symbol(N5, Decl(inferenceSharedTypeArguments.ts, 26, 31))
+
+    f1<
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+
+        const N6 extends string,
+>N6 : Symbol(N6, Decl(inferenceSharedTypeArguments.ts, 32, 7))
+
+        const N7 extends Record<string, unknown> = {},
+>N7 : Symbol(N7, Decl(inferenceSharedTypeArguments.ts, 33, 32))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+        const N8 extends Record<string, T1> = {},
+>N8 : Symbol(N8, Decl(inferenceSharedTypeArguments.ts, 34, 54))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(inferenceSharedTypeArguments.ts, 0, 0))
+
+    >(
+        x1: N6,
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 36, 6))
+>N6 : Symbol(N6, Decl(inferenceSharedTypeArguments.ts, 32, 7))
+
+        x2: T10<T8<[...N1, ...N5], N4>, T9<N1>, N7, N8>,
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 37, 15))
+>T10 : Symbol(T10, Decl(inferenceSharedTypeArguments.ts, 13, 2))
+>T8 : Symbol(T8, Decl(inferenceSharedTypeArguments.ts, 8, 2))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 22, 13))
+>N5 : Symbol(N5, Decl(inferenceSharedTypeArguments.ts, 26, 31))
+>N4 : Symbol(N4, Decl(inferenceSharedTypeArguments.ts, 25, 31))
+>T9 : Symbol(T9, Decl(inferenceSharedTypeArguments.ts, 10, 55))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 22, 13))
+>N7 : Symbol(N7, Decl(inferenceSharedTypeArguments.ts, 33, 32))
+>N8 : Symbol(N8, Decl(inferenceSharedTypeArguments.ts, 34, 54))
+
+    ): I1<
+>I1 : Symbol(I1, Decl(inferenceSharedTypeArguments.ts, 20, 30))
+
+        [...N1, T4<N6, T10<T8<[...N1, ...N5], N4>, T9<N1>, N7, N8>>],
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 22, 13))
+>T4 : Symbol(T4, Decl(inferenceSharedTypeArguments.ts, 2, 56))
+>N6 : Symbol(N6, Decl(inferenceSharedTypeArguments.ts, 32, 7))
+>T10 : Symbol(T10, Decl(inferenceSharedTypeArguments.ts, 13, 2))
+>T8 : Symbol(T8, Decl(inferenceSharedTypeArguments.ts, 8, 2))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 22, 13))
+>N5 : Symbol(N5, Decl(inferenceSharedTypeArguments.ts, 26, 31))
+>N4 : Symbol(N4, Decl(inferenceSharedTypeArguments.ts, 25, 31))
+>T9 : Symbol(T9, Decl(inferenceSharedTypeArguments.ts, 10, 55))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 22, 13))
+>N7 : Symbol(N7, Decl(inferenceSharedTypeArguments.ts, 33, 32))
+>N8 : Symbol(N8, Decl(inferenceSharedTypeArguments.ts, 34, 54))
+
+        N2,
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 23, 43))
+
+        N3,
+>N3 : Symbol(N3, Decl(inferenceSharedTypeArguments.ts, 24, 12))
+
+        N4,
+>N4 : Symbol(N4, Decl(inferenceSharedTypeArguments.ts, 25, 31))
+
+        N5
+>N5 : Symbol(N5, Decl(inferenceSharedTypeArguments.ts, 26, 31))
+
+    >;
+}
+
+declare const x1: I1;
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 48, 13))
+>I1 : Symbol(I1, Decl(inferenceSharedTypeArguments.ts, 20, 30))
+
+const x2 = x1
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 49, 5))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s14", { p11: "14", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s15", { p11: "15", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s16", { p11: "16", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s17", { p11: "17", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s18", { p11: "18", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s19", { p11: "19", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s14", { p11: "14", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s15", { p11: "15", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s16", { p11: "16", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s17", { p11: "17", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s18", { p11: "18", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s14", { p11: "14", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s15", { p11: "15", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s16", { p11: "16", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s17", { p11: "17", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s14", { p11: "14", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s15", { p11: "15", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s16", { p11: "16", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s14", { p11: "14", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s15", { p11: "15", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s14", { p11: "14", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1("s2", { p11: "2", f1: "f", p14: () => [] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1("s1", { p11: "1", f1: "f", p14: () => [] })    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1    .f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 48, 13))
+
+    .f1("s1", { p11: "1", f1: "f", p14: () => [] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 50, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 50, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 50, 34))
+
+    .f1("s2", { p11: "2", f1: "f", p14: () => [] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 51, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 51, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 51, 34))
+
+    .f1("s3", { p11: "3", f1: "f", p13: { p6: { p1: "a" } }, p14: () => [] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 52, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 52, 25))
+>p13 : Symbol(p13, Decl(inferenceSharedTypeArguments.ts, 52, 34))
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 52, 41))
+>p1 : Symbol(p1, Decl(inferenceSharedTypeArguments.ts, 52, 47))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 52, 60))
+
+    .f1("s4", { p11: "4", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 53, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 53, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 53, 34))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 53, 41))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 53, 44))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 53, 44))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s5", { p11: "5", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 54, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 54, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 54, 34))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 54, 41))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 54, 44))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 54, 44))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s6", { p11: "6", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 55, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 55, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 55, 34))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 55, 41))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 55, 44))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 55, 44))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s7", { p11: "7", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 56, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 56, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 56, 34))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 56, 41))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 56, 44))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 56, 44))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s8", { p11: "8", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 57, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 57, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 57, 34))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 57, 41))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 57, 44))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 57, 44))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s9", { p11: "9", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 58, 15))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 58, 25))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 58, 34))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 58, 41))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 58, 44))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 58, 44))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s10", { p11: "10", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 59, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 59, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 59, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 59, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 59, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 59, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s11", { p11: "11", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 60, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 60, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 60, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 60, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 60, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 60, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s12", { p11: "12", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 61, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 61, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 61, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 61, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 61, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 61, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s13", { p11: "13", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 62, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 62, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 62, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 62, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 62, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 62, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s14", { p11: "14", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 63, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 63, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 63, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 63, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 63, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 63, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s15", { p11: "15", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 64, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 64, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 64, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 64, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 64, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 64, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s16", { p11: "16", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 65, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 65, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 65, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 65, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 65, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 65, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s17", { p11: "17", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 66, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 66, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 66, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 66, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 66, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 66, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s18", { p11: "18", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 67, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 67, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 67, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 67, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 67, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 67, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s19", { p11: "19", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] })
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 68, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 68, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 68, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 68, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 68, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 68, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+    .f1("s20", { p11: "20", f1: "f", p14: (x1, x2) => [String(x2.s3?.p6 ?? "")] });
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 69, 16))
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 69, 27))
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 69, 36))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 69, 43))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 69, 46))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 69, 46))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+x2.f1("s21", {
+>x2.f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 49, 5))
+>f1 : Symbol(I1.f1, Decl(inferenceSharedTypeArguments.ts, 31, 22))
+
+    p11: "21",
+>p11 : Symbol(p11, Decl(inferenceSharedTypeArguments.ts, 71, 14))
+
+    f1: "f",
+>f1 : Symbol(f1, Decl(inferenceSharedTypeArguments.ts, 72, 14))
+
+    p12: x1 => ({ p18: x1.s3, p19: x1.s20 }),
+>p12 : Symbol(p12, Decl(inferenceSharedTypeArguments.ts, 73, 12))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 74, 8))
+>p18 : Symbol(p18, Decl(inferenceSharedTypeArguments.ts, 74, 17))
+>x1.s3 : Symbol(s3)
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 74, 8))
+>s3 : Symbol(s3)
+>p19 : Symbol(p19, Decl(inferenceSharedTypeArguments.ts, 74, 29))
+>x1.s20 : Symbol(s20)
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 74, 8))
+>s20 : Symbol(s20)
+
+    p14: (x1, x2) => {
+>p14 : Symbol(p14, Decl(inferenceSharedTypeArguments.ts, 74, 45))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 75, 10))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 75, 13))
+
+        const x3: string | undefined = x2.s3?.p6;
+>x3 : Symbol(x3, Decl(inferenceSharedTypeArguments.ts, 76, 13))
+>x2.s3?.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 75, 13))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+        const x4: number | undefined = x2.s3?.p8;
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 77, 13))
+>x2.s3?.p8 : Symbol(p8, Decl(inferenceSharedTypeArguments.ts, 4, 39))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 75, 13))
+>s3 : Symbol(s3)
+>p8 : Symbol(p8, Decl(inferenceSharedTypeArguments.ts, 4, 39))
+
+        const x5: boolean | undefined = x2.s20?.p7;
+>x5 : Symbol(x5, Decl(inferenceSharedTypeArguments.ts, 78, 13))
+>x2.s20?.p7 : Symbol(p7, Decl(inferenceSharedTypeArguments.ts, 4, 26))
+>x2.s20 : Symbol(s20)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 75, 13))
+>s20 : Symbol(s20)
+>p7 : Symbol(p7, Decl(inferenceSharedTypeArguments.ts, 4, 26))
+
+        const x6: unknown = x1.p18;
+>x6 : Symbol(x6, Decl(inferenceSharedTypeArguments.ts, 79, 13))
+>x1.p18 : Symbol(p18, Decl(inferenceSharedTypeArguments.ts, 74, 17))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 75, 10))
+>p18 : Symbol(p18, Decl(inferenceSharedTypeArguments.ts, 74, 17))
+
+        const x7: number = x2.s3!.p6;
+>x7 : Symbol(x7, Decl(inferenceSharedTypeArguments.ts, 80, 13))
+>x2.s3!.p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+>x2.s3 : Symbol(s3)
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 75, 13))
+>s3 : Symbol(s3)
+>p6 : Symbol(p6, Decl(inferenceSharedTypeArguments.ts, 4, 14))
+
+        x2.s0;
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 75, 13))
+
+        x1.p0;
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 75, 10))
+
+        return [x3 ?? ""];
+>x3 : Symbol(x3, Decl(inferenceSharedTypeArguments.ts, 76, 13))
+
+    },
+    p20: { p21: true },
+>p20 : Symbol(p20, Decl(inferenceSharedTypeArguments.ts, 84, 6))
+>p21 : Symbol(p21, Decl(inferenceSharedTypeArguments.ts, 85, 10))
+
+});
+
+type T11<N = string> = { p22: N };
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 88, 9))
+>p22 : Symbol(p22, Decl(inferenceSharedTypeArguments.ts, 88, 24))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 88, 9))
+
+interface I2<N> { p22: N; }
+>I2 : Symbol(I2, Decl(inferenceSharedTypeArguments.ts, 88, 34))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 89, 13))
+>p22 : Symbol(I2.p22, Decl(inferenceSharedTypeArguments.ts, 89, 17))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 89, 13))
+
+type T12<N> = T11<T11<T11<T11<T11<T11<N>>>>>>;
+>T12 : Symbol(T12, Decl(inferenceSharedTypeArguments.ts, 89, 27))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 90, 9))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 90, 9))
+
+declare function f2<N>(x1: T11<N>): N;
+>f2 : Symbol(f2, Decl(inferenceSharedTypeArguments.ts, 90, 46))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 92, 20))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 92, 23))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 92, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 92, 20))
+
+declare function f3<N>(x1: I2<N>): N;
+>f3 : Symbol(f3, Decl(inferenceSharedTypeArguments.ts, 92, 38))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 93, 20))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 93, 23))
+>I2 : Symbol(I2, Decl(inferenceSharedTypeArguments.ts, 88, 34))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 93, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 93, 20))
+
+declare function f4<N>(x1: T12<N>): N;
+>f4 : Symbol(f4, Decl(inferenceSharedTypeArguments.ts, 93, 37))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 94, 20))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 94, 23))
+>T12 : Symbol(T12, Decl(inferenceSharedTypeArguments.ts, 89, 27))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 94, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 94, 20))
+
+declare const x3: T11;
+>x3 : Symbol(x3, Decl(inferenceSharedTypeArguments.ts, 95, 13))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+
+declare const x4: T11<number>;
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 96, 13))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+
+declare const x5: I2<number>;
+>x5 : Symbol(x5, Decl(inferenceSharedTypeArguments.ts, 97, 13))
+>I2 : Symbol(I2, Decl(inferenceSharedTypeArguments.ts, 88, 34))
+
+declare const x6: T12<number>;
+>x6 : Symbol(x6, Decl(inferenceSharedTypeArguments.ts, 98, 13))
+>T12 : Symbol(T12, Decl(inferenceSharedTypeArguments.ts, 89, 27))
+
+export const x7 = f2(x3);
+>x7 : Symbol(x7, Decl(inferenceSharedTypeArguments.ts, 100, 12))
+>f2 : Symbol(f2, Decl(inferenceSharedTypeArguments.ts, 90, 46))
+>x3 : Symbol(x3, Decl(inferenceSharedTypeArguments.ts, 95, 13))
+
+export const x8 = f2(x4);
+>x8 : Symbol(x8, Decl(inferenceSharedTypeArguments.ts, 101, 12))
+>f2 : Symbol(f2, Decl(inferenceSharedTypeArguments.ts, 90, 46))
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 96, 13))
+
+export const x9 = f3(x5);
+>x9 : Symbol(x9, Decl(inferenceSharedTypeArguments.ts, 102, 12))
+>f3 : Symbol(f3, Decl(inferenceSharedTypeArguments.ts, 92, 38))
+>x5 : Symbol(x5, Decl(inferenceSharedTypeArguments.ts, 97, 13))
+
+export const x10 = f4(x6);
+>x10 : Symbol(x10, Decl(inferenceSharedTypeArguments.ts, 103, 12))
+>f4 : Symbol(f4, Decl(inferenceSharedTypeArguments.ts, 93, 37))
+>x6 : Symbol(x6, Decl(inferenceSharedTypeArguments.ts, 98, 13))
+
+declare function f5<N>(x1: { p23: T11<N>; p24: T11<N>; p25: (x1: T11<N>) => void }): N;
+>f5 : Symbol(f5, Decl(inferenceSharedTypeArguments.ts, 103, 26))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 105, 20))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 105, 23))
+>p23 : Symbol(p23, Decl(inferenceSharedTypeArguments.ts, 105, 28))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 105, 20))
+>p24 : Symbol(p24, Decl(inferenceSharedTypeArguments.ts, 105, 41))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 105, 20))
+>p25 : Symbol(p25, Decl(inferenceSharedTypeArguments.ts, 105, 54))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 105, 61))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 105, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 105, 20))
+
+export const x11 = f5({ p23: x4, p24: x4, p25: (x1: T11<number | string>) => {} });
+>x11 : Symbol(x11, Decl(inferenceSharedTypeArguments.ts, 106, 12))
+>f5 : Symbol(f5, Decl(inferenceSharedTypeArguments.ts, 103, 26))
+>p23 : Symbol(p23, Decl(inferenceSharedTypeArguments.ts, 106, 23))
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 96, 13))
+>p24 : Symbol(p24, Decl(inferenceSharedTypeArguments.ts, 106, 32))
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 96, 13))
+>p25 : Symbol(p25, Decl(inferenceSharedTypeArguments.ts, 106, 41))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 106, 48))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+
+export function f6<N>(x1: T11<N>) {
+>f6 : Symbol(f6, Decl(inferenceSharedTypeArguments.ts, 106, 83))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 108, 19))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 108, 22))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 108, 19))
+
+    return f2(x1);
+>f2 : Symbol(f2, Decl(inferenceSharedTypeArguments.ts, 90, 46))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 108, 22))
+}
+
+declare function f7<N>(x1: T11<N> | N): N;
+>f7 : Symbol(f7, Decl(inferenceSharedTypeArguments.ts, 110, 1))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 112, 20))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 112, 23))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 112, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 112, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 112, 20))
+
+export const x12 = f7(x4);
+>x12 : Symbol(x12, Decl(inferenceSharedTypeArguments.ts, 113, 12))
+>f7 : Symbol(f7, Decl(inferenceSharedTypeArguments.ts, 110, 1))
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 96, 13))
+
+declare function f8<N>(x1: T11<N>, x2: T11<NoInfer<N>>): N;
+>f8 : Symbol(f8, Decl(inferenceSharedTypeArguments.ts, 113, 26))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 115, 20))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 115, 23))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 115, 20))
+>x2 : Symbol(x2, Decl(inferenceSharedTypeArguments.ts, 115, 34))
+>T11 : Symbol(T11, Decl(inferenceSharedTypeArguments.ts, 86, 3))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 115, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 115, 20))
+
+export const x13 = f8(x4, { p22: 1 });
+>x13 : Symbol(x13, Decl(inferenceSharedTypeArguments.ts, 116, 12))
+>f8 : Symbol(f8, Decl(inferenceSharedTypeArguments.ts, 113, 26))
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 96, 13))
+>p22 : Symbol(p22, Decl(inferenceSharedTypeArguments.ts, 116, 27))
+
+f8(x4, { p22: "x" });
+>f8 : Symbol(f8, Decl(inferenceSharedTypeArguments.ts, 113, 26))
+>x4 : Symbol(x4, Decl(inferenceSharedTypeArguments.ts, 96, 13))
+>p22 : Symbol(p22, Decl(inferenceSharedTypeArguments.ts, 117, 8))
+
+interface I3<N> { p22: N; p26?: I3<N>; }
+>I3 : Symbol(I3, Decl(inferenceSharedTypeArguments.ts, 117, 21))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 119, 13))
+>p22 : Symbol(I3.p22, Decl(inferenceSharedTypeArguments.ts, 119, 17))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 119, 13))
+>p26 : Symbol(I3.p26, Decl(inferenceSharedTypeArguments.ts, 119, 25))
+>I3 : Symbol(I3, Decl(inferenceSharedTypeArguments.ts, 117, 21))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 119, 13))
+
+declare function f9<N>(x1: I3<N>): N;
+>f9 : Symbol(f9, Decl(inferenceSharedTypeArguments.ts, 119, 40))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 120, 20))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 120, 23))
+>I3 : Symbol(I3, Decl(inferenceSharedTypeArguments.ts, 117, 21))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 120, 20))
+>N : Symbol(N, Decl(inferenceSharedTypeArguments.ts, 120, 20))
+
+declare const x14: I3<number>;
+>x14 : Symbol(x14, Decl(inferenceSharedTypeArguments.ts, 121, 13))
+>I3 : Symbol(I3, Decl(inferenceSharedTypeArguments.ts, 117, 21))
+
+export const x15 = f9(x14);
+>x15 : Symbol(x15, Decl(inferenceSharedTypeArguments.ts, 122, 12))
+>f9 : Symbol(f9, Decl(inferenceSharedTypeArguments.ts, 119, 40))
+>x14 : Symbol(x14, Decl(inferenceSharedTypeArguments.ts, 121, 13))
+
+const x16: string = x8;
+>x16 : Symbol(x16, Decl(inferenceSharedTypeArguments.ts, 124, 5))
+>x8 : Symbol(x8, Decl(inferenceSharedTypeArguments.ts, 101, 12))
+
+const x17: string = x9;
+>x17 : Symbol(x17, Decl(inferenceSharedTypeArguments.ts, 125, 5))
+>x9 : Symbol(x9, Decl(inferenceSharedTypeArguments.ts, 102, 12))
+
+const x18: string = x10;
+>x18 : Symbol(x18, Decl(inferenceSharedTypeArguments.ts, 126, 5))
+>x10 : Symbol(x10, Decl(inferenceSharedTypeArguments.ts, 103, 12))
+
+const x19: string = x12;
+>x19 : Symbol(x19, Decl(inferenceSharedTypeArguments.ts, 127, 5))
+>x12 : Symbol(x12, Decl(inferenceSharedTypeArguments.ts, 113, 12))
+
+type T13<N1, N2> = [N1];
+>T13 : Symbol(T13, Decl(inferenceSharedTypeArguments.ts, 127, 24))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 129, 9))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 129, 12))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 129, 9))
+
+type T14<N1, N2> = [N1];
+>T14 : Symbol(T14, Decl(inferenceSharedTypeArguments.ts, 129, 24))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 130, 9))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 130, 12))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 130, 9))
+
+declare function f10<N1, N2>(x1: T13<N1, N2>): N2;
+>f10 : Symbol(f10, Decl(inferenceSharedTypeArguments.ts, 130, 24))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 131, 21))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 131, 24))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 131, 29))
+>T13 : Symbol(T13, Decl(inferenceSharedTypeArguments.ts, 127, 24))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 131, 21))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 131, 24))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 131, 24))
+
+declare function f11<N1, N2>(x1: T13<N1, N2> & number): N2;
+>f11 : Symbol(f11, Decl(inferenceSharedTypeArguments.ts, 131, 50))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 132, 21))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 132, 24))
+>x1 : Symbol(x1, Decl(inferenceSharedTypeArguments.ts, 132, 29))
+>T13 : Symbol(T13, Decl(inferenceSharedTypeArguments.ts, 127, 24))
+>N1 : Symbol(N1, Decl(inferenceSharedTypeArguments.ts, 132, 21))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 132, 24))
+>N2 : Symbol(N2, Decl(inferenceSharedTypeArguments.ts, 132, 24))
+
+declare const x20: T13<string, boolean>;
+>x20 : Symbol(x20, Decl(inferenceSharedTypeArguments.ts, 133, 13))
+>T13 : Symbol(T13, Decl(inferenceSharedTypeArguments.ts, 127, 24))
+
+declare const x21: T14<string, boolean>;
+>x21 : Symbol(x21, Decl(inferenceSharedTypeArguments.ts, 134, 13))
+>T14 : Symbol(T14, Decl(inferenceSharedTypeArguments.ts, 129, 24))
+
+declare const x22: T13<string, boolean> & number;
+>x22 : Symbol(x22, Decl(inferenceSharedTypeArguments.ts, 135, 13))
+>T13 : Symbol(T13, Decl(inferenceSharedTypeArguments.ts, 127, 24))
+
+export const x23 = f10(x20);
+>x23 : Symbol(x23, Decl(inferenceSharedTypeArguments.ts, 137, 12))
+>f10 : Symbol(f10, Decl(inferenceSharedTypeArguments.ts, 130, 24))
+>x20 : Symbol(x20, Decl(inferenceSharedTypeArguments.ts, 133, 13))
+
+export const x24 = f10(x21);
+>x24 : Symbol(x24, Decl(inferenceSharedTypeArguments.ts, 138, 12))
+>f10 : Symbol(f10, Decl(inferenceSharedTypeArguments.ts, 130, 24))
+>x21 : Symbol(x21, Decl(inferenceSharedTypeArguments.ts, 134, 13))
+
+export const x25 = f11(x22);
+>x25 : Symbol(x25, Decl(inferenceSharedTypeArguments.ts, 139, 12))
+>f11 : Symbol(f11, Decl(inferenceSharedTypeArguments.ts, 131, 50))
+>x22 : Symbol(x22, Decl(inferenceSharedTypeArguments.ts, 135, 13))
+
+const x26: boolean = x23;
+>x26 : Symbol(x26, Decl(inferenceSharedTypeArguments.ts, 141, 5))
+>x23 : Symbol(x23, Decl(inferenceSharedTypeArguments.ts, 137, 12))
+
+const x27: boolean = x24;
+>x27 : Symbol(x27, Decl(inferenceSharedTypeArguments.ts, 142, 5))
+>x24 : Symbol(x24, Decl(inferenceSharedTypeArguments.ts, 138, 12))
+
+const x28: boolean = x25;
+>x28 : Symbol(x28, Decl(inferenceSharedTypeArguments.ts, 143, 5))
+>x25 : Symbol(x25, Decl(inferenceSharedTypeArguments.ts, 139, 12))
+

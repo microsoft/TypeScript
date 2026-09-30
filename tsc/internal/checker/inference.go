@@ -13,6 +13,14 @@ type InferenceKey struct {
 	t TypeId
 }
 
+type typeArgumentInferenceKey struct {
+	source, target           TypeId
+	priority                 InferencePriority
+	propagationType          *Type
+	context                  InferenceKey
+	contravariant, bivariant bool
+}
+
 type InferenceState struct {
 	inferences        []*InferenceInfo
 	originalSource    *Type
@@ -24,6 +32,7 @@ type InferenceState struct {
 	expandingFlags    ExpandingFlags
 	propagationType   *Type
 	visited           map[InferenceKey]InferencePriority
+	typeArgumentCache map[typeArgumentInferenceKey]InferencePriority
 	sourceStack       []*Type
 	targetStack       []*Type
 	next              *InferenceState
@@ -40,12 +49,14 @@ func (c *Checker) getInferenceState() *InferenceState {
 
 func (c *Checker) putInferenceState(n *InferenceState) {
 	clear(n.visited)
+	clear(n.typeArgumentCache)
 	*n = InferenceState{
-		inferences:  n.inferences[:0],
-		visited:     n.visited,
-		sourceStack: n.sourceStack[:0],
-		targetStack: n.targetStack[:0],
-		next:        c.freeinferenceState,
+		inferences:        n.inferences[:0],
+		visited:           n.visited,
+		typeArgumentCache: n.typeArgumentCache,
+		sourceStack:       n.sourceStack[:0],
+		targetStack:       n.targetStack[:0],
+		next:              c.freeinferenceState,
 	}
 	c.freeinferenceState = n
 }
@@ -78,14 +89,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	}
 	if source.alias != nil && target.alias != nil && source.alias.symbol == target.alias.symbol {
 		if len(source.alias.typeArguments) != 0 || len(target.alias.typeArguments) != 0 {
-			// Source and target are types originating in the same generic type alias declaration.
-			// Simply infer from source type arguments to target type arguments, with defaults applied.
-			params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
-			minParams := c.getMinTypeArgumentCount(params)
-			nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
-			sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
-			targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
-			c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
+			c.inferFromTypeArguments(n, source, target)
 		}
 		// And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
 		return
@@ -231,7 +235,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	switch {
 	case source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.AsTypeReference().target == target.AsTypeReference().target || c.isArrayType(source) && c.isArrayType(target)) && !(source.AsTypeReference().node != nil && target.AsTypeReference().node != nil):
 		// If source and target are references to the same generic type, infer from type arguments
-		c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.AsTypeReference().target))
+		c.inferFromTypeArguments(n, source, target)
 	case source.flags&TypeFlagsIndex != 0 && target.flags&TypeFlagsIndex != 0:
 		c.inferFromContravariantTypes(n, source.AsIndexType().target, target.AsIndexType().target)
 	case (isLiteralType(source) || source.flags&TypeFlagsString != 0) && target.flags&TypeFlagsIndex != 0:
@@ -281,7 +285,41 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	}
 }
 
-func (c *Checker) inferFromTypeArguments(n *InferenceState, sourceTypes []*Type, targetTypes []*Type, variances []VarianceFlags) {
+func (c *Checker) inferFromTypeArguments(n *InferenceState, source, target *Type) {
+	context := InferenceKey{}
+	if i := len(n.sourceStack) - 1; i >= 0 {
+		context = InferenceKey{s: n.sourceStack[i].id, t: n.targetStack[i].id}
+	}
+	key := typeArgumentInferenceKey{
+		source: source.id, target: target.id, priority: n.priority,
+		propagationType: n.propagationType, context: context,
+		contravariant: n.contravariant, bivariant: n.bivariant,
+	}
+	if status, ok := n.typeArgumentCache[key]; ok {
+		n.inferencePriority = min(n.inferencePriority, status)
+		return
+	}
+	if n.typeArgumentCache == nil {
+		n.typeArgumentCache = make(map[typeArgumentInferenceKey]InferencePriority)
+	}
+	n.typeArgumentCache[key] = InferencePriorityCircularity
+	saveInferencePriority := n.inferencePriority
+	n.inferencePriority = InferencePriorityMaxValue
+	if source.alias != nil && target.alias != nil && source.alias.symbol == target.alias.symbol {
+		params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
+		minParams := c.getMinTypeArgumentCount(params)
+		nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
+		sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
+		targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
+		c.inferFromTypeArgumentsWorker(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
+	} else {
+		c.inferFromTypeArgumentsWorker(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.AsTypeReference().target))
+	}
+	n.typeArgumentCache[key] = n.inferencePriority
+	n.inferencePriority = min(n.inferencePriority, saveInferencePriority)
+}
+
+func (c *Checker) inferFromTypeArgumentsWorker(n *InferenceState, sourceTypes []*Type, targetTypes []*Type, variances []VarianceFlags) {
 	for i := range min(len(sourceTypes), len(targetTypes)) {
 		if i < len(variances) && variances[i]&VarianceFlagsVarianceMask == VarianceFlagsContravariant {
 			c.inferFromContravariantTypes(n, sourceTypes[i], targetTypes[i])
@@ -699,7 +737,7 @@ func (c *Checker) inferFromGenericMappedTypes(n *InferenceState, source *Type, t
 func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *Type) {
 	if source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.Target() == target.Target() || c.isArrayType(source) && c.isArrayType(target)) {
 		// If source and target are references to the same generic type, infer from type arguments
-		c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.Target()))
+		c.inferFromTypeArgumentsWorker(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.Target()))
 		return
 	}
 	if c.isGenericMappedType(source) && c.isGenericMappedType(target) {
