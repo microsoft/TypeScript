@@ -44,77 +44,72 @@ extends:
           - job: Build
             displayName: Build and sign vscode-typescript
             timeoutInMinutes: 90
+            pool:
+              name: AzurePipelines-EO
+              image: 1ESPT-Ubuntu22.04
+              os: linux
 
             templateContext:
+              mb:
+                signing:
+                  enabled: true
+                  signWithProd: true
+                  signType: real
+                  zipSources: false
+                mbpresteps:
+                  - checkout: self
+                    clean: true
+                    submodules: false
+                    fetchDepth: 0
+                    fetchFilter: blob:none
+                    fetchTags: false
+
+                  - bash: |
+                      set -euo pipefail
+                      git fetch origin main --no-tags
+                      if ! git merge-base --is-ancestor "$BUILD_SOURCEVERSION" refs/remotes/origin/main; then
+                        echo "Release tags must point to commits already merged into main." >&2
+                        exit 1
+                      fi
+
+                      tag="${BUILD_SOURCEBRANCH#refs/tags/}"
+                      case "$tag" in
+                        vscode-typescript/v*) ;;
+                        *)
+                          echo "Expected a vscode-typescript/v* tag, got $BUILD_SOURCEBRANCH." >&2
+                          exit 1
+                          ;;
+                      esac
+
+                      tagVersion="${tag#vscode-typescript/v}"
+                      packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
+                      lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
+                      if [ "$tagVersion" != "$packageVersion" ]; then
+                        echo "Tag version $tagVersion does not match package version $packageVersion." >&2
+                        exit 1
+                      fi
+                      if [ "$packageVersion" != "$lockVersion" ]; then
+                        echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
+                        exit 1
+                      fi
+                      if ! [[ "$packageVersion" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+                        echo "Extension version must be a stable three-component version." >&2
+                        exit 1
+                      fi
+
+                      echo "##vso[build.updatebuildnumber]vscode-typescript-$packageVersion"
+                    displayName: Validate release tag
+
+                  - task: UseDotNet@2
+                    displayName: Use .NET Core SDK 8.0.x
+                    inputs:
+                      version: 8.0.x
               outputs:
                 - output: pipelineArtifact
                   targetPath: $(Build.ArtifactStagingDirectory)/vsix
                   artifactName: vsix
 
             steps:
-              - checkout: self
-                clean: true
-                submodules: false
-                fetchDepth: 0
-                fetchFilter: blob:none
-                fetchTags: false
-
-              - bash: |
-                  set -euo pipefail
-                  git fetch origin main --no-tags
-                  if ! git merge-base --is-ancestor "$BUILD_SOURCEVERSION" refs/remotes/origin/main; then
-                    echo "Release tags must point to commits already merged into main." >&2
-                    exit 1
-                  fi
-
-                  tag="${BUILD_SOURCEBRANCH#refs/tags/}"
-                  case "$tag" in
-                    vscode-typescript/v*) ;;
-                    *)
-                      echo "Expected a vscode-typescript/v* tag, got $BUILD_SOURCEBRANCH." >&2
-                      exit 1
-                      ;;
-                  esac
-
-                  tagVersion="${tag#vscode-typescript/v}"
-                  packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
-                  lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
-                  if [ "$tagVersion" != "$packageVersion" ]; then
-                    echo "Tag version $tagVersion does not match package version $packageVersion." >&2
-                    exit 1
-                  fi
-                  if [ "$packageVersion" != "$lockVersion" ]; then
-                    echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
-                    exit 1
-                  fi
-                  if ! [[ "$packageVersion" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
-                    echo "Extension version must be a stable three-component version." >&2
-                    exit 1
-                  fi
-
-                  echo "##vso[build.updatebuildnumber]vscode-typescript-$packageVersion"
-                displayName: Validate release tag
-
-              - task: NuGetAuthenticate@1
-                displayName: '🔩 NuGet Authenticate'
-              - task: UsePythonVersion@0
-                displayName: Use Python 3.11
-                inputs:
-                  versionSpec: 3.11
-              - task: UseDotNet@2
-                displayName: Use .NET Core SDK 8.0.x
-                inputs:
-                  version: 8.0.x
-              - task: MicroBuildSigningPlugin@4
-                displayName: '🔩 Install Signing Plugin'
-                inputs:
-                  signType: real
-                  azureSubscription: MicroBuild Signing Task (DevDiv)
-                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
-                  zipSources: false
-                env:
-                  MicroBuildOutputFolderOverride: $(Agent.TempDirectory)
-
               - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
 
               - bash: npm test -w native-preview
