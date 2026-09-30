@@ -1663,7 +1663,7 @@ export const options: OptionsModel = {
         {
             name: "listEmittedFiles",
             type: "Tristate",
-            // Unlike the other excluded flags, this belongs to Compiler Diagnostics.
+            // File listings are excluded from showConfig despite belonging to Compiler Diagnostics.
             showConfig: false,
             internal: true,
             declarations: [
@@ -1678,6 +1678,7 @@ export const options: OptionsModel = {
         {
             name: "listFiles",
             type: "Tristate",
+            showConfig: false,
             internal: true,
             declarations: [
                 {

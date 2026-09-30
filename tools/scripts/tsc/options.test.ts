@@ -212,9 +212,10 @@ test("compiler options preserve the internal fields comment", () => {
 
 test("showConfig exclusions are applied by the generated serializer", () => {
     const source = generateOptions().get("tsc/internal/tsoptions/options_generated.go")!.split("func serializeCompilerOptions(")[1];
-    for (const name of ["showConfig", "configFile", "configFilePath", "help", "init", "listFilesOnly", "listEmittedFiles", "project", "build", "version"]) {
+    for (const name of ["showConfig", "configFile", "configFilePath", "help", "init", "listFiles", "listFilesOnly", "listEmittedFiles", "project", "build", "version"]) {
         assert(!source.includes(`result.Set("${name}",`), name);
     }
+    assert(source.includes('result.Set("explainFiles",'));
 });
 
 test("build options preserve the compiler options parsing comment", () => {
