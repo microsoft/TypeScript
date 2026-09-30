@@ -2050,6 +2050,9 @@ func IsInExpressionContext(node *Node) bool {
 		return parent.Expression() == node && !IsPartOfTypeNode(parent)
 	case KindShorthandPropertyAssignment:
 		return parent.AsShorthandPropertyAssignment().ObjectAssignmentInitializer == node
+	case KindFunctionExpression, KindClassExpression:
+		// The name of a function or class expression is a declaration name, not an expression.
+		return parent.Name() != node
 	default:
 		return IsExpressionNode(parent)
 	}
