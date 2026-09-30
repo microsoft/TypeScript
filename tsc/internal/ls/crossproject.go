@@ -242,6 +242,14 @@ func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocument
 				return true
 			})
 
+			// An inferred project may reference files whose configured project was
+			// unloaded when an unrelated file was opened. Load it before expanding the search.
+			if defaultLs.GetProgram().Options().ConfigFilePath == "" && !tspath.IsDeclarationFileName(defaultDefinition.TextDocumentURI().FileName()) {
+				if _, errProjects := orchestrator.GetProjectsForFile(ctx, defaultDefinition.TextDocumentURI()); errProjects != nil {
+					return resp, errProjects
+				}
+			}
+
 			// Load more projects based on default definition found
 			for loadedProject := range orchestrator.GetProjectsLoadingProjectTree(ctx, &requestedProjectTrees) {
 				if ctx.Err() != nil {
