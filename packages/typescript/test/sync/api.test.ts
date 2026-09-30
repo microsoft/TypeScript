@@ -27,6 +27,8 @@ import {
     isJSDocParameterTag,
     isModuleDeclaration,
     isNamedImports,
+    isObjectLiteralExpression,
+    isPropertyAssignment,
     isReturnStatement,
     isShorthandPropertyAssignment,
     isStringLiteral,
@@ -41,11 +43,13 @@ import {
     type NodeArray,
     NodeFlags,
     type Path,
+    type SourceFile,
     SyntaxKind,
     tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
 } from "@typescript/typescript/unstable/ast";
 import {
+    cloneNode,
     createArrayTypeNode,
     createFunctionTypeNode,
     createIdentifier,
@@ -79,6 +83,7 @@ import {
     type DocumentIdentifier,
     EmitOnly,
     type FreshableType,
+    getSymbol,
     type ImportAdderAction,
     type IndexedAccessType,
     IndexKind,
@@ -124,6 +129,11 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import {
+    getNodeId,
+    parseNodeHandle,
+    RemoteSourceFile,
+} from "../../src/api/node/node.ts";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import {
     areTestsFiltered,
@@ -481,6 +491,163 @@ describe("API", { concurrency }, () => {
         retained.dispose();
         using retainedAfterDispose = api.createSourceFile("/component.tsx", sourceText);
         assert.strictEqual(retainedAfterDispose.sourceFile, retainedAgain.sourceFile);
+    });
+
+    test("remote declarations lazily fetch and cache binder symbols", () => {
+        const sourceText = "function present() {}\nimport {} from './missing';";
+        using api = spawnAPI({
+            "/symbols.ts": sourceText,
+        });
+        const snapshot = api.createSnapshot({ openFiles: ["/symbols.ts"] });
+        const project = snapshot.getProjects()[0];
+        const sourceFile = project.program.getSourceFile("/symbols.ts");
+        assert.ok(sourceFile);
+        const declaration = sourceFile.statements[0];
+        const withoutSymbol = sourceFile.statements[1];
+        assert.ok(isFunctionDeclaration(declaration));
+        assert.ok(isImportDeclaration(withoutSymbol));
+        const checkerSymbol = project.checker.getSymbolAtPosition("/symbols.ts", sourceText.indexOf("present"));
+        assert.ok(checkerSymbol);
+
+        const client = (api as unknown as {
+            client: { apiRequest(method: string, params: unknown): unknown; };
+        }).client;
+        const apiRequest = client.apiRequest.bind(client);
+        let symbolRequests = 0;
+        client.apiRequest = (method, params) => {
+            if (method === "getSymbolOfDeclaration") symbolRequests++;
+            return apiRequest(method, params);
+        };
+
+        const first = getSymbol(declaration);
+        const concurrent = api.getSymbol(declaration);
+        assert.ok(first);
+        assert.strictEqual(first, checkerSymbol);
+        assert.strictEqual(concurrent, first);
+        assert.strictEqual(getSymbol(declaration), first);
+        assert.equal(symbolRequests, 1);
+
+        symbolRequests = 0;
+        const absent = getSymbol(withoutSymbol);
+        const concurrentAbsent = api.getSymbol(withoutSymbol);
+        assert.equal(absent, undefined);
+        assert.equal(concurrentAbsent, undefined);
+        assert.equal(getSymbol(withoutSymbol), undefined);
+        assert.equal(symbolRequests, 1);
+
+        snapshot.dispose();
+    });
+
+    test("getSymbol returns undefined for synthesized declarations", () => {
+        using api = spawnAPI();
+        const local = createVariableDeclaration(createIdentifier("local"), undefined, undefined, undefined);
+        assert.equal(getSymbol(local), undefined);
+        assert.equal(api.getSymbol(local), undefined);
+
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        assert.ok(getSymbol(declaration));
+        const shallowClone = cloneNode(declaration);
+        const deepClone = getSynthesizedDeepClone(declaration);
+        assert.equal(getSymbol(shallowClone), undefined);
+        assert.equal(api.getSymbol(deepClone), undefined);
+        assert.equal("getSymbol" in declaration, false);
+    });
+
+    test("source files own separate declaration result and request caches", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}\nimport {} from './missing';");
+        const file = lease.sourceFile;
+        assert.ok(file instanceof RemoteSourceFile);
+        const cache = file.symbolCache;
+        assert.ok(cache);
+        const declaration = cast(file.statements[0], isFunctionDeclaration);
+        const index = parseNodeHandle(getNodeId(declaration)).index;
+        const request = getSymbol(declaration);
+        const symbol = request;
+        assert.ok(symbol);
+        assert.strictEqual(cache.symbolsByDeclarationNodeIndex.get(index), symbol);
+        assert.strictEqual(cache.symbolsById.get(symbol.reference.id), symbol);
+        assert.equal(cache.declarationSymbolRequests.has(index), false);
+        const withoutSymbol = cast(file.statements[1], isImportDeclaration);
+        const absentIndex = parseNodeHandle(getNodeId(withoutSymbol)).index;
+        assert.equal(getSymbol(withoutSymbol), undefined);
+        assert.ok(cache.symbolsByDeclarationNodeIndex.has(absentIndex));
+        assert.equal(cache.symbolsByDeclarationNodeIndex.get(absentIndex), undefined);
+        assert.equal(cache.declarationSymbolRequests.has(absentIndex), false);
+        api.clearSourceFileCache();
+        assert.strictEqual(file.symbolCache, cache);
+    });
+
+    test("standalone getSymbol delegates to the source file's API", context => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        assert.ok(lease.sourceFile instanceof RemoteSourceFile);
+        assert.strictEqual(lease.sourceFile.api, api);
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        // Materialize the sync API's lazy method before mocking it.
+        void api.getSymbol;
+        const method = context.mock.method(api, "getSymbol");
+        const symbol = getSymbol(declaration);
+        assert.ok(symbol);
+        assert.equal(method.mock.callCount(), 1);
+        assert.strictEqual(api.getSymbol(declaration), symbol);
+    });
+
+    test("declaration symbol results survive releasing the last lease", () => {
+        using api = spawnAPI();
+        const lease = api.createSourceFile("/symbols.ts", "function present() {}\nimport {} from './missing';");
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        const withoutSymbol = cast(lease.sourceFile.statements[1], isImportDeclaration);
+        const symbol = getSymbol(declaration);
+        assert.ok(symbol);
+        assert.equal(getSymbol(withoutSymbol), undefined);
+
+        lease.dispose();
+        assert.strictEqual(getSymbol(declaration), symbol);
+        assert.equal(getSymbol(withoutSymbol), undefined);
+    });
+
+    test("declaration symbols can be fetched after clearing the client cache", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function first() {} function second() {}");
+        const first = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        const second = cast(lease.sourceFile.statements[1], isFunctionDeclaration);
+        const firstSymbol = getSymbol(first);
+        assert.ok(firstSymbol);
+
+        api.clearSourceFileCache();
+        const secondSymbol = getSymbol(second);
+        assert.ok(secondSymbol);
+        assert.equal(secondSymbol.name, "second");
+        assert.strictEqual(getSymbol(first), firstSymbol);
+
+        using retained = api.retainSourceFile(lease.sourceFile);
+        assert.strictEqual(retained.sourceFile, lease.sourceFile);
+        assert.strictEqual(getSymbol(first), firstSymbol);
+        assert.strictEqual(getSymbol(second), secondSymbol);
+    });
+
+    test("declaration lookup rejects unavailable and recreated files without caching failures", () => {
+        using api = spawnAPI();
+        const text = "function present() {}";
+        const lease = api.createSourceFile("/symbols.ts", text);
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        assert.ok(lease.sourceFile instanceof RemoteSourceFile);
+        const cache = lease.sourceFile.symbolCache;
+        assert.ok(cache);
+        const index = parseNodeHandle(getNodeId(declaration)).index;
+        lease.dispose();
+
+        assert.throws(() => getSymbol(declaration), /source file is not available/);
+        assert.equal(cache.symbolsByDeclarationNodeIndex.has(index), false);
+        assert.equal(cache.declarationSymbolRequests.has(index), false);
+        using recreated = api.createSourceFile("/symbols.ts", text);
+        assert.throws(() => getSymbol(declaration), /source file descriptor no longer identifies/);
+        assert.equal(cache.symbolsByDeclarationNodeIndex.has(index), false);
+        assert.equal(cache.declarationSymbolRequests.has(index), false);
+        const recreatedDeclaration = cast(recreated.sourceFile.statements[0], isFunctionDeclaration);
+        assert.equal((getSymbol(recreatedDeclaration))?.name, "present");
     });
 
     test("createSourceFile can be used with a compatible program", () => {
@@ -3466,6 +3633,7 @@ export const value = 1;
         assert.ok(declaration);
         assert.equal(declaration.getSourceFile().fileName, "/src/mod.ts");
         assert.equal((api.getTimingInfo()).totals.sourceFilesFetched, 1);
+        assert.equal((getSymbol(cast(declaration, isClassDeclaration)))?.name, "Animal");
     });
 
     test("file-owned symbol properties do not require a snapshot or project", () => {
@@ -3477,6 +3645,10 @@ export const value = 1;
         using retained = api.retainSourceFile(sourceFile);
         const animal = project.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
         assert.ok(animal);
+        const storage = animal["storage"];
+        assert.ok("owner" in storage);
+        assert.strictEqual(storage.owner.api, api);
+        assert.deepEqual(Object.keys(storage.owner).sort(), ["api", "record"]);
 
         snapshot.dispose();
         const members = animal.getMembers();
@@ -7986,6 +8158,10 @@ describe("Program - diagnostics", { concurrency }, () => {
         assert.ok(rootConfig);
         assert.equal(rootConfig.fileName, "/tsconfig.json");
         assert.equal(project.program.getSourceFile("/tsconfig.json"), undefined);
+        const configObject = cast(cast(rootConfig.statements[0], isExpressionStatement).expression, isObjectLiteralExpression);
+        const configProperty = cast(configObject.properties[0], isPropertyAssignment);
+        assert.equal(getSymbol(configProperty), undefined);
+        assert.equal(api.getSymbol(configProperty), undefined);
 
         fs.writeFile!("/tsconfig.base.json", `{ "compilerOptions": { "strict": false } }`);
         const extendedConfig = project.program.getConfigSourceFile("/tsconfig.base.json");

@@ -26,6 +26,7 @@ export interface APIMethodInfo {
     releaseSourceFile: APIMethod<ReleaseSourceFileParams, unknown>;
     retainSourceFile: APIMethod<RetainSourceFileParams, RetainSourceFileResponse>;
     getCachedSourceFile: APIMethod<GetCachedSourceFileParams, SourceFileResponse>;
+    getSymbolOfDeclaration: APIMethod<GetSymbolOfDeclarationParams, SymbolResponse | null>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
@@ -241,6 +242,22 @@ export interface SourceFileResponse {
     data: string;
 }
 
+export interface GetSymbolOfDeclarationParams {
+    file: SourceFileDescriptor;
+    index: number;
+}
+
+export interface SymbolResponse {
+    reference: SymbolReference;
+    name: string;
+    flags: number;
+    checkFlags: number;
+    declarations?: string[] | undefined;
+    valueDeclaration?: string | undefined;
+    parent?: CompactSymbolReference | undefined;
+    exportSymbol?: CompactSymbolReference | undefined;
+}
+
 export interface BatchRequestsParams {
     requests: readonly BatchRequest[] | null;
     continuationToken?: string | undefined;
@@ -441,17 +458,6 @@ export interface GetSymbolAtPositionParams {
     project: ProjectId;
     file: DocumentIdentifier;
     position: number;
-}
-
-export interface SymbolResponse {
-    reference: SymbolReference;
-    name: string;
-    flags: number;
-    checkFlags: number;
-    declarations?: string[] | undefined;
-    valueDeclaration?: string | undefined;
-    parent?: CompactSymbolReference | undefined;
-    exportSymbol?: CompactSymbolReference | undefined;
 }
 
 export interface GetSymbolsAtPositionsParams {
@@ -1104,6 +1110,22 @@ export interface SourceFileDescriptor {
     nodeId: string;
 }
 
+/** SymbolReference identifies a symbol and its server-resolvable owner. */
+export interface SymbolReference extends SymbolOwner {
+    id: number;
+}
+
+/**
+ * CompactSymbolReference is embedded in other responses. It identifies a cached
+ * symbol without repeating its owning file's full descriptor: File is the owning source file's
+ * node ID, or empty for a symbol owned by the response's snapshot. When the client has not cached
+ * the symbol, it fetches a full SymbolResponse through the corresponding property method.
+ */
+export interface CompactSymbolReference {
+    id: number;
+    file?: string | undefined;
+}
+
 export interface BatchRequest {
     method:
         | "batchRequests"
@@ -1214,6 +1236,7 @@ export interface BatchRequest {
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
+        | "getSymbolOfDeclaration"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"
         | "getSymbolsAtLocations"
@@ -1391,6 +1414,7 @@ export interface BatchResponse {
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
+        | "getSymbolOfDeclaration"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"
         | "getSymbolsAtLocations"
@@ -1718,22 +1742,6 @@ export interface TranspileOptions {
     reportDiagnostics?: boolean | undefined;
 }
 
-/** SymbolReference identifies a symbol and its server-resolvable owner. */
-export interface SymbolReference extends SymbolOwner {
-    id: number;
-}
-
-/**
- * CompactSymbolReference is embedded in other responses. It identifies a cached
- * symbol without repeating its owning file's full descriptor: File is the owning source file's
- * node ID, or empty for a symbol owned by the response's snapshot. When the client has not cached
- * the symbol, it fetches a full SymbolResponse through the corresponding property method.
- */
-export interface CompactSymbolReference {
-    id: number;
-    file?: string | undefined;
-}
-
 export interface PackageId {
     name: string;
     subModuleName: string;
@@ -1773,6 +1781,13 @@ export interface EmitOutputFile {
     fileName: string;
     text: string;
     sourceFileName?: string | undefined;
+}
+
+export interface SymbolOwner {
+    kind: SymbolOwnerKind;
+    file?: SourceFileDescriptor | undefined;
+    snapshot?: number | undefined;
+    project?: ProjectId | undefined;
 }
 
 export interface CreateSnapshotProgramParams {
@@ -1832,13 +1847,6 @@ export interface ModuleResolutionEntry {
     containingDirectory?: DocumentIdentifier | undefined;
     resolutionMode?: ResolutionMode | undefined;
     result: StaticModuleResolution;
-}
-
-export interface SymbolOwner {
-    kind: SymbolOwnerKind;
-    file?: SourceFileDescriptor | undefined;
-    snapshot?: number | undefined;
-    project?: ProjectId | undefined;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */

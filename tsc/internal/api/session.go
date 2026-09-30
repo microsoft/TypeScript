@@ -894,6 +894,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleRetainSourceFile(parsed.(*RetainSourceFileParams))
 	case string(MethodGetCachedSourceFile):
 		return s.handleGetCachedSourceFile(parsed.(*GetCachedSourceFileParams))
+	case string(MethodGetSymbolOfDeclaration):
+		return s.handleGetSymbolOfDeclaration(parsed.(*GetSymbolOfDeclarationParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
 	case string(MethodCreateSnapshot):
@@ -2083,6 +2085,29 @@ func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (
 	}
 	defer lease.Release()
 	return s.encodeSourceFileResponse(lease.SourceFile())
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationParams) (*SymbolResponse, error) {
+	lease, err := s.acquireCachedSourceFile(params.File)
+	if err != nil {
+		return nil, err
+	}
+	defer lease.Release()
+
+	table := encoder.GetNodeIndexTable(lease.SourceFile())
+	if params.Index == 0 || int(params.Index) >= len(table.Nodes) {
+		return nil, fmt.Errorf("%w: declaration node index %d is out of range", ErrClientError, params.Index)
+	}
+	node := table.Nodes[params.Index]
+	if node == nil || !ast.IsDeclaration(node) {
+		return nil, fmt.Errorf("%w: node index %d is not a declaration", ErrClientError, params.Index)
+	}
+	symbol := node.Symbol()
+	if symbol == nil {
+		return nil, nil
+	}
+	return newFileSymbolResponse(symbol), nil
 }
 
 // acquireCachedSourceFile holds a reference to the exact ordinary cached AST identified by a
