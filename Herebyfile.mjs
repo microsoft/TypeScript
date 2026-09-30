@@ -1604,6 +1604,14 @@ function runCleanSignTempDirectory() {
 let signCount = 0;
 
 /**
+ * @param {string} value
+ */
+function escapeMsbuildXml(value) {
+    return value.replaceAll("%", "%25").replaceAll("$", "%24").replaceAll("@", "%40").replaceAll(";", "%3B")
+        .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+}
+
+/**
  * @typedef {{
  *   SignFileRecordList: {
  *     SignFileList: { SrcPath: string; DstPath: string | null }[];
@@ -1615,8 +1623,7 @@ let signCount = 0;
  * @param {DDSignFileList} filelist
  */
 async function sign(filelist, unchangedOutputOkay = false) {
-    let data = JSON.stringify(filelist, undefined, 4);
-    console.log("filelist:", data);
+    console.log("filelist:", JSON.stringify(filelist, undefined, 4));
 
     if (!process.env.MBSIGN_APPFOLDER) {
         console.log(styleText("yellow", "Faking signing because MBSIGN_APPFOLDER is not set."));
@@ -1659,6 +1666,7 @@ async function sign(filelist, unchangedOutputOkay = false) {
     }
 
     const signingWorkaround = true;
+    let signingFilelist = filelist;
 
     /** @type {{ source: string; target: string }[]} */
     const signingWorkaroundFiles = [];
@@ -1699,8 +1707,8 @@ async function sign(filelist, unchangedOutputOkay = false) {
             }),
         };
 
-        data = JSON.stringify(newFileList, undefined, 4);
-        console.log("new filelist:", data);
+        signingFilelist = newFileList;
+        console.log("new filelist:", JSON.stringify(signingFilelist, undefined, 4));
     }
 
     /** @type {Map<string, string>} */
@@ -1724,16 +1732,40 @@ async function sign(filelist, unchangedOutputOkay = false) {
     }
 
     const tmp = await getSignTempDir();
-    const filelistPath = path.resolve(tmp, `signing-filelist-${signCount++}.json`);
-    await fs.promises.writeFile(filelistPath, data);
+    const propsPath = path.resolve(tmp, `signing-items-${signCount++}.props`);
+    const signingItems = signingFilelist.SignFileRecordList.flatMap(record => record.SignFileList.map(file => ({ path: file.SrcPath, cert: record.Certs, macAppName: record.MacAppName })));
+    const items = signingItems.map(({ path: filePath, cert, macAppName }) =>
+        `    <FilesToSign Include="${escapeMsbuildXml(filePath)}">
+      <Authenticode>${escapeMsbuildXml(cert)}</Authenticode>
+      <StrongName>None</StrongName>${
+            macAppName ? `
+      <MacAppName>${escapeMsbuildXml(macAppName)}</MacAppName>` : ""
+        }
+    </FilesToSign>`
+    ).join("\n");
+    await fs.promises.writeFile(
+        propsPath,
+        `<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+${items}
+  </ItemGroup>
+</Project>
+`,
+    );
 
     try {
-        const dll = path.join(process.env.MBSIGN_APPFOLDER, "DDSignFiles.dll");
-        const filelistFlag = `/filelist:${filelistPath}`;
-        await run("dotnet", [dll, "--", filelistFlag]);
+        await run("dotnet", [
+            "build",
+            path.resolve("tools/signing/Sign.csproj"),
+            "--target:AfterBuild",
+            "-p:SignType=real",
+            `-p:SignFilesDir=${path.resolve("built")}`,
+            `-p:FilesToSignPropsFile=${propsPath}`,
+            `-p:MicroBuildOverridePluginDirectory=${path.dirname(path.dirname(process.env.MBSIGN_APPFOLDER))}`,
+        ]);
     }
     finally {
-        await fs.promises.unlink(filelistPath);
+        await fs.promises.unlink(propsPath);
     }
 
     if (signingWorkaround) {
