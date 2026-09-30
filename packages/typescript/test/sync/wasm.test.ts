@@ -274,11 +274,16 @@ describe("API over WebAssembly", () => {
             /TypeScript WASM callbacks cannot close the same API transport/,
         );
         Reflect.set(transport, "inCallback", false);
+        transport.registerCallback("retained", () => "");
         api.close();
+        assert.deepStrictEqual(Reflect.get(transport, "callbackNames"), new Set());
 
         const secondTransport = new WasmTransport({ instance, cwd: "/" });
         const second = new SyncAPI({ transport: secondTransport });
         assert.strictEqual(secondTransport.requestSync("echo", "recreated"), "recreated");
+        secondTransport.registerCallback("retained", () => "");
+        transport.unregisterCallback("retained");
+        assert.deepStrictEqual(Reflect.get(secondTransport, "callbackNames"), new Set(["retained"]));
         second.close();
 
         const asyncTransport = new WasmTransport({ instance, cwd: "/" });

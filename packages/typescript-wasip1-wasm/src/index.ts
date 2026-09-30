@@ -54,6 +54,7 @@ export class WasmTransport {
     private requestPointer = 0;
     private closed = false;
     private inCallback = false;
+    private readonly callbackNames = new Set<string>();
 
     constructor(options: WasmTransportOptions) {
         this.instance = options.instance;
@@ -126,9 +127,11 @@ export class WasmTransport {
                 this.inCallback = false;
             }
         });
+        this.callbackNames.add(name);
     }
 
     unregisterCallback(name: string): void {
+        if (!this.callbackNames.delete(name)) return;
         unregisterWasmCallback(this.instance, name);
     }
 
@@ -174,6 +177,10 @@ export class WasmTransport {
             this.exports.close_session();
         }
         finally {
+            for (const name of this.callbackNames) {
+                unregisterWasmCallback(this.instance, name);
+            }
+            this.callbackNames.clear();
             setWasmFileSystem(this.instance, undefined);
         }
     }
