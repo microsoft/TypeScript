@@ -231,7 +231,7 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
 		},
 		{
-			subScenario: "Parse watch interval option",
+			subScenario: "Reject removed watch interval option",
 			files: FileMap{
 				"/home/src/workspaces/project/first.ts": `export const a = 1`,
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
@@ -245,7 +245,7 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},
 		{
-			subScenario:     "Parse watch interval option without tsconfig.json",
+			subScenario:     "Reject removed watch interval option without tsconfig.json",
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},
 		{
@@ -1101,9 +1101,6 @@ func TestTscExtends(t *testing.T) {
 						"paths": {
 							"@myscope/*": ["${configDir}/types/*"],
 						},
-					},
-					"watchOptions": {
-						"excludeFiles": ["${configDir}/main.ts"],
 					},
 				}`),
 				"/home/src/projects/myproject/tsconfig.json": stringtestutil.Dedent(`

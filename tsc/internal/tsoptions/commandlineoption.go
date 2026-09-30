@@ -68,7 +68,6 @@ type extraValidation string
 
 const (
 	extraValidationNone   extraValidation = ""
-	extraValidationSpec   extraValidation = "spec"
 	extraValidationLocale extraValidation = "locale"
 )
 

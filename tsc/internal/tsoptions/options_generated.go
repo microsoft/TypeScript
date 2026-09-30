@@ -316,36 +316,6 @@ func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
 	return &core.TypeAcquisition{}
 }
 
-func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*ast.Diagnostic {
-	if allOptions == nil {
-		return nil
-	}
-
-	switch key {
-	case "watchInterval":
-		allOptions.Interval = parseNumber(value)
-	case "watchFile":
-		if value != nil {
-			allOptions.FileKind = value.(core.WatchFileKind)
-		}
-	case "watchDirectory":
-		if value != nil {
-			allOptions.DirectoryKind = value.(core.WatchDirectoryKind)
-		}
-	case "fallbackPolling":
-		if value != nil {
-			allOptions.FallbackPolling = value.(core.PollingKind)
-		}
-	case "synchronousWatchDirectory":
-		allOptions.SyncWatchDir = ParseTristate(value)
-	case "excludeDirectories":
-		allOptions.ExcludeDir = ParseStringArray(value)
-	case "excludeFiles":
-		allOptions.ExcludeFiles = ParseStringArray(value)
-	}
-	return nil
-}
-
 func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisition) []*ast.Diagnostic {
 	if value == nil {
 		return nil

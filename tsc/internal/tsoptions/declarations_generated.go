@@ -1158,54 +1158,6 @@ var optionsForCompiler = []*CommandLineOption{
 	},
 }
 
-var OptionsForWatch = []*CommandLineOption{
-	{
-		Name:     "watchInterval",
-		Kind:     CommandLineOptionTypeNumber,
-		Category: diagnostics.Watch_and_Build_Modes,
-	},
-	{
-		Name:                    "watchFile",
-		Kind:                    CommandLineOptionTypeEnum,
-		Category:                diagnostics.Watch_and_Build_Modes,
-		Description:             diagnostics.Specify_how_the_TypeScript_watch_mode_works,
-		DefaultValueDescription: core.WatchFileKindUseFsEvents,
-	},
-	{
-		Name:                    "watchDirectory",
-		Kind:                    CommandLineOptionTypeEnum,
-		Category:                diagnostics.Watch_and_Build_Modes,
-		Description:             diagnostics.Specify_how_directories_are_watched_on_systems_that_lack_recursive_file_watching_functionality,
-		DefaultValueDescription: core.WatchDirectoryKindUseFsEvents,
-	},
-	{
-		Name:                    "fallbackPolling",
-		Kind:                    CommandLineOptionTypeEnum,
-		Category:                diagnostics.Watch_and_Build_Modes,
-		Description:             diagnostics.Specify_what_approach_the_watcher_should_use_if_the_system_runs_out_of_native_file_watchers,
-		DefaultValueDescription: core.PollingKindPriorityInterval,
-	},
-	{
-		Name:                    "synchronousWatchDirectory",
-		Kind:                    CommandLineOptionTypeBoolean,
-		Category:                diagnostics.Watch_and_Build_Modes,
-		Description:             diagnostics.Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
-		DefaultValueDescription: false,
-	},
-	{
-		Name:        "excludeDirectories",
-		Kind:        CommandLineOptionTypeList,
-		Category:    diagnostics.Watch_and_Build_Modes,
-		Description: diagnostics.Remove_a_list_of_directories_from_the_watch_process,
-	},
-	{
-		Name:        "excludeFiles",
-		Kind:        CommandLineOptionTypeList,
-		Category:    diagnostics.Watch_and_Build_Modes,
-		Description: diagnostics.Remove_a_list_of_files_from_the_watch_mode_s_processing,
-	},
-}
-
 var typeAcquisitionDecls = []*CommandLineOption{
 	{
 		Name:                    "enable",
@@ -1282,18 +1234,6 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 	"extends": {
 		Name: "extends",
 		Kind: CommandLineOptionTypeString,
-	},
-	"excludeDirectories": {
-		Name:            "excludeDirectory",
-		Kind:            CommandLineOptionTypeString,
-		IsFilePath:      true,
-		extraValidation: extraValidationSpec,
-	},
-	"excludeFiles": {
-		Name:            "excludeFile",
-		Kind:            CommandLineOptionTypeString,
-		IsFilePath:      true,
-		extraValidation: extraValidationSpec,
 	},
 	"libFiles": {
 		Name: "libFiles",
@@ -1601,29 +1541,6 @@ var newLineOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[
 	{Key: "lf", Value: core.NewLineKindLF},
 })
 
-var watchFileEnumMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
-	{Key: "fixedpollinginterval", Value: core.WatchFileKindFixedPollingInterval},
-	{Key: "prioritypollinginterval", Value: core.WatchFileKindPriorityPollingInterval},
-	{Key: "dynamicprioritypolling", Value: core.WatchFileKindDynamicPriorityPolling},
-	{Key: "fixedchunksizepolling", Value: core.WatchFileKindFixedChunkSizePolling},
-	{Key: "usefsevents", Value: core.WatchFileKindUseFsEvents},
-	{Key: "usefseventsonparentdirectory", Value: core.WatchFileKindUseFsEventsOnParentDirectory},
-})
-
-var watchDirectoryEnumMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
-	{Key: "usefsevents", Value: core.WatchDirectoryKindUseFsEvents},
-	{Key: "fixedpollinginterval", Value: core.WatchDirectoryKindFixedPollingInterval},
-	{Key: "dynamicprioritypolling", Value: core.WatchDirectoryKindDynamicPriorityPolling},
-	{Key: "fixedchunksizepolling", Value: core.WatchDirectoryKindFixedChunkSizePolling},
-})
-
-var fallbackEnumMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
-	{Key: "fixedinterval", Value: core.PollingKindFixedInterval},
-	{Key: "priorityinterval", Value: core.PollingKindPriorityInterval},
-	{Key: "dynamicpriority", Value: core.PollingKindDynamicPriority},
-	{Key: "fixedchunksize", Value: core.PollingKindFixedChunkSize},
-})
-
 var commandLineOptionEnumMap = map[string]*collections.OrderedMap[string, any]{
 	"lib":              LibMap,
 	"moduleResolution": moduleResolutionOptionMap,
@@ -1632,9 +1549,6 @@ var commandLineOptionEnumMap = map[string]*collections.OrderedMap[string, any]{
 	"moduleDetection":  moduleDetectionOptionMap,
 	"jsx":              jsxOptionMap,
 	"newLine":          newLineOptionMap,
-	"watchFile":        watchFileEnumMap,
-	"watchDirectory":   watchDirectoryEnumMap,
-	"fallbackPolling":  fallbackEnumMap,
 }
 
 var commandLineOptionDeprecated = map[string]*collections.Set[string]{

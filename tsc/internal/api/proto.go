@@ -1030,33 +1030,8 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *Conf
 		ProjectReferences: parsedCommandLine.ProjectReferences(),
 		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
 		CompileOnSave:     compileOnSave,
-		Raw:               toProtocolJSONValue(parsedCommandLine.Raw),
+		Raw:               parsedCommandLine.Raw,
 		Errors:            errors,
-	}
-}
-
-func toProtocolJSONValue(value any) any {
-	switch value := value.(type) {
-	case core.WatchFileKind:
-		return int(value) - 1
-	case core.WatchDirectoryKind:
-		return int(value) - 1
-	case core.PollingKind:
-		return int(value) - 1
-	case *collections.OrderedMap[string, any]:
-		result := collections.NewOrderedMapWithSizeHint[string, any](value.Size())
-		for key, child := range value.Entries() {
-			result.Set(key, toProtocolJSONValue(child))
-		}
-		return result
-	case []any:
-		result := make([]any, len(value))
-		for i, child := range value {
-			result[i] = toProtocolJSONValue(child)
-		}
-		return result
-	default:
-		return value
 	}
 }
 

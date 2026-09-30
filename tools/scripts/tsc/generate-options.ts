@@ -82,7 +82,7 @@ export function validateOptions(model: OptionsModel): void {
             assert.equal(typeof option.jsconfigDefault, expected, `Invalid jsconfig default: ${option.name}`);
         }
     }
-    for (const group of [model.watchOptions, model.typeAcquisition, model.buildOptions]) {
+    for (const group of [model.typeAcquisition, model.buildOptions]) {
         const fields = group.flatMap(option => option.field ? [option.field.name] : []);
         assert.equal(new Set(fields).size, fields.length, "Duplicate stored option field");
         for (const option of group) {
@@ -94,7 +94,7 @@ export function validateOptions(model: OptionsModel): void {
         orderByName(compiler.filter(declaration => declaration.group === group), model.declarationOrder[group], group);
     }
     orderByName(model.buildOptions.filter(option => option.field), model.buildOptionFieldOrder, "BuildOptions fields");
-    const declarations = [...compiler, ...model.watchOptions, ...model.typeAcquisition, ...model.buildOptions, ...model.rootOptions, ...Object.values(model.elements)];
+    const declarations = [...compiler, ...model.typeAcquisition, ...model.buildOptions, ...model.rootOptions, ...Object.values(model.elements)];
     for (const declaration of declarations) {
         if (declaration.kind === "Enum") {
             assert(model.enumMaps[declaration.name], `Missing enum map: ${declaration.name}`);
@@ -104,7 +104,7 @@ export function validateOptions(model: OptionsModel): void {
         }
         for (const value of Object.values(declaration)) {
             if (typeof value === "object" && value !== null && "go" in value) {
-                assert(/^(?:core|diagnostics)\.[A-Za-z_]\w*$|^extraValidation(?:Spec|Locale|None)$/.test(value.go), `Invalid Go reference: ${value.go}`);
+                assert(/^(?:core|diagnostics)\.[A-Za-z_]\w*$|^extraValidation(?:Locale|None)$/.test(value.go), `Invalid Go reference: ${value.go}`);
             }
         }
     }
@@ -180,12 +180,11 @@ function optionsEquality(name: string, fields: StoredDeclaration["field"][]): st
 `;
 }
 
-function storedOptions(name: string, declarations: StoredDeclaration[], omitZero: boolean): string {
+function storedOptions(name: string, declarations: StoredDeclaration[]): string {
     return `type ${name} struct {
 ${name === "BuildOptions" ? "_ noCopy\n" : ""}
-${declarations.map(option => `${option.field.comment ? "\n" + option.field.comment.split("\n").map(line => line ? "// " + line : "").join("\n") + "\n" : ""}${option.field.name} ${option.field.type} \`json:"${option.name}${omitZero ? ",omitzero" : ""}"\``).join("\n")}
+${declarations.map(option => `${option.field.comment ? "\n" + option.field.comment.split("\n").map(line => line ? "// " + line : "").join("\n") + "\n" : ""}${option.field.name} ${option.field.type} \`json:"${option.name},omitzero"\``).join("\n")}
 }
-${name === "WatchOptions" ? "\n// Equals compares stored watch options, preserving nil versus empty collections.\n" + optionsEquality(name, declarations.map(option => option.field)) : ""}
 `;
 }
 
@@ -424,7 +423,6 @@ function declarations(): string {
     const groups = ["commonOptionsWithBuild", "optionsForCompiler"] as const;
     const arrays: [string, Declaration[]][] = [
         ...groups.map(group => [group, orderByName(all.filter(declaration => declaration.group === group), options.declarationOrder[group], group)] as [string, Declaration[]]),
-        ["OptionsForWatch", options.watchOptions],
         ["typeAcquisitionDecls", options.typeAcquisition],
     ];
     return `var OptionsDeclarations = slices.Concat(commonOptionsWithBuild, optionsForCompiler)
@@ -551,19 +549,16 @@ func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
 `;
 }
 
-function storedParser(name: string, declarations: StoredDeclaration[], guardNull: boolean): string {
+function storedParser(name: string, declarations: StoredDeclaration[]): string {
     return `func Parse${name}(key string, value any, allOptions *core.${name}) []*ast.Diagnostic {
-    ${guardNull ? "if value == nil { return nil }" : ""}
+    if value == nil { return nil }
     if allOptions == nil { return nil }
     ${name === "BuildOptions" ? "if option := BuildNameMap.Get(key); option != nil { key = option.Name }" : ""}
     switch key {
     ${
         declarations.map(option => {
             const stored: CompilerOption = { name: option.name, goName: option.field.name, type: option.field.type };
-            const assignment = option.kind === "Enum"
-                ? `if value != nil { allOptions.${option.field.name} = value.(core.${option.field.type}) }`
-                : parserAssignment(stored);
-            return `case ${JSON.stringify(option.name)}:\n${assignment}`;
+            return `case ${JSON.stringify(option.name)}:\n${parserAssignment(stored)}`;
         }).join("\n")
     }
     }
@@ -591,9 +586,8 @@ import (
 
 ${coreOptions()}
 ${numericEnums()}
-${storedOptions("WatchOptions", options.watchOptions, false)}
-${storedOptions("TypeAcquisition", options.typeAcquisition, true)}
-${storedOptions("BuildOptions", orderByName(buildOptions, options.buildOptionFieldOrder, "BuildOptions fields"), true)}
+${storedOptions("TypeAcquisition", options.typeAcquisition)}
+${storedOptions("BuildOptions", orderByName(buildOptions, options.buildOptionFieldOrder, "BuildOptions fields"))}
 `,
         ],
         ["tsc/internal/transpile/options_generated.go", transpileOptions()],
@@ -628,9 +622,8 @@ import (
 )
 
 ${parser()}
-${storedParser("WatchOptions", options.watchOptions, false)}
-${storedParser("TypeAcquisition", options.typeAcquisition, true)}
-${storedParser("BuildOptions", buildOptions, true)}
+${storedParser("TypeAcquisition", options.typeAcquisition)}
+${storedParser("BuildOptions", buildOptions)}
 ${generateOptionComparisons()}
 ${generateBuildInfoOptions()}
 ${mergeCompilerOptions()}

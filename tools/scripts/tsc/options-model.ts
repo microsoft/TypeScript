@@ -29,10 +29,7 @@ export type CompilerOptionType =
     | "ModuleResolutionKind"
     | "ModuleDetectionKind"
     | "NewLineKind"
-    | "ScriptTarget"
-    | "WatchFileKind"
-    | "WatchDirectoryKind"
-    | "PollingKind";
+    | "ScriptTarget";
 
 export interface DeclarationMetadata {
     comment?: string;
@@ -130,7 +127,6 @@ export interface OptionsModel {
     /** Removed options retained only in configuration schemas, always deprecated. */
     schemaOnlyOptions: SchemaOnlyOption[];
     declarationOrder: Record<DeclarationGroup, string[]>;
-    watchOptions: StoredDeclaration[];
     typeAcquisition: StoredDeclaration[];
     buildOptions: (Declaration & { field?: StoredDeclaration["field"]; })[];
     buildOptionFieldOrder: string[];

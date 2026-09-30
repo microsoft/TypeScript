@@ -9,7 +9,6 @@ import (
 
 type ParsedOptions struct {
 	CompilerOptions *core.CompilerOptions `json:"compilerOptions"`
-	WatchOptions    *core.WatchOptions    `json:"watchOptions"`
 	TypeAcquisition *core.TypeAcquisition `json:"typeAcquisition"`
 
 	FileNames         []string                 `json:"fileNames"`
@@ -26,7 +25,6 @@ func (p *ParsedOptions) Equals(other *ParsedOptions) bool {
 		return false
 	}
 	if !p.CompilerOptions.Equals(other.CompilerOptions) ||
-		!p.WatchOptions.Equals(other.WatchOptions) ||
 		!p.TypeAcquisition.Equals(other.TypeAcquisition) {
 		return false
 	}

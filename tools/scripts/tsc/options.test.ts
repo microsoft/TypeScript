@@ -138,6 +138,13 @@ test("option generation is deterministic", () => {
     assert.deepEqual(generateOptions(), generateOptions());
 });
 
+test("unused watch settings are not generated or advertised", () => {
+    for (const [file, content] of generateOptions()) {
+        assert.doesNotMatch(content, /WatchOptions|WatchFileKind|WatchDirectoryKind|PollingKind|"watchOptions"|"watchInterval"|"watchFile"|"watchDirectory"|"fallbackPolling"|"synchronousWatchDirectory"|"excludeDirectories"|"excludeFiles"/, file);
+    }
+    assert(options.compilerOptions.some(option => option.name === "watch"));
+});
+
 test("generated Go options are grouped by package and responsibility", () => {
     assert.deepEqual([...generateOptions().keys()].filter(file => file.endsWith(".go")), [
         "tsc/internal/core/options_generated.go",
@@ -260,9 +267,8 @@ test("schema compiler properties are config-visible declarations plus schema-onl
         return declaration && !declaration.isCommandLineOnly && declaration.category?.go !== "diagnostics.Command_line_Options";
     }).map(option => option.name);
     assert.deepEqual(Object.keys(schema.definitions.compilerOptions.properties), [...expected, ...options.schemaOnlyOptions.map(option => option.name)]);
-    assert.deepEqual(Object.keys(schema.definitions.watchOptions.properties), options.watchOptions.map(option => option.name));
     assert.deepEqual(Object.keys(schema.definitions.typeAcquisition.properties), options.typeAcquisition.map(option => option.name));
-    assert.deepEqual(Object.keys(schema.properties).filter(name => name !== "$schema" && name !== "watchOptions"), options.rootOptions.map(option => option.name));
+    assert.deepEqual(Object.keys(schema.properties).filter(name => name !== "$schema"), options.rootOptions.map(option => option.name));
 });
 
 test("schemas retain historical options as deprecated without restoring native support", () => {
@@ -386,7 +392,7 @@ function accepts(schema: JSONSchema, value: unknown, root: JSONSchema): boolean 
 test("root option documentation is outside draft-07 references", () => {
     for (const kind of ["tsconfig", "jsconfig"] as const) {
         const schema = generateConfigSchema(kind);
-        for (const name of ["compilerOptions", "watchOptions", "typeAcquisition"]) {
+        for (const name of ["compilerOptions", "typeAcquisition"]) {
             const property = schema.properties[name];
             assert.equal(property.$ref, undefined, name);
             assert.deepEqual(property.allOf, [{ $ref: `#/definitions/${name}` }]);
@@ -399,13 +405,12 @@ test("root option documentation is outside draft-07 references", () => {
 test("schemas accept representative valid configs and reject malformed configs", () => {
     const valid = [
         {},
-        { compilerOptions: null, files: null, include: null, exclude: null, references: null, typeAcquisition: null, watchOptions: null },
+        { compilerOptions: null, files: null, include: null, exclude: null, references: null, typeAcquisition: null },
         { compilerOptions: { strict: null, target: null, paths: null, types: null, maxNodeModuleJsDepth: null } },
         { extends: "./base.json", files: [] },
         { extends: ["./base.json", "some-package/tsconfig.json"], references: [{ path: "../project", circular: true }] },
         { compilerOptions: { target: "ESNext", module: "NodeNext", moduleResolution: "BUNDLER", jsx: "React-JSX", newLine: "LF" } },
         { compilerOptions: { paths: { "@/*": ["src/*"] }, plugins: [{ name: "some-plugin", customSetting: true }], moduleSuffixes: ["", ".native"] } },
-        { watchOptions: { watchFile: "useFsEvents", excludeFiles: ["**/generated/*"], watchInterval: 2000 } },
         { typeAcquisition: { enable: true, include: ["node"], exclude: [] } },
         { contentMappers: [{ package: "mapper", extensions: [".vue"], options: { customSetting: true } }] },
         { "$schema": "./tsconfig.schema.json", "tool-specific": { anything: true } },
@@ -427,7 +432,6 @@ test("schemas accept representative valid configs and reject malformed configs",
         { compilerOptions: { plugins: ["plugin"] } },
         { compilerOptions: { plugins: [{ name: false }] } },
         { compilerOptions: { maxNodeModuleJsDepth: "2" } },
-        { watchOptions: { watchFile: "invented" } },
         { typeAcquisition: { enable: "true" } },
         { typeAcquisition: { exclude: [false] } },
         { references: [{ path: false }] },
@@ -449,7 +453,6 @@ test("schemas accept representative valid configs and reject malformed configs",
 test("schemas preserve SchemaStore's extensible and partial option objects", () => {
     const configs = [
         { compilerOptions: { strictTypo: true, showConfig: true } },
-        { watchOptions: { customSetting: true } },
         { typeAcquisition: { customSetting: true } },
         { compilerOptions: { plugins: [{}] } },
         { references: [{ path: "../project", customSetting: true }] },
@@ -464,7 +467,7 @@ test("schemas preserve SchemaStore's extensible and partial option objects", () 
 test("every enum value accepts mixed casing without broadening the accepted names", () => {
     const schema = generateConfigSchema("tsconfig");
     for (const [name, map] of Object.entries(options.enumMaps)) {
-        const option = schema.definitions.compilerOptions.properties[name] ?? schema.definitions.watchOptions.properties[name];
+        const option = schema.definitions.compilerOptions.properties[name];
         assert(option, name);
         const list = options.compilerOptions.some(option => option.name === name && optionKind(option) === "List");
         for (const entry of map.values) {
@@ -537,7 +540,6 @@ test("schema hover documentation includes reference links and conditional defaul
             }
         }
         assert.match(compiler.moduleResolution.markdownDescription!, /Default:/);
-        assert.match(schema.definitions.watchOptions.properties.watchFile.markdownDescription!, /tsconfig\/#watchFile/);
         for (const property of Object.values(schema.definitions.typeAcquisition.properties)) {
             assert.match(property.markdownDescription!, /tsconfig\/#typeAcquisition/);
         }
@@ -559,6 +561,9 @@ test("invalid metadata is rejected before generating files", () => {
     const missingElement = structuredClone(options);
     delete missingElement.elements.lib;
     assert.throws(() => validateOptions(missingElement), /Missing list element: lib/);
+    const removedValidation = structuredClone(options);
+    removedValidation.elements.lib.extraValidation = { go: "extraValidationSpec" };
+    assert.throws(() => validateOptions(removedValidation), /Invalid Go reference: extraValidationSpec/);
     const missingConstant = structuredClone(options);
     missingConstant.enumMaps.target.values[0].value = { go: "core.ScriptTargetMissing" };
     assert.throws(() => validateOptions(missingConstant), /Unknown enum constant/);

@@ -800,83 +800,9 @@ const (
 	JsxEmitReactJSXDev JsxEmit = 5
 )
 
-type WatchFileKind int32
-
-const (
-	WatchFileKindNone                         WatchFileKind = 0
-	WatchFileKindFixedPollingInterval         WatchFileKind = 1
-	WatchFileKindPriorityPollingInterval      WatchFileKind = 2
-	WatchFileKindDynamicPriorityPolling       WatchFileKind = 3
-	WatchFileKindFixedChunkSizePolling        WatchFileKind = 4
-	WatchFileKindUseFsEvents                  WatchFileKind = 5
-	WatchFileKindUseFsEventsOnParentDirectory WatchFileKind = 6
-)
-
-type WatchDirectoryKind int32
-
-const (
-	WatchDirectoryKindNone                   WatchDirectoryKind = 0
-	WatchDirectoryKindUseFsEvents            WatchDirectoryKind = 1
-	WatchDirectoryKindFixedPollingInterval   WatchDirectoryKind = 2
-	WatchDirectoryKindDynamicPriorityPolling WatchDirectoryKind = 3
-	WatchDirectoryKindFixedChunkSizePolling  WatchDirectoryKind = 4
-)
-
-type PollingKind int32
-
-const (
-	PollingKindNone             PollingKind = 0
-	PollingKindFixedInterval    PollingKind = 1
-	PollingKindPriorityInterval PollingKind = 2
-	PollingKindDynamicPriority  PollingKind = 3
-	PollingKindFixedChunkSize   PollingKind = 4
-)
-
 var ModuleKindToModuleResolutionKind = map[ModuleKind]ModuleResolutionKind{
 	ModuleKindNode16:   ModuleResolutionKindNode16,
 	ModuleKindNodeNext: ModuleResolutionKindNodeNext,
-}
-
-type WatchOptions struct {
-	Interval        *int               `json:"watchInterval"`
-	FileKind        WatchFileKind      `json:"watchFile"`
-	DirectoryKind   WatchDirectoryKind `json:"watchDirectory"`
-	FallbackPolling PollingKind        `json:"fallbackPolling"`
-	SyncWatchDir    Tristate           `json:"synchronousWatchDirectory"`
-	ExcludeDir      []string           `json:"excludeDirectories"`
-	ExcludeFiles    []string           `json:"excludeFiles"`
-}
-
-// Equals compares stored watch options, preserving nil versus empty collections.
-func (options *WatchOptions) Equals(other *WatchOptions) bool {
-	if options == other {
-		return true
-	}
-	if options == nil || other == nil {
-		return false
-	}
-	if options.Interval != other.Interval && (options.Interval == nil || other.Interval == nil || *options.Interval != *other.Interval) {
-		return false
-	}
-	if options.FileKind != other.FileKind {
-		return false
-	}
-	if options.DirectoryKind != other.DirectoryKind {
-		return false
-	}
-	if options.FallbackPolling != other.FallbackPolling {
-		return false
-	}
-	if options.SyncWatchDir != other.SyncWatchDir {
-		return false
-	}
-	if (options.ExcludeDir == nil) != (other.ExcludeDir == nil) || !slices.Equal(options.ExcludeDir, other.ExcludeDir) {
-		return false
-	}
-	if (options.ExcludeFiles == nil) != (other.ExcludeFiles == nil) || !slices.Equal(options.ExcludeFiles, other.ExcludeFiles) {
-		return false
-	}
-	return true
 }
 
 type TypeAcquisition struct {

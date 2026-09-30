@@ -25,10 +25,6 @@ func TestParsedOptionsEquality(t *testing.T) {
 	makeOptions := func() *ParsedOptions {
 		return &ParsedOptions{
 			CompilerOptions: &core.CompilerOptions{Strict: core.TSTrue},
-			WatchOptions: &core.WatchOptions{
-				Interval: new(10), FileKind: core.WatchFileKindUseFsEvents,
-				ExcludeDir: []string{"dir"}, ExcludeFiles: []string{"file"},
-			},
 			TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue, Include: []string{"a"}, Exclude: []string{"b"}},
 			FileNames:       []string{"a.ts", "b.ts"},
 			ProjectReferences: []*core.ProjectReference{
@@ -73,8 +69,6 @@ func TestParsedOptionsEquality(t *testing.T) {
 	}{
 		{"compiler options", func(p *ParsedOptions) { p.CompilerOptions.Strict = core.TSFalse }},
 		{"nil compiler options", func(p *ParsedOptions) { p.CompilerOptions = nil }},
-		{"nil watch options", func(p *ParsedOptions) { p.WatchOptions = nil }},
-		{"watch interval", func(p *ParsedOptions) { p.WatchOptions.Interval = new(20) }},
 		{"nil type acquisition", func(p *ParsedOptions) { p.TypeAcquisition = nil }},
 		{"type acquisition enable", func(p *ParsedOptions) { p.TypeAcquisition.Enable = core.TSFalse }},
 		{"type acquisition include", func(p *ParsedOptions) { p.TypeAcquisition.Include[0] = "other" }},
@@ -144,20 +138,6 @@ func TestParsedOptionsEquality(t *testing.T) {
 				check(t, b, a)
 			})
 		}
-	}
-
-	for field := range reflect.TypeFor[core.WatchOptions]().Fields() {
-		t.Run("watch/"+field.Name, func(t *testing.T) {
-			t.Parallel()
-			for _, aValue := range compilerOptionTestValues(t, field) {
-				for _, bValue := range compilerOptionTestValues(t, field) {
-					a, b := makeOptions(), makeOptions()
-					reflect.ValueOf(a.WatchOptions).Elem().FieldByIndex(field.Index).Set(aValue)
-					reflect.ValueOf(b.WatchOptions).Elem().FieldByIndex(field.Index).Set(bValue)
-					check(t, a, b)
-				}
-			}
-		})
 	}
 }
 

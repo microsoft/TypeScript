@@ -173,7 +173,6 @@ export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
         schema.deprecationMessage = "This option has been removed from TypeScript. It is retained in the schema for historical configurations.";
         compilerProperties[option.name] = withDescription(schema, option.description, option.name);
     }
-    const watchProperties = Object.fromEntries(options.watchOptions.map(option => [option.name, optionSchema(option)]));
     const acquisitionProperties = Object.fromEntries(options.typeAcquisition.map(option => [
         option.name,
         optionSchema({
@@ -195,7 +194,6 @@ export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
     };
     const properties: Record<string, JSONSchema> = {
         $schema: { type: "string", description: "The JSON schema used to validate this configuration." },
-        watchOptions: withDescription({ allOf: [{ $ref: "#/definitions/watchOptions" }] }, "Options for watching files and directories.", "watchOptions"),
     };
     for (const option of options.rootOptions) {
         const schema = option.elementOptions && option.elementOptions !== "extends"
@@ -215,7 +213,6 @@ export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
         additionalProperties: true,
         definitions: {
             compilerOptions: optionObject(compilerProperties),
-            watchOptions: optionObject(watchProperties),
             typeAcquisition: optionObject(acquisitionProperties),
         },
     };

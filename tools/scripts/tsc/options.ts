@@ -2026,83 +2026,6 @@ export const options: OptionsModel = {
             "ignoreDeprecations",
         ],
     },
-    watchOptions: [
-        {
-            name: "watchInterval",
-            kind: "Number",
-            category: diagnostic("Watch and Build Modes"),
-            field: {
-                name: "Interval",
-                type: "*int",
-            },
-        },
-        {
-            name: "watchFile",
-            kind: "Enum",
-            category: diagnostic("Watch and Build Modes"),
-            description: diagnostic("Specify how the TypeScript watch mode works."),
-            defaultValueDescription: { go: "core.WatchFileKindUseFsEvents" },
-            field: {
-                name: "FileKind",
-                type: "WatchFileKind",
-            },
-        },
-        {
-            name: "watchDirectory",
-            kind: "Enum",
-            category: diagnostic("Watch and Build Modes"),
-            description: diagnostic("Specify how directories are watched on systems that lack recursive file-watching functionality."),
-            defaultValueDescription: { go: "core.WatchDirectoryKindUseFsEvents" },
-            field: {
-                name: "DirectoryKind",
-                type: "WatchDirectoryKind",
-            },
-        },
-        {
-            name: "fallbackPolling",
-            kind: "Enum",
-            category: diagnostic("Watch and Build Modes"),
-            description: diagnostic("Specify what approach the watcher should use if the system runs out of native file watchers."),
-            defaultValueDescription: { go: "core.PollingKindPriorityInterval" },
-            field: {
-                name: "FallbackPolling",
-                type: "PollingKind",
-            },
-        },
-        {
-            name: "synchronousWatchDirectory",
-            kind: "Boolean",
-            category: diagnostic("Watch and Build Modes"),
-            description: diagnostic("Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively."),
-            defaultValueDescription: false,
-            field: {
-                name: "SyncWatchDir",
-                type: "Tristate",
-            },
-        },
-        {
-            name: "excludeDirectories",
-            kind: "List",
-            allowConfigDirTemplateSubstitution: true,
-            category: diagnostic("Watch and Build Modes"),
-            description: diagnostic("Remove a list of directories from the watch process."),
-            field: {
-                name: "ExcludeDir",
-                type: "[]string",
-            },
-        },
-        {
-            name: "excludeFiles",
-            kind: "List",
-            allowConfigDirTemplateSubstitution: true,
-            category: diagnostic("Watch and Build Modes"),
-            description: diagnostic("Remove a list of files from the watch mode's processing."),
-            field: {
-                name: "ExcludeFiles",
-                type: "[]string",
-            },
-        },
-    ],
     typeAcquisition: [
         {
             name: "enable",
@@ -2278,18 +2201,6 @@ export const options: OptionsModel = {
         extends: {
             name: "extends",
             kind: "String",
-        },
-        excludeDirectories: {
-            name: "excludeDirectory",
-            kind: "String",
-            isFilePath: true,
-            extraValidation: { go: "extraValidationSpec" },
-        },
-        excludeFiles: {
-            name: "excludeFile",
-            kind: "String",
-            isFilePath: true,
-            extraValidation: { go: "extraValidationSpec" },
         },
         libFiles: {
             name: "libFiles",
@@ -2507,35 +2418,6 @@ export const options: OptionsModel = {
             values: [
                 { name: "crlf", value: { go: "core.NewLineKindCRLF" } },
                 { name: "lf", value: { go: "core.NewLineKindLF" } },
-            ],
-        },
-        watchFile: {
-            goName: "watchFileEnumMap",
-            values: [
-                { name: "fixedpollinginterval", value: { go: "core.WatchFileKindFixedPollingInterval" } },
-                { name: "prioritypollinginterval", value: { go: "core.WatchFileKindPriorityPollingInterval" } },
-                { name: "dynamicprioritypolling", value: { go: "core.WatchFileKindDynamicPriorityPolling" } },
-                { name: "fixedchunksizepolling", value: { go: "core.WatchFileKindFixedChunkSizePolling" } },
-                { name: "usefsevents", value: { go: "core.WatchFileKindUseFsEvents" } },
-                { name: "usefseventsonparentdirectory", value: { go: "core.WatchFileKindUseFsEventsOnParentDirectory" } },
-            ],
-        },
-        watchDirectory: {
-            goName: "watchDirectoryEnumMap",
-            values: [
-                { name: "usefsevents", value: { go: "core.WatchDirectoryKindUseFsEvents" } },
-                { name: "fixedpollinginterval", value: { go: "core.WatchDirectoryKindFixedPollingInterval" } },
-                { name: "dynamicprioritypolling", value: { go: "core.WatchDirectoryKindDynamicPriorityPolling" } },
-                { name: "fixedchunksizepolling", value: { go: "core.WatchDirectoryKindFixedChunkSizePolling" } },
-            ],
-        },
-        fallbackPolling: {
-            goName: "fallbackEnumMap",
-            values: [
-                { name: "fixedinterval", value: { go: "core.PollingKindFixedInterval" } },
-                { name: "priorityinterval", value: { go: "core.PollingKindPriorityInterval" } },
-                { name: "dynamicpriority", value: { go: "core.PollingKindDynamicPriority" } },
-                { name: "fixedchunksize", value: { go: "core.PollingKindFixedChunkSize" } },
             ],
         },
     },
@@ -2804,89 +2686,6 @@ export const options: OptionsModel = {
                 {
                     name: "ReactJSXDev",
                     value: 5,
-                },
-            ],
-        },
-        {
-            name: "WatchFileKind",
-            members: [
-                {
-                    name: "None",
-                    value: 0,
-                },
-                {
-                    name: "FixedPollingInterval",
-                    value: 1,
-                },
-                {
-                    name: "PriorityPollingInterval",
-                    value: 2,
-                },
-                {
-                    name: "DynamicPriorityPolling",
-                    value: 3,
-                },
-                {
-                    name: "FixedChunkSizePolling",
-                    value: 4,
-                },
-                {
-                    name: "UseFsEvents",
-                    value: 5,
-                },
-                {
-                    name: "UseFsEventsOnParentDirectory",
-                    value: 6,
-                },
-            ],
-        },
-        {
-            name: "WatchDirectoryKind",
-            members: [
-                {
-                    name: "None",
-                    value: 0,
-                },
-                {
-                    name: "UseFsEvents",
-                    value: 1,
-                },
-                {
-                    name: "FixedPollingInterval",
-                    value: 2,
-                },
-                {
-                    name: "DynamicPriorityPolling",
-                    value: 3,
-                },
-                {
-                    name: "FixedChunkSizePolling",
-                    value: 4,
-                },
-            ],
-        },
-        {
-            name: "PollingKind",
-            members: [
-                {
-                    name: "None",
-                    value: 0,
-                },
-                {
-                    name: "FixedInterval",
-                    value: 1,
-                },
-                {
-                    name: "PriorityInterval",
-                    value: 2,
-                },
-                {
-                    name: "DynamicPriority",
-                    value: 3,
-                },
-                {
-                    name: "FixedChunkSize",
-                    value: 4,
                 },
             ],
         },

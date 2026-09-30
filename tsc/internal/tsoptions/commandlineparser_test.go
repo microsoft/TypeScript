@@ -68,21 +68,35 @@ func TestCommandLineParseResult(t *testing.T) {
 		{"parse --incremental", []string{"--incremental", "0.ts"}},
 		{"parse --tsBuildInfoFile", []string{"--tsBuildInfoFile", "build.tsbuildinfo", "0.ts"}},
 		{"allows tsconfig only option to be set to null", []string{"--composite", "null", "-tsBuildInfoFile", "null", "0.ts"}},
-
-		// ****** Watch Options ******
-		{"parse --watchFile", []string{"--watchFile", "UseFsEvents", "0.ts"}},
-		{"parse --watchDirectory", []string{"--watchDirectory", "FixedPollingInterval", "0.ts"}},
-		{"parse --fallbackPolling", []string{"--fallbackPolling", "PriorityInterval", "0.ts"}},
-		{"parse --synchronousWatchDirectory", []string{"--synchronousWatchDirectory", "0.ts"}},
-		{"errors on missing argument to --fallbackPolling", []string{"0.ts", "--fallbackPolling"}},
-		{"parse --excludeDirectories", []string{"--excludeDirectories", "**/temp", "0.ts"}},
-		{"errors on invalid excludeDirectories", []string{"--excludeDirectories", "**/../*", "0.ts"}},
-		{"parse --excludeFiles", []string{"--excludeFiles", "**/temp/*.ts", "0.ts"}},
-		{"errors on invalid excludeFiles", []string{"--excludeFiles", "**/../*", "0.ts"}},
 	}
 
 	for _, testCase := range parseCommandLineSubScenarios {
 		testCase.createSubScenario("parseCommandLine").assertParseResult(t)
+	}
+}
+
+func TestRemovedWatchOptions(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{}, "/project", true)
+	for _, option := range []string{
+		"watchInterval", "watchFile", "watchDirectory", "fallbackPolling",
+		"synchronousWatchDirectory", "excludeDirectories", "excludeFiles",
+	} {
+		t.Run(option, func(t *testing.T) {
+			t.Parallel()
+			args := []string{"--watch", "--" + option}
+			parsed := tsoptions.ParseCommandLine(args, host)
+			assert.Assert(t, parsed.CompilerOptions().Watch.IsTrue())
+			assert.Equal(t, len(parsed.Errors), 1)
+			build := tsoptions.ParseBuildCommandLine(args, host)
+			assert.Assert(t, build.CompilerOptions.Watch.IsTrue())
+			assert.Equal(t, len(build.Errors), 1)
+			var errors strings.Builder
+			diagnosticwriter.WriteFormatDiagnostics(&errors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
+			diagnosticwriter.WriteFormatDiagnostics(&errors, diagnosticwriter.FromASTDiagnostics(build.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
+			baseline.Run(t, option+".js", errors.String(), baseline.Options{Subfolder: "tsoptions/removedWatchOptions"})
+		})
 	}
 }
 
@@ -288,13 +302,6 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		assert.NilError(t, e)
 		assert.DeepEqual(t, tsBaseline.options, newParsedCompilerOptions, cmpopts.IgnoreUnexported(core.CompilerOptions{}))
 
-		newParsedWatchOptions := core.WatchOptions{}
-		e = json.Unmarshal(o, &newParsedWatchOptions)
-		assert.NilError(t, e)
-
-		// !!! useful for debugging but will not pass due to `none` as enum options
-		// assert.DeepEqual(t, tsBaseline.watchoptions, newParsedWatchOptions)
-
 		var formattedErrors strings.Builder
 		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
 		newBaselineErrors := formattedErrors.String()
@@ -309,25 +316,18 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 
 func parseExistingCompilerBaseline(t *testing.T, baseline string) *TestCommandLineParser {
 	_, rest, _ := strings.Cut(baseline, "CompilerOptions::\n")
-	compilerOptions, rest, watchFound := strings.Cut(rest, "\nWatchOptions::\n")
-	watchOptions, rest, _ := strings.Cut(rest, "\nFileNames::\n")
+	compilerOptions, rest, _ := strings.Cut(rest, "\nWatchOptions::\n")
+	_, rest, _ = strings.Cut(rest, "\nFileNames::\n")
 	fileNames, errors, _ := strings.Cut(rest, "\nErrors::\n")
 
 	baselineCompilerOptions := &core.CompilerOptions{}
 	e := json.Unmarshal([]byte(compilerOptions), &baselineCompilerOptions)
 	assert.NilError(t, e)
 
-	baselineWatchOptions := &core.WatchOptions{}
-	if watchFound && watchOptions != "" {
-		e2 := json.Unmarshal([]byte(watchOptions), &baselineWatchOptions)
-		assert.NilError(t, e2)
-	}
-
 	return &TestCommandLineParser{
-		options:      baselineCompilerOptions,
-		watchoptions: baselineWatchOptions,
-		fileNames:    fileNames,
-		errors:       errors,
+		options:   baselineCompilerOptions,
+		fileNames: fileNames,
+		errors:    errors,
 	}
 }
 
@@ -351,8 +351,6 @@ func formatNewBaseline(
 	formatted.WriteByte(']')
 	formatted.WriteString("\n\nCompilerOptions::\n")
 	formatted.Write(opts)
-	// todo: watch options not implemented
-	// formatted.WriteString("WatchOptions::\n")
 	formatted.WriteString("\n\nFileNames::\n")
 	formatted.WriteString(fileNames)
 	formatted.WriteString("\n\nErrors::\n")
@@ -405,13 +403,6 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 			assert.DeepEqual(t, tsBaseline.compilerOptions, newParsedCompilerOptions, cmpopts.IgnoreUnexported(core.CompilerOptions{}))
 		}
 
-		newParsedWatchOptions := core.WatchOptions{}
-		e = json.Unmarshal(o, &newParsedWatchOptions)
-		assert.NilError(t, e)
-
-		// !!! useful for debugging but will not pass due to `none` as enum options
-		// assert.DeepEqual(t, tsBaseline.watchoptions, newParsedWatchOptions)
-
 		var formattedErrors strings.Builder
 		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
 		newBaselineErrors := formattedErrors.String()
@@ -426,8 +417,8 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 
 func parseExistingCompilerBaselineBuild(t *testing.T, baseline string) *TestCommandLineParserBuild {
 	_, rest, _ := strings.Cut(baseline, "buildOptions::\n")
-	buildOptions, rest, watchFound := strings.Cut(rest, "\nWatchOptions::\n")
-	watchOptions, rest, _ := strings.Cut(rest, "\nProjects::\n")
+	buildOptions, rest, _ := strings.Cut(rest, "\nWatchOptions::\n")
+	_, rest, _ = strings.Cut(rest, "\nProjects::\n")
 	projects, errors, _ := strings.Cut(rest, "\nErrors::\n")
 
 	baselineBuildOptions := &core.BuildOptions{}
@@ -438,16 +429,9 @@ func parseExistingCompilerBaselineBuild(t *testing.T, baseline string) *TestComm
 	e = json.Unmarshal([]byte(buildOptions), &baselineCompilerOptions)
 	assert.NilError(t, e)
 
-	baselineWatchOptions := &core.WatchOptions{}
-	if watchFound && watchOptions != "" {
-		e2 := json.Unmarshal([]byte(watchOptions), &baselineWatchOptions)
-		assert.NilError(t, e2)
-	}
-
 	return &TestCommandLineParserBuild{
 		options:         baselineBuildOptions,
 		compilerOptions: baselineCompilerOptions,
-		watchoptions:    baselineWatchOptions,
 		projects:        projects,
 		errors:          errors,
 	}
@@ -476,8 +460,6 @@ func formatNewBaselineBuild(
 	formatted.Write(opts)
 	formatted.WriteString("\n\ncompilerOptions::\n")
 	formatted.Write(compilerOpts)
-	// todo: watch options not implemented
-	// formatted.WriteString("WatchOptions::\n")
 	formatted.WriteString("\n\nProjects::\n")
 	formatted.WriteString(projects)
 	formatted.WriteString("\n\nErrors::\n")
@@ -526,14 +508,12 @@ type verifyNull struct {
 
 type TestCommandLineParser struct {
 	options           *core.CompilerOptions
-	watchoptions      *core.WatchOptions
 	fileNames, errors string
 }
 
 type TestCommandLineParserBuild struct {
 	options          *core.BuildOptions
 	compilerOptions  *core.CompilerOptions
-	watchoptions     *core.WatchOptions
 	projects, errors string
 }
 
@@ -555,14 +535,6 @@ func TestParseBuildCommandLine(t *testing.T) {
 		{`--clean and --verbose together is invalid`, []string{"--clean", "--verbose"}},
 		{`--clean and --watch together is invalid`, []string{"--clean", "--watch"}},
 		{`--watch and --dry together is invalid`, []string{"--watch", "--dry"}},
-		{"parse --watchFile", []string{"--watchFile", "UseFsEvents", "--verbose"}},
-		{"parse --watchDirectory", []string{"--watchDirectory", "FixedPollingInterval", "--verbose"}},
-		{"parse --fallbackPolling", []string{"--fallbackPolling", "PriorityInterval", "--verbose"}},
-		{"parse --synchronousWatchDirectory", []string{"--synchronousWatchDirectory", "--verbose"}},
-		{"errors on missing argument", []string{"--verbose", "--fallbackPolling"}},
-		{"errors on invalid excludeDirectories", []string{"--excludeDirectories", "**/../*"}},
-		{"parse --excludeFiles", []string{"--excludeFiles", "**/temp/*.ts"}},
-		{"errors on invalid excludeFiles", []string{"--excludeFiles", "**/../*"}},
 	}
 
 	for _, testCase := range parseCommandLineSubScenarios {

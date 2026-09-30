@@ -327,10 +327,6 @@ func validateJsonOptionValue(
 	var errors []*ast.Diagnostic
 
 	switch opt.extraValidation {
-	case extraValidationSpec:
-		if diag := specToDiagnostic(val.(string), false); diag != nil {
-			errors = append(errors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, diag))
-		}
 	case extraValidationLocale:
 		if _, ok := locale.Parse(val.(string)); !ok {
 			errors = append(errors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, diagnostics.Locale_must_be_an_IETF_BCP_47_language_tag_Examples_Colon_0_1, "en", "ja-jp"))

@@ -214,22 +214,6 @@ func (o *compilerOptionsParser) UnknownDidYouMeanDiagnostic() *diagnostics.Messa
 	return extraKeyDidYouMeanDiagnostics("compilerOptions")
 }
 
-type watchOptionsParser struct {
-	*core.WatchOptions
-}
-
-func (o *watchOptionsParser) ParseOption(key string, value any) []*ast.Diagnostic {
-	return ParseWatchOptions(key, value, o.WatchOptions)
-}
-
-func (o *watchOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
-	return extraKeyDiagnostics("watchOptions")
-}
-
-func (o *watchOptionsParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message {
-	return extraKeyDidYouMeanDiagnostics("watchOptions")
-}
-
 type typeAcquisitionParser struct {
 	*core.TypeAcquisition
 }
