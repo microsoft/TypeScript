@@ -254,7 +254,7 @@ function zeroValue(option: CompilerOption): string {
 function showConfig(): string {
     const serializedOptions = options.compilerOptions.filter(option => {
         const declaration = option.declarations?.[0];
-        return declaration && declaration.category?.go !== "diagnostics.Command_line_Options" && declaration.category?.go !== "diagnostics.Output_Formatting";
+        return option.showConfig !== false && declaration && declaration.category?.go !== "diagnostics.Command_line_Options" && declaration.category?.go !== "diagnostics.Output_Formatting";
     });
     const enumOptions = serializedOptions.filter(option => optionKind(option) === "Enum");
     assert.equal(new Set(enumOptions.map(option => option.type)).size, enumOptions.length, "ShowConfig enum types must have a single option map");

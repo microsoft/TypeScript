@@ -1702,9 +1702,6 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 	if options.GenerateTrace != "" {
 		result.Set("generateTrace", serializeCompilerOptionPath(options.GenerateTrace, configFilePath, comparePathsOptions))
 	}
-	if options.ListEmittedFiles == core.TSTrue || options.ListEmittedFiles == core.TSFalse {
-		result.Set("listEmittedFiles", options.ListEmittedFiles == core.TSTrue)
-	}
 	if options.ListFiles == core.TSTrue || options.ListFiles == core.TSFalse {
 		result.Set("listFiles", options.ListFiles == core.TSTrue)
 	}

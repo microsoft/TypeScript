@@ -78,14 +78,6 @@ func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName stri
 	// Serialize compiler options
 	optionMap := serializeCompilerOptions(configParseResult.CompilerOptions(), normalizedConfigPath, comparePathsOptions)
 
-	// Remove command-line-only options from the output
-	for _, name := range []string{
-		"showConfig", "configFile", "configFilePath", "help", "init",
-		"listFilesOnly", "listEmittedFiles", "project", "build", "version",
-	} {
-		optionMap.Delete(name)
-	}
-
 	// Add implied compiler options (options that are derived from explicitly set options,
 	// such as moduleResolution implied by module, or useDefineForClassFields implied by target).
 	// This mirrors TypeScript's convertToTSConfig computedOptions logic.

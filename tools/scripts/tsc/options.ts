@@ -1663,6 +1663,8 @@ export const options: OptionsModel = {
         {
             name: "listEmittedFiles",
             type: "Tristate",
+            // Unlike the other excluded flags, this belongs to Compiler Diagnostics.
+            showConfig: false,
             internal: true,
             declarations: [
                 {

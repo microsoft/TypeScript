@@ -91,6 +91,8 @@ export interface CompilerOption {
         group: DeclarationGroup;
     })[];
     jsconfigDefault?: string | number | boolean;
+    /** Additional exclusion beyond undeclared options and command-line/output-formatting categories. */
+    showConfig?: false;
     transpile?: {
         value: boolean | "clear";
         declarationValue?: boolean | "preserve";

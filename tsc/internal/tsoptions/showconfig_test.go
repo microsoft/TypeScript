@@ -98,6 +98,7 @@ func TestShowConfigSerialization(t *testing.T) {
 		t.Helper()
 		got := serializeCompilerOptions(options, "/project/tsconfig.json", comparePaths)
 		want := reflectedSerializeCompilerOptions(options, "/project/tsconfig.json", comparePaths)
+		want.Delete("listEmittedFiles")
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("Serialization differs:\ngot keys: %+v\nwant keys: %+v", slices.Collect(got.Keys()), slices.Collect(want.Keys()))
 			for name, expected := range want.Entries() {
