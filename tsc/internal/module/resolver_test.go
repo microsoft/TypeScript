@@ -1,15 +1,20 @@
-package module_test
+package module
 
 import (
+	"reflect"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
 
 type resolutionHostStub struct {
@@ -19,6 +24,14 @@ type resolutionHostStub struct {
 
 func (h *resolutionHostStub) FS() vfs.FS                  { return h.fs }
 func (h *resolutionHostStub) GetCurrentDirectory() string { return h.cwd }
+
+func TestResolverSharedData(t *testing.T) {
+	t.Parallel()
+	assert.NilError(t, testutil.CheckDataOnly(reflect.TypeFor[ResolutionData](), []reflect.Type{
+		reflect.TypeFor[ast.Diagnostic](),
+		reflect.TypeFor[packagejson.PackageJson](),
+	}))
+}
 
 // Regression test for https://github.com/microsoft/TypeScript/tsc/issues/3526.
 //
@@ -39,7 +52,7 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
 
 	for _, name := range []string{"pkg", "pkg/"} {
 		r, _, _ := resolver.ResolveModuleName(name, "/repo/src/file.ts", core.ModuleKindESNext, nil)
@@ -47,6 +60,51 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 			t.Errorf("%q failed to resolve", name)
 		}
 	}
+}
+
+func TestResolutionDataCaches(t *testing.T) {
+	t.Parallel()
+	oldHost := &resolutionHostStub{cwd: "/", fs: vfstest.FromMap(map[string]string{
+		"/src/node_modules/pkg/package.json": `{"name":"pkg","types":"index.d.ts"}`,
+		"/src/node_modules/pkg/index.d.ts":   "export const value: number;",
+	}, true)}
+	newHost := &resolutionHostStub{cwd: "/", fs: vfstest.FromMap(map[string]string{
+		"/src/node_modules/pkg/package.json": `{"name":"pkg","types":"index.d.ts"}`,
+		"/src/node_modules/pkg/index.d.ts":   "export const value: number;",
+		"/new/package.json":                  `{"name":"new"}`,
+		"/missing-first/package.json":        `{"name":"missing-first"}`,
+	}, true)}
+	resolver := NewResolver(ResolverOptions{Host: oldHost, CompilerOptions: &core.CompilerOptions{Module: core.ModuleKindNodeNext}})
+	resolved, _, err := resolver.ResolveModuleName("pkg", "/src/index.ts", core.ModuleKindCommonJS, nil)
+	assert.NilError(t, err)
+	assert.Assert(t, resolved.IsResolved())
+	cached, _, err := resolver.ResolveModuleName("pkg", "/src/index.ts", core.ModuleKindCommonJS, nil)
+	assert.NilError(t, err)
+	assert.Equal(t, cached, resolved)
+
+	resolver.ResolveTypeReferenceDirective("missing", "/src/index.ts", core.ModuleKindCommonJS, nil)
+	paths := collections.NewOrderedMapWithSizeHint[string, []string](1)
+	paths.Set("alias/*", []string{"./*"})
+	resolver.getParsedPatternsForPaths(&core.CompilerOptions{Paths: paths})
+	assert.Equal(t, resolver.moduleResolutionCache.cache.Size(), 1)
+	assert.Equal(t, resolver.typeRefDirectiveResolutionCache.cache.Size(), 1)
+	assert.Equal(t, resolver.parsedPatternsForPaths.cache.Size(), 1)
+
+	data := resolver.GetResolutionData()
+	rebound := data.NewResolver(oldHost)
+	assert.Equal(t, rebound.moduleResolutionCache.cache.Size(), 0)
+	assert.Equal(t, rebound.typeRefDirectiveResolutionCache.cache.Size(), 0)
+	assert.Equal(t, rebound.parsedPatternsForPaths.cache.Size(), 0)
+
+	clone := data.Clone().NewResolver(newHost)
+	assert.Equal(t, clone.moduleResolutionCache.cache.Size(), 0)
+	assert.Equal(t, clone.typeRefDirectiveResolutionCache.cache.Size(), 0)
+	assert.Equal(t, clone.parsedPatternsForPaths.cache.Size(), 0)
+	assert.Equal(t, clone.GetPackageScopeForPath("/src/node_modules/pkg"), resolver.GetPackageScopeForPath("/src/node_modules/pkg"))
+	assert.Assert(t, clone.GetPackageScopeForPath("/new").Exists())
+	assert.Assert(t, !resolver.GetPackageScopeForPath("/new").Exists())
+	assert.Assert(t, !resolver.GetPackageScopeForPath("/missing-first").Exists())
+	assert.Assert(t, clone.GetPackageScopeForPath("/missing-first").Exists())
 }
 
 // blockingFS wraps a vfs.FS and forces FileExists calls for `targetPath` to
@@ -168,7 +226,7 @@ func TestResolveModuleNameTrailingSlashRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
 
 	type resolutionResult struct {
 		name     string
@@ -240,7 +298,7 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
 
 	var panicked atomic.Bool
 	type resolutionResult struct {
@@ -322,7 +380,7 @@ func TestParseNodeModuleFromPath(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			if got := module.ParseNodeModuleFromPath(tt.path, tt.isFolder); got != tt.want {
+			if got := ParseNodeModuleFromPath(tt.path, tt.isFolder); got != tt.want {
 				t.Errorf("ParseNodeModuleFromPath(%q, %v) = %q, want %q", tt.path, tt.isFolder, got, tt.want)
 			}
 		})
@@ -363,7 +421,7 @@ func TestResolvePeerDependencyNilContentsRace(t *testing.T) {
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
 	}
-	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: opts})
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
 
 	var panicked atomic.Bool
 	type resolutionResult struct {

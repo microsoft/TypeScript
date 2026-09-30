@@ -17,6 +17,8 @@ import (
 // request-scoped lifetime and reclamation. It returns a checker and a release
 // function that must be called when the caller is done with the checker.
 // The returned checker must not be accessed concurrently; each acquisition is exclusive.
+// Acquisitions are not reentrant, even when they share a request ID. Callers must
+// pass an already acquired checker to nested operations instead of acquiring again.
 // If file is non-nil, the pool may use it as an affinity hint to return the same
 // checker for the same file across calls.
 type CheckerPool interface {

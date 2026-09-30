@@ -96,18 +96,70 @@ func TestCheckerPoolRequestAffinity(t *testing.T) {
 	// First call acquires.
 	c1, release1 := pool.GetChecker(ctx, nil)
 
-	// Second call with same request ID while still held returns same checker (noop release).
-	c2, release2 := pool.GetChecker(ctx, nil)
-	release2()
 	release1()
 
-	assert.Assert(t, c1 == c2, "same request ID should return the same checker while held")
-
 	// After release, same request should still get the same checker (cross-release affinity).
-	c3, release3 := pool.GetChecker(ctx, nil)
-	release3()
+	c2, release2 := pool.GetChecker(ctx, nil)
+	release2()
 
-	assert.Assert(t, c1 == c3, "same request ID should return the same checker after release")
+	assert.Assert(t, c1 == c2, "same request ID should return the same checker after release")
+}
+
+func TestCheckerPoolSameRequestContention(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2})
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	for _, test := range []struct {
+		name     string
+		lifetime core.CheckerLifetime
+	}{
+		{"diagnostics", core.CheckerLifetimeDiagnostics},
+		{"query", core.CheckerLifetimeTemporary},
+		{"api", core.CheckerLifetimeAPI},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			synctest.Test(t, func(t *testing.T) {
+				pool := newTestCheckerPool(ls.GetProgram(), CheckerPoolOptions{MaxCheckers: 2})
+				ctx, cancel := context.WithCancel(context.Background())
+				defer cancel()
+				ctx = core.WithRequestID(ctx, "same-request")
+				ctx = core.WithCheckerLifetime(ctx, test.lifetime)
+
+				c1, release1 := pool.GetChecker(ctx, nil)
+				defer release1()
+				var acquired atomic.Bool
+				go func() {
+					c2, release2 := pool.GetChecker(ctx, nil)
+					defer release2()
+					assert.Assert(t, c1 == c2)
+					acquired.Store(true)
+				}()
+
+				synctest.Wait()
+				assert.Check(t, !acquired.Load(), "the request ID must not bypass exclusive acquisition")
+				release1()
+				synctest.Wait()
+				assert.Assert(t, acquired.Load(), "waiting acquisition should finish after release")
+			})
+		})
+	}
+}
+
+func TestCheckerPoolSameRequestConcurrentQueries(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 3})
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	ctx = core.WithRequestID(ctx, "same-request")
+
+	c1, release1 := pool.GetChecker(ctx, nil)
+	defer release1()
+	c2, release2 := pool.GetChecker(ctx, nil)
+	defer release2()
+	assert.Check(t, c1 != c2, "overlapping acquisitions must use different checkers")
+	assert.Equal(t, len(pool.querySem), 2, "each acquisition must hold its own slot")
 }
 
 func TestCheckerPoolIdleCleanup(t *testing.T) {

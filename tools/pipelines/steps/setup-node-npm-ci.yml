@@ -11,7 +11,9 @@ steps:
     displayName: 'Set up .npmrc'
 
   - pwsh: |
-      npm install -g (Get-Content package.json | ConvertFrom-Json).packageManager
+      $ErrorActionPreference = 'Stop'
+      $PSNativeCommandUseErrorActionPreference = $true
+      npm install -g --userconfig .npmrc (Get-Content package.json | ConvertFrom-Json).packageManager
       npm --version
     displayName: 'Install packageManager from package.json'
 
