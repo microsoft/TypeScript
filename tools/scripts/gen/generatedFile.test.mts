@@ -368,6 +368,48 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     assert.match(nested.stdout, /Enums are up to date/);
 });
 
+test("generate:go generates new option diagnostics before Go-dependent generators", async () => {
+    const root = path.resolve(import.meta.dirname, "../../..");
+    const generate = async () => {
+        const result = await x("npx", ["hereby", "generate:go"], { nodeOptions: { cwd: root } });
+        assert.equal(result.exitCode, 0, result.stdout + result.stderr);
+        return result;
+    };
+    await generate();
+    const metadataFile = path.join(root, "tools/scripts/tsc/options.ts");
+    const diagnosticsFile = path.join(root, "tsc/internal/diagnostics/diagnosticMessages.json");
+    const protocolFile = path.join(root, "packages/typescript/src/api/proto.generated.ts");
+    const originalMetadata = fs.readFileSync(metadataFile, "utf8");
+    const originalDiagnostics = fs.readFileSync(diagnosticsFile, "utf8");
+    const originalProtocol = fs.readFileSync(protocolFile, "utf8");
+    const messages: Record<string, { code: number; category: string; }> = JSON.parse(originalDiagnostics);
+    const message = "Codegen ordering probe";
+    assert.equal(messages[message], undefined);
+    messages[message] = { category: "Message", code: Math.max(...Object.values(messages).map(message => message.code)) + 1 };
+    const metadata = originalMetadata.replace(
+        'diagnostic("Print all of the files read during the compilation.")',
+        `diagnostic("${message}")`,
+    );
+    assert.notEqual(metadata, originalMetadata);
+    try {
+        fs.writeFileSync(diagnosticsFile, JSON.stringify(messages, null, 4) + "\n");
+        fs.writeFileSync(metadataFile, metadata);
+        // Exercise protocol generation too, rather than accepting its cached output.
+        fs.writeFileSync(protocolFile, originalProtocol + "\n");
+        const { stdout } = await generate();
+        assert.match(stdout, /All generated values match Go/);
+        assert.match(stdout, /\$ go -C \.\/tools run \.\/gen-proto/);
+        assert.equal(fs.readFileSync(protocolFile, "utf8"), originalProtocol);
+        assert.match(fs.readFileSync(path.join(root, "tsc/internal/tsoptions/declarations_generated.go"), "utf8"), /diagnostics\.Codegen_ordering_probe/);
+        assert.match(fs.readFileSync(path.join(root, "tsc/internal/diagnostics/diagnostics_generated.go"), "utf8"), /Codegen_ordering_probe/);
+    }
+    finally {
+        fs.writeFileSync(metadataFile, originalMetadata);
+        fs.writeFileSync(diagnosticsFile, originalDiagnostics);
+        await generate();
+    }
+});
+
 test("generate includes standalone generators without Go traversal", async () => {
     const root = path.resolve(import.meta.dirname, "../../..");
     const { stdout } = await x("npx", ["hereby", "generate"], { throwOnError: true, nodeOptions: { cwd: root } });

@@ -348,6 +348,9 @@ async function runGenerateGo() {
     for (const generate of goGenerateActions) {
         await generate();
     }
+    // These generators load Go packages, so all generated Go sources must be current.
+    await runGenerateEnums();
+    await runGenerateAPI();
 }
 
 export const generateGo = task({
@@ -478,12 +481,21 @@ async function runGenerateOptionDefinitions() {
     await generate(!!options.force);
 }
 
-export const generateCompilerOptions = goGenerateTask("generate:compileroptions", async () => {
+async function runGenerateCompilerOptions() {
     await runGenerateOptionDefinitions();
     await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"));
     await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"));
-    await runGenerateEnums();
-    await runGenerateAPI();
+}
+
+goGenerateActions.push(runGenerateCompilerOptions);
+export const generateCompilerOptions = task({
+    name: "generate:compileroptions",
+    description: "Generates compiler options and their dependent API files. Pass --force to regenerate unchanged files.",
+    run: async () => {
+        await runGenerateCompilerOptions();
+        await runGenerateEnums();
+        await runGenerateAPI();
+    },
 });
 
 export const generateLanguageVariant = goGenerateTask("generate:languagevariant", [
@@ -687,7 +699,11 @@ async function runGenerateAPI() {
     });
 }
 
-export const generateAPI = goGenerateTask("generate:api", runGenerateAPI);
+export const generateAPI = task({
+    name: "generate:api",
+    description: "Generates API files. Pass --force to regenerate unchanged files.",
+    run: runGenerateAPI,
+});
 
 const vendorJsonrpcDir = "packages/typescript/vendor/vscode-jsonrpc";
 const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
@@ -727,10 +743,7 @@ const generateCompiler = task({
     name: "generate:compiler",
     hiddenFromTaskList: true,
     dependencies: [generateAST, generateLSP],
-    run: async () => {
-        await runGenerateGo();
-        await runGenerateEnums();
-    },
+    run: runGenerateGo,
 });
 
 export const generate = task({
