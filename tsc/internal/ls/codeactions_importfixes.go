@@ -61,7 +61,10 @@ type fixInfo struct {
 }
 
 func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*CodeAction, error) {
-	info, err := getFixInfos(ctx, fixContext, fixContext.ErrorCode, fixContext.Span.Pos())
+	ch, done := fixContext.Program.GetTypeChecker(ctx)
+	defer done()
+
+	info, err := getFixInfos(ch, fixContext, fixContext.ErrorCode, fixContext.Span.Pos())
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +136,7 @@ func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*
 	)
 
 	for _, diag := range importDiags {
-		if err := addImportFromDiagnostic(ctx, importAdder, diag, fixContext); err != nil {
+		if err := addImportFromDiagnostic(ch, importAdder, diag, fixContext); err != nil {
 			return nil, err
 		}
 	}
@@ -149,7 +152,7 @@ func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*
 }
 
 // addImportFromDiagnostic finds the best import fix for a diagnostic and adds it to the adder.
-func addImportFromDiagnostic(ctx context.Context, importAdder autoimport.ImportAdder, diag *ast.Diagnostic, fixContext *CodeFixContext) error {
+func addImportFromDiagnostic(ch *checker.Checker, importAdder autoimport.ImportAdder, diag *ast.Diagnostic, fixContext *CodeFixContext) error {
 	diagFixContext := &CodeFixContext{
 		SourceFile: fixContext.SourceFile,
 		Span:       core.NewTextRange(diag.Pos(), diag.End()),
@@ -158,7 +161,7 @@ func addImportFromDiagnostic(ctx context.Context, importAdder autoimport.ImportA
 		LS:         fixContext.LS,
 	}
 
-	infos, err := getFixInfos(ctx, diagFixContext, diag.Code(), diag.Pos())
+	infos, err := getFixInfos(ch, diagFixContext, diag.Code(), diag.Pos())
 	if err != nil {
 		return err
 	}
@@ -168,7 +171,7 @@ func addImportFromDiagnostic(ctx context.Context, importAdder autoimport.ImportA
 	return nil
 }
 
-func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int32, pos int) ([]*fixInfo, error) {
+func getFixInfos(ch *checker.Checker, fixContext *CodeFixContext, errorCode int32, pos int) ([]*fixInfo, error) {
 	// Can't compute import fixes for dynamic/untitled files since they don't have real file paths
 	if tspath.IsDynamicFileName(fixContext.SourceFile.FileName()) {
 		return nil, nil
@@ -178,9 +181,6 @@ func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int3
 	if errorCode != diagnostics.X_0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.Code() && !ast.IsIdentifier(symbolToken) {
 		return nil, nil
 	}
-
-	ch, done := fixContext.Program.GetTypeChecker(ctx)
-	defer done()
 
 	var view *autoimport.View
 	var info []*fixInfo

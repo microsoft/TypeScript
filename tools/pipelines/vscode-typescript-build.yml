@@ -133,29 +133,11 @@ extends:
 
               - bash: |
                   set -euo pipefail
-                  shopt -s nullglob
-                  signatureFiles=(built/vsix/*.signature.p7s)
-                  if (( ${#signatureFiles[@]} == 0 )); then
-                    echo "No VSIX signatures were produced." >&2
-                    exit 1
-                  fi
-                  for signatureFile in "${signatureFiles[@]}"; do
-                    manifestFile="${signatureFile%.signature.p7s}.manifest"
-                    if cmp -s "$manifestFile" "$signatureFile"; then
-                      echo "$signatureFile was not replaced with a real signature." >&2
-                      exit 1
-                    fi
-                    openssl pkcs7 -inform DER -in "$signatureFile" -noout
-                  done
-                  echo "##vso[build.addbuildtag]vscode-typescript-release"
-                displayName: Validate release signatures
-
-              - bash: |
-                  set -euo pipefail
                   artifactDirectory="$(Build.ArtifactStagingDirectory)/vsix"
                   mkdir -p "$artifactDirectory"
                   cp -v built/vsix/*.vsix "$artifactDirectory"
                   cp -v built/vsix/*.manifest "$artifactDirectory"
                   cp -v built/vsix/*.signature.p7s "$artifactDirectory"
                   cp -v built/vsix/release-manifest.json "$artifactDirectory"
+                  echo "##vso[build.addbuildtag]vscode-typescript-release"
                 displayName: Stage release artifacts

@@ -136,8 +136,3 @@ func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
 func (host *emitHost) GetSymlinkCache() *symlinks.KnownSymlinks {
 	return host.program.GetSymlinkCache()
 }
-
-func (host *emitHost) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
-	resolved, _, _ := host.program.resolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
-	return resolved
-}

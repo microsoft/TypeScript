@@ -76,7 +76,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 		typeResp, err := session.handleGetTypeOfSymbol(t.Context(), &GetTypeOfSymbolParams{
 			Snapshot: snapshotResp.Snapshot,
 			Project:  proj.Id,
-			Symbol:   entry.Symbol.Id,
+			Symbol:   entry.Symbol.Reference,
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, typeResp != nil, "type of completion symbol %q should resolve", entry.Name)

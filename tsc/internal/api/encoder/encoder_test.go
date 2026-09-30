@@ -19,6 +19,8 @@ import (
 
 func TestEncodeSourceFile(t *testing.T) {
 	t.Parallel()
+	assert.Equal(t, encoder.HeaderSize, 64)
+	assert.Equal(t, encoder.NodeSize, 28)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
 		Path:     "/test.ts",

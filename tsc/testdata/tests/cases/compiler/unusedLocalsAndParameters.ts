@@ -85,6 +85,13 @@ namespace N {
     var x;
 }
 
+// in a class static block
+class C1 {
+    static {
+        let foo = 1;
+    }
+}
+
 for (let x: y) {
     z(x);
 }

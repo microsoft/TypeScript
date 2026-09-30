@@ -11,6 +11,7 @@ import {
     HEADER_OFFSET_HASH_LO0,
     HEADER_OFFSET_HASH_LO1,
     HEADER_OFFSET_PARSE_OPTIONS,
+    HEADER_OFFSET_SOURCE_FILE_ID,
     HEADER_OFFSET_SOURCE_FILE_LEASE,
     NODE_DATA_TYPE_CHILDREN,
     NODE_DATA_TYPE_EXTENDED,
@@ -100,6 +101,14 @@ export function readSourceFileLease(data: DataView): number {
         throw new Error(`Source file lease ${lease} exceeds the maximum safe integer`);
     }
     return Number(lease);
+}
+
+export function readSourceFileNodeId(data: DataView): string {
+    const nodeId = data.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true);
+    if (nodeId === 0n) {
+        throw new Error("Source file response has no node ID");
+    }
+    return nodeId.toString();
 }
 
 function hex8(n: number): string {
