@@ -1604,6 +1604,14 @@ function runCleanSignTempDirectory() {
 let signCount = 0;
 
 /**
+ * @param {string} value
+ */
+function assertMsbuildXmlValue(value) {
+    assert(value.length > 0 && !/[^\w./\\: -]/.test(value), `Unsupported MSBuild XML value: ${JSON.stringify(value)}`);
+    return value;
+}
+
+/**
  * @typedef {{
  *   SignFileRecordList: {
  *     SignFileList: { SrcPath: string; DstPath: string | null }[];
@@ -1615,11 +1623,10 @@ let signCount = 0;
  * @param {DDSignFileList} filelist
  */
 async function sign(filelist, unchangedOutputOkay = false) {
-    let data = JSON.stringify(filelist, undefined, 4);
-    console.log("filelist:", data);
+    console.log("filelist:", JSON.stringify(filelist, undefined, 4));
 
-    if (!process.env.MBSIGN_APPFOLDER) {
-        console.log(styleText("yellow", "Faking signing because MBSIGN_APPFOLDER is not set."));
+    if (!process.env.MICROBUILD_PLUGIN_DIRECTORY) {
+        console.log(styleText("yellow", "Faking signing because MICROBUILD_PLUGIN_DIRECTORY is not set."));
 
         // Fake signing for testing.
 
@@ -1659,6 +1666,7 @@ async function sign(filelist, unchangedOutputOkay = false) {
     }
 
     const signingWorkaround = true;
+    let signingFilelist = filelist;
 
     /** @type {{ source: string; target: string }[]} */
     const signingWorkaroundFiles = [];
@@ -1699,8 +1707,8 @@ async function sign(filelist, unchangedOutputOkay = false) {
             }),
         };
 
-        data = JSON.stringify(newFileList, undefined, 4);
-        console.log("new filelist:", data);
+        signingFilelist = newFileList;
+        console.log("new filelist:", JSON.stringify(signingFilelist, undefined, 4));
     }
 
     /** @type {Map<string, string>} */
@@ -1724,16 +1732,41 @@ async function sign(filelist, unchangedOutputOkay = false) {
     }
 
     const tmp = await getSignTempDir();
-    const filelistPath = path.resolve(tmp, `signing-filelist-${signCount++}.json`);
-    await fs.promises.writeFile(filelistPath, data);
+    const propsPath = path.resolve(tmp, `signing-items-${signCount++}.props`);
+    const signingItems = signingFilelist.SignFileRecordList.flatMap(record => record.SignFileList.map(file => ({ path: file.SrcPath, cert: record.Certs, macAppName: record.MacAppName })));
+    const items = signingItems.map(({ path: filePath, cert, macAppName }) =>
+        `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
+      <Authenticode>${assertMsbuildXmlValue(cert)}</Authenticode>
+      <StrongName>None</StrongName>${
+            macAppName ? `
+      <MacAppName>${assertMsbuildXmlValue(macAppName)}</MacAppName>` : ""
+        }
+    </FilesToSign>`
+    ).join("\n");
+    await fs.promises.writeFile(
+        propsPath,
+        `<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+${items}
+  </ItemGroup>
+</Project>
+`,
+    );
 
     try {
-        const dll = path.join(process.env.MBSIGN_APPFOLDER, "DDSignFiles.dll");
-        const filelistFlag = `/filelist:${filelistPath}`;
-        await run("dotnet", [dll, "--", filelistFlag]);
+        await run("dotnet", [
+            "build",
+            path.resolve("tools/signing/Sign.csproj"),
+            "--target:AfterBuild",
+            "--verbosity:normal",
+            "-p:SignType=real",
+            `-p:SignFilesDir=${path.resolve("built")}`,
+            `-p:FilesToSignPropsFile=${propsPath}`,
+            `-p:MicroBuildOverridePluginDirectory=${process.env.MICROBUILD_PLUGIN_DIRECTORY}`,
+        ]);
     }
     finally {
-        await fs.promises.unlink(filelistPath);
+        await fs.promises.unlink(propsPath);
     }
 
     if (signingWorkaround) {
@@ -2798,7 +2831,7 @@ async function runSignVsixExtensions() {
         ],
     });
 
-    if (!process.env.MBSIGN_APPFOLDER) {
+    if (!process.env.MICROBUILD_PLUGIN_DIRECTORY) {
         console.log("Skipping VSIX signature verification because signing was faked.");
         return;
     }
