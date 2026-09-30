@@ -1,10 +1,9 @@
-package module_test
+package module
 
 import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -16,7 +15,7 @@ func TestStaticResolver(t *testing.T) {
 		"/repo/node_modules/fallback/package.json": `{"name":"fallback","types":"index.d.ts"}`,
 		"/repo/node_modules/fallback/index.d.ts":   "export {};",
 	}, true)
-	fallback := module.NewResolver(module.ResolverOptions{
+	fallback := NewResolver(ResolverOptions{
 		Host: &resolutionHostStub{fs: fs, cwd: "/repo"},
 		CompilerOptions: &core.CompilerOptions{
 			Module:           core.ModuleKindESNext,
@@ -24,12 +23,12 @@ func TestStaticResolver(t *testing.T) {
 		},
 	})
 	esm := core.ResolutionModeESM
-	resolutions, err := module.NewStaticResolutions(
-		[]module.StaticResolutionEntry{
-			{ModuleName: "provided", Result: &module.ResolvedModule{ResolvedFileName: "/global.d.ts"}},
-			{ModuleName: "provided", ContainingDirectory: "/repo/src", Result: &module.ResolvedModule{ResolvedFileName: "/directory.d.ts"}},
-			{ModuleName: "provided", ResolutionMode: &esm, Result: &module.ResolvedModule{ResolvedFileName: "/esm.d.ts"}},
-			{ModuleName: "provided", ContainingDirectory: "/repo/src", ResolutionMode: &esm, Result: &module.ResolvedModule{ResolvedFileName: "/directory-esm.d.ts"}},
+	resolutions, err := NewStaticResolutions(
+		[]StaticResolutionEntry{
+			{ModuleName: "provided", Result: &ResolvedModule{ResolvedFileName: "/global.d.ts"}},
+			{ModuleName: "provided", ContainingDirectory: "/repo/src", Result: &ResolvedModule{ResolvedFileName: "/directory.d.ts"}},
+			{ModuleName: "provided", ResolutionMode: &esm, Result: &ResolvedModule{ResolvedFileName: "/esm.d.ts"}},
+			{ModuleName: "provided", ContainingDirectory: "/repo/src", ResolutionMode: &esm, Result: &ResolvedModule{ResolvedFileName: "/directory-esm.d.ts"}},
 			{ModuleName: "unresolved"},
 		},
 		true,
@@ -37,7 +36,7 @@ func TestStaticResolver(t *testing.T) {
 		true,
 	)
 	assert.NilError(t, err)
-	resolver := module.NewStaticResolver(fallback, resolutions)
+	resolver := NewStaticResolver(fallback, resolutions)
 
 	tests := []struct {
 		name             string
