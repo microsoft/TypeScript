@@ -84,8 +84,8 @@ extends:
                   enabled: false
               outputs:
                 - output: pipelineArtifact
-                  targetPath: $(Build.SourcesDirectory)/built/npm/typescript-$(platform)
-                  artifactName: typescript-$(platform)
+                  targetPath: $(Build.SourcesDirectory)/built/npm/$(npmDirName)
+                  artifactName: $(npmDirName)
                   isProduction: false
                   sbomEnabled: false
 
@@ -195,18 +195,25 @@ extends:
                 inputs:
                   buildType: current
                   targetPath: $(Pipeline.Workspace)/platform-packages
-                  patterns: 'typescript-*/**'
+                  patterns: '*-*/**'
 
               - bash: |
                   set -euo pipefail
                   shopt -s nullglob
-                  platformArtifacts=("$(Pipeline.Workspace)"/platform-packages/typescript-*)
+                  platformArtifacts=("$(Pipeline.Workspace)"/platform-packages/*)
                   if (( ${#platformArtifacts[@]} == 0 )); then
                     echo "No platform package artifacts were downloaded." >&2
                     exit 1
                   fi
                   for artifact in "${platformArtifacts[@]}"; do
-                    cp -a "$artifact" "built/npm/$(basename "$artifact")"
+                    packageDir="built/npm/$(basename "$artifact")"
+                    cp -a "$artifact" "$packageDir"
+                    executable="$(find "$packageDir/lib" -maxdepth 1 -type f \( -name tsc -o -name tsc.exe -o -name tsgo -o -name tsgo.exe \) -print -quit)"
+                    if [[ -z "$executable" ]]; then
+                      echo "Missing platform executable in $packageDir." >&2
+                      exit 1
+                    fi
+                    chmod +x "$executable"
                   done
                 displayName: 'Assemble platform packages'
 
