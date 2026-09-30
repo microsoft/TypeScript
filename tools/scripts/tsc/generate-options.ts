@@ -432,6 +432,29 @@ export function generateOptionComparisons(model = options): string {
 `;
 }
 
+function enumStrings(): string {
+    return options.enums.filter(enumDef => enumDef.stringer).map(enumDef => {
+        const stringer = enumDef.stringer!;
+        return `func (value ${enumDef.name}) String() string {
+    switch value {
+    case 0:
+        panic("should not use zero value of ${enumDef.name}")
+    ${
+            enumDef.members.filter(member => typeof member.value === "number" && member.value !== 0).map(member => {
+                const constant = `${enumDef.name}${member.name}`;
+                const text = stringer === "name" ? member.name : options.enumMaps[stringer.enumMap].values.find(entry => typeof entry.value === "object" && entry.value.go === `core.${constant}`)?.name;
+                assert(text, `Missing display name for ${constant}`);
+                return `case ${constant}: return ${JSON.stringify(text)}`;
+            }).join("\n")
+        }
+    default:
+        panic("unhandled case in ${enumDef.name}.String")
+    }
+}
+`;
+    }).join("\n");
+}
+
 function numericEnums(): string {
     return `${
         options.enums.map(enumDef =>
@@ -639,6 +662,7 @@ import (
 
 ${coreOptions()}
 ${numericEnums()}
+${enumStrings()}
 ${storedOptions("TypeAcquisition", options.typeAcquisition)}
 ${storedOptions("BuildOptions", orderByName(buildOptions, options.buildOptionFieldOrder, "BuildOptions fields"))}
 `,

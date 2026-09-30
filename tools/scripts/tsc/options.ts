@@ -2522,6 +2522,7 @@ export const options: OptionsModel = {
         {
             name: "ModuleResolutionKind",
             api: true,
+            stringer: "name",
             members: [
                 {
                     name: "Unknown",
@@ -2667,6 +2668,7 @@ export const options: OptionsModel = {
         {
             name: "JsxEmit",
             api: true,
+            stringer: { enumMap: "jsx" },
             members: [
                 {
                     name: "None",

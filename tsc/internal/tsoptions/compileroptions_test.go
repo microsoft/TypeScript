@@ -10,6 +10,49 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
+func TestOptionEnumStrings(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		value interface{ String() string }
+		want  string
+	}{
+		{core.ModuleResolutionKindClassic, "Classic"},
+		{core.ModuleResolutionKindNode10, "Node10"},
+		{core.ModuleResolutionKindNode16, "Node16"},
+		{core.ModuleResolutionKindNodeNext, "NodeNext"},
+		{core.ModuleResolutionKindBundler, "Bundler"},
+		{core.JsxEmitPreserve, "preserve"},
+		{core.JsxEmitReactNative, "react-native"},
+		{core.JsxEmitReact, "react"},
+		{core.JsxEmitReactJSX, "react-jsx"},
+		{core.JsxEmitReactJSXDev, "react-jsxdev"},
+	} {
+		if got := test.value.String(); got != test.want {
+			t.Errorf("got %q, want %q", got, test.want)
+		}
+	}
+	for _, test := range []struct {
+		value interface{ String() string }
+		want  string
+	}{
+		{core.ModuleResolutionKindUnknown, "should not use zero value of ModuleResolutionKind"},
+		{core.ModuleResolutionKind(-1), "unhandled case in ModuleResolutionKind.String"},
+		{core.ModuleResolutionKind(4), "unhandled case in ModuleResolutionKind.String"},
+		{core.JsxEmitNone, "should not use zero value of JsxEmit"},
+		{core.JsxEmit(-1), "unhandled case in JsxEmit.String"},
+		{core.JsxEmit(6), "unhandled case in JsxEmit.String"},
+	} {
+		func() {
+			defer func() {
+				if got := recover(); got != test.want {
+					t.Errorf("got panic %v, want %q", got, test.want)
+				}
+			}()
+			_ = test.value.String()
+		}()
+	}
+}
+
 func TestGeneratedCompilerOptionParsingAndClone(t *testing.T) {
 	t.Parallel()
 

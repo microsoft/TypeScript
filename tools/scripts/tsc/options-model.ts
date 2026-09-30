@@ -110,6 +110,8 @@ export type SchemaOnlyOption = {
 export interface OptionEnum {
     name: string;
     api?: boolean;
+    /** Generate a String method that rejects zero and unknown values. */
+    stringer?: "name" | { enumMap: string; };
     members: {
         name: string;
         value: number | string;
