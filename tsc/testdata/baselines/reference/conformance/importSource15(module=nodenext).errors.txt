@@ -1,4 +1,4 @@
-b.js(1,8): error TS100074: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
+b.js(1,8): error TS18115: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
 
 
 ==== package.json (0 errors) ====
@@ -10,6 +10,6 @@ b.js(1,8): error TS100074: Source phase imports are not allowed on statements th
 ==== b.js (1 errors) ====
     import source a from "./a.js";
            ~~~~~~~~
-!!! error TS100074: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
+!!! error TS18115: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
     const b = import.source("./a.js");
     

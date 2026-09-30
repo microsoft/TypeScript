@@ -1,5 +1,5 @@
-b.ts(1,8): error TS100071: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-b.ts(2,11): error TS100071: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+b.ts(1,8): error TS18113: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+b.ts(2,11): error TS18113: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 
 
 ==== a.ts (0 errors) ====
@@ -8,8 +8,8 @@ b.ts(2,11): error TS100071: Source phase imports are only supported when the '--
 ==== b.ts (2 errors) ====
     import source a from "./a.js";
            ~~~~~~~~
-!!! error TS100071: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS18113: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
     const b = import.source("./a.js");
               ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS100071: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS18113: Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
     

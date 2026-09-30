@@ -1,19 +1,19 @@
-b.js(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
-c.js(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
-d.js(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
-e.js(1,8): error TS100069: A source phase import must specify a local binding.
+b.js(1,8): error TS18112: Named and namespace imports are not allowed in a source phase import.
+c.js(1,8): error TS18112: Named and namespace imports are not allowed in a source phase import.
+d.js(1,8): error TS18112: Named and namespace imports are not allowed in a source phase import.
+e.js(1,8): error TS18111: A source phase import must specify a local binding.
 f.js(1,14): error TS1005: '(' expected.
 f.js(2,15): error TS1005: '(' expected.
 f.js(3,23): error TS1005: '(' expected.
 f.js(4,14): error TS1005: '(' expected.
 f.js(6,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 f.js(7,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
-f.js(8,14): error TS100072: Optional chaining cannot be used with 'import.source'.
+f.js(8,14): error TS18114: Optional chaining cannot be used with 'import.source'.
 f.js(9,14): error TS1005: '(' expected.
 f.js(10,15): error TS1325: Argument of dynamic import cannot be spread element.
 g.js(1,5): error TS1109: Expression expected.
 h.js(1,21): error TS1005: '(' expected.
-i.js(1,8): error TS100073: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
+i.js(1,8): error TS18061: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
 m.js(1,8): error TS1260: Keywords cannot contain escape characters.
 
 
@@ -24,22 +24,22 @@ m.js(1,8): error TS1260: Keywords cannot contain escape characters.
 ==== b.js (1 errors) ====
     import source * as a from "./a.js";
            ~~~~~~~~~~~~~
-!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+!!! error TS18112: Named and namespace imports are not allowed in a source phase import.
     
 ==== c.js (1 errors) ====
     import source { a } from "./a.js";
            ~~~~~~~~~~~~
-!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+!!! error TS18112: Named and namespace imports are not allowed in a source phase import.
     
 ==== d.js (1 errors) ====
     import source a, { a as b } from "./a.js";
            ~~~~~~~~~~~~~~~~~~~~
-!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+!!! error TS18112: Named and namespace imports are not allowed in a source phase import.
     
 ==== e.js (1 errors) ====
     import source "./a.js";
            ~~~~~~
-!!! error TS100069: A source phase import must specify a local binding.
+!!! error TS18111: A source phase import must specify a local binding.
     
 ==== f.js (9 errors) ====
     import.source;
@@ -63,7 +63,7 @@ m.js(1,8): error TS1260: Keywords cannot contain escape characters.
 !!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     import.source?.("./a.js");
                  ~~
-!!! error TS100072: Optional chaining cannot be used with 'import.source'.
+!!! error TS18114: Optional chaining cannot be used with 'import.source'.
     import.source<string>("./a.js");
                  
 !!! error TS1005: '(' expected.
@@ -84,7 +84,7 @@ m.js(1,8): error TS1260: Keywords cannot contain escape characters.
 ==== i.js (1 errors) ====
     import.a("./a.js");
            ~
-!!! error TS100073: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
+!!! error TS18061: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
     
 ==== j.js (0 errors) ====
     import source a from "./a.js" with { type: "javascript" };

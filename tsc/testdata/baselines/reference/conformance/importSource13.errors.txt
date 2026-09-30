@@ -1,4 +1,4 @@
-c.cts(1,8): error TS100074: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
+c.cts(1,8): error TS18115: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
 
 
 ==== b.mts (0 errors) ====
@@ -9,7 +9,7 @@ c.cts(1,8): error TS100074: Source phase imports are not allowed on statements t
 ==== c.cts (1 errors) ====
     import source a from "./a.wasm";
            ~~~~~~~~
-!!! error TS100074: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
+!!! error TS18115: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
     const b: AbstractModuleSource = a;
     const c: Promise<AbstractModuleSource> = import.source("./a.wasm");
     

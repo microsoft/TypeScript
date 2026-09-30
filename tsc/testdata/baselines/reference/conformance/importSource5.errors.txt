@@ -4,14 +4,14 @@ b.ts(3,23): error TS1005: '(' expected.
 b.ts(4,14): error TS1005: '(' expected.
 b.ts(6,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 b.ts(7,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
-b.ts(8,14): error TS100072: Optional chaining cannot be used with 'import.source'.
+b.ts(8,14): error TS18114: Optional chaining cannot be used with 'import.source'.
 b.ts(9,1): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
 b.ts(10,15): error TS1325: Argument of dynamic import cannot be spread element.
 c.ts(1,5): error TS1109: Expression expected.
 d.ts(1,5): error TS1109: Expression expected.
 d.ts(1,29): error TS2339: Property 'a' does not exist on type 'Promise<AbstractModuleSource>'.
 e.ts(1,21): error TS1005: '(' expected.
-f.ts(1,8): error TS100073: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
+f.ts(1,8): error TS18061: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
 
 
 ==== a.ts (0 errors) ====
@@ -39,7 +39,7 @@ f.ts(1,8): error TS100073: 'a' is not a valid meta-property for keyword 'import'
 !!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     import.source?.("./a.js");
                  ~~
-!!! error TS100072: Optional chaining cannot be used with 'import.source'.
+!!! error TS18114: Optional chaining cannot be used with 'import.source'.
     import.source<string>("./a.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
@@ -67,5 +67,5 @@ f.ts(1,8): error TS100073: 'a' is not a valid meta-property for keyword 'import'
 ==== f.ts (1 errors) ====
     import.a("./a.js");
            ~
-!!! error TS100073: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
+!!! error TS18061: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
     
