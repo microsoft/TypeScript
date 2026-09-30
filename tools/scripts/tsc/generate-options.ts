@@ -17,7 +17,10 @@ import {
     type StoredDeclaration,
 } from "./options-model.ts";
 import { generateConfigSchema } from "./options-schema.ts";
-import { options } from "./options.ts";
+import {
+    options,
+    pluginImportFields,
+} from "./options.ts";
 
 export { generateConfigSchema } from "./options-schema.ts";
 
@@ -128,7 +131,11 @@ function coreOptions(): string {
         const tags = [`json:"${option.name},omitzero"`, ...(option.deprecated ? ['deprecated:"true"'] : []), ...(option.internal ? ['internal:"true"'] : [])];
         return `${comments}${fieldName(option)} ${option.type} \`${tags.join(" ")}\``;
     });
-    return `// CompilerOptions contains the compiler options exposed by the API.
+    return `type PluginImport struct {
+${pluginImportFields.map(field => `${fieldName(field)} ${field.type} \`json:"${field.name}"\``).join("\n")}
+}
+
+// CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {
     _ noCopy
     ${fields.join("\n")}
@@ -144,6 +151,51 @@ func (options *CompilerOptions) Clone() *CompilerOptions {
 // Equals reports whether all stored option values are equal, including nil versus empty collections.
 // Paths are compared by ordered entries, ignoring backing-storage allocation.
 ${optionsEquality("CompilerOptions", options.compilerOptions.map(option => ({ name: fieldName(option), type: option.type })))}
+`;
+}
+
+export function generateCompilerOptionsAPI(model = options): string {
+    const imports = new Set<string>();
+    function typeName(option: CompilerOption): string {
+        switch (option.type) {
+            case "Tristate":
+                return "boolean";
+            case "string":
+                return "string";
+            case "*int":
+                return "number";
+            case "[]string":
+                return "string[]";
+            case "[]PluginImport":
+                return "PluginImport[]";
+            case "*collections.OrderedMap[string, []string]":
+                return "Record<string, string[]>";
+            default:
+                assert(model.enums.some(definition => definition.name === option.type && definition.api), `Missing API enum: ${option.type}`);
+                imports.add(option.type);
+                return option.type;
+        }
+    }
+    const fields = model.compilerOptions.filter(option => !option.internal && !option.deprecated).map(option => {
+        const comment = option.comment ? `/** ${option.comment.replaceAll("*/", "*\\/").replaceAll("\n", "\n * ")} */\n` : "";
+        return `${comment}${option.name}?: ${typeName(option)} | undefined;`;
+    });
+    const pluginFields = pluginImportFields.map(field => `${field.name}: ${typeName(field)};`);
+    const enumNames = [...imports].sort();
+    const enumPath = (name: string) => `#enums/${name[0].toLowerCase() + name.slice(1)}`;
+    return `${header}
+${enumNames.map(name => `import type { ${name} } from "${enumPath(name)}";`).join("\n")}
+
+${enumNames.map(name => `export { ${name} } from "${enumPath(name)}";`).join("\n")}
+
+/** CompilerOptions contains the compiler options exposed by the API. */
+export interface CompilerOptions {
+${fields.join("\n")}
+}
+
+export interface PluginImport {
+${pluginFields.join("\n")}
+}
 `;
 }
 
@@ -571,6 +623,7 @@ export function generateOptions(): Map<string, string> {
     validateOptions(options);
     const buildOptions = options.buildOptions.filter((option): option is StoredDeclaration => option.field !== undefined);
     return new Map([
+        ["packages/typescript/src/api/compilerOptions.generated.ts", generateCompilerOptionsAPI()],
         [
             "tsc/internal/core/options_generated.go",
             `${header}

@@ -9,6 +9,7 @@ import {
 } from "./generate-enums.ts";
 import {
     generateBuildInfoOptions,
+    generateCompilerOptionsAPI,
     generateConfigSchema,
     generateOptionComparisons,
     generateOptions,
@@ -23,6 +24,30 @@ import { options } from "./options.ts";
 
 test("option metadata is valid", () => {
     validateOptions(options);
+});
+
+test("API compiler options are generated directly from option metadata", () => {
+    const source = generateCompilerOptionsAPI();
+    for (
+        const field of [
+            "allowJs?: boolean | undefined;",
+            "jsx?: JsxEmit | undefined;",
+            "module?: ModuleKind | undefined;",
+            "moduleResolution?: ModuleResolutionKind | undefined;",
+            "moduleDetection?: ModuleDetectionKind | undefined;",
+            "newLine?: NewLineKind | undefined;",
+            "target?: ScriptTarget | undefined;",
+            "maxNodeModuleJsDepth?: number | undefined;",
+            "paths?: Record<string, string[]> | undefined;",
+            "plugins?: PluginImport[] | undefined;",
+            "configFilePath?: string | undefined;",
+        ]
+    ) assert(source.includes(field), field);
+    assert.match(source, /export interface PluginImport \{\s*name: string;/);
+    assert.doesNotMatch(source, /baseUrl\?:|outFile\?:|watch\?:|help\?:|configFile\?:/);
+    const model = structuredClone(options);
+    model.compilerOptions.push({ name: "newAPIOption", type: "Tristate" });
+    assert.match(generateCompilerOptionsAPI(model), /newAPIOption\?: boolean \| undefined;/);
 });
 
 test("diagnostic references use checked message text and preserve Go names", () => {
@@ -253,7 +278,7 @@ test("all generated options artifacts are checked in and current", () => {
             assert.deepEqual(JSON.parse(actual), JSON.parse(content), file);
         }
         else {
-            // Ignore Go formatting, but preserve the contents of string literals and comments.
+            // Ignore formatting, but preserve the contents of string literals and comments.
             const tokens = (source: string) => source.match(/"(?:\\.|[^"\\])*"|`[^`]*`|\/\/[^\r\n]*|[^\s]/g);
             assert.deepEqual(tokens(actual), tokens(content), file);
         }

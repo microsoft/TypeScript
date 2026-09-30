@@ -10,6 +10,10 @@ import (
 
 //go:generate npx hereby generate:compileroptions
 
+type PluginImport struct {
+	Name string `json:"name"`
+}
+
 // CompilerOptions contains the compiler options exposed by the API.
 type CompilerOptions struct {
 	_                                         noCopy

@@ -355,7 +355,7 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const generate = () => x("npx", ["hereby", "generate:go"], { throwOnError: true, nodeOptions: { cwd: root } });
     const first = await generate();
     assert.doesNotMatch(first.stdout, /\$ go generate|npm run --silent cache|\$ node .*generate-unicode-data/);
-    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/proto.generated.ts", "packages/typescript/src/enums/*.ts", "tsc/internal/tsoptions/schemas/*.schema.json"], { cwd: root });
+    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/*.generated.ts", "packages/typescript/src/enums/*.ts", "tsc/internal/tsoptions/schemas/*.schema.json"], { cwd: root });
     const timestamps = files.map(file => fs.statSync(path.join(root, file)).mtimeMs);
     const current = await generate();
     assert.doesNotMatch(current.stdout, /Generated codegen outputs|Generated Unicode tables/);
@@ -838,6 +838,8 @@ test("package generation forwards force to AST, encoder, and sync generators", a
 test("API protocol generation caches formatted output and supports force", async context => {
     const root = path.resolve(import.meta.dirname, "../../..");
     const output = path.join(root, "packages/typescript/src/api/proto.generated.ts");
+    const compilerOptions = path.join(root, "packages/typescript/src/api/compilerOptions.generated.ts");
+    const compilerOptionsTimestamp = fs.statSync(compilerOptions).mtimeMs;
     const generate = (force = false) => x("npx", ["hereby", "generate:api", ...(force ? ["--force"] : [])], { throwOnError: true, nodeOptions: { cwd: root } });
     await generate();
     const timestamp = fs.statSync(output).mtimeMs;
@@ -870,6 +872,7 @@ test("API protocol generation caches formatted output and supports force", async
     fs.utimesSync(output, oldTime, oldTime);
     await generate(true);
     assert.notEqual(fs.statSync(output).mtimeMs, oldTime.getTime());
+    assert.equal(fs.statSync(compilerOptions).mtimeMs, compilerOptionsTimestamp, "Protocol generation must not regenerate compiler option definitions");
     assert.match((await generate()).stdout, /codegen outputs are already up to date/);
     fs.utimesSync(output, oldTime, oldTime);
     const nested = await x("go", ["-C", "./tsc", "generate", "./internal/api"], {

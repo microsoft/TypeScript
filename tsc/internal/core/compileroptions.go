@@ -7,10 +7,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-type PluginImport struct {
-	Name string `json:"name"`
-}
-
 // noCopy may be embedded into structs which must not be copied
 // after the first use.
 //

@@ -517,6 +517,10 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/core.Tristate":
 		return "boolean"
+	case "github.com/microsoft/TypeScript/tsc/internal/core.CompilerOptions":
+		return r.importTypeOnly("CompilerOptions", "./compilerOptions.generated.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/core.PluginImport":
+		return r.importTypeOnly("PluginImport", "./compilerOptions.generated.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.JsxEmit":
 		return r.importType("JsxEmit", "#enums/jsxEmit")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleDetectionKind":
@@ -713,6 +717,7 @@ func (r *typeRenderer) importDeclarations() string {
 	for _, path := range paths {
 		fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(r.imports[path], ", "), path)
 	}
+	out.WriteString("export * from \"./compilerOptions.generated.ts\";\n")
 	return out.String()
 }
 

@@ -1,7 +1,12 @@
 import {
+    type CompilerOptionType,
     diagnostic,
     type OptionsModel,
 } from "./options-model.ts";
+
+export const pluginImportFields: { name: string; type: CompilerOptionType; }[] = [
+    { name: "name", type: "string" },
+];
 
 export const options: OptionsModel = {
     schemaOnlyOptions: [

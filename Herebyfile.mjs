@@ -665,7 +665,6 @@ export const generateSync = task({
 });
 
 async function runGenerateAPI() {
-    await runGenerateOptionDefinitions();
     await runGoGenerator("generate:api", {
         file: "tsc/internal/api/proto.go",
         cwd: __dirname,
