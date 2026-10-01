@@ -17,6 +17,7 @@ nodeTest("browser test harness preserves skip options", async () => {
     });
 
     assert.deepStrictEqual(await runRegisteredTests([]), {
+        total: 3,
         passed: 1,
         skipped: [
             { name: "skipped test", reason: "test reason" },

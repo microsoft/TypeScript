@@ -32,6 +32,7 @@ export interface BrowserTestSkip {
 }
 
 export interface BrowserTestResults {
+    total: number;
     passed: number;
     skipped: BrowserTestSkip[];
     failures: BrowserTestFailure[];
@@ -156,7 +157,7 @@ export async function runRegisteredTests(exclusions: readonly BrowserTestExclusi
             });
         }
     }
-    return { passed, skipped, failures };
+    return { total: tests.length, passed, skipped, failures };
 }
 
 function currentSuiteSkip(): string | undefined {

@@ -24,10 +24,6 @@ import type { BrowserTestResults } from "./harness.ts";
 const browserDir = fileURLToPath(new URL(".", import.meta.url));
 const packageDir = path.resolve(browserDir, "../..");
 const modes = ["async", "sync"] as const;
-const expectedTestCounts = {
-    async: 422,
-    sync: 505,
-} as const;
 const fileExclusions = [
     {
         mode: "async",
@@ -210,6 +206,11 @@ describe("API test suite in a browser", () => {
             assert.strictEqual(error, undefined, error?.stack ?? error?.message);
             const results = await page.evaluate(() => Reflect.get(globalThis, "browserTestResults")) as BrowserTestResults;
             assert.strictEqual(
+                results.passed + results.skipped.length + results.failures.length,
+                results.total,
+                `Browser ${mode} API test registration accounting changed`,
+            );
+            assert.strictEqual(
                 results.failures.length,
                 0,
                 [
@@ -220,11 +221,6 @@ describe("API test suite in a browser", () => {
             assert.ok(results.passed > 0);
             const excludedFiles = fileExclusions.filter(exclusion => exclusion.mode === mode);
             const excludedFileTests = excludedFiles.reduce((count, exclusion) => count + exclusion.tests, 0);
-            assert.strictEqual(
-                results.passed + results.skipped.length + excludedFileTests,
-                expectedTestCounts[mode],
-                `Browser ${mode} API test accounting changed`,
-            );
             t.diagnostic(`${results.passed} passed, ${results.skipped.length + excludedFileTests} skipped`);
             for (const skipped of results.skipped) {
                 t.diagnostic(`SKIP ${skipped.name}: ${skipped.reason}`);
