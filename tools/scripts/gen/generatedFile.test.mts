@@ -364,7 +364,7 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const fallback = await x("go", ["-C", "./tsc", "generate", "./internal/diagnostics"], { throwOnError: true, nodeOptions: { cwd: root } });
     assert.equal(fallback.stdout.match(/codegen outputs are already up to date/g)?.length, 2);
     const nested = await x("npx", ["hereby", "generate:compileroptions"], { throwOnError: true, nodeOptions: { cwd: path.join(root, "tsc/internal/core") } });
-    assert.equal(nested.stdout.match(/codegen outputs are already up to date/g)?.length, 3);
+    assert.equal(nested.stdout.match(/codegen outputs are already up to date/g)?.length, 4);
     assert.match(nested.stdout, /Enums are up to date/);
 });
 
