@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/jsxImportSourceScriptFile.tsx] ////
+
+=== /node_modules/@solidjs/web/jsx-runtime.d.ts ===
+export namespace JSX {
+>JSX : Symbol(JSX, Decl(jsx-runtime.d.ts, 0, 0))
+
+    type Element = { readonly __solid: true };
+>Element : Symbol(Element, Decl(jsx-runtime.d.ts, 0, 22))
+>__solid : Symbol(__solid, Decl(jsx-runtime.d.ts, 1, 20))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsx-runtime.d.ts, 1, 46))
+
+        div: { children?: unknown };
+>div : Symbol(IntrinsicElements.div, Decl(jsx-runtime.d.ts, 2, 33))
+>children : Symbol(children, Decl(jsx-runtime.d.ts, 3, 14))
+    }
+}
+export declare function jsx(type: any, props: any): JSX.Element;
+>jsx : Symbol(jsx, Decl(jsx-runtime.d.ts, 5, 1))
+>type : Symbol(type, Decl(jsx-runtime.d.ts, 6, 28))
+>props : Symbol(props, Decl(jsx-runtime.d.ts, 6, 38))
+>JSX : Symbol(JSX, Decl(jsx-runtime.d.ts, 0, 0))
+>Element : Symbol(JSX.Element, Decl(jsx-runtime.d.ts, 0, 22))
+
+export declare function Fragment(props: { children?: unknown }): JSX.Element;
+>Fragment : Symbol(Fragment, Decl(jsx-runtime.d.ts, 6, 64))
+>props : Symbol(props, Decl(jsx-runtime.d.ts, 7, 33))
+>children : Symbol(children, Decl(jsx-runtime.d.ts, 7, 41))
+>JSX : Symbol(JSX, Decl(jsx-runtime.d.ts, 0, 0))
+>Element : Symbol(JSX.Element, Decl(jsx-runtime.d.ts, 0, 22))
+
+=== /script.tsx ===
+const ok = <><div>hi</div></>;
+>ok : Symbol(ok, Decl(script.tsx, 0, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsx-runtime.d.ts, 2, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsx-runtime.d.ts, 2, 33))
+
+const bad = <span />; // error, not in the runtime's JSX.IntrinsicElements
+>bad : Symbol(bad, Decl(script.tsx, 1, 5))
+
+=== /module.tsx ===
+const ok = <><div>hi</div></>;
+>ok : Symbol(ok, Decl(module.tsx, 0, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsx-runtime.d.ts, 2, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsx-runtime.d.ts, 2, 33))
+
+const bad = <span />; // error, not in the runtime's JSX.IntrinsicElements
+>bad : Symbol(bad, Decl(module.tsx, 1, 5))
+
+export {};
+
