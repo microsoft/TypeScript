@@ -316,6 +316,12 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		}
 		name := n.Name()
 		namedBindings := tx.Visitor().VisitNode(n.NamedBindings)
+		if name != nil && namedBindings != nil && ast.IsNamedImports(namedBindings) &&
+			len(namedBindings.AsNamedImports().Elements.Nodes) == 0 &&
+			len(n.NamedBindings.AsNamedImports().Elements.Nodes) != 0 {
+			// the default binding keeps the import; a source-written {} is left as is
+			namedBindings = nil
+		}
 		if name == nil && namedBindings == nil {
 			// all import bindings were elided
 			return nil

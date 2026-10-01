@@ -23,10 +23,10 @@ export default class A {
 }
 export const v = 0;
 //// [b.js]
-import A1, {} from "./a";
+import A1 from "./a";
 import A2, { v } from "./a";
 import {} from "./a";
 import A4, {} from "./a";
-import A5, {} from "./a";
-import A6, {} from "./a";
+import A5 from "./a";
+import A6 from "./a";
 export { A1, A2, A4, A5, A6, v };
