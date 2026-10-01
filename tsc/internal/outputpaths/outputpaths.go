@@ -9,15 +9,17 @@ import (
 type OutputPathsHost interface {
 	CommonSourceDirectory() string
 	ContentMapperExtensions() []string
+	ContentMapperExtensionRewrites() []core.ExtensionRewrite
 	GetCurrentDirectory() string
 	UseCaseSensitiveFileNames() bool
 }
 
 type OutputPaths struct {
-	jsFilePath          string
-	sourceMapFilePath   string
-	declarationFilePath string
-	declarationMapPath  string
+	jsFilePath             string
+	sourceMapFilePath      string
+	declarationFilePath    string
+	declarationMapPath     string
+	externalOutputFilePath string
 }
 
 // DeclarationFilePath implements declarations.OutputPaths.
@@ -38,6 +40,10 @@ func (o *OutputPaths) DeclarationMapPath() string {
 	return o.declarationMapPath
 }
 
+func (o *OutputPaths) ExternalOutputFilePath() string {
+	return o.externalOutputFilePath
+}
+
 type ForceEmitPaths struct {
 	Dts            bool
 	Js             bool
@@ -54,6 +60,9 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
 		}) == 0
 	paths := &OutputPaths{}
+	if sourceFile.ContentMapper() != "" {
+		paths.externalOutputFilePath = GetExternalOutputFileName(sourceFile.FileName(), options, host)
+	}
 	if sourceFile.ContentMapper() == "" && (force.Js || options.EmitDeclarationOnly != core.TSTrue) && !isJsonEmittedToSameLocation {
 		paths.jsFilePath = ownOutputFilePath
 		if !ast.IsJsonSourceFile(sourceFile) {
@@ -69,9 +78,27 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 	return paths
 }
 
-func ForEachEmittedFile(host OutputPathsHost, options *core.CompilerOptions, action func(emitFileNames *OutputPaths, sourceFile *ast.SourceFile) bool, sourceFiles []*ast.SourceFile, forceDtsEmit bool) bool {
+func ForEachEmittedFile(
+	host OutputPathsHost,
+	options *core.CompilerOptions,
+	action func(emitFileNames *OutputPaths, sourceFile *ast.SourceFile) bool,
+	sourceFiles []*ast.SourceFile,
+	externalOutputSourceFiles []*ast.SourceFile,
+	forceDtsEmit bool,
+) bool {
+	seen := make(map[*ast.SourceFile]struct{}, len(sourceFiles))
 	for _, sourceFile := range sourceFiles {
+		seen[sourceFile] = struct{}{}
 		if action(GetOutputPathsFor(sourceFile, options, host, ForceEmitPaths{Dts: forceDtsEmit}), sourceFile) {
+			return true
+		}
+	}
+	for _, sourceFile := range externalOutputSourceFiles {
+		if _, ok := seen[sourceFile]; ok {
+			continue
+		}
+		paths := &OutputPaths{externalOutputFilePath: GetExternalOutputFileName(sourceFile.FileName(), options, host)}
+		if action(paths, sourceFile) {
 			return true
 		}
 	}
@@ -113,6 +140,15 @@ func GetOutputDeclarationFileNameWorker(inputFileName string, options *core.Comp
 	return ChangeToDeclarationExtension(getOutputPathWithoutChangingExtension(inputFileName, dir, host), host)
 }
 
+func GetExternalOutputFileName(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
+	outputPath := getOutputPathWithoutChangingExtension(inputFileName, options.OutDir, host)
+	rewritten, ok := core.RewriteExtension(outputPath, host.ContentMapperExtensionRewrites(), !host.UseCaseSensitiveFileNames())
+	if !ok {
+		return ""
+	}
+	return rewritten
+}
+
 func GetOutputExtension(fileName string, jsx core.JsxEmit) string {
 	switch {
 	case tspath.FileExtensionIs(fileName, tspath.ExtensionJson):
@@ -146,9 +182,16 @@ func GetDeclarationEmitOutputFilePath(file string, options *core.CompilerOptions
 }
 
 func ChangeToDeclarationExtension(path string, host OutputPathsHost) string {
+	if rewritten, ok := core.RewriteExtension(path, host.ContentMapperExtensionRewrites(), !host.UseCaseSensitiveFileNames()); ok {
+		return changeToDeclarationExtension(rewritten)
+	}
 	if extension := tspath.GetLongestExtensionFromPath(path, host.ContentMapperExtensions(), false); extension != "" {
 		return tspath.RemoveExtension(path, extension) + ".d" + extension + ".ts"
 	}
+	return changeToDeclarationExtension(path)
+}
+
+func changeToDeclarationExtension(path string) string {
 	pathWithoutExtension := tspath.RemoveFileExtension(path)
 	if pathWithoutExtension == path {
 		if extension := tspath.GetAnyExtensionFromPath(path, nil, false); extension != "" {

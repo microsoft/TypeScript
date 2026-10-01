@@ -16,6 +16,7 @@ const documentedContribution = {
             exec: ["node", "mapper.js"],
             compilerOptions: ["strict"],
             dynamicConfig: true,
+            outputExtensions: { ".vue": ".js" },
         },
     },
 } satisfies ContentMapperContribution;
@@ -49,6 +50,7 @@ describe("content mapper contributions", { concurrency: true }, () => {
                     cwd: undefined,
                     compilerOptions: ["strict"],
                     dynamicConfig: true,
+                    outputExtensions: { ".vue": ".js" },
                 },
             },
         }]);

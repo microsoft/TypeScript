@@ -54,6 +54,10 @@ func (p *fakeProgram) ContentMapperExtensions() []string {
 	return nil
 }
 
+func (p *fakeProgram) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+	return nil
+}
+
 func (p *fakeProgram) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
 	panic("unimplemented")
 }

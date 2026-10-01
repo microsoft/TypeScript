@@ -159,6 +159,10 @@ func (r *aliasResolver) ContentMapperExtensions() []string {
 	return nil
 }
 
+func (r *aliasResolver) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+	return nil
+}
+
 // FileExists implements checker.Program.
 func (r *aliasResolver) FileExists(fileName string) bool {
 	panic("unimplemented")

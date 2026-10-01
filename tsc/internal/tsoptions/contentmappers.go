@@ -1,6 +1,10 @@
 package tsoptions
 
 import (
+	"maps"
+	"slices"
+	"strings"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -52,5 +56,27 @@ func resolveContentMapperManifest(host ParseConfigHost, containingFile string, p
 	}
 	compilerOptions, _ := cm.CompilerOptions.GetValue()
 	dynamicConfig, _ := cm.DynamicConfig.GetValue()
-	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig}, packageDirectory, nil
+	outputExtensions, valid := cm.OutputExtensions.GetValue()
+	if cm.OutputExtensions.IsPresent() && !valid {
+		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+			diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
+			packageName,
+		)
+	}
+	for _, source := range slices.Sorted(maps.Keys(outputExtensions)) {
+		output := outputExtensions[source]
+		if !isValidContentMapperExtension(source) || !isValidContentMapperExtension(output) {
+			return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+				diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
+				packageName,
+				source,
+				output,
+			)
+		}
+	}
+	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions}, packageDirectory, nil
+}
+
+func isValidContentMapperExtension(extension string) bool {
+	return len(extension) > 1 && strings.HasPrefix(extension, ".")
 }

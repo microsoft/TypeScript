@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"iter"
+	"maps"
 	"math/rand/v2"
 	"runtime/debug"
 	"slices"
@@ -2486,6 +2487,11 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 				return result, fmt.Errorf("content mapper contribution %q requests unknown compiler option %q", identity, option)
 			}
 		}
+		for source, output := range valueOrZero(manifest.OutputExtensions) {
+			if len(source) <= 1 || source[0] != '.' || len(output) <= 1 || output[0] != '.' {
+				return result, fmt.Errorf("content mapper contribution %q has invalid output extension mapping from %q to %q", identity, source, output)
+			}
+		}
 		for _, extension := range validExtensions {
 			if !claimedExtensions.AddIfAbsent(strings.ToLower(extension)) {
 				return result, fmt.Errorf("content mapper contributions both claim extension %q", extension)
@@ -2509,6 +2515,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			DynamicConfig:   valueOrZero(manifest.DynamicConfig),
 			ContributionID:  identity,
 		}
+		mapper.Manifest.DefaultOutputExtensions = maps.Clone(valueOrZero(manifest.OutputExtensions))
 		if manifest.Cwd != nil {
 			if !tspath.PathIsAbsolute(*manifest.Cwd) {
 				return result, fmt.Errorf("content mapper contribution %q has non-absolute cwd", identity)

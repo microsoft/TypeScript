@@ -35,6 +35,7 @@ type DeclarationEmitHost interface {
 	modulespecifiers.ModuleSpecifierGenerationHost
 	GetCurrentDirectory() string
 	UseCaseSensitiveFileNames() bool
+	ContentMapperExtensionRewrites() []core.ExtensionRewrite
 	GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile
 
 	GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) OutputPaths
@@ -220,7 +221,7 @@ const declarationEmitNodeBuilderFlags = nodebuilder.FlagsMultilineObjectLiterals
 	nodebuilder.FlagsGenerateNamesForShadowedTypeParams |
 	nodebuilder.FlagsNoTruncation
 
-const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames
+const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames | nodebuilder.InternalFlagsRewriteModuleSpecifiers
 
 // functions as both `visitDeclarationStatements` and `transformRoot`, utilitzing SyntaxList nodes
 func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
@@ -1610,6 +1611,23 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		return nil
 	}
 	tx.resultHasExternalModuleIndicator = tx.resultHasExternalModuleIndicator || (parent.Kind != ast.KindModuleDeclaration && parent.Kind != ast.KindImportType)
+	if ast.IsStringLiteral(input) && core.ShouldRewriteModuleSpecifierWithExtensions(
+		input.Text(),
+		tx.compilerOptions,
+		tx.host.ContentMapperExtensionRewrites(),
+		!tx.host.UseCaseSensitiveFileNames(),
+	) {
+		if rewritten, ok := core.RewriteExtension(
+			input.Text(),
+			tx.host.ContentMapperExtensionRewrites(),
+			!tx.host.UseCaseSensitiveFileNames(),
+		); ok {
+			result := tx.Factory().NewStringLiteral(rewritten, input.AsStringLiteral().TokenFlags)
+			tx.EmitContext().SetOriginal(result, input)
+			tx.EmitContext().AssignCommentAndSourceMapRanges(result, input)
+			return result
+		}
+	}
 	return input
 }
 

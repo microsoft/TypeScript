@@ -48,6 +48,10 @@ func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensions() []string {
 	return h.contentMapperExtensions
 }
 
+func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+	return nil
+}
+
 func (h *mockModuleSpecifierGenerationHost) GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
 	return nil
 }

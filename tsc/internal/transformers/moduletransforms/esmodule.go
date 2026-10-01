@@ -12,12 +12,14 @@ import (
 
 type ESModuleTransformer struct {
 	transformers.Transformer
-	compilerOptions           *core.CompilerOptions
-	resolver                  binder.ReferenceResolver
-	getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind
-	currentSourceFile         *ast.SourceFile
-	importRequireStatements   *importRequireStatements
-	helperNameSubstitutions   map[string]*ast.IdentifierNode
+	compilerOptions                *core.CompilerOptions
+	resolver                       binder.ReferenceResolver
+	getEmitModuleFormatOfFile      func(file ast.HasFileName) core.ModuleKind
+	contentMapperExtensionRewrites []core.ExtensionRewrite
+	ignoreCase                     bool
+	currentSourceFile              *ast.SourceFile
+	importRequireStatements        *importRequireStatements
+	helperNameSubstitutions        map[string]*ast.IdentifierNode
 }
 
 type importRequireStatements struct {
@@ -27,7 +29,7 @@ type importRequireStatements struct {
 
 func NewESModuleTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	compilerOptions := opts.CompilerOptions
-	tx := &ESModuleTransformer{compilerOptions: compilerOptions, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile}
+	tx := &ESModuleTransformer{compilerOptions: compilerOptions, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile, contentMapperExtensionRewrites: opts.ContentMapperExtensionRewrites, ignoreCase: opts.IgnoreCase}
 	return tx.NewTransformer(tx.visit, opts.Context)
 }
 
@@ -104,7 +106,7 @@ func (tx *ESModuleTransformer) visitImportDeclaration(node *ast.ImportDeclaratio
 	if !tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		return node.AsNode()
 	}
-	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions)
+	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase)
 	return tx.Factory().UpdateImportDeclaration(
 		node,
 		nil, /*modifiers*/
@@ -198,7 +200,7 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 		return node.AsNode()
 	}
 
-	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions)
+	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase)
 	if tx.compilerOptions.Module > core.ModuleKindES2015 || node.ExportClause == nil || !ast.IsNamespaceExport(node.ExportClause) {
 		// Either ill-formed or don't need to be transformed.
 		return tx.Factory().UpdateExportDeclaration(
@@ -264,9 +266,9 @@ func (tx *ESModuleTransformer) visitImportOrRequireCall(node *ast.CallExpression
 
 	var argument *ast.Expression
 	if ast.IsStringLiteralLike(node.Arguments.Nodes[0]) {
-		argument = rewriteModuleSpecifier(tx.EmitContext(), node.Arguments.Nodes[0], tx.compilerOptions)
+		argument = rewriteModuleSpecifier(tx.EmitContext(), node.Arguments.Nodes[0], tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase)
 	} else {
-		argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(node.Arguments.Nodes[0], tx.compilerOptions.Jsx == core.JsxEmitPreserve)
+		argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(node.Arguments.Nodes[0], tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.ignoreCase)
 	}
 
 	var arguments []*ast.Expression
@@ -292,7 +294,7 @@ func (tx *ESModuleTransformer) createRequireCall(node *ast.Node /*ImportDeclarat
 
 	var args []*ast.Expression
 	if moduleName != nil {
-		args = append(args, rewriteModuleSpecifier(tx.EmitContext(), moduleName, tx.compilerOptions))
+		args = append(args, rewriteModuleSpecifier(tx.EmitContext(), moduleName, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase))
 	}
 
 	if tx.compilerOptions.GetEmitModuleKind() == core.ModuleKindPreserve {

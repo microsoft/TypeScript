@@ -14,6 +14,7 @@ type EmitHost interface {
 	UseCaseSensitiveFileNames() bool
 	GetCurrentDirectory() string
 	CommonSourceDirectory() string
+	ContentMapperExtensionRewrites() []core.ExtensionRewrite
 	IsEmitBlocked(file string) bool
 	WriteFile(fileName string, text string) error
 	GetEmitModuleFormatOfFile(file ast.HasFileName) core.ModuleKind

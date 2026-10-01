@@ -51,6 +51,7 @@ type ModuleSpecifierGenerationHost interface {
 	// GetFileIncludeReasons() any // !!! TODO: adapt new resolution cache model
 	CommonSourceDirectory() string
 	ContentMapperExtensions() []string
+	ContentMapperExtensionRewrites() []core.ExtensionRewrite
 	GetGlobalTypingsCacheLocation() string
 	UseCaseSensitiveFileNames() bool
 	GetCurrentDirectory() string

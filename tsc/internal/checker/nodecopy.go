@@ -270,7 +270,10 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 func (b *NodeBuilderImpl) rewriteModuleSpecifier(parent *ast.Node, lit *ast.Node) *ast.Node {
 	newName := b.getModuleSpecifierOverride(parent, lit)
 	if len(newName) == 0 {
-		return lit
+		newName = b.rewriteContentMappedModuleSpecifier(lit.Text())
+		if newName == lit.Text() {
+			return lit
+		}
 	}
 	res := b.f.NewStringLiteral(newName, ast.TokenFlagsNone)
 	b.e.SetOriginal(res, lit)

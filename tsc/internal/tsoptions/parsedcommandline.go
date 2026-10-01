@@ -361,6 +361,47 @@ func (p *ParsedCommandLine) ContentMapperExtensions() []string {
 	})
 }
 
+func (p *ParsedCommandLine) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+	var result []core.ExtensionRewrite
+	hasNonIdentityMapping := false
+	ignoreCase := !p.UseCaseSensitiveFileNames()
+	for _, mapper := range p.ContentMappers() {
+		outputExtensions := mapper.EffectiveOutputExtensions()
+		for _, source := range mapper.Definition.Extensions {
+			target, ok := getContentMapperOutputExtension(outputExtensions, source, ignoreCase)
+			if !ok || target == source || ignoreCase && strings.EqualFold(target, source) {
+				target = source
+			} else {
+				hasNonIdentityMapping = true
+			}
+			result = append(result, core.ExtensionRewrite{Source: source, Target: target})
+		}
+	}
+	if !hasNonIdentityMapping {
+		return nil
+	}
+	// Identity entries prevent shorter mappings from claiming a longer registered extension.
+	// The runtime helper uses the first match, so emit the longest extensions first.
+	slices.SortStableFunc(result, func(a, b core.ExtensionRewrite) int {
+		return len(b.Source) - len(a.Source)
+	})
+	return result
+}
+
+func getContentMapperOutputExtension(outputExtensions map[string]string, sourceExtension string, ignoreCase bool) (string, bool) {
+	if output, ok := outputExtensions[sourceExtension]; ok {
+		return output, true
+	}
+	if ignoreCase {
+		for source, output := range outputExtensions {
+			if strings.EqualFold(source, sourceExtension) {
+				return output, true
+			}
+		}
+	}
+	return "", false
+}
+
 // GetContentMapperForFileName returns the configured content mapper whose extensions include fileName,
 // or nil if no content mapper is registered for the file's extension.
 func (p *ParsedCommandLine) GetContentMapperForFileName(fileName string) *contentmapper.Mapper {

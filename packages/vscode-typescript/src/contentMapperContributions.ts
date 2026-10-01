@@ -7,6 +7,7 @@ export interface ContentMapperManifest {
     readonly cwd?: vscode.Uri;
     readonly compilerOptions?: readonly string[];
     readonly dynamicConfig?: boolean;
+    readonly outputExtensions?: Readonly<Record<string, string>>;
 }
 
 export interface ContentMapperContribution {
@@ -29,6 +30,7 @@ export interface SerializedContentMapperContribution {
             readonly cwd?: string;
             readonly compilerOptions?: readonly string[];
             readonly dynamicConfig?: boolean;
+            readonly outputExtensions?: Readonly<Record<string, string>>;
         };
     };
 }
@@ -49,6 +51,9 @@ export function serializeContentMapperContributions(
                         exec: [...contribution.inferredProjectContribution.manifest.exec],
                         cwd: contribution.inferredProjectContribution.manifest.cwd?.fsPath,
                         compilerOptions: contribution.inferredProjectContribution.manifest.compilerOptions && [...contribution.inferredProjectContribution.manifest.compilerOptions],
+                        ...(contribution.inferredProjectContribution.manifest.outputExtensions && {
+                            outputExtensions: { ...contribution.inferredProjectContribution.manifest.outputExtensions },
+                        }),
                     },
                 },
             });
@@ -75,7 +80,14 @@ export function validateContentMapperRegistration(contributorId: string, contrib
         if (inferredProjectContribution?.manifest.cwd && inferredProjectContribution.manifest.cwd.scheme !== "file") {
             throw new TypeError("Content mapper contribution cwd must be a file URI.");
         }
+        if (inferredProjectContribution?.manifest.outputExtensions && Object.entries(inferredProjectContribution.manifest.outputExtensions).some(([source, output]) => !isExtension(source) || !isExtension(output))) {
+            throw new TypeError("Content mapper output extensions must be non-empty and begin with '.'.");
+        }
     }
+}
+
+function isExtension(value: string): boolean {
+    return value.length > 1 && value.startsWith(".");
 }
 
 export function documentMatchesContentMapperContributions(

@@ -62,6 +62,54 @@ func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 	assert.DeepEqual(t, slices.Collect(commandLine.GetOutputFileNames()), []string{"/dist/Component.d.vue.ts"})
 }
 
+func TestContentMapperExtensionRewritesPreserveLongestExtension(t *testing.T) {
+	t.Parallel()
+	mapper := &contentmapper.Mapper{
+		Extensions: []string{".z", ".y.z", ".identity.y.z", ".unmapped.y.z"},
+		OutputExtensions: map[string]string{
+			".z": ".js", ".y.z": ".mjs", ".identity.y.z": ".identity.y.z",
+		},
+	}
+	commandLine := NewParsedCommandLine(
+		&core.CompilerOptions{Declaration: core.TSTrue, OutDir: "/dist"},
+		[]string{"/src/Widget.y.z", "/src/Widget.identity.y.z", "/src/Widget.unmapped.y.z"},
+		nil,
+		tspath.ComparePathsOptions{CurrentDirectory: "/", UseCaseSensitiveFileNames: true},
+	)
+	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
+	rewrites := commandLine.ContentMapperExtensionRewrites()
+	assert.Assert(t, slices.IsSortedFunc(rewrites, func(a, b core.ExtensionRewrite) int {
+		return len(b.Source) - len(a.Source)
+	}))
+	for _, file := range []string{"./Widget.identity.y.z", "./Widget.unmapped.y.z"} {
+		rewritten, ok := core.RewriteExtension(file, rewrites, false)
+		assert.Assert(t, !ok)
+		assert.Equal(t, rewritten, file)
+	}
+	assert.DeepEqual(t, slices.Collect(commandLine.GetOutputFileNames()), []string{
+		"/dist/Widget.d.mts",
+		"/dist/Widget.d.identity.y.z.ts",
+		"/dist/Widget.d.unmapped.y.z.ts",
+	})
+}
+
+func TestResolveContentMapperManifestRejectsMalformedOutputExtensions(t *testing.T) {
+	t.Parallel()
+	for _, value := range []string{`"invalid"`, `null`, `[]`, `{".vue": 1}`, `{".vue": null}`} {
+		t.Run(value, func(t *testing.T) {
+			t.Parallel()
+			host := resolveContentMapperHost{fs: vfstest.FromMap(map[string]string{
+				"/home/project/node_modules/mapper/package.json": `{
+					"name": "mapper",
+					"typescript": { "contentMapper": { "exec": ["run"], "outputExtensions": ` + value + ` } }
+				}`,
+			}, true)}
+			_, _, diagnostic := resolveContentMapperManifest(host, "/home/project/tsconfig.json", "mapper")
+			assert.Assert(t, diagnostic != nil, "expected malformed outputExtensions to be rejected")
+		})
+	}
+}
+
 func (h resolveContentMapperHost) FS() vfs.FS                  { return h.fs }
 func (h resolveContentMapperHost) GetCurrentDirectory() string { return "/home/project" }
 
@@ -72,7 +120,7 @@ func TestResolveContentMapperManifest(t *testing.T) {
 		"/home/project/node_modules/vue-ts-mapper/package.json": `{
 			"name": "vue-ts-mapper",
 			"version": "1.2.3",
-			"typescript": { "contentMapper": { "exec": ["node", "./dist/mapper.js"], "compilerOptions": ["target", "jsx"] } }
+			"typescript": { "contentMapper": { "exec": ["node", "./dist/mapper.js"], "compilerOptions": ["target", "jsx"], "outputExtensions": { ".vue": ".js" } } }
 		}`,
 		"/home/node_modules/@scope/noversion/package.json": `{
 			"name": "@scope/noversion",
@@ -92,6 +140,10 @@ func TestResolveContentMapperManifest(t *testing.T) {
 			"name": "bad-exec",
 			"typescript": { "contentMapper": { "exec": "node ./mapper.js" } }
 		}`,
+		"/home/project/node_modules/bad-output-extension/package.json": `{
+			"name": "bad-output-extension",
+			"typescript": { "contentMapper": { "exec": ["run"], "outputExtensions": { ".vue": "js" } } }
+		}`,
 	}, true /*useCaseSensitiveFileNames*/)}
 
 	// Name, version, and the verbatim exec argv are preserved.
@@ -102,6 +154,7 @@ func TestResolveContentMapperManifest(t *testing.T) {
 	assert.Equal(t, packageDirectory, "/home/project/node_modules/vue-ts-mapper")
 	assert.DeepEqual(t, manifest.Exec, []string{"node", "./dist/mapper.js"})
 	assert.DeepEqual(t, manifest.CompilerOptions, []string{"target", "jsx"})
+	assert.DeepEqual(t, manifest.DefaultOutputExtensions, map[string]string{".vue": ".js"})
 
 	// Resolution walks up node_modules; a package with no version resolves to a name and empty version.
 	manifest, _, diagnostic = resolveContentMapperManifest(host, "/home/project/src/tsconfig.json", "@scope/noversion")
@@ -131,4 +184,7 @@ func TestResolveContentMapperManifest(t *testing.T) {
 		assert.Assert(t, diagnostic != nil, "expected a diagnostic for %s", pkg)
 		assert.Equal(t, diagnostic.Code(), diagnostics.The_typescript_contentMapper_exec_of_the_content_mapper_package_0_must_be_a_non_empty_array_of_strings.Code())
 	}
+
+	_, _, diagnostic = resolveContentMapperManifest(host, "/home/project/tsconfig.json", "bad-output-extension")
+	assert.Equal(t, diagnostic.Code(), diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a.Code())
 }

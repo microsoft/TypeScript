@@ -8895,5 +8895,25 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 18110
+    },
+    "Content mapper output extension '{0}' must be non-empty and begin with a '.'.": {
+        "category": "Error",
+        "code": 18111
+    },
+    "Content mapper output extension mapping source '{0}' is not registered by this content mapper.": {
+        "category": "Error",
+        "code": 18112
+    },
+    "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled.": {
+        "category": "Error",
+        "code": 18113
+    },
+    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'.": {
+        "category": "Error",
+        "code": 18114
+    },
+    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values.": {
+        "category": "Error",
+        "code": 18115
     }
 }

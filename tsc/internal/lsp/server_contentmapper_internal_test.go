@@ -26,6 +26,7 @@ func TestParseContentMapperContributions(t *testing.T) {
 	version := "2.3.4"
 	cwd := "/workspace/mapper"
 	compilerOptions := []string{"strict"}
+	outputExtensions := map[string]string{".vue": ".js"}
 	options := map[string]any{"mode": "embedded"}
 	contributions, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{
 		{
@@ -34,11 +35,12 @@ func TestParseContentMapperContributions(t *testing.T) {
 			InferredProjectContribution: &lsproto.InferredProjectContentMapperContribution{
 				Options: &options,
 				Manifest: &lsproto.ContentMapperManifest{
-					Name:            "Vue mapper",
-					Version:         &version,
-					Exec:            []string{"node", "mapper.js"},
-					Cwd:             &cwd,
-					CompilerOptions: &compilerOptions,
+					Name:             "Vue mapper",
+					Version:          &version,
+					Exec:             []string{"node", "mapper.js"},
+					Cwd:              &cwd,
+					CompilerOptions:  &compilerOptions,
+					OutputExtensions: &outputExtensions,
 				},
 			},
 		},
@@ -53,6 +55,7 @@ func TestParseContentMapperContributions(t *testing.T) {
 	mapper := contributions.Mappers[0]
 	assert.Equal(t, mapper.Identity(), "publisher.extension[0] (Vue mapper@2.3.4)")
 	assert.Equal(t, mapper.PackageDirectory, cwd)
+	assert.DeepEqual(t, mapper.Manifest.DefaultOutputExtensions, map[string]string{".vue": ".js"})
 	assert.Equal(t, string(mapper.Definition.Options), `{"mode":"embedded"}`)
 }
 
@@ -97,4 +100,22 @@ func TestParseContentMapperContributionsDefaultsOptionsToObject(t *testing.T) {
 	}})
 	assert.NilError(t, err)
 	assert.Equal(t, string(contributions.Mappers[0].Definition.Options), `{}`)
+}
+
+func TestParseContentMapperContributionsRejectsInvalidOutputExtensions(t *testing.T) {
+	t.Parallel()
+	for _, compilerOptions := range []*[]string{nil, new([]string{}), new([]string{"strict"})} {
+		outputExtensions := map[string]string{".vue": "js"}
+		_, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+			ContributorId: "publisher.extension",
+			Extensions:    []string{".vue"},
+			InferredProjectContribution: &lsproto.InferredProjectContentMapperContribution{
+				Manifest: &lsproto.ContentMapperManifest{
+					Name: "mapper", Exec: []string{"mapper"},
+					CompilerOptions: compilerOptions, OutputExtensions: &outputExtensions,
+				},
+			},
+		}})
+		assert.ErrorContains(t, err, `invalid output extension mapping`)
+	}
 }

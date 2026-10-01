@@ -3892,6 +3892,16 @@ var The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the
 
 var Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex = &Message{code: 18110, category: CategoryMessage, key: "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_18110", text: "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'."}
 
+var Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a = &Message{code: 18111, category: CategoryError, key: "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18111", text: "Content mapper output extension '{0}' must be non-empty and begin with a '.'."}
+
+var Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper = &Message{code: 18112, category: CategoryError, key: "Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper_18112", text: "Content mapper output extension mapping source '{0}' is not registered by this content mapper."}
+
+var Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_enabled = &Message{code: 18113, category: CategoryError, key: "Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_e_18113", text: "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled."}
+
+var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a = &Message{code: 18114, category: CategoryError, key: "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_ma_18114", text: "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'."}
+
+var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values = &Message{code: 18115, category: CategoryError, key: "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_18115", text: "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6378,6 +6388,11 @@ var allMessages = [...]**Message{
 	&The_content_mapper_returned_diagnostic_directives_with_overlapping_virtual_ranges,
 	&The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper,
 	&Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex,
+	&Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a,
+	&Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper,
+	&Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_enabled,
+	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
+	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,
