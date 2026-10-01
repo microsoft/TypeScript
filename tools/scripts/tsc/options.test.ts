@@ -65,7 +65,7 @@ test("API compiler options are generated directly from option metadata", () => {
             "maxNodeModuleJsDepth?: number | undefined;",
             "paths?: Record<string, string[]> | undefined;",
             "plugins?: PluginImport[] | undefined;",
-            "configFilePath?: string | undefined;",
+            "configFilePath?: RootedFilePath | undefined;",
         ]
     ) assert(source.includes(field), field);
     assert.match(source, /export interface PluginImport \{\s*name: string;/);

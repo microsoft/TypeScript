@@ -4,7 +4,6 @@ import (
 	"io/fs"
 	"maps"
 	"slices"
-	"strings"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -24,18 +23,18 @@ type requestEntry interface {
 }
 
 type requestFile struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	content  string
 }
 
 type requestSymlink struct {
-	linkName string
-	target   string
+	linkName tspath.RootedPath
+	target   tspath.RootedPath
 	host     bool
 }
 
 type requestDirectory struct {
-	directoryName string
+	directoryName tspath.RootedDirectoryPath
 	listing       *vfs.Entries
 }
 
@@ -43,7 +42,7 @@ func (*requestFile) isRequestEntry()      {}
 func (*requestSymlink) isRequestEntry()   {}
 func (*requestDirectory) isRequestEntry() {}
 
-func (file *requestFile) Name() string               { return tspath.GetBaseFileName(file.fileName) }
+func (file *requestFile) Name() string               { return file.fileName.BaseName() }
 func (file *requestFile) Size() int64                { return int64(len(file.content)) }
 func (file *requestFile) Mode() fs.FileMode          { return 0o444 }
 func (file *requestFile) ModTime() time.Time         { return time.Time{} }
@@ -53,7 +52,7 @@ func (file *requestFile) Type() fs.FileMode          { return file.Mode().Type()
 func (file *requestFile) Info() (fs.FileInfo, error) { return file, nil }
 
 func (directory *requestDirectory) Name() string {
-	return tspath.GetBaseFileName(directory.directoryName)
+	return directory.directoryName.BaseName()
 }
 func (directory *requestDirectory) Size() int64                { return 0 }
 func (directory *requestDirectory) Mode() fs.FileMode          { return fs.ModeDir | 0o555 }
@@ -73,7 +72,7 @@ var (
 type requestPathNode struct {
 	entry       requestEntry
 	fallback    requestFallback
-	children    map[tspath.Path]*requestPathNode
+	children    map[tspath.PathKey]*requestPathNode
 	hasSymlinks bool
 }
 
@@ -85,11 +84,11 @@ func (node *requestPathNode) replacesSubtree() bool {
 	return false
 }
 
-func requestPathAncestors(path tspath.Path) []tspath.Path {
-	var paths []tspath.Path
+func requestPathAncestors(path tspath.PathKey) []tspath.PathKey {
+	var paths []tspath.PathKey
 	for {
 		paths = append(paths, path)
-		parent := tspath.Path(tspath.GetDirectoryPath(string(path)))
+		parent := path.Parent()
 		if parent == path {
 			break
 		}
@@ -99,10 +98,10 @@ func requestPathAncestors(path tspath.Path) []tspath.Path {
 	return paths
 }
 
-func (node *requestPathNode) ensure(path tspath.Path) *requestPathNode {
+func (node *requestPathNode) ensure(path tspath.PathKey) *requestPathNode {
 	for _, ancestor := range requestPathAncestors(path) {
 		if node.children == nil {
-			node.children = make(map[tspath.Path]*requestPathNode)
+			node.children = make(map[tspath.PathKey]*requestPathNode)
 		}
 		child := node.children[ancestor]
 		if child == nil {
@@ -114,7 +113,7 @@ func (node *requestPathNode) ensure(path tspath.Path) *requestPathNode {
 	return node
 }
 
-func (node *requestPathNode) lookup(path tspath.Path) (*requestPathNode, requestFallback) {
+func (node *requestPathNode) lookup(path tspath.PathKey) (*requestPathNode, requestFallback) {
 	fallback := requestFallbackInherit
 	for _, ancestor := range requestPathAncestors(path) {
 		if node == nil {
@@ -131,7 +130,7 @@ func (node *requestPathNode) lookup(path tspath.Path) (*requestPathNode, request
 	return node, fallback
 }
 
-func (node *requestPathNode) walkSymlinks(visit func(tspath.Path, *requestSymlink)) {
+func (node *requestPathNode) walkSymlinks(visit func(tspath.PathKey, *requestSymlink)) {
 	if node == nil || !node.hasSymlinks {
 		return
 	}
@@ -158,9 +157,9 @@ func (node *requestPathNode) entries() (vfs.Entries, bool) {
 	for _, child := range node.children {
 		switch entry := child.entry.(type) {
 		case *requestFile:
-			entries.Files = append(entries.Files, tspath.GetBaseFileName(entry.fileName))
+			entries.Files = append(entries.Files, entry.fileName.BaseName())
 		case *requestDirectory:
-			entries.Directories = append(entries.Directories, tspath.GetBaseFileName(entry.directoryName))
+			entries.Directories = append(entries.Directories, entry.directoryName.BaseName())
 		}
 	}
 	slices.Sort(entries.Files)
@@ -168,7 +167,7 @@ func (node *requestPathNode) entries() (vfs.Entries, bool) {
 	return entries, true
 }
 
-func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallback requestFallback, caseSensitive bool) *requestPathNode {
+func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallback requestFallback, caseSensitivity tspath.CaseSensitivity) *requestPathNode {
 	if overlay == nil {
 		return base
 	}
@@ -197,17 +196,17 @@ func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallba
 	}
 	for path, child := range overlay.children {
 		if result.children == nil {
-			result.children = make(map[tspath.Path]*requestPathNode)
+			result.children = make(map[tspath.PathKey]*requestPathNode)
 		}
-		result.children[path] = composeRequestPaths(result.children[path], child, fallback, caseSensitive)
+		result.children[path] = composeRequestPaths(result.children[path], child, fallback, caseSensitivity)
 	}
 	if directory, ok := result.entry.(*requestDirectory); ok && directory.listing != nil && (overlayDirectory == nil || overlayDirectory.listing == nil) {
 		entries := cloneEntries(*directory.listing)
 		equal := func(left string, right string) bool {
-			return tspath.GetCanonicalFileName(left, caseSensitive) == tspath.GetCanonicalFileName(right, caseSensitive)
+			return caseSensitivity.GetComparer()(left, right) == 0
 		}
 		for path, child := range overlay.children {
-			name := tspath.GetBaseFileName(string(path))
+			name := path.BaseName()
 			if child.fallback == requestFallbackMissing || child.replacesSubtree() {
 				entries.Files = slices.DeleteFunc(entries.Files, func(entry string) bool { return equal(entry, name) })
 				entries.Directories = slices.DeleteFunc(entries.Directories, func(entry string) bool { return equal(entry, name) })
@@ -219,9 +218,9 @@ func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallba
 			}
 			switch entry := child.entry.(type) {
 			case *requestFile:
-				entries = mergeEntries(entries, vfs.Entries{Files: []string{tspath.GetBaseFileName(entry.fileName)}}, equal)
+				entries = mergeEntries(entries, vfs.Entries{Files: []string{entry.fileName.BaseName()}}, equal)
 			case *requestDirectory:
-				entries = mergeEntries(entries, vfs.Entries{Directories: []string{tspath.GetBaseFileName(entry.directoryName)}}, equal)
+				entries = mergeEntries(entries, vfs.Entries{Directories: []string{entry.directoryName.BaseName()}}, equal)
 			}
 		}
 		result.entry = &requestDirectory{directoryName: directory.directoryName, listing: &entries}
@@ -233,7 +232,7 @@ func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallba
 	return &result
 }
 
-func (node *requestPathNode) firstSymlink(path tspath.Path) (tspath.Path, *requestSymlink) {
+func (node *requestPathNode) firstSymlink(path tspath.PathKey) (tspath.PathKey, *requestSymlink) {
 	for _, ancestor := range requestPathAncestors(path) {
 		if node == nil {
 			break
@@ -248,7 +247,7 @@ func (node *requestPathNode) firstSymlink(path tspath.Path) (tspath.Path, *reque
 	return "", nil
 }
 
-func (node *requestPathNode) containsFileAncestor(path tspath.Path) bool {
+func (node *requestPathNode) containsFileAncestor(path tspath.PathKey) bool {
 	for _, ancestor := range requestPathAncestors(path) {
 		if node == nil {
 			return false
@@ -263,6 +262,6 @@ func (node *requestPathNode) containsFileAncestor(path tspath.Path) bool {
 	return false
 }
 
-func requestPathContains(parent tspath.Path, path tspath.Path) bool {
-	return path == parent || strings.HasPrefix(string(path), tspath.EnsureTrailingDirectorySeparator(string(parent)))
+func requestPathContains(parent tspath.PathKey, path tspath.PathKey) bool {
+	return parent.ContainsPath(path)
 }

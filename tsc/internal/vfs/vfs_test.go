@@ -22,8 +22,8 @@ func BenchmarkReadFile(b *testing.B) {
 	osFS := osvfs.FS()
 
 	const smallData = "hello, world"
-	tmpdir := tspath.NormalizeSlashes(b.TempDir())
-	osSmallDataPath := tspath.CombinePaths(tmpdir, "foo.ts")
+	tmpdir := tspath.RootedDirectoryPathFromAbsolute(b.TempDir())
+	osSmallDataPath := tmpdir.ResolveFile("foo.ts")
 	err := osFS.WriteFile(osSmallDataPath, smallData)
 	assert.NilError(b, err)
 
@@ -32,11 +32,11 @@ func BenchmarkReadFile(b *testing.B) {
 			"/foo.ts": &fstest.MapFile{
 				Data: []byte(smallData),
 			},
-		}, true), "/foo.ts"},
-		{"OS small", osFS, osSmallDataPath},
+		}, tspath.CaseSensitive), "/foo.ts"},
+		{"OS small", osFS, osSmallDataPath.AsString()},
 	}
 
-	checkerPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TestDataPath()), "fixtures", "compiler", "checker.ts")
+	checkerPath := tspath.RootedDirectoryPathFromAbsolute(repo.TestDataPath()).ResolveFile("fixtures/compiler/checker.ts")
 
 	checkerContents, ok := osFS.ReadFile(checkerPath)
 	assert.Assert(b, ok)
@@ -47,16 +47,16 @@ func BenchmarkReadFile(b *testing.B) {
 			"/checker.ts": &fstest.MapFile{
 				Data: []byte(checkerContents),
 			},
-		}, true),
+		}, tspath.CaseSensitive),
 		"/checker.ts",
 	})
-	tests = append(tests, bench{"OS checker.ts", osFS, checkerPath})
+	tests = append(tests, bench{"OS checker.ts", osFS, checkerPath.AsString()})
 
 	for _, tt := range tests {
 		b.Run(tt.name, func(b *testing.B) {
 			b.ReportAllocs()
 			for range b.N {
-				_, _ = tt.fs.ReadFile(tt.path)
+				_, _ = tt.fs.ReadFile(tspath.RootedFilePathFromNormalized(tt.path))
 			}
 		})
 	}

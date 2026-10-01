@@ -20,14 +20,22 @@ func TestAutoImportCssModule(t *testing.T) {
 // @Filename: /package.json
 { "type": "module" }
 
-// @Filename: /augmentations.ts
+// @Filename: /types/augmentations.ts
 export {};
 declare module "./styles.css" {
     export const myClass: string;
 }
+declare module "./styles" {
+    export const noExtension: string;
+}
+declare module "/types/rooted.css" {
+    export const rootedClass: string;
+}
 
-// @Filename: /index.ts
+// @Filename: /src/index.ts
 myClass/**/
+noExtension/*noExtension*/
+rootedClass/*rooted*/
 `
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -44,7 +52,49 @@ myClass/**/
 					Label: "myClass",
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
-							ModuleSpecifier: "./styles.css",
+							ModuleSpecifier: "../types/styles.css",
+						},
+					},
+					AdditionalTextEdits: fourslash.AnyTextEdits,
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "noExtension", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "noExtension",
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportFix{
+							ModuleSpecifier: "../types/styles",
+						},
+					},
+					AdditionalTextEdits: fourslash.AnyTextEdits,
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "rooted", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "rootedClass",
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportFix{
+							ModuleSpecifier: "/types/rooted.css",
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,

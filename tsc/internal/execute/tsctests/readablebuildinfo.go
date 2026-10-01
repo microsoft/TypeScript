@@ -221,12 +221,12 @@ func toReadableBuildInfo(buildInfo *incremental.BuildInfo, buildInfoText string)
 		Version:              buildInfo.Version,
 		Errors:               buildInfo.Errors,
 		CheckPending:         buildInfo.CheckPending,
-		FileNames:            buildInfo.FileNames,
+		FileNames:            buildInfoPathsAsStrings(buildInfo.FileNames),
 		Options:              buildInfo.Options,
-		LatestChangedDtsFile: buildInfo.LatestChangedDtsFile,
+		LatestChangedDtsFile: buildInfo.LatestChangedDtsFile.AsString(),
 		SemanticErrors:       buildInfo.SemanticErrors,
-		PackageJsons:         buildInfo.PackageJsons,
-		MissingPackageJsons:  buildInfo.MissingPackageJsons,
+		PackageJsons:         buildInfoPathsAsStrings(buildInfo.PackageJsons),
+		MissingPackageJsons:  buildInfoPathsAsStrings(buildInfo.MissingPackageJsons),
 		Size:                 len(buildInfoText),
 	}
 	readable.setFileInfos()
@@ -246,8 +246,12 @@ func toReadableBuildInfo(buildInfo *incremental.BuildInfo, buildInfoText string)
 	return string(contents)
 }
 
+func buildInfoPathsAsStrings(paths []incremental.BuildInfoPath) []string {
+	return core.Map(paths, incremental.BuildInfoPath.AsString)
+}
+
 func (r *readableBuildInfo) toFilePath(fileId incremental.BuildInfoFileId) string {
-	return r.buildInfo.FileNames[fileId-1]
+	return r.buildInfo.FileNames[fileId-1].AsString()
 }
 
 func (r *readableBuildInfo) toFilePathSet(fileIdListId incremental.BuildInfoFileIdListId) []string {
@@ -320,7 +324,7 @@ func (r *readableBuildInfo) setRoot() {
 	r.Root = core.Map(r.buildInfo.Root, func(original *incremental.BuildInfoRoot) *readableBuildInfoRoot {
 		var files []string
 		if original.NonIncremental != "" {
-			files = []string{original.NonIncremental}
+			files = []string{original.NonIncremental.AsString()}
 		} else if original.End == 0 {
 			files = []string{r.toFilePath(original.Start)}
 		} else {

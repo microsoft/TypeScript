@@ -2,7 +2,9 @@ package tsoptions
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type CommandLineOptionKind string
@@ -17,11 +19,75 @@ const (
 	CommandLineOptionTypeEnum          CommandLineOptionKind = "enum" // map
 )
 
+type CommandLineOptionPathKind uint8
+
+const (
+	CommandLineOptionPathKindNone CommandLineOptionPathKind = iota
+	CommandLineOptionPathKindFile
+	CommandLineOptionPathKindDirectory
+	CommandLineOptionPathKindFileOrDirectory
+	CommandLineOptionPathKindSourceMapLocation
+	CommandLineOptionPathKindFileSpec
+	CommandLineOptionPathKindPathPattern
+	CommandLineOptionPathKindResolvedPathPattern
+	CommandLineOptionPathKindConfigLocator
+)
+
+func (k CommandLineOptionPathKind) IsRooted() bool {
+	switch k {
+	case CommandLineOptionPathKindFile,
+		CommandLineOptionPathKindDirectory,
+		CommandLineOptionPathKindFileOrDirectory,
+		CommandLineOptionPathKindResolvedPathPattern:
+		return true
+	default:
+		return false
+	}
+}
+
+func (k CommandLineOptionPathKind) IsFileSystemPath() bool {
+	switch k {
+	case CommandLineOptionPathKindFile,
+		CommandLineOptionPathKindDirectory,
+		CommandLineOptionPathKindFileOrDirectory:
+		return true
+	default:
+		return false
+	}
+}
+
+func PathValueAsString(value any) (string, bool) {
+	switch value := value.(type) {
+	case tspath.RootedFilePath:
+		return value.AsString(), true
+	case tspath.RootedDirectoryPath:
+		return value.AsString(), true
+	case tspath.RootedPath:
+		return value.AsString(), true
+	case tspath.SourceMapLocation:
+		return value.AsString(), true
+	default:
+		return "", false
+	}
+}
+
+func PathValuesAsStrings(value any) ([]string, bool) {
+	switch value := value.(type) {
+	case []tspath.RootedFilePath:
+		return core.Map(value, func(path tspath.RootedFilePath) string { return path.AsString() }), true
+	case []tspath.RootedDirectoryPath:
+		return core.Map(value, func(path tspath.RootedDirectoryPath) string { return path.AsString() }), true
+	default:
+		return nil, false
+	}
+}
+
 type CommandLineOption struct {
 	Name, ShortName string
 	Kind            CommandLineOptionKind
 
 	// used in parsing
+	PathKind          CommandLineOptionPathKind
 	IsFilePath        bool
 	IsTSConfigOnly    bool
 	IsCommandLineOnly bool
