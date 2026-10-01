@@ -22721,7 +22721,7 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 	case flags&TypeFlagsStringMapping != 0:
 		return c.getStringMappingType(t.symbol, c.instantiateType(t.AsStringMappingType().target, m))
 	case flags&TypeFlagsConditional != 0:
-		return c.getConditionalTypeInstantiation(t, c.combineTypeMappers(t.AsConditionalType().mapper, m), false /*forConstraint*/, alias)
+		return c.getConditionalTypeInstantiationEx(t, t.AsConditionalType().mapper, m, false /*forConstraint*/, alias)
 	case flags&TypeFlagsSubstitution != 0:
 		newBaseType := c.instantiateType(t.AsSubstitutionType().baseType, m)
 		if c.isNoInferType(t) {
@@ -22932,12 +22932,26 @@ func (c *Checker) instantiateAnonymousType(t *Type, m *TypeMapper, alias *TypeAl
 }
 
 func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, forConstraint bool, alias *TypeAlias) *Type {
+	return c.getConditionalTypeInstantiationEx(t, nil, mapper, forConstraint, alias)
+}
+
+// Instantiates t with combineTypeMappers(m1, mapper) without creating the combined mapper, which
+// is only needed for the type arguments.
+func (c *Checker) getConditionalTypeInstantiationEx(t *Type, m1 *TypeMapper, mapper *TypeMapper, forConstraint bool, alias *TypeAlias) *Type {
 	root := t.AsConditionalType().root
 	if len(root.outerTypeParameters) != 0 {
 		// We are instantiating a conditional type that has one or more type parameters in scope. Apply the
 		// mapper to the type parameters to produce the effective list of type arguments, and compute the
 		// instantiation cache key from the type IDs of the type arguments.
-		typeArguments := core.Map(root.outerTypeParameters, mapper.Map)
+		typeArguments := core.Map(root.outerTypeParameters, func(t *Type) *Type {
+			// What CompositeTypeMapper.Map does.
+			if m1 != nil {
+				if t1 := m1.Map(t); t1 != t {
+					return c.instantiateType(t1, mapper)
+				}
+			}
+			return mapper.Map(t)
+		})
 		key := getConditionalTypeKey(typeArguments, alias, forConstraint)
 		result := root.instantiations[key]
 		if result == nil {
