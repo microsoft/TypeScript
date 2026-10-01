@@ -664,6 +664,9 @@ func (c *Checker) isAccessible(
 	if symbol == c.getMergedSymbol(symbolFromSymbolTable) {
 		likeSymbols = true
 	}
+	if resolvedAliasSymbol != nil && resolvedAliasSymbol.Flags&ast.SymbolFlagsAlias != 0 && symbol == c.getMergedSymbol(c.resolveAlias(resolvedAliasSymbol)) {
+		likeSymbols = true
+	}
 	if !likeSymbols {
 		return false
 	}
