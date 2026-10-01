@@ -1,4 +1,4 @@
-import type { WasmReactorInstance } from "./index.ts";
+import type { WasmReactorInstance } from "./transport.ts";
 
 const errnoSuccess = 0;
 const errnoBadFileDescriptor = 8;

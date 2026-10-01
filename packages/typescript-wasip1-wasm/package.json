@@ -17,6 +17,10 @@
             "@typescript/source": "./src/index.ts",
             "default": "./dist/index.js"
         },
+        "./transport": {
+            "@typescript/source": "./src/transport.ts",
+            "default": "./dist/transport.js"
+        },
         "./tsc.wasm": "./lib/tsc.wasm"
     },
     "imports": {
