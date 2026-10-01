@@ -21791,25 +21791,23 @@ func (c *Checker) getPropertyOfUnionOrIntersectionType(t *Type, name string, ski
 // these partial properties when identifying discriminant properties, but otherwise they are filtered out
 // and do not appear to be present in the union type.
 func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
-	var cache ast.SymbolTable
+	d := t.AsUnionOrIntersectionType()
+	cache := &d.propertyCache
 	if skipObjectFunctionPropertyAugment {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment)
-	} else {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
+		cache = &d.propertyCacheWithoutFunctionPropertyAugment
 	}
-	if prop := cache[name]; prop != nil {
+	if prop := (*cache)[name]; prop != nil {
 		return prop
+	}
+	// A property found without the function property augment is also the augmented one unless it is partial.
+	if !skipObjectFunctionPropertyAugment {
+		if prop := d.propertyCacheWithoutFunctionPropertyAugment[name]; prop != nil && prop.CheckFlags&ast.CheckFlagsPartial == 0 {
+			return prop
+		}
 	}
 	prop := c.createUnionOrIntersectionProperty(t, name, skipObjectFunctionPropertyAugment)
 	if prop != nil {
-		cache[name] = prop
-		// Propagate an entry from the non-augmented cache to the augmented cache unless the property is partial.
-		if skipObjectFunctionPropertyAugment && prop.CheckFlags&ast.CheckFlagsPartial == 0 {
-			augmentedCache := ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
-			if augmentedCache[name] == nil {
-				augmentedCache[name] = prop
-			}
-		}
+		ast.GetSymbolTable(cache)[name] = prop
 	}
 	return prop
 }
