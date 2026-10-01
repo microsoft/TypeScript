@@ -553,7 +553,7 @@ export interface CompletionInfo {
 }
 
 export interface FormatDiagnosticsHost {
-    getCurrentDirectory(): RootedDirectoryPath;
+    getCurrentDirectory(): string;
     getCanonicalFileName(fileName: string): string;
     getNewLine(): string;
 }

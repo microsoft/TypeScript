@@ -1,12 +1,9 @@
-import type {
-    RootedDirectoryPath,
-    RootedFilePath,
-} from "../ast/index.ts";
+import type { RootedFilePath } from "../ast/index.ts";
 import { convertToRelativePath } from "./path.ts";
 import type { DiagnosticResponse as Diagnostic } from "./proto.generated.ts";
 
 export interface FormatDiagnosticsHost {
-    getCurrentDirectory(): RootedDirectoryPath;
+    getCurrentDirectory(): string;
     getCanonicalFileName(fileName: string): string;
     getNewLine(): string;
 }

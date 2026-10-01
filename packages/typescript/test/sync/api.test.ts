@@ -91,6 +91,7 @@ import {
     DiagnosticCategory,
     type DocumentIdentifier,
     EmitOnly,
+    type FormatDiagnosticsHost,
     type FreshableType,
     getSymbol,
     type ImportAdderAction,
@@ -177,7 +178,16 @@ describe("API", { concurrency }, () => {
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
-            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: {}, options: { projectReferences: [{ path: toRootedFilePath("/tsconfig.json", undefined) }] } }] });
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: {}, options: { projectReferences: [{ path: "/tsconfig.json" }] } }] });
+            void standalone.createModuleResolver({ outDir: "dist", rootDirs: ["src"], typeRoots: ["types"] });
+            void standalone.transpileModule("", { compilerOptions: { outDir: "dist" } });
+
+            const formatDiagnosticsHost: FormatDiagnosticsHost = {
+                getCurrentDirectory: () => "/workspace",
+                getCanonicalFileName: fileName => fileName,
+                getNewLine: () => "\n",
+            };
+            void formatDiagnosticsHost;
 
             // @ts-expect-error Snapshot parameters are excess-property checked.
             void standalone.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
@@ -208,7 +218,7 @@ describe("API", { concurrency }, () => {
                 fileExists: serverFS.useOS,
                 getAccessibleEntries: serverFS.useOS,
                 readFile: serverFS.useOS,
-                realpath: serverFS.identity,
+                realpath: path => `${path}`,
                 stat: serverFS.fakeStat,
                 writeFile: serverFS.useOS,
                 removeFile: serverFS.useOS,
@@ -814,6 +824,7 @@ describe("API", { concurrency }, () => {
             [providedA]: `export declare const value: "a";`,
             [providedB]: `export declare const value: "b";`,
         });
+
         using api = disposableAPI;
         const compilerOptions = {
             noLib: true,
@@ -889,6 +900,19 @@ describe("API", { concurrency }, () => {
         });
         assert.deepEqual([...repeatedCallback.getProgram(callbackProgramId)!.getSourceFileNames()].sort(), [providedA, root]);
         assert.equal(callbackCalls, 1);
+    });
+
+    test("module resolver normalizes raw compiler option paths", () => {
+        using api = spawnAPI();
+        const resolver = api.createModuleResolver({
+            noLib: true,
+            outDir: "dist",
+            rootDirs: ["src", "generated"],
+            tsBuildInfoFile: "cache/build.tsbuildinfo",
+            typeRoots: ["types"],
+        });
+        const result = resolver.resolveModuleName("./missing", "/src", undefined);
+        assert.equal(result.resolvedModule, undefined);
     });
 
     test("module resolver runs against snapshots or the host filesystem", () => {
@@ -1263,6 +1287,7 @@ declare module "augmentation" {}`,
         };
         // @ts-expect-error raw path strings are not finalized compiler options
         const _finalizedOptions: CompilerOptions = rawOptions;
+        const _rawOptions: RawCompilerOptions = undefined! as CompilerOptions;
 
         const program = api.createProgram(["/src/index.ts", "/src/component.vue"], rawOptions);
         const compilerOptions: CompilerOptions = program.getCompilerOptions();
@@ -1311,21 +1336,20 @@ declare module "augmentation" {}`,
         program.dispose();
     });
 
-    test("createProgram includes project references", () => {
-        const reference = { path: toRootedFilePath("/lib/tsconfig.json", undefined), originalPath: "/lib/tsconfig.json", circular: false };
+    test("createProgram rejects invalid project reference paths", () => {
         using api = spawnAPI({
             "/src/index.ts": `export const value = 1;`,
-            "/lib/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true, noLib: true }, files: ["index.ts"] }),
-            "/lib/index.ts": `export const lib = 1;`,
         });
 
-        const program = api.createProgram(
-            ["/src/index.ts"],
-            { noLib: true },
-            { projectReferences: [reference] },
+        assert.throws(
+            () =>
+                api.createProgram(
+                    ["/src/index.ts"],
+                    { noLib: true },
+                    { projectReferences: [{ path: "" }] },
+                ),
+            /Path must not be empty/,
         );
-        assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
-        program.dispose();
     });
 
     test("createProgram includes config file parsing diagnostics", () => {
@@ -4772,6 +4796,29 @@ describe("readFile callback semantics", { concurrency }, () => {
         assert.throws(
             () => api.readConfigFile("/tsconfig.json"),
             /Invalid result from filesystem callback 'readFile'/,
+        );
+    });
+
+    test("realpath callback string results are normalized before reaching the server", () => {
+        const fs = createVirtualFileSystem({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { module: "nodenext", moduleResolution: "nodenext" },
+                files: ["index.ts"],
+            }),
+            "/index.ts": `import "pkg";`,
+            "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/pkg/index.d.ts": `export {};`,
+        });
+        const callbacks: FileSystemCallbacks = {
+            ...fs,
+            realpath: path => path.replaceAll("/", "\\"),
+        };
+        using api = new API({ cwd: "/", fs: callbacks });
+
+        using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        assert.ok(
+            (snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFileNames())
+                .includes(toRootedFilePath("/node_modules/pkg/index.d.ts", undefined)),
         );
     });
 

@@ -253,6 +253,47 @@ ${pluginFields.join("\n")}
 `;
 }
 
+export function generatePrepareCompilerOptionsAPI(model = options): string {
+    const pathOptions = model.compilerOptions.filter(option => (option.pathKind === "file" || option.pathKind === "directory" || option.pathKind === "fileOrDirectory"));
+    const converter = (option: CompilerOption): string => {
+        const value = option.name;
+        switch (option.pathKind) {
+            case "file":
+                return `${value} === undefined ? undefined : toRootedFilePath(${value}, currentDirectory)`;
+            case "directory":
+                return option.type === "[]string"
+                    ? `${value}?.map(value => toRootedDirectoryPath(value, currentDirectory))`
+                    : `${value} === undefined ? undefined : toRootedDirectoryPath(${value}, currentDirectory)`;
+            case "fileOrDirectory":
+                return `${value} === undefined ? undefined : toRootedPath(${value}, currentDirectory)`;
+            default:
+                throw new Error(`Unsupported API path kind for ${option.name}: ${option.pathKind}`);
+        }
+    };
+    return `${header}
+import type { RootedDirectoryPath } from "../ast/index.ts";
+import type { CompilerOptions } from "./compilerOptions.generated.ts";
+import {
+    toRootedDirectoryPath,
+    toRootedFilePath,
+    toRootedPath,
+} from "./path.ts";
+import type { RawCompilerOptions } from "./proto.generated.ts";
+
+export function prepareCompilerOptions(options: RawCompilerOptions, currentDirectory: RootedDirectoryPath): CompilerOptions {
+    const {
+        ${pathOptions.map(option => `${option.name},`).join("\n        ")}
+        ...rest
+    } = options;
+    const result = {
+        ...rest,
+        ${pathOptions.map(option => `${option.name}: ${converter(option)},`).join("\n        ")}
+    };
+    return result;
+}
+`;
+}
+
 function optionsEquality(name: string, fields: { name: string; type: GoCompilerOptionType; }[]): string {
     return `func (options *${name}) Equals(other *${name}) bool {
     if options == other { return true }
@@ -758,6 +799,7 @@ export function generateOptions(): Map<string, string> {
     const buildOptions = options.buildOptions.filter((option): option is StoredDeclaration => option.field !== undefined);
     return new Map([
         ["packages/typescript/src/api/compilerOptions.generated.ts", generateCompilerOptionsAPI()],
+        ["packages/typescript/src/api/prepareCompilerOptions.generated.ts", generatePrepareCompilerOptionsAPI()],
         [
             "tsc/internal/core/options_generated.go",
             `${header}

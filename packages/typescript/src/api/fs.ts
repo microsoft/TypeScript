@@ -81,7 +81,7 @@ export interface FileSystemCallbacks {
         | typeof serverFS.useOS
         | typeof serverFS.error;
     realpath:
-        | ((path: RootedPath) => RootedPath | typeof serverFS.useOS | typeof serverFS.identity | typeof serverFS.error)
+        | ((path: RootedPath) => string | typeof serverFS.useOS | typeof serverFS.identity | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.identity
         | typeof serverFS.error;

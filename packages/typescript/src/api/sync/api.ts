@@ -83,6 +83,7 @@ import {
     toRootedDirectoryPath,
     toRootedPath,
 } from "../path.ts";
+import { prepareCompilerOptions } from "../prepareCompilerOptions.generated.ts";
 import type {
     BuildResponse,
     CleanBuildResponse,
@@ -301,8 +302,9 @@ export type InProgressSnapshot = number & { readonly [inProgressSnapshotBrand]: 
 
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => StaticModuleResolution | undefined;
 
-export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
+export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver" | "projectReferences"> & {
     moduleResolver?: ModuleResolver | undefined;
+    projectReferences?: readonly (Omit<ProjectReference, "path"> & { path: string; })[] | undefined;
 };
 export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
 export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
@@ -344,7 +346,7 @@ function registerModuleResolutionCallback(client: Client, callback: ResolveModul
 }
 
 export interface TranspileOptions {
-    compilerOptions?: CompilerOptions | undefined;
+    compilerOptions?: RawCompilerOptions | undefined;
     fileName?: string | undefined;
     reportDiagnostics?: boolean | undefined;
 }
@@ -1051,11 +1053,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         if (!params) return undefined;
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
-            const { moduleResolver, ...rest } = options;
+            const { moduleResolver, projectReferences, ...rest } = options;
             moduleResolver?.ensureNotDisposed();
             return {
                 ...rest,
                 moduleResolver: moduleResolver?.id,
+                projectReferences: projectReferences?.map(reference => ({
+                    ...reference,
+                    path: toRootedPath(reference.path, this.getCurrentDirectory()),
+                })),
             };
         };
         return {
@@ -1226,21 +1232,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     get createModuleResolver(): {
-        (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): ModuleResolver;
-        gen(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]>;
+        (compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): ModuleResolver;
+        gen(compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createModuleResolver",
-            function (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): ModuleResolver {
+            function (compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): ModuleResolver {
                 owner.ensureInitialized();
                 const callback = options?.resolveModuleName
                     ? registerModuleResolutionCallback(owner.client, options.resolveModuleName, id => owner.activeSnapshots.get(id))
                     : undefined;
                 try {
                     const id = owner.client.apiRequest("createModuleResolver", {
-                        compilerOptions,
+                        compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
                         moduleResolutions: options?.moduleResolutions,
                         resolveModuleNameCallback: callback?.name,
                     });
@@ -1251,14 +1257,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     throw error;
                 }
             },
-            function* (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]> {
+            function* (compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 const callback = options?.resolveModuleName
                     ? registerModuleResolutionCallback(owner.client, options.resolveModuleName, id => owner.activeSnapshots.get(id))
                     : undefined;
                 try {
                     const id = yield* apiRequest("createModuleResolver", {
-                        compilerOptions,
+                        compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
                         moduleResolutions: options?.moduleResolutions,
                         resolveModuleNameCallback: callback?.name,
                     });
