@@ -17,11 +17,11 @@ iteratorZip.ts(68,14): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'number' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
       Type 'number' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
-iteratorZip.ts(80,14): error TS2769: No overload matches this call.
+iteratorZip.ts(78,14): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
       Type 'string' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
-iteratorZip.ts(81,14): error TS2769: No overload matches this call.
+iteratorZip.ts(79,14): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'string[]' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
       Type 'string[]' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
@@ -30,7 +30,7 @@ iteratorZip.ts(81,14): error TS2769: No overload matches this call.
             Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
               Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
                 Type 'string' is not assignable to type 'IteratorInput<unknown>'.
-iteratorZip.ts(82,14): error TS2769: No overload matches this call.
+iteratorZip.ts(80,14): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'Set<string>' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
       Type 'Set<string>' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
@@ -39,26 +39,26 @@ iteratorZip.ts(82,14): error TS2769: No overload matches this call.
             Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
               Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
                 Type 'string' is not assignable to type 'IteratorInput<unknown>'.
-iteratorZip.ts(83,19): error TS2769: No overload matches this call.
+iteratorZip.ts(81,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"ab"' is not assignable to parameter of type 'never'.
-iteratorZip.ts(85,37): error TS2769: No overload matches this call.
+iteratorZip.ts(83,37): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type 'string' is not assignable to type 'Iterable<undefined> & object'.
       Type 'string' is not assignable to type 'Iterable<undefined>'.
-iteratorZip.ts(86,42): error TS2769: No overload matches this call.
+iteratorZip.ts(84,42): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type 'string' is not assignable to type 'Iterable<string | undefined> & object'.
       Type 'string' is not assignable to type 'object'.
-iteratorZip.ts(87,19): error TS2769: No overload matches this call.
+iteratorZip.ts(85,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'never'.
-iteratorZip.ts(95,6): error TS2339: Property 'b' does not exist on type 'IteratorZipResult<{ a: number[]; } & {}, never, {}>'.
-iteratorZip.ts(111,6): error TS2339: Property 'd' does not exist on type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>'.
-iteratorZip.ts(112,7): error TS2322: Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>[]' is not assignable to type '{ a: number; c: boolean; }[]'.
-  Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' is not assignable to type '{ a: number; c: boolean; }'.
-    Property 'c' is optional in type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' but required in type '{ a: number; c: boolean; }'.
-iteratorZip.ts(132,14): error TS2769: No overload matches this call.
+iteratorZip.ts(93,8): error TS2339: Property 'b' does not exist on type '{ a: number; } & {}'.
+iteratorZip.ts(109,8): error TS2339: Property 'd' does not exist on type '{ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; }'.
+iteratorZip.ts(110,7): error TS2322: Type '({ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; })[]' is not assignable to type '{ a: number; c: boolean; }[]'.
+  Type '{ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; }' is not assignable to type '{ a: number; c: boolean; }'.
+    Property 'c' is optional in type '{ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; }' but required in type '{ a: number; c: boolean; }'.
+iteratorZip.ts(130,14): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'undefined[]' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>> & object'.
       Type 'undefined[]' is not assignable to type 'Iterable<IteratorInput<unknown>>'.
@@ -67,155 +67,159 @@ iteratorZip.ts(132,14): error TS2769: No overload matches this call.
             Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
               Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
                 Type 'undefined' is not assignable to type 'IteratorInput<unknown>'.
-iteratorZip.ts(150,7): error TS2322: Type '[number, ...(number | undefined)[]][]' is not assignable to type 'number[][]'.
-  Type '[number, ...(number | undefined)[]]' is not assignable to type 'number[]'.
-    Type 'number | undefined' is not assignable to type 'number'.
+iteratorZip.ts(146,7): error TS2322: Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]][]' is not assignable to type 'number[][]'.
+  Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]]' is not assignable to type 'number[]'.
+    Type 'IteratorZipValue<Iterable<number>, number, undefined, [number]>' is not assignable to type 'number'.
       Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(155,7): error TS2322: Type 'IteratorZipResult<{ [x: string]: Iterable<number>; } & {}, undefined, {}>[]' is not assignable to type 'Record<string, number>[]'.
-  Type 'IteratorZipResult<{ [x: string]: Iterable<number>; } & {}, undefined, {}>' is not assignable to type 'Record<string, number>'.
+iteratorZip.ts(151,7): error TS2322: Type '({ [x: string]: IteratorZipValue<Iterable<number>, string, undefined, {}>; } & {})[]' is not assignable to type 'Record<string, number>[]'.
+  Type '{ [x: string]: IteratorZipValue<Iterable<number>, string, undefined, {}>; } & {}' is not assignable to type 'Record<string, number>'.
     'string' index signatures are incompatible.
-      Type 'number | undefined' is not assignable to type 'number'.
+      Type 'IteratorZipValue<Iterable<number>, string, undefined, {}>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(160,7): error TS2322: Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number>>[]' is not assignable to type '{ a: number; b: number; }[]'.
-  Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number>>' is not assignable to type '{ a: number; b: number; }'.
+iteratorZip.ts(156,7): error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
+  Type '{ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {}' is not assignable to type '{ a: number; b: number; }'.
     Types of property 'a' are incompatible.
-      Type 'number | undefined' is not assignable to type 'number'.
+      Type 'IteratorZipValue<number[], "a", undefined, Record<string, number>>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(169,7): error TS2322: Type '[number, string | undefined][]' is not assignable to type '[number, string][]'.
-  Type '[number, string | undefined]' is not assignable to type '[number, string]'.
+iteratorZip.ts(165,7): error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number]>][]' is not assignable to type '[number, string][]'.
+  Type '[number, IteratorZipValue<string[], "1", undefined, [number]>]' is not assignable to type '[number, string]'.
     Type at position 1 in source is not compatible with type at position 1 in target.
-      Type 'string | undefined' is not assignable to type 'string'.
+      Type 'IteratorZipValue<string[], "1", undefined, [number]>' is not assignable to type 'string'.
         Type 'undefined' is not assignable to type 'string'.
-iteratorZip.ts(172,7): error TS2322: Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; }>[]' is not assignable to type '{ a: number; b: string; }[]'.
-  Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; }>' is not assignable to type '{ a: number; b: string; }'.
+iteratorZip.ts(168,7): error TS2322: Type '({ a: number; b: IteratorZipValue<string[], "b", undefined, { a: number; }>; } & {})[]' is not assignable to type '{ a: number; b: string; }[]'.
+  Type '{ a: number; b: IteratorZipValue<string[], "b", undefined, { a: number; }>; } & {}' is not assignable to type '{ a: number; b: string; }'.
     Types of property 'b' are incompatible.
-      Type 'string | undefined' is not assignable to type 'string'.
+      Type 'IteratorZipValue<string[], "b", undefined, { a: number; }>' is not assignable to type 'string'.
         Type 'undefined' is not assignable to type 'string'.
-iteratorZip.ts(178,7): error TS2322: Type '[number, string | undefined][]' is not assignable to type '[number, string][]'.
-  Type '[number, string | undefined]' is not assignable to type '[number, string]'.
+iteratorZip.ts(174,7): error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number, string?]>][]' is not assignable to type '[number, string][]'.
+  Type '[number, IteratorZipValue<string[], "1", undefined, [number, string?]>]' is not assignable to type '[number, string]'.
     Type at position 1 in source is not compatible with type at position 1 in target.
-      Type 'string | undefined' is not assignable to type 'string'.
+      Type 'IteratorZipValue<string[], "1", undefined, [number, string?]>' is not assignable to type 'string'.
         Type 'undefined' is not assignable to type 'string'.
-iteratorZip.ts(182,7): error TS2322: Type 'IteratorZipResult<[Iterable<number>] | [Iterable<number>, Iterable<number>], undefined, [number]>[]' is not assignable to type 'number[][]'.
+iteratorZip.ts(178,7): error TS2322: Type 'IteratorZipResult<[Iterable<number>] | [Iterable<number>, Iterable<number>], undefined, [number]>[]' is not assignable to type 'number[][]'.
   Type 'IteratorZipResult<[Iterable<number>] | [Iterable<number>, Iterable<number>], undefined, [number]>' is not assignable to type 'number[]'.
-    Type '[number, number | undefined]' is not assignable to type 'number[]'.
-      Type 'number | undefined' is not assignable to type 'number'.
+    Type '[number, IteratorZipValue<Iterable<number>, "1", undefined, [number]>]' is not assignable to type 'number[]'.
+      Type 'IteratorZipValue<Iterable<number>, "1", undefined, [number]>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(185,7): error TS2322: Type '(IteratorZipResult<{ a: Iterable<number>; } & {}, undefined, { a: number; }> | IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>)[]' is not assignable to type '({ a: number; } | { b: string; })[]'.
-  Type 'IteratorZipResult<{ a: Iterable<number>; } & {}, undefined, { a: number; }> | IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>' is not assignable to type '{ a: number; } | { b: string; }'.
-    Type 'IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>' is not assignable to type '{ a: number; } | { b: string; }'.
-      Type 'IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>' is not assignable to type '{ b: string; }'.
+iteratorZip.ts(181,7): error TS2322: Type '(({ a: number; } & {}) | ({ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {}))[]' is not assignable to type '({ a: number; } | { b: string; })[]'.
+  Type '({ a: number; } & {}) | ({ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {})' is not assignable to type '{ a: number; } | { b: string; }'.
+    Type '{ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {}' is not assignable to type '{ a: number; } | { b: string; }'.
+      Type '{ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {}' is not assignable to type '{ b: string; }'.
         Types of property 'b' are incompatible.
-          Type 'string | undefined' is not assignable to type 'string'.
+          Type 'IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>' is not assignable to type 'string'.
             Type 'undefined' is not assignable to type 'string'.
-iteratorZip.ts(189,7): error TS2322: Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; } | { b: string; }>[]' is not assignable to type '{ a: number; b: string; }[]'.
-  Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; } | { b: string; }>' is not assignable to type '{ a: number; b: string; }'.
+iteratorZip.ts(185,7): error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, { a: number; } | { b: string; }>; b: IteratorZipValue<string[], "b", undefined, { a: number; } | { b: string; }>; } & {})[]' is not assignable to type '{ a: number; b: string; }[]'.
+  Type '{ a: IteratorZipValue<number[], "a", undefined, { a: number; } | { b: string; }>; b: IteratorZipValue<string[], "b", undefined, { a: number; } | { b: string; }>; } & {}' is not assignable to type '{ a: number; b: string; }'.
     Types of property 'a' are incompatible.
-      Type 'number | undefined' is not assignable to type 'number'.
+      Type 'IteratorZipValue<number[], "a", undefined, { a: number; } | { b: string; }>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(192,7): error TS2322: Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, { a: undefined; b: number; }>[]' is not assignable to type '{ a: number; b: number; }[]'.
-  Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, { a: undefined; b: number; }>' is not assignable to type '{ a: number; b: number; }'.
+iteratorZip.ts(188,7): error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, { a: undefined; b: number; }>; b: number; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
+  Type '{ a: IteratorZipValue<number[], "a", undefined, { a: undefined; b: number; }>; b: number; } & {}' is not assignable to type '{ a: number; b: number; }'.
     Types of property 'a' are incompatible.
-      Type 'number | undefined' is not assignable to type 'number'.
+      Type 'IteratorZipValue<number[], "a", undefined, { a: undefined; b: number; }>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(196,7): error TS2322: Type 'IteratorZipResult<{ [x: `a${string}`]: Iterable<number>; } & {}, undefined, {}>[]' is not assignable to type '{ [x: `a${string}`]: number; }[]'.
-  Type 'IteratorZipResult<{ [x: `a${string}`]: Iterable<number>; } & {}, undefined, {}>' is not assignable to type '{ [x: `a${string}`]: number; }'.
+iteratorZip.ts(192,7): error TS2322: Type '({ [x: `a${string}`]: IteratorZipValue<Iterable<number>, `a${string}`, undefined, {}>; } & {})[]' is not assignable to type '{ [x: `a${string}`]: number; }[]'.
+  Type '{ [x: `a${string}`]: IteratorZipValue<Iterable<number>, `a${string}`, undefined, {}>; } & {}' is not assignable to type '{ [x: `a${string}`]: number; }'.
     '`a${string}`' index signatures are incompatible.
-      Type 'number | undefined' is not assignable to type 'number'.
+      Type 'IteratorZipValue<Iterable<number>, `a${string}`, undefined, {}>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(204,7): error TS2322: Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number> & { a: number; }>[]' is not assignable to type '{ a: number; b: number; }[]'.
-  Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number> & { a: number; }>' is not assignable to type '{ a: number; b: number; }'.
+iteratorZip.ts(200,7): error TS2322: Type '({ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
+  Type '{ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {}' is not assignable to type '{ a: number; b: number; }'.
     Types of property 'b' are incompatible.
-      Type 'number | undefined' is not assignable to type 'number'.
+      Type 'IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-iteratorZip.ts(209,7): error TS2322: Type '[number, string | undefined][]' is not assignable to type '[number, string][]'.
-  Type '[number, string | undefined]' is not assignable to type '[number, string]'.
+iteratorZip.ts(205,7): error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number] | [number, string]>][]' is not assignable to type '[number, string][]'.
+  Type '[number, IteratorZipValue<string[], "1", undefined, [number] | [number, string]>]' is not assignable to type '[number, string]'.
     Type at position 1 in source is not compatible with type at position 1 in target.
-      Type 'string | undefined' is not assignable to type 'string'.
+      Type 'IteratorZipValue<string[], "1", undefined, [number] | [number, string]>' is not assignable to type 'string'.
         Type 'undefined' is not assignable to type 'string'.
-iteratorZip.ts(248,7): error TS2322: Type 'unknown' is not assignable to type 'string'.
-iteratorZip.ts(249,7): error TS2322: Type 'unknown' is not assignable to type 'string'.
-iteratorZip.ts(258,19): error TS2769: No overload matches this call.
+iteratorZip.ts(238,7): error TS2322: Type 'unknown' is not assignable to type 'string'.
+iteratorZip.ts(239,7): error TS2322: Type 'unknown' is not assignable to type 'string'.
+iteratorZip.ts(255,7): error TS2322: Type 'Record<PropertyKey, unknown>[]' is not assignable to type 'never[]'.
+  Type 'Record<PropertyKey, unknown>' is not assignable to type 'never'.
+iteratorZip.ts(260,7): error TS2322: Type 'Record<PropertyKey, unknown>[]' is not assignable to type 'never[]'.
+  Type 'Record<PropertyKey, unknown>' is not assignable to type 'never'.
+iteratorZip.ts(262,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '0' is not assignable to parameter of type 'never'.
-iteratorZip.ts(259,19): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type 'null' is not assignable to parameter of type 'never'.
-iteratorZip.ts(260,31): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Type '"invalid"' is not assignable to type '"longest" | "shortest" | "strict" | undefined'.
-iteratorZip.ts(261,49): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Object literal may only specify known properties, and 'padding' does not exist in type 'IteratorZipShortestOptions'.
-iteratorZip.ts(262,48): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Type 'number' is not assignable to type 'object'.
 iteratorZip.ts(263,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Argument of type '{ values: number[]; }' is not assignable to parameter of type 'never'.
+    Argument of type 'null' is not assignable to parameter of type 'never'.
+iteratorZip.ts(264,27): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"invalid"' is not assignable to type '"longest" | "shortest" | "strict" | undefined'.
+iteratorZip.ts(265,45): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'padding' does not exist in type 'IteratorZipShortestOptions'.
+iteratorZip.ts(266,44): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'number' is not assignable to type 'object'.
+iteratorZip.ts(267,19): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ a: number[]; }' is not assignable to parameter of type 'never'.
 
 
-==== iteratorZip.ts (36 errors) ====
-    declare const key: unique symbol;
+==== iteratorZip.ts (38 errors) ====
+    declare const a1: unique symbol;
     
-    const tuples: [number, string][] = Iterator.zip([
+    const a2: [number, string][] = Iterator.zip([
         [1, 2],
         new Set(["a", "b"]),
     ] as const).toArray();
     
-    tuples[0][0] = 2;
+    a2[0][0] = 2;
     
-    const shortestTuples: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "shortest" }).toArray();
-    const strictTuples: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "strict" }).toArray();
-    const longestTuplesWithPadding: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1, "a"] }).toArray();
-    const longestTuplesWithoutPadding: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest" }).toArray();
-    const longestTuplesWithPartialPadding: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1] }).toArray();
+    const a3: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "shortest" }).toArray();
+    const a4: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "strict" }).toArray();
+    const a5: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1, "a"] }).toArray();
+    const a6: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest" }).toArray();
+    const a7: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1] }).toArray();
     
-    declare const maybeLongestOptions: { mode: "shortest"; } | { mode: "longest"; };
-    const maybeLongestTuples: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, maybeLongestOptions).toArray();
+    declare const a8: { mode: "shortest"; } | { mode: "longest"; };
+    const a9: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, a8).toArray();
     
-    const empty: never[] = Iterator.zip([]).toArray();
-    const emptyLongest: never[] = Iterator.zip([], { mode: "longest" }).toArray();
+    const a10: never[] = Iterator.zip([]).toArray();
+    const a11: never[] = Iterator.zip([], { mode: "longest" }).toArray();
     
-    declare const iterables: Iterable<Iterable<number>>;
-    const arrays: number[][] = Iterator.zip(iterables).toArray();
-    const longestArrays: (number | undefined)[][] = Iterator.zip(iterables, { mode: "longest" }).toArray();
-    const maybeLongestArrays: (number | undefined)[][] = Iterator.zip(iterables, maybeLongestOptions).toArray();
+    declare const a12: Iterable<Iterable<number>>;
+    const a13: number[][] = Iterator.zip(a12).toArray();
+    const a14: (number | undefined)[][] = Iterator.zip(a12, { mode: "longest" }).toArray();
+    const a15: (number | undefined)[][] = Iterator.zip(a12, a8).toArray();
     
-    declare const iterableArray: Iterable<number>[];
-    const longestArrayWithPadding: (number | undefined)[][] = Iterator.zip(iterableArray, { mode: "longest", padding: [] }).toArray();
+    declare const a16: Iterable<number>[];
+    const a17: (number | undefined)[][] = Iterator.zip(a16, { mode: "longest", padding: [] }).toArray();
     
-    const objects: { a: number; b: string; [key]: boolean; }[] = Iterator.zipKeyed({
+    const a18: { a: number; b: string; [a1]: boolean; }[] = Iterator.zipKeyed({
         a: [1, 2],
         b: new Set(["a", "b"]),
-        [key]: [true, false],
+        [a1]: [true, false],
     } as const).toArray();
     
-    objects[0].a = 2;
+    a18[0].a = 2;
     
-    const longestObjectsWithPadding: { a: number; b: string; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+    const a19: { a: number; b: string; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
         mode: "longest",
         padding: { a: 1, b: "a" },
     }).toArray();
     
-    const longestObjectsWithoutPadding: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+    const a20: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
         mode: "longest",
     }).toArray();
     
-    const longestObjectsWithPartialPadding: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+    const a21: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
         mode: "longest",
         padding: { b: "a" },
     }).toArray();
     
-    const maybeLongestObjects: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, maybeLongestOptions).toArray();
+    const a22: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, a8).toArray();
     
-    interface Inputs {
+    interface I1 {
         a: Iterable<number>;
         b: Iterator<string>;
     }
     
-    declare const inputs: Inputs;
-    const rows: { a: number; b: string; }[] = Iterator.zipKeyed(inputs).toArray();
+    declare const a23: I1;
+    const a24: { a: number; b: string; }[] = Iterator.zipKeyed(a23).toArray();
     
     Iterator.zip([[1]], { mode: "invalid" });
                           ~~~~
@@ -254,13 +258,11 @@ iteratorZip.ts(263,19): error TS2769: No overload matches this call.
     
     Iterator.zipKeyed({ a: 0 });
     
-    const emptyKeyed: never[] = Iterator.zipKeyed({}).toArray();
-    const emptyKeyedLongest: never[] = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
+    const a25: Record<PropertyKey, unknown>[] = Iterator.zipKeyed({}).toArray();
+    const a26: Record<PropertyKey, unknown>[] = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
     
-    declare const unionInputs: { a: Iterable<number>; } | { b: Iterator<string>; };
-    const unionRows: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(unionInputs).toArray();
-    
-    // Inputs
+    declare const a27: { a: Iterable<number>; } | { b: Iterator<string>; };
+    const a28: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(a27).toArray();
     
     Iterator.zip("ab");
                  ~~~~
@@ -321,54 +323,54 @@ iteratorZip.ts(263,19): error TS2769: No overload matches this call.
 !!! error TS2769:     Argument of type '{}' is not assignable to parameter of type 'never'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
     
-    const a: [string][] = Iterator.zip([new String("ab")]).toArray();
-    const b: { a: string; }[] = Iterator.zipKeyed({ a: new String("ab") }).toArray();
-    const c: (string | undefined)[][] = Iterator.zip([["a"]], { mode: "longest", padding: new String("ab") }).toArray();
+    const a29: [string][] = Iterator.zip([new String("ab")]).toArray();
+    const a30: { a: string; }[] = Iterator.zipKeyed({ a: new String("ab") }).toArray();
+    const a31: (string | undefined)[][] = Iterator.zip([["a"]], { mode: "longest", padding: new String("ab") }).toArray();
     
-    const d = Iterator.zipKeyed({ a: [1], b: undefined }).toArray();
-    const e: { a: number; }[] = d;
-    d[0].b;
-         ~
-!!! error TS2339: Property 'b' does not exist on type 'IteratorZipResult<{ a: number[]; } & {}, never, {}>'.
-    const f: never[] = Iterator.zipKeyed({ a: undefined }).toArray();
-    const g: never[] = Iterator.zipKeyed({ a: undefined }, { mode: "longest", padding: {} }).toArray();
+    const a32 = Iterator.zipKeyed({ a: [1], b: undefined }).toArray();
+    const a33: { a: number; }[] = a32;
+    a32[0].b;
+           ~
+!!! error TS2339: Property 'b' does not exist on type '{ a: number; } & {}'.
+    const a34: never[] = Iterator.zipKeyed({ a: undefined }).toArray();
+    const a35: never[] = Iterator.zipKeyed({ a: undefined }, { mode: "longest", padding: {} }).toArray();
     
-    interface I {
+    interface I2 {
         readonly a: Iterable<number>;
         readonly b?: Iterator<string>;
         readonly c: Iterable<boolean> | undefined;
         readonly d?: undefined;
     }
-    declare const h: I;
-    const i = Iterator.zipKeyed(h).toArray();
-    const j: { a: number; b?: string; c?: boolean; }[] = i;
-    i[0].a = 2;
-    i[0].b = "a";
-    i[0].c = true;
-    i[0].d;
-         ~
-!!! error TS2339: Property 'd' does not exist on type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>'.
-    const k: { a: number; c: boolean; }[] = i;
-          ~
-!!! error TS2322: Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>[]' is not assignable to type '{ a: number; c: boolean; }[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' is not assignable to type '{ a: number; c: boolean; }'.
-!!! error TS2322:     Property 'c' is optional in type 'IteratorZipResult<{ readonly a: Iterable<number>; } & { readonly b?: Iterator<string, any, any>; readonly c?: Iterable<boolean> | undefined; }, never, {}>' but required in type '{ a: number; c: boolean; }'.
-    const l: { a: number | undefined; b?: string | undefined; c?: boolean | undefined; }[] = Iterator.zipKeyed(h, { mode: "longest" }).toArray();
+    declare const a36: I2;
+    const a37 = Iterator.zipKeyed(a36).toArray();
+    const a38: { a: number; b?: string; c?: boolean; }[] = a37;
+    a37[0].a = 2;
+    a37[0].b = "a";
+    a37[0].c = true;
+    a37[0].d;
+           ~
+!!! error TS2339: Property 'd' does not exist on type '{ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; }'.
+    const a39: { a: number; c: boolean; }[] = a37;
+          ~~~
+!!! error TS2322: Type '({ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; })[]' is not assignable to type '{ a: number; c: boolean; }[]'.
+!!! error TS2322:   Type '{ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; }' is not assignable to type '{ a: number; c: boolean; }'.
+!!! error TS2322:     Property 'c' is optional in type '{ a: number; } & { b?: string; c?: IteratorZipValue<Iterable<boolean> | undefined, "c", never, {}>; }' but required in type '{ a: number; c: boolean; }'.
+    const a40: { a: number | undefined; b?: string | undefined; c?: boolean | undefined; }[] = Iterator.zipKeyed(a36, { mode: "longest" }).toArray();
     
-    declare const m: { a: Iterable<number>; } | { b: Iterator<string>; };
-    const n: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(m).toArray();
-    declare const o: { a: Iterable<number>; } | { b: number; };
-    Iterator.zipKeyed(o);
-    Iterator.zipKeyed(o, { mode: "longest" });
-    Iterator.zipKeyed(o, { mode: "longest", padding: {} });
-    declare const p: { a?: Iterable<number>; } | { b: string; };
-    Iterator.zipKeyed(p);
-    declare const q: { a: Iterable<number>; } | { b: undefined; };
-    const r: { a: number; }[] = Iterator.zipKeyed(q).toArray();
+    declare const a41: { a: Iterable<number>; } | { b: Iterator<string>; };
+    const a42: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(a41).toArray();
+    declare const a43: { a: Iterable<number>; } | { b: number; };
+    Iterator.zipKeyed(a43);
+    Iterator.zipKeyed(a43, { mode: "longest" });
+    Iterator.zipKeyed(a43, { mode: "longest", padding: {} });
+    declare const a44: { a?: Iterable<number>; } | { b: string; };
+    Iterator.zipKeyed(a44);
+    declare const a45: { a: Iterable<number>; } | { b: undefined; };
+    const a46: { a: number; }[] = Iterator.zipKeyed(a45).toArray();
     
-    declare const s: unique symbol;
-    declare const t: { a: Iterable<number>; [s]?: Iterable<string>; };
-    const u: { a: number; [s]?: string; }[] = Iterator.zipKeyed(t).toArray();
+    declare const a47: unique symbol;
+    declare const a48: { a: Iterable<number>; [a47]?: Iterable<string>; };
+    const a49: { a: number; [a47]?: string; }[] = Iterator.zipKeyed(a48).toArray();
     
     Iterator.zipKeyed({ a: [1], b: null });
     Iterator.zipKeyed({ a: [1], b: false });
@@ -385,10 +387,10 @@ iteratorZip.ts(263,19): error TS2769: No overload matches this call.
 !!! error TS2769:                 Type 'undefined' is not assignable to type 'IteratorInput<unknown>'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
     
-    declare const v: { a?: undefined; };
-    const w: never[] = Iterator.zipKeyed(v).toArray();
-    const x: { a: number; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest", padding: { a: 0 } }).toArray();
-    const y: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest" }).toArray();
+    declare const a50: { a?: undefined; };
+    const a51: never[] = Iterator.zipKeyed(a50).toArray();
+    const a52: { a: number; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest", padding: { a: 0 } }).toArray();
+    const a53: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest" }).toArray();
     
     function f1<T>(a: Iterable<T>) {
         const b: { a: T; }[] = Iterator.zipKeyed({ a }).toArray();
@@ -396,201 +398,213 @@ iteratorZip.ts(263,19): error TS2769: No overload matches this call.
         return { b, c };
     }
     
-    // Padding
-    
-    const paddingA: [Iterable<number>, ...Iterable<number>[]] = [[1, 2], [3]];
-    const paddingB = Iterator.zip(paddingA, { mode: "longest", padding: [0] }).toArray();
-    const paddingC: (number | undefined)[][] = paddingB;
-    const paddingD: number[][] = paddingB;
-          ~~~~~~~~
-!!! error TS2322: Type '[number, ...(number | undefined)[]][]' is not assignable to type 'number[][]'.
-!!! error TS2322:   Type '[number, ...(number | undefined)[]]' is not assignable to type 'number[]'.
-!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+    const a54: [Iterable<number>, ...Iterable<number>[]] = [[1, 2], [3]];
+    const a55 = Iterator.zip(a54, { mode: "longest", padding: [0] }).toArray();
+    const a56: (number | undefined)[][] = a55;
+    const a57: number[][] = a55;
+          ~~~
+!!! error TS2322: Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]][]' is not assignable to type 'number[][]'.
+!!! error TS2322:   Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]]' is not assignable to type 'number[]'.
+!!! error TS2322:     Type 'IteratorZipValue<Iterable<number>, number, undefined, [number]>' is not assignable to type 'number'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
     
-    const paddingE: Record<string, Iterable<number>> = { a: [1], b: [2, 3] };
-    const paddingF = Iterator.zipKeyed(paddingE, { mode: "longest", padding: {} }).toArray();
-    const paddingG: Record<string, number | undefined>[] = paddingF;
-    const paddingH: Record<string, number>[] = paddingF;
-          ~~~~~~~~
-!!! error TS2322: Type 'IteratorZipResult<{ [x: string]: Iterable<number>; } & {}, undefined, {}>[]' is not assignable to type 'Record<string, number>[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ [x: string]: Iterable<number>; } & {}, undefined, {}>' is not assignable to type 'Record<string, number>'.
+    const a58: Record<string, Iterable<number>> = { a: [1], b: [2, 3] };
+    const a59 = Iterator.zipKeyed(a58, { mode: "longest", padding: {} }).toArray();
+    const a60: Record<string, number | undefined>[] = a59;
+    const a61: Record<string, number>[] = a59;
+          ~~~
+!!! error TS2322: Type '({ [x: string]: IteratorZipValue<Iterable<number>, string, undefined, {}>; } & {})[]' is not assignable to type 'Record<string, number>[]'.
+!!! error TS2322:   Type '{ [x: string]: IteratorZipValue<Iterable<number>, string, undefined, {}>; } & {}' is not assignable to type 'Record<string, number>'.
 !!! error TS2322:     'string' index signatures are incompatible.
-!!! error TS2322:       Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'IteratorZipValue<Iterable<number>, string, undefined, {}>' is not assignable to type 'number'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
-    declare const paddingI: Record<string, number>;
-    const paddingJ = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: paddingI }).toArray();
-    const paddingK: { a: number | undefined; b: number | undefined; }[] = paddingJ;
-    const paddingL: { a: number; b: number; }[] = paddingJ;
-          ~~~~~~~~
-!!! error TS2322: Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number>>[]' is not assignable to type '{ a: number; b: number; }[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number>>' is not assignable to type '{ a: number; b: number; }'.
+    declare const a62: Record<string, number>;
+    const a63 = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: a62 }).toArray();
+    const a64: { a: number | undefined; b: number | undefined; }[] = a63;
+    const a65: { a: number; b: number; }[] = a63;
+          ~~~
+!!! error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
+!!! error TS2322:   Type '{ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {}' is not assignable to type '{ a: number; b: number; }'.
 !!! error TS2322:     Types of property 'a' are incompatible.
-!!! error TS2322:       Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'IteratorZipValue<number[], "a", undefined, Record<string, number>>' is not assignable to type 'number'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
-    const paddingM = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
-    const paddingN: [number, string][] = paddingM;
-    const paddingO = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0, b: "" } }).toArray();
-    const paddingP: { a: number; b: string; }[] = paddingO;
+    const a66 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
+    const a67: [number, string][] = a66;
+    const a68 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0, b: "" } }).toArray();
+    const a69: { a: number; b: string; }[] = a68;
     
-    const paddingQ = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0] }).toArray();
-    const paddingR: [number | undefined, string | undefined][] = paddingQ;
-    const paddingS: [number, string][] = paddingQ;
-          ~~~~~~~~
-!!! error TS2322: Type '[number, string | undefined][]' is not assignable to type '[number, string][]'.
-!!! error TS2322:   Type '[number, string | undefined]' is not assignable to type '[number, string]'.
+    const a70 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0] }).toArray();
+    const a71: [number | undefined, string | undefined][] = a70;
+    const a72: [number, string][] = a70;
+          ~~~
+!!! error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number]>][]' is not assignable to type '[number, string][]'.
+!!! error TS2322:   Type '[number, IteratorZipValue<string[], "1", undefined, [number]>]' is not assignable to type '[number, string]'.
 !!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
-!!! error TS2322:       Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'IteratorZipValue<string[], "1", undefined, [number]>' is not assignable to type 'string'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'string'.
-    const paddingT = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0 } }).toArray();
-    const paddingU: { a: number | undefined; b: string | undefined; }[] = paddingT;
-    const paddingV: { a: number; b: string; }[] = paddingT;
-          ~~~~~~~~
-!!! error TS2322: Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; }>[]' is not assignable to type '{ a: number; b: string; }[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; }>' is not assignable to type '{ a: number; b: string; }'.
+    const a73 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0 } }).toArray();
+    const a74: { a: number | undefined; b: string | undefined; }[] = a73;
+    const a75: { a: number; b: string; }[] = a73;
+          ~~~
+!!! error TS2322: Type '({ a: number; b: IteratorZipValue<string[], "b", undefined, { a: number; }>; } & {})[]' is not assignable to type '{ a: number; b: string; }[]'.
+!!! error TS2322:   Type '{ a: number; b: IteratorZipValue<string[], "b", undefined, { a: number; }>; } & {}' is not assignable to type '{ a: number; b: string; }'.
 !!! error TS2322:     Types of property 'b' are incompatible.
-!!! error TS2322:       Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'IteratorZipValue<string[], "b", undefined, { a: number; }>' is not assignable to type 'string'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'string'.
     
-    declare const paddingW: readonly [number, string];
-    const paddingX: [number, string][] = Iterator.zip([[1], ["a"]], { mode: "longest", padding: paddingW }).toArray();
-    declare const paddingY: [number, string?];
-    const paddingZ = Iterator.zip([[1], ["a"]], { mode: "longest", padding: paddingY }).toArray();
-    const paddingA1: [number, string][] = paddingZ;
-          ~~~~~~~~~
-!!! error TS2322: Type '[number, string | undefined][]' is not assignable to type '[number, string][]'.
-!!! error TS2322:   Type '[number, string | undefined]' is not assignable to type '[number, string]'.
+    declare const a76: readonly [number, string];
+    const a77: [number, string][] = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a76 }).toArray();
+    declare const a78: [number, string?];
+    const a79 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a78 }).toArray();
+    const a80: [number, string][] = a79;
+          ~~~
+!!! error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number, string?]>][]' is not assignable to type '[number, string][]'.
+!!! error TS2322:   Type '[number, IteratorZipValue<string[], "1", undefined, [number, string?]>]' is not assignable to type '[number, string]'.
 !!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
-!!! error TS2322:       Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'IteratorZipValue<string[], "1", undefined, [number, string?]>' is not assignable to type 'string'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'string'.
     
-    declare const paddingB1: [Iterable<number>] | [Iterable<number>, Iterable<number>];
-    const paddingC1 = Iterator.zip(paddingB1, { mode: "longest", padding: [0] }).toArray();
-    const paddingD1: number[][] = paddingC1;
-          ~~~~~~~~~
+    declare const a81: [Iterable<number>] | [Iterable<number>, Iterable<number>];
+    const a82 = Iterator.zip(a81, { mode: "longest", padding: [0] }).toArray();
+    const a83: number[][] = a82;
+          ~~~
 !!! error TS2322: Type 'IteratorZipResult<[Iterable<number>] | [Iterable<number>, Iterable<number>], undefined, [number]>[]' is not assignable to type 'number[][]'.
 !!! error TS2322:   Type 'IteratorZipResult<[Iterable<number>] | [Iterable<number>, Iterable<number>], undefined, [number]>' is not assignable to type 'number[]'.
-!!! error TS2322:     Type '[number, number | undefined]' is not assignable to type 'number[]'.
-!!! error TS2322:       Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:     Type '[number, IteratorZipValue<Iterable<number>, "1", undefined, [number]>]' is not assignable to type 'number[]'.
+!!! error TS2322:       Type 'IteratorZipValue<Iterable<number>, "1", undefined, [number]>' is not assignable to type 'number'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
-    declare const paddingE1: { a: Iterable<number>; } | { b: Iterable<string>; };
-    const paddingF1 = Iterator.zipKeyed(paddingE1, { mode: "longest", padding: { a: 0 } }).toArray();
-    const paddingG1: ({ a: number; } | { b: string; })[] = paddingF1;
-          ~~~~~~~~~
-!!! error TS2322: Type '(IteratorZipResult<{ a: Iterable<number>; } & {}, undefined, { a: number; }> | IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>)[]' is not assignable to type '({ a: number; } | { b: string; })[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ a: Iterable<number>; } & {}, undefined, { a: number; }> | IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>' is not assignable to type '{ a: number; } | { b: string; }'.
-!!! error TS2322:     Type 'IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>' is not assignable to type '{ a: number; } | { b: string; }'.
-!!! error TS2322:       Type 'IteratorZipResult<{ b: Iterable<string>; } & {}, undefined, { a: number; }>' is not assignable to type '{ b: string; }'.
+    declare const a84: { a: Iterable<number>; } | { b: Iterable<string>; };
+    const a85 = Iterator.zipKeyed(a84, { mode: "longest", padding: { a: 0 } }).toArray();
+    const a86: ({ a: number; } | { b: string; })[] = a85;
+          ~~~
+!!! error TS2322: Type '(({ a: number; } & {}) | ({ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {}))[]' is not assignable to type '({ a: number; } | { b: string; })[]'.
+!!! error TS2322:   Type '({ a: number; } & {}) | ({ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {})' is not assignable to type '{ a: number; } | { b: string; }'.
+!!! error TS2322:     Type '{ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {}' is not assignable to type '{ a: number; } | { b: string; }'.
+!!! error TS2322:       Type '{ b: IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>; } & {}' is not assignable to type '{ b: string; }'.
 !!! error TS2322:         Types of property 'b' are incompatible.
-!!! error TS2322:           Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:           Type 'IteratorZipValue<Iterable<string>, "b", undefined, { a: number; }>' is not assignable to type 'string'.
 !!! error TS2322:             Type 'undefined' is not assignable to type 'string'.
     
-    declare const paddingH1: { a: number; } | { b: string; };
-    const paddingI1 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: paddingH1 }).toArray();
-    const paddingJ1: { a: number; b: string; }[] = paddingI1;
-          ~~~~~~~~~
-!!! error TS2322: Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; } | { b: string; }>[]' is not assignable to type '{ a: number; b: string; }[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ a: number[]; b: string[]; } & {}, undefined, { a: number; } | { b: string; }>' is not assignable to type '{ a: number; b: string; }'.
+    declare const a87: { a: number; } | { b: string; };
+    const a88 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: a87 }).toArray();
+    const a89: { a: number; b: string; }[] = a88;
+          ~~~
+!!! error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, { a: number; } | { b: string; }>; b: IteratorZipValue<string[], "b", undefined, { a: number; } | { b: string; }>; } & {})[]' is not assignable to type '{ a: number; b: string; }[]'.
+!!! error TS2322:   Type '{ a: IteratorZipValue<number[], "a", undefined, { a: number; } | { b: string; }>; b: IteratorZipValue<string[], "b", undefined, { a: number; } | { b: string; }>; } & {}' is not assignable to type '{ a: number; b: string; }'.
 !!! error TS2322:     Types of property 'a' are incompatible.
-!!! error TS2322:       Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'IteratorZipValue<number[], "a", undefined, { a: number; } | { b: string; }>' is not assignable to type 'number'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
-    const paddingK1 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: { a: undefined, b: 0 } }).toArray();
-    const paddingL1: { a: number; b: number; }[] = paddingK1;
-          ~~~~~~~~~
-!!! error TS2322: Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, { a: undefined; b: number; }>[]' is not assignable to type '{ a: number; b: number; }[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, { a: undefined; b: number; }>' is not assignable to type '{ a: number; b: number; }'.
+    const a90 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: { a: undefined, b: 0 } }).toArray();
+    const a91: { a: number; b: number; }[] = a90;
+          ~~~
+!!! error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, { a: undefined; b: number; }>; b: number; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
+!!! error TS2322:   Type '{ a: IteratorZipValue<number[], "a", undefined, { a: undefined; b: number; }>; b: number; } & {}' is not assignable to type '{ a: number; b: number; }'.
 !!! error TS2322:     Types of property 'a' are incompatible.
-!!! error TS2322:       Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'IteratorZipValue<number[], "a", undefined, { a: undefined; b: number; }>' is not assignable to type 'number'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
-    declare const paddingM1: { [K in `a${string}`]: Iterable<number>; };
-    const paddingN1 = Iterator.zipKeyed(paddingM1, { mode: "longest", padding: {} }).toArray();
-    const paddingO1: { [K in `a${string}`]: number; }[] = paddingN1;
-          ~~~~~~~~~
-!!! error TS2322: Type 'IteratorZipResult<{ [x: `a${string}`]: Iterable<number>; } & {}, undefined, {}>[]' is not assignable to type '{ [x: `a${string}`]: number; }[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ [x: `a${string}`]: Iterable<number>; } & {}, undefined, {}>' is not assignable to type '{ [x: `a${string}`]: number; }'.
+    declare const a92: { [K in `a${string}`]: Iterable<number>; };
+    const a93 = Iterator.zipKeyed(a92, { mode: "longest", padding: {} }).toArray();
+    const a94: { [K in `a${string}`]: number; }[] = a93;
+          ~~~
+!!! error TS2322: Type '({ [x: `a${string}`]: IteratorZipValue<Iterable<number>, `a${string}`, undefined, {}>; } & {})[]' is not assignable to type '{ [x: `a${string}`]: number; }[]'.
+!!! error TS2322:   Type '{ [x: `a${string}`]: IteratorZipValue<Iterable<number>, `a${string}`, undefined, {}>; } & {}' is not assignable to type '{ [x: `a${string}`]: number; }'.
 !!! error TS2322:     '`a${string}`' index signatures are incompatible.
-!!! error TS2322:       Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'IteratorZipValue<Iterable<number>, `a${string}`, undefined, {}>' is not assignable to type 'number'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
-    declare const paddingP1: unique symbol;
-    const paddingQ1: { [paddingP1]: number; }[] = Iterator.zipKeyed({ [paddingP1]: [1] }, { mode: "longest", padding: { [paddingP1]: 0 } }).toArray();
+    declare const a95: unique symbol;
+    const a96: { [a95]: number; }[] = Iterator.zipKeyed({ [a95]: [1] }, { mode: "longest", padding: { [a95]: 0 } }).toArray();
     
-    declare const paddingR1: Record<string, number> & { a: number; };
-    const paddingS1 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: paddingR1 }).toArray();
-    const paddingT1: { a: number; b: number | undefined; }[] = paddingS1;
-    const paddingU1: { a: number; b: number; }[] = paddingS1;
-          ~~~~~~~~~
-!!! error TS2322: Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number> & { a: number; }>[]' is not assignable to type '{ a: number; b: number; }[]'.
-!!! error TS2322:   Type 'IteratorZipResult<{ a: number[]; b: number[]; } & {}, undefined, Record<string, number> & { a: number; }>' is not assignable to type '{ a: number; b: number; }'.
+    declare const a97: Record<string, number> & { a: number; };
+    const a98 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: a97 }).toArray();
+    const a99: { a: number; b: number | undefined; }[] = a98;
+    const a100: { a: number; b: number; }[] = a98;
+          ~~~~
+!!! error TS2322: Type '({ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
+!!! error TS2322:   Type '{ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {}' is not assignable to type '{ a: number; b: number; }'.
 !!! error TS2322:     Types of property 'b' are incompatible.
-!!! error TS2322:       Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>' is not assignable to type 'number'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
-    declare const paddingV1: [number] | [number, string];
-    const paddingW1 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: paddingV1 }).toArray();
-    const paddingX1: [number, string | undefined][] = paddingW1;
-    const paddingY1: [number, string][] = paddingW1;
-          ~~~~~~~~~
-!!! error TS2322: Type '[number, string | undefined][]' is not assignable to type '[number, string][]'.
-!!! error TS2322:   Type '[number, string | undefined]' is not assignable to type '[number, string]'.
+    declare const a101: [number] | [number, string];
+    const a102 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a101 }).toArray();
+    const a103: [number, string | undefined][] = a102;
+    const a104: [number, string][] = a102;
+          ~~~~
+!!! error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number] | [number, string]>][]' is not assignable to type '[number, string][]'.
+!!! error TS2322:   Type '[number, IteratorZipValue<string[], "1", undefined, [number] | [number, string]>]' is not assignable to type '[number, string]'.
 !!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
-!!! error TS2322:       Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'IteratorZipValue<string[], "1", undefined, [number] | [number, string]>' is not assignable to type 'string'.
 !!! error TS2322:         Type 'undefined' is not assignable to type 'string'.
     
-    const paddingZ1: [number | undefined, number][] = Iterator.zip([[1], [2]], { mode: "longest", padding: [undefined, 0] }).toArray();
-    const paddingA2: { a: number | undefined; b: number; }[] = paddingK1;
+    const a105: [number | undefined, number][] = Iterator.zip([[1], [2]], { mode: "longest", padding: [undefined, 0] }).toArray();
+    const a106: { a: number | undefined; b: number; }[] = a90;
     
-    // Own properties
+    class C1 {
+        a = [1, 2];
     
-    class InputsWithPrototypeMembers {
-        values = [1, 2];
-    
-        get label() {
+        get b() {
             return "inputs";
         }
     
-        describe() {
-            return this.label;
+        f() {
+            return this.b;
         }
     }
     
-    const instance = new InputsWithPrototypeMembers();
-    const inherited = Iterator.zipKeyed(instance).toArray();
-    const inheritedStrict = Iterator.zipKeyed(instance, { mode: "strict" }).toArray();
-    const inheritedLongest = Iterator.zipKeyed(instance, { mode: "longest" }).toArray();
-    const inheritedPadded = Iterator.zipKeyed(instance, { mode: "longest", padding: { values: 0 } }).toArray();
+    const a107 = new C1();
+    const a108 = Iterator.zipKeyed(a107).toArray();
+    const a109 = Iterator.zipKeyed(a107, { mode: "strict" }).toArray();
+    const a110 = Iterator.zipKeyed(a107, { mode: "longest" }).toArray();
+    const a111 = Iterator.zipKeyed(a107, { mode: "longest", padding: { a: 0 } }).toArray();
     
-    const hiddenInputs = { values: [1, 2], label: "inputs" };
-    Object.defineProperty(hiddenInputs, "label", { enumerable: false });
-    const nonEnumerable = Iterator.zipKeyed(hiddenInputs).toArray();
-    const nonEnumerablePadded = Iterator.zipKeyed(hiddenInputs, { mode: "longest", padding: { values: 0 } }).toArray();
+    const a112 = { a: [1, 2], b: "inputs" };
+    Object.defineProperty(a112, "b", { enumerable: false });
+    const a113 = Iterator.zipKeyed(a112).toArray();
+    const a114 = Iterator.zipKeyed(a112, { mode: "longest", padding: { a: 0 } }).toArray();
     
-    // The same static shape can have an enumerable non-iterator property instead.
-    // Such inputs are accepted by the fallback and checked at runtime.
-    const enumerableInputs = { values: [1, 2], label: "inputs" };
-    const enumerable = Iterator.zipKeyed(enumerableInputs).toArray();
+    const a115 = { a: [1, 2], b: "inputs" };
+    const a116 = Iterator.zipKeyed(a115).toArray();
     
-    // The array's length and methods are not enumerable own properties.
-    const arrayInputs = Iterator.zipKeyed([[1, 2], ["a", "b"]]).toArray();
+    const a117 = Iterator.zipKeyed([[1, 2], ["a", "b"]]).toArray();
     
-    // The fallback must not claim that ignored properties exist on yielded objects.
-    const inheritedLabel: string = inherited[0].label;
-          ~~~~~~~~~~~~~~
+    const a118: string = a108[0].b;
+          ~~~~
 !!! error TS2322: Type 'unknown' is not assignable to type 'string'.
-    const nonEnumerableLabel: string = nonEnumerable[0].label;
-          ~~~~~~~~~~~~~~~~~~
+    const a119: string = a113[0].b;
+          ~~~~
 !!! error TS2322: Type 'unknown' is not assignable to type 'string'.
     
-    // Precise record inference still handles symbol keys and padding.
-    declare const ownKey: unique symbol;
-    const precise: { values: number; [ownKey]: string; }[] = Iterator.zipKeyed({ values: [1], [ownKey]: ["a"] }).toArray();
-    const preciseLongest: { values: number | undefined; }[] = Iterator.zipKeyed({ values: [1] }, { mode: "longest" }).toArray();
-    const precisePadded: { values: number; }[] = Iterator.zipKeyed({ values: [1] }, { mode: "longest", padding: { values: 0 } }).toArray();
-    const emptyOwnProperties: never[] = Iterator.zipKeyed({}).toArray();
+    declare const a120: unique symbol;
+    const a121: { a: number; [a120]: string; }[] = Iterator.zipKeyed({ a: [1], [a120]: ["a"] }).toArray();
+    const a122: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1] }, { mode: "longest" }).toArray();
+    const a123: { a: number; }[] = Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: 0 } }).toArray();
+    
+    declare const a124: object;
+    const a125 = Iterator.zipKeyed(a124).toArray();
+    const a126 = Iterator.zipKeyed(a124, { mode: "strict" }).toArray();
+    const a127 = Iterator.zipKeyed(a124, { mode: "longest" }).toArray();
+    const a128 = Iterator.zipKeyed(a124, { mode: "longest", padding: { a: 0 } }).toArray();
+    const a129: unknown = a125[0].a;
+    const a130: unknown = a126[0].a;
+    const a131: unknown = a127[0].a;
+    const a132: unknown = a128[0].a;
+    const a133: never[] = a125;
+          ~~~~
+!!! error TS2322: Type 'Record<PropertyKey, unknown>[]' is not assignable to type 'never[]'.
+!!! error TS2322:   Type 'Record<PropertyKey, unknown>' is not assignable to type 'never'.
+    
+    declare const a134: {};
+    const a135 = Iterator.zipKeyed(a134).toArray();
+    const a136: unknown = a135[0].a;
+    const a137: never[] = a135;
+          ~~~~
+!!! error TS2322: Type 'Record<PropertyKey, unknown>[]' is not assignable to type 'never[]'.
+!!! error TS2322:   Type 'Record<PropertyKey, unknown>' is not assignable to type 'never'.
     
     Iterator.zipKeyed(0);
                       ~
@@ -604,28 +618,28 @@ iteratorZip.ts(263,19): error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'never'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
-    Iterator.zipKeyed(instance, { mode: "invalid" });
-                                  ~~~~
+    Iterator.zipKeyed(a107, { mode: "invalid" });
+                              ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Type '"invalid"' is not assignable to type '"longest" | "shortest" | "strict" | undefined'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
-    Iterator.zipKeyed(instance, { mode: "shortest", padding: {} });
-                                                    ~~~~~~~
+    Iterator.zipKeyed(a107, { mode: "shortest", padding: {} });
+                                                ~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Object literal may only specify known properties, and 'padding' does not exist in type 'IteratorZipShortestOptions'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
-    Iterator.zipKeyed(instance, { mode: "longest", padding: 0 });
-                                                   ~~~~~~~
+    Iterator.zipKeyed(a107, { mode: "longest", padding: 0 });
+                                               ~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Type 'number' is not assignable to type 'object'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
-    Iterator.zipKeyed({ values: [1] }, { mode: "longest", padding: { values: "invalid" } });
-                      ~~~~~~~~~~~~~~~
+    Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: "invalid" } });
+                      ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
-!!! error TS2769:     Argument of type '{ values: number[]; }' is not assignable to parameter of type 'never'.
+!!! error TS2769:     Argument of type '{ a: number[]; }' is not assignable to parameter of type 'never'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
     

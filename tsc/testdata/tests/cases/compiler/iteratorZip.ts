@@ -4,66 +4,66 @@
 // @exactOptionalPropertyTypes: true, false
 // @declaration: true
 
-declare const key: unique symbol;
+declare const a1: unique symbol;
 
-const tuples: [number, string][] = Iterator.zip([
+const a2: [number, string][] = Iterator.zip([
     [1, 2],
     new Set(["a", "b"]),
 ] as const).toArray();
 
-tuples[0][0] = 2;
+a2[0][0] = 2;
 
-const shortestTuples: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "shortest" }).toArray();
-const strictTuples: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "strict" }).toArray();
-const longestTuplesWithPadding: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1, "a"] }).toArray();
-const longestTuplesWithoutPadding: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest" }).toArray();
-const longestTuplesWithPartialPadding: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1] }).toArray();
+const a3: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "shortest" }).toArray();
+const a4: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "strict" }).toArray();
+const a5: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1, "a"] }).toArray();
+const a6: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest" }).toArray();
+const a7: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1] }).toArray();
 
-declare const maybeLongestOptions: { mode: "shortest"; } | { mode: "longest"; };
-const maybeLongestTuples: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, maybeLongestOptions).toArray();
+declare const a8: { mode: "shortest"; } | { mode: "longest"; };
+const a9: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, a8).toArray();
 
-const empty: never[] = Iterator.zip([]).toArray();
-const emptyLongest: never[] = Iterator.zip([], { mode: "longest" }).toArray();
+const a10: never[] = Iterator.zip([]).toArray();
+const a11: never[] = Iterator.zip([], { mode: "longest" }).toArray();
 
-declare const iterables: Iterable<Iterable<number>>;
-const arrays: number[][] = Iterator.zip(iterables).toArray();
-const longestArrays: (number | undefined)[][] = Iterator.zip(iterables, { mode: "longest" }).toArray();
-const maybeLongestArrays: (number | undefined)[][] = Iterator.zip(iterables, maybeLongestOptions).toArray();
+declare const a12: Iterable<Iterable<number>>;
+const a13: number[][] = Iterator.zip(a12).toArray();
+const a14: (number | undefined)[][] = Iterator.zip(a12, { mode: "longest" }).toArray();
+const a15: (number | undefined)[][] = Iterator.zip(a12, a8).toArray();
 
-declare const iterableArray: Iterable<number>[];
-const longestArrayWithPadding: (number | undefined)[][] = Iterator.zip(iterableArray, { mode: "longest", padding: [] }).toArray();
+declare const a16: Iterable<number>[];
+const a17: (number | undefined)[][] = Iterator.zip(a16, { mode: "longest", padding: [] }).toArray();
 
-const objects: { a: number; b: string; [key]: boolean; }[] = Iterator.zipKeyed({
+const a18: { a: number; b: string; [a1]: boolean; }[] = Iterator.zipKeyed({
     a: [1, 2],
     b: new Set(["a", "b"]),
-    [key]: [true, false],
+    [a1]: [true, false],
 } as const).toArray();
 
-objects[0].a = 2;
+a18[0].a = 2;
 
-const longestObjectsWithPadding: { a: number; b: string; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+const a19: { a: number; b: string; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
     mode: "longest",
     padding: { a: 1, b: "a" },
 }).toArray();
 
-const longestObjectsWithoutPadding: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+const a20: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
     mode: "longest",
 }).toArray();
 
-const longestObjectsWithPartialPadding: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+const a21: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
     mode: "longest",
     padding: { b: "a" },
 }).toArray();
 
-const maybeLongestObjects: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, maybeLongestOptions).toArray();
+const a22: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, a8).toArray();
 
-interface Inputs {
+interface I1 {
     a: Iterable<number>;
     b: Iterator<string>;
 }
 
-declare const inputs: Inputs;
-const rows: { a: number; b: string; }[] = Iterator.zipKeyed(inputs).toArray();
+declare const a23: I1;
+const a24: { a: number; b: string; }[] = Iterator.zipKeyed(a23).toArray();
 
 Iterator.zip([[1]], { mode: "invalid" });
 
@@ -75,13 +75,11 @@ Iterator.zip(0);
 
 Iterator.zipKeyed({ a: 0 });
 
-const emptyKeyed: never[] = Iterator.zipKeyed({}).toArray();
-const emptyKeyedLongest: never[] = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
+const a25: Record<PropertyKey, unknown>[] = Iterator.zipKeyed({}).toArray();
+const a26: Record<PropertyKey, unknown>[] = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
 
-declare const unionInputs: { a: Iterable<number>; } | { b: Iterator<string>; };
-const unionRows: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(unionInputs).toArray();
-
-// Inputs
+declare const a27: { a: Iterable<number>; } | { b: Iterator<string>; };
+const a28: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(a27).toArray();
 
 Iterator.zip("ab");
 Iterator.zip(["ab"]);
@@ -92,55 +90,55 @@ Iterator.zip([], { mode: "longest", padding: "ab" });
 Iterator.zip([["a"]], { mode: "longest", padding: "ab" });
 Iterator.zipKeyed({}, { mode: "longest", padding: "ab" });
 
-const a: [string][] = Iterator.zip([new String("ab")]).toArray();
-const b: { a: string; }[] = Iterator.zipKeyed({ a: new String("ab") }).toArray();
-const c: (string | undefined)[][] = Iterator.zip([["a"]], { mode: "longest", padding: new String("ab") }).toArray();
+const a29: [string][] = Iterator.zip([new String("ab")]).toArray();
+const a30: { a: string; }[] = Iterator.zipKeyed({ a: new String("ab") }).toArray();
+const a31: (string | undefined)[][] = Iterator.zip([["a"]], { mode: "longest", padding: new String("ab") }).toArray();
 
-const d = Iterator.zipKeyed({ a: [1], b: undefined }).toArray();
-const e: { a: number; }[] = d;
-d[0].b;
-const f: never[] = Iterator.zipKeyed({ a: undefined }).toArray();
-const g: never[] = Iterator.zipKeyed({ a: undefined }, { mode: "longest", padding: {} }).toArray();
+const a32 = Iterator.zipKeyed({ a: [1], b: undefined }).toArray();
+const a33: { a: number; }[] = a32;
+a32[0].b;
+const a34: never[] = Iterator.zipKeyed({ a: undefined }).toArray();
+const a35: never[] = Iterator.zipKeyed({ a: undefined }, { mode: "longest", padding: {} }).toArray();
 
-interface I {
+interface I2 {
     readonly a: Iterable<number>;
     readonly b?: Iterator<string>;
     readonly c: Iterable<boolean> | undefined;
     readonly d?: undefined;
 }
-declare const h: I;
-const i = Iterator.zipKeyed(h).toArray();
-const j: { a: number; b?: string; c?: boolean; }[] = i;
-i[0].a = 2;
-i[0].b = "a";
-i[0].c = true;
-i[0].d;
-const k: { a: number; c: boolean; }[] = i;
-const l: { a: number | undefined; b?: string | undefined; c?: boolean | undefined; }[] = Iterator.zipKeyed(h, { mode: "longest" }).toArray();
+declare const a36: I2;
+const a37 = Iterator.zipKeyed(a36).toArray();
+const a38: { a: number; b?: string; c?: boolean; }[] = a37;
+a37[0].a = 2;
+a37[0].b = "a";
+a37[0].c = true;
+a37[0].d;
+const a39: { a: number; c: boolean; }[] = a37;
+const a40: { a: number | undefined; b?: string | undefined; c?: boolean | undefined; }[] = Iterator.zipKeyed(a36, { mode: "longest" }).toArray();
 
-declare const m: { a: Iterable<number>; } | { b: Iterator<string>; };
-const n: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(m).toArray();
-declare const o: { a: Iterable<number>; } | { b: number; };
-Iterator.zipKeyed(o);
-Iterator.zipKeyed(o, { mode: "longest" });
-Iterator.zipKeyed(o, { mode: "longest", padding: {} });
-declare const p: { a?: Iterable<number>; } | { b: string; };
-Iterator.zipKeyed(p);
-declare const q: { a: Iterable<number>; } | { b: undefined; };
-const r: { a: number; }[] = Iterator.zipKeyed(q).toArray();
+declare const a41: { a: Iterable<number>; } | { b: Iterator<string>; };
+const a42: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(a41).toArray();
+declare const a43: { a: Iterable<number>; } | { b: number; };
+Iterator.zipKeyed(a43);
+Iterator.zipKeyed(a43, { mode: "longest" });
+Iterator.zipKeyed(a43, { mode: "longest", padding: {} });
+declare const a44: { a?: Iterable<number>; } | { b: string; };
+Iterator.zipKeyed(a44);
+declare const a45: { a: Iterable<number>; } | { b: undefined; };
+const a46: { a: number; }[] = Iterator.zipKeyed(a45).toArray();
 
-declare const s: unique symbol;
-declare const t: { a: Iterable<number>; [s]?: Iterable<string>; };
-const u: { a: number; [s]?: string; }[] = Iterator.zipKeyed(t).toArray();
+declare const a47: unique symbol;
+declare const a48: { a: Iterable<number>; [a47]?: Iterable<string>; };
+const a49: { a: number; [a47]?: string; }[] = Iterator.zipKeyed(a48).toArray();
 
 Iterator.zipKeyed({ a: [1], b: null });
 Iterator.zipKeyed({ a: [1], b: false });
 Iterator.zip([undefined]);
 
-declare const v: { a?: undefined; };
-const w: never[] = Iterator.zipKeyed(v).toArray();
-const x: { a: number; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest", padding: { a: 0 } }).toArray();
-const y: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest" }).toArray();
+declare const a50: { a?: undefined; };
+const a51: never[] = Iterator.zipKeyed(a50).toArray();
+const a52: { a: number; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest", padding: { a: 0 } }).toArray();
+const a53: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: undefined }, { mode: "longest" }).toArray();
 
 function f1<T>(a: Iterable<T>) {
     const b: { a: T; }[] = Iterator.zipKeyed({ a }).toArray();
@@ -148,122 +146,128 @@ function f1<T>(a: Iterable<T>) {
     return { b, c };
 }
 
-// Padding
+const a54: [Iterable<number>, ...Iterable<number>[]] = [[1, 2], [3]];
+const a55 = Iterator.zip(a54, { mode: "longest", padding: [0] }).toArray();
+const a56: (number | undefined)[][] = a55;
+const a57: number[][] = a55;
 
-const paddingA: [Iterable<number>, ...Iterable<number>[]] = [[1, 2], [3]];
-const paddingB = Iterator.zip(paddingA, { mode: "longest", padding: [0] }).toArray();
-const paddingC: (number | undefined)[][] = paddingB;
-const paddingD: number[][] = paddingB;
+const a58: Record<string, Iterable<number>> = { a: [1], b: [2, 3] };
+const a59 = Iterator.zipKeyed(a58, { mode: "longest", padding: {} }).toArray();
+const a60: Record<string, number | undefined>[] = a59;
+const a61: Record<string, number>[] = a59;
 
-const paddingE: Record<string, Iterable<number>> = { a: [1], b: [2, 3] };
-const paddingF = Iterator.zipKeyed(paddingE, { mode: "longest", padding: {} }).toArray();
-const paddingG: Record<string, number | undefined>[] = paddingF;
-const paddingH: Record<string, number>[] = paddingF;
+declare const a62: Record<string, number>;
+const a63 = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: a62 }).toArray();
+const a64: { a: number | undefined; b: number | undefined; }[] = a63;
+const a65: { a: number; b: number; }[] = a63;
 
-declare const paddingI: Record<string, number>;
-const paddingJ = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: paddingI }).toArray();
-const paddingK: { a: number | undefined; b: number | undefined; }[] = paddingJ;
-const paddingL: { a: number; b: number; }[] = paddingJ;
+const a66 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
+const a67: [number, string][] = a66;
+const a68 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0, b: "" } }).toArray();
+const a69: { a: number; b: string; }[] = a68;
 
-const paddingM = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
-const paddingN: [number, string][] = paddingM;
-const paddingO = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0, b: "" } }).toArray();
-const paddingP: { a: number; b: string; }[] = paddingO;
+const a70 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0] }).toArray();
+const a71: [number | undefined, string | undefined][] = a70;
+const a72: [number, string][] = a70;
+const a73 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0 } }).toArray();
+const a74: { a: number | undefined; b: string | undefined; }[] = a73;
+const a75: { a: number; b: string; }[] = a73;
 
-const paddingQ = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0] }).toArray();
-const paddingR: [number | undefined, string | undefined][] = paddingQ;
-const paddingS: [number, string][] = paddingQ;
-const paddingT = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: { a: 0 } }).toArray();
-const paddingU: { a: number | undefined; b: string | undefined; }[] = paddingT;
-const paddingV: { a: number; b: string; }[] = paddingT;
+declare const a76: readonly [number, string];
+const a77: [number, string][] = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a76 }).toArray();
+declare const a78: [number, string?];
+const a79 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a78 }).toArray();
+const a80: [number, string][] = a79;
 
-declare const paddingW: readonly [number, string];
-const paddingX: [number, string][] = Iterator.zip([[1], ["a"]], { mode: "longest", padding: paddingW }).toArray();
-declare const paddingY: [number, string?];
-const paddingZ = Iterator.zip([[1], ["a"]], { mode: "longest", padding: paddingY }).toArray();
-const paddingA1: [number, string][] = paddingZ;
+declare const a81: [Iterable<number>] | [Iterable<number>, Iterable<number>];
+const a82 = Iterator.zip(a81, { mode: "longest", padding: [0] }).toArray();
+const a83: number[][] = a82;
+declare const a84: { a: Iterable<number>; } | { b: Iterable<string>; };
+const a85 = Iterator.zipKeyed(a84, { mode: "longest", padding: { a: 0 } }).toArray();
+const a86: ({ a: number; } | { b: string; })[] = a85;
 
-declare const paddingB1: [Iterable<number>] | [Iterable<number>, Iterable<number>];
-const paddingC1 = Iterator.zip(paddingB1, { mode: "longest", padding: [0] }).toArray();
-const paddingD1: number[][] = paddingC1;
-declare const paddingE1: { a: Iterable<number>; } | { b: Iterable<string>; };
-const paddingF1 = Iterator.zipKeyed(paddingE1, { mode: "longest", padding: { a: 0 } }).toArray();
-const paddingG1: ({ a: number; } | { b: string; })[] = paddingF1;
+declare const a87: { a: number; } | { b: string; };
+const a88 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: a87 }).toArray();
+const a89: { a: number; b: string; }[] = a88;
 
-declare const paddingH1: { a: number; } | { b: string; };
-const paddingI1 = Iterator.zipKeyed({ a: [1], b: ["a"] }, { mode: "longest", padding: paddingH1 }).toArray();
-const paddingJ1: { a: number; b: string; }[] = paddingI1;
+const a90 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: { a: undefined, b: 0 } }).toArray();
+const a91: { a: number; b: number; }[] = a90;
 
-const paddingK1 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: { a: undefined, b: 0 } }).toArray();
-const paddingL1: { a: number; b: number; }[] = paddingK1;
+declare const a92: { [K in `a${string}`]: Iterable<number>; };
+const a93 = Iterator.zipKeyed(a92, { mode: "longest", padding: {} }).toArray();
+const a94: { [K in `a${string}`]: number; }[] = a93;
 
-declare const paddingM1: { [K in `a${string}`]: Iterable<number>; };
-const paddingN1 = Iterator.zipKeyed(paddingM1, { mode: "longest", padding: {} }).toArray();
-const paddingO1: { [K in `a${string}`]: number; }[] = paddingN1;
+declare const a95: unique symbol;
+const a96: { [a95]: number; }[] = Iterator.zipKeyed({ [a95]: [1] }, { mode: "longest", padding: { [a95]: 0 } }).toArray();
 
-declare const paddingP1: unique symbol;
-const paddingQ1: { [paddingP1]: number; }[] = Iterator.zipKeyed({ [paddingP1]: [1] }, { mode: "longest", padding: { [paddingP1]: 0 } }).toArray();
+declare const a97: Record<string, number> & { a: number; };
+const a98 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: a97 }).toArray();
+const a99: { a: number; b: number | undefined; }[] = a98;
+const a100: { a: number; b: number; }[] = a98;
 
-declare const paddingR1: Record<string, number> & { a: number; };
-const paddingS1 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: paddingR1 }).toArray();
-const paddingT1: { a: number; b: number | undefined; }[] = paddingS1;
-const paddingU1: { a: number; b: number; }[] = paddingS1;
+declare const a101: [number] | [number, string];
+const a102 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a101 }).toArray();
+const a103: [number, string | undefined][] = a102;
+const a104: [number, string][] = a102;
 
-declare const paddingV1: [number] | [number, string];
-const paddingW1 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: paddingV1 }).toArray();
-const paddingX1: [number, string | undefined][] = paddingW1;
-const paddingY1: [number, string][] = paddingW1;
+const a105: [number | undefined, number][] = Iterator.zip([[1], [2]], { mode: "longest", padding: [undefined, 0] }).toArray();
+const a106: { a: number | undefined; b: number; }[] = a90;
 
-const paddingZ1: [number | undefined, number][] = Iterator.zip([[1], [2]], { mode: "longest", padding: [undefined, 0] }).toArray();
-const paddingA2: { a: number | undefined; b: number; }[] = paddingK1;
+class C1 {
+    a = [1, 2];
 
-// Own properties
-
-class InputsWithPrototypeMembers {
-    values = [1, 2];
-
-    get label() {
+    get b() {
         return "inputs";
     }
 
-    describe() {
-        return this.label;
+    f() {
+        return this.b;
     }
 }
 
-const instance = new InputsWithPrototypeMembers();
-const inherited = Iterator.zipKeyed(instance).toArray();
-const inheritedStrict = Iterator.zipKeyed(instance, { mode: "strict" }).toArray();
-const inheritedLongest = Iterator.zipKeyed(instance, { mode: "longest" }).toArray();
-const inheritedPadded = Iterator.zipKeyed(instance, { mode: "longest", padding: { values: 0 } }).toArray();
+const a107 = new C1();
+const a108 = Iterator.zipKeyed(a107).toArray();
+const a109 = Iterator.zipKeyed(a107, { mode: "strict" }).toArray();
+const a110 = Iterator.zipKeyed(a107, { mode: "longest" }).toArray();
+const a111 = Iterator.zipKeyed(a107, { mode: "longest", padding: { a: 0 } }).toArray();
 
-const hiddenInputs = { values: [1, 2], label: "inputs" };
-Object.defineProperty(hiddenInputs, "label", { enumerable: false });
-const nonEnumerable = Iterator.zipKeyed(hiddenInputs).toArray();
-const nonEnumerablePadded = Iterator.zipKeyed(hiddenInputs, { mode: "longest", padding: { values: 0 } }).toArray();
+const a112 = { a: [1, 2], b: "inputs" };
+Object.defineProperty(a112, "b", { enumerable: false });
+const a113 = Iterator.zipKeyed(a112).toArray();
+const a114 = Iterator.zipKeyed(a112, { mode: "longest", padding: { a: 0 } }).toArray();
 
-// The same static shape can have an enumerable non-iterator property instead.
-// Such inputs are accepted by the fallback and checked at runtime.
-const enumerableInputs = { values: [1, 2], label: "inputs" };
-const enumerable = Iterator.zipKeyed(enumerableInputs).toArray();
+const a115 = { a: [1, 2], b: "inputs" };
+const a116 = Iterator.zipKeyed(a115).toArray();
 
-// The array's length and methods are not enumerable own properties.
-const arrayInputs = Iterator.zipKeyed([[1, 2], ["a", "b"]]).toArray();
+const a117 = Iterator.zipKeyed([[1, 2], ["a", "b"]]).toArray();
 
-// The fallback must not claim that ignored properties exist on yielded objects.
-const inheritedLabel: string = inherited[0].label;
-const nonEnumerableLabel: string = nonEnumerable[0].label;
+const a118: string = a108[0].b;
+const a119: string = a113[0].b;
 
-// Precise record inference still handles symbol keys and padding.
-declare const ownKey: unique symbol;
-const precise: { values: number; [ownKey]: string; }[] = Iterator.zipKeyed({ values: [1], [ownKey]: ["a"] }).toArray();
-const preciseLongest: { values: number | undefined; }[] = Iterator.zipKeyed({ values: [1] }, { mode: "longest" }).toArray();
-const precisePadded: { values: number; }[] = Iterator.zipKeyed({ values: [1] }, { mode: "longest", padding: { values: 0 } }).toArray();
-const emptyOwnProperties: never[] = Iterator.zipKeyed({}).toArray();
+declare const a120: unique symbol;
+const a121: { a: number; [a120]: string; }[] = Iterator.zipKeyed({ a: [1], [a120]: ["a"] }).toArray();
+const a122: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1] }, { mode: "longest" }).toArray();
+const a123: { a: number; }[] = Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: 0 } }).toArray();
+
+declare const a124: object;
+const a125 = Iterator.zipKeyed(a124).toArray();
+const a126 = Iterator.zipKeyed(a124, { mode: "strict" }).toArray();
+const a127 = Iterator.zipKeyed(a124, { mode: "longest" }).toArray();
+const a128 = Iterator.zipKeyed(a124, { mode: "longest", padding: { a: 0 } }).toArray();
+const a129: unknown = a125[0].a;
+const a130: unknown = a126[0].a;
+const a131: unknown = a127[0].a;
+const a132: unknown = a128[0].a;
+const a133: never[] = a125;
+
+declare const a134: {};
+const a135 = Iterator.zipKeyed(a134).toArray();
+const a136: unknown = a135[0].a;
+const a137: never[] = a135;
 
 Iterator.zipKeyed(0);
 Iterator.zipKeyed(null);
-Iterator.zipKeyed(instance, { mode: "invalid" });
-Iterator.zipKeyed(instance, { mode: "shortest", padding: {} });
-Iterator.zipKeyed(instance, { mode: "longest", padding: 0 });
-Iterator.zipKeyed({ values: [1] }, { mode: "longest", padding: { values: "invalid" } });
+Iterator.zipKeyed(a107, { mode: "invalid" });
+Iterator.zipKeyed(a107, { mode: "shortest", padding: {} });
+Iterator.zipKeyed(a107, { mode: "longest", padding: 0 });
+Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: "invalid" } });

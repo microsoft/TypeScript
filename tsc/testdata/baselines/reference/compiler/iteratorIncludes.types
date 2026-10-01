@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/iteratorIncludes.ts] ////
 
 === iteratorIncludes.ts ===
-const includes: boolean = Iterator.from([1, 2, 3]).includes(2);
->includes : boolean
+const a: boolean = Iterator.from([1, 2, 3]).includes(2);
+>a : boolean
 >Iterator.from([1, 2, 3]).includes(2) : boolean
 >Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean
 >Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
@@ -16,8 +16,8 @@ const includes: boolean = Iterator.from([1, 2, 3]).includes(2);
 >includes : (searchElement: number, skippedElements?: number) => boolean
 >2 : 2
 
-const includesAfterSkipping: boolean = Iterator.from([1, 2, 3]).includes(2, 1);
->includesAfterSkipping : boolean
+const b: boolean = Iterator.from([1, 2, 3]).includes(2, 1);
+>b : boolean
 >Iterator.from([1, 2, 3]).includes(2, 1) : boolean
 >Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean
 >Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>

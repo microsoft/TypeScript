@@ -62,21 +62,22 @@ type IteratorZipPaddingKeys<T> = keyof {
     [K in keyof T as {} extends Pick<T, K> ? never : K]: unknown;
 };
 
+type IteratorZipValue<T, K extends PropertyKey, TExtra, TPadding> =
+    | IteratorYield<T>
+    | (K extends keyof TPadding ? TPadding[K] : never)
+    | (K extends IteratorZipPaddingKeys<TPadding> ? never : TExtra);
+
 type IteratorZipResult<T, TExtra = never, TPadding = {}> = {
-    -readonly [K in keyof T]: IteratorYield<T[K]> | (K extends keyof TPadding ? TPadding[K] : never) | (K extends IteratorZipPaddingKeys<TPadding> ? never : TExtra);
+    -readonly [K in keyof T]: IteratorZipValue<T[K], K, TExtra, TPadding>;
 };
 
 type IteratorZipKeyedInput<T> = {
     [K in T extends unknown ? keyof T : never]?: IteratorInput<unknown> | undefined;
 };
 
-type IteratorZipKeyedResult<T, TExtra = never, TPadding = {}> = T extends Partial<Record<keyof T, undefined>> ? never
-    : IteratorZipResult<
-        { [K in keyof T as undefined extends T[K] ? never : K]: T[K]; } &
-        { [K in keyof T as undefined extends T[K] ? T[K] extends undefined ? never : K : never]?: T[K]; },
-        TExtra,
-        TPadding
-    >;
+type IteratorZipKeyedResult<T, TExtra = never, TPadding = {}> = T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never
+    : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: IteratorZipValue<T[K], K, TExtra, TPadding>; } &
+    { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends undefined ? never : K : never]?: IteratorZipValue<T[K], K, TExtra, TPadding>; };
 
 declare global {
     interface IteratorObject<T, TReturn, TNext> {

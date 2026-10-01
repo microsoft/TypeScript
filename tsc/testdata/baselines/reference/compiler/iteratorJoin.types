@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/iteratorJoin.ts] ////
 
 === iteratorJoin.ts ===
-const joined: string = Iterator.from([1, 2, 3]).join("-");
->joined : string
+const a: string = Iterator.from([1, 2, 3]).join("-");
+>a : string
 >Iterator.from([1, 2, 3]).join("-") : string
 >Iterator.from([1, 2, 3]).join : (separator?: string) => string
 >Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
@@ -16,8 +16,8 @@ const joined: string = Iterator.from([1, 2, 3]).join("-");
 >join : (separator?: string) => string
 >"-" : "-"
 
-const joinedWithDefaultSeparator: string = Iterator.from([1, 2, 3]).join();
->joinedWithDefaultSeparator : string
+const b: string = Iterator.from([1, 2, 3]).join();
+>b : string
 >Iterator.from([1, 2, 3]).join() : string
 >Iterator.from([1, 2, 3]).join : (separator?: string) => string
 >Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
