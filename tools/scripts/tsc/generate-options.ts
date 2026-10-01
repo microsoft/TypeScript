@@ -10,6 +10,7 @@ import {
 import {
     type CompilerOption,
     type Declaration,
+    type DeclarationGroup,
     fieldName,
     type GoValue,
     optionKind,
@@ -32,7 +33,7 @@ export function goValue(value: GoValue | { go: string; }): string {
     return typeof value === "object" ? value.go : JSON.stringify(value);
 }
 
-export function compilerDeclarations(model = options) {
+export function compilerDeclarations(model = options): (Declaration & { group: DeclarationGroup; })[] {
     return model.compilerOptions.flatMap(option => {
         if (!option.declaration) return [];
         const { extraShortNames = [], ...metadata } = option.declaration;

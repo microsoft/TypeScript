@@ -76,7 +76,7 @@ export interface RootDeclaration extends Declaration {
     elementOptions?: "compilerOptions" | "typeAcquisition" | "extends";
 }
 
-type DeclarationGroup = "commonOptionsWithBuild" | "optionsForCompiler";
+export type DeclarationGroup = "commonOptionsWithBuild" | "optionsForCompiler";
 
 export interface CompilerOption {
     name: string;
