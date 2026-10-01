@@ -2430,6 +2430,58 @@ func TestTscIncremental(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "recursive tagged tuple after incremental edits",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "incremental": true, "noEmit": true, "module": "esnext", "moduleResolution": "bundler"}}`,
+				tscLibPath + "/lib.es2026.full.d.ts":         libWithReadonlyArray,
+				"/home/src/workspaces/project/doc.ts": stringtestutil.Dedent(`
+					type Doc =
+						| string
+						| { [k: string]: Doc }
+						| readonly ["array", Doc]
+						| readonly ["array", Doc, { length: number }]
+						| readonly ["array", Doc, { min?: number; max?: number }]
+						| readonly ["union", Doc, ...Doc[]];
+					export declare const doc: Doc;
+				`),
+				"/home/src/workspaces/project/consumer.ts": stringtestutil.Dedent(`
+					import { doc } from "./doc";
+					export const value = doc;
+				`),
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the recursive type",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/doc.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+				{
+					caption: "add a union constituent",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/doc.ts", "| string", "| number\n    | string")
+					},
+				},
+				noChange,
+				{
+					caption: "verify the consumer type was not weakened",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/consumer.ts", "\nexport const invalid: number = value;\n")
+					},
+				},
+				noChange,
+				{
+					caption: "delete build info and check the edited source afresh",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
+					},
+				},
+				noChange,
+			},
+		},
+		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
