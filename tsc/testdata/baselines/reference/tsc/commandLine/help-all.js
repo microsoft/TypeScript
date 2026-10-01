@@ -609,41 +609,6 @@ default: false
 
 You can learn about all of the compiler options at https://aka.ms/tsc
 
-[1mWATCH OPTIONS[22m
-
-Including --watch, -w will start watching the current project for the file changes. Once set, you can config watch mode with:
-
-[94m--watchInterval[39m
-
-type: number
-default: undefined
-
-[94m--watchFile[39m
-Specify how the TypeScript watch mode works.
-one of: fixedpollinginterval, prioritypollinginterval, dynamicprioritypolling, fixedchunksizepolling, usefsevents, usefseventsonparentdirectory
-default: usefsevents
-
-[94m--watchDirectory[39m
-Specify how directories are watched on systems that lack recursive file-watching functionality.
-one of: usefsevents, fixedpollinginterval, dynamicprioritypolling, fixedchunksizepolling
-default: usefsevents
-
-[94m--fallbackPolling[39m
-Specify what approach the watcher should use if the system runs out of native file watchers.
-one of: fixedinterval, priorityinterval, dynamicpriority, fixedchunksize
-default: priorityinterval
-
-[94m--synchronousWatchDirectory[39m
-Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively.
-type: boolean
-default: false
-
-[94m--excludeDirectories[39m
-Remove a list of directories from the watch process.
-
-[94m--excludeFiles[39m
-Remove a list of files from the watch mode's processing.
-
 [1mBUILD OPTIONS[22m
 
 Using --build, -b will make tsc behave more like a build orchestrator than a compiler. This is used to trigger building composite projects which you can learn more about at https://aka.ms/tsc-composite-builds
