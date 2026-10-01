@@ -1,12 +1,15 @@
 {
     "compilerOptions": {
-        "rootDir": "./src",
+        "rootDir": "..",
         "outDir": "./dist",
         "noEmit": true,
 
         "target": "es2023",
         "module": "preserve",
         "moduleResolution": "bundler",
+        "paths": {
+            "@typescript/typescript/unstable/vscode": ["../typescript/src/vscode/extensionApi.ts"]
+        },
         "types": ["node"],
 
         "strict": true,

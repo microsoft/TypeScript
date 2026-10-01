@@ -31,7 +31,13 @@ if (!fs.existsSync(metaModelPath)) {
     process.exit(1);
 }
 
-const model: MetaModel = JSON.parse(fs.readFileSync(metaModelPath, "utf-8"));
+const originalModel: MetaModel = JSON.parse(fs.readFileSync(metaModelPath, "utf-8"));
+const model = structuredClone(originalModel);
+let typeScriptModel: MetaModel;
+
+export function getTypeScriptModel(): MetaModel {
+    return structuredClone(typeScriptModel);
+}
 
 // Custom structures to add to the model
 const customStructures: Structure[] = [
@@ -1269,6 +1275,26 @@ function patchAndPreprocessModel() {
     model.structures.push(...customStructures, ...syntheticStructures);
     model.requests.push(...customRequests);
     model.notifications.push(...customNotifications);
+
+    typeScriptModel = structuredClone({
+        ...model,
+        typeAliases: [...model.typeAliases, ...customTypeAliases],
+    });
+    const sourceDefinition = typeScriptModel.requests.find(request => request.method === "custom/textDocument/sourceDefinition");
+    const definition = typeScriptModel.requests.find(request => request.method === "textDocument/definition");
+    if (!sourceDefinition || !definition) throw new Error("Missing definition request schemas.");
+    // The Go request names a synthesized union; clients use the standard definition result.
+    sourceDefinition.result = structuredClone(definition.result);
+    // Go's typed data structures are implementation details, not client wire contracts.
+    for (const structure of originalModel.structures) {
+        for (const property of structure.properties) {
+            if (property.name === "data" && property.type.kind === "reference" && property.type.name === "LSPAny") {
+                const target = typeScriptModel.structures.find(candidate => candidate.name === structure.name)?.properties.find(candidate => candidate.name === property.name);
+                if (!target) throw new Error(`Missing wire property ${structure.name}.${property.name}`);
+                target.type = structuredClone(property.type);
+            }
+        }
+    }
 
     // Build structure map for preprocessing
     const structureMap = new Map<string, Structure>();

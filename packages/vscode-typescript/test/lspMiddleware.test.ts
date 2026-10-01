@@ -1,3 +1,4 @@
+import type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
 import assert from "node:assert/strict";
 import { PassThrough } from "node:stream";
 import test, { describe } from "node:test";
@@ -10,7 +11,6 @@ import {
     PublishDiagnosticsNotification,
     type PublishDiagnosticsParams,
 } from "vscode-languageserver-protocol/node";
-import type { ExtensionAPI } from "../src/api";
 import {
     type FirstPartyLspMiddleware,
     LspMiddlewareRegistry,

@@ -1,10 +1,10 @@
-import * as path from "path";
-import * as vscode from "vscode";
-import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";
 import type {
     LspMiddlewareMethod,
     LspMiddlewareTransformer,
-} from "./api";
+} from "@typescript/typescript/unstable/vscode";
+import * as path from "path";
+import * as vscode from "vscode";
+import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";
 import { Client } from "./client";
 import {
     registerCodeLensShowLocationsCommand,

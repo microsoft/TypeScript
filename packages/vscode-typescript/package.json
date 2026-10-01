@@ -383,6 +383,7 @@
         "vscode-tas-client": "^0.3.3"
     },
     "devDependencies": {
+        "@typescript/typescript": "0.0.0",
         "@types/vscode": "~1.125.0",
         "@typescript/bundled-typescript": "npm:typescript@7.0.2",
         "@vscode/vsce": "4.0.0",

@@ -1,14 +1,14 @@
 import type {
-    CancellationToken,
-    Disposable,
-    MessageSignature,
-} from "vscode-languageserver-protocol";
-import type {
     LspMiddlewareContext,
     LspMiddlewareMethod,
     LspMiddlewareResult,
     LspMiddlewareTransformer,
-} from "./api";
+} from "@typescript/typescript/unstable/vscode";
+import type {
+    CancellationToken,
+    Disposable,
+    MessageSignature,
+} from "vscode-languageserver-protocol";
 
 const supportedMethods: { readonly [M in LspMiddlewareMethod]: true; } = {
     "textDocument/hover": true,
