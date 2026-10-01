@@ -103,12 +103,16 @@ extends:
 
           - job: Build
             displayName: Build and Sign
-            dependsOn: BuildPackages
+            dependsOn:
+              - SetupBuildMatrix
+              - BuildPackages
             timeoutInMinutes: 180
             pool:
               name: AzurePipelines-EO
               image: 1ESPT-Ubuntu22.04
               os: linux
+            variables:
+              packageBaseName: $[ dependencies.SetupBuildMatrix.outputs['buildMatrix.packageBaseName'] ]
 
             templateContext:
               mb:
@@ -195,12 +199,12 @@ extends:
                 inputs:
                   buildType: current
                   targetPath: $(Pipeline.Workspace)/platform-packages
-                  patterns: '*-*/**'
+                  patterns: '$(packageBaseName)-*/**'
 
               - bash: |
                   set -euo pipefail
                   shopt -s nullglob
-                  platformArtifacts=("$(Pipeline.Workspace)"/platform-packages/*)
+                  platformArtifacts=("$(Pipeline.Workspace)"/platform-packages/"$PACKAGE_BASE_NAME"-*)
                   if (( ${#platformArtifacts[@]} == 0 )); then
                     echo "No platform package artifacts were downloaded." >&2
                     exit 1
@@ -216,6 +220,8 @@ extends:
                     chmod +x "$executable"
                   done
                 displayName: 'Assemble platform packages'
+                env:
+                  PACKAGE_BASE_NAME: $(packageBaseName)
 
               - bash: npx hereby typescript:test-package --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Test packages'
