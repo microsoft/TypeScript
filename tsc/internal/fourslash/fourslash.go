@@ -4815,8 +4815,8 @@ func (f *FourslashTest) verifyBaselineRename(
 
 		var renameOptions strings.Builder
 		if preferences != nil {
-			if preferences.UseAliasesForRename != core.TSUnknown {
-				fmt.Fprintf(&renameOptions, "// @useAliasesForRename: %v\n", preferences.UseAliasesForRename.IsTrue())
+			if preferences.ProvidePrefixAndSuffixTextForRename != core.TSUnknown {
+				fmt.Fprintf(&renameOptions, "// @useAliasesForRename: %v\n", preferences.ProvidePrefixAndSuffixTextForRename.IsTrue())
 			}
 			if preferences.QuotePreference != lsutil.QuotePreferenceUnknown {
 				fmt.Fprintf(&renameOptions, "// @quotePreference: %v\n", preferences.QuotePreference)

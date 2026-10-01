@@ -116,7 +116,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	defer done()
 
 	quotePreference := lsutil.GetQuotePreference(sourceFile, l.UserPreferences())
-	useAliasesForRename := l.UserPreferences().UseAliasesForRename.IsTrueOrUnknown()
+	useAliasesForRename := l.UserPreferences().ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown()
 
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
@@ -254,7 +254,7 @@ func isDefinedInLibraryFile(program *compiler.Program, declaration *ast.Node) bo
 // wouldRenameInOtherNodeModules checks if renaming the symbol would affect node_modules.
 func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Symbol, ch *checker.Checker, preferences lsutil.UserPreferences) *diagnostics.Message {
 	sym := symbol
-	if !preferences.UseAliasesForRename.IsTrueOrUnknown() && sym.Flags&ast.SymbolFlagsAlias != 0 {
+	if !preferences.ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown() && sym.Flags&ast.SymbolFlagsAlias != 0 {
 		importSpecifier := core.Find(sym.Declarations, ast.IsImportSpecifier)
 		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName == nil {
 			sym = ch.GetAliasedSymbol(sym)

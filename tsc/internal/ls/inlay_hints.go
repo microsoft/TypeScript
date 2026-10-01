@@ -27,7 +27,7 @@ func (l *LanguageService) ProvideInlayHint(
 	params *lsproto.InlayHintParams,
 ) (lsproto.InlayHintResponse, error) {
 	userPreferences := l.UserPreferences()
-	inlayHintPreferences := userPreferences.InlayHints
+	inlayHintPreferences := userPreferences.InlayHintsPreferences
 	if !isAnyInlayHintEnabled(inlayHintPreferences) {
 		return lsproto.InlayHintsOrNull{InlayHints: nil}, nil
 	}
