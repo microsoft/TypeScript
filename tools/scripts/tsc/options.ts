@@ -521,7 +521,6 @@ export const options: OptionsModel = {
             name: "lib",
             transpile: { value: "clear" },
             type: "[]string",
-            parser: "lib",
             declaration: {
                 group: "optionsForCompiler",
                 showInSimplifiedHelpView: true,
@@ -548,7 +547,7 @@ export const options: OptionsModel = {
                 isCommandLineOnly: true,
                 description: diagnostic("Set the language of the messaging from TypeScript. This does not affect emit."),
                 defaultValueDescription: diagnostic("Platform specific"),
-                extraValidation: { go: "extraValidationLocale" },
+                extraValidation: "locale",
             },
         },
         {
@@ -860,7 +859,6 @@ export const options: OptionsModel = {
         {
             name: "plugins",
             type: "[]PluginImport",
-            parser: "plugins",
             comment: "Plugins are parsed only so tools can report that native TypeScript does not support them.",
             declaration: {
                 group: "optionsForCompiler",

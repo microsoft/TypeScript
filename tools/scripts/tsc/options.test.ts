@@ -461,8 +461,9 @@ test("invalid metadata is rejected before generating files", () => {
     delete missingElement.elements.lib;
     assert.throws(() => validateOptions(missingElement), /Missing list element: lib/);
     const removedValidation = structuredClone(options);
-    removedValidation.elements.lib.extraValidation = { go: "extraValidationSpec" };
-    assert.throws(() => validateOptions(removedValidation), /Invalid Go reference: extraValidationSpec/);
+    // @ts-expect-error Only locale validation is supported.
+    removedValidation.elements.lib.extraValidation = "spec";
+    assert.throws(() => validateOptions(removedValidation), /Invalid extra validation: spec/);
     const missingConstant = structuredClone(options);
     missingConstant.enumMaps.target.values[0].value = { go: "core.ScriptTargetMissing" };
     assert.throws(() => validateOptions(missingConstant), /Unknown enum constant/);

@@ -43,7 +43,7 @@ export interface DeclarationMetadata {
     defaultValueDescription?: GoValue;
     showInSimplifiedHelpView?: boolean;
     category?: DiagnosticMessage;
-    extraValidation?: { go: string; };
+    extraValidation?: "locale";
     minValue?: number;
     /** Defaults to isFilePath for compiler options; false explicitly disables substitution. */
     allowConfigDirTemplateSubstitution?: boolean;
@@ -80,7 +80,6 @@ export interface CompilerOption {
     deprecated?: boolean;
     comment?: string;
     parseAliases?: string[];
-    parser?: "lib" | "plugins";
     declaration?: DeclarationMetadata & {
         group: DeclarationGroup;
         /** Additional short aliases without repeated help text. */
