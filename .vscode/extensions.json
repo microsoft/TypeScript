@@ -1,9 +1,0 @@
-{
-    "recommendations": [
-        "dprint.dprint",
-        "golang.go"
-    ],
-    "unwantedRecommendations": [
-        "ms-vscode.vscode-typescript-tslint-plugin"
-    ]
-}

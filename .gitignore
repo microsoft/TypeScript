@@ -64,13 +64,10 @@ __debug_bin*
 *.out
 
 # Environment and editor files
-.env
 .env.development.local
 .env.test.local
 .env.production.local
-.env.local
 .node_repl_history
-**/.vscode/*
 !**/.vscode/tasks.json
 !**/.vscode/settings.template.json
 !**/.vscode/launch.template.json
@@ -139,3 +136,4 @@ tools/gotestsum.exe.hash
 !packages/typescript/vendor/**/*.txt
 !tsc/testdata/submoduleAccepted.txt
 !tsc/testdata/submoduleTriaged.txt
+config.bat

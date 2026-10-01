@@ -15,7 +15,6 @@ import {
 import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
-import { workspacePackageSubpaths } from "./tsdkPackage";
 import {
     getDefaultExePath,
     getExe,
@@ -499,6 +498,11 @@ async function getStradaExtensionVersion(extensionId: string, pathToTypescript: 
         return undefined;
     }
 }
+
+const workspacePackageSubpaths: readonly (readonly string[])[] = [
+    ["node_modules", "typescript"],
+    ["node_modules", "@typescript", "native-preview"],
+];
 
 async function findWorkspaceNativePreviewPackages(): Promise<DetectedVersion[]> {
     const results: DetectedVersion[] = [];
