@@ -19,6 +19,7 @@ export type { ConfigFileResponse as ParsedCommandLine, DiagnosticResponse as Dia
 export type { ProtocolSymbolResponse };
 
 export * from "./proto.generated.ts";
+export * from "./userPreferences.generated.ts";
 
 export interface FileSymbolOwner {
     readonly kind: typeof SymbolOwnerKind.File;

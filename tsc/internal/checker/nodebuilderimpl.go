@@ -2372,6 +2372,10 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 const MAX_REVERSE_MAPPED_NESTING_INSPECTION_DEPTH = 3
 
 func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Symbol) bool {
+	// Reverse mapped type placeholders are for display, not declaration emit.
+	if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
+		return false
+	}
 	// Use placeholders for reverse mapped types we've either
 	// (1) already descended into, or
 	// (2) are nested reverse mappings within a mapping over a non-anonymous type, or
@@ -2735,7 +2739,11 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 		typeElements = append(typeElements, b.signatureToSignatureDeclarationHelper(signature, ast.KindConstructSignature, nil))
 	}
 	for _, info := range resolvedType.indexInfos {
-		typeElements = slices.Concat(typeElements, b.indexInfoToObjectComputedNamesOrSignatureDeclaration(info, core.IfElse(resolvedType.objectFlags&ObjectFlagsReverseMapped != 0, b.createElidedInformationPlaceholder(), nil)))
+		var typeNode *ast.TypeNode
+		if resolvedType.objectFlags&ObjectFlagsReverseMapped != 0 && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier != 0 {
+			typeNode = b.createElidedInformationPlaceholder()
+		}
+		typeElements = slices.Concat(typeElements, b.indexInfoToObjectComputedNamesOrSignatureDeclaration(info, typeNode))
 	}
 
 	properties := resolvedType.properties
@@ -2969,8 +2977,13 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 		} else {
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 		}
+	} else if t.objectFlags&ObjectFlagsReverseMapped != 0 && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
+		if b.ctx.visitedTypes.Has(typeId) {
+			return b.createCyclicStructurePlaceholder()
+		}
+		return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 	} else {
-		// Anonymous types without a symbol are never circular.
+		// Reverse mapped types use property and index signature placeholders for display.
 		return b.createTypeNodeFromObjectType(t)
 	}
 }
@@ -3251,6 +3264,19 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 			b.ctx.approximateLength += cachedResult.addedLength
 			return b.f.DeepCloneNode(cachedResult.node)
 		}
+	}
+
+	if t.objectFlags&ObjectFlagsReverseMapped != 0 {
+		// Growing type arguments can prevent a reverse mapped type from repeating.
+		// Bound expansion by its mapped declaration as well as its type identity.
+		origin := CompositeSymbolIdentity{nodeId: ast.GetNodeId(t.AsReverseMappedType().mappedType.AsMappedType().declaration.AsNode())}
+		depth := b.ctx.symbolDepth[origin]
+		if depth >= 100 {
+			b.ctx.truncating = true
+			return b.createElidedInformationPlaceholder()
+		}
+		b.ctx.symbolDepth[origin] = depth + 1
+		defer func() { b.ctx.symbolDepth[origin] = depth }()
 	}
 
 	var depth int

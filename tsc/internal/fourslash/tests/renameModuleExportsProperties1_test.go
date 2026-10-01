@@ -16,5 +16,5 @@ func TestRenameModuleExportsProperties1(t *testing.T) {
 module.exports = { [|A|] }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue}, f.Ranges()[1], f.Ranges()[2])
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue}, f.Ranges()[1], f.Ranges()[2])
 }

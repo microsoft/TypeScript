@@ -1492,8 +1492,8 @@ export const value = content;`,
 		session.Configure(lsutil.NewDefaultUserPreferences())
 		// Change user preferences for code lens and inlay hints.
 		newPrefs := session.Config()
-		newPrefs.CodeLens.ReferencesCodeLensEnabled = core.TSTrue
-		newPrefs.InlayHints.IncludeInlayFunctionLikeReturnTypeHints = core.TSTrue
+		newPrefs.CodeLensUserPreferences.ReferencesCodeLensEnabled = core.TSTrue
+		newPrefs.InlayHintsPreferences.IncludeInlayFunctionLikeReturnTypeHints = core.TSTrue
 
 		session.Configure(newPrefs)
 
@@ -1533,7 +1533,7 @@ export const value = content;`,
 		initialProgram := session.Snapshot().ProjectCollection.ConfiguredProject(configPath).Program
 
 		preferences := session.Config()
-		preferences.CodeLens.ReferencesCodeLensEnabled = core.TSTrue
+		preferences.CodeLensUserPreferences.ReferencesCodeLensEnabled = core.TSTrue
 		session.Configure(preferences)
 		_, err = session.GetLanguageService(ctx, uri)
 		assert.NilError(t, err)
@@ -1561,7 +1561,7 @@ export const value = content;`,
 			return nil
 		}
 		prefs := lsutil.NewDefaultUserPreferences()
-		prefs.CodeLens.ReferencesCodeLensEnabled = core.TSTrue
+		prefs.CodeLensUserPreferences.ReferencesCodeLensEnabled = core.TSTrue
 
 		session.Configure(prefs)
 
@@ -1618,7 +1618,7 @@ export const value = content;`,
 		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap1}))
 		actualConfig1 := session.Config()
 		expectedPrefs1 := lsutil.NewDefaultUserPreferences()
-		expectedPrefs1.UseAliasesForRename = core.TSTrue
+		expectedPrefs1.ProvidePrefixAndSuffixTextForRename = core.TSTrue
 		expectedPrefs1.QuotePreference = lsutil.QuotePreferenceSingle
 		expectedPrefs1.OrganizeImportsSort = lsutil.OrganizeImportsSortOrdinalIgnoreCase
 
@@ -1636,7 +1636,7 @@ export const value = content;`,
 		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap2}))
 		actualConfig2 := session.Config()
 		expectedPrefs2 := lsutil.NewDefaultUserPreferences()
-		expectedPrefs2.UseAliasesForRename = core.TSFalse
+		expectedPrefs2.ProvidePrefixAndSuffixTextForRename = core.TSFalse
 		expectedPrefs2.QuotePreference = lsutil.QuotePreferenceDouble
 		expectedPrefs2.OrganizeImportsSort = lsutil.OrganizeImportsSortOrdinal
 
