@@ -15,8 +15,8 @@ interface BrowserTestContext {
         method<T extends object, K extends keyof T>(
             target: T,
             name: K,
-            implementation: T[K],
-        ): void;
+            implementation?: T[K] | undefined,
+        ): T[K] & { mock: { callCount(): number; }; };
     };
 }
 
@@ -113,11 +113,28 @@ export async function runRegisteredTests(exclusions: readonly BrowserTestExclusi
                     restorations.push(callback);
                 },
                 mock: {
-                    method(target, name, implementation) {
+                    method: <T extends object, K extends keyof T>(
+                        target: T,
+                        name: K,
+                        implementation?: T[K] | undefined,
+                    ): T[K] & { mock: { callCount(): number; }; } => {
                         const descriptor = Object.getOwnPropertyDescriptor(target, name);
+                        const original = target[name];
+                        const callback = implementation ?? original;
+                        if (typeof callback !== "function") {
+                            throw new TypeError(`Cannot mock non-function property ${String(name)}`);
+                        }
+                        let callCount = 0;
+                        const wrapped = function (this: unknown, ...args: unknown[]) {
+                            callCount++;
+                            return callback.apply(this, args);
+                        };
+                        wrapped.mock = {
+                            callCount: () => callCount,
+                        };
                         Object.defineProperty(target, name, {
                             configurable: true,
-                            value: implementation,
+                            value: wrapped,
                             writable: true,
                         });
                         restorations.push(() => {
@@ -128,6 +145,7 @@ export async function runRegisteredTests(exclusions: readonly BrowserTestExclusi
                                 delete target[name];
                             }
                         });
+                        return wrapped as T[K] & { mock: { callCount(): number; }; };
                     },
                 },
             };

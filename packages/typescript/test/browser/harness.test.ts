@@ -15,10 +15,22 @@ nodeTest("browser test harness preserves skip options", async () => {
     describe("nested suite", () => {
         test("passing test", () => {});
     });
+    test("mock method", context => {
+        const target = {
+            value: 0,
+            increment(amount: number) {
+                this.value += amount;
+                return this.value;
+            },
+        };
+        const method = context.mock.method(target, "increment");
+        assert.strictEqual(target.increment(2), 2);
+        assert.strictEqual(method.mock.callCount(), 1);
+    });
 
     assert.deepStrictEqual(await runRegisteredTests([]), {
-        total: 3,
-        passed: 1,
+        total: 4,
+        passed: 2,
         skipped: [
             { name: "skipped test", reason: "test reason" },
             { name: "skipped suite > nested test", reason: "suite reason" },
