@@ -21,13 +21,13 @@ import type {
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, "../../../..");
+const repoRoot = path.resolve(__dirname, "../../..");
 
-const out = path.resolve(__dirname, "../lsp_generated.go");
+const out = path.join(repoRoot, "tsc/internal/lsp/lsproto/lsp_generated.go");
 const metaModelPath = path.resolve(__dirname, "metaModel.json");
 
 if (!fs.existsSync(metaModelPath)) {
-    console.error("Meta model file not found; did you forget to run fetchModel.mjs?");
+    console.error("Meta model file not found; did you forget to run fetchModel.mts?");
     process.exit(1);
 }
 

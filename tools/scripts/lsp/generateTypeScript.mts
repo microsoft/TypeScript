@@ -5,7 +5,7 @@ import ts from "typescript";
 import { getTypeScriptModel } from "./generate.mts";
 import { generateTypeScript } from "./typeScript.mts";
 
-const root = path.resolve(import.meta.dirname, "../../../../..");
+const root = path.resolve(import.meta.dirname, "../../..");
 const output = path.join(root, "packages/typescript/src/vscode/protocol.generated.ts");
 const registry = path.join(root, "packages/vscode-typescript/src/lspMiddleware.ts");
 

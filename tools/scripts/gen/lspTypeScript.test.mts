@@ -4,10 +4,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import ts from "typescript";
-import { getTypeScriptModel } from "../../../tsc/internal/lsp/lsproto/_generate/generate.mts";
-import { getMiddlewareMethods } from "../../../tsc/internal/lsp/lsproto/_generate/generateTypeScript.mts";
-import type { MetaModel } from "../../../tsc/internal/lsp/lsproto/_generate/metaModelSchema.mts";
-import { generateTypeScript } from "../../../tsc/internal/lsp/lsproto/_generate/typeScript.mts";
+import { getTypeScriptModel } from "../lsp/generate.mts";
+import { getMiddlewareMethods } from "../lsp/generateTypeScript.mts";
+import type { MetaModel } from "../lsp/metaModelSchema.mts";
+import { generateTypeScript } from "../lsp/typeScript.mts";
 
 function fixture(): MetaModel {
     return {
