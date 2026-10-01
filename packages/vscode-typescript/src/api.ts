@@ -130,7 +130,7 @@ export interface ExtensionAPI {
 
     /**
      * Changes an LSP language-feature response before conversion to VS Code objects.
-     * Request parameters are provided as a frozen copy.
+     * Each callback gets its own copy of the request parameters.
      *
      * Callbacks run in registration order. Order between extensions may vary.
      * If a callback fails, we log the error and use the original server response.

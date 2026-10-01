@@ -32,7 +32,7 @@ describe("LSP middleware", () => {
         registry.register("textDocument/hover", (result, context) => {
             assert.deepEqual(context.params, params);
             assert.notEqual(context.params, params);
-            assert.ok(Object.isFrozen(context.params.textDocument));
+            assert.equal(Object.isFrozen(context.params.textDocument), false);
             return result && { ...result, contents: "first" };
         });
         registry.register("textDocument/hover", async result => {
@@ -151,19 +151,37 @@ describe("LSP middleware", () => {
         assert.deepEqual(await registry.sendRequest("textDocument/diagnostic", params, undefined, async () => original), original);
     });
 
-    test("exposes deeply frozen detached context without modifying outgoing parameters", async () => {
-        const errors: unknown[] = [];
-        const registry = new LspMiddlewareRegistry((_method, error) => errors.push(error));
+    test("isolates mutable context copies between callbacks and from outgoing parameters", async () => {
+        const registry = new LspMiddlewareRegistry(() => assert.fail("Unexpected error"));
+        let firstContext: unknown;
         registry.register("textDocument/hover", (result, context) => {
+            firstContext = context;
+            assert.equal(Object.isFrozen(context), false);
+            assert.equal(Object.isFrozen(context.params.textDocument), false);
             // @ts-expect-error Deliberate runtime mutation of readonly request context.
             context.params.textDocument.uri = "file:///modified.ts";
+            // @ts-expect-error Nested context mutations must also remain isolated.
+            context.params.position.line = 42;
+            return result && { ...result, contents: "first" };
+        });
+        registry.register("textDocument/hover", async (result, context) => {
+            assert.notEqual(context, firstContext);
+            assert.deepEqual(context.params, params);
+            assert.equal(result?.contents, "first");
+            // @ts-expect-error Deliberate mutation of this callback's independent copy.
+            context.params.textDocument.uri = "file:///second.ts";
+            await Promise.resolve();
+            return result;
+        });
+        registry.register("textDocument/hover", (result, context) => {
+            assert.deepEqual(context.params, params);
             return result;
         });
         const original = { contents: "server" };
-        assert.equal(await registry.sendRequest("textDocument/hover", params, undefined, async () => original), original);
+        assert.deepEqual(await registry.sendRequest("textDocument/hover", params, undefined, async () => original), { contents: "first" });
         assert.equal(params.textDocument.uri, "file:///test.ts");
-        assert.equal(errors.length, 1);
-        assert.ok(errors[0] instanceof TypeError);
+        assert.equal(params.position.line, 0);
+        assert.deepEqual(original, { contents: "server" });
     });
 
     test("captures registrations on response arrival, not request dispatch", async () => {
@@ -257,7 +275,7 @@ describe("first-party middleware", () => {
         assert.equal(Object.isFrozen(request), false);
     });
 
-    test("supplies third-party callbacks with frozen copies of first-party request changes", async () => {
+    test("supplies third-party callbacks with independent copies of first-party request changes", async () => {
         const middleware: FirstPartyLspMiddleware = (type, sentParams, token, next) =>
             next(
                 type,
@@ -272,8 +290,8 @@ describe("first-party middleware", () => {
         registry.register("workspace/symbol", (result, context) => {
             assert.deepEqual(context.params, { query: "symbol", textDocument: { uri: "file:///workspace.ts" } });
             assert.notEqual(context.params, outgoing);
-            assert.ok(Object.isFrozen(context.params));
-            assert.ok(Object.isFrozen(context.params.textDocument));
+            assert.equal(Object.isFrozen(context.params), false);
+            assert.equal(Object.isFrozen(context.params.textDocument), false);
             return result;
         });
         await registry.sendRequest("workspace/symbol", request, undefined, async (_type, sentParams) => {

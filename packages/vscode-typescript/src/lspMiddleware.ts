@@ -64,14 +64,6 @@ interface Registration {
     invoke(result: unknown, context: unknown): unknown;
 }
 
-function freezeDeep(value: unknown): void {
-    if (typeof value !== "object" || value === null) return;
-    Object.freeze(value);
-    for (const child of Object.values(value)) {
-        freezeDeep(child);
-    }
-}
-
 export class LspMiddlewareRegistry implements Disposable {
     private readonly registrations = new Map<LspMiddlewareMethod, Registration[]>();
     private disposed = false;
@@ -138,11 +130,9 @@ export class LspMiddlewareRegistry implements Disposable {
         if (!registrations?.length || token?.isCancellationRequested) return original;
         try {
             let result: unknown = structuredClone(original);
-            const readonlyContext: unknown = structuredClone(context);
-            freezeDeep(readonlyContext);
             for (const registration of registrations) {
                 if (token?.isCancellationRequested) return original;
-                result = await registration.invoke(result, readonlyContext);
+                result = await registration.invoke(result, structuredClone(context));
             }
             return token?.isCancellationRequested ? original : result as R;
         }
