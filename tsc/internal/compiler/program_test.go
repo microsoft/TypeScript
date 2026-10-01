@@ -328,6 +328,7 @@ var esnextLibs = []string{
 	"lib.es2026.json.d.ts",
 	"lib.es2026.math.d.ts",
 	"lib.es2026.typedarrays.d.ts",
+	"lib.esnext.promise.d.ts",
 	"lib.esnext.date.d.ts",
 	"lib.esnext.decorators.d.ts",
 	"lib.esnext.disposable.d.ts",

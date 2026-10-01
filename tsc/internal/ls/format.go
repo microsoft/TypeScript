@@ -36,7 +36,7 @@ func (l *LanguageService) ProvideFormatDocument(
 	documentURI lsproto.DocumentUri,
 	options *lsproto.FormattingOptions,
 ) (lsproto.DocumentFormattingResponse, error) {
-	if l.UserPreferences().EnableFormatting.IsFalse() {
+	if l.UserPreferences().FormatEnabled.IsFalse() {
 		return lsproto.TextEditsOrNull{}, nil
 	}
 	_, file := l.getProgramAndFile(documentURI)
@@ -154,7 +154,7 @@ func (l *LanguageService) ProvideFormatDocumentRange(
 	options *lsproto.FormattingOptions,
 	r lsproto.Range,
 ) (lsproto.DocumentRangeFormattingResponse, error) {
-	if l.UserPreferences().EnableFormatting.IsFalse() {
+	if l.UserPreferences().FormatEnabled.IsFalse() {
 		return lsproto.TextEditsOrNull{}, nil
 	}
 	_, file := l.getProgramAndFile(documentURI)
@@ -184,7 +184,7 @@ func (l *LanguageService) ProvideFormatDocumentOnType(
 	position lsproto.Position,
 	character string,
 ) (lsproto.DocumentOnTypeFormattingResponse, error) {
-	if l.UserPreferences().EnableFormatting.IsFalse() {
+	if l.UserPreferences().FormatEnabled.IsFalse() {
 		return lsproto.TextEditsOrNull{}, nil
 	}
 	_, file := l.getProgramAndFile(documentURI)

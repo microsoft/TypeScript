@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/declarationEmitMergedExportAlias.ts] ////
+
+=== route.d.ts ===
+export class Route<T> {
+>Route : Route<T>
+
+    private parts;
+>parts : any
+
+    readonly schema: T;
+>schema : T
+
+    constructor(schema: T);
+>schema : T
+}
+
+=== reexport.ts ===
+export { Route as Factory } from "./route";
+>Route : typeof import("./route").Route
+>Factory : typeof import("./route").Route
+
+export declare namespace Factory {
+    export type Schema = { value: number };
+>Schema : Schema
+>value : number
+}
+
+=== index.ts ===
+import { Factory } from "./reexport";
+>Factory : typeof Factory
+
+export const route = new Factory<Factory.Schema>({ value: 0 });
+>route : Factory<Factory.Schema>
+>new Factory<Factory.Schema>({ value: 0 }) : Factory<Factory.Schema>
+>Factory : typeof Factory
+>Factory : any
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+
+export const constructor = Factory;
+>constructor : typeof Factory
+>Factory : typeof Factory
+

@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
@@ -65,10 +66,11 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 }
 
 const (
-	MethodRelease             Method = "release"
-	MethodReleaseSourceFile   Method = "releaseSourceFile"
-	MethodRetainSourceFile    Method = "retainSourceFile"
-	MethodGetCachedSourceFile Method = "getCachedSourceFile"
+	MethodRelease                Method = "release"
+	MethodReleaseSourceFile      Method = "releaseSourceFile"
+	MethodRetainSourceFile       Method = "retainSourceFile"
+	MethodGetCachedSourceFile    Method = "getCachedSourceFile"
+	MethodGetSymbolOfDeclaration Method = "getSymbolOfDeclaration"
 
 	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
@@ -422,6 +424,10 @@ func (e *EnsurePrograms) UnmarshalJSONFrom(dec *json.Decoder) error {
 // CreateSnapshotParams are the parameters for creating a new independent snapshot.
 type CreateSnapshotParams struct {
 	SnapshotRequestChangesParams
+	// UserPreferences configures language service behavior in the new snapshot.
+	UserPreferences *lsutil.UserPreferences `json:"userPreferences,omitempty"`
+	// PrepareAutoImports identifies the file whose auto-import indexes should be ready in the new snapshot.
+	PrepareAutoImports *DocumentIdentifier `json:"prepareAutoImports,omitempty"`
 	// FileNotifications describes host file system changes to invalidate while creating the snapshot.
 	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
@@ -574,6 +580,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
 	MethodRetainSourceFile:                               unmarshallerFor[RetainSourceFileParams],
 	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
+	MethodGetSymbolOfDeclaration:                         unmarshallerFor[GetSymbolOfDeclarationParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
@@ -921,6 +928,11 @@ type GetCachedSourceFileParams struct {
 	File SourceFileDescriptor `json:"file"`
 }
 
+type GetSymbolOfDeclarationParams struct {
+	File  SourceFileDescriptor `json:"file"`
+	Index uint32               `json:"index"`
+}
+
 type ProfileParams struct {
 	Dir string `json:"dir"`
 }
@@ -1030,33 +1042,8 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *Conf
 		ProjectReferences: parsedCommandLine.ProjectReferences(),
 		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
 		CompileOnSave:     compileOnSave,
-		Raw:               toProtocolJSONValue(parsedCommandLine.Raw),
+		Raw:               parsedCommandLine.Raw,
 		Errors:            errors,
-	}
-}
-
-func toProtocolJSONValue(value any) any {
-	switch value := value.(type) {
-	case core.WatchFileKind:
-		return int(value) - 1
-	case core.WatchDirectoryKind:
-		return int(value) - 1
-	case core.PollingKind:
-		return int(value) - 1
-	case *collections.OrderedMap[string, any]:
-		result := collections.NewOrderedMapWithSizeHint[string, any](value.Size())
-		for key, child := range value.Entries() {
-			result.Set(key, toProtocolJSONValue(child))
-		}
-		return result
-	case []any:
-		result := make([]any, len(value))
-		for i, child := range value {
-			result[i] = toProtocolJSONValue(child)
-		}
-		return result
-	default:
-		return value
 	}
 }
 

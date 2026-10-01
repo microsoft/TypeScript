@@ -1829,7 +1829,7 @@ func (s *Session) NpmInstall(cwd string, npmInstallArgs []string) ([]byte, error
 }
 
 func (s *Session) refreshInlayHintsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
-	if oldPrefs.InlayHints != newPrefs.InlayHints {
+	if oldPrefs.InlayHintsPreferences != newPrefs.InlayHintsPreferences {
 		if err := s.client.RefreshInlayHints(s.backgroundContext()); err != nil && s.options.LoggingEnabled {
 			s.logger.Logf("Error refreshing inlay hints: %v", err)
 		}
@@ -1837,7 +1837,7 @@ func (s *Session) refreshInlayHintsIfNeeded(oldPrefs lsutil.UserPreferences, new
 }
 
 func (s *Session) refreshCodeLensIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
-	if oldPrefs.CodeLens != newPrefs.CodeLens {
+	if oldPrefs.CodeLensUserPreferences != newPrefs.CodeLensUserPreferences {
 		if err := s.client.RefreshCodeLens(s.backgroundContext()); err != nil && s.options.LoggingEnabled {
 			s.logger.Logf("Error refreshing code lens: %v", err)
 		}
@@ -1847,7 +1847,7 @@ func (s *Session) refreshCodeLensIfNeeded(oldPrefs lsutil.UserPreferences, newPr
 func (s *Session) refreshDiagnosticsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
 	if oldPrefs.CustomConfigFileName != newPrefs.CustomConfigFileName ||
 		oldPrefs.ReportStyleChecksAsWarnings != newPrefs.ReportStyleChecksAsWarnings ||
-		oldPrefs.EnableValidation != newPrefs.EnableValidation {
+		oldPrefs.ValidateEnabled != newPrefs.ValidateEnabled {
 		s.ScheduleDiagnosticsRefresh()
 	}
 }
@@ -1864,8 +1864,8 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 	if !s.options.PushDiagnosticsEnabled {
 		return
 	}
-	if newSnapshot.UserPreferences().EnableValidation.IsFalse() {
-		if oldSnapshot.UserPreferences().EnableValidation.IsFalse() {
+	if newSnapshot.UserPreferences().ValidateEnabled.IsFalse() {
+		if oldSnapshot.UserPreferences().ValidateEnabled.IsFalse() {
 			return
 		}
 		for _, oldProject := range oldSnapshot.ProjectCollection.ProjectsByID().Entries() {
@@ -1942,7 +1942,7 @@ func shouldPublishProgramDiagnostics(p *Project, snapshotID uint64) bool {
 }
 
 func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath string, diagnostics []*ast.Diagnostic, converters *lsconv.Converters) {
-	if s.Config().EnableValidation.IsFalse() {
+	if s.Config().ValidateEnabled.IsFalse() {
 		diagnostics = nil
 	}
 	ctx = s.WithCurrentLocale(ctx)
@@ -1963,7 +1963,7 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 // global diagnostics from checker pools, re-publishing tsconfig diagnostics if changed.
 // Multiple calls are coalesced into a single background task.
 func (s *Session) EnqueuePublishGlobalDiagnostics() {
-	if !s.options.PushDiagnosticsEnabled || s.Config().EnableValidation.IsFalse() {
+	if !s.options.PushDiagnosticsEnabled || s.Config().ValidateEnabled.IsFalse() {
 		return
 	}
 	if s.globalDiagPublishPending.CompareAndSwap(false, true) {
