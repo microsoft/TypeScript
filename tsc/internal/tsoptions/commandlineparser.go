@@ -50,12 +50,10 @@ func ParseCommandLine(
 	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS(), host.GetCurrentDirectory())
 	options := convertToOptionsWithAbsolutePaths(parser.options.Clone(), CommandLineCompilerOptionsMap, host.GetCurrentDirectory())
 	compilerOptions := convertMapToOptions(options, &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
-	watchOptions := convertMapToOptions(options, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
 	result := NewParsedCommandLine(compilerOptions, parser.fileNames, nil, tspath.ComparePathsOptions{
 		UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
 		CurrentDirectory:          host.GetCurrentDirectory(),
 	})
-	result.ParsedConfig.WatchOptions = watchOptions
 	result.Errors = parser.errors
 	result.Raw = parser.options
 	return result
@@ -79,7 +77,6 @@ func ParseBuildCommandLine(
 	result := &ParsedBuildCommandLine{
 		BuildOptions:    convertMapToOptions(parser.options, &buildOptionsParser{&core.BuildOptions{}}).BuildOptions,
 		CompilerOptions: compilerOptions,
-		WatchOptions:    convertMapToOptions(parser.options, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions,
 		Projects:        parser.fileNames,
 		Errors:          parser.errors,
 		Raw:             parser.options,
@@ -148,12 +145,7 @@ func (p *commandLineParser) parseStrings(args []string) {
 			if opt != nil {
 				i = p.parseOptionValue(args, i, opt, p.workerDiagnostics.OptionTypeMismatchDiagnostic)
 			} else {
-				watchOpt := WatchNameMap.GetOptionDeclarationFromName(inputOptionName, true /*allowShort*/)
-				if watchOpt != nil {
-					i = p.parseOptionValue(args, i, watchOpt, watchOptionsDidYouMeanDiagnostics.OptionTypeMismatchDiagnostic)
-				} else {
-					p.errors = append(p.errors, p.createUnknownOptionError(inputOptionName, s, nil, nil))
-				}
+				p.errors = append(p.errors, p.createUnknownOptionError(inputOptionName, s, nil, nil))
 			}
 		default:
 			p.fileNames = append(p.fileNames, s)
