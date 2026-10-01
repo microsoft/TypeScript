@@ -1,0 +1,11 @@
+lib.dom.d.ts(--,--): error TS2430: Interface 'Window' incorrectly extends interface 'WindowOrWorkerGlobalScope'.
+  Types of property 'scheduler' are incompatible.
+    Type 'Scheduler | undefined' is not assignable to type 'Scheduler'.
+      Type 'undefined' is not assignable to type 'Scheduler'.
+
+
+==== index.d.ts (0 errors) ====
+    interface Window {
+        readonly scheduler?: Scheduler;
+    }
+    

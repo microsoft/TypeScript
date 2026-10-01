@@ -12,7 +12,6 @@ import (
 type ParsedBuildCommandLine struct {
 	BuildOptions    *core.BuildOptions    `json:"buildOptions"`
 	CompilerOptions *core.CompilerOptions `json:"compilerOptions"`
-	WatchOptions    *core.WatchOptions    `json:"watchOptions"`
 	Projects        []string              `json:"projects"`
 	Errors          []*ast.Diagnostic     `json:"errors"`
 	Raw             any                   `json:"raw"`
