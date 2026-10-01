@@ -15,11 +15,13 @@ import {
 import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
+import { workspacePackageSubpaths } from "./tsdkPackage";
 import {
     getDefaultExePath,
     getExe,
     getWorkspaceTsdkConfigValue,
     getWorkspaceTsdkForPrompt,
+    pathHasTsserverJs,
     readNativePreviewConfig,
     resolveTsdkPath,
     resolveTsdkPathToExe,
@@ -501,15 +503,22 @@ async function getStradaExtensionVersion(extensionId: string, pathToTypescript: 
 async function findWorkspaceNativePreviewPackages(): Promise<DetectedVersion[]> {
     const results: DetectedVersion[] = [];
     for (const folder of vscode.workspace.workspaceFolders ?? []) {
-        const packagePath = vscode.Uri.joinPath(folder.uri, "node_modules", "@typescript", "native-preview");
-        const resolved = await resolveTsdkPathToExe(path.normalize(packagePath.fsPath));
-        if (!resolved) continue;
-        results.push({
-            folder,
-            version: resolved?.version ?? "unknown",
-            tsdkPath: path.normalize(packagePath.fsPath),
-            exePath: resolved?.path ?? "",
-        });
+        for (const candidate of workspacePackageSubpaths) {
+            const packagePath = vscode.Uri.joinPath(folder.uri, ...candidate);
+            const normalizedPath = path.normalize(packagePath.fsPath);
+            if (await pathHasTsserverJs(normalizedPath)) {
+                continue;
+            }
+            const resolved = await resolveTsdkPathToExe(normalizedPath);
+            if (!resolved) continue;
+            results.push({
+                folder,
+                version: resolved.version ?? "unknown",
+                tsdkPath: normalizedPath,
+                exePath: resolved.path ?? "",
+            });
+            break;
+        }
     }
     return results;
 }
@@ -655,7 +664,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
 
 /**
  * If the workspace has a tsdk setting pending consent, or has
- * `@typescript/typescript` installed in node_modules, prompt the user
+ * TypeScript 7 installed in node_modules, prompt the user
  * to allow using it.
  */
 export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext): Promise<void> {
@@ -694,7 +703,7 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
         }
     }
     else {
-        // No workspace tsdk config, but check if native-preview is installed
+        // No workspace tsdk config, but check if TypeScript 7 is installed
         // in the workspace's node_modules.
         const workspaceVersions = await findWorkspaceNativePreviewPackages();
         if (workspaceVersions.length === 0) return;
