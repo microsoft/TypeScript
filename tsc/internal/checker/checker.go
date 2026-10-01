@@ -30100,7 +30100,8 @@ func (c *Checker) getContextualTypeForBindingElement(declaration *ast.Node, cont
 
 func (c *Checker) getContextualTypeForStaticPropertyDeclaration(declaration *ast.Node, contextFlags ContextFlags) *Type {
 	if ast.IsExpression(declaration.Parent) {
-		if parentType := c.getContextualType(declaration.Parent, contextFlags); parentType != nil {
+		// Don't contextually type a static property by its own class, its type might still be in-progress and that would cause spurious circularities
+		if parentType := c.getContextualType(declaration.Parent, contextFlags); parentType != nil && parentType.symbol != c.getSymbolOfDeclaration(declaration.Parent) {
 			return c.getTypeOfPropertyOfContextualType(parentType, c.getSymbolOfDeclaration(declaration).Name)
 		}
 	}

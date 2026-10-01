@@ -7,6 +7,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
@@ -187,6 +189,283 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 	t.Fatal("expected auto-import completion for someValue")
 }
 
+func TestCompletionWithSymbolsRequiresPreparedAutoImports(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const fileName = "/home/projects/p/src/index.ts"
+	const content = "someV"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json": `{ "compilerOptions": { "module": "esnext", "target": "esnext" } }`,
+		"/home/projects/p/src/export.ts": "export const someValue = 1;",
+		fileName:                         content,
+	})
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		UserPreferences: &lsutil.UserPreferences{
+			IncludeCompletionsForModuleExports: core.TSTrue,
+		},
+	})
+	assert.NilError(t, err)
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
+		Snapshot: snapshotResp.Snapshot,
+		File:     DocumentIdentifier{FileName: fileName},
+	})
+	assert.NilError(t, err)
+
+	_, err = session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
+		Snapshot:      snapshotResp.Snapshot,
+		Project:       proj.Id,
+		File:          DocumentIdentifier{FileName: fileName},
+		Position:      uint32(len(content)),
+		IncludeSymbol: true,
+	})
+	assert.ErrorContains(t, err, "snapshot is not prepared for auto-imports")
+}
+
+func TestCompletionWithSymbolsUsesPreparedSnapshot(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const fileName = "/home/projects/p/src/index.ts"
+	const content = "someV"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json": `{ "compilerOptions": { "module": "esnext", "target": "esnext" } }`,
+		"/home/projects/p/src/export.ts": "export const someValue = 1;",
+		fileName:                         content,
+	})
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		OpenFiles:          []DocumentIdentifier{{FileName: fileName}},
+		PrepareAutoImports: &DocumentIdentifier{FileName: fileName},
+		UserPreferences: &lsutil.UserPreferences{
+			IncludeCompletionsForModuleExports: core.TSTrue,
+		},
+	})
+	assert.NilError(t, err)
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
+		Snapshot: snapshotResp.Snapshot,
+		File:     DocumentIdentifier{FileName: fileName},
+	})
+	assert.NilError(t, err)
+
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
+		Snapshot:      snapshotResp.Snapshot,
+		Project:       proj.Id,
+		File:          DocumentIdentifier{FileName: fileName},
+		Position:      uint32(len(content)),
+		IncludeSymbol: true,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, completions != nil)
+	for _, entry := range completions.Entries {
+		if entry.Name == "someValue" {
+			return
+		}
+	}
+	t.Fatal("expected auto-import completion for someValue")
+}
+
+func TestCompletionUsesSnapshotPreferences(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const fileName = "/home/projects/p/src/index.ts"
+	const content = "someV"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json": `{ "compilerOptions": { "module": "esnext", "target": "esnext" } }`,
+		"/home/projects/p/src/export.ts": "export const someValue = 1;",
+		fileName:                         content,
+	})
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		UserPreferences: &lsutil.UserPreferences{
+			IncludeCompletionsForModuleExports: core.TSFalse,
+		},
+	})
+	assert.NilError(t, err)
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
+		Snapshot: snapshotResp.Snapshot,
+		File:     DocumentIdentifier{FileName: fileName},
+	})
+	assert.NilError(t, err)
+
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
+		Snapshot:      snapshotResp.Snapshot,
+		Project:       proj.Id,
+		File:          DocumentIdentifier{FileName: fileName},
+		Position:      uint32(len(content)),
+		IncludeSymbol: true,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, completions != nil)
+	for _, entry := range completions.Entries {
+		assert.Assert(t, entry.Name != "someValue", "snapshot preferences should disable auto-import completions")
+	}
+}
+
+func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
+	t.Parallel()
+	for _, update := range []bool{false, true} {
+		t.Run(map[bool]string{false: "create", true: "update"}[update], func(t *testing.T) {
+			t.Parallel()
+			defer testutil.RecoverAndFail(t, "snapshot creation panicked")
+			const fileName = "/home/projects/p/index.ts"
+			projectSession, _ := projecttestutil.Setup(map[string]any{
+				"/home/projects/p/tsconfig.json": "{}",
+				fileName:                         "someV",
+				"/home/projects/p/export.ts":     "export const someValue = 1;",
+				"/home/projects/synthetic.ts":    "export const x = 1;",
+			})
+			defer projectSession.Close()
+			session := NewLSPSession(projectSession, nil)
+			defer session.Close()
+			params := &CreateSnapshotParams{
+				OpenProjects:       []DocumentIdentifier{{FileName: "/home/projects/p/tsconfig.json"}},
+				PrepareAutoImports: &DocumentIdentifier{FileName: fileName},
+				CreatePrograms: []*CreateSnapshotProgramParams{{
+					RootFiles:       []DocumentIdentifier{{FileName: "/home/projects/synthetic.ts"}},
+					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+				}},
+			}
+			var response *CreateSnapshotResponse
+			var err error
+			expectedID := SnapshotID(1)
+			if update {
+				base, e := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
+				assert.NilError(t, e)
+				expectedID = base.Snapshot + 1
+				response, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+					Snapshot: base.Snapshot,
+					Changes:  params,
+				})
+			} else {
+				response, err = session.handleCreateSnapshot(t.Context(), params)
+			}
+			assert.NilError(t, err)
+			assert.Equal(t, response.Snapshot, expectedID)
+			assert.Equal(t, len(*response.Operation.CreatedPrograms), 1)
+			snapshot := session.snapshots[response.Snapshot].snapshot
+			proj := snapshot.GetDefaultProject("file:///home/projects/p/index.ts")
+			assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(fileName, proj.ID(), snapshot.UserPreferences()))
+		})
+	}
+}
+
+func TestPreparedIndependentSnapshotPreservesLSPOverlays(t *testing.T) {
+	t.Parallel()
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json":                    "{}",
+		fileName:                                            "diskOnly",
+		"/home/projects/p/package.json":                     `{"dependencies":{"my-pkg":"1.0.0"}}`,
+		"/home/projects/p/node_modules/my-pkg/package.json": `{"name":"my-pkg","version":"1.0.0","types":"index.d.ts"}`,
+		"/home/projects/p/node_modules/my-pkg/index.d.ts":   "export declare const packageValue: number;",
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(t.Context(), "file:///home/projects/p/index.ts", 1, "packageV", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	base, err := session.handleGetCurrentLanguageServerSnapshot(t.Context(), &GetCurrentLanguageServerSnapshotParams{})
+	assert.NilError(t, err)
+	prepared, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		Changes: &CreateSnapshotParams{
+			PrepareAutoImports: &DocumentIdentifier{FileName: fileName},
+		},
+	})
+	assert.NilError(t, err)
+	snapshot := session.snapshots[prepared.Snapshot].snapshot
+	content, ok := snapshot.ReadFile(fileName)
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "packageV")
+	proj := snapshot.GetDefaultProject("file:///home/projects/p/index.ts")
+	assert.Equal(t, proj.GetProgram().GetSourceFile(fileName).Text(), "packageV")
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
+		Snapshot:      prepared.Snapshot,
+		Project:       proj.ID(),
+		File:          DocumentIdentifier{FileName: fileName},
+		Position:      8,
+		IncludeSymbol: true,
+	})
+	assert.NilError(t, err)
+	for _, entry := range completions.Entries {
+		if entry.Name == "packageValue" {
+			return
+		}
+	}
+	t.Fatal("expected dependency auto-import completion from an LSP-derived snapshot")
+}
+
+func TestFreshSnapshotIncludesDependencyAutoImports(t *testing.T) {
+	t.Parallel()
+	for _, prepare := range []bool{false, true} {
+		t.Run(map[bool]string{false: "retry", true: "prepared"}[prepare], func(t *testing.T) {
+			t.Parallel()
+			const fileName = "/home/projects/MixedCase/index.ts"
+			projectSession, _ := projecttestutil.Setup(map[string]any{
+				"/home/projects/MixedCase/tsconfig.json":                    "{}",
+				fileName:                                                    "packageV",
+				"/home/projects/MixedCase/package.json":                     `{"dependencies":{"my-pkg":"1.0.0"}}`,
+				"/home/projects/MixedCase/node_modules/my-pkg/package.json": `{"name":"my-pkg","version":"1.0.0","types":"index.d.ts"}`,
+				"/home/projects/MixedCase/node_modules/my-pkg/index.d.ts":   "export declare const packageValue: number;",
+			})
+			defer projectSession.Close()
+			projectSession.DidOpenFile(t.Context(), "file:///home/projects/MixedCase/index.ts", 1, "editorOnly", lsproto.LanguageKindTypeScript)
+			session := NewLSPSession(projectSession, nil)
+			defer session.Close()
+			params := &CreateSnapshotParams{
+				OpenProjects: []DocumentIdentifier{{FileName: "/home/projects/MixedCase/tsconfig.json"}},
+			}
+			if prepare {
+				params.PrepareAutoImports = &DocumentIdentifier{FileName: fileName}
+			}
+			response, err := session.handleCreateSnapshot(t.Context(), params)
+			assert.NilError(t, err)
+			snapshot := session.snapshots[response.Snapshot].snapshot
+			content, ok := snapshot.ReadFile(fileName)
+			assert.Assert(t, ok)
+			assert.Equal(t, content, "packageV")
+			proj := snapshot.GetDefaultProject("file:///home/projects/MixedCase/index.ts")
+			completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
+				Snapshot:      response.Snapshot,
+				Project:       proj.ID(),
+				File:          DocumentIdentifier{FileName: fileName},
+				Position:      8,
+				IncludeSymbol: prepare,
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, completions != nil)
+			for _, entry := range completions.Entries {
+				if entry.Name == "packageValue" {
+					return
+				}
+			}
+			t.Fatal("expected dependency auto-import completion from a fresh API snapshot")
+		})
+	}
+}
+
 func TestCompletionWithSymbolsAndExistingImportDoesNotDeadlock(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
@@ -210,7 +489,8 @@ func TestCompletionWithSymbolsAndExistingImportDoesNotDeadlock(t *testing.T) {
 	defer session.Close()
 
 	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		OpenFiles:          []DocumentIdentifier{{FileName: fileName}},
+		PrepareAutoImports: &DocumentIdentifier{FileName: fileName},
 	})
 	assert.NilError(t, err)
 	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
