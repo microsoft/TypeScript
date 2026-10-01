@@ -552,7 +552,7 @@ func TestPushDiagnostics(t *testing.T) {
 		}
 		session, utils := projecttestutil.Setup(files)
 		prefs := lsutil.NewDefaultUserPreferences()
-		prefs.EnableValidation = core.TSFalse
+		prefs.ValidateEnabled = core.TSFalse
 		session.Configure(prefs)
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
@@ -587,7 +587,7 @@ func TestPushDiagnostics(t *testing.T) {
 		assert.Assert(t, len(tsconfigCalls[len(tsconfigCalls)-1].Params.Diagnostics) > 0, "expected initial diagnostics")
 
 		prefs := lsutil.NewDefaultUserPreferences()
-		prefs.EnableValidation = core.TSFalse
+		prefs.ValidateEnabled = core.TSFalse
 		session.Configure(prefs)
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)

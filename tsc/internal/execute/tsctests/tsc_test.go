@@ -2384,6 +2384,55 @@ func TestTscIncremental(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "reverse mapped declaration consumption",
+			files: FileMap{
+				"/home/src/workspaces/project/producer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" }
+				}`,
+				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
+					declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;
+					declare const indexedInput: { [key: string]: { value: string } };
+					export const indexed = unwrap(indexedInput);
+					type Validator<T> = ((input: unknown) => T | undefined) | {
+						[K in keyof T]: Validator<T[K]>;
+					};
+					declare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;
+					declare const stringValidator: (input: unknown) => string | undefined;
+					export const deep = decode({ a: { b: { c: { d: stringValidator } } } });
+					interface NamedInput { leaf: typeof stringValidator }
+					declare const namedInput: { node: NamedInput };
+					export const named = decode(namedInput);
+				`),
+				"/home/src/workspaces/project/consumer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "noEmit": true },
+					"references": [{ "path": "../producer" }]
+				}`,
+				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					import { indexed, deep, named } from "../producer/dist/index.js";
+					const a: string = indexed["name"];
+					const b: string = deep.a.b.c.d;
+					const c: string = named.node.leaf;
+					type IsAny<T> = 0 extends (1 & T) ? true : false;
+					const notAny: false = null as unknown as
+						IsAny<typeof indexed[string] | typeof deep.a.b.c.d | typeof named.node.leaf>;
+					const invalidIndex: number = indexed["name"];
+					const invalidDeep: number = deep.a.b.c.d;
+					const invalidNamed: number = named.node.leaf;
+				`),
+			},
+			commandLineArgs: []string{"--build", "consumer"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the producer",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/producer/index.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+			},
+		},
+		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`

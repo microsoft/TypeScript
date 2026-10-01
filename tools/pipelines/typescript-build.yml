@@ -54,8 +54,24 @@ extends:
           - job: Build
             displayName: Build and Sign
             timeoutInMinutes: 180
+            pool:
+              name: AzurePipelines-EO
+              image: 1ESPT-Ubuntu22.04
+              os: linux
 
             templateContext:
+              mb:
+                signing:
+                  enabled: true
+                  signWithProd: true
+                  signType: real
+                  zipSources: false
+                mbpresteps:
+                  # Needed for ESRP. https://dev.azure.com/devdiv/DevDiv/_wiki/wikis/DevDiv.wiki/46279/Real-signing-with-PME-Enforcement
+                  - task: UseDotNet@2
+                    displayName: Use .NET Core sdk 8.0.x
+                    inputs:
+                      version: 8.0.x
               outputs:
                 - output: pipelineArtifact
                   targetPath: $(Build.ArtifactStagingDirectory)/npm
@@ -68,41 +84,6 @@ extends:
               - bash: echo "##vso[build.addbuildtag]Build.Reason.Schedule"
                 displayName: 'Set build tag "Build.Reason.Schedule"'
                 condition: eq(variables['Build.Reason'], 'Schedule')
-
-              # This is copied from https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Jobs/Job.yml
-              # With the difference that we install .NET Core becuase DDSignFiles needs it.
-              - task: NuGetAuthenticate@1
-                displayName: '🔩 NuGet Authenticate'
-              - task: UsePythonVersion@0
-                displayName: 'Use Python 3.11'
-                inputs:
-                  versionSpec: 3.11
-              # This is old, but DDSignFiles is built with it.
-              # Copying https://github.com/microsoft/vscode-gradle/blob/2f60b4483ef15aa9b196e008939610cdeab60029/.azure-pipelines/vscode-gradle-nightly.yml#L50
-              - task: UseDotNet@2
-                displayName: 'Use .NET Core 3.1.x'
-                inputs:
-                  packageType: 'sdk'
-                  version: '3.1.x'
-              # Needed for ESRP. https://dev.azure.com/devdiv/DevDiv/_wiki/wikis/DevDiv.wiki/46279/Real-signing-with-PME-Enforcement
-              - task: UseDotNet@2
-                displayName: Use .NET Core sdk 8.0.x
-                inputs:
-                  version: 8.0.x
-              # https://dev.azure.com/devdiv/DevDiv/_wiki/wikis/DevDiv.wiki/12267/ESRP-Signing-in-Mac-or-Linux-Pipelines
-              # TODO: switch to the template's signing, now that DDSignFiles should work.
-              - task: MicroBuildSigningPlugin@4
-                displayName: '🔩 Install Signing Plugin'
-                inputs:
-                  signType: real
-                  # azureSubscription AKA ConnectedServiceName
-                  azureSubscription: 'MicroBuild Signing Task (DevDiv)'
-                  # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
-                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
-                  # We do this ourselves.
-                  zipSources: false
-                env:
-                  MicroBuildOutputFolderOverride: '$(Agent.TempDirectory)'
 
               - checkout: self
                 clean: true
@@ -164,6 +145,7 @@ extends:
               - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Sign packages'
                 env:
+                  MICROBUILD_PLUGIN_DIRECTORY: $(Agent.TempDirectory)/MicroBuild/Plugins
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
@@ -176,6 +158,7 @@ extends:
               - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Sign extensions'
                 env:
+                  MICROBUILD_PLUGIN_DIRECTORY: $(Agent.TempDirectory)/MicroBuild/Plugins
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
