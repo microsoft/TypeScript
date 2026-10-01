@@ -99,7 +99,7 @@ Remember to only enable Workspace Trust for workspaces that you trust, i.e. are 
 
 The Go compiler is frequently updated to address CVEs in its core components and standard library.
 These normally do not affect TypeScript - for example, a CVE in Go's HTTP library is not reachable from tsc, so is not relevant to TypeScript security.
-We do not backport Go compilations to prior TypeScript releases **unless** there is a discoverable path to a particular CVE.
+We do not issue patch releases of TypeScript to adopt newer versions of Go **unless** there is an identified path to a particular CVE.
 We recommend using `govulncheck` instead of a blanket version-based scan to identify potential issues.
 
 ## Examples
