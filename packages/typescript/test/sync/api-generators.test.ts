@@ -450,7 +450,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const [cached] = api.batch(api.getSymbol.gen(declaration));
         assert.strictEqual(cached, symbol);
         const clone = cloneNode(declaration);
-        assert.deepEqual(api.batch(getSymbol.gen(clone), api.getSymbol.gen(clone)), [undefined, undefined]);
+        assert.throws(() => api.batch(getSymbol.gen(clone)), /Source file not found/);
+        assert.throws(() => api.batch(api.getSymbol.gen(clone)), /Source file not found/);
     });
 
     test("batches source file requests", context => {

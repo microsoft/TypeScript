@@ -375,88 +375,84 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     /**
-     * Looks up the declaration's symbol.
+     * Looks up a remote declaration's binder symbol. Throws for synthesized or configuration ASTs.
      */
     get getSymbol(): {
-        (declaration: Declaration): Symbol | undefined;
-        gen(declaration: Declaration): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+        (declaration: Declaration): Symbol;
+        gen(declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getSymbol",
-            function (declaration: Declaration): Symbol | undefined {
+            function (declaration: Declaration): Symbol {
                 const file = getRemoteSourceFile(declaration);
-                if (!file) return undefined;
+                if (!file) throw new Error(`Source file not found for declaration`);
                 const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
-                if (!record) return undefined;
+                if (!record) throw new Error(`Cached source file not found for declaration`);
                 const index = parseNodeHandle(getNodeId(declaration)).index;
-                if (record.symbolsByDeclarationNodeIndex.has(index)) return record.symbolsByDeclarationNodeIndex.get(index);
+                const cached = record.symbolsByDeclarationNodeIndex.get(index);
+                if (cached) return cached;
                 return owner.fetchDeclarationSymbol(record, index);
             },
-            function* (declaration: Declaration): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+            function* (declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const file = getRemoteSourceFile(declaration);
-                if (!file) return undefined;
+                if (!file) throw new Error(`Source file not found for declaration`);
                 const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
-                if (!record) return undefined;
+                if (!record) throw new Error(`Cached source file not found for declaration`);
                 const index = parseNodeHandle(getNodeId(declaration)).index;
-                if (record.symbolsByDeclarationNodeIndex.has(index)) return record.symbolsByDeclarationNodeIndex.get(index);
+                const cached = record.symbolsByDeclarationNodeIndex.get(index);
+                if (cached) return cached;
                 return yield* owner.fetchDeclarationSymbol.gen(record, index);
             },
         );
     }
 
     private get fetchDeclarationSymbol(): {
-        (record: CachedSourceFile<Symbol>, index: number): Symbol | undefined;
-        gen(record: CachedSourceFile<Symbol>, index: number): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+        (record: CachedSourceFile<Symbol>, index: number): Symbol;
+        gen(record: CachedSourceFile<Symbol>, index: number): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchDeclarationSymbol",
-            function (record: CachedSourceFile<Symbol>, index: number): Symbol | undefined {
+            function (record: CachedSourceFile<Symbol>, index: number): Symbol {
                 const data = owner.client.apiRequest("getSymbolOfDeclaration", {
                     file: record.descriptor,
                     index,
                 });
-                let symbol: Symbol | undefined;
-                if (data) {
-                    validateSymbolResponse(data);
-                    const reference = data.reference;
-                    if (reference.kind !== SymbolOwnerKind.File) {
-                        throw new Error(`Symbol ${reference.id} is not file-owned`);
-                    }
-                    const fileOwner: SourceFileOwner = { record, api: owner };
-                    symbol = owner.sourceFileCache.getOrCreateSymbol(
-                        record,
-                        reference.file,
-                        reference.id,
-                        () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
-                    );
+                validateSymbolResponse(data);
+                const reference = data.reference;
+                if (reference.kind !== SymbolOwnerKind.File) {
+                    throw new Error(`Symbol ${reference.id} is not file-owned`);
                 }
+                const fileOwner: SourceFileOwner = { record, api: owner };
+                const symbol = owner.sourceFileCache.getOrCreateSymbol(
+                    record,
+                    reference.file,
+                    reference.id,
+                    () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
+                );
                 record.symbolsByDeclarationNodeIndex.set(index, symbol);
                 return symbol;
             },
-            function* (record: CachedSourceFile<Symbol>, index: number): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+            function* (record: CachedSourceFile<Symbol>, index: number): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSymbolOfDeclaration", {
                     file: record.descriptor,
                     index,
                 });
-                let symbol: Symbol | undefined;
-                if (data) {
-                    validateSymbolResponse(data);
-                    const reference = data.reference;
-                    if (reference.kind !== SymbolOwnerKind.File) {
-                        throw new Error(`Symbol ${reference.id} is not file-owned`);
-                    }
-                    const fileOwner: SourceFileOwner = { record, api: owner };
-                    symbol = owner.sourceFileCache.getOrCreateSymbol(
-                        record,
-                        reference.file,
-                        reference.id,
-                        () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
-                    );
+                validateSymbolResponse(data);
+                const reference = data.reference;
+                if (reference.kind !== SymbolOwnerKind.File) {
+                    throw new Error(`Symbol ${reference.id} is not file-owned`);
                 }
+                const fileOwner: SourceFileOwner = { record, api: owner };
+                const symbol = owner.sourceFileCache.getOrCreateSymbol(
+                    record,
+                    reference.file,
+                    reference.id,
+                    () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
+                );
                 record.symbolsByDeclarationNodeIndex.set(index, symbol);
                 return symbol;
             },
@@ -1427,18 +1423,20 @@ function getNodeAPI(node: Node): API<boolean> | undefined {
     return api;
 }
 
-/** Looks up the declaration's symbol. */
-export function getSymbol(declaration: Declaration): Symbol | undefined {
+/** Looks up a remote declaration's binder symbol through its API. Throws for non-remote declarations. */
+export function getSymbol(declaration: Declaration): Symbol {
     const api = getNodeAPI(declaration);
-    return api?.getSymbol(declaration);
+    if (!api) throw new Error("Source file not found for declaration");
+    return api.getSymbol(declaration);
 }
 
 export declare namespace getSymbol {
-    function gen(declaration: Declaration): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    function gen(declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
 }
-getSymbol.gen = function* (declaration: Declaration): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+getSymbol.gen = function* (declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
     const api = getNodeAPI(declaration);
-    return api ? yield* api.getSymbol.gen(declaration) : undefined;
+    if (!api) throw new Error("Source file not found for declaration");
+    return yield* api.getSymbol.gen(declaration);
 };
 
 /** An independently retained source file and its disposable remote-lifetime lease. */

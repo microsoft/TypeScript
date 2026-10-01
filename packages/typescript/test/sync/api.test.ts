@@ -528,29 +528,26 @@ describe("API", { concurrency }, () => {
         assert.equal(symbolRequests, 1);
 
         symbolRequests = 0;
-        const absent = getSymbol(withoutSymbol);
-        const concurrentAbsent = api.getSymbol(withoutSymbol);
-        assert.equal(absent, undefined);
-        assert.equal(concurrentAbsent, undefined);
-        assert.equal(getSymbol(withoutSymbol), undefined);
-        assert.equal(symbolRequests, 1);
+        assert.throws(() => getSymbol(withoutSymbol), /has no binder symbol/);
+        assert.throws(() => api.getSymbol(withoutSymbol), /has no binder symbol/);
+        assert.equal(symbolRequests, 2);
 
         snapshot.dispose();
     });
 
-    test("getSymbol returns undefined for synthesized declarations", () => {
+    test("getSymbol rejects synthesized declarations", () => {
         using api = spawnAPI();
         const local = createVariableDeclaration(createIdentifier("local"), undefined, undefined, undefined);
-        assert.equal(getSymbol(local), undefined);
-        assert.equal(api.getSymbol(local), undefined);
+        assert.throws(() => getSymbol(local), /Source file not found/);
+        assert.throws(() => api.getSymbol(local), /Source file not found/);
 
         using lease = api.createSourceFile("/symbols.ts", "function present() {}");
         const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
         assert.ok(getSymbol(declaration));
         const shallowClone = cloneNode(declaration);
         const deepClone = getSynthesizedDeepClone(declaration);
-        assert.equal(getSymbol(shallowClone), undefined);
-        assert.equal(api.getSymbol(deepClone), undefined);
+        assert.throws(() => getSymbol(shallowClone), /Source file not found/);
+        assert.throws(() => api.getSymbol(deepClone), /Source file not found/);
         assert.equal("getSymbol" in declaration, false);
     });
 
@@ -571,9 +568,8 @@ describe("API", { concurrency }, () => {
         assert.equal(cache.declarationSymbolRequests.has(index), false);
         const withoutSymbol = cast(file.statements[1], isImportDeclaration);
         const absentIndex = parseNodeHandle(getNodeId(withoutSymbol)).index;
-        assert.equal(getSymbol(withoutSymbol), undefined);
-        assert.ok(cache.symbolsByDeclarationNodeIndex.has(absentIndex));
-        assert.equal(cache.symbolsByDeclarationNodeIndex.get(absentIndex), undefined);
+        assert.throws(() => getSymbol(withoutSymbol), /has no binder symbol/);
+        assert.equal(cache.symbolsByDeclarationNodeIndex.has(absentIndex), false);
         assert.equal(cache.declarationSymbolRequests.has(absentIndex), false);
         api.clearSourceFileCache();
         assert.strictEqual(file.symbolCache, cache);
@@ -596,16 +592,13 @@ describe("API", { concurrency }, () => {
 
     test("declaration symbol results survive releasing the last lease", () => {
         using api = spawnAPI();
-        const lease = api.createSourceFile("/symbols.ts", "function present() {}\nimport {} from './missing';");
+        const lease = api.createSourceFile("/symbols.ts", "function present() {}");
         const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
-        const withoutSymbol = cast(lease.sourceFile.statements[1], isImportDeclaration);
         const symbol = getSymbol(declaration);
         assert.ok(symbol);
-        assert.equal(getSymbol(withoutSymbol), undefined);
 
         lease.dispose();
         assert.strictEqual(getSymbol(declaration), symbol);
-        assert.equal(getSymbol(withoutSymbol), undefined);
     });
 
     test("declaration symbols can be fetched after clearing the client cache", () => {
@@ -8160,8 +8153,8 @@ describe("Program - diagnostics", { concurrency }, () => {
         assert.equal(project.program.getSourceFile("/tsconfig.json"), undefined);
         const configObject = cast(cast(rootConfig.statements[0], isExpressionStatement).expression, isObjectLiteralExpression);
         const configProperty = cast(configObject.properties[0], isPropertyAssignment);
-        assert.equal(getSymbol(configProperty), undefined);
-        assert.equal(api.getSymbol(configProperty), undefined);
+        assert.throws(() => getSymbol(configProperty), /Cached source file not found/);
+        assert.throws(() => api.getSymbol(configProperty), /Cached source file not found/);
 
         fs.writeFile!("/tsconfig.base.json", `{ "compilerOptions": { "strict": false } }`);
         const extendedConfig = project.program.getConfigSourceFile("/tsconfig.base.json");

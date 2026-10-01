@@ -2087,7 +2087,6 @@ func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (
 	return s.encodeSourceFileResponse(lease.SourceFile())
 }
 
-// @gen-proto-nullable
 func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationParams) (*SymbolResponse, error) {
 	lease, err := s.acquireCachedSourceFile(params.File)
 	if err != nil {
@@ -2105,7 +2104,7 @@ func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationPar
 	}
 	symbol := node.Symbol()
 	if symbol == nil {
-		return nil, nil
+		return nil, fmt.Errorf("%w: declaration node index %d has no binder symbol", ErrClientError, params.Index)
 	}
 	return newFileSymbolResponse(symbol), nil
 }
