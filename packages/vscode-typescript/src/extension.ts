@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
+import type { ExtensionAPI } from "./api";
+export type { ExtensionAPI } from "./api";
 
 import {
     registerEnablementCommands,
     updateUseTsgoSetting,
 } from "./commands";
-import type { ContentMapperContribution } from "./contentMapperContributions";
 import {
     aiConnectionString,
     getExplicitConfigTarget,
@@ -23,12 +24,6 @@ import { ExperimentationService } from "./experimentationService";
 import { createTelemetryReporter } from "./telemetryReporting";
 
 import assert from "node:assert";
-
-export interface ExtensionAPI {
-    onLanguageServerInitialized: vscode.Event<void>;
-    initializeAPIConnection(pipe?: string): Promise<string>;
-    registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable;
-}
 
 export async function activate(context: vscode.ExtensionContext): Promise<ExtensionAPI | undefined> {
     await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
@@ -84,6 +79,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
         },
         registerContentMappers(contributorId, contributions): vscode.Disposable {
             return sessionManager.registerContentMappers(contributorId, contributions);
+        },
+        registerLspMiddleware(method, transformer): vscode.Disposable {
+            return sessionManager.registerLspMiddleware(method, transformer);
         },
     };
 
