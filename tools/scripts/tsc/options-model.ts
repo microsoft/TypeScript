@@ -51,7 +51,6 @@ export interface DeclarationMetadata {
     affectsSemanticDiagnostics?: boolean;
     affectsBuildInfo?: boolean;
     affectsEmit?: boolean;
-    allowJsFlag?: boolean;
     strictFlag?: boolean;
     listPreserveFalsyValues?: boolean;
 }

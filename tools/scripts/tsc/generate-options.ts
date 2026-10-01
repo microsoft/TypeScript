@@ -436,7 +436,7 @@ export function generateOptionComparisons(model = options): string {
                 const value = (receiver: string) => {
                     const field = `${receiver}.${fieldName(option)}`;
                     if (declaration.strictFlag) return `${receiver}.GetStrictOptionValue(${field})`;
-                    if (declaration.allowJsFlag) return `${receiver}.GetAllowJS()`;
+                    if (option.name === "allowJs") return `${receiver}.GetAllowJS()`;
                     return field;
                 };
                 return [`${value("oldOptions")} != ${value("newOptions")}`];
@@ -503,7 +503,6 @@ function declarationLiteral(declaration: Declaration): string {
     const {
         name,
         kind,
-        allowJsFlag,
         strictFlag,
         affectsDeclarationPath,
         affectsSemanticDiagnostics,

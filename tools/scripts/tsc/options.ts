@@ -64,7 +64,6 @@ export const options: OptionsModel = {
             jsconfigDefault: true,
             declaration: {
                 group: "optionsForCompiler",
-                allowJsFlag: true,
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("JavaScript Support"),
