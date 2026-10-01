@@ -72,7 +72,7 @@ extends:
                 name: buildMatrix
 
           - job: BuildPackages
-            displayName: Build $(platform)
+            displayName: Build platform package
             dependsOn: SetupBuildMatrix
 
             strategy:
