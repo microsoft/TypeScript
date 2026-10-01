@@ -62,7 +62,7 @@ export interface Declaration extends DeclarationMetadata {
 }
 
 export interface StoredDeclaration extends Declaration {
-    field: { name: string; type: CompilerOptionType; comment?: string; };
+    field: { name: string; type: CompilerOptionType; section?: string; };
 }
 
 export interface RootDeclaration extends Declaration {
@@ -78,6 +78,7 @@ export interface CompilerOption {
     goName?: string;
     internal?: boolean;
     deprecated?: boolean;
+    section?: string;
     comment?: string;
     parseAliases?: string[];
     declaration?: DeclarationMetadata & {

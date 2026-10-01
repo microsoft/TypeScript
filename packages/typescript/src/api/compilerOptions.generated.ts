@@ -118,7 +118,9 @@ export interface CompilerOptions {
     useUnknownInCatchVariables?: boolean | undefined;
     verbatimModuleSyntax?: boolean | undefined;
     maxNodeModuleJsDepth?: number | undefined;
-    /** Internal fields */
+
+    // Internal fields
+
     configFilePath?: string | undefined;
 }
 

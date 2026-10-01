@@ -177,6 +177,16 @@ test("option comparisons reject types that require deep equality", () => {
     }
 });
 
+test("option section headings are detached line comments", () => {
+    const generated = generateOptions();
+    const go = generated.get("tsc/internal/core/options_generated.go")!;
+    assert.match(go, /\n\/\/ Internal fields\n\nConfigFilePath /);
+    assert.match(go, /\n\/\/ Internal fields\n\nClean /);
+    const api = generated.get("packages/typescript/src/api/compilerOptions.generated.ts")!;
+    assert.match(api, /\n\/\/ Internal fields\n\nconfigFilePath\?:/);
+    assert.doesNotMatch(api, /\/\*\* Internal fields/);
+});
+
 test("all generated options artifacts are checked in and current", () => {
     for (const [file, content] of generateOptions()) {
         const actual = fs.readFileSync(path.join(repoRoot, file), "utf8");

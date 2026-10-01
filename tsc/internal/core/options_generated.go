@@ -131,7 +131,9 @@ type CompilerOptions struct {
 	ESModuleInterop Tristate `json:"esModuleInterop,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	OutFile string `json:"outFile,omitzero"`
+
 	// Internal fields
+
 	ConfigFilePath      string   `json:"configFilePath,omitzero"`
 	NoDtsResolution     Tristate `json:"noDtsResolution,omitzero"`
 	PathsBasePath       string   `json:"pathsBasePath,omitzero"`
@@ -863,8 +865,7 @@ type BuildOptions struct {
 	Builders          *int     `json:"builders,omitzero"`
 	StopBuildOnErrors Tristate `json:"stopBuildOnErrors,omitzero"`
 
-	// CompilerOptions are not parsed here and will be available on ParsedBuildCommandLine
-
 	// Internal fields
+
 	Clean Tristate `json:"clean,omitzero"`
 }

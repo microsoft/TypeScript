@@ -133,13 +133,17 @@ export function validateOptions(model: OptionsModel): void {
     }
 }
 
+function sectionComment(section: string | undefined): string {
+    return section ? `\n// ${section.replaceAll("\n", "\n// ")}\n\n` : "";
+}
+
 function coreOptions(): string {
     const fields = options.compilerOptions.map(option => {
         const comments = [
             ...(option.comment ? [option.comment] : []),
             ...(option.deprecated ? ["Deprecated: Do not use outside of options parsing and validation."] : []),
         ].map(comment => `// ${comment}\n`).join("");
-        return `${comments}${fieldName(option)} ${option.type} \`json:"${option.name},omitzero"\``;
+        return `${sectionComment(option.section)}${comments}${fieldName(option)} ${option.type} \`json:"${option.name},omitzero"\``;
     });
     return `type PluginImport struct {
 ${pluginImportFields.map(field => `${fieldName(field)} ${field.type} \`json:"${field.name}"\``).join("\n")}
@@ -188,7 +192,7 @@ export function generateCompilerOptionsAPI(model = options): string {
     }
     const fields = model.compilerOptions.filter(option => !option.internal && !option.deprecated).map(option => {
         const comment = option.comment ? `/** ${option.comment.replaceAll("*/", "*\\/").replaceAll("\n", "\n * ")} */\n` : "";
-        return `${comment}${option.name}?: ${typeName(option)} | undefined;`;
+        return `${sectionComment(option.section)}${comment}${option.name}?: ${typeName(option)} | undefined;`;
     });
     const pluginFields = pluginImportFields.map(field => `${field.name}: ${typeName(field)};`);
     const enumNames = [...imports].sort();
@@ -245,7 +249,7 @@ function optionsEquality(name: string, fields: StoredDeclaration["field"][]): st
 function storedOptions(name: string, declarations: StoredDeclaration[]): string {
     return `type ${name} struct {
 ${name === "BuildOptions" ? "_ noCopy\n" : ""}
-${declarations.map(option => `${option.field.comment ? "\n" + option.field.comment.split("\n").map(line => line ? "// " + line : "").join("\n") + "\n" : ""}${option.field.name} ${option.field.type} \`json:"${option.name},omitzero"\``).join("\n")}
+${declarations.map(option => `${sectionComment(option.field.section)}${option.field.name} ${option.field.type} \`json:"${option.name},omitzero"\``).join("\n")}
 }
 `;
 }

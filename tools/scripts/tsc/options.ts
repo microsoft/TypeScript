@@ -1347,7 +1347,7 @@ export const options: OptionsModel = {
         {
             name: "configFilePath",
             type: "string",
-            comment: "Internal fields",
+            section: "Internal fields",
         },
         {
             name: "noDtsResolution",
@@ -1827,11 +1827,7 @@ export const options: OptionsModel = {
             category: diagnostic("Command-line Options"),
             description: diagnostic("Delete the outputs of all projects."),
             defaultValueDescription: false,
-            field: {
-                name: "Clean",
-                type: "Tristate",
-                comment: "CompilerOptions are not parsed here and will be available on ParsedBuildCommandLine\n\nInternal fields",
-            },
+            field: { name: "Clean", type: "Tristate", section: "Internal fields" },
         },
         {
             name: "builders",
