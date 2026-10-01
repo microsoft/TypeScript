@@ -29,6 +29,7 @@
     "files": [
         "bin",
         "lib",
+        "schemas",
         "dist",
         "vendor"
     ],
@@ -37,6 +38,8 @@
     },
     "exports": {
         "./package.json": "./package.json",
+        "./schemas/tsconfig.schema.json": "./schemas/tsconfig.schema.json",
+        "./schemas/jsconfig.schema.json": "./schemas/jsconfig.schema.json",
         ".": "./lib/version.cjs",
         "./unstable/sync": {
             "@typescript/source": "./src/api/sync/api.ts",

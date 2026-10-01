@@ -297,10 +297,7 @@ func SetOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compil
 		commandLineOption := getCommandLineOption(name)
 		if commandLineOption != nil {
 			parsedValue := getOptionValue(t, commandLineOption, value, currentDirectory)
-			errors := tsoptions.ParseCompilerOptions(commandLineOption.Name, parsedValue, compilerOptions)
-			if len(errors) > 0 {
-				t.Fatalf("Error parsing value '%s' for compiler option '%s'.", value, commandLineOption.Name)
-			}
+			tsoptions.ParseCompilerOptions(commandLineOption.Name, parsedValue, compilerOptions)
 			continue
 		}
 		harnessOption := getHarnessOption(name)
@@ -1035,12 +1032,12 @@ func getFileBasedTestConfigurationDescription(config TestConfiguration) string {
 	return output.String()
 }
 
-func GetFileBasedTestConfigurations(t *testing.T, settings map[string]string, varyByOptions map[string]struct{}) []*NamedTestConfiguration {
+func GetFileBasedTestConfigurations(t *testing.T, settings map[string]string, varyByOptions *collections.Set[string]) []*NamedTestConfiguration {
 	var optionEntries [][]string // Each element slice has the option name as the first element, and the values as the rest
 	variationCount := 1
 	nonVaryingOptions := make(map[string]string)
 	for option, value := range settings {
-		if _, ok := varyByOptions[option]; ok {
+		if varyByOptions.Has(option) {
 			entries := splitOptionValues(t, value, option)
 			if len(entries) > 1 {
 				variationCount *= len(entries)

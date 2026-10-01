@@ -281,7 +281,7 @@ func TestBuildWatchStopsWhenContextIsCancelled(t *testing.T) {
 
 	resultCh := make(chan tsc.CommandLineResult, 1)
 	go func() {
-		resultCh <- execute.CommandLine(ctx, sys, []string{"--build", "--watch", "--watchInterval", "60000"}, sys)
+		resultCh <- execute.CommandLine(ctx, sys, []string{"--build", "--watch"}, sys)
 	}()
 
 	select {
