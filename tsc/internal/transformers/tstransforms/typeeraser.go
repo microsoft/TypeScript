@@ -316,6 +316,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		}
 		name := n.Name()
 		namedBindings := tx.Visitor().VisitNode(n.NamedBindings)
+		// Empty {} due to type-only import erasure can be skipped if there is also a default import
 		if name != nil && namedBindings != nil && ast.IsNamedImports(namedBindings) &&
 			len(namedBindings.AsNamedImports().Elements.Nodes) == 0 &&
 			len(n.NamedBindings.AsNamedImports().Elements.Nodes) != 0 {
