@@ -41,9 +41,10 @@ type SerializedTypeEntry struct {
 }
 
 type CompositeTypeCacheIdentity struct {
-	typeId        TypeId
-	flags         nodebuilder.Flags
-	internalFlags nodebuilder.InternalFlags
+	typeId              TypeId
+	flags               nodebuilder.Flags
+	internalFlags       nodebuilder.InternalFlags
+	inferTypeParameters CacheHashKey
 }
 
 type NodeBuilderLinks struct {
@@ -3084,7 +3085,7 @@ func (b *NodeBuilderImpl) getParentSymbolOfTypeParameter(typeParameter *TypePara
 	return b.ch.getSymbolOfNode(host)
 }
 
-func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
+func (b *NodeBuilderImpl) arrayOrTupleTypeToNode(t *Type) *ast.TypeNode {
 	var typeArguments []*Type = b.ch.getTypeArguments(t)
 	if t.Target() == b.ch.globalArrayType || t.Target() == b.ch.globalReadonlyArrayType {
 		if b.ctx.flags&nodebuilder.FlagsWriteArrayAsGenericType != 0 {
@@ -3101,7 +3102,8 @@ func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 		} else {
 			return b.f.NewTypeOperatorNode(ast.KindReadonlyKeyword, arrayType)
 		}
-	} else if t.Target().objectFlags&ObjectFlagsTuple != 0 {
+	} else {
+		debug.Assert(t.Target().objectFlags&ObjectFlagsTuple != 0)
 		typeArguments = core.SameMapIndex(typeArguments, func(arg *Type, i int) *Type {
 			isOptional := false
 			if i < len(t.Target().AsTupleType().elementInfos) {
@@ -3154,7 +3156,12 @@ func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 		b.ctx.encounteredError = true
 		return nil
 		// TODO: GH#18217
-	} else if b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0 && t.symbol.ValueDeclaration != nil && ast.IsClassLike(t.symbol.ValueDeclaration) && !b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
+	}
+}
+
+func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
+	var typeArguments []*Type = b.ch.getTypeArguments(t)
+	if b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0 && t.symbol.ValueDeclaration != nil && ast.IsClassLike(t.symbol.ValueDeclaration) && !b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
 		return b.createAnonymousTypeNode(t)
 	} else {
 		outerTypeParameters := t.Target().AsInterfaceType().OuterTypeParameters()
@@ -3232,9 +3239,21 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	}
 
 	typeId := t.id
+	isArrayOrTuple := b.ch.isArrayOrTupleType(t)
+	if isArrayOrTuple {
+		// Deferred and regular references share a cycle identity.
+		typeId = b.ch.createTypeReference(t.Target(), b.ch.getTypeArguments(t)).id
+	}
+	if b.ctx.visitedTypes.Has(typeId) {
+		return b.createCyclicStructurePlaceholder()
+	}
+
 	isConstructorObject := t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsClass != 0
 	var id *CompositeSymbolIdentity
 	switch {
+	case isArrayOrTuple:
+		// Do not bound finite container nesting by the shared Array symbol or tuple origin.
+		id = nil
 	case t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil:
 		id = &CompositeSymbolIdentity{false, 0, ast.GetNodeId(t.AsTypeReference().node)}
 	case t.flags&TypeFlagsConditional != 0:
@@ -3247,7 +3266,14 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	// Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
 	// of types allows us to catch circular references to instantiations of the same anonymous type
 
-	key := CompositeTypeCacheIdentity{typeId, b.ctx.flags, b.ctx.internalFlags}
+	key := CompositeTypeCacheIdentity{
+		typeId:        typeId,
+		flags:         b.ctx.flags,
+		internalFlags: b.ctx.internalFlags,
+	}
+	if len(b.ctx.inferTypeParameters) != 0 {
+		key.inferTypeParameters = getTypeListKey(b.ctx.inferTypeParameters)
+	}
 	// Don't rely on type cache if we're expanding a type, because we need to compute `canIncreaseExpansionDepth`.
 	canUseCache := b.ctx.maxExpansionDepth < 0
 	if canUseCache && b.ctx.enclosingDeclaration != nil && b.links.Has(b.ctx.enclosingDeclaration) {
@@ -3518,7 +3544,9 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 			b.ctx.depth--
 			return result
 		}
-		if t.AsTypeReference().node != nil {
+		if b.ch.isArrayOrTupleType(t) {
+			return b.visitAndTransformType(t, (*NodeBuilderImpl).arrayOrTupleTypeToNode)
+		} else if t.AsTypeReference().node != nil {
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).typeReferenceToTypeNode)
 		} else {
 			return b.typeReferenceToTypeNode(t)

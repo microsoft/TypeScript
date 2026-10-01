@@ -21,6 +21,7 @@ import {
     type SourceFile,
     SyntaxKind,
 } from "@typescript/typescript/unstable/ast";
+import { cloneNode } from "@typescript/typescript/unstable/ast/factory";
 import type {
     APIRequest,
     APIResponse,
@@ -34,6 +35,7 @@ import {
     type ConditionalType,
     defer,
     type DeferredAPIRequestGenerator,
+    getSymbol,
     type IndexedAccessType,
     type IndexInfo,
     IndexKind,
@@ -160,6 +162,7 @@ const publicGeneratorExemptions = new Map<string, string>([
 ]);
 const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
+    "API.fetchDeclarationSymbol",
     "API.initializeWorker",
     "API.updateSnapshot",
     "Checker.getIntrinsicType",
@@ -437,6 +440,20 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("looks up binder symbols through standalone and API generators", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        const [symbol] = api.batch(getSymbol.gen(declaration));
+        assert.ok(symbol);
+        assert.equal(symbol.name, "present");
+        const [cached] = api.batch(api.getSymbol.gen(declaration));
+        assert.strictEqual(cached, symbol);
+        const clone = cloneNode(declaration);
+        assert.throws(() => api.batch(getSymbol.gen(clone)), /Source file not found/);
+        assert.throws(() => api.batch(api.getSymbol.gen(clone)), /Source file not found/);
+    });
+
     test("batches source file requests", context => {
         const api = spawnAPI(parityFiles);
         context.after(() => api.close());
@@ -1570,6 +1587,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
                 parityCase("API", "createSourceFileFromFile", api.createSourceFileFromFile, assertRetainedSourceFilesEquivalent, "/src/index.ts"),
                 parityCase("API", "retainSourceFile", api.retainSourceFile, assertRetainedSourceFilesEquivalent, indexFile),
+                parityCase("API", "getSymbol", api.getSymbol, assertOptionalSymbolsEquivalent, combineDeclaration),
                 parityCase("API", "transpileModule", api.transpileModule, assertDeepEquivalent, "export const value: number = 1;", { compilerOptions: { module: 99 } }),
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),

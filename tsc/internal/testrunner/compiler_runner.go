@@ -145,37 +145,6 @@ func (r *CompilerBaselineRunner) cleanUpLocal(t *testing.T) {
 	}
 }
 
-// Set of compiler options for which we allow variations to be specified in the test file,
-// for instance `// @strict: true, false`.
-var compilerVaryBy map[string]struct{} = getCompilerVaryByMap()
-
-func getCompilerVaryByMap() map[string]struct{} {
-	varyByOptions := append(
-		core.Map(core.Filter(tsoptions.OptionsDeclarations, func(option *tsoptions.CommandLineOption) bool {
-			return !option.IsCommandLineOnly &&
-				(option.Kind == tsoptions.CommandLineOptionTypeBoolean || option.Kind == tsoptions.CommandLineOptionTypeEnum) &&
-				(option.AffectsProgramStructure ||
-					option.AffectsEmit ||
-					option.AffectsModuleResolution ||
-					option.AffectsBindDiagnostics ||
-					option.AffectsSemanticDiagnostics ||
-					option.AffectsSourceFile ||
-					option.AffectsDeclarationPath ||
-					option.AffectsBuildInfo)
-		}), func(option *tsoptions.CommandLineOption) string {
-			return option.Name
-		}),
-		// explicit variations that do not match above conditions
-		"noEmit",
-		"isolatedModules",
-	)
-	varyByMap := make(map[string]struct{})
-	for _, option := range varyByOptions {
-		varyByMap[strings.ToLower(option)] = struct{}{}
-	}
-	return varyByMap
-}
-
 func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 	test := getCompilerFileBasedTest(t, filename)
 	basename := tspath.GetBaseFileName(filename)
