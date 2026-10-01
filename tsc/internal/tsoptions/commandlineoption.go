@@ -40,16 +40,6 @@ type CommandLineOption struct {
 	// checks that option with number type has value >= minValue
 	minValue int
 
-	// used for filter in compilerrunner
-	AffectsDeclarationPath     bool
-	AffectsProgramStructure    bool
-	AffectsSemanticDiagnostics bool
-	AffectsBuildInfo           bool
-	AffectsBindDiagnostics     bool
-	AffectsSourceFile          bool
-	AffectsModuleResolution    bool
-	AffectsEmit                bool
-
 	// used for CommandLineOptionTypeList
 	listPreserveFalsyValues bool
 	// used for compilerOptionsDeclaration

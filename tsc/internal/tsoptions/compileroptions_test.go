@@ -232,24 +232,6 @@ func TestCompilerOptionsEquality(t *testing.T) {
 	}
 }
 
-// Keep the reflection-based implementation as an independent check of the generated code.
-func forEachReflectedCompilerOptionValue(options *core.CompilerOptions, declFilter func(*CommandLineOption) bool, fn func(option *CommandLineOption, value reflect.Value, i int) bool) bool {
-	optionsValue := reflect.ValueOf(options).Elem()
-	optionsType := reflect.TypeFor[core.CompilerOptions]()
-	for i := range optionsValue.NumField() {
-		field := optionsType.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-		if optionDeclaration := CommandLineCompilerOptionsMap.Get(field.Name); optionDeclaration != nil && declFilter(optionDeclaration) {
-			if fn(optionDeclaration, optionsValue.Field(i), i) {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 func compilerOptionTestValues(t *testing.T, field reflect.StructField) []reflect.Value {
 	t.Helper()
 	values := []reflect.Value{reflect.Zero(field.Type)}
@@ -272,50 +254,6 @@ func compilerOptionTestValues(t *testing.T, field reflect.StructField) []reflect
 		values = append(values, value)
 	}
 	return values
-}
-
-func TestCompilerOptionsForBuildInfo(t *testing.T) {
-	t.Parallel()
-
-	type entry struct {
-		option *CommandLineOption
-		value  any
-	}
-	check := func(t *testing.T, options *core.CompilerOptions) {
-		t.Helper()
-		var want []entry
-		forEachReflectedCompilerOptionValue(options, func(option *CommandLineOption) bool { return option.AffectsBuildInfo }, func(option *CommandLineOption, value reflect.Value, _ int) bool {
-			if !value.IsZero() {
-				want = append(want, entry{option, value.Interface()})
-			}
-			return false
-		})
-		var got []entry
-		ForEachCompilerOptionAffectingBuildInfo(options, func(option *CommandLineOption, value any) {
-			got = append(got, entry{option, value})
-		})
-		if !reflect.DeepEqual(got, want) {
-			t.Fatalf("got %+v, want %+v", got, want)
-		}
-	}
-	check(t, &core.CompilerOptions{})
-	allOptions := &core.CompilerOptions{}
-	for field := range reflect.TypeFor[core.CompilerOptions]().Fields() {
-		if !field.IsExported() {
-			continue
-		}
-		values := compilerOptionTestValues(t, field)
-		reflect.ValueOf(allOptions).Elem().FieldByIndex(field.Index).Set(values[1])
-		t.Run(field.Name, func(t *testing.T) {
-			t.Parallel()
-			for _, value := range values {
-				options := &core.CompilerOptions{}
-				reflect.ValueOf(options).Elem().FieldByIndex(field.Index).Set(value)
-				check(t, options)
-			}
-		})
-	}
-	check(t, allOptions)
 }
 
 func TestCompilerOptionConfigDirSubstitution(t *testing.T) {

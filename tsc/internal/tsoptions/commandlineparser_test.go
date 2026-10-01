@@ -553,16 +553,3 @@ func TestParseBuildCommandLine(t *testing.T) {
 		testCase.createSubScenario("parseBuildOptions").assertBuildParseResultWithTsBaseline(t, nil)
 	}
 }
-
-func TestAffectsBuildInfo(t *testing.T) {
-	t.Parallel()
-	t.Run("should have affectsBuildInfo true for every option with affectsSemanticDiagnostics", func(t *testing.T) {
-		t.Parallel()
-		for _, option := range tsoptions.OptionsDeclarations {
-			if option.AffectsSemanticDiagnostics {
-				// semantic diagnostics affect the build info, so ensure they're included
-				assert.Assert(t, option.AffectsBuildInfo)
-			}
-		}
-	})
-}

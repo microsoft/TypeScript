@@ -26,6 +26,22 @@ test("option metadata is valid", () => {
     validateOptions(options);
 });
 
+test("semantic diagnostic options must be stored in build info", () => {
+    const model = structuredClone(options);
+    model.compilerOptions.find(option => option.name === "noImplicitAny")!.declaration!.affectsBuildInfo = false;
+    assert.throws(() => validateOptions(model), /Semantic diagnostics must affect build info: noImplicitAny/);
+});
+
+test("compiler test variations accept finite options without requiring affects metadata", () => {
+    const source = generateOptions().get("tsc/internal/testrunner/options_generated.go")!;
+    for (const name of ["strict", "module", "noCheck", "preserveSymlinks", "noEmit", "isolatedModules"]) {
+        assert(source.includes(`"${name.toLowerCase()}",`), name);
+    }
+    for (const name of ["lib", "maxNodeModuleJsDepth", "outDir", "watch", "configFilePath"]) {
+        assert(!source.includes(`"${name.toLowerCase()}",`), name);
+    }
+});
+
 test("help short aliases preserve parsing metadata without duplicating help text", () => {
     const help = compilerDeclarations().filter(option => option.name === "help");
     assert.deepEqual(help.map(option => option.shortName), ["h", "?"]);

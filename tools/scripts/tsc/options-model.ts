@@ -32,7 +32,6 @@ export type CompilerOptionType =
     | "ScriptTarget";
 
 export interface DeclarationMetadata {
-    comment?: string;
     shortName?: string;
     isFilePath?: boolean;
     isTSConfigOnly?: boolean;
@@ -49,12 +48,8 @@ export interface DeclarationMetadata {
     /** Defaults to isFilePath for compiler options; false explicitly disables substitution. */
     allowConfigDirTemplateSubstitution?: boolean;
     affectsDeclarationPath?: boolean;
-    affectsProgramStructure?: boolean;
     affectsSemanticDiagnostics?: boolean;
     affectsBuildInfo?: boolean;
-    affectsBindDiagnostics?: boolean;
-    affectsSourceFile?: boolean;
-    affectsModuleResolution?: boolean;
     affectsEmit?: boolean;
     allowJsFlag?: boolean;
     strictFlag?: boolean;

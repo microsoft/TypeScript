@@ -38,7 +38,7 @@ export function compilerDeclarations(model = options): (Declaration & { group: D
         if (!option.declaration) return [];
         const { extraShortNames = [], ...metadata } = option.declaration;
         const declaration = { name: option.name, kind: optionKind(option), ...metadata };
-        const { comment, description, showInSimplifiedHelpView, ...alias } = declaration;
+        const { description, showInSimplifiedHelpView, ...alias } = declaration;
         return [declaration, ...extraShortNames.map(shortName => ({ ...alias, shortName }))];
     });
 }
@@ -80,6 +80,9 @@ export function validateOptions(model: OptionsModel): void {
         }
         assert(!fields.has(fieldName(option)), `Duplicate compiler field: ${fieldName(option)}`);
         fields.add(fieldName(option));
+        if (option.declaration?.affectsSemanticDiagnostics) {
+            assert(option.declaration.affectsBuildInfo, `Semantic diagnostics must affect build info: ${option.name}`);
+        }
         if (option.transpile) {
             const { value, declarationValue, unless } = option.transpile;
             assert(value === "clear" || option.type === "Tristate", `Non-boolean transpile value: ${option.name}`);
@@ -402,8 +405,8 @@ ${
 `;
 }
 
-export function generateBuildInfoOptions(model = options): string {
-    const storedOptions = model.compilerOptions.filter(option => option.declaration?.affectsBuildInfo);
+function generateBuildInfoOptions(): string {
+    const storedOptions = options.compilerOptions.filter(option => option.declaration?.affectsBuildInfo);
     return `// ForEachCompilerOptionAffectingBuildInfo visits nonzero options in CompilerOptions field order.
 func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn func(option *CommandLineOption, value any)) {
 ${
@@ -497,14 +500,24 @@ const privateMetadata = new Set([
 ]);
 
 function declarationLiteral(declaration: Declaration): string {
-    const { name, kind, comment, allowJsFlag, strictFlag, ...metadata } = declaration;
+    const {
+        name,
+        kind,
+        allowJsFlag,
+        strictFlag,
+        affectsDeclarationPath,
+        affectsSemanticDiagnostics,
+        affectsBuildInfo,
+        affectsEmit,
+        ...metadata
+    } = declaration;
     const properties = [`Name: ${JSON.stringify(name)},`, `Kind: CommandLineOptionType${kind},`];
     for (const [key, value] of Object.entries(metadata)) {
         if (key === "group" || key === "jsconfigDefault" || key === "field" || key === "variable" || key === "elementOptions" || key === "documentationAnchor" || key === "schemaDescription" || key === "allowConfigDirTemplateSubstitution") continue;
         const goName = privateMetadata.has(key) ? key : key[0].toUpperCase() + key.slice(1);
         properties.push(`${goName}: ${goValue(value)},`);
     }
-    return `${comment ? "// " + comment.replaceAll("\n", "\n// ") + "\n" : ""}{\n${properties.join("\n")}\n}`;
+    return `{\n${properties.join("\n")}\n}`;
 }
 
 function declarations(): string {
@@ -718,6 +731,23 @@ ${generateBuildInfoOptions()}
 ${mergeCompilerOptions()}
 ${configDirSubstitution()}
 ${showConfig()}
+`,
+        ],
+        [
+            "tsc/internal/testrunner/options_generated.go",
+            `${header}
+package testrunner
+
+import "github.com/microsoft/TypeScript/tsc/internal/collections"
+
+var compilerVaryBy = collections.NewSetFromItems(
+${
+                options.compilerOptions.filter(option =>
+                    option.declaration && !option.declaration.isCommandLineOnly &&
+                    (optionKind(option) === "Boolean" || optionKind(option) === "Enum")
+                ).map(option => option.name.toLowerCase()).sort().map(name => `${JSON.stringify(name)},`).join("\n")
+            }
+)
 `,
         ],
         ...(["tsconfig", "jsconfig"] as const).map(name => [`packages/typescript/schemas/${name}.schema.json`, JSON.stringify(generateConfigSchema(name), null, 4) + "\n"] as [string, string]),

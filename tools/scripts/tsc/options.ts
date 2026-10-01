@@ -77,7 +77,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsProgramStructure: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Enable importing files with any extension, provided a declaration file is present."),
                 defaultValueDescription: false,
@@ -118,7 +117,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsBindDiagnostics: true,
                 affectsSemanticDiagnostics: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Type Checking"),
@@ -131,7 +129,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsBindDiagnostics: true,
                 affectsSemanticDiagnostics: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Type Checking"),
@@ -157,7 +154,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 affectsSemanticDiagnostics: true,
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
@@ -171,7 +167,6 @@ export const options: OptionsModel = {
             type: "[]string",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Conditions to set in addition to the resolver-specific defaults when resolving imports."),
             },
@@ -195,7 +190,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "commonOptionsWithBuild",
-                comment: "Full emit is calculated separately, so this does not set affectsEmit.",
+                // Full emit is calculated separately, so this does not set affectsEmit.
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Emit"),
@@ -234,7 +229,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "commonOptionsWithBuild",
-                comment: "Full emit is calculated separately, so this does not set affectsEmit.",
+                // Full emit is calculated separately, so this does not set affectsEmit.
                 shortName: "d",
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
@@ -263,7 +258,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "commonOptionsWithBuild",
-                comment: "Full emit is calculated separately, so this does not set affectsEmit.",
+                // Full emit is calculated separately, so this does not set affectsEmit.
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Emit"),
@@ -280,7 +275,6 @@ export const options: OptionsModel = {
                 description: diagnostic("Deduplicate packages with the same name and version."),
                 documentationAnchor: false,
                 defaultValueDescription: true,
-                affectsProgramStructure: true,
             },
         },
         {
@@ -288,7 +282,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsProgramStructure: true,
                 category: diagnostic("Editor Support"),
                 description: diagnostic("Remove the 20mb cap on total source code size for JavaScript files in the TypeScript language server."),
                 defaultValueDescription: false,
@@ -369,7 +362,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 category: diagnostic("Interop Constraints"),
                 description: diagnostic("Ensure that casing is correct in imports."),
                 defaultValueDescription: true,
@@ -426,7 +418,6 @@ export const options: OptionsModel = {
                 group: "optionsForCompiler",
                 affectsEmit: true,
                 affectsBuildInfo: true,
-                affectsSourceFile: true,
                 category: diagnostic("Emit"),
                 description: diagnostic("Allow importing helper functions from tslib once per project, instead of including them per-file."),
                 defaultValueDescription: false,
@@ -437,7 +428,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "commonOptionsWithBuild",
-                comment: "Full emit is calculated separately, so this does not set affectsEmit.",
+                // Full emit is calculated separately, so this does not set affectsEmit.
                 affectsBuildInfo: true,
                 category: diagnostic("Emit"),
                 description: diagnostic("Include sourcemap files inside the emitted JavaScript."),
@@ -484,11 +475,9 @@ export const options: OptionsModel = {
             type: "JsxEmit",
             declaration: {
                 group: "optionsForCompiler",
-                comment: "JSX without this option is a semantic error; changing it must refresh semantic diagnostics.",
-                affectsSourceFile: true,
+                // JSX without this option is a semantic error; changing it must refresh semantic diagnostics.
                 affectsEmit: true,
                 affectsBuildInfo: true,
-                affectsModuleResolution: true,
                 affectsSemanticDiagnostics: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Language and Environment"),
@@ -524,8 +513,6 @@ export const options: OptionsModel = {
                 affectsSemanticDiagnostics: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
-                affectsModuleResolution: true,
-                affectsSourceFile: true,
                 category: diagnostic("Language and Environment"),
                 description: diagnostic("Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'."),
                 defaultValueDescription: "react",
@@ -538,7 +525,6 @@ export const options: OptionsModel = {
             parser: "lib",
             declaration: {
                 group: "optionsForCompiler",
-                affectsProgramStructure: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Language and Environment"),
                 description: diagnostic("Specify a set of bundled library declaration files that describe the target runtime environment."),
@@ -549,7 +535,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsProgramStructure: true,
                 category: diagnostic("Language and Environment"),
                 description: diagnostic("Enable lib replacement."),
                 defaultValueDescription: false,
@@ -584,7 +569,6 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 shortName: "m",
-                affectsModuleResolution: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
@@ -598,7 +582,6 @@ export const options: OptionsModel = {
             type: "ModuleResolutionKind",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Specify how TypeScript looks up a file from a given module specifier."),
                 defaultValueDescription: diagnostic("`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."),
@@ -610,7 +593,6 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 listPreserveFalsyValues: true,
-                affectsModuleResolution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("List of file name suffixes to search when resolving a module."),
             },
@@ -623,8 +605,6 @@ export const options: OptionsModel = {
             ],
             declaration: {
                 group: "optionsForCompiler",
-                affectsSourceFile: true,
-                affectsModuleResolution: true,
                 description: diagnostic("Control what method is used to detect module-format JS files."),
                 category: diagnostic("Language and Environment"),
                 defaultValueDescription: diagnostic('"auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.'),
@@ -661,7 +641,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "commonOptionsWithBuild",
-                comment: "The builder handles this specially so changing noCheck does not discard all diagnostics.",
+                // The builder handles this specially so changing noCheck does not discard all diagnostics.
                 showInSimplifiedHelpView: false,
                 category: diagnostic("Compiler Diagnostics"),
                 description: diagnostic("Disable full type checking (only critical parse and emit errors will be reported)."),
@@ -685,7 +665,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsBindDiagnostics: true,
                 affectsSemanticDiagnostics: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Type Checking"),
@@ -749,9 +728,8 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                comment: "Transpilation does not supply library source files, so noLib avoids reporting missing files.",
+                // Transpilation does not supply library source files, so noLib avoids reporting missing files.
                 category: diagnostic("Language and Environment"),
-                affectsProgramStructure: true,
                 description: diagnostic("Disable including any library files, including the default lib.d.ts."),
                 defaultValueDescription: false,
             },
@@ -824,8 +802,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                comment: "Transpilation does not resolve the full program, so noResolve avoids reporting missing files.",
-                affectsModuleResolution: true,
+                // Transpilation does not resolve the full program, so noResolve avoids reporting missing files.
                 category: diagnostic("Modules"),
                 description: diagnostic("Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project."),
                 defaultValueDescription: false,
@@ -875,7 +852,6 @@ export const options: OptionsModel = {
             type: "*collections.OrderedMap[string, []string]",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 allowConfigDirTemplateSubstitution: true,
                 isTSConfigOnly: true,
                 category: diagnostic("Modules"),
@@ -934,7 +910,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Enable importing .json files."),
                 defaultValueDescription: false,
@@ -945,7 +920,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Use the package.json 'exports' field when resolving package imports."),
                 defaultValueDescription: diagnostic("`true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`."),
@@ -956,7 +930,6 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Use the package.json 'imports' field when resolving imports."),
                 defaultValueDescription: diagnostic("`true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`."),
@@ -1020,7 +993,6 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 isTSConfigOnly: true,
-                affectsModuleResolution: true,
                 allowConfigDirTemplateSubstitution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Allow multiple folders to be treated as one when resolving modules."),
@@ -1033,7 +1005,7 @@ export const options: OptionsModel = {
             jsconfigDefault: true,
             declaration: {
                 group: "optionsForCompiler",
-                comment: "Store this in build info to determine whether library files need to be rechecked.",
+                // Store this in build info to determine whether library files need to be rechecked.
                 affectsBuildInfo: true,
                 category: diagnostic("Completeness"),
                 description: diagnostic("Skip type checking all .d.ts files."),
@@ -1058,7 +1030,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                comment: "Individual strict flags determine semantic diagnostics. Store strict in build info so their effective values can be recovered.",
+                // Individual strict flags determine semantic diagnostics. Store strict in build info so their effective values can be recovered.
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Type Checking"),
@@ -1148,7 +1120,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
-                comment: "Store this in build info to determine whether library files need to be rechecked.",
+                // Store this in build info to determine whether library files need to be rechecked.
                 affectsBuildInfo: true,
                 category: diagnostic("Completeness"),
                 description: diagnostic("Skip type checking .d.ts files that are included with TypeScript."),
@@ -1160,7 +1132,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "commonOptionsWithBuild",
-                comment: "Full emit is calculated separately, so this does not set affectsEmit.",
+                // Full emit is calculated separately, so this does not set affectsEmit.
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Emit"),
@@ -1190,8 +1162,6 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 shortName: "t",
-                affectsSourceFile: true,
-                affectsModuleResolution: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
@@ -1229,7 +1199,6 @@ export const options: OptionsModel = {
             type: "[]string",
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 allowConfigDirTemplateSubstitution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Specify multiple folders that act like './node_modules/@types'."),
@@ -1241,7 +1210,6 @@ export const options: OptionsModel = {
             type: "[]string",
             declaration: {
                 group: "optionsForCompiler",
-                affectsProgramStructure: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Specify type package names to be included without being referenced in a source file."),
@@ -1292,7 +1260,6 @@ export const options: OptionsModel = {
             jsconfigDefault: 2,
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 category: diagnostic("JavaScript Support"),
                 description: diagnostic("Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'."),
                 defaultValueDescription: 0,
@@ -1317,7 +1284,6 @@ export const options: OptionsModel = {
             deprecated: true,
             declaration: {
                 group: "optionsForCompiler",
-                affectsSourceFile: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Type Checking"),
@@ -1331,7 +1297,6 @@ export const options: OptionsModel = {
             deprecated: true,
             declaration: {
                 group: "optionsForCompiler",
-                affectsModuleResolution: true,
                 isFilePath: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Specify the base directory to resolve non-relative module names."),

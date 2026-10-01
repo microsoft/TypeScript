@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
@@ -21,11 +22,7 @@ import (
 
 var transpileBaselineRegex = regexp.MustCompile(`\.[cm]?[tj]sx?$`)
 
-var transpileVaryBy = map[string]struct{}{
-	"declarationmap":  {},
-	"sourcemap":       {},
-	"inlinesourcemap": {},
-}
+var transpileVaryBy = collections.NewSetFromItems("declarationmap", "sourcemap", "inlinesourcemap")
 
 type TranspileBaselineRunner struct {
 	testFiles []string
