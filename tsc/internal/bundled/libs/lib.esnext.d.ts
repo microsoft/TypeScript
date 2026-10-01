@@ -22,3 +22,4 @@ and limitations under the License.
 /// <reference lib="esnext.temporal" />
 /// <reference lib="esnext.date" />
 /// <reference lib="esnext.iterator" />
+/// <reference lib="esnext.promise" />
