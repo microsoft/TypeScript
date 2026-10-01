@@ -66,10 +66,11 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 }
 
 const (
-	MethodRelease             Method = "release"
-	MethodReleaseSourceFile   Method = "releaseSourceFile"
-	MethodRetainSourceFile    Method = "retainSourceFile"
-	MethodGetCachedSourceFile Method = "getCachedSourceFile"
+	MethodRelease                Method = "release"
+	MethodReleaseSourceFile      Method = "releaseSourceFile"
+	MethodRetainSourceFile       Method = "retainSourceFile"
+	MethodGetCachedSourceFile    Method = "getCachedSourceFile"
+	MethodGetSymbolOfDeclaration Method = "getSymbolOfDeclaration"
 
 	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
@@ -579,6 +580,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
 	MethodRetainSourceFile:                               unmarshallerFor[RetainSourceFileParams],
 	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
+	MethodGetSymbolOfDeclaration:                         unmarshallerFor[GetSymbolOfDeclarationParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
@@ -924,6 +926,11 @@ type RetainSourceFileResponse struct {
 // independent of any snapshot or lease.
 type GetCachedSourceFileParams struct {
 	File SourceFileDescriptor `json:"file"`
+}
+
+type GetSymbolOfDeclarationParams struct {
+	File  SourceFileDescriptor `json:"file"`
+	Index uint32               `json:"index"`
 }
 
 type ProfileParams struct {

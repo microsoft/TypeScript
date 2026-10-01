@@ -47,7 +47,11 @@ export interface CachedSourceFile<TSymbol> {
     /** Set of snapshot/project or direct-lease ref keys that reference this entry */
     refs: Set<string>;
     /** Binder symbols owned by this exact source-file incarnation. */
-    readonly symbols: Map<number, TSymbol>;
+    readonly symbolsById: Map<number, TSymbol>;
+    /** Successfully resolved declaration symbols. */
+    readonly symbolsByDeclarationNodeIndex: Map<number, TSymbol>;
+    /** In-flight async declaration symbol lookups. */
+    readonly declarationSymbolRequests: Map<number, Promise<TSymbol>>;
 }
 
 /**
@@ -103,7 +107,13 @@ export class SourceFileCache<TSymbol> {
         }
         let record = this.findDescriptor(file, entries);
         if (!record) {
-            record = this.addRecord(entries, { descriptor: file, refs: new Set(), symbols: new Map() });
+            record = this.addRecord(entries, {
+                descriptor: file,
+                refs: new Set(),
+                symbolsById: new Map(),
+                symbolsByDeclarationNodeIndex: new Map(),
+                declarationSymbolRequests: new Map(),
+            });
         }
         this.retainRecordForSnapshot(record, snapshotId, projectId);
         return record;
@@ -127,17 +137,19 @@ export class SourceFileCache<TSymbol> {
         if (!descriptorsEqual(descriptorFromFile(file), record.descriptor)) {
             throw new Error(`Source file does not match cached record '${record.descriptor.fileName}'`);
         }
-        return record.file ??= file;
+        const result = record.file ??= file;
+        result.symbolCache = record;
+        return result;
     }
 
     getOrCreateSymbol(record: CachedSourceFile<TSymbol>, file: SourceFileDescriptor, id: number, create: () => TSymbol): TSymbol {
         if (!descriptorsEqual(file, record.descriptor)) {
             throw new Error(`Symbol ${id} does not belong to '${record.descriptor.fileName}'`);
         }
-        let symbol = record.symbols.get(id);
+        let symbol = record.symbolsById.get(id);
         if (!symbol) {
             symbol = create();
-            record.symbols.set(id, symbol);
+            record.symbolsById.set(id, symbol);
         }
         return symbol;
     }
@@ -171,14 +183,19 @@ export class SourceFileCache<TSymbol> {
             entries = [];
             this.cache.set(file.path, entries);
         }
-        const existing = this.find(file, entries);
-        if (existing) {
-            existing.refs.add(ref);
-            existing.file ??= file;
-            return existing.file;
+        let record = this.find(file, entries);
+        if (!record) {
+            record = (file.symbolCache as CachedSourceFile<TSymbol> | undefined) ?? {
+                descriptor: descriptorFromFile(file),
+                refs: new Set(),
+                symbolsById: new Map(),
+                symbolsByDeclarationNodeIndex: new Map(),
+                declarationSymbolRequests: new Map(),
+            };
+            this.addRecord(entries, record);
         }
-        this.addRecord(entries, { file, descriptor: descriptorFromFile(file), refs: new Set([ref]), symbols: new Map() });
-        return file;
+        record.refs.add(ref);
+        return this.attachFile(record, file);
     }
 
     private addRecord(entries: CachedSourceFile<TSymbol>[], record: CachedSourceFile<TSymbol>): CachedSourceFile<TSymbol> {
@@ -298,9 +315,14 @@ export class SourceFileCache<TSymbol> {
     }
 
     /**
-     * Clear all entries from the cache.
+     * Drop local cache ownership without releasing server-side snapshots or leases.
+     * Caller-held ASTs may keep detached records alive; newly cached records need not
+     * preserve object identity with those detached records.
      */
     clear(): void {
+        for (const record of this.recordsByNodeId.values()) {
+            record.refs.clear();
+        }
         this.cache.clear();
         this.snapshotProjectPaths.clear();
         this.leasePaths.clear();

@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
@@ -163,6 +164,44 @@ func TestCreateSourceFile(t *testing.T) {
 		}
 		_, err := session.handleRetainSourceFile(&RetainSourceFileParams{File: descriptor})
 		assert.ErrorContains(t, err, "source file is not available")
+	})
+
+	t.Run("declaration symbol lookup", func(t *testing.T) {
+		t.Parallel()
+
+		created, err := session.createSourceFile(
+			"/src/symbols.ts",
+			"function present() {}\nimport {} from './missing';",
+			CreateSourceFileOptions{},
+		)
+		assert.NilError(t, err)
+		defer created.Release()
+
+		sourceFile := created.SourceFile()
+		table := encoder.GetNodeIndexTable(sourceFile)
+		descriptor := newSourceFileDescriptor(sourceFile)
+
+		present, err := session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
+			File:  descriptor,
+			Index: table.GetIndex(sourceFile.Statements.Nodes[0]),
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, present != nil)
+		assert.Equal(t, present.Name, "present")
+		assert.Equal(t, present.Reference.Kind, SymbolOwnerKindFile)
+
+		absent, err := session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
+			File:  descriptor,
+			Index: table.GetIndex(sourceFile.Statements.Nodes[1]),
+		})
+		assert.ErrorContains(t, err, "has no binder symbol")
+		assert.Assert(t, absent == nil)
+
+		_, err = session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
+			File:  descriptor,
+			Index: 0,
+		})
+		assert.ErrorContains(t, err, "out of range")
 	})
 
 	t.Run("rejects stale node ID", func(t *testing.T) {
