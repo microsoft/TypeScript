@@ -1566,7 +1566,6 @@ export interface BuildOptions {
     verbose?: boolean | undefined;
     builders?: number | undefined;
     stopBuildOnErrors?: boolean | undefined;
-    /** Internal fields */
     clean?: boolean | undefined;
 }
 
