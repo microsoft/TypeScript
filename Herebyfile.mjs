@@ -2341,6 +2341,7 @@ export const buildNativePreviewPlatformMatrix = task({
             }),
         );
         console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
+        console.log(`##vso[task.setvariable variable=packageBaseName;isOutput=true]${path.basename(mainNativePreviewPackage.npmDir)}`);
     },
 });
 
