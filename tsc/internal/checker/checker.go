@@ -15495,6 +15495,11 @@ func (c *Checker) resolveExternalModule(
 		}
 
 		if errorNode != nil {
+			rewrites := c.program.ContentMapperExtensionRewrites()
+			ignoreCase := !c.program.UseCaseSensitiveFileNames()
+			_, mappedSpecifier := core.RewriteExtension(moduleReference, rewrites, ignoreCase)
+			checkDeclarationRewrite := c.compilerOptions.GetEmitDeclarations() && mappedSpecifier &&
+				tspath.PathIsRelative(moduleReference) && !importingSourceFile.IsDeclarationFile
 			if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleReference) {
 				if ast.FindAncestor(location, ast.IsEmittableImport) != nil {
 					tsExtension := tspath.TryExtractTSExtension(moduleReference)
@@ -15531,12 +15536,10 @@ func (c *Checker) resolveExternalModule(
 					)
 				}
 			} else if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
-				location.Flags&ast.NodeFlagsAmbient == 0 &&
+				(location.Flags&ast.NodeFlagsAmbient == 0 || checkDeclarationRewrite) &&
 				!tspath.IsDeclarationFileName(moduleReference) &&
-				!ast.IsLiteralImportTypeNode(location) &&
-				!ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) {
-				rewrites := c.program.ContentMapperExtensionRewrites()
-				ignoreCase := !c.program.UseCaseSensitiveFileNames()
+				(!ast.IsLiteralImportTypeNode(location) && !ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) ||
+					checkDeclarationRewrite) {
 				shouldRewrite := core.ShouldRewriteModuleSpecifierWithExtensions(moduleReference, c.compilerOptions, rewrites, ignoreCase)
 				mappedSource := false
 				if sourceFile.ContentMapper() != "" {

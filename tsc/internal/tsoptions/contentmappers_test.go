@@ -93,6 +93,33 @@ func TestContentMapperExtensionRewritesPreserveLongestExtension(t *testing.T) {
 	})
 }
 
+func TestContentMapperExtensionRewritesAreCached(t *testing.T) { //nolint:paralleltest,tparallel // AllocsPerRun cannot run in parallel tests.
+	mapper := &contentmapper.Mapper{
+		Extensions:       []string{".astro", ".y.z"},
+		OutputExtensions: map[string]string{".astro": ".js", ".y.z": ".mjs"},
+	}
+	commandLine := NewParsedCommandLine(
+		&core.CompilerOptions{}, nil, nil,
+		tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true},
+	)
+	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
+	rewrites := commandLine.ContentMapperExtensionRewrites()
+	for range 10 {
+		assert.Assert(t, &commandLine.ContentMapperExtensionRewrites()[0] == &rewrites[0])
+	}
+	assert.Equal(t, testing.AllocsPerRun(100, func() {
+		commandLine.ContentMapperExtensionRewrites()
+	}), float64(0))
+	withFileNames := commandLine.WithFileNames([]string{"/src/Card.astro"})
+	for range 10 {
+		t.Run("concurrent", func(t *testing.T) {
+			t.Parallel()
+			assert.Assert(t, &commandLine.ContentMapperExtensionRewrites()[0] == &rewrites[0])
+			assert.DeepEqual(t, withFileNames.ContentMapperExtensionRewrites(), rewrites)
+		})
+	}
+}
+
 func TestResolveContentMapperManifestRejectsMalformedOutputExtensions(t *testing.T) {
 	t.Parallel()
 	for _, value := range []string{`"invalid"`, `null`, `[]`, `{".vue": 1}`, `{".vue": null}`} {

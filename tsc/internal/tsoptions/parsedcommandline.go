@@ -70,6 +70,9 @@ type ParsedCommandLine struct {
 	fileNamesByPath     map[tspath.Path]string // maps file names to their paths, used for quick lookups
 	fileNamesByPathOnce sync.Once
 
+	contentMapperExtensionRewrites     []core.ExtensionRewrite
+	contentMapperExtensionRewritesOnce sync.Once
+
 	locale     locale.Locale
 	localeOnce sync.Once
 }
@@ -362,6 +365,13 @@ func (p *ParsedCommandLine) ContentMapperExtensions() []string {
 }
 
 func (p *ParsedCommandLine) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+	p.contentMapperExtensionRewritesOnce.Do(func() {
+		p.contentMapperExtensionRewrites = p.computeContentMapperExtensionRewrites()
+	})
+	return p.contentMapperExtensionRewrites
+}
+
+func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []core.ExtensionRewrite {
 	var result []core.ExtensionRewrite
 	hasNonIdentityMapping := false
 	ignoreCase := !p.UseCaseSensitiveFileNames()
