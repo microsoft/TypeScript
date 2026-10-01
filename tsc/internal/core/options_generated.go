@@ -120,43 +120,43 @@ type CompilerOptions struct {
 	VerbatimModuleSyntax            Tristate       `json:"verbatimModuleSyntax,omitzero"`
 	MaxNodeModuleJsDepth            *int           `json:"maxNodeModuleJsDepth,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	AllowSyntheticDefaultImports Tristate `json:"allowSyntheticDefaultImports,omitzero" deprecated:"true"`
+	AllowSyntheticDefaultImports Tristate `json:"allowSyntheticDefaultImports,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	AlwaysStrict Tristate `json:"alwaysStrict,omitzero" deprecated:"true"`
+	AlwaysStrict Tristate `json:"alwaysStrict,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	BaseUrl string `json:"baseUrl,omitzero" deprecated:"true"`
+	BaseUrl string `json:"baseUrl,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	DownlevelIteration Tristate `json:"downlevelIteration,omitzero" deprecated:"true"`
+	DownlevelIteration Tristate `json:"downlevelIteration,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	ESModuleInterop Tristate `json:"esModuleInterop,omitzero" deprecated:"true"`
+	ESModuleInterop Tristate `json:"esModuleInterop,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	OutFile string `json:"outFile,omitzero" deprecated:"true"`
+	OutFile string `json:"outFile,omitzero"`
 	// Internal fields
 	ConfigFilePath      string   `json:"configFilePath,omitzero"`
-	NoDtsResolution     Tristate `json:"noDtsResolution,omitzero" internal:"true"`
-	PathsBasePath       string   `json:"pathsBasePath,omitzero" internal:"true"`
-	Diagnostics         Tristate `json:"diagnostics,omitzero" internal:"true"`
-	ExtendedDiagnostics Tristate `json:"extendedDiagnostics,omitzero" internal:"true"`
-	GenerateCpuProfile  string   `json:"generateCpuProfile,omitzero" internal:"true"`
-	GenerateTrace       string   `json:"generateTrace,omitzero" internal:"true"`
-	ListEmittedFiles    Tristate `json:"listEmittedFiles,omitzero" internal:"true"`
-	ListFiles           Tristate `json:"listFiles,omitzero" internal:"true"`
-	ExplainFiles        Tristate `json:"explainFiles,omitzero" internal:"true"`
-	ListFilesOnly       Tristate `json:"listFilesOnly,omitzero" internal:"true"`
-	NoEmitForJsFiles    Tristate `json:"noEmitForJsFiles,omitzero" internal:"true"`
-	PreserveWatchOutput Tristate `json:"preserveWatchOutput,omitzero" internal:"true"`
-	Pretty              Tristate `json:"pretty,omitzero" internal:"true"`
-	Version             Tristate `json:"version,omitzero" internal:"true"`
-	Watch               Tristate `json:"watch,omitzero" internal:"true"`
-	ShowConfig          Tristate `json:"showConfig,omitzero" internal:"true"`
-	Build               Tristate `json:"build,omitzero" internal:"true"`
-	Help                Tristate `json:"help,omitzero" internal:"true"`
-	All                 Tristate `json:"all,omitzero" internal:"true"`
-	RunExternalCode     Tristate `json:"runExternalCode,omitzero" internal:"true"`
-	PprofDir            string   `json:"pprofDir,omitzero" internal:"true"`
-	SingleThreaded      Tristate `json:"singleThreaded,omitzero" internal:"true"`
-	Quiet               Tristate `json:"quiet,omitzero" internal:"true"`
-	Checkers            *int     `json:"checkers,omitzero" internal:"true"`
+	NoDtsResolution     Tristate `json:"noDtsResolution,omitzero"`
+	PathsBasePath       string   `json:"pathsBasePath,omitzero"`
+	Diagnostics         Tristate `json:"diagnostics,omitzero"`
+	ExtendedDiagnostics Tristate `json:"extendedDiagnostics,omitzero"`
+	GenerateCpuProfile  string   `json:"generateCpuProfile,omitzero"`
+	GenerateTrace       string   `json:"generateTrace,omitzero"`
+	ListEmittedFiles    Tristate `json:"listEmittedFiles,omitzero"`
+	ListFiles           Tristate `json:"listFiles,omitzero"`
+	ExplainFiles        Tristate `json:"explainFiles,omitzero"`
+	ListFilesOnly       Tristate `json:"listFilesOnly,omitzero"`
+	NoEmitForJsFiles    Tristate `json:"noEmitForJsFiles,omitzero"`
+	PreserveWatchOutput Tristate `json:"preserveWatchOutput,omitzero"`
+	Pretty              Tristate `json:"pretty,omitzero"`
+	Version             Tristate `json:"version,omitzero"`
+	Watch               Tristate `json:"watch,omitzero"`
+	ShowConfig          Tristate `json:"showConfig,omitzero"`
+	Build               Tristate `json:"build,omitzero"`
+	Help                Tristate `json:"help,omitzero"`
+	All                 Tristate `json:"all,omitzero"`
+	RunExternalCode     Tristate `json:"runExternalCode,omitzero"`
+	PprofDir            string   `json:"pprofDir,omitzero"`
+	SingleThreaded      Tristate `json:"singleThreaded,omitzero"`
+	Quiet               Tristate `json:"quiet,omitzero"`
+	Checkers            *int     `json:"checkers,omitzero"`
 }
 
 // Clone creates a shallow copy of the CompilerOptions.

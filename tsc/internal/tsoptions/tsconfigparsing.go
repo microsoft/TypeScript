@@ -142,14 +142,12 @@ func parseOwnConfigOfJsonSourceFile(
 		}
 		if parentOption != nil && parentOption.Name != "undefined" && value != nil {
 			if option != nil && option.Name != "" {
-				var parseDiagnostics []*ast.Diagnostic
 				switch parentOption.Name {
 				case "compilerOptions":
-					parseDiagnostics = ParseCompilerOptions(option.Name, value, compilerOptions)
+					ParseCompilerOptions(option.Name, value, compilerOptions)
 				case "typeAcquisition":
-					parseDiagnostics = ParseTypeAcquisition(option.Name, value, typeAcquisition)
+					ParseTypeAcquisition(option.Name, value, typeAcquisition)
 				}
-				propertySetErrors = append(propertySetErrors, parseDiagnostics...)
 			} else if keyText != "" && extraKeyDiagnostics(parentOption.Name) != nil {
 				unknownNameDiag := extraKeyDiagnostics(parentOption.Name)
 				if parentOption.ElementOptions != nil {
@@ -559,7 +557,7 @@ func commandLineOptionsToMap(compilerOptions []*CommandLineOption) CommandLineOp
 var CommandLineCompilerOptionsMap CommandLineOptionNameMap = commandLineOptionsToMap(OptionsDeclarations)
 
 func convertMapToOptions[O optionParser](compilerOptions *collections.OrderedMap[string, any], result O) O {
-	// this assumes any `key`, `value` pair in `options` will have `value` already be the correct type. this function should no error handling
+	// Values have already been validated and converted.
 	for key, value := range compilerOptions.Entries() {
 		result.ParseOption(key, value)
 	}
@@ -590,8 +588,7 @@ func convertOptionsFromJson[O optionParser](optionsNameMap CommandLineOptionName
 
 		convertJson, err := convertJsonOption(opt, value, basePath, nil, nil, nil)
 		errors = append(errors, err...)
-		compilerOptionsErr := result.ParseOption(key, convertJson)
-		errors = append(errors, compilerOptionsErr...)
+		result.ParseOption(key, convertJson)
 	}
 	return result, errors
 }

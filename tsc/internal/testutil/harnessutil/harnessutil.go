@@ -297,10 +297,7 @@ func SetOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compil
 		commandLineOption := getCommandLineOption(name)
 		if commandLineOption != nil {
 			parsedValue := getOptionValue(t, commandLineOption, value, currentDirectory)
-			errors := tsoptions.ParseCompilerOptions(commandLineOption.Name, parsedValue, compilerOptions)
-			if len(errors) > 0 {
-				t.Fatalf("Error parsing value '%s' for compiler option '%s'.", value, commandLineOption.Name)
-			}
+			tsoptions.ParseCompilerOptions(commandLineOption.Name, parsedValue, compilerOptions)
 			continue
 		}
 		harnessOption := getHarnessOption(name)

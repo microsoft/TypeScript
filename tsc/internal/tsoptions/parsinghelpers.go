@@ -193,7 +193,7 @@ func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {
 }
 
 type optionParser interface {
-	ParseOption(key string, value any) []*ast.Diagnostic
+	ParseOption(key string, value any)
 	UnknownOptionDiagnostic() *diagnostics.Message
 	UnknownDidYouMeanDiagnostic() *diagnostics.Message
 }
@@ -202,8 +202,8 @@ type compilerOptionsParser struct {
 	*core.CompilerOptions
 }
 
-func (o *compilerOptionsParser) ParseOption(key string, value any) []*ast.Diagnostic {
-	return ParseCompilerOptions(key, value, o.CompilerOptions)
+func (o *compilerOptionsParser) ParseOption(key string, value any) {
+	ParseCompilerOptions(key, value, o.CompilerOptions)
 }
 
 func (o *compilerOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
@@ -218,8 +218,8 @@ type typeAcquisitionParser struct {
 	*core.TypeAcquisition
 }
 
-func (o *typeAcquisitionParser) ParseOption(key string, value any) []*ast.Diagnostic {
-	return ParseTypeAcquisition(key, value, o.TypeAcquisition)
+func (o *typeAcquisitionParser) ParseOption(key string, value any) {
+	ParseTypeAcquisition(key, value, o.TypeAcquisition)
 }
 
 func (o *typeAcquisitionParser) UnknownOptionDiagnostic() *diagnostics.Message {
@@ -234,8 +234,8 @@ type buildOptionsParser struct {
 	*core.BuildOptions
 }
 
-func (o *buildOptionsParser) ParseOption(key string, value any) []*ast.Diagnostic {
-	return ParseBuildOptions(key, value, o.BuildOptions)
+func (o *buildOptionsParser) ParseOption(key string, value any) {
+	ParseBuildOptions(key, value, o.BuildOptions)
 }
 
 func (o *buildOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
@@ -246,15 +246,14 @@ func (o *buildOptionsParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message 
 	return extraKeyDidYouMeanDiagnostics("buildOptions")
 }
 
-func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) []*ast.Diagnostic {
+func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) {
 	if value == nil {
-		return nil
+		return
 	}
 	if allOptions == nil {
-		return nil
+		return
 	}
 	parseCompilerOptions(key, value, allOptions)
-	return nil
 }
 
 func floatOrInt32ToFlag[T ~int32](value any) T {

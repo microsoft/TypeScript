@@ -50,9 +50,6 @@ type CommandLineOption struct {
 	AffectsModuleResolution    bool
 	AffectsEmit                bool
 
-	allowJsFlag bool
-	strictFlag  bool
-
 	// used for CommandLineOptionTypeList
 	listPreserveFalsyValues bool
 	// used for compilerOptionsDeclaration

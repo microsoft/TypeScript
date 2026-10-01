@@ -135,8 +135,7 @@ function coreOptions(): string {
             ...(option.comment ? [option.comment] : []),
             ...(option.deprecated ? ["Deprecated: Do not use outside of options parsing and validation."] : []),
         ].map(comment => `// ${comment}\n`).join("");
-        const tags = [`json:"${option.name},omitzero"`, ...(option.deprecated ? ['deprecated:"true"'] : []), ...(option.internal ? ['internal:"true"'] : [])];
-        return `${comments}${fieldName(option)} ${option.type} \`${tags.join(" ")}\``;
+        return `${comments}${fieldName(option)} ${option.type} \`json:"${option.name},omitzero"\``;
     });
     return `type PluginImport struct {
 ${pluginImportFields.map(field => `${fieldName(field)} ${field.type} \`json:"${field.name}"\``).join("\n")}
@@ -494,13 +493,11 @@ ${options.enums.find(enumDef => enumDef.name === "ModuleKind")!.members.filter(m
 const privateMetadata = new Set([
     "extraValidation",
     "minValue",
-    "allowJsFlag",
-    "strictFlag",
     "listPreserveFalsyValues",
 ]);
 
 function declarationLiteral(declaration: Declaration): string {
-    const { name, kind, comment, ...metadata } = declaration;
+    const { name, kind, comment, allowJsFlag, strictFlag, ...metadata } = declaration;
     const properties = [`Name: ${JSON.stringify(name)},`, `Kind: CommandLineOptionType${kind},`];
     for (const [key, value] of Object.entries(metadata)) {
         if (key === "group" || key === "jsconfigDefault" || key === "field" || key === "variable" || key === "elementOptions" || key === "documentationAnchor" || key === "schemaDescription" || key === "allowConfigDirTemplateSubstitution") continue;
@@ -642,9 +639,9 @@ func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
 }
 
 function storedParser(name: string, declarations: StoredDeclaration[]): string {
-    return `func Parse${name}(key string, value any, allOptions *core.${name}) []*ast.Diagnostic {
-    if value == nil { return nil }
-    if allOptions == nil { return nil }
+    return `func Parse${name}(key string, value any, allOptions *core.${name}) {
+    if value == nil { return }
+    if allOptions == nil { return }
     ${name === "BuildOptions" ? "if option := BuildNameMap.Get(key); option != nil { key = option.Name }" : ""}
     switch key {
     ${
@@ -654,7 +651,6 @@ function storedParser(name: string, declarations: StoredDeclaration[]): string {
         }).join("\n")
     }
     }
-    return nil
 }
 `;
 }
@@ -709,7 +705,6 @@ ${enumMaps()}
 package tsoptions
 
 import (
-    "github.com/microsoft/TypeScript/tsc/internal/ast"
     "github.com/microsoft/TypeScript/tsc/internal/collections"
     "github.com/microsoft/TypeScript/tsc/internal/core"
     "github.com/microsoft/TypeScript/tsc/internal/tspath"

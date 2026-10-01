@@ -3,7 +3,6 @@
 package tsoptions
 
 import (
-	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -316,12 +315,12 @@ func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
 	return &core.TypeAcquisition{}
 }
 
-func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisition) []*ast.Diagnostic {
+func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisition) {
 	if value == nil {
-		return nil
+		return
 	}
 	if allOptions == nil {
-		return nil
+		return
 	}
 
 	switch key {
@@ -334,15 +333,14 @@ func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisitio
 	case "disableFilenameBasedTypeAcquisition":
 		allOptions.DisableFilenameBasedTypeAcquisition = ParseTristate(value)
 	}
-	return nil
 }
 
-func ParseBuildOptions(key string, value any, allOptions *core.BuildOptions) []*ast.Diagnostic {
+func ParseBuildOptions(key string, value any, allOptions *core.BuildOptions) {
 	if value == nil {
-		return nil
+		return
 	}
 	if allOptions == nil {
-		return nil
+		return
 	}
 	if option := BuildNameMap.Get(key); option != nil {
 		key = option.Name
@@ -361,7 +359,6 @@ func ParseBuildOptions(key string, value any, allOptions *core.BuildOptions) []*
 	case "stopBuildOnErrors":
 		allOptions.StopBuildOnErrors = ParseTristate(value)
 	}
-	return nil
 }
 
 func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
