@@ -5,6 +5,7 @@ import { ScriptKind } from "#enums/scriptKind";
 import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
 import type { Path } from "../ast/index.ts";
 import type { CompilerOptions } from "./compilerOptions.generated.ts";
+import type { UserPreferences } from "./userPreferences.generated.ts";
 
 export { ModuleKind } from "#enums/moduleKind";
 export { ScriptKind } from "#enums/scriptKind";
@@ -254,6 +255,10 @@ export interface InitializeResponse {
 
 /** CreateSnapshotParams are the parameters for creating a new independent snapshot. */
 export interface CreateSnapshotParams extends SnapshotRequestChangesParams {
+    /** UserPreferences configures language service behavior in the new snapshot. */
+    userPreferences?: UserPreferences | undefined;
+    /** PrepareAutoImports identifies the file whose auto-import indexes should be ready in the new snapshot. */
+    prepareAutoImports?: DocumentIdentifier | undefined;
     /** FileNotifications describes host file system changes to invalidate while creating the snapshot. */
     fileNotifications?: FileNotifications | undefined;
     /**

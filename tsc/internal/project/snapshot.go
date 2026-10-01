@@ -338,6 +338,8 @@ type APIReconfigureProgramRequest struct {
 }
 
 type APISnapshotRequest struct {
+	UserPreferences     *lsutil.UserPreferences
+	PrepareAutoImports  lsproto.DocumentUri
 	OpenProjects        *collections.Set[string]
 	CloseProjects       *collections.Set[tspath.Path]
 	OpenFiles           map[tspath.Path]string
@@ -651,8 +653,10 @@ func (s *Snapshot) Clone(
 		openFiles[path] = overlay.FileName()
 	}
 	prepareAutoImports := tspath.Path("")
+	prepareAutoImportsFileName := ""
 	if change.ResourceRequest.AutoImports != "" {
 		prepareAutoImports = change.ResourceRequest.AutoImports.Path(s.UseCaseSensitiveFileNames())
+		prepareAutoImportsFileName = change.ResourceRequest.AutoImports.FileName()
 	}
 	oldAutoImports := s.AutoImports
 	if oldAutoImports == nil {
@@ -660,13 +664,14 @@ func (s *Snapshot) Clone(
 	}
 	var autoImportsWatch *WatchedFiles[map[tspath.Path]string]
 	autoImports, err := oldAutoImports.Clone(ctx, autoimport.RegistryChange{
-		RequestedFile:   prepareAutoImports,
-		OpenFiles:       openFiles,
-		Changed:         change.fileChanges.Changed,
-		Created:         change.fileChanges.Created,
-		Deleted:         change.fileChanges.Deleted,
-		RebuiltPrograms: projectsWithNewProgramStructure,
-		UserPreferences: change.newConfig,
+		RequestedFile:     prepareAutoImports,
+		RequestedFileName: prepareAutoImportsFileName,
+		OpenFiles:         openFiles,
+		Changed:           change.fileChanges.Changed,
+		Created:           change.fileChanges.Created,
+		Deleted:           change.fileChanges.Deleted,
+		RebuiltPrograms:   projectsWithNewProgramStructure,
+		UserPreferences:   change.newConfig,
 	}, autoImportHost, logger.Fork("UpdateAutoImports"))
 	if err == nil {
 		autoImportsWatch = s.autoImportsWatch.Clone(autoImports.NodeModulesDirectories())

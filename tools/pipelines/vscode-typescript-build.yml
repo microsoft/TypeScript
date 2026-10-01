@@ -44,8 +44,23 @@ extends:
           - job: Build
             displayName: Build and sign vscode-typescript
             timeoutInMinutes: 90
+            pool:
+              name: AzurePipelines-EO
+              image: 1ESPT-Ubuntu22.04
+              os: linux
 
             templateContext:
+              mb:
+                signing:
+                  enabled: true
+                  signWithProd: true
+                  signType: real
+                  zipSources: false
+                mbpresteps:
+                  - task: UseDotNet@2
+                    displayName: Use .NET Core SDK 8.0.x
+                    inputs:
+                      version: 8.0.x
               outputs:
                 - output: pipelineArtifact
                   targetPath: $(Build.ArtifactStagingDirectory)/vsix
@@ -95,31 +110,6 @@ extends:
                   echo "##vso[build.updatebuildnumber]vscode-typescript-$packageVersion"
                 displayName: Validate release tag
 
-              - task: NuGetAuthenticate@1
-                displayName: '🔩 NuGet Authenticate'
-              - task: UsePythonVersion@0
-                displayName: Use Python 3.11
-                inputs:
-                  versionSpec: 3.11
-              - task: UseDotNet@2
-                displayName: Use .NET Core 3.1.x
-                inputs:
-                  packageType: sdk
-                  version: 3.1.x
-              - task: UseDotNet@2
-                displayName: Use .NET Core SDK 8.0.x
-                inputs:
-                  version: 8.0.x
-              - task: MicroBuildSigningPlugin@4
-                displayName: '🔩 Install Signing Plugin'
-                inputs:
-                  signType: real
-                  azureSubscription: MicroBuild Signing Task (DevDiv)
-                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
-                  zipSources: false
-                env:
-                  MicroBuildOutputFolderOverride: $(Agent.TempDirectory)
-
               - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
 
               - bash: npm test -w native-preview
@@ -128,6 +118,7 @@ extends:
               - bash: npx hereby vscode-typescript:release --forRelease --vscodeTypescriptRelease
                 displayName: Build and sign extensions
                 env:
+                  MICROBUILD_PLUGIN_DIRECTORY: $(Agent.TempDirectory)/MicroBuild/Plugins
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
                   VSCODE_TYPESCRIPT_SIGN_TYPE: real
 

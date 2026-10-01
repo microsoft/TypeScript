@@ -521,6 +521,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importTypeOnly("CompilerOptions", "./compilerOptions.generated.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.PluginImport":
 		return r.importTypeOnly("PluginImport", "./compilerOptions.generated.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.UserPreferences":
+		return r.importTypeOnly(obj.Name(), "./userPreferences.generated.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.JsxEmit":
 		return r.importType("JsxEmit", "#enums/jsxEmit")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleDetectionKind":

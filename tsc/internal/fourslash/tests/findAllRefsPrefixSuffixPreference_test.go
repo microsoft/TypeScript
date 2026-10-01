@@ -29,8 +29,8 @@ log(/*q3*/[|q|] + 1);`
 	defer done()
 	f.VerifyNoErrors(t)
 	f.VerifyBaselineFindAllReferences(t, "q0", "q1", "q2", "q3", "z0", "z1", "z2")
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue}, f.Ranges()[1], f.Ranges()[3], f.Ranges()[10], f.Ranges()[11])
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSFalse}, f.Ranges()[1], f.Ranges()[3], f.Ranges()[10], f.Ranges()[11])
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue}, f.Ranges()[5], f.Ranges()[7], f.Ranges()[8])
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSFalse}, f.Ranges()[5], f.Ranges()[7], f.Ranges()[8])
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue}, f.Ranges()[1], f.Ranges()[3], f.Ranges()[10], f.Ranges()[11])
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSFalse}, f.Ranges()[1], f.Ranges()[3], f.Ranges()[10], f.Ranges()[11])
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue}, f.Ranges()[5], f.Ranges()[7], f.Ranges()[8])
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSFalse}, f.Ranges()[5], f.Ranges()[7], f.Ranges()[8])
 }

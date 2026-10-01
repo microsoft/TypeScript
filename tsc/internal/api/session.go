@@ -152,7 +152,6 @@ func (sd *snapshotData) getProgram(projectHandle project.ID) (*compiler.Program,
 	if err != nil {
 		return nil, err
 	}
-
 	program := proj.GetProgram()
 	if program == nil {
 		return nil, fmt.Errorf("%w: project has no program", ErrClientError)
@@ -1404,6 +1403,10 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	if err != nil {
 		return nil, err
 	}
+	apiRequest.UserPreferences = params.UserPreferences
+	if params.PrepareAutoImports != nil {
+		apiRequest.PrepareAutoImports = params.PrepareAutoImports.ToURI(s.GetCurrentDirectory())
+	}
 
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{})
 	fileChanges := s.toFileChangeSummary(params.FileNotifications)
@@ -1423,6 +1426,10 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	if err != nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create snapshot: %w", ErrClientError, err)
+	}
+	if err := s.validatePreparedAutoImports(ctx, snapshot, params.PrepareAutoImports); err != nil {
+		snapshot.Deref()
+		return nil, err
 	}
 	if err := moduleResolutionError(snapshot); err != nil {
 		snapshot.Deref()
@@ -1449,6 +1456,10 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if err != nil {
 		return nil, err
 	}
+	apiRequest.UserPreferences = changes.UserPreferences
+	if changes.PrepareAutoImports != nil {
+		apiRequest.PrepareAutoImports = changes.PrepareAutoImports.ToURI(s.GetCurrentDirectory())
+	}
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles})
 	fileChanges := s.toFileChangeSummary(changes.FileNotifications)
 	snapshotFileSystem := baseSD.fileSystem
@@ -1471,6 +1482,10 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if err != nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
+	}
+	if err := s.validatePreparedAutoImports(ctx, snapshot, changes.PrepareAutoImports); err != nil {
+		snapshot.Deref()
+		return nil, err
 	}
 	if err := moduleResolutionError(snapshot); err != nil {
 		snapshot.Deref()
@@ -1609,6 +1624,22 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 		}
 	}
 	return apiRequest, nil
+}
+
+func (s *Session) validatePreparedAutoImports(ctx context.Context, snapshot *project.Snapshot, file *DocumentIdentifier) error {
+	if file == nil {
+		return nil
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	uri := file.ToURI(s.GetCurrentDirectory())
+	proj := snapshot.GetDefaultProject(uri)
+	if proj == nil || snapshot.AutoImportRegistry() == nil ||
+		!snapshot.AutoImportRegistry().IsPreparedForImportingFile(uri.FileName(), proj.ID(), snapshot.UserPreferences()) {
+		return fmt.Errorf("%w: could not prepare auto-imports for %s", ErrClientError, file)
+	}
+	return nil
 }
 
 type languageServerSnapshotUpdate struct {
@@ -5316,7 +5347,7 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 		if sourceFile == nil {
 			return nil, nil
 		}
-		langSvc, e := s.setupLanguageService(snapshot, program, params.Project, "")
+		langSvc, e := s.setupLanguageService(snapshot, program, params.Project, sourceFile.FileName())
 		if e != nil {
 			return nil, e
 		}
@@ -5330,6 +5361,9 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	}
 	result, err := run(sd.snapshot, program)
 	if errors.Is(err, ls.ErrNeedsAutoImports) {
+		if params.IncludeSymbol {
+			return nil, fmt.Errorf("%w: snapshot is not prepared for auto-imports for %s", ErrClientError, params.File)
+		}
 		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.GetCurrentDirectory()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
