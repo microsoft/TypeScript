@@ -33,13 +33,13 @@ export function goValue(value: GoValue | { go: string; }): string {
 }
 
 export function compilerDeclarations(model = options) {
-    return model.compilerOptions.flatMap(option =>
-        (option.declarations ?? []).map(declaration => ({
-            name: option.name,
-            kind: optionKind(option),
-            ...declaration,
-        }))
-    );
+    return model.compilerOptions.flatMap(option => {
+        if (!option.declaration) return [];
+        const { extraShortNames = [], ...metadata } = option.declaration;
+        const declaration = { name: option.name, kind: optionKind(option), ...metadata };
+        const { comment, description, showInSimplifiedHelpView, ...alias } = declaration;
+        return [declaration, ...extraShortNames.map(shortName => ({ ...alias, shortName }))];
+    });
 }
 
 function orderByName<T extends { name: string; }>(items: T[], order: string[], group: string): T[] {
@@ -253,7 +253,7 @@ function zeroValue(option: CompilerOption): string {
 
 function showConfig(): string {
     const serializedOptions = options.compilerOptions.filter(option => {
-        const declaration = option.declarations?.[0];
+        const declaration = option.declaration;
         return option.showConfig !== false && declaration && declaration.category?.go !== "diagnostics.Command_line_Options" && declaration.category?.go !== "diagnostics.Output_Formatting";
     });
     const enumOptions = serializedOptions.filter(option => optionKind(option) === "Enum");
@@ -264,7 +264,7 @@ ${
         serializedOptions.map(option => {
             const field = `options.${fieldName(option)}`;
             const name = JSON.stringify(option.name);
-            const declaration = option.declarations![0];
+            const declaration = option.declaration!;
             let value = field;
             let condition = `${field} != ${zeroValue(option)}`;
             switch (optionKind(option)) {
@@ -324,7 +324,7 @@ ${entries.map(entry => `if value == ${goValue(entry.value)} { return ${JSON.stri
 }
 
 function configDirSubstitution(): string {
-    const substitutedOptions = options.compilerOptions.filter(option => option.declarations?.some(declaration => declaration.allowConfigDirTemplateSubstitution ?? declaration.isFilePath));
+    const substitutedOptions = options.compilerOptions.filter(option => option.declaration?.allowConfigDirTemplateSubstitution ?? option.declaration?.isFilePath);
     return `func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
     if compilerOptions == nil { return }
 ${
@@ -403,7 +403,7 @@ ${
 }
 
 export function generateBuildInfoOptions(model = options): string {
-    const storedOptions = model.compilerOptions.filter(option => option.declarations?.some(declaration => declaration.affectsBuildInfo));
+    const storedOptions = model.compilerOptions.filter(option => option.declaration?.affectsBuildInfo);
     return `// ForEachCompilerOptionAffectingBuildInfo visits nonzero options in CompilerOptions field order.
 func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn func(option *CommandLineOption, value any)) {
 ${
@@ -426,8 +426,8 @@ export function generateOptionComparisons(model = options): string {
     return `${
         comparisons.map(([name, flag]) => {
             const expressions = model.compilerOptions.flatMap(option => {
-                const declaration = option.declarations?.find(declaration => declaration[flag]);
-                if (!declaration) return [];
+                const declaration = option.declaration;
+                if (!declaration?.[flag]) return [];
                 const kind = optionKind(option);
                 assert(kind === "Boolean" || kind === "String" || kind === "Enum", `Unsupported comparison type for ${option.name}: ${option.type}`);
                 const value = (receiver: string) => {

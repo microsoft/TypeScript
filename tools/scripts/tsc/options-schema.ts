@@ -151,7 +151,7 @@ function optionObject(properties: Record<string, JSONSchema>) {
 export function generateConfigSchema(kind: "tsconfig" | "jsconfig") {
     const compilerProperties: Record<string, JSONSchema> = {};
     for (const option of options.compilerOptions) {
-        const declaration = option.declarations?.[0];
+        const declaration = option.declaration;
         if (!declaration || declaration.isCommandLineOnly || declaration.category?.go === "diagnostics.Command_line_Options") continue;
         const schema = optionSchema({
             name: option.name,

@@ -87,9 +87,11 @@ export interface CompilerOption {
     comment?: string;
     parseAliases?: string[];
     parser?: "lib" | "plugins";
-    declarations?: (DeclarationMetadata & {
+    declaration?: DeclarationMetadata & {
         group: DeclarationGroup;
-    })[];
+        /** Additional short aliases without repeated help text. */
+        extraShortNames?: string[];
+    };
     jsconfigDefault?: string | number | boolean;
     /** Additional exclusion beyond undeclared options and command-line/output-formatting categories. */
     showConfig?: false;

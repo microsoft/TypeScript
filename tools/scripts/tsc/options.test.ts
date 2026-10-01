@@ -8,6 +8,7 @@ import {
     generateEnum,
 } from "./generate-enums.ts";
 import {
+    compilerDeclarations,
     generateCompilerOptionsAPI,
     generateConfigSchema,
     generateOptionComparisons,
@@ -23,6 +24,20 @@ import { options } from "./options.ts";
 
 test("option metadata is valid", () => {
     validateOptions(options);
+});
+
+test("help short aliases preserve parsing metadata without duplicating help text", () => {
+    const help = compilerDeclarations().filter(option => option.name === "help");
+    assert.deepEqual(help.map(option => option.shortName), ["h", "?"]);
+    assert.equal(help[0].description?.text, "Print this message.");
+    assert.equal(help[0].showInSimplifiedHelpView, true);
+    assert.equal(help[1].description, undefined);
+    assert.equal(help[1].showInSimplifiedHelpView, undefined);
+    for (const option of help) {
+        assert.equal(option.kind, "Boolean");
+        assert.equal(option.isCommandLineOnly, true);
+        assert.equal(option.group, "commonOptionsWithBuild");
+    }
 });
 
 test("API compiler options are generated directly from option metadata", () => {
@@ -141,7 +156,7 @@ test("metadata enum artifacts are current and use the shared alias ordering", ()
 test("option comparisons reject types that require deep equality", () => {
     for (const name of ["maxNodeModuleJsDepth", "types", "paths", "plugins"]) {
         const model = structuredClone(options);
-        model.compilerOptions.find(option => option.name === name)!.declarations![0].affectsEmit = true;
+        model.compilerOptions.find(option => option.name === name)!.declaration!.affectsEmit = true;
         assert.throws(() => generateOptionComparisons(model), new RegExp(`Unsupported comparison type for ${name}:`));
     }
 });
@@ -392,7 +407,7 @@ test("schema hover documentation includes reference links and conditional defaul
         const schema = generateConfigSchema(kind);
         const compiler = schema.definitions.compilerOptions.properties;
         for (const [name, property] of Object.entries(compiler)) {
-            const declaration = options.compilerOptions.find(option => option.name === name)?.declarations?.[0]
+            const declaration = options.compilerOptions.find(option => option.name === name)?.declaration
                 ?? options.schemaOnlyOptions.find(option => option.name === name);
             assert(declaration, `${kind}: ${name}`);
             if (!declaration.description) {
