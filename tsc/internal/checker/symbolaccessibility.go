@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
@@ -665,9 +666,9 @@ func (c *Checker) isAccessible(
 		likeSymbols = true
 	}
 	if !likeSymbols && resolvedAliasSymbol != nil && resolvedAliasSymbol.Flags&ast.SymbolFlagsAlias != 0 {
-		seenAliases := make(map[*ast.Symbol]bool)
-		for resolvedAliasSymbol.Flags&ast.SymbolFlagsAlias != 0 && !seenAliases[resolvedAliasSymbol] {
-			seenAliases[resolvedAliasSymbol] = true
+		var seenAliases collections.Set[*ast.Symbol]
+		for resolvedAliasSymbol.Flags&ast.SymbolFlagsAlias != 0 && !seenAliases.Has(resolvedAliasSymbol) {
+			seenAliases.Add(resolvedAliasSymbol)
 			resolvedAliasSymbol = c.getMergedSymbol(c.resolveAlias(resolvedAliasSymbol))
 			if symbol == resolvedAliasSymbol {
 				likeSymbols = true
