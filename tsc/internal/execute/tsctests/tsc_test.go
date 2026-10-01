@@ -231,7 +231,7 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
 		},
 		{
-			subScenario: "Parse watch interval option",
+			subScenario: "Reject removed watch interval option",
 			files: FileMap{
 				"/home/src/workspaces/project/first.ts": `export const a = 1`,
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
@@ -245,7 +245,7 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},
 		{
-			subScenario:     "Parse watch interval option without tsconfig.json",
+			subScenario:     "Reject removed watch interval option without tsconfig.json",
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},
 		{
@@ -1101,9 +1101,6 @@ func TestTscExtends(t *testing.T) {
 						"paths": {
 							"@myscope/*": ["${configDir}/types/*"],
 						},
-					},
-					"watchOptions": {
-						"excludeFiles": ["${configDir}/main.ts"],
 					},
 				}`),
 				"/home/src/projects/myproject/tsconfig.json": stringtestutil.Dedent(`
@@ -2427,6 +2424,58 @@ func TestTscIncremental(t *testing.T) {
 					caption: "add a comment to the producer",
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/producer/index.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "recursive tagged tuple after incremental edits",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "incremental": true, "noEmit": true, "module": "esnext", "moduleResolution": "bundler"}}`,
+				tscLibPath + "/lib.es2026.full.d.ts":         libWithReadonlyArray,
+				"/home/src/workspaces/project/doc.ts": stringtestutil.Dedent(`
+					type Doc =
+						| string
+						| { [k: string]: Doc }
+						| readonly ["array", Doc]
+						| readonly ["array", Doc, { length: number }]
+						| readonly ["array", Doc, { min?: number; max?: number }]
+						| readonly ["union", Doc, ...Doc[]];
+					export declare const doc: Doc;
+				`),
+				"/home/src/workspaces/project/consumer.ts": stringtestutil.Dedent(`
+					import { doc } from "./doc";
+					export const value = doc;
+				`),
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the recursive type",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/doc.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+				{
+					caption: "add a union constituent",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/doc.ts", "| string", "| number\n    | string")
+					},
+				},
+				noChange,
+				{
+					caption: "verify the consumer type was not weakened",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/consumer.ts", "\nexport const invalid: number = value;\n")
+					},
+				},
+				noChange,
+				{
+					caption: "delete build info and check the edited source afresh",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
 					},
 				},
 				noChange,

@@ -46,13 +46,9 @@ func TestGenerate(t *testing.T) {
 		`reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;`,
 		`snapshot: number;`,
 		`file: DocumentIdentifier;`,
-		`jsx?: JsxEmit | undefined;`,
-		`module?: ModuleKind | undefined;`,
-		`moduleResolution?: ModuleResolutionKind | undefined;`,
-		`moduleDetection?: ModuleDetectionKind | undefined;`,
-		`newLine?: NewLineKind | undefined;`,
-		`paths?: Record<string, string[]> | undefined;`,
-		`target?: ScriptTarget | undefined;`,
+		`import type { CompilerOptions } from "./compilerOptions.generated.ts";`,
+		`export * from "./compilerOptions.generated.ts";`,
+		`export interface CreateBuildOrchestratorParams extends BuildOptions, CompilerOptions`,
 		`scriptKind?: ScriptKind | undefined;`,
 		`export interface SourceFileDescriptor {
     fileName: string;
@@ -63,8 +59,6 @@ func TestGenerate(t *testing.T) {
 export interface InitializeResponse`,
 		`/** UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive. */
     useCaseSensitiveFileNames: boolean;`,
-		`/** CompilerOptions contains the compiler options exposed by the API. */
-export interface CompilerOptions`,
 		`projectReferences?: ProjectReference[] | undefined;`,
 		`errors: DiagnosticResponse[];`,
 		`getSymbolsAtPositions: APIMethod<GetSymbolsAtPositionsParams, SymbolResponse[]>;`,
@@ -105,6 +99,11 @@ export interface CompilerOptions`,
 	}
 	if strings.Contains(generated, "projects: readonly ProjectResponse[];") {
 		t.Error("response array fields must remain mutable")
+	}
+	for _, name := range []string{"CompilerOptions", "PluginImport"} {
+		if strings.Contains(generated, "export interface "+name+" {") {
+			t.Errorf("%s must be imported, not regenerated from Go", name)
+		}
 	}
 	languageServerChanges := generated[strings.Index(generated, "export interface LanguageServerSnapshotChanges"):strings.Index(generated, "export interface BuildOptions")]
 	if strings.Contains(languageServerChanges, "userPreferences") || strings.Contains(languageServerChanges, "prepareAutoImports") {
