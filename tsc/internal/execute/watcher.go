@@ -184,18 +184,19 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	// Resolve ancestor fallbacks first so coverage checks use final dirs.
 	resolvedDirs := w.wm.ResolveDesiredDirs(desiredDirs)
 
-	opts := w.comparePathsOptions()
+	coverage := watchmanager.NewDirWatchSet(w.comparePathsOptions())
+	for dir, recursive := range resolvedDirs {
+		coverage.Set(dir, recursive)
+	}
 	for _, filePath := range seenFilePaths {
 		dir := tspath.GetDirectoryPath(filePath)
-		if !watchmanager.IsDirCoveredByWatch(resolvedDirs, dir, opts) {
-			if watchmanager.CanWatchDirectory(dir) {
-				resolvedDirs[dir] = false
-			}
+		if !coverage.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
+			coverage.Set(dir, false)
 		}
 	}
 
 	// Re-resolve in case newly added dirs don't exist
-	return w.wm.ResolveDesiredDirs(resolvedDirs)
+	return w.wm.ResolveDesiredDirs(coverage.Dirs())
 }
 
 func (w *Watcher) reconcileWatches(seenFilePaths []string) error {
