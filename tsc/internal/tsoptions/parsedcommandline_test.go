@@ -234,4 +234,33 @@ func TestParsedCommandLine(t *testing.T) {
 			assert.DeepEqual(t, withTypings.FileNames(), []string{"/dev/index.ts", "/cache/@types/pkg/index.d.ts"})
 		})
 	})
+
+	t.Run("CommonSourceDirectory does not mutate errors", func(t *testing.T) {
+		t.Parallel()
+
+		configFileName := "/dev/tsconfig.json"
+		tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, tspath.Path(configFileName), `{
+			"compilerOptions": {
+				"rootDir": "./src"
+			},
+			"files": ["src/index.ts"]
+		}`)
+		parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
+			tsconfigSourceFile,
+			tsoptionstest.NewVFSParseConfigHost(map[string]string{
+				"/dev/src/index.ts": "",
+			}, "/dev", true),
+			"/dev",
+			nil,
+			nil,
+			configFileName,
+			nil,
+			nil,
+		)
+
+		initialErrorsLen := len(parsedCommandLine.Errors)
+		commonDir := parsedCommandLine.CommonSourceDirectory()
+		assert.Equal(t, commonDir, "/dev/src/")
+		assert.Equal(t, len(parsedCommandLine.Errors), initialErrorsLen)
+	})
 }
