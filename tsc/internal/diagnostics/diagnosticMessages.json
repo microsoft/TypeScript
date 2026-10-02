@@ -8895,5 +8895,9 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 18110
+    },
+    "This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?": {
+        "category": "Error",
+        "code": 18111
     }
 }
