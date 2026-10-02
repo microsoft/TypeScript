@@ -1,6 +1,7 @@
 import type {
     LspMiddlewareMethod,
     LspMiddlewareTransformer,
+    TypeScriptSDK,
 } from "@typescript/typescript/unstable/vscode";
 import * as path from "path";
 import * as vscode from "vscode";
@@ -48,6 +49,17 @@ export class SessionManager implements vscode.Disposable {
     private readonly lspMiddleware: LspMiddlewareRegistry;
     private lifecycleOperation = Promise.resolve();
     private contentMapperSyncOperation = Promise.resolve();
+    private readonly sdkInitialized = new vscode.EventEmitter<TypeScriptSDK>();
+    private lastSDK: TypeScriptSDK | undefined;
+
+    readonly onLanguageServerInitialized: vscode.Event<TypeScriptSDK> = (listener, thisArgs, disposables) => {
+        const subscription = this.sdkInitialized.event(listener, thisArgs, disposables);
+        const sdk = this.currentSession?.client.sdk;
+        if (sdk) {
+            listener.call(thisArgs, sdk);
+        }
+        return subscription;
+    };
 
     constructor(
         context: vscode.ExtensionContext,
@@ -58,6 +70,7 @@ export class SessionManager implements vscode.Disposable {
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
         this.initializedEventEmitter = initializedEventEmitter;
+        this.disposables.push(this.sdkInitialized);
         this.lspMiddleware = new LspMiddlewareRegistry((method, error) => {
             const detail = error instanceof Error ? error.stack ?? error.message : String(error);
             this.outputChannel.error(`LSP middleware for '${method}' failed; using original server data: ${detail}`);
@@ -76,6 +89,11 @@ export class SessionManager implements vscode.Disposable {
             }
         }));
         this.disposables.push(initializedEventEmitter.event(() => {
+            const sdk = this.currentSession?.client.sdk;
+            if (sdk && sdk !== this.lastSDK) {
+                this.lastSDK = sdk;
+                this.sdkInitialized.fire(sdk);
+            }
             void this.syncContentMapperContributions();
         }));
     }
@@ -115,14 +133,6 @@ export class SessionManager implements vscode.Disposable {
                 this.currentSession = undefined;
             }
         });
-    }
-
-    async initializeAPIConnection(pipe?: string): Promise<string> {
-        if (!this.currentSession) {
-            throw new Error(vscode.l10n.t("Language server is not running."));
-        }
-        const result = await this.currentSession.client.initializeAPISession(pipe);
-        return result.pipe;
     }
 
     registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable {

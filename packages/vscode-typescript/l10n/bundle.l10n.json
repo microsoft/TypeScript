@@ -38,7 +38,6 @@
   "Heap profile saved to: {0}": "Heap profile saved to: {0}",
   "Ignore": "Ignore",
   "Language client is not initialized": "Language client is not initialized",
-  "Language server is not running.": "Language server is not running.",
   "Loading project info...": "Loading project info...",
   "Never in this Workspace": "Never in this Workspace",
   "No jsconfig": "No jsconfig",

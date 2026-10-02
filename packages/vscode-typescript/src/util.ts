@@ -42,6 +42,7 @@ export interface ExeInfo {
     path: string;
     version: string;
     isLocal?: boolean;
+    apiPackageJsonPath?: string;
 }
 
 const packagedExeBaseNames = ["tsc", "tsgo"];
@@ -52,7 +53,12 @@ export async function getBuiltinExePath(context: vscode.ExtensionContext): Promi
         const exe = context.asAbsolutePath(path.join("../../", "built", "local", exeName));
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(exe));
-            return { path: exe, version: "(local)", isLocal: true };
+            return {
+                path: exe,
+                version: "(local)",
+                isLocal: true,
+                apiPackageJsonPath: context.asAbsolutePath(path.join("../../", "packages", "typescript", "package.json")),
+            };
         }
         catch {}
     }
@@ -105,6 +111,7 @@ async function tryGetPackagedExePath(extensionUri: vscode.Uri, version: unknown)
             return {
                 path: withLongPathPrefix(exePath.fsPath),
                 version: typeof version === "string" ? version : "unknown",
+                apiPackageJsonPath: vscode.Uri.joinPath(extensionUri, "lib", "typescript", "package.json").fsPath,
             };
         }
         catch {}
@@ -338,7 +345,11 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
             const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
             const exePath = vscode.Uri.file(resolvePackageExecutable(packageJsonPath.fsPath, platformPackage, exeName));
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown" };
+            return {
+                path: withLongPathPrefix(exePath.fsPath),
+                version: typeof packageJson.version === "string" ? packageJson.version : "unknown",
+                apiPackageJsonPath: packageJsonPath.fsPath,
+            };
         }
         catch {}
     }

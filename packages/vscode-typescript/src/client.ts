@@ -14,6 +14,7 @@ import {
     MessageSignature,
     NotebookDocumentFilter,
     ServerOptions,
+    State,
     StaticFeature,
     TextDocumentFilter,
     TransportKind,
@@ -31,6 +32,10 @@ import { registerOnAutoInsertFeature } from "./languageFeatures/onAutoInsert";
 import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefinition";
 import type { LspMiddlewareRegistry } from "./lspMiddleware";
 import * as tr from "./telemetryReporting";
+import {
+    createTypeScriptSDK,
+    isSameTypeScriptInstallation,
+} from "./tsdkPackage";
 import {
     contentMappersEnabled,
     ExeInfo,
@@ -72,6 +77,7 @@ export class Client implements vscode.Disposable {
     private isStopping = false;
     private disposables: vscode.Disposable[] = [];
     isInitialized = false;
+    sdk: TypeScriptSDK | undefined;
 
     // Document filters for content-mapped file extensions, keyed by the server's registration ID. These
     // augment the static jsTs document selector so the extension's custom language-feature providers
@@ -257,6 +263,20 @@ export class Client implements vscode.Disposable {
             serverOptions,
             this.clientOptions,
         );
+        this.disposables.push(this.client.onDidChangeState(event => {
+            this.isInitialized = event.newState === State.Running;
+            this.sdk = undefined;
+            if (this.isInitialized) {
+                const sdk = createTypeScriptSDK(
+                    exe.version,
+                    exe.apiPackageJsonPath ? vscode.Uri.file(exe.apiPackageJsonPath) : undefined,
+                    () => this.sdk === sdk && this.isInitialized && !this.isStopping && !this.isDisposed,
+                    pipe => this.initializeAPISession(pipe),
+                );
+                this.sdk = sdk;
+                this.initializedEventEmitter.fire();
+            }
+        }));
 
         // Register a static feature to advertise verbosityLevel support in hover capabilities.
         this.client.registerFeature(
@@ -277,8 +297,6 @@ export class Client implements vscode.Disposable {
 
         this.outputChannel.appendLine(vscode.l10n.t(`Starting language server...`));
         await this.client.start();
-        this.isInitialized = true;
-        this.initializedEventEmitter.fire();
 
         // Send the initial log verbosity level to the server, and update it
         // whenever the output channel's log level changes (via the gear icon).
@@ -393,6 +411,7 @@ export class Client implements vscode.Disposable {
         }
         this.isStopping = true;
         this.isInitialized = false;
+        this.sdk = undefined;
         for (const disposable of this.selectorScopedFeatures.splice(0)) {
             disposable.dispose();
         }
@@ -409,6 +428,7 @@ export class Client implements vscode.Disposable {
         this.isDisposed = true;
         this.isStopping = true;
         this.isInitialized = false;
+        this.sdk = undefined;
         for (const disposable of this.selectorScopedFeatures.splice(0)) {
             disposable.dispose();
         }
@@ -418,7 +438,7 @@ export class Client implements vscode.Disposable {
         await this.client?.dispose();
     }
 
-    getCurrentExe(): { path: string; version: string; } | undefined {
+    getCurrentExe(): ExeInfo | undefined {
         return this.exe;
     }
 
@@ -438,7 +458,7 @@ export class Client implements vscode.Disposable {
     }
 
     /**
-     * Restart the language server if the executable path has not changed.
+     * Restart the language server if the selected installation has not changed.
      * Returns true if a restart was performed.
      */
     async tryRestart(context: vscode.ExtensionContext): Promise<boolean> {
@@ -447,11 +467,12 @@ export class Client implements vscode.Disposable {
         }
         this.isStopping = false;
         const exe = await getExe(context);
-        if (exe.path !== this.exe?.path) {
+        if (!isSameTypeScriptInstallation(this.exe, exe)) {
             return false;
         }
 
         this.isInitialized = false;
+        this.sdk = undefined;
         this.outputChannel.appendLine(vscode.l10n.t("Restarting language server..."));
         try {
             await this.client.restart();
@@ -460,8 +481,6 @@ export class Client implements vscode.Disposable {
             this.outputChannel.appendLine(vscode.l10n.t(`Graceful shutdown failed, forcing restart: {0}`, String(err)));
             await this.client.start();
         }
-        this.isInitialized = true;
-        this.initializedEventEmitter.fire();
         return true;
     }
 
@@ -745,3 +764,4 @@ function sanitizeStderrLine(line: string): string {
     // Non-internal frames get fully redacted.
     return leadingWhitespace + "(REDACTED)";
 }
+import type { TypeScriptSDK } from "@typescript/typescript/unstable/vscode";

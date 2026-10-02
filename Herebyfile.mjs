@@ -2680,29 +2680,33 @@ export const packVsixExtensions = task({
 /** @type {Map<string, Promise<string>>} */
 const publishedPlatformPackageLibDirs = new Map();
 
-const getPublishedTypeScriptPackageJson = memoize(() => {
+const getPublishedTypeScriptPackageDir = memoize(() => {
     const candidates = [
-        path.join(extensionDir, "node_modules", publishedTypeScriptAliasPackageName, "package.json"),
-        path.join(__dirname, "node_modules", publishedTypeScriptAliasPackageName, "package.json"),
+        path.join(extensionDir, "node_modules", publishedTypeScriptAliasPackageName),
+        path.join(__dirname, "node_modules", publishedTypeScriptAliasPackageName),
     ];
 
     for (const candidate of candidates) {
-        if (fs.existsSync(candidate)) {
-            const packageJson = JSON.parse(fs.readFileSync(candidate, "utf8"));
-            if (packageJson.name !== "typescript") {
-                throw new Error(`${publishedTypeScriptAliasPackageName} should alias the typescript package, but found ${packageJson.name}.`);
-            }
-            if (!packageJson.version || typeof packageJson.version !== "string") {
-                throw new Error(`${publishedTypeScriptAliasPackageName} package.json did not contain a version.`);
-            }
-            if (!packageJson.optionalDependencies || typeof packageJson.optionalDependencies !== "object") {
-                throw new Error(`${publishedTypeScriptAliasPackageName} package.json did not contain platform optionalDependencies.`);
-            }
-            return packageJson;
+        if (fs.existsSync(path.join(candidate, "package.json"))) {
+            return candidate;
         }
     }
 
     throw new Error(`Could not find ${publishedTypeScriptAliasPackageName}; run npm install first.`);
+});
+
+const getPublishedTypeScriptPackageJson = memoize(() => {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(getPublishedTypeScriptPackageDir(), "package.json"), "utf8"));
+    if (packageJson.name !== "typescript") {
+        throw new Error(`${publishedTypeScriptAliasPackageName} should alias the typescript package, but found ${packageJson.name}.`);
+    }
+    if (!packageJson.version || typeof packageJson.version !== "string") {
+        throw new Error(`${publishedTypeScriptAliasPackageName} package.json did not contain a version.`);
+    }
+    if (!packageJson.optionalDependencies || typeof packageJson.optionalDependencies !== "object") {
+        throw new Error(`${publishedTypeScriptAliasPackageName} package.json did not contain platform optionalDependencies.`);
+    }
+    return packageJson;
 });
 
 function getPublishedTypeScriptVersion() {
@@ -2853,6 +2857,10 @@ async function runPackVsixExtensions() {
 
         await cpWithoutNodeModulesOrTsconfig(sourceDir, thisExtensionDir);
         await cpWithoutNodeModulesOrTsconfig(npmLibDir, extensionLibDir);
+        await cpWithoutNodeModulesOrTsconfig(
+            usePublishedPlatformPackagesForVsix ? getPublishedTypeScriptPackageDir() : mainNativePreviewPackage.npmDir,
+            path.join(extensionLibDir, "typescript"),
+        );
         await fs.promises.chmod(path.join(extensionLibDir, nativePreviewExeName(nodeOs)), 0o755);
 
         const packageJsonPath = path.join(thisExtensionDir, "package.json");

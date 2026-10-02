@@ -57,13 +57,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     });
     context.subscriptions.push(onDidChangeExtensions);
 
-    function onLanguageServerInitialized(listener: () => void): vscode.Disposable {
-        if (sessionManager.currentSession?.client.isInitialized) {
-            listener();
-        }
-        return languageServerInitializedEventEmitter.event(listener);
-    }
-
     async function startNativeServer(): Promise<void> {
         await sessionManager.start(context);
         warnAboutTsServerPlugins(context, output);
@@ -73,10 +66,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }
 
     const api: ExtensionAPI = {
-        onLanguageServerInitialized: onLanguageServerInitialized,
-        async initializeAPIConnection(pipe?: string): Promise<string> {
-            return sessionManager.initializeAPIConnection(pipe);
-        },
+        onLanguageServerInitialized: sessionManager.onLanguageServerInitialized,
         registerContentMappers(contributorId, contributions): vscode.Disposable {
             return sessionManager.registerContentMappers(contributorId, contributions);
         },
