@@ -350,7 +350,7 @@ const testApi = {
 >fetch(baseUrl + 'entries')      .then((res) => res.json()) : Promise<any>
 >fetch(baseUrl + 'entries')      .then : <TResult1 = Response, TResult2 = never>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >fetch(baseUrl + 'entries') : Promise<Response>
->fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+>fetch : (input: RequestInfo | Location | URL, init?: RequestInit) => Promise<Response>
 >baseUrl + 'entries' : string
 >baseUrl : "https://api.publicapis.org/"
 >'entries' : "entries"
