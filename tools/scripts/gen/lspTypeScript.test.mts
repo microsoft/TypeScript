@@ -6,7 +6,10 @@ import { test } from "node:test";
 import ts from "typescript";
 import { getTypeScriptModel } from "../lsp/generate.mts";
 import { getMiddlewareMethods } from "../lsp/generateTypeScript.mts";
-import type { MetaModel, Type } from "../lsp/metaModelSchema.mts";
+import type {
+    MetaModel,
+    Type,
+} from "../lsp/metaModelSchema.mts";
 import { generateTypeScript } from "../lsp/typeScript.mts";
 
 function fixture(): MetaModel {
