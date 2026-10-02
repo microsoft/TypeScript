@@ -1,15 +1,15 @@
-import {
-    instantiateWasm,
-    instantiateWasmSync,
-    WasmTransport,
-    wasmURL,
-} from "@typescript/typescript-wasip1-wasm";
+import { wasmURL } from "@typescript/typescript-wasip1-wasm";
 import {
     isIdentifier,
     isVariableStatement,
 } from "@typescript/typescript/unstable/ast";
 import { API as AsyncAPI } from "@typescript/typescript/unstable/async";
 import { API as SyncAPI } from "@typescript/typescript/unstable/sync";
+import {
+    instantiateWasm,
+    instantiateWasmSync,
+    WasmTransport,
+} from "@typescript/typescript/unstable/wasm";
 import binaryen from "binaryen";
 import assert from "node:assert";
 import { spawn } from "node:child_process";
@@ -28,6 +28,14 @@ import {
 import { WASI } from "node:wasi";
 
 describe("API over WebAssembly", () => {
+    test("publishes its library file list", async () => {
+        const libFilesURL = new URL("libFiles.json", wasmURL);
+        const libFiles = JSON.parse(await readFile(libFilesURL, "utf8")) as string[];
+        assert.ok(libFiles.includes("lib.d.ts"));
+        assert.ok(libFiles.includes("lib.es5.d.ts"));
+        assert.ok(libFiles.every(file => !file.includes("/")));
+    });
+
     test("implements reactor stdio descriptor lifecycle", () => {
         const WebAssembly = (globalThis as any).WebAssembly;
         const output: string[] = [];

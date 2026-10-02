@@ -17,17 +17,8 @@
             "@typescript/source": "./src/index.ts",
             "default": "./dist/index.js"
         },
-        "./transport": {
-            "@typescript/source": "./src/transport.ts",
-            "default": "./dist/transport.js"
-        },
-        "./tsc.wasm": "./lib/tsc.wasm"
-    },
-    "imports": {
-        "#wasmURL": {
-            "@typescript/source": "./src/wasmURL.source.ts",
-            "default": "./dist/wasmURL.js"
-        }
+        "./lib/libFiles.json": "./lib/libFiles.json",
+        "./lib/tsc.wasm": "./lib/tsc.wasm"
     },
     "scripts": {
         "build": "hereby --herebyfile ../../Herebyfile.mjs build:wasip1",

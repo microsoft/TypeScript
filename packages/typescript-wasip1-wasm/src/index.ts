@@ -1,2 +1,1 @@
-export { wasmURL } from "#wasmURL";
-export * from "./transport.ts";
+export const wasmURL: URL = new URL("../lib/tsc.wasm", import.meta.url);

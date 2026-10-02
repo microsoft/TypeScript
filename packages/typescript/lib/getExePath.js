@@ -67,7 +67,7 @@ export default function getExePath() {
 }
 
 export function getWasmPath() {
-    const { __dirname, normalizedDirname } = getPackageInfo();
+    const { __dirname, normalizedDirname, pkg } = getPackageInfo();
 
     let wasmDir;
     if (normalizedDirname.endsWith("/packages/typescript/lib")) {
@@ -78,7 +78,31 @@ export function getWasmPath() {
     }
     else {
         const require = module.createRequire(import.meta.url);
-        const packageJson = require.resolve("@typescript/typescript-wasip1-wasm/package.json");
+        let packageJson;
+        try {
+            packageJson = require.resolve("@typescript/typescript-wasip1-wasm/package.json");
+        }
+        catch (error) {
+            if (error?.code === "MODULE_NOT_FOUND") {
+                throw Object.assign(
+                    new Error(
+                        `WebAssembly compiler package not found. Install @typescript/typescript-wasip1-wasm@${pkg.version} to enable WASI fallback.`,
+                        { cause: error },
+                    ),
+                    { code: "ERR_TYPESCRIPT_WASM_PACKAGE" },
+                );
+            }
+            throw error;
+        }
+        const wasmPackage = JSON.parse(fs.readFileSync(packageJson, "utf8"));
+        if (wasmPackage.version !== pkg.version) {
+            throw Object.assign(
+                new Error(
+                    `WebAssembly compiler package version ${wasmPackage.version} is incompatible with ${pkg.name}@${pkg.version}. Install @typescript/typescript-wasip1-wasm@${pkg.version}.`,
+                ),
+                { code: "ERR_TYPESCRIPT_WASM_PACKAGE" },
+            );
+        }
         wasmDir = path.join(path.dirname(packageJson), "lib");
     }
 

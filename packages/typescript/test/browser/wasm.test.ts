@@ -20,14 +20,15 @@ describe("API over WebAssembly in a browser", () => {
     const server = createServer();
 
     before(async () => {
-        const transport = await readFile(new URL("../../../typescript-wasip1-wasm/dist/transport.js", import.meta.url));
-        const wasi = await readFile(new URL("../../../typescript-wasip1-wasm/dist/wasi.js", import.meta.url));
+        const index = await readFile(new URL("../../dist/wasm/index.js", import.meta.url));
+        const transport = await readFile(new URL("../../dist/wasm/transport.js", import.meta.url));
+        const wasi = await readFile(new URL("../../dist/wasm/wasi.js", import.meta.url));
         const result = await build({
             stdin: {
                 contents: `
-                    import { instantiateWasm, WasmTransport } from "@typescript/typescript-wasip1-wasm";
                     import { API as AsyncAPI } from "typescript/unstable/async";
                     import { API as SyncAPI } from "typescript/unstable/sync";
+                    import { instantiateWasm, WasmTransport } from "typescript/unstable/wasm";
 
                     async function check(API, module) {
                         const instance = await instantiateWasm(module);
@@ -96,6 +97,10 @@ describe("API over WebAssembly in a browser", () => {
                     response.setHeader("Content-Type", "text/javascript");
                     response.end(transport);
                     break;
+                case "/index.js":
+                    response.setHeader("Content-Type", "text/javascript");
+                    response.end(index);
+                    break;
                 case "/wasi.js":
                     response.setHeader("Content-Type", "text/javascript");
                     response.end(wasi);
@@ -133,7 +138,7 @@ describe("API over WebAssembly in a browser", () => {
     test("loads the transport entry without package resolution", async () => {
         const page = await browser.newPage();
         await page.goto(origin);
-        const exports = await page.evaluate(async origin => Object.keys(await import(`${origin}/transport.js`)), origin);
+        const exports = await page.evaluate(async origin => Object.keys(await import(`${origin}/index.js`)), origin);
         assert.deepStrictEqual(exports, ["WasmTransport", "instantiateWasm", "instantiateWasmSync"]);
     });
 });

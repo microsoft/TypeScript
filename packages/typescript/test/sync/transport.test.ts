@@ -1,11 +1,11 @@
 import {
-    type WasmReactorExports,
-    WasmTransport,
-} from "@typescript/typescript-wasip1-wasm";
-import {
     API,
     type ParsedCommandLine,
 } from "@typescript/typescript/unstable/sync";
+import {
+    type WasmReactorExports,
+    WasmTransport,
+} from "@typescript/typescript/unstable/wasm";
 import assert from "node:assert";
 import {
     describe,

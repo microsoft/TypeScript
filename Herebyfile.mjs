@@ -1098,9 +1098,16 @@ function patchWasiFile(file) {
 async function runBuildWasi(extraFlags = []) {
     const packageDir = "./packages/typescript-wasip1-wasm";
     await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
-    await fs.promises.rm(path.join(packageDir, "dist", "tsc.wasm"), { force: true });
     await buildWasiFile(path.join(packageDir, "lib", "tsc.wasm"), extraFlags);
-    await generateLibs(path.join(packageDir, "lib"));
+    const libDir = path.join(packageDir, "lib");
+    await generateLibs(libDir);
+    const libFiles = (await fs.promises.readdir(libDir))
+        .filter(file => file === "lib.d.ts" || file.startsWith("lib.") && file.endsWith(".d.ts"))
+        .sort();
+    await fs.promises.writeFile(
+        path.join(libDir, "libFiles.json"),
+        JSON.stringify(libFiles, undefined, 4) + "\n",
+    );
 }
 
 export const buildWasi = task({
@@ -2436,7 +2443,7 @@ async function runBuildNativePreviewPackages() {
 
     // Copy package contents excluding node_modules and dist (dist is copied separately after build).
     // The package.json "files" field controls what npm pack actually includes.
-    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
+    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.split("/").includes("dist"));
     if (publishAsTypescript) {
         await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
         await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
@@ -2482,9 +2489,6 @@ async function runBuildNativePreviewPackages() {
     const wasmPackageJson = JSON.parse(fs.readFileSync(path.join(wasmInputDir, "package.json"), "utf8"));
     wasmPackageJson.version = getVersion();
     wasmPackageJson.gitHead = inputPackageJson.gitHead;
-    wasmPackageJson.peerDependencies = {
-        [mainNativePreviewPackage.npmPackageName]: getVersion(),
-    };
     wasmPackageJson.publishConfig = {
         access: "public",
         tag: getPublishTag(),
@@ -2495,7 +2499,7 @@ async function runBuildNativePreviewPackages() {
     stripSourceConditions(wasmPackageJson);
 
     await runBuildWasi(extraFlags);
-    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
+    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.split("/").includes("dist"));
     await cpRecursive(path.join(wasmInputDir, "dist"), path.join(wasip1Package.npmDir, "dist"));
     await fs.promises.writeFile(
         path.join(wasip1Package.npmDir, "package.json"),
@@ -2585,6 +2589,10 @@ async function testNativePreviewPackage(platforms) {
         const { stdout } = await runOutput("npm", ["pack", "--dry-run", "--json", mainPackageDir]);
         /** @type {{ files: { path: string }[] }[]} */
         const packed = JSON.parse(stdout);
+        assert(
+            packed[0].files.some(file => file.path === "dist/wasm/index.js"),
+            "Main package is missing the WASM host entrypoint",
+        );
         for (const name of ["tsconfig", "jsconfig"]) {
             const schemaPath = `schemas/${name}.schema.json`;
             assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
@@ -2594,6 +2602,23 @@ async function testNativePreviewPackage(platforms) {
             );
             assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
         }
+
+        const wasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "package.json"), "utf8"));
+        assert.equal(wasmPackageJson.peerDependencies, undefined, "WASI artifact package must not depend on the main package");
+        const libFiles = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "lib", "libFiles.json"), "utf8"));
+        const expectedLibFiles = (await fs.promises.readdir(path.join(wasmPackageDir, "lib")))
+            .filter(file => file === "lib.d.ts" || file.startsWith("lib.") && file.endsWith(".d.ts"))
+            .sort();
+        assert.deepEqual(libFiles, expectedLibFiles);
+
+        const { stdout: wasmPackOutput } = await runOutput("npm", ["pack", "--dry-run", "--json", wasmPackageDir]);
+        /** @type {{ files: { path: string }[] }[]} */
+        const wasmPacked = JSON.parse(wasmPackOutput);
+        const wasmFiles = new Set(wasmPacked[0].files.map(file => file.path));
+        assert(wasmFiles.has("dist/index.js"), "WASI artifact package is missing its URL helper");
+        assert(wasmFiles.has("lib/libFiles.json"), "WASI artifact package is missing its library file list");
+        assert(!wasmFiles.has("dist/transport.js"), "WASI artifact package contains the reactor transport");
+        assert(!wasmFiles.has("dist/wasi.js"), "WASI artifact package contains the reactor host");
 
         const binName = publishAsTypescript ? "tsc" : "tsgo";
         const binPath = path.join(mainPackageDir, "bin", binName);
@@ -2786,8 +2811,8 @@ async function runPackNativePreviewPackages() {
         await fs.promises.rename(filename, npmTarball);
     }));
 
-    // Publish in dependency order: platform packages, the main package that references
-    // them as optionalDependencies, then the WASI package with its exact main-package peer.
+    // Publish platform packages before the main package that references them as
+    // optionalDependencies. The independent WASI artifact package is published last.
     const publishManifest = {
         stages: [
             platforms.map(p => ({

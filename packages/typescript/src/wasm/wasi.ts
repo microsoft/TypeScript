@@ -1,5 +1,37 @@
 import type { WasmReactorInstance } from "./transport.ts";
 
+declare namespace WebAssembly {
+    interface Module {}
+
+    type Imports = Record<string, Record<string, object | Function | number | bigint>>;
+
+    interface Instance {
+        readonly exports: Record<string, unknown>;
+    }
+
+    const Instance: {
+        new (module: Module, imports?: Imports): Instance;
+    };
+
+    interface Memory {
+        readonly buffer: ArrayBufferLike;
+    }
+
+    const Memory: {
+        readonly prototype: Memory;
+        new (descriptor: object): Memory;
+    };
+
+    function instantiate(module: Module, imports?: Imports): Promise<Instance>;
+}
+
+interface StreamingTextDecoder {
+    decode(
+        input?: ArrayBuffer | ArrayBufferView<ArrayBufferLike> | null,
+        options?: { stream?: boolean | undefined; },
+    ): string;
+}
+
 const errnoSuccess = 0;
 const errnoBadFileDescriptor = 8;
 const errnoInvalidArgument = 28;
@@ -80,7 +112,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
     let instance: WebAssembly.Instance | undefined;
     const stdout = options.stdout ?? (text => console.log(text));
     const stderr = options.stderr ?? (text => console.error(text));
-    const decoders = new Map<number, TextDecoder>();
+    const decoders = new Map<number, StreamingTextDecoder>();
     const encoder = new TextEncoder();
     const callbacks = new Map<string, (name: string, payload: string) => string>();
     const closedDescriptors = new Set<number>();

@@ -65,6 +65,10 @@
             "@typescript/source": "./src/api/proto.ts",
             "default": "./dist/api/proto.js"
         },
+        "./unstable/wasm": {
+            "@typescript/source": "./src/wasm/index.ts",
+            "default": "./dist/wasm/index.js"
+        },
         "./unstable/ast": {
             "@typescript/source": "./src/ast/index.ts",
             "default": "./dist/ast/index.js"

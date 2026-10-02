@@ -20,7 +20,10 @@ catch (nativeError) {
     try {
         wasmPath = getWasmPath();
     }
-    catch {
+    catch (wasmError) {
+        if (wasmError?.code === "ERR_TYPESCRIPT_WASM_PACKAGE") {
+            throw wasmError;
+        }
         throw nativeError;
     }
     await runWasi(wasmPath);

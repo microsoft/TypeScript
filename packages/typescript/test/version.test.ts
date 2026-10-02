@@ -1,7 +1,10 @@
 import getExePath from "#getExePath";
 import { versionMajorMinor } from "@typescript/typescript";
 import assert from "node:assert";
-import { execFileSync } from "node:child_process";
+import {
+    execFileSync,
+    spawnSync,
+} from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
     cp,
@@ -47,19 +50,50 @@ test("the CLI falls back to the WASI package", {
                 path.join(packageDirectory, "package.json"),
                 JSON.stringify({
                     name: "typescript",
+                    version: "0.0.0",
                     type: "module",
                     imports: { "#getExePath": "./lib/getExePath.js" },
                 }),
             ),
         ]);
 
+        const missingArtifact = spawnSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
+            cwd: directory,
+            encoding: "utf8",
+        });
+        assert.notStrictEqual(missingArtifact.status, 0);
+        assert.match(
+            missingArtifact.stderr,
+            /Install @typescript\/typescript-wasip1-wasm@0\.0\.0 to enable WASI fallback/,
+        );
+
         const scopeDirectory = path.join(directory, "node_modules", "@typescript");
         await mkdir(scopeDirectory, { recursive: true });
+        const artifactDirectory = path.join(scopeDirectory, "typescript-wasip1-wasm");
+        await mkdir(artifactDirectory);
         await symlink(
-            new URL("../../typescript-wasip1-wasm", import.meta.url),
-            path.join(scopeDirectory, "typescript-wasip1-wasm"),
+            new URL("../../typescript-wasip1-wasm/lib", import.meta.url),
+            path.join(artifactDirectory, "lib"),
             process.platform === "win32" ? "junction" : "dir",
         );
+        const artifactPackageJson = {
+            name: "@typescript/typescript-wasip1-wasm",
+            version: "1.0.0",
+            exports: { "./package.json": "./package.json" },
+        };
+        await writeFile(path.join(artifactDirectory, "package.json"), JSON.stringify(artifactPackageJson));
+
+        const mismatchedArtifact = spawnSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
+            cwd: directory,
+            encoding: "utf8",
+        });
+        assert.notStrictEqual(mismatchedArtifact.status, 0);
+        assert.match(
+            mismatchedArtifact.stderr,
+            /WebAssembly compiler package version 1\.0\.0 is incompatible with typescript@0\.0\.0/,
+        );
+        artifactPackageJson.version = "0.0.0";
+        await writeFile(path.join(artifactDirectory, "package.json"), JSON.stringify(artifactPackageJson));
 
         const output = execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
             cwd: directory,

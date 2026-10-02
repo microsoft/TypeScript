@@ -1,9 +1,9 @@
+import type { FileSystemCallbacks } from "@typescript/typescript/unstable/fs";
 import {
     instantiateWasm,
     type WasmReactorInstance,
     WasmTransport,
-} from "@typescript/typescript-wasip1-wasm";
-import type { FileSystemCallbacks } from "@typescript/typescript/unstable/fs";
+} from "@typescript/typescript/unstable/wasm";
 import {
     type DocumentIdentifier,
     type FileNotifications,
