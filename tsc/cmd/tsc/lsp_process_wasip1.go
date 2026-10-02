@@ -3,12 +3,13 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"io"
 )
 
-func getNpmInstall() func(cwd string, args []string) ([]byte, error) {
-	return func(string, []string) ([]byte, error) {
+func getNpmInstall() func(context.Context, string, []string) ([]byte, error) {
+	return func(context.Context, string, []string) ([]byte, error) {
 		return nil, errors.New("installing npm packages is not supported in WebAssembly")
 	}
 }

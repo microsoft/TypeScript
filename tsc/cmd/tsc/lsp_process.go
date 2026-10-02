@@ -3,13 +3,14 @@
 package main
 
 import (
+	"context"
 	"io"
 	"os/exec"
 )
 
-func getNpmInstall() func(cwd string, args []string) ([]byte, error) {
-	return func(cwd string, args []string) ([]byte, error) {
-		cmd := exec.Command("npm", args...)
+func getNpmInstall() func(ctx context.Context, cwd string, args []string) ([]byte, error) {
+	return func(ctx context.Context, cwd string, args []string) ([]byte, error) {
+		cmd := exec.CommandContext(ctx, "npm", args...)
 		cmd.Dir = cwd
 		return cmd.Output()
 	}

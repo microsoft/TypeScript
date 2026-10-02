@@ -477,9 +477,7 @@ describe("API", { concurrency }, () => {
 
         await using retainedAgain = await api.createSourceFile("/component.tsx", sourceText);
         assert.strictEqual(retainedAgain.sourceFile, sourceFile);
-
-        await using empty = await api.createSourceFile("", "");
-        assert.equal(empty.sourceFile.scriptKind, ScriptKind.TS);
+        await assert.rejects(api.createSourceFile("", ""), /fileName must not be empty/); // @sync: assert.throws(() => api.createSourceFile("", ""), /fileName must not be empty/);
         await using dot = await api.createSourceFile(".", "");
         assert.equal(dot.sourceFile.scriptKind, ScriptKind.TS);
 
@@ -946,6 +944,31 @@ describe("API", { concurrency }, () => {
             (await resolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/b.d.ts",
         );
+    });
+
+    test("source imports do not request module resolution", async () => {
+        await using api = spawnAPI({
+            "/src/index.ts": `import source a from "pkg";
+import.source("missing");
+import { value } from "pkg";`,
+            "/pkg.d.ts": "export const value: number;",
+        });
+        const compilerOptions = { noLib: true, module: ModuleKind.ESNext };
+        const requests: string[] = [];
+        const resolver = await api.createModuleResolver(compilerOptions, {
+            resolveModuleName: async name => {
+                requests.push(name);
+                return { resolvedFileName: "/pkg.d.ts" };
+            },
+        });
+        const program = await api.createProgram(["/src/index.ts"], compilerOptions, { moduleResolver: resolver });
+        assert.deepEqual(requests, ["pkg"]);
+        const file = await program.getSourceFile("/src/index.ts");
+        assert.ok(file);
+        const source = cast(cast(file.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
+        const evaluation = cast(cast(file.statements[2], isImportDeclaration).moduleSpecifier, isStringLiteral);
+        assert.equal(await program.getResolvedModuleFromModuleSpecifier(source), undefined);
+        assert.equal((await program.getResolvedModuleFromModuleSpecifier(evaluation))?.resolvedFileName, "/pkg.d.ts");
     });
 
     test("module resolver callbacks can delegate to another resolver", async () => {
@@ -2143,6 +2166,30 @@ describe("LanguageService - imports", { concurrency }, () => {
         assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\n\nconst value = foo + bar;\n`);
     });
 
+    test("getImportAdderEdits roots relative files at the project directory", async () => {
+        const source = `const value = foo;\n`;
+        const api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": source,
+            "/outside/src/foo.ts": `export const foo = 1;\n`,
+        });
+        try {
+            const snapshot = await api.createSnapshot({ openProject: "/outside/tsconfig.json" });
+            const project = snapshot.getConfiguredProject("/outside/tsconfig.json")!;
+            const foo = await project.checker.getSymbolAtPosition("/outside/src/foo.ts", "export const ".length);
+            assert.ok(foo);
+
+            const edits = await project.languageService.getImportAdderEdits("src/index.ts", [
+                { kind: "importSymbol", symbol: await foo.getExportSymbol() },
+            ]);
+
+            assert.equal(applyTextEdits(source, edits), `import { foo } from "./foo";\n\nconst value = foo;\n`);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("getImportAdderEdits adds to an existing import", async () => {
         const source = `import { foo } from "./foo";\nconst value = foo + bar;\n`;
         await using api = spawnAPI({
@@ -2453,6 +2500,21 @@ describe("Checker - getMemberInModuleExports", { concurrency }, () => {
 });
 
 describe("SourceFile", { concurrency }, () => {
+    test("relative and absolute identifiers share the project source file cache", async () => {
+        await using api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": "export const value = 1;",
+        });
+
+        const snapshot = await api.createSnapshot({ openProject: "/outside/tsconfig.json" });
+        const program = snapshot.getConfiguredProject("/outside/tsconfig.json")!.program;
+        const absolute = await program.getSourceFile("/outside/src/index.ts");
+        const relative = await program.getSourceFile("src/index.ts");
+
+        assert.ok(absolute);
+        assert.strictEqual(relative, absolute);
+    });
+
     test("getSourceFile rejects invalid document identifiers", async () => {
         await using api = spawnAPI();
 

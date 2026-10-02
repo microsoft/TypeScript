@@ -11,6 +11,9 @@ import (
 )
 
 type KnownDirectoryLink struct {
+	// Matches the spelling used to reach the symlink.
+	// Always has trailing directory separator.
+	Symlink string
 	// Matches the casing returned by `realpath`. Used to compute the `realpath` of children.
 	// Always has trailing directory separator
 	Real string
@@ -54,12 +57,23 @@ func (cache *KnownSymlinks) FilesByRealpath() *collections.SyncMap[tspath.Path, 
 
 func (cache *KnownSymlinks) SetDirectory(symlink string, symlinkPath tspath.Path, realDirectory *KnownDirectoryLink) {
 	if realDirectory != nil {
+		link := *realDirectory
+		link.Symlink = tspath.EnsureTrailingDirectorySeparator(symlink)
+		realDirectory = &link
 		if _, ok := cache.directories.Load(symlinkPath); !ok {
 			set, _ := cache.directoriesByRealpath.LoadOrStore(realDirectory.RealPath, &collections.SyncSet[string]{})
 			set.Add(symlink)
 		}
 	}
 	cache.directories.Store(symlinkPath, realDirectory)
+}
+
+func (link *KnownDirectoryLink) ResolveFileName(fileName string, useCaseSensitiveFileNames bool) (string, bool) {
+	relative, ok := tspath.TrimFilePathPrefix(fileName, link.Symlink, useCaseSensitiveFileNames)
+	if !ok {
+		return "", false
+	}
+	return link.Real + relative, true
 }
 
 func (cache *KnownSymlinks) SetFile(symlink string, symlinkPath tspath.Path, realpath string) {
