@@ -8,10 +8,7 @@ import type {
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
-import type {
-    RootedDirectoryPath,
-    RootedFilePath,
-} from "../../ast/index.ts";
+import type { RootedFilePath } from "../../ast/index.ts";
 import type {
     Diagnostic,
     RequestFileSystem,
