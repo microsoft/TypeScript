@@ -11,7 +11,7 @@ import (
 )
 
 type projectReferenceParseTask struct {
-	configName string
+	configName tspath.RootedFilePath
 	resolved   *tsoptions.ParsedCommandLine
 	subTasks   []*projectReferenceParseTask
 }
@@ -19,9 +19,9 @@ type projectReferenceParseTask struct {
 func (t *projectReferenceParseTask) parse(projectReferenceParser *projectReferenceParser) {
 	loader := projectReferenceParser.loader
 	if tr := loader.tracing; tr != nil {
-		defer tr.Push(tracing.PhaseParse, "parseJsonSourceFileConfigFileContent", map[string]any{"path": t.configName}, false)()
+		defer tr.Push(tracing.PhaseParse, "parseJsonSourceFileConfigFileContent", map[string]any{"path": t.configName.AsString()}, false)()
 	}
-	t.resolved = loader.host.GetResolvedProjectReference(t.configName, loader.toPath(t.configName))
+	t.resolved = loader.host.GetResolvedProjectReference(t.configName, loader.toPath(t.configName.AsPath()))
 	if t.resolved == nil {
 		return
 	}
@@ -31,8 +31,8 @@ func (t *projectReferenceParseTask) parse(projectReferenceParser *projectReferen
 	}
 }
 
-func createProjectReferenceParseTasks(projectReferences []string) []*projectReferenceParseTask {
-	return core.Map(projectReferences, func(configName string) *projectReferenceParseTask {
+func createProjectReferenceParseTasks(projectReferences []tspath.RootedFilePath) []*projectReferenceParseTask {
+	return core.Map(projectReferences, func(configName tspath.RootedFilePath) *projectReferenceParseTask {
 		return &projectReferenceParseTask{
 			configName: configName,
 		}
@@ -42,7 +42,7 @@ func createProjectReferenceParseTasks(projectReferences []string) []*projectRefe
 type projectReferenceParser struct {
 	loader          *fileLoader
 	wg              core.WorkGroup
-	tasksByFileName collections.SyncMap[tspath.Path, *projectReferenceParseTask]
+	tasksByFileName collections.SyncMap[tspath.PathKey, *projectReferenceParseTask]
 }
 
 func (p *projectReferenceParser) parse(tasks []*projectReferenceParseTask) {
@@ -53,7 +53,7 @@ func (p *projectReferenceParser) parse(tasks []*projectReferenceParseTask) {
 
 func (p *projectReferenceParser) start(tasks []*projectReferenceParseTask) {
 	for i, task := range tasks {
-		path := p.loader.toPath(task.configName)
+		path := p.loader.toPath(task.configName.AsPath())
 		if loadedTask, loaded := p.tasksByFileName.LoadOrStore(path, task); loaded {
 			// dedup tasks to ensure correct file order, regardless of which task would be started first
 			tasks[i] = loadedTask
@@ -68,21 +68,21 @@ func (p *projectReferenceParser) start(tasks []*projectReferenceParseTask) {
 
 func (p *projectReferenceParser) initMapper(tasks []*projectReferenceParseTask) {
 	totalReferences := p.tasksByFileName.Size() + 1
-	p.loader.projectReferences.configToProjectReference = make(map[tspath.Path]*tsoptions.ParsedCommandLine, totalReferences)
-	p.loader.projectReferences.referencesInConfigFile = make(map[tspath.Path][]tspath.Path, totalReferences)
-	p.loader.projectReferences.sourceToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
-	p.loader.projectReferences.outputDtsToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
+	p.loader.projectReferences.configToProjectReference = make(map[tspath.PathKey]*tsoptions.ParsedCommandLine, totalReferences)
+	p.loader.projectReferences.referencesInConfigFile = make(map[tspath.PathKey][]tspath.PathKey, totalReferences)
+	p.loader.projectReferences.sourceToProjectReference = make(map[tspath.PathKey]*tsoptions.SourceOutputAndProjectReference)
+	p.loader.projectReferences.outputDtsToProjectReference = make(map[tspath.PathKey]*tsoptions.SourceOutputAndProjectReference)
 	p.loader.projectReferences.referencesInConfigFile[p.loader.projectReferences.rootConfigPath()] = p.initMapperWorker(tasks, &collections.Set[*projectReferenceParseTask]{})
-	p.loader.projectReferences.host = p.loader.projectReferences.resolutionHost(p.loader.host)
+	p.loader.projectReferences.host = p.loader.projectReferences.resolutionHost(p.loader.projectReferences.host)
 }
 
-func (p *projectReferenceParser) initMapperWorker(tasks []*projectReferenceParseTask, seen *collections.Set[*projectReferenceParseTask]) []tspath.Path {
+func (p *projectReferenceParser) initMapperWorker(tasks []*projectReferenceParseTask, seen *collections.Set[*projectReferenceParseTask]) []tspath.PathKey {
 	if len(tasks) == 0 {
 		return nil
 	}
-	results := make([]tspath.Path, 0, len(tasks))
+	results := make([]tspath.PathKey, 0, len(tasks))
 	for _, task := range tasks {
-		path := p.loader.toPath(task.configName)
+		path := p.loader.toPath(task.configName.AsPath())
 		results = append(results, path)
 		// ensure we only walk each task once
 		if !seen.AddIfAbsent(task) {
@@ -101,7 +101,7 @@ func (p *projectReferenceParser) initMapperWorker(tasks []*projectReferenceParse
 					declDir = task.resolved.CompilerOptions().OutDir
 				}
 				if declDir != "" {
-					p.loader.projectReferences.dtsDirectories.Add(p.loader.toPath(declDir))
+					p.loader.projectReferences.dtsDirectories.Add(p.loader.toPath(declDir.AsPath()))
 				}
 			}
 		}

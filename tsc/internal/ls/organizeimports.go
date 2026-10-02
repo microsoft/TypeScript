@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // OrganizeImports organizes imports by:
@@ -26,7 +27,7 @@ func (l *LanguageService) OrganizeImports(
 	sourceFile *ast.SourceFile,
 	program *compiler.Program,
 	kind lsproto.CodeActionKind,
-) map[string][]*lsproto.TextEdit {
+) map[tspath.RootedFilePath][]*lsproto.TextEdit {
 	changeTracker := change.NewTracker(ctx, program.Options(), l.FormatOptions(), l.converters)
 	shouldSort := kind == lsproto.CodeActionKindSourceSortImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
 	shouldCombine := shouldSort

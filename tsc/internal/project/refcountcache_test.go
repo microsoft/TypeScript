@@ -22,7 +22,7 @@ import (
 func TestContentMappedParseCacheBundleLifetime(t *testing.T) {
 	t.Parallel()
 	cache := NewContentMappedParseCache(RefCountCacheOptions{})
-	key := ContentMappedParseCacheKey{FileName: "/component.vue", Path: "/component.vue"}
+	key := ContentMappedParseCacheKey{FileName: "/component.vue", PathKey: "/component.vue"}
 	canonical := &ast.SourceFile{}
 	supplemental := &ast.SourceFile{}
 	produced := contentmapper.SourceFiles{Canonical: canonical, Supplemental: []*ast.SourceFile{supplemental}}
@@ -48,7 +48,7 @@ func TestContentMappedParseCacheBundleLifetime(t *testing.T) {
 
 func TestContentMappedParseCacheKeyReconstruction(t *testing.T) {
 	t.Parallel()
-	acquireOptions := ast.SourceFileParseOptions{FileName: "/component.box", Path: "/component.box"}
+	acquireOptions := ast.SourceFileParseOptions{FileName: "/component.box", PathKey: "/component.box"}
 	mappedOptions := acquireOptions
 	mappedOptions.ExternalModuleIndicatorOptions.Force = true
 	hash := xxh3.Hash128([]byte("cache key"))
@@ -74,10 +74,10 @@ func TestParseCacheBindsBeforePublishing(t *testing.T) {
 	t.Parallel()
 
 	const fileName = "/index.js"
-	fileHandle := newOverlay(fileName, "module.exports = 0;", 1, core.ScriptKindJS)
+	fileHandle := newOverlay(tspath.RootedFilePathFromNormalized(fileName), "module.exports = 0;", 1, core.ScriptKindJS)
 	parseOptions := ast.SourceFileParseOptions{
 		FileName: fileName,
-		Path:     tspath.Path(fileName),
+		PathKey:  tspath.PathKey(fileName),
 	}
 	key := NewParseCacheKey(parseOptions, fileHandle.Hash(), fileHandle.Kind())
 	cache := NewParseCache(RefCountCacheOptions{})
@@ -96,7 +96,7 @@ func TestParseCacheAcquireExistingUsesFullKey(t *testing.T) {
 	fileHandle := NewCachedFileHandle(fileName, "export {};")
 	key := NewParseCacheKey(ast.SourceFileParseOptions{
 		FileName: fileName,
-		Path:     tspath.Path(fileName),
+		PathKey:  tspath.PathKey(fileName),
 	}, fileHandle.Hash(), core.ScriptKindTS)
 	cache := NewParseCache(RefCountCacheOptions{})
 	file := cache.Acquire(key, fileHandle)
@@ -108,12 +108,12 @@ func TestParseCacheAcquireExistingUsesFullKey(t *testing.T) {
 
 	mismatches := map[string]ParseCacheKey{
 		"file name": {
-			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: "/INDEX.ts", Path: key.Path},
+			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: "/INDEX.ts", PathKey: key.PathKey},
 			Hash:                   key.Hash,
 			ScriptKind:             key.ScriptKind,
 		},
 		"path": {
-			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: key.FileName, Path: "/INDEX.ts"},
+			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: key.FileName, PathKey: "/INDEX.ts"},
 			Hash:                   key.Hash,
 			ScriptKind:             key.ScriptKind,
 		},
@@ -130,7 +130,7 @@ func TestParseCacheAcquireExistingUsesFullKey(t *testing.T) {
 		"jsx parse option": {
 			SourceFileParseOptions: ast.SourceFileParseOptions{
 				FileName: key.FileName,
-				Path:     key.Path,
+				PathKey:  key.PathKey,
 				ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
 					JSX: true,
 				},
@@ -141,7 +141,7 @@ func TestParseCacheAcquireExistingUsesFullKey(t *testing.T) {
 		"force parse option": {
 			SourceFileParseOptions: ast.SourceFileParseOptions{
 				FileName: key.FileName,
-				Path:     key.Path,
+				PathKey:  key.PathKey,
 				ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
 					Force: true,
 				},
@@ -228,7 +228,7 @@ func TestRefCountingCaches(t *testing.T) {
 	}
 
 	setup := func(files map[string]any) *Session {
-		fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
+		fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/))
 		session := NewSession(&SessionInit{
 			BackgroundCtx: context.Background(),
 			Options: &SessionOptions{
@@ -436,7 +436,7 @@ func TestRefCountingCaches(t *testing.T) {
 
 			var projectEntries int
 			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
-				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
+				if strings.HasPrefix(key.FileName.AsString(), "/user/username/projects/myproject/src/") {
 					projectEntries++
 				}
 				return true
@@ -452,7 +452,7 @@ func TestRefCountingCaches(t *testing.T) {
 
 			projectEntries = 0
 			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
-				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
+				if strings.HasPrefix(key.FileName.AsString(), "/user/username/projects/myproject/src/") {
 					projectEntries++
 				}
 				return true
@@ -489,7 +489,7 @@ func TestRefCountingCaches(t *testing.T) {
 			program := ls.GetProgram()
 			var dupKeys []ParseCacheKey
 			for _, dup := range program.DuplicateSourceFiles() {
-				if strings.HasSuffix(dup.ParseOptions.FileName, "/sub/DEP.ts") {
+				if strings.HasSuffix(dup.ParseOptions.FileName.AsString(), "/sub/DEP.ts") {
 					dupKeys = append(dupKeys, NewParseCacheKey(dup.ParseOptions, dup.Hash, dup.ScriptKind))
 				}
 			}
@@ -549,7 +549,7 @@ func TestRefCountingCaches(t *testing.T) {
 
 			projectEntries := 0
 			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
-				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
+				if strings.HasPrefix(key.FileName.AsString(), "/user/username/projects/myproject/src/") {
 					projectEntries++
 				}
 				return true
@@ -576,7 +576,7 @@ func TestRefCountingCaches(t *testing.T) {
 			session.DidOpenFile(context.Background(), "file:///user/username/projects/myproject/src/main.ts", 1, files["/user/username/projects/myproject/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
 			snapshot := session.Snapshot()
 			config := snapshot.ConfigFileRegistry.GetConfig("/user/username/projects/myproject/tsconfig.json")
-			assert.Equal(t, config.ExtendedSourceFiles()[0], "/user/username/projects/myproject/tsconfig.base.json")
+			assert.Equal(t, config.ExtendedSourceFiles()[0], tspath.RootedFilePath("/user/username/projects/myproject/tsconfig.base.json"))
 			extendedConfigEntry, _ := session.extendedConfigCache.entries.Load("/user/username/projects/myproject/tsconfig.base.json")
 			assert.Equal(t, len(extendedConfigEntry.owners), 1)
 
@@ -593,7 +593,7 @@ func TestRefCountingCaches(t *testing.T) {
 			session := setup(files)
 			uri := lsproto.DocumentUri("file:///user/username/projects/myproject/src/main.ts")
 			baseSnapshot := session.Snapshot()
-			extendedConfigPath := tspath.Path("/user/username/projects/myproject/tsconfig.base.json")
+			extendedConfigPath := tspath.PathKey("/user/username/projects/myproject/tsconfig.base.json")
 			clone := baseSnapshot.Clone(context.Background(), SnapshotChange{
 				reason:    UpdateReasonRequestedLanguageServiceProjectNotLoaded,
 				Documents: []lsproto.DocumentUri{uri},
@@ -641,13 +641,15 @@ func TestRefCountingCaches(t *testing.T) {
 			})
 			defer session.Close()
 			ctx := context.Background()
+			appConfigKey := tspath.PathKeyFromCanonical(appConfigPath)
 
 			baseSnapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
-				OpenProjects: collections.NewSetFromItems(appConfigPath),
+				OpenProjects:   collections.NewSetFromItems(tspath.RootedFilePathFromNormalized(appConfigPath)),
+				EnsurePrograms: collections.NewSetFromItems(ConfiguredProjectIDFromPathKey(appConfigKey).AsID()),
 			})
 			assert.NilError(t, err)
 			defer baseSnapshot.Deref()
-			appProject := baseSnapshot.ProjectCollection.GetProject(ConfiguredProjectID(baseSnapshot.toPath(appConfigPath)).AsID())
+			appProject := baseSnapshot.ProjectCollection.GetProject(ConfiguredProjectIDFromPathKey(appConfigKey).AsID())
 			assert.Assert(t, appProject != nil)
 
 			createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
@@ -668,7 +670,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Assert(t, programProject != nil)
 			assert.Assert(t, programProject.Program != appProject.Program)
 
-			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(tspath.Path(libBaseConfigPath))
+			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(tspath.PathKey(libBaseConfigPath))
 			assert.Assert(t, ok)
 			extendedConfigEntry.mu.Lock()
 			_, ownedByBaseSnapshot := extendedConfigEntry.owners[baseSnapshot.id]
@@ -712,12 +714,12 @@ func TestRefCountingCaches(t *testing.T) {
 
 		ctx := context.Background()
 		snapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
-			OpenProjects: collections.NewSetFromItems(configFileName),
+			OpenProjects: collections.NewSetFromItems(tspath.RootedFilePathFromNormalized(configFileName)),
 		})
 		assert.NilError(t, err)
 		snapshot.Deref()
 
-		configPath := session.toPath(configFileName)
+		configPath := tspath.PathKey(configFileName)
 
 		failedSnapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
 			CloseProjects: collections.NewSetFromItems(configPath),

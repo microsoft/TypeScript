@@ -21,6 +21,7 @@ func (f *plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
 		caseBodyAnalyzer,
 		forbidParentAccessAnalyzer,
 		shadowAnalyzer,
+		typedPathsAnalyzer,
 		unexportedAPIAnalyzer,
 	}, nil
 }

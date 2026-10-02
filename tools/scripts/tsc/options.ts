@@ -241,6 +241,7 @@ export const options: OptionsModel = {
             name: "declarationDir",
             transpile: { value: "clear" },
             type: "string",
+            pathKind: "directory",
             declaration: {
                 group: "optionsForCompiler",
                 affectsEmit: true,
@@ -553,6 +554,7 @@ export const options: OptionsModel = {
         {
             name: "mapRoot",
             type: "string",
+            pathKind: "sourceMapLocation",
             declaration: {
                 group: "optionsForCompiler",
                 affectsEmit: true,
@@ -833,6 +835,7 @@ export const options: OptionsModel = {
         {
             name: "outDir",
             type: "string",
+            pathKind: "directory",
             declaration: {
                 group: "optionsForCompiler",
                 affectsEmit: true,
@@ -892,6 +895,7 @@ export const options: OptionsModel = {
         {
             name: "project",
             type: "string",
+            pathKind: "fileOrDirectory",
             declaration: {
                 group: "optionsForCompiler",
                 shortName: "p",
@@ -972,6 +976,7 @@ export const options: OptionsModel = {
         {
             name: "rootDir",
             type: "string",
+            pathKind: "directory",
             declaration: {
                 group: "optionsForCompiler",
                 affectsEmit: true,
@@ -987,6 +992,7 @@ export const options: OptionsModel = {
             name: "rootDirs",
             transpile: { value: "clear" },
             type: "[]string",
+            pathKind: "directory",
             declaration: {
                 group: "optionsForCompiler",
                 isTSConfigOnly: true,
@@ -1140,6 +1146,7 @@ export const options: OptionsModel = {
         {
             name: "sourceRoot",
             type: "string",
+            pathKind: "sourceMapLocation",
             declaration: {
                 group: "optionsForCompiler",
                 affectsEmit: true,
@@ -1181,6 +1188,7 @@ export const options: OptionsModel = {
             name: "tsBuildInfoFile",
             transpile: { value: "clear" },
             type: "string",
+            pathKind: "file",
             declaration: {
                 group: "optionsForCompiler",
                 affectsEmit: true,
@@ -1194,6 +1202,7 @@ export const options: OptionsModel = {
         {
             name: "typeRoots",
             type: "[]string",
+            pathKind: "directory",
             declaration: {
                 group: "optionsForCompiler",
                 allowConfigDirTemplateSubstitution: true,
@@ -1291,6 +1300,7 @@ export const options: OptionsModel = {
         {
             name: "baseUrl",
             type: "string",
+            pathKind: "directory",
             deprecated: true,
             declaration: {
                 group: "optionsForCompiler",
@@ -1332,6 +1342,7 @@ export const options: OptionsModel = {
             name: "outFile",
             transpile: { value: "clear" },
             type: "string",
+            pathKind: "file",
             deprecated: true,
             declaration: {
                 group: "optionsForCompiler",
@@ -1347,6 +1358,7 @@ export const options: OptionsModel = {
         {
             name: "configFilePath",
             type: "string",
+            pathKind: "file",
             section: "Internal fields",
         },
         {
@@ -1357,6 +1369,7 @@ export const options: OptionsModel = {
         {
             name: "pathsBasePath",
             type: "string",
+            pathKind: "directory",
             internal: true,
         },
         {
@@ -1384,6 +1397,7 @@ export const options: OptionsModel = {
         {
             name: "generateCpuProfile",
             type: "string",
+            pathKind: "file",
             internal: true,
             declaration: {
                 group: "commonOptionsWithBuild",
@@ -1396,6 +1410,7 @@ export const options: OptionsModel = {
         {
             name: "generateTrace",
             type: "string",
+            pathKind: "directory",
             internal: true,
             declaration: {
                 group: "commonOptionsWithBuild",
@@ -1568,6 +1583,7 @@ export const options: OptionsModel = {
         {
             name: "pprofDir",
             type: "string",
+            pathKind: "directory",
             internal: true,
             declaration: {
                 group: "commonOptionsWithBuild",
@@ -1869,11 +1885,13 @@ export const options: OptionsModel = {
             name: "rootDirs",
             kind: "String",
             isFilePath: true,
+            pathKind: "directory",
         },
         typeRoots: {
             name: "typeRoots",
             kind: "String",
             isFilePath: true,
+            pathKind: "directory",
         },
         types: {
             name: "types",
@@ -1902,18 +1920,22 @@ export const options: OptionsModel = {
         files: {
             name: "files",
             kind: "String",
+            pathKind: "fileSpec",
         },
         include: {
             name: "include",
             kind: "String",
+            pathKind: "pathPattern",
         },
         exclude: {
             name: "exclude",
             kind: "String",
+            pathKind: "pathPattern",
         },
         extends: {
             name: "extends",
             kind: "String",
+            pathKind: "configLocator",
         },
         libFiles: {
             name: "libFiles",
