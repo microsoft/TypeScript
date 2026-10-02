@@ -4,6 +4,7 @@ import {
     type ContentMapperContribution,
     documentMatchesContentMapperContributions,
     serializeContentMapperContributions,
+    validateContentMapperRegistration,
 } from "../src/contentMapperContributions";
 
 const documentedContribution = {
@@ -22,6 +23,25 @@ const documentedContribution = {
 } satisfies ContentMapperContribution;
 
 describe("content mapper contributions", { concurrency: true }, () => {
+    test("accepts compound extensions with non-reserved suffixes", () => {
+        assert.doesNotThrow(() =>
+            validateContentMapperRegistration("mapper", [{
+                extensions: [".y.z", ".component.tsx.vue"],
+            }])
+        );
+    });
+
+    test("rejects builtin extensions and compound extensions ending in them", () => {
+        for (const extension of [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs", ".json", ".d.ts", ".d.mts", ".d.cts"]) {
+            for (const source of [extension, extension.toUpperCase(), `.component${extension}`, `.component${extension.toUpperCase()}`]) {
+                assert.throws(() =>
+                    validateContentMapperRegistration("mapper", [{
+                        extensions: [source],
+                    }]), /built-in extension/);
+            }
+        }
+    });
+
     test("content mapper extensions match document paths case-insensitively", () => {
         const registrations = new Map<string, readonly ContentMapperContribution[]>([[
             "publisher.extension",

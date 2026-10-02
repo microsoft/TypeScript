@@ -22,6 +22,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/zeebo/xxh3"
 )
 
@@ -30,7 +31,8 @@ var ErrProjectUnavailable = errors.New("content mapper project is unavailable")
 // Definition is a content mapper as declared in a tsconfig's "contentMappers": the npm package that
 // implements the mapper and the otherwise unsupported file extensions it registers.
 type Definition struct {
-	Package    string   `json:"package"`
+	Package string `json:"package"`
+	// Extensions may be compound, but must not end in a built-in file extension.
 	Extensions []string `json:"extensions"`
 	// OutputExtensions replaces the manifest defaults, including when the map is empty.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
@@ -66,6 +68,18 @@ var supportedVirtualExtensions = collections.NewSetFromItems(
 
 func IsSupportedVirtualExtension(extension string) bool {
 	return supportedVirtualExtensions.Has(extension)
+}
+
+func HasReservedSourceExtension(extension string) bool {
+	for _, extensions := range tspath.AllSupportedExtensionsWithJson {
+		for _, nativeExtension := range extensions {
+			if len(extension) >= len(nativeExtension) &&
+				strings.EqualFold(extension[len(extension)-len(nativeExtension):], nativeExtension) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // DiagnosticName returns the best available user-facing name, including when manifest resolution failed.

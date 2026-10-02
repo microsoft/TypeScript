@@ -4,7 +4,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -100,6 +102,29 @@ func TestParseContentMapperContributionsDefaultsOptionsToObject(t *testing.T) {
 	}})
 	assert.NilError(t, err)
 	assert.Equal(t, string(contributions.Mappers[0].Definition.Options), `{}`)
+}
+
+func TestParseContentMapperContributionsCompoundExtensions(t *testing.T) {
+	t.Parallel()
+	for _, extension := range []string{".y.z", ".component.tsx.vue"} {
+		contributions, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+			ContributorId: "mapper",
+			Extensions:    []string{extension},
+			InferredProjectContribution: &lsproto.InferredProjectContentMapperContribution{
+				Manifest: &lsproto.ContentMapperManifest{Name: "mapper", Exec: []string{"mapper"}},
+			},
+		}})
+		assert.NilError(t, err)
+		assert.DeepEqual(t, contributions.Extensions, []string{extension})
+	}
+	for _, nativeExtension := range core.Flatten(tspath.AllSupportedExtensionsWithJson) {
+		for _, extension := range []string{".component" + nativeExtension, ".component" + strings.ToUpper(nativeExtension)} {
+			_, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+				ContributorId: "mapper", Extensions: []string{extension},
+			}})
+			assert.ErrorContains(t, err, "invalid extension")
+		}
+	}
 }
 
 func TestParseContentMapperContributionsRejectsInvalidOutputExtensions(t *testing.T) {

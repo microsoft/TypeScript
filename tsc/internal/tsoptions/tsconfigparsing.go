@@ -1309,7 +1309,6 @@ func parseJsonConfigFileContentWorker(
 	}
 	seenContentMapperExtensions := make(map[string]struct{}, totalContentMapperExtensions)
 	contentMapperExtensions := make([]string, 0, totalContentMapperExtensions)
-	nativeExtensions := core.Flatten(tspath.AllSupportedExtensionsWithJson)
 	canonicalExtension := func(extension string) string {
 		return tspath.GetCanonicalFileName(extension, host.FS().UseCaseSensitiveFileNames())
 	}
@@ -1321,9 +1320,7 @@ func parseJsonConfigFileContentWorker(
 			switch {
 			case !strings.HasPrefix(ext, "."):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_must_begin_with_a, ext), contentMapperSourceFile, extNode))
-			case slices.ContainsFunc(nativeExtensions, func(nativeExtension string) bool {
-				return strings.EqualFold(nativeExtension, ext)
-			}):
+			case contentmapper.HasReservedSourceExtension(ext):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper, ext), contentMapperSourceFile, extNode))
 			default:
 				if _, seen := seenContentMapperExtensions[canonicalExt]; seen {

@@ -1475,6 +1475,43 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 	}
 }
 
+func TestContentMapperCompoundExtensionValidation(t *testing.T) {
+	t.Parallel()
+	for _, useCaseSensitiveFileNames := range []bool{false, true} {
+		extensions := []string{".y.z", ".component.tsx.vue"}
+		for _, extension := range core.Flatten(tspath.AllSupportedExtensionsWithJson) {
+			extensions = append(extensions, ".component"+extension, ".component"+strings.ToUpper(extension))
+		}
+		for _, extension := range extensions {
+			t.Run(fmt.Sprintf("%s/caseSensitive=%t", extension, useCaseSensitiveFileNames), func(t *testing.T) {
+				t.Parallel()
+				files := map[string]string{
+					"/tsconfig.json": fmt.Sprintf(`{ "contentMappers": [{ "package": "mapper", "extensions": [%q] }] }`, extension),
+					"/app.ts":        "export {};",
+					"/node_modules/mapper/package.json": `{
+						"name": "mapper",
+						"typescript": { "contentMapper": { "exec": ["mapper"] } }
+					}`,
+				}
+				host := tsoptionstest.NewVFSParseConfigHost(files, "/", useCaseSensitiveFileNames)
+				config := testConfig{
+					jsonText: files["/tsconfig.json"], configFileName: "tsconfig.json", basePath: "/",
+					allFileList: files, existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+				}
+				parsed := getParsedWithJsonSourceFileApi(config, host, config.basePath)
+				if extension == ".y.z" || extension == ".component.tsx.vue" {
+					assert.Equal(t, len(parsed.Errors), 0)
+					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
+				} else {
+					assert.Equal(t, len(parsed.Errors), 1)
+					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code())
+					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
+				}
+			})
+		}
+	}
+}
+
 func getParsedWithJsonSourceFileApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
 	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
 	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())

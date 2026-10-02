@@ -2601,12 +2601,10 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 }
 
 func isValidContributedContentMapperExtension(extension string) bool {
-	if len(extension) <= 1 || extension[0] != '.' || tspath.GetAnyExtensionFromPath("file"+extension, nil, false) != extension {
+	if len(extension) <= 1 || extension[0] != '.' || strings.ContainsAny(extension, "/\\") {
 		return false
 	}
-	return !slices.ContainsFunc(core.Flatten(tspath.AllSupportedExtensionsWithJson), func(nativeExtension string) bool {
-		return strings.EqualFold(nativeExtension, extension)
-	})
+	return !contentmapper.HasReservedSourceExtension(extension)
 }
 
 func valueOrZero[T any](value *T) T {

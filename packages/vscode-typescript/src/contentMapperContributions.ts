@@ -11,6 +11,7 @@ export interface ContentMapperManifest {
 }
 
 export interface ContentMapperContribution {
+    /** Source extensions may be compound, but must not end in a built-in file extension. */
     readonly extensions: readonly string[];
     readonly inferredProjectContribution?: {
         readonly options?: Readonly<Record<string, unknown>>;
@@ -69,6 +70,9 @@ export function validateContentMapperRegistration(contributorId: string, contrib
     for (const contribution of contributions) {
         if (contribution.extensions.length === 0 || contribution.extensions.some(extension => !extension.startsWith(".") || extension.length === 1)) {
             throw new TypeError("Content mapper contributions require non-empty extensions beginning with '.'.");
+        }
+        if (contribution.extensions.some(extension => /\.(?:[cm]?[jt]s|[jt]sx|json)$/i.test(extension))) {
+            throw new TypeError("Content mapper extensions must not end in a built-in extension.");
         }
         const inferredProjectContribution = contribution.inferredProjectContribution;
         if (inferredProjectContribution?.options === null || Array.isArray(inferredProjectContribution?.options) || inferredProjectContribution?.options !== undefined && typeof inferredProjectContribution.options !== "object") {
