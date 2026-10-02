@@ -2152,7 +2152,7 @@ func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationPar
 		return nil, fmt.Errorf("%w: declaration node index %d is out of range", ErrClientError, params.Index)
 	}
 	node := table.Nodes[params.Index]
-	if node == nil || !ast.IsDeclaration(node) || !ast.CanHaveSymbol(node) {
+	if node == nil || !ast.IsDeclaration(node) {
 		return nil, fmt.Errorf("%w: node index %d is not a declaration", ErrClientError, params.Index)
 	}
 	symbol := node.Symbol()
@@ -4693,6 +4693,7 @@ func (s *Session) handleGetSymbolOfNode(ctx context.Context, params *CheckerNode
 	return setup.newSymbolResponse(setup.checker.GetSymbolOfNode(node)), nil
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolOfDeclarationForChecker(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -4704,15 +4705,7 @@ func (s *Session) handleGetSymbolOfDeclarationForChecker(ctx context.Context, pa
 	if err != nil {
 		return nil, err
 	}
-	if !ast.IsDeclaration(node) || !ast.CanHaveSymbol(node) {
-		return nil, fmt.Errorf("%w: node is not a declaration", ErrClientError)
-	}
-	symbol := setup.checker.GetSymbolOfDeclaration(node)
-	if symbol == nil {
-		return nil, fmt.Errorf("%w: declaration has no symbol", ErrClientError)
-	}
-
-	return setup.newSymbolResponse(symbol), nil
+	return setup.newSymbolResponse(setup.checker.GetSymbolOfDeclaration(node)), nil
 }
 
 // @gen-proto-nullable

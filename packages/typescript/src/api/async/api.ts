@@ -2261,7 +2261,8 @@ export class Checker {
             project: this.project.id,
             location: getNodeId(node),
         });
-        return this.objectRegistry.getOrCreateSymbol(data);
+        // Declarations normally have symbols, but preserve unexpected null results at runtime.
+        return (data && this.objectRegistry.getOrCreateSymbol(data))!;
     }
 
     /** Get a symbol's merged parent, if any. */

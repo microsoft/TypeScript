@@ -4142,7 +4142,8 @@ export class Checker {
                     project: owner.project.id,
                     location: getNodeId(node),
                 });
-                return owner.objectRegistry.getOrCreateSymbol(data);
+                // Declarations normally have symbols, but preserve unexpected null results at runtime.
+                return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
             },
             function* (node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSymbolOfDeclarationForChecker", {
@@ -4150,7 +4151,8 @@ export class Checker {
                     project: owner.project.id,
                     location: getNodeId(node),
                 });
-                return owner.objectRegistry.getOrCreateSymbol(data);
+                // Declarations normally have symbols, but preserve unexpected null results at runtime.
+                return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
             },
         );
     }

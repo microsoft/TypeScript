@@ -147,7 +147,7 @@ export interface APIMethodInfo {
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getMergedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getSymbolOfNode: APIMethod<CheckerNodeParams, SymbolResponse | null>;
-    getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse>;
+    getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getParentOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getExportSymbolOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
