@@ -3,6 +3,8 @@ package project
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -25,4 +27,89 @@ func TestNilWatchedFilesClone(t *testing.T) {
 	var w *WatchedFiles[int]
 	result := w.Clone(42)
 	assert.Assert(t, result == nil, "clone on a nil `WatchedFiles` should return nil")
+}
+
+func TestResolutionLookupWatcherPreservesIncludedDirectorySpelling(t *testing.T) {
+	t.Parallel()
+
+	var files collections.SyncMap[tspath.Path, string]
+	for _, fileName := range []string{
+		"/Workspace/src/index.ts",
+		"/Project/src/index.ts",
+		"/Lib/lib.d.ts",
+	} {
+		files.Store(tspath.ToPath(fileName, "/", false), fileName)
+	}
+
+	result := createResolutionLookupGlobMapper(
+		"/Workspace",
+		"/Lib",
+		"/Project",
+		false,
+	)(&files)
+
+	assert.DeepEqual(t, result.patternsInsideWorkspace, []string{
+		"/Workspace/**/*",
+		"/Project/**/*",
+		"/Lib/**/*",
+	})
+}
+
+func TestResolutionLookupWatcherPreservesNodeModulesSpelling(t *testing.T) {
+	t.Parallel()
+
+	var files collections.SyncMap[tspath.Path, string]
+	fileName := "/External/Node_Modules/pkg/index.ts"
+	files.Store(tspath.ToPath(fileName, "/", false), fileName)
+
+	result := createResolutionLookupGlobMapper(
+		"/Workspace",
+		"/Lib",
+		"/Project",
+		false,
+	)(&files)
+
+	assert.DeepEqual(t, result.patternsInsideWorkspace, []string{"/External/Node_Modules/**/*"})
+}
+
+func TestResolutionLookupWatcherAggregatesUsingHostCaseSensitivity(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		name                      string
+		useCaseSensitiveFileNames bool
+	}{
+		{"case sensitive", true},
+		{"case insensitive", false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			var files collections.SyncMap[tspath.Path, string]
+			for _, fileName := range []string{
+				"/External/Lib/src/a.ts",
+				"/external/LIB/test/b.ts",
+			} {
+				files.Store(tspath.ToPath(fileName, "/", test.useCaseSensitiveFileNames), fileName)
+			}
+
+			result := createResolutionLookupGlobMapper(
+				"/Workspace",
+				"/Lib",
+				"/Project",
+				test.useCaseSensitiveFileNames,
+			)(&files)
+
+			if test.useCaseSensitiveFileNames {
+				assert.DeepEqual(t, result.directoriesOutsideWorkspace, []string{
+					"/External/Lib/src",
+					"/external/LIB/test",
+				})
+			} else {
+				assert.Equal(t, len(result.directoriesOutsideWorkspace), 1)
+				directory := result.directoriesOutsideWorkspace[0]
+				assert.Assert(t, directory == "/External/Lib" || directory == "/external/LIB")
+			}
+		})
+	}
 }

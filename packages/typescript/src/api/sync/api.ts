@@ -359,7 +359,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     readonly client: Client;
     /** @internal */
     readonly sourceFileCache: SourceFileCache<Symbol>;
-    private toPath: ((fileName: string) => Path) | undefined;
+    private toPath: ((fileName: string, basePath?: string) => Path) | undefined;
     private currentDirectory: string | undefined;
     private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
@@ -526,7 +526,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     const currentDirectory = response.currentDirectory;
                     owner.getCanonicalFileNameWorker = getCanonicalFileName;
                     owner.currentDirectory = currentDirectory;
-                    owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+                    owner.toPath = (fileName: string, basePath = currentDirectory) => toPath(fileName, basePath, getCanonicalFileName) as Path;
                     owner.initialized = true;
                 }
                 catch (error) {
@@ -541,7 +541,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     const currentDirectory = response.currentDirectory;
                     owner.getCanonicalFileNameWorker = getCanonicalFileName;
                     owner.currentDirectory = currentDirectory;
-                    owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+                    owner.toPath = (fileName: string, basePath = currentDirectory) => toPath(fileName, basePath, getCanonicalFileName) as Path;
                     owner.initialized = true;
                 }
                 catch (error) {
@@ -1650,7 +1650,7 @@ export class Snapshot {
     readonly id: number;
     readonly operation: SnapshotOperation;
     private projectMap: Map<ProjectId, Project>;
-    private toPath: (fileName: string) => Path;
+    private toPath: (fileName: string, basePath?: string) => Path;
     private readonly api: API<boolean>;
     private disposed: boolean = false;
     private disposePromise: void | undefined;
@@ -1664,7 +1664,7 @@ export class Snapshot {
         return this.api.client;
     }
 
-    constructor(data: CreateSnapshotResponse, toPath: (fileName: string) => Path, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot) {
+    constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => Path, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot) {
         this.id = data.snapshot;
         this.api = api;
         this.toPath = toPath;
@@ -2557,7 +2557,7 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly languageService: LanguageService;
     private snapshotId: number;
 
-    constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string) => Path, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
+    constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => Path, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
         this.api = api;
         this.configFileName = data.configFileName;
@@ -2863,7 +2863,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     readonly snapshotId: number;
     readonly id: Id;
     private readonly project: Project<Id>;
-    private readonly toPath: (fileName: string) => Path;
+    private readonly toPath: (fileName: string, basePath?: string) => Path;
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<Path, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
@@ -2877,7 +2877,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.api.sourceFileCache;
     }
 
-    constructor(snapshotId: number, project: Project<Id>, toPath: (fileName: string) => Path) {
+    constructor(snapshotId: number, project: Project<Id>, toPath: (fileName: string, basePath?: string) => Path) {
         this.snapshotId = snapshotId;
         this.id = project.id;
         this.project = project;
@@ -2957,7 +2957,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             "getSourceFile",
             function (file: DocumentIdentifier): SourceFile | undefined {
                 const fileName = resolveFileName(file);
-                const path = owner.toPath(fileName);
+                const path = owner.toPath(fileName, owner.project.currentDirectory);
 
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
@@ -2981,7 +2981,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
                 const fileName = resolveFileName(file);
-                const path = owner.toPath(fileName);
+                const path = owner.toPath(fileName, owner.project.currentDirectory);
 
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
@@ -3223,10 +3223,10 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             owner,
             "getSourceFileMetadata",
             function (file: DocumentIdentifier): SourceFileMetadata | undefined {
-                return owner.getSourceFileMetadataByPath(owner.toPath(resolveFileName(file)));
+                return owner.getSourceFileMetadataByPath(owner.toPath(resolveFileName(file), owner.project.currentDirectory));
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
-                return yield* owner.getSourceFileMetadataByPath.gen(owner.toPath(resolveFileName(file)));
+                return yield* owner.getSourceFileMetadataByPath.gen(owner.toPath(resolveFileName(file), owner.project.currentDirectory));
             },
         );
     }
