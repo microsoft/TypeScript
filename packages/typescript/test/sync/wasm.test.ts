@@ -212,12 +212,24 @@ describe("API over WebAssembly", () => {
         );
 
         const emittedFiles = new Map<string, string>();
-        const transport = new WasmTransport({
+        const memory = Reflect.get(instance.exports, "memory");
+        assert.ok(memory instanceof WebAssembly.Memory);
+        let transport!: WasmTransport;
+        transport = new WasmTransport({
             instance,
             cwd: "/",
             collectTiming: true,
             fs: {
                 writeFile(path, data) {
+                    memory.grow(0);
+                    assert.throws(
+                        () => transport.close(),
+                        /TypeScript WASM callbacks cannot close the same API transport/,
+                    );
+                    assert.throws(
+                        () => transport.readFile("/src/index.ts"),
+                        /TypeScript WASM callbacks cannot call the same API transport/,
+                    );
                     emittedFiles.set(path, data);
                 },
             },
@@ -263,6 +275,7 @@ describe("API over WebAssembly", () => {
             fileSystem: undefined,
         });
         assert.strictEqual(emittedFiles.get("/src/index.js"), "export const value = 42;\n");
+        assert.strictEqual(transport.requestSync("echo", "after callback"), "after callback");
 
         const timing = api.getTimingInfo();
         assert.strictEqual(timing.enabled, true);

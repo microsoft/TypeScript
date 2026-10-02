@@ -68,7 +68,7 @@ export class WasmTransport {
             throw new Error(`Failed to create TypeScript WASM session: ${this.readResponseText()}`);
         }
         try {
-            setWasmFileSystem(options.instance, options.fs);
+            this.configureFileSystem(options.fs);
         }
         catch (error) {
             try {
@@ -86,7 +86,7 @@ export class WasmTransport {
 
     setFileSystem(fs: WasmFileSystem | undefined): void {
         this.ensureOpen();
-        setWasmFileSystem(this.instance, fs);
+        this.configureFileSystem(fs);
     }
 
     requestSync(method: string, payload: string): string {
@@ -117,15 +117,7 @@ export class WasmTransport {
 
     registerCallback(name: string, callback: (name: string, payload: string) => string): void {
         this.ensureOpen();
-        registerWasmCallback(this.instance, name, (callbackName, payload) => {
-            this.inCallback = true;
-            try {
-                return callback(callbackName, payload);
-            }
-            finally {
-                this.inCallback = false;
-            }
-        });
+        registerWasmCallback(this.instance, name, (callbackName, payload) => this.invokeCallback(() => callback(callbackName, payload)));
         this.callbackNames.add(name);
     }
 
@@ -135,7 +127,7 @@ export class WasmTransport {
     }
 
     setFile(path: string, content: string): void {
-        this.ensureOpen();
+        this.ensureCanEnterWasm();
         const pathBytes = encoder.encode(path);
         const contentBytes = encoder.encode(content);
         this.writeRequest(pathBytes, contentBytes);
@@ -146,7 +138,7 @@ export class WasmTransport {
 
     /** Read a file from the reactor's in-memory filesystem. */
     readFile(path: string): string | undefined {
-        this.ensureOpen();
+        this.ensureCanEnterWasm();
         const pathBytes = encoder.encode(path);
         this.writeRequest(pathBytes);
         const status = this.exports.read_file(pathBytes.length);
@@ -158,7 +150,7 @@ export class WasmTransport {
     }
 
     removeFile(path: string): void {
-        this.ensureOpen();
+        this.ensureCanEnterWasm();
         const pathBytes = encoder.encode(path);
         this.writeRequest(pathBytes);
         if (this.exports.remove_file(pathBytes.length) !== 0) {
@@ -185,10 +177,7 @@ export class WasmTransport {
     }
 
     private call(method: string, payload: Uint8Array): Uint8Array {
-        this.ensureOpen();
-        if (this.inCallback) {
-            throw new Error("TypeScript WASM callbacks cannot call the same API transport");
-        }
+        this.ensureCanEnterWasm();
         const methodBytes = encoder.encode(method);
         this.writeRequest(methodBytes, payload);
         this.lastBytesSent = payload.length;
@@ -222,6 +211,34 @@ export class WasmTransport {
     private ensureOpen(): void {
         if (this.closed) {
             throw new Error("The TypeScript WASM transport is closed");
+        }
+    }
+
+    private ensureCanEnterWasm(): void {
+        this.ensureOpen();
+        if (this.inCallback) {
+            throw new Error("TypeScript WASM callbacks cannot call the same API transport");
+        }
+    }
+
+    private configureFileSystem(fs: WasmFileSystem | undefined): void {
+        const writeFile = fs?.writeFile;
+        setWasmFileSystem(
+            this.instance,
+            typeof writeFile === "function"
+                ? { writeFile: (path, data) => this.invokeCallback(() => writeFile(path, data)) }
+                : fs,
+        );
+    }
+
+    private invokeCallback<T>(callback: () => T): T {
+        const previous = this.inCallback;
+        this.inCallback = true;
+        try {
+            return callback();
+        }
+        finally {
+            this.inCallback = previous;
         }
     }
 }

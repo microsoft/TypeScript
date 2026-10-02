@@ -210,19 +210,23 @@ function createWasiHost(options: InstantiateWasmOptions): {
             if (result.length > resultCapacity) {
                 throw new Error(`Callback result exceeds ${resultCapacity} bytes`);
             }
-            new Uint8Array(memory.buffer, resultPointer, result.length).set(result);
-            view.setUint32(bufferPointer + 8, result.length, true);
-            view.setUint32(bufferPointer + 12, 0, true);
-            view.setUint32(writtenPointer, bufferLength, true);
+            const resultMemory = getMemory();
+            const resultView = new DataView(resultMemory.buffer);
+            new Uint8Array(resultMemory.buffer, resultPointer, result.length).set(result);
+            resultView.setUint32(bufferPointer + 8, result.length, true);
+            resultView.setUint32(bufferPointer + 12, 0, true);
+            resultView.setUint32(writtenPointer, bufferLength, true);
             return errnoSuccess;
         }
         catch (error) {
             const errorBytes = encoder.encode(error instanceof Error ? error.message : String(error));
             const errorLength = Math.min(errorBytes.length, errorCapacity);
-            new Uint8Array(memory.buffer, errorPointer, errorLength).set(errorBytes.subarray(0, errorLength));
-            view.setUint32(bufferPointer + 8, 0, true);
-            view.setUint32(bufferPointer + 12, errorLength, true);
-            view.setUint32(writtenPointer, 0, true);
+            const errorMemory = getMemory();
+            const errorView = new DataView(errorMemory.buffer);
+            new Uint8Array(errorMemory.buffer, errorPointer, errorLength).set(errorBytes.subarray(0, errorLength));
+            errorView.setUint32(bufferPointer + 8, 0, true);
+            errorView.setUint32(bufferPointer + 12, errorLength, true);
+            errorView.setUint32(writtenPointer, 0, true);
             return errnoIo;
         }
     }
@@ -258,15 +262,17 @@ function createWasiHost(options: InstantiateWasmOptions): {
         const data = decoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
         try {
             fileSystem.writeFile(path, data);
-            view.setUint32(writtenPointer, bufferLength, true);
+            new DataView(getMemory().buffer).setUint32(writtenPointer, bufferLength, true);
             return errnoSuccess;
         }
         catch (error) {
             const errorBytes = encoder.encode(error instanceof Error ? error.message : String(error));
             const errorLength = Math.min(errorBytes.length, errorCapacity);
-            new Uint8Array(memory.buffer, errorPointer, errorLength).set(errorBytes.subarray(0, errorLength));
-            view.setUint32(bufferPointer + 8, errorLength, true);
-            view.setUint32(writtenPointer, 0, true);
+            const errorMemory = getMemory();
+            const errorView = new DataView(errorMemory.buffer);
+            new Uint8Array(errorMemory.buffer, errorPointer, errorLength).set(errorBytes.subarray(0, errorLength));
+            errorView.setUint32(bufferPointer + 8, errorLength, true);
+            errorView.setUint32(writtenPointer, 0, true);
             return errnoIo;
         }
     }
