@@ -1953,7 +1953,6 @@
   "_0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property_2610": "\"{0}\" определен как метод доступа в классе \"{1}\", но переопределяется здесь в \"{2}\" как свойство экземпляра.",
   "_0_is_deprecated_6385": "\"{0}\" устарело.",
   "_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012": "\"{0}\" не является допустимым метасвойством для ключевого слова \"{1}\". Вы имели в виду \"{2}\"?",
-  "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061": "\"{0}\" не является допустимым метасвойством для ключевого слова \"import\". Вы имели в виду \"meta\" или \"defer\"?",
   "_0_is_not_allowed_as_a_parameter_name_1390": "\"{0}\" не является допустимым именем параметра.",
   "_0_is_not_allowed_as_a_variable_declaration_name_1389": "Использование \"{0}\" в качестве имени объявления переменной не допускается.",
   "_0_is_of_type_unknown_18046": "\"{0}\" относится к типу unknown.",

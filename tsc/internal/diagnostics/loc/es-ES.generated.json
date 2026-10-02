@@ -1954,7 +1954,6 @@
   "_0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property_2610": "\"{0}\" se define como descriptor de acceso en la clase \"{1}\", pero se reemplaza aquí en \"{2}\" como propiedad de instancia.",
   "_0_is_deprecated_6385": "\"{0}\" está en desuso.",
   "_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012": "\"{0}\" no es una propiedad Meta válida para la palabra clave \"{1}\". ¿Pretendía usar \"{2}\"?",
-  "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061": "'{0}' no es una meta-propiedad válida para la palabra clave 'import'. ¿Quería decir \"meta\" o \"aplazar\"?",
   "_0_is_not_allowed_as_a_parameter_name_1390": "No se permite “{0}” como nombre de parámetro.",
   "_0_is_not_allowed_as_a_variable_declaration_name_1389": "No se permite \"{0}\" como nombre de declaración de variable.",
   "_0_is_of_type_unknown_18046": "\"{0}\" es de tipo \"unknown\".",

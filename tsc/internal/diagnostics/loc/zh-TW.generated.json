@@ -1953,7 +1953,6 @@
   "_0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property_2610": "'{0}' 在類別 '{1}' 中定義為存取子，但在此處的 '{2}' 中卻覆寫為執行個體屬性。",
   "_0_is_deprecated_6385": "'{0}' 已淘汰。",
   "_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012": "'{0}' 對關鍵字 '{1}' 而言不是有效的中繼屬性。您是指 '{2}' 嗎?",
-  "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061": "'{0}' 對關鍵字 'import' 而言不是有效的中繼屬性。您的意思是 'meta' 或 'defer'？",
   "_0_is_not_allowed_as_a_parameter_name_1390": "不允許 '{0}' 做為參數名稱。",
   "_0_is_not_allowed_as_a_variable_declaration_name_1389": "'{0}' 不能是變數宣告名稱。",
   "_0_is_of_type_unknown_18046": "'{0}' 的類型為 'unknown'。",

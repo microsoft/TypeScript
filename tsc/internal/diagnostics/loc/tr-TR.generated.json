@@ -1954,7 +1954,6 @@
   "_0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property_2610": "'{0}', '{1}' sınıfında bir erişimci olarak tanımlandı ancak burada, '{2}' içinde örnek özelliği olarak geçersiz kılındı.",
   "_0_is_deprecated_6385": "'{0}' kullanım dışı bırakıldı.",
   "_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012": "'{0}', '{1}' anahtar sözcüğü için geçerli bir meta özellik değil. Bunu mu demek istediniz: '{2}'?",
-  "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061": "'{0}', 'import' anahtar sözcüğü için geçerli bir meta özellik değil. Bunu mu demek istediniz: 'meta' veya 'defer'?",
   "_0_is_not_allowed_as_a_parameter_name_1390": "'{0}' öğesine parametre adı olarak izin verilmiyor.",
   "_0_is_not_allowed_as_a_variable_declaration_name_1389": "'{0}' öğesinin değişken bildirim adı olarak kullanılmasına izin verilmiyor.",
   "_0_is_of_type_unknown_18046": "'{0}' 'unknown' türünde.",

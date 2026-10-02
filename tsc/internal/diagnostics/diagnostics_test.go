@@ -1,11 +1,18 @@
 package diagnostics
 
 import (
+	"bytes"
+	"compress/gzip"
+	"io"
+	"maps"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"golang.org/x/text/language"
@@ -160,23 +167,27 @@ func TestLocaleFiles(t *testing.T) {
 		t.Run(localeName, func(t *testing.T) {
 			t.Parallel()
 
-			file, openErr := os.Open(path)
-			assert.NilError(t, openErr)
-			defer file.Close()
+			data, readErr := os.ReadFile(path)
+			assert.NilError(t, readErr)
 
 			var handback map[Key]string
-			assert.NilError(t, json.UnmarshalRead(file, &handback))
+			assert.NilError(t, json.Unmarshal(data, &handback))
 			validateLocalizedMessages(t, handback)
 
-			activeMessages := make(map[Key]string, len(handback))
-			for key, text := range handback {
-				if keyToMessage(key) != nil {
-					activeMessages[key] = text
-				}
+			var orderedMessages collections.OrderedMap[Key, string]
+			for _, key := range slices.Sorted(maps.Keys(handback)) {
+				message := keyToMessage(key)
+				assert.Assert(t, message != nil, "obsolete diagnostic %q", key)
+				assert.Assert(t, handback[key] != message.text, "redundant English fallback for %q", key)
+				orderedMessages.Set(key, handback[key])
 			}
+			expected, marshalErr := json.MarshalIndent(&orderedMessages, "", "  ")
+			assert.NilError(t, marshalErr)
+			expected = bytes.ReplaceAll(expected, []byte("\n"), []byte("\r\n"))
+			assert.Equal(t, string(data), string(expected), "handback must use sorted keys and canonical formatting")
 
 			actual := getLocalizedMessages(language.MustParse(localeName))
-			assert.DeepEqual(t, actual, activeMessages)
+			assert.DeepEqual(t, actual, handback)
 		})
 	}
 }
@@ -186,6 +197,84 @@ func TestLocaleFilesIgnoreStaleDiagnostics(t *testing.T) {
 	validateLocalizedMessages(t, map[Key]string{
 		"Removed_diagnostic_99999": "Stale translation.",
 	})
+}
+
+func TestGenerateLocalizations(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	locDir := filepath.Join(dir, "loc")
+	projectDir := filepath.Join(dir, "tools")
+	assert.NilError(t, os.MkdirAll(locDir, 0o755))
+	assert.NilError(t, os.MkdirAll(projectDir, 0o755))
+	project := filepath.Join(projectDir, "LocProject.json")
+	assert.NilError(t, os.WriteFile(project, []byte(`{
+		"Projects": [{"LocItems": [{
+			"SourceFile": "source.json",
+			"Languages": "de-DE;cs-CZ;fr-FR"
+		}]}]
+	}`), 0o644))
+	assert.NilError(t, os.WriteFile(filepath.Join(locDir, "de-DE.generated.json"), []byte(`{
+		"Unterminated_string_literal_1002": "Zeichenfolge nicht abgeschlossen.",
+		"Removed_diagnostic_99999": "Obsolete translation.",
+		"Identifier_expected_1003": "Identifier expected.",
+		"A_label_is_not_allowed_here_1344": "Hier ist keine Bezeichnung erlaubt."
+	}`), 0o644))
+	assert.NilError(t, os.WriteFile(filepath.Join(locDir, "cs-CZ.generated.json"), []byte(`{
+		"Identifier_expected_1003": "Identifier expected."
+	}`), 0o644))
+	assert.NilError(t, os.WriteFile(filepath.Join(locDir, "fr-FR.generated.json"), []byte("{}"), 0o644))
+	assert.NilError(t, os.WriteFile(filepath.Join(locDir, "obsolete.json.gz"), []byte("stale archive"), 0o644))
+
+	generate := func() {
+		t.Helper()
+		command := exec.Command("go", "run", "generate.go",
+			"-diagnostics", filepath.Join(dir, "diagnostics_generated.go"),
+			"-loc", filepath.Join(dir, "loc_generated.go"),
+			"-locdir", locDir,
+			"-locproject", project,
+			"-locsource", filepath.Join(dir, "source.json"))
+		output, err := command.CombinedOutput()
+		assert.NilError(t, err, "%s", output)
+	}
+	generate()
+
+	data, err := os.ReadFile(filepath.Join(locDir, "de-DE.generated.json"))
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), "{\r\n"+
+		"  \"A_label_is_not_allowed_here_1344\": \"Hier ist keine Bezeichnung erlaubt.\",\r\n"+
+		"  \"Unterminated_string_literal_1002\": \"Zeichenfolge nicht abgeschlossen.\"\r\n"+
+		"}")
+
+	archive, err := os.ReadFile(filepath.Join(locDir, "de-DE.json.gz"))
+	assert.NilError(t, err)
+	reader, err := gzip.NewReader(bytes.NewReader(archive))
+	assert.NilError(t, err)
+	defer reader.Close()
+	runtimeData, err := io.ReadAll(reader)
+	assert.NilError(t, err)
+	var handback, runtimeMessages map[Key]string
+	assert.NilError(t, json.Unmarshal(data, &handback))
+	assert.NilError(t, json.Unmarshal(runtimeData, &runtimeMessages))
+	assert.DeepEqual(t, runtimeMessages, handback)
+
+	for _, localeName := range []string{"cs-CZ", "fr-FR"} {
+		empty, readErr := os.ReadFile(filepath.Join(locDir, localeName+".generated.json"))
+		assert.NilError(t, readErr)
+		assert.Equal(t, string(empty), "{}")
+		_, statErr := os.Stat(filepath.Join(locDir, localeName+".json.gz"))
+		assert.Assert(t, os.IsNotExist(statErr))
+	}
+	_, err = os.Stat(filepath.Join(locDir, "obsolete.json.gz"))
+	assert.Assert(t, os.IsNotExist(err))
+
+	generate()
+	regenerated, err := os.ReadFile(filepath.Join(locDir, "de-DE.generated.json"))
+	assert.NilError(t, err)
+	assert.DeepEqual(t, regenerated, data)
+	regeneratedArchive, err := os.ReadFile(filepath.Join(locDir, "de-DE.json.gz"))
+	assert.NilError(t, err)
+	assert.DeepEqual(t, regeneratedArchive, archive)
 }
 
 func validateLocalizedMessages(t *testing.T, localizedMessages map[Key]string) {

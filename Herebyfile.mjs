@@ -515,7 +515,7 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
         file: "tsc/internal/diagnostics/diagnostics.go",
         inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
-        outputs: ["diagnostics_generated.go", "diagnosticMessages.generated.json", "loc_generated.go", "loc/*.json.gz"],
+        outputs: ["diagnostics_generated.go", "diagnosticMessages.generated.json", "loc_generated.go", "loc/*.generated.json", "loc/*.json.gz"],
         commands: [
             [
                 "go",
