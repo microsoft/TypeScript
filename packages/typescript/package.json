@@ -34,7 +34,7 @@
         "vendor"
     ],
     "bin": {
-        "tsc": "./bin/tsc"
+        "tsc": "./bin/tsc.js"
     },
     "exports": {
         "./package.json": "./package.json",
