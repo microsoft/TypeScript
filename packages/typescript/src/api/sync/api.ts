@@ -4068,6 +4068,121 @@ export class Checker {
         this.objectRegistry.clear();
     }
 
+    /** Get the merged symbol, or the original symbol if it has not been merged. */
+    get getMergedSymbol(): {
+        (symbol: Symbol): Symbol;
+        gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getMergedSymbol",
+            function (symbol: Symbol): Symbol {
+                const data = owner.client.apiRequest("getMergedSymbol", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.reference,
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getMergedSymbol", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.reference,
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
+            },
+        );
+    }
+
+    /**
+     * Get a node's merged symbol. For a declaration, prefer
+     * {@link Checker.getSymbolOfDeclaration} for a non-nullable result.
+     */
+    get getSymbolOfNode(): {
+        (node: Node): Symbol | undefined;
+        gen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSymbolOfNode",
+            function (node: Node): Symbol | undefined {
+                const data = owner.client.apiRequest("getSymbolOfNode", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+            function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getSymbolOfNode", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
+
+    /** Get a declaration's merged symbol. */
+    get getSymbolOfDeclaration(): {
+        (node: Declaration): Symbol;
+        gen(node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSymbolOfDeclaration",
+            function (node: Declaration): Symbol {
+                const data = owner.client.apiRequest("getSymbolOfDeclarationForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
+            },
+            function* (node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getSymbolOfDeclarationForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
+            },
+        );
+    }
+
+    /** Get a symbol's merged parent, if any. */
+    get getParentOfSymbol(): {
+        (symbol: Symbol): Symbol | undefined;
+        gen(symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getParentOfSymbol",
+            function (symbol: Symbol): Symbol | undefined {
+                const data = owner.client.apiRequest("getParentOfSymbolForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.reference,
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getParentOfSymbolForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.reference,
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
+
     get getSymbolAtLocation(): {
         (node: Node): Symbol | undefined;
         (nodes: readonly Node[]): (Symbol | undefined)[];

@@ -145,6 +145,10 @@ export interface APIMethodInfo {
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getMergedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getSymbolOfNode: APIMethod<CheckerNodeParams, SymbolResponse | null>;
+    getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse>;
+    getParentOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getExportSymbolOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
@@ -1193,6 +1197,7 @@ export interface BatchRequest {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getMergedSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
         | "getNameTypeOfMappedType"
@@ -1207,6 +1212,7 @@ export interface BatchRequest {
         | "getParameterType"
         | "getParametersOfSignature"
         | "getParentOfSymbol"
+        | "getParentOfSymbolForChecker"
         | "getProgramDiagnostics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
@@ -1234,6 +1240,8 @@ export interface BatchRequest {
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
         | "getSymbolOfDeclaration"
+        | "getSymbolOfDeclarationForChecker"
+        | "getSymbolOfNode"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"
         | "getSymbolsAtLocations"
@@ -1371,6 +1379,7 @@ export interface BatchResponse {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getMergedSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
         | "getNameTypeOfMappedType"
@@ -1385,6 +1394,7 @@ export interface BatchResponse {
         | "getParameterType"
         | "getParametersOfSignature"
         | "getParentOfSymbol"
+        | "getParentOfSymbolForChecker"
         | "getProgramDiagnostics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
@@ -1412,6 +1422,8 @@ export interface BatchResponse {
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
         | "getSymbolOfDeclaration"
+        | "getSymbolOfDeclarationForChecker"
+        | "getSymbolOfNode"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"
         | "getSymbolsAtLocations"
