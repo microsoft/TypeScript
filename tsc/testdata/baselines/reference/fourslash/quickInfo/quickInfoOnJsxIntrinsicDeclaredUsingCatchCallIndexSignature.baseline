@@ -7,7 +7,7 @@
 //  ^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (index) JSX.IntrinsicElements[string]: any
+// | (index) IntrinsicElements[string]: any
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -25,7 +25,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(index) JSX.IntrinsicElements[string]: any\n```\n"
+        "value": "```typescript\n(index) IntrinsicElements[string]: any\n```\n"
       },
       "range": {
         "start": {

@@ -10,7 +10,7 @@ import (
 func TestQuickInfoIndexSignatureOwnerAlias(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	// UseOnlyExternalAliasing keeps the declared owner instead of an internal import-equals alias.
+	// Like TS6, index signature owners do not use the alias available at the hover location.
 	const content = `
 namespace Outer {
     export namespace Inner {
@@ -23,5 +23,5 @@ dictionary./*alias*/aliasKey;
 `
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyQuickInfoAt(t, "alias", "(index) Outer.Inner.Dictionary[string]: number", "")
+	f.VerifyQuickInfoAt(t, "alias", "(index) Dictionary[string]: number", "")
 }

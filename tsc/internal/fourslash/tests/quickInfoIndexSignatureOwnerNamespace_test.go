@@ -10,7 +10,7 @@ import (
 func TestQuickInfoIndexSignatureOwnerNamespace(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	// The enclosing container distinguishes owners with the same name in different namespaces.
+	// Like TS6, index signature owners are displayed without an enclosing container.
 	const content = `
 namespace Outer {
     export namespace Inner {
@@ -30,6 +30,6 @@ other./*other*/otherKey;
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyQuickInfoAt(t, "inside", "(index) Dictionary[string]: number", "")
-	f.VerifyQuickInfoAt(t, "outside", "(index) Outer.Inner.Dictionary[string]: number", "")
-	f.VerifyQuickInfoAt(t, "other", "(index) Other.Dictionary[string]: number", "")
+	f.VerifyQuickInfoAt(t, "outside", "(index) Dictionary[string]: number", "")
+	f.VerifyQuickInfoAt(t, "other", "(index) Dictionary[string]: number", "")
 }

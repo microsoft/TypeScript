@@ -688,7 +688,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				dpw.Write("index")
 				dpw.WritePunctuation(") ")
 				if symbol.Parent != nil {
-					writeSymbolClassified(symbol.Parent, container, ast.SymbolFlagsNone, symbolFormatFlags)
+					writeSymbolClassified(symbol.Parent, nil, ast.SymbolFlagsNone, checker.SymbolFormatFlagsUseAliasDefinedOutsideCurrentScope)
 				}
 				dpw.WritePunctuation("[")
 				for i, info := range c.GetIndexInfosOfIndexSymbol(symbol) {
