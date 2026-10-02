@@ -201,6 +201,17 @@ func GetEncodedRootLength(path string) int {
 
 	// Untitled paths (e.g., "^/untitled/ts-nul-authority/Untitled-1")
 	if ch0 == '^' && ln > 1 && path[1] == '/' {
+		if strings.HasPrefix(path, DynamicURIFileNamePrefix) {
+			schemeEnd := strings.IndexByte(path[len(DynamicURIFileNamePrefix):], '/')
+			if schemeEnd != -1 {
+				schemeEnd += len(DynamicURIFileNamePrefix)
+				authorityEnd := strings.IndexByte(path[schemeEnd+1:], '/')
+				if authorityEnd != -1 {
+					return schemeEnd + authorityEnd + 2
+				}
+				return ln
+			}
+		}
 		return 2 // Untitled: "^/"
 	}
 
@@ -217,7 +228,10 @@ func GetEncodedRootLength(path string) int {
 			// special case interpreted as "the machine from which the URL is being interpreted".
 			scheme := path[:schemeEnd]
 			authority := path[authorityStart:authorityEnd]
-			if scheme == "file" && (authority == "" || authority == "localhost") && (len(path) > authorityEnd+2) && IsVolumeCharacter(path[authorityEnd+1]) {
+			if stringutil.EquateStringCaseInsensitive(scheme, "file") &&
+				(authority == "" || stringutil.EquateStringCaseInsensitive(authority, "localhost")) &&
+				(len(path) > authorityEnd+2) &&
+				IsVolumeCharacter(path[authorityEnd+1]) {
 				volumeSeparatorEnd := getFileUrlVolumeSeparatorEnd(path, authorityEnd+2)
 				if volumeSeparatorEnd != -1 {
 					if volumeSeparatorEnd == len(path) {
@@ -726,6 +740,9 @@ func ToPath(fileName string, basePath string, useCaseSensitiveFileNames bool) Pa
 		nonCanonicalizedPath = NormalizePath(fileName)
 	} else {
 		nonCanonicalizedPath = GetNormalizedAbsolutePath(fileName, basePath)
+	}
+	if IsEncodedDynamicFileName(nonCanonicalizedPath) {
+		return Path(canonicalDynamicURIPath(nonCanonicalizedPath))
 	}
 	return Path(GetCanonicalFileName(nonCanonicalizedPath, useCaseSensitiveFileNames))
 }

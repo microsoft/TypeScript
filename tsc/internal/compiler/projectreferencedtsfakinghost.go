@@ -168,7 +168,13 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 		return false
 	}
 	// Check if the directory or file is a symlinked package
-	if packageRoot := module.ParseNodeModuleFromPath(fileOrDirectory, true /*isFolder*/); packageRoot != "" {
+	var packageRoot string
+	if isFile {
+		packageRoot = module.NodeModulePackageRootForFile(fileOrDirectory)
+	} else {
+		packageRoot = module.NodeModulePackageRootForDirectory(fileOrDirectory)
+	}
+	if packageRoot != "" {
 		fs.handleDirectoryCouldBeSymlink(packageRoot)
 	}
 	knownDirectoryLinks := fs.knownSymlinks.Directories()
@@ -185,18 +191,21 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 	// If it contains node_modules check if its one of the symlinked path we know of
 	var exists bool
 	knownDirectoryLinks.Range(func(directoryPath tspath.Path, knownDirectoryLink *symlinks.KnownDirectoryLink) bool {
-		relative, hasPrefix := strings.CutPrefix(string(fileOrDirectoryPath), string(directoryPath))
-		if !hasPrefix {
+		if !strings.HasPrefix(string(fileOrDirectoryPath), string(directoryPath)) {
 			return true
 		}
-		if exists = fileOrDirectoryExistsUsingSource(string(knownDirectoryLink.RealPath) + relative).IsTrue(); exists {
+		realFileOrDirectory, ok := knownDirectoryLink.ResolveFileName(fileOrDirectory, fs.UseCaseSensitiveFileNames())
+		if !ok {
+			panic("canonical symlink path did not match its presentation path")
+		}
+		if exists = fileOrDirectoryExistsUsingSource(realFileOrDirectory).IsTrue(); exists {
 			if isFile {
 				// Store the real path for the file
 				absolutePath := tspath.GetNormalizedAbsolutePath(fileOrDirectory, fs.host.GetCurrentDirectory())
 				fs.knownSymlinks.SetFile(
 					absolutePath,
 					fileOrDirectoryPath,
-					knownDirectoryLink.Real+absolutePath[len(directoryPath):],
+					realFileOrDirectory,
 				)
 			}
 			return false

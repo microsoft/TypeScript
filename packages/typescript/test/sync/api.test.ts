@@ -466,9 +466,7 @@ describe("API", { concurrency }, () => {
 
         using retainedAgain = api.createSourceFile("/component.tsx", sourceText);
         assert.strictEqual(retainedAgain.sourceFile, sourceFile);
-
-        using empty = api.createSourceFile("", "");
-        assert.equal(empty.sourceFile.scriptKind, ScriptKind.TS);
+        assert.throws(() => api.createSourceFile("", ""), /fileName must not be empty/);
         using dot = api.createSourceFile(".", "");
         assert.equal(dot.sourceFile.scriptKind, ScriptKind.TS);
 
@@ -2034,6 +2032,30 @@ describe("LanguageService - imports", { concurrency }, () => {
         assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\n\nconst value = foo + bar;\n`);
     });
 
+    test("getImportAdderEdits roots relative files at the project directory", () => {
+        const source = `const value = foo;\n`;
+        const api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": source,
+            "/outside/src/foo.ts": `export const foo = 1;\n`,
+        });
+        try {
+            const snapshot = api.createSnapshot({ openProject: "/outside/tsconfig.json" });
+            const project = snapshot.getConfiguredProject("/outside/tsconfig.json")!;
+            const foo = project.checker.getSymbolAtPosition("/outside/src/foo.ts", "export const ".length);
+            assert.ok(foo);
+
+            const edits = project.languageService.getImportAdderEdits("src/index.ts", [
+                { kind: "importSymbol", symbol: foo.getExportSymbol() },
+            ]);
+
+            assert.equal(applyTextEdits(source, edits), `import { foo } from "./foo";\n\nconst value = foo;\n`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("getImportAdderEdits adds to an existing import", () => {
         const source = `import { foo } from "./foo";\nconst value = foo + bar;\n`;
         using api = spawnAPI({
@@ -2336,6 +2358,21 @@ describe("Checker - getMemberInModuleExports", { concurrency }, () => {
 });
 
 describe("SourceFile", { concurrency }, () => {
+    test("relative and absolute identifiers share the project source file cache", () => {
+        using api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": "export const value = 1;",
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/outside/tsconfig.json" });
+        const program = snapshot.getConfiguredProject("/outside/tsconfig.json")!.program;
+        const absolute = program.getSourceFile("/outside/src/index.ts");
+        const relative = program.getSourceFile("src/index.ts");
+
+        assert.ok(absolute);
+        assert.strictEqual(relative, absolute);
+    });
+
     test("getSourceFile rejects invalid document identifiers", () => {
         using api = spawnAPI();
 
