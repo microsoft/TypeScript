@@ -55,7 +55,7 @@ jobs:
         displayName: Cache Go modules
         condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
         inputs:
-          key: '"go-modules" | "$(Agent.OS)" | "$(GoVersion)" | **/go.mod,**/go.sum | go.work | go.work.sum'
+          key: '"go-modules" | "$(Agent.OS)" | "$(GoVersion)" | **/go.mod,**/go.sum | go.work'
           path: $(Pipeline.Workspace)/go/pkg/mod
           cacheHitVar: GO_MODULES_CACHE_HIT
 
