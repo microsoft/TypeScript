@@ -64,7 +64,7 @@ export enum TypeFlags {
     ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
     Simplifiable = IndexedAccess | Conditional | Index,
     Singleton = Any | Unknown | String | Number | Boolean | BigInt | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
-    Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
+    Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbolLike | NonPrimitive,
     IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral | StringMapping | RegisteredESSymbol,
     IncludesMissingType = TypeParameter,
     IncludesNonWideningType = Index,

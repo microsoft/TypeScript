@@ -26156,7 +26156,7 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 				typeSet = slices.Delete(typeSet, 1, 2)
 			}
 		}
-		if includes&(TypeFlagsEnum|TypeFlagsLiteral|TypeFlagsUniqueESSymbol|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
+		if includes&(TypeFlagsEnum|TypeFlagsLiteral|TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 			includes&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 {
 			typeSet = c.removeRedundantLiteralTypes(typeSet, includes, unionReduction&UnionReductionSubtype != 0)
 		}
@@ -26329,7 +26329,7 @@ func (c *Checker) removeRedundantLiteralTypes(types []*Type, includes TypeFlags,
 		remove := flags&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 && includes&TypeFlagsString != 0 ||
 			flags&TypeFlagsNumberLiteral != 0 && includes&TypeFlagsNumber != 0 ||
 			flags&TypeFlagsBigIntLiteral != 0 && includes&TypeFlagsBigInt != 0 ||
-			flags&TypeFlagsUniqueESSymbol != 0 && includes&TypeFlagsESSymbol != 0 ||
+			flags&(TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol) != 0 && includes&TypeFlagsESSymbol != 0 ||
 			reduceVoidUndefined && flags&TypeFlagsUndefined != 0 && includes&TypeFlagsVoid != 0 ||
 			isFreshLiteralType(t) && containsType(types, t.AsLiteralType().regularType)
 		if remove {
@@ -26596,7 +26596,7 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 	if includes&TypeFlagsString != 0 && includes&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 		includes&TypeFlagsNumber != 0 && includes&TypeFlagsNumberLiteral != 0 ||
 		includes&TypeFlagsBigInt != 0 && includes&TypeFlagsBigIntLiteral != 0 ||
-		includes&TypeFlagsESSymbol != 0 && includes&TypeFlagsUniqueESSymbol != 0 ||
+		includes&TypeFlagsESSymbol != 0 && includes&(TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol) != 0 ||
 		includes&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 ||
 		includes&TypeFlagsIncludesEmptyObject != 0 && includes&TypeFlagsDefinitelyNonNullable != 0 {
 		if flags&IntersectionFlagsNoSupertypeReduction == 0 {
@@ -26785,7 +26785,7 @@ func (c *Checker) removeRedundantSupertypes(types []*Type, includes TypeFlags) [
 		remove := t.flags&TypeFlagsString != 0 && includes&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 			t.flags&TypeFlagsNumber != 0 && includes&TypeFlagsNumberLiteral != 0 ||
 			t.flags&TypeFlagsBigInt != 0 && includes&TypeFlagsBigIntLiteral != 0 ||
-			t.flags&TypeFlagsESSymbol != 0 && includes&TypeFlagsUniqueESSymbol != 0 ||
+			t.flags&TypeFlagsESSymbol != 0 && includes&(TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol) != 0 ||
 			t.flags&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 ||
 			c.IsEmptyAnonymousObjectType(t) && includes&TypeFlagsDefinitelyNonNullable != 0
 		if remove {
@@ -28033,6 +28033,10 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 		}
 		return c.stringType
 	case t.flags&TypeFlagsRegisteredESSymbol != 0:
+		constraint := c.getNextBaseConstraint(t.Target(), stack)
+		if constraint != nil && constraint != t.Target() {
+			return c.getRegisteredESSymbolType(constraint, t.alias)
+		}
 		return c.esSymbolType
 	case t.flags&TypeFlagsIndexedAccess != 0:
 		if c.isMappedTypeGenericIndexedAccess(t) {

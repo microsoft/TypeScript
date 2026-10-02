@@ -3831,6 +3831,21 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				}
 			}
 		}
+	case source.flags&TypeFlagsRegisteredESSymbol != 0:
+		if target.flags&TypeFlagsRegisteredESSymbol != 0 {
+			result = r.isRelatedTo(source.Target(), target.Target(), RecursionFlagsBoth, reportErrors)
+			if result != TernaryFalse {
+				return result
+			}
+		} else {
+			constraint := r.c.getBaseConstraintOfType(source)
+			if constraint != nil {
+				result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
+				if result != TernaryFalse {
+					return result
+				}
+			}
+		}
 	default:
 		// An empty object type is related to any mapped type that includes a '?' modifier.
 		if r.relation != r.c.subtypeRelation && r.relation != r.c.strictSubtypeRelation && isPartialMappedType(target) && r.c.isEmptyObjectType(source) {
