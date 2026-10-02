@@ -150,7 +150,7 @@ const concurrency = areTestsFiltered();
 describe("API", { concurrency }, () => {
     test("getCurrentLanguageServerSnapshot is LSP-only", () => {
         if (!!false) {
-            const standalone = new API();
+            using standalone = new API();
             // @ts-expect-error The standalone API has no canonical language server state.
             void standalone.getCurrentLanguageServerSnapshot();
 
@@ -708,7 +708,7 @@ describe("API", { concurrency }, () => {
             "/src/index.ts": `export const value: string = 1;`,
         });
 
-        const program = api.createProgram(["/src/index.ts"], { noLib: true, strict: true });
+        using program = api.createProgram(["/src/index.ts"], { noLib: true, strict: true });
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
         assert.deepEqual(program.getSourceFileNames(), ["/src/index.ts"]);
@@ -1391,7 +1391,7 @@ describe("BuildOrchestrator", () => {
         const { api: disposableApi } = spawnAPIWithFS({ ...files });
         using api = disposableApi;
         const options = api.parseCommandLine([]);
-        const orchestrator = api.createBuildOrchestrator(
+        using orchestrator = api.createBuildOrchestrator(
             ["/a/tsconfig.json"],
             { cwd: "/", ...options },
         );
@@ -3038,7 +3038,7 @@ describe("Snapshot disposal", { concurrency }, () => {
         assert.ok(snapshot.isDisposed());
     });
 
-    test("api.close waits for disposal started by using", () => {
+    test("api.close waits for disposal started by await using", () => {
         const api = spawnAPI();
         let snapshot: Snapshot;
         {
