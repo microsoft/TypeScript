@@ -16,7 +16,7 @@ func BenchmarkReadFile(b *testing.B) {
 	type bench struct {
 		name string
 		fs   vfs.FS
-		path string
+		path tspath.RootedFilePath
 	}
 
 	osFS := osvfs.FS()
@@ -32,8 +32,8 @@ func BenchmarkReadFile(b *testing.B) {
 			"/foo.ts": &fstest.MapFile{
 				Data: []byte(smallData),
 			},
-		}, tspath.CaseSensitive), "/foo.ts"},
-		{"OS small", osFS, osSmallDataPath.AsString()},
+		}, tspath.CaseSensitive), tspath.RootedFilePathFromNormalized("/foo.ts")},
+		{"OS small", osFS, osSmallDataPath},
 	}
 
 	checkerPath := tspath.RootedDirectoryPathFromAbsolute(repo.TestDataPath()).ResolveFile("fixtures/compiler/checker.ts")
@@ -48,15 +48,15 @@ func BenchmarkReadFile(b *testing.B) {
 				Data: []byte(checkerContents),
 			},
 		}, tspath.CaseSensitive),
-		"/checker.ts",
+		tspath.RootedFilePathFromNormalized("/checker.ts"),
 	})
-	tests = append(tests, bench{"OS checker.ts", osFS, checkerPath.AsString()})
+	tests = append(tests, bench{"OS checker.ts", osFS, checkerPath})
 
 	for _, tt := range tests {
 		b.Run(tt.name, func(b *testing.B) {
 			b.ReportAllocs()
 			for range b.N {
-				_, _ = tt.fs.ReadFile(tspath.RootedFilePathFromNormalized(tt.path))
+				_, _ = tt.fs.ReadFile(tt.path)
 			}
 		})
 	}
