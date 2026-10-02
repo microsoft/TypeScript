@@ -32,10 +32,12 @@ func TestFlakyDiagnosticTrackingParallelEmit(t *testing.T) {
 				"/src/b.ts": `import { box } from "./a"; export const b = box("b");`,
 				"/src/c.ts": `import { box } from "./a"; export const c = box(1);`,
 			}
+			fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
+			assert.Equal(t, fs.CaseSensitivity(), tspath.CaseInsensitive)
 			client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
 				Err:                io.Discard,
 				Cwd:                "/src",
-				FS:                 bundled.WrapFS(vfstest.FromMap(files, tspath.CaseSensitive)),
+				FS:                 fs,
 				DefaultLibraryPath: bundled.LibPath(),
 			}, func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 				switch req.Method {
