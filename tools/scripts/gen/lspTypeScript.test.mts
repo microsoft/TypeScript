@@ -6,7 +6,7 @@ import { test } from "node:test";
 import ts from "typescript";
 import { getTypeScriptModel } from "../lsp/generate.mts";
 import { getMiddlewareMethods } from "../lsp/generateTypeScript.mts";
-import type { MetaModel } from "../lsp/metaModelSchema.mts";
+import type { MetaModel, Type } from "../lsp/metaModelSchema.mts";
 import { generateTypeScript } from "../lsp/typeScript.mts";
 
 function fixture(): MetaModel {
@@ -66,10 +66,35 @@ test("LSP TypeScript generation traverses reachable types and preserves wire sha
     assert.match(output, /export type DocumentUri = string/);
     assert.match(output, /export type Kind = "first" \| "second"/);
     assert.match(output, /export type OpenKind = 1 \| number/);
-    assert.match(output, /export type Result = \(\(Child\)\[\] \| null\)/);
+    assert.match(output, /export type Result = Child\[\] \| null;/);
     assert.doesNotMatch(output, /UnusedLifecycle|export interface Parent|export interface Mixin/);
     const file = ts.createSourceFile("generated.ts", output, ts.ScriptTarget.Latest, true);
     assert.ok(file.statements.every(statement => ts.isInterfaceDeclaration(statement) || ts.isTypeAliasDeclaration(statement)));
+});
+
+test("LSP TypeScript generation parenthesizes only lower-precedence types", () => {
+    const model = fixture();
+    const a: Type = { kind: "reference", name: "Child" };
+    const b: Type = { kind: "reference", name: "Parent" };
+    const c: Type = { kind: "reference", name: "Mixin" };
+    const union: Type = { kind: "or", items: [a, b] };
+    const intersection: Type = { kind: "and", items: [a, b] };
+    const cases: [Type, string][] = [
+        [{ kind: "array", element: a }, "Child[]"],
+        [{ kind: "array", element: { kind: "array", element: a } }, "Child[][]"],
+        [union, "Child | Parent"],
+        [intersection, "Child & Parent"],
+        [{ kind: "array", element: union }, "(Child | Parent)[]"],
+        [{ kind: "array", element: intersection }, "(Child & Parent)[]"],
+        [{ kind: "and", items: [union, c] }, "(Child | Parent) & Mixin"],
+        [{ kind: "or", items: [intersection, c] }, "Child & Parent | Mixin"],
+        [{ kind: "tuple", items: [union, intersection] }, "[Child | Parent, Child & Parent]"],
+    ];
+    for (const [result, expected] of cases) {
+        model.requests[0].result = result;
+        const output = generateTypeScript(model, ["test/feature"]);
+        assert.ok(output.includes(`result: ${expected};`), expected);
+    }
 });
 
 test("LSP TypeScript generation reports invalid schema and method inputs", () => {

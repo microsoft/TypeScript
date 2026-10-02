@@ -45,7 +45,7 @@ export interface CallHierarchyIncomingCall {
      * The ranges at which the calls appear. This is relative to the caller
      * denoted by {@link CallHierarchyIncomingCall.from `this.from`}.
      */
-    fromRanges: (Range)[];
+    fromRanges: Range[];
 }
 
 /**
@@ -84,7 +84,7 @@ export interface CallHierarchyItem {
     /**
      * Tags for this item.
      */
-    tags?: (SymbolTag)[] | undefined;
+    tags?: SymbolTag[] | undefined;
     /**
      * More detail for this item, e.g. the signature of a function.
      */
@@ -124,7 +124,7 @@ export interface CallHierarchyOutgoingCall {
      * passed to {@link CallHierarchyItemProvider.provideCallHierarchyOutgoingCalls `provideCallHierarchyOutgoingCalls`}
      * and not {@link CallHierarchyOutgoingCall.to `this.to`}.
      */
-    fromRanges: (Range)[];
+    fromRanges: Range[];
 }
 
 /**
@@ -213,7 +213,7 @@ export interface CodeAction {
     /**
      * The diagnostics that this code action resolves.
      */
-    diagnostics?: (Diagnostic)[] | undefined;
+    diagnostics?: Diagnostic[] | undefined;
     /**
      * Marks this as a preferred action. Preferred actions are used by the `auto fix` command and can be targeted
      * by keybindings.
@@ -264,7 +264,7 @@ export interface CodeAction {
      *
      * @since 3.18.0
      */
-    tags?: (CodeActionTag)[] | undefined;
+    tags?: CodeActionTag[] | undefined;
 }
 
 /**
@@ -279,14 +279,14 @@ export interface CodeActionContext {
      * that these accurately reflect the error state of the resource. The primary parameter
      * to compute code actions is the provided range.
      */
-    diagnostics: (Diagnostic)[];
+    diagnostics: Diagnostic[];
     /**
      * Requested kind of actions to return.
      *
      * Actions not of this kind are filtered out by the client before being shown. So servers
      * can omit computing them.
      */
-    only?: (CodeActionKind)[] | undefined;
+    only?: CodeActionKind[] | undefined;
     /**
      * The reason why code actions were requested.
      *
@@ -434,7 +434,7 @@ export interface Command {
      * Arguments that the command handler should be
      * invoked with.
      */
-    arguments?: (LSPAny)[] | undefined;
+    arguments?: LSPAny[] | undefined;
 }
 
 /**
@@ -483,7 +483,7 @@ export interface CompletionItem {
      *
      * @since 3.15.0
      */
-    tags?: (CompletionItemTag)[] | undefined;
+    tags?: CompletionItemTag[] | undefined;
     /**
      * A human-readable string with additional information
      * about this item, like type or symbol information.
@@ -492,7 +492,7 @@ export interface CompletionItem {
     /**
      * A human-readable string that represents a doc-comment.
      */
-    documentation?: (string | MarkupContent) | undefined;
+    documentation?: string | MarkupContent | undefined;
     /**
      * Indicates if this item is deprecated.
      * @deprecated Use `tags` instead.
@@ -571,7 +571,7 @@ export interface CompletionItem {
      *
      * @since 3.16.0 additional type `InsertReplaceEdit`
      */
-    textEdit?: (TextEdit | InsertReplaceEdit) | undefined;
+    textEdit?: TextEdit | InsertReplaceEdit | undefined;
     /**
      * The edit text used if the completion item is part of a CompletionList and
      * CompletionList defines an item default for the text edit range.
@@ -594,13 +594,13 @@ export interface CompletionItem {
      * (for example adding an import statement at the top of the file if the completion item will
      * insert an unqualified type).
      */
-    additionalTextEdits?: (TextEdit)[] | undefined;
+    additionalTextEdits?: TextEdit[] | undefined;
     /**
      * An optional set of characters that when pressed while this completion is active will accept it first and
      * then type that character. *Note* that all commit characters should have `length=1` and that superfluous
      * characters will be ignored.
      */
-    commitCharacters?: (string)[] | undefined;
+    commitCharacters?: string[] | undefined;
     /**
      * An optional {@link Command command} that is executed *after* inserting this completion. *Note* that
      * additional modifications to the current document should be described with the
@@ -702,13 +702,13 @@ export interface CompletionItemDefaults {
      *
      * @since 3.17.0
      */
-    commitCharacters?: (string)[] | undefined;
+    commitCharacters?: string[] | undefined;
     /**
      * A default edit range.
      *
      * @since 3.17.0
      */
-    editRange?: (Range | EditRangeWithInsertReplace) | undefined;
+    editRange?: Range | EditRangeWithInsertReplace | undefined;
     /**
      * A default insert text format.
      *
@@ -813,7 +813,7 @@ export interface CompletionList {
     /**
      * The completion items.
      */
-    items: (CompletionItem)[];
+    items: CompletionItem[];
 }
 
 /**
@@ -895,7 +895,7 @@ export interface CreateFileOptions {
  * Servers should prefer returning `DefinitionLink` over `Definition` if supported
  * by the client.
  */
-export type Definition = Location | (Location)[];
+export type Definition = Location | Location[];
 
 /**
  * Information about where a symbol is defined.
@@ -984,7 +984,7 @@ export interface Diagnostic {
     /**
      * The diagnostic's code, which usually appear in the user interface.
      */
-    code?: (number | string) | undefined;
+    code?: number | string | undefined;
     /**
      * An optional property to describe the error code.
      * Requires the code field (above) to be present/not null.
@@ -1010,12 +1010,12 @@ export interface Diagnostic {
      *
      * @since 3.15.0
      */
-    tags?: (DiagnosticTag)[] | undefined;
+    tags?: DiagnosticTag[] | undefined;
     /**
      * An array of related diagnostic information, e.g. when symbol-names within
      * a scope collide all definitions can be marked via this property.
      */
-    relatedInformation?: (DiagnosticRelatedInformation)[] | undefined;
+    relatedInformation?: DiagnosticRelatedInformation[] | undefined;
     /**
      * A data entry field that is preserved between a `textDocument/publishDiagnostics`
      * notification and `textDocument/codeAction` request.
@@ -1229,7 +1229,7 @@ export interface DocumentSymbol {
      *
      * @since 3.16.0
      */
-    tags?: (SymbolTag)[] | undefined;
+    tags?: SymbolTag[] | undefined;
     /**
      * Indicates if this symbol is deprecated.
      *
@@ -1250,7 +1250,7 @@ export interface DocumentSymbol {
     /**
      * Children of this symbol, e.g. properties of a class.
      */
-    children?: (DocumentSymbol)[] | undefined;
+    children?: DocumentSymbol[] | undefined;
 }
 
 /**
@@ -1399,7 +1399,7 @@ export interface FullDocumentDiagnosticReport {
     /**
      * The actual items.
      */
-    items: (Diagnostic)[];
+    items: Diagnostic[];
 }
 
 /**
@@ -1409,7 +1409,7 @@ export interface Hover {
     /**
      * The hover's content
      */
-    contents: MarkupContent | MarkedString | (MarkedString)[];
+    contents: MarkupContent | MarkedString | MarkedString[];
     /**
      * An optional range inside the text document that is used to
      * visualize the hover, e.g. by changing the background color.
@@ -1486,7 +1486,7 @@ export interface InlayHint {
      *
      * *Note* that neither the string nor the label part can be empty.
      */
-    label: string | (InlayHintLabelPart)[];
+    label: string | InlayHintLabelPart[];
     /**
      * The kind of this hint. Can be omitted in which case the client
      * should fall back to a reasonable default.
@@ -1499,11 +1499,11 @@ export interface InlayHint {
      * hint (or its nearest variant) is now part of the document and the inlay
      * hint itself is now obsolete.
      */
-    textEdits?: (TextEdit)[] | undefined;
+    textEdits?: TextEdit[] | undefined;
     /**
      * The tooltip text when you hover over this item.
      */
-    tooltip?: (string | MarkupContent) | undefined;
+    tooltip?: string | MarkupContent | undefined;
     /**
      * Render padding before the hint.
      *
@@ -1550,7 +1550,7 @@ export interface InlayHintLabelPart {
      * the client capability `inlayHint.resolveSupport` clients might resolve
      * this property late using the resolve request.
      */
-    tooltip?: (string | MarkupContent) | undefined;
+    tooltip?: string | MarkupContent | undefined;
     /**
      * An optional source code location that represents this
      * label part.
@@ -1642,7 +1642,7 @@ export type LSPAny = LSPObject | LSPArray | string | number | boolean | null;
  * LSP arrays.
  * @since 3.17.0
  */
-export type LSPArray = (LSPAny)[];
+export type LSPArray = LSPAny[];
 
 /**
  * LSP object definition.
@@ -1675,7 +1675,7 @@ export interface LinkedEditingRanges {
      * A list of ranges that can be edited together. The ranges must have
      * identical length and contain identical text content. The ranges cannot overlap.
      */
-    ranges: (Range)[];
+    ranges: Range[];
     /**
      * An optional word pattern (regular expression) that describes valid contents for
      * the given ranges. If no pattern is provided, the client configuration's word
@@ -1811,7 +1811,7 @@ export interface MultiDocumentHighlight {
     /**
      * The highlights for the document.
      */
-    highlights: (DocumentHighlight)[];
+    highlights: DocumentHighlight[];
 }
 
 /**
@@ -1829,7 +1829,7 @@ export interface MultiDocumentHighlightParams {
     /**
      * The list of file URIs to search for highlights across.
      */
-    filesToSearch: (DocumentUri)[];
+    filesToSearch: DocumentUri[];
 }
 
 /**
@@ -1874,7 +1874,7 @@ export interface ParameterInformation {
      * The human-readable doc-comment of this parameter. Will be shown
      * in the UI but can be omitted.
      */
-    documentation?: (string | MarkupContent) | undefined;
+    documentation?: string | MarkupContent | undefined;
 }
 
 /**
@@ -2032,7 +2032,7 @@ export interface RelatedFullDocumentDiagnosticReport {
     /**
      * The actual items.
      */
-    items: (Diagnostic)[];
+    items: Diagnostic[];
     /**
      * Diagnostics of related documents. This information is useful
      * in programming languages where code in a file A can generate
@@ -2176,7 +2176,7 @@ export interface SelectionRangeParams {
     /**
      * The positions inside the text document.
      */
-    positions: (Position)[];
+    positions: Position[];
 }
 
 /**
@@ -2193,7 +2193,7 @@ export interface SemanticTokens {
     /**
      * The actual tokens.
      */
-    data: (number)[];
+    data: number[];
 }
 
 /**
@@ -2247,7 +2247,7 @@ export interface SignatureHelp {
     /**
      * One or more signatures.
      */
-    signatures: (SignatureInformation)[];
+    signatures: SignatureInformation[];
     /**
      * The active signature. If omitted or the value lies outside the
      * range of `signatures` the value defaults to zero or is ignored if
@@ -2281,7 +2281,7 @@ export interface SignatureHelp {
      * Since version 3.16.0 the `SignatureInformation` itself provides a
      * `activeParameter` property and it should be used instead of this one.
      */
-    activeParameter?: (number | null) | undefined;
+    activeParameter?: number | null | undefined;
 }
 
 /**
@@ -2363,11 +2363,11 @@ export interface SignatureInformation {
      * The human-readable doc-comment of this signature. Will be shown
      * in the UI but can be omitted.
      */
-    documentation?: (string | MarkupContent) | undefined;
+    documentation?: string | MarkupContent | undefined;
     /**
      * The parameters of this signature.
      */
-    parameters?: (ParameterInformation)[] | undefined;
+    parameters?: ParameterInformation[] | undefined;
     /**
      * The index of the active parameter.
      *
@@ -2381,7 +2381,7 @@ export interface SignatureInformation {
      *
      * @since 3.16.0
      */
-    activeParameter?: (number | null) | undefined;
+    activeParameter?: number | null | undefined;
     /**
      * A colorized label for the signature, providing classified text runs for VS syntax coloring.
      */
@@ -2448,7 +2448,7 @@ export interface SymbolInformation {
      *
      * @since 3.16.0
      */
-    tags?: (SymbolTag)[] | undefined;
+    tags?: SymbolTag[] | undefined;
     /**
      * The name of the symbol containing this symbol. This information is for
      * user interface purposes (e.g. to render a qualifier in the user interface
@@ -2508,7 +2508,7 @@ export interface TextDocumentEdit {
      * @since 3.18.0 - support for SnippetTextEdit. This is guarded using a
      * client capability.
      */
-    edits: ((TextEdit | AnnotatedTextEdit | SnippetTextEdit))[];
+    edits: (TextEdit | AnnotatedTextEdit | SnippetTextEdit)[];
 }
 
 /**
@@ -2602,7 +2602,7 @@ export interface VSClassifiedTextElement {
     /**
      * The classified text runs that make up this element.
      */
-    Runs: (VSClassifiedTextRun)[];
+    Runs: VSClassifiedTextRun[];
     /**
      * VS type discriminator required by ObjectContentConverter for deserialization.
      */
@@ -2646,7 +2646,7 @@ export interface VSContainerElement {
     /**
      * The child elements contained within this container.
      */
-    Elements: ((VSImageElement | VSClassifiedTextElement | VSContainerElement))[];
+    Elements: (VSImageElement | VSClassifiedTextElement | VSContainerElement)[];
     /**
      * VS type discriminator required by ObjectContentConverter for deserialization.
      */
@@ -2737,7 +2737,7 @@ export interface VSReferenceItem {
     /**
      * The kind(s) of this reference (read, write, etc.).
      */
-    _vs_kind?: (VSReferenceKind)[] | undefined;
+    _vs_kind?: VSReferenceKind[] | undefined;
     /**
      * The location of this reference.
      */
@@ -2776,7 +2776,7 @@ export interface WorkspaceEdit {
     /**
      * Holds changes to existing resources.
      */
-    changes?: { [key: DocumentUri]: (TextEdit)[]; } | undefined;
+    changes?: { [key: DocumentUri]: TextEdit[]; } | undefined;
     /**
      * Depending on the client capability `workspace.workspaceEdit.resourceOperations` document changes
      * are either an array of `TextDocumentEdit`s to express changes to n different text documents
@@ -2789,7 +2789,7 @@ export interface WorkspaceEdit {
      * If a client neither supports `documentChanges` nor `workspace.workspaceEdit.resourceOperations` then
      * only plain `TextEdit`s using the `changes` property are supported.
      */
-    documentChanges?: ((TextDocumentEdit | CreateFile | RenameFile | DeleteFile))[] | undefined;
+    documentChanges?: (TextDocumentEdit | CreateFile | RenameFile | DeleteFile)[] | undefined;
     /**
      * A map of change annotations that can be referenced in `AnnotatedTextEdit`s or create, rename and
      * delete file / folder operations.
@@ -2822,7 +2822,7 @@ export interface WorkspaceSymbol {
      *
      * @since 3.16.0
      */
-    tags?: (SymbolTag)[] | undefined;
+    tags?: SymbolTag[] | undefined;
     /**
      * The name of the symbol containing this symbol. This information is for
      * user interface purposes (e.g. to render a qualifier in the user interface
@@ -2878,36 +2878,36 @@ export interface WorkspaceSymbolParams {
 /** Language-feature requests supported by the extension middleware API. */
 export interface LspMiddlewareRequests {
     "textDocument/hover": { params: HoverParams; result: Hover | null; };
-    "textDocument/completion": { params: CompletionParams; result: (CompletionItem)[] | CompletionList | null; };
+    "textDocument/completion": { params: CompletionParams; result: CompletionItem[] | CompletionList | null; };
     "completionItem/resolve": { params: CompletionItem; result: CompletionItem; };
     "textDocument/signatureHelp": { params: SignatureHelpParams; result: SignatureHelp | null; };
-    "textDocument/definition": { params: DefinitionParams; result: Definition | (DefinitionLink)[] | null; };
-    "textDocument/typeDefinition": { params: TypeDefinitionParams; result: Definition | (DefinitionLink)[] | null; };
-    "textDocument/implementation": { params: ImplementationParams; result: Definition | (DefinitionLink)[] | null; };
-    "textDocument/references": { params: ReferenceParams; result: (Location)[] | null; };
-    "textDocument/documentHighlight": { params: DocumentHighlightParams; result: (DocumentHighlight)[] | null; };
-    "textDocument/documentSymbol": { params: DocumentSymbolParams; result: (SymbolInformation)[] | (DocumentSymbol)[] | null; };
-    "workspace/symbol": { params: WorkspaceSymbolParams; result: (SymbolInformation)[] | (WorkspaceSymbol)[] | null; };
+    "textDocument/definition": { params: DefinitionParams; result: Definition | DefinitionLink[] | null; };
+    "textDocument/typeDefinition": { params: TypeDefinitionParams; result: Definition | DefinitionLink[] | null; };
+    "textDocument/implementation": { params: ImplementationParams; result: Definition | DefinitionLink[] | null; };
+    "textDocument/references": { params: ReferenceParams; result: Location[] | null; };
+    "textDocument/documentHighlight": { params: DocumentHighlightParams; result: DocumentHighlight[] | null; };
+    "textDocument/documentSymbol": { params: DocumentSymbolParams; result: SymbolInformation[] | DocumentSymbol[] | null; };
+    "workspace/symbol": { params: WorkspaceSymbolParams; result: SymbolInformation[] | WorkspaceSymbol[] | null; };
     "textDocument/rename": { params: RenameParams; result: WorkspaceEdit | null; };
     "textDocument/prepareRename": { params: PrepareRenameParams; result: PrepareRenameResult | null; };
-    "textDocument/formatting": { params: DocumentFormattingParams; result: (TextEdit)[] | null; };
-    "textDocument/rangeFormatting": { params: DocumentRangeFormattingParams; result: (TextEdit)[] | null; };
-    "textDocument/onTypeFormatting": { params: DocumentOnTypeFormattingParams; result: (TextEdit)[] | null; };
-    "textDocument/selectionRange": { params: SelectionRangeParams; result: (SelectionRange)[] | null; };
-    "textDocument/foldingRange": { params: FoldingRangeParams; result: (FoldingRange)[] | null; };
-    "textDocument/inlayHint": { params: InlayHintParams; result: (InlayHint)[] | null; };
-    "textDocument/codeAction": { params: CodeActionParams; result: ((Command | CodeAction))[] | null; };
-    "textDocument/codeLens": { params: CodeLensParams; result: (CodeLens)[] | null; };
+    "textDocument/formatting": { params: DocumentFormattingParams; result: TextEdit[] | null; };
+    "textDocument/rangeFormatting": { params: DocumentRangeFormattingParams; result: TextEdit[] | null; };
+    "textDocument/onTypeFormatting": { params: DocumentOnTypeFormattingParams; result: TextEdit[] | null; };
+    "textDocument/selectionRange": { params: SelectionRangeParams; result: SelectionRange[] | null; };
+    "textDocument/foldingRange": { params: FoldingRangeParams; result: FoldingRange[] | null; };
+    "textDocument/inlayHint": { params: InlayHintParams; result: InlayHint[] | null; };
+    "textDocument/codeAction": { params: CodeActionParams; result: (Command | CodeAction)[] | null; };
+    "textDocument/codeLens": { params: CodeLensParams; result: CodeLens[] | null; };
     "codeLens/resolve": { params: CodeLens; result: CodeLens; };
-    "textDocument/prepareCallHierarchy": { params: CallHierarchyPrepareParams; result: (CallHierarchyItem)[] | null; };
-    "callHierarchy/incomingCalls": { params: CallHierarchyIncomingCallsParams; result: (CallHierarchyIncomingCall)[] | null; };
-    "callHierarchy/outgoingCalls": { params: CallHierarchyOutgoingCallsParams; result: (CallHierarchyOutgoingCall)[] | null; };
+    "textDocument/prepareCallHierarchy": { params: CallHierarchyPrepareParams; result: CallHierarchyItem[] | null; };
+    "callHierarchy/incomingCalls": { params: CallHierarchyIncomingCallsParams; result: CallHierarchyIncomingCall[] | null; };
+    "callHierarchy/outgoingCalls": { params: CallHierarchyOutgoingCallsParams; result: CallHierarchyOutgoingCall[] | null; };
     "textDocument/linkedEditingRange": { params: LinkedEditingRangeParams; result: LinkedEditingRanges | null; };
     "textDocument/semanticTokens/full": { params: SemanticTokensParams; result: SemanticTokens | null; };
     "textDocument/semanticTokens/range": { params: SemanticTokensRangeParams; result: SemanticTokens | null; };
     "textDocument/diagnostic": { params: DocumentDiagnosticParams; result: DocumentDiagnosticReport; };
-    "custom/textDocument/sourceDefinition": { params: TextDocumentPositionParams; result: Definition | (DefinitionLink)[] | null; };
-    "custom/textDocument/multiDocumentHighlight": { params: MultiDocumentHighlightParams; result: (MultiDocumentHighlight)[] | null; };
+    "custom/textDocument/sourceDefinition": { params: TextDocumentPositionParams; result: Definition | DefinitionLink[] | null; };
+    "custom/textDocument/multiDocumentHighlight": { params: MultiDocumentHighlightParams; result: MultiDocumentHighlight[] | null; };
     "textDocument/_vs_onAutoInsert": { params: VSOnAutoInsertParams; result: VSOnAutoInsertResponseItem | null; };
-    "textDocument/_vs_references": { params: ReferenceParams; result: (VSReferenceItem)[] | null; };
+    "textDocument/_vs_references": { params: ReferenceParams; result: VSReferenceItem[] | null; };
 }

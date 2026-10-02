@@ -67,7 +67,13 @@ export function generateTypeScript(model: MetaModel, methods: readonly string[])
         return name;
     }
 
-    function type(value: Type): string {
+    function type(value: Type, minimumPrecedence = 0): string {
+        const precedence = value.kind === "or" ? 1 : value.kind === "and" ? 2 : value.kind === "array" ? 3 : 4;
+        const text = typeText(value);
+        return precedence < minimumPrecedence ? `(${text})` : text;
+    }
+
+    function typeText(value: Type): string {
         switch (value.kind) {
             case "base":
                 if (value.name === "DocumentUri" || value.name === "URI") {
@@ -78,15 +84,15 @@ export function generateTypeScript(model: MetaModel, methods: readonly string[])
             case "reference":
                 return reference(value.name);
             case "array":
-                return `(${type(value.element)})[]`;
+                return `${type(value.element, 3)}[]`;
             case "map":
                 return `{ [key: ${type(value.key)}]: ${type(value.value)}; }`;
             case "and":
-                return `(${value.items.map(type).join(" & ")})`;
+                return value.items.map(item => type(item, 2)).join(" & ");
             case "or":
-                return `(${[...new Set(value.items.map(type))].join(" | ")})`;
+                return [...new Set(value.items.map(item => type(item, 1)))].join(" | ");
             case "tuple":
-                return `[${value.items.map(type).join(", ")}]`;
+                return `[${value.items.map(item => type(item)).join(", ")}]`;
             case "literal":
                 return `{\n${properties(value.value.properties)}\n}`;
             case "stringLiteral":
@@ -107,7 +113,7 @@ export function generateTypeScript(model: MetaModel, methods: readonly string[])
         selected.add(method);
         const request = requests.get(method);
         if (!request || request.messageDirection !== "clientToServer") throw new Error(`Not a client-to-server request: ${method}`);
-        const params = !request.params ? "undefined" : Array.isArray(request.params) ? `[${request.params.map(type).join(", ")}]` : type(request.params);
+        const params = !request.params ? "undefined" : Array.isArray(request.params) ? `[${request.params.map(item => type(item)).join(", ")}]` : type(request.params);
         return `${JSON.stringify(method)}: { params: ${params}; result: ${type(request.result)}; };`;
     });
     return [
