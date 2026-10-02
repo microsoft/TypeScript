@@ -1,4 +1,7 @@
 // === goToDefinition ===
+// === /src/types/lib/index.d.ts ===
+// [||]declare let $: {x: number};
+
 // === /src/app.ts ===
-// /// <reference types="lib/*GOTO DEF*/"/>
+// /// <reference types="[|lib|]/*GOTO DEF*/"/>
 // $.x;

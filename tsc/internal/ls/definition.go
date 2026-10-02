@@ -51,13 +51,15 @@ func (l *LanguageService) provideDefinitionAtPosition(ctx context.Context, progr
 	node := astnav.GetTouchingPropertyName(file, pos)
 	reference := getReferenceAtPosition(file, pos, program)
 
-	if node.Kind == ast.KindSourceFile {
-		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}
-	}
-
 	originSelectionRange, _ := l.createLspRangeFromNode(node, file)
 	if reference != nil && reference.file != nil {
+		if node.Kind == ast.KindSourceFile {
+			originSelectionRange, _ = l.createLspRangeFromBounds(reference.reference.Pos(), reference.reference.End(), file)
+		}
 		return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, []*ast.Node{}, reference, spanmap.FeatureDefinition)
+	}
+	if node.Kind == ast.KindSourceFile {
+		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}
 	}
 
 	c, done := program.GetTypeCheckerForFile(ctx, file)
