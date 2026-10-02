@@ -123,55 +123,7 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 		opts = &core.CompilerOptions{}
 	}
 
-	// Clear options that do not apply to single-file transpilation.
-	opts.Incremental = core.TSUnknown
-	opts.Declaration = core.TSUnknown
-	opts.EmitDeclarationOnly = core.TSUnknown
-	opts.NoEmit = core.TSUnknown
-	opts.Lib = nil
-	opts.OutFile = ""
-	opts.Composite = core.TSUnknown
-	opts.TsBuildInfoFile = ""
-	opts.Paths = nil
-	opts.RootDirs = nil
-	opts.Types = nil
-	opts.AllowImportingTsExtensions = core.TSUnknown
-	opts.NoEmitOnError = core.TSUnknown
-	opts.DeclarationDir = ""
-
-	// Do not set `isolatedModules` if `verbatimModuleSyntax` was supplied, since
-	// it would be redundant.
-	if !opts.VerbatimModuleSyntax.IsTrue() {
-		opts.IsolatedModules = core.TSTrue
-	}
-	opts.NoCheck = core.TSTrue
-	opts.NoResolve = core.TSTrue
-
-	// transpileModule/transpileDeclaration do not write anything to disk, so
-	// there's no need to verify there are no conflicts between input and
-	// output paths.
-	opts.SuppressOutputPathCheck = core.TSTrue
-
-	// FileName can be a non-ts file.
-	opts.AllowNonTsExtensions = core.TSTrue
-
-	if declaration {
-		opts.Declaration = core.TSTrue
-		opts.EmitDeclarationOnly = core.TSTrue
-		opts.IsolatedDeclarations = core.TSTrue
-	} else {
-		opts.Declaration = core.TSFalse
-		opts.DeclarationMap = core.TSFalse
-		opts.IsolatedDeclarations = core.TSFalse
-	}
-
-	// When transpiling declarations, we need a lib. GetDefaultLibFileName will
-	// cause the barebones lib below to be used instead of a real lib.
-	if declaration {
-		opts.NoLib = core.TSFalse
-	} else {
-		opts.NoLib = core.TSTrue
-	}
+	setOptionsForTranspile(opts, declaration)
 
 	// If jsx is specified, then treat the file as .tsx.
 	fileName := options.FileName

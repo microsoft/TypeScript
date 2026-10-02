@@ -12,6 +12,9 @@ import {
     SyntaxKind,
     TokenFlags,
 } from "../../ast/index.ts";
+import type { API as AsyncAPI } from "../async/api.ts";
+import type { CachedSourceFile } from "../sourceFileCache.ts";
+import type { API as SyncAPI } from "../sync/api.ts";
 import type { TimingCollector } from "../timing.ts";
 import { MsgpackReader } from "./msgpack.ts";
 import {
@@ -78,6 +81,8 @@ for (const [index, offset] of Object.values(sourceFileExtendedDataOffsets).entri
 const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
+    readonly api: AsyncAPI<boolean> | SyncAPI<boolean> | undefined;
+    symbolCache: CachedSourceFile<unknown> | undefined;
     readonly nodes: (RemoteNode | RemoteNodeList)[];
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
@@ -100,7 +105,12 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
     private _diagnosticDirectivesRead = false;
 
-    constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector) {
+    constructor(
+        data: Uint8Array,
+        decoder: TextDecoder,
+        timing?: TimingCollector,
+        api?: AsyncAPI<boolean> | SyncAPI<boolean> | undefined,
+    ) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
         super(view, 1, undefined!, undefined!, offsetNodes);
@@ -112,6 +122,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
         this._decoder = decoder;
         this._timing = timing;
+        this.api = api;
         this.nodes = Array((view.byteLength - offsetNodes) / NODE_LEN);
         this.nodes[1] = this;
         // Every node slot is materializable on demand except the nil sentinel at

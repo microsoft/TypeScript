@@ -893,6 +893,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleRetainSourceFile(parsed.(*RetainSourceFileParams))
 	case string(MethodGetCachedSourceFile):
 		return s.handleGetCachedSourceFile(parsed.(*GetCachedSourceFileParams))
+	case string(MethodGetSymbolOfDeclaration):
+		return s.handleGetSymbolOfDeclaration(parsed.(*GetSymbolOfDeclarationParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
 	case string(MethodCreateSnapshot):
@@ -2041,7 +2043,11 @@ func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, 
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
-	lease, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
+	if err != nil {
+		return nil, err
+	}
+	lease, err := s.createSourceFile(fileName, params.SourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
@@ -2050,7 +2056,10 @@ func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSour
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *CreateSourceFileFromFileParams) (any, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.GetCurrentDirectory())
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
+	if err != nil {
+		return nil, err
+	}
 	sourceText, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
@@ -2060,6 +2069,13 @@ func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *Cr
 		return nil, err
 	}
 	return s.encodeLeasedSourceFile(lease)
+}
+
+func (s *Session) resolveCreateSourceFileName(fileName string) (string, error) {
+	if fileName == "" {
+		return "", fmt.Errorf("%w: fileName must not be empty", ErrClientError)
+	}
+	return tspath.GetNormalizedAbsolutePath(fileName, s.GetCurrentDirectory()), nil
 }
 
 func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*project.SourceFileLease, error) {
@@ -2114,6 +2130,28 @@ func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (
 	}
 	defer lease.Release()
 	return s.encodeSourceFileResponse(lease.SourceFile())
+}
+
+func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationParams) (*SymbolResponse, error) {
+	lease, err := s.acquireCachedSourceFile(params.File)
+	if err != nil {
+		return nil, err
+	}
+	defer lease.Release()
+
+	table := encoder.GetNodeIndexTable(lease.SourceFile())
+	if params.Index == 0 || int(params.Index) >= len(table.Nodes) {
+		return nil, fmt.Errorf("%w: declaration node index %d is out of range", ErrClientError, params.Index)
+	}
+	node := table.Nodes[params.Index]
+	if node == nil || !ast.IsDeclaration(node) {
+		return nil, fmt.Errorf("%w: node index %d is not a declaration", ErrClientError, params.Index)
+	}
+	symbol := node.Symbol()
+	if symbol == nil {
+		return nil, fmt.Errorf("%w: declaration node index %d has no binder symbol", ErrClientError, params.Index)
+	}
+	return newFileSymbolResponse(symbol), nil
 }
 
 // acquireCachedSourceFile holds a reference to the exact ordinary cached AST identified by a
@@ -3168,7 +3206,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
 		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectID, userPreferences) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.GetCurrentDirectory()), nil)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
 		}
@@ -5364,7 +5402,11 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 		if params.IncludeSymbol {
 			return nil, fmt.Errorf("%w: snapshot is not prepared for auto-imports for %s", ErrClientError, params.File)
 		}
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.GetCurrentDirectory()), nil)
+		sourceFile := program.GetSourceFile(params.File.ToFileName())
+		if sourceFile == nil {
+			return nil, nil
+		}
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
 		}

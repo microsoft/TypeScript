@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
@@ -51,6 +52,7 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 		ModuleResolution: core.ModuleResolutionKindBundler,
 		Module:           core.ModuleKindESNext,
 		Target:           core.ScriptTargetESNext,
+		TraceResolution:  core.TSTrue,
 	}
 	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
 
@@ -105,6 +107,269 @@ func TestResolutionDataCaches(t *testing.T) {
 	assert.Assert(t, !resolver.GetPackageScopeForPath("/new").Exists())
 	assert.Assert(t, !resolver.GetPackageScopeForPath("/missing-first").Exists())
 	assert.Assert(t, clone.GetPackageScopeForPath("/missing-first").Exists())
+}
+
+func TestResolveDynamicModuleNameUsingRootDirs(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		name       string
+		targetRoot string
+		targetFile string
+	}{
+		{
+			name:       "dynamic roots",
+			targetRoot: "^/~ts-uri~/custom/ts-nul-authority/generated",
+			targetFile: "^/~ts-uri~/custom/ts-nul-authority/generated/~ts-uri-escape~7e74732d7572692d6573636170657e66696c65~.ts",
+		},
+		{
+			name:       "dynamic to disk",
+			targetRoot: "c:/generated",
+			targetFile: "c:/generated/~ts-uri-escape~file.ts",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			const sourceFile = "^/~ts-uri~/custom/ts-nul-authority/src/main.ts"
+			fs := vfstest.FromMap(map[string]string{
+				sourceFile:      "",
+				test.targetFile: "export const value = 1;",
+			}, true)
+			host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+			opts := &core.CompilerOptions{
+				ModuleResolution: core.ModuleResolutionKindBundler,
+				Module:           core.ModuleKindESNext,
+				Target:           core.ScriptTargetESNext,
+				RootDirs: []string{
+					"^/~ts-uri~/custom/ts-nul-authority/src",
+					test.targetRoot,
+				},
+			}
+
+			resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+			resolved, _, _ := resolver.ResolveModuleName("./~ts-uri-escape~file", sourceFile, core.ModuleKindESNext, nil)
+			if !resolved.IsResolved() || resolved.ResolvedFileName != test.targetFile {
+				t.Errorf("resolved file = %q, expected %q", resolved.ResolvedFileName, test.targetFile)
+			}
+		})
+	}
+}
+
+func TestRootDirsPreservesExceptionalDynamicSegments(t *testing.T) {
+	t.Parallel()
+
+	const (
+		sourceFile = "^/~ts-uri~/custom/ts-nul-authority/src/~ts-uri-escape~2e2e~/main.ts"
+		targetFile = "^/~ts-uri~/custom/ts-nul-authority/generated/~ts-uri-escape~2e2e~/dep.ts"
+	)
+	fs := vfstest.FromMap(map[string]string{
+		sourceFile: "",
+		targetFile: "export const value = 1;",
+		"^/~ts-uri~/custom/ts-nul-authority/dep.ts": "export const wrong = 1;",
+	}, true)
+	host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindESNext,
+		Target:           core.ScriptTargetESNext,
+		RootDirs: []string{
+			"^/~ts-uri~/custom/ts-nul-authority/src",
+			"^/~ts-uri~/custom/ts-nul-authority/generated",
+		},
+	}
+
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+	resolved, _, _ := resolver.ResolveModuleName("./dep", sourceFile, core.ModuleKindESNext, nil)
+	if !resolved.IsResolved() || resolved.ResolvedFileName != targetFile {
+		t.Errorf("resolved file = %q, expected %q", resolved.ResolvedFileName, targetFile)
+	}
+}
+
+func TestRootDirsRejectsUnrepresentableDiskSegments(t *testing.T) {
+	t.Parallel()
+
+	for _, sourceFile := range []string{
+		"^/~ts-uri~/custom/ts-nul-authority/src/~ts-uri-escape~2e2e~/main.ts",
+		"^/~ts-uri~/custom/ts-nul-authority/src/c:/main.ts",
+		"^/~ts-uri~/custom/ts-nul-authority/src/^/main.ts",
+	} {
+		t.Run(sourceFile, func(t *testing.T) {
+			t.Parallel()
+
+			fs := vfstest.FromMap(map[string]string{
+				sourceFile:  "",
+				"c:/dep.ts": "export const wrong = 1;",
+			}, true)
+			host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+			opts := &core.CompilerOptions{
+				ModuleResolution: core.ModuleResolutionKindBundler,
+				Module:           core.ModuleKindESNext,
+				Target:           core.ScriptTargetESNext,
+				RootDirs: []string{
+					"^/~ts-uri~/custom/ts-nul-authority/src",
+					"c:/generated",
+				},
+			}
+
+			resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+			resolved, _, _ := resolver.ResolveModuleName("./dep", sourceFile, core.ModuleKindESNext, nil)
+			if resolved.IsResolved() {
+				t.Errorf("unexpectedly resolved unrepresentable disk path to %q", resolved.ResolvedFileName)
+			}
+		})
+	}
+}
+
+func TestResolveDynamicPackageSubpathFile(t *testing.T) {
+	t.Parallel()
+
+	const (
+		sourceFile = "^/~ts-uri~/custom/ts-nul-authority/src/main.ts"
+		targetFile = "^/~ts-uri~/custom/ts-nul-authority/node_modules/pkg/~ts-uri-escape~7e74732d7572692d6573636170657e3636366636667e~.ts"
+	)
+	fs := vfstest.FromMap(map[string]string{
+		sourceFile: "",
+		"^/~ts-uri~/custom/ts-nul-authority/node_modules/pkg/package.json": `{"name":"pkg"}`,
+		targetFile: "export const value = 1;",
+	}, true)
+	host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindESNext,
+		Target:           core.ScriptTargetESNext,
+	}
+
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+	resolved, _, _ := resolver.ResolveModuleName("pkg/~ts-uri-escape~666f6f~.ts", sourceFile, core.ModuleKindESNext, nil)
+	if !resolved.IsResolved() || resolved.ResolvedFileName != targetFile {
+		t.Errorf("resolved file = %q, expected %q", resolved.ResolvedFileName, targetFile)
+	}
+}
+
+func TestResolveDynamicDottedDirectory(t *testing.T) {
+	t.Parallel()
+
+	const (
+		sourceFile = "^/~ts-uri~/custom/ts-nul-authority/src/main.ts"
+		targetFile = "^/~ts-uri~/custom/ts-nul-authority/src/~ts-uri-escape~7e74732d7572692d6573636170657e6469722e6a73~/index.ts"
+	)
+	fs := vfstest.FromMap(map[string]string{
+		sourceFile: "",
+		targetFile: "export const value = 1;",
+	}, true)
+	host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindCommonJS,
+		Target:           core.ScriptTargetESNext,
+	}
+
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+	resolved, _, _ := resolver.ResolveModuleName("./~ts-uri-escape~dir.js", sourceFile, core.ModuleKindCommonJS, nil)
+	if !resolved.IsResolved() || resolved.ResolvedFileName != targetFile {
+		t.Errorf("resolved file = %q, expected %q", resolved.ResolvedFileName, targetFile)
+	}
+}
+
+func TestResolveDynamicPackageJSONPath(t *testing.T) {
+	t.Parallel()
+
+	const (
+		sourceFile   = "^/~ts-uri~/custom/ts-nul-authority/src/main.ts"
+		fallbackFile = "^/~ts-uri~/custom/ts-nul-authority/node_modules/pkg/~ts-uri-escape~7e74732d7572692d6573636170657e7479706573~.d.ts"
+		targetFile   = "^/~ts-uri~/custom/ts-nul-authority/node_modules/pkg/ts3.1/~ts-uri-escape~7e74732d7572692d6573636170657e7479706573~.d.ts"
+	)
+	fs := vfstest.FromMap(map[string]string{
+		sourceFile: "",
+		"^/~ts-uri~/custom/ts-nul-authority/node_modules/pkg/package.json": `{"name":"pkg","types":"~ts-uri-escape~types.d.ts","typesVersions":{"*":{"*":["ts3.1/*"]}}}`,
+		fallbackFile: "export const fallback: number;",
+		targetFile:   "export const value: number;",
+	}, true)
+	host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindESNext,
+		Target:           core.ScriptTargetESNext,
+	}
+
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+	resolved, _, _ := resolver.ResolveModuleName("pkg", sourceFile, core.ModuleKindESNext, nil)
+	if !resolved.IsResolved() || resolved.ResolvedFileName != targetFile {
+		t.Errorf("resolved file = %q, expected %q", resolved.ResolvedFileName, targetFile)
+	}
+}
+
+func TestResolveDynamicESMPackageIndexFromReservedDirectory(t *testing.T) {
+	t.Parallel()
+
+	const (
+		sourceFile       = "^/~ts-uri~/custom/ts-nul-authority/src/main.ts"
+		packageName      = "~ts-uri-escape~pkg.js"
+		packageDirectory = "^/~ts-uri~/custom/ts-nul-authority/node_modules/~ts-uri-escape~7e74732d7572692d6573636170657e706b672e6a73~"
+		targetFile       = packageDirectory + "/index.js"
+	)
+	fs := vfstest.FromMap(map[string]string{
+		sourceFile:                         "",
+		packageDirectory + "/package.json": `{"name":"` + packageName + `"}`,
+		targetFile:                         "exports.value = 1;",
+	}, true)
+	host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindESNext,
+		Target:           core.ScriptTargetESNext,
+	}
+
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+	resolved, _, _ := resolver.ResolveModuleName(packageName, sourceFile, core.ModuleKindESNext, nil)
+	if !resolved.IsResolved() || resolved.ResolvedFileName != targetFile {
+		t.Errorf("resolved file = %q, expected %q", resolved.ResolvedFileName, targetFile)
+	}
+}
+
+func TestGeneratedDynamicEntrypointSpecifierResolvesEncodedFile(t *testing.T) {
+	t.Parallel()
+
+	const (
+		sourceFile      = "^/~ts-uri~/custom/ts-nul-authority/src/main.ts"
+		packageFile     = "^/~ts-uri~/custom/ts-nul-authority/node_modules/Pkg/~ts-uri-escape~7e74732d7572692d6573636170657e76616c7565~.d.ts"
+		moduleSpecifier = "Pkg/~ts-uri-spec~7e74732d7572692d6573636170657e76616c7565~.d.ts"
+	)
+	fs := vfstest.FromMap(map[string]string{
+		sourceFile: "",
+		"^/~ts-uri~/custom/ts-nul-authority/node_modules/Pkg/package.json": `{"name":"Pkg"}`,
+		packageFile: "export const value: number;",
+	}, true)
+	host := &resolutionHostStub{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindESNext,
+		Target:           core.ScriptTargetESNext,
+	}
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+
+	_, _, _ = resolver.ResolveModuleName("Pkg", sourceFile, core.ModuleKindESNext, nil)
+	var packageJson *packagejson.InfoCacheEntry
+	resolver.PackageJsonCacheEntries(func(_ tspath.Path, entry *packagejson.InfoCacheEntry) bool {
+		if entry.Exists() {
+			packageJson = entry
+			return false
+		}
+		return true
+	})
+	if packageJson == nil {
+		t.Fatal("expected package JSON cache entry")
+	}
+	entrypoints := resolver.GetEntrypointsFromPackageJsonInfo(packageJson, "Pkg", true)
+	if len(entrypoints) != 1 || entrypoints[0].ModuleSpecifier != moduleSpecifier {
+		t.Fatalf("entrypoints = %v, expected %q", entrypoints, moduleSpecifier)
+	}
+
+	resolved, _, _ := resolver.ResolveModuleName(moduleSpecifier, sourceFile, core.ModuleKindESNext, nil)
+	if !resolved.IsResolved() || resolved.ResolvedFileName != packageFile {
+		t.Errorf("resolved file = %q, expected %q", resolved.ResolvedFileName, packageFile)
+	}
 }
 
 // blockingFS wraps a vfs.FS and forces FileExists calls for `targetPath` to
@@ -356,7 +621,7 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 	}
 }
 
-func TestParseNodeModuleFromPath(t *testing.T) {
+func TestNodeModulePackageRoot(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -371,6 +636,8 @@ func TestParseNodeModuleFromPath(t *testing.T) {
 		{"folder subpath scoped", "/a/node_modules/@scope/b/lib/File", true, "/a/node_modules/@scope/b"},
 		{"package root folder", "/a/node_modules/b", true, "/a/node_modules/b"},
 		{"scoped package root folder", "/a/node_modules/@scope/b", true, "/a/node_modules/@scope/b"},
+		{"package root interpreted as file", "/a/node_modules/b", false, "/a/node_modules/"},
+		{"scoped package root interpreted as file", "/a/node_modules/@scope/b", false, "/a/node_modules/@scope"},
 		// A bare scope directory has no package name; must not panic (https://github.com/microsoft/TypeScript/tsc/issues/4373).
 		{"scope-only folder", "/a/node_modules/@scope", true, "/a/node_modules/@scope"},
 		{"types scope-only folder", "/a/node_modules/@types", true, "/a/node_modules/@types"},
@@ -380,8 +647,14 @@ func TestParseNodeModuleFromPath(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			if got := ParseNodeModuleFromPath(tt.path, tt.isFolder); got != tt.want {
-				t.Errorf("ParseNodeModuleFromPath(%q, %v) = %q, want %q", tt.path, tt.isFolder, got, tt.want)
+			var got string
+			if tt.isFolder {
+				got = NodeModulePackageRootForDirectory(tt.path)
+			} else {
+				got = NodeModulePackageRootForFile(tt.path)
+			}
+			if got != tt.want {
+				t.Errorf("nodeModulesPackageRoot(%q, %v) = %q, want %q", tt.path, tt.isFolder, got, tt.want)
 			}
 		})
 	}

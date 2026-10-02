@@ -699,4 +699,56 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Equal(t, updatedReferences[0].CompilerOptions().Strict, core.TSTrue)
 		})
 	})
+
+	t.Run("failed API update preserves API references", func(t *testing.T) {
+		t.Parallel()
+
+		const configFileName = "/project/tsconfig.json"
+		session := setup(map[string]any{
+			configFileName:      `{"compilerOptions":{"noLib":true},"files":["index.ts"]}`,
+			"/project/index.ts": "export const value = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		snapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
+			OpenProjects: collections.NewSetFromItems(configFileName),
+		})
+		assert.NilError(t, err)
+		snapshot.Deref()
+
+		configPath := session.toPath(configFileName)
+
+		failedSnapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
+			CloseProjects: collections.NewSetFromItems(configPath),
+			ReconfigurePrograms: []*APIReconfigureProgramRequest{{
+				ProgramID: NewSyntheticProjectID(999),
+			}},
+		})
+		assert.ErrorContains(t, err, "synthetic program not found for reconfiguration")
+		assert.Assert(t, failedSnapshot == nil)
+
+		apiState := session.Snapshot().ProjectCollection.apiState
+		assert.Equal(t, apiState.openProjects[configPath], 1)
+	})
+
+	t.Run("session close releases the current snapshot", func(t *testing.T) {
+		t.Parallel()
+
+		const fileName = "/project/index.ts"
+		session := setup(map[string]any{
+			fileName: "export const value = 1;",
+		})
+		session.DidOpenFile(context.Background(), "file://"+fileName, 1, "export const value = 1;", lsproto.LanguageKindTypeScript)
+
+		program := session.Snapshot().ProjectCollection.InferredProject().Program
+		sourceFile := program.GetSourceFile(fileName)
+		key := NewParseCacheKey(sourceFile.ParseOptions(), sourceFile.Hash, sourceFile.ScriptKind)
+		assert.Assert(t, session.parseCache.Has(key))
+
+		session.Close()
+
+		assert.Assert(t, !session.parseCache.Has(key))
+		assert.Equal(t, session.programCounter.Len(), 0)
+	})
 }

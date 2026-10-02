@@ -6,6 +6,7 @@ import { task } from "hereby";
 import assert from "node:assert";
 import crypto from "node:crypto";
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import url from "node:url";
@@ -347,6 +348,9 @@ async function runGenerateGo() {
     for (const generate of goGenerateActions) {
         await generate();
     }
+    // These generators load Go packages, so all generated Go sources must be current.
+    await runGenerateEnums();
+    await runGenerateAPI();
 }
 
 export const generateGo = task({
@@ -472,10 +476,27 @@ export const generateChecker = goGenerateTask("generate:checker", [
     stringerGenerator("tsc/internal/checker/types.go", "SignatureKind", "stringer_generated.go"),
 ]);
 
-export const generateCompilerOptions = goGenerateTask("generate:compileroptions", [
-    stringerGenerator("tsc/internal/core/compileroptions.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"),
-    stringerGenerator("tsc/internal/core/compileroptions.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"),
-]);
+async function runGenerateOptionDefinitions() {
+    const { default: generate } = await import("./tools/scripts/tsc/generate-options.ts");
+    await generate(!!options.force);
+}
+
+async function runGenerateCompilerOptions() {
+    await runGenerateOptionDefinitions();
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"));
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"));
+}
+
+goGenerateActions.push(runGenerateCompilerOptions);
+export const generateCompilerOptions = task({
+    name: "generate:compileroptions",
+    description: "Generates compiler options and their dependent API files. Pass --force to regenerate unchanged files.",
+    run: async () => {
+        await runGenerateCompilerOptions();
+        await runGenerateEnums();
+        await runGenerateAPI();
+    },
+});
 
 export const generateLanguageVariant = goGenerateTask("generate:languagevariant", [
     stringerGenerator("tsc/internal/core/languagevariant.go", "LanguageVariant", "languagevariant_stringer_generated.go"),
@@ -643,7 +664,7 @@ async function runGenerateEnums() {
 
 export const generateEnums = task({
     name: "generate:enums",
-    description: "Generates TypeScript enum files from Go source. Pass --force to regenerate unchanged files.",
+    description: "Generates TypeScript enums from metadata and Go source. Pass --force to regenerate unchanged files.",
     run: runGenerateEnums,
 });
 
@@ -704,7 +725,7 @@ async function runGenerateAPI() {
             "tsc/internal/tspath/path.go",
             "tools/gen-proto/*.go",
         ],
-        exclude: ["**/*_test.go", "**/*_generated.go"],
+        exclude: ["**/*_test.go"],
         envInputs: [],
         outputs: ["packages/typescript/src/api/proto.generated.ts"],
         commands: [
@@ -714,7 +735,11 @@ async function runGenerateAPI() {
     });
 }
 
-export const generateAPI = goGenerateTask("generate:api", runGenerateAPI);
+export const generateAPI = task({
+    name: "generate:api",
+    description: "Generates API files. Pass --force to regenerate unchanged files.",
+    run: runGenerateAPI,
+});
 
 const vendorJsonrpcDir = "packages/typescript/vendor/vscode-jsonrpc";
 const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
@@ -754,10 +779,7 @@ const generateCompiler = task({
     name: "generate:compiler",
     hiddenFromTaskList: true,
     dependencies: [generateAST, generateLSP],
-    run: async () => {
-        await runGenerateGo();
-        await runGenerateEnums();
-    },
+    run: runGenerateGo,
 });
 
 export const generate = task({
@@ -1000,7 +1022,7 @@ export const testCodegen = task({
     description: "Runs incremental codegen tests.",
     run: async () => {
         await run("go", ["-C", "tsc", "mod", "download"]);
-        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts"]);
+        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
     },
 });
 
@@ -1206,6 +1228,9 @@ export const validate = task({
         }
         if (options.all) {
             await runValidation("test:tools", runTestTools);
+            await runValidation("test:options", async () => {
+                await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
+            });
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);
@@ -2422,6 +2447,20 @@ async function testNativePreviewPackage(platforms) {
         await cpRecursive(mainNativePreviewPackage.npmDir, mainPackageDir);
         await cpRecursive(hostPlatform.npmDir, platformPackageDir);
         await fs.promises.writeFile(sourceFile, 'export const value: string = "value";\n');
+
+        const require = createRequire(sourceFile);
+        const { stdout } = await runOutput("npm", ["pack", "--dry-run", "--json", mainPackageDir]);
+        /** @type {{ files: { path: string }[] }[]} */
+        const packed = JSON.parse(stdout);
+        for (const name of ["tsconfig", "jsconfig"]) {
+            const schemaPath = `schemas/${name}.schema.json`;
+            assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
+            assert.deepEqual(
+                await fs.promises.readFile(path.join(mainPackageDir, schemaPath)),
+                await fs.promises.readFile(path.join("packages/typescript", schemaPath)),
+            );
+            assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
+        }
 
         const binName = publishAsTypescript ? "tsc" : "tsgo";
         const binPath = path.join(mainPackageDir, "bin", binName);

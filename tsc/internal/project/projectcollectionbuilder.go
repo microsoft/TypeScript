@@ -183,7 +183,15 @@ func (b *ProjectCollectionBuilder) forEachProject(fn func(entry dirty.Value[*Pro
 	}
 }
 
-func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotRequest, logger *logging.LogTree) error {
+func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotRequest, logger *logging.LogTree) (err error) {
+	previousAPIState := b.apiState
+	b.apiState = b.apiState.clone()
+	defer func() {
+		if err != nil {
+			b.apiState = previousAPIState
+		}
+	}()
+
 	var projectsToClose map[tspath.Path]struct{}
 	if apiRequest.CloseProjects != nil {
 		for projectPath := range apiRequest.CloseProjects.Keys() {
@@ -1316,7 +1324,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	project.ChangeIf(
 		func(p *Project) bool {
 			return !slices.Equal(p.CommandLine.FileNames(), newCommandLine.FileNames()) ||
-				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
+				!p.CommandLine.CompilerOptions().Equals(compilerOptions) ||
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
 				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers()) ||
@@ -1398,7 +1406,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateInferredProject(
 	changed := b.inferredProject.ChangeIf(
 		func(p *Project) bool {
 			return !slices.Equal(p.CommandLine.FileNames(), newCommandLine.FileNames()) ||
-				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
+				!p.CommandLine.CompilerOptions().Equals(compilerOptions) ||
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
 				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
