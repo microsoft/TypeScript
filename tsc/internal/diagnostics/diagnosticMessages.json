@@ -8696,7 +8696,7 @@
         "category": "Error",
         "code": 18060
     },
-    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
+    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?": {
         "category": "Error",
         "code": 18061
     },
@@ -8896,24 +8896,44 @@
         "category": "Message",
         "code": 18110
     },
-    "Content mapper output extension '{0}' must be non-empty and begin with a '.'.": {
+    "A source phase import must specify a local binding.": {
         "category": "Error",
         "code": 18111
     },
-    "Content mapper output extension mapping source '{0}' is not registered by this content mapper.": {
+    "Named and namespace imports are not allowed in a source phase import.": {
         "category": "Error",
         "code": 18112
     },
-    "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled.": {
+    "Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 18113
     },
-    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'.": {
+    "Optional chaining cannot be used with 'import.source'.": {
         "category": "Error",
         "code": 18114
     },
-    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values.": {
+    "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 18115
+    },
+    "Content mapper output extension '{0}' must be non-empty and begin with a '.'.": {
+        "category": "Error",
+        "code": 18116
+    },
+    "Content mapper output extension mapping source '{0}' is not registered by this content mapper.": {
+        "category": "Error",
+        "code": 18117
+    },
+    "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled.": {
+        "category": "Error",
+        "code": 18118
+    },
+    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'.": {
+        "category": "Error",
+        "code": 18119
+    },
+    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values.": {
+        "category": "Error",
+        "code": 18120
     }
 }

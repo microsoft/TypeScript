@@ -881,7 +881,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 
 		for index, entry := range moduleNames {
 			moduleName := entry.Text()
-			if moduleName == "" {
+			if moduleName == "" || ast.IsSourcePhaseImport(entry.Parent) {
 				continue
 			}
 
@@ -1089,12 +1089,14 @@ func getEmitSyntaxForUsageLocationWorker(fileName string, meta ast.SourceFileMet
 		return core.ModuleKindCommonJS
 	}
 	fileEmitMode := ast.GetEmitModuleFormatOfFileWorker(fileName, options, meta)
-	if ast.IsImportCall(ast.WalkUpParenthesizedExpressions(usage.Parent)) {
-		if ast.ShouldTransformImportCall(fileName, options, fileEmitMode) {
-			return core.ModuleKindCommonJS
-		} else {
+	if call := ast.WalkUpParenthesizedExpressions(usage.Parent); ast.IsImportCall(call) {
+		if ast.IsSourcePhaseImportCall(call) {
 			return core.ModuleKindESNext
 		}
+		if ast.ShouldTransformImportCall(fileName, options, fileEmitMode) {
+			return core.ModuleKindCommonJS
+		}
+		return core.ModuleKindESNext
 	}
 	// If we're in --module preserve on an input file, we know that an import
 	// is an import. But if this is a declaration file, we'd prefer to use the
