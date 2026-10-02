@@ -1,9 +1,6 @@
 trigger: none
 pr: none
 
-# Before OneLoc assigns an LCL package ID, this pipeline publishes the initial
-# localization handoff. After the package ID is configured, it applies packaged
-# handbacks, generates deterministic runtime gzip files, and updates a pull request.
 schedules:
   - cron: '0 7 * * *'
     displayName: Daily localization update
@@ -13,7 +10,6 @@ schedules:
         - main
 
 variables:
-  # Fill this in after the localization team assigns the LCL package ID.
   - name: OneLocLclPackageId
     value: LCL-JUNO-PROD-TYPESCRIPT
   - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
