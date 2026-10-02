@@ -1,3 +1,7 @@
+import type {
+    LspMiddlewareMethod,
+    LspMiddlewareTransformer,
+} from "@typescript/typescript/unstable/vscode";
 import * as path from "path";
 import * as vscode from "vscode";
 import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";
@@ -12,6 +16,7 @@ import {
     serializeContentMapperContributions,
     validateContentMapperRegistration,
 } from "./contentMapperContributions";
+import { LspMiddlewareRegistry } from "./lspMiddleware";
 import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
@@ -27,6 +32,7 @@ import {
     useWorkspaceTsdkStorageKey,
     workspaceConfigBase,
 } from "./util";
+import { workspaceSymbolSendRequestMiddleware } from "./workspaceSymbolMiddleware";
 
 /**
  * SessionManager's lifetime is equal to that of the extension. It is responsible
@@ -39,6 +45,7 @@ export class SessionManager implements vscode.Disposable {
     private initializedEventEmitter: vscode.EventEmitter<void>;
     private telemetryReporter: TelemetryReporter;
     private readonly contentMapperRegistrations = new Map<string, readonly ContentMapperContribution[]>();
+    private readonly lspMiddleware: LspMiddlewareRegistry;
     private lifecycleOperation = Promise.resolve();
     private contentMapperSyncOperation = Promise.resolve();
 
@@ -51,6 +58,10 @@ export class SessionManager implements vscode.Disposable {
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
         this.initializedEventEmitter = initializedEventEmitter;
+        this.lspMiddleware = new LspMiddlewareRegistry((method, error) => {
+            const detail = error instanceof Error ? error.stack ?? error.message : String(error);
+            this.outputChannel.error(`LSP middleware for '${method}' failed; using original server data: ${detail}`);
+        }, [workspaceSymbolSendRequestMiddleware]);
 
         this.disposables.push(vscode.workspace.onDidChangeConfiguration(event => {
             if (this.currentSession && event.affectsConfiguration("js/ts.contentMappers.enabled")) {
@@ -82,7 +93,7 @@ export class SessionManager implements vscode.Disposable {
             this.outputChannel.appendLine("Restarting TypeScript language server...");
             await this.currentSession.stop();
         }
-        const session = new Session(context, this.outputChannel, this.initializedEventEmitter, this.telemetryReporter, () => this.stop(), () => this.restart(context));
+        const session = new Session(context, this.outputChannel, this.initializedEventEmitter, this.telemetryReporter, () => this.stop(), () => this.restart(context), this.lspMiddleware);
         this.currentSession = session;
         try {
             await session.start(context);
@@ -130,6 +141,10 @@ export class SessionManager implements vscode.Disposable {
         });
     }
 
+    registerLspMiddleware<M extends LspMiddlewareMethod>(method: M, transformer: LspMiddlewareTransformer<NoInfer<M>>): vscode.Disposable {
+        return this.lspMiddleware.register(method, transformer);
+    }
+
     private syncContentMapperContributions(): Promise<void> {
         const operation = this.contentMapperSyncOperation.then(() => this.syncContentMapperContributionsNow());
         this.contentMapperSyncOperation = operation.catch(() => {});
@@ -160,6 +175,7 @@ export class SessionManager implements vscode.Disposable {
 
     dispose(): Promise<void> {
         return this.enqueueLifecycleOperation(async () => {
+            this.lspMiddleware.dispose();
             await this.currentSession?.dispose();
             this.currentSession = undefined;
             await Promise.all(this.disposables.splice(0).map(d => d.dispose()));
@@ -192,8 +208,9 @@ class Session implements vscode.Disposable {
         telemetryReporter: TelemetryReporter,
         stopSession: () => Promise<void>,
         restartSession: () => Promise<void>,
+        lspMiddleware: LspMiddlewareRegistry,
     ) {
-        this.client = new Client(outputChannel, initializedEventEmitter, telemetryReporter);
+        this.client = new Client(outputChannel, initializedEventEmitter, telemetryReporter, lspMiddleware);
         this.context = context;
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
