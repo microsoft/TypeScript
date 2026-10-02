@@ -771,9 +771,12 @@ func tryGetModuleNameAsNodeModule(
 		packageRootIndex := parts.PackageRootIndex
 		var moduleFileName string
 		for true {
+			currentParts := *parts
+			currentParts.PackageRootIndex = packageRootIndex
 			// If the module could be imported by a directory name, use that directory's name
 			pkgJsonResults := tryDirectoryWithPackageJson(
-				*parts,
+				currentParts,
+				parts.PackageRootIndex,
 				pathObj,
 				importingSourceFile,
 				host,
@@ -836,6 +839,7 @@ type pkgJsonDirAttemptResult struct {
 
 func tryDirectoryWithPackageJson(
 	parts NodeModulePathParts,
+	packageBaseRootIndex int,
 	pathObj ModulePath,
 	importingSourceFile SourceFileForSpecifierGeneration,
 	host ModuleSpecifierGenerationHost,
@@ -854,7 +858,7 @@ func tryDirectoryWithPackageJson(
 	packageJson := host.GetPackageJsonInfo(packageJsonPath)
 	if packageJson == nil {
 		// No package.json exists; an index.js will still resolve as the package name
-		fileName := moduleFileToTry[parts.PackageRootIndex+1:]
+		fileName := moduleFileToTry[packageBaseRootIndex+1:]
 		if fileName == "index.d.ts" || fileName == "index.js" || fileName == "index.ts" || fileName == "index.tsx" {
 			return pkgJsonDirAttemptResult{moduleFileToTry: moduleFileToTry, packageRootPath: packageRootPath}
 		} else {
