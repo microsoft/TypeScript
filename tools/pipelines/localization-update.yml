@@ -15,7 +15,7 @@ schedules:
 variables:
   # Fill this in after the localization team assigns the LCL package ID.
   - name: OneLocLclPackageId
-    value: ''
+    value: LCL-JUNO-PROD-TYPESCRIPT
   - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
     value: Iv23li4GolzJSEp1mzHI
   - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
