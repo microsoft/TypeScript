@@ -41,11 +41,11 @@ type testingT interface {
 // Compile-time assertion that *testing.T satisfies testingT.
 var _ testingT = (*testing.T)(nil)
 
-// retryAttempts is the number of times runForEachWatcher will re-run a
-// failing per-backend test body before propagating the failure to the
-// real *testing.T. The per-event timeouts inside the body scale with
-// the attempt number (1×, 5×, 15×), so the fast-path is cheap and only
-// real environmental flakes pay the cost of longer waits.
+// retryAttempts is the number of attempts runWithRetry will make to run
+// the test body, retrying on failure before propagating the failure to
+// the real *testing.T. The per-event timeouts inside the body scale
+// with the attempt number (1×, 5×, 15×), so the fast-path is cheap and
+// only real environmental flakes pay the cost of longer waits.
 const retryAttempts = 3
 
 // retryTimeoutScale returns the multiplier applied to per-event timeouts
