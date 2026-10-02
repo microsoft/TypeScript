@@ -202,7 +202,7 @@ jobs:
                 $remoteBranch = git ls-remote --heads origin $branch
                 $branchExists = [bool] $remoteBranch
                 if ($branchExists) {
-                    git fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
+                    git fetch --depth=1 --no-tags --progress origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
                 }
 
                 $shouldPush = $true
