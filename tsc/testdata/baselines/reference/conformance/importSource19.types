@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/importSource/importSource19.ts] ////
+
+=== globals.d.ts ===
+declare module "*.wasm" {
+>"*.wasm" : typeof import("*.wasm")
+
+    const value: string;
+>value : string
+
+    export default value;
+>value : string
+}
+declare namespace WebAssembly {
+    interface Module { value: number; }
+>value : number
+}
+
+=== index.ts ===
+import a from "./a.wasm";
+>a : string
+
+import source b from "./a.wasm";
+>b : AbstractModuleSource
+
+const c: string = a;
+>c : string
+>a : string
+
+const d: AbstractModuleSource = b;
+>d : AbstractModuleSource
+>b : AbstractModuleSource
+
+export { b };
+>b : AbstractModuleSource
+
+export const e = import.source("./a.wasm");
+>e : Promise<AbstractModuleSource>
+>import.source("./a.wasm") : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+

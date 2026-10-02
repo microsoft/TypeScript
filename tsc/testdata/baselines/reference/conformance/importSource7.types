@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/importSource/importSource7.ts] ////
+
+=== a.d.wasm.ts ===
+export const a: number;
+>a : number
+
+=== b.ts ===
+import { a } from "./a.wasm";
+>a : number
+
+import source b from "./a.wasm";
+>b : AbstractModuleSource
+
+const c: number = a;
+>c : number
+>a : number
+
+const d: AbstractModuleSource = b;
+>d : AbstractModuleSource
+>b : AbstractModuleSource
+
+const e: Promise<AbstractModuleSource> = import.source("./a.wasm");
+>e : Promise<AbstractModuleSource>
+>import.source("./a.wasm") : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+

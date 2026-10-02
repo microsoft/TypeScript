@@ -935,6 +935,31 @@ describe("API", { concurrency }, () => {
         );
     });
 
+    test("source imports do not request module resolution", async () => {
+        await using api = spawnAPI({
+            "/src/index.ts": `import source a from "pkg";
+import.source("missing");
+import { value } from "pkg";`,
+            "/pkg.d.ts": "export const value: number;",
+        });
+        const compilerOptions = { noLib: true, module: ModuleKind.ESNext };
+        const requests: string[] = [];
+        const resolver = await api.createModuleResolver(compilerOptions, {
+            resolveModuleName: async name => {
+                requests.push(name);
+                return { resolvedFileName: "/pkg.d.ts" };
+            },
+        });
+        const program = await api.createProgram(["/src/index.ts"], compilerOptions, { moduleResolver: resolver });
+        assert.deepEqual(requests, ["pkg"]);
+        const file = await program.getSourceFile("/src/index.ts");
+        assert.ok(file);
+        const source = cast(cast(file.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
+        const evaluation = cast(cast(file.statements[2], isImportDeclaration).moduleSpecifier, isStringLiteral);
+        assert.equal(await program.getResolvedModuleFromModuleSpecifier(source), undefined);
+        assert.equal((await program.getResolvedModuleFromModuleSpecifier(evaluation))?.resolvedFileName, "/pkg.d.ts");
+    });
+
     test("module resolver callbacks can delegate to another resolver", async () => {
         await using api = spawnAPI({
             "/src/index.ts": `import "custom"; import "native";`,
