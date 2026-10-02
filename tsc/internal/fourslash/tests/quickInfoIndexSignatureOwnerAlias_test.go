@@ -10,7 +10,8 @@ import (
 func TestQuickInfoIndexSignatureOwnerAlias(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	// Like TS6, index signature owners do not use the alias available at the hover location.
+	// The nil enclosing container keeps the owner unqualified, even when an alias is available.
+	// This covers the container choice, not UseOnlyExternalAliasing: nil bypasses symbol-chain lookup.
 	const content = `
 namespace Outer {
     export namespace Inner {
