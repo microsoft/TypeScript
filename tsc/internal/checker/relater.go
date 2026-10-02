@@ -4857,9 +4857,14 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 		if !isConversionOrInterfaceImplementationMessage(message) && r.chainArgsMatch(generalizedSourceType, targetType) {
 			return
 		}
-	case diagnostics.Type_0_is_not_assignable_to_type_1,
-		diagnostics.Type_0_is_not_comparable_to_type_1:
-		if r.chainArgsMatch(generalizedSourceType, targetType) {
+	case diagnostics.Type_0_is_not_assignable_to_type_1:
+		if (message == diagnostics.Type_0_is_not_assignable_to_type_1 || message == diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1) &&
+			r.chainArgsExactMatch(generalizedSourceType, targetType) {
+			r.errorChain = r.errorChain.next
+		}
+	case diagnostics.Type_0_is_not_comparable_to_type_1:
+		if message == diagnostics.Type_0_is_not_comparable_to_type_1 &&
+			r.chainArgsExactMatch(generalizedSourceType, targetType) {
 			r.errorChain = r.errorChain.next
 		}
 	}
@@ -4962,6 +4967,10 @@ func (r *Relater) chainArgsMatch(args ...any) bool {
 		}
 	}
 	return true
+}
+
+func (r *Relater) chainArgsExactMatch(args ...any) bool {
+	return r.errorChain != nil && len(r.errorChain.args) == len(args) && r.chainArgsMatch(args...)
 }
 
 func getPropertyNameArg(arg any) string {
