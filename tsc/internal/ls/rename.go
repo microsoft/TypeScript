@@ -344,13 +344,12 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName st
 }
 
 func tryRemoveIndexFileName(fileName tspath.RootedFilePath) tspath.RootedPath {
-	candidate := fileName.RemoveFileExtension()
-	if candidate.BaseName() == "index" {
-		root, relative := candidate.RootAndRelativePath()
-		if (root == "/" || root.AsPath().IsDynamic()) && relative == "index" {
+	if tspath.RemoveFileExtension(fileName.BaseName()) == "index" {
+		root, relative := fileName.RootAndRelativePath()
+		if (root == "/" || root.AsPath().IsDynamic()) && tspath.RemoveFileExtension(relative) == "index" {
 			return ""
 		}
-		return candidate.Directory().AsPath()
+		return fileName.Directory().AsPath()
 	}
 	return ""
 }

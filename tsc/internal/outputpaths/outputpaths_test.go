@@ -10,15 +10,16 @@ import (
 )
 
 type outputPathsHost struct {
-	commonSourceDirectory tspath.RootedDirectoryPath
+	commonSourceDirectory   tspath.RootedDirectoryPath
+	contentMapperExtensions []string
 }
 
 func (h outputPathsHost) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	return h.commonSourceDirectory
 }
 
-func (outputPathsHost) ContentMapperExtensions() []string {
-	return nil
+func (h outputPathsHost) ContentMapperExtensions() []string {
+	return h.contentMapperExtensions
 }
 
 func (outputPathsHost) CaseSensitivity() tspath.CaseSensitivity {
@@ -74,6 +75,42 @@ func TestGetBuildInfoFileNameAcrossRoots(t *testing.T) {
 			expected:       "c:/out/project/tsconfig.tsbuildinfo",
 		},
 		{
+			name:           "empty stem",
+			rootDir:        "c:/src",
+			outDir:         "c:/out",
+			configFilePath: "c:/src/project/.json",
+			expected:       "c:/out/project/.tsbuildinfo",
+		},
+		{
+			name:           "dot stem",
+			rootDir:        "c:/src",
+			outDir:         "c:/out",
+			configFilePath: "c:/src/project/..json",
+			expected:       "c:/out/project/..tsbuildinfo",
+		},
+		{
+			name:           "empty filename stem without rootDir",
+			outDir:         "c:/out",
+			configFilePath: "c:/src/project/.json",
+			expected:       "c:/out/.tsbuildinfo",
+		},
+		{
+			name:           "parent-dot filename stem without rootDir",
+			outDir:         "c:/out",
+			configFilePath: "c:/src/project/...json",
+			expected:       "c:/out/...tsbuildinfo",
+		},
+		{
+			name:           "empty filename stem without outDir",
+			configFilePath: "c:/src/project/.json",
+			expected:       "c:/src/project/.tsbuildinfo",
+		},
+		{
+			name:           "dot filename stem without outDir",
+			configFilePath: "c:/src/project/..json",
+			expected:       "c:/src/project/..tsbuildinfo",
+		},
+		{
 			name:           "different drive",
 			rootDir:        "c:/src",
 			outDir:         "c:/out",
@@ -125,4 +162,32 @@ func TestGetOutputFileNameAcrossRoots(t *testing.T) {
 
 	assert.Equal(t, outputpaths.GetOutputJSFileNameWorker(input, options, host), tspath.RootedFilePath("d:/shared.js"))
 	assert.Equal(t, outputpaths.GetOutputDeclarationFileNameWorker(input, options, host), tspath.RootedFilePath("d:/shared.d.ts"))
+}
+
+func TestOutputFileNamesPreserveEmptyAndDotStems(t *testing.T) {
+	t.Parallel()
+
+	host := outputPathsHost{
+		commonSourceDirectory:   "/project/src",
+		contentMapperExtensions: []string{".css"},
+	}
+	options := &core.CompilerOptions{OutDir: "/project/out"}
+	for _, test := range []struct {
+		input       tspath.RootedFilePath
+		js          tspath.RootedFilePath
+		declaration tspath.RootedFilePath
+	}{
+		{"/project/src/.ts", "/project/out/.js", "/project/out/.d.ts"},
+		{"/project/src/..ts", "/project/out/..js", "/project/out/..d.ts"},
+		{"/project/src/...ts", "/project/out/...js", "/project/out/...d.ts"},
+		{"/project/src/.mts", "/project/out/.mjs", "/project/out/.d.mts"},
+		{"/project/src/.d.ts", "/project/out/.js", "/project/out/.d.ts"},
+		{"/project/src/.css", "/project/out/.css", "/project/out/.d.css.ts"},
+	} {
+		t.Run(test.input.AsString(), func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(t, outputpaths.GetOutputJSFileNameWorker(test.input, options, host), test.js)
+			assert.Equal(t, outputpaths.GetOutputDeclarationFileNameWorker(test.input, options, host), test.declaration)
+		})
+	}
 }

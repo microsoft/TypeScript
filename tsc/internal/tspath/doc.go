@@ -22,4 +22,8 @@
 // FromNormalized constructor only when the input is already rooted and
 // normalized. Derive a PathKey only when a canonical key is needed for a
 // comparison, set, or map lookup.
+//
+// RootedFilePath.RemoveFileExtension and RemoveExtension return FileNameStem
+// because removing an extension can break path normalization. Append the final
+// suffix before treating a stem as a rooted file path.
 package tspath

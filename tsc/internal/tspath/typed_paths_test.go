@@ -120,8 +120,23 @@ func TestExtensionMutationsPreserveNormalizedInvariant(t *testing.T) {
 	t.Parallel()
 
 	for _, mutate := range []func() RootedFilePath{
-		func() RootedFilePath { return RootedFilePathFromNormalized("/project/..ts").RemoveFileExtension() },
-		func() RootedFilePath { return RootedFilePathFromNormalized("/project/..ts").RemoveExtension(".ts") },
+		func() RootedFilePath {
+			return RootedFilePathFromNormalized("/project/.ts").RemoveFileExtension().AppendSuffix("")
+		},
+		func() RootedFilePath {
+			return RootedFilePathFromNormalized("/project/.ts").RemoveExtension(".ts").AppendSuffix("")
+		},
+		func() RootedFilePath { return RootedFilePathFromNormalized("/project/.ts").ChangeExtension("") },
+		func() RootedFilePath { return RootedFilePathFromNormalized("/project/.d.ts").ChangeFullExtension("") },
+		func() RootedFilePath {
+			return RootedFilePathFromNormalized("/project/.ts").ChangeAnyExtension("", []string{".ts"}, CaseSensitive)
+		},
+		func() RootedFilePath {
+			return RootedFilePathFromNormalized("/project/..ts").RemoveFileExtension().AppendSuffix("")
+		},
+		func() RootedFilePath {
+			return RootedFilePathFromNormalized("/project/..ts").RemoveExtension(".ts").AppendSuffix("")
+		},
 		func() RootedFilePath { return RootedFilePathFromNormalized("/project/..ts").ChangeExtension("") },
 		func() RootedFilePath { return RootedFilePathFromNormalized("/project/...ts").ChangeFullExtension("") },
 		func() RootedFilePath {
@@ -158,6 +173,77 @@ func TestExtensionMutationsPreserveNormalizedInvariant(t *testing.T) {
 	assert.Assert(t, !ok)
 	_, _, ok = RootedFilePath("").SplitAtComponent("node_modules")
 	assert.Assert(t, !ok)
+}
+
+func TestFileNameStemsPreserveFilenamePrefixes(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		fileName RootedFilePath
+		stem     FileNameStem
+		output   RootedFilePath
+	}{
+		{"", "", ""},
+		{"/project/file.ts", "/project/file", "/project/file.js"},
+		{"/project/.ts", "/project/", "/project/.js"},
+		{"/project/..ts", "/project/.", "/project/..js"},
+		{"/project/...ts", "/project/..", "/project/...js"},
+		{"/project/.d.ts", "/project/", "/project/.js"},
+		{"/.ts", "/", "/.js"},
+		{"c:/.ts", "c:/", "c:/.js"},
+		{"//server/.ts", "//server/", "//server/.js"},
+		{"file:///.ts", "file:///", "file:///.js"},
+		{"^/~ts-uri~/custom/ts-nul-authority/.ts", "^/~ts-uri~/custom/ts-nul-authority/", "^/~ts-uri~/custom/ts-nul-authority/.js"},
+	} {
+		t.Run(test.fileName.AsString(), func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(t, test.fileName.AsStem().AsString(), test.fileName.AsString())
+			assert.Equal(t, test.fileName.AsStem().AppendSuffix(""), test.fileName)
+			var stem FileNameStem = test.fileName.RemoveFileExtension()
+			assert.Equal(t, stem, test.stem)
+			if test.fileName == "" {
+				assert.Equal(t, test.stem.AppendSuffix(""), test.output)
+				assertPanics(t, func() { test.stem.AppendSuffix(".js") })
+			} else {
+				output := test.stem.AppendSuffix(".js")
+				assert.Equal(t, output, test.output)
+				assert.Equal(t, RootedFilePathFromNormalized(output.AsString()), output)
+				assert.Equal(t, test.fileName.RemoveExtension(".ts").AppendSuffix(".ts"), test.fileName)
+			}
+		})
+	}
+
+	for _, fileName := range []RootedFilePath{"/project/.ts", "/project/..ts", "/project/...ts"} {
+		assertPanics(t, func() { fileName.RemoveFileExtension().AppendSuffix("") })
+	}
+	stem := RootedFilePath("/project/file.ts").RemoveFileExtension()
+	assertPanics(t, func() { stem.AppendSuffix("/other.js") })
+	assertPanics(t, func() { stem.AppendSuffix(`\other.js`) })
+	assertPanics(t, func() { RootedFilePath("http://example.com/.ts").RemoveFileExtension().AppendSuffix("?query") })
+	assertPanics(t, func() { RootedFilePath("/project/file.ts").RemoveExtension(".js") })
+	assertPanics(t, func() { RootedFilePath("/project/file.ts").RemoveExtension("/file.ts") })
+}
+
+func TestCompareFileNameStemsKeepsLiteralDotComponentsAndCasingPolicy(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		a                RootedFilePath
+		b                RootedFilePath
+		equalSensitive   bool
+		equalInsensitive bool
+	}{
+		{"/project/.ts", "/project/.d.ts", true, true},
+		{"/project/..ts", "/project.ts", false, false},
+		{"/project/...ts", "/.ts", false, false},
+		{"c:/project/.ts", "C:/project/.d.ts", true, true},
+		{"/project/File.ts", "/project/file.js", false, true},
+		{"^/~ts-uri~/custom/ts-nul-authority/Foo.ts", "^/~ts-uri~/custom/ts-nul-authority/foo.js", false, false},
+	} {
+		a, b := test.a.RemoveFileExtension(), test.b.RemoveFileExtension()
+		assert.Equal(t, CaseSensitive.CompareFileNameStems(a, b) == 0, test.equalSensitive)
+		assert.Equal(t, CaseInsensitive.CompareFileNameStems(a, b) == 0, test.equalInsensitive)
+	}
 }
 
 func TestSplitAtRootLevelComponentKeepsRoot(t *testing.T) {
@@ -582,7 +668,7 @@ func TestRootedFilePathExtensionOperationsPreserveInvariants(t *testing.T) {
 	t.Parallel()
 
 	fileName := RootedFilePathFromNormalized("/project/src/file.ts")
-	assert.Equal(t, fileName.RemoveFileExtension(), RootedFilePathFromNormalized("/project/src/file"))
+	assert.Equal(t, fileName.RemoveFileExtension(), FileNameStem("/project/src/file"))
 	assert.Equal(t, fileName.ChangeExtension(".js"), RootedFilePathFromNormalized("/project/src/file.js"))
 	assert.Equal(t, RootedFilePathFromNormalized("/project/src/file.d.ts").ChangeFullExtension(""), RootedFilePathFromNormalized("/project/src/file"))
 	assertPanics(t, func() { fileName.ChangeExtension("../other") })

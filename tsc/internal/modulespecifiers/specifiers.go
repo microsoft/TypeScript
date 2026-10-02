@@ -989,7 +989,7 @@ func isPackageMainFile(
 	mainIsDirectory := tspath.HasTrailingDirectorySeparator(mainFileRelative)
 	mainExportFile := packageRootDirectory.ResolveFile(mainFileRelative)
 
-	if !mainIsDirectory && caseSensitivity.CompareFilePaths(mainExportFile.RemoveFileExtension(), moduleFileName.RemoveFileExtension()) == 0 {
+	if !mainIsDirectory && caseSensitivity.CompareFileNameStems(mainExportFile.RemoveFileExtension(), moduleFileName.RemoveFileExtension()) == 0 {
 		// An arbitrary removal of file extension for this comparison is almost certainly wrong.
 		return true
 	}
@@ -997,7 +997,7 @@ func isPackageMainFile(
 	return packageType != "module" &&
 		!moduleFileName.ExtensionIsOneOf(tspath.ExtensionsNotSupportingExtensionlessResolution) &&
 		caseSensitivity.ComparePaths(moduleFileName.Directory().AsPath(), mainExportDirectory.AsPath()) == 0 &&
-		moduleFileName.RemoveFileExtension().BaseName() == "index"
+		tspath.RemoveFileExtension(moduleFileName.BaseName()) == "index"
 }
 
 func tryGetModuleNameFromExports(

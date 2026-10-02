@@ -177,16 +177,12 @@ func (c resolutionCandidate) HasTrailingDirectorySeparator() bool {
 	return c.directoryOnly
 }
 
-func (c resolutionCandidate) RemoveFileExtension() resolutionCandidate {
-	return resolutionCandidateFromFileName(tspath.RootedFilePathFromPath(c.path).RemoveFileExtension())
+func (c resolutionCandidate) RemoveFileExtension() tspath.FileNameStem {
+	return tspath.RootedFilePathFromPath(c.path).RemoveFileExtension()
 }
 
-func (c resolutionCandidate) RemoveExtension(extension string) resolutionCandidate {
-	return resolutionCandidateFromFileName(tspath.RootedFilePathFromPath(c.path).RemoveExtension(extension))
-}
-
-func (c resolutionCandidate) AppendSuffix(suffix string) resolutionCandidate {
-	return resolutionCandidateFromFileName(tspath.RootedFilePathFromPath(c.path).AppendSuffix(suffix))
+func (c resolutionCandidate) RemoveExtension(extension string) tspath.FileNameStem {
+	return tspath.RootedFilePathFromPath(c.path).RemoveExtension(extension)
 }
 
 func (c resolutionCandidate) Resolve(path string) resolutionCandidate {
@@ -209,11 +205,11 @@ func (c resolutionCandidate) RelativeToDirectory(directory tspath.RootedDirector
 	return relative
 }
 
-func (c resolutionCandidate) SplitExtension(extraExtensions []string) (resolutionCandidate, string) {
+func (c resolutionCandidate) SplitExtension(extraExtensions []string) (tspath.FileNameStem, string) {
 	fileName := tspath.RootedFilePathFromPath(c.path)
 	extension := fileName.Extension()
 	extensionless := c.RemoveFileExtension()
-	if extensionless.path == c.path {
+	if extensionless.AsString() == c.path.AsString() {
 		extension = fileName.LongestExtension(extraExtensions, tspath.CaseSensitive)
 		if extension == "" {
 			path := c.path.AsString()
@@ -222,10 +218,6 @@ func (c resolutionCandidate) SplitExtension(extraExtensions []string) (resolutio
 		extensionless = c.RemoveExtension(extension)
 	}
 	return extensionless, extension
-}
-
-func (c resolutionCandidate) FilePathWithSuffix(suffix string, extension string) tspath.RootedFilePath {
-	return tspath.RootedFilePathFromPath(c.path).AppendSuffix(suffix + extension)
 }
 
 type resolutionKindSpecificLoader = func(extensions extensions, candidate resolutionCandidate) *resolved
@@ -1639,7 +1631,7 @@ func (r *resolutionState) loadModuleFromFile(extensions extensions, candidate re
 
 	// ./foo -> ./foo.ts
 	if !r.esmMode {
-		return r.tryAddingExtensions(candidate, extensions, "")
+		return r.tryAddingExtensions(tspath.RootedFilePathFromPath(candidate.path).AsStem(), candidate.Directory(), extensions, "")
 	}
 
 	return continueSearching()
@@ -1654,11 +1646,10 @@ func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions exte
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension)
 	}
-	return r.tryAddingExtensions(extensionless, extensions, extension)
+	return r.tryAddingExtensions(extensionless, candidate.Directory(), extensions, extension)
 }
 
-func (r *resolutionState) tryAddingExtensions(extensionless resolutionCandidate, extensions extensions, originalExtension string) *resolved {
-	directory := extensionless.Directory()
+func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem, directory tspath.RootedDirectoryPath, extensions extensions, originalExtension string) *resolved {
 	if directory != "" && !r.resolver.fs.DirectoryExists(directory) {
 		return continueSearching()
 	}
@@ -1772,7 +1763,7 @@ func (r *resolutionState) tryAddingExtensions(extensionless resolutionCandidate,
 				return resolved
 			}
 		}
-		if extensions&extensionsDeclaration != 0 && !tspath.RootedFilePathFromPath(extensionless.AppendSuffix(originalExtension).path).IsDeclarationFile() {
+		if extensions&extensionsDeclaration != 0 && !extensionless.AppendSuffix(originalExtension).IsDeclarationFile() {
 			if resolved := r.tryExtension(".d"+originalExtension+".ts", extensionless, false); !resolved.shouldContinueSearching() {
 				return resolved
 			}
@@ -1781,8 +1772,8 @@ func (r *resolutionState) tryAddingExtensions(extensionless resolutionCandidate,
 	}
 }
 
-func (r *resolutionState) tryExtension(extension string, extensionless resolutionCandidate, resolvedUsingTsExtension bool) *resolved {
-	fileName := extensionless.AppendSuffix(extension)
+func (r *resolutionState) tryExtension(extension string, extensionless tspath.FileNameStem, resolvedUsingTsExtension bool) *resolved {
+	fileName := resolutionCandidateFromFileName(extensionless.AppendSuffix(extension))
 	if path, ok := r.tryFile(fileName); ok {
 		return &resolved{
 			path:                     path,
@@ -1808,7 +1799,7 @@ func (r *resolutionState) tryFile(fileName resolutionCandidate) (tspath.RootedFi
 	ext := tspath.RootedFilePathFromPath(fileName.path).Extension()
 	fileNameNoExtension := fileName.RemoveExtension(ext)
 	for _, suffix := range r.compilerOptions.ModuleSuffixes {
-		path := fileNameNoExtension.FilePathWithSuffix(suffix, ext)
+		path := fileNameNoExtension.AppendSuffix(suffix + ext)
 		if r.tryFileLookup(path) {
 			return path, true
 		}

@@ -152,7 +152,7 @@ func ChangeToDeclarationExtension(path tspath.RootedFilePath, host OutputPathsHo
 		return path.RemoveExtension(extension).AppendSuffix(".d" + extension + ".ts")
 	}
 	pathWithoutExtension := path.RemoveFileExtension()
-	if pathWithoutExtension == path {
+	if pathWithoutExtension.AsString() == path.AsString() {
 		if extension := path.AnyExtension(nil, tspath.CaseSensitive); extension != "" {
 			pathWithoutExtension = path.RemoveExtension(extension)
 		}
@@ -186,18 +186,18 @@ func GetSourceFileNameInNewDir(fileName tspath.RootedFilePath, newDirPath tspath
 }
 
 func getOwnEmitOutputFilePathForFileName(fileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost, extension string) tspath.RootedFilePath {
-	var emitOutputFilePathWithoutExtension tspath.RootedFilePath
+	var emitOutputFilePath tspath.RootedFilePath
 	if len(options.OutDir) > 0 {
-		emitOutputFilePathWithoutExtension = GetSourceFileNameInNewDir(
+		emitOutputFilePath = GetSourceFileNameInNewDir(
 			fileName,
 			options.OutDir,
 			host.CommonSourceDirectory(),
 			host.CaseSensitivity(),
-		).RemoveFileExtension()
+		)
 	} else {
-		emitOutputFilePathWithoutExtension = fileName.RemoveFileExtension()
+		emitOutputFilePath = fileName
 	}
-	return emitOutputFilePathWithoutExtension.AppendSuffix(extension)
+	return emitOutputFilePath.RemoveFileExtension().AppendSuffix(extension)
 }
 
 func GetSourceMapFilePath(jsFilePath tspath.RootedFilePath, options *core.CompilerOptions) tspath.RootedFilePath {
@@ -217,21 +217,21 @@ func GetBuildInfoFileName(options *core.CompilerOptions, caseSensitivity tspath.
 	if options.ConfigFilePath == "" {
 		return ""
 	}
-	configFileExtensionLess := options.ConfigFilePath.RemoveFileExtension()
-	var buildInfoExtensionLess tspath.RootedFilePath
+	configFileName := options.ConfigFilePath
+	var buildInfoFileName tspath.RootedFilePath
 	if options.OutDir != "" {
 		if options.RootDir != "" {
-			relativePath, ok := caseSensitivity.RelativePathFromDirectory(options.RootDir, configFileExtensionLess)
+			relativePath, ok := caseSensitivity.RelativePathFromDirectory(options.RootDir, configFileName)
 			if ok {
-				buildInfoExtensionLess = options.OutDir.ResolveRelativeFile(relativePath)
+				buildInfoFileName = options.OutDir.ResolveRelativeFile(relativePath)
 			} else {
-				buildInfoExtensionLess = configFileExtensionLess
+				buildInfoFileName = configFileName
 			}
 		} else {
-			buildInfoExtensionLess = options.OutDir.ResolveFile(configFileExtensionLess.BaseName())
+			buildInfoFileName = options.OutDir.ResolveFile(configFileName.BaseName())
 		}
 	} else {
-		buildInfoExtensionLess = configFileExtensionLess
+		buildInfoFileName = configFileName
 	}
-	return buildInfoExtensionLess.AppendSuffix(tspath.ExtensionTsBuildInfo)
+	return buildInfoFileName.RemoveFileExtension().AppendSuffix(tspath.ExtensionTsBuildInfo)
 }

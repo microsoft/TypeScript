@@ -99,6 +99,36 @@ func TestPackageJSONPathWithTrailingSeparatorDoesNotResolveAsFile(t *testing.T) 
 	}
 }
 
+func TestExtensionReplacementPreservesEmptyAndDotStems(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		importName string
+		expected   tspath.RootedFilePath
+	}{
+		{".js", "/project/.native.ts"},
+		{"..js", "/project/..native.ts"},
+		{"...js", "/project/...native.ts"},
+		{".js", "/project/.native.d.ts"},
+	} {
+		t.Run(test.expected.AsString(), func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{test.expected.AsString(): "export {};"}, tspath.CaseSensitive)
+			state := &resolutionState{
+				resolver:        &DefaultResolver{ResolutionData: &ResolutionData{}, fs: fs},
+				compilerOptions: &core.CompilerOptions{ModuleSuffixes: []string{".native", ""}},
+			}
+			result := state.loadModuleFromFileNoImplicitExtensions(
+				extensionsTypeScript|extensionsDeclaration,
+				resolveResolutionCandidate("/project", test.importName),
+			)
+			if result == nil || result.path != test.expected {
+				t.Fatalf("got %v, expected %s", result, test.expected)
+			}
+		})
+	}
+}
+
 func TestOutputDirectoriesRemoveTrailingSeparators(t *testing.T) {
 	t.Parallel()
 

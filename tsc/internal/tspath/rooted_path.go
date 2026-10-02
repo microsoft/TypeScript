@@ -15,6 +15,11 @@ type RootedPath string
 // not assert that the path exists or is a file on a filesystem.
 type RootedFilePath RootedPath
 
+// FileNameStem is a rooted filename prefix, not a normalized path. Removing
+// an extension can leave a trailing separator or a "." or ".." component.
+// Complete the stem with AppendSuffix before using it as a path.
+type FileNameStem string
+
 // RootedDirectoryPath is a RootedPath intended to be used as a directory path.
 // It does not assert that the path exists or is a directory on a filesystem,
 // and does not guarantee a trailing directory separator.
@@ -248,12 +253,7 @@ func (f RootedFilePath) SuffixAfterSeparator(index int) string {
 // AppendSuffix appends a suffix that cannot change the rooted or normalized
 // path structure.
 func (f RootedFilePath) AppendSuffix(suffix string) RootedFilePath {
-	if f == "" && suffix != "" {
-		panic("cannot append a suffix to an empty file name")
-	}
-	if strings.ContainsAny(suffix, `/\`) {
-		panic("file name suffix must not contain a directory separator")
-	}
+	validateFileNameSuffix(f.AsString(), suffix)
 	result := RootedFilePath(string(f) + suffix)
 	if result != "" {
 		RootedPathFromNormalized(result.AsString())
@@ -261,16 +261,42 @@ func (f RootedFilePath) AppendSuffix(suffix string) RootedFilePath {
 	return result
 }
 
-func (f RootedFilePath) RemoveFileExtension() RootedFilePath {
-	return rootedFilePathFromExtensionMutation(RemoveFileExtension(string(f)))
+func validateFileNameSuffix(prefix string, suffix string) {
+	if prefix == "" && suffix != "" {
+		panic("cannot append a suffix to an empty file name")
+	}
+	if strings.ContainsAny(suffix, `/\`) {
+		panic("file name suffix must not contain a directory separator")
+	}
 }
 
-func (f RootedFilePath) RemoveExtension(extension string) RootedFilePath {
+func (f RootedFilePath) AsStem() FileNameStem {
+	return FileNameStem(f)
+}
+
+func (f RootedFilePath) RemoveFileExtension() FileNameStem {
+	return FileNameStem(RemoveFileExtension(f.AsString()))
+}
+
+func (f RootedFilePath) RemoveExtension(extension string) FileNameStem {
 	validateFileExtension(extension)
-	if !strings.HasSuffix(string(f), extension) {
+	if !strings.HasSuffix(f.AsString(), extension) {
 		panic("file name does not have extension: " + extension)
 	}
-	return rootedFilePathFromExtensionMutation(RemoveExtension(string(f), extension))
+	return FileNameStem(RemoveExtension(f.AsString(), extension))
+}
+
+func (s FileNameStem) AsString() string {
+	return string(s)
+}
+
+func (s FileNameStem) AppendSuffix(suffix string) RootedFilePath {
+	validateFileNameSuffix(s.AsString(), suffix)
+	result := s.AsString() + suffix
+	if result == "" {
+		return ""
+	}
+	return RootedFilePathFromNormalized(result)
 }
 
 func (f RootedFilePath) ChangeExtension(extension string) RootedFilePath {
@@ -299,7 +325,8 @@ func validateFileExtension(extension string) {
 
 func rootedFilePathFromExtensionMutation(path string) RootedFilePath {
 	baseName := getBaseFileNameFromNormalized(path)
-	if baseName == "." || baseName == ".." {
+	if baseName == "." || baseName == ".." ||
+		HasTrailingDirectorySeparator(path) && len(path) > GetRootLength(path) {
 		panic("file extension change must preserve path normalization")
 	}
 	return rootedFilePathFromResolved(path)
@@ -485,18 +512,26 @@ func (c CaseSensitivity) CompareFilePaths(a RootedFilePath, b RootedFilePath) in
 // ComparePaths compares already rooted and normalized paths without combining
 // or reducing their path components.
 func (c CaseSensitivity) ComparePaths(a RootedPath, b RootedPath) int {
-	if a == b {
+	return c.compareRootedText(a.AsString(), b.AsString())
+}
+
+// CompareFileNameStems compares filename prefixes without interpreting dot
+// components produced by extension removal as directory traversal.
+func (c CaseSensitivity) CompareFileNameStems(a FileNameStem, b FileNameStem) int {
+	return c.compareRootedText(a.AsString(), b.AsString())
+}
+
+func (c CaseSensitivity) compareRootedText(aString string, bString string) int {
+	if aString == bString {
 		return 0
 	}
-	if a == "" {
+	if aString == "" {
 		return -1
 	}
-	if b == "" {
+	if bString == "" {
 		return 1
 	}
 
-	aString := string(a)
-	bString := string(b)
 	if IsEncodedDynamicFileName(aString) || IsEncodedDynamicFileName(bString) {
 		return stringutil.CompareStringsCaseSensitive(
 			canonicalDynamicURIPath(aString),
