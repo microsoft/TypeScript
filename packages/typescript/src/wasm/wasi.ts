@@ -95,7 +95,12 @@ export async function instantiateWasm(
     return host.initialize(instance);
 }
 
-/** Synchronously instantiate and initialize the TypeScript reactor with its minimal WASI host. */
+/**
+ * Synchronously instantiate and initialize the TypeScript reactor with its minimal WASI host.
+ *
+ * Prefer `instantiateWasm` on browser main threads, where synchronous
+ * instantiation of large WebAssembly modules may be rejected.
+ */
 export function instantiateWasmSync(
     module: WebAssembly.Module,
     options: InstantiateWasmOptions = {},
