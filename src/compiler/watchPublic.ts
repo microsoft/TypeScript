@@ -561,6 +561,10 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     function close() {
         clearInvalidateResolutionsOfFailedLookupLocations();
+        if (timerToUpdateProgram) {
+            host.clearTimeout!(timerToUpdateProgram);
+            timerToUpdateProgram = undefined;
+        }
         resolutionCache.clear();
         clearMap(sourceFilesCache, value => {
             if (value && value.fileWatcher) {

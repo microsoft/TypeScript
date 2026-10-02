@@ -844,3 +844,45 @@ describe("unittests:: tscWatch:: watchAPI:: when creating program with project r
         });
     });
 });
+
+describe("unittests:: tscWatch:: watchAPI:: when watch program is closed", () => {
+    it("clears the pending program update", () => {
+        const config: File = {
+            path: `/user/username/projects/myproject/tsconfig.json`,
+            content: "{}",
+        };
+        const mainFile: File = {
+            path: `/user/username/projects/myproject/main.ts`,
+            content: "const x = 10;",
+        };
+        const { sys, baseline, cb, getPrograms } = createBaseline(
+            TestServerHost.createWatchedSystem(
+                [config, mainFile],
+                { currentDirectory: ts.getDirectoryPath(config.path) },
+            ),
+        );
+        const host = createWatchCompilerHostOfConfigFileForBaseline({
+            configFileName: config.path,
+            system: sys,
+            cb,
+        });
+        const watch = ts.createWatchProgram(host);
+        runWatchBaseline({
+            scenario: "watchApi",
+            subScenario: "close clears the pending program update",
+            commandLineArgs: ["--w", "--p", config.path],
+            sys,
+            baseline,
+            getPrograms,
+            edits: [{
+                caption: "Change a file and close the program before the update runs",
+                edit: sys => sys.writeFile(mainFile.path, "const x = 20;"),
+                timeouts: sys => {
+                    watch.close();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            }],
+            watchOrSolution: watch,
+        });
+    });
+});
