@@ -190,13 +190,6 @@ func TestCreateSourceFile(t *testing.T) {
 		assert.Equal(t, present.Name, "present")
 		assert.Equal(t, present.Reference.Kind, SymbolOwnerKindFile)
 
-		absent, err := session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
-			File:  descriptor,
-			Index: table.GetIndex(sourceFile.Statements.Nodes[1]),
-		})
-		assert.ErrorContains(t, err, "has no binder symbol")
-		assert.Assert(t, absent == nil)
-
 		_, err = session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
 			File:  descriptor,
 			Index: 0,

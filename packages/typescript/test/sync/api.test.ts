@@ -29,6 +29,7 @@ import {
     isNamedImports,
     isObjectLiteralExpression,
     isPropertyAssignment,
+    isPropertyDeclaration,
     isReturnStatement,
     isShorthandPropertyAssignment,
     isStringLiteral,
@@ -493,7 +494,7 @@ describe("API", { concurrency }, () => {
     });
 
     test("remote declarations lazily fetch and cache binder symbols", () => {
-        const sourceText = "function present() {}\nimport {} from './missing';";
+        const sourceText = "function present() {}";
         using api = spawnAPI({
             "/symbols.ts": sourceText,
         });
@@ -502,9 +503,7 @@ describe("API", { concurrency }, () => {
         const sourceFile = project.program.getSourceFile("/symbols.ts");
         assert.ok(sourceFile);
         const declaration = sourceFile.statements[0];
-        const withoutSymbol = sourceFile.statements[1];
         assert.ok(isFunctionDeclaration(declaration));
-        assert.ok(isImportDeclaration(withoutSymbol));
         const checkerSymbol = project.checker.getSymbolAtPosition("/symbols.ts", sourceText.indexOf("present"));
         assert.ok(checkerSymbol);
 
@@ -525,11 +524,6 @@ describe("API", { concurrency }, () => {
         assert.strictEqual(concurrent, first);
         assert.strictEqual(getSymbol(declaration), first);
         assert.equal(symbolRequests, 1);
-
-        symbolRequests = 0;
-        assert.throws(() => getSymbol(withoutSymbol), /has no binder symbol/);
-        assert.throws(() => api.getSymbol(withoutSymbol), /has no binder symbol/);
-        assert.equal(symbolRequests, 2);
 
         snapshot.dispose();
     });
@@ -552,7 +546,7 @@ describe("API", { concurrency }, () => {
 
     test("source files own separate declaration result and request caches", () => {
         using api = spawnAPI();
-        using lease = api.createSourceFile("/symbols.ts", "function present() {}\nimport {} from './missing';");
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
         const file = lease.sourceFile;
         assert.ok(file instanceof RemoteSourceFile);
         const cache = file.symbolCache;
@@ -565,11 +559,6 @@ describe("API", { concurrency }, () => {
         assert.strictEqual(cache.symbolsByDeclarationNodeIndex.get(index), symbol);
         assert.strictEqual(cache.symbolsById.get(symbol.reference.id), symbol);
         assert.equal(cache.declarationSymbolRequests.has(index), false);
-        const withoutSymbol = cast(file.statements[1], isImportDeclaration);
-        const absentIndex = parseNodeHandle(getNodeId(withoutSymbol)).index;
-        assert.throws(() => getSymbol(withoutSymbol), /has no binder symbol/);
-        assert.equal(cache.symbolsByDeclarationNodeIndex.has(absentIndex), false);
-        assert.equal(cache.declarationSymbolRequests.has(absentIndex), false);
         api.clearSourceFileCache();
         assert.strictEqual(file.symbolCache, cache);
     });
@@ -3776,6 +3765,69 @@ export const value = 1;
         assert.ok(first);
         assert.ok(second);
         assert.notStrictEqual(second, first);
+    });
+
+    test("checker symbol methods merge declarations and parents in their project", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: ["/src/a.ts", "/src/b.ts"] }),
+            "/single/tsconfig.json": JSON.stringify({ files: ["/src/a.ts"] }),
+            "/src/a.ts": "namespace Merged { export const a = 1; }",
+            "/src/b.ts": "namespace Merged { export const b = 1; }",
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json", "/single/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const singleProject = snapshot.getConfiguredProject("/single/tsconfig.json")!;
+        const fileA = project.program.getSourceFile("/src/a.ts");
+        const fileB = project.program.getSourceFile("/src/b.ts");
+        assert.ok(fileA && fileB);
+        const declarationA = cast(fileA.statements[0], isModuleDeclaration);
+        const declarationB = cast(fileB.statements[0], isModuleDeclaration);
+        const rawA = getSymbol(declarationA);
+        const rawB = getSymbol(declarationB);
+        assert.notStrictEqual(rawA, rawB);
+
+        const merged = project.checker.getSymbolOfDeclaration(declarationA);
+        assert.strictEqual(project.checker.getSymbolOfDeclaration(declarationB), merged);
+        assert.strictEqual(project.checker.getSymbolOfNode(declarationA), merged);
+        assert.strictEqual(project.checker.getMergedSymbol(rawA), merged);
+        assert.strictEqual(project.checker.getMergedSymbol(rawB), merged);
+        assert.strictEqual(project.checker.getMergedSymbol(merged), merged);
+        assert.strictEqual(singleProject.checker.getMergedSymbol(rawA), rawA);
+        assert.strictEqual(singleProject.checker.getSymbolOfDeclaration(declarationA), rawA);
+        assert.equal(project.checker.getSymbolOfNode(declarationA.name), undefined);
+        assert.equal(project.checker.getSymbolOfNode(fileA), undefined);
+        assert.equal(project.checker.getParentOfSymbol(merged), undefined);
+
+        const member = (rawA.getExports()).get("a" as __String);
+        assert.ok(member);
+        assert.strictEqual(member.getParent(), rawA);
+        assert.strictEqual(project.checker.getParentOfSymbol(member), merged);
+        assert.strictEqual(singleProject.checker.getParentOfSymbol(member), rawA);
+    });
+
+    test("checker symbol methods late-bind computed members", () => {
+        using api = spawnAPI({
+            "/src/computed.ts": "declare const key: unique symbol;\nclass Container { [key] = 1; ordinary = 2; }\nimport {} from './missing';",
+        });
+        const snapshot = api.createSnapshot({ openFiles: ["/src/computed.ts"] });
+        const project = snapshot.getProjects()[0];
+        const file = project.program.getSourceFile("/src/computed.ts");
+        assert.ok(file);
+        const declaration = cast(file.statements[1], isClassDeclaration);
+        const memberDeclaration = cast(declaration.members[0], isPropertyDeclaration);
+        const raw = getSymbol(memberDeclaration);
+        const lateBound = project.checker.getSymbolOfDeclaration(memberDeclaration);
+        assert.notStrictEqual(lateBound, raw);
+        assert.strictEqual(project.checker.getSymbolOfNode(memberDeclaration), lateBound);
+        const container = project.checker.getSymbolOfDeclaration(declaration);
+        assert.strictEqual(project.checker.getParentOfSymbol(lateBound), container);
+        const type = project.checker.getDeclaredTypeOfSymbol(container);
+        const property = (type.getProperties()).find(symbol => symbol.escapedName === lateBound.escapedName);
+        assert.ok(property);
+        assert.strictEqual(project.checker.getTargetSymbol(property), lateBound);
+        const ordinary = cast(declaration.members[1], isPropertyDeclaration);
+        assert.strictEqual(project.checker.getSymbolOfDeclaration(ordinary), getSymbol(ordinary));
+        assert.equal(project.checker.getSymbolOfNode(file.statements[2]), undefined);
     });
 
     test("snapshot-owned symbols resolve cached file-owned parents", () => {

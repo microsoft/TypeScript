@@ -1642,6 +1642,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getJavaScriptEmit", program.getJavaScriptEmit, assertDeepEquivalent, ["/src/index.ts"]),
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
 
+                parityCase("Checker", "getMergedSymbol", checker.getMergedSymbol, assertSymbolsEquivalent, interfaceSymbol),
+                parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration.name),
+                parityCase("Checker", "getSymbolOfDeclaration", checker.getSymbolOfDeclaration, assertSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getParentOfSymbol", checker.getParentOfSymbol, assertOptionalSymbolsEquivalent, unimportedSymbol),
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
                 parityCase("Checker", "getSymbolAtPosition", selectGeneratorMethod<[file: string, position: number], Symbol | undefined>(checker.getSymbolAtPosition), assertOptionalSymbolsEquivalent, "/src/index.ts", importedDerived.pos),

@@ -1155,6 +1155,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetTargetSymbol):
 		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetMergedSymbol):
+		return s.handleGetMergedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetSymbolOfNode):
+		return s.handleGetSymbolOfNode(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetSymbolOfDeclarationForChecker):
+		return s.handleGetSymbolOfDeclarationForChecker(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetParentOfSymbolForChecker):
+		return s.handleGetParentOfSymbolForChecker(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportSymbolOfSymbolForChecker):
 		return s.handleGetExportSymbolOfSymbolForChecker(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
@@ -4652,6 +4660,68 @@ func (s *Session) handleGetExportSpecifierLocalTargetSymbol(ctx context.Context,
 	}
 
 	return setup.newSymbolResponse(symbol), nil
+}
+
+func (s *Session) handleGetMergedSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetMergedSymbol(symbol)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetSymbolOfNode(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetSymbolOfNode(node)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetSymbolOfDeclarationForChecker(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newSymbolResponse(setup.checker.GetSymbolOfDeclaration(node)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetParentOfSymbolForChecker(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetParentOfSymbol(symbol)), nil
 }
 
 // handleGetAliasedSymbol resolves an alias symbol to its target.

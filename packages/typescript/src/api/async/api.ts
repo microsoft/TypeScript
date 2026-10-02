@@ -2231,6 +2231,50 @@ export class Checker {
         this.objectRegistry.clear();
     }
 
+    /** Get the merged symbol, or the original symbol if it has not been merged. */
+    async getMergedSymbol(symbol: Symbol): Promise<Symbol> {
+        const data = await this.client.apiRequest("getMergedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
+    }
+
+    /**
+     * Get a node's merged symbol. For a declaration, prefer
+     * {@link Checker.getSymbolOfDeclaration} for a non-nullable result.
+     */
+    async getSymbolOfNode(node: Node): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest("getSymbolOfNode", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    /** Get a declaration's merged symbol. */
+    async getSymbolOfDeclaration(node: Declaration): Promise<Symbol> {
+        const data = await this.client.apiRequest("getSymbolOfDeclarationForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            location: getNodeId(node),
+        });
+        // Declarations normally have symbols, but preserve unexpected null results at runtime.
+        return (data && this.objectRegistry.getOrCreateSymbol(data))!;
+    }
+
+    /** Get a symbol's merged parent, if any. */
+    async getParentOfSymbol(symbol: Symbol): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest("getParentOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.reference,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
     getSymbolAtLocation(node: Node): Promise<Symbol | undefined>;
     getSymbolAtLocation(nodes: readonly Node[]): Promise<(Symbol | undefined)[]>;
     async getSymbolAtLocation(nodeOrNodes: Node | readonly Node[]): Promise<Symbol | (Symbol | undefined)[] | undefined> {

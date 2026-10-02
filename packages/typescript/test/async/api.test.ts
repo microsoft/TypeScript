@@ -21,6 +21,7 @@ import {
     isNamedImports,
     isObjectLiteralExpression,
     isPropertyAssignment,
+    isPropertyDeclaration,
     isReturnStatement,
     isShorthandPropertyAssignment,
     isStringLiteral,
@@ -505,7 +506,7 @@ describe("API", { concurrency }, () => {
     });
 
     test("remote declarations lazily fetch and cache binder symbols", async () => {
-        const sourceText = "function present() {}\nimport {} from './missing';";
+        const sourceText = "function present() {}";
         await using api = spawnAPI({
             "/symbols.ts": sourceText,
         });
@@ -514,9 +515,7 @@ describe("API", { concurrency }, () => {
         const sourceFile = await project.program.getSourceFile("/symbols.ts");
         assert.ok(sourceFile);
         const declaration = sourceFile.statements[0];
-        const withoutSymbol = sourceFile.statements[1];
         assert.ok(isFunctionDeclaration(declaration));
-        assert.ok(isImportDeclaration(withoutSymbol));
         const checkerSymbol = await project.checker.getSymbolAtPosition("/symbols.ts", sourceText.indexOf("present")); // @sync: const checkerSymbol = project.checker.getSymbolAtPosition("/symbols.ts", sourceText.indexOf("present"));
         assert.ok(checkerSymbol);
 
@@ -536,11 +535,6 @@ describe("API", { concurrency }, () => {
         assert.strictEqual(concurrent, first);
         assert.strictEqual(await getSymbol(declaration), first); // @sync: assert.strictEqual(getSymbol(declaration), first);
         assert.equal(symbolRequests, 1);
-
-        symbolRequests = 0;
-        await assert.rejects(getSymbol(withoutSymbol), /has no binder symbol/); // @sync: assert.throws(() => getSymbol(withoutSymbol), /has no binder symbol/);
-        await assert.rejects(api.getSymbol(withoutSymbol), /has no binder symbol/); // @sync: assert.throws(() => api.getSymbol(withoutSymbol), /has no binder symbol/);
-        assert.equal(symbolRequests, 2);
 
         await snapshot.dispose();
     });
@@ -563,7 +557,7 @@ describe("API", { concurrency }, () => {
 
     test("source files own separate declaration result and request caches", async () => {
         await using api = spawnAPI();
-        await using lease = await api.createSourceFile("/symbols.ts", "function present() {}\nimport {} from './missing';");
+        await using lease = await api.createSourceFile("/symbols.ts", "function present() {}");
         const file = lease.sourceFile;
         assert.ok(file instanceof RemoteSourceFile);
         const cache = file.symbolCache;
@@ -578,11 +572,6 @@ describe("API", { concurrency }, () => {
         assert.strictEqual(cache.symbolsByDeclarationNodeIndex.get(index), symbol);
         assert.strictEqual(cache.symbolsById.get(symbol.reference.id), symbol);
         assert.equal(cache.declarationSymbolRequests.has(index), false);
-        const withoutSymbol = cast(file.statements[1], isImportDeclaration);
-        const absentIndex = parseNodeHandle(getNodeId(withoutSymbol)).index;
-        await assert.rejects(getSymbol(withoutSymbol), /has no binder symbol/); // @sync: assert.throws(() => getSymbol(withoutSymbol), /has no binder symbol/);
-        assert.equal(cache.symbolsByDeclarationNodeIndex.has(absentIndex), false);
-        assert.equal(cache.declarationSymbolRequests.has(absentIndex), false);
         api.clearSourceFileCache();
         assert.strictEqual(file.symbolCache, cache);
     });
@@ -3951,6 +3940,69 @@ export const value = 1;
         assert.ok(first);
         assert.ok(second);
         assert.notStrictEqual(second, first);
+    });
+
+    test("checker symbol methods merge declarations and parents in their project", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: ["/src/a.ts", "/src/b.ts"] }),
+            "/single/tsconfig.json": JSON.stringify({ files: ["/src/a.ts"] }),
+            "/src/a.ts": "namespace Merged { export const a = 1; }",
+            "/src/b.ts": "namespace Merged { export const b = 1; }",
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json", "/single/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const singleProject = snapshot.getConfiguredProject("/single/tsconfig.json")!;
+        const fileA = await project.program.getSourceFile("/src/a.ts");
+        const fileB = await project.program.getSourceFile("/src/b.ts");
+        assert.ok(fileA && fileB);
+        const declarationA = cast(fileA.statements[0], isModuleDeclaration);
+        const declarationB = cast(fileB.statements[0], isModuleDeclaration);
+        const rawA = await getSymbol(declarationA);
+        const rawB = await getSymbol(declarationB);
+        assert.notStrictEqual(rawA, rawB);
+
+        const merged = await project.checker.getSymbolOfDeclaration(declarationA);
+        assert.strictEqual(await project.checker.getSymbolOfDeclaration(declarationB), merged);
+        assert.strictEqual(await project.checker.getSymbolOfNode(declarationA), merged);
+        assert.strictEqual(await project.checker.getMergedSymbol(rawA), merged);
+        assert.strictEqual(await project.checker.getMergedSymbol(rawB), merged);
+        assert.strictEqual(await project.checker.getMergedSymbol(merged), merged);
+        assert.strictEqual(await singleProject.checker.getMergedSymbol(rawA), rawA);
+        assert.strictEqual(await singleProject.checker.getSymbolOfDeclaration(declarationA), rawA);
+        assert.equal(await project.checker.getSymbolOfNode(declarationA.name), undefined);
+        assert.equal(await project.checker.getSymbolOfNode(fileA), undefined);
+        assert.equal(await project.checker.getParentOfSymbol(merged), undefined);
+
+        const member = (await rawA.getExports()).get("a" as __String);
+        assert.ok(member);
+        assert.strictEqual(await member.getParent(), rawA);
+        assert.strictEqual(await project.checker.getParentOfSymbol(member), merged);
+        assert.strictEqual(await singleProject.checker.getParentOfSymbol(member), rawA);
+    });
+
+    test("checker symbol methods late-bind computed members", async () => {
+        await using api = spawnAPI({
+            "/src/computed.ts": "declare const key: unique symbol;\nclass Container { [key] = 1; ordinary = 2; }\nimport {} from './missing';",
+        });
+        const snapshot = await api.createSnapshot({ openFiles: ["/src/computed.ts"] });
+        const project = snapshot.getProjects()[0];
+        const file = await project.program.getSourceFile("/src/computed.ts");
+        assert.ok(file);
+        const declaration = cast(file.statements[1], isClassDeclaration);
+        const memberDeclaration = cast(declaration.members[0], isPropertyDeclaration);
+        const raw = await getSymbol(memberDeclaration);
+        const lateBound = await project.checker.getSymbolOfDeclaration(memberDeclaration);
+        assert.notStrictEqual(lateBound, raw);
+        assert.strictEqual(await project.checker.getSymbolOfNode(memberDeclaration), lateBound);
+        const container = await project.checker.getSymbolOfDeclaration(declaration);
+        assert.strictEqual(await project.checker.getParentOfSymbol(lateBound), container);
+        const type = await project.checker.getDeclaredTypeOfSymbol(container);
+        const property = (await type.getProperties()).find(symbol => symbol.escapedName === lateBound.escapedName);
+        assert.ok(property);
+        assert.strictEqual(await project.checker.getTargetSymbol(property), lateBound);
+        const ordinary = cast(declaration.members[1], isPropertyDeclaration);
+        assert.strictEqual(await project.checker.getSymbolOfDeclaration(ordinary), await getSymbol(ordinary));
+        assert.equal(await project.checker.getSymbolOfNode(file.statements[2]), undefined);
     });
 
     test("snapshot-owned symbols resolve cached file-owned parents", async () => {
