@@ -10,6 +10,8 @@ import (
 	"runtime/pprof"
 	"sync"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/osutil"
 )
 
 type ProfileSession struct {
@@ -17,6 +19,9 @@ type ProfileSession struct {
 	memFilePath string
 	cpuFile     *os.File
 	logWriter   io.Writer
+	stopSignals func()
+	done        chan struct{}
+	stopOnce    sync.Once
 }
 
 // BeginProfiling starts CPU and memory profiling, writing the profiles to the specified directory.
@@ -38,31 +43,55 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
 		panic(err)
 	}
 
-	return &ProfileSession{
+	session := &ProfileSession{
 		cpuFilePath: cpuProfilePath,
 		memFilePath: memProfilePath,
 		cpuFile:     cpuFile,
 		logWriter:   logWriter,
+		done:        make(chan struct{}),
 	}
+	sigCh, stopSignals := osutil.NotifyTerminationSignals()
+	session.stopSignals = stopSignals
+	go func() {
+		select {
+		case sig := <-sigCh:
+			defer func() {
+				osutil.ReraiseSignal(sig)
+				os.Exit(1)
+			}()
+			session.Stop()
+		case <-session.done:
+			return
+		}
+	}()
+	return session
 }
 
 func (p *ProfileSession) Stop() {
-	pprof.StopCPUProfile()
-	p.cpuFile.Close()
-
-	if p.memFilePath != "" {
-		memFile, err := os.Create(p.memFilePath)
-		if err != nil {
-			panic(err)
+	p.stopOnce.Do(func() {
+		if p.stopSignals != nil {
+			p.stopSignals()
 		}
-		if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
-			panic(err)
+		if p.done != nil {
+			close(p.done)
 		}
-		memFile.Close()
-		fmt.Fprintf(p.logWriter, "Memory profile: %v\n", p.memFilePath)
-	}
+		pprof.StopCPUProfile()
+		p.cpuFile.Close()
 
-	fmt.Fprintf(p.logWriter, "CPU profile: %v\n", p.cpuFilePath)
+		if p.memFilePath != "" {
+			memFile, err := os.Create(p.memFilePath)
+			if err != nil {
+				panic(err)
+			}
+			if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
+				panic(err)
+			}
+			memFile.Close()
+			fmt.Fprintf(p.logWriter, "Memory profile: %v\n", p.memFilePath)
+		}
+
+		fmt.Fprintf(p.logWriter, "CPU profile: %v\n", p.cpuFilePath)
+	})
 }
 
 // CPUProfiler manages on-demand CPU profiling.

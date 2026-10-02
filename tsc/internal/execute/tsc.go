@@ -50,17 +50,25 @@ func stopTracing(sys tsc.System, tr *tracing.Tracing) {
 	}
 }
 
+type CommandLineOptions struct {
+	WatchContext func(context.Context) (context.Context, context.CancelFunc)
+}
+
 func CommandLine(ctx context.Context, sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+	return CommandLineWithOptions(ctx, sys, commandLineArgs, testing, CommandLineOptions{})
+}
+
+func CommandLineWithOptions(ctx context.Context, sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting, options CommandLineOptions) tsc.CommandLineResult {
 	if len(commandLineArgs) > 0 {
 		switch strings.ToLower(commandLineArgs[0]) {
 		case "-b", "--b", "-build", "--build":
-			return tscBuildCompilation(ctx, sys, tsoptions.ParseBuildCommandLine(commandLineArgs, sys), testing)
+			return tscBuildCompilation(ctx, sys, tsoptions.ParseBuildCommandLine(commandLineArgs, sys), testing, options)
 			// case "-f":
 			// 	return fmtMain(sys, commandLineArgs[1], commandLineArgs[1])
 		}
 	}
 
-	return tscCompilation(ctx, sys, tsoptions.ParseCommandLine(commandLineArgs, sys), testing)
+	return tscCompilation(ctx, sys, tsoptions.ParseCommandLine(commandLineArgs, sys), testing, options)
 }
 
 func fmtMain(sys tsc.System, input, output string) tsc.ExitStatus {
@@ -88,9 +96,10 @@ func fmtMain(sys tsc.System, input, output string) tsc.ExitStatus {
 	return tsc.ExitStatusSuccess
 }
 
-func tscBuildCompilation(ctx context.Context, sys tsc.System, buildCommand *tsoptions.ParsedBuildCommandLine, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+func tscBuildCompilation(ctx context.Context, sys tsc.System, buildCommand *tsoptions.ParsedBuildCommandLine, testing tsc.CommandLineTesting, options CommandLineOptions) tsc.CommandLineResult {
 	locale := buildCommand.Locale()
 	reportDiagnostic := tsc.CreateDiagnosticReporter(sys, sys.Writer(), locale, buildCommand.CompilerOptions)
+	profiled := false
 
 	if len(buildCommand.Errors) > 0 {
 		for _, err := range buildCommand.Errors {
@@ -103,6 +112,7 @@ func tscBuildCompilation(ctx context.Context, sys tsc.System, buildCommand *tsop
 		// !!! stderr?
 		profileSession := pprof.BeginProfiling(pprofDir, sys.Writer())
 		defer profileSession.Stop()
+		profiled = true
 	}
 
 	if buildCommand.CompilerOptions.Help.IsTrue() {
@@ -111,6 +121,11 @@ func tscBuildCompilation(ctx context.Context, sys tsc.System, buildCommand *tsop
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess}
 	}
 
+	if buildCommand.CompilerOptions.Watch.IsTrue() && !profiled && options.WatchContext != nil {
+		var stop context.CancelFunc
+		ctx, stop = options.WatchContext(ctx)
+		defer stop()
+	}
 	orchestrator := build.NewOrchestrator(build.Options{
 		Sys:     sys,
 		Command: buildCommand,
@@ -119,10 +134,11 @@ func tscBuildCompilation(ctx context.Context, sys tsc.System, buildCommand *tsop
 	return orchestrator.Start(ctx)
 }
 
-func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.ParsedCommandLine, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.ParsedCommandLine, testing tsc.CommandLineTesting, options CommandLineOptions) tsc.CommandLineResult {
 	configFileName := ""
 	locale := commandLine.Locale()
 	reportDiagnostic := tsc.CreateDiagnosticReporter(sys, sys.Writer(), locale, commandLine.CompilerOptions())
+	profiled := false
 
 	if len(commandLine.Errors) > 0 {
 		for _, e := range commandLine.Errors {
@@ -135,6 +151,7 @@ func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.
 		// !!! stderr?
 		profileSession := pprof.BeginProfiling(pprofDir, sys.Writer())
 		defer profileSession.Stop()
+		profiled = true
 	}
 
 	if commandLine.CompilerOptions().Init.IsTrue() {
@@ -231,6 +248,11 @@ func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess}
 	}
 	if configForCompilation.CompilerOptions().Watch.IsTrue() {
+		if !profiled && options.WatchContext != nil {
+			var stop context.CancelFunc
+			ctx, stop = options.WatchContext(ctx)
+			defer stop()
+		}
 		watcher := createWatcher(
 			sys,
 			configForCompilation,
