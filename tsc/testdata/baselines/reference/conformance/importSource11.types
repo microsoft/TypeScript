@@ -1,0 +1,153 @@
+//// [tests/cases/conformance/importSource/importSource11.ts] ////
+
+=== a.js ===
+export default 1;
+export const a = 2;
+>a : 2
+>2 : 2
+
+=== b.js ===
+import source * as a from "./a.js";
+>a : any
+
+=== c.js ===
+import source { a } from "./a.js";
+>a : any
+
+=== d.js ===
+import source a, { a as b } from "./a.js";
+>a : AbstractModuleSource
+>a : any
+>b : any
+
+=== e.js ===
+
+import source "./a.js";
+
+=== f.js ===
+import.source;
+>import.source : any
+>source : any
+
+(import.source)("./a.js");
+>(import.source)("./a.js") : any
+>(import.source) : any
+>import.source : any
+>source : any
+>"./a.js" : "./a.js"
+
+Function(import.source);
+>Function(import.source) : Function
+>Function : FunctionConstructor
+>import.source : any
+>source : any
+
+import.source.unknown;
+>import.source.unknown : any
+>import.source : any
+>source : any
+>unknown : any
+
+import.source();
+>import.source() : Promise<any>
+>source : any
+
+import.source("./a.js", {}, {});
+>import.source("./a.js", {}, {}) : Promise<AbstractModuleSource>
+>source : any
+>"./a.js" : "./a.js"
+>{} : {}
+>{} : {}
+
+import.source?.("./a.js");
+>import.source?.("./a.js") : Promise<AbstractModuleSource>
+>source : any
+>"./a.js" : "./a.js"
+
+import.source<string>("./a.js");
+>import.source<string>("./a.js") : boolean
+>import.source<string : boolean
+>import.source : any
+>source : any
+>string : any
+>("./a.js") : "./a.js"
+>"./a.js" : "./a.js"
+
+import.source(...["./a.js"]);
+>import.source(...["./a.js"]) : Promise<AbstractModuleSource>
+>source : any
+>...["./a.js"] : string
+>["./a.js"] : [string]
+>"./a.js" : "./a.js"
+
+=== g.js ===
+new import.source("./a.js");
+>new : any
+> : any
+>import.source("./a.js") : Promise<AbstractModuleSource>
+>source : any
+>"./a.js" : "./a.js"
+
+=== h.js ===
+typeof import.source;
+>typeof import.source : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>import.source : any
+>source : any
+
+=== i.js ===
+import.a("./a.js");
+>import.a("./a.js") : any
+>import.a : any
+>a : any
+>"./a.js" : "./a.js"
+
+=== j.js ===
+import source a from "./a.js" with { type: "javascript" };
+>a : AbstractModuleSource
+>type : any
+
+const b = import.source("./a.js", { with: { type: "javascript" } });
+>b : Promise<AbstractModuleSource>
+>import.source("./a.js", { with: { type: "javascript" } }) : Promise<AbstractModuleSource>
+>source : any
+>"./a.js" : "./a.js"
+>{ with: { type: "javascript" } } : { with: { readonly type: "javascript"; }; }
+>with : { readonly type: "javascript"; }
+>{ type: "javascript" } : { readonly type: "javascript"; }
+>type : "javascript"
+>"javascript" : "javascript"
+
+a;
+>a : AbstractModuleSource
+
+b;
+>b : Promise<AbstractModuleSource>
+
+=== k.js ===
+const a = import.source("./a.js", { with: { type: "javascript" } });
+>a : Promise<AbstractModuleSource>
+>import.source("./a.js", { with: { type: "javascript" } }) : Promise<AbstractModuleSource>
+>source : any
+>"./a.js" : "./a.js"
+>{ with: { type: "javascript" } } : { with: { readonly type: "javascript"; }; }
+>with : { readonly type: "javascript"; }
+>{ type: "javascript" } : { readonly type: "javascript"; }
+>type : "javascript"
+>"javascript" : "javascript"
+
+a;
+>a : Promise<AbstractModuleSource>
+
+=== l.js ===
+import s\u006furce from "./a.js";
+>s\u006furce : 1
+
+source;
+>source : 1
+
+=== m.js ===
+import.s\u006furce("./a.js");
+>import.s\u006furce("./a.js") : Promise<AbstractModuleSource>
+>s\u006furce : any
+>"./a.js" : "./a.js"
+

@@ -2036,6 +2036,7 @@ export const options: OptionsModel = {
                 { name: "esnext.decorators", value: "lib.esnext.decorators.d.ts" },
                 { name: "esnext.disposable", value: "lib.esnext.disposable.d.ts" },
                 { name: "esnext.intl", value: "lib.esnext.intl.d.ts" },
+                { name: "esnext.modulesource", value: "lib.esnext.modulesource.d.ts" },
                 { name: "esnext.sharedmemory", value: "lib.esnext.sharedmemory.d.ts" },
                 { name: "esnext.temporal", value: "lib.esnext.temporal.d.ts" },
                 { name: "decorators", value: "lib.decorators.d.ts" },

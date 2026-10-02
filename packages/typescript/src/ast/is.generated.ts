@@ -2773,7 +2773,8 @@ export function isJsxTokenKind(kind: SyntaxKind): kind is JsxTokenSyntaxKind {
 
 export function isImportPhaseModifierKind(kind: SyntaxKind): kind is ImportPhaseModifierSyntaxKind {
     return kind === SyntaxKind.TypeKeyword
-        || kind === SyntaxKind.DeferKeyword;
+        || kind === SyntaxKind.DeferKeyword
+        || kind === SyntaxKind.SourceKeyword;
 }
 
 export function isPostfixUnaryOperator(kind: SyntaxKind): kind is PostfixUnaryOperator {
