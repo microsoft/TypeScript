@@ -28,7 +28,6 @@ import {
     isSpawnOptions,
     resolveExePath,
 } from "../options.ts";
-import { toRootedPath } from "../path.ts";
 import type {
     APIMethodInfo,
     APIRequest,
@@ -185,11 +184,7 @@ export class Client {
                     const callback = fs.realpath;
                     if (typeof callback !== "function") throw new Error("Invalid realpath callback configuration");
                     connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
-                        const result = callback(path);
-                        return encodeFileSystemCallbackResult(
-                            name,
-                            typeof result === "string" ? toRootedPath(result, undefined) : result,
-                        );
+                        return encodeFileSystemCallbackResult(name, callback(path));
                     });
                     break;
                 }

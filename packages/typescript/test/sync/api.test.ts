@@ -4799,7 +4799,7 @@ describe("readFile callback semantics", { concurrency }, () => {
         );
     });
 
-    test("realpath callback string results are normalized before reaching the server", () => {
+    test("realpath callback string results are resolved and normalized by the server", () => {
         const fs = createVirtualFileSystem({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: { module: "nodenext", moduleResolution: "nodenext" },
@@ -4809,17 +4809,22 @@ describe("readFile callback semantics", { concurrency }, () => {
             "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
             "/node_modules/pkg/index.d.ts": `export {};`,
         });
-        const callbacks: FileSystemCallbacks = {
-            ...fs,
-            realpath: path => path.replaceAll("/", "\\"),
-        };
-        using api = new API({ cwd: "/", fs: callbacks });
+        for (
+            const realpath of [
+                (path: string) => path.replaceAll("/", "\\"),
+                (path: string) => path.slice(path.lastIndexOf("/") + 1),
+                (path: string) => "../" + path.split("/").slice(-2).join("/"),
+            ]
+        ) {
+            const callbacks: FileSystemCallbacks = { ...fs, realpath };
+            using api = new API({ cwd: "/", fs: callbacks });
 
-        using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        assert.ok(
-            (snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFileNames())
-                .includes(toRootedFilePath("/node_modules/pkg/index.d.ts", undefined)),
-        );
+            using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+            assert.ok(
+                (snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFileNames())
+                    .includes(toRootedFilePath("/node_modules/pkg/index.d.ts", undefined)),
+            );
+        }
     });
 
     test("readFile: string returns content, undefined blocks fallback, useOS falls through to the server OS", () => {

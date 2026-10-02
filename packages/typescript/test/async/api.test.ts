@@ -4974,7 +4974,7 @@ describe("readFile callback semantics", { concurrency }, () => {
         );
     });
 
-    test("realpath callback string results are normalized before reaching the server", async () => {
+    test("realpath callback string results are resolved and normalized by the server", async () => {
         const fs = createVirtualFileSystem({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: { module: "nodenext", moduleResolution: "nodenext" },
@@ -4984,17 +4984,22 @@ describe("readFile callback semantics", { concurrency }, () => {
             "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
             "/node_modules/pkg/index.d.ts": `export {};`,
         });
-        const callbacks: FileSystemCallbacks = {
-            ...fs,
-            realpath: path => path.replaceAll("/", "\\"),
-        };
-        await using api = new API({ cwd: "/", fs: callbacks });
+        for (
+            const realpath of [
+                (path: string) => path.replaceAll("/", "\\"),
+                (path: string) => path.slice(path.lastIndexOf("/") + 1),
+                (path: string) => "../" + path.split("/").slice(-2).join("/"),
+            ]
+        ) {
+            const callbacks: FileSystemCallbacks = { ...fs, realpath };
+            await using api = new API({ cwd: "/", fs: callbacks });
 
-        using snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
-        assert.ok(
-            (await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFileNames())
-                .includes(toRootedFilePath("/node_modules/pkg/index.d.ts", undefined)),
-        );
+            using snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+            assert.ok(
+                (await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFileNames())
+                    .includes(toRootedFilePath("/node_modules/pkg/index.d.ts", undefined)),
+            );
+        }
     });
 
     // @sync-skip-block-start

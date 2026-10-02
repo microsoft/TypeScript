@@ -80,6 +80,7 @@ export interface FileSystemCallbacks {
         | ((fileName: RootedFilePath) => string | undefined | typeof serverFS.useOS | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.error;
+    /** Relative results are resolved against the queried path's directory by the server. */
     realpath:
         | ((path: RootedPath) => string | typeof serverFS.useOS | typeof serverFS.identity | typeof serverFS.error)
         | typeof serverFS.useOS
