@@ -683,7 +683,22 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 		if flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsAccessor) != 0 {
 			writeNewLine()
-			if symbol.CheckFlags&ast.CheckFlagsIndexSymbol == 0 {
+			if symbol.CheckFlags&ast.CheckFlagsIndexSymbol != 0 {
+				dpw.WritePunctuation("(")
+				dpw.Write("index")
+				dpw.WritePunctuation(") ")
+				if symbol.Parent != nil {
+					writeSymbolClassified(symbol.Parent, container, ast.SymbolFlagsNone, symbolFormatFlags)
+				}
+				dpw.WritePunctuation("[")
+				for i, info := range c.GetIndexInfosOfIndexSymbol(symbol) {
+					if i != 0 {
+						dpw.WritePunctuation(" | ")
+					}
+					writeTypeClassified(info.KeyType(), container, typeFormatFlags)
+				}
+				dpw.WritePunctuation("]: ")
+			} else {
 				switch {
 				case flags&ast.SymbolFlagsProperty != 0:
 					dpw.WritePunctuation("(")
