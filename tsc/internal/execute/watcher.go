@@ -3,7 +3,6 @@ package execute
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"slices"
 	"time"
 
@@ -252,9 +251,22 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	for dir, recursive := range resolvedDirs {
 		coverage.Set(dir, recursive)
 	}
+	programFiles := w.program.GetProgram().FilesByPath()
+	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
+	rootFiles := collections.NewSetFromItems(core.Map(w.config.FileNames(), func(fileName string) tspath.Path {
+		return tspath.ToPath(fileName, cwd, caseSensitive)
+	})...)
 	for _, filePath := range seenFilePaths {
 		dir := tspath.GetDirectoryPath(filePath)
-		if !coverage.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
+		if coverage.Covered(dir) {
+			continue
+		}
+		// Seen files mix program files with lookup locations. Only lookups keep the depth check, so an imported
+		// file outside the tsconfig directory (say /shared next to /app) is still watched. A root file is not in
+		// the program while it is missing, but its directory stays watched so that recreating it rebuilds.
+		p := tspath.ToPath(filePath, cwd, caseSensitive)
+		_, isProgramFile := programFiles[p]
+		if isProgramFile || rootFiles.Has(p) || watchmanager.CanWatchDirectory(dir) {
 			coverage.Set(dir, false)
 		}
 	}
@@ -562,7 +574,7 @@ func (w *Watcher) tryUpdateProgram(host *watchCompilerHost) bool {
 		}
 	}
 
-	newProgram, _, reused := oldProgram.ReuseProgram(changedPath, host, nil)
+	newProgram, _, reused := oldProgram.ReuseProgram(changedPath, host, nil, nil)
 	if reused {
 		w.program = incremental.NewProgram(newProgram, w.program, nil, w.sys.Now, w.testing != nil)
 	}
@@ -619,11 +631,21 @@ func (w *Watcher) compileAndEmit() tsc.CompileAndEmitResult {
 }
 
 func (w *Watcher) contentMapperManifestChanged(changedPaths map[string]fswatch.EventKind) bool {
+	comparePathsOptions := w.comparePathsOptions()
+	var changedPathKeys map[tspath.Path]struct{}
 	for _, mapper := range w.config.ContentMappers() {
 		if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 			continue
 		}
-		if _, changed := changedPaths[tspath.CombinePaths(mapper.PackageDirectory, "package.json")]; changed {
+		if changedPathKeys == nil {
+			changedPathKeys = make(map[tspath.Path]struct{}, len(changedPaths))
+			for path := range changedPaths {
+				changedPathKeys[tspath.ToPath(path, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames)] = struct{}{}
+			}
+		}
+		manifestPath := tspath.CombinePaths(mapper.PackageDirectory, "package.json")
+		manifestKey := tspath.ToPath(manifestPath, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames)
+		if _, changed := changedPathKeys[manifestKey]; changed {
 			return true
 		}
 	}
@@ -664,7 +686,7 @@ func (w *Watcher) recheckTsConfig(force bool) bool {
 	}
 	w.configHasErrors = false
 	w.configFilePaths = append([]string{w.configFileName}, configParseResult.ExtendedSourceFiles()...)
-	if !reflect.DeepEqual(w.config.ParsedConfig, configParseResult.ParsedConfig) {
+	if !w.config.ParsedConfig.Equals(configParseResult.ParsedConfig) {
 		w.configModified = true
 	}
 	w.replaceContentMapperProject(configParseResult)

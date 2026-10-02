@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/importSource/importSource20.ts] ////
+
+=== index.mts ===
+import source a from "pkg";
+>a : AbstractModuleSource
+
+import { value } from "pkg";
+>value : number
+
+const b: AbstractModuleSource = a;
+>b : AbstractModuleSource
+>a : AbstractModuleSource
+
+const c: number = value;
+>c : number
+>value : number
+
+export const d = import.source("pkg");
+>d : Promise<AbstractModuleSource>
+>import.source("pkg") : Promise<AbstractModuleSource>
+>source : any
+>"pkg" : "pkg"
+
+export const e = import("pkg");
+>e : Promise<typeof import("pkg")>
+>import("pkg") : Promise<typeof import("pkg")>
+>"pkg" : "pkg"
+
+export { a };
+>a : AbstractModuleSource
+
+=== node_modules/pkg/index.d.ts ===
+export const value: number;
+>value : number
+

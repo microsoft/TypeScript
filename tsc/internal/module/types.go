@@ -16,6 +16,27 @@ type ResolutionHost interface {
 	GetCurrentDirectory() string
 }
 
+type Resolver interface {
+	ResolveModuleName(
+		moduleName string,
+		containingFile string,
+		resolutionMode core.ResolutionMode,
+		redirectedReference ResolvedProjectReference,
+	) (*ResolvedModule, []DiagAndArgs, error)
+	ResolveModuleNameFromDirectory(
+		moduleName string,
+		containingDirectory string,
+		resolutionMode core.ResolutionMode,
+	) (*ResolvedModule, []DiagAndArgs, error)
+	ResolveTypeReferenceDirective(
+		typeReferenceDirectiveName string,
+		containingFile string,
+		resolutionMode core.ResolutionMode,
+		redirectedReference ResolvedProjectReference,
+	) (*ResolvedTypeReferenceDirective, []DiagAndArgs)
+	GetResolutionData() *ResolutionData
+}
+
 type ModeAwareCacheKey struct {
 	Name string
 	Mode core.ResolutionMode

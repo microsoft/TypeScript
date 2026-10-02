@@ -1,0 +1,41 @@
+declFileTypeofFunction.ts(20,5): error TS5088: The inferred type of 'foo3' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+declFileTypeofFunction.ts(23,5): error TS5088: The inferred type of 'x' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== declFileTypeofFunction.ts (2 errors) ====
+    function f(n: typeof f): string;
+    function f(n: typeof g): string;
+    function f() { return undefined; }
+    function g(n: typeof g): number;
+    function g(n: typeof f): number;
+    function g() { return undefined; }
+    
+    var b: () => typeof b;
+    
+    function b1() {
+        return b1;
+    }
+    
+    function foo(): typeof foo {
+        return null;
+    }
+    var foo1: typeof foo;
+    var foo2 = foo;
+    
+    var foo3 = function () {
+        ~~~~
+!!! error TS5088: The inferred type of 'foo3' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        return foo3;
+    }
+    var x = () => {
+        ~
+!!! error TS5088: The inferred type of 'x' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        return x;
+    }
+    
+    function foo5(x: number) {
+        function bar(x: number) {
+            return x;
+        }
+        return bar;
+    }

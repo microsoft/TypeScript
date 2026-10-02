@@ -63,8 +63,7 @@ func deduplicateRenameEdits(mappedEdits []mappedRenameEdit) (map[lsproto.Documen
 }
 
 func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.RenameParams, orchestrator CrossProjectOrchestrator) (lsproto.WorkspaceEditOrNull, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -79,7 +78,7 @@ func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.Ren
 
 func (l *LanguageService) GetRenameInfo(ctx context.Context, newName string, documentURI lsproto.DocumentUri, position lsproto.Position) RenameInfo {
 	program, sourceFile := l.getProgramAndFile(documentURI)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, position, spanmap.FeatureRename)
+	positions := l.converters.FromLSPPositionForSourceFile(sourceFile, position, spanmap.FeatureRename)
 	for _, mapped := range positions {
 		if !mapped.Fidelity.IsExact() {
 			continue
@@ -117,7 +116,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	defer done()
 
 	quotePreference := lsutil.GetQuotePreference(sourceFile, l.UserPreferences())
-	useAliasesForRename := l.UserPreferences().UseAliasesForRename.IsTrueOrUnknown()
+	useAliasesForRename := l.UserPreferences().ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown()
 
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
@@ -255,7 +254,7 @@ func isDefinedInLibraryFile(program *compiler.Program, declaration *ast.Node) bo
 // wouldRenameInOtherNodeModules checks if renaming the symbol would affect node_modules.
 func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Symbol, ch *checker.Checker, preferences lsutil.UserPreferences) *diagnostics.Message {
 	sym := symbol
-	if !preferences.UseAliasesForRename.IsTrueOrUnknown() && sym.Flags&ast.SymbolFlagsAlias != 0 {
+	if !preferences.ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown() && sym.Flags&ast.SymbolFlagsAlias != 0 {
 		importSpecifier := core.Find(sym.Declarations, ast.IsImportSpecifier)
 		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName == nil {
 			sym = ch.GetAliasedSymbol(sym)
@@ -267,7 +266,7 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 		return nil
 	}
 
-	originalPackage := module.ParseNodeModuleFromPath(originalFile.FileName(), false /*isFolder*/)
+	originalPackage := module.NodeModulePackageRootForFile(originalFile.FileName())
 	if originalPackage == "" {
 		// Original source file is not in node_modules.
 		for _, declaration := range declarations {
@@ -280,7 +279,7 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 
 	// Original source file is in node_modules.
 	for _, declaration := range declarations {
-		declPackage := module.ParseNodeModuleFromPath(ast.GetSourceFileOfNode(declaration).FileName(), false /*isFolder*/)
+		declPackage := module.NodeModulePackageRootForFile(ast.GetSourceFileOfNode(declaration).FileName())
 		if declPackage != "" && declPackage != originalPackage {
 			return diagnostics.You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder
 		}

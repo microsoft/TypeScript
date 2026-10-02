@@ -5,7 +5,6 @@ package main
 import (
 	"bytes"
 	"cmp"
-	"encoding/xml"
 	"flag"
 	"fmt"
 	"go/format"
@@ -15,7 +14,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"slices"
 	"strconv"
 	"strings"
@@ -39,33 +37,13 @@ type diagnosticMessage struct {
 	key string
 }
 
-type LCX struct {
-	TgtCul    string     `xml:"TgtCul,attr"`
-	RootItems []RootItem `xml:"Item"`
-}
-
-type RootItem struct {
-	ItemId string            `xml:"ItemId,attr"`
-	Items  []StringTableItem `xml:"Item"`
-}
-
-type StringTableItem struct {
-	ItemId string          `xml:"ItemId,attr"`
-	Items  []LocalizedItem `xml:"Item"`
-}
-
-type LocalizedItem struct {
-	ItemId string `xml:"ItemId,attr"`
-	Str    Str    `xml:"Str"`
-}
-
-type Str struct {
-	Val string `xml:"Val"`
-	Tgt *Tgt   `xml:"Tgt"`
-}
-
-type Tgt struct {
-	Val string `xml:"Val"`
+type localizationProject struct {
+	Projects []struct {
+		LocItems []struct {
+			SourceFile string `json:"SourceFile"`
+			Languages  string `json:"Languages"`
+		} `json:"LocItems"`
+	} `json:"Projects"`
 }
 
 func main() {
@@ -74,24 +52,16 @@ func main() {
 	diagnosticsOutput := flag.String("diagnostics", "", "path to the output diagnostics_generated.go file")
 	locOutput := flag.String("loc", "", "path to the output loc_generated.go file")
 	locDir := flag.String("locdir", "", "directory to write locale .json.gz files")
+	locProject := flag.String("locproject", "", "path to the localization project file")
+	locSourceOutput := flag.String("locsource", "", "path to the localization source file")
 	flag.Parse()
 
-	if *diagnosticsOutput == "" || *locOutput == "" || *locDir == "" {
+	if *diagnosticsOutput == "" || *locOutput == "" || *locDir == "" || *locProject == "" || *locSourceOutput == "" {
 		flag.Usage()
 		return
 	}
 
 	rawDiagnosticMessages := readRawMessages("diagnosticMessages.json")
-
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		panic("could not get current filename")
-	}
-	filename = filepath.FromSlash(filename) // runtime.Caller always returns forward slashes; https://go.dev/issues/3335, https://go.dev/cl/603275
-
-	rawExtraMessages := readRawMessages(filepath.Join(filepath.Dir(filename), "extraDiagnosticMessages.json"))
-
-	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
 	diagnosticMessages := slices.Collect(maps.Values(rawDiagnosticMessages))
 
 	slices.SortFunc(diagnosticMessages, func(a *diagnosticMessage, b *diagnosticMessage) int {
@@ -119,8 +89,17 @@ func main() {
 		return
 	}
 
+	locSource, err := generateLocalizationSource(diagnosticMessages)
+	if err != nil {
+		log.Fatalf("failed to generate localization source: %v", err)
+	}
+	if err := os.WriteFile(*locSourceOutput, locSource, 0o666); err != nil {
+		log.Fatalf("failed to write localization source: %v", err)
+	}
+
 	// Generate localizations file
-	locBuf := generateLocalizations(knownKeys, *locDir)
+	localeNames := readLocaleNames(*locProject, *locSourceOutput, *locDir)
+	locBuf := generateLocalizations(knownKeys, *locDir, localeNames)
 
 	formatted, err = format.Source(locBuf.Bytes())
 	if err != nil {
@@ -159,21 +138,100 @@ func generateDiagnostics(diagnosticMessages []*diagnosticMessage) *bytes.Buffer 
 		buf.WriteString("}\n\n")
 	}
 
-	buf.WriteString("func keyToMessage(key Key) *Message {\n")
-	buf.WriteString("\tswitch key {\n")
+	// Addresses can be statically initialized even across package initialization calls.
+	// Copying the pointer variables or using a large map literal generates substantial initialization code.
+	buf.WriteString("var allMessages = [...]**Message{\n")
 	for _, m := range diagnosticMessages {
-		_, key := convertPropertyName(m.key, m.Code)
 		varName, _ := convertPropertyName(m.key, m.Code)
-		fmt.Fprintf(&buf, "\tcase %q:\n\t\treturn %s\n", key, varName)
+		fmt.Fprintf(&buf, "\t&%s,\n", varName)
 	}
-	buf.WriteString("\tdefault:\n\t\treturn nil\n")
-	buf.WriteString("\t}\n")
 	buf.WriteString("}\n")
 
 	return &buf
 }
 
-func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buffer {
+func readLocaleNames(projectPath string, sourcePath string, localeDir string) []string {
+	file, err := os.Open(projectPath)
+	if err != nil {
+		log.Fatalf("failed to open localization project: %v", err)
+	}
+	defer file.Close()
+
+	var project localizationProject
+	if err := json.UnmarshalRead(file, &project); err != nil {
+		log.Fatalf("failed to decode localization project: %v", err)
+	}
+
+	projectRoot, err := filepath.Abs(filepath.Join(filepath.Dir(projectPath), ".."))
+	if err != nil {
+		log.Fatalf("failed to resolve localization project root: %v", err)
+	}
+	sourcePath, err = filepath.Abs(sourcePath)
+	if err != nil {
+		log.Fatalf("failed to resolve localization source path: %v", err)
+	}
+
+	var languagesValue string
+	found := false
+	for _, project := range project.Projects {
+		for _, item := range project.LocItems {
+			itemSourceFile := filepath.FromSlash(strings.ReplaceAll(item.SourceFile, "\\", "/"))
+			if filepath.Join(projectRoot, itemSourceFile) != sourcePath {
+				continue
+			}
+			if found {
+				log.Fatalf("duplicate localization item for %q in %s", sourcePath, projectPath)
+			}
+			found = true
+			languagesValue = item.Languages
+		}
+	}
+	if !found {
+		log.Fatalf("localization item for %q not found in %s", sourcePath, projectPath)
+	}
+
+	languages := strings.Split(languagesValue, ";")
+	declared := make(map[string]bool, len(languages))
+	for _, localeName := range languages {
+		tag, err := language.Parse(localeName)
+		if err != nil {
+			log.Fatalf("invalid locale %q in %s: %v", localeName, projectPath, err)
+		}
+		if canonical := tag.String(); canonical != localeName {
+			log.Fatalf("locale %q in %s is not canonical; use %q", localeName, projectPath, canonical)
+		}
+		if declared[localeName] {
+			log.Fatalf("duplicate locale %q in %s", localeName, projectPath)
+		}
+		declared[localeName] = true
+	}
+
+	entries, err := os.ReadDir(localeDir)
+	if err != nil {
+		log.Fatalf("failed to read locale directory: %v", err)
+	}
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+		if !strings.HasSuffix(entry.Name(), ".generated.json") {
+			log.Fatalf("locale file %q must use the .generated.json suffix", filepath.Join(localeDir, entry.Name()))
+		}
+		localeName := strings.TrimSuffix(entry.Name(), ".generated.json")
+		if !declared[localeName] {
+			log.Fatalf("locale file %q is not declared in %s", filepath.Join(localeDir, entry.Name()), projectPath)
+		}
+		delete(declared, localeName)
+	}
+	if len(declared) != 0 {
+		missing := slices.Sorted(maps.Keys(declared))
+		log.Fatalf("locales declared in %s have no handback files: %s", projectPath, strings.Join(missing, ", "))
+	}
+
+	return languages
+}
+
+func generateLocalizations(knownKeys map[string]bool, locDir string, localeNames []string) *bytes.Buffer {
 	var buf bytes.Buffer
 
 	buf.WriteString("// Code generated by generate.go; DO NOT EDIT.\n")
@@ -189,37 +247,27 @@ func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buff
 	buf.WriteString("\t\"github.com/microsoft/TypeScript/tsc/internal/json\"\n")
 	buf.WriteString(")\n")
 
-	// Remove and recreate the loc directory for a clean state
-	if err := os.RemoveAll(locDir); err != nil {
-		log.Fatalf("failed to remove locale directory: %v", err)
-	}
-	if err := os.MkdirAll(locDir, 0o755); err != nil {
-		log.Fatalf("failed to create locale directory: %v", err)
-	}
-
-	// Generate locale maps
-	localeFiles, err := filepath.Glob(filepath.Join("..", "locale", "lcl", "*", "diagnosticMessages", "diagnosticMessages.generated.json.lcl"))
+	existingArchives, err := filepath.Glob(filepath.Join(locDir, "*.json.gz"))
 	if err != nil {
-		log.Fatalf("failed to find locale files: %v", err)
+		log.Fatalf("failed to find existing locale archives: %v", err)
 	}
-	if len(localeFiles) == 0 {
-		log.Fatalf("no locale files found in %s", filepath.Join("..", "locale", "lcl"))
+	for _, archive := range existingArchives {
+		if err := os.Remove(archive); err != nil {
+			log.Fatalf("failed to remove existing locale archive %s: %v", archive, err)
+		}
 	}
-	slices.Sort(localeFiles)
 
 	type localeInfo struct {
-		varName   string
-		tgtCul    string
-		canonical string // canonical lowercase form (e.g., "zh-cn", "pt-br")
-		lang      string
-		messages  map[string]string
-		filename  string
+		varName  string
+		tgtCul   string
+		filename string
 	}
 
 	var locales []localeInfo
 
-	for _, localeFile := range localeFiles {
-		localizedMessages, tgtCul := readLocalizedMessages(localeFile)
+	for _, tgtCul := range localeNames {
+		localeFile := filepath.Join(locDir, tgtCul+".generated.json")
+		localizedMessages := readLocalizedMessages(localeFile)
 		if len(localizedMessages) == 0 {
 			continue
 		}
@@ -239,17 +287,10 @@ func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buff
 		localeVar := strings.ReplaceAll(strings.ReplaceAll(tgtCul, "-", ""), "_", "")
 
 		// Parse the locale using language.Tag to get canonical forms
-		tag, err := language.Parse(tgtCul)
-		if err != nil {
+		if _, err := language.Parse(tgtCul); err != nil {
 			log.Printf("failed to parse locale %q: %v", tgtCul, err)
 			continue
 		}
-
-		base, _ := tag.Base()
-		lang := strings.ToLower(base.String())
-
-		// Get canonical form (lowercase with dash)
-		canonical := strings.ToLower(tgtCul)
 
 		// Filename for the JSON.gz file (use the original tgtCul as standard language tag)
 		filename := fmt.Sprintf("%s.json.gz", tgtCul)
@@ -285,12 +326,9 @@ func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buff
 		}
 
 		locales = append(locales, localeInfo{
-			varName:   localeVar,
-			tgtCul:    tgtCul,
-			canonical: canonical,
-			lang:      lang,
-			messages:  localizedMessages,
-			filename:  filename,
+			varName:  localeVar,
+			tgtCul:   tgtCul,
+			filename: filename,
 		})
 	}
 
@@ -338,6 +376,16 @@ func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buff
 	return &buf
 }
 
+func generateLocalizationSource(diagnosticMessages []*diagnosticMessage) ([]byte, error) {
+	var messages collections.OrderedMap[string, string]
+	for _, m := range diagnosticMessages {
+		_, key := convertPropertyName(m.key, m.Code)
+		messages.Set(key, m.key)
+	}
+	data, err := json.MarshalIndent(&messages, "", "    ")
+	return append(data, '\n'), err
+}
+
 func readRawMessages(p string) map[int]*diagnosticMessage {
 	file, err := os.Open(p)
 	if err != nil {
@@ -355,49 +403,30 @@ func readRawMessages(p string) map[int]*diagnosticMessage {
 	codeToMessage := make(map[int]*diagnosticMessage, len(rawMessages))
 	for k, m := range rawMessages {
 		m.key = k
+		if existing, ok := codeToMessage[m.Code]; ok {
+			log.Fatalf("diagnostics %q and %q both use code %d", existing.key, k, m.Code)
+		}
 		codeToMessage[m.Code] = m
 	}
 
 	return codeToMessage
 }
 
-func readLocalizedMessages(p string) (map[string]string, string) {
+func readLocalizedMessages(p string) map[string]string {
 	file, err := os.Open(p)
 	if err != nil {
-		log.Printf("failed to open locale file %s: %v", p, err)
-		return nil, ""
+		log.Fatalf("failed to open locale file %s: %v", p, err)
+		return nil
 	}
 	defer file.Close()
 
-	var lcx LCX
-	if err := xml.NewDecoder(file).Decode(&lcx); err != nil {
-		log.Printf("failed to decode locale file %s: %v", p, err)
-		return nil, ""
+	var messages map[string]string
+	if err := json.UnmarshalRead(file, &messages); err != nil {
+		log.Fatalf("failed to decode locale file %s: %v", p, err)
+		return nil
 	}
 
-	messages := make(map[string]string)
-
-	// Navigate the nested Item structure
-	for _, rootItem := range lcx.RootItems {
-		for _, stringTable := range rootItem.Items {
-			for _, item := range stringTable.Items {
-				// ItemId has format ";key_code", remove the leading semicolon
-				itemId := strings.TrimPrefix(item.ItemId, ";")
-
-				// Get the localized text from Tgt if available, otherwise use Val
-				var text string
-				if item.Str.Tgt != nil && item.Str.Tgt.Val != "" {
-					text = item.Str.Tgt.Val
-				} else {
-					text = item.Str.Val
-				}
-
-				messages[itemId] = text
-			}
-		}
-	}
-
-	return messages, lcx.TgtCul
+	return messages
 }
 
 var (

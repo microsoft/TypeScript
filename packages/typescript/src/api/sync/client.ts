@@ -1,4 +1,7 @@
-import { fsCallbackNames } from "../fs.ts";
+import {
+    configureFileSystemCallbacks,
+    encodeFileSystemCallbackResult,
+} from "../fsCallbacks.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -10,6 +13,7 @@ import {
 import type {
     APIMethodInfo,
     APIRequest,
+    BatchRequestsParams,
     BatchRequestsResponse,
     SourceFileResponseMethod,
 } from "../proto.ts";
@@ -28,6 +32,7 @@ export class Client {
     private channel: SyncRpcChannel;
     private encoder = new TextEncoder();
     private timing: TimingCollector | undefined;
+    private maxResponseBytesPerPage: number | undefined;
 
     constructor(options: ClientOptions) {
         if (!isSpawnOptions(options)) {
@@ -35,18 +40,11 @@ export class Client {
         }
 
         const args = getAPIProcessArgs(options, false);
+        this.maxResponseBytesPerPage = options.maxResponseBytesPerPage;
 
-        // Enable virtual FS callbacks for each provided FS function
-        const enabledCallbacks: (typeof fsCallbackNames[number])[] = [];
-        if (options.fs) {
-            for (const name of fsCallbackNames) {
-                if (options.fs[name]) {
-                    enabledCallbacks.push(name);
-                }
-            }
-        }
-        if (enabledCallbacks.length > 0) {
-            args.push(`--callbacks=${enabledCallbacks.join(",")}`);
+        const fsConfiguration = configureFileSystemCallbacks(options.fs);
+        if (fsConfiguration.arguments.length > 0) {
+            args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
         }
 
         const collectTiming = options.collectTiming ?? false;
@@ -58,30 +56,23 @@ export class Client {
         this.channel = channel;
 
         if (options.fs) {
-            for (const name of enabledCallbacks) {
+            for (const name of fsConfiguration.callbackNames) {
                 if (name === "writeFile") {
-                    if (!options.fs.writeFile) continue;
                     const callback = options.fs.writeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
 
                     channel.registerCallback(name, (_, arg) => {
                         const { path, data } = JSON.parse(arg);
-                        callback(path, data);
-                        return "";
+                        return JSON.stringify(encodeFileSystemCallbackResult(name, callback(path, data)));
                     });
 
                     continue;
                 }
 
-                const callback = options.fs[name]!;
+                const callback = options.fs[name];
+                if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
                 channel.registerCallback(name, (_, arg) => {
-                    const result = callback(JSON.parse(arg));
-                    if (name === "readFile") {
-                        // readFile has 3 returns: string (content), null (not found), undefined (fall back).
-                        // Wrap in object to preserve null vs undefined distinction.
-                        if (result === undefined) return "";
-                        return JSON.stringify({ content: result });
-                    }
-                    return JSON.stringify(result) ?? "";
+                    return JSON.stringify(encodeFileSystemCallbackResult(name, callback(JSON.parse(arg))));
                 });
             }
         }
@@ -95,11 +86,42 @@ export class Client {
         if (result.length) {
             return JSON.parse(result) as APIMethodInfo[K]["result"];
         }
+
         return undefined as APIMethodInfo[K]["result"];
     }
 
+    registerCallback(name: string, callback: (params: unknown) => unknown): () => void {
+        this.channel.registerCallback(name, (_, payload) => JSON.stringify(callback(JSON.parse(payload))) ?? "");
+        return () => this.channel.unregisterCallback(name);
+    }
+
     batchRequests(requests: readonly APIRequest[]): BatchRequestsResponse {
-        return this.apiRequest("batchRequests", { requests });
+        const params: BatchRequestsParams = { requests };
+        if (this.maxResponseBytesPerPage !== undefined) {
+            params.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
+        }
+        const response = this.apiRequest("batchRequests", params);
+        let responses = response.responses;
+        let continuationToken = response.continuationToken;
+        while (continuationToken) {
+            const pageParams: BatchRequestsParams = {
+                requests: [],
+                continuationToken,
+            };
+            if (this.maxResponseBytesPerPage !== undefined) {
+                pageParams.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
+            }
+            const page = this.apiRequest("batchRequests", pageParams);
+            if (page.responses.length < 200) {
+                responses.push(...page.responses);
+            }
+            else {
+                // If the number of responses is approaching the max argument length, we need to concat instead of push
+                responses = responses.concat(page.responses);
+            }
+            continuationToken = page.continuationToken;
+        }
+        return { responses };
     }
 
     apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params?: APIMethodInfo[K]["params"]): Uint8Array | undefined {

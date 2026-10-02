@@ -195,6 +195,13 @@ func (wm *WatchManager) createDirWatchRequest(dir string, entry *watchedDir) Wat
 func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[string]bool {
 	resolved := make(map[string]bool, len(desiredDirs))
 	for dir, recursive := range desiredDirs {
+		// Only directories on disk can be watched. The embedded libs (bundled:///libs) exist in the FS but not on disk.
+		if !tspath.IsRootedDiskPath(dir) {
+			if wm.DebugLog != nil {
+				fmt.Fprintf(wm.DebugLog, "[watch] not a disk path: %s\n", dir)
+			}
+			continue
+		}
 		watchDir := dir
 		watchRecursive := recursive
 		for !wm.dirExists(watchDir) {
@@ -205,7 +212,10 @@ func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[stri
 			watchDir = parent
 			watchRecursive = false // ancestor fallbacks are always non-recursive
 		}
-		if !wm.dirExists(watchDir) || !CanWatchDirectory(watchDir) {
+		// CanWatchDirectory only guards against falling back to an ancestor that is too generic to watch
+		// (/, /home, ...). A directory that exists and was asked for is watched at any depth, otherwise a
+		// project that lives near the filesystem root (say /app or /srv/app) would never be watched.
+		if !wm.dirExists(watchDir) || (watchDir != dir && !CanWatchDirectory(watchDir)) {
 			if wm.DebugLog != nil {
 				fmt.Fprintf(wm.DebugLog, "[watch] no watchable ancestor for %s\n", dir)
 			}
@@ -293,14 +303,16 @@ func (wm *WatchManager) createDirWatches(updates []dirWatchUpdate) error {
 // already present in the set, or when it is contained within a recursive watch
 // directory already in the set.
 type DirWatchSet struct {
-	opts tspath.ComparePathsOptions
-	dirs map[string]bool
+	opts  tspath.ComparePathsOptions
+	dirs  map[string]bool
+	names map[string]string
 }
 
 func NewDirWatchSet(opts tspath.ComparePathsOptions) *DirWatchSet {
 	return &DirWatchSet{
-		opts: opts,
-		dirs: make(map[string]bool),
+		opts:  opts,
+		dirs:  make(map[string]bool),
+		names: make(map[string]string),
 	}
 }
 
@@ -309,7 +321,11 @@ func (s *DirWatchSet) canonical(dir string) string {
 }
 
 func (s *DirWatchSet) Set(dir string, recursive bool) {
+	original := dir
 	dir = s.canonical(dir)
+	if _, exists := s.names[dir]; !exists {
+		s.names[dir] = original
+	}
 	s.dirs[dir] = s.dirs[dir] || recursive
 }
 
@@ -329,7 +345,11 @@ func (s *DirWatchSet) Covered(dir string) bool {
 }
 
 func (s *DirWatchSet) Dirs() map[string]bool {
-	return s.dirs
+	dirs := make(map[string]bool, len(s.dirs))
+	for key, recursive := range s.dirs {
+		dirs[s.names[key]] = recursive
+	}
+	return dirs
 }
 
 func (wm *WatchManager) IsPathUnderWatch(path string, opts tspath.ComparePathsOptions) bool {

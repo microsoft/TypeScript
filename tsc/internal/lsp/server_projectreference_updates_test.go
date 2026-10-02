@@ -50,14 +50,14 @@ func initMutableLSPClient(t *testing.T, files map[string]string, prefs *lsutil.U
 	}, onServerRequest)
 	t.Cleanup(func() { _ = closeClient() })
 
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
-	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
+	client.SendNotification(t, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
 		Settings: map[string]any{"typescript": prefs},
 	})
 
@@ -84,26 +84,26 @@ func TestReferencesAfterAncestorProjectConfigDeletion1(t *testing.T) {
 	}, &lsutil.UserPreferences{})
 
 	mainURI := lsconv.FileNameToDocumentURI("/root/project/src/main.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: mainURI, LanguageId: "typescript", Text: "export function helloWorld() {}\nhelloWorld()\n"},
 	})
 
 	// Prime the child project so opening a file creates the ancestor configured-project placeholder.
-	msg, _, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentDocumentSymbolInfo, &lsproto.DocumentSymbolParams{
+	msg, _, ok := client.SendRequest(t, lsproto.TextDocumentDocumentSymbolInfo, &lsproto.DocumentSymbolParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: mainURI},
 	})
 	assert.Assert(t, ok, "expected response")
 	assert.Assert(t, msg.AsResponse().Error == nil)
 
 	assert.NilError(t, fs.Remove("root/tsconfig.json"))
-	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
+	client.SendNotification(t, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
 		Changes: []*lsproto.FileEvent{{
 			Uri:  lsconv.FileNameToDocumentURI("/root/tsconfig.json"),
 			Type: lsproto.FileChangeTypeDeleted,
 		}},
 	})
 
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentReferencesInfo, &lsproto.ReferenceParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.TextDocumentReferencesInfo, &lsproto.ReferenceParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: mainURI},
 		Position:     lsproto.Position{Line: 1, Character: 3},
 		Context:      &lsproto.ReferenceContext{IncludeDeclaration: true},

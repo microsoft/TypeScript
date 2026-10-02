@@ -3,7 +3,6 @@ package incremental
 import (
 	"fmt"
 	"maps"
-	"reflect"
 	"slices"
 	"strings"
 
@@ -289,21 +288,14 @@ func (t *toBuildInfo) setRootOfIncrementalProgram() {
 }
 
 func (t *toBuildInfo) setCompilerOptions() {
-	tsoptions.ForEachCompilerOptionValue(
+	tsoptions.ForEachCompilerOptionAffectingBuildInfo(
 		t.snapshot.options,
-		func(option *tsoptions.CommandLineOption) bool {
-			return option.AffectsBuildInfo
-		},
-		func(option *tsoptions.CommandLineOption, value reflect.Value, i int) bool {
-			if value.IsZero() {
-				return false
-			}
+		func(option *tsoptions.CommandLineOption, value any) {
 			// Make it relative to buildInfo directory if file path
 			if t.buildInfo.Options == nil {
 				t.buildInfo.Options = &collections.OrderedMap[string, any]{}
 			}
-			t.buildInfo.Options.Set(option.Name, t.toRelativeToBuildInfoCompilerOptionValue(option, value.Interface()))
-			return false
+			t.buildInfo.Options.Set(option.Name, t.toRelativeToBuildInfoCompilerOptionValue(option, value))
 		},
 	)
 }

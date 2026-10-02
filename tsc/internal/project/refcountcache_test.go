@@ -22,7 +22,7 @@ import (
 func TestContentMappedParseCacheBundleLifetime(t *testing.T) {
 	t.Parallel()
 	cache := NewContentMappedParseCache(RefCountCacheOptions{})
-	key := ContentMappedParseCacheKey{SourceFileParseOptions: ast.SourceFileParseOptions{FileName: "/component.vue", Path: "/component.vue"}}
+	key := ContentMappedParseCacheKey{FileName: "/component.vue", Path: "/component.vue"}
 	canonical := &ast.SourceFile{}
 	supplemental := &ast.SourceFile{}
 	produced := contentmapper.SourceFiles{Canonical: canonical, Supplemental: []*ast.SourceFile{supplemental}}
@@ -87,6 +87,137 @@ func TestParseCacheBindsBeforePublishing(t *testing.T) {
 
 	assert.Assert(t, file.IsBound())
 	assert.Assert(t, file.CommonJSModuleIndicator != nil)
+}
+
+func TestParseCacheAcquireExistingUsesFullKey(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/index.ts"
+	fileHandle := NewCachedFileHandle(fileName, "export {};")
+	key := NewParseCacheKey(ast.SourceFileParseOptions{
+		FileName: fileName,
+		Path:     tspath.Path(fileName),
+	}, fileHandle.Hash(), core.ScriptKindTS)
+	cache := NewParseCache(RefCountCacheOptions{})
+	file := cache.Acquire(key, fileHandle)
+
+	acquired, ok := cache.AcquireExisting(key)
+	assert.Assert(t, ok)
+	assert.Assert(t, acquired == file)
+	cache.Deref(key)
+
+	mismatches := map[string]ParseCacheKey{
+		"file name": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: "/INDEX.ts", Path: key.Path},
+			Hash:                   key.Hash,
+			ScriptKind:             key.ScriptKind,
+		},
+		"path": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{FileName: key.FileName, Path: "/INDEX.ts"},
+			Hash:                   key.Hash,
+			ScriptKind:             key.ScriptKind,
+		},
+		"hash": {
+			SourceFileParseOptions: key.SourceFileParseOptions,
+			Hash:                   xxh3.Hash128([]byte("different")),
+			ScriptKind:             key.ScriptKind,
+		},
+		"script kind": {
+			SourceFileParseOptions: key.SourceFileParseOptions,
+			Hash:                   key.Hash,
+			ScriptKind:             core.ScriptKindTSX,
+		},
+		"jsx parse option": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{
+				FileName: key.FileName,
+				Path:     key.Path,
+				ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
+					JSX: true,
+				},
+			},
+			Hash:       key.Hash,
+			ScriptKind: key.ScriptKind,
+		},
+		"force parse option": {
+			SourceFileParseOptions: ast.SourceFileParseOptions{
+				FileName: key.FileName,
+				Path:     key.Path,
+				ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
+					Force: true,
+				},
+			},
+			Hash:       key.Hash,
+			ScriptKind: key.ScriptKind,
+		},
+	}
+	for name, mismatch := range mismatches {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			_, found := cache.AcquireExisting(mismatch)
+			assert.Assert(t, !found)
+			assert.Assert(t, !cache.Has(mismatch))
+		})
+	}
+
+	cache.Deref(key)
+	assert.Assert(t, !cache.Has(key))
+}
+
+func TestRefCountCacheAcquireExisting(t *testing.T) {
+	t.Parallel()
+
+	parseCount := 0
+	cache := NewRefCountCache(RefCountCacheOptions{}, func(key string, value int) int {
+		parseCount++
+		return value
+	})
+
+	value, ok := cache.AcquireExisting("missing")
+	assert.Equal(t, value, 0)
+	assert.Assert(t, !ok)
+	assert.Equal(t, parseCount, 0)
+
+	assert.Equal(t, cache.Acquire("key", 1), 1)
+	value, ok = cache.AcquireExisting("key")
+	assert.Assert(t, ok)
+	assert.Equal(t, value, 1)
+	assert.Equal(t, parseCount, 1)
+
+	cache.Deref("key")
+	assert.Assert(t, cache.Has("key"))
+	cache.Deref("key")
+	assert.Assert(t, !cache.Has("key"))
+
+	value, ok = cache.AcquireExisting("key")
+	assert.Equal(t, value, 0)
+	assert.Assert(t, !ok)
+	assert.Equal(t, parseCount, 1)
+}
+
+func TestRefCountCacheAcquireExistingRacesFinalRelease(t *testing.T) {
+	t.Parallel()
+
+	for range 100 {
+		cache := NewRefCountCache(RefCountCacheOptions{}, func(_ string, value *int) *int {
+			return value
+		})
+		value := 1
+		cache.Acquire("key", &value)
+
+		start := make(chan struct{})
+		acquired := make(chan bool)
+		go func() {
+			<-start
+			_, ok := cache.AcquireExisting("key")
+			acquired <- ok
+		}()
+		close(start)
+		cache.Deref("key")
+		if <-acquired {
+			cache.Deref("key")
+		}
+		assert.Assert(t, !cache.Has("key"))
+	}
 }
 
 func TestRefCountingCaches(t *testing.T) {
@@ -464,11 +595,9 @@ func TestRefCountingCaches(t *testing.T) {
 			baseSnapshot := session.Snapshot()
 			extendedConfigPath := tspath.Path("/user/username/projects/myproject/tsconfig.base.json")
 			clone := baseSnapshot.Clone(context.Background(), SnapshotChange{
-				reason: UpdateReasonRequestedLanguageServiceProjectNotLoaded,
-				ResourceRequest: ResourceRequest{
-					Documents: []lsproto.DocumentUri{uri},
-				},
-			}, baseSnapshot.fs.overlays, session)
+				reason:    UpdateReasonRequestedLanguageServiceProjectNotLoaded,
+				Documents: []lsproto.DocumentUri{uri},
+			}, baseSnapshot.overlays(), nil, nil)
 
 			project := clone.GetDefaultProject(uri)
 			assert.Assert(t, project != nil)
@@ -484,7 +613,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Assert(t, ok)
 			assert.Equal(t, len(extendedConfigEntry.owners), 1)
 
-			clone.Deref(session)
+			clone.Deref()
 
 			_, ok = session.parseCache.entries.Load(mainKey)
 			assert.Assert(t, !ok)
@@ -517,24 +646,27 @@ func TestRefCountingCaches(t *testing.T) {
 				OpenProjects: collections.NewSetFromItems(appConfigPath),
 			})
 			assert.NilError(t, err)
-			defer baseSnapshot.Deref(session)
-			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
+			defer baseSnapshot.Deref()
+			appProject := baseSnapshot.ProjectCollection.GetProject(ConfiguredProjectID(baseSnapshot.toPath(appConfigPath)).AsID())
 			assert.Assert(t, appProject != nil)
 
-			programSnapshot := session.APICreateProgram(
+			createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
+				RootFileNames:                appProject.CommandLine.FileNames(),
+				CompilerOptions:              appProject.CommandLine.CompilerOptions(),
+				ProjectReferences:            appProject.CommandLine.ProjectReferences(),
+				ConfigFileParsingDiagnostics: appProject.CommandLine.Errors,
+			}}}
+			programSnapshot, err := session.CloneSnapshot(
 				ctx,
-				appProject.CommandLine.FileNames(),
-				appProject.CommandLine.CompilerOptions(),
-				appProject.CommandLine.ProjectReferences(),
-				appProject.CommandLine.Errors,
 				baseSnapshot,
-				appProject,
 				FileChangeSummary{},
+				createRequest,
 			)
-			defer programSnapshot.Deref(session)
-			programProject := programSnapshot.ProjectCollection.InferredProject()
+			assert.NilError(t, err)
+			defer programSnapshot.Deref()
+			programProject := programSnapshot.CreatedPrograms()[0]
 			assert.Assert(t, programProject != nil)
-			assert.Assert(t, programProject.Program == appProject.Program)
+			assert.Assert(t, programProject.Program != appProject.Program)
 
 			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(tspath.Path(libBaseConfigPath))
 			assert.Assert(t, ok)
@@ -547,26 +679,76 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Assert(t, ownedByProgramSnapshot)
 			assert.Equal(t, ownerCount, 2)
 
-			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
+			assert.NilError(t, session.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
-			updatedProgramSnapshot := session.APICreateProgram(
+			updateRequest := &APISnapshotRequest{EnsurePrograms: collections.NewSetFromItems(programProject.ID())}
+			updatedProgramSnapshot, err := session.CloneSnapshot(
 				ctx,
-				programProject.CommandLine.FileNames(),
-				programProject.CommandLine.CompilerOptions(),
-				programProject.CommandLine.ProjectReferences(),
-				programProject.CommandLine.Errors,
 				programSnapshot,
-				programProject,
 				fileChanges,
+				updateRequest,
 			)
-			defer updatedProgramSnapshot.Deref(session)
-			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.InferredProject()
+			assert.NilError(t, err)
+			defer updatedProgramSnapshot.Deref()
+			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.GetProject(programProject.ID())
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)
 			updatedReferences := updatedProgramProject.Program.GetResolvedProjectReferences()
 			assert.Equal(t, len(updatedReferences), 1)
 			assert.Equal(t, updatedReferences[0].CompilerOptions().Strict, core.TSTrue)
 		})
+	})
+
+	t.Run("failed API update preserves API references", func(t *testing.T) {
+		t.Parallel()
+
+		const configFileName = "/project/tsconfig.json"
+		session := setup(map[string]any{
+			configFileName:      `{"compilerOptions":{"noLib":true},"files":["index.ts"]}`,
+			"/project/index.ts": "export const value = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		snapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
+			OpenProjects: collections.NewSetFromItems(configFileName),
+		})
+		assert.NilError(t, err)
+		snapshot.Deref()
+
+		configPath := session.toPath(configFileName)
+
+		failedSnapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
+			CloseProjects: collections.NewSetFromItems(configPath),
+			ReconfigurePrograms: []*APIReconfigureProgramRequest{{
+				ProgramID: NewSyntheticProjectID(999),
+			}},
+		})
+		assert.ErrorContains(t, err, "synthetic program not found for reconfiguration")
+		assert.Assert(t, failedSnapshot == nil)
+
+		apiState := session.Snapshot().ProjectCollection.apiState
+		assert.Equal(t, apiState.openProjects[configPath], 1)
+	})
+
+	t.Run("session close releases the current snapshot", func(t *testing.T) {
+		t.Parallel()
+
+		const fileName = "/project/index.ts"
+		session := setup(map[string]any{
+			fileName: "export const value = 1;",
+		})
+		session.DidOpenFile(context.Background(), "file://"+fileName, 1, "export const value = 1;", lsproto.LanguageKindTypeScript)
+
+		program := session.Snapshot().ProjectCollection.InferredProject().Program
+		sourceFile := program.GetSourceFile(fileName)
+		key := NewParseCacheKey(sourceFile.ParseOptions(), sourceFile.Hash, sourceFile.ScriptKind)
+		assert.Assert(t, session.parseCache.Has(key))
+
+		session.Close()
+
+		assert.Assert(t, !session.parseCache.Has(key))
+		assert.Equal(t, session.programCounter.Len(), 0)
 	})
 }

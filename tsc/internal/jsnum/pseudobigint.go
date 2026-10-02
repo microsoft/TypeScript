@@ -1,6 +1,7 @@
 package jsnum
 
 import (
+	"cmp"
 	"fmt"
 	"math/big"
 	"strings"
@@ -35,6 +36,20 @@ func (value PseudoBigInt) Sign() int {
 		return -1
 	}
 	return 1
+}
+
+func (value PseudoBigInt) Compare(other PseudoBigInt) int {
+	if c := cmp.Compare(value.Sign(), other.Sign()); c != 0 {
+		return c
+	}
+	c := cmp.Compare(len(value.Base10Value), len(other.Base10Value))
+	if c == 0 {
+		c = strings.Compare(value.Base10Value, other.Base10Value)
+	}
+	if value.Negative {
+		c = -c
+	}
+	return c
 }
 
 func ParseValidBigInt(text string) PseudoBigInt {

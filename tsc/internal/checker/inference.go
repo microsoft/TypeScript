@@ -9,8 +9,11 @@ import (
 )
 
 type InferenceKey struct {
-	s TypeId
-	t TypeId
+	source        TypeId
+	target        TypeId
+	priority      InferencePriority
+	contravariant bool
+	bivariant     bool
 }
 
 type InferenceState struct {
@@ -78,14 +81,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	}
 	if source.alias != nil && target.alias != nil && source.alias.symbol == target.alias.symbol {
 		if len(source.alias.typeArguments) != 0 || len(target.alias.typeArguments) != 0 {
-			// Source and target are types originating in the same generic type alias declaration.
-			// Simply infer from source type arguments to target type arguments, with defaults applied.
-			params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
-			minParams := c.getMinTypeArgumentCount(params)
-			nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
-			sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
-			targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
-			c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
+			c.invokeOnce(n, source, target, (*Checker).inferFromAliasTypeArguments)
 		}
 		// And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
 		return
@@ -231,7 +227,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	switch {
 	case source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.AsTypeReference().target == target.AsTypeReference().target || c.isArrayType(source) && c.isArrayType(target)) && !(source.AsTypeReference().node != nil && target.AsTypeReference().node != nil):
 		// If source and target are references to the same generic type, infer from type arguments
-		c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.AsTypeReference().target))
+		c.invokeOnce(n, source, target, (*Checker).inferFromReferenceTypeArguments)
 	case source.flags&TypeFlagsIndex != 0 && target.flags&TypeFlagsIndex != 0:
 		c.inferFromContravariantTypes(n, source.AsIndexType().target, target.AsIndexType().target)
 	case (isLiteralType(source) || source.flags&TypeFlagsString != 0) && target.flags&TypeFlagsIndex != 0:
@@ -279,6 +275,21 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 			c.invokeOnce(n, source, target, (*Checker).inferFromObjectTypes)
 		}
 	}
+}
+
+func (c *Checker) inferFromAliasTypeArguments(n *InferenceState, source *Type, target *Type) {
+	// Source and target are types originating in the same generic type alias declaration.
+	// Simply infer from source type arguments to target type arguments, with defaults applied.
+	params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
+	minParams := c.getMinTypeArgumentCount(params)
+	nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
+	sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
+	targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
+	c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
+}
+
+func (c *Checker) inferFromReferenceTypeArguments(n *InferenceState, source *Type, target *Type) {
+	c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.AsTypeReference().target))
 }
 
 func (c *Checker) inferFromTypeArguments(n *InferenceState, sourceTypes []*Type, targetTypes []*Type, variances []VarianceFlags) {
@@ -333,7 +344,7 @@ func (c *Checker) inferFromContravariantTypesIfStrictFunctionTypes(n *InferenceS
 // such that we would go on inferring forever, even though we would never infer
 // between the same pair of types.
 func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type)) {
-	key := InferenceKey{s: source.id, t: target.id}
+	key := InferenceKey{source: source.id, target: target.id, priority: n.priority, contravariant: n.contravariant, bivariant: n.bivariant}
 	if status, ok := n.visited[key]; ok {
 		n.inferencePriority = min(n.inferencePriority, status)
 		return
@@ -553,10 +564,10 @@ func (c *Checker) inferToMultipleTypesWithPriority(n *InferenceState, source *Ty
 
 func (c *Checker) inferToConditionalType(n *InferenceState, source *Type, target *Type) {
 	if source.flags&TypeFlagsConditional != 0 {
-		c.inferFromTypes(n, source.AsConditionalType().checkType, target.AsConditionalType().checkType)
-		c.inferFromTypes(n, source.AsConditionalType().extendsType, target.AsConditionalType().extendsType)
-		c.inferFromTypes(n, c.getTrueTypeFromConditionalType(source), c.getTrueTypeFromConditionalType(target))
-		c.inferFromTypes(n, c.getFalseTypeFromConditionalType(source), c.getFalseTypeFromConditionalType(target))
+		c.inferFromTypes(n, getNonDistributedTypeParameter(source.AsConditionalType().checkType), target.AsConditionalType().checkType)
+		c.inferFromTypes(n, getNonDistributedTypeParameter(source.AsConditionalType().extendsType), target.AsConditionalType().extendsType)
+		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getTrueTypeFromConditionalType(source)), c.getTrueTypeFromConditionalType(target))
+		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getFalseTypeFromConditionalType(source)), c.getFalseTypeFromConditionalType(target))
 	} else {
 		targetTypes := []*Type{c.getTrueTypeFromConditionalType(target), c.getFalseTypeFromConditionalType(target)}
 		c.inferToMultipleTypesWithPriority(n, source, targetTypes, target.flags, core.IfElse(n.contravariant, InferencePriorityContravariantConditional, 0))
@@ -564,7 +575,7 @@ func (c *Checker) inferToConditionalType(n *InferenceState, source *Type, target
 }
 
 func (c *Checker) inferToTemplateLiteralType(n *InferenceState, source *Type, target *TemplateLiteralType) {
-	matches := c.inferTypesFromTemplateLiteralType(source, target)
+	matches := c.inferTypesFromTemplateLiteralType(source, target, c.compareTypesAssignable)
 	types := target.types
 	// When the target template literal contains only placeholders (meaning that inference is intended to extract
 	// single characters and remainder strings) and inference fails to produce matches, we want to infer 'never' for
@@ -699,7 +710,7 @@ func (c *Checker) inferFromGenericMappedTypes(n *InferenceState, source *Type, t
 func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *Type) {
 	if source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.Target() == target.Target() || c.isArrayType(source) && c.isArrayType(target)) {
 		// If source and target are references to the same generic type, infer from type arguments
-		c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.Target()))
+		c.inferFromReferenceTypeArguments(n, source, target)
 		return
 	}
 	if c.isGenericMappedType(source) && c.isGenericMappedType(target) {
@@ -1378,7 +1389,8 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 		constraint := c.getConstraintOfTypeParameter(inference.typeParameter)
 		if constraint != nil {
 			instantiatedConstraint := c.instantiateType(constraint, n.nonFixingMapper)
-			if inferredType != nil {
+			// A pure return type inference is still filtered in a recursive call resolution, whose result can become the type of the enclosing declaration.
+			if inferredType != nil && (n.flags&InferenceFlagsNoConstraintChecks == 0 || inference.priority == InferencePriorityReturnType) {
 				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)
 				if n.compareTypes(inferredType, constraintWithThis, false) == TernaryFalse {
 					var filteredByConstraint *Type
@@ -1518,6 +1530,7 @@ func (c *Checker) getTypeFromInference(inference *InferenceInfo) *Type {
 
 func getInferenceInfoForType(n *InferenceState, t *Type) *InferenceInfo {
 	if t.flags&TypeFlagsTypeVariable != 0 {
+		t = getNonDistributedTypeParameter(t)
 		for _, inference := range n.inferences {
 			if t == inference.typeParameter {
 				return inference

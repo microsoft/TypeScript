@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
@@ -35,7 +34,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
 	}
 
 	program, file := l.getProgramAndFile(params.TextDocument.Uri)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, params.Position, spanmap.FeatureHover)
+	positions := l.converters.FromLSPPositionForSourceFile(file, params.Position, spanmap.FeatureHover)
 	var hovers []*lsproto.Hover
 	for _, projection := range positions {
 		if !projection.Fidelity.IsSingleSegment() {
@@ -873,6 +872,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			dpw.WritePunctuation("(")
 			dpw.Write("type parameter")
 			dpw.WritePunctuation(") ")
+			if ast.IsIdentifier(node) && ast.IsTypeReferenceNode(node.Parent) && checker.IsDistributedTypeParameter(c.GetTypeAtLocation(node.Parent)) {
+				dpw.WritePunctuation("(")
+				dpw.Write("distributed")
+				dpw.WritePunctuation(") ")
+			}
 			tp := c.GetDeclaredTypeOfSymbol(symbol)
 			writeSymbolClassified(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags)
 			cons := c.GetConstraintOfTypeParameter(tp)

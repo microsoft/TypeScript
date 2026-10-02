@@ -4,7 +4,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
@@ -14,23 +13,22 @@ import (
 )
 
 type projectReferenceDtsFakingHost struct {
-	host CompilerHost
-	fs   *cachedvfs.FS
+	currentDirectory string
+	fs               *cachedvfs.FS
 }
 
 var _ module.ResolutionHost = (*projectReferenceDtsFakingHost)(nil)
 
-func newProjectReferenceDtsFakingHost(loader *fileLoader) module.ResolutionHost {
+func newProjectReferenceDtsFakingHost(host module.ResolutionHost, references *projectReferenceFileMapper) module.ResolutionHost {
 	// Create a new host that will fake the dts files
-	host := &projectReferenceDtsFakingHost{
-		host: loader.opts.Host,
+	return &projectReferenceDtsFakingHost{
+		currentDirectory: host.GetCurrentDirectory(),
 		fs: cachedvfs.From(&projectReferenceDtsFakingVfs{
-			projectReferenceFileMapper: loader.projectReferenceFileMapper,
-			dtsDirectories:             loader.dtsDirectories,
+			host:                       host,
+			projectReferenceFileMapper: references,
 			knownSymlinks:              symlinks.KnownSymlinks{},
 		}),
 	}
-	return host
 }
 
 // FS implements module.ResolutionHost.
@@ -40,12 +38,12 @@ func (h *projectReferenceDtsFakingHost) FS() vfs.FS {
 
 // GetCurrentDirectory implements module.ResolutionHost.
 func (h *projectReferenceDtsFakingHost) GetCurrentDirectory() string {
-	return h.host.GetCurrentDirectory()
+	return h.currentDirectory
 }
 
 type projectReferenceDtsFakingVfs struct {
+	host                       module.ResolutionHost
 	projectReferenceFileMapper *projectReferenceFileMapper
-	dtsDirectories             collections.Set[tspath.Path]
 	knownSymlinks              symlinks.KnownSymlinks
 }
 
@@ -53,12 +51,12 @@ var _ vfs.FS = (*projectReferenceDtsFakingVfs)(nil)
 
 // UseCaseSensitiveFileNames implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) UseCaseSensitiveFileNames() bool {
-	return fs.projectReferenceFileMapper.opts.Host.FS().UseCaseSensitiveFileNames()
+	return fs.host.FS().UseCaseSensitiveFileNames()
 }
 
 // FileExists implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) FileExists(path string) bool {
-	if fs.projectReferenceFileMapper.opts.Host.FS().FileExists(path) {
+	if fs.host.FS().FileExists(path) {
 		return true
 	}
 	if !tspath.IsDeclarationFileName(path) {
@@ -71,7 +69,7 @@ func (fs *projectReferenceDtsFakingVfs) FileExists(path string) bool {
 // ReadFile implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) ReadFile(path string) (contents string, ok bool) {
 	// Dont need to override as we cannot mimick read file
-	return fs.projectReferenceFileMapper.opts.Host.FS().ReadFile(path)
+	return fs.host.FS().ReadFile(path)
 }
 
 // WriteFile implements vfs.FS.
@@ -96,7 +94,7 @@ func (fs *projectReferenceDtsFakingVfs) Chtimes(path string, aTime time.Time, mT
 
 // DirectoryExists implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) DirectoryExists(path string) bool {
-	if fs.projectReferenceFileMapper.opts.Host.FS().DirectoryExists(path) {
+	if fs.host.FS().DirectoryExists(path) {
 		fs.handleDirectoryCouldBeSymlink(path)
 		return true
 	}
@@ -113,22 +111,17 @@ func (fs *projectReferenceDtsFakingVfs) Stat(path string) vfs.FileInfo {
 	panic("should not be called by resolver")
 }
 
-// WalkDir implements vfs.FS.
-func (fs *projectReferenceDtsFakingVfs) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	panic("should not be called by resolver")
-}
-
 // Realpath implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) Realpath(path string) string {
 	result, ok := fs.knownSymlinks.Files().Load(fs.toPath(path))
 	if ok {
 		return result
 	}
-	return fs.projectReferenceFileMapper.opts.Host.FS().Realpath(path)
+	return fs.host.FS().Realpath(path)
 }
 
 func (fs *projectReferenceDtsFakingVfs) toPath(path string) tspath.Path {
-	return tspath.ToPath(path, fs.projectReferenceFileMapper.opts.Host.GetCurrentDirectory(), fs.UseCaseSensitiveFileNames())
+	return tspath.ToPath(path, fs.host.GetCurrentDirectory(), fs.UseCaseSensitiveFileNames())
 }
 
 func (fs *projectReferenceDtsFakingVfs) handleDirectoryCouldBeSymlink(directory string) {
@@ -175,7 +168,13 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 		return false
 	}
 	// Check if the directory or file is a symlinked package
-	if packageRoot := module.ParseNodeModuleFromPath(fileOrDirectory, true /*isFolder*/); packageRoot != "" {
+	var packageRoot string
+	if isFile {
+		packageRoot = module.NodeModulePackageRootForFile(fileOrDirectory)
+	} else {
+		packageRoot = module.NodeModulePackageRootForDirectory(fileOrDirectory)
+	}
+	if packageRoot != "" {
 		fs.handleDirectoryCouldBeSymlink(packageRoot)
 	}
 	knownDirectoryLinks := fs.knownSymlinks.Directories()
@@ -192,18 +191,21 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 	// If it contains node_modules check if its one of the symlinked path we know of
 	var exists bool
 	knownDirectoryLinks.Range(func(directoryPath tspath.Path, knownDirectoryLink *symlinks.KnownDirectoryLink) bool {
-		relative, hasPrefix := strings.CutPrefix(string(fileOrDirectoryPath), string(directoryPath))
-		if !hasPrefix {
+		if !strings.HasPrefix(string(fileOrDirectoryPath), string(directoryPath)) {
 			return true
 		}
-		if exists = fileOrDirectoryExistsUsingSource(string(knownDirectoryLink.RealPath) + relative).IsTrue(); exists {
+		realFileOrDirectory, ok := knownDirectoryLink.ResolveFileName(fileOrDirectory, fs.UseCaseSensitiveFileNames())
+		if !ok {
+			panic("canonical symlink path did not match its presentation path")
+		}
+		if exists = fileOrDirectoryExistsUsingSource(realFileOrDirectory).IsTrue(); exists {
 			if isFile {
 				// Store the real path for the file
-				absolutePath := tspath.GetNormalizedAbsolutePath(fileOrDirectory, fs.projectReferenceFileMapper.opts.Host.GetCurrentDirectory())
+				absolutePath := tspath.GetNormalizedAbsolutePath(fileOrDirectory, fs.host.GetCurrentDirectory())
 				fs.knownSymlinks.SetFile(
 					absolutePath,
 					fileOrDirectoryPath,
-					knownDirectoryLink.Real+absolutePath[len(directoryPath):],
+					realFileOrDirectory,
 				)
 			}
 			return false
@@ -216,14 +218,14 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 func (fs *projectReferenceDtsFakingVfs) fileExistsIfProjectReferenceDts(file string) core.Tristate {
 	source := fs.projectReferenceFileMapper.getProjectReferenceFromOutputDts(fs.toPath(file))
 	if source != nil {
-		return core.IfElse(fs.projectReferenceFileMapper.opts.Host.FS().FileExists(source.Source), core.TSTrue, core.TSFalse)
+		return core.IfElse(fs.host.FS().FileExists(source.Source), core.TSTrue, core.TSFalse)
 	}
 	return core.TSUnknown
 }
 
 func (fs *projectReferenceDtsFakingVfs) directoryExistsIfProjectReferenceDeclDir(dir string) core.Tristate {
 	dirPath := fs.toPath(dir)
-	for declDirPath := range fs.dtsDirectories.Keys() {
+	for declDirPath := range fs.projectReferenceFileMapper.dtsDirectories.Keys() {
 		if dirPath.ContainsPath(declDirPath) || declDirPath.ContainsPath(dirPath) {
 			return core.TSTrue
 		}

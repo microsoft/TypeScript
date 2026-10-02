@@ -67,6 +67,8 @@ func getCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Cont
 }
 
 func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
+	allDiags := getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile)
+
 	typeChecker, done := fixContext.Program.GetTypeCheckerForFile(context, fixContext.SourceFile)
 	defer done()
 
@@ -78,7 +80,7 @@ func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.C
 
 	seenClassDeclarations := collections.Set[*ast.Node]{}
 
-	for _, diag := range getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile) {
+	for _, diag := range allDiags {
 		if isFixableDiagnostic(diag, fixClassIncorrectlyImplementsInterfaceErrorCodes) {
 			classDeclaration := getClass(fixContext.SourceFile, core.NewTextRange(diag.Pos(), diag.End()))
 			if classDeclaration == nil {
@@ -229,7 +231,7 @@ func getInheritedMembers(typeChecker *checker.Checker, classDeclaration *ast.Nod
 }
 
 func createImportAdder(context context.Context, fixContext *CodeFixContext, typeChecker *checker.Checker) (autoimport.ImportAdder, error) {
-	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile)
+	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile, typeChecker)
 	if err != nil {
 		return nil, err
 	}

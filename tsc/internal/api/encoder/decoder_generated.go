@@ -210,7 +210,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		ast.KindGlobalKeyword,
 		ast.KindOverrideKeyword,
 		ast.KindOfKeyword,
-		ast.KindDeferKeyword:
+		ast.KindDeferKeyword,
+		ast.KindSourceKeyword:
 		return d.factory.NewToken(kind), nil
 	case ast.KindQualifiedName:
 		it := newChildIter(childIndices)
@@ -1095,6 +1096,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 			phaseModifier = ast.KindTypeKeyword
 		case 2:
 			phaseModifier = ast.KindDeferKeyword
+		case 3:
+			phaseModifier = ast.KindSourceKeyword
 		}
 		it := newChildIter(childIndices)
 		name := d.nodeAt(it.nextIf(mask, 0))

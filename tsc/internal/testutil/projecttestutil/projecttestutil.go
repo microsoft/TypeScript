@@ -23,11 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
-//go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out clientmock_generated.go ../../project Client
-//go:generate npx dprint fmt clientmock_generated.go
-
-//go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out npmexecutormock_generated.go ../../project/ata NpmExecutor
-//go:generate npx dprint fmt npmexecutormock_generated.go
+//go:generate npx hereby generate:projecttestutil
 
 const (
 	TestTypingsLocation = "/home/src/Library/Caches/typescript"
@@ -65,7 +61,7 @@ func (h *SessionUtils) SetupNpmExecutorForTypingsInstaller() {
 		return
 	}
 
-	h.npmExecutor.NpmInstallFunc = func(cwd string, packageNames []string) ([]byte, error) {
+	h.npmExecutor.NpmInstallFunc = func(ctx context.Context, cwd string, packageNames []string) ([]byte, error) {
 		// packageNames is actually npmInstallArgs due to interface misnaming
 		npmInstallArgs := packageNames
 		lenNpmInstallArgs := len(npmInstallArgs)

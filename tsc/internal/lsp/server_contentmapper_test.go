@@ -61,14 +61,14 @@ const value = 1;`
 		case lsproto.MethodWorkspaceConfiguration:
 			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: []any{nil, nil, nil, nil}}
 		case lsproto.MethodClientRegisterCapability:
-			params, err := lsproto.UnmarshalParams[*lsproto.RegistrationParams](req)
+			params, err := req.UnmarshalParams[*lsproto.RegistrationParams]()
 			assert.NilError(t, err)
 			mu.Lock()
 			registrations = append(registrations, params.Registrations...)
 			mu.Unlock()
 			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: lsproto.Null{}}
 		case lsproto.MethodClientUnregisterCapability:
-			params, err := lsproto.UnmarshalParams[*lsproto.UnregistrationParams](req)
+			params, err := req.UnmarshalParams[*lsproto.UnregistrationParams]()
 			assert.NilError(t, err)
 			mu.Lock()
 			unregistrations = append(unregistrations, params.Unregisterations...)
@@ -121,18 +121,18 @@ const value = 1;`
 			},
 		},
 	}
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: caps,
 		InitializationOptions: &lsproto.InitializationOptionsOrNull{InitializationOptions: &lsproto.InitializationOptions{
 			RunExternalCode: new(true),
 		}},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
 	uri := lsproto.DocumentUri("file:///home/project/ProfileCard.vue")
-	msg, _, ok := lsptestutil.SendRequest(t, client, lsproto.CustomSetContentMapperContributionsInfo, &lsproto.SetContentMapperContributionsParams{
+	msg, _, ok := client.SendRequest(t, lsproto.CustomSetContentMapperContributionsInfo, &lsproto.SetContentMapperContributionsParams{
 		OpenDocuments: []lsproto.TextDocumentIdentifier{{Uri: uri}},
 		Contributions: []*lsproto.ContentMapperContribution{{
 			ContributorId: "test",
@@ -202,23 +202,23 @@ const value = 1;`
 		assert.Assert(t, found, "expected %s registration for .vue", id)
 	}
 
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "vue", Version: 1, Text: component},
 	})
-	hoverMsg, hover, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+	hoverMsg, hover, ok := client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 	})
 	assert.Assert(t, ok && hoverMsg.AsResponse().Error == nil)
 	assert.Assert(t, hover.Hover != nil, "expected hover after first foreign didOpen")
 
-	isContentMappedMsg, isContentMapped, ok := lsptestutil.SendRequest(t, client, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
+	isContentMappedMsg, isContentMapped, ok := client.SendRequest(t, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok && isContentMappedMsg.AsResponse().Error == nil)
 	assert.Assert(t, isContentMapped.IsContentMapped)
 
-	virtualFilesMsg, virtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+	virtualFilesMsg, virtualFiles, ok := client.SendRequest(t, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok && virtualFilesMsg.AsResponse().Error == nil)
@@ -232,10 +232,10 @@ const value = 1;`
 	assert.Equal(t, virtualFiles.Files[0].Mappings[0].Features, int32((1<<20)-1))
 
 	boxURI := lsproto.DocumentUri("file:///home/project/example.box")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: boxURI, LanguageId: "box", Version: 1, Text: box},
 	})
-	_, boxVirtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+	_, boxVirtualFiles, ok := client.SendRequest(t, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: boxURI},
 	})
 	assert.Assert(t, ok)
@@ -260,10 +260,10 @@ const value = 1;`
 	assert.Equal(t, directive.VirtualRange.End, int32(utf16Length(boxVirtualFile.Text[:affectedStart+len(affectedText)])))
 
 	supplementalURI := lsproto.DocumentUri("file:///home/project/component.astro")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: supplementalURI, LanguageId: "astro", Version: 1, Text: supplemental},
 	})
-	_, supplementalVirtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+	_, supplementalVirtualFiles, ok := client.SendRequest(t, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: supplementalURI},
 	})
 	assert.Assert(t, ok)
@@ -290,10 +290,10 @@ const value = 1;`
 	assert.Equal(t, len(supplementalFile.DiagnosticDirectives), 0)
 
 	missingOriginalURI := lsproto.DocumentUri("file:///home/project/missing-original.box")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: missingOriginalURI, LanguageId: "box", Version: 1, Text: missingOriginalRange},
 	})
-	_, missingOriginalVirtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+	_, missingOriginalVirtualFiles, ok := client.SendRequest(t, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: missingOriginalURI},
 	})
 	assert.Assert(t, ok)
@@ -305,45 +305,45 @@ const value = 1;`
 	assert.NilError(t, fs.WriteFile("/home/project/tsconfig.json", `{
 		"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true }
 	}`))
-	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
+	client.SendNotification(t, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
 		Changes: []*lsproto.FileEvent{{Uri: "file:///home/project/tsconfig.json", Type: lsproto.FileChangeTypeChanged}},
 	})
-	hoverMsg, hover, _ = lsptestutil.SendRequest(t, client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+	hoverMsg, hover, _ = client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 	})
 	assert.Assert(t, hoverMsg != nil && hoverMsg.AsResponse().Error == nil, "request before didClose should return a null result")
 	assert.Assert(t, hover.Hover == nil)
-	isContentMappedMsg, isContentMapped, ok = lsptestutil.SendRequest(t, client, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
+	isContentMappedMsg, isContentMapped, ok = client.SendRequest(t, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok && isContentMappedMsg.AsResponse().Error == nil)
 	assert.Assert(t, !isContentMapped.IsContentMapped)
-	virtualFilesMsg, virtualFiles, ok = lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+	virtualFilesMsg, virtualFiles, ok = client.SendRequest(t, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok && virtualFilesMsg.AsResponse().Error == nil)
 	assert.Equal(t, len(virtualFiles.Files), 0)
-	diagnosticMsg, diagnostics, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentDiagnosticInfo, &lsproto.DocumentDiagnosticParams{
+	diagnosticMsg, diagnostics, ok := client.SendRequest(t, lsproto.TextDocumentDiagnosticInfo, &lsproto.DocumentDiagnosticParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok && diagnosticMsg.AsResponse().Error == nil, "diagnostics before didClose should return an empty report")
 	assert.Assert(t, diagnostics.FullDocumentDiagnosticReport != nil)
 	assert.Equal(t, len(diagnostics.FullDocumentDiagnosticReport.Items), 0)
-	completionMsg, completion, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+	completionMsg, completion, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 	})
 	assert.Assert(t, ok && completionMsg.AsResponse().Error == nil)
 	assert.Assert(t, completion.Items == nil && completion.List == nil)
-	referencesMsg, references, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentReferencesInfo, &lsproto.ReferenceParams{
+	referencesMsg, references, ok := client.SendRequest(t, lsproto.TextDocumentReferencesInfo, &lsproto.ReferenceParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 		Context:      &lsproto.ReferenceContext{IncludeDeclaration: true},
 	})
 	assert.Assert(t, ok && referencesMsg.AsResponse().Error == nil)
 	assert.Assert(t, references.Locations == nil)
-	renameMsg, rename, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentRenameInfo, &lsproto.RenameParams{
+	renameMsg, rename, ok := client.SendRequest(t, lsproto.TextDocumentRenameInfo, &lsproto.RenameParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 		NewName:      "renamed",
@@ -370,16 +370,16 @@ const value = 1;`
 		assert.Assert(t, found, "expected %s unregistration", id)
 	}
 
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: boxURI},
 	})
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: supplementalURI},
 	})
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: missingOriginalURI},
 	})
 }

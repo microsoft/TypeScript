@@ -3,7 +3,6 @@ package tsoptions_test
 import (
 	"fmt"
 	"io"
-	"io/fs"
 	"maps"
 	"path/filepath"
 	"slices"
@@ -143,11 +142,9 @@ func TestParseConfigFileTextToJson(t *testing.T) {
 				baselineContent.WriteString("\n")
 				baselineContent.WriteString("Errors::\n")
 				diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(errors), &diagnosticwriter.FormattingOptions{
-					NewLine: "\n",
-					ComparePathsOptions: tspath.ComparePathsOptions{
-						CurrentDirectory:          "/",
-						UseCaseSensitiveFileNames: true,
-					},
+					NewLine:                   "\n",
+					CurrentDirectory:          "/",
+					UseCaseSensitiveFileNames: true,
 				})
 				baselineContent.WriteString("\n")
 				if i != len(rec.input)-1 {
@@ -1540,11 +1537,9 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, includeCompi
 		baselineContent.WriteString("\n")
 		baselineContent.WriteString("Errors::\n")
 		diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(parsedConfigFileContent.Errors), &diagnosticwriter.FormattingOptions{
-			NewLine: "\r\n",
-			ComparePathsOptions: tspath.ComparePathsOptions{
-				CurrentDirectory:          basePath,
-				UseCaseSensitiveFileNames: true,
-			},
+			NewLine:                   "\r\n",
+			CurrentDirectory:          basePath,
+			UseCaseSensitiveFileNames: true,
 		})
 		baselineContent.WriteString("\n")
 		if i != len(input)-1 {
@@ -1655,17 +1650,15 @@ func TestParseTypeAcquisition(t *testing.T) {
 }
 
 func printFS(output io.Writer, files vfs.FS, root string) error {
-	return files.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	return vfs.WalkDir(files, root, func(path string, entry vfs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if d.Type().IsRegular() {
+		if entry.Type().IsRegular() {
 			if content, ok := files.ReadFile(path); !ok {
 				return fmt.Errorf("failed to read file %s", path)
-			} else {
-				if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
-					return err
-				}
+			} else if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
+				return err
 			}
 		}
 		return nil

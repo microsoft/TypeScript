@@ -60,6 +60,7 @@ function getFileUrlVolumeSeparatorEnd(url: string, start: number) {
  * getRootLength("file://server/path") === 14 // "file://server/"
  * getRootLength("http://server") === 13      // "http://server"
  * getRootLength("http://server/path") === 14 // "http://server/"
+ * getRootLength("^/untitled/ts-nul-authority/Untitled-1") === 2 // "^/"
  * ```
  *
  * @internal
@@ -87,12 +88,26 @@ function getEncodedRootLength(path: string): number {
         return p1 + 1; // UNC: "//server/" or "\\server\"
     }
 
+    // Dynamic/virtual compiler file name.
+    if (ch0 === 94 /* ^ */ && path.charCodeAt(1) === CharacterCodesSlash) {
+        if (path.startsWith(dynamicURIFileNamePrefix)) {
+            const schemeEnd = path.indexOf(directorySeparator, dynamicURIFileNamePrefix.length);
+            if (schemeEnd !== -1) {
+                const authorityEnd = path.indexOf(directorySeparator, schemeEnd + 1);
+                return authorityEnd === -1 ? path.length : authorityEnd + 1;
+            }
+        }
+        return 2;
+    }
+
     // DOS
     if (isVolumeCharacter(ch0) && path.charCodeAt(1) === CharacterCodesColon) {
         const ch2 = path.charCodeAt(2);
         if (ch2 === CharacterCodesSlash || ch2 === CharacterCodesBackslash) return 3; // DOS: "c:/" or "c:\"
         if (path.length === 2) return 2; // DOS: "c:" (but not "c:d")
     }
+
+    if (isDynamicFileName(path)) return 2;
 
     // URL
     const schemeEnd = path.indexOf(urlSchemeSeparator);
@@ -106,7 +121,7 @@ function getEncodedRootLength(path: string): number {
             const scheme = path.slice(0, schemeEnd);
             const authority = path.slice(authorityStart, authorityEnd);
             if (
-                scheme === "file" && (authority === "" || authority === "localhost") &&
+                scheme.toLowerCase() === "file" && (authority === "" || authority.toLowerCase() === "localhost") &&
                 isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
             ) {
                 const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
@@ -388,7 +403,9 @@ export function toPath(fileName: string, basePath: string | undefined, getCanoni
     const nonCanonicalizedPath = isRootedDiskPath(fileName)
         ? normalizePath(fileName)
         : getNormalizedAbsolutePath(fileName, basePath);
-    return getCanonicalFileName(nonCanonicalizedPath);
+    return nonCanonicalizedPath.startsWith(dynamicURIFileNamePrefix)
+        ? nonCanonicalizedPath
+        : getCanonicalFileName(nonCanonicalizedPath);
 }
 
 /**
@@ -407,6 +424,11 @@ function toLowerCase(s: string): string {
 }
 
 const bundledScheme = "bundled:///";
+const dynamicURIFileNamePrefix = "^/~ts-uri~/";
+const dynamicURIPathSegmentEscapePrefix = "~ts-uri-escape~";
+const dynamicURIModuleSpecifierEscapePrefix = "~ts-uri-spec~";
+const dynamicURINoPathEscapePrefix = "~ts-uri-no-path~";
+const dynamicURIPathSegmentEscapeRegExp = /(?:^|\/)(?:\.{1,2}(?:\/|$)|~ts-uri-escape~|~ts-uri-spec~|~ts-uri-no-path~)/;
 
 /**
  * Returns true if the path refers to a bundled library file.
@@ -430,6 +452,13 @@ export function isDynamicFileName(fileName: string): boolean {
 export function splitVolumePath(path: string): [volume: string, rest: string, ok: boolean] {
     if (path.length >= 2 && isVolumeCharacter(path.charCodeAt(0)) && path.charCodeAt(1) === CharacterCodesColon) {
         return [path.substring(0, 2).toLowerCase(), path.substring(2), true];
+    }
+    return ["", path, false];
+}
+
+function splitVolumePathPreservingCase(path: string): [volume: string, rest: string, ok: boolean] {
+    if (path.length >= 2 && isVolumeCharacter(path.charCodeAt(0)) && path.charCodeAt(1) === CharacterCodesColon) {
+        return [path.substring(0, 2), path.substring(2), true];
     }
     return ["", path, false];
 }
@@ -483,8 +512,8 @@ export function fileNameToDocumentURI(fileName: string): string {
 
     // Dynamic/virtual files (untitled, vscode-vfs, etc.) need special handling
     if (isDynamicFileName(fileName)) {
-        // Format: ^/scheme/authority/path
-        const withoutPrefix = fileName.substring(2); // Remove "^/"
+        const encoded = fileName.startsWith(dynamicURIFileNamePrefix);
+        const withoutPrefix = fileName.substring(encoded ? dynamicURIFileNamePrefix.length : 2);
         const firstSlash = withoutPrefix.indexOf("/");
         if (firstSlash === -1) {
             throw new Error("invalid file name: " + fileName);
@@ -496,11 +525,20 @@ export function fileNameToDocumentURI(fileName: string): string {
         if (secondSlash === -1) {
             throw new Error("invalid file name: " + fileName);
         }
-        const authority = rest.substring(0, secondSlash);
-        const path = rest.substring(secondSlash + 1);
+        const encodedAuthority = rest.substring(0, secondSlash);
+        const hasAuthority = encodedAuthority !== "ts-nul-authority";
+        const authority = encoded ? decodeDynamicURIPathSegment(encodedAuthority) : encodedAuthority;
+        const encodedPath = rest.substring(secondSlash + 1);
+        if (encoded && hasAuthority) {
+            const suffix = decodeDynamicURINoPath(encodedPath);
+            if (suffix !== undefined) {
+                return scheme + "://" + authority + suffix;
+            }
+        }
+        const path = encoded ? decodeDynamicURIPath(encodedPath) : encodedPath;
 
         // ts-nul-authority is a placeholder for URIs without an authority
-        if (authority === "ts-nul-authority") {
+        if (!hasAuthority) {
             return scheme + ":" + path;
         }
         return scheme + "://" + authority + "/" + path;
@@ -548,15 +586,16 @@ export function documentURIToFileName(uri: string): string {
             throw new Error("invalid file URI: " + uri);
         }
 
+        const path = decodeURIComponent(parsed.pathname);
+
         // UNC path: file://server/share/...
         if (parsed.host !== "") {
-            return "//" + parsed.host + parsed.pathname;
+            return "//" + parsed.host + path;
         }
 
         // Local file - fix Windows path by removing leading slash before volume
-        const path = decodeURIComponent(parsed.pathname);
         if (path.length >= 3 && path.charCodeAt(0) === CharacterCodesSlash) {
-            const [volume, rest, ok] = splitVolumePath(path.substring(1));
+            const [volume, rest, ok] = splitVolumePathPreservingCase(path.substring(1));
             if (ok) {
                 return volume + rest;
             }
@@ -574,17 +613,188 @@ export function documentURIToFileName(uri: string): string {
 
     const scheme = uri.substring(0, colonIndex);
     let path = uri.substring(colonIndex + 1);
+    let suffix = "";
+    const suffixStart = path.search(/[?#]/);
+    if (suffixStart !== -1) {
+        suffix = path.substring(suffixStart);
+        path = path.substring(0, suffixStart);
+    }
 
     let authority = "ts-nul-authority";
+    let hasAuthority = false;
+    let hasPath = true;
     if (path.startsWith("//")) {
+        hasAuthority = true;
         const rest = path.substring(2);
         const slashIndex = rest.indexOf("/");
         if (slashIndex === -1) {
-            throw new Error("invalid URI: " + uri);
+            authority = rest;
+            path = "";
+            hasPath = false;
         }
-        authority = rest.substring(0, slashIndex);
-        path = rest.substring(slashIndex + 1);
+        else {
+            authority = rest.substring(0, slashIndex);
+            path = rest.substring(slashIndex + 1);
+        }
     }
 
-    return "^/" + scheme + "/" + authority + "/" + path;
+    let encodedAuthority = authority;
+    if (hasAuthority) {
+        encodedAuthority = authority === "ts-nul-authority"
+            ? forceEncodeDynamicURIPathSegment(authority, false)
+            : encodeDynamicURIPath(authority);
+    }
+    const encodedPath = hasPath
+        ? encodeDynamicURIPathWithSuffix(path, suffix)
+        : encodeDynamicURINoPath(suffix);
+    return dynamicURIFileNamePrefix + scheme + "/" + encodedAuthority + "/" + encodedPath;
+}
+
+function encodeDynamicURIPath(path: string, preserveFinalExtension = true): string {
+    if (!dynamicURIPathNeedsEncoding(path) && !isRootedDiskPath(path)) {
+        return path;
+    }
+    const segments = path.split("/");
+    for (let i = 0; i < segments.length; i++) {
+        segments[i] = encodeDynamicURIPathSegment(segments[i], preserveFinalExtension && i === segments.length - 1);
+    }
+    if (isRootedDiskPath(segments.join("/"))) {
+        segments[0] = forceEncodeDynamicURIPathSegment(segments[0], segments.length === 1 && preserveFinalExtension);
+    }
+    return segments.join("/");
+}
+
+function encodeDynamicURIPathWithSuffix(path: string, suffix: string): string {
+    if (suffix === "") {
+        return encodeDynamicURIPath(path);
+    }
+    const slash = path.lastIndexOf("/");
+    const before = slash === -1 ? "" : encodeDynamicURIPath(path.substring(0, slash), false) + "/";
+    return before + forceEncodeDynamicURIPathSegmentWithSuffix(path.substring(slash + 1), suffix);
+}
+
+function dynamicURIPathNeedsEncoding(path: string): boolean {
+    return path === "" ||
+        path.startsWith("/") ||
+        path.endsWith("/") ||
+        path.includes("//") ||
+        path.includes("\\") ||
+        dynamicURIPathSegmentEscapeRegExp.test(path);
+}
+
+function dynamicURIPathSegmentNeedsEncoding(segment: string): boolean {
+    return segment === "" ||
+        segment === "." ||
+        segment === ".." ||
+        segment.startsWith(dynamicURIPathSegmentEscapePrefix) ||
+        segment.startsWith(dynamicURIModuleSpecifierEscapePrefix) ||
+        segment.startsWith(dynamicURINoPathEscapePrefix) ||
+        segment.includes("\\");
+}
+
+function encodeDynamicURIPathSegment(segment: string, preserveExtension: boolean): string {
+    return dynamicURIPathSegmentNeedsEncoding(segment)
+        ? forceEncodeDynamicURIPathSegment(segment, preserveExtension)
+        : segment;
+}
+
+function forceEncodeDynamicURIPathSegment(segment: string, preserveExtension: boolean): string {
+    let extension = "";
+    if (preserveExtension && segment !== "." && segment !== "..") {
+        [segment, extension] = splitDynamicURIFileExtension(segment);
+    }
+    return dynamicURIPathSegmentEscapePrefix + encodeDynamicURIHex(segment) + "~" + extension;
+}
+
+function forceEncodeDynamicURIPathSegmentWithSuffix(segment: string, suffix: string): string {
+    const [base, extension] = splitDynamicURIFileExtension(segment);
+    return forceEncodeDynamicURIPathSegment(base + "\0" + suffix, false) + extension;
+}
+
+function splitDynamicURIFileExtension(segment: string): [base: string, extension: string] {
+    const extension = getDynamicURIFileExtension(segment);
+    return extension === ""
+        ? [segment, extension]
+        : [segment.substring(0, segment.length - extension.length), extension];
+}
+
+function getDynamicURIFileExtension(segment: string): string {
+    const baseStart = segment.lastIndexOf("\\") + 1;
+    for (const extension of [".d.ts", ".d.mts", ".d.cts"]) {
+        if (segment.endsWith(extension) && segment.length - extension.length >= baseStart) {
+            return extension;
+        }
+    }
+    if (segment.endsWith(".ts")) {
+        const declaration = segment.indexOf(".d.", baseStart);
+        if (declaration !== -1) {
+            return segment.substring(declaration);
+        }
+    }
+    const dot = segment.lastIndexOf(".");
+    return dot >= baseStart ? segment.substring(dot) : "";
+}
+
+function encodeDynamicURIHex(text: string): string {
+    let hex = "";
+    const encoded = encodeURIComponent(text);
+    for (let i = 0; i < encoded.length; i++) {
+        if (encoded.charCodeAt(i) === CharacterCodesPercent) {
+            hex += encoded.slice(i + 1, i + 3).toLowerCase();
+            i += 2;
+        }
+        else {
+            hex += encoded.charCodeAt(i).toString(16).padStart(2, "0");
+        }
+    }
+    return hex;
+}
+
+function decodeDynamicURIPath(path: string): string {
+    return path.includes(dynamicURIPathSegmentEscapePrefix)
+        ? path.split("/").map(decodeDynamicURIPathSegment).join("/")
+        : path;
+}
+
+function decodeDynamicURIPathSegment(segment: string): string {
+    if (!segment.startsWith(dynamicURIPathSegmentEscapePrefix)) {
+        return segment;
+    }
+    const separator = segment.indexOf("~", dynamicURIPathSegmentEscapePrefix.length);
+    if (separator === -1) {
+        return segment;
+    }
+    const encoded = segment.slice(dynamicURIPathSegmentEscapePrefix.length, separator);
+    const extension = segment.slice(separator + 1);
+    const decoded = decodeDynamicURIHex(encoded);
+    if (decoded === undefined) {
+        return segment;
+    }
+    const suffix = decoded.indexOf("\0");
+    return suffix === -1
+        ? decoded + extension
+        : decoded.substring(0, suffix) + extension + decoded.substring(suffix + 1);
+}
+
+function encodeDynamicURINoPath(suffix: string): string {
+    return dynamicURINoPathEscapePrefix + encodeDynamicURIHex(suffix) + "~";
+}
+
+function decodeDynamicURINoPath(path: string): string | undefined {
+    if (!path.startsWith(dynamicURINoPathEscapePrefix) || !path.endsWith("~")) {
+        return undefined;
+    }
+    return decodeDynamicURIHex(path.substring(dynamicURINoPathEscapePrefix.length, path.length - 1));
+}
+
+function decodeDynamicURIHex(encoded: string): string | undefined {
+    if (encoded.length % 2 !== 0 || !/^[0-9a-f]*$/i.test(encoded)) {
+        return undefined;
+    }
+    try {
+        return decodeURIComponent(encoded.replace(/../g, value => `%${value}`));
+    }
+    catch {
+        return undefined;
+    }
 }

@@ -423,7 +423,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		}
 		if s.Flags&ast.SymbolFlagsTypeParameter != 0 {
 			declaredType := b.ch.getDeclaredTypeOfSymbol(s)
-			if b.ctx.mapper != nil && b.ctx.mapper.Map(declaredType) != declaredType {
+			if b.ctx.mapper != nil && getMappedType(declaredType, b.ctx.mapper) != declaredType {
 				return nil // refers to type parameter remapped by context (TODO improvement: just return the remapped param name?)
 			}
 		}

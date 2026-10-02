@@ -53,6 +53,8 @@ func TestGetRootLength(t *testing.T) {
 	assert.Equal(t, GetRootLength("file://localhost/c%3A"), 21)
 	assert.Equal(t, GetRootLength("file://localhost/c%3Ad"), 17)
 	assert.Equal(t, GetRootLength("file://localhost/c%3A/path"), 22)
+	assert.Equal(t, GetRootLength("FILE:///C:/path"), 11)
+	assert.Equal(t, GetRootLength("file://LOCALHOST/C%3A/path"), 22)
 	assert.Equal(t, GetRootLength("file://server"), 13)
 	assert.Equal(t, GetRootLength("file://server/"), 14)
 	assert.Equal(t, GetRootLength("file://server/path"), 14)
@@ -646,6 +648,10 @@ func TestToPath(t *testing.T) {
 	assert.Equal(t, string(ToPath("file.ext", "path/to", false /*useCaseSensitiveFileNames*/)), "path/to/file.ext")
 	assert.Equal(t, string(ToPath("file.ext", "/path/to", true /*useCaseSensitiveFileNames*/)), "/path/to/file.ext")
 	assert.Equal(t, string(ToPath("/path/to/../file.ext", "path/to", true /*useCaseSensitiveFileNames*/)), "/path/file.ext")
+	assert.Equal(t,
+		string(ToPath("^/~ts-uri~/custom/ts-nul-authority/CaseSensitive.ts", "/", false /*useCaseSensitiveFileNames*/)),
+		"^/~ts-uri~/custom/ts-nul-authority/CaseSensitive.ts",
+	)
 }
 
 var relativePathSegmentRegExp = regexp.MustCompile(`//|(?:^|/)\.\.?(?:$|/)`)
@@ -882,6 +888,15 @@ func TestGetCommonParents(t *testing.T) {
 		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{"/a/b"}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("nested fan-out keeps every result", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/x/1/p", "/a/x/2/q", "/a/y/3/r"}
+		got, ignored := GetCommonParents(paths, 4, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/a/x/1/p", "/a/x/2/q", "/a/y/3/r"}
 		assert.DeepEqual(t, got, expected)
 	})
 }

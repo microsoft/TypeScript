@@ -1,31 +1,79 @@
+import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
 } from "./path.ts";
 import type {
     APIMethodInfo,
+    CreateSnapshotParams as CoreCreateSnapshotParams,
     DocumentIdentifier,
+    ProjectId,
     SignatureResponse,
+    SourceFileDescriptor,
     SourceFileResponse,
-    SymbolResponse,
+    SymbolOwner as ProtocolSymbolOwner,
+    SymbolResponse as ProtocolSymbolResponse,
     TypeResponse,
-    UpdateSnapshotParams as CoreUpdateSnapshotParams,
 } from "./proto.generated.ts";
 export type { ConfigFileResponse as ParsedCommandLine, DiagnosticResponse as Diagnostic } from "./proto.generated.ts";
+export type { ProtocolSymbolResponse };
 
 export * from "./proto.generated.ts";
+export * from "./userPreferences.generated.ts";
+
+export interface FileSymbolOwner {
+    readonly kind: typeof SymbolOwnerKind.File;
+    readonly file: SourceFileDescriptor;
+    readonly snapshot?: never;
+    readonly project?: never;
+}
+
+export interface SnapshotSymbolOwner {
+    readonly kind: typeof SymbolOwnerKind.Snapshot;
+    readonly file?: never;
+    readonly snapshot: number;
+    readonly project: ProjectId;
+}
+
+export type SymbolOwner = FileSymbolOwner | SnapshotSymbolOwner;
+export type SymbolReference = SymbolOwner & { readonly id: number; };
+export type SymbolResponse = Omit<ProtocolSymbolResponse, "reference"> & {
+    readonly reference: SymbolReference;
+};
+
+export function validateSymbolOwner(owner: ProtocolSymbolOwner): asserts owner is SymbolOwner {
+    switch (owner.kind) {
+        case SymbolOwnerKind.File:
+            if (!owner.file || owner.snapshot !== undefined || owner.project !== undefined) {
+                throw new Error("Invalid file symbol owner");
+            }
+            return;
+        case SymbolOwnerKind.Snapshot:
+            if (owner.file !== undefined || owner.snapshot === undefined || owner.project === undefined) {
+                throw new Error("Invalid snapshot symbol owner");
+            }
+            return;
+        default:
+            throw new Error(`Invalid symbol owner kind '${owner.kind}'`);
+    }
+}
+
+export function validateSymbolResponse(response: ProtocolSymbolResponse): asserts response is SymbolResponse {
+    validateSymbolOwner(response.reference);
+}
 
 export type APIMethodsReturning<T> = { [K in keyof APIMethodInfo]: [T] extends [NonNullable<APIMethodInfo[K]["result"]>] ? [NonNullable<APIMethodInfo[K]["result"]>] extends [T] ? K : never : never; }[keyof APIMethodInfo];
 
 export type SourceFileResponseMethod = APIMethodsReturning<SourceFileResponse>;
-export type SymbolPropertyMethod = APIMethodsReturning<SymbolResponse>;
-export type SymbolsPropertyMethod = APIMethodsReturning<SymbolResponse[]>;
+export type SymbolPropertyMethod = APIMethodsReturning<ProtocolSymbolResponse>;
+export type SymbolsPropertyMethod = APIMethodsReturning<ProtocolSymbolResponse[]>;
 export type SignaturePropertyMethod = APIMethodsReturning<SignatureResponse>;
 export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, IntrinsicTypeMethod>;
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
 export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
-export type APIRequest = { [K in keyof APIMethodInfo]: { method: K; params: APIMethodInfo[K]["params"]; }; }[keyof APIMethodInfo];
+type BatchableAPIMethod = Exclude<keyof APIMethodInfo, "batchRequests">;
+export type APIRequest = { [K in BatchableAPIMethod]: { method: K; params: APIMethodInfo[K]["params"]; }; }[BatchableAPIMethod];
 export type APIResponse<Request extends APIRequest = APIRequest> = Request extends APIRequest ?
         & {
             method: Request["method"];
@@ -80,40 +128,33 @@ export function resolveDocumentURI(identifier: DocumentIdentifier): string {
     return identifier.uri;
 }
 
-export interface LSPUpdateSnapshotParams extends CoreUpdateSnapshotParams {
-    /**
-     * @deprecated Use {@link openProjects} instead.
-     * Path to a tsconfig.json file to open in the new snapshot.
-     */
-    openProject?: string;
-
-    /** FileChanges are not supplied by the LSP */
-    fileChanges?: never;
-}
-
 /**
- * Parameters for updateSnapshot, including deprecated members handled by `toUpdateSnapshotRequest`
+ * Parameters for createSnapshot, including deprecated members handled by `toCreateSnapshotRequest`
  */
-export interface UpdateSnapshotParams extends CoreUpdateSnapshotParams {
+export interface CreateSnapshotParams extends CoreCreateSnapshotParams {
     /**
      * @deprecated Use {@link openProjects} instead.
      * Path to a tsconfig.json file to open in the new snapshot.
      */
-    openProject?: string;
+    openProject?: string | undefined;
+}
+
+export interface CreateBuildOrchestratorParams {
+    rootNames: readonly string[] | null;
 }
 
 /**
- * Builds the wire request for updateSnapshot, applying the deprecated `openProject`
+ * Builds the wire request for createSnapshot, applying the deprecated `openProject`
  * compatibility shim: a single `openProject` is folded into `openProjects` and is
  * never sent on the wire.
  */
-export function toUpdateSnapshotRequest(params?: UpdateSnapshotParams): UpdateSnapshotParams {
+export function toCreateSnapshotRequest(params?: CreateSnapshotParams): CreateSnapshotParams {
     const { openProject, openProjects, ...rest } = params ?? {};
     const mergedOpenProjects = openProject !== undefined
         ? [resolveFileName(openProject), ...(openProjects ?? [])]
         : openProjects;
     return {
         ...rest,
-        ...(mergedOpenProjects !== undefined ? { openProjects: mergedOpenProjects } : {}),
+        openProjects: mergedOpenProjects,
     };
 }

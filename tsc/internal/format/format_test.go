@@ -33,14 +33,12 @@ func TestFormatNoTrailingSpace(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
-				EditorSettings: lsutil.EditorSettings{
-					TabSize:                4,
-					IndentSize:             4,
-					NewLineCharacter:       "\n",
-					ConvertTabsToSpaces:    core.TSTrue,
-					IndentStyle:            lsutil.IndentStyleSmart,
-					TrimTrailingWhitespace: core.TSTrue,
-				},
+				TabSize:                4,
+				IndentSize:             4,
+				NewLineCharacter:       "\n",
+				ConvertTabsToSpaces:    core.TSTrue,
+				IndentStyle:            lsutil.IndentStyleSmart,
+				TrimTrailingWhitespace: core.TSTrue,
 			}, "\n")
 			sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/test.ts",

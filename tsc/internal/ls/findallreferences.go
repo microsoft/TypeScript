@@ -519,10 +519,8 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 				continue
 			}
 			return &nonLocalDefinition{
-				position: position{
-					uri: lsconv.FileNameToDocumentURI(fileName),
-					pos: lspPosition,
-				},
+				uri: lsconv.FileNameToDocumentURI(fileName),
+				pos: lspPosition,
 				GetSourcePosition: sync.OnceValue(func() lsproto.HasTextDocumentPosition {
 					mapped := l.tryGetSourcePosition(fileName, startPos)
 					if mapped != nil {
@@ -652,7 +650,7 @@ func (l *LanguageService) provideSymbolsAndEntries(ctx context.Context, uri lspr
 	} else if isRename {
 		feature = spanmap.FeatureRename
 	}
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, documentPosition, feature)
+	positions := l.converters.FromLSPPositionForSourceFile(sourceFile, documentPosition, feature)
 	if len(positions) == 0 {
 		return SymbolAndEntriesData{}, false
 	}
@@ -741,14 +739,13 @@ func (l *LanguageService) getSymbolAndEntries(
 		}
 	} else {
 		options.use = referenceUseRename
-		options.useAliasesForRename = l.UserPreferences().UseAliasesForRename.IsTrueOrUnknown()
+		options.useAliasesForRename = l.UserPreferences().ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown()
 	}
 	return l.getReferencedSymbolsForNode(ctx, position, node, program, program.GetSourceFiles(), options)
 }
 
 func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator) (lsproto.ReferencesResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -762,8 +759,7 @@ func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto
 }
 
 func (l *LanguageService) provideReferencesFromData(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator, data SymbolAndEntriesData) (lsproto.ReferencesResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -777,8 +773,7 @@ func (l *LanguageService) provideReferencesFromData(ctx context.Context, params 
 }
 
 func (l *LanguageService) ProvideVSReferences(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator) (lsproto.VSReferencesResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -807,7 +802,7 @@ func (l *LanguageService) symbolAndEntriesToVSReferences(ctx context.Context, pa
 	vsCapability := caps.VSSupportsVisualStudioExtensions
 	var items []*lsproto.VSReferenceItem
 	id := int32(0)
-	projectName := string(l.projectPath)
+	projectName := l.projectID.String()
 
 	for _, s := range data.SymbolsAndEntries {
 		if s.definition == nil {
@@ -1023,8 +1018,7 @@ func (l *LanguageService) ProvideImplementations(ctx context.Context, params *ls
 }
 
 func (l *LanguageService) provideImplementationsEx(ctx context.Context, params *lsproto.ImplementationParams, options symbolEntryTransformOptions, orchestrator CrossProjectOrchestrator) (lsproto.ImplementationResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -1038,8 +1032,7 @@ func (l *LanguageService) provideImplementationsEx(ctx context.Context, params *
 }
 
 func (l *LanguageService) provideImplementationsFromData(ctx context.Context, params *lsproto.ImplementationParams, options symbolEntryTransformOptions, orchestrator CrossProjectOrchestrator, data SymbolAndEntriesData) (lsproto.ImplementationResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -1294,7 +1287,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 		}
 
 		if moduleSymbol := checker.GetMergedSymbol(resolvedRef.file.Symbol); moduleSymbol != nil {
-			return l.getReferencedSymbolsForModule(ctx, program, moduleSymbol /*excludeImportTypeOfExportEquals*/, false, sourceFiles, sourceFilesSet)
+			return l.getReferencedSymbolsForModule(checker, program, moduleSymbol /*excludeImportTypeOfExportEquals*/, false, sourceFiles, sourceFilesSet)
 		}
 
 		// !!! not implemented
@@ -1343,7 +1336,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 		if symbol.Parent == nil {
 			return nil
 		}
-		return l.getReferencedSymbolsForModule(ctx, program, symbol.Parent, false /*excludeImportTypeOfExportEquals*/, sourceFiles, sourceFilesSet)
+		return l.getReferencedSymbolsForModule(checker, program, symbol.Parent, false /*excludeImportTypeOfExportEquals*/, sourceFiles, sourceFilesSet)
 	}
 
 	moduleReferences := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, symbol, program, sourceFiles, checker, options, sourceFilesSet)
@@ -1417,7 +1410,7 @@ func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ct
 	}
 	exportEquals := symbol.Exports[ast.InternalSymbolNameExportEquals]
 	// If exportEquals != nil, we're about to add references to `import("mod")` anyway, so don't double-count them.
-	moduleReferences := l.getReferencedSymbolsForModule(ctx, program, symbol, exportEquals != nil, sourceFiles, sourceFilesSet)
+	moduleReferences := l.getReferencedSymbolsForModule(checker, program, symbol, exportEquals != nil, sourceFiles, sourceFilesSet)
 	if exportEquals == nil || exportEquals.Flags&ast.SymbolFlagsAlias == 0 || !sourceFilesSet.Has(moduleSourceFileName) {
 		return moduleReferences
 	}
@@ -1739,11 +1732,8 @@ func getMergedAliasedSymbolOfNamespaceExportDeclaration(node *ast.Node, symbol *
 	return nil
 }
 
-func (l *LanguageService) getReferencedSymbolsForModule(ctx context.Context, program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
+func (l *LanguageService) getReferencedSymbolsForModule(checker *checker.Checker, program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
 	debug.Assert(symbol.ValueDeclaration != nil)
-
-	checker, done := program.GetTypeChecker(ctx)
-	defer done()
 
 	moduleRefs := findModuleReferences(program, sourceFiles, symbol, checker)
 	references := core.MapNonNil(moduleRefs, func(reference ModuleReference) *ReferenceEntry {
