@@ -1317,6 +1317,36 @@ func TestContentMappersValidation(t *testing.T) {
 			expectedCode:   diagnostics.Content_mapper_file_extension_0_must_begin_with_a.Code(),
 		},
 		{
+			name:           "source extension contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue/foo"] }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "source extension contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue\\foo"] }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension key contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue/foo": ".js"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension key contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue\\foo": ".js"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension value contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue": ".js/foo"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension value contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue": ".js\\foo"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
 			name:           "built-in extension",
 			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
 			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),

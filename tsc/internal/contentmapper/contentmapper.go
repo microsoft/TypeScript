@@ -31,8 +31,7 @@ var ErrProjectUnavailable = errors.New("content mapper project is unavailable")
 // Definition is a content mapper as declared in a tsconfig's "contentMappers": the npm package that
 // implements the mapper and the otherwise unsupported file extensions it registers.
 type Definition struct {
-	Package string `json:"package"`
-	// Extensions may be compound, but must not end in a built-in file extension.
+	Package    string   `json:"package"`
 	Extensions []string `json:"extensions"`
 	// OutputExtensions replaces the manifest defaults, including when the map is empty.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
@@ -68,6 +67,10 @@ var supportedVirtualExtensions = collections.NewSetFromItems(
 
 func IsSupportedVirtualExtension(extension string) bool {
 	return supportedVirtualExtensions.Has(extension)
+}
+
+func IsValidExtension(extension string) bool {
+	return len(extension) > 1 && extension[0] == '.' && !strings.ContainsAny(extension, "/\\")
 }
 
 func HasReservedSourceExtension(extension string) bool {

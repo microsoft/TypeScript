@@ -1954,6 +1954,7 @@
     "Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_e_18118": "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled.",
     "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_ma_18119": "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'.",
     "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_18120": "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values.",
+    "Content_mapper_extension_0_must_not_contain_path_separators_18121": "Content mapper extension '{0}' must not contain path separators.",
     "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010": "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.",
     "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001": "File is a CommonJS module; it may be converted to an ES module.",
     "This_constructor_function_may_be_converted_to_a_class_declaration_80002": "This constructor function may be converted to a class declaration.",

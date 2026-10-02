@@ -23,6 +23,21 @@ const documentedContribution = {
 } satisfies ContentMapperContribution;
 
 describe("content mapper contributions", { concurrency: true }, () => {
+    test("rejects path separators in source and output extensions", () => {
+        for (const extension of [".vue/foo", ".vue\\foo"]) {
+            assert.throws(() => validateContentMapperRegistration("mapper", [{ extensions: [extension] }]), /path separators/);
+            for (const outputExtensions of [{ [extension]: ".js" }, { ".vue": extension }]) {
+                assert.throws(() =>
+                    validateContentMapperRegistration("mapper", [{
+                        ...documentedContribution,
+                        inferredProjectContribution: {
+                            manifest: { ...documentedContribution.inferredProjectContribution.manifest, outputExtensions },
+                        },
+                    }]), /path separators/);
+            }
+        }
+    });
+
     test("accepts compound extensions with non-reserved suffixes", () => {
         assert.doesNotThrow(() =>
             validateContentMapperRegistration("mapper", [{

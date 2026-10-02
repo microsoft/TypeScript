@@ -122,7 +122,7 @@ func TestContentMapperExtensionRewritesAreCached(t *testing.T) { //nolint:parall
 
 func TestResolveContentMapperManifestRejectsMalformedOutputExtensions(t *testing.T) {
 	t.Parallel()
-	for _, value := range []string{`"invalid"`, `null`, `[]`, `{".vue": 1}`, `{".vue": null}`} {
+	for _, value := range []string{`"invalid"`, `null`, `[]`, `{".vue": 1}`, `{".vue": null}`, `{".vue/foo": ".js"}`, `{".vue\\foo": ".js"}`, `{".vue": ".js/foo"}`, `{".vue": ".js\\foo"}`} {
 		t.Run(value, func(t *testing.T) {
 			t.Parallel()
 			host := resolveContentMapperHost{fs: vfstest.FromMap(map[string]string{

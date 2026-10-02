@@ -2560,7 +2560,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			}
 		}
 		for source, output := range valueOrZero(manifest.OutputExtensions) {
-			if len(source) <= 1 || source[0] != '.' || len(output) <= 1 || output[0] != '.' {
+			if !contentmapper.IsValidExtension(source) || !contentmapper.IsValidExtension(output) {
 				return result, fmt.Errorf("content mapper contribution %q has invalid output extension mapping from %q to %q", identity, source, output)
 			}
 		}
@@ -2601,7 +2601,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 }
 
 func isValidContributedContentMapperExtension(extension string) bool {
-	if len(extension) <= 1 || extension[0] != '.' || strings.ContainsAny(extension, "/\\") {
+	if !contentmapper.IsValidExtension(extension) {
 		return false
 	}
 	return !contentmapper.HasReservedSourceExtension(extension)

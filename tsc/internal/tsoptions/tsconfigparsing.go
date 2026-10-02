@@ -1320,6 +1320,8 @@ func parseJsonConfigFileContentWorker(
 			switch {
 			case !strings.HasPrefix(ext, "."):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_must_begin_with_a, ext), contentMapperSourceFile, extNode))
+			case strings.ContainsAny(ext, "/\\"):
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, ext), contentMapperSourceFile, extNode))
 			case contentmapper.HasReservedSourceExtension(ext):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper, ext), contentMapperSourceFile, extNode))
 			default:
@@ -1336,10 +1338,14 @@ func parseJsonConfigFileContentWorker(
 		for _, sourceExtension := range slices.Sorted(maps.Keys(mapper.Definition.OutputExtensions)) {
 			outputExtension := mapper.Definition.OutputExtensions[sourceExtension]
 			outputExtensionsNode := getContentMapperSyntax(contentMapperSourceFile, contentMapperIndices[j], "outputExtensions")
-			if !isValidContentMapperExtension(sourceExtension) {
+			if strings.ContainsAny(sourceExtension, "/\\") {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
+			} else if !contentmapper.IsValidExtension(sourceExtension) {
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
 			}
-			if !isValidContentMapperExtension(outputExtension) {
+			if strings.ContainsAny(outputExtension, "/\\") {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, outputExtension), contentMapperSourceFile, outputExtensionsNode))
+			} else if !contentmapper.IsValidExtension(outputExtension) {
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a, outputExtension), contentMapperSourceFile, outputExtensionsNode))
 			}
 			if !slices.ContainsFunc(validExtensions, func(extension string) bool {

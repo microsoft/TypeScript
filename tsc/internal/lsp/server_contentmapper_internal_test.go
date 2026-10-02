@@ -144,3 +144,22 @@ func TestParseContentMapperContributionsRejectsInvalidOutputExtensions(t *testin
 		assert.ErrorContains(t, err, `invalid output extension mapping`)
 	}
 }
+
+func TestParseContentMapperContributionsRejectsExtensionPaths(t *testing.T) {
+	t.Parallel()
+	for _, extension := range []string{".vue/foo", `.vue\foo`} {
+		_, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+			ContributorId: "mapper", Extensions: []string{extension},
+		}})
+		assert.ErrorContains(t, err, "invalid extension")
+		for _, outputExtensions := range []map[string]string{{extension: ".js"}, {".vue": extension}} {
+			_, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+				ContributorId: "mapper", Extensions: []string{".vue"},
+				InferredProjectContribution: &lsproto.InferredProjectContentMapperContribution{
+					Manifest: &lsproto.ContentMapperManifest{Name: "mapper", Exec: []string{"mapper"}, OutputExtensions: &outputExtensions},
+				},
+			}})
+			assert.ErrorContains(t, err, "invalid output extension mapping")
+		}
+	}
+}

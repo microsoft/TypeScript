@@ -11,7 +11,6 @@ export interface ContentMapperManifest {
 }
 
 export interface ContentMapperContribution {
-    /** Source extensions may be compound, but must not end in a built-in file extension. */
     readonly extensions: readonly string[];
     readonly inferredProjectContribution?: {
         readonly options?: Readonly<Record<string, unknown>>;
@@ -68,8 +67,8 @@ export function validateContentMapperRegistration(contributorId: string, contrib
         throw new TypeError("Content mapper contributor ID must not be empty.");
     }
     for (const contribution of contributions) {
-        if (contribution.extensions.length === 0 || contribution.extensions.some(extension => !extension.startsWith(".") || extension.length === 1)) {
-            throw new TypeError("Content mapper contributions require non-empty extensions beginning with '.'.");
+        if (contribution.extensions.length === 0 || contribution.extensions.some(extension => !isExtension(extension))) {
+            throw new TypeError("Content mapper contributions require non-empty extensions beginning with '.' and containing no path separators.");
         }
         if (contribution.extensions.some(extension => /\.(?:[cm]?[jt]s|[jt]sx|json)$/i.test(extension))) {
             throw new TypeError("Content mapper extensions must not end in a built-in extension.");
@@ -85,13 +84,13 @@ export function validateContentMapperRegistration(contributorId: string, contrib
             throw new TypeError("Content mapper contribution cwd must be a file URI.");
         }
         if (inferredProjectContribution?.manifest.outputExtensions && Object.entries(inferredProjectContribution.manifest.outputExtensions).some(([source, output]) => !isExtension(source) || !isExtension(output))) {
-            throw new TypeError("Content mapper output extensions must be non-empty and begin with '.'.");
+            throw new TypeError("Content mapper output extensions must be non-empty, begin with '.', and contain no path separators.");
         }
     }
 }
 
 function isExtension(value: string): boolean {
-    return value.length > 1 && value.startsWith(".");
+    return value.length > 1 && value.startsWith(".") && !/[\\/]/.test(value);
 }
 
 export function documentMatchesContentMapperContributions(

@@ -65,7 +65,15 @@ func resolveContentMapperManifest(host ParseConfigHost, containingFile string, p
 	}
 	for _, source := range slices.Sorted(maps.Keys(outputExtensions)) {
 		output := outputExtensions[source]
-		if !isValidContentMapperExtension(source) || !isValidContentMapperExtension(output) {
+		for _, extension := range []string{source, output} {
+			if strings.ContainsAny(extension, "/\\") {
+				return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+					diagnostics.Content_mapper_extension_0_must_not_contain_path_separators,
+					extension,
+				)
+			}
+		}
+		if !contentmapper.IsValidExtension(source) || !contentmapper.IsValidExtension(output) {
 			return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
 				diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
 				packageName,
@@ -75,8 +83,4 @@ func resolveContentMapperManifest(host ParseConfigHost, containingFile string, p
 		}
 	}
 	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions}, packageDirectory, nil
-}
-
-func isValidContentMapperExtension(extension string) bool {
-	return len(extension) > 1 && strings.HasPrefix(extension, ".")
 }

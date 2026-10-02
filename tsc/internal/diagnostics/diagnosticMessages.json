@@ -8935,5 +8935,9 @@
     "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values.": {
         "category": "Error",
         "code": 18120
+    },
+    "Content mapper extension '{0}' must not contain path separators.": {
+        "category": "Error",
+        "code": 18121
     }
 }
