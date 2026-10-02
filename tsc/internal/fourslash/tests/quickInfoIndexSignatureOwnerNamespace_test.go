@@ -10,7 +10,6 @@ import (
 func TestQuickInfoIndexSignatureOwnerNamespace(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	// Like TS6, index signature owners are displayed without an enclosing container.
 	const content = `
 namespace Outer {
     export namespace Inner {
