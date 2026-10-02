@@ -1,5 +1,6 @@
 import {
     instantiateWasm,
+    instantiateWasmSync,
     WasmTransport,
     wasmURL,
 } from "@typescript/typescript-wasip1-wasm";
@@ -9,6 +10,7 @@ import {
 } from "@typescript/typescript/unstable/ast";
 import { API as AsyncAPI } from "@typescript/typescript/unstable/async";
 import { API as SyncAPI } from "@typescript/typescript/unstable/sync";
+import binaryen from "binaryen";
 import assert from "node:assert";
 import { spawn } from "node:child_process";
 import {
@@ -26,6 +28,52 @@ import {
 import { WASI } from "node:wasi";
 
 describe("API over WebAssembly", () => {
+    test("implements reactor stdio descriptor lifecycle", () => {
+        const WebAssembly = (globalThis as any).WebAssembly;
+        const output: string[] = [];
+        const module = binaryen.parseText(`
+            (module
+                (import "wasi_snapshot_preview1" "fd_close" (func $fd_close (param i32) (result i32)))
+                (import "wasi_snapshot_preview1" "fd_fdstat_get" (func $fd_fdstat_get (param i32 i32) (result i32)))
+                (import "wasi_snapshot_preview1" "fd_write" (func $fd_write (param i32 i32 i32 i32) (result i32)))
+                (memory (export "memory") 1)
+                (func (export "typescript_initialize"))
+                (func (export "write_stdout") (param $pointer i32) (param $length i32) (result i32)
+                    (i32.store (i32.const 0) (local.get $pointer))
+                    (i32.store (i32.const 4) (local.get $length))
+                    (call $fd_write (i32.const 1) (i32.const 0) (i32.const 1) (i32.const 8))
+                )
+                (func (export "close_stdout") (result i32)
+                    (call $fd_close (i32.const 1))
+                )
+                (func (export "stat_stdout") (result i32)
+                    (call $fd_fdstat_get (i32.const 1) (i32.const 16))
+                )
+                (data (i32.const 32) "\\e2\\82")
+            )
+        `);
+        const instance = instantiateWasmSync(
+            new WebAssembly.Module(module.emitBinary()),
+            { stdout: (text: string) => output.push(text) },
+        );
+        const exports = instance.exports as {
+            write_stdout(pointer: number, length: number): number;
+            close_stdout(): number;
+            stat_stdout(): number;
+        };
+
+        assert.strictEqual(exports.write_stdout(32, 0), 0);
+        assert.deepStrictEqual(output, []);
+        assert.strictEqual(exports.write_stdout(32, 2), 0);
+        assert.deepStrictEqual(output, []);
+        assert.strictEqual(exports.close_stdout(), 0);
+        assert.deepStrictEqual(output, ["\uFFFD"]);
+        assert.strictEqual(exports.write_stdout(32, 0), 8);
+        assert.strictEqual(exports.stat_stdout(), 8);
+        assert.strictEqual(exports.close_stdout(), 8);
+        module.dispose();
+    });
+
     test("runs the compiler command from the same module", async () => {
         const WebAssembly = (globalThis as any).WebAssembly;
         const directory = await mkdtemp(path.join(tmpdir(), "typescript-wasip1-"));

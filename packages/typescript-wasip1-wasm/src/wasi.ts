@@ -83,6 +83,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
     const decoders = new Map<number, TextDecoder>();
     const encoder = new TextEncoder();
     const callbacks = new Map<string, (name: string, payload: string) => string>();
+    const closedDescriptors = new Set<number>();
     let fileSystem: WasmFileSystem | undefined;
 
     function getMemory(): WebAssembly.Memory {
@@ -125,7 +126,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
 
     function fdFdstatGet(fd: number, statPointer: number): number {
         statPointer >>>= 0;
-        if (fd < 0 || fd > 2) return errnoBadFileDescriptor;
+        if (!isOpenStdioDescriptor(fd)) return errnoBadFileDescriptor;
         const memory = getMemory();
         new Uint8Array(memory.buffer, statPointer, 24).fill(0);
         const view = new DataView(memory.buffer);
@@ -136,12 +137,12 @@ function createWasiHost(options: InstantiateWasmOptions): {
     }
 
     function fdFdstatSetFlags(fd: number, _flags: number): number {
-        return fd >= 0 && fd <= 2 ? errnoSuccess : errnoBadFileDescriptor;
+        return isOpenStdioDescriptor(fd) ? errnoSuccess : errnoBadFileDescriptor;
     }
 
     function fdRead(fd: number, _iovsPointer: number, _iovsLength: number, readPointer: number): number {
         readPointer >>>= 0;
-        if (fd !== 0) return errnoBadFileDescriptor;
+        if (fd !== 0 || closedDescriptors.has(fd)) return errnoBadFileDescriptor;
         getView().setUint32(readPointer, 0, true);
         return errnoSuccess;
     }
@@ -155,7 +156,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
         if (fd === hostCallbackFD) {
             return hostCallback(iovsPointer, iovsLength, writtenPointer);
         }
-        if (fd !== 1 && fd !== 2) return errnoBadFileDescriptor;
+        if ((fd !== 1 && fd !== 2) || closedDescriptors.has(fd)) return errnoBadFileDescriptor;
         const memory = getMemory();
         const view = new DataView(memory.buffer);
         const chunks: Uint8Array[] = [];
@@ -174,10 +175,32 @@ function createWasiHost(options: InstantiateWasmOptions): {
             offset += chunk.length;
         }
         view.setUint32(writtenPointer, length, true);
+        if (length === 0) return errnoSuccess;
         const decoder = decoders.get(fd) ?? new TextDecoder();
         decoders.set(fd, decoder);
-        (fd === 1 ? stdout : stderr)(decoder.decode(bytes, { stream: true }));
+        const text = decoder.decode(bytes, { stream: true });
+        if (text) {
+            (fd === 1 ? stdout : stderr)(text);
+        }
         return errnoSuccess;
+    }
+
+    function fdClose(fd: number): number {
+        if (!isOpenStdioDescriptor(fd)) return errnoBadFileDescriptor;
+        closedDescriptors.add(fd);
+        const decoder = decoders.get(fd);
+        if (decoder) {
+            decoders.delete(fd);
+            const text = decoder.decode();
+            if (text) {
+                (fd === 1 ? stdout : stderr)(text);
+            }
+        }
+        return errnoSuccess;
+    }
+
+    function isOpenStdioDescriptor(fd: number): boolean {
+        return fd >= 0 && fd <= 2 && !closedDescriptors.has(fd);
     }
 
     function hostCallback(iovsPointer: number, iovsLength: number, writtenPointer: number): number {
@@ -331,7 +354,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
         clock_time_get: clockTimeGet,
         environ_get: () => errnoSuccess,
         environ_sizes_get: argsSizesGet,
-        fd_close: (fd: number) => fd >= 0 && fd <= 2 ? errnoSuccess : errnoBadFileDescriptor,
+        fd_close: fdClose,
         fd_fdstat_get: fdFdstatGet,
         fd_fdstat_set_flags: fdFdstatSetFlags,
         fd_filestat_get: unsupported,
