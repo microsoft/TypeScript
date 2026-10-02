@@ -4857,6 +4857,11 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 		if !isConversionOrInterfaceImplementationMessage(message) && r.chainArgsMatch(generalizedSourceType, targetType) {
 			return
 		}
+	case diagnostics.Type_0_is_not_assignable_to_type_1,
+		diagnostics.Type_0_is_not_comparable_to_type_1:
+		if r.chainArgsMatch(generalizedSourceType, targetType) {
+			r.errorChain = r.errorChain.next
+		}
 	}
 	r.reportError(message, generalizedSourceType, targetType)
 }
@@ -4948,6 +4953,9 @@ func (r *Relater) getChainMessage(index int) *diagnostics.Message {
 // Return true if the arguments of the first entry on the error chain match the
 // given arguments (where nil acts as a wildcard).
 func (r *Relater) chainArgsMatch(args ...any) bool {
+	if r.errorChain == nil || len(r.errorChain.args) < len(args) {
+		return false
+	}
 	for i, a := range args {
 		if a != nil && a != r.errorChain.args[i] {
 			return false
