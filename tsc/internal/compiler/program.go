@@ -467,7 +467,8 @@ func (p *Program) canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.Sour
 		file1.UsesUriStyleNodeCoreModules == file2.UsesUriStyleNodeCoreModules &&
 		slices.EqualFunc(file1.Imports(), file2.Imports(), func(n1 *ast.Node, n2 *ast.Node) bool {
 			return equalModuleSpecifiers(n1, n2) &&
-				p.GetModeForUsageLocation(file1, n1) == p.GetModeForUsageLocation(file2, n2)
+				p.GetModeForUsageLocation(file1, n1) == p.GetModeForUsageLocation(file2, n2) &&
+				ast.IsSourcePhaseImport(n1.Parent) == ast.IsSourcePhaseImport(n2.Parent)
 		}) &&
 		slices.EqualFunc(file1.ModuleAugmentations, file2.ModuleAugmentations, equalModuleAugmentationNames) &&
 		slices.Equal(file1.AmbientModuleNames, file2.AmbientModuleNames) &&
@@ -640,6 +641,9 @@ func (p *Program) GetResolvedModule(file ast.HasFileName, moduleReference string
 func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
 	if !ast.IsStringLiteralLike(moduleSpecifier) {
 		panic("moduleSpecifier must be a StringLiteralLike")
+	}
+	if ast.IsSourcePhaseImport(moduleSpecifier.Parent) {
+		return nil
 	}
 	mode := p.GetModeForUsageLocation(file, moduleSpecifier)
 	return p.GetResolvedModule(file, moduleSpecifier.Text(), mode)
@@ -2242,7 +2246,7 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 				continue
 			}
 			for _, imp := range file.Imports() {
-				if tspath.IsExternalModuleNameRelative(imp.Text()) {
+				if ast.IsSourcePhaseImport(imp.Parent) || tspath.IsExternalModuleNameRelative(imp.Text()) {
 					continue
 				}
 				if resolvedModules, ok := p.resolvedModules[file.Path()]; ok {
@@ -2419,6 +2423,7 @@ var plainJSErrors = collections.NewSetFromItems(
 	diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block.Code(),
 	diagnostics.A_set_accessor_cannot_have_rest_parameter.Code(),
 	diagnostics.A_set_accessor_must_have_exactly_one_parameter.Code(),
+	diagnostics.A_source_phase_import_must_specify_a_local_binding.Code(),
 	diagnostics.An_export_declaration_can_only_be_used_at_the_top_level_of_a_module.Code(),
 	diagnostics.An_export_declaration_cannot_have_modifiers.Code(),
 	diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_module.Code(),
@@ -2442,11 +2447,15 @@ var plainJSErrors = collections.NewSetFromItems(
 	diagnostics.Jump_target_cannot_cross_function_boundary.Code(),
 	diagnostics.Line_terminator_not_permitted_before_arrow.Code(),
 	diagnostics.Modifiers_cannot_appear_here.Code(),
+	diagnostics.Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import.Code(),
 	diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement.Code(),
 	diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement.Code(),
+	diagnostics.Optional_chaining_cannot_be_used_with_import_source.Code(),
 	diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies.Code(),
 	diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression.Code(),
 	diagnostics.Property_0_is_not_accessible_outside_class_1_because_it_has_a_private_identifier.Code(),
+	diagnostics.Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls.Code(),
+	diagnostics.Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve.Code(),
 	diagnostics.Tagged_template_expressions_are_not_permitted_in_an_optional_chain.Code(),
 	diagnostics.The_left_hand_side_of_a_for_of_statement_may_not_be_async.Code(),
 	diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer.Code(),
@@ -2455,6 +2464,7 @@ var plainJSErrors = collections.NewSetFromItems(
 	diagnostics.Variable_declaration_list_cannot_be_empty.Code(),
 	diagnostics.X_0_and_1_operations_cannot_be_mixed_without_parentheses.Code(),
 	diagnostics.X_0_expected.Code(),
+	diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source.Code(),
 	diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2.Code(),
 	diagnostics.X_0_list_cannot_be_empty.Code(),
 	diagnostics.X_0_modifier_already_seen.Code(),

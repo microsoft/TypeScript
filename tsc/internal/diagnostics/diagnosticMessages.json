@@ -8696,7 +8696,7 @@
         "category": "Error",
         "code": 18060
     },
-    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
+    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?": {
         "category": "Error",
         "code": 18061
     },
@@ -8895,5 +8895,25 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 18110
+    },
+    "A source phase import must specify a local binding.": {
+        "category": "Error",
+        "code": 18111
+    },
+    "Named and namespace imports are not allowed in a source phase import.": {
+        "category": "Error",
+        "code": 18112
+    },
+    "Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
+        "category": "Error",
+        "code": 18113
+    },
+    "Optional chaining cannot be used with 'import.source'.": {
+        "category": "Error",
+        "code": 18114
+    },
+    "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.": {
+        "category": "Error",
+        "code": 18115
     }
 }
