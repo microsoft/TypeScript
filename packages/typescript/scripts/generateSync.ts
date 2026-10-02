@@ -21,18 +21,17 @@
  *   node generateSync.ts
  */
 
+import { readFileSync } from "node:fs";
 import {
-    mkdirSync,
-    readFileSync,
-    writeFileSync,
-} from "node:fs";
-import {
-    dirname,
     join,
     relative,
 } from "node:path";
-import { xSync } from "tinyexec";
 import ts from "typescript";
+import { GeneratedFile } from "../../../tools/scripts/gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+} from "../../../tools/scripts/gen/utils.mts";
 
 function generatedHeader(asyncSourceRelPath: string): string {
     return [
@@ -53,19 +52,24 @@ const SRC = join(ROOT, "src", "api");
 const TEST = join(ROOT, "test");
 
 type SourceTransform = (source: string, fileName: string) => string;
+type SyncVariant = "sync" | "generators";
 
 function generateSyncFile(
     srcPath: string,
     destPath: string,
     transform: SourceTransform,
-): string {
+    force: boolean,
+    variant: SyncVariant = "sync",
+): GeneratedFile | undefined {
+    const generated = new GeneratedFile(destPath, [import.meta.filename, srcPath]);
+    if (generated.isCurrent(force)) return;
     const source = readFileSync(srcPath, "utf-8");
 
     // Normalize line endings to LF
     const normalized = source.replace(/\r/g, "");
 
     // Phase 1: Process sync directives (text-based, operates on comments/lines)
-    const afterDirectives = processDirectives(normalized.split("\n")).join("\n");
+    const afterDirectives = processDirectives(normalized.split("\n"), variant).join("\n");
 
     // Phase 2: AST-based async→sync transforms
     const fileName = destPath.split("/").pop()!;
@@ -75,23 +79,32 @@ function generateSyncFile(
     const srcRelPath = relative(ROOT, srcPath).replaceAll("\\", "/");
     result = generatedHeader(srcRelPath) + result;
 
-    mkdirSync(dirname(destPath), { recursive: true });
-    writeFileSync(destPath, result);
+    generated.write(result);
     const label = relative(ROOT, srcPath).replaceAll("\\", "/");
     const destLabel = relative(ROOT, destPath).replaceAll("\\", "/");
     console.log(`  ${label} → ${destLabel}`);
-    return destPath;
+    return generated;
 }
 
 // ── Directive processing ─────────────────────────────────────────
 
-function processDirectives(lines: string[]): string[] {
+function processDirectives(lines: string[], variant: SyncVariant): string[] {
     const output: string[] = [];
     let skipBlock = false;
     let syncOnlyBlock = false;
+    let generatorsOnlyBlock = false;
 
     for (const line of lines) {
         const trimmed = line.trim();
+
+        if (trimmed === "// @generators-skip-block-start") {
+            skipBlock = variant === "generators";
+            continue;
+        }
+        if (trimmed === "// @generators-skip-block-end") {
+            skipBlock = false;
+            continue;
+        }
 
         // Block-skip markers
         if (trimmed === "// @sync-skip-block-start") {
@@ -104,6 +117,20 @@ function processDirectives(lines: string[]): string[] {
         }
         if (skipBlock) continue;
 
+        if (trimmed === "// @generators-only-start") {
+            generatorsOnlyBlock = true;
+            continue;
+        }
+        if (trimmed === "// @generators-only-end") {
+            generatorsOnlyBlock = false;
+            continue;
+        }
+
+        if (generatorsOnlyBlock) {
+            if (variant === "generators") output.push(uncommentLine(line));
+            continue;
+        }
+
         // Sync-only markers (uncomment block)
         if (trimmed === "// @sync-only-start") {
             syncOnlyBlock = true;
@@ -115,17 +142,11 @@ function processDirectives(lines: string[]): string[] {
         }
 
         if (syncOnlyBlock) {
-            const indent = line.match(/^(\s*)/)![1];
-            const rest = line.slice(indent.length);
-            if (rest.startsWith("// ")) {
-                output.push(indent + rest.slice(3));
-            }
-            else if (rest === "//") {
-                output.push(indent);
-            }
-            else {
-                output.push(line);
-            }
+            output.push(uncommentLine(line));
+            continue;
+        }
+
+        if (variant === "generators" && line.includes("// @generators-skip")) {
             continue;
         }
 
@@ -135,17 +156,35 @@ function processDirectives(lines: string[]): string[] {
         }
 
         // Single-line replacement: // @sync: <replacement>
-        const syncReplaceMatch = line.match(/\/\/ @sync: (.+)$/);
-        if (syncReplaceMatch) {
+        const generatorsReplaceMatch = line.match(/\/\/ @generators: (.+)$/);
+        if (variant === "generators" && generatorsReplaceMatch) {
             const indent = line.match(/^(\s*)/)![1];
+            output.push(indent + generatorsReplaceMatch[1]);
+            continue;
+        }
+
+        const lineWithoutGeneratorsDirective = generatorsReplaceMatch
+            ? line.slice(0, generatorsReplaceMatch.index).trimEnd()
+            : line;
+        const syncReplaceMatch = lineWithoutGeneratorsDirective.match(/\/\/ @sync: (.+)$/);
+        if (syncReplaceMatch) {
+            const indent = lineWithoutGeneratorsDirective.match(/^(\s*)/)![1];
             output.push(indent + syncReplaceMatch[1]);
             continue;
         }
 
-        output.push(line);
+        output.push(lineWithoutGeneratorsDirective);
     }
 
     return output;
+}
+
+function uncommentLine(line: string): string {
+    const indent = line.match(/^(\s*)/)![1];
+    const rest = line.slice(indent.length);
+    if (rest.startsWith("// ")) return indent + rest.slice(3);
+    if (rest === "//") return indent;
+    return line;
 }
 
 // ── AST-based transforms ────────────────────────────────────────
@@ -374,7 +413,10 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         const [method, params] = call.arguments;
         const methodText = getTextWithOwner(method);
         const paramsText = params ? getTextWithOwner(params) : "undefined";
-        return `yield* apiRequest(${methodText}, ${paramsText})`;
+        const request = `yield* apiRequest(${methodText}, ${paramsText})`;
+        return ts.isPropertyAccessExpression(call.expression) && call.expression.name.text === "apiRequestBinary"
+            ? `sourceFileResponseToUint8Array((${request}))`
+            : request;
     }
 
     function getGeneratorCallText(call: ts.CallExpression): string {
@@ -424,7 +466,9 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function isAPIRequestCall(node: ts.Expression): node is ts.CallExpression & { expression: ts.PropertyAccessExpression; } {
-        return ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === "apiRequest";
+        return ts.isCallExpression(node)
+            && ts.isPropertyAccessExpression(node.expression)
+            && (node.expression.name.text === "apiRequest" || node.expression.name.text === "apiRequestBinary");
     }
 
     function getCallExpression(node: ts.Expression): ts.CallExpression | undefined {
@@ -583,15 +627,11 @@ function getIndent(source: string, position: number): string {
 
 // ── Formatting ───────────────────────────────────────────────────
 
-function formatFiles(paths: string[]): void {
-    xSync("dprint", ["fmt", ...paths], { throwOnError: true });
-}
-
 // ── Main ─────────────────────────────────────────────────────────
 
-export function generateSync(): void {
+export function generateSync(force = false): void {
     console.log("Generating sync API from async source...");
-    const generatedFiles: string[] = [];
+    const generatedFiles: (GeneratedFile | undefined)[] = [];
 
     // Source files
     for (const relPath of ["types.ts", "api.ts"]) {
@@ -612,6 +652,7 @@ export function generateSync(): void {
                         "",
                         transformAsyncSource(source, fileName, true),
                     ].join("\n"),
+            force,
         ));
     }
 
@@ -621,14 +662,29 @@ export function generateSync(): void {
             join(TEST, "async", relPath),
             join(TEST, "sync", relPath),
             (source, fileName) => transformAsyncSource(source, fileName, false),
+            force,
         ));
     }
 
+    generatedFiles.push(generateSyncFile(
+        join(TEST, "async", "api.bench.ts"),
+        join(TEST, "generators", "api.bench.ts"),
+        (source, fileName) => transformAsyncSource(source, fileName, false),
+        force,
+        "generators",
+    ));
+
+    const changedFiles = generatedFiles.filter(file => file !== undefined);
+    if (!changedFiles.length) {
+        console.log("Sync API is up to date.");
+        return;
+    }
     console.log("Formatting...");
-    formatFiles(generatedFiles);
+    formatFilesSync(changedFiles.map(file => file.fileName));
+    for (const file of changedFiles) file.markCurrent();
     console.log("Done.");
 }
 
 if (process.argv[1] === import.meta.filename) {
-    generateSync();
+    generateSync(parseGeneratorArgs({}).force);
 }

@@ -350,6 +350,7 @@ type typeRenderer struct {
 	seen               map[*types.TypeName]bool
 	names              map[string]*types.TypeName
 	imports            map[string][]string
+	typeImports        map[string][]string
 	docs               map[types.Object]string
 	packages           map[string]*packages.Package
 	documentIdentifier *types.TypeName
@@ -361,6 +362,7 @@ func newTypeRenderer(apiPackage *packages.Package) *typeRenderer {
 		seen:           make(map[*types.TypeName]bool),
 		names:          make(map[string]*types.TypeName),
 		imports:        make(map[string][]string),
+		typeImports:    make(map[string][]string),
 		docs:           make(map[types.Object]string),
 		packages:       make(map[string]*packages.Package),
 	}
@@ -492,6 +494,19 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case r.apiPackagePath + ".DocumentIdentifier":
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
+	case r.apiPackagePath + ".ResolutionMode":
+		return "ResolutionMode"
+	case r.apiPackagePath + ".EnsurePrograms":
+		return "EnsurePrograms"
+	case r.apiPackagePath + ".SymbolOwnerKind":
+		return r.importType("SymbolOwnerKind", "#enums/symbolOwnerKind")
+	case "github.com/microsoft/TypeScript/tsc/internal/project.ID":
+		r.importTypeOnly("Path", "../ast/index.ts")
+		return "ProjectId"
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.Path":
+		return r.importTypeOnly("Path", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/project.SyntheticProjectID":
+		return "SyntheticProjectId"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":
@@ -502,6 +517,12 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/core.Tristate":
 		return "boolean"
+	case "github.com/microsoft/TypeScript/tsc/internal/core.CompilerOptions":
+		return r.importTypeOnly("CompilerOptions", "./compilerOptions.generated.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/core.PluginImport":
+		return r.importTypeOnly("PluginImport", "./compilerOptions.generated.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.UserPreferences":
+		return r.importTypeOnly(obj.Name(), "./userPreferences.generated.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.JsxEmit":
 		return r.importType("JsxEmit", "#enums/jsxEmit")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleDetectionKind":
@@ -514,6 +535,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importType("NewLineKind", "#enums/newLineKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptTarget":
 		return r.importType("ScriptTarget", "#enums/scriptTarget")
+	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptKind":
+		return r.importType("ScriptKind", "#enums/scriptKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/collections.OrderedMap":
 		if named.TypeArgs().Len() != 2 {
 			return "Record<string, unknown>"
@@ -565,11 +588,14 @@ func (r *typeRenderer) inlineStruct(structType *types.Struct) string {
 	var fields []string
 	multiline := false
 	for i := range structType.NumFields() {
-		field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
-		if !include || deprecated || internal {
+		field, include, optional, nonnil := jsonField(structType, i)
+		if !include {
 			continue
 		}
 		fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
+		if optional {
+			fieldType += " | undefined"
+		}
 		doc := r.docs[structType.Field(i)]
 		multiline = multiline || doc != ""
 		fields = append(fields, fmt.Sprintf("%s%s%s: %s", inlineDoc(doc), propertyName(field), optionalMarker(optional), fieldType))
@@ -597,21 +623,43 @@ func (r *typeRenderer) declarations() (string, error) {
 		writeDoc(&out, "", r.docs[r.documentIdentifier])
 		out.WriteString("export type DocumentIdentifier = string | { uri: string; };\n\n")
 	}
+	out.WriteString("export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;\n\n")
+	out.WriteString("export type EnsurePrograms = true | readonly ProjectId[];\n\n")
+	out.WriteString("export type InferredProjectId = string & { __inferredProjectIdBrand: any; };\n")
+	out.WriteString("export type ConfiguredProjectId = Path & { __configuredProjectIdBrand: any; };\n")
+	out.WriteString("export type SyntheticProjectId = string & { __syntheticProjectIdBrand: any; };\n")
+	out.WriteString("export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProjectId;\n\n")
 	for len(r.queued) > 0 {
 		named := r.queued[0]
 		r.queued = r.queued[1:]
 		structType := named.Underlying().(*types.Struct)
 		isParams := strings.HasSuffix(named.Obj().Name(), "Params")
 		writeDoc(&out, "", r.docs[named.Obj()])
-		fmt.Fprintf(&out, "export interface %s {\n", exportedName(named.Obj().Name()))
+		var embedded []string
+		for field := range structType.Fields() {
+			if field.Embedded() {
+				embedded = append(embedded, r.typeString(field.Type(), false))
+			}
+		}
+		fmt.Fprintf(&out, "export interface %s", exportedName(named.Obj().Name()))
+		if len(embedded) > 0 {
+			fmt.Fprintf(&out, " extends %s", strings.Join(embedded, ", "))
+		}
+		out.WriteString(" {\n")
 		for i := range structType.NumFields() {
-			field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
-			if !include || deprecated || internal {
+			if structType.Field(i).Embedded() {
+				continue
+			}
+			field, include, optional, nonnil := jsonField(structType, i)
+			if !include {
 				continue
 			}
 			fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
 			if isParams && isArrayType(structType.Field(i).Type()) {
 				fieldType = "readonly " + fieldType
+			}
+			if optional {
+				fieldType += " | undefined"
 			}
 			writeDoc(&out, "    ", r.docs[structType.Field(i)])
 			fmt.Fprintf(&out, "    %s%s: %s;\n", propertyName(field), optionalMarker(optional), fieldType)
@@ -647,6 +695,16 @@ func jsDocLine(line string) string {
 
 func (r *typeRenderer) importDeclarations() string {
 	var out bytes.Buffer
+	typePaths := make([]string, 0, len(r.typeImports))
+	for path := range r.typeImports {
+		typePaths = append(typePaths, path)
+	}
+	sort.Strings(typePaths)
+	for _, path := range typePaths {
+		names := r.typeImports[path]
+		sort.Strings(names)
+		fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+	}
 	paths := make([]string, 0, len(r.imports))
 	for path := range r.imports {
 		paths = append(paths, path)
@@ -661,7 +719,15 @@ func (r *typeRenderer) importDeclarations() string {
 	for _, path := range paths {
 		fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(r.imports[path], ", "), path)
 	}
+	out.WriteString("export * from \"./compilerOptions.generated.ts\";\n")
 	return out.String()
+}
+
+func (r *typeRenderer) importTypeOnly(name string, path string) string {
+	if !slices.Contains(r.typeImports[path], name) {
+		r.typeImports[path] = append(r.typeImports[path], name)
+	}
+	return name
 }
 
 func (r *typeRenderer) importType(name string, path string) string {
@@ -682,19 +748,17 @@ func (r *typeRenderer) referencedNames() []string {
 	return names
 }
 
-func jsonField(structType *types.Struct, index int) (name string, include bool, optional bool, nonnil bool, deprecated bool, internal bool) {
+func jsonField(structType *types.Struct, index int) (name string, include bool, optional bool, nonnil bool) {
 	field := structType.Field(index)
 	if !field.Exported() {
-		return "", false, false, false, false, false
+		return "", false, false, false
 	}
 	tag := reflect.StructTag(structType.Tag(index)).Get("json")
 	noniltag := reflect.StructTag(structType.Tag(index)).Get("nonnil")
-	deprecatedtag := reflect.StructTag(structType.Tag(index)).Get("deprecated")
-	internaltag := reflect.StructTag(structType.Tag(index)).Get("internal")
 	parts := strings.Split(tag, ",")
 	name = parts[0]
 	if name == "-" {
-		return "", false, false, noniltag == "true", deprecatedtag == "true", internaltag == "true"
+		return "", false, false, noniltag == "true"
 	}
 	if name == "" {
 		name = field.Name()
@@ -704,7 +768,7 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 			optional = true
 		}
 	}
-	return name, true, optional, noniltag == "true", deprecatedtag == "true", internaltag == "true"
+	return name, true, optional, noniltag == "true"
 }
 
 func exportedName(value string) string {

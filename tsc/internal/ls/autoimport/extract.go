@@ -28,7 +28,7 @@ type symbolExtractor struct {
 
 type exportExtractor struct {
 	*symbolExtractor
-	moduleResolver *module.Resolver
+	moduleResolver *module.DefaultResolver
 }
 
 type extractorStats struct {
@@ -70,7 +70,7 @@ func newSymbolExtractor(packageName string, checker *checker.Checker, toPath fun
 	}
 }
 
-func (b *registryBuilder) newExportExtractor(packageName string, checker *checker.Checker, moduleResolver *module.Resolver, realpath func(string) string) *exportExtractor {
+func (b *registryBuilder) newExportExtractor(packageName string, checker *checker.Checker, moduleResolver *module.DefaultResolver, realpath func(string) string) *exportExtractor {
 	return &exportExtractor{
 		symbolExtractor: newSymbolExtractor(packageName, checker, b.base.toPath, realpath),
 		moduleResolver:  moduleResolver,
@@ -156,7 +156,7 @@ func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 		moduleID := ModuleID(name)
 		var moduleFileName string
 		if tspath.IsExternalModuleNameRelative(name) {
-			if resolved, _ := e.moduleResolver.ResolveModuleName(name, file.FileName(), core.ModuleKindCommonJS, nil); resolved.IsResolved() {
+			if resolved, _, _ := e.moduleResolver.ResolveModuleName(name, file.FileName(), core.ModuleKindCommonJS, nil); resolved.IsResolved() {
 				moduleFileName = resolved.ResolvedFileName
 				moduleID = ModuleID(e.toPath(moduleFileName))
 			} else {
@@ -264,10 +264,8 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 	}
 
 	export := &Export{
-		ExportID: ExportID{
-			ExportName: symbol.Name,
-			ModuleID:   moduleID,
-		},
+		ExportName:     symbol.Name,
+		ModuleID:       moduleID,
 		ModuleFileName: moduleFileName,
 		Syntax:         syntax,
 		Flags:          symbol.CombinedLocalAndExportSymbolFlags(),

@@ -180,10 +180,10 @@ outer();
 `, contentmappertest.PrefixedSupplementalMapper, ".astro")
 	defer done()
 
-	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
 		ReferencesCodeLensEnabled:            core.TSTrue,
 		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
-	}})
+	})
 }
 
 func TestContentMapperDisabledSupplementalCodeLens(t *testing.T) {
@@ -204,10 +204,10 @@ outer();
 `, contentmappertest.PrefixedSupplementalMapper, ".astro")
 	defer done()
 
-	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
 		ReferencesCodeLensEnabled:            core.TSTrue,
 		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
-	}})
+	})
 }
 
 func TestContentMapperDeduplicatesProjectedCodeLens(t *testing.T) {
@@ -228,10 +228,10 @@ outer();
 `, contentmappertest.PrefixedSupplementalMapper, ".astro")
 	defer done()
 
-	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
 		ReferencesCodeLensEnabled:            core.TSTrue,
 		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
-	}})
+	})
 }
 
 func TestContentMapperSupplementalImplementationCodeLens(t *testing.T) {
@@ -255,9 +255,9 @@ class Impl implements Service { run() {} }
 `, contentmappertest.PrefixedSupplementalMapper, ".astro")
 	defer done()
 
-	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
 		ImplementationsCodeLensEnabled: core.TSTrue,
-	}})
+	})
 }
 
 func TestContentMapperFormatsSupplementalVerbatimRange(t *testing.T) {

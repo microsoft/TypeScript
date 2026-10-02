@@ -22,8 +22,8 @@ export interface MyTypeA {
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSFalse}, "import")
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue}, "import")
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSFalse}, "import")
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue}, "import")
 }
 
 func TestRenameNamedImportDefaultInNodeModules(t *testing.T) {
@@ -44,7 +44,7 @@ export interface Foo {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "fooImport")
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue}, "fooImport")
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue}, "fooImport")
 	f.GoToMarker(t, "fooImport")
-	f.VerifyRenameFailed(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSFalse})
+	f.VerifyRenameFailed(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSFalse})
 }

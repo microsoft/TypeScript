@@ -1260,10 +1260,14 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedLabeledStatement(node *a
 // Visits a top-level nested `with` statement as it may contain `var` declarations that are hoisted and may still be
 // exported with `export {}`.
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedWithStatement(node *ast.WithStatement) *ast.Node {
+	statement := tx.topLevelNestedVisitor.VisitEmbeddedStatement(node.Statement)
+	if statement == nil {
+		statement = tx.Factory().NewEmptyStatement()
+	}
 	return tx.Factory().UpdateWithStatement(
 		node,
 		tx.Visitor().VisitNode(node.Expression),
-		tx.topLevelNestedVisitor.VisitEmbeddedStatement(node.Statement),
+		statement,
 	)
 }
 
@@ -1807,7 +1811,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 			needsRewrite = true
 		}
 	}
-	if ast.IsImportCall(node.AsNode()) && tx.shouldTransformImportCall() {
+	if node.Expression.Kind == ast.KindImportKeyword && tx.shouldTransformImportCall() {
 		return tx.visitImportCallExpression(node, needsRewrite)
 	}
 	if needsRewrite {

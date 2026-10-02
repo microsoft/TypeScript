@@ -314,9 +314,8 @@ export class Client implements vscode.Disposable {
             logLevelListener,
             serverTelemetryListener,
             registerSourceDefinitionFeature(this.client),
-            registerOnAutoInsertFeature(this.documentSelector, this.client),
         );
-        // Register the selector-scoped custom providers (hover, multi-document highlight). These start
+        // Register the selector-scoped custom providers (hover, multi-document highlight, on-auto-insert). These start
         // scoped to the static jsTs selector and expand as content-mapped extensions register.
         this.registerSelectorScopedFeatures();
     }
@@ -383,6 +382,7 @@ export class Client implements vscode.Disposable {
         this.selectorScopedFeatures.push(
             registerMultiDocumentHighlightFeature(selector, this.client),
             registerHoverFeature(selector, this.client),
+            registerOnAutoInsertFeature(selector, this.client),
         );
     }
 

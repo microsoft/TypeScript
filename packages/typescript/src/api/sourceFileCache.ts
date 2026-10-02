@@ -1,50 +1,82 @@
+import type { Path } from "../ast/index.ts";
+import type { RemoteSourceFile } from "./node/node.ts";
 import type {
-    Path,
-    SourceFile,
-} from "../ast/index.ts";
-import type { SnapshotChanges } from "./proto.ts";
+    SnapshotChanges,
+    SourceFileDescriptor,
+} from "./proto.ts";
 
 /**
  * Builds a composite ref key from a snapshot ID and project ID.
  */
-function refKey(snapshotId: number, projectId: string): string {
-    return `${snapshotId}:${projectId}`;
+function snapshotRefKey(snapshotId: number, projectId: string): string {
+    return `snapshot:${snapshotId}:${projectId}`;
+}
+
+function leaseRefKey(leaseId: number): string {
+    return `lease:${leaseId}`;
+}
+
+function descriptorFromFile(file: RemoteSourceFile): SourceFileDescriptor {
+    return {
+        fileName: file.fileName,
+        path: file.path,
+        contentHash: file.contentHash,
+        parseOptionsKey: file.parseOptionsKey,
+        scriptKind: file.scriptKind,
+        nodeId: file.nodeId,
+    };
+}
+
+function descriptorsEqual(left: SourceFileDescriptor, right: SourceFileDescriptor): boolean {
+    return left.fileName === right.fileName &&
+        left.path === right.path &&
+        left.contentHash === right.contentHash &&
+        left.parseOptionsKey === right.parseOptionsKey &&
+        left.scriptKind === right.scriptKind &&
+        left.nodeId === right.nodeId;
 }
 
 /**
  * A cached source file entry, identified by content hash.
  */
-export interface CachedSourceFile {
-    /** The cached source file object */
-    file: SourceFile;
-    /** The content hash from the server */
-    contentHash: string;
-    /** The parse options key that was used to create this file */
-    parseOptionsKey: string;
-    /** Set of (snapshot, project) ref keys that reference this entry */
+export interface CachedSourceFile<TSymbol> {
+    /** The cached source file object, once its AST has been requested. */
+    file?: RemoteSourceFile | undefined;
+    /** Complete identity available before an AST response is materialized. */
+    readonly descriptor: SourceFileDescriptor;
+    /** Set of snapshot/project or direct-lease ref keys that reference this entry */
     refs: Set<string>;
+    /** Binder symbols owned by this exact source-file incarnation. */
+    readonly symbolsById: Map<number, TSymbol>;
+    /** Successfully resolved declaration symbols. */
+    readonly symbolsByDeclarationNodeIndex: Map<number, TSymbol>;
+    /** In-flight async declaration symbol lookups. */
+    readonly declarationSymbolRequests: Map<number, Promise<TSymbol>>;
 }
 
 /**
- * Client-side cache for source files keyed by (path, parseOptionsKey, contentHash).
+ * Client-side cache for source files keyed by (path, fileName, scriptKind, parseOptionsKey, contentHash).
  *
  * Supports multiple versions of the same file at the same path (e.g., from
  * different snapshots with different file contents). Each version is identified
- * by its content hash and parse options key.
+ * by its script kind, content hash, and parse options key.
  *
- * Entries are ref-counted by (snapshot, project) pairs. When a snapshot is
- * disposed, all refs for that snapshot across all projects are released,
- * and entries with no remaining references are evicted.
+ * Entries are ref-counted by (snapshot, project) pairs and direct source-file
+ * leases. Releasing an owner evicts entries with no remaining references.
  *
  * When a new snapshot is created, unchanged cache entries from the previous
  * snapshot are retained per-project. Only files within changed or removed
  * projects are invalidated.
  */
-export class SourceFileCache {
+export class SourceFileCache<TSymbol> {
     /** Map from path to all cached versions of that file */
-    private cache: Map<Path, CachedSourceFile[]> = new Map();
+    private cache: Map<Path, CachedSourceFile<TSymbol>[]> = new Map();
     /** Map from snapshotId to (projectId → Set of paths fetched through that project) */
     private snapshotProjectPaths: Map<number, Map<string, Set<Path>>> = new Map();
+    /** Map from direct lease ID to its retained path */
+    private leasePaths: Map<number, Path> = new Map();
+    /** Map from source-file node ID to its record, for resolving compact symbol references */
+    private recordsByNodeId: Map<string, CachedSourceFile<TSymbol>> = new Map();
 
     /**
      * Get a cached source file already retained for the given (snapshot, project) pair.
@@ -55,35 +87,134 @@ export class SourceFileCache {
      * A given (snapshot, project) pair always parses a file the same way, so there is
      * at most one matching entry per ref.
      */
-    getRetained(path: Path, snapshotId: number, projectId: string): SourceFile | undefined {
+    getRetained(path: Path, snapshotId: number, projectId: string): RemoteSourceFile | undefined {
         const entries = this.cache.get(path);
         if (!entries) return undefined;
-        const key = refKey(snapshotId, projectId);
+        const key = snapshotRefKey(snapshotId, projectId);
         const entry = entries.find(e => e.refs.has(key));
         return entry?.file;
+    }
+
+    get(file: RemoteSourceFile): RemoteSourceFile | undefined {
+        return this.find(file)?.file;
+    }
+
+    getOrCreateRecord(file: SourceFileDescriptor, snapshotId: number, projectId: string): CachedSourceFile<TSymbol> {
+        let entries = this.cache.get(file.path);
+        if (!entries) {
+            entries = [];
+            this.cache.set(file.path, entries);
+        }
+        let record = this.findDescriptor(file, entries);
+        if (!record) {
+            record = this.addRecord(entries, {
+                descriptor: file,
+                refs: new Set(),
+                symbolsById: new Map(),
+                symbolsByDeclarationNodeIndex: new Map(),
+                declarationSymbolRequests: new Map(),
+            });
+        }
+        this.retainRecordForSnapshot(record, snapshotId, projectId);
+        return record;
+    }
+
+    /** Find the live record for a source-file node ID without creating or retaining one. */
+    findRecord(nodeId: string): CachedSourceFile<TSymbol> | undefined {
+        return this.recordsByNodeId.get(nodeId);
+    }
+
+    /** Retain an existing record for a snapshot/project that reused one of its cached objects. */
+    retainRecord(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: string): void {
+        if (this.recordsByNodeId.get(record.descriptor.nodeId) !== record) {
+            throw new Error(`Source file record '${record.descriptor.fileName}' is no longer cached`);
+        }
+        this.retainRecordForSnapshot(record, snapshotId, projectId);
+    }
+
+    /** Attach a source file fetched by its descriptor to its existing record. */
+    attachFile(record: CachedSourceFile<TSymbol>, file: RemoteSourceFile): RemoteSourceFile {
+        if (!descriptorsEqual(descriptorFromFile(file), record.descriptor)) {
+            throw new Error(`Source file does not match cached record '${record.descriptor.fileName}'`);
+        }
+        const result = record.file ??= file;
+        result.symbolCache = record;
+        return result;
+    }
+
+    getOrCreateSymbol(record: CachedSourceFile<TSymbol>, file: SourceFileDescriptor, id: number, create: () => TSymbol): TSymbol {
+        if (!descriptorsEqual(file, record.descriptor)) {
+            throw new Error(`Symbol ${id} does not belong to '${record.descriptor.fileName}'`);
+        }
+        let symbol = record.symbolsById.get(id);
+        if (!symbol) {
+            symbol = create();
+            record.symbolsById.set(id, symbol);
+        }
+        return symbol;
     }
 
     /**
      * Store a source file in the cache and retain it for the given (snapshot, project) pair.
      * Returns the cached file — which may be an existing entry if the hash matches.
      */
-    set(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, snapshotId: number, projectId: string): SourceFile {
-        let entries = this.cache.get(path);
+    set(file: RemoteSourceFile, snapshotId: number, projectId: string): RemoteSourceFile {
+        const result = this.setWithRef(file, snapshotRefKey(snapshotId, projectId));
+        this.trackPath(snapshotId, projectId, file.path);
+        return result;
+    }
+
+    /**
+     * Store a source file in the cache and retain it for a direct lease.
+     * Returns the cached file so leased and program-owned files share identity.
+     */
+    setForLease(file: RemoteSourceFile, leaseId: number): RemoteSourceFile {
+        if (this.leasePaths.has(leaseId)) {
+            throw new Error(`Source file lease ${leaseId} is already cached`);
+        }
+        const result = this.setWithRef(file, leaseRefKey(leaseId));
+        this.leasePaths.set(leaseId, file.path);
+        return result;
+    }
+
+    private setWithRef(file: RemoteSourceFile, ref: string): RemoteSourceFile {
+        let entries = this.cache.get(file.path);
         if (!entries) {
             entries = [];
-            this.cache.set(path, entries);
+            this.cache.set(file.path, entries);
         }
-        const ref = refKey(snapshotId, projectId);
-        // Check if we already have this exact version
-        const existing = entries.find(e => e.parseOptionsKey === parseOptionsKey && e.contentHash === contentHash);
-        if (existing) {
-            existing.refs.add(ref);
-            this.trackPath(snapshotId, projectId, path);
-            return existing.file;
+        let record = this.find(file, entries);
+        if (!record) {
+            record = (file.symbolCache as CachedSourceFile<TSymbol> | undefined) ?? {
+                descriptor: descriptorFromFile(file),
+                refs: new Set(),
+                symbolsById: new Map(),
+                symbolsByDeclarationNodeIndex: new Map(),
+                declarationSymbolRequests: new Map(),
+            };
+            this.addRecord(entries, record);
         }
-        entries.push({ file, contentHash, parseOptionsKey, refs: new Set([ref]) });
-        this.trackPath(snapshotId, projectId, path);
-        return file;
+        record.refs.add(ref);
+        return this.attachFile(record, file);
+    }
+
+    private addRecord(entries: CachedSourceFile<TSymbol>[], record: CachedSourceFile<TSymbol>): CachedSourceFile<TSymbol> {
+        entries.push(record);
+        this.recordsByNodeId.set(record.descriptor.nodeId, record);
+        return record;
+    }
+
+    private retainRecordForSnapshot(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: string): void {
+        record.refs.add(snapshotRefKey(snapshotId, projectId));
+        this.trackPath(snapshotId, projectId, record.descriptor.path);
+    }
+
+    private find(file: RemoteSourceFile, entries = this.cache.get(file.path)): CachedSourceFile<TSymbol> | undefined {
+        return this.findDescriptor(descriptorFromFile(file), entries);
+    }
+
+    private findDescriptor(file: SourceFileDescriptor, entries = this.cache.get(file.path)): CachedSourceFile<TSymbol> | undefined {
+        return entries?.find(entry => descriptorsEqual(entry.descriptor, file));
     }
 
     /**
@@ -97,7 +228,7 @@ export class SourceFileCache {
         const prevProjectMap = this.snapshotProjectPaths.get(previousSnapshotId);
         if (!prevProjectMap) return;
 
-        const removedProjects = new Set(changes?.removedProjects ?? []);
+        const removedProjects = new Set<string>(changes?.removedProjects ?? []);
         const changedProjects = changes?.changedProjects ?? {};
 
         for (const [projectId, paths] of prevProjectMap) {
@@ -111,8 +242,8 @@ export class SourceFileCache {
                 for (const p of projectChanges.deletedFiles ?? []) invalidPaths.add(p);
             }
 
-            const prevRef = refKey(previousSnapshotId, projectId);
-            const newRef = refKey(newSnapshotId, projectId);
+            const prevRef = snapshotRefKey(previousSnapshotId, projectId);
+            const newRef = snapshotRefKey(newSnapshotId, projectId);
 
             for (const path of paths) {
                 if (invalidPaths?.has(path)) continue;
@@ -137,22 +268,36 @@ export class SourceFileCache {
         const projectMap = this.snapshotProjectPaths.get(snapshotId);
         if (!projectMap) return;
         for (const [projectId, paths] of projectMap) {
-            const key = refKey(snapshotId, projectId);
+            const key = snapshotRefKey(snapshotId, projectId);
             for (const path of paths) {
-                const entries = this.cache.get(path);
-                if (!entries) continue;
-                for (let i = entries.length - 1; i >= 0; i--) {
-                    entries[i].refs.delete(key);
-                    if (entries[i].refs.size === 0) {
-                        entries.splice(i, 1);
-                    }
-                }
-                if (entries.length === 0) {
-                    this.cache.delete(path);
-                }
+                this.releaseRef(path, key);
             }
         }
         this.snapshotProjectPaths.delete(snapshotId);
+    }
+
+    releaseLease(leaseId: number): void {
+        const path = this.leasePaths.get(leaseId);
+        if (path === undefined) return;
+        this.releaseRef(path, leaseRefKey(leaseId));
+        this.leasePaths.delete(leaseId);
+    }
+
+    private releaseRef(path: Path, ref: string): void {
+        const entries = this.cache.get(path);
+        if (!entries) return;
+        for (let i = entries.length - 1; i >= 0; i--) {
+            entries[i].refs.delete(ref);
+            if (entries[i].refs.size === 0) {
+                const [evicted] = entries.splice(i, 1);
+                if (this.recordsByNodeId.get(evicted.descriptor.nodeId) === evicted) {
+                    this.recordsByNodeId.delete(evicted.descriptor.nodeId);
+                }
+            }
+        }
+        if (entries.length === 0) {
+            this.cache.delete(path);
+        }
     }
 
     private trackPath(snapshotId: number, projectId: string, path: Path): void {
@@ -170,11 +315,18 @@ export class SourceFileCache {
     }
 
     /**
-     * Clear all entries from the cache.
+     * Drop local cache ownership without releasing server-side snapshots or leases.
+     * Caller-held ASTs may keep detached records alive; newly cached records need not
+     * preserve object identity with those detached records.
      */
     clear(): void {
+        for (const record of this.recordsByNodeId.values()) {
+            record.refs.clear();
+        }
         this.cache.clear();
         this.snapshotProjectPaths.clear();
+        this.leasePaths.clear();
+        this.recordsByNodeId.clear();
     }
 
     /**

@@ -19,6 +19,8 @@ import (
 
 func TestEncodeSourceFile(t *testing.T) {
 	t.Parallel()
+	assert.Equal(t, encoder.HeaderSize, 64)
+	assert.Equal(t, encoder.NodeSize, 28)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
 		Path:     "/test.ts",
@@ -37,8 +39,8 @@ func TestEncodeSourceFile(t *testing.T) {
 
 func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	t.Parallel()
-	if encoder.ProtocolVersion != 8 {
-		t.Fatalf("protocol version = %d, want 8", encoder.ProtocolVersion)
+	if encoder.ProtocolVersion != 9 {
+		t.Fatalf("protocol version = %d, want 9", encoder.ProtocolVersion)
 	}
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/component.vue",

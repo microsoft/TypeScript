@@ -73,13 +73,11 @@ func (m *Map[K, V]) Get(key K) (*MapEntry[K, V], bool) {
 		return nil, false
 	}
 	return &MapEntry[K, V]{
-		m: m,
-		mapEntry: mapEntry[K, V]{
-			key:      key,
-			original: value,
-			value:    value,
-			dirty:    false,
-		},
+		m:        m,
+		key:      key,
+		original: value,
+		value:    value,
+		dirty:    false,
 	}, true
 }
 
@@ -90,12 +88,10 @@ func (m *Map[K, V]) Get(key K) (*MapEntry[K, V], bool) {
 // exist in the base map, use `Change` instead.
 func (m *Map[K, V]) Add(key K, value V) {
 	m.dirty[key] = &MapEntry[K, V]{
-		m: m,
-		mapEntry: mapEntry[K, V]{
-			key:   key,
-			value: value,
-			dirty: true,
-		},
+		m:     m,
+		key:   key,
+		value: value,
+		dirty: true,
 	}
 }
 
@@ -133,12 +129,13 @@ func (m *Map[K, V]) Range(fn func(*MapEntry[K, V]) bool) {
 		if _, ok := seenInDirty[key]; ok {
 			continue // already processed in dirty entries
 		}
-		if !fn(&MapEntry[K, V]{m: m, mapEntry: mapEntry[K, V]{
+		if !fn(&MapEntry[K, V]{
+			m:        m,
 			key:      key,
 			original: value,
 			value:    value,
 			dirty:    false,
-		}}) {
+		}) {
 			break
 		}
 	}

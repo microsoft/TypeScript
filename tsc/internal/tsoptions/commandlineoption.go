@@ -2,7 +2,6 @@ package tsoptions
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
-	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
 
@@ -41,27 +40,6 @@ type CommandLineOption struct {
 	// checks that option with number type has value >= minValue
 	minValue int
 
-	// true or undefined
-	// used for configDirTemplateSubstitutionOptions
-	allowConfigDirTemplateSubstitution bool
-
-	// used for filter in compilerrunner
-	AffectsDeclarationPath     bool
-	AffectsProgramStructure    bool
-	AffectsSemanticDiagnostics bool
-	AffectsBuildInfo           bool
-	AffectsBindDiagnostics     bool
-	AffectsSourceFile          bool
-	AffectsModuleResolution    bool
-	AffectsEmit                bool
-
-	allowJsFlag bool
-	strictFlag  bool
-
-	// used in transpileoptions worker
-	// todo: revisit to see if this can be reduced to boolean
-	transpileOptionValue core.Tristate
-
 	// used for CommandLineOptionTypeList
 	listPreserveFalsyValues bool
 	// used for compilerOptionsDeclaration
@@ -70,11 +48,7 @@ type CommandLineOption struct {
 
 type extraValidation string
 
-const (
-	extraValidationNone   extraValidation = ""
-	extraValidationSpec   extraValidation = "spec"
-	extraValidationLocale extraValidation = "locale"
-)
+const extraValidationLocale extraValidation = "locale"
 
 func (o *CommandLineOption) DeprecatedKeys() *collections.Set[string] {
 	if o.Kind != CommandLineOptionTypeEnum {
@@ -99,105 +73,6 @@ func (o *CommandLineOption) Elements() *CommandLineOption {
 
 func (o *CommandLineOption) DisallowNullOrUndefined() bool {
 	return o.Name == "extends"
-}
-
-// CommandLineOption.Elements()
-var commandLineOptionElements = map[string]*CommandLineOption{
-	"lib": {
-		Name:                    "lib",
-		Kind:                    CommandLineOptionTypeEnum, // libMap,
-		DefaultValueDescription: core.TSUnknown,
-	},
-	"rootDirs": {
-		Name:       "rootDirs",
-		Kind:       CommandLineOptionTypeString,
-		IsFilePath: true,
-	},
-	"typeRoots": {
-		Name:       "typeRoots",
-		Kind:       CommandLineOptionTypeString,
-		IsFilePath: true,
-	},
-	"types": {
-		Name: "types",
-		Kind: CommandLineOptionTypeString,
-	},
-	"moduleSuffixes": {
-		Name: "moduleSuffixes",
-		Kind: CommandLineOptionTypeString,
-	},
-	"customConditions": {
-		Name: "condition",
-		Kind: CommandLineOptionTypeString,
-	},
-	"plugins": {
-		Name: "plugin",
-		Kind: CommandLineOptionTypeObject,
-	},
-	// For tsconfig root options
-	"references": {
-		Name: "references",
-		Kind: CommandLineOptionTypeObject,
-	},
-	"contentMappers": {
-		Name: "contentMappers",
-		Kind: CommandLineOptionTypeObject,
-	},
-	"files": {
-		Name: "files",
-		Kind: CommandLineOptionTypeString,
-	},
-	"include": {
-		Name: "include",
-		Kind: CommandLineOptionTypeString,
-	},
-	"exclude": {
-		Name: "exclude",
-		Kind: CommandLineOptionTypeString,
-	},
-	"extends": {
-		Name: "extends",
-		Kind: CommandLineOptionTypeString,
-	},
-	// For Watch options
-	"excludeDirectories": {
-		Name:            "excludeDirectory",
-		Kind:            CommandLineOptionTypeString,
-		IsFilePath:      true,
-		extraValidation: extraValidationSpec,
-	},
-	"excludeFiles": {
-		Name:            "excludeFile",
-		Kind:            CommandLineOptionTypeString,
-		IsFilePath:      true,
-		extraValidation: extraValidationSpec,
-	},
-	// Test infra options
-	"libFiles": {
-		Name: "libFiles",
-		Kind: CommandLineOptionTypeString,
-	},
-}
-
-// CommandLineOption.EnumMap()
-var commandLineOptionEnumMap = map[string]*collections.OrderedMap[string, any]{
-	"lib":              LibMap,
-	"moduleResolution": moduleResolutionOptionMap,
-	"module":           moduleOptionMap,
-	"target":           targetOptionMap,
-	"moduleDetection":  moduleDetectionOptionMap,
-	"jsx":              jsxOptionMap,
-	"newLine":          newLineOptionMap,
-	"watchFile":        watchFileEnumMap,
-	"watchDirectory":   watchDirectoryEnumMap,
-	"fallbackPolling":  fallbackEnumMap,
-}
-
-// CommandLineOption.DeprecatedKeys()
-var commandLineOptionDeprecated = map[string]*collections.Set[string]{
-	"module":           collections.NewSetFromItems("none", "amd", "system", "umd"),
-	"moduleResolution": collections.NewSetFromItems("node", "classic", "node10"),
-	"target":           collections.NewSetFromItems("es5"),
 }
 
 // todo: revisit to see if this can be improved

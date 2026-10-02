@@ -117,18 +117,18 @@ func (c *compilerHost) GetContentMappedSourceFiles(parseOptions ast.SourceFilePa
 		return contentmapper.SourceFiles{}, nil
 	}
 	diagnosticLocale := locale.FromContext(c.builder.ctx)
-	c.ensureContentMapperProject()
-	if c.contentMapperProject == nil {
+	project := c.ContentMapperProject()
+	if project == nil {
 		return contentmapper.SourceFiles{}, contentmapper.ErrProjectUnavailable
 	}
-	identity, err := c.contentMapperProject.Identity(mapper)
+	identity, err := project.Identity(mapper)
 	if err != nil {
 		return contentmapper.SourceFiles{}, contentmapper.NewTransformError(contentmapper.TransformErrorKindProject, err)
 	}
 	transformIdentity := xxh3.Hash128([]byte(identity))
 	key := contentMappedParseCacheKey(parseOptions, fh.Hash(), transformIdentity, diagnosticLocale)
 	files, err := c.builder.contentMappedParseCache.AcquireOrError(key, func() (contentmapper.SourceFiles, error) {
-		files, transformErr := contentmapper.TransformAndParse(parseOptions, fh.Content(), mapper, c.contentMapperProject)
+		files, transformErr := contentmapper.TransformAndParse(parseOptions, fh.Content(), mapper, project)
 		if transformErr != nil {
 			return contentmapper.SourceFiles{}, transformErr
 		}
@@ -150,21 +150,21 @@ func (c *compilerHost) GetContentMappedSourceFiles(parseOptions ast.SourceFilePa
 	return files, err
 }
 
-func (c *compilerHost) ensureContentMapperProject() {
+func (c *compilerHost) ContentMapperProject() contentmapper.Project {
 	c.contentMapperOnce.Do(func() {
-		if c.builder.contentMapperHost == nil {
+		if c.builder == nil || c.builder.contentMapperHost == nil {
 			return
 		}
 		commandLine := c.project.getCommandLineWithTypingsFiles()
+		if len(commandLine.ContentMappers()) == 0 {
+			return
+		}
 		c.contentMapperProject = c.builder.contentMapperHost.Project(contentmapper.ProjectSpec{
 			ConfigFileName:  commandLine.ConfigName(),
 			Mappers:         commandLine.ContentMappers(),
 			CompilerOptions: commandLine.CompilerOptions(),
 		})
 	})
-}
-
-func (c *compilerHost) ContentMapperProject() contentmapper.Project {
 	return c.contentMapperProject
 }
 

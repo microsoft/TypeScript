@@ -2133,7 +2133,7 @@ func (node *CallExpression) computeSubtreeFacts() SubtreeFacts {
 		propagateSubtreeFacts(node.QuestionDotToken) |
 		propagateEraseableSyntaxListSubtreeFacts(node.TypeArguments) |
 		propagateNodeListSubtreeFacts(node.Arguments, propagateSubtreeFacts) |
-		core.IfElse(node.Expression.Kind == KindImportKeyword, SubtreeContainsDynamicImport, SubtreeFactsNone)
+		core.IfElse(IsImportCall(node.AsNode()), SubtreeContainsDynamicImport, SubtreeFactsNone)
 }
 
 func (node *CallExpression) propagateSubtreeFacts() SubtreeFacts {
@@ -2401,15 +2401,15 @@ func NewSourceFileDataKey[T any]() *SourceFileDataKey[T] {
 	return &SourceFileDataKey[T]{key: sourceFileDataKey(sourceFileDataKeyCounter.Add(1))}
 }
 
-func GetOrComputeSourceFileData[T any](file *SourceFile, key *SourceFileDataKey[T], compute func(*SourceFile) T) T {
-	cell := getSourceFileDataCell(file, key)
+func (file *SourceFile) GetOrComputeData[T any](key *SourceFileDataKey[T], compute func(*SourceFile) T) T {
+	cell := file.getDataCell(key)
 	cell.once.Do(func() {
 		cell.value = compute(file)
 	})
 	return cell.value
 }
 
-func getSourceFileDataCell[T any](file *SourceFile, key *SourceFileDataKey[T]) *sourceFileDataCell[T] {
+func (file *SourceFile) getDataCell[T any](key *SourceFileDataKey[T]) *sourceFileDataCell[T] {
 	if key == nil || key.key == 0 {
 		panic("invalid SourceFileDataKey; use NewSourceFileDataKey")
 	}
@@ -2568,6 +2568,11 @@ func (node *SourceFile) SpanMap() *spanmap.SpanMap {
 		return nil
 	}
 	return node.contentMapperInfo.SpanMap
+}
+
+// IsContentMapped reports whether this file was produced by a content mapper.
+func (node *SourceFile) IsContentMapped() bool {
+	return node.contentMapperInfo != nil
 }
 
 // ContentMapper returns the identity of the content mapper that produced this file, or "" if the file

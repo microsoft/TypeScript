@@ -285,12 +285,10 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 			if previousCharacter == '[' && currentCharacter == '|' {
 				// found a range start
 				openRanges = append(openRanges, rangeLocationInformation{
-					locationInformation: locationInformation{
-						position:       (i - 1) - difference,
-						sourcePosition: i - 1,
-						sourceLine:     line,
-						sourceColumn:   column,
-					},
+					position:       (i - 1) - difference,
+					sourcePosition: i - 1,
+					sourceLine:     line,
+					sourceColumn:   column,
 				})
 				// copy all text up to marker position
 				flush(i - 1)

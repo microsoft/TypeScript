@@ -13,7 +13,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
@@ -29,7 +28,7 @@ func (l *LanguageService) ProvideSourceDefinition(
 	position lsproto.Position,
 ) (lsproto.DefinitionResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureDefinition)
+	positions := l.converters.FromLSPPositionForSourceFile(file, position, spanmap.FeatureDefinition)
 	results := make([]lsproto.DefinitionResponse, 0, len(positions))
 	for _, mapped := range positions {
 		if mapped.Fidelity.IsSingleSegment() {
@@ -68,9 +67,13 @@ func (l *LanguageService) provideSourceDefinitionAtPosition(
 
 	originSelectionRange, _ := l.createLspRangeFromNode(node, file)
 
+	containingModuleSpecifier := findContainingModuleSpecifier(node)
+	if containingModuleSpecifier != nil && ast.IsSourcePhaseImport(containingModuleSpecifier.Parent) {
+		return l.provideDefinitionAtPosition(ctx, program, file, textPos, clientSupportsLink), nil
+	}
+
 	// If the cursor is directly on a module specifier string, resolve to the
 	// implementation file's entry point.
-	containingModuleSpecifier := findContainingModuleSpecifier(node)
 	if node == containingModuleSpecifier {
 		specifierMode := program.GetModeForUsageLocation(file, containingModuleSpecifier)
 		if implementationFile := resolver.resolveImplementation(containingModuleSpecifier.Text(), specifierMode); implementationFile != "" {
@@ -136,7 +139,7 @@ type sourceDefResolver struct {
 	options       *core.CompilerOptions
 	getSourceFile func(string) *ast.SourceFile
 	resolveFrom   string
-	resolver      *module.Resolver
+	resolver      *module.DefaultResolver
 	parsedFiles   map[string]*ast.SourceFile
 }
 
@@ -153,7 +156,12 @@ func (l *LanguageService) newSourceDefResolver(
 		options:       options,
 		getSourceFile: program.GetSourceFile,
 		resolveFrom:   resolveFrom,
-		resolver:      module.NewResolver(program.Host(), noDtsOptions, program.GetGlobalTypingsCacheLocation(), "", program.CommandLine().ContentMapperExtensions()),
+		resolver: module.NewResolver(module.ResolverOptions{
+			Host:            program.Host(),
+			CompilerOptions: noDtsOptions,
+			TypingsLocation: program.GetGlobalTypingsCacheLocation(),
+			ExtraExtensions: program.CommandLine().ContentMapperExtensions(),
+		}),
 	}
 }
 
@@ -423,7 +431,7 @@ func (r *sourceDefResolver) resolveImplementationFrom(
 	}
 
 	for _, mode := range modes {
-		resolved, _ := r.resolver.ResolveModuleName(moduleName, resolveFromFile, mode, nil)
+		resolved, _, _ := r.resolver.ResolveModuleName(moduleName, resolveFromFile, mode, nil)
 		if resolved != nil && resolved.IsResolved() && !tspath.IsDeclarationFileName(resolved.ResolvedFileName) {
 			return resolved.ResolvedFileName
 		}

@@ -90,6 +90,7 @@ export interface Node extends ReadonlyTextRange {
     readonly flags: NodeFlags;
     readonly parent: Node;
     readonly jsDoc?: readonly Node[] | undefined;
+    childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext>;
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
     getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;

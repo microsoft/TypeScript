@@ -23,11 +23,13 @@ type fakeCloneHost struct {
 
 func (h *fakeCloneHost) FS() vfs.FS                  { return h.fs }
 func (h *fakeCloneHost) GetCurrentDirectory() string { return "/" }
-func (h *fakeCloneHost) GetDefaultProject(path tspath.Path) (tspath.Path, *compiler.Program) {
-	return "", nil
+func (h *fakeCloneHost) GetDefaultProject(path tspath.Path) (ProjectID, *compiler.Program) {
+	return nil, nil
 }
 
-func (h *fakeCloneHost) GetProgramForProject(projectPath tspath.Path) *compiler.Program { return nil }
+func (h *fakeCloneHost) GetProgramForProject(projectID ProjectID) *compiler.Program {
+	return nil
+}
 
 func (h *fakeCloneHost) GetPackageJson(fileName string) *packagejson.InfoCacheEntry { return nil }
 
@@ -56,7 +58,7 @@ func TestAliasResolverGetDiagnosticsDoesNotPanic(t *testing.T) {
 	}, text, core.ScriptKindTS)
 	binder.BindSourceFile(sourceFile)
 
-	resolver := module.NewResolver(host, core.EmptyCompilerOptions, "", "", nil)
+	resolver := module.NewResolver(module.ResolverOptions{Host: host, CompilerOptions: core.EmptyCompilerOptions})
 	r := newAliasResolver(
 		[]*ast.SourceFile{sourceFile},
 		nil,

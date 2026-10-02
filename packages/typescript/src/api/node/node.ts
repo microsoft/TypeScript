@@ -12,6 +12,9 @@ import {
     SyntaxKind,
     TokenFlags,
 } from "../../ast/index.ts";
+import type { API as AsyncAPI } from "../async/api.ts";
+import type { CachedSourceFile } from "../sourceFileCache.ts";
+import type { API as SyncAPI } from "../sync/api.ts";
 import type { TimingCollector } from "../timing.ts";
 import { MsgpackReader } from "./msgpack.ts";
 import {
@@ -20,6 +23,9 @@ import {
 } from "./node.generated.ts";
 import {
     NODE_EXTENDED_DATA_MASK,
+    readParseOptionsKey,
+    readSourceFileHash,
+    readSourceFileNodeId,
     type SourceFileInfo,
     type TextDecoder,
 } from "./node.infrastructure.ts";
@@ -38,7 +44,7 @@ import { Wtf8Decoder } from "./wtf8.ts";
 
 // Re-export everything consumers need from the other two files.
 export { RemoteNode, RemoteNodeList } from "./node.generated.ts";
-export { readParseOptionsKey, readSourceFileHash, RemoteNodeBase } from "./node.infrastructure.ts";
+export { readParseOptionsKey, readSourceFileHash, readSourceFileLease, readSourceFileNodeId, RemoteNodeBase } from "./node.infrastructure.ts";
 
 const sourceFileExtendedDataOffsets = {
     Text: 0,
@@ -75,6 +81,8 @@ for (const [index, offset] of Object.values(sourceFileExtendedDataOffsets).entri
 const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
+    readonly api: AsyncAPI<boolean> | SyncAPI<boolean> | undefined;
+    symbolCache: CachedSourceFile<unknown> | undefined;
     readonly nodes: (RemoteNode | RemoteNodeList)[];
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
@@ -97,7 +105,12 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
     private _diagnosticDirectivesRead = false;
 
-    constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector) {
+    constructor(
+        data: Uint8Array,
+        decoder: TextDecoder,
+        timing?: TimingCollector,
+        api?: AsyncAPI<boolean> | SyncAPI<boolean> | undefined,
+    ) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
         super(view, 1, undefined!, undefined!, offsetNodes);
@@ -109,11 +122,27 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
         this._decoder = decoder;
         this._timing = timing;
+        this.api = api;
         this.nodes = Array((view.byteLength - offsetNodes) / NODE_LEN);
         this.nodes[1] = this;
         // Every node slot is materializable on demand except the nil sentinel at
         // index 0 and the source-file node at index 1, which is pre-materialized.
         timing?.recordSourceFileFetched(Math.max(0, this.nodes.length - 2));
+    }
+
+    /** @internal */
+    get contentHash(): string {
+        return readSourceFileHash(this.view);
+    }
+
+    /** @internal */
+    get parseOptionsKey(): string {
+        return readParseOptionsKey(this.view);
+    }
+
+    /** @internal */
+    get nodeId(): string {
+        return readSourceFileNodeId(this.view);
     }
 
     readFileReferences(structuredDataOffset: number): readonly FileReference[] {
@@ -201,9 +230,9 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         return this.getString(stringIndex);
     }
 
-    get path(): string {
+    get path(): Path {
         const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Path, true);
-        return this.getString(stringIndex);
+        return this.getString(stringIndex) as Path;
     }
 
     get languageVariant(): number {

@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 	"testing"
@@ -115,8 +116,8 @@ func TestCallbackASMTouchesOnlySafeRegisters(t *testing.T) {
 		fields := strings.Split(line, "\t")
 		// Find the rightmost non-empty field: the instruction text.
 		var inst string
-		for i := len(fields) - 1; i >= 0; i-- {
-			if f := strings.TrimSpace(fields[i]); f != "" {
+		for _, field := range slices.Backward(fields) {
+			if f := strings.TrimSpace(field); f != "" {
 				inst = f
 				break
 			}

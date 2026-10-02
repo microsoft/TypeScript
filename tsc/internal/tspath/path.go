@@ -201,6 +201,17 @@ func GetEncodedRootLength(path string) int {
 
 	// Untitled paths (e.g., "^/untitled/ts-nul-authority/Untitled-1")
 	if ch0 == '^' && ln > 1 && path[1] == '/' {
+		if strings.HasPrefix(path, DynamicURIFileNamePrefix) {
+			schemeEnd := strings.IndexByte(path[len(DynamicURIFileNamePrefix):], '/')
+			if schemeEnd != -1 {
+				schemeEnd += len(DynamicURIFileNamePrefix)
+				authorityEnd := strings.IndexByte(path[schemeEnd+1:], '/')
+				if authorityEnd != -1 {
+					return schemeEnd + authorityEnd + 2
+				}
+				return ln
+			}
+		}
 		return 2 // Untitled: "^/"
 	}
 
@@ -217,7 +228,10 @@ func GetEncodedRootLength(path string) int {
 			// special case interpreted as "the machine from which the URL is being interpreted".
 			scheme := path[:schemeEnd]
 			authority := path[authorityStart:authorityEnd]
-			if scheme == "file" && (authority == "" || authority == "localhost") && (len(path) > authorityEnd+2) && IsVolumeCharacter(path[authorityEnd+1]) {
+			if stringutil.EquateStringCaseInsensitive(scheme, "file") &&
+				(authority == "" || stringutil.EquateStringCaseInsensitive(authority, "localhost")) &&
+				(len(path) > authorityEnd+2) &&
+				IsVolumeCharacter(path[authorityEnd+1]) {
 				volumeSeparatorEnd := getFileUrlVolumeSeparatorEnd(path, authorityEnd+2)
 				if volumeSeparatorEnd != -1 {
 					if volumeSeparatorEnd == len(path) {
@@ -727,6 +741,9 @@ func ToPath(fileName string, basePath string, useCaseSensitiveFileNames bool) Pa
 	} else {
 		nonCanonicalizedPath = GetNormalizedAbsolutePath(fileName, basePath)
 	}
+	if IsEncodedDynamicFileName(nonCanonicalizedPath) {
+		return Path(canonicalDynamicURIPath(nonCanonicalizedPath))
+	}
 	return Path(GetCanonicalFileName(nonCanonicalizedPath, useCaseSensitiveFileNames))
 }
 
@@ -1130,8 +1147,8 @@ func ForEachAncestorDirectory[T any](directory string, callback func(directory s
 	}
 }
 
-func ForEachAncestorDirectoryPath[T any](directory Path, callback func(directory Path) (result T, stop bool)) (result T, ok bool) {
-	return ForEachAncestorDirectory(string(directory), func(directory string) (T, bool) {
+func (p Path) ForEachAncestorDirectory[T any](callback func(directory Path) (result T, stop bool)) (result T, ok bool) {
+	return ForEachAncestorDirectory(string(p), func(directory string) (T, bool) {
 		return callback(Path(directory))
 	})
 }
@@ -1237,7 +1254,11 @@ func getCommonParentsWorker(componentGroups [][]string, minComponents int, optio
 						group := newGroups[key]
 						subResults := getCommonParentsWorker(group.tails, minComponents-(lastCommonIndex+1), options)
 						for _, sr := range subResults {
-							result = append(result, append(group.head, sr...))
+							if len(sr) == 0 {
+								result = append(result, slices.Clip(group.head))
+							} else {
+								result = append(result, slices.Concat(group.head, sr))
+							}
 						}
 					}
 					return result
