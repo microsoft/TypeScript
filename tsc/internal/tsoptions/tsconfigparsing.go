@@ -1299,7 +1299,6 @@ func parseJsonConfigFileContentWorker(
 	}
 	seenContentMapperExtensions := make(map[string]struct{}, totalContentMapperExtensions)
 	contentMapperExtensions := make([]string, 0, totalContentMapperExtensions)
-	nativeExtensions := core.Flatten(tspath.AllSupportedExtensionsWithJson)
 	canonicalExtension := func(extension string) string {
 		return fs.CaseSensitivity().Canonicalize(extension)
 	}
@@ -1311,9 +1310,9 @@ func parseJsonConfigFileContentWorker(
 			switch {
 			case !strings.HasPrefix(ext, "."):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_must_begin_with_a, ext), contentMapperSourceFile, extNode))
-			case slices.ContainsFunc(nativeExtensions, func(nativeExtension string) bool {
-				return strings.EqualFold(nativeExtension, ext)
-			}):
+			case strings.ContainsAny(ext, "/\\"):
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, ext), contentMapperSourceFile, extNode))
+			case contentmapper.HasReservedSourceExtension(ext):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper, ext), contentMapperSourceFile, extNode))
 			default:
 				if _, seen := seenContentMapperExtensions[canonicalExt]; seen {
@@ -1326,6 +1325,25 @@ func parseJsonConfigFileContentWorker(
 			}
 		}
 		mapper.Definition.Extensions = validExtensions
+		for _, sourceExtension := range slices.Sorted(maps.Keys(mapper.Definition.OutputExtensions)) {
+			outputExtension := mapper.Definition.OutputExtensions[sourceExtension]
+			outputExtensionsNode := getContentMapperSyntax(contentMapperSourceFile, contentMapperIndices[j], "outputExtensions")
+			if strings.ContainsAny(sourceExtension, "/\\") {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
+			} else if !contentmapper.IsValidExtension(sourceExtension) {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
+			}
+			if strings.ContainsAny(outputExtension, "/\\") {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, outputExtension), contentMapperSourceFile, outputExtensionsNode))
+			} else if !contentmapper.IsValidExtension(outputExtension) {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a, outputExtension), contentMapperSourceFile, outputExtensionsNode))
+			}
+			if !slices.ContainsFunc(validExtensions, func(extension string) bool {
+				return canonicalExtension(extension) == canonicalExtension(sourceExtension)
+			}) {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
+			}
+		}
 	}
 	if len(contentMappers) > 0 && !(parsedConfig.options != nil && parsedConfig.options.RunExternalCode.IsTrue()) {
 		errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mappers_require_the_runExternalCode_command_line_flag_to_be_enabled), contentMapperSourceFile, getContentMappersKeySyntax(contentMapperSourceFile)))
@@ -1349,6 +1367,17 @@ func parseJsonConfigFileContentWorker(
 				continue
 			}
 			mapper.Manifest = manifest
+			for _, sourceExtension := range mapper.Definition.Extensions {
+				outputExtension, ok := getContentMapperOutputExtension(mapper.EffectiveOutputExtensions(), sourceExtension, fs.CaseSensitivity().IsCaseInsensitive())
+				identity := sourceExtension == outputExtension || fs.CaseSensitivity().IsCaseInsensitive() && strings.EqualFold(sourceExtension, outputExtension)
+				if ok && !identity && !parsedConfig.options.RewriteRelativeImportExtensions.IsTrue() {
+					errors = append(errors, setContentMapperDiagnosticLocation(
+						ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_enabled, sourceExtension, outputExtension),
+						contentMapperSourceFile,
+						getContentMapperSyntax(contentMapperSourceFile, contentMapperIndices[j], ""),
+					))
+				}
+			}
 			resolvedContentMappers = append(resolvedContentMappers, mapper)
 		}
 		contentMappers = resolvedContentMappers

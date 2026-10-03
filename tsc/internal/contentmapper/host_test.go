@@ -27,6 +27,19 @@ import (
 // fakeMapper is an in-process mapper that transforms content verbatim and reports one diagnostic.
 type fakeMapper struct{}
 
+func TestEmptyOutputExtensionsOverrideSurvivesSerialization(t *testing.T) {
+	t.Parallel()
+	definition := contentmapper.Definition{Package: "mapper", Extensions: []string{".vue"}, OutputExtensions: map[string]string{}}
+	data, err := json.Marshal(definition)
+	assert.NilError(t, err)
+	var parsed contentmapper.Definition
+	assert.NilError(t, json.Unmarshal(data, &parsed))
+	assert.Assert(t, parsed.OutputExtensions != nil)
+	mapper := &contentmapper.Mapper{Definition: parsed}
+	mapper.Manifest.DefaultOutputExtensions = map[string]string{".vue": ".js"}
+	assert.Equal(t, len(mapper.EffectiveOutputExtensions()), 0)
+}
+
 type responseMapper struct {
 	response func(contentmapper.TransformParams) any
 }

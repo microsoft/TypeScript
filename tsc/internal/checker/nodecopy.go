@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func (b *NodeBuilderImpl) reuseNode(node *ast.Node) *ast.Node {
@@ -270,7 +271,10 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 func (b *NodeBuilderImpl) rewriteModuleSpecifier(parent *ast.Node, lit *ast.Node) *ast.Node {
 	newName := b.getModuleSpecifierOverride(parent, lit)
 	if len(newName) == 0 {
-		return lit
+		newName = b.rewriteContentMappedModuleSpecifier(tspath.ToModuleSpecifier(lit.Text())).AsString()
+		if newName == lit.Text() {
+			return lit
+		}
 	}
 	res := b.f.NewStringLiteral(newName, ast.TokenFlagsNone)
 	b.e.SetOriginal(res, lit)

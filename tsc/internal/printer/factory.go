@@ -1297,13 +1297,39 @@ func (f *NodeFactory) NewAssignmentTargetWrapper(paramName *ast.IdentifierNode, 
 }
 
 // Allocates a new Call expression to the `__rewriteRelativeImportExtension` helper.
-func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool) *ast.Expression {
+func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool, extraExtensions []core.ExtensionRewrite, ignoreCase bool) *ast.Expression {
+	if len(extraExtensions) == 0 {
+		f.emitContext.RequestEmitHelper(rewriteRelativeImportExtensionsHelper)
+		var arguments []*ast.Expression
+		if preserveJsx {
+			arguments = []*ast.Expression{firstArgument, f.NewToken(ast.KindTrueKeyword)}
+		} else {
+			arguments = []*ast.Expression{firstArgument}
+		}
+		return f.NewCallExpression(
+			f.NewUnscopedHelperName("__rewriteRelativeImportExtension"),
+			nil,
+			nil,
+			f.NewNodeList(arguments),
+			ast.NodeFlagsNone,
+		)
+	}
 	f.emitContext.RequestEmitHelper(rewriteRelativeImportExtensionsHelper)
-	var arguments []*ast.Expression
-	if preserveJsx {
-		arguments = []*ast.Expression{firstArgument, f.NewToken(ast.KindTrueKeyword)}
-	} else {
-		arguments = []*ast.Expression{firstArgument}
+	arguments := []*ast.Expression{firstArgument}
+	arguments = append(arguments, f.NewToken(core.IfElse(preserveJsx, ast.KindTrueKeyword, ast.KindFalseKeyword)))
+	properties := make([]*ast.Node, 0, len(extraExtensions))
+	for _, extension := range extraExtensions {
+		properties = append(properties, f.NewPropertyAssignment(
+			nil,
+			f.NewStringLiteral(extension.Source, ast.TokenFlagsNone),
+			nil,
+			nil,
+			f.NewStringLiteral(extension.Target, ast.TokenFlagsNone),
+		))
+	}
+	arguments = append(arguments, f.NewObjectLiteralExpression(f.NewNodeList(properties), false))
+	if ignoreCase {
+		arguments = append(arguments, f.NewToken(ast.KindTrueKeyword))
 	}
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__rewriteRelativeImportExtension"),

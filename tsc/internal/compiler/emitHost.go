@@ -118,6 +118,10 @@ func (host *emitHost) ContentMapperExtensions() []string {
 	return host.program.ContentMapperExtensions()
 }
 
+func (host *emitHost) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+	return host.program.ContentMapperExtensionRewrites()
+}
+
 func (host *emitHost) CaseSensitivity() tspath.CaseSensitivity {
 	return host.program.CaseSensitivity()
 }

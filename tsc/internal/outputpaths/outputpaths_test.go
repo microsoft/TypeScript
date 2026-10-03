@@ -10,8 +10,9 @@ import (
 )
 
 type outputPathsHost struct {
-	commonSourceDirectory   tspath.RootedDirectoryPath
-	contentMapperExtensions []string
+	commonSourceDirectory          tspath.RootedDirectoryPath
+	contentMapperExtensions        []string
+	contentMapperExtensionRewrites []core.ExtensionRewrite
 }
 
 func (h outputPathsHost) CommonSourceDirectory() tspath.RootedDirectoryPath {
@@ -22,8 +23,25 @@ func (h outputPathsHost) ContentMapperExtensions() []string {
 	return h.contentMapperExtensions
 }
 
+func (h outputPathsHost) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+	return h.contentMapperExtensionRewrites
+}
+
 func (outputPathsHost) CaseSensitivity() tspath.CaseSensitivity {
 	return tspath.CaseInsensitive
+}
+
+func TestContentMapperOutputExtensionCaseInsensitivePaths(t *testing.T) {
+	t.Parallel()
+	host := outputPathsHost{
+		commonSourceDirectory:          "/src",
+		contentMapperExtensions:        []string{".y.z"},
+		contentMapperExtensionRewrites: []core.ExtensionRewrite{{Source: ".y.z", Target: ".mjs"}},
+	}
+	options := &core.CompilerOptions{OutDir: "/dist"}
+	fileName := tspath.RootedFilePath("/src/Widget.Y.Z")
+	assert.Equal(t, outputpaths.GetExternalOutputFileName(fileName, options, host), tspath.RootedFilePath("/dist/Widget.mjs"))
+	assert.Equal(t, outputpaths.GetOutputDeclarationFileNameWorker(fileName, options, host), tspath.RootedFilePath("/dist/Widget.d.mts"))
 }
 
 func TestGetSourceFileNameInNewDirSourceMatchesCommonDirectory(t *testing.T) {

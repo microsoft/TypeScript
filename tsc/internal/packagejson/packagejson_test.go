@@ -142,14 +142,15 @@ func TestParse(t *testing.T) {
 			content: `{
 				"name": "test-package",
 				"typescript": {
-					"contentMapper": { "exec": ["mapper"], "dynamicConfig": true }
+					"contentMapper": { "exec": ["mapper"], "dynamicConfig": true, "outputExtensions": { ".astro": ".js" } }
 				}
 			}`,
 			want: packagejson.Fields{
 				HeaderFields: packagejson.HeaderFields{Name: packagejson.ExpectedOf("test-package")},
 				ContentMapper: packagejson.ExpectedOf(packagejson.ContentMapperFields{
-					Exec:          packagejson.ExpectedOf([]string{"mapper"}),
-					DynamicConfig: packagejson.ExpectedOf(true),
+					Exec:             packagejson.ExpectedOf([]string{"mapper"}),
+					DynamicConfig:    packagejson.ExpectedOf(true),
+					OutputExtensions: packagejson.ExpectedOf(map[string]string{".astro": ".js"}),
 				}),
 			},
 		},

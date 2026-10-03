@@ -721,7 +721,48 @@ func IndexAfter(s string, pattern string, startIndex int) int {
 }
 
 func ShouldRewriteModuleSpecifier(specifier string, compilerOptions *CompilerOptions) bool {
-	return compilerOptions.RewriteRelativeImportExtensions.IsTrue() && tspath.PathIsRelative(specifier) && !tspath.IsDeclarationFileName(specifier) && tspath.HasTSFileExtension(specifier)
+	return ShouldRewriteModuleSpecifierWithExtensions(specifier, compilerOptions, nil, false)
+}
+
+func ShouldRewriteModuleSpecifierWithExtensions(specifier string, compilerOptions *CompilerOptions, rewrites []ExtensionRewrite, ignoreCase bool) bool {
+	if !compilerOptions.RewriteRelativeImportExtensions.IsTrue() || !tspath.PathIsRelative(specifier) || tspath.IsDeclarationFileName(specifier) {
+		return false
+	}
+	if rewrite, ok := GetExtensionRewrite(specifier, rewrites, ignoreCase); ok {
+		return !isIdentityExtensionRewrite(rewrite, ignoreCase)
+	}
+	return tspath.HasTSFileExtension(specifier)
+}
+
+type ExtensionRewrite struct {
+	Source string
+	Target string
+}
+
+func GetExtensionRewrite(path string, rewrites []ExtensionRewrite, ignoreCase bool) (ExtensionRewrite, bool) {
+	var best ExtensionRewrite
+	for _, rewrite := range rewrites {
+		if len(rewrite.Source) <= len(best.Source) || len(path) <= len(rewrite.Source) {
+			continue
+		}
+		suffix := path[len(path)-len(rewrite.Source):]
+		if suffix == rewrite.Source || ignoreCase && strings.EqualFold(suffix, rewrite.Source) {
+			best = rewrite
+		}
+	}
+	return best, best.Source != ""
+}
+
+func RewriteExtension(path string, rewrites []ExtensionRewrite, ignoreCase bool) (string, bool) {
+	rewrite, ok := GetExtensionRewrite(path, rewrites, ignoreCase)
+	if !ok || isIdentityExtensionRewrite(rewrite, ignoreCase) {
+		return path, false
+	}
+	return path[:len(path)-len(rewrite.Source)] + rewrite.Target, true
+}
+
+func isIdentityExtensionRewrite(rewrite ExtensionRewrite, ignoreCase bool) bool {
+	return rewrite.Source == rewrite.Target || ignoreCase && strings.EqualFold(rewrite.Source, rewrite.Target)
 }
 
 func SingleElementSlice[T any](element *T) []*T {

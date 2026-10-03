@@ -33,6 +33,7 @@ type OutputPaths interface {
 // Used to be passed in the TransformationContext, which is now just an EmitContext
 type DeclarationEmitHost interface {
 	modulespecifiers.ModuleSpecifierGenerationHost
+	ContentMapperExtensionRewrites() []core.ExtensionRewrite
 	CaseSensitivity() tspath.CaseSensitivity
 	GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile
 
@@ -217,7 +218,7 @@ const declarationEmitNodeBuilderFlags = nodebuilder.FlagsMultilineObjectLiterals
 	nodebuilder.FlagsGenerateNamesForShadowedTypeParams |
 	nodebuilder.FlagsNoTruncation
 
-const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames
+const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames | nodebuilder.InternalFlagsRewriteModuleSpecifiers
 
 // functions as both `visitDeclarationStatements` and `transformRoot`, utilitzing SyntaxList nodes
 func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
@@ -1603,6 +1604,23 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		return nil
 	}
 	tx.resultHasExternalModuleIndicator = tx.resultHasExternalModuleIndicator || (parent.Kind != ast.KindModuleDeclaration && parent.Kind != ast.KindImportType)
+	if ast.IsStringLiteral(input) && core.ShouldRewriteModuleSpecifierWithExtensions(
+		input.Text(),
+		tx.compilerOptions,
+		tx.host.ContentMapperExtensionRewrites(),
+		tx.host.CaseSensitivity().IsCaseInsensitive(),
+	) {
+		if rewritten, ok := core.RewriteExtension(
+			input.Text(),
+			tx.host.ContentMapperExtensionRewrites(),
+			tx.host.CaseSensitivity().IsCaseInsensitive(),
+		); ok {
+			result := tx.Factory().NewStringLiteral(rewritten, input.AsStringLiteral().TokenFlags)
+			tx.EmitContext().SetOriginal(result, input)
+			tx.EmitContext().AssignCommentAndSourceMapRanges(result, input)
+			return result
+		}
+	}
 	return input
 }
 

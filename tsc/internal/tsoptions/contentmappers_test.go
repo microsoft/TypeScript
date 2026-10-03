@@ -59,6 +59,82 @@ func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 	assert.DeepEqual(t, slices.Collect(commandLine.GetOutputFileNames()), []tspath.RootedFilePath{"/dist/Component.d.vue.ts"})
 }
 
+func TestContentMapperExtensionRewritesPreserveLongestExtension(t *testing.T) {
+	t.Parallel()
+	mapper := &contentmapper.Mapper{
+		Extensions: []string{".z", ".y.z", ".identity.y.z", ".unmapped.y.z"},
+		OutputExtensions: map[string]string{
+			".z": ".js", ".y.z": ".mjs", ".identity.y.z": ".identity.y.z",
+		},
+	}
+	commandLine := NewParsedCommandLine(
+		&core.CompilerOptions{Declaration: core.TSTrue, OutDir: "/dist"},
+		[]tspath.RootedFilePath{"/src/Widget.y.z", "/src/Widget.identity.y.z", "/src/Widget.unmapped.y.z"},
+		nil,
+		"/",
+		tspath.CaseSensitive,
+	)
+	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
+	rewrites := commandLine.ContentMapperExtensionRewrites()
+	assert.Assert(t, slices.IsSortedFunc(rewrites, func(a, b core.ExtensionRewrite) int {
+		return len(b.Source) - len(a.Source)
+	}))
+	for _, file := range []string{"./Widget.identity.y.z", "./Widget.unmapped.y.z"} {
+		rewritten, ok := core.RewriteExtension(file, rewrites, false)
+		assert.Assert(t, !ok)
+		assert.Equal(t, rewritten, file)
+	}
+	assert.DeepEqual(t, slices.Collect(commandLine.GetOutputFileNames()), []tspath.RootedFilePath{
+		"/dist/Widget.d.mts",
+		"/dist/Widget.d.identity.y.z.ts",
+		"/dist/Widget.d.unmapped.y.z.ts",
+	})
+}
+
+func TestContentMapperExtensionRewritesAreCached(t *testing.T) { //nolint:paralleltest,tparallel // AllocsPerRun cannot run in parallel tests.
+	mapper := &contentmapper.Mapper{
+		Extensions:       []string{".astro", ".y.z"},
+		OutputExtensions: map[string]string{".astro": ".js", ".y.z": ".mjs"},
+	}
+	commandLine := NewParsedCommandLine(
+		&core.CompilerOptions{}, nil, nil,
+		"/", tspath.CaseSensitive,
+	)
+	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
+	rewrites := commandLine.ContentMapperExtensionRewrites()
+	for range 10 {
+		assert.Assert(t, &commandLine.ContentMapperExtensionRewrites()[0] == &rewrites[0])
+	}
+	assert.Equal(t, testing.AllocsPerRun(100, func() {
+		commandLine.ContentMapperExtensionRewrites()
+	}), float64(0))
+	withFileNames := commandLine.WithFileNames([]tspath.RootedFilePath{"/src/Card.astro"})
+	for range 10 {
+		t.Run("concurrent", func(t *testing.T) {
+			t.Parallel()
+			assert.Assert(t, &commandLine.ContentMapperExtensionRewrites()[0] == &rewrites[0])
+			assert.DeepEqual(t, withFileNames.ContentMapperExtensionRewrites(), rewrites)
+		})
+	}
+}
+
+func TestResolveContentMapperManifestRejectsMalformedOutputExtensions(t *testing.T) {
+	t.Parallel()
+	for _, value := range []string{`"invalid"`, `null`, `[]`, `{".vue": 1}`, `{".vue": null}`, `{".vue/foo": ".js"}`, `{".vue\\foo": ".js"}`, `{".vue": ".js/foo"}`, `{".vue": ".js\\foo"}`} {
+		t.Run(value, func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{
+				"/home/project/node_modules/mapper/package.json": `{
+					"name": "mapper",
+					"typescript": { "contentMapper": { "exec": ["run"], "outputExtensions": ` + value + ` } }
+				}`,
+			}, tspath.CaseSensitive)
+			_, _, diagnostic := resolveContentMapperManifest(fs, "/home/project/tsconfig.json", "mapper")
+			assert.Assert(t, diagnostic != nil, "expected malformed outputExtensions to be rejected")
+		})
+	}
+}
+
 func TestResolveContentMapperManifest(t *testing.T) {
 	t.Parallel()
 
@@ -66,7 +142,7 @@ func TestResolveContentMapperManifest(t *testing.T) {
 		"/home/project/node_modules/vue-ts-mapper/package.json": `{
 			"name": "vue-ts-mapper",
 			"version": "1.2.3",
-			"typescript": { "contentMapper": { "exec": ["node", "./dist/mapper.js"], "compilerOptions": ["target", "jsx"] } }
+			"typescript": { "contentMapper": { "exec": ["node", "./dist/mapper.js"], "compilerOptions": ["target", "jsx"], "outputExtensions": { ".vue": ".js" } } }
 		}`,
 		"/home/node_modules/@scope/noversion/package.json": `{
 			"name": "@scope/noversion",
@@ -86,6 +162,10 @@ func TestResolveContentMapperManifest(t *testing.T) {
 			"name": "bad-exec",
 			"typescript": { "contentMapper": { "exec": "node ./mapper.js" } }
 		}`,
+		"/home/project/node_modules/bad-output-extension/package.json": `{
+			"name": "bad-output-extension",
+			"typescript": { "contentMapper": { "exec": ["run"], "outputExtensions": { ".vue": "js" } } }
+		}`,
 	}, tspath.CaseSensitive /*caseSensitivity*/)
 
 	// Name, version, and the verbatim exec argv are preserved.
@@ -96,6 +176,7 @@ func TestResolveContentMapperManifest(t *testing.T) {
 	assert.Equal(t, packageDirectory, tspath.RootedDirectoryPath("/home/project/node_modules/vue-ts-mapper"))
 	assert.DeepEqual(t, manifest.Exec, []string{"node", "./dist/mapper.js"})
 	assert.DeepEqual(t, manifest.CompilerOptions, []string{"target", "jsx"})
+	assert.DeepEqual(t, manifest.DefaultOutputExtensions, map[string]string{".vue": ".js"})
 
 	// Resolution walks up node_modules; a package with no version resolves to a name and empty version.
 	manifest, _, diagnostic = resolveContentMapperManifest(fs, "/home/project/src/tsconfig.json", "@scope/noversion")
@@ -125,4 +206,7 @@ func TestResolveContentMapperManifest(t *testing.T) {
 		assert.Assert(t, diagnostic != nil, "expected a diagnostic for %s", pkg)
 		assert.Equal(t, diagnostic.Code(), diagnostics.The_typescript_contentMapper_exec_of_the_content_mapper_package_0_must_be_a_non_empty_array_of_strings.Code())
 	}
+
+	_, _, diagnostic = resolveContentMapperManifest(fs, "/home/project/tsconfig.json", "bad-output-extension")
+	assert.Equal(t, diagnostic.Code(), diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a.Code())
 }

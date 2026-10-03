@@ -1,0 +1,27 @@
+/tsconfig.json(6,9): error TS18118: Content mapper output extension mapping from '.astro' to '.js' requires 'rewriteRelativeImportExtensions' to be enabled.
+
+
+==== /tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "declaration": true
+        },
+        "contentMappers": [
+            { "package": "mapper", "extensions": [".astro"] }
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18118: Content mapper output extension mapping from '.astro' to '.js' requires 'rewriteRelativeImportExtensions' to be enabled.
+        ]
+    }
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": {
+            "contentMapper": {
+                "exec": ["compiler-test-mapper"],
+                "outputExtensions": { ".astro": ".js" }
+            }
+        }
+    }
+    

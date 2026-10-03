@@ -1,6 +1,10 @@
 package tsoptions
 
 import (
+	"maps"
+	"slices"
+	"strings"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -66,5 +70,31 @@ func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePat
 	}
 	compilerOptions, _ := cm.CompilerOptions.GetValue()
 	dynamicConfig, _ := cm.DynamicConfig.GetValue()
-	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig}, packageDirectory, nil
+	outputExtensions, valid := cm.OutputExtensions.GetValue()
+	if cm.OutputExtensions.IsPresent() && !valid {
+		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+			diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
+			packageName,
+		)
+	}
+	for _, source := range slices.Sorted(maps.Keys(outputExtensions)) {
+		output := outputExtensions[source]
+		for _, extension := range []string{source, output} {
+			if strings.ContainsAny(extension, "/\\") {
+				return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+					diagnostics.Content_mapper_extension_0_must_not_contain_path_separators,
+					extension,
+				)
+			}
+		}
+		if !contentmapper.IsValidExtension(source) || !contentmapper.IsValidExtension(output) {
+			return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+				diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
+				packageName,
+				source,
+				output,
+			)
+		}
+	}
+	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions}, packageDirectory, nil
 }
