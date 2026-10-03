@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/importSource/importSource9.ts] ////
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : AbstractModuleSource
+
+export { a };
+>a : AbstractModuleSource
+
+=== c.ts ===
+import { a } from "./b.js";
+>a : AbstractModuleSource
+
+const b: AbstractModuleSource = a;
+>b : AbstractModuleSource
+>a : AbstractModuleSource
+
+=== d.ts ===
+import * as a from "./b.js";
+>a : typeof a
+
+const b: AbstractModuleSource = a.a;
+>b : AbstractModuleSource
+>a.a : AbstractModuleSource
+>a : typeof a
+>a : AbstractModuleSource
+
+=== e.ts ===
+import source a from "./a.wasm";
+>a : AbstractModuleSource
+
+export type B = typeof a;
+>B : AbstractModuleSource
+>a : AbstractModuleSource
+
+export const b = import.source("./a.wasm");
+>b : Promise<AbstractModuleSource>
+>import.source("./a.wasm") : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+

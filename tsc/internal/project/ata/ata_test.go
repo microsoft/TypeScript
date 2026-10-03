@@ -56,20 +56,20 @@ func leaveUnbuiltInferredProject(t *testing.T, ctx context.Context, session *pro
 	t.Helper()
 	const config = "/user/username/projects/other/tsconfig.json"
 	const file = "/user/username/projects/other/x.js"
-	openProjects := &collections.Set[string]{}
-	openProjects.Add(config)
+	openProjects := &collections.Set[tspath.RootedFilePath]{}
+	openProjects.Add(tspath.RootedFilePathFromNormalized(config))
 	snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
 		OpenProjects: openProjects,
-		OpenFiles:    map[tspath.Path]string{utils.ToPath(file): file},
+		OpenFiles:    map[tspath.PathKey]tspath.RootedFilePath{utils.FS().CaseSensitivity().PathKey(tspath.RootedPath(file)): tspath.RootedFilePathFromNormalized(file)},
 	})
 	assert.NilError(t, err)
 	snapshot.Deref()
-	closeProjects := &collections.Set[tspath.Path]{}
-	closeProjects.Add(utils.ToPath(config))
+	closeProjects := &collections.Set[tspath.PathKey]{}
+	closeProjects.Add(utils.FS().CaseSensitivity().PathKey(tspath.RootedPath(config)))
 	snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{CloseProjects: closeProjects})
 	assert.NilError(t, err)
 	snapshot.Deref()
-	snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{CloseFiles: &collections.Set[tspath.Path]{}})
+	snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{CloseFiles: &collections.Set[tspath.PathKey]{}})
 	assert.NilError(t, err)
 	inferred := snapshot.ProjectCollection.InferredProject()
 	assert.Assert(t, inferred != nil && inferred.GetProgram() == nil, "replacement inferred project should be unbuilt")
@@ -78,8 +78,8 @@ func leaveUnbuiltInferredProject(t *testing.T, ctx context.Context, session *pro
 
 func closeUnbuiltInferredProject(t *testing.T, ctx context.Context, session *project.Session, utils *projecttestutil.SessionUtils) {
 	t.Helper()
-	closeFiles := &collections.Set[tspath.Path]{}
-	closeFiles.Add(utils.ToPath("/user/username/projects/other/x.js"))
+	closeFiles := &collections.Set[tspath.PathKey]{}
+	closeFiles.Add(utils.FS().CaseSensitivity().PathKey(tspath.RootedPath("/user/username/projects/other/x.js")))
 	snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{CloseFiles: closeFiles})
 	assert.NilError(t, err)
 	assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
@@ -155,9 +155,9 @@ func TestATA(t *testing.T) {
 		session.WaitForBackgroundTasks()
 		npmCalls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, len(npmCalls), 2)
-		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, npmCalls[0].Args[2], "types-registry@latest")
-		assert.Equal(t, npmCalls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, npmCalls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Assert(t, slices.Contains(npmCalls[1].Args, "@types/jquery@latest"))
 		assert.Equal(t, len(utils.Client().RefreshDiagnosticsCalls()), 1)
 	})
@@ -201,12 +201,12 @@ func TestATA(t *testing.T) {
 		var releaseInstallOnce sync.Once
 		release := func() { releaseInstallOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/commander@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 
 		err = utils.FS().WriteFile(packageJSONURI.FileName(), `{
@@ -283,12 +283,12 @@ func TestATA(t *testing.T) {
 		var releaseInstallOnce sync.Once
 		release := func() { releaseInstallOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/commander@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 
 		ctx := context.Background()
@@ -298,7 +298,7 @@ func TestATA(t *testing.T) {
 
 		session.DidCloseFile(ctx, uri)
 		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
-			CloseFiles: &collections.Set[tspath.Path]{},
+			CloseFiles: &collections.Set[tspath.PathKey]{},
 		})
 		assert.NilError(t, err)
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
@@ -348,9 +348,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 
 		// Verify the types file was installed
@@ -421,12 +421,12 @@ func TestATA(t *testing.T) {
 		var releaseInstallOnce sync.Once
 		release := func() { releaseInstallOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/jquery@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 
 		ctx := context.Background()
@@ -490,7 +490,7 @@ func TestATA(t *testing.T) {
 		}})
 		ls, err := session.GetLanguageService(ctx, bURI)
 		assert.NilError(t, err)
-		assert.Assert(t, ls.GetProgram().GetSourceFile(commanderTypings) != nil, "the install's own writes should not discard its result")
+		assert.Assert(t, ls.GetProgram().GetSourceFile(tspath.RootedFilePathFromNormalized(commanderTypings)) != nil, "the install's own writes should not discard its result")
 	})
 
 	t.Run("source edit delivered with an ATA result rejects obsolete typings", func(t *testing.T) {
@@ -512,7 +512,7 @@ func TestATA(t *testing.T) {
 		var releaseOnce sync.Once
 		releaseCommander := func() { releaseOnce.Do(func() { close(releaseCommanderInstall) }) }
 		defer releaseCommander()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			switch {
 			case slices.Contains(args, "@types/jquery@latest"):
 				jqueryInstallStarted <- struct{}{}
@@ -520,7 +520,7 @@ func TestATA(t *testing.T) {
 			case slices.Contains(args, "@types/commander@latest"):
 				<-releaseCommanderInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
@@ -686,7 +686,7 @@ func TestATA(t *testing.T) {
 			"/user/username/projects/project/app.js":                                       "",
 			"/user/username/projects/project/package.json":                                 `{"name":"test"}`,
 			projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts": `declare const $: { x: number }`,
-		}, false))
+		}, tspath.CaseInsensitive))
 		snapshot, err = session.APIUpdate(ctx, summary, &project.APISnapshotRequest{
 			FileSystem:        replacement,
 			ReplaceFileSystem: true,
@@ -696,8 +696,8 @@ func TestATA(t *testing.T) {
 
 		snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
 			FileSystem: replacement,
-			OpenFiles: map[tspath.Path]string{
-				utils.ToPath(uri.FileName()): uri.FileName(),
+			OpenFiles: map[tspath.PathKey]tspath.RootedFilePath{
+				utils.FS().CaseSensitivity().PathKey(uri.FileName().AsPath()): uri.FileName(),
 			},
 		})
 		assert.NilError(t, err)
@@ -785,12 +785,12 @@ func TestATA(t *testing.T) {
 		var releaseInstallOnce sync.Once
 		release := func() { releaseInstallOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/commander@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 
 		err = utils.FS().WriteFile(packageJSONURI.FileName(), `{
@@ -1044,12 +1044,12 @@ func TestATA(t *testing.T) {
 		var releaseOnce sync.Once
 		release := func() { releaseOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/jquery@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
@@ -1142,12 +1142,12 @@ func TestATA(t *testing.T) {
 		var releaseOnce sync.Once
 		release := func() { releaseOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/commander@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
@@ -1202,12 +1202,12 @@ func TestATA(t *testing.T) {
 		var releaseOnce sync.Once
 		release := func() { releaseOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/commander@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
@@ -1263,12 +1263,12 @@ func TestATA(t *testing.T) {
 		var releaseOnce sync.Once
 		release := func() { releaseOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/commander@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
@@ -1328,12 +1328,12 @@ func TestATA(t *testing.T) {
 		var releaseOnce sync.Once
 		release := func() { releaseOnce.Do(func() { close(releaseInstall) }) }
 		defer release()
-		utils.NpmExecutor().NpmInstallFunc = func(cwd string, args []string) ([]byte, error) {
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 			if slices.Contains(args, "@types/commander@latest") {
 				installStarted <- struct{}{}
 				<-releaseInstall
 			}
-			return originalNpmInstall(cwd, args)
+			return originalNpmInstall(ctx, cwd, args)
 		}
 
 		session.DidChangeFile(ctx, uri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
@@ -1435,7 +1435,7 @@ func TestATA(t *testing.T) {
 		replacement := bundled.WrapFS(vfstest.FromMap(map[string]string{
 			"/user/username/projects/project/app.js":       "",
 			"/user/username/projects/project/package.json": `{"name":"test"}`,
-		}, false))
+		}, tspath.CaseInsensitive))
 		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
 			FileSystem:        replacement,
 			ReplaceFileSystem: true,
@@ -1472,7 +1472,7 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called once (only types-registry)
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 1, len(calls), "Expected exactly 1 npm install call")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
 	})
 
@@ -1507,9 +1507,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 	})
 
@@ -1626,9 +1626,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 
 		// Verify the types file was installed
@@ -1663,9 +1663,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 
 		// Verify the types file was installed
@@ -1839,7 +1839,7 @@ func TestATA(t *testing.T) {
 		// Only the types-registry should be installed; @types/node should NOT be installed since it exists locally
 		npmCalls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, len(npmCalls), 1)
-		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, npmCalls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
 
 		// And the program should include the local @types/node declaration file
@@ -1928,11 +1928,11 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
 
 		// The second call should install all three packages at once
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[0], "install")
 		assert.Equal(t, calls[1].Args[1], "--ignore-scripts")
 		// Check that all three packages are in the install command

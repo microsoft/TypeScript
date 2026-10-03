@@ -29,6 +29,7 @@ import { registerMultiDocumentHighlightFeature } from "./languageFeatures/docume
 import { registerHoverFeature } from "./languageFeatures/hover";
 import { registerOnAutoInsertFeature } from "./languageFeatures/onAutoInsert";
 import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefinition";
+import type { LspMiddlewareRegistry } from "./lspMiddleware";
 import * as tr from "./telemetryReporting";
 import {
     contentMappersEnabled,
@@ -39,7 +40,6 @@ import {
     readNativePreviewConfig,
 } from "./util";
 import { getLanguageForUri } from "./util";
-import { workspaceSymbolSendRequestMiddleware } from "./workspaceSymbolMiddleware";
 
 // Registration IDs the server uses for content mapper capabilities all share this prefix (see
 // RegisterContentMapperExtensions in internal/lsp/server.go). The extension watches for these dynamic
@@ -88,6 +88,7 @@ export class Client implements vscode.Disposable {
         outputChannel: vscode.LogOutputChannel,
         initializedEventEmitter: vscode.EventEmitter<void>,
         telemetryReporter: tr.TelemetryReporter,
+        private readonly lspMiddleware: LspMiddlewareRegistry,
     ) {
         this.outputChannel = outputChannel;
         this.initializedEventEmitter = initializedEventEmitter;
@@ -128,7 +129,7 @@ export class Client implements vscode.Disposable {
                     },
                 },
                 sendNotification: sendNotificationMiddleware,
-                sendRequest: workspaceSymbolSendRequestMiddleware,
+                sendRequest: (type, params, token, next) => this.lspMiddleware.sendRequest(type, params, token, next),
                 provideHover: () => undefined,
                 handleRegisterCapability: async (params, next) => {
                     await next(params, CancellationToken.None);
@@ -314,9 +315,8 @@ export class Client implements vscode.Disposable {
             logLevelListener,
             serverTelemetryListener,
             registerSourceDefinitionFeature(this.client),
-            registerOnAutoInsertFeature(this.documentSelector, this.client),
         );
-        // Register the selector-scoped custom providers (hover, multi-document highlight). These start
+        // Register the selector-scoped custom providers (hover, multi-document highlight, on-auto-insert). These start
         // scoped to the static jsTs selector and expand as content-mapped extensions register.
         this.registerSelectorScopedFeatures();
     }
@@ -383,6 +383,7 @@ export class Client implements vscode.Disposable {
         this.selectorScopedFeatures.push(
             registerMultiDocumentHighlightFeature(selector, this.client),
             registerHoverFeature(selector, this.client),
+            registerOnAutoInsertFeature(selector, this.client),
         );
     }
 

@@ -1,21 +1,5 @@
-import * as vscode from "vscode";
-
-export interface ContentMapperManifest {
-    readonly name: string;
-    readonly version?: string;
-    readonly exec: readonly string[];
-    readonly cwd?: vscode.Uri;
-    readonly compilerOptions?: readonly string[];
-    readonly dynamicConfig?: boolean;
-}
-
-export interface ContentMapperContribution {
-    readonly extensions: readonly string[];
-    readonly inferredProjectContribution?: {
-        readonly options?: Readonly<Record<string, unknown>>;
-        readonly manifest: ContentMapperManifest;
-    };
-}
+import type { ContentMapperContribution } from "@typescript/typescript/unstable/vscode";
+export type { ContentMapperContribution, ContentMapperManifest } from "@typescript/typescript/unstable/vscode";
 
 export interface SerializedContentMapperContribution {
     readonly contributorId: string;

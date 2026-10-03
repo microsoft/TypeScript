@@ -1,21 +1,39 @@
 import type {
+    BinaryExpression,
+    BindingElement,
+    CallExpression,
+    ClassDeclaration,
+    ClassElement,
+    Declaration,
+    ExportAssignment,
     ExpressionStatement,
+    FunctionDeclaration,
     Identifier,
+    InterfaceDeclaration,
     JSDoc,
+    MethodDeclaration,
     Node,
     NodeArray,
+    ObjectBindingPattern,
+    ObjectLiteralElement,
+    ObjectLiteralExpression,
     SourceFile,
     StringLiteralLikeNode,
+    TypeElement,
     VariableStatement,
 } from "@typescript/typescript/unstable/ast";
 import {
+    getCombinedModifierFlags,
+    getNameOfDeclaration,
     getTokenAtPosition,
     isClassDeclaration,
+    isExternalModule,
     isImportDeclaration,
     isInterfaceDeclaration,
     isJSDocLink,
     isNamedImports,
     isValidTypeOnlyAliasUseSite,
+    ModifierFlags,
     NodeFlags,
     SyntaxKind,
     TokenFlags,
@@ -29,6 +47,7 @@ import {
     createBinaryExpression,
     createBlock,
     createExpressionStatement,
+    createFunctionDeclaration,
     createIdentifier,
     createIfStatement,
     createMissingDeclaration,
@@ -44,7 +63,6 @@ import {
     visitNode,
     visitNodes,
 } from "@typescript/typescript/unstable/ast/visitor";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import {
     API,
     Checker,
@@ -56,7 +74,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
-import { areTestsFiltered } from "../testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
@@ -604,6 +625,124 @@ function getRemoteSourceFileAndChecker(api: API, configPath: string, filePath: s
 function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
     return getRemoteSourceFileAndChecker(api, configPath, filePath)[0];
 }
+
+describe("declaration utilities", { concurrency }, () => {
+    test("isExternalModule distinguishes external modules from scripts and CommonJS", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, moduleDetection: "legacy" } }),
+            "/src/module.ts": "export const x = 1;",
+            "/src/import.ts": 'import { x } from "./module";',
+            "/src/script.ts": "const y = 1;",
+            "/src/commonjs.js": "module.exports = 1;",
+        });
+        for (
+            const [fileName, expected] of [
+                ["module.ts", true],
+                ["import.ts", true],
+                ["script.ts", false],
+                ["commonjs.js", false],
+            ] as const
+        ) {
+            const sourceFile = getRemoteSourceFile(api, "/tsconfig.json", `/src/${fileName}`);
+            assert.strictEqual(isExternalModule(sourceFile), expected, fileName);
+            assert.strictEqual(isExternalModule(cloneNode(sourceFile)), expected, `cloned ${fileName}`);
+        }
+    });
+
+    test("getCombinedModifierFlags includes modifiers on factory nodes", () => {
+        const declaration = createFunctionDeclaration(
+            [createToken(SyntaxKind.ExportKeyword), createToken(SyntaxKind.AsyncKeyword)],
+            undefined,
+            createIdentifier("f"),
+            undefined,
+            [],
+            undefined,
+            createBlock([]),
+        );
+
+        assert.strictEqual(
+            getCombinedModifierFlags(declaration),
+            ModifierFlags.Export | ModifierFlags.Async,
+        );
+    });
+
+    test("getCombinedModifierFlags includes variable statement flags for binding elements", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": "export const { x } = value;",
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const statement = sf.statements[0] as VariableStatement;
+        const declaration = statement.declarationList.declarations[0];
+        const binding = (declaration.name as ObjectBindingPattern).elements[0] as BindingElement;
+
+        assert.strictEqual(
+            getCombinedModifierFlags(binding),
+            ModifierFlags.Export,
+        );
+    });
+
+    test("element categories are named declarations", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `
+class C { public member = 1; }
+interface I { member?: number; }
+const object = { member: 1 };
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const classElement: ClassElement = (sf.statements[0] as ClassDeclaration).members[0];
+        const typeElement: TypeElement = (sf.statements[1] as InterfaceDeclaration).members[0];
+        const variable = sf.statements[2] as VariableStatement;
+        const objectLiteral = variable.declarationList.declarations[0].initializer as ObjectLiteralExpression;
+        const objectLiteralElement: ObjectLiteralElement = objectLiteral.properties[0];
+        const declarations: readonly Declaration[] = [classElement, typeElement, objectLiteralElement];
+
+        assert.deepStrictEqual(declarations.map(declaration => getNameOfDeclaration(declaration)?.getText()), ["member", "member", "member"]);
+        assert.strictEqual(getCombinedModifierFlags(classElement), ModifierFlags.Public);
+    });
+
+    test("getNameOfDeclaration returns declared and assigned names", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `
+function declared() {}
+const assigned = class {};
+export default declared;
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const variable = sf.statements[1] as VariableStatement;
+        const classExpression = variable.declarationList.declarations[0].initializer!;
+
+        assert.strictEqual(getNameOfDeclaration(sf.statements[0] as FunctionDeclaration)?.getText(), "declared");
+        assert.strictEqual(getNameOfDeclaration(classExpression)?.getText(), "assigned");
+        assert.strictEqual(getNameOfDeclaration(sf.statements[2] as ExportAssignment)?.getText(), "declared");
+        assert.strictEqual(getNameOfDeclaration(undefined), undefined);
+    });
+
+    test("getNameOfDeclaration returns JavaScript assignment declaration names", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true } }),
+            "/src/index.js": `
+exports.foo = () => {};
+Object.defineProperty(exports, "bar", { value: 1 });
+class C { #x; method() { this.#x = 1; } }
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.js");
+        const assignment = (sf.statements[0] as ExpressionStatement).expression as BinaryExpression;
+        const defineProperty = (sf.statements[1] as ExpressionStatement).expression as CallExpression;
+        const classDeclaration = sf.statements[2] as ClassDeclaration;
+        const method = classDeclaration.members[1] as MethodDeclaration;
+        const privateAssignment = (method.body!.statements[0] as ExpressionStatement).expression as BinaryExpression;
+
+        assert.strictEqual(getNameOfDeclaration(assignment)?.getText(), "foo");
+        assert.strictEqual(getNameOfDeclaration(defineProperty)?.getText(), '"bar"');
+        assert.strictEqual(getNameOfDeclaration(privateAssignment), privateAssignment.left);
+    });
+});
 
 describe("RemoteNode + cloneNode", { concurrency }, () => {
     test("does not read a sibling as an invalid JSDoc link name", () => {
