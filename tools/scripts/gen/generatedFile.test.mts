@@ -844,6 +844,16 @@ test("enum generation skips unchanged outputs and Go verification", async () => 
     }
 });
 
+test("TypeScript AST generation emits LF before formatting", async context => {
+    const writes = context.mock.method(GeneratedFile.prototype, "write");
+    const { default: generate } = await import("../tsc/generate-ts-ast.ts");
+    generate(true);
+    assert.equal(writes.mock.callCount(), 4);
+    for (const call of writes.mock.calls) {
+        assert.equal(call.arguments[0].includes("\r"), false, "unformatted output must use LF");
+    }
+});
+
 test("AST generation forwards force to schema generators and the kind stringer", async () => {
     const root = path.resolve(import.meta.dirname, "../../..");
     const generate = (force = false) => x("npx", ["hereby", "generate:ast", ...(force ? ["--force"] : [])], { throwOnError: true, nodeOptions: { cwd: root } });
