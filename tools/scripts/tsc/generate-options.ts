@@ -9,6 +9,7 @@ import {
 } from "../gen/utils.mts";
 import {
     type CompilerOption,
+    type CompilerOptionType,
     type Declaration,
     type DeclarationGroup,
     fieldName,
@@ -37,7 +38,7 @@ export function compilerDeclarations(model = options): (Declaration & { group: D
     return model.compilerOptions.flatMap(option => {
         if (!option.declaration) return [];
         const { extraShortNames = [], ...metadata } = option.declaration;
-        const declaration = { name: option.name, kind: optionKind(option), ...metadata };
+        const declaration = { name: option.name, kind: optionKind(option), pathKind: option.type === "[]string" ? undefined : option.pathKind, ...metadata };
         const { description, showInSimplifiedHelpView, ...alias } = declaration;
         return [declaration, ...extraShortNames.map(shortName => ({ ...alias, shortName }))];
     });
@@ -137,13 +138,36 @@ function sectionComment(section: string | undefined): string {
     return section ? `\n// ${section.replaceAll("\n", "\n// ")}\n\n` : "";
 }
 
+type GoCompilerOptionType =
+    | CompilerOptionType
+    | "tspath.RootedFilePath"
+    | "tspath.RootedDirectoryPath"
+    | "[]tspath.RootedDirectoryPath"
+    | "tspath.RootedPath"
+    | "tspath.SourceMapLocation";
+
+function goType(option: CompilerOption): GoCompilerOptionType {
+    switch (option.pathKind) {
+        case "file":
+            return "tspath.RootedFilePath";
+        case "directory":
+            return option.type === "[]string" ? "[]tspath.RootedDirectoryPath" : "tspath.RootedDirectoryPath";
+        case "fileOrDirectory":
+            return "tspath.RootedPath";
+        case "sourceMapLocation":
+            return "tspath.SourceMapLocation";
+        default:
+            return option.type;
+    }
+}
+
 function coreOptions(): string {
     const fields = options.compilerOptions.map(option => {
         const comments = [
             ...(option.comment ? [option.comment] : []),
             ...(option.deprecated ? ["Deprecated: Do not use outside of options parsing and validation."] : []),
         ].map(comment => `// ${comment}\n`).join("");
-        return `${sectionComment(option.section)}${comments}${fieldName(option)} ${option.type} \`json:"${option.name},omitzero"\``;
+        return `${sectionComment(option.section)}${comments}${fieldName(option)} ${goType(option)} \`json:"${option.name},omitzero"\``;
     });
     return `type PluginImport struct {
 ${pluginImportFields.map(field => `${fieldName(field)} ${field.type} \`json:"${field.name}"\``).join("\n")}
@@ -164,13 +188,26 @@ func (options *CompilerOptions) Clone() *CompilerOptions {
 
 // Equals reports whether all stored option values are equal, including nil versus empty collections.
 // Paths are compared by ordered entries, ignoring backing-storage allocation.
-${optionsEquality("CompilerOptions", options.compilerOptions.map(option => ({ name: fieldName(option), type: option.type })))}
+${optionsEquality("CompilerOptions", options.compilerOptions.map(option => ({ name: fieldName(option), type: goType(option) })))}
 `;
 }
 
 export function generateCompilerOptionsAPI(model = options): string {
     const imports = new Set<string>();
     function typeName(option: CompilerOption): string {
+        switch (option.pathKind) {
+            case "file":
+                imports.add("RootedFilePath");
+                return "RootedFilePath";
+            case "directory":
+                imports.add("RootedDirectoryPath");
+                return option.type === "[]string" ? "RootedDirectoryPath[]" : "RootedDirectoryPath";
+            case "fileOrDirectory":
+                imports.add("RootedPath");
+                return "RootedPath";
+            case "sourceMapLocation":
+                return "string";
+        }
         switch (option.type) {
             case "Tristate":
                 return "boolean";
@@ -196,11 +233,14 @@ export function generateCompilerOptionsAPI(model = options): string {
     });
     const pluginFields = pluginImportFields.map(field => `${field.name}: ${typeName(field)};`);
     const enumNames = [...imports].sort();
+    const pathTypes = enumNames.filter(name => name.startsWith("Rooted"));
+    const optionEnums = enumNames.filter(name => !name.startsWith("Rooted"));
     const enumPath = (name: string) => `#enums/${name[0].toLowerCase() + name.slice(1)}`;
     return `${header}
-${enumNames.map(name => `import type { ${name} } from "${enumPath(name)}";`).join("\n")}
+${optionEnums.map(name => `import type { ${name} } from "${enumPath(name)}";`).join("\n")}
+${pathTypes.length ? `import type {\n    ${pathTypes.join(",\n    ")},\n} from "../ast/index.ts";` : ""}
 
-${enumNames.map(name => `export { ${name} } from "${enumPath(name)}";`).join("\n")}
+${optionEnums.map(name => `export { ${name} } from "${enumPath(name)}";`).join("\n")}
 
 /** CompilerOptions contains the compiler options exposed by the API. */
 export interface CompilerOptions {
@@ -213,7 +253,48 @@ ${pluginFields.join("\n")}
 `;
 }
 
-function optionsEquality(name: string, fields: StoredDeclaration["field"][]): string {
+export function generatePrepareCompilerOptionsAPI(model = options): string {
+    const pathOptions = model.compilerOptions.filter(option => (option.pathKind === "file" || option.pathKind === "directory" || option.pathKind === "fileOrDirectory"));
+    const converter = (option: CompilerOption): string => {
+        const value = option.name;
+        switch (option.pathKind) {
+            case "file":
+                return `${value} === undefined ? undefined : toRootedFilePath(${value}, currentDirectory)`;
+            case "directory":
+                return option.type === "[]string"
+                    ? `${value}?.map(value => toRootedDirectoryPath(value, currentDirectory))`
+                    : `${value} === undefined ? undefined : toRootedDirectoryPath(${value}, currentDirectory)`;
+            case "fileOrDirectory":
+                return `${value} === undefined ? undefined : toRootedPath(${value}, currentDirectory)`;
+            default:
+                throw new Error(`Unsupported API path kind for ${option.name}: ${option.pathKind}`);
+        }
+    };
+    return `${header}
+import type { RootedDirectoryPath } from "../ast/index.ts";
+import type { CompilerOptions } from "./compilerOptions.generated.ts";
+import {
+    toRootedDirectoryPath,
+    toRootedFilePath,
+    toRootedPath,
+} from "./path.ts";
+import type { RawCompilerOptions } from "./proto.generated.ts";
+
+export function prepareCompilerOptions(options: RawCompilerOptions, currentDirectory: RootedDirectoryPath): CompilerOptions {
+    const {
+        ${pathOptions.map(option => `${option.name},`).join("\n        ")}
+        ...rest
+    } = options;
+    const result = {
+        ...rest,
+        ${pathOptions.map(option => `${option.name}: ${converter(option)},`).join("\n        ")}
+    };
+    return result;
+}
+`;
+}
+
+function optionsEquality(name: string, fields: { name: string; type: GoCompilerOptionType; }[]): string {
     return `func (options *${name}) Equals(other *${name}) bool {
     if options == other { return true }
     if options == nil || other == nil { return false }
@@ -228,6 +309,7 @@ function optionsEquality(name: string, fields: StoredDeclaration["field"][]): st
                     break;
                 case "[]string":
                 case "[]PluginImport":
+                case "[]tspath.RootedDirectoryPath":
                     differs = `(${a} == nil) != (${b} == nil) || !slices.Equal(${a}, ${b})`;
                     break;
                 case "*collections.OrderedMap[string, []string]":
@@ -266,7 +348,7 @@ function showConfig(): string {
     });
     const enumOptions = serializedOptions.filter(option => optionKind(option) === "Enum");
     assert.equal(new Set(enumOptions.map(option => option.type)).size, enumOptions.length, "ShowConfig enum types must have a single option map");
-    return `func serializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
+    return `func serializeCompilerOptions(options *core.CompilerOptions, configFilePath tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) *collections.OrderedMap[string, any] {
     result := collections.NewOrderedMapWithSizeHint[string, any](32)
 ${
         serializedOptions.map(option => {
@@ -287,13 +369,21 @@ ${
                     value = `${field} == core.TSTrue`;
                     break;
                 case "String":
-                    if (declaration.isFilePath) value = `serializeCompilerOptionPath(${field}, configFilePath, comparePathsOptions)`;
+                    if (option.pathKind === "file" || option.pathKind === "directory") {
+                        value = `serializeCompilerOptionPath(${field}.AsPath(), configFilePath, caseSensitivity)`;
+                    }
+                    else if (option.pathKind === "fileOrDirectory") {
+                        value = `serializeCompilerOptionPath(${field}, configFilePath, caseSensitivity)`;
+                    }
                     break;
                 case "List": {
                     const element = options.elements[option.name];
-                    if (element?.isFilePath) {
+                    if (option.pathKind === "directory") {
                         assert.equal(option.type, "[]string", `Unsupported file path list: ${option.name}`);
-                        value = `serializeCompilerOptionPaths(${field}, configFilePath, comparePathsOptions)`;
+                        value = `core.Map(${field}, func(value tspath.RootedDirectoryPath) string {
+    if value == "" { return "" }
+    return serializeCompilerOptionPath(value.AsPath(), configFilePath, caseSensitivity)
+})`;
                     }
                     else if (element?.kind === "Enum") {
                         assert.equal(option.type, "[]string", `Unsupported enum list: ${option.name}`);
@@ -332,8 +422,8 @@ ${entries.map(entry => `if value == ${goValue(entry.value)} { return ${JSON.stri
 }
 
 function configDirSubstitution(): string {
-    const substitutedOptions = options.compilerOptions.filter(option => option.declaration?.allowConfigDirTemplateSubstitution ?? option.declaration?.isFilePath);
-    return `func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
+    const substitutedOptions = options.compilerOptions.filter(option => !option.pathKind && option.declaration?.allowConfigDirTemplateSubstitution);
+    return `func handleOptionConfigDirTemplateSubstitution(compilerOptions *parsedCompilerOptions, basePath tspath.RootedDirectoryPath) {
     if compilerOptions == nil { return }
 ${
         substitutedOptions.map(option => {
@@ -365,6 +455,18 @@ ${
             }
         }).join("\n")
     }
+    for key, value := range compilerOptions.unresolvedPaths {
+        option := CommandLineCompilerOptionsMap.Get(key)
+        if option.Kind == CommandLineOptionTypeList {
+            value = core.Map(ParseStringArray(value), func(path string) any {
+                return getSubstitutedPathWithConfigDirTemplate(path, basePath)
+            })
+        } else {
+            value = getSubstitutedPathWithConfigDirTemplate(ParseString(value), basePath)
+        }
+        ParseCompilerOptions(key, value, compilerOptions.CompilerOptions)
+    }
+    clear(compilerOptions.unresolvedPaths)
 }
 `;
 }
@@ -500,6 +602,7 @@ ${options.enums.find(enumDef => enumDef.name === "ModuleKind")!.members.filter(m
 const declarationFields = new Map([
     ["shortName", "ShortName"],
     ["isFilePath", "IsFilePath"],
+    ["pathKind", "PathKind"],
     ["isTSConfigOnly", "IsTSConfigOnly"],
     ["isCommandLineOnly", "IsCommandLineOnly"],
     ["description", "Description"],
@@ -517,7 +620,12 @@ function declarationLiteral(declaration: Declaration): string {
     for (const [key, value] of Object.entries(declaration)) {
         const goName = declarationFields.get(key);
         if (goName === undefined || value === undefined) continue;
-        properties.push(`${goName}: ${key === "extraValidation" ? "extraValidationLocale" : goValue(value)},`);
+        const goValueText = key === "extraValidation"
+            ? "extraValidationLocale"
+            : key === "pathKind"
+            ? `CommandLineOptionPathKind${value[0].toUpperCase() + value.slice(1)}`
+            : goValue(value);
+        properties.push(`${goName}: ${goValueText},`);
     }
     return `{\n${properties.join("\n")}\n}`;
 }
@@ -591,6 +699,18 @@ ${options.enums.find(enumDef => enumDef.name === "ScriptTarget")!.members.filter
 
 function parserAssignment(option: CompilerOption): string {
     const target = `allOptions.${fieldName(option)}`;
+    switch (option.pathKind) {
+        case "file":
+            return `${target} = parseFileName(value)`;
+        case "directory":
+            return option.type === "[]string"
+                ? `${target} = parseDirectoryNames(value)`
+                : `${target} = parseDirectoryName(value)`;
+        case "fileOrDirectory":
+            return `${target} = parseFileOrDirectoryName(value)`;
+        case "sourceMapLocation":
+            return `${target} = tspath.ToSourceMapLocation(ParseString(value))`;
+    }
     if (option.name === "lib") {
         return `if libs, ok := value.([]string); ok { ${target} = libs } else { ${target} = ParseStringArray(value) }`;
     }
@@ -627,9 +747,10 @@ function parser(): string {
     return true
 }
 
-func getDefaultCompilerOptions(configFileName string) *core.CompilerOptions {
-    if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
-        return &core.CompilerOptions{
+func getDefaultCompilerOptions(configFileName tspath.RootedFilePath) *parsedCompilerOptions {
+   options := &core.CompilerOptions{}
+   if configFileName != "" && configFileName.BaseName() == "jsconfig.json" {
+       options = &core.CompilerOptions{
         ${
         options.compilerOptions.filter(option => option.jsconfigDefault !== undefined).map(option => {
             const value = option.jsconfigDefault!;
@@ -639,11 +760,14 @@ func getDefaultCompilerOptions(configFileName string) *core.CompilerOptions {
     }
         }
     }
-    return &core.CompilerOptions{}
+    return &parsedCompilerOptions{
+        CompilerOptions: options,
+        unresolvedPaths: make(unresolvedCompilerOptionPaths),
+    }
 }
 
-func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
-    if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
+func getDefaultTypeAcquisition(configFileName tspath.RootedFilePath) *core.TypeAcquisition {
+    if configFileName != "" && configFileName.BaseName() == "jsconfig.json" {
         return &core.TypeAcquisition{
             ${options.typeAcquisition.filter(option => option.jsconfigDefault !== undefined).map(option => `${option.field.name}: core.TS${option.jsconfigDefault ? "True" : "False"},`).join("\n")}
         }
@@ -675,6 +799,7 @@ export function generateOptions(): Map<string, string> {
     const buildOptions = options.buildOptions.filter((option): option is StoredDeclaration => option.field !== undefined);
     return new Map([
         ["packages/typescript/src/api/compilerOptions.generated.ts", generateCompilerOptionsAPI()],
+        ["packages/typescript/src/api/prepareCompilerOptions.generated.ts", generatePrepareCompilerOptionsAPI()],
         [
             "tsc/internal/core/options_generated.go",
             `${header}
@@ -684,6 +809,7 @@ import (
     "slices"
 
     "github.com/microsoft/TypeScript/tsc/internal/collections"
+    "github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 //go:generate npx hereby generate:compileroptions

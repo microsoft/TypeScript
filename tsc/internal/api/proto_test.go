@@ -15,6 +15,18 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestCompilerOptionsInput(t *testing.T) {
+	t.Parallel()
+
+	var options api.TranspileOptions
+	assert.NilError(t, json.Unmarshal([]byte(`{"compilerOptions":{"module":1,"outDir":"dist"}}`), &options))
+	assert.Assert(t, options.CompilerOptionsInput != nil)
+	compilerOptions, diagnostics := options.CompilerOptionsInput.Finalize(tspath.RootedDirectoryPath("/project"))
+	assert.Equal(t, len(diagnostics), 0)
+	assert.Equal(t, compilerOptions.Module, core.ModuleKindCommonJS)
+	assert.Equal(t, compilerOptions.OutDir, tspath.RootedDirectoryPath("/project/dist"))
+}
+
 func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
@@ -40,8 +52,34 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 			uri:   "file:///foo.ts",
 		},
 		{
+			name:  "uri object with nested unknown field",
+			input: `{"extra":{"nested":true},"uri":"file:///foo.ts"}`,
+			uri:   "file:///foo.ts",
+		},
+		{
 			name:  "empty object",
 			input: `{}`,
+			err:   "object must contain uri",
+		},
+		{
+			name:  "empty file name",
+			input: `""`,
+			err:   "file name must not be empty",
+		},
+		{
+			name:  "empty uri",
+			input: `{"uri":""}`,
+			err:   "uri must be a non-empty string",
+		},
+		{
+			name:  "non-string uri",
+			input: `{"uri":42}`,
+			err:   "uri must be a non-empty string",
+		},
+		{
+			name:  "duplicate uri",
+			input: `{"uri":"file:///foo.ts","uri":"file:///bar.ts"}`,
+			err:   `duplicate object member name "uri"`,
 		},
 		{
 			name:  "invalid type",
@@ -76,7 +114,7 @@ func TestEnsureProgramsUnmarshalJSON(t *testing.T) {
 	var projects api.EnsurePrograms
 	assert.NilError(t, json.Unmarshal([]byte(`["/tsconfig.json","/dev/null/synthetic/1"]`), &projects))
 	assert.DeepEqual(t, projects.Projects, []project.ID{
-		project.ConfiguredProjectID(tspath.Path("/tsconfig.json")).AsID(),
+		project.ConfiguredProjectIDFromPathKey(tspath.PathKeyFromCanonical("/tsconfig.json")).AsID(),
 		project.NewSyntheticProjectID(1).AsID(),
 	})
 

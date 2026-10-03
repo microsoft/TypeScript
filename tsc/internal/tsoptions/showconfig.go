@@ -57,31 +57,36 @@ type TSConfig struct {
 
 // ConvertToTSConfig generates a complete tsconfig representation for --showConfig output,
 // matching the behavior of TypeScript's convertToTSConfig function.
-func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName string) *TSConfig {
+func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName tspath.RootedFilePath) *TSConfig {
 	if configFileName == "" {
-		configFileName = "tsconfig.json"
+		configFileName = configParseResult.BaseDirectory().ResolveFile("tsconfig.json")
 	}
-	normalizedConfigPath := tspath.GetNormalizedAbsolutePath(configFileName, configParseResult.GetCurrentDirectory())
-	comparePathsOptions := tspath.ComparePathsOptions{
-		CurrentDirectory:          configParseResult.GetCurrentDirectory(),
-		UseCaseSensitiveFileNames: configParseResult.UseCaseSensitiveFileNames(),
-	}
+	caseSensitivity := configParseResult.CaseSensitivity()
 
 	// Build the list of all resolved files as relative paths from the config file.
 	var files []string
 	for _, f := range configParseResult.FileNames() {
-		normalizedFilePath := tspath.GetNormalizedAbsolutePath(f, configParseResult.GetCurrentDirectory())
-		relativePath := tspath.GetRelativePathFromFile(normalizedConfigPath, normalizedFilePath, comparePathsOptions)
-		files = append(files, relativePath)
+		if relativePath, ok := caseSensitivity.RelativePathFromFile(configFileName, f); ok {
+			files = append(files, relativePath.AsModuleSpecifier().AsString())
+		} else {
+			files = append(files, f.AsString())
+		}
 	}
 
 	// Serialize compiler options
-	optionMap := serializeCompilerOptions(configParseResult.CompilerOptions(), normalizedConfigPath, comparePathsOptions)
+	optionMap := serializeCompilerOptions(configParseResult.CompilerOptions(), configFileName, caseSensitivity)
+
+	for _, name := range []string{
+		"showConfig", "configFile", "configFilePath", "help", "init",
+		"listFilesOnly", "listEmittedFiles", "project", "build", "version",
+	} {
+		optionMap.Delete(name)
+	}
 
 	// Add implied compiler options (options that are derived from explicitly set options,
 	// such as moduleResolution implied by module, or useDefineForClassFields implied by target).
 	// This mirrors TypeScript's convertToTSConfig computedOptions logic.
-	addImpliedOptions(optionMap, configParseResult.CompilerOptions(), normalizedConfigPath, comparePathsOptions)
+	addImpliedOptions(optionMap, configParseResult.CompilerOptions())
 
 	config := &TSConfig{
 		CompilerOptions: optionMap,
@@ -107,13 +112,12 @@ func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName stri
 	}
 
 	// Add include/exclude from configFileSpecs
-	if configParseResult.ConfigFile != nil && configParseResult.ConfigFile.configFileSpecs != nil {
-		specs := configParseResult.ConfigFile.configFileSpecs
-		include := filterSameAsDefaultInclude(specs.validatedIncludeSpecs)
+	if specs := configParseResult.getConfigFileSpecs(); specs != nil {
+		include := filterSameAsDefaultInclude(core.Map(specs.validatedIncludeSpecs, tspath.PathPattern.AsString))
 		if len(include) > 0 {
 			config.Include = include
 		}
-		config.Exclude = specs.validatedExcludeSpecs
+		config.Exclude = core.Map(specs.validatedExcludeSpecs, tspath.PathPattern.AsString)
 	}
 
 	// Add compileOnSave
@@ -147,18 +151,11 @@ func getNameOfCompilerOptionValue(value any, enumMap *collections.OrderedMap[str
 	return ""
 }
 
-func serializeCompilerOptionPath(value string, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) string {
-	configDir := tspath.GetDirectoryPath(configFilePath)
-	absolute := tspath.GetNormalizedAbsolutePath(value, configDir)
-	return tspath.GetRelativePathFromFile(configFilePath, absolute, comparePathsOptions)
-}
-
-func serializeCompilerOptionPaths(values []string, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) []string {
-	result := make([]string, len(values))
-	for i, value := range values {
-		result[i] = serializeCompilerOptionPath(value, configFilePath, comparePathsOptions)
+func serializeCompilerOptionPath(value tspath.RootedPath, configFilePath tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) string {
+	if relativePath, ok := caseSensitivity.RelativePathFromFileToPath(configFilePath, value); ok {
+		return relativePath.AsModuleSpecifier().AsString()
 	}
-	return result
+	return value.AsString()
 }
 
 func serializeCompilerOptionEnumList(values []string, enumMap *collections.OrderedMap[string, any]) []string {
@@ -179,8 +176,6 @@ func serializeCompilerOptionEnumList(values []string, enumMap *collections.Order
 func addImpliedOptions(
 	optionMap *collections.OrderedMap[string, any],
 	options *core.CompilerOptions,
-	_ string,
-	_ tspath.ComparePathsOptions,
 ) {
 	// Build the set of explicitly provided option JSON names (e.g., "module", "target").
 	provided := make(map[string]bool, optionMap.Size())

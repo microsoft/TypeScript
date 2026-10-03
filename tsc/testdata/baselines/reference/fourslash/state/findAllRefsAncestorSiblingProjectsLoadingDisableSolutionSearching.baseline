@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/solution/compiler/program.ts] *new* 
 namespace ts {
 	export const program: Program = {
