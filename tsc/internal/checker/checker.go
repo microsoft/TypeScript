@@ -24268,6 +24268,7 @@ func (c *Checker) getInferTypeParameters(node *ast.Node) []*Type {
 			result = append(result, c.getDeclaredTypeOfSymbol(symbol))
 		}
 	}
+	slices.SortFunc(result, CompareTypes)
 	return result
 }
 
