@@ -96,6 +96,12 @@ describe("API test suite in a browser", () => {
                                     pattern: /module resolver callbacks (?:can delegate to another resolver|can resolve against the in-progress snapshot filesystem|preserve retained and live filesystem context)$/,
                                     reason: "An in-thread WebAssembly reactor cannot service nested API requests while a host callback is in flight.",
                                 },
+                                ...${JSON.stringify(mode)} === "async"
+                                    ? [{
+                                        pattern: /source imports do not request module resolution$/,
+                                        reason: "The async resolver returns a Promise, which cannot complete inside a synchronous WebAssembly host callback.",
+                                    }]
+                                    : [],
                                 {
                                     pattern: /can close a process client while initialization is manually batched$/,
                                     reason: "This test exercises the Node.js spawned-process client.",

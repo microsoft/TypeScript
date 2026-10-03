@@ -6,6 +6,11 @@ import type { ModuleKind } from "#enums/moduleKind";
 import type { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import type { NewLineKind } from "#enums/newLineKind";
 import type { ScriptTarget } from "#enums/scriptTarget";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+    RootedPath,
+} from "../ast/index.ts";
 
 export { JsxEmit } from "#enums/jsxEmit";
 export { ModuleDetectionKind } from "#enums/moduleDetectionKind";
@@ -31,7 +36,7 @@ export interface CompilerOptions {
     emitBOM?: boolean | undefined;
     emitDecoratorMetadata?: boolean | undefined;
     declaration?: boolean | undefined;
-    declarationDir?: string | undefined;
+    declarationDir?: RootedDirectoryPath | undefined;
     declarationMap?: boolean | undefined;
     deduplicatePackages?: boolean | undefined;
     disableSizeLimit?: boolean | undefined;
@@ -81,21 +86,21 @@ export interface CompilerOptions {
     noResolve?: boolean | undefined;
     noImplicitOverride?: boolean | undefined;
     noUncheckedSideEffectImports?: boolean | undefined;
-    outDir?: string | undefined;
+    outDir?: RootedDirectoryPath | undefined;
     paths?: Record<string, string[]> | undefined;
     /** Plugins are parsed only so tools can report that native TypeScript does not support them. */
     plugins?: PluginImport[] | undefined;
     preserveConstEnums?: boolean | undefined;
     preserveSymlinks?: boolean | undefined;
-    project?: string | undefined;
+    project?: RootedPath | undefined;
     resolveJsonModule?: boolean | undefined;
     resolvePackageJsonExports?: boolean | undefined;
     resolvePackageJsonImports?: boolean | undefined;
     removeComments?: boolean | undefined;
     rewriteRelativeImportExtensions?: boolean | undefined;
     reactNamespace?: string | undefined;
-    rootDir?: string | undefined;
-    rootDirs?: string[] | undefined;
+    rootDir?: RootedDirectoryPath | undefined;
+    rootDirs?: RootedDirectoryPath[] | undefined;
     skipLibCheck?: boolean | undefined;
     stableTypeOrdering?: boolean | undefined;
     strict?: boolean | undefined;
@@ -111,8 +116,8 @@ export interface CompilerOptions {
     suppressOutputPathCheck?: boolean | undefined;
     target?: ScriptTarget | undefined;
     traceResolution?: boolean | undefined;
-    tsBuildInfoFile?: string | undefined;
-    typeRoots?: string[] | undefined;
+    tsBuildInfoFile?: RootedFilePath | undefined;
+    typeRoots?: RootedDirectoryPath[] | undefined;
     types?: string[] | undefined;
     useDefineForClassFields?: boolean | undefined;
     useUnknownInCatchVariables?: boolean | undefined;
@@ -121,7 +126,7 @@ export interface CompilerOptions {
 
     // Internal fields
 
-    configFilePath?: string | undefined;
+    configFilePath?: RootedFilePath | undefined;
 }
 
 export interface PluginImport {

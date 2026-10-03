@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
@@ -33,6 +34,7 @@ type Reactor struct {
 	cancel    context.CancelFunc
 	session   *api.Session
 	files     vfs.FS
+	cwd       tspath.RootedDirectoryPath
 	timing    *ipc.ServerTimingCollector
 	closeOnce sync.Once
 }
@@ -41,8 +43,12 @@ func New(ctx context.Context, options Options) *Reactor {
 	if options.Cwd == "" {
 		options.Cwd = "/"
 	}
-	useCaseSensitiveFileNames := options.UseCaseSensitiveFileNames == nil || *options.UseCaseSensitiveFileNames
-	files := vfstest.FromMap(map[string]string{}, useCaseSensitiveFileNames)
+	cwd := tspath.RootedDirectoryPathFromAbsolute(options.Cwd)
+	caseSensitivity := tspath.CaseSensitive
+	if options.UseCaseSensitiveFileNames != nil && !*options.UseCaseSensitiveFileNames {
+		caseSensitivity = tspath.CaseInsensitive
+	}
+	files := vfstest.FromMap(map[string]string{}, caseSensitivity)
 	var projectFiles vfs.FS = files
 	if options.WrapFS != nil {
 		projectFiles = options.WrapFS(projectFiles)
@@ -52,7 +58,7 @@ func New(ctx context.Context, options Options) *Reactor {
 		BackgroundCtx: ctx,
 		FS:            bundled.WrapFS(projectFiles),
 		Options: &project.SessionOptions{
-			CurrentDirectory:   options.Cwd,
+			CurrentDirectory:   cwd,
 			DefaultLibraryPath: bundled.LibPath(),
 			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
 			LoggingEnabled:     false,
@@ -67,6 +73,7 @@ func New(ctx context.Context, options Options) *Reactor {
 		cancel:  cancel,
 		session: session,
 		files:   files,
+		cwd:     cwd,
 	}
 	if options.CollectTiming {
 		reactor.timing = ipc.NewServerTimingCollector()
@@ -108,15 +115,15 @@ func marshalResponse(result any) (Response, error) {
 }
 
 func (r *Reactor) SetFile(path string, content string) error {
-	return r.files.WriteFile(path, content)
+	return r.files.WriteFile(tspath.ToRootedFilePath(path, r.cwd), content)
 }
 
 func (r *Reactor) ReadFile(path string) (string, bool) {
-	return r.files.ReadFile(path)
+	return r.files.ReadFile(tspath.ToRootedFilePath(path, r.cwd))
 }
 
 func (r *Reactor) RemoveFile(path string) error {
-	return r.files.Remove(path)
+	return r.files.Remove(tspath.ToRootedPath(path, r.cwd))
 }
 
 func (r *Reactor) Close() {

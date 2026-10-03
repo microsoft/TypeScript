@@ -11,13 +11,12 @@ import (
 type EmitHost interface {
 	Options() *core.CompilerOptions
 	SourceFiles() []*ast.SourceFile
-	UseCaseSensitiveFileNames() bool
-	GetCurrentDirectory() string
-	CommonSourceDirectory() string
-	IsEmitBlocked(file string) bool
-	WriteFile(fileName string, text string) error
+	CaseSensitivity() tspath.CaseSensitivity
+	CommonSourceDirectory() tspath.RootedDirectoryPath
+	IsEmitBlocked(file tspath.RootedFilePath) bool
+	WriteFile(fileName tspath.RootedFilePath, text string) error
 	GetEmitModuleFormatOfFile(file ast.HasFileName) core.ModuleKind
 	GetEmitResolver() EmitResolver
-	GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
+	GetProjectReferenceFromSource(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference
 	IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
 }

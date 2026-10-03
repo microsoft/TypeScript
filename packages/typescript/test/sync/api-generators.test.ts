@@ -22,6 +22,7 @@ import {
     SyntaxKind,
 } from "@typescript/typescript/unstable/ast";
 import { cloneNode } from "@typescript/typescript/unstable/ast/factory";
+import { toRootedFilePath } from "@typescript/typescript/unstable/path";
 import type {
     APIRequest,
     APIResponse,
@@ -171,6 +172,7 @@ const privateGeneratorGetters = new Set([
     "NodeHandle.fetchOwnerFile",
     "Program.disposeWorker",
     "Program.fetchSourceFileMetadata",
+    "Program.getSourceFileWorker",
     "Snapshot.disposeWorker",
     "Symbol.fetchSymbol",
     "Symbol.fetchSymbols",
@@ -1391,8 +1393,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 project.program.getSourceFileNames.gen(),
             );
             assert.strictEqual(defaultProject, project);
-            assert.ok(sourceFileNames.includes("/src/foo.ts"));
-            assert.ok(sourceFileNames.includes("/src/index.ts"));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/foo.ts", undefined)));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/index.ts", undefined)));
 
             const [symbol, type] = api.batch(
                 project.checker.getSymbolAtLocation.gen(node),
@@ -1596,7 +1598,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
                 parityCase("API", "createBuildOrchestrator", api.createBuildOrchestrator, assertBuildOrchestratorsEquivalent, ["/tsconfig.json"], { cwd: "/" }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
-                    temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
+                    temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName!);
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
                 parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
@@ -1618,6 +1620,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
                 parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
                 parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
+                parityCase("Program", "getSourceFileByPath", program.getSourceFileByPath, assertOptionalSourceFilesEquivalent, indexFile.path),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),
@@ -1642,6 +1645,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getJavaScriptEmit", program.getJavaScriptEmit, assertDeepEquivalent, ["/src/index.ts"]),
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
 
+                parityCase("Checker", "getMergedSymbol", checker.getMergedSymbol, assertSymbolsEquivalent, interfaceSymbol),
+                parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration.name),
+                parityCase("Checker", "getSymbolOfDeclaration", checker.getSymbolOfDeclaration, assertSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getParentOfSymbol", checker.getParentOfSymbol, assertOptionalSymbolsEquivalent, unimportedSymbol),
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
                 parityCase("Checker", "getSymbolAtPosition", selectGeneratorMethod<[file: string, position: number], Symbol | undefined>(checker.getSymbolAtPosition), assertOptionalSymbolsEquivalent, "/src/index.ts", importedDerived.pos),

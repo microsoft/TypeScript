@@ -1,5 +1,9 @@
 import type { FileSystemCallbacks } from "@typescript/typescript/unstable/fs";
 import {
+    toRootedDirectoryPath,
+    toRootedFilePath,
+} from "@typescript/typescript/unstable/path";
+import {
     instantiateWasm,
     type WasmReactorInstance,
     WasmTransport,
@@ -126,7 +130,7 @@ function syncOpenFiles(
 ): void {
     for (const file of changes?.openFiles ?? []) {
         const fileName = resolveFileName(file);
-        const content = typeof fs.readFile === "function" ? fs.readFile(fileName) : undefined;
+        const content = typeof fs.readFile === "function" ? fs.readFile(toRootedFilePath(fileName, undefined)) : undefined;
         if (typeof content === "string") {
             transport.setFile(fileName, content);
             mirroredFiles.get(transport)?.add(fileName);
@@ -150,12 +154,14 @@ function synchronizeFileSystem(fs: FileSystemCallbacks, transport: WasmTransport
     mirroredFiles.set(transport, current);
 
     function visit(directory: string): void {
-        const entries = typeof fs.getAccessibleEntries === "function" ? fs.getAccessibleEntries(directory) : undefined;
+        const entries = typeof fs.getAccessibleEntries === "function"
+            ? fs.getAccessibleEntries(toRootedDirectoryPath(directory, undefined))
+            : undefined;
         if (!entries || typeof entries !== "object") return;
         for (const file of entries.files) {
             const path = join(directory, file);
             current.add(path);
-            const content = typeof fs.readFile === "function" ? fs.readFile(path) : undefined;
+            const content = typeof fs.readFile === "function" ? fs.readFile(toRootedFilePath(path, undefined)) : undefined;
             if (typeof content === "string") {
                 transport.setFile(path, content);
             }
@@ -176,7 +182,7 @@ function syncFileChanges(
     }
     for (const file of [...changes?.changed ?? [], ...changes?.created ?? []]) {
         const fileName = resolveFileName(file);
-        const content = typeof fs.readFile === "function" ? fs.readFile(fileName) : undefined;
+        const content = typeof fs.readFile === "function" ? fs.readFile(toRootedFilePath(fileName, undefined)) : undefined;
         if (typeof content === "string") {
             transport.setFile(fileName, content);
             mirroredFiles.get(transport)?.add(fileName);

@@ -1,3 +1,5 @@
+import type { FileSystemCallbacks } from "../api/fs.ts";
+import type { RootedFilePath } from "../ast/index.ts";
 import type { WasmReactorInstance } from "./transport.ts";
 
 declare namespace WebAssembly {
@@ -49,7 +51,7 @@ export interface InstantiateWasmOptions {
 }
 
 export interface WasmFileSystem {
-    writeFile?: ((path: string, data: string) => unknown) | symbol | undefined;
+    writeFile?: FileSystemCallbacks["writeFile"] | undefined;
 }
 
 interface WasmHost {
@@ -321,7 +323,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
         const path = decoder.decode(new Uint8Array(memory.buffer, pathPointer, pathLength));
         const data = decoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
         try {
-            fileSystem.writeFile(path, data);
+            fileSystem.writeFile(path as RootedFilePath, data);
             new DataView(getMemory().buffer).setUint32(writtenPointer, bufferLength, true);
             return errnoSuccess;
         }

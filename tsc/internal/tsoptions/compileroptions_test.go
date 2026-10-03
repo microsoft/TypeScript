@@ -67,20 +67,25 @@ func TestGeneratedCompilerOptionParsingAndClone(t *testing.T) {
 			optionsValue := reflect.ValueOf(options).Elem()
 			var input any
 			var expected any
-			switch field.Type {
-			case reflect.TypeFor[core.Tristate]():
+			switch {
+			case field.Type == reflect.TypeFor[core.Tristate]():
 				input, expected = true, core.TSTrue
-			case reflect.TypeFor[string]():
-				input, expected = "value", "value"
-			case reflect.TypeFor[*int]():
+			case field.Type.Kind() == reflect.String:
+				input = "/value"
+				expected = reflect.ValueOf(input).Convert(field.Type).Interface()
+			case field.Type == reflect.TypeFor[*int]():
 				input, expected = float64(2), new(2)
-			case reflect.TypeFor[[]string]():
-				input, expected = []any{"first", "second"}, []string{"first", "second"}
-			case reflect.TypeFor[[]core.PluginImport]():
+			case field.Type.Kind() == reflect.Slice && field.Type.Elem().Kind() == reflect.String:
+				input = []any{"/first", "/second"}
+				value := reflect.MakeSlice(field.Type, 2, 2)
+				value.Index(0).Set(reflect.ValueOf("/first").Convert(field.Type.Elem()))
+				value.Index(1).Set(reflect.ValueOf("/second").Convert(field.Type.Elem()))
+				expected = value.Interface()
+			case field.Type == reflect.TypeFor[[]core.PluginImport]():
 				plugin := &collections.OrderedMap[string, any]{}
 				plugin.Set("name", "plugin")
 				input, expected = []any{plugin}, []core.PluginImport{{Name: "plugin"}}
-			case reflect.TypeFor[*collections.OrderedMap[string, []string]]():
+			case field.Type == reflect.TypeFor[*collections.OrderedMap[string, []string]]():
 				paths := &collections.OrderedMap[string, any]{}
 				paths.Set("@/*", []any{"src/*"})
 				expectedPaths := &collections.OrderedMap[string, []string]{}
@@ -260,28 +265,30 @@ func TestCompilerOptionConfigDirSubstitution(t *testing.T) {
 	t.Parallel()
 
 	handleOptionConfigDirTemplateSubstitution(nil, "/config")
-	fields := []string{
-		"GenerateCpuProfile", "GenerateTrace", "OutFile", "OutDir",
-		"RootDir", "TsBuildInfoFile", "BaseUrl", "DeclarationDir",
+	tests := []struct {
+		option string
+		field  string
+	}{
+		{option: "generateCpuProfile", field: "GenerateCpuProfile"},
+		{option: "generateTrace", field: "GenerateTrace"},
+		{option: "outFile", field: "OutFile"},
+		{option: "outDir", field: "OutDir"},
+		{option: "rootDir", field: "RootDir"},
+		{option: "tsBuildInfoFile", field: "TsBuildInfoFile"},
+		{option: "baseUrl", field: "BaseUrl"},
+		{option: "declarationDir", field: "DeclarationDir"},
 	}
-	for field := range reflect.TypeFor[core.CompilerOptions]().Fields() {
-		if field.Type.Kind() != reflect.String {
-			continue
-		}
-		t.Run(field.Name, func(t *testing.T) {
+	for _, test := range tests {
+		t.Run(test.field, func(t *testing.T) {
 			t.Parallel()
-			for _, value := range []string{"", "unchanged", "${configDir}/output", "prefix/${configDir}/output"} {
-				options := &core.CompilerOptions{}
-				actual := reflect.ValueOf(options).Elem().FieldByIndex(field.Index)
-				actual.SetString(value)
-				handleOptionConfigDirTemplateSubstitution(options, "/config")
-				expected := value
-				if slices.Contains(fields, field.Name) && value == "${configDir}/output" {
-					expected = "/config/output"
-				}
-				if actual.String() != expected {
-					t.Fatalf("Got %q, want %q", actual.String(), expected)
-				}
+			options := &parsedCompilerOptions{
+				CompilerOptions: &core.CompilerOptions{},
+				unresolvedPaths: unresolvedCompilerOptionPaths{test.option: "${configDir}/output"},
+			}
+			handleOptionConfigDirTemplateSubstitution(options, "/config")
+			actual, ok := PathValueAsString(reflect.ValueOf(options.CompilerOptions).Elem().FieldByName(test.field).Interface())
+			if !ok || actual != "/config/output" {
+				t.Fatalf("Got %q, want %q", actual, "/config/output")
 			}
 		})
 	}
@@ -293,19 +300,18 @@ func TestCompilerOptionConfigDirSubstitutionCopyOnWrite(t *testing.T) {
 	for _, fieldName := range []string{"RootDirs", "TypeRoots"} {
 		t.Run(fieldName, func(t *testing.T) {
 			t.Parallel()
-			for _, original := range [][]string{nil, {}, {"unchanged"}, {"${configDir}/types", "unchanged"}} {
-				options := &core.CompilerOptions{}
-				field := reflect.ValueOf(options).Elem().FieldByName(fieldName)
-				field.Set(reflect.ValueOf(original))
-				handleOptionConfigDirTemplateSubstitution(options, "/config")
-				actual := field.Interface().([]string)
-				if len(original) > 0 && original[0] == "${configDir}/types" {
-					if !slices.Equal(actual, []string{"/config/types", "unchanged"}) || &actual[0] == &original[0] {
-						t.Fatal("Substitution must copy the changed slice")
-					}
-				} else if !reflect.DeepEqual(actual, original) || field.Pointer() != reflect.ValueOf(original).Pointer() {
-					t.Fatal("Unchanged slices must retain their identity")
-				}
+			optionName := "rootDirs"
+			if fieldName == "TypeRoots" {
+				optionName = "typeRoots"
+			}
+			options := &parsedCompilerOptions{
+				CompilerOptions: &core.CompilerOptions{},
+				unresolvedPaths: unresolvedCompilerOptionPaths{optionName: []any{"${configDir}/types", "unchanged"}},
+			}
+			handleOptionConfigDirTemplateSubstitution(options, "/config")
+			values, ok := PathValuesAsStrings(reflect.ValueOf(options.CompilerOptions).Elem().FieldByName(fieldName).Interface())
+			if !ok || !slices.Equal(values, []string{"/config/types", "/config/unchanged"}) {
+				t.Fatalf("Got %v, want substituted paths", values)
 			}
 		})
 	}
@@ -315,7 +321,7 @@ func TestCompilerOptionConfigDirSubstitutionCopyOnWrite(t *testing.T) {
 	changed := []string{"${configDir}/src", "other"}
 	original.Set("unchanged", unchanged)
 	original.Set("changed", changed)
-	options := &core.CompilerOptions{Paths: original}
+	options := &parsedCompilerOptions{CompilerOptions: &core.CompilerOptions{Paths: original}}
 	handleOptionConfigDirTemplateSubstitution(options, "/config")
 	if options.Paths == original || !slices.Equal(options.Paths.GetOrZero("changed"), []string{"/config/src", "other"}) {
 		t.Fatal("Substitution must clone paths before changing them")

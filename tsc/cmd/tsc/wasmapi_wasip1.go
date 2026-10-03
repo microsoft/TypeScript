@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/api/wasmreactor"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 )
@@ -60,8 +61,8 @@ func createSession(optionsPtr uint32, optionsLen uint32) (status uint32) {
 	options.Conn = hostCallbackConn{}
 	options.WrapFS = func(files vfs.FS) vfs.FS {
 		return wrapvfs.Wrap(files, wrapvfs.Replacements{
-			WriteFile: func(path string, data string) error {
-				handled, err := writeFileToHost(path, data)
+			WriteFile: func(path tspath.RootedFilePath, data string) error {
+				handled, err := writeFileToHost(path.AsString(), data)
 				if !handled {
 					return files.WriteFile(path, data)
 				}

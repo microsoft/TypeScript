@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
@@ -42,6 +43,7 @@ func runLSP(args []string) int {
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
 	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
+	cwd := tspath.RootedDirectoryPathFromAbsolute(core.Must(getCurrentDirectory()))
 
 	ctx, stop := notifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
@@ -50,10 +52,10 @@ func runLSP(args []string) int {
 		In:                 lsp.ToReader(stdioStdin),
 		Out:                lsp.ToWriter(os.Stdout),
 		Err:                os.Stderr,
-		Cwd:                core.Must(getCurrentDirectory()),
+		Cwd:                cwd,
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
-		TypingsLocation:    typingsLocation,
+		TypingsLocation:    tspath.ToRootedDirectoryPath(typingsLocation, cwd),
 		NpmInstall:         getNpmInstall(),
 		Spawn:              getLSPSpawn(),
 		ProgressDelay:      250 * time.Millisecond,
