@@ -56,7 +56,7 @@ type Mapper struct {
 	Definition
 	Manifest `json:"-"`
 	// PackageDirectory is the real path directory returned by package resolution for package-based mappers.
-	PackageDirectory string `json:"-"`
+	PackageDirectory tspath.RootedDirectoryPath `json:"-"`
 	// ContributionID is provided by an LSP client extension for inferred project content mappers.
 	ContributionID string `json:"-"`
 }

@@ -7,40 +7,39 @@ import (
 )
 
 type OutputPathsHost interface {
-	CommonSourceDirectory() string
+	CommonSourceDirectory() tspath.RootedDirectoryPath
 	ContentMapperExtensions() []string
 	ContentMapperExtensionRewrites() []core.ExtensionRewrite
-	GetCurrentDirectory() string
-	UseCaseSensitiveFileNames() bool
+	CaseSensitivity() tspath.CaseSensitivity
 }
 
 type OutputPaths struct {
-	jsFilePath             string
-	sourceMapFilePath      string
-	declarationFilePath    string
-	declarationMapPath     string
-	externalOutputFilePath string
+	jsFilePath             tspath.RootedFilePath
+	sourceMapFilePath      tspath.RootedFilePath
+	declarationFilePath    tspath.RootedFilePath
+	declarationMapPath     tspath.RootedFilePath
+	externalOutputFilePath tspath.RootedFilePath
 }
 
 // DeclarationFilePath implements declarations.OutputPaths.
-func (o *OutputPaths) DeclarationFilePath() string {
+func (o *OutputPaths) DeclarationFilePath() tspath.RootedFilePath {
 	return o.declarationFilePath
 }
 
 // JsFilePath implements declarations.OutputPaths.
-func (o *OutputPaths) JsFilePath() string {
+func (o *OutputPaths) JsFilePath() tspath.RootedFilePath {
 	return o.jsFilePath
 }
 
-func (o *OutputPaths) SourceMapFilePath() string {
+func (o *OutputPaths) SourceMapFilePath() tspath.RootedFilePath {
 	return o.sourceMapFilePath
 }
 
-func (o *OutputPaths) DeclarationMapPath() string {
+func (o *OutputPaths) DeclarationMapPath() tspath.RootedFilePath {
 	return o.declarationMapPath
 }
 
-func (o *OutputPaths) ExternalOutputFilePath() string {
+func (o *OutputPaths) ExternalOutputFilePath() tspath.RootedFilePath {
 	return o.externalOutputFilePath
 }
 
@@ -51,14 +50,12 @@ type ForceEmitPaths struct {
 }
 
 func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions, host OutputPathsHost, force ForceEmitPaths) *OutputPaths {
-	ownOutputFilePath := getOwnEmitOutputFilePath(sourceFile.FileName(), options, host, GetOutputExtension(sourceFile.FileName(), options.Jsx))
+	fileName := sourceFile.FileName()
+	ownOutputFilePath := getOwnEmitOutputFilePathForFileName(fileName, options, host, GetOutputExtensionForFileName(fileName, options.Jsx))
 	isJsonFile := ast.IsJsonSourceFile(sourceFile)
 	// If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
 	isJsonEmittedToSameLocation := isJsonFile &&
-		tspath.ComparePaths(sourceFile.FileName(), ownOutputFilePath, tspath.ComparePathsOptions{
-			CurrentDirectory:          host.GetCurrentDirectory(),
-			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
-		}) == 0
+		host.CaseSensitivity().CompareFilePaths(fileName, ownOutputFilePath) == 0
 	paths := &OutputPaths{}
 	if sourceFile.ContentMapper() != "" {
 		paths.externalOutputFilePath = GetExternalOutputFileName(sourceFile.FileName(), options, host)
@@ -70,9 +67,9 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 		}
 	}
 	if force.Dts || options.GetEmitDeclarations() && !isJsonFile {
-		paths.declarationFilePath = GetDeclarationEmitOutputFilePath(sourceFile.FileName(), options, host)
+		paths.declarationFilePath = getDeclarationEmitOutputFilePathForFileName(fileName, options, host)
 		if options.GetAreDeclarationMapsEnabled() || force.DeclarationMap && options.DeclarationMap.IsTrue() {
-			paths.declarationMapPath = paths.declarationFilePath + ".map"
+			paths.declarationMapPath = paths.declarationFilePath.AppendSuffix(".map")
 		}
 	}
 	return paths
@@ -105,48 +102,44 @@ func ForEachEmittedFile(
 	return false
 }
 
-func GetOutputJSFileName(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
+func GetOutputJSFileName(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
 	if options.EmitDeclarationOnly.IsTrue() || isContentMappedFileName(inputFileName, host) {
 		return ""
 	}
 	outputFileName := GetOutputJSFileNameWorker(inputFileName, options, host)
-	if !tspath.FileExtensionIs(outputFileName, tspath.ExtensionJson) ||
-		tspath.ComparePaths(inputFileName, outputFileName, tspath.ComparePathsOptions{
-			CurrentDirectory:          host.GetCurrentDirectory(),
-			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
-		}) != 0 {
+	if !outputFileName.ExtensionIs(tspath.ExtensionJson) ||
+		host.CaseSensitivity().CompareFilePaths(inputFileName, outputFileName) != 0 {
 		return outputFileName
 	}
 
 	return ""
 }
 
-func isContentMappedFileName(fileName string, host OutputPathsHost) bool {
-	return tspath.GetLongestExtensionFromPath(fileName, host.ContentMapperExtensions(), !host.UseCaseSensitiveFileNames()) != ""
+func isContentMappedFileName(fileName tspath.RootedFilePath, host OutputPathsHost) bool {
+	return fileName.LongestExtension(host.ContentMapperExtensions(), host.CaseSensitivity()) != ""
 }
 
-func GetOutputJSFileNameWorker(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
-	return tspath.ChangeExtension(
-		getOutputPathWithoutChangingExtension(inputFileName, options.OutDir, host),
-		GetOutputExtension(inputFileName, options.Jsx),
-	)
+func GetOutputJSFileNameWorker(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
+	return getOutputFileNameWithoutChangingExtension(inputFileName, options.OutDir, host).
+		ChangeExtension(GetOutputExtensionForFileName(inputFileName, options.Jsx))
 }
 
-func GetOutputDeclarationFileNameWorker(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
+func GetOutputDeclarationFileNameWorker(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
 	dir := options.DeclarationDir
 	if len(dir) == 0 {
 		dir = options.OutDir
 	}
-	return ChangeToDeclarationExtension(getOutputPathWithoutChangingExtension(inputFileName, dir, host), host)
+	path := getOutputFileNameWithoutChangingExtension(inputFileName, dir, host)
+	return ChangeToDeclarationExtension(path, host)
 }
 
-func GetExternalOutputFileName(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
-	outputPath := getOutputPathWithoutChangingExtension(inputFileName, options.OutDir, host)
-	rewritten, ok := core.RewriteExtension(outputPath, host.ContentMapperExtensionRewrites(), !host.UseCaseSensitiveFileNames())
+func GetExternalOutputFileName(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
+	outputPath := getOutputFileNameWithoutChangingExtension(inputFileName, options.OutDir, host)
+	rewritten, ok := core.RewriteExtension(outputPath.AsString(), host.ContentMapperExtensionRewrites(), host.CaseSensitivity().IsCaseInsensitive())
 	if !ok {
 		return ""
 	}
-	return rewritten
+	return tspath.RootedFilePathFromNormalized(rewritten)
 }
 
 func GetOutputExtension(fileName string, jsx core.JsxEmit) string {
@@ -164,90 +157,100 @@ func GetOutputExtension(fileName string, jsx core.JsxEmit) string {
 	}
 }
 
-func GetDeclarationEmitOutputFilePath(file string, options *core.CompilerOptions, host OutputPathsHost) string {
-	var outputDir *string
-	if len(options.DeclarationDir) > 0 {
-		outputDir = &options.DeclarationDir
-	} else if len(options.OutDir) > 0 {
-		outputDir = &options.OutDir
-	}
-
-	var path string
-	if outputDir != nil {
-		path = GetSourceFilePathInNewDirWorker(file, *outputDir, host.GetCurrentDirectory(), host.CommonSourceDirectory(), host.UseCaseSensitiveFileNames())
-	} else {
-		path = file
-	}
-	return ChangeToDeclarationExtension(path, host)
+func GetOutputExtensionForFileName(fileName tspath.RootedFilePath, jsx core.JsxEmit) string {
+	return GetOutputExtension(fileName.AsString(), jsx)
 }
 
-func ChangeToDeclarationExtension(path string, host OutputPathsHost) string {
-	if rewritten, ok := core.RewriteExtension(path, host.ContentMapperExtensionRewrites(), !host.UseCaseSensitiveFileNames()); ok {
-		return changeToDeclarationExtension(rewritten)
+func getDeclarationEmitOutputFilePathForFileName(file tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
+	var outputDir tspath.RootedDirectoryPath
+	if len(options.DeclarationDir) > 0 {
+		outputDir = options.DeclarationDir
+	} else if len(options.OutDir) > 0 {
+		outputDir = options.OutDir
 	}
-	if extension := tspath.GetLongestExtensionFromPath(path, host.ContentMapperExtensions(), false); extension != "" {
-		return tspath.RemoveExtension(path, extension) + ".d" + extension + ".ts"
+
+	if outputDir != "" {
+		return ChangeToDeclarationExtension(
+			GetSourceFileNameInNewDir(
+				file,
+				outputDir,
+				host.CommonSourceDirectory(),
+				host.CaseSensitivity(),
+			),
+			host,
+		)
+	}
+	return ChangeToDeclarationExtension(file, host)
+}
+
+func ChangeToDeclarationExtension(path tspath.RootedFilePath, host OutputPathsHost) tspath.RootedFilePath {
+	if rewritten, ok := core.RewriteExtension(path.AsString(), host.ContentMapperExtensionRewrites(), host.CaseSensitivity().IsCaseInsensitive()); ok {
+		return changeToDeclarationExtension(tspath.RootedFilePathFromNormalized(rewritten))
+	}
+	if extension := path.LongestExtension(host.ContentMapperExtensions(), tspath.CaseSensitive); extension != "" {
+		return path.RemoveExtension(extension).AppendSuffix(".d" + extension + ".ts")
 	}
 	return changeToDeclarationExtension(path)
 }
 
-func changeToDeclarationExtension(path string) string {
-	pathWithoutExtension := tspath.RemoveFileExtension(path)
-	if pathWithoutExtension == path {
-		if extension := tspath.GetAnyExtensionFromPath(path, nil, false); extension != "" {
-			pathWithoutExtension = tspath.RemoveExtension(path, extension)
+func changeToDeclarationExtension(path tspath.RootedFilePath) tspath.RootedFilePath {
+	pathWithoutExtension := path.RemoveFileExtension()
+	if pathWithoutExtension.AsString() == path.AsString() {
+		if extension := path.AnyExtension(nil, tspath.CaseSensitive); extension != "" {
+			pathWithoutExtension = path.RemoveExtension(extension)
 		}
 	}
-	return pathWithoutExtension + tspath.GetDeclarationEmitExtensionForPath(path)
+	return pathWithoutExtension.AppendSuffix(path.DeclarationEmitExtension())
 }
 
-func GetSourceFilePathInNewDir(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
-	return GetSourceFilePathInNewDirWorker(fileName, newDirPath, currentDirectory, commonSourceDirectory, useCaseSensitiveFileNames)
-}
+func getOutputFileNameWithoutChangingExtension(inputFileName tspath.RootedFilePath, outputDirectory tspath.RootedDirectoryPath, host OutputPathsHost) tspath.RootedFilePath {
+	if outputDirectory != "" {
+		relativePath, ok := host.CaseSensitivity().RelativePathFromDirectory(
+			host.CommonSourceDirectory(),
+			inputFileName,
+		)
+		if !ok {
+			return inputFileName
+		}
 
-func getOutputPathWithoutChangingExtension(inputFileName string, outputDirectory string, host OutputPathsHost) string {
-	if len(outputDirectory) > 0 {
-		return tspath.ResolvePath(outputDirectory, tspath.GetRelativePathFromDirectory(host.CommonSourceDirectory(), inputFileName, tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
-			CurrentDirectory:          host.GetCurrentDirectory(),
-		}))
+		return outputDirectory.ResolveRelativeFile(relativePath)
 	}
 	return inputFileName
 }
 
-func GetSourceFilePathInNewDirWorker(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
-	sourceFilePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
-	if trimmed, ok := tspath.TrimFilePathPrefix(sourceFilePath, commonSourceDirectory, useCaseSensitiveFileNames); ok {
-		sourceFilePath = trimmed
+func GetSourceFileNameInNewDir(fileName tspath.RootedFilePath, newDirPath tspath.RootedDirectoryPath, commonSourceDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) tspath.RootedFilePath {
+	if fileName.AsPath() == commonSourceDirectory.AsPath() {
+		return fileName
 	}
-	return tspath.CombinePaths(newDirPath, sourceFilePath)
+	if relativePath, ok := caseSensitivity.RelativeFilePathFromDirectory(commonSourceDirectory, fileName); ok {
+		return newDirPath.ResolveRelativeFile(relativePath)
+	}
+	return fileName
 }
 
-func getOwnEmitOutputFilePath(fileName string, options *core.CompilerOptions, host OutputPathsHost, extension string) string {
-	var emitOutputFilePathWithoutExtension string
+func getOwnEmitOutputFilePathForFileName(fileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost, extension string) tspath.RootedFilePath {
+	var emitOutputFilePath tspath.RootedFilePath
 	if len(options.OutDir) > 0 {
-		currentDirectory := host.GetCurrentDirectory()
-		emitOutputFilePathWithoutExtension = tspath.RemoveFileExtension(GetSourceFilePathInNewDir(
+		emitOutputFilePath = GetSourceFileNameInNewDir(
 			fileName,
 			options.OutDir,
-			currentDirectory,
 			host.CommonSourceDirectory(),
-			host.UseCaseSensitiveFileNames(),
-		))
+			host.CaseSensitivity(),
+		)
 	} else {
-		emitOutputFilePathWithoutExtension = tspath.RemoveFileExtension(fileName)
+		emitOutputFilePath = fileName
 	}
-	return emitOutputFilePathWithoutExtension + extension
+	return emitOutputFilePath.RemoveFileExtension().AppendSuffix(extension)
 }
 
-func GetSourceMapFilePath(jsFilePath string, options *core.CompilerOptions) string {
+func GetSourceMapFilePath(jsFilePath tspath.RootedFilePath, options *core.CompilerOptions) tspath.RootedFilePath {
 	if options.SourceMap.IsTrue() && !options.InlineSourceMap.IsTrue() {
-		return jsFilePath + ".map"
+		return jsFilePath.AppendSuffix(".map")
 	}
 	return ""
 }
 
-func GetBuildInfoFileName(options *core.CompilerOptions, opts tspath.ComparePathsOptions) string {
+func GetBuildInfoFileName(options *core.CompilerOptions, caseSensitivity tspath.CaseSensitivity) tspath.RootedFilePath {
 	if !options.IsIncremental() && !options.Build.IsTrue() {
 		return ""
 	}
@@ -257,16 +260,21 @@ func GetBuildInfoFileName(options *core.CompilerOptions, opts tspath.ComparePath
 	if options.ConfigFilePath == "" {
 		return ""
 	}
-	configFileExtensionLess := tspath.RemoveFileExtension(options.ConfigFilePath)
-	var buildInfoExtensionLess string
+	configFileName := options.ConfigFilePath
+	var buildInfoFileName tspath.RootedFilePath
 	if options.OutDir != "" {
 		if options.RootDir != "" {
-			buildInfoExtensionLess = tspath.ResolvePath(options.OutDir, tspath.GetRelativePathFromDirectory(options.RootDir, configFileExtensionLess, opts))
+			relativePath, ok := caseSensitivity.RelativePathFromDirectory(options.RootDir, configFileName)
+			if ok {
+				buildInfoFileName = options.OutDir.ResolveRelativeFile(relativePath)
+			} else {
+				buildInfoFileName = configFileName
+			}
 		} else {
-			buildInfoExtensionLess = tspath.CombinePaths(options.OutDir, tspath.GetBaseFileName(configFileExtensionLess))
+			buildInfoFileName = options.OutDir.ResolveFile(configFileName.BaseName())
 		}
 	} else {
-		buildInfoExtensionLess = configFileExtensionLess
+		buildInfoFileName = configFileName
 	}
-	return buildInfoExtensionLess + tspath.ExtensionTsBuildInfo
+	return buildInfoFileName.RemoveFileExtension().AppendSuffix(tspath.ExtensionTsBuildInfo)
 }

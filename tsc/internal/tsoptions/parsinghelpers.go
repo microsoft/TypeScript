@@ -1,6 +1,8 @@
 package tsoptions
 
 import (
+	"maps"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -58,6 +60,39 @@ func ParseString(value any) string {
 	return ""
 }
 
+func parseFileName(value any) tspath.RootedFilePath {
+	path := ParseString(value)
+	if path == "" {
+		return ""
+	}
+	return tspath.RootedFilePathFromNormalized(path)
+}
+
+func parseDirectoryName(value any) tspath.RootedDirectoryPath {
+	path := ParseString(value)
+	if path == "" {
+		return ""
+	}
+	return tspath.RootedDirectoryPathFromNormalized(path)
+}
+
+func parseFileOrDirectoryName(value any) tspath.RootedPath {
+	path := ParseString(value)
+	if path == "" {
+		return ""
+	}
+	return tspath.RootedPathFromNormalized(path)
+}
+
+func parseDirectoryNames(value any) []tspath.RootedDirectoryPath {
+	return core.Map(ParseStringArray(value), func(path string) tspath.RootedDirectoryPath {
+		if path == "" {
+			return ""
+		}
+		return tspath.RootedDirectoryPathFromNormalized(path)
+	})
+}
+
 func parseNumber(value any) *int {
 	if num, ok := value.(int); ok {
 		return &num
@@ -71,6 +106,7 @@ func parseNumber(value any) *int {
 
 type projectReferenceParseResult struct {
 	reference     core.ProjectReference
+	path          string
 	hasPath       bool
 	pathValid     bool
 	hasCircular   bool
@@ -83,7 +119,7 @@ func parseProjectReference(json any) *projectReferenceParseResult {
 		if value, ok := v.Get("path"); ok {
 			result.hasPath = true
 			if path, ok := value.(string); ok {
-				result.reference.Path = path
+				result.path = path
 				result.pathValid = true
 			}
 		}
@@ -223,10 +259,40 @@ type optionParser interface {
 
 type compilerOptionsParser struct {
 	*core.CompilerOptions
+	unresolvedPaths unresolvedCompilerOptionPaths
 }
 
 func (o *compilerOptionsParser) ParseOption(key string, value any) {
+	if o.unresolvedPaths != nil && compilerOptionContainsConfigDirTemplate(key, value) {
+		o.unresolvedPaths[key] = value
+		return
+	}
 	ParseCompilerOptions(key, value, o.CompilerOptions)
+}
+
+type unresolvedCompilerOptionPaths map[string]any
+
+func compilerOptionContainsConfigDirTemplate(key string, value any) bool {
+	option := CommandLineCompilerOptionsMap.Get(key)
+	if option == nil {
+		return false
+	}
+	pathKind := option.PathKind
+	if option.Kind == CommandLineOptionTypeList {
+		element := option.Elements()
+		if element == nil {
+			return false
+		}
+		pathKind = element.PathKind
+	}
+	if !pathKind.IsRooted() {
+		return false
+	}
+	if option.Kind == CommandLineOptionTypeList {
+		return core.Some(ParseStringArray(value), startsWithConfigDirTemplate)
+	}
+	path, ok := value.(string)
+	return ok && startsWithConfigDirTemplate(path)
 }
 
 func (o *compilerOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
@@ -316,7 +382,31 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
 	return targetOptions
 }
 
-func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[string, any], optionMap CommandLineOptionNameMap, cwd string) *collections.OrderedMap[string, any] {
+func mergeParsedCompilerOptions(targetOptions, sourceOptions *parsedCompilerOptions, rawSource any) *parsedCompilerOptions {
+	if sourceOptions == nil {
+		return targetOptions
+	}
+	if targetOptions == nil {
+		targetOptions = &parsedCompilerOptions{
+			CompilerOptions: &core.CompilerOptions{},
+			unresolvedPaths: make(unresolvedCompilerOptionPaths),
+		}
+	}
+	mergeCompilerOptions(targetOptions.CompilerOptions, sourceOptions.CompilerOptions, rawSource)
+	if rawMap, ok := rawSource.(*collections.OrderedMap[string, any]); ok && rawMap != nil {
+		if compilerOptionsRaw, ok := rawMap.Get("compilerOptions"); ok {
+			if compilerOptionsMap, ok := compilerOptionsRaw.(*collections.OrderedMap[string, any]); ok {
+				for key := range compilerOptionsMap.Keys() {
+					delete(targetOptions.unresolvedPaths, key)
+				}
+			}
+		}
+	}
+	maps.Copy(targetOptions.unresolvedPaths, sourceOptions.unresolvedPaths)
+	return targetOptions
+}
+
+func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[string, any], optionMap CommandLineOptionNameMap, cwd tspath.RootedDirectoryPath) *collections.OrderedMap[string, any] {
 	// !!! convert to options with absolute paths was previously done with `CompilerOptions` object, but for ease of implementation, we do it pre-conversion.
 	// !!! Revisit this choice if/when refactoring when conversion is done in tsconfig parsing
 	if optionsBase == nil {
@@ -331,7 +421,7 @@ func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[strin
 	return optionsBase
 }
 
-func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNameMap, cwd string) (any, bool) {
+func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNameMap, cwd tspath.RootedDirectoryPath) (any, bool) {
 	option := optionMap.Get(o)
 	if option == nil {
 		return nil, false

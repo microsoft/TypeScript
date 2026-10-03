@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -129,7 +130,7 @@ func TestContentMapperOutputExtensionsIncrementalEmit(t *testing.T) {
 					result := execute.CommandLine(t.Context(), sys, args, testSys)
 					assert.Equal(t, result.Status, tsc.ExitStatusSuccess, testSys.currentWrite.String())
 					for _, file := range []string{"main.js", "main.d.ts"} {
-						text, ok := testSys.FS().ReadFile(root + "dist/" + file)
+						text, ok := testSys.FS().ReadFile(tspath.RootedFilePathFromNormalized(root + "dist/" + file))
 						assert.Assert(t, ok)
 						assert.Assert(t, strings.Contains(text, `"./app`+extension+`"`), text)
 					}

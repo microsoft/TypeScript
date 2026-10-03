@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func TestParsedOptionsEquality(t *testing.T) {
@@ -26,7 +27,7 @@ func TestParsedOptionsEquality(t *testing.T) {
 		result := &ParsedOptions{
 			CompilerOptions: &core.CompilerOptions{Strict: core.TSTrue},
 			TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue, Include: []string{"a"}, Exclude: []string{"b"}},
-			FileNames:       []string{"a.ts", "b.ts"},
+			FileNames:       []tspath.RootedFilePath{"/a.ts", "/b.ts"},
 			ProjectReferences: []*core.ProjectReference{
 				{Path: "/project", OriginalPath: "../project", Circular: true}, nil,
 			},
@@ -77,7 +78,7 @@ func TestParsedOptionsEquality(t *testing.T) {
 		{"type acquisition include", func(p *ParsedOptions) { p.TypeAcquisition.Include[0] = "other" }},
 		{"type acquisition exclude", func(p *ParsedOptions) { p.TypeAcquisition.Exclude[0] = "other" }},
 		{"type acquisition filename", func(p *ParsedOptions) { p.TypeAcquisition.DisableFilenameBasedTypeAcquisition = core.TSTrue }},
-		{"filenames order", func(p *ParsedOptions) { p.FileNames = []string{"b.ts", "a.ts"} }},
+		{"filenames order", func(p *ParsedOptions) { p.FileNames = []tspath.RootedFilePath{"/b.ts", "/a.ts"} }},
 		{"reference path", func(p *ParsedOptions) { p.ProjectReferences[0].Path = "/other" }},
 		{"reference original path", func(p *ParsedOptions) { p.ProjectReferences[0].OriginalPath = "./other" }},
 		{"reference circular", func(p *ParsedOptions) { p.ProjectReferences[0].Circular = false }},

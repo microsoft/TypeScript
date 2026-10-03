@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -20,37 +21,37 @@ var _ vfs.FS = &FSMock{}
 //
 //		// make and configure a mocked vfs.FS
 //		mockedFS := &FSMock{
-//			AppendFileFunc: func(path string, data string) error {
+//			AppendFileFunc: func(path tspath.RootedFilePath, data string) error {
 //				panic("mock out the AppendFile method")
 //			},
-//			ChtimesFunc: func(path string, aTime time.Time, mTime time.Time) error {
+//			CaseSensitivityFunc: func() tspath.CaseSensitivity {
+//				panic("mock out the CaseSensitivity method")
+//			},
+//			ChtimesFunc: func(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 //				panic("mock out the Chtimes method")
 //			},
-//			DirectoryExistsFunc: func(path string) bool {
+//			DirectoryExistsFunc: func(path tspath.RootedDirectoryPath) bool {
 //				panic("mock out the DirectoryExists method")
 //			},
-//			FileExistsFunc: func(path string) bool {
+//			FileExistsFunc: func(path tspath.RootedFilePath) bool {
 //				panic("mock out the FileExists method")
 //			},
-//			GetAccessibleEntriesFunc: func(path string) vfs.Entries {
+//			GetAccessibleEntriesFunc: func(path tspath.RootedDirectoryPath) vfs.Entries {
 //				panic("mock out the GetAccessibleEntries method")
 //			},
-//			ReadFileFunc: func(path string) (string, bool) {
+//			ReadFileFunc: func(path tspath.RootedFilePath) (string, bool) {
 //				panic("mock out the ReadFile method")
 //			},
-//			RealpathFunc: func(path string) string {
+//			RealpathFunc: func(path tspath.RootedPath) tspath.RootedPath {
 //				panic("mock out the Realpath method")
 //			},
-//			RemoveFunc: func(path string) error {
+//			RemoveFunc: func(path tspath.RootedPath) error {
 //				panic("mock out the Remove method")
 //			},
-//			StatFunc: func(path string) vfs.FileInfo {
+//			StatFunc: func(path tspath.RootedPath) vfs.FileInfo {
 //				panic("mock out the Stat method")
 //			},
-//			UseCaseSensitiveFileNamesFunc: func() bool {
-//				panic("mock out the UseCaseSensitiveFileNames method")
-//			},
-//			WriteFileFunc: func(path string, data string) error {
+//			WriteFileFunc: func(path tspath.RootedFilePath, data string) error {
 //				panic("mock out the WriteFile method")
 //			},
 //		}
@@ -61,51 +62,53 @@ var _ vfs.FS = &FSMock{}
 //	}
 type FSMock struct {
 	// AppendFileFunc mocks the AppendFile method.
-	AppendFileFunc func(path string, data string) error
+	AppendFileFunc func(path tspath.RootedFilePath, data string) error
+
+	// CaseSensitivityFunc mocks the CaseSensitivity method.
+	CaseSensitivityFunc func() tspath.CaseSensitivity
 
 	// ChtimesFunc mocks the Chtimes method.
-	ChtimesFunc func(path string, aTime time.Time, mTime time.Time) error
+	ChtimesFunc func(path tspath.RootedPath, aTime time.Time, mTime time.Time) error
 
 	// DirectoryExistsFunc mocks the DirectoryExists method.
-	DirectoryExistsFunc func(path string) bool
+	DirectoryExistsFunc func(path tspath.RootedDirectoryPath) bool
 
 	// FileExistsFunc mocks the FileExists method.
-	FileExistsFunc func(path string) bool
+	FileExistsFunc func(path tspath.RootedFilePath) bool
 
 	// GetAccessibleEntriesFunc mocks the GetAccessibleEntries method.
-	GetAccessibleEntriesFunc func(path string) vfs.Entries
+	GetAccessibleEntriesFunc func(path tspath.RootedDirectoryPath) vfs.Entries
 
 	// ReadFileFunc mocks the ReadFile method.
-	ReadFileFunc func(path string) (string, bool)
+	ReadFileFunc func(path tspath.RootedFilePath) (string, bool)
 
 	// RealpathFunc mocks the Realpath method.
-	RealpathFunc func(path string) string
+	RealpathFunc func(path tspath.RootedPath) tspath.RootedPath
 
 	// RemoveFunc mocks the Remove method.
-	RemoveFunc func(path string) error
+	RemoveFunc func(path tspath.RootedPath) error
 
 	// StatFunc mocks the Stat method.
-	StatFunc func(path string) vfs.FileInfo
-
-	// UseCaseSensitiveFileNamesFunc mocks the UseCaseSensitiveFileNames method.
-	UseCaseSensitiveFileNamesFunc func() bool
+	StatFunc func(path tspath.RootedPath) vfs.FileInfo
 
 	// WriteFileFunc mocks the WriteFile method.
-	WriteFileFunc func(path string, data string) error
+	WriteFileFunc func(path tspath.RootedFilePath, data string) error
 
 	// calls tracks calls to the methods.
 	calls struct {
 		// AppendFile holds details about calls to the AppendFile method.
 		AppendFile []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedFilePath
 			// Data is the data argument value.
 			Data string
 		}
+		// CaseSensitivity holds details about calls to the CaseSensitivity method.
+		CaseSensitivity []struct{}
 		// Chtimes holds details about calls to the Chtimes method.
 		Chtimes []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedPath
 			// ATime is the aTime argument value.
 			ATime time.Time
 			// MTime is the mTime argument value.
@@ -114,68 +117,66 @@ type FSMock struct {
 		// DirectoryExists holds details about calls to the DirectoryExists method.
 		DirectoryExists []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedDirectoryPath
 		}
 		// FileExists holds details about calls to the FileExists method.
 		FileExists []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedFilePath
 		}
 		// GetAccessibleEntries holds details about calls to the GetAccessibleEntries method.
 		GetAccessibleEntries []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedDirectoryPath
 		}
 		// ReadFile holds details about calls to the ReadFile method.
 		ReadFile []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedFilePath
 		}
 		// Realpath holds details about calls to the Realpath method.
 		Realpath []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedPath
 		}
 		// Remove holds details about calls to the Remove method.
 		Remove []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedPath
 		}
 		// Stat holds details about calls to the Stat method.
 		Stat []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedPath
 		}
-		// UseCaseSensitiveFileNames holds details about calls to the UseCaseSensitiveFileNames method.
-		UseCaseSensitiveFileNames []struct{}
 		// WriteFile holds details about calls to the WriteFile method.
 		WriteFile []struct {
 			// Path is the path argument value.
-			Path string
+			Path tspath.RootedFilePath
 			// Data is the data argument value.
 			Data string
 		}
 	}
-	lockAppendFile                sync.RWMutex
-	lockChtimes                   sync.RWMutex
-	lockDirectoryExists           sync.RWMutex
-	lockFileExists                sync.RWMutex
-	lockGetAccessibleEntries      sync.RWMutex
-	lockReadFile                  sync.RWMutex
-	lockRealpath                  sync.RWMutex
-	lockRemove                    sync.RWMutex
-	lockStat                      sync.RWMutex
-	lockUseCaseSensitiveFileNames sync.RWMutex
-	lockWriteFile                 sync.RWMutex
+	lockAppendFile           sync.RWMutex
+	lockCaseSensitivity      sync.RWMutex
+	lockChtimes              sync.RWMutex
+	lockDirectoryExists      sync.RWMutex
+	lockFileExists           sync.RWMutex
+	lockGetAccessibleEntries sync.RWMutex
+	lockReadFile             sync.RWMutex
+	lockRealpath             sync.RWMutex
+	lockRemove               sync.RWMutex
+	lockStat                 sync.RWMutex
+	lockWriteFile            sync.RWMutex
 }
 
 // AppendFile calls AppendFileFunc.
-func (mock *FSMock) AppendFile(path string, data string) error {
+func (mock *FSMock) AppendFile(path tspath.RootedFilePath, data string) error {
 	if mock.AppendFileFunc == nil {
 		panic("FSMock.AppendFileFunc: method is nil but FS.AppendFile was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedFilePath
 		Data string
 	}{
 		Path: path,
@@ -192,11 +193,11 @@ func (mock *FSMock) AppendFile(path string, data string) error {
 //
 //	len(mockedFS.AppendFileCalls())
 func (mock *FSMock) AppendFileCalls() []struct {
-	Path string
+	Path tspath.RootedFilePath
 	Data string
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedFilePath
 		Data string
 	}
 	mock.lockAppendFile.RLock()
@@ -205,13 +206,37 @@ func (mock *FSMock) AppendFileCalls() []struct {
 	return calls
 }
 
+// CaseSensitivity calls CaseSensitivityFunc.
+func (mock *FSMock) CaseSensitivity() tspath.CaseSensitivity {
+	if mock.CaseSensitivityFunc == nil {
+		panic("FSMock.CaseSensitivityFunc: method is nil but FS.CaseSensitivity was just called")
+	}
+	callInfo := struct{}{}
+	mock.lockCaseSensitivity.Lock()
+	mock.calls.CaseSensitivity = append(mock.calls.CaseSensitivity, callInfo)
+	mock.lockCaseSensitivity.Unlock()
+	return mock.CaseSensitivityFunc()
+}
+
+// CaseSensitivityCalls gets all the calls that were made to CaseSensitivity.
+// Check the length with:
+//
+//	len(mockedFS.CaseSensitivityCalls())
+func (mock *FSMock) CaseSensitivityCalls() []struct{} {
+	var calls []struct{}
+	mock.lockCaseSensitivity.RLock()
+	calls = mock.calls.CaseSensitivity
+	mock.lockCaseSensitivity.RUnlock()
+	return calls
+}
+
 // Chtimes calls ChtimesFunc.
-func (mock *FSMock) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (mock *FSMock) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 	if mock.ChtimesFunc == nil {
 		panic("FSMock.ChtimesFunc: method is nil but FS.Chtimes was just called")
 	}
 	callInfo := struct {
-		Path  string
+		Path  tspath.RootedPath
 		ATime time.Time
 		MTime time.Time
 	}{
@@ -230,12 +255,12 @@ func (mock *FSMock) Chtimes(path string, aTime time.Time, mTime time.Time) error
 //
 //	len(mockedFS.ChtimesCalls())
 func (mock *FSMock) ChtimesCalls() []struct {
-	Path  string
+	Path  tspath.RootedPath
 	ATime time.Time
 	MTime time.Time
 } {
 	var calls []struct {
-		Path  string
+		Path  tspath.RootedPath
 		ATime time.Time
 		MTime time.Time
 	}
@@ -246,12 +271,12 @@ func (mock *FSMock) ChtimesCalls() []struct {
 }
 
 // DirectoryExists calls DirectoryExistsFunc.
-func (mock *FSMock) DirectoryExists(path string) bool {
+func (mock *FSMock) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	if mock.DirectoryExistsFunc == nil {
 		panic("FSMock.DirectoryExistsFunc: method is nil but FS.DirectoryExists was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedDirectoryPath
 	}{
 		Path: path,
 	}
@@ -266,10 +291,10 @@ func (mock *FSMock) DirectoryExists(path string) bool {
 //
 //	len(mockedFS.DirectoryExistsCalls())
 func (mock *FSMock) DirectoryExistsCalls() []struct {
-	Path string
+	Path tspath.RootedDirectoryPath
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedDirectoryPath
 	}
 	mock.lockDirectoryExists.RLock()
 	calls = mock.calls.DirectoryExists
@@ -278,12 +303,12 @@ func (mock *FSMock) DirectoryExistsCalls() []struct {
 }
 
 // FileExists calls FileExistsFunc.
-func (mock *FSMock) FileExists(path string) bool {
+func (mock *FSMock) FileExists(path tspath.RootedFilePath) bool {
 	if mock.FileExistsFunc == nil {
 		panic("FSMock.FileExistsFunc: method is nil but FS.FileExists was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedFilePath
 	}{
 		Path: path,
 	}
@@ -298,10 +323,10 @@ func (mock *FSMock) FileExists(path string) bool {
 //
 //	len(mockedFS.FileExistsCalls())
 func (mock *FSMock) FileExistsCalls() []struct {
-	Path string
+	Path tspath.RootedFilePath
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedFilePath
 	}
 	mock.lockFileExists.RLock()
 	calls = mock.calls.FileExists
@@ -310,12 +335,12 @@ func (mock *FSMock) FileExistsCalls() []struct {
 }
 
 // GetAccessibleEntries calls GetAccessibleEntriesFunc.
-func (mock *FSMock) GetAccessibleEntries(path string) vfs.Entries {
+func (mock *FSMock) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
 	if mock.GetAccessibleEntriesFunc == nil {
 		panic("FSMock.GetAccessibleEntriesFunc: method is nil but FS.GetAccessibleEntries was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedDirectoryPath
 	}{
 		Path: path,
 	}
@@ -330,10 +355,10 @@ func (mock *FSMock) GetAccessibleEntries(path string) vfs.Entries {
 //
 //	len(mockedFS.GetAccessibleEntriesCalls())
 func (mock *FSMock) GetAccessibleEntriesCalls() []struct {
-	Path string
+	Path tspath.RootedDirectoryPath
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedDirectoryPath
 	}
 	mock.lockGetAccessibleEntries.RLock()
 	calls = mock.calls.GetAccessibleEntries
@@ -342,12 +367,12 @@ func (mock *FSMock) GetAccessibleEntriesCalls() []struct {
 }
 
 // ReadFile calls ReadFileFunc.
-func (mock *FSMock) ReadFile(path string) (string, bool) {
+func (mock *FSMock) ReadFile(path tspath.RootedFilePath) (string, bool) {
 	if mock.ReadFileFunc == nil {
 		panic("FSMock.ReadFileFunc: method is nil but FS.ReadFile was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedFilePath
 	}{
 		Path: path,
 	}
@@ -362,10 +387,10 @@ func (mock *FSMock) ReadFile(path string) (string, bool) {
 //
 //	len(mockedFS.ReadFileCalls())
 func (mock *FSMock) ReadFileCalls() []struct {
-	Path string
+	Path tspath.RootedFilePath
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedFilePath
 	}
 	mock.lockReadFile.RLock()
 	calls = mock.calls.ReadFile
@@ -374,12 +399,12 @@ func (mock *FSMock) ReadFileCalls() []struct {
 }
 
 // Realpath calls RealpathFunc.
-func (mock *FSMock) Realpath(path string) string {
+func (mock *FSMock) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	if mock.RealpathFunc == nil {
 		panic("FSMock.RealpathFunc: method is nil but FS.Realpath was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedPath
 	}{
 		Path: path,
 	}
@@ -394,10 +419,10 @@ func (mock *FSMock) Realpath(path string) string {
 //
 //	len(mockedFS.RealpathCalls())
 func (mock *FSMock) RealpathCalls() []struct {
-	Path string
+	Path tspath.RootedPath
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedPath
 	}
 	mock.lockRealpath.RLock()
 	calls = mock.calls.Realpath
@@ -406,12 +431,12 @@ func (mock *FSMock) RealpathCalls() []struct {
 }
 
 // Remove calls RemoveFunc.
-func (mock *FSMock) Remove(path string) error {
+func (mock *FSMock) Remove(path tspath.RootedPath) error {
 	if mock.RemoveFunc == nil {
 		panic("FSMock.RemoveFunc: method is nil but FS.Remove was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedPath
 	}{
 		Path: path,
 	}
@@ -426,10 +451,10 @@ func (mock *FSMock) Remove(path string) error {
 //
 //	len(mockedFS.RemoveCalls())
 func (mock *FSMock) RemoveCalls() []struct {
-	Path string
+	Path tspath.RootedPath
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedPath
 	}
 	mock.lockRemove.RLock()
 	calls = mock.calls.Remove
@@ -438,12 +463,12 @@ func (mock *FSMock) RemoveCalls() []struct {
 }
 
 // Stat calls StatFunc.
-func (mock *FSMock) Stat(path string) vfs.FileInfo {
+func (mock *FSMock) Stat(path tspath.RootedPath) vfs.FileInfo {
 	if mock.StatFunc == nil {
 		panic("FSMock.StatFunc: method is nil but FS.Stat was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedPath
 	}{
 		Path: path,
 	}
@@ -458,10 +483,10 @@ func (mock *FSMock) Stat(path string) vfs.FileInfo {
 //
 //	len(mockedFS.StatCalls())
 func (mock *FSMock) StatCalls() []struct {
-	Path string
+	Path tspath.RootedPath
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedPath
 	}
 	mock.lockStat.RLock()
 	calls = mock.calls.Stat
@@ -469,37 +494,13 @@ func (mock *FSMock) StatCalls() []struct {
 	return calls
 }
 
-// UseCaseSensitiveFileNames calls UseCaseSensitiveFileNamesFunc.
-func (mock *FSMock) UseCaseSensitiveFileNames() bool {
-	if mock.UseCaseSensitiveFileNamesFunc == nil {
-		panic("FSMock.UseCaseSensitiveFileNamesFunc: method is nil but FS.UseCaseSensitiveFileNames was just called")
-	}
-	callInfo := struct{}{}
-	mock.lockUseCaseSensitiveFileNames.Lock()
-	mock.calls.UseCaseSensitiveFileNames = append(mock.calls.UseCaseSensitiveFileNames, callInfo)
-	mock.lockUseCaseSensitiveFileNames.Unlock()
-	return mock.UseCaseSensitiveFileNamesFunc()
-}
-
-// UseCaseSensitiveFileNamesCalls gets all the calls that were made to UseCaseSensitiveFileNames.
-// Check the length with:
-//
-//	len(mockedFS.UseCaseSensitiveFileNamesCalls())
-func (mock *FSMock) UseCaseSensitiveFileNamesCalls() []struct{} {
-	var calls []struct{}
-	mock.lockUseCaseSensitiveFileNames.RLock()
-	calls = mock.calls.UseCaseSensitiveFileNames
-	mock.lockUseCaseSensitiveFileNames.RUnlock()
-	return calls
-}
-
 // WriteFile calls WriteFileFunc.
-func (mock *FSMock) WriteFile(path string, data string) error {
+func (mock *FSMock) WriteFile(path tspath.RootedFilePath, data string) error {
 	if mock.WriteFileFunc == nil {
 		panic("FSMock.WriteFileFunc: method is nil but FS.WriteFile was just called")
 	}
 	callInfo := struct {
-		Path string
+		Path tspath.RootedFilePath
 		Data string
 	}{
 		Path: path,
@@ -516,11 +517,11 @@ func (mock *FSMock) WriteFile(path string, data string) error {
 //
 //	len(mockedFS.WriteFileCalls())
 func (mock *FSMock) WriteFileCalls() []struct {
-	Path string
+	Path tspath.RootedFilePath
 	Data string
 } {
 	var calls []struct {
-		Path string
+		Path tspath.RootedFilePath
 		Data string
 	}
 	mock.lockWriteFile.RLock()

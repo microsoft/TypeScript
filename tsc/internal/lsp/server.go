@@ -45,10 +45,10 @@ type ServerOptions struct {
 	Out Writer
 	Err io.Writer
 
-	Cwd                string
+	Cwd                tspath.RootedDirectoryPath
 	FS                 vfs.FS
-	DefaultLibraryPath string
-	TypingsLocation    string
+	DefaultLibraryPath tspath.RootedDirectoryPath
+	TypingsLocation    tspath.RootedDirectoryPath
 	ParseCache         *project.ParseCache
 	NpmInstall         func(ctx context.Context, cwd string, args []string) ([]byte, error)
 	// Spawn launches a child process, returning its stdio as an io.ReadWriteCloser (Read is its stdout,
@@ -186,10 +186,10 @@ type Server struct {
 	pendingServerRequests   map[jsonrpc.ID]chan *lsproto.ResponseMessage
 	pendingServerRequestsMu sync.Mutex
 
-	cwd                string
+	cwd                tspath.RootedDirectoryPath
 	fs                 vfs.FS
-	defaultLibraryPath string
-	typingsLocation    string
+	defaultLibraryPath tspath.RootedDirectoryPath
+	typingsLocation    tspath.RootedDirectoryPath
 
 	initializeParams      *lsproto.InitializeParams
 	initializationOptions *lsproto.InitializationOptions
@@ -1490,7 +1490,7 @@ func (c *crossProjectOrchestrator) GetProjectsForFile(ctx context.Context, uri l
 	return c.server.session.GetProjectsForFile(ctx, uri)
 }
 
-func (c *crossProjectOrchestrator) GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[ls.Project] {
+func (c *crossProjectOrchestrator) GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.PathKey]) iter.Seq[ls.Project] {
 	return func(yield func(ls.Project) bool) {
 		c.server.session.WithSnapshotLoadingProjectTree(ctx, requestedProjectTrees, func(snapshot *project.Snapshot) {
 			for _, p := range snapshot.ProjectCollection.LanguageServiceProjects() {
@@ -1750,14 +1750,17 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		s.initializeParams.WorkspaceFolders != nil &&
 		s.initializeParams.WorkspaceFolders.WorkspaceFolders != nil &&
 		len(*s.initializeParams.WorkspaceFolders.WorkspaceFolders) == 1 {
-		cwd = lsproto.DocumentUri((*s.initializeParams.WorkspaceFolders.WorkspaceFolders)[0].Uri).FileName()
+		if fileName := lsproto.DocumentUri((*s.initializeParams.WorkspaceFolders.WorkspaceFolders)[0].Uri).FileName(); fileName != "" {
+			cwd = tspath.RootedDirectoryPathFromPath(tspath.RootedPath(fileName))
+		}
 	} else if s.initializeParams.RootUri.DocumentUri != nil {
-		cwd = s.initializeParams.RootUri.DocumentUri.FileName()
+		if fileName := s.initializeParams.RootUri.DocumentUri.FileName(); fileName != "" {
+			cwd = tspath.RootedDirectoryPathFromPath(tspath.RootedPath(fileName))
+		}
 	} else if s.initializeParams.RootPath != nil && s.initializeParams.RootPath.String != nil {
-		cwd = *s.initializeParams.RootPath.String
-	}
-	if !tspath.PathIsAbsolute(cwd) {
-		cwd = s.cwd
+		if rootPath := *s.initializeParams.RootPath.String; tspath.PathIsAbsolute(rootPath) {
+			cwd = tspath.RootedDirectoryPathFromAbsolute(rootPath)
+		}
 	}
 
 	s.telemetryEnabled = enableTelemetry
@@ -1894,7 +1897,7 @@ func (s *Server) handleDocumentDiagnostic(ctx context.Context, languageService *
 		return direct, err
 	}
 	languageService.GetProgram().Emit(ctx, compiler.EmitOptions{
-		WriteFile: func(fileName, text string, data *compiler.WriteFileData) error {
+		WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 			// do nothing
 			return nil
 		},
@@ -1973,8 +1976,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 				{
 					RenameFile: &lsproto.RenameFile{
 						Kind:   lsproto.StringLiteralRename{},
-						OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
-						NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
+						OldUri: lsconv.PathToDocumentURI(info.FileToRename),
+						NewUri: lsconv.PathToDocumentURI(info.NewFileName),
 					},
 				},
 			}
@@ -1986,8 +1989,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 		}
 		renameFilesParams := &lsproto.RenameFilesParams{
 			Files: []*lsproto.FileRename{{
-				OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
-				NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
+				OldUri: lsconv.PathToDocumentURI(info.FileToRename),
+				NewUri: lsconv.PathToDocumentURI(info.NewFileName),
 			}},
 		}
 		return s.handleWillRenameFilesWorker(ctx, renameFilesParams, req, true /*sendRenameFile*/)
@@ -2156,25 +2159,25 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
 	}
-	if !tspath.PathIsAbsolute(data.FileName) {
+	fileName, ok := tspath.TryRootedFilePathFromAbsolute(data.FileName)
+	if !ok {
 		return nil, errors.New("completion item data fileName must be absolute")
 	}
 	var uri lsproto.DocumentUri
-	if tspath.IsDynamicFileName(data.FileName) {
-		var ok bool
-		uri, ok = lsproto.TryDynamicFileNameToDocumentUri(data.FileName)
+	if fileName.IsDynamic() {
+		uri, ok = lsproto.TryDynamicFileNameToDocumentUri(fileName.AsPath())
 		if !ok {
 			return nil, errors.New("completion item data fileName must be a valid dynamic path")
 		}
 	} else {
-		uri = lsconv.FileNameToDocumentURI(data.FileName)
+		uri = lsconv.FileNameToDocumentURI(fileName)
 	}
 	languageService, err := s.session.GetLanguageService(ctx, uri)
 	if err != nil {
 		return nil, err
 	}
 	defer s.recover(reqMsg)
-	return languageService.ResolveCompletionItem(ctx, params, data)
+	return languageService.ResolveCompletionItem(ctx, params, data, fileName)
 }
 
 func (s *Server) handleDocumentFormat(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentFormattingParams) (lsproto.DocumentFormattingResponse, error) {
@@ -2441,8 +2444,8 @@ func (s *Server) SetCompilerOptionsForInferredProjects(ctx context.Context, opti
 }
 
 // NpmInstall implements ata.NpmExecutor
-func (s *Server) NpmInstall(ctx context.Context, cwd string, args []string) ([]byte, error) {
-	return s.npmInstall(ctx, cwd, args)
+func (s *Server) NpmInstall(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
+	return s.npmInstall(ctx, cwd.AsString(), args)
 }
 
 // contentMapperSpawner adapts the server's spawn callback to a content mapper spawner, or returns nil when
@@ -2514,7 +2517,7 @@ func (s *Server) handleProjectInfo(ctx context.Context, params *lsproto.ProjectI
 	}
 	configFilePath := ""
 	if defaultProject != nil && defaultProject.Kind == project.KindConfigured {
-		configFilePath = defaultProject.ConfigFileName()
+		configFilePath = defaultProject.ConfigFileName().AsString()
 	}
 	return &lsproto.ProjectInfoResult{
 		ConfigFilePath: configFilePath,
@@ -2592,7 +2595,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			if !tspath.PathIsAbsolute(*manifest.Cwd) {
 				return result, fmt.Errorf("content mapper contribution %q has non-absolute cwd", identity)
 			}
-			mapper.PackageDirectory = *manifest.Cwd
+			mapper.PackageDirectory = tspath.RootedDirectoryPathFromAbsolute(*manifest.Cwd)
 		}
 		result.Mappers = append(result.Mappers, mapper)
 	}

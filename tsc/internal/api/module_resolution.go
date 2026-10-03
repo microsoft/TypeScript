@@ -19,7 +19,7 @@ type moduleResolverFactory struct {
 	registration     *moduleResolverRegistration
 	session          *Session
 	conn             ipc.Conn
-	currentDirectory string
+	currentDirectory tspath.RootedDirectoryPath
 }
 
 type programResolutionContext struct {
@@ -32,10 +32,15 @@ type callbackModuleResolver struct {
 	registration               *moduleResolverRegistration
 	conn                       ipc.Conn
 	ctx                        context.Context
-	currentDirectory           string
+	currentDirectory           tspath.RootedDirectoryPath
+	caseSensitivity            tspath.CaseSensitivity
 	snapshot                   SnapshotID
 	programResolutionContextID uint64
 	fallbackResolver           module.Resolver
+}
+
+func (p *callbackModuleResolver) BaseDirectory() tspath.RootedDirectoryPath {
+	return p.fallbackResolver.BaseDirectory()
 }
 
 func (f *moduleResolverFactory) NewResolver(
@@ -56,6 +61,7 @@ func (f *moduleResolverFactory) NewResolver(
 		conn:                       f.conn,
 		ctx:                        ctx,
 		currentDirectory:           f.currentDirectory,
+		caseSensitivity:            f.session.caseSensitivity(),
 		programResolutionContextID: contextID,
 		fallbackResolver:           fallback,
 	}
@@ -69,31 +75,29 @@ func (f *moduleResolverFactory) NewResolver(
 
 func (p *callbackModuleResolver) ResolveModuleName(
 	moduleName string,
-	containingFile string,
+	containingFile tspath.RootedFilePath,
 	resolutionMode core.ResolutionMode,
 	redirectedReference module.ResolvedProjectReference,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
-	return p.resolveModuleName(moduleName, containingFile, tspath.GetDirectoryPath(containingFile), resolutionMode, redirectedReference)
+	return p.resolveModuleName(moduleName, containingFile.Directory(), resolutionMode)
 }
 
 func (p *callbackModuleResolver) ResolveModuleNameFromDirectory(
 	moduleName string,
-	containingDirectory string,
+	containingDirectory tspath.RootedDirectoryPath,
 	resolutionMode core.ResolutionMode,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
-	return p.resolveModuleName(moduleName, containingDirectory, containingDirectory, resolutionMode, nil)
+	return p.resolveModuleName(moduleName, containingDirectory, resolutionMode)
 }
 
 func (p *callbackModuleResolver) resolveModuleName(
 	moduleName string,
-	containingFile string,
-	containingDirectory string,
+	containingDirectory tspath.RootedDirectoryPath,
 	resolutionMode core.ResolutionMode,
-	redirectedReference module.ResolvedProjectReference,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
 	params := &ResolveModuleNameCallbackParams{
 		ModuleName:          moduleName,
-		ContainingDirectory: containingDirectory,
+		ContainingDirectory: containingDirectory.AsString(),
 	}
 	if p.snapshot != 0 {
 		params.Snapshot = &p.snapshot
@@ -115,12 +119,12 @@ func (p *callbackModuleResolver) resolveModuleName(
 	if err := json.Unmarshal(callbackResult, &staticResolution); err != nil {
 		return nil, nil, fmt.Errorf("invalid resolveModuleName callback result: %w", err)
 	}
-	return staticModuleResolutionToResolvedModule(&staticResolution, p.currentDirectory), nil, nil
+	return staticModuleResolutionToResolvedModule(&staticResolution, p.currentDirectory, p.caseSensitivity), nil, nil
 }
 
 func (p *callbackModuleResolver) ResolveTypeReferenceDirective(
 	typeReferenceDirectiveName string,
-	containingFile string,
+	containingFile tspath.RootedFilePath,
 	resolutionMode core.ResolutionMode,
 	redirectedReference module.ResolvedProjectReference,
 ) (*module.ResolvedTypeReferenceDirective, []module.DiagAndArgs) {
@@ -131,7 +135,7 @@ func (p *callbackModuleResolver) GetResolutionData() *module.ResolutionData {
 	return p.fallbackResolver.GetResolutionData()
 }
 
-func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory string, useCaseSensitive bool) (*module.StaticResolutions, error) {
+func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) (*module.StaticResolutions, error) {
 	if spec == nil {
 		return nil, nil
 	}
@@ -159,7 +163,7 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory st
 
 		staticEntry := module.StaticResolutionEntry{ModuleName: entry.ModuleName}
 		if entry.ContainingDirectory != nil {
-			staticEntry.ContainingDirectory = tspath.GetNormalizedAbsolutePath(entry.ContainingDirectory.ToAbsoluteFileName(currentDirectory), currentDirectory)
+			staticEntry.ContainingDirectory = tspath.ToRootedDirectoryPath(entry.ContainingDirectory.ToFileName(currentDirectory).AsString(), currentDirectory)
 		}
 		if entry.ResolutionMode != nil {
 			mode := core.ModuleKind(*entry.ResolutionMode)
@@ -168,27 +172,28 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory st
 			}
 			staticEntry.ResolutionMode = &mode
 		}
-		staticEntry.Result = staticModuleResolutionToResolvedModule(entry.Result, currentDirectory)
+		staticEntry.Result = staticModuleResolutionToResolvedModule(entry.Result, currentDirectory, caseSensitivity)
 		entries = append(entries, staticEntry)
 	}
 
-	resolutions, err := module.NewStaticResolutions(entries, fallbackToResolution, currentDirectory, useCaseSensitive)
+	resolutions, err := module.NewStaticResolutions(entries, fallbackToResolution, currentDirectory, caseSensitivity)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
 	}
 	return resolutions, nil
 }
 
-func staticModuleResolutionToResolvedModule(staticResolution *StaticModuleResolution, currentDirectory string) *module.ResolvedModule {
+func staticModuleResolutionToResolvedModule(staticResolution *StaticModuleResolution, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *module.ResolvedModule {
 	if staticResolution == nil || staticResolution.ResolvedFileName == nil {
 		return nil
 	}
 	result := &module.ResolvedModule{
-		ResolvedFileName: tspath.GetNormalizedAbsolutePath(staticResolution.ResolvedFileName.ToAbsoluteFileName(currentDirectory), currentDirectory),
+		ResolvedFileName: staticResolution.ResolvedFileName.ToFileName(currentDirectory),
 	}
 	if staticResolution.OriginalPath != nil {
-		result.OriginalPath = tspath.GetNormalizedAbsolutePath(staticResolution.OriginalPath.ToAbsoluteFileName(currentDirectory), currentDirectory)
+		result.OriginalPath = staticResolution.OriginalPath.ToFileName(currentDirectory)
 	}
+	result.ResolvedPath = caseSensitivity.PathKey(result.ResolvedFileName.AsPath())
 	if staticResolution.PackageID != nil {
 		result.PackageId = module.PackageId{
 			Name:             staticResolution.PackageID.Name,
@@ -201,8 +206,8 @@ func staticModuleResolutionToResolvedModule(staticResolution *StaticModuleResolu
 	if result.OriginalPath != "" {
 		originalPath = result.OriginalPath
 	}
-	result.Extension = tspath.TryGetExtensionFromPath(result.ResolvedFileName)
-	result.IsExternalLibraryImport = strings.Contains(originalPath, "/node_modules/")
+	result.Extension = result.ResolvedFileName.Extension()
+	result.IsExternalLibraryImport = strings.Contains(originalPath.AsString(), "/node_modules/")
 	return result
 }
 
@@ -282,7 +287,7 @@ func (s *Session) handleCreateModuleResolver(params *CreateModuleResolverParams)
 	provider, err := compileModuleResolutionSpec(
 		params.ModuleResolutions,
 		s.GetCurrentDirectory(),
-		s.FS().UseCaseSensitiveFileNames(),
+		s.caseSensitivity(),
 	)
 	if err != nil {
 		return 0, err
@@ -331,7 +336,7 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 			return nil, fmt.Errorf("%w: invalid resolutionMode %s", ErrClientError, mode.String())
 		}
 	}
-	containingDirectory := tspath.GetNormalizedAbsolutePath(params.ContainingDirectory.ToAbsoluteFileName(s.GetCurrentDirectory()), s.GetCurrentDirectory())
+	containingDirectory := tspath.ToRootedDirectoryPath(params.ContainingDirectory.ToFileName(s.GetCurrentDirectory()).AsString(), s.GetCurrentDirectory())
 
 	var resolver module.Resolver
 	if params.Snapshot != 0 && params.InProgressSnapshot != 0 {
@@ -367,6 +372,7 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 			conn:                       s.conn,
 			ctx:                        ctx,
 			currentDirectory:           s.GetCurrentDirectory(),
+			caseSensitivity:            s.caseSensitivity(),
 			snapshot:                   params.Snapshot,
 			programResolutionContextID: params.InProgressSnapshot,
 			fallbackResolver:           resolver,

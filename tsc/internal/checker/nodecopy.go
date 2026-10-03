@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func (b *NodeBuilderImpl) reuseNode(node *ast.Node) *ast.Node {
@@ -249,11 +250,11 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 			parentSymbol = b.lookupSymbolChain(nodeSymbol, meaning, true)[0]
 		}
 		if parentSymbol != nil && IsExternalModuleSymbol(parentSymbol) {
-			name = b.getSpecifierForModuleSymbol(parentSymbol, mode).specifier
+			name = b.getSpecifierForModuleSymbol(parentSymbol, mode).specifier.AsString()
 		} else {
 			targetFile := b.ch.getExternalModuleFileFromDeclaration(parent)
 			if targetFile != nil {
-				name = b.getSpecifierForModuleSymbol(targetFile.Symbol, mode).specifier
+				name = b.getSpecifierForModuleSymbol(targetFile.Symbol, mode).specifier.AsString()
 			}
 		}
 		if len(name) > 0 && strings.Contains(name, "/node_modules/") {
@@ -270,7 +271,7 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 func (b *NodeBuilderImpl) rewriteModuleSpecifier(parent *ast.Node, lit *ast.Node) *ast.Node {
 	newName := b.getModuleSpecifierOverride(parent, lit)
 	if len(newName) == 0 {
-		newName = b.rewriteContentMappedModuleSpecifier(lit.Text())
+		newName = b.rewriteContentMappedModuleSpecifier(tspath.ToModuleSpecifier(lit.Text())).AsString()
 		if newName == lit.Text() {
 			return lit
 		}
