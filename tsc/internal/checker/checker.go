@@ -27919,7 +27919,7 @@ func (c *Checker) getBaseConstraintOrType(t *Type) *Type {
 }
 
 func (c *Checker) getBaseConstraintOfType(t *Type) *Type {
-	if t.flags&(TypeFlagsInstantiableNonPrimitive|TypeFlagsUnionOrIntersection|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsRegisteredESSymbol|TypeFlagsIndex) != 0 || c.isGenericTupleType(t) {
+	if t.flags&(TypeFlagsInstantiable|TypeFlagsUnionOrIntersection) != 0 || c.isGenericTupleType(t) {
 		constraint := c.getResolvedBaseConstraint(t, nil)
 		if constraint != c.noConstraintType && constraint != c.circularConstraintType {
 			return constraint

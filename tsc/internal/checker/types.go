@@ -505,7 +505,7 @@ const (
 	// This *should* be every type other than null, undefined, void, and never
 	TypeFlagsNarrowable = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsStructuredOrInstantiable | TypeFlagsStringLike | TypeFlagsNumberLike | TypeFlagsBigIntLike | TypeFlagsBooleanLike | TypeFlagsESSymbolLike | TypeFlagsNonPrimitive
 	// The following flags are aggregated during union and intersection type construction
-	TypeFlagsIncludesMask = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsPrimitive | TypeFlagsNever | TypeFlagsObject | TypeFlagsUnion | TypeFlagsIntersection | TypeFlagsNonPrimitive | TypeFlagsTemplateLiteral | TypeFlagsStringMapping | TypeFlagsRegisteredESSymbol
+	TypeFlagsIncludesMask = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsPrimitive | TypeFlagsNever | TypeFlagsObject | TypeFlagsUnion | TypeFlagsIntersection | TypeFlagsNonPrimitive | TypeFlagsTemplateLiteral | TypeFlagsStringMapping
 	// The following flags are used for different purposes during union and intersection type construction
 	TypeFlagsIncludesMissingType             = TypeFlagsTypeParameter
 	TypeFlagsIncludesNonWideningType         = TypeFlagsIndex
