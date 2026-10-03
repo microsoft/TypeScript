@@ -6,5 +6,4 @@
 # Preserve line-ending-sensitive fixtures exactly.
 tsc/testdata/** -text
 
-# TODO: Remove this exception when this directory is converted or removed.
-tools/loc/** -text
+tools/loc/**/*.lcl -text
