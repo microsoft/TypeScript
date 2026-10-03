@@ -2844,12 +2844,52 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 
 	restoreFlags := b.saveRestoreFlags()
 	b.ctx.flags |= nodebuilder.FlagsInObjectTypeLiteral
+	var mappedProperties []*ast.Symbol
+	var ordinaryProperties []*ast.Symbol
+	for _, property := range resolved.properties {
+		var nameType *Type
+		if b.ch.valueSymbolLinks.Has(property) {
+			nameType = b.ch.valueSymbolLinks.TryGet(property).nameType
+		}
+		name := ast.GetNameOfDeclaration(property.ValueDeclaration)
+		if nameType != nil && nameType.flags&TypeFlagsUniqueESSymbol != 0 && isRegisteredSymbolAlias(nameType.alias) &&
+			name != nil && ast.IsComputedPropertyName(name) && !ast.IsEntityNameExpression(name.Expression()) {
+			mappedProperties = append(mappedProperties, property)
+		} else {
+			ordinaryProperties = append(ordinaryProperties, property)
+		}
+	}
+	if len(mappedProperties) != 0 {
+		copy := *resolved
+		copy.properties = ordinaryProperties
+		resolved = &copy
+	}
 	members := b.createTypeNodesFromResolvedType(resolved)
+	var typeNodes []*ast.TypeNode
+	if members != nil && len(members.Nodes) != 0 || len(mappedProperties) == 0 {
+		typeLiteralNode := b.f.NewTypeLiteralNode(members)
+		b.ctx.approximateLength += 2
+		b.e.SetEmitFlags(typeLiteralNode, core.IfElse((b.ctx.flags&nodebuilder.FlagsMultilineObjectLiterals != 0), 0, printer.EFSingleLine))
+		typeNodes = append(typeNodes, typeLiteralNode)
+	}
+	for _, property := range mappedProperties {
+		nameType := b.ch.valueSymbolLinks.Get(property).nameType
+		key := b.f.NewTypeParameterDeclaration(nil, b.f.NewIdentifier("K"), b.typeToTypeNode(nameType), nil, nil)
+		var readonlyToken *ast.Node
+		if b.ch.isReadonlySymbol(property) {
+			readonlyToken = b.f.NewToken(ast.KindReadonlyKeyword)
+		}
+		var questionToken *ast.Node
+		if property.Flags&ast.SymbolFlagsOptional != 0 {
+			questionToken = b.f.NewToken(ast.KindQuestionToken)
+		}
+		typeNodes = append(typeNodes, b.f.NewMappedTypeNode(readonlyToken, key, nil, questionToken, b.typeToTypeNode(b.ch.getNonMissingTypeOfSymbol(property)), nil))
+	}
 	restoreFlags()
-	typeLiteralNode := b.f.NewTypeLiteralNode(members)
-	b.ctx.approximateLength += 2
-	b.e.SetEmitFlags(typeLiteralNode, core.IfElse((b.ctx.flags&nodebuilder.FlagsMultilineObjectLiterals != 0), 0, printer.EFSingleLine))
-	return typeLiteralNode
+	if len(typeNodes) == 1 {
+		return typeNodes[0]
+	}
+	return b.f.NewIntersectionTypeNode(b.f.NewNodeList(typeNodes))
 }
 
 func getTypeAliasForTypeLiteral(c *Checker, t *Type) *ast.Symbol {
