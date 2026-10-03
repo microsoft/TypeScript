@@ -86,7 +86,7 @@ func DiscoverTypings(
 	// Add the cached typing locations for inferred typings that are already installed
 	packageNameToTypingLocation.Range(func(name string, typing *CachedTyping) bool {
 		registryEntry := typesRegistry[name]
-		if inferredTypings[name] == "" && registryEntry != nil && isTypingUpToDate(typing, registryEntry) {
+		if inferred, ok := inferredTypings[name]; ok && inferred == "" && registryEntry != nil && isTypingUpToDate(typing, registryEntry) {
 			inferredTypings[name] = typing.TypingsLocation
 		}
 		return true
