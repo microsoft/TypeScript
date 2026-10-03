@@ -1,0 +1,25 @@
+staticFieldSelfReferenceInGenericClassExpression.ts(14,12): error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+staticFieldSelfReferenceInGenericClassExpression.ts(14,27): error TS2729: Property 'foo' is used before its initialization.
+
+
+==== staticFieldSelfReferenceInGenericClassExpression.ts (2 errors) ====
+    function id<T>(x: T): T {
+        return x;
+    }
+    
+    const Foo = id(class {
+        static readonly foo = id(42);
+    });
+    
+    const Ok = class {
+        static readonly foo = id(42);
+    };
+    
+    class Circular {
+        static foo = Circular.foo;
+               ~~~
+!!! error TS7022: 'foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                              ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 staticFieldSelfReferenceInGenericClassExpression.ts:14:12: 'foo' is declared here.
+    }
