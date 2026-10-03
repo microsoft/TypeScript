@@ -359,7 +359,7 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]any, []*ast.Di
 	switch opt.Elements().Kind {
 	case "string":
 		elements := core.MapFiltered(values, func(v string) (any, bool) {
-			val, err := validateJsonOptionValue(opt.Elements(), v, nil, nil)
+			val, err := validateJsonOptionValue(opt.Elements(), strings.TrimFunc(v, stringutil.IsWhiteSpaceLike), nil, nil)
 			if s, ok := val.(string); ok && len(err) == 0 && s != "" {
 				return s, true
 			}
