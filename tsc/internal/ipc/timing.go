@@ -60,6 +60,35 @@ type timingCollector struct {
 	head int
 }
 
+// ServerTimingCollector records server-side request processing time for transports
+// that dispatch directly to a Handler rather than through a connection.
+type ServerTimingCollector struct {
+	collector *timingCollector
+}
+
+// NewServerTimingCollector creates an empty server timing collector.
+func NewServerTimingCollector() *ServerTimingCollector {
+	return &ServerTimingCollector{collector: newTimingCollector()}
+}
+
+// Record adds a completed request to the collector.
+func (c *ServerTimingCollector) Record(method string, duration time.Duration) {
+	c.collector.record(method, duration)
+}
+
+// Reset clears all collected request timing.
+func (c *ServerTimingCollector) Reset() {
+	c.collector.reset()
+}
+
+// ServerTimingSnapshot returns the collector's current JSON-serializable snapshot.
+func ServerTimingSnapshot(collector *ServerTimingCollector) any {
+	if collector == nil {
+		return disabledServerTimingInfo()
+	}
+	return collector.collector.snapshot()
+}
+
 func newTimingCollector() *timingCollector {
 	return &timingCollector{}
 }
