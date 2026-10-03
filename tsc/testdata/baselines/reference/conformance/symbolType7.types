@@ -3,10 +3,10 @@
 === symbolType7.ts ===
 var s = Symbol.for("shift");
 >s : symbol
->Symbol.for("shift") : symbol
->Symbol.for : (key: string) => symbol
+>Symbol.for("shift") : RegisteredSymbol<"shift">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >"shift" : "shift"
 
 s << s;

@@ -355,14 +355,16 @@ const (
 	IntrinsicTypeKindCapitalize
 	IntrinsicTypeKindUncapitalize
 	IntrinsicTypeKindNoInfer
+	IntrinsicTypeKindRegisteredSymbol
 )
 
 var intrinsicTypeKinds = map[string]IntrinsicTypeKind{
-	"Uppercase":    IntrinsicTypeKindUppercase,
-	"Lowercase":    IntrinsicTypeKindLowercase,
-	"Capitalize":   IntrinsicTypeKindCapitalize,
-	"Uncapitalize": IntrinsicTypeKindUncapitalize,
-	"NoInfer":      IntrinsicTypeKindNoInfer,
+	"Uppercase":        IntrinsicTypeKindUppercase,
+	"Lowercase":        IntrinsicTypeKindLowercase,
+	"Capitalize":       IntrinsicTypeKindCapitalize,
+	"Uncapitalize":     IntrinsicTypeKindUncapitalize,
+	"NoInfer":          IntrinsicTypeKindNoInfer,
+	"RegisteredSymbol": IntrinsicTypeKindRegisteredSymbol,
 }
 
 type MappedTypeModifiers uint32
@@ -629,6 +631,7 @@ type Checker struct {
 	indexedAccessTypes                          map[CacheHashKey]*Type
 	templateLiteralTypes                        map[CacheHashKey]*Type
 	stringMappingTypes                          map[StringMappingKey]*Type
+	registeredESSymbolTypes                     map[CacheHashKey]*Type
 	uniqueESSymbolTypes                         map[*ast.Symbol]*Type
 	thisExpandoKinds                            map[*ast.Symbol]thisAssignmentDeclarationKind
 	thisExpandoLocations                        map[*ast.Symbol]*ast.Node
@@ -947,6 +950,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.indexedAccessTypes = make(map[CacheHashKey]*Type)
 	c.templateLiteralTypes = make(map[CacheHashKey]*Type)
 	c.stringMappingTypes = make(map[StringMappingKey]*Type)
+	c.registeredESSymbolTypes = make(map[CacheHashKey]*Type)
 	c.uniqueESSymbolTypes = make(map[*ast.Symbol]*Type)
 	c.thisExpandoKinds = make(map[*ast.Symbol]thisAssignmentDeclarationKind)
 	c.thisExpandoLocations = make(map[*ast.Symbol]*ast.Node)
@@ -7545,7 +7549,7 @@ func (c *Checker) getQuickTypeOfExpression(node *ast.Node) *Type {
 		return nil
 	// Optimize for the common case of a call to a function with a single non-generic call
 	// signature where we can just fetch the return type without checking the arguments.
-	case ast.IsCallExpression(expr) && expr.Expression().Kind != ast.KindSuperKeyword && !ast.IsRequireCall(expr, true /*requireStringLiteralLikeArgument*/) && !c.isSymbolOrSymbolForCall(expr) && !ast.IsImportCall(expr):
+	case ast.IsCallExpression(expr) && expr.Expression().Kind != ast.KindSuperKeyword && !ast.IsRequireCall(expr, true /*requireStringLiteralLikeArgument*/) && !c.isSymbolCall(expr) && !ast.IsImportCall(expr):
 		if isCallChain(expr) {
 			return c.getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr)
 		}
@@ -8528,7 +8532,7 @@ func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type
 	returnType := c.getReturnTypeOfSignature(signature)
 	// Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
 	// as a fresh unique symbol literal type.
-	if returnType.flags&TypeFlagsESSymbolLike != 0 && c.isSymbolOrSymbolForCall(node) {
+	if returnType.flags&TypeFlagsESSymbolLike != 0 && c.isSymbolCall(node) {
 		return c.getESSymbolLikeTypeForNode(ast.WalkUpParenthesizedExpressions(node.Parent))
 	}
 	if ast.IsCallExpression(node) && node.QuestionDotToken() == nil && ast.IsExpressionStatement(node.Parent) && returnType.flags&TypeFlagsVoid != 0 && c.getTypePredicateOfSignature(signature) != nil {
@@ -8559,14 +8563,11 @@ func (c *Checker) addDeprecatedSuggestionWithSignature(location *ast.Node, decla
 	return c.addDeprecatedSuggestionWorker([]*ast.Node{declaration}, diagnostic)
 }
 
-func (c *Checker) isSymbolOrSymbolForCall(node *ast.Node) bool {
+func (c *Checker) isSymbolCall(node *ast.Node) bool {
 	if !ast.IsCallExpression(node) {
 		return false
 	}
 	left := node.Expression()
-	if ast.IsPropertyAccessExpression(left) && left.Name().Text() == "for" {
-		left = left.Expression()
-	}
 	if !ast.IsIdentifier(left) || left.Text() != "Symbol" {
 		return false
 	}
@@ -12513,7 +12514,7 @@ func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 	// safe even for `x as const` and keeps diagnostics stable regardless of traversal order.
 	c.checkSourceElement(typeNode)
 	if isConstTypeReference(typeNode) {
-		if !c.isValidConstAssertionArgument(node.Expression()) {
+		if !c.isValidConstAssertionArgument(node.Expression()) && exprType.flags&TypeFlagsUniqueESSymbol == 0 {
 			c.error(node.Expression(), diagnostics.A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals)
 		}
 		return c.getRegularTypeOfLiteralType(exprType)
@@ -18623,8 +18624,9 @@ func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.
 			c.reportErrorsFromWidening(declaration, t, WideningKindNormal)
 		}
 
-		// always widen a 'unique symbol' type if the type was created for a different declaration.
-		if t.flags&TypeFlagsUniqueESSymbol != 0 && (ast.IsBindingElement(declaration) || declaration.Type() == nil) && t.symbol != c.getSymbolOfDeclaration(declaration) {
+		// Widen a 'unique symbol' type if the type was created for a different declaration, unless the
+		// declaration or initializer is const-like.
+		if t.flags&TypeFlagsUniqueESSymbol != 0 && !c.isConstLikeUniqueSymbolDeclaration(declaration) && (ast.IsBindingElement(declaration) || declaration.Type() == nil) && t.symbol != c.getSymbolOfDeclaration(declaration) {
 			t = c.esSymbolType
 		}
 		return c.getWidenedType(t)
@@ -18642,6 +18644,12 @@ func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.
 		}
 	}
 	return t
+}
+
+func (c *Checker) isConstLikeUniqueSymbolDeclaration(declaration *ast.Node) bool {
+	return c.getCombinedNodeFlagsCached(declaration)&ast.NodeFlagsConstant != 0 ||
+		isDeclarationReadonly(declaration) ||
+		declaration.Initializer() != nil && ast.IsConstAssertion(ast.SkipParentheses(declaration.Initializer()))
 }
 
 func (c *Checker) reportImplicitAny(declaration *ast.Node, t *Type, wideningKind WideningKind) {
@@ -22728,6 +22736,9 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		return c.getTemplateLiteralType(t.AsTemplateLiteralType().texts, c.instantiateTypes(t.AsTemplateLiteralType().types, m))
 	case flags&TypeFlagsStringMapping != 0:
 		return c.getStringMappingType(t.symbol, c.instantiateType(t.AsStringMappingType().target, m))
+	case flags&TypeFlagsRegisteredESSymbol != 0:
+		newAlias := c.instantiateTypeAlias(t.alias, m)
+		return c.getRegisteredESSymbolType(newAlias.typeArguments[0], newAlias)
 	case flags&TypeFlagsConditional != 0:
 		return c.getConditionalTypeInstantiation(t, c.combineTypeMappers(t.AsConditionalType().mapper, m), false /*forConstraint*/, alias)
 	case flags&TypeFlagsSubstitution != 0:
@@ -22751,6 +22762,10 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		return c.getIntersectionType([]*Type{newConstraint, newBaseType})
 	}
 	return t
+}
+
+func isRegisteredSymbolAlias(alias *TypeAlias) bool {
+	return alias != nil && alias.symbol != nil && alias.symbol.Name == "RegisteredSymbol" && len(alias.typeArguments) == 1
 }
 
 // Handles instantiation of the following object types:
@@ -23457,6 +23472,68 @@ func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
 	return c.esSymbolType
 }
 
+func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Type {
+	if keyType.flags&TypeFlagsNever != 0 {
+		return c.neverType
+	}
+	if keyType.flags&TypeFlagsUnion != 0 {
+		members := make([]*Type, 0, len(keyType.Types()))
+		for _, member := range keyType.Types() {
+			if member.flags&TypeFlagsStringOrNumberLiteral == 0 {
+				return c.esSymbolType
+			}
+			memberAlias := &TypeAlias{symbol: alias.symbol, typeArguments: []*Type{member}}
+			members = append(members, c.getRegisteredESSymbolType(member, memberAlias))
+		}
+		return c.getUnionType(members)
+	}
+	if keyType.flags&(TypeFlagsStringOrNumberLiteral|TypeFlagsTypeParameter) == 0 {
+		return c.esSymbolType
+	}
+	key := c.getRegisteredESSymbolTypeKey(keyType)
+	t := c.registeredESSymbolTypes[key]
+	if t == nil {
+		if keyType.flags&TypeFlagsTypeParameter != 0 {
+			data := &RegisteredESSymbolType{target: keyType}
+			t = c.newType(TypeFlagsRegisteredESSymbol, ObjectFlagsNone, data)
+		} else {
+			name := ast.InternalSymbolNamePrefix + "@@" + c.getRegisteredESSymbolNameText(keyType)
+			symbol := c.newSymbol(ast.SymbolFlagsProperty, name)
+			t = c.newUniqueESSymbolType(symbol, name)
+		}
+		c.registeredESSymbolTypes[key] = t
+	}
+	t.alias = alias
+	return t
+}
+
+func (c *Checker) getRegisteredESSymbolTypeKey(keyType *Type) CacheHashKey {
+	var b keyBuilder
+	b.writeString("RegisteredSymbol")
+	if keyType.flags&TypeFlagsStringLiteral != 0 {
+		b.writeByte('s')
+		b.writeString(getStringLiteralValue(keyType))
+	} else if keyType.flags&TypeFlagsNumberLiteral != 0 {
+		b.writeByte('n')
+		b.writeString(getNumberLiteralValue(keyType).String())
+	} else {
+		b.writeByte('t')
+		b.writeType(keyType)
+	}
+	return b.hash()
+}
+
+func (c *Checker) getRegisteredESSymbolNameText(keyType *Type) string {
+	switch {
+	case keyType.flags&TypeFlagsStringLiteral != 0:
+		return getStringLiteralValue(keyType)
+	case keyType.flags&TypeFlagsNumberLiteral != 0:
+		return getNumberLiteralValue(keyType).String()
+	default:
+		return c.typeToStringEx(keyType, nil, TypeFormatFlagsNoTruncation|TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil)
+	}
+}
+
 func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
@@ -24138,6 +24215,11 @@ func (c *Checker) getTypeAliasInstantiation(symbol *ast.Symbol, typeArguments []
 			switch typeKind {
 			case IntrinsicTypeKindNoInfer:
 				return c.getNoInferType(typeArguments[0])
+			case IntrinsicTypeKindRegisteredSymbol:
+				if alias == nil {
+					alias = &TypeAlias{symbol: symbol, typeArguments: typeArguments}
+				}
+				return c.getRegisteredESSymbolType(typeArguments[0], alias)
 			default:
 				return c.getStringMappingType(symbol, typeArguments[0])
 			}
@@ -26173,7 +26255,7 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 				typeSet = slices.Delete(typeSet, 1, 2)
 			}
 		}
-		if includes&(TypeFlagsEnum|TypeFlagsLiteral|TypeFlagsUniqueESSymbol|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
+		if includes&(TypeFlagsEnum|TypeFlagsLiteral|TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 			includes&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 {
 			typeSet = c.removeRedundantLiteralTypes(typeSet, includes, unionReduction&UnionReductionSubtype != 0)
 		}
@@ -26346,7 +26428,7 @@ func (c *Checker) removeRedundantLiteralTypes(types []*Type, includes TypeFlags,
 		remove := flags&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 && includes&TypeFlagsString != 0 ||
 			flags&TypeFlagsNumberLiteral != 0 && includes&TypeFlagsNumber != 0 ||
 			flags&TypeFlagsBigIntLiteral != 0 && includes&TypeFlagsBigInt != 0 ||
-			flags&TypeFlagsUniqueESSymbol != 0 && includes&TypeFlagsESSymbol != 0 ||
+			flags&(TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol) != 0 && includes&TypeFlagsESSymbol != 0 ||
 			reduceVoidUndefined && flags&TypeFlagsUndefined != 0 && includes&TypeFlagsVoid != 0 ||
 			isFreshLiteralType(t) && containsType(types, t.AsLiteralType().regularType)
 		if remove {
@@ -26613,7 +26695,7 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 	if includes&TypeFlagsString != 0 && includes&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 		includes&TypeFlagsNumber != 0 && includes&TypeFlagsNumberLiteral != 0 ||
 		includes&TypeFlagsBigInt != 0 && includes&TypeFlagsBigIntLiteral != 0 ||
-		includes&TypeFlagsESSymbol != 0 && includes&TypeFlagsUniqueESSymbol != 0 ||
+		includes&TypeFlagsESSymbol != 0 && includes&(TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol) != 0 ||
 		includes&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 ||
 		includes&TypeFlagsIncludesEmptyObject != 0 && includes&TypeFlagsDefinitelyNonNullable != 0 {
 		if flags&IntersectionFlagsNoSupertypeReduction == 0 {
@@ -26802,7 +26884,7 @@ func (c *Checker) removeRedundantSupertypes(types []*Type, includes TypeFlags) [
 		remove := t.flags&TypeFlagsString != 0 && includes&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 			t.flags&TypeFlagsNumber != 0 && includes&TypeFlagsNumberLiteral != 0 ||
 			t.flags&TypeFlagsBigInt != 0 && includes&TypeFlagsBigIntLiteral != 0 ||
-			t.flags&TypeFlagsESSymbol != 0 && includes&TypeFlagsUniqueESSymbol != 0 ||
+			t.flags&TypeFlagsESSymbol != 0 && includes&(TypeFlagsUniqueESSymbol|TypeFlagsRegisteredESSymbol) != 0 ||
 			t.flags&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 ||
 			c.IsEmptyAnonymousObjectType(t) && includes&TypeFlagsDefinitelyNonNullable != 0
 		if remove {
@@ -27936,7 +28018,7 @@ func (c *Checker) getBaseConstraintOrType(t *Type) *Type {
 }
 
 func (c *Checker) getBaseConstraintOfType(t *Type) *Type {
-	if t.flags&(TypeFlagsInstantiableNonPrimitive|TypeFlagsUnionOrIntersection|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsIndex) != 0 || c.isGenericTupleType(t) {
+	if t.flags&(TypeFlagsInstantiable|TypeFlagsUnionOrIntersection) != 0 || c.isGenericTupleType(t) {
 		constraint := c.getResolvedBaseConstraint(t, nil)
 		if constraint != c.noConstraintType && constraint != c.circularConstraintType {
 			return constraint
@@ -28049,6 +28131,12 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 			return c.getStringMappingType(t.symbol, constraint)
 		}
 		return c.stringType
+	case t.flags&TypeFlagsRegisteredESSymbol != 0:
+		constraint := c.getNextBaseConstraint(t.Target(), stack)
+		if constraint != nil && constraint != t.Target() {
+			return c.getRegisteredESSymbolType(constraint, t.alias)
+		}
+		return c.esSymbolType
 	case t.flags&TypeFlagsIndexedAccess != 0:
 		if c.isMappedTypeGenericIndexedAccess(t) {
 			// For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,

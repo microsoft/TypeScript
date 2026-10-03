@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/uniqueSymbolConstLikeWidening.ts] ////
+
+=== uniqueSymbolConstLikeWidening.ts ===
+const us = Symbol.match;
+>us : unique symbol
+>Symbol.match : unique symbol
+>Symbol : SymbolConstructor
+>match : unique symbol
+
+const us2 = us;
+>us2 : unique symbol
+>us : unique symbol
+
+let widened = us;
+>widened : symbol
+>us : unique symbol
+
+let asserted = us as const;
+>asserted : unique symbol
+>us as const : unique symbol
+>us : unique symbol
+
+let sameAsSource: typeof us = us2;
+>sameAsSource : unique symbol
+>us : unique symbol
+>us2 : unique symbol
+
+let sameAsAsserted: typeof us = asserted;
+>sameAsAsserted : unique symbol
+>us : unique symbol
+>asserted : unique symbol
+
+let symbolFromConst: symbol = us2;
+>symbolFromConst : symbol
+>us2 : unique symbol
+
+let symbolFromAsserted: symbol = asserted;
+>symbolFromAsserted : symbol
+>asserted : unique symbol
+

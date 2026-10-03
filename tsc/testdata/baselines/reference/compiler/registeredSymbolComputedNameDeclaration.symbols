@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/registeredSymbolComputedNameDeclaration.ts] ////
+
+=== registeredSymbolComputedNameDeclaration.ts ===
+export const key = Symbol.for("abc");
+>key : Symbol(key, Decl(registeredSymbolComputedNameDeclaration.ts, 0, 12))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+export function getKey(): typeof key { return key; }
+>getKey : Symbol(getKey, Decl(registeredSymbolComputedNameDeclaration.ts, 0, 37))
+>key : Symbol(key, Decl(registeredSymbolComputedNameDeclaration.ts, 0, 12))
+>key : Symbol(key, Decl(registeredSymbolComputedNameDeclaration.ts, 0, 12))
+
+export const value = {
+>value : Symbol(value, Decl(registeredSymbolComputedNameDeclaration.ts, 3, 12))
+
+    ordinary: 1,
+>ordinary : Symbol(ordinary, Decl(registeredSymbolComputedNameDeclaration.ts, 3, 22))
+
+    [getKey()]: "text",
+>[getKey()] : Symbol([getKey()], Decl(registeredSymbolComputedNameDeclaration.ts, 4, 16))
+>getKey : Symbol(getKey, Decl(registeredSymbolComputedNameDeclaration.ts, 0, 37))
+
+    [Symbol.for("other")]: true,
+>[Symbol.for("other")] : Symbol([Symbol.for("other")], Decl(registeredSymbolComputedNameDeclaration.ts, 5, 23))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+};
+
+export const readonlyValue = { [getKey()]: "fixed" } as const;
+>readonlyValue : Symbol(readonlyValue, Decl(registeredSymbolComputedNameDeclaration.ts, 9, 12))
+>[getKey()] : Symbol([getKey()], Decl(registeredSymbolComputedNameDeclaration.ts, 9, 30))
+>getKey : Symbol(getKey, Decl(registeredSymbolComputedNameDeclaration.ts, 0, 37))
+>const : Symbol(const)
+

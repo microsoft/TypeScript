@@ -1,0 +1,275 @@
+//// [tests/cases/compiler/registeredSymbolPropertyAccess.ts] ////
+
+=== registeredSymbolPropertyAccess.ts ===
+export const single = Symbol.for("single");
+>single : RegisteredSymbol<"single">
+>Symbol.for("single") : RegisteredSymbol<"single">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"single" : "single"
+
+export const twin1 = Symbol.for("twin");
+>twin1 : RegisteredSymbol<"twin">
+>Symbol.for("twin") : RegisteredSymbol<"twin">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"twin" : "twin"
+
+export const twin2 = Symbol.for("twin");
+>twin2 : RegisteredSymbol<"twin">
+>Symbol.for("twin") : RegisteredSymbol<"twin">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"twin" : "twin"
+
+export const unique1 = Symbol("unique");
+>unique1 : unique symbol
+>Symbol("unique") : unique symbol
+>Symbol : SymbolConstructor
+>"unique" : "unique"
+
+export const unique2 = Symbol("unique");
+>unique2 : unique symbol
+>Symbol("unique") : unique symbol
+>Symbol : SymbolConstructor
+>"unique" : "unique"
+
+export const wellKnown = Symbol.match;
+>wellKnown : unique symbol
+>Symbol.match : unique symbol
+>Symbol : SymbolConstructor
+>match : unique symbol
+
+export const wellKnown2 = Symbol.toStringTag;
+>wellKnown2 : unique symbol
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+
+export const record1 = {
+>record1 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+>{    [single]: "single",    [twin2]: "twin",    [unique1]: "unique1",    [unique2]: "unique2",} as const : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+>{    [single]: "single",    [twin2]: "twin",    [unique1]: "unique1",    [unique2]: "unique2",} : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+
+    [single]: "single",
+>[single] : "single"
+>single : RegisteredSymbol<"single">
+>"single" : "single"
+
+    [twin2]: "twin",
+>[twin2] : "twin"
+>twin2 : RegisteredSymbol<"twin">
+>"twin" : "twin"
+
+    [unique1]: "unique1",
+>[unique1] : "unique1"
+>unique1 : unique symbol
+>"unique1" : "unique1"
+
+    [unique2]: "unique2",
+>[unique2] : "unique2"
+>unique2 : unique symbol
+>"unique2" : "unique2"
+
+} as const;
+export let singleVal: string = record1[single] satisfies "single";
+>singleVal : string
+>record1[single] satisfies "single" : "single"
+>record1[single] : "single"
+>record1 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+>single : RegisteredSymbol<"single">
+
+export let twin1Val: string = record1[twin1] satisfies "twin";
+>twin1Val : string
+>record1[twin1] satisfies "twin" : "twin"
+>record1[twin1] : "twin"
+>record1 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+>twin1 : RegisteredSymbol<"twin">
+
+export let twin2Val: string = record1[twin2] satisfies "twin";
+>twin2Val : string
+>record1[twin2] satisfies "twin" : "twin"
+>record1[twin2] : "twin"
+>record1 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+>twin2 : RegisteredSymbol<"twin">
+
+export let unique1Val: string = record1[unique1] satisfies "unique1";
+>unique1Val : string
+>record1[unique1] satisfies "unique1" : "unique1"
+>record1[unique1] : "unique1"
+>record1 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+>unique1 : unique symbol
+
+export let unique2Val: string = record1[unique2] satisfies "unique2";
+>unique2Val : string
+>record1[unique2] satisfies "unique2" : "unique2"
+>record1[unique2] : "unique2"
+>record1 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+>unique2 : unique symbol
+
+export const record2 = {
+>record2 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>{    ...record1,    [unique1]: "unique1New",    [wellKnown]: "wellKnown",} as const : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>{    ...record1,    [unique1]: "unique1New",    [wellKnown]: "wellKnown",} : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+
+    ...record1,
+>record1 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; }
+
+    [unique1]: "unique1New",
+>[unique1] : "unique1New"
+>unique1 : unique symbol
+>"unique1New" : "unique1New"
+
+    [wellKnown]: "wellKnown",
+>[wellKnown] : "wellKnown"
+>wellKnown : unique symbol
+>"wellKnown" : "wellKnown"
+
+} as const;
+singleVal = record2[single] satisfies "single";
+>singleVal = record2[single] satisfies "single" : "single"
+>singleVal : string
+>record2[single] satisfies "single" : "single"
+>record2[single] : "single"
+>record2 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>single : RegisteredSymbol<"single">
+
+twin1Val = record2[twin1] satisfies "twin";
+>twin1Val = record2[twin1] satisfies "twin" : "twin"
+>twin1Val : string
+>record2[twin1] satisfies "twin" : "twin"
+>record2[twin1] : "twin"
+>record2 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>twin1 : RegisteredSymbol<"twin">
+
+twin2Val = record2[twin2] satisfies "twin";
+>twin2Val = record2[twin2] satisfies "twin" : "twin"
+>twin2Val : string
+>record2[twin2] satisfies "twin" : "twin"
+>record2[twin2] : "twin"
+>record2 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>twin2 : RegisteredSymbol<"twin">
+
+unique1Val = record2[unique1] satisfies "unique1New";
+>unique1Val = record2[unique1] satisfies "unique1New" : "unique1New"
+>unique1Val : string
+>record2[unique1] satisfies "unique1New" : "unique1New"
+>record2[unique1] : "unique1New"
+>record2 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>unique1 : unique symbol
+
+unique2Val = record2[unique2] satisfies "unique2";
+>unique2Val = record2[unique2] satisfies "unique2" : "unique2"
+>unique2Val : string
+>record2[unique2] satisfies "unique2" : "unique2"
+>record2[unique2] : "unique2"
+>record2 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>unique2 : unique symbol
+
+export let wellKnownVal: string = record2[wellKnown] satisfies "wellKnown";
+>wellKnownVal : string
+>record2[wellKnown] satisfies "wellKnown" : "wellKnown"
+>record2[wellKnown] : "wellKnown"
+>record2 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique2]: "unique2"; readonly [unique1]: "unique1New"; readonly [Symbol.match]: "wellKnown"; }
+>wellKnown : unique symbol
+
+export const record3 = {
+>record3 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>{    [single]: "single",    [twin2]: "twin",    [unique1]: "unique1",    [unique2]: "unique2",    [wellKnown]: "wellKnown",} as const : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>{    [single]: "single",    [twin2]: "twin",    [unique1]: "unique1",    [unique2]: "unique2",    [wellKnown]: "wellKnown",} : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+
+    [single]: "single",
+>[single] : "single"
+>single : RegisteredSymbol<"single">
+>"single" : "single"
+
+    [twin2]: "twin",
+>[twin2] : "twin"
+>twin2 : RegisteredSymbol<"twin">
+>"twin" : "twin"
+
+    [unique1]: "unique1",
+>[unique1] : "unique1"
+>unique1 : unique symbol
+>"unique1" : "unique1"
+
+    [unique2]: "unique2",
+>[unique2] : "unique2"
+>unique2 : unique symbol
+>"unique2" : "unique2"
+
+    [wellKnown]: "wellKnown",
+>[wellKnown] : "wellKnown"
+>wellKnown : unique symbol
+>"wellKnown" : "wellKnown"
+
+} as const;
+singleVal = record3[single] satisfies "single";
+>singleVal = record3[single] satisfies "single" : "single"
+>singleVal : string
+>record3[single] satisfies "single" : "single"
+>record3[single] : "single"
+>record3 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>single : RegisteredSymbol<"single">
+
+twin1Val = record3[twin1] satisfies "twin";
+>twin1Val = record3[twin1] satisfies "twin" : "twin"
+>twin1Val : string
+>record3[twin1] satisfies "twin" : "twin"
+>record3[twin1] : "twin"
+>record3 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>twin1 : RegisteredSymbol<"twin">
+
+twin2Val = record3[twin2] satisfies "twin";
+>twin2Val = record3[twin2] satisfies "twin" : "twin"
+>twin2Val : string
+>record3[twin2] satisfies "twin" : "twin"
+>record3[twin2] : "twin"
+>record3 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>twin2 : RegisteredSymbol<"twin">
+
+unique1Val = record3[unique1] satisfies "unique1";
+>unique1Val = record3[unique1] satisfies "unique1" : "unique1"
+>unique1Val : string
+>record3[unique1] satisfies "unique1" : "unique1"
+>record3[unique1] : "unique1"
+>record3 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>unique1 : unique symbol
+
+unique2Val = record3[unique2] satisfies "unique2";
+>unique2Val = record3[unique2] satisfies "unique2" : "unique2"
+>unique2Val : string
+>record3[unique2] satisfies "unique2" : "unique2"
+>record3[unique2] : "unique2"
+>record3 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>unique2 : unique symbol
+
+wellKnownVal = record3[wellKnown] satisfies "wellKnown";
+>wellKnownVal = record3[wellKnown] satisfies "wellKnown" : "wellKnown"
+>wellKnownVal : string
+>record3[wellKnown] satisfies "wellKnown" : "wellKnown"
+>record3[wellKnown] : "wellKnown"
+>record3 : { readonly [single]: "single"; readonly [twin2]: "twin"; readonly [unique1]: "unique1"; readonly [unique2]: "unique2"; readonly [Symbol.match]: "wellKnown"; }
+>wellKnown : unique symbol
+
+export const record4 = {
+>record4 : { readonly [Symbol.toStringTag]: "wellKnown2"; }
+>{    [wellKnown2]: "wellKnown2",} as const : { readonly [Symbol.toStringTag]: "wellKnown2"; }
+>{    [wellKnown2]: "wellKnown2",} : { readonly [Symbol.toStringTag]: "wellKnown2"; }
+
+    [wellKnown2]: "wellKnown2",
+>[wellKnown2] : "wellKnown2"
+>wellKnown2 : unique symbol
+>"wellKnown2" : "wellKnown2"
+
+} as const;
+export let wellKnown2Val: string = record4[wellKnown2] satisfies "wellKnown2";
+>wellKnown2Val : string
+>record4[wellKnown2] satisfies "wellKnown2" : "wellKnown2"
+>record4[wellKnown2] : "wellKnown2"
+>record4 : { readonly [Symbol.toStringTag]: "wellKnown2"; }
+>wellKnown2 : unique symbol
+

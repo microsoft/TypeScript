@@ -3397,6 +3397,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			if source.AsStringMappingType().Symbol() == target.AsStringMappingType().Symbol() {
 				return r.isRelatedTo(source.AsStringMappingType().target, target.AsStringMappingType().target, RecursionFlagsBoth, false /*reportErrors*/)
 			}
+		case source.flags&TypeFlagsRegisteredESSymbol != 0:
+			return r.isRelatedTo(source.AsRegisteredESSymbolType().target, target.AsRegisteredESSymbolType().target, RecursionFlagsBoth, false /*reportErrors*/)
 		}
 		if source.flags&TypeFlagsObject == 0 {
 			return TernaryFalse
@@ -3817,6 +3819,21 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				return TernaryFalse
 			}
 			result = r.isRelatedTo(source.AsStringMappingType().target, target.AsStringMappingType().target, RecursionFlagsBoth, reportErrors)
+			if result != TernaryFalse {
+				return result
+			}
+		} else {
+			constraint := r.c.getBaseConstraintOfType(source)
+			if constraint != nil {
+				result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
+				if result != TernaryFalse {
+					return result
+				}
+			}
+		}
+	case source.flags&TypeFlagsRegisteredESSymbol != 0:
+		if target.flags&TypeFlagsRegisteredESSymbol != 0 {
+			result = r.isRelatedTo(source.Target(), target.Target(), RecursionFlagsBoth, reportErrors)
 			if result != TernaryFalse {
 				return result
 			}
