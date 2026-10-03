@@ -60,7 +60,7 @@ func TestImportLocalization(t *testing.T) {
 		"  \"StaleEnglish\": \"기존 번역\",\n"+
 		"  \"Translated\": \"새 번역]\",\n"+
 		"  \"Updated\": \"이전 번역\"\n"+
-		"}")
+		"}\n")
 	assert.NilError(t, importLocalization(source, handback, output))
 	again, err := os.ReadFile(output)
 	assert.NilError(t, err)

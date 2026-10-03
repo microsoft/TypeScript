@@ -191,6 +191,7 @@ func validateLocaleFile(t *testing.T, data []byte, runtimeMessages map[Key]strin
 	}
 	expected, err := json.MarshalIndent(&orderedMessages, "", "  ")
 	assert.NilError(t, err)
+	expected = append(expected, '\n')
 	assert.Equal(t, string(data), string(expected), "handback must use sorted keys and canonical formatting")
 
 	if len(activeMessages) == 0 {
@@ -205,11 +206,11 @@ func TestLocaleFilesIgnoreStaleDiagnostics(t *testing.T) {
 	data := []byte("{\n" +
 		"  \"Identifier_expected_1003\": \"Known translation.\",\n" +
 		"  \"Removed_diagnostic_99999\": \"Stale translation.\"\n" +
-		"}")
+		"}\n")
 	validateLocaleFile(t, data, map[Key]string{
 		"Identifier_expected_1003": "Known translation.",
 	})
-	validateLocaleFile(t, []byte("{\n  \"Removed_diagnostic_99999\": \"Stale translation.\"\n}"), nil)
+	validateLocaleFile(t, []byte("{\n  \"Removed_diagnostic_99999\": \"Stale translation.\"\n}\n"), nil)
 }
 
 func TestGenerateLocalizations(t *testing.T) {
