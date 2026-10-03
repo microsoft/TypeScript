@@ -7,10 +7,12 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -18,7 +20,7 @@ import (
 func initCompletionClient(t *testing.T, files map[string]string, prefs *lsutil.UserPreferences) *lsptestutil.LSPClient {
 	t.Helper()
 
-	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		switch req.Method {
@@ -99,8 +101,8 @@ func TestCompletionAfterFileClose(t *testing.T) {
 		"/home/projects/b.ts":          "s",
 	}, prefs)
 
-	aURI := lsproto.DocumentUriFromFileName("/home/projects/a.ts")
-	bURI := lsproto.DocumentUriFromFileName("/home/projects/b.ts")
+	aURI := lsconv.FileNameToDocumentURI("/home/projects/a.ts")
+	bURI := lsconv.FileNameToDocumentURI("/home/projects/b.ts")
 	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: aURI, LanguageId: "typescript", Text: "export const someVar = 10;"},
 	})
@@ -144,8 +146,8 @@ func TestCompletionWithConcurrentFileClose(t *testing.T) {
 		"/home/projects/b.ts":          "s",
 	}, prefs)
 
-	aURI := lsproto.DocumentUriFromFileName("/home/projects/a.ts")
-	bURI := lsproto.DocumentUriFromFileName("/home/projects/b.ts")
+	aURI := lsconv.FileNameToDocumentURI("/home/projects/a.ts")
+	bURI := lsconv.FileNameToDocumentURI("/home/projects/b.ts")
 	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: aURI, LanguageId: "typescript", Text: "export const someVar = 10;"},
 	})
@@ -185,7 +187,7 @@ func TestCompletionForUnopenedFile(t *testing.T) {
 		"/home/projects/c.ts":          "let xyz = 1;\nxy",
 	}, prefs)
 
-	cURI := lsproto.DocumentUriFromFileName("/home/projects/c.ts")
+	cURI := lsconv.FileNameToDocumentURI("/home/projects/c.ts")
 	msg, resp, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: cURI},
 		Position:     lsproto.Position{Line: 1, Character: 2},
@@ -213,7 +215,7 @@ func TestAutoImportCompletionForUnopenedFile(t *testing.T) {
 		"/home/projects/c.ts":          "s",
 	}, prefs)
 
-	cURI := lsproto.DocumentUriFromFileName("/home/projects/c.ts")
+	cURI := lsconv.FileNameToDocumentURI("/home/projects/c.ts")
 	msg, resp, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: cURI},
 		Position:     lsproto.Position{Line: 0, Character: 1},
@@ -248,8 +250,8 @@ func TestCompletionSnapshotFreezing(t *testing.T) {
 		"/home/projects/b.ts":          "someV",
 	}, prefs)
 
-	aURI := lsproto.DocumentUriFromFileName("/home/projects/a.ts")
-	bURI := lsproto.DocumentUriFromFileName("/home/projects/b.ts")
+	aURI := lsconv.FileNameToDocumentURI("/home/projects/a.ts")
+	bURI := lsconv.FileNameToDocumentURI("/home/projects/b.ts")
 	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: aURI, LanguageId: "typescript", Text: "export const someVar = 10;"},
 	})

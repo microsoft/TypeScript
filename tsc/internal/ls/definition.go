@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
@@ -232,7 +233,7 @@ func (l *LanguageService) createDefinitionLocations(
 		}
 		locations = append(locations, &lsproto.LocationLink{
 			OriginSelectionRange: &originSelectionRange,
-			TargetUri:            lsproto.DocumentUriFromFileName(reference.fileName),
+			TargetUri:            lsconv.FileNameToDocumentURI(reference.fileName),
 			TargetRange:          targetRange,
 			TargetSelectionRange: targetRange,
 		})

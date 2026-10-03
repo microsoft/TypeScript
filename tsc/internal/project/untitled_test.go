@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
@@ -22,7 +23,7 @@ func TestUntitledReferences(t *testing.T) {
 	convertedFileName := untitledURI.FileName()
 	t.Logf("URI '%s' converts to filename '%s'", untitledURI, convertedFileName)
 
-	backToURI := lsproto.DocumentUriFromFileName(convertedFileName)
+	backToURI := lsconv.FileNameToDocumentURI(convertedFileName)
 	t.Logf("Filename '%s' converts back to URI '%s'", convertedFileName, backToURI)
 
 	if string(backToURI) != string(untitledURI) {

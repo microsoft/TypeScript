@@ -13,15 +13,17 @@ import {
 export const repoRoot = path.resolve(import.meta.dirname, "../../..");
 
 const fileFingerprints = new Map<string, { stats: fs.BigIntStats; hash: string; }>();
-let reuseFileFingerprints = false;
+let fileFingerprintCacheScopes = 0;
 let activeFingerprintWriters = 0;
 
 export function enableFileFingerprintCache(): () => void {
-    const previous = reuseFileFingerprints;
-    reuseFileFingerprints = true;
+    fileFingerprintCacheScopes++;
     fileFingerprints.clear();
+    let enabled = true;
     return () => {
-        reuseFileFingerprints = previous;
+        if (!enabled) return;
+        enabled = false;
+        fileFingerprintCacheScopes--;
         fileFingerprints.clear();
     };
 }
@@ -44,7 +46,7 @@ export function getFileFingerprint(file: string, fresh = false): string {
     file = path.resolve(file);
     fresh ||= activeFingerprintWriters > 0;
     const previous = fileFingerprints.get(file);
-    if (!fresh && reuseFileFingerprints && previous) return previous.hash;
+    if (!fresh && fileFingerprintCacheScopes > 0 && previous) return previous.hash;
     const stats = fs.statSync(file, { bigint: true });
     if (
         !fresh && previous

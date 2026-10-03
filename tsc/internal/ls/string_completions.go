@@ -672,8 +672,8 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 		mode = program.GetModeForUsageLocation(file, node)
 	}
 
-	scriptPath := file.Path()
-	scriptDirectory := scriptPath.GetDirectoryPath()
+	scriptPath := file.PathKey()
+	scriptDirectory := file.FileName().Directory()
 	options := program.Options()
 	extensionOptions := l.getExtensionOptions(options, referenceKindModuleSpecifier, file, mode, checker)
 
@@ -681,7 +681,7 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 		(options.Paths.Size() == 0 && (tspath.IsRootedDiskPath(literalValue) || tspath.IsUrl(literalValue))) {
 		return l.getCompletionEntriesForRelativeModules(
 			literalValue,
-			string(scriptDirectory),
+			scriptDirectory,
 			program,
 			scriptPath,
 			extensionOptions,
@@ -689,7 +689,7 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 	} else {
 		return l.getCompletionEntriesForNonRelativeModules(
 			literalValue,
-			string(scriptDirectory),
+			scriptDirectory,
 			mode,
 			program,
 			checker,
@@ -706,7 +706,7 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 //	    This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
 func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 	fragment string,
-	scriptPath string,
+	scriptDirectory tspath.RootedDirectoryPath,
 	mode core.ResolutionMode,
 	program *compiler.Program,
 	typeChecker *checker.Checker,
@@ -719,7 +719,7 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 	moduleResolution := compilerOptions.GetModuleResolutionKind()
 
 	if paths != nil && paths.Size() > 0 {
-		absolute := compilerOptions.GetPathsBasePath(program.GetCurrentDirectory())
+		absolute := compilerOptions.GetPathsBasePath(program.BaseDirectory())
 		l.addCompletionEntriesFromPaths(result, program, fragment, absolute, extensionOptions, paths)
 	}
 
@@ -731,14 +731,14 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 		})
 	}
 
-	l.getCompletionEntriesFromTypings(program, scriptPath, fragmentDirectory, extensionOptions, result)
+	l.getCompletionEntriesFromTypings(program, scriptDirectory, fragmentDirectory, extensionOptions, result)
 
 	if moduleResolutionUsesNodeModules(moduleResolution) {
 		// If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
 		// (But do if we didn't find anything, e.g. 'package.json' missing.)
 		foundGlobal := false
 		if fragmentDirectory == "" {
-			for _, moduleName := range l.enumerateNodeModulesVisibleToScript(scriptPath) {
+			for _, moduleName := range l.enumerateNodeModulesVisibleToScript(scriptDirectory) {
 				moduleResult := moduleCompletionNameAndKind{
 					name: moduleName,
 					kind: moduleCompletionKindExternalModuleName,
@@ -756,7 +756,7 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 			conditions := module.GetConditions(compilerOptions, mode)
 
 			// Returns true if the search should stop.
-			exportsOrImportsLookup := func(lookupTable *packagejson.ExportsOrImports, fragment string, baseDirectory string, isExports bool, isImports bool) bool {
+			exportsOrImportsLookup := func(lookupTable *packagejson.ExportsOrImports, fragment string, baseDirectory tspath.RootedDirectoryPath, isExports bool, isImports bool) bool {
 				if lookupTable == nil || lookupTable.Type != packagejson.JSONValueTypeObject {
 					return lookupTable != nil && lookupTable.Type != packagejson.JSONValueTypeNotPresent
 				}
@@ -789,10 +789,9 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 				return true
 			}
 
-			importsLookup := func(directory string) {
+			importsLookup := func(directory tspath.RootedDirectoryPath) {
 				if resolvePackageJsonImports && !seenPackageScope {
-					packageFile := tspath.CombinePaths(directory, "package.json")
-					packageJsonInfo := program.GetPackageJsonInfo(packageFile)
+					packageJsonInfo := program.GetPackageJsonInfo(directory.ResolveFile("package.json"))
 					if packageJsonInfo != nil && packageJsonInfo.Exists() {
 						seenPackageScope = true
 						exportsOrImportsLookup(&packageJsonInfo.Contents.Imports, fragment, directory, false /*isExports*/, true /*isImports*/)
@@ -800,8 +799,8 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 				}
 			}
 
-			ancestorLookup := func(ancestor string) (any, bool) {
-				nodeModules := tspath.CombinePaths(ancestor, "node_modules")
+			ancestorLookup := func(ancestor tspath.RootedDirectoryPath) (any, bool) {
+				nodeModules := ancestor.ResolveDirectory("node_modules")
 				if l.host.DirectoryExists(nodeModules) {
 					l.getCompletionEntriesForDirectoryFragment(
 						fragment,
@@ -819,8 +818,8 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 
 			if fragmentDirectory != "" && resolvePackageJsonExports {
 				nodeModulesDirectoryOrImportsLookup := ancestorLookup
-				ancestorLookup = func(ancestor string) (any, bool) {
-					components := tspath.GetPathComponents(fragment, "")
+				ancestorLookup = func(ancestor tspath.RootedDirectoryPath) (any, bool) {
+					components := tspath.GetPathComponents(fragment)
 					components = components[1:] // shift off empty root
 					if len(components) == 0 {
 						nodeModulesDirectoryOrImportsLookup(ancestor)
@@ -841,9 +840,8 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 						importsLookup(ancestor)
 						return nil, false
 					}
-					packageDirectory := tspath.CombinePaths(ancestor, "node_modules", packagePath)
-					packageFile := tspath.CombinePaths(packageDirectory, "package.json")
-					packageJsonInfo := program.GetPackageJsonInfo(packageFile)
+					packageDirectory := ancestor.ResolveDirectory(tspath.CombinePaths("node_modules", packagePath))
+					packageJsonInfo := program.GetPackageJsonInfo(packageDirectory.ResolveFile("package.json"))
 					if packageJsonInfo != nil && packageJsonInfo.Exists() {
 						fragmentSubpath := strings.Join(components, "/")
 						if len(components) > 0 && tspath.HasTrailingDirectorySeparator(fragment) {
@@ -865,7 +863,13 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 			}
 
 			globalCacheLocation := program.GetGlobalTypingsCacheLocation()
-			tspath.ForEachAncestorDirectoryStoppingAtGlobalCache(globalCacheLocation, scriptPath, ancestorLookup)
+			tspath.ForEachAncestorDirectoryPathStoppingAtGlobalCache(
+				globalCacheLocation,
+				scriptDirectory,
+				func(directory tspath.RootedDirectoryPath) (any, bool) {
+					return ancestorLookup(directory)
+				},
+			)
 		}
 	}
 
@@ -930,7 +934,7 @@ func getAmbientModuleName(symbol *ast.Symbol) string {
 
 func (l *LanguageService) getCompletionEntriesFromTypings(
 	program *compiler.Program,
-	scriptPath string,
+	scriptDirectory tspath.RootedDirectoryPath,
 	fragmentDirectory string,
 	extensionOptions *extensionOptions,
 	result *moduleCompletionNameAndKindSet,
@@ -938,22 +942,22 @@ func (l *LanguageService) getCompletionEntriesFromTypings(
 	options := program.Options()
 	seen := make(map[string]bool)
 
-	typeRoots, _ := options.GetEffectiveTypeRoots(program.GetCurrentDirectory())
+	typeRoots, _ := options.GetEffectiveTypeRoots(program.BaseDirectory())
 
 	for _, root := range typeRoots {
 		l.getCompletionEntriesFromTypingsDirectories(root, options, fragmentDirectory, extensionOptions, program, seen, result)
 	}
 
 	globalCacheLocation := program.GetGlobalTypingsCacheLocation()
-	tspath.ForEachAncestorDirectoryStoppingAtGlobalCache(globalCacheLocation, scriptPath, func(directory string) (any, bool) {
-		typesDir := tspath.CombinePaths(directory, "node_modules/@types")
+	tspath.ForEachAncestorDirectoryPathStoppingAtGlobalCache(globalCacheLocation, scriptDirectory, func(directory tspath.RootedDirectoryPath) (any, bool) {
+		typesDir := directory.ResolveDirectory("node_modules/@types")
 		l.getCompletionEntriesFromTypingsDirectories(typesDir, options, fragmentDirectory, extensionOptions, program, seen, result)
 		return nil, false
 	})
 }
 
 func (l *LanguageService) getCompletionEntriesFromTypingsDirectories(
-	directory string,
+	directory tspath.RootedDirectoryPath,
 	options *core.CompilerOptions,
 	fragmentDirectory string,
 	extensionOptions *extensionOptions,
@@ -980,8 +984,8 @@ func (l *LanguageService) getCompletionEntriesFromTypingsDirectories(
 				seen[packageName] = true
 			}
 		} else {
-			baseDirectory := tspath.CombinePaths(directory, typeDirectoryName)
-			remainingFragment := tryRemoveDirectoryPrefix(fragmentDirectory, packageName, program.UseCaseSensitiveFileNames())
+			baseDirectory := directory.ResolveDirectory(typeDirectoryName)
+			remainingFragment := tryRemoveDirectoryPrefix(fragmentDirectory, packageName, program.CaseSensitivity())
 			if remainingFragment != nil {
 				l.getCompletionEntriesForDirectoryFragment(
 					*remainingFragment,
@@ -997,8 +1001,8 @@ func (l *LanguageService) getCompletionEntriesFromTypingsDirectories(
 	}
 }
 
-func tryRemoveDirectoryPrefix(path string, prefix string, useCaseSensitiveFileNames bool) *string {
-	withoutPrefix, ok := tspath.TrimFilePathPrefix(path, prefix, useCaseSensitiveFileNames)
+func tryRemoveDirectoryPrefix(path string, prefix string, caseSensitivity tspath.CaseSensitivity) *string {
+	withoutPrefix, ok := caseSensitivity.TrimPrefix(path, prefix)
 	if !ok {
 		return nil
 	}
@@ -1008,12 +1012,12 @@ func tryRemoveDirectoryPrefix(path string, prefix string, useCaseSensitiveFileNa
 	return &withoutPrefix
 }
 
-func (l *LanguageService) enumerateNodeModulesVisibleToScript(scriptPath string) []string {
+func (l *LanguageService) enumerateNodeModulesVisibleToScript(scriptDirectory tspath.RootedDirectoryPath) []string {
 	var result []string
 	globalCacheLocation := l.program.GetGlobalTypingsCacheLocation()
 
-	tspath.ForEachAncestorDirectoryStoppingAtGlobalCache(globalCacheLocation, scriptPath, func(directory string) (any, bool) {
-		packageJsonPath := tspath.CombinePaths(directory, "package.json")
+	tspath.ForEachAncestorDirectoryPathStoppingAtGlobalCache(globalCacheLocation, scriptDirectory, func(directory tspath.RootedDirectoryPath) (any, bool) {
+		packageJsonPath := directory.ResolveFile("package.json")
 		packageJsonInfo := l.program.GetPackageJsonInfo(packageJsonPath)
 		if packageJsonInfo != nil && packageJsonInfo.Exists() && packageJsonInfo.Contents != nil {
 			packageJsonInfo.Contents.RangeDependencies(func(name, version, dependencyField string) bool {
@@ -1083,19 +1087,18 @@ func isPathRelativeToScript(path string) bool {
 
 func (l *LanguageService) getCompletionEntriesForRelativeModules(
 	literalValue string,
-	scriptDirectory string,
+	scriptDirectory tspath.RootedDirectoryPath,
 	program *compiler.Program,
-	scriptPath tspath.Path,
+	scriptPath tspath.PathKey,
 	extensionOptions *extensionOptions,
 ) []moduleCompletionNameAndKind {
 	options := program.Options()
 	if len(options.RootDirs) > 0 {
 		return l.getCompletionEntriesForDirectoryFragmentWithRootDirs(
-			options.RootDirs,
 			literalValue,
 			scriptDirectory,
 			program,
-			string(scriptPath),
+			scriptPath,
 			extensionOptions,
 		)
 	} else {
@@ -1105,7 +1108,7 @@ func (l *LanguageService) getCompletionEntriesForRelativeModules(
 			extensionOptions,
 			program,
 			true, /*moduleSpecifierIsRelative*/
-			string(scriptPath),
+			scriptPath,
 			&moduleCompletionNameAndKindSet{names: map[string]moduleCompletionNameAndKind{}},
 		)
 		return slices.Collect(maps.Values(result.names))
@@ -1113,22 +1116,18 @@ func (l *LanguageService) getCompletionEntriesForRelativeModules(
 }
 
 func (l *LanguageService) getCompletionEntriesForDirectoryFragmentWithRootDirs(
-	rootDirs []string,
 	fragment string,
-	scriptDirectory string,
+	scriptDirectory tspath.RootedDirectoryPath,
 	program *compiler.Program,
-	exclude string,
+	exclude tspath.PathKey,
 	extensionOptions *extensionOptions,
 ) []moduleCompletionNameAndKind {
 	options := program.Options()
-	var basePath string
-	if options.Project != "" {
-		basePath = options.Project
-	} else {
-		basePath = program.GetCurrentDirectory()
-	}
-	ignoreCase := !program.UseCaseSensitiveFileNames()
-	baseDirectories := getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase)
+	baseDirectories := getBaseDirectoriesFromRootDirs(
+		options.GetEffectiveRootDirs(),
+		scriptDirectory,
+		program.CaseSensitivity(),
+	)
 
 	var allCompletions []moduleCompletionNameAndKind
 	for _, baseDirectory := range baseDirectories {
@@ -1152,56 +1151,40 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragmentWithRootDirs(
 
 // getBaseDirectoriesFromRootDirs takes a script path and returns paths for all potential folders
 // that could be merged with its containing folder via the "rootDirs" compiler option.
-func getBaseDirectoriesFromRootDirs(rootDirs []string, basePath string, scriptDirectory string, ignoreCase bool) []string {
-	// Make all paths absolute/normalized if they are not already
-	normalizedRootDirs := make([]string, len(rootDirs))
-	for i, rootDirectory := range rootDirs {
-		var normalizedPath string
-		if tspath.IsRootedDiskPath(rootDirectory) {
-			normalizedPath = rootDirectory
-		} else {
-			normalizedPath = tspath.CombinePaths(basePath, rootDirectory)
-		}
-		normalizedRootDirs[i] = tspath.EnsureTrailingDirectorySeparator(tspath.NormalizePath(normalizedPath))
-	}
-
+func getBaseDirectoriesFromRootDirs(rootDirs []tspath.RootedDirectoryPath, scriptDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) []tspath.RootedDirectoryPath {
 	// Determine the path to the directory containing the script relative to the root directory it is contained within
-	var relativeDirectory string
-	comparePathsOptions := tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: !ignoreCase,
-		CurrentDirectory:          basePath,
-	}
-	for _, rootDirectory := range normalizedRootDirs {
-		if tspath.ContainsPath(rootDirectory, scriptDirectory, comparePathsOptions) {
-			if len(rootDirectory) > len(scriptDirectory) {
-				relativeDirectory = ""
-			} else {
-				relativeDirectory = scriptDirectory[len(rootDirectory):]
-			}
+	var relativeDirectory tspath.RelativePath
+	for _, rootDirectory := range rootDirs {
+		if relative, ok := caseSensitivity.RelativePathWithinDirectory(rootDirectory, scriptDirectory.AsPath()); ok {
+			relativeDirectory = relative
 			break
 		}
 	}
 
 	// Now find a path for each potential directory that is to be merged with the one containing the script
-	var directories []string
-	for _, rootDirectory := range normalizedRootDirs {
-		directories = append(directories, tspath.RemoveTrailingDirectorySeparator(tspath.CombinePaths(rootDirectory, relativeDirectory)))
+	var directories []tspath.RootedDirectoryPath
+	for _, rootDirectory := range rootDirs {
+		if relativeDirectory == "" {
+			directories = append(directories, rootDirectory)
+		} else {
+			directories = append(directories, rootDirectory.ResolveRelativeDirectory(relativeDirectory))
+		}
 	}
-	directories = append(directories, tspath.RemoveTrailingDirectorySeparator(scriptDirectory))
+	directories = append(directories, scriptDirectory)
 
-	return deduplicateStrings(directories)
+	return deduplicateDirectoryNames(directories)
 }
 
-func deduplicateStrings(slice []string) []string {
+func deduplicateDirectoryNames(slice []tspath.RootedDirectoryPath) []tspath.RootedDirectoryPath {
 	if len(slice) <= 1 {
 		return slice
 	}
-	seen := make(map[string]bool)
-	var result []string
-	for _, s := range slice {
-		if !seen[s] {
-			seen[s] = true
-			result = append(result, s)
+	seen := make(map[tspath.RootedDirectoryPath]bool)
+	var result []tspath.RootedDirectoryPath
+	for _, directory := range slice {
+		if !seen[directory] {
+			seen[directory] = true
+			result = append(result, directory)
 		}
 	}
 	return result
@@ -1271,11 +1254,11 @@ const (
 // Given a path ending at a directory, gets the completions for the path.
 func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 	fragment string,
-	scriptDirectory string,
+	scriptDirectory tspath.RootedDirectoryPath,
 	extensionOptions *extensionOptions,
 	program *compiler.Program,
 	moduleSpecifierIsRelative bool,
-	exclude string,
+	exclude tspath.PathKey,
 	result *moduleCompletionNameAndKindSet,
 ) *moduleCompletionNameAndKindSet {
 	fragment = tspath.NormalizeSlashes(fragment)
@@ -1292,20 +1275,26 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 
 	fragment = tspath.EnsureTrailingDirectorySeparator(fragment)
 
-	baseDirectory := tspath.ResolvePath(scriptDirectory, fragment)
+	baseDirectory := scriptDirectory.ResolveDirectory(fragment)
 	if !moduleSpecifierIsRelative {
 		// Check for a version redirect.
 		packageJsonDirectory := program.GetNearestAncestorDirectoryWithPackageJson(baseDirectory)
 		if packageJsonDirectory != "" {
-			packageJsonPath := tspath.CombinePaths(packageJsonDirectory, "package.json")
+			packageJsonPath := packageJsonDirectory.ResolveFile("package.json")
 			packageJsonInfo := program.GetPackageJsonInfo(packageJsonPath)
 			if packageJsonInfo != nil && packageJsonInfo.Contents != nil &&
 				packageJsonInfo.Contents.TypesVersions.Type == packagejson.JSONValueTypeObject {
 				versionPaths := packageJsonInfo.Contents.GetVersionPaths(nil)
 				paths := versionPaths.GetPaths()
 				if paths.Size() > 0 {
-					pathInPackage := baseDirectory[len(tspath.EnsureTrailingDirectorySeparator(packageJsonDirectory)):]
-					if l.addCompletionEntriesFromPaths(result, program, pathInPackage, packageJsonDirectory, extensionOptions, paths) {
+					pathInPackage, ok := baseDirectory.AsPath().RelativeTo(packageJsonDirectory)
+					if !ok {
+						panic("package json directory must be an ancestor of the completion directory")
+					}
+					if pathInPackage != "" {
+						pathInPackage = pathInPackage.WithTrailingDirectorySeparator()
+					}
+					if l.addCompletionEntriesFromRelativePathPatterns(result, program, pathInPackage, packageJsonDirectory, extensionOptions, paths) {
 						// One of the `versionPaths` was matched, which will block relative resolution
 						// to files and folders from here.
 						// All reachable paths given the pattern match are already added.
@@ -1328,15 +1317,12 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 	)
 
 	for _, filePath := range files {
-		if tspath.ComparePaths(exclude, filePath, tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: program.UseCaseSensitiveFileNames(),
-			CurrentDirectory:          program.GetCurrentDirectory(),
-		}) == 0 {
+		if exclude == program.PathKeyForFileName(filePath) {
 			continue // Avoid self-imports
 		}
 
 		name, extension := getFilenameWithExtensionOption(
-			tspath.GetBaseFileName(filePath),
+			filePath.BaseName(),
 			program,
 			extensionOptions,
 			false, /*isExportsOrImportsWildcard*/
@@ -1370,11 +1356,22 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 
 // Returns true if `fragment` was a match for any `paths`
 // (which should indicate whether any other path completions should be offered).
+func (l *LanguageService) addCompletionEntriesFromRelativePathPatterns(
+	result *moduleCompletionNameAndKindSet,
+	program *compiler.Program,
+	fragment tspath.RelativePath,
+	baseDirectory tspath.RootedDirectoryPath,
+	extensionOptions *extensionOptions,
+	paths *collections.OrderedMap[string, []string],
+) bool {
+	return l.addCompletionEntriesFromPaths(result, program, fragment.AsString(), baseDirectory, extensionOptions, paths)
+}
+
 func (l *LanguageService) addCompletionEntriesFromPaths(
 	result *moduleCompletionNameAndKindSet,
 	program *compiler.Program,
 	fragment string,
-	baseDirectory string,
+	baseDirectory tspath.RootedDirectoryPath,
 	extensionOptions *extensionOptions,
 	paths *collections.OrderedMap[string, []string],
 ) bool {
@@ -1416,7 +1413,7 @@ func (l *LanguageService) addCompletionEntriesFromPathsOrExportsOrImports(
 	isExports bool,
 	isImports bool,
 	fragment string,
-	baseDirectory string,
+	baseDirectory tspath.RootedDirectoryPath,
 	extensionOptions *extensionOptions,
 	keys iter.Seq[string],
 	getPatternsForKey func(key string) []string,
@@ -1501,7 +1498,7 @@ func (l *LanguageService) getCompletionsForPathMapping(
 	path string,
 	patterns []string,
 	fragment string,
-	packageDirectory string,
+	packageDirectory tspath.RootedDirectoryPath,
 	isExports bool,
 	isImports bool,
 	extensionOptions *extensionOptions,
@@ -1598,7 +1595,7 @@ func (l *LanguageService) getCompletionsForPathMapping(
 func getFileExtension(fileName string) string {
 	extension := tspath.TryGetExtensionFromPath(fileName)
 	if extension == "" {
-		extension = tspath.GetAnyExtensionFromPath(fileName, nil /*extensions*/, false /*ignoreCase*/)
+		extension = tspath.GetAnyExtensionFromPath(fileName, nil /*extensions*/, tspath.CaseSensitive)
 	}
 	return extension
 }
@@ -1610,7 +1607,7 @@ func getFileExtension(fileName string) string {
 // the result should be interpreted as "bar/_dir/abd".
 func (l *LanguageService) getModulesForPathsPattern(
 	fragment string,
-	packageDirectory string,
+	packageDirectory tspath.RootedDirectoryPath,
 	pattern string,
 	isExports bool,
 	isImports bool,
@@ -1649,9 +1646,15 @@ func (l *LanguageService) getModulesForPathsPattern(
 	}
 
 	options := program.Options()
-	ignoreCase := !program.UseCaseSensitiveFileNames()
-	outDir := options.OutDir
-	declarationDir := options.DeclarationDir
+	caseSensitivity := program.CaseSensitivity()
+	var outDir tspath.RootedDirectoryPath
+	if options.OutDir != "" {
+		outDir = options.OutDir
+	}
+	var declarationDir tspath.RootedDirectoryPath
+	if options.DeclarationDir != "" {
+		declarationDir = options.DeclarationDir
+	}
 
 	// Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
 	var expandedPrefixDirectory string
@@ -1661,15 +1664,15 @@ func (l *LanguageService) getModulesForPathsPattern(
 		expandedPrefixDirectory = normalizedPrefixDirectory
 	}
 	// Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
-	baseDirectory := tspath.NormalizePath(tspath.CombinePaths(packageDirectory, expandedPrefixDirectory))
+	baseDirectory := packageDirectory.ResolveDirectory(expandedPrefixDirectory)
 
-	var possibleInputBaseDirectoryForOutDir string
-	var possibleInputBaseDirectoryForDeclarationDir string
+	var possibleInputBaseDirectoryForOutDir tspath.RootedDirectoryPath
+	var possibleInputBaseDirectoryForDeclarationDir tspath.RootedDirectoryPath
 	if isImports {
 		if outDir != "" {
 			possibleInputBaseDirectoryForOutDir = getPossibleOriginalInputPathWithoutChangingExt(
 				baseDirectory,
-				ignoreCase,
+				caseSensitivity,
 				outDir,
 				program.CommonSourceDirectory,
 			)
@@ -1677,7 +1680,7 @@ func (l *LanguageService) getModulesForPathsPattern(
 		if declarationDir != "" {
 			possibleInputBaseDirectoryForDeclarationDir = getPossibleOriginalInputPathWithoutChangingExt(
 				baseDirectory,
-				ignoreCase,
+				caseSensitivity,
 				declarationDir,
 				program.CommonSourceDirectory,
 			)
@@ -1732,12 +1735,12 @@ func (l *LanguageService) getModulesForPathsPattern(
 		return ""
 	}
 
-	getMatchesWithPrefix := func(directory string) []moduleCompletionNameAndKind {
+	getMatchesWithPrefix := func(directory tspath.RootedDirectoryPath) []moduleCompletionNameAndKind {
 		var completePrefix string
 		if fragmentHasPath {
-			completePrefix = directory
+			completePrefix = directory.AsString()
 		} else {
-			completePrefix = tspath.EnsureTrailingDirectorySeparator(directory) + normalizedPrefixBase
+			completePrefix = tspath.EnsureTrailingDirectorySeparator(directory.AsString()) + normalizedPrefixBase
 		}
 
 		matches := l.ReadDirectory(
@@ -1748,10 +1751,10 @@ func (l *LanguageService) getModulesForPathsPattern(
 
 		var result []moduleCompletionNameAndKind
 		for _, match := range matches {
-			trimmedWithPattern := trimPrefixAndSuffix(match, completePrefix)
+			trimmedWithPattern := trimPrefixAndSuffix(match.AsString(), completePrefix)
 			if trimmedWithPattern != "" {
 				if containsSlash(trimmedWithPattern) {
-					pathComponents := tspath.GetPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern), "")
+					pathComponents := tspath.GetPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))
 					if len(pathComponents) > 1 {
 						result = append(result, moduleCompletionNameAndKind{
 							name: pathComponents[1],
@@ -1766,7 +1769,7 @@ func (l *LanguageService) getModulesForPathsPattern(
 						isExportsOrImportsWildcard,
 					)
 					if extension == "" {
-						extension = getFileExtension(match)
+						extension = getFileExtension(match.AsString())
 					}
 					result = append(result, moduleCompletionNameAndKind{
 						name:      name,
@@ -1779,7 +1782,7 @@ func (l *LanguageService) getModulesForPathsPattern(
 		return result
 	}
 
-	getDirectoryMatches := func(directoryName string) []moduleCompletionNameAndKind {
+	getDirectoryMatches := func(directoryName tspath.RootedDirectoryPath) []moduleCompletionNameAndKind {
 		directories := l.GetDirectories(directoryName)
 		var result []moduleCompletionNameAndKind
 		for _, dir := range directories {
@@ -1836,18 +1839,17 @@ func removeLeadingDirectorySeparator(path string) string {
 }
 
 func getPossibleOriginalInputPathWithoutChangingExt(
-	filePath string,
-	ignoreCase bool,
-	outputDir string,
-	getCommonSourceDirectory func() string,
-) string {
+	filePath tspath.RootedDirectoryPath,
+	caseSensitivity tspath.CaseSensitivity,
+	outputDir tspath.RootedDirectoryPath,
+	getCommonSourceDirectory func() tspath.RootedDirectoryPath,
+) tspath.RootedDirectoryPath {
 	if outputDir != "" {
-		return tspath.ResolvePath(
-			getCommonSourceDirectory(),
-			tspath.GetRelativePathFromDirectory(outputDir, filePath, tspath.ComparePathsOptions{
-				UseCaseSensitiveFileNames: !ignoreCase,
-			}),
-		)
+		relativePath, ok := caseSensitivity.RelativePathFromPath(outputDir, filePath.AsPath())
+		if !ok {
+			return filePath
+		}
+		return getCommonSourceDirectory().ResolveRelativeDirectory(relativePath)
 	}
 	return filePath
 }
@@ -2217,7 +2219,7 @@ func (l *LanguageService) getTripleSlashReferenceCompletions(
 		return nil
 	}
 
-	scriptPath := tspath.GetDirectoryPath(string(file.Path()))
+	scriptDirectory := file.FileName().Directory()
 
 	var names []moduleCompletionNameAndKind
 	switch kind {
@@ -2225,18 +2227,18 @@ func (l *LanguageService) getTripleSlashReferenceCompletions(
 		extensionOptions := l.getExtensionOptions(compilerOptions, referenceKindFileName, file, core.ResolutionModeNone, nil /*checker*/)
 		result := l.getCompletionEntriesForDirectoryFragment(
 			toComplete,
-			scriptPath,
+			scriptDirectory,
 			extensionOptions,
 			program,
 			true, /*moduleSpecifierIsRelative*/
-			string(file.Path()),
+			file.PathKey(),
 			&moduleCompletionNameAndKindSet{names: make(map[string]moduleCompletionNameAndKind)},
 		)
 		names = slices.Collect(maps.Values(result.names))
 	case "types":
 		extensionOptions := l.getExtensionOptions(compilerOptions, referenceKindModuleSpecifier, file, core.ResolutionModeNone, nil /*checker*/)
 		result := &moduleCompletionNameAndKindSet{names: make(map[string]moduleCompletionNameAndKind)}
-		l.getCompletionEntriesFromTypings(program, scriptPath, getFragmentDirectory(toComplete), extensionOptions, result)
+		l.getCompletionEntriesFromTypings(program, scriptDirectory, getFragmentDirectory(toComplete), extensionOptions, result)
 		names = slices.Collect(maps.Values(result.names))
 	}
 

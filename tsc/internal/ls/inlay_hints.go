@@ -27,7 +27,7 @@ func (l *LanguageService) ProvideInlayHint(
 	params *lsproto.InlayHintParams,
 ) (lsproto.InlayHintResponse, error) {
 	userPreferences := l.UserPreferences()
-	inlayHintPreferences := userPreferences.InlayHints
+	inlayHintPreferences := userPreferences.InlayHintsPreferences
 	if !isAnyInlayHintEnabled(inlayHintPreferences) {
 		return lsproto.InlayHintsOrNull{InlayHints: nil}, nil
 	}
@@ -38,20 +38,22 @@ func (l *LanguageService) ProvideInlayHint(
 	mappedRanges := l.converters.FromLSPRangeIntersectingForSourceFile(file, params.Range, spanmap.FeatureInlayHints)
 	result := make([]*lsproto.InlayHint, 0, len(mappedRanges))
 	for _, mapped := range mappedRanges {
-		projection := mapped.Script
-		checker, done := program.GetTypeCheckerForFile(ctx, projection)
-		defer done()
-		inlayHintState := &inlayHintState{
-			ctx:             ctx,
-			span:            mapped.Span,
-			preferences:     inlayHintPreferences,
-			quotePreference: quotePreference,
-			file:            projection,
-			checker:         checker,
-			converters:      l.converters,
-		}
-		inlayHintState.visit(projection.AsNode())
-		result = append(result, inlayHintState.result...)
+		func() {
+			projection := mapped.Script
+			checker, done := program.GetTypeCheckerForFile(ctx, projection)
+			defer done()
+			inlayHintState := &inlayHintState{
+				ctx:             ctx,
+				span:            mapped.Span,
+				preferences:     inlayHintPreferences,
+				quotePreference: quotePreference,
+				file:            projection,
+				checker:         checker,
+				converters:      l.converters,
+			}
+			inlayHintState.visit(projection.AsNode())
+			result = append(result, inlayHintState.result...)
+		}()
 	}
 	return lsproto.InlayHintsOrNull{InlayHints: &result}, nil
 }
@@ -794,7 +796,7 @@ func (s *inlayHintState) getNodeDisplayPart(text string, node *ast.Node) *lsprot
 	// user somewhere wrong, so it is better to omit the target than to fabricate one.
 	if lspRange, fidelity := s.converters.ToLSPRangeForFeature(file, core.NewTextRange(pos, end), spanmap.FeatureInlayHints); fidelity.IsSingleSegment() {
 		part.Location = &lsproto.Location{
-			Uri:   lsproto.DocumentUriFromFileName(file.OriginalFileName()),
+			Uri:   lsconv.FileNameToDocumentURI(file.OriginalFileName()),
 			Range: lspRange,
 		}
 	}

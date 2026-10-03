@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
@@ -38,9 +39,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		file := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/dependency/fns.ts"))
+		file := p.Program.GetSourceFileByPath(tspath.PathKey("/user/username/projects/myproject/dependency/fns.ts"))
 		assert.Assert(t, file != nil)
-		dtsFile := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/decls/fns.d.ts"))
+		dtsFile := p.Program.GetSourceFileByPath(tspath.PathKey("/user/username/projects/myproject/decls/fns.d.ts"))
 		assert.Assert(t, dtsFile == nil)
 	})
 
@@ -67,9 +68,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		file := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/dependency/fns.ts"))
+		file := p.Program.GetSourceFileByPath(tspath.PathKey("/user/username/projects/myproject/dependency/fns.ts"))
 		assert.Assert(t, file == nil)
-		dtsFile := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/decls/fns.d.ts"))
+		dtsFile := p.Program.GetSourceFileByPath(tspath.PathKey("/user/username/projects/myproject/decls/fns.d.ts"))
 		assert.Assert(t, dtsFile != nil)
 	})
 
@@ -80,7 +81,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -89,9 +90,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -102,7 +103,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -111,9 +112,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -124,7 +125,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -133,9 +134,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -146,7 +147,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -155,9 +156,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -168,7 +169,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -177,9 +178,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -190,7 +191,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -199,9 +200,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -212,7 +213,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -221,9 +222,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -234,7 +235,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUriFromFileName(aTest)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aTest))
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot = session.Snapshot()
@@ -243,9 +244,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := projects[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		fooFile := p.Program.GetSourceFile(bFoo)
+		fooFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFoo))
 		assert.Assert(t, fooFile != nil)
-		barFile := p.Program.GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bBar))
 		assert.Assert(t, barFile != nil)
 	})
 
@@ -253,7 +254,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		t.Parallel()
 		files, aIndex, bFile := filesForDirectorySubpathSymlinkReferences("")
 		session, _ := projecttestutil.Setup(files)
-		uri := lsproto.DocumentUriFromFileName(aIndex)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aIndex))
 		session.DidOpenFile(context.Background(), uri, 1, files[aIndex].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot := session.Snapshot()
@@ -262,9 +263,9 @@ func TestProjectReferencesProgram(t *testing.T) {
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
 		// The import must redirect to source, so the source file is part of the program...
-		assert.Assert(t, p.Program.GetSourceFile(bFile) != nil)
+		assert.Assert(t, p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFile)) != nil)
 		// ...and there must be no `TS2307: Cannot find module 'b/lib/File'` diagnostic.
-		diagnostics := p.Program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), p.Program.GetSourceFile(aIndex))
+		diagnostics := p.Program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(aIndex)))
 		assert.Equal(t, len(diagnostics), 0)
 	})
 
@@ -272,7 +273,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		t.Parallel()
 		files, aIndex, bFile := filesForDirectorySubpathSymlinkReferences("@issue/")
 		session, _ := projecttestutil.Setup(files)
-		uri := lsproto.DocumentUriFromFileName(aIndex)
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(aIndex))
 		session.DidOpenFile(context.Background(), uri, 1, files[aIndex].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot := session.Snapshot()
@@ -280,8 +281,8 @@ func TestProjectReferencesProgram(t *testing.T) {
 		p := snapshot.ProjectCollection.Projects()[0]
 		assert.Equal(t, p.Kind, project.KindConfigured)
 
-		assert.Assert(t, p.Program.GetSourceFile(bFile) != nil)
-		diagnostics := p.Program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), p.Program.GetSourceFile(aIndex))
+		assert.Assert(t, p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(bFile)) != nil)
+		diagnostics := p.Program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), p.Program.GetSourceFile(tspath.RootedFilePathFromNormalized(aIndex)))
 		assert.Equal(t, len(diagnostics), 0)
 	})
 
@@ -359,7 +360,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		session.WaitForBackgroundTasks()
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
-		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/user/username/projects/myproject/dependency/tsconfig.json")) != nil)
+		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.PathKey("/user/username/projects/myproject/dependency/tsconfig.json")) != nil)
 
 		// 2. Remove the project reference from main/tsconfig.json and rebuild.
 		//    The new program no longer references dependency.
@@ -384,11 +385,11 @@ func TestProjectReferencesProgram(t *testing.T) {
 		session.DidOpenFile(context.Background(), otherURI, 1, otherContent, lsproto.LanguageKindTypeScript)
 		session.WaitForBackgroundTasks()
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/main/tsconfig.json")) == nil)
+		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/main/tsconfig.json")) == nil)
 		// Dropping the reference releases main from dependency's retainingProjects,
 		// so the now-unreferenced dependency config is cleaned up and no stale entry
 		// survives to crash a later config change.
-		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/user/username/projects/myproject/dependency/tsconfig.json")) == nil)
+		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.PathKey("/user/username/projects/myproject/dependency/tsconfig.json")) == nil)
 
 		// 4. Change dependency/tsconfig.json and flush. This used to copy the stale
 		//    retainingProjects into affectedProjects and crash

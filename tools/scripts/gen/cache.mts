@@ -90,7 +90,6 @@ export default async function cache({
         console.log(`skipped ${commandText}: codegen outputs are already up to date`);
         return true;
     }
-
     for (const file of previous) file.invalidate();
     for (const [command, ...args] of commands) {
         await run(command, args, { cwd, env: environment });

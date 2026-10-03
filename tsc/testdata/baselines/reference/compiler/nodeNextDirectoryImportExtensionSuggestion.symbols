@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/nodeNextDirectoryImportExtensionSuggestion.ts] ////
+
+=== /foo.ts ===
+
+export {};
+
+=== /foo/index.ts ===
+
+export {};
+
+=== /index.ts ===
+
+import "./foo/";
+

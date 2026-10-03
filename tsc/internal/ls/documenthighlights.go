@@ -8,10 +8,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 )
@@ -81,7 +83,7 @@ func (l *LanguageService) provideDocumentHighlightsAtPosition(ctx context.Contex
 
 	// Resolve the source files to search, deduplicating by file name.
 	var sourceFiles []*ast.SourceFile
-	seenFiles := collections.NewSetWithSizeHint[string](len(filesToSearch))
+	seenFiles := collections.NewSetWithSizeHint[tspath.RootedFilePath](len(filesToSearch))
 	for _, uri := range filesToSearch {
 		fileName := uri.FileName()
 		if !seenFiles.AddIfAbsent(fileName) {
@@ -157,9 +159,9 @@ func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, pos
 	var result []*lsproto.MultiDocumentHighlight
 	for _, sf := range sourceFiles {
 		fileName := sf.OriginalFileName()
-		if highlights, ok := fileHighlights[fileName]; ok {
+		if highlights, ok := fileHighlights[fileName.AsString()]; ok {
 			result = append(result, &lsproto.MultiDocumentHighlight{
-				Uri:        lsproto.DocumentUriFromFileName(fileName),
+				Uri:        lsconv.FileNameToDocumentURI(fileName),
 				Highlights: highlights,
 			})
 		}
@@ -169,7 +171,7 @@ func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, pos
 
 func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *lsproto.DocumentHighlight) {
 	entry = l.resolveEntry(entry)
-	fileName := entry.sourceFile.OriginalFileName()
+	fileName := entry.sourceFile.OriginalFileName().AsString()
 
 	kind := lsproto.DocumentHighlightKindRead
 	lspRange, ok := l.getRangeOfEntryForFeature(entry, spanmap.FeatureDocumentHighlights)

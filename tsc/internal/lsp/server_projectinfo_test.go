@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -26,7 +27,7 @@ func expectedCodeActionKinds() []lsproto.CodeActionKind {
 func initProjectInfoClient(t *testing.T, files map[string]string) *lsptestutil.LSPClient {
 	t.Helper()
 
-	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		switch req.Method {
@@ -65,7 +66,7 @@ func TestInitializeCodeActionKinds(t *testing.T) {
 	client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
 		Err:                io.Discard,
 		Cwd:                "/home/projects",
-		FS:                 bundled.WrapFS(vfstest.FromMap(map[string]string{}, false)),
+		FS:                 bundled.WrapFS(vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)),
 		DefaultLibraryPath: bundled.LibPath(),
 	}, nil)
 	t.Cleanup(func() { _ = closeClient() })

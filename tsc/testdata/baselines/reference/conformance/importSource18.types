@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/importSource/importSource18.ts] ////
+
+=== index.ts ===
+import source a from "./a.wasm";
+>a : {}
+
+a;
+>a : {}
+
+import.source("./a.wasm");
+>import.source("./a.wasm") : Promise<{}>
+>source : any
+>"./a.wasm" : "./a.wasm"
+

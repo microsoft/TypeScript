@@ -56,7 +56,7 @@ func TestGetTokenAtPosition(t *testing.T) {
 }`
 		file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.js",
-			Path:     "/test.js",
+			PathKey:  "/test.js",
 		}, fileText, core.ScriptKindJS)
 
 		// Position of 'x' inside the parenthesized expression (position 52)
@@ -84,7 +84,7 @@ func TestGetTokenAtPosition(t *testing.T) {
 }`
 		file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.js",
-			Path:     "/test.js",
+			PathKey:  "/test.js",
 		}, fileText, core.ScriptKindJS)
 
 		// Find position of 'x' in the type assertion
@@ -104,7 +104,7 @@ func TestGetTokenAtPosition(t *testing.T) {
 		`
 		file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/file.ts",
-			Path:     "/file.ts",
+			PathKey:  "/file.ts",
 		}, fileText, core.ScriptKindTS)
 		assert.Equal(t, astnav.GetTokenAtPosition(file, 0), astnav.GetTokenAtPosition(file, 0))
 	})
@@ -148,7 +148,7 @@ func baselineTokens(t *testing.T, testName string, includeEOF bool, getTSTokens 
 			tsTokens := getTSTokens(string(fileText), positions)
 			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/file.ts",
-				Path:     "/file.ts",
+				PathKey:  "/file.ts",
 			}, string(fileText), core.ScriptKindTS)
 
 			var output strings.Builder
@@ -202,7 +202,7 @@ func baselineGoTokensJSON(t *testing.T, testName string, getGoToken func(file *a
 
 			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/file.ts",
-				Path:     "/file.ts",
+				PathKey:  "/file.ts",
 			}, string(fileText), core.ScriptKindTS)
 
 			maxPos := len(fileText)
@@ -574,7 +574,7 @@ export function isAnyDirectorySeparator(charCode: number): boolean {
 			t.Parallel()
 			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/file.ts",
-				Path:     "/file.ts",
+				PathKey:  "/file.ts",
 			}, testCase.fileContent, core.ScriptKindTS)
 			token := astnav.FindPrecedingToken(file, testCase.position)
 			assert.Equal(t, token.Kind, testCase.expectedKind)

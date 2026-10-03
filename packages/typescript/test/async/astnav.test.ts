@@ -13,7 +13,6 @@ import type {
     Node,
     SourceFile,
 } from "@typescript/typescript/unstable/ast";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -24,6 +23,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 
 // ---------------------------------------------------------------------------
 // Go JSON baseline format
@@ -76,7 +79,7 @@ const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav")
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("astnav", () => {
+describe("astnav", { concurrency: areTestsFiltered() }, () => {
     let fileText: string;
 
     try {

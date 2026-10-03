@@ -126,6 +126,8 @@ func getIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *CodeFix
 }
 
 func getAllIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
+	allDiags := getAllDiagnostics(ctx, fixContext.Program, fixContext.SourceFile)
+
 	ch, done := fixContext.Program.GetTypeCheckerForFile(ctx, fixContext.SourceFile)
 	defer done()
 
@@ -141,7 +143,6 @@ func getAllIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *Code
 		typePrintMode: typePrintModeFull,
 	}
 
-	allDiags := getAllDiagnostics(ctx, fixContext.Program, fixContext.SourceFile)
 	for _, diag := range allDiags {
 		if isFixableDiagnostic(diag, isolatedDeclarationsFixErrorCodes) {
 			span := core.NewTextRange(diag.Loc().Pos(), diag.Loc().End())

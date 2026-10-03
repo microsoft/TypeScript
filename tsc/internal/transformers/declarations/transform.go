@@ -26,15 +26,14 @@ type ReferencedFilePair struct {
 }
 
 type OutputPaths interface {
-	DeclarationFilePath() string
-	JsFilePath() string
+	DeclarationFilePath() tspath.RootedFilePath
+	JsFilePath() tspath.RootedFilePath
 }
 
 // Used to be passed in the TransformationContext, which is now just an EmitContext
 type DeclarationEmitHost interface {
 	modulespecifiers.ModuleSpecifierGenerationHost
-	GetCurrentDirectory() string
-	UseCaseSensitiveFileNames() bool
+	CaseSensitivity() tspath.CaseSensitivity
 	GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile
 
 	GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) OutputPaths
@@ -67,8 +66,7 @@ type DeclarationTransformer struct {
 	tracker             *SymbolTrackerImpl
 	state               *SymbolTrackerSharedState
 	resolver            printer.EmitResolver
-	declarationFilePath string
-	declarationMapPath  string
+	declarationFilePath tspath.RootedFilePath
 
 	needsDeclare                     bool
 	needsScopeFixMarker              bool
@@ -100,7 +98,7 @@ type DeclarationTransformer struct {
 }
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
-func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath string, declarationMapPath string) *DeclarationTransformer {
+func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath tspath.RootedFilePath) *DeclarationTransformer {
 	resolver := host.GetEmitResolver()
 	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), stripInternal: compilerOptions.StripInternal.IsTrue(), resolver: resolver}
 	tracker := NewSymbolTracker(host, resolver, state)
@@ -112,7 +110,6 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 		state:               state,
 		resolver:            resolver,
 		declarationFilePath: declarationFilePath,
-		declarationMapPath:  declarationMapPath,
 	}
 	tx.state.reportExpandoFunctionErrors = func(node *ast.Node) {
 		if !tx.state.isolatedDeclarations {
@@ -370,12 +367,11 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 			combinedStatements = withMarker
 		}
 	}
-	outputFilePath := tspath.GetDirectoryPath(tspath.NormalizeSlashes(tx.declarationFilePath))
 	result := tx.Factory().UpdateSourceFile(node, combinedStatements, node.EndOfFileToken)
 	result.AsSourceFile().LibReferenceDirectives = tx.getLibReferences()
 	result.AsSourceFile().TypeReferenceDirectives = tx.getTypeReferences()
 	result.AsSourceFile().IsDeclarationFile = true
-	result.AsSourceFile().ReferencedFiles = tx.getReferencedFiles(outputFilePath)
+	result.AsSourceFile().ReferencedFiles = tx.getReferencedFiles(tx.declarationFilePath.Directory())
 	return result.AsNode()
 }
 
@@ -461,7 +457,7 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 	return tx.Factory().NewNodeList(results)
 }
 
-func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath string) (results []*ast.FileReference) {
+func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath tspath.RootedDirectoryPath) (results []*ast.FileReference) {
 	// Handle path rewrites for triple slash ref comments
 	for _, pair := range tx.rawReferencedFiles {
 		sourceFile := pair.file
@@ -476,34 +472,31 @@ func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath string) (res
 			continue
 		}
 
-		var declFileName string
+		var declFileName tspath.RootedFilePath
 		if file.IsDeclarationFile {
 			declFileName = file.FileName()
 		} else {
 			paths := tx.host.GetOutputPathsFor(file, true)
 			// Try to use output path for referenced file, or output js path if that doesn't exist, or the input path if all else fails
 			declFileName = paths.DeclarationFilePath()
-			if len(declFileName) == 0 {
+			if declFileName == "" {
 				declFileName = paths.JsFilePath()
 			}
-			if len(declFileName) == 0 {
+			if declFileName == "" {
 				declFileName = file.FileName()
 			}
 		}
 		// Should only be missing if the source file is missing a fileName (at which point we can't name a reference to it anyway)
 		// TODO: Shouldn't this be a crash or assert instead of a silent continue?
-		if len(declFileName) == 0 {
+		if declFileName == "" {
 			continue
 		}
 
 		fileName := tspath.GetRelativePathToDirectoryOrUrl(
-			outputFilePath,
-			declFileName,
-			false, // TODO: Probably unsafe to assume this isn't a URL, but that's what strada does
-			tspath.ComparePathsOptions{
-				CurrentDirectory:          tx.host.GetCurrentDirectory(),
-				UseCaseSensitiveFileNames: tx.host.UseCaseSensitiveFileNames(),
-			},
+			outputFilePath.AsString(),
+			declFileName.AsString(),
+			false,
+			tx.host.CaseSensitivity(),
 		)
 
 		results = append(results, &ast.FileReference{
@@ -1231,9 +1224,18 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	tx.resultHasScopeMarker = true
 	if ast.IsIdentifier(expression) && (ast.IsSourceFile(input.Parent) || ast.IsModuleBlock(input.Parent)) {
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, expression)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.preserveJsDoc(exportAssignment, input)
 		return exportAssignment
 	}
+
+	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+		return &SymbolAccessibilityDiagnostic{
+			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+			errorNode:         input,
+		}
+	}
+	tx.tracker.PushErrorFallbackNode(assignment)
 
 	// Check if the expression is a class expression - emit as a class declaration + export assignment
 	unwrapped := ast.SkipOuterExpressions(expression, ast.OEKExpressionTypePassthrough)
@@ -1244,9 +1246,11 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
 		classDecl := tx.transformClassExpressionToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods))
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(classDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, classDecl})
 	} else if ast.IsFunctionLike(unwrapped) {
@@ -1257,22 +1261,17 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		}
 		fullSignatureType := assignment.Type()
 		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods), fullSignatureType)
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(funcDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, funcDecl})
 	}
 
 	// expression is non-identifier, create _default typed variable to reference
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
-		return &SymbolAccessibilityDiagnostic{
-			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-			errorNode:         input,
-		}
-	}
 	tx.cjsExportAssignmentName = newId
-	tx.tracker.PushErrorFallbackNode(assignment)
 	var type_, initializer *ast.Node
 	if ast.IsPrimitiveLiteralValue(unwrapParenthesizedExpression(expression), true) {
 		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(assignment), tx.tracker)
@@ -1290,6 +1289,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	}
 	statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst))
 	exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+	tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 	// Remove comments from the export declaration and copy them onto the synthetic _default declaration
 	tx.preserveJsDoc(statement, input)
 	return tx.Factory().NewSyntaxList([]*ast.Node{statement, exportAssignment})
@@ -2799,14 +2799,18 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
 	defer cleanupDiagnosticContext()
 
+	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
+
 	if ast.IsIdentifier(node.Right) {
+		if !preexistingExpandoHasExport {
+			tx.addExportModifierToExpandoMembers(hostId)
+		}
 		// alias-like, emit an `export {name}` or `export {name as alias}`
 		result := tx.transformBinaryExpressionToExportDeclaration(node.AsNode(), exportName)
 		tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], result)
 		return
 	}
 
-	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 	var varModifiers *ast.ModifierList
 
 	if preexistingExpandoHasExport {
@@ -2846,16 +2850,22 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 			},
 		))
 		statements = append(statements, tx.Factory().NewExportDeclaration(nil /*modifiers*/, false /*isTypeOnly*/, namedExports, nil /*moduleSpecifier*/, nil /*attributes*/))
-	}
-
-	if len(statements) > 1 && !preexistingExpandoHasExport {
-		// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
-		for _, decl := range tx.expandoMembers[hostId] {
-			modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
-			decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
+		if !preexistingExpandoHasExport {
+			// Done before adding statements to expando members to keep the initial variable statement, before we rename anything, private
+			tx.addExportModifierToExpandoMembers(hostId)
 		}
 	}
+
 	tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], statements...)
+}
+
+func (tx *DeclarationTransformer) addExportModifierToExpandoMembers(hostId ast.NodeId) {
+	// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
+	for _, decl := range tx.expandoMembers[hostId] {
+		// only invoked when `tx.expandoMembers` does not *yet* contain an `export` declaration, so no need to skip one here to prevent `export export {}`
+		modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
+		decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
+	}
 }
 
 func (tx *DeclarationTransformer) getExpandoHostId(declaration *ast.Declaration) ast.NodeId {

@@ -186,21 +186,38 @@ func (c *SyncConn) Call(ctx context.Context, method string, params any) (json.Va
 		return nil, ctx.Err()
 	}
 
-	// Read the response inline.
-	msg, err := c.protocol.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	if msg.IsResponse() && msg.ID != nil && msg.ID.String() == method {
-		if msg.Error != nil {
-			return nil, fmt.Errorf("ipc: remote error [%d]: %s", msg.Error.Code, msg.Error.Message)
+	for {
+		// Read the response inline.
+		msg, err := c.protocol.ReadMessage()
+		if err != nil {
+			return nil, err
 		}
-		return msg.Result, nil
-	}
 
-	// Unexpected message while waiting for response
-	return nil, fmt.Errorf("ipc: unexpected message while waiting for %q response", method)
+		if msg.IsResponse() && msg.ID != nil && msg.ID.String() == method {
+			if msg.Error != nil {
+				return nil, fmt.Errorf("ipc: remote error [%d]: %s", msg.Error.Code, msg.Error.Message)
+			}
+			return msg.Result, nil
+		}
+		if msg.IsRequest() {
+			// A synchronous client callback may make a nested API request. Release
+			// the protocol lock while handling it so nested callbacks can proceed.
+			c.mu.Unlock()
+			err := c.handleRequest(ctx, msg)
+			c.mu.Lock()
+			if err != nil {
+				return nil, err
+			}
+			continue
+		}
+		if msg.IsNotification() {
+			c.mu.Unlock()
+			c.handleNotification(ctx, msg)
+			c.mu.Lock()
+			continue
+		}
+		return nil, fmt.Errorf("ipc: unexpected message while waiting for %q response", method)
+	}
 }
 
 // Notify sends a notification to the client (no response expected).

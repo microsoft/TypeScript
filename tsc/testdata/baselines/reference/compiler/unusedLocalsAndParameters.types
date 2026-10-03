@@ -154,6 +154,17 @@ namespace N {
 >x : any
 }
 
+// in a class static block
+class C1 {
+>C1 : C1
+
+    static {
+        let foo = 1;
+>foo : number
+>1 : 1
+    }
+}
+
 for (let x: y) {
 >x : y
 

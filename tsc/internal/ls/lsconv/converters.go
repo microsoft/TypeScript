@@ -3,12 +3,14 @@ package lsconv
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"slices"
 	"strings"
 	"unicode/utf16"
 	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -17,10 +19,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type Converters struct {
-	getLineMap       func(fileName string) *LSPLineMap
+	getLineMap       func(fileName tspath.RootedFilePath) *LSPLineMap
 	positionEncoding lsproto.PositionEncodingKind
 }
 
@@ -39,8 +42,8 @@ type MappedPosition[T Script] struct {
 // (OriginalText()); virtual ranges are then automatically converted to original coordinates (see
 // ToLSPRange). For an ordinary file SpanMap() is nil and OriginalText() equals Text().
 type Script interface {
-	FileName() string
-	OriginalFileName() string
+	FileName() tspath.RootedFilePath
+	OriginalFileName() tspath.RootedFilePath
 	Text() string
 	SpanMap() *spanmap.SpanMap
 	OriginalText() string
@@ -48,7 +51,7 @@ type Script interface {
 
 func NewConverters(
 	positionEncoding lsproto.PositionEncodingKind,
-	getLineMap func(fileName string) *LSPLineMap,
+	getLineMap func(fileName tspath.RootedFilePath) *LSPLineMap,
 ) *Converters {
 	return &Converters{
 		getLineMap:       getLineMap,
@@ -104,7 +107,7 @@ func (c *Converters) ToLSPPositionForFeature(script Script, position core.TextPo
 func (c *Converters) ToLSPLocation(script Script, rng core.TextRange) (lsproto.Location, spanmap.Fidelity) {
 	lspRange, fidelity := c.ToLSPRange(script, rng)
 	return lsproto.Location{
-		Uri:   lsproto.DocumentUriFromFileName(script.OriginalFileName()),
+		Uri:   FileNameToDocumentURI(script.OriginalFileName()),
 		Range: lspRange,
 	}, fidelity
 }
@@ -115,7 +118,7 @@ func (c *Converters) ToLSPLocation(script Script, rng core.TextRange) (lsproto.L
 // [Converters.ToLSPLocation].
 func (c *Converters) ToLSPLocationForFeature(script Script, rng core.TextRange, feature spanmap.Feature) (lsproto.Location, spanmap.Fidelity) {
 	lspRange, fidelity := c.ToLSPRangeForFeature(script, rng, feature)
-	return lsproto.Location{Uri: lsproto.DocumentUriFromFileName(script.OriginalFileName()), Range: lspRange}, fidelity
+	return lsproto.Location{Uri: FileNameToDocumentURI(script.OriginalFileName()), Range: lspRange}, fidelity
 }
 
 // FromLSPRange converts an lsproto.Range to offsets in one Script. For a content-mapped script, results
@@ -301,6 +304,59 @@ func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
 	}
 }
 
+// https://github.com/microsoft/vscode-uri/blob/edfdccd976efaf4bb8fdeca87e97c47257721729/src/uri.ts#L455
+var extraEscapeReplacer = strings.NewReplacer(
+	":", "%3A",
+	"/", "%2F",
+	"?", "%3F",
+	"#", "%23",
+	"[", "%5B",
+	"]", "%5D",
+	"@", "%40",
+
+	"!", "%21",
+	"$", "%24",
+	"&", "%26",
+	"'", "%27",
+	"(", "%28",
+	")", "%29",
+	"*", "%2A",
+	"+", "%2B",
+	",", "%2C",
+	";", "%3B",
+	"=", "%3D",
+
+	" ", "%20",
+)
+
+func FileNameToDocumentURI(fileName tspath.RootedFilePath) lsproto.DocumentUri {
+	return PathToDocumentURI(fileName.AsPath())
+}
+
+func PathToDocumentURI(rootedPath tspath.RootedPath) lsproto.DocumentUri {
+	path := rootedPath.AsString()
+	if bundled.IsBundled(path) {
+		return lsproto.DocumentUri(path)
+	}
+	if rootedPath.IsDynamic() {
+		return lsproto.DynamicFileNameToDocumentUri(rootedPath)
+	}
+
+	volume, path, _ := tspath.SplitVolumePath(path)
+	if volume != "" {
+		volume = "/" + extraEscapeReplacer.Replace(volume)
+	}
+
+	path = strings.TrimPrefix(path, "//")
+
+	parts := strings.Split(path, "/")
+	for i, part := range parts {
+		parts[i] = extraEscapeReplacer.Replace(url.PathEscape(part))
+	}
+
+	return lsproto.DocumentUri("file://" + volume + strings.Join(parts, "/"))
+}
+
 func (c *Converters) lineAndCharacterToPosition(script Script, lineAndCharacter lsproto.Position) core.TextPos {
 	// UTF-8/16 0-indexed line and character to UTF-8 offset
 	debug.Assert(script.SpanMap() == nil, "raw coordinate conversion requires a non-content-mapped script")
@@ -449,7 +505,7 @@ func diagnosticToLSP(ctx context.Context, converters *Converters, diagnostic *as
 			}
 			relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
 				Location: lsproto.Location{
-					Uri:   lsproto.DocumentUriFromFileName(related.File().OriginalFileName()),
+					Uri:   FileNameToDocumentURI(related.File().OriginalFileName()),
 					Range: relatedRange,
 				},
 				Message: related.Localize(locale),
@@ -532,15 +588,15 @@ func diagnosticScriptAndRange(file *ast.SourceFile, loc core.TextRange, source s
 // originalTextScript presents a content-mapped file's original (untransformed) text as a Script, so that
 // ranges already mapped into that text convert to the correct line/character positions.
 type originalTextScript struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	text     string
 }
 
-func (s originalTextScript) FileName() string         { return s.fileName }
-func (s originalTextScript) OriginalFileName() string { return s.fileName }
-func (s originalTextScript) Text() string             { return s.text }
-func (s originalTextScript) OriginalText() string     { return s.text }
-func (originalTextScript) SpanMap() *spanmap.SpanMap  { return nil }
+func (s originalTextScript) FileName() tspath.RootedFilePath         { return s.fileName }
+func (s originalTextScript) OriginalFileName() tspath.RootedFilePath { return s.fileName }
+func (s originalTextScript) Text() string                            { return s.text }
+func (s originalTextScript) OriginalText() string                    { return s.text }
+func (originalTextScript) SpanMap() *spanmap.SpanMap                 { return nil }
 
 // diagnosticSeverity maps a diagnostic category to its LSP severity.
 func diagnosticSeverity(category diagnostics.Category) lsproto.DiagnosticSeverity {
