@@ -2286,7 +2286,7 @@ async function runBuildNativePreviewPackages() {
     inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
     if (publishAsTypescript) {
         inputPackageJson.bin = {
-            tsc: "./bin/tsc",
+            tsc: "./bin/tsc.js",
         };
         inputPackageJson.description = "TypeScript is a language for application scale JavaScript development";
         inputPackageJson.homepage = "https://www.typescriptlang.org/";
@@ -2332,8 +2332,8 @@ async function runBuildNativePreviewPackages() {
     // The package.json "files" field controls what npm pack actually includes.
     await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
     if (publishAsTypescript) {
-        await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
-        await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
+        await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc.js"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
+        await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc.js"), 0o755);
         await fs.promises.copyFile(path.join(inputDir, "typescript-package-readme.md"), path.join(mainPackageDir, "README.md"));
     }
 
@@ -2463,7 +2463,9 @@ async function testNativePreviewPackage(platforms) {
         }
 
         const binName = publishAsTypescript ? "tsc" : "tsgo";
-        const binPath = path.join(mainPackageDir, "bin", binName);
+        const packageJson = JSON.parse(await fs.promises.readFile(path.join(mainPackageDir, "package.json"), "utf8"));
+        const binPath = path.resolve(mainPackageDir, packageJson.bin[binName]);
+        assert.equal(path.extname(binPath), ".js");
         const { stdout: versionOutput } = await runOutput(process.execPath, [binPath, "--version"]);
         assert.equal(versionOutput.trim(), `Version ${getVersion()}`);
 
