@@ -60,6 +60,7 @@ func (f *Fix) Edits(
 	formatOptions lsutil.FormatCodeSettings,
 	converters *lsconv.Converters,
 	preferences lsutil.UserPreferences,
+	includeSymbolNameInDescription bool,
 ) ([]*lsproto.TextEdit, string, bool) {
 	locale := locale.FromContext(ctx)
 	tracker := change.NewTracker(ctx, compilerOptions, formatOptions, converters)
@@ -75,6 +76,9 @@ func (f *Fix) Edits(
 		existingFix := getAddToExistingImportFix(file, f)
 		addToExistingImport(tracker, file, existingFix.importClauseOrBindingPattern, existingFix.defaultImport, core.SingleElementSlice(existingFix.namedImport), preferences)
 		edits, safe := fileEdits(tracker, file)
+		if includeSymbolNameInDescription {
+			return edits, diagnostics.Import_0_from_1.Localize(locale, f.Name, f.ModuleSpecifier), safe
+		}
 		return edits, diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindAddNew:
 		var declarations []*ast.Statement
@@ -107,6 +111,9 @@ func (f *Fix) Edits(
 		// 	addNamespaceQualifier(tracker, file, qualification)
 		// }
 		edits, safe := fileEdits(tracker, file)
+		if includeSymbolNameInDescription {
+			return edits, diagnostics.Import_0_from_1.Localize(locale, f.Name, f.ModuleSpecifier), safe
+		}
 		return edits, diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindPromoteTypeOnly:
 		promotedDeclaration := promoteFromTypeOnly(tracker, f.TypeOnlyAliasDeclaration, compilerOptions, file, preferences)
