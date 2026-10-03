@@ -13,9 +13,9 @@ import (
 )
 
 // Preserve the reflection-based serializer as an independent check of generated serialization.
-func reflectedSerializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
+func reflectedSerializeCompilerOptions(options *core.CompilerOptions, configFilePath tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) *collections.OrderedMap[string, any] {
 	result := collections.NewOrderedMapWithSizeHint[string, any](32)
-	configDir := tspath.GetDirectoryPath(configFilePath)
+	configDir := configFilePath.Directory()
 	optionsValue := reflect.ValueOf(options).Elem()
 	for i := range optionsValue.NumField() {
 		field := optionsValue.Type().Field(i)
@@ -45,17 +45,25 @@ func reflectedSerializeCompilerOptions(options *core.CompilerOptions, configFile
 			debug.Assert(false, "listOrElement option should not reach serialization")
 		case CommandLineOptionTypeList:
 			element := option.Elements()
-			if values, ok := value.([]string); ok && element != nil {
-				if element.IsFilePath {
-					relative := make([]string, len(values))
-					for j, path := range values {
-						absolute := tspath.GetNormalizedAbsolutePath(path, configDir)
-						relative[j] = tspath.GetRelativePathFromFile(configFilePath, absolute, comparePathsOptions)
+			if element != nil {
+				if element.PathKind.IsRooted() {
+					if values, ok := PathValuesAsStrings(value); ok {
+						relative := make([]string, len(values))
+						for j, path := range values {
+							if path != "" {
+								relative[j] = serializeCompilerOptionPath(tspath.ToRootedFilePath(path, configDir).AsPath(), configFilePath, caseSensitivity)
+							}
+						}
+						result.Set(option.Name, relative)
+						continue
 					}
-					result.Set(option.Name, relative)
-					continue
 				}
 				if enumMap := element.EnumMap(); enumMap != nil {
+					values, ok := value.([]string)
+					if !ok {
+						result.Set(option.Name, value)
+						continue
+					}
 					serialized := make([]string, 0, len(values))
 					for _, item := range values {
 						for key, enumValue := range enumMap.Entries() {
@@ -72,8 +80,10 @@ func reflectedSerializeCompilerOptions(options *core.CompilerOptions, configFile
 			}
 			result.Set(option.Name, value)
 		case CommandLineOptionTypeString:
-			if option.IsFilePath {
-				value = tspath.GetRelativePathFromFile(configFilePath, tspath.GetNormalizedAbsolutePath(value.(string), configDir), comparePathsOptions)
+			if option.PathKind.IsRooted() {
+				if path, ok := PathValueAsString(value); ok {
+					value = serializeCompilerOptionPath(tspath.ToRootedFilePath(path, configDir).AsPath(), configFilePath, caseSensitivity)
+				}
 			}
 			result.Set(option.Name, value)
 		case CommandLineOptionTypeBoolean:
@@ -93,11 +103,12 @@ func reflectedSerializeCompilerOptions(options *core.CompilerOptions, configFile
 func TestShowConfigSerialization(t *testing.T) {
 	t.Parallel()
 
-	comparePaths := tspath.ComparePathsOptions{CurrentDirectory: "/project", UseCaseSensitiveFileNames: true}
+	configFilePath := tspath.RootedFilePath("/project/tsconfig.json")
+	caseSensitivity := tspath.CaseSensitive
 	check := func(t *testing.T, options *core.CompilerOptions) {
 		t.Helper()
-		got := serializeCompilerOptions(options, "/project/tsconfig.json", comparePaths)
-		want := reflectedSerializeCompilerOptions(options, "/project/tsconfig.json", comparePaths)
+		got := serializeCompilerOptions(options, configFilePath, caseSensitivity)
+		want := reflectedSerializeCompilerOptions(options, configFilePath, caseSensitivity)
 		want.Delete("listFiles")
 		want.Delete("listEmittedFiles")
 		if !reflect.DeepEqual(got, want) {
@@ -129,10 +140,17 @@ func TestShowConfigSerialization(t *testing.T) {
 		case reflect.Uint8:
 			values = append(values, reflect.ValueOf(core.Tristate(255)))
 		case reflect.String:
-			values = append(values, reflect.ValueOf("/project/src"), reflect.ValueOf("../other"), reflect.ValueOf("./local"))
+			for _, value := range []string{"/project/src", "../other", "./local"} {
+				values = append(values, reflect.ValueOf(value).Convert(field.Type))
+			}
 		}
-		if field.Type == reflect.TypeFor[[]string]() {
-			values = append(values, reflect.ValueOf([]string{"lib.es2015.d.ts", "lib.es2016.d.ts", "unknown", "../types"}))
+		if field.Type.Kind() == reflect.Slice && field.Type.Elem().Kind() == reflect.String {
+			items := []string{"lib.es2015.d.ts", "lib.es2016.d.ts", "unknown", "/project/types"}
+			value := reflect.MakeSlice(field.Type, len(items), len(items))
+			for i, item := range items {
+				value.Index(i).Set(reflect.ValueOf(item).Convert(field.Type.Elem()))
+			}
+			values = append(values, value)
 		}
 		reflect.ValueOf(allOptions).Elem().FieldByIndex(field.Index).Set(values[len(values)-1])
 		t.Run(field.Name, func(t *testing.T) {

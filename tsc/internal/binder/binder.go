@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type ContainerFlags int32
@@ -770,7 +769,7 @@ func (b *Binder) bindSourceFileIfExternalModule() {
 }
 
 func (b *Binder) bindSourceFileAsExternalModule() {
-	b.bindAnonymousDeclaration(b.file.AsNode(), ast.SymbolFlagsValueModule, "\""+tspath.RemoveFileExtension(b.file.FileName())+"\"")
+	b.bindAnonymousDeclaration(b.file.AsNode(), ast.SymbolFlagsValueModule, "\""+b.file.FileName().RemoveFileExtension().AsString()+"\"")
 }
 
 func (b *Binder) bindModuleDeclaration(node *ast.Node) {
