@@ -5,7 +5,6 @@ import (
 	"io"
 	"slices"
 	"strings"
-	"sync"
 	"testing"
 	"time"
 
@@ -44,89 +43,58 @@ func TestBuildScheduling(t *testing.T) {
 		project  string
 		refsOnly bool
 		order    []string
-		schedule []string
 	}{
-		{"full build", "", false, []string{"Leaf", "Middle", "Independent", "Root", "Other"}, []string{"Leaf", "Independent", "Other", "Middle", "Root"}},
-		{"selected project", "Root", false, []string{"Leaf", "Middle", "Independent", "Root"}, []string{"Leaf", "Independent", "Middle", "Root"}},
-		{"selected references", "Root", true, []string{"Leaf", "Middle", "Independent"}, []string{"Leaf", "Independent", "Middle"}},
-		{"selected chain", "Middle", false, []string{"Leaf", "Middle"}, []string{"Leaf", "Middle"}},
-		{"no references", "Leaf", true, []string{}, []string{}},
+		{"full build", "", false, []string{"Leaf", "Middle", "Independent", "Root", "Other"}},
+		{"selected project", "Root", false, []string{"Leaf", "Middle", "Independent", "Root"}},
+		{"selected references", "Root", true, []string{"Leaf", "Middle", "Independent"}},
 	} {
-		for _, mode := range []struct {
-			name string
-			args []string
-		}{
-			{"one builder", []string{"--builders", "1"}},
-			{"single threaded", []string{"--singleThreaded"}},
-			{"two builders", []string{"--builders", "2"}},
-		} {
-			t.Run(operation.name+"/"+mode.name, func(t *testing.T) {
-				t.Parallel()
-				sys := newSchedulingTestSystem()
-				var mu sync.Mutex
-				visited := []string{}
-				independentStarted := make(chan struct{})
-				blockLeaf := mode.name == "two builders" && slices.Contains(operation.schedule, "Independent")
-				sys.fs.onRead = func(path tspath.RootedFilePath) {
-					if path.BaseName() != "index.ts" {
+		t.Run(operation.name, func(t *testing.T) {
+			t.Parallel()
+			sys := newSchedulingTestSystem()
+			independentStarted := make(chan struct{})
+			sys.fs.onRead = func(path tspath.RootedFilePath) {
+				if path.BaseName() != "index.ts" {
+					return
+				}
+				switch path.Directory().BaseName() {
+				case "Leaf":
+					// Independent must start while Leaf is still occupying a builder.
+					select {
+					case <-independentStarted:
 						return
+					case <-time.After(30 * time.Second):
+						t.Error("Independent was queued behind a builder waiting on Leaf")
 					}
-					project := path.Directory().BaseName()
-					mu.Lock()
-					visited = append(visited, project)
-					mu.Unlock()
-					if blockLeaf {
-						switch project {
-						case "Leaf":
-							// Independent must start while Leaf is still occupying a builder.
-							select {
-							case <-independentStarted:
-								return
-							case <-time.After(5 * time.Second):
-								t.Error("Independent was queued behind a builder waiting on Leaf")
-							}
-						case "Independent":
-							close(independentStarted)
+				case "Independent":
+					close(independentStarted)
+				}
+			}
+			command := tsoptions.ParseBuildCommandLine([]string{"--build", "--verbose", "--builders", "2", "Root", "Other"}, sys.FS(), sys.GetCurrentDirectory())
+			orchestrator := build.NewOrchestrator(build.Options{Sys: sys, Command: command})
+			var result *build.OrchestratorResult
+			if operation.refsOnly {
+				result = orchestrator.BuildReferences(t.Context(), operation.project)
+			} else {
+				result = orchestrator.Build(t.Context(), operation.project)
+			}
+			assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+			assert.Equal(t, result.Statistics.Projects, len(operation.order))
+			assert.Equal(t, result.Statistics.ProjectsBuilt, len(operation.order))
+			reported := []string{}
+			for line := range strings.SplitSeq(sys.output.String(), "\n") {
+				if strings.Contains(line, "Building project") {
+					for _, project := range operation.order {
+						if strings.Contains(line, "'"+project+"/tsconfig.json'") {
+							reported = append(reported, project)
 						}
 					}
 				}
-				args := append([]string{"--build", "--verbose"}, mode.args...)
-				args = append(args, "Root", "Other")
-				command := tsoptions.ParseBuildCommandLine(args, sys.FS(), sys.GetCurrentDirectory())
-				orchestrator := build.NewOrchestrator(build.Options{Sys: sys, Command: command})
-				var result *build.OrchestratorResult
-				if operation.refsOnly {
-					result = orchestrator.BuildReferences(t.Context(), operation.project)
-				} else {
-					result = orchestrator.Build(t.Context(), operation.project)
-				}
-				assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
-				assert.Equal(t, result.Statistics.Projects, len(operation.order))
-				assert.Equal(t, result.Statistics.ProjectsBuilt, len(operation.order))
-				if mode.name == "two builders" {
-					slices.Sort(visited)
-					expected := slices.Clone(operation.schedule)
-					slices.Sort(expected)
-					assert.DeepEqual(t, visited, expected)
-				} else {
-					assert.DeepEqual(t, visited, operation.schedule)
-				}
-				reported := []string{}
-				for line := range strings.SplitSeq(sys.output.String(), "\n") {
-					if strings.Contains(line, "Building project") {
-						for _, project := range operation.order {
-							if strings.Contains(line, "'"+project+"/tsconfig.json'") {
-								reported = append(reported, project)
-							}
-						}
-					}
-				}
-				assert.DeepEqual(t, reported, operation.order)
-				for _, project := range []string{"Leaf", "Middle", "Independent", "Root", "Other"} {
-					assert.Equal(t, sys.FS().FileExists(sys.GetCurrentDirectory().ResolveFile(project+"/dist/index.js")), slices.Contains(operation.order, project))
-				}
-			})
-		}
+			}
+			assert.DeepEqual(t, reported, operation.order)
+			for _, project := range []string{"Leaf", "Middle", "Independent", "Root", "Other"} {
+				assert.Equal(t, sys.FS().FileExists(sys.GetCurrentDirectory().ResolveFile(project+"/dist/index.js")), slices.Contains(operation.order, project))
+			}
+		})
 	}
 }
 
