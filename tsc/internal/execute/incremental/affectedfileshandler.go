@@ -2,7 +2,6 @@ package incremental
 
 import (
 	"context"
-	"maps"
 	"slices"
 	"sync"
 	"sync/atomic"
@@ -85,19 +84,17 @@ func (h *affectedFilesHandler) computeDtsSignature(file *ast.SourceFile) string 
 }
 
 func (h *affectedFilesHandler) updateShapeSignature(file *ast.SourceFile, useFileVersionAsSignature bool) bool {
+	info, _ := h.program.snapshot.fileInfos.Load(file.PathKey())
 	update := &updatedSignature{}
 	update.mu.Lock()
 	defer update.mu.Unlock()
-	// If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
 	if existing, ok := h.updatedSignatures.LoadOrStore(file.PathKey(), update); ok {
 		// Ensure calculations for existing ones are complete before using the value
 		existing.mu.Lock()
 		defer existing.mu.Unlock()
-		return false
+		return existing.signature != info.signature
 	}
 
-	info, _ := h.program.snapshot.fileInfos.Load(file.PathKey())
-	prevSignature := info.signature
 	// JSON files have no declaration output from which to compute a shape
 	// signature, so use the file version to conservatively invalidate dependents.
 	if !file.IsDeclarationFile && !ast.IsJsonSourceFile(file) && !useFileVersionAsSignature {
@@ -108,45 +105,47 @@ func (h *affectedFilesHandler) updateShapeSignature(file *ast.SourceFile, useFil
 		update.signature = info.version
 		update.kind = SignatureUpdateKindUsedVersion
 	}
-	return update.signature != prevSignature
+	return update.signature != info.signature
 }
 
-func (h *affectedFilesHandler) getFilesAffectedBy(path tspath.PathKey) []*ast.SourceFile {
+func (h *affectedFilesHandler) collectFilesAffectedBy(path tspath.PathKey, wg core.WorkGroup, result *collections.SyncSet[*ast.SourceFile]) {
 	file := h.program.program.GetSourceFileByPath(path)
 	if file == nil {
-		return nil
+		return
 	}
 
+	result.Add(file)
 	if !h.updateShapeSignature(file, false) {
-		return []*ast.SourceFile{file}
+		return
 	}
 
 	if info, _ := h.program.snapshot.fileInfos.Load(file.PathKey()); info.affectsGlobalScope {
 		h.hasAllFilesExcludingDefaultLibraryFile.Store(true)
-		return h.program.snapshot.getAllFilesExcludingDefaultLibraryFile(h.program.program, file)
+		for _, affectedFile := range h.program.snapshot.getAllFilesExcludingDefaultLibraryFile(h.program.program, file) {
+			result.Add(affectedFile)
+		}
+		return
 	}
 
 	if h.program.snapshot.options.IsolatedModules.IsTrue() {
-		return []*ast.SourceFile{file}
+		return
 	}
 
-	// Now we need to if each file in the referencedBy list has a shape change as well.
-	// Because if so, its own referencedBy files need to be saved as well to make the
-	// emitting result consistent with files on disk.
-	seenFileNamesMap := h.forEachFileReferencedBy(
-		file,
-		func(currentFile *ast.SourceFile, currentPath tspath.PathKey) (queueForFile bool, fastReturn bool) {
-			// If the current file is not nil and has a shape change, we need to queue it for processing
-			if currentFile != nil && h.updateShapeSignature(currentFile, false) {
-				return true, false
+	h.collectReferencingFiles(file, wg, result)
+}
+
+func (h *affectedFilesHandler) collectReferencingFiles(file *ast.SourceFile, wg core.WorkGroup, result *collections.SyncSet[*ast.SourceFile]) {
+	for path := range h.program.snapshot.referencedMap.getReferencedBy(file.PathKey()) {
+		currentFile := h.program.program.GetSourceFileByPath(path)
+		if currentFile == nil || !result.AddIfAbsent(currentFile) {
+			continue
+		}
+		wg.Queue(func() {
+			if h.updateShapeSignature(currentFile, false) {
+				h.collectReferencingFiles(currentFile, wg, result)
 			}
-			return false, false
-		},
-	)
-	// Return array of values that needs emit
-	return core.Filter(slices.Collect(maps.Values(seenFileNamesMap)), func(file *ast.SourceFile) bool {
-		return file != nil
-	})
+		})
+	}
 }
 
 func (h *affectedFilesHandler) forEachFileReferencedBy(file *ast.SourceFile, fn func(currentFile *ast.SourceFile, currentPath tspath.PathKey) (queueForFile bool, fastReturn bool)) map[tspath.PathKey]*ast.SourceFile {
@@ -366,9 +365,7 @@ func collectAllAffectedFiles(ctx context.Context, program *Program) {
 	var result collections.SyncSet[*ast.SourceFile]
 	program.snapshot.changedFilesSet.Range(func(file tspath.PathKey) bool {
 		wg.Queue(func() {
-			for _, affectedFile := range handler.getFilesAffectedBy(file) {
-				result.Add(affectedFile)
-			}
+			handler.collectFilesAffectedBy(file, wg, &result)
 		})
 		return true
 	})
