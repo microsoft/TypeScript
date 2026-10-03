@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/literalUnionAssignabilityDoubleError.ts] ////
+
+=== literalUnionAssignabilityDoubleError.ts ===
+declare const x: "a" | "b";
+>x : Symbol(x, Decl(literalUnionAssignabilityDoubleError.ts, 0, 13))
+
+const y: number = x;
+>y : Symbol(y, Decl(literalUnionAssignabilityDoubleError.ts, 1, 5))
+>x : Symbol(x, Decl(literalUnionAssignabilityDoubleError.ts, 0, 13))
+
+function foo(param: number) {}
+>foo : Symbol(foo, Decl(literalUnionAssignabilityDoubleError.ts, 1, 20))
+>param : Symbol(param, Decl(literalUnionAssignabilityDoubleError.ts, 3, 13))
+
+foo(x);
+>foo : Symbol(foo, Decl(literalUnionAssignabilityDoubleError.ts, 1, 20))
+>x : Symbol(x, Decl(literalUnionAssignabilityDoubleError.ts, 0, 13))
+
+function bar(): number {
+>bar : Symbol(bar, Decl(literalUnionAssignabilityDoubleError.ts, 4, 7))
+
+    return x;
+>x : Symbol(x, Decl(literalUnionAssignabilityDoubleError.ts, 0, 13))
+}
+
+declare const nums: 1 | 2;
+>nums : Symbol(nums, Decl(literalUnionAssignabilityDoubleError.ts, 10, 13))
+
+const s: string = nums;
+>s : Symbol(s, Decl(literalUnionAssignabilityDoubleError.ts, 11, 5))
+>nums : Symbol(nums, Decl(literalUnionAssignabilityDoubleError.ts, 10, 13))
+
+declare const bigints: 0n | 1n;
+>bigints : Symbol(bigints, Decl(literalUnionAssignabilityDoubleError.ts, 13, 13))
+
+const sym: symbol = bigints;
+>sym : Symbol(sym, Decl(literalUnionAssignabilityDoubleError.ts, 14, 5))
+>bigints : Symbol(bigints, Decl(literalUnionAssignabilityDoubleError.ts, 13, 13))
+
