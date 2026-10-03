@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/recursiveCallbackArgumentDeclarationEmit.ts] ////
+
+=== recursiveCallbackArgumentDeclarationEmit.ts ===
+export interface Schema<O> { readonly out: O }
+>out : O
+
+export type Shape = Record<string, Schema<any> | (() => Schema<any>)>;
+>Shape : Shape
+
+type Resolve<T> = T extends () => infer R ? R : T;
+>Resolve : Resolve<T>
+
+export type Infer<S extends Shape> = { [K in keyof S]: Resolve<S[K]> extends Schema<infer O> ? O : never };
+>Infer : Infer<S>
+
+export declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>shape : S
+
+export declare function array<T extends Schema<any>>(el: T): Schema<T["out"][]>;
+>array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
+>el : T
+
+export declare function string(): Schema<string>;
+>string : () => Schema<string>
+
+export declare function lazy<T extends Schema<any>>(fn: () => T): T;
+>lazy : <T extends Schema<any>>(fn: () => T) => T
+>fn : () => T
+
+export const Category = object({
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
+>object({    name: string(),    subcategories: lazy(() => array(Category)),}) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Infer<S>>
+>{    name: string(),    subcategories: lazy(() => array(Category)),} : { name: Schema<string>; subcategories: Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>; }
+
+    name: string(),
+>name : Schema<string>
+>string() : Schema<string>
+>string : () => Schema<string>
+
+    subcategories: lazy(() => array(Category)),
+>subcategories : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>lazy(() => array(Category)) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>lazy : <T extends Schema<any>>(fn: () => T) => T
+>() => array(Category) : () => Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>array(Category) : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>[]>
+>array : <T extends Schema<any>>(el: T) => Schema<T["out"][]>
+>Category : Schema<Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>>
+
+});
+
