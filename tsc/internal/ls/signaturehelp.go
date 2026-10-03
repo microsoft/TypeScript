@@ -1078,21 +1078,17 @@ func getSpreadElementCount(node *ast.SpreadElement, c *checker.Checker) int {
 		if tupleType == nil {
 			return 0
 		}
-		elementFlags := tupleType.ElementFlags()
-		fixedLength := tupleType.FixedLength()
-		if fixedLength == 0 {
-			return 0
-		}
-
-		firstOptionalIndex := core.FindIndex(elementFlags, func(f checker.ElementFlags) bool {
-			return (f&checker.ElementFlagsRequired == 0)
-		})
-		if firstOptionalIndex < 0 {
-			return fixedLength
-		}
-		return firstOptionalIndex
+		return getRequiredTupleElementCount(tupleType)
 	}
 	return 0
+}
+
+func getRequiredTupleElementCount(tupleType *checker.TupleType) int {
+	fixedLength := tupleType.FixedLength()
+	firstOptionalIndex := core.FindIndex(tupleType.ElementInfos()[:fixedLength], func(info checker.TupleElementInfo) bool {
+		return info.TupleElementFlags()&checker.ElementFlagsRequired == 0
+	})
+	return core.IfElse(firstOptionalIndex < 0, fixedLength, firstOptionalIndex)
 }
 
 func getArgumentIndex(node *ast.Node, arguments *ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
