@@ -3902,6 +3902,8 @@ var Optional_chaining_cannot_be_used_with_import_source = &Message{code: 18114, 
 
 var Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls = &Message{code: 18115, category: CategoryError, key: "Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls_18115", text: "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls."}
 
+var This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using = &Message{code: 18116, category: CategoryError, key: "This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using_18116", text: "This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?"}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6393,6 +6395,7 @@ var allMessages = [...]**Message{
 	&Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve,
 	&Optional_chaining_cannot_be_used_with_import_source,
 	&Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls,
+	&This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

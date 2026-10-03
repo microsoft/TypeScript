@@ -151,9 +151,9 @@ import {
 const concurrency = areTestsFiltered();
 
 describe("API", { concurrency }, () => {
-    test("getCurrentLanguageServerSnapshot is LSP-only", () => {
+    test("getCurrentLanguageServerSnapshot is LSP-only", async () => {
         if (!!false) {
-            const standalone = new API();
+            await using standalone = new API();
             // @ts-expect-error The standalone API has no canonical language server state.
             void standalone.getCurrentLanguageServerSnapshot();
 
@@ -729,7 +729,7 @@ describe("API", { concurrency }, () => {
             "/src/index.ts": `export const value: string = 1;`,
         });
 
-        const program = await api.createProgram(["/src/index.ts"], { noLib: true, strict: true });
+        await using program = await api.createProgram(["/src/index.ts"], { noLib: true, strict: true });
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
         assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
@@ -1617,7 +1617,7 @@ describe("BuildOrchestrator", () => {
         const { api: disposableApi } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
         const options = await api.parseCommandLine([]);
-        const orchestrator = await api.createBuildOrchestrator(
+        await using orchestrator = await api.createBuildOrchestrator(
             ["/a/tsconfig.json"],
             { cwd: "/", ...options },
         );
@@ -3272,11 +3272,11 @@ describe("Snapshot disposal", { concurrency }, () => {
         assert.ok(snapshot.isDisposed());
     });
 
-    test("api.close waits for disposal started by using", async () => {
+    test("api.close waits for disposal started by await using", async () => {
         const api = spawnAPI();
         let snapshot: Snapshot;
         {
-            using disposableSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+            await using disposableSnapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
             snapshot = disposableSnapshot;
         }
         assert.ok(snapshot.isDisposed());
@@ -5212,7 +5212,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             fs,
         });
 
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: {
                 kind: "full",
@@ -5237,7 +5237,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
         });
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: createFileSystemWithLib(Object.entries({
                 "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["src/main.ts"] }),
@@ -5269,7 +5269,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             collectTiming: true,
         });
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openFiles: files.map(([document]) => document),
             fileSystem: createFileSystem(files),
         });
@@ -5311,7 +5311,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             fs,
         });
 
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: {
                 kind: "layer",
@@ -5344,7 +5344,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             }),
         });
 
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: createFileSystemLayer([
                 ["/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true }, include: ["src/**/*.ts"] })],
@@ -5377,7 +5377,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             },
         });
 
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/project/tsconfig.json",
             fileSystem: {
                 kind: "full",
@@ -5418,7 +5418,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             },
         });
 
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/project/tsconfig.json",
             fileSystem: {
                 kind: "full",
@@ -5444,7 +5444,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
         });
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: createFileSystem(Object.entries({
                 "/tsconfig.json": JSON.stringify({
@@ -5458,7 +5458,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             })),
         });
 
-        using updated = await snapshot.update({
+        await using updated = await snapshot.update({
             ensurePrograms: true,
             fileSystem: createFileSystemLayer(
                 Object.entries({
@@ -5476,10 +5476,10 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         assert.equal((await project.program.getSourceFile("/src/added.ts"))?.text, `export const added = true;`);
         assert.equal(await project.program.getSourceFile("/src/remove.ts"), undefined);
         assert.equal(await project.program.getSourceFile("/src/removed/gone.ts"), undefined);
-        using fork = await snapshot.update({ ensurePrograms: true });
+        await using fork = await snapshot.update({ ensurePrograms: true });
         assert.equal((await fork.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/change.ts"))?.text, `export const version = "old";`);
 
-        using updatedAgain = await updated.update({
+        await using updatedAgain = await updated.update({
             ensurePrograms: true,
             fileSystem: createFileSystemLayer(
                 Object.entries({
@@ -5536,8 +5536,8 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: host,
         });
-        using snapshot = await api.createSnapshot();
-        using replaced = await snapshot.update({
+        await using snapshot = await api.createSnapshot();
+        await using replaced = await snapshot.update({
             ensurePrograms: true,
             openProject: "/tsconfig.json",
             fileSystem: createFileSystem([
@@ -5554,7 +5554,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
         });
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: createFileSystem(
                 Object.entries({
@@ -5571,7 +5571,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             ),
         });
 
-        using updated = await snapshot.update({
+        await using updated = await snapshot.update({
             ensurePrograms: true,
             fileSystem: createFileSystemLayer(
                 Object.entries({
@@ -5606,7 +5606,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
                 removeFile: serverFS.useOS,
             },
         });
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: createFileSystem(Object.entries({
                 "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, outDir: "/out", rootDir: "/src" }, files: ["src/main.ts"] }),
@@ -5624,7 +5624,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         });
         assert.deepEqual(hostWrites, []);
 
-        using updated = await snapshot.update({ fileSystem: result.fileSystem!, openFiles: ["/out/main.js"] });
+        await using updated = await snapshot.update({ fileSystem: result.fileSystem!, openFiles: ["/out/main.js"] });
         const outputProject = await updated.getDefaultProjectForFile("/out/main.js");
         assert.equal((await updated.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts"))?.text, `export const value: number = 1;`);
         assert.equal((await outputProject?.program.getSourceFile("/out/main.js"))?.text, `export const value = 1;\n`);
@@ -5636,7 +5636,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: host,
         });
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: createFileSystemLayer(Object.entries({
                 "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, outDir: "/out", rootDir: "/src" }, files: ["src/main.ts"] }),
@@ -5676,7 +5676,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             },
         });
 
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/project/tsconfig.json",
             fileSystem: {
                 kind: "full",
@@ -5711,14 +5711,14 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: host,
         });
-        using snapshot = await api.createSnapshot({
+        await using snapshot = await api.createSnapshot({
             openProject: "/project/tsconfig.json",
             fileSystem: createFileSystem([
                 ["/project/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node" }, files: ["index.ts"] })],
                 ["/project/index.ts", `import { value } from "pkg"; export { value };`],
             ]),
         });
-        using updated = await snapshot.update({
+        await using updated = await snapshot.update({
             ensurePrograms: true,
             fileSystem: createFileSystemLayer([], {
                 symlinks: {
