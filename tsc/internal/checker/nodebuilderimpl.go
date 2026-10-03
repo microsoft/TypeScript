@@ -2353,6 +2353,14 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 		}
 	}
 	if result == nil {
+		if declaration != nil && ast.IsVariableDeclaration(declaration) && t.flags&TypeFlagsUniqueESSymbol != 0 && !b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
+			initializer := declaration.Initializer()
+			if initializer != nil && ast.IsEntityNameExpression(initializer) {
+				result = b.f.NewTypeQueryNode(b.f.DeepCloneNode(initializer), nil)
+			}
+		}
+	}
+	if result == nil {
 		if reportedInferenceFallback {
 			oldSuppress := b.ctx.suppressReportInferenceFallback
 			b.ctx.suppressReportInferenceFallback = true
