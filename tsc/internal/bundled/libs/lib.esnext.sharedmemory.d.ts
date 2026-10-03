@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 interface Atomics {
     /**
      * Performs a finite-time microwait by signaling to the operating system or

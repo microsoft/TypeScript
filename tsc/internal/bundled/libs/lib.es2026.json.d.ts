@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 export {};
 
 declare class RawJSONInstance {
@@ -36,7 +35,7 @@ declare global {
          * The context object has a `source` property when the property is unmodified and its value is primitive.
          * @throws {SyntaxError} If `text` is not valid JSON.
          */
-        parse(text: string, reviver: (this: any, key: string, value: any, context: { source?: string }) => any): any;
+        parse(text: string, reviver: (this: any, key: string, value: any, context: { source?: string; }) => any): any;
 
         /**
          * Creates a frozen object containing JSON text for a primitive value.
