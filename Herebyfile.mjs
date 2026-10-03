@@ -1437,8 +1437,7 @@ async function runFormat() {
 
 const lineEndingExclusions = [
     ":(exclude)tsc/testdata/**",
-    // TODO: Remove this exclusion when this directory is converted or removed.
-    ":(exclude)tools/loc/**",
+    ":(exclude)tools/loc/**/*.lcl",
 ];
 
 export const fixLineEndingsTask = task({
@@ -1542,11 +1541,6 @@ export const checkFormat = task({
 });
 
 async function checkLineEndings() {
-    const exclusions = [
-        ":(exclude)tsc/testdata/**",
-        // TODO: Remove this exclusion when this directory is converted or removed.
-        ":(exclude)tools/loc/**",
-    ];
     const result = xSync(
         "git",
         ["grep", "--cached", "-Il", "\r", "--", ".", ...lineEndingExclusions],

@@ -12,7 +12,7 @@ charset = unset
 trim_trailing_whitespace = unset
 insert_final_newline = unset
 
-[tools/loc/**]
+[tools/loc/**/*.lcl]
 end_of_line = unset
 charset = unset
 trim_trailing_whitespace = unset
