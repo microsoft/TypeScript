@@ -1,0 +1,112 @@
+instantiatedReferenceLazyMembers.ts(14,9): error TS2339: Property 'missing' does not exist on type 'Derived<number>'.
+instantiatedReferenceLazyMembers.ts(22,5): error TS2341: Property 'secret' is private and only accessible within class 'Box<T>'.
+instantiatedReferenceLazyMembers.ts(31,7): error TS2559: Type '{ other: number; }' has no properties in common with type 'Weak<"b">'.
+instantiatedReferenceLazyMembers.ts(32,7): error TS2741: Property 'kind' is missing in type '{ other: number; }' but required in type 'Weak<"a">'.
+instantiatedReferenceLazyMembers.ts(37,9): error TS2339: Property 'bind' does not exist on type 'Fn<"b">'.
+instantiatedReferenceLazyMembers.ts(45,7): error TS2322: Type 'Dict<"b">' is not assignable to type '{ [key: string]: number; }'.
+  'string' index signatures are incompatible.
+    Type 'unknown' is not assignable to type 'number'.
+instantiatedReferenceLazyMembers.ts(47,11): error TS2430: Interface 'Wrap<T>' incorrectly extends interface 'T'.
+  'Wrap<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a?: string | undefined; }'.
+instantiatedReferenceLazyMembers.ts(48,7): error TS2741: Property 'b' is missing in type '{ other: number; }' but required in type 'Wrap<{ a?: string | undefined; b: number; }>'.
+instantiatedReferenceLazyMembers.ts(54,7): error TS2322: Type '<U>(x: U, y: string) => U' is not assignable to type 'number'.
+instantiatedReferenceLazyMembers.ts(56,7): error TS2322: Type '(x: unknown, y: string) => unknown' is not assignable to type 'number'.
+
+
+==== instantiatedReferenceLazyMembers.ts (10 errors) ====
+    // Member lookups and shape queries on instantiated class and interface
+    // references, including base types whose shape depends on the instantiation.
+    
+    interface Base<T> {
+        value: T;
+        shared: string;
+    }
+    interface Derived<T> extends Base<T[]> {
+        shared: "derived";
+    }
+    declare const derived: Derived<number>;
+    const derived1 = derived.value;
+    const derived2 = derived.shared;
+    derived.missing;
+            ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Derived<number>'.
+    
+    class Box<T> {
+        private secret!: T;
+        contents!: T;
+    }
+    declare const box: Box<string>;
+    const box1 = box.contents;
+    box.secret;
+        ~~~~~~
+!!! error TS2341: Property 'secret' is private and only accessible within class 'Box<T>'.
+    
+    // Tagged<"b"> reduces to never, Tagged<"a"> doesn't.
+    type Tagged<T> = { kind: T } & { kind: "a" };
+    declare const other: { other: number };
+    
+    interface Weak<T extends string> extends Tagged<T> {
+        opt?: number;
+    }
+    const weak1: Weak<"b"> = other;
+          ~~~~~
+!!! error TS2559: Type '{ other: number; }' has no properties in common with type 'Weak<"b">'.
+    const weak2: Weak<"a"> = other;
+          ~~~~~
+!!! error TS2741: Property 'kind' is missing in type '{ other: number; }' but required in type 'Weak<"a">'.
+!!! related TS2728 instantiatedReferenceLazyMembers.ts:25:20: 'kind' is declared here.
+    
+    type Callable<T> = { (): void; kind: T } & { kind: "a" };
+    interface Fn<T extends string> extends Callable<T> {}
+    declare const neverFn: Fn<"b">;
+    neverFn.bind;
+            ~~~~
+!!! error TS2339: Property 'bind' does not exist on type 'Fn<"b">'.
+    declare const fn: Fn<"a">;
+    const fn1 = fn.bind;
+    
+    interface Dict<T extends string> extends Tagged<T> {
+        [key: string]: unknown;
+    }
+    declare const dict: Dict<"b">;
+    const dict1: { [key: string]: number } = dict;
+          ~~~~~
+!!! error TS2322: Type 'Dict<"b">' is not assignable to type '{ [key: string]: number; }'.
+!!! error TS2322:   'string' index signatures are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'number'.
+    
+    interface Wrap<T extends { a?: string }> extends T {}
+              ~~~~
+!!! error TS2430: Interface 'Wrap<T>' incorrectly extends interface 'T'.
+!!! error TS2430:   'Wrap<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a?: string | undefined; }'.
+    const wrap1: Wrap<{ a?: string; b: number }> = other;
+          ~~~~~
+!!! error TS2741: Property 'b' is missing in type '{ other: number; }' but required in type 'Wrap<{ a?: string | undefined; b: number; }>'.
+!!! related TS2728 instantiatedReferenceLazyMembers.ts:48:33: 'b' is declared here.
+    
+    type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+    interface Overloads<T> extends Two<T> {}
+    declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+    declare const merged: Overloads<string>;
+    const piped1: number = pipe(merged);
+          ~~~~~~
+!!! error TS2322: Type '<U>(x: U, y: string) => U' is not assignable to type 'number'.
+    declare const distinct: Overloads<number>;
+    const piped2: number = pipe(distinct);
+          ~~~~~~
+!!! error TS2322: Type '(x: unknown, y: string) => unknown' is not assignable to type 'number'.
+    
+    interface Tree<T> extends Array<Tree<T>> {
+        value: T;
+    }
+    declare const tree: Tree<string>;
+    const tree1 = tree.map(child => child.value);
+    
+    interface CallableBox<T> {
+        (): T;
+    }
+    declare const boxOrCallable: CallableBox<string> | Box<string>;
+    if (typeof boxOrCallable === "function") {
+        boxOrCallable;
+    }
+    

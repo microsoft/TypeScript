@@ -700,6 +700,7 @@ type Checker struct {
 	sourceFileLinks                             core.LinkStore[*ast.SourceFile, SourceFileLinks]
 	regExpScanner                               *scanner.Scanner
 	patternForType                              map[*Type]*ast.Node
+	lazyMemberTables                            map[*Type]*lazyMemberTable
 	contextFreeTypes                            map[*ast.Node]*Type
 	anyType                                     *Type
 	autoType                                    *Type
@@ -981,6 +982,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
 	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
+	c.lazyMemberTables = make(map[*Type]*lazyMemberTable)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
 	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
 	c.autoType = c.newIntrinsicTypeEx(TypeFlagsAny, "any", ObjectFlagsNonInferrableType)
@@ -19276,8 +19278,7 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	t = c.getReducedApparentType(t)
 	switch {
 	case t.flags&TypeFlagsObject != 0:
-		resolved := c.resolveStructuredTypeMembers(t)
-		symbol := resolved.members[name]
+		symbol := c.getMemberOfStructuredType(t, name)
 		if symbol != nil {
 			if !includeTypeOnlyMembers && t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsValueModule != 0 && c.moduleSymbolLinks.Get(t.symbol).typeOnlyExportStarMap[name] != nil {
 				// If this is the type of a module, `resolved.members.get(name)` might have effectively skipped over
@@ -19296,9 +19297,9 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 		switch {
 		case t == c.anyFunctionType:
 			functionType = c.globalFunctionType
-		case len(resolved.CallSignatures()) != 0:
+		case len(c.getSignaturesOfStructuredType(t, SignatureKindCall)) != 0:
 			functionType = c.globalCallableFunctionType
-		case len(resolved.ConstructSignatures()) != 0:
+		case len(c.getSignaturesOfStructuredType(t, SignatureKindConstruct)) != 0:
 			functionType = c.globalNewableFunctionType
 		}
 		if functionType != nil {
@@ -19340,6 +19341,12 @@ func (c *Checker) getSignaturesOfStructuredType(t *Type, kind SignatureKind) []*
 	if t.flags&TypeFlagsStructuredType == 0 {
 		return nil
 	}
+	if lm := c.getReadyLazyMemberTable(t); lm != nil {
+		if kind == SignatureKindCall {
+			return lm.callSignatures
+		}
+		return lm.constructSignatures
+	}
 	resolved := c.resolveStructuredTypeMembers(t)
 	if kind == SignatureKindCall {
 		return resolved.signatures[:resolved.callSignatureCount]
@@ -19353,6 +19360,9 @@ func (c *Checker) getIndexInfosOfType(t *Type) []*IndexInfo {
 
 func (c *Checker) getIndexInfosOfStructuredType(t *Type) []*IndexInfo {
 	if t.flags&TypeFlagsStructuredType != 0 {
+		if lm := c.getReadyLazyMemberTable(t); lm != nil {
+			return lm.indexInfos
+		}
 		return c.resolveStructuredTypeMembers(t).indexInfos
 	}
 	return nil
@@ -19469,13 +19479,12 @@ func (c *Checker) resolveClassOrInterfaceMembers(t *Type) {
 }
 
 func (c *Checker) resolveTypeReferenceMembers(t *Type) {
-	source := t.Target()
-	typeParameters := source.AsInterfaceType().allTypeParameters
-	typeArguments := c.getTypeArguments(t)
-	paddedTypeArguments := typeArguments
-	if len(typeArguments) == len(typeParameters)-1 {
-		paddedTypeArguments = core.Concatenate(typeArguments, []*Type{t})
+	if lm := c.lazyMemberTables[t]; lm != nil && lm.ready {
+		c.resolveLazyMembers(t, lm)
+		return
 	}
+	source := t.Target()
+	typeParameters, paddedTypeArguments := c.getReferenceMemberTypeArguments(t, source)
 	c.resolveObjectTypeMembers(t, source, typeParameters, paddedTypeArguments)
 }
 
@@ -19512,17 +19521,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 				instantiatedBaseType = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
 			}
 			members = c.addInheritedMembers(members, c.getPropertiesOfType(instantiatedBaseType))
-			callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindCall))
-			constructSignatures = core.Concatenate(constructSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindConstruct))
-			var inheritedIndexInfos []*IndexInfo
-			if instantiatedBaseType != c.anyType {
-				inheritedIndexInfos = c.getIndexInfosOfType(instantiatedBaseType)
-			} else {
-				inheritedIndexInfos = []*IndexInfo{c.anyBaseTypeIndexInfo}
-			}
-			indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
-				return findIndexInfo(indexInfos, info.keyType) == nil
-			}))
+			callSignatures, constructSignatures, indexInfos = c.appendInheritedSignaturesAndIndexInfos(callSignatures, constructSignatures, indexInfos, instantiatedBaseType)
 		}
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
@@ -19535,6 +19534,213 @@ func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
 		}
 	}
 	return nil
+}
+
+func (c *Checker) appendInheritedSignaturesAndIndexInfos(callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo, baseType *Type) ([]*Signature, []*Signature, []*IndexInfo) {
+	callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(baseType, SignatureKindCall))
+	constructSignatures = core.Concatenate(constructSignatures, c.getSignaturesOfType(baseType, SignatureKindConstruct))
+	var inheritedIndexInfos []*IndexInfo
+	if baseType != c.anyType {
+		inheritedIndexInfos = c.getIndexInfosOfType(baseType)
+	} else {
+		inheritedIndexInfos = []*IndexInfo{c.anyBaseTypeIndexInfo}
+	}
+	indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
+		return findIndexInfo(indexInfos, info.keyType) == nil
+	}))
+	return callSignatures, constructSignatures, indexInfos
+}
+
+// Instantiated class and interface references get a lazy member table in place of
+// resolved members. It has the signatures and index infos, but only instantiates the
+// members that are looked up, and reuses them if the members are later resolved in full.
+
+type lazyMemberTable struct {
+	ready               bool
+	mapper              *TypeMapper
+	typeArguments       []*Type
+	unaffected          []string // sorted names of declared members that instantiate to themselves
+	callSignatures      []*Signature
+	constructSignatures []*Signature
+	indexInfos          []*IndexInfo
+	baseTypes           []*Type
+	declared            map[string]*ast.Symbol
+}
+
+func mayHaveLazyMembers(t *Type) bool {
+	return t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsReference) == ObjectFlagsReference
+}
+
+func (c *Checker) getReferenceMemberTypeArguments(t *Type, source *Type) (typeParameters []*Type, typeArguments []*Type) {
+	typeParameters = source.AsInterfaceType().allTypeParameters
+	typeArguments = c.getTypeArguments(t)
+	if len(typeArguments) == len(typeParameters)-1 {
+		typeArguments = core.Concatenate(typeArguments, []*Type{t})
+	}
+	return typeParameters, typeArguments
+}
+
+// Returns nil if t has no lazy member table or it is still being prepared.
+func (c *Checker) getReadyLazyMemberTable(t *Type) *lazyMemberTable {
+	if !mayHaveLazyMembers(t) {
+		return nil
+	}
+	return c.getReadyLazyMemberTableWorker(t)
+}
+
+func (c *Checker) getReadyLazyMemberTableWorker(t *Type) *lazyMemberTable {
+	source := t.Target()
+	if t.flags&TypeFlagsObject == 0 || source == nil || source == t || source.objectFlags&ObjectFlagsClassOrInterface == 0 ||
+		source.objectFlags&ObjectFlagsTuple != 0 || t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsValueModule != 0 {
+		return nil
+	}
+	lm := c.lazyMemberTables[t]
+	if lm == nil {
+		typeParameters, typeArguments := c.getReferenceMemberTypeArguments(t, t.Target())
+		if slices.Equal(typeParameters, typeArguments) {
+			return nil
+		}
+		lm = &lazyMemberTable{
+			mapper:        newTypeMapper(typeParameters, typeArguments),
+			typeArguments: typeArguments,
+			declared:      map[string]*ast.Symbol{},
+		}
+		c.lazyMemberTables[t] = lm
+		c.prepareLazyMembers(t, lm)
+	}
+	if !lm.ready || t.objectFlags&ObjectFlagsMembersResolved != 0 {
+		return nil
+	}
+	return lm
+}
+
+// Mirrors resolveObjectTypeMembers without creating member symbols.
+func (c *Checker) prepareLazyMembers(t *Type, lm *lazyMemberTable) {
+	source := t.Target()
+	resolved := c.resolveDeclaredMembers(source)
+	// Whether instantiateSymbol returns a member itself depends on what is resolved now.
+	for id, symbol := range resolved.declaredMembers {
+		if c.isNamedMember(symbol, id) && c.isSymbolUnaffectedByInstantiation(symbol, lm.mapper) {
+			lm.unaffected = append(lm.unaffected, id)
+		}
+	}
+	slices.Sort(lm.unaffected)
+	callSignatures := c.instantiateSignatures(resolved.declaredCallSignatures, lm.mapper)
+	constructSignatures := c.instantiateSignatures(resolved.declaredConstructSignatures, lm.mapper)
+	indexInfos := c.instantiateIndexInfos(resolved.declaredIndexInfos, lm.mapper)
+	thisArgument := core.LastOrNil(lm.typeArguments)
+	for _, baseType := range c.getBaseTypes(source) {
+		instantiatedBaseType := baseType
+		if thisArgument != nil {
+			instantiatedBaseType = c.getTypeWithThisArgument(c.instantiateType(baseType, lm.mapper), thisArgument, false /*needsApparentType*/)
+		}
+		lm.baseTypes = append(lm.baseTypes, instantiatedBaseType)
+		if c.getReadyLazyMemberTable(c.getReducedApparentType(instantiatedBaseType)) == nil {
+			c.getPropertiesOfType(instantiatedBaseType)
+		}
+		callSignatures, constructSignatures, indexInfos = c.appendInheritedSignaturesAndIndexInfos(callSignatures, constructSignatures, indexInfos, instantiatedBaseType)
+	}
+	lm.callSignatures, lm.constructSignatures, lm.indexInfos = callSignatures, constructSignatures, indexInfos
+	lm.ready = true
+	if t.objectFlags&ObjectFlagsMembersResolved != 0 {
+		// t was resolved while preparing; resolveObjectTypeMembers would now replace its members.
+		c.resolveLazyMembers(t, lm)
+	}
+}
+
+func (c *Checker) resolveLazyMembers(t *Type, lm *lazyMemberTable) {
+	resolved := c.resolveDeclaredMembers(t.Target())
+	var members ast.SymbolTable
+	if len(resolved.declaredMembers) != 0 {
+		members = make(ast.SymbolTable, len(resolved.declaredMembers))
+		for id, symbol := range resolved.declaredMembers {
+			if c.isNamedMember(symbol, id) {
+				members[id] = c.getLazyDeclaredMember(lm, symbol, id)
+			}
+		}
+	}
+	for _, baseType := range lm.baseTypes {
+		members = c.addInheritedMembers(members, c.getPropertiesOfType(baseType))
+	}
+	c.setStructuredTypeMembers(t, members, lm.callSignatures, lm.constructSignatures, lm.indexInfos)
+	delete(c.lazyMemberTables, t)
+}
+
+func (c *Checker) getLazyDeclaredMember(lm *lazyMemberTable, symbol *ast.Symbol, name string) *ast.Symbol {
+	result := lm.declared[name]
+	if result == nil {
+		result = symbol
+		if _, unaffected := slices.BinarySearch(lm.unaffected, name); !unaffected {
+			result = c.newInstantiatedSymbol(symbol, lm.mapper)
+		}
+		lm.declared[name] = result
+	}
+	return result
+}
+
+func (c *Checker) getMemberOfStructuredType(t *Type, name string) *ast.Symbol {
+	if t.objectFlags&ObjectFlagsMembersResolved != 0 {
+		return t.AsStructuredType().members[name]
+	}
+	return c.getMemberOfUnresolvedStructuredType(t, name)
+}
+
+func (c *Checker) getMemberOfUnresolvedStructuredType(t *Type, name string) *ast.Symbol {
+	lm := c.getReadyLazyMemberTable(t)
+	if lm == nil || isReservedMemberName(name) {
+		return c.resolveStructuredTypeMembers(t).members[name]
+	}
+	// The declared member, else the first base type's property (see addInheritedMembers).
+	var result *ast.Symbol
+	if decl := c.resolveDeclaredMembers(t.Target()).declaredMembers[name]; decl != nil && c.isNamedMember(decl, name) {
+		result = c.getLazyDeclaredMember(lm, decl, name)
+	}
+	for _, baseType := range lm.baseTypes {
+		if result != nil && result.Flags&ast.SymbolFlagsValue != 0 {
+			break
+		}
+		if prop := c.getPropertyOfTypeEx(baseType, name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/); prop != nil && !isStaticPrivateIdentifierProperty(prop) {
+			result = prop
+		}
+	}
+	return result
+}
+
+// f may see a declared member instead of its instantiation, which has the same flags.
+func (c *Checker) everyPropertyOfStructuredType(t *Type, f func(prop *ast.Symbol) bool) bool {
+	if lm := c.getReadyLazyMemberTable(t); lm != nil {
+		var seen collections.Set[string]
+		return c.everyLazyProperty(t, lm, &seen, f)
+	}
+	return core.Every(c.resolveStructuredTypeMembers(t).properties, f)
+}
+
+func (c *Checker) hasPropertiesOfStructuredType(t *Type) bool {
+	return !c.everyPropertyOfStructuredType(t, func(*ast.Symbol) bool { return false })
+}
+
+// seen has the names of properties that hide inherited ones, as in addInheritedMembers.
+func (c *Checker) everyLazyProperty(t *Type, lm *lazyMemberTable, seen *collections.Set[string], f func(prop *ast.Symbol) bool) bool {
+	for id, symbol := range c.resolveDeclaredMembers(t.Target()).declaredMembers {
+		if c.isNamedMember(symbol, id) && seen.AddIfAbsent(id) && !f(symbol) {
+			return false
+		}
+	}
+	for _, baseType := range lm.baseTypes {
+		reduced := c.getReducedApparentType(baseType)
+		if baseTable := c.getReadyLazyMemberTable(reduced); baseTable != nil {
+			if !c.everyLazyProperty(reduced, baseTable, seen, f) {
+				return false
+			}
+			continue
+		}
+		for _, prop := range c.getPropertiesOfType(baseType) {
+			if !isStaticPrivateIdentifierProperty(prop) && seen.AddIfAbsent(prop.Name) && !f(prop) {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func (c *Checker) getBaseTypes(t *Type) []*Type {
@@ -19725,13 +19931,14 @@ func (c *Checker) getSingleCallOrConstructSignature(t *Type) *Signature {
 
 func (c *Checker) getSingleSignature(t *Type, kind SignatureKind, allowMembers bool) *Signature {
 	if t.flags&TypeFlagsObject != 0 {
-		resolved := c.resolveStructuredTypeMembers(t)
-		if allowMembers || len(resolved.properties) == 0 && len(resolved.indexInfos) == 0 {
-			if kind == SignatureKindCall && len(resolved.CallSignatures()) == 1 && len(resolved.ConstructSignatures()) == 0 {
-				return resolved.CallSignatures()[0]
+		if allowMembers || !c.hasPropertiesOfStructuredType(t) && len(c.getIndexInfosOfStructuredType(t)) == 0 {
+			callSignatures := c.getSignaturesOfStructuredType(t, SignatureKindCall)
+			constructSignatures := c.getSignaturesOfStructuredType(t, SignatureKindConstruct)
+			if kind == SignatureKindCall && len(callSignatures) == 1 && len(constructSignatures) == 0 {
+				return callSignatures[0]
 			}
-			if kind == SignatureKindConstruct && len(resolved.ConstructSignatures()) == 1 && len(resolved.CallSignatures()) == 0 {
-				return resolved.ConstructSignatures()[0]
+			if kind == SignatureKindConstruct && len(constructSignatures) == 1 && len(callSignatures) == 0 {
+				return constructSignatures[0]
 			}
 		}
 	}
@@ -21124,24 +21331,34 @@ func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper)
 }
 
 func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symbol {
-	if symbol == nil {
-		return nil
+	if symbol == nil || c.isSymbolUnaffectedByInstantiation(symbol, m) {
+		return symbol
 	}
+	return c.newInstantiatedSymbol(symbol, m)
+}
+
+// Can change from false to true once the type of the symbol is resolved.
+func (c *Checker) isSymbolUnaffectedByInstantiation(symbol *ast.Symbol, m *TypeMapper) bool {
 	links := c.valueSymbolLinks.Get(symbol)
 	if m != nil && m.MapsThisOnly() && isThisless(symbol) {
-		return symbol
+		return true
 	}
 	// If the type of the symbol is already resolved, and if that type could not possibly
 	// be affected by instantiation, simply return the symbol itself.
 	if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
 		if symbol.Flags&ast.SymbolFlagsSetAccessor == 0 {
-			return symbol
+			return true
 		}
 		// If we're a setter, check writeType.
 		if links.writeType != nil && !c.couldContainTypeVariables(links.writeType) {
-			return symbol
+			return true
 		}
 	}
+	return false
+}
+
+func (c *Checker) newInstantiatedSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symbol {
+	links := c.valueSymbolLinks.Get(symbol)
 	if symbol.CheckFlags&ast.CheckFlagsInstantiated != 0 {
 		// If symbol being instantiated is itself a instantiation, fetch the original target and combine the
 		// type mappers. This ensures that original type identities are properly preserved and that aliases
@@ -27866,7 +28083,7 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
-	return t.flags&TypeFlagsObject != 0 && !c.isGenericMappedType(t) && len(c.getPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
+	return t.flags&TypeFlagsObject != 0 && !c.isGenericMappedType(t) && !c.hasPropertiesOfStructuredType(t) && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
 
@@ -31666,8 +31883,8 @@ func (c *Checker) isFunctionObjectType(t *Type) bool {
 	}
 	// We do a quick check for a "bind" property before performing the more expensive subtype
 	// check. This gives us a quicker out in the common case where an object type is not a function.
-	resolved := c.resolveStructuredTypeMembers(t)
-	return len(resolved.signatures) != 0 || resolved.members["bind"] != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
+	return len(c.getSignaturesOfStructuredType(t, SignatureKindCall)) != 0 || len(c.getSignaturesOfStructuredType(t, SignatureKindConstruct)) != 0 ||
+		c.getMemberOfStructuredType(t, "bind") != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
 }
 
 func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {
