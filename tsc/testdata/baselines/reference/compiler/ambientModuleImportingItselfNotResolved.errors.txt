@@ -1,0 +1,25 @@
+/a.ts(2,1): error TS2304: Cannot find name 'fooGlobal'.
+
+
+==== /a.ts (1 errors) ====
+    /// <reference path="declarations.d.ts" />
+    fooGlobal;
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'fooGlobal'.
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    { "name": "foo", "version": "1.0.0", "types": "index.d.ts" }
+    
+==== /node_modules/foo/index.d.ts (0 errors) ====
+    declare global {
+        var fooGlobal: string;
+    }
+    declare function foo(value: unknown): boolean;
+    export default foo;
+    
+==== /declarations.d.ts (0 errors) ====
+    declare module "foo" {
+        import _foo from "foo";
+        export function isFoo(value: unknown): boolean;
+    }
+    
