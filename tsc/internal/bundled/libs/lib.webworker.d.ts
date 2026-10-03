@@ -557,6 +557,7 @@ interface GPUPipelineErrorInit {
 
 interface GPUPipelineLayoutDescriptor extends GPUObjectDescriptorBase {
     bindGroupLayouts: (GPUBindGroupLayout | null)[];
+    immediateSize?: GPUSize32;
 }
 
 interface GPUPrimitiveState {
@@ -932,6 +933,11 @@ interface NavigationPreloadState {
     headerValue?: string;
 }
 
+interface NotificationAction {
+    action: string;
+    title: string;
+}
+
 interface NotificationEventInit extends ExtendableEventInit {
     action?: string;
     notification: Notification;
@@ -1206,6 +1212,34 @@ interface SecurityPolicyViolationEventInit extends EventInit {
     violatedDirective?: string;
 }
 
+interface SerialInputSignals {
+    clearToSend: boolean;
+    dataCarrierDetect: boolean;
+    dataSetReady: boolean;
+    ringIndicator: boolean;
+}
+
+interface SerialOptions {
+    baudRate: number;
+    bufferSize?: number;
+    dataBits?: number;
+    flowControl?: FlowControlType;
+    parity?: ParityType;
+    stopBits?: number;
+}
+
+interface SerialOutputSignals {
+    break?: boolean;
+    dataTerminalReady?: boolean;
+    requestToSend?: boolean;
+}
+
+interface SerialPortInfo {
+    bluetoothServiceClassId?: BluetoothServiceUUID;
+    usbProductId?: number;
+    usbVendorId?: number;
+}
+
 interface StorageEstimate {
     quota?: number;
     usage?: number;
@@ -1470,6 +1504,23 @@ interface WebTransportCloseInfo {
     reason?: string;
 }
 
+interface WebTransportConnectionStats {
+    bytesReceived?: number;
+    datagrams: WebTransportDatagramStats;
+    minRtt?: DOMHighResTimeStamp;
+    packetsLost?: number;
+    packetsReceived?: number;
+    packetsSent?: number;
+    rttVariation?: DOMHighResTimeStamp;
+    smoothedRtt?: DOMHighResTimeStamp;
+}
+
+interface WebTransportDatagramStats {
+    droppedIncoming?: number;
+    expiredOutgoing?: number;
+    lostOutgoing?: number;
+}
+
 interface WebTransportErrorOptions {
     source?: WebTransportErrorSource;
     streamErrorCode?: number | null;
@@ -1488,11 +1539,22 @@ interface WebTransportOptions {
     serverCertificateHashes?: WebTransportHash[];
 }
 
+interface WebTransportReceiveStreamStats {
+    bytesRead?: number;
+    bytesReceived?: number;
+}
+
 interface WebTransportSendOptions {
     sendOrder?: number;
 }
 
 interface WebTransportSendStreamOptions extends WebTransportSendOptions {
+}
+
+interface WebTransportSendStreamStats {
+    bytesAcknowledged?: number;
+    bytesSent?: number;
+    bytesWritten?: number;
 }
 
 interface WorkerOptions {
@@ -1912,21 +1974,53 @@ declare var Blob: {
 };
 
 interface Body {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body) */
+    /**
+     * The **`body`** read-only property of the Request interface contains a ReadableStream with the body contents that have been added to the request. Note that a request using the GET or HEAD method cannot have a body and null is returned in these cases.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body)
+     */
     readonly body: ReadableStream<Uint8Array<ArrayBuffer>> | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bodyUsed) */
+    /**
+     * The **`bodyUsed`** read-only property of the Request interface is a boolean value that indicates whether the request body has been read yet.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bodyUsed)
+     */
     readonly bodyUsed: boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/arrayBuffer) */
+    /**
+     * The **`arrayBuffer()`** method of the Request interface reads the request body and returns it as a promise that resolves with an ArrayBuffer.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/arrayBuffer)
+     */
     arrayBuffer(): Promise<ArrayBuffer>;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/blob) */
+    /**
+     * The **`blob()`** method of the Request interface reads the request body and returns it as a promise that resolves with a Blob.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/blob)
+     */
     blob(): Promise<Blob>;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bytes) */
+    /**
+     * The **`bytes()`** method of the Request interface reads the request body and returns it as a promise that resolves with a Uint8Array.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bytes)
+     */
     bytes(): Promise<Uint8Array<ArrayBuffer>>;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/formData) */
+    /**
+     * The **`formData()`** method of the Request interface reads the request body and returns it as a promise that resolves with a FormData object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/formData)
+     */
     formData(): Promise<FormData>;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/json) */
+    /**
+     * The **`json()`** method of the Request interface reads the request body and returns it as a promise that resolves with the result of parsing the body text as JSON.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/json)
+     */
     json(): Promise<any>;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/text) */
+    /**
+     * The **`text()`** method of the Request interface reads the request body and returns it as a promise that resolves with a String. The response is always decoded using UTF-8.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/text)
+     */
     text(): Promise<string>;
 }
 
@@ -2027,9 +2121,29 @@ declare var CSSKeywordValue: {
     new(value: string): CSSKeywordValue;
 };
 
+/**
+ * The **`CSSMathClamp`** interface of the CSS Typed Object Model API represents the CSS clamp() function. It inherits properties and methods from its parent CSSNumericValue.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathClamp)
+ */
 interface CSSMathClamp extends CSSMathValue {
+    /**
+     * The **`lower`** read-only property of the CSSMathClamp interface returns a CSSNumericValue object containing the minimum value of a CSSMathClamp object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathClamp/lower)
+     */
     readonly lower: CSSNumericValue;
+    /**
+     * The **`upper`** read-only property of the CSSMathClamp interface returns a CSSNumericValue object containing the maximum value of a CSSMathClamp object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathClamp/upper)
+     */
     readonly upper: CSSNumericValue;
+    /**
+     * The **`value`** read-only property of the CSSMathClamp interface returns a CSSNumericValue object containing the preferred value of a CSSMathClamp object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathClamp/value)
+     */
     readonly value: CSSNumericValue;
 }
 
@@ -2540,13 +2654,13 @@ declare var CSSTranslate: {
 };
 
 /**
- * The **`CSSUnitValue`** interface of the CSS Typed Object Model API represents values that contain a single unit type. For example, "42px" would be represented by a CSSNumericValue.
+ * The **`CSSUnitValue`** interface of the CSS Typed Object Model API represents values that contain a single unit type.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSUnitValue)
  */
 interface CSSUnitValue extends CSSNumericValue {
     /**
-     * The **`CSSUnitValue.unit`** read-only property of the CSSUnitValue interface returns a string indicating the type of unit.
+     * The **`CSSUnitValue.unit`** read-only property of the CSSUnitValue interface returns a string indicating the unit type.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSUnitValue/unit)
      */
@@ -2911,6 +3025,8 @@ interface CanvasTextDrawingStyles {
     fontStretch: CanvasFontStretch;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/fontVariantCaps) */
     fontVariantCaps: CanvasFontVariantCaps;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/lang) */
+    lang: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/letterSpacing) */
     letterSpacing: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/textAlign) */
@@ -4333,7 +4449,7 @@ interface Event {
      */
     readonly eventPhase: number;
     /**
-     * The **`isTrusted`** read-only property of the Event interface is a boolean value that is true when the event was generated by the user agent (including via user actions and programmatic methods such as HTMLElement.focus()), and false when the event was dispatched via EventTarget.dispatchEvent(). The only exception is the click event, which initializes the isTrusted property to false in user agents.
+     * The **`isTrusted`** read-only property of the Event interface is a boolean value that is true when the event was generated by the user agent (including via user actions and programmatic methods such as HTMLElement.focus()), and false when the event was dispatched via EventTarget.dispatchEvent(). The click event fired through HTMLElement.click() sets the isTrusted property to false.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Event/isTrusted)
      */
@@ -6318,8 +6434,12 @@ interface GPUSupportedLimits {
     readonly maxSamplersPerShaderStage: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSupportedLimits#instance_properties) */
     readonly maxStorageBufferBindingSize: number;
+    readonly maxStorageBuffersInFragmentStage: number;
+    readonly maxStorageBuffersInVertexStage: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSupportedLimits#instance_properties) */
     readonly maxStorageBuffersPerShaderStage: number;
+    readonly maxStorageTexturesInFragmentStage: number;
+    readonly maxStorageTexturesInVertexStage: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSupportedLimits#instance_properties) */
     readonly maxStorageTexturesPerShaderStage: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSupportedLimits#instance_properties) */
@@ -7786,6 +7906,12 @@ interface NotificationEventMap {
  */
 interface Notification extends EventTarget {
     /**
+     * The **`actions`** read-only property of the Notification interface provides the actions available for users to choose from for interacting with the notification.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/actions)
+     */
+    readonly actions: ReadonlyArray<NotificationAction>;
+    /**
      * The **`body`** read-only property of the Notification interface indicates the body string of the notification, as specified in the body option of the Notification() constructor.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/body)
@@ -7862,6 +7988,12 @@ interface Notification extends EventTarget {
 declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
+    /**
+     * The **`maxActions`** read-only static property of the Notification interface returns the maximum number of actions supported by the device and the User Agent. Effectively, this is the maximum number of elements in Notification.actions array which will be respected by the User Agent.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/maxActions_static)
+     */
+    readonly maxActions: number;
     /**
      * The **`permission`** read-only static property of the Notification interface indicates the current permission granted by the user for the current origin to display web notifications.
      *
@@ -8096,9 +8228,10 @@ interface OffscreenCanvas extends EventTarget {
     getContext(contextId: "bitmaprenderer", options?: any): ImageBitmapRenderingContext | null;
     getContext(contextId: "webgl", options?: any): WebGLRenderingContext | null;
     getContext(contextId: "webgl2", options?: any): WebGL2RenderingContext | null;
+    getContext(contextId: "webgpu"): GPUCanvasContext | null;
     getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
     /**
-     * The **`OffscreenCanvas.transferToImageBitmap()`** method creates an ImageBitmap object from the most recently rendered image of the OffscreenCanvas. The OffscreenCanvas allocates a new image for its subsequent rendering.
+     * The **`transferToImageBitmap()`** method of the OffscreenCanvas interface creates an ImageBitmap object from the most recently rendered image of the OffscreenCanvas. The image in the OffscreenCanvas is replaced with a new blank image for subsequent rendering.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/transferToImageBitmap)
      */
@@ -8127,6 +8260,18 @@ interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDra
 declare var OffscreenCanvasRenderingContext2D: {
     prototype: OffscreenCanvasRenderingContext2D;
     new(): OffscreenCanvasRenderingContext2D;
+};
+
+interface Origin {
+    readonly opaque: boolean;
+    isSameOrigin(other: Origin): boolean;
+    isSameSite(other: Origin): boolean;
+}
+
+declare var Origin: {
+    prototype: Origin;
+    new(): Origin;
+    from(value: any): Origin;
 };
 
 /**
@@ -8411,11 +8556,23 @@ interface PerformanceResourceTiming extends PerformanceEntry {
      */
     readonly connectStart: DOMHighResTimeStamp;
     /**
+     * The **`contentType`** read-only property of the PerformanceResourceTiming interface is a string indicating the content type of the fetched resource, formatted as a MIME type and subtype separated by a forward slash.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/contentType)
+     */
+    readonly contentType: string;
+    /**
      * The **`decodedBodySize`** read-only property returns the size (in octets) received from the fetch (HTTP or cache) of the message body after removing any applied content encoding (like gzip or Brotli). If the resource is retrieved from an application cache or local resources, it returns the size of the payload after removing any applied content encoding.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/decodedBodySize)
      */
     readonly decodedBodySize: number;
+    /**
+     * The **`deliveryType`** read-only property is a string indicating how the resource was delivered — for example from the cache or from a navigational prefetch.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/deliveryType)
+     */
+    readonly deliveryType: string;
     /**
      * The **`domainLookupEnd`** read-only property returns the timestamp immediately after the browser finishes the domain-name lookup for the resource.
      *
@@ -8440,6 +8597,18 @@ interface PerformanceResourceTiming extends PerformanceEntry {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/fetchStart)
      */
     readonly fetchStart: DOMHighResTimeStamp;
+    /**
+     * The **`finalResponseHeadersStart`** read-only property returns a timestamp immediately after the browser receives the first byte of the final document response (for example, 200 OK) from the server.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/finalResponseHeadersStart)
+     */
+    readonly finalResponseHeadersStart: DOMHighResTimeStamp;
+    /**
+     * The **`firstInterimResponseStart`** read-only property returns a timestamp immediately after the browser receives the first byte of the interim 1xx response (for example, 100 Continue or 103 Early Hints) from the server.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/firstInterimResponseStart)
+     */
+    readonly firstInterimResponseStart: DOMHighResTimeStamp;
     /**
      * The **`initiatorType`** read-only property is a string representing web platform feature that initiated the resource load.
      *
@@ -9037,7 +9206,7 @@ interface RTCEncodedVideoFrame {
      */
     readonly timestamp: number;
     /**
-     * The **`type`** read-only property of the RTCEncodedVideoFrame interface indicates whether this frame is a key frame, delta frame, or empty frame.
+     * The **`type`** read-only property of the RTCEncodedVideoFrame interface indicates whether this frame is a key frame or a delta frame.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCEncodedVideoFrame/type)
      */
@@ -9249,7 +9418,7 @@ interface ReadableStreamBYOBRequest {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/view)
      */
-    readonly view: ArrayBufferView<ArrayBuffer> | null;
+    readonly view: Uint8Array<ArrayBuffer> | null;
     /**
      * The **`respond()`** method of the ReadableStreamBYOBRequest interface is used to signal to the associated readable byte stream that the specified number of bytes were written into the ReadableStreamBYOBRequest.view.
      *
@@ -9463,7 +9632,7 @@ interface Request extends Body {
 
 declare var Request: {
     prototype: Request;
-    new(input: RequestInfo | URL, init?: RequestInit): Request;
+    new(input: RequestInfo | WorkerLocation | URL, init?: RequestInit): Request;
 };
 
 /**
@@ -9583,7 +9752,7 @@ interface SecurityPolicyViolationEvent extends Event {
      */
     readonly blockedURI: string;
     /**
-     * The **`columnNumber`** read-only property of the SecurityPolicyViolationEvent interface is the column number in the document or worker script at which the Content Security Policy (CSP) violation occurred.
+     * The **`columnNumber`** read-only property of the SecurityPolicyViolationEvent interface is the character position in the source file line of the document or worker script at which the Content Security Policy (CSP) violation occurred.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SecurityPolicyViolationEvent/columnNumber)
      */
@@ -9653,6 +9822,107 @@ interface SecurityPolicyViolationEvent extends Event {
 declare var SecurityPolicyViolationEvent: {
     prototype: SecurityPolicyViolationEvent;
     new(type: string, eventInitDict?: SecurityPolicyViolationEventInit): SecurityPolicyViolationEvent;
+};
+
+/**
+ * The **`Serial`** interface of the Web Serial API provides attributes and methods for finding and connecting to serial ports from a web page.
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Serial)
+ */
+interface Serial extends EventTarget {
+    /**
+     * The **`getPorts()`** method of the Serial interface returns a Promise that resolves with an array of SerialPort objects representing serial ports connected to the host which the origin has permission to access.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Serial/getPorts)
+     */
+    getPorts(): Promise<SerialPort[]>;
+}
+
+declare var Serial: {
+    prototype: Serial;
+    new(): Serial;
+};
+
+interface SerialPortEventMap {
+    "connect": Event;
+    "disconnect": Event;
+}
+
+/**
+ * The **`SerialPort`** interface of the Web Serial API provides access to a serial port on the host device.
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort)
+ */
+interface SerialPort extends EventTarget {
+    /**
+     * The **`connected`** read-only property of the SerialPort interface returns a boolean value that indicates whether the port is logically connected to the device.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/connected)
+     */
+    readonly connected: boolean;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/connect_event) */
+    onconnect: ((this: SerialPort, ev: Event) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/disconnect_event) */
+    ondisconnect: ((this: SerialPort, ev: Event) => any) | null;
+    /**
+     * The **`readable`** read-only property of the SerialPort interface returns a ReadableStream for receiving data from the device connected to the port. Chunks read from this stream are instances of Uint8Array. This property is non-null as long as the port is open and has not encountered a fatal error.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/readable)
+     */
+    readonly readable: ReadableStream | null;
+    /**
+     * The **`writable`** read-only property of the SerialPort interface returns a WritableStream for sending data to the device connected to the port. Chunks written to this stream must be instances of ArrayBuffer, TypedArray, or DataView. This property is non-null as long as the port is open and has not encountered a fatal error.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/writable)
+     */
+    readonly writable: WritableStream | null;
+    /**
+     * The **`SerialPort.close()`** method of the SerialPort interface returns a Promise that resolves when the port closes.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/close)
+     */
+    close(): Promise<void>;
+    /**
+     * The **`SerialPort.forget()`** method of the SerialPort interface returns a Promise that resolves when access to the serial port is revoked.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/forget)
+     */
+    forget(): Promise<void>;
+    /**
+     * The **`getInfo()`** method of the SerialPort interface returns an object containing identifying information for the device available via the port.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/getInfo)
+     */
+    getInfo(): SerialPortInfo;
+    /**
+     * The **`SerialPort.getSignals()`** method of the SerialPort interface returns a Promise that resolves with an object containing the current state of the port's control signals.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/getSignals)
+     */
+    getSignals(): Promise<SerialInputSignals>;
+    /**
+     * The **`open()`** method of the SerialPort interface returns a Promise that resolves when the port is opened. By default the port is opened with 8 data bits, 1 stop bit and no parity checking. The baudRate parameter is required.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/open)
+     */
+    open(options: SerialOptions): Promise<void>;
+    /**
+     * The **`setSignals()`** method of the SerialPort interface sets control signals on the port and returns a Promise that resolves when they are set.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/setSignals)
+     */
+    setSignals(signals?: SerialOutputSignals): Promise<void>;
+    addEventListener<K extends keyof SerialPortEventMap>(type: K, listener: (this: SerialPort, ev: SerialPortEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof SerialPortEventMap>(type: K, listener: (this: SerialPort, ev: SerialPortEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var SerialPort: {
+    prototype: SerialPort;
+    new(): SerialPort;
 };
 
 interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
@@ -10441,7 +10711,7 @@ interface TransformStreamDefaultController<O = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/TransformStreamDefaultController/enqueue)
      */
-    enqueue(chunk?: O): void;
+    enqueue(chunk: O): void;
     /**
      * The **`error()`** method of the TransformStreamDefaultController interface errors both sides of the stream. Any further interactions with it will fail with the given error message, and any chunks in the queue will be discarded.
      *
@@ -10550,13 +10820,13 @@ interface URL {
 
 declare var URL: {
     prototype: URL;
-    new(url: string | URL, base?: string | URL): URL;
+    new(url: string | WorkerLocation | URL, base?: string | URL | WorkerLocation): URL;
     /**
      * The **`URL.canParse()`** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
      */
-    canParse(url: string | URL, base?: string | URL): boolean;
+    canParse(url: string | WorkerLocation | URL, base?: string | URL | WorkerLocation): boolean;
     /**
      * The **`createObjectURL()`** static method of the URL interface creates a string containing a blob URL pointing to the object given in the parameter.
      *
@@ -10568,7 +10838,7 @@ declare var URL: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
      */
-    parse(url: string | URL, base?: string | URL): URL | null;
+    parse(url: string | WorkerLocation | URL, base?: string | URL | WorkerLocation): URL | null;
     /**
      * The **`revokeObjectURL()`** static method of the URL interface releases an existing object URL which was previously created by calling URL.createObjectURL().
      *
@@ -11209,13 +11479,13 @@ interface WEBGL_draw_buffers {
  */
 interface WEBGL_lose_context {
     /**
-     * The **`WEBGL_lose_context.loseContext()`** method is part of the WebGL API and allows you to simulate losing the context of a WebGLRenderingContext context.
+     * The **`loseContext()`** method of the WEBGL_lose_context extension is part of the WebGL API and allows you to simulate losing the context of a WebGLRenderingContext.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_lose_context/loseContext)
      */
     loseContext(): void;
     /**
-     * The **`WEBGL_lose_context.restoreContext()`** method is part of the WebGL API and allows you to simulate restoring the context of a WebGLRenderingContext object.
+     * The **`restoreContext()`** method of the WEBGL_lose_context extension is part of the WebGL API and allows you to simulate restoring the context of a WebGLRenderingContext.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_lose_context/restoreContext)
      */
@@ -13616,6 +13886,12 @@ interface WebTransport {
      */
     readonly closed: Promise<WebTransportCloseInfo>;
     /**
+     * The **`congestionControl`** read-only property of the WebTransport interface indicates the application's preference for either high throughput or low-latency when sending data.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/congestionControl)
+     */
+    readonly congestionControl: WebTransportCongestionControl;
+    /**
      * The **`datagrams`** read-only property of the WebTransport interface returns a WebTransportDatagramDuplexStream instance that can be used to send and receive datagrams — unreliable data transmission.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/datagrams)
@@ -13633,12 +13909,19 @@ interface WebTransport {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/incomingUnidirectionalStreams)
      */
     readonly incomingUnidirectionalStreams: ReadableStream;
+    readonly protocol: string;
     /**
      * The **`ready`** read-only property of the WebTransport interface returns a promise that resolves when the transport is ready to use.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/ready)
      */
     readonly ready: Promise<void>;
+    /**
+     * The **`reliability`** read-only property of the WebTransport interface indicates whether the connection supports reliable transports only, or whether it also supports unreliable transports (such as UDP).
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/reliability)
+     */
+    readonly reliability: WebTransportReliabilityMode;
     /**
      * The **`close()`** method of the WebTransport interface closes an ongoing WebTransport session.
      *
@@ -13657,6 +13940,12 @@ interface WebTransport {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/createUnidirectionalStream)
      */
     createUnidirectionalStream(options?: WebTransportSendStreamOptions): Promise<WritableStream>;
+    /**
+     * The **`getStats()`** method of the WebTransport interface asynchronously returns an object containing HTTP/3 connection statistics.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/getStats)
+     */
+    getStats(): Promise<WebTransportConnectionStats>;
 }
 
 declare var WebTransport: {
@@ -13773,6 +14062,52 @@ declare var WebTransportError: {
 };
 
 /**
+ * The **`WebTransportReceiveStream`** interface of the WebTransport API is a ReadableStream that can be used to read from an incoming unidirectional or bidirectional WebTransport stream.
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportReceiveStream)
+ */
+interface WebTransportReceiveStream extends ReadableStream {
+    /**
+     * The **`getStats()`** method of the WebTransportReceiveStream interface asynchronously returns an object containing statistics for the current stream.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportReceiveStream/getStats)
+     */
+    getStats(): Promise<WebTransportReceiveStreamStats>;
+}
+
+declare var WebTransportReceiveStream: {
+    prototype: WebTransportReceiveStream;
+    new(): WebTransportReceiveStream;
+};
+
+/**
+ * The **`WebTransportSendStream`** interface of the WebTransport API is a specialized WritableStream that is used to send outbound data in both unidirectional or bidirectional WebTransport streams.
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportSendStream)
+ */
+interface WebTransportSendStream extends WritableStream {
+    /**
+     * The **`sendOrder`** property of the WebTransportSendStream interface indicates the send priority of this stream relative to other streams for which the value has been set.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportSendStream/sendOrder)
+     */
+    sendOrder: number;
+    /**
+     * The **`getStats()`** method of the WebTransportSendStream interface asynchronously returns an object containing statistics for the current stream.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportSendStream/getStats)
+     */
+    getStats(): Promise<WebTransportSendStreamStats>;
+}
+
+declare var WebTransportSendStream: {
+    prototype: WebTransportSendStream;
+    new(): WebTransportSendStream;
+};
+
+/**
  * The **`WindowClient`** interface of the ServiceWorker API represents the scope of a service worker client that is a document in a browsing context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WindowClient)
@@ -13842,7 +14177,7 @@ interface WindowOrWorkerGlobalScope {
     createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
-    fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+    fetch(input: RequestInfo | WorkerLocation | URL, init?: RequestInit): Promise<Response>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/queueMicrotask) */
     queueMicrotask(callback: VoidFunction): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/reportError) */
@@ -14037,6 +14372,12 @@ interface WorkerNavigator extends NavigatorBadge, NavigatorConcurrentHardware, N
      */
     readonly permissions: Permissions;
     /**
+     * The **`serial`** read-only property of the WorkerNavigator interface returns a Serial object which represents the entry point into the Web Serial API.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WorkerNavigator/serial)
+     */
+    readonly serial: Serial;
+    /**
      * The **`serviceWorker`** read-only property of the WorkerNavigator interface returns the ServiceWorkerContainer object for the associated document, which provides access to registration, removal, upgrade, and communication with the ServiceWorker.
      * Available only in secure contexts.
      *
@@ -14159,7 +14500,7 @@ interface WritableStreamDefaultWriter<W = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/write)
      */
-    write(chunk?: W): Promise<void>;
+    write(chunk: W): Promise<void>;
 }
 
 declare var WritableStreamDefaultWriter: {
@@ -14262,8 +14603,8 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open)
      */
-    open(method: string, url: string | URL): void;
-    open(method: string, url: string | URL, async: boolean, username?: string | null, password?: string | null): void;
+    open(method: string, url: string | WorkerLocation | URL): void;
+    open(method: string, url: string | WorkerLocation | URL, async: boolean, username?: string | null, password?: string | null): void;
     /**
      * The XMLHttpRequest method **`overrideMimeType()`** specifies a MIME type other than the one provided by the server to be used instead when interpreting the data being transferred in a request.
      *
@@ -14354,6 +14695,47 @@ declare var XMLHttpRequestUpload: {
     new(): XMLHttpRequestUpload;
 };
 
+declare namespace GPUBufferUsage {
+    const MAP_READ: 0x0001;
+    const MAP_WRITE: 0x0002;
+    const COPY_SRC: 0x0004;
+    const COPY_DST: 0x0008;
+    const INDEX: 0x0010;
+    const VERTEX: 0x0020;
+    const UNIFORM: 0x0040;
+    const STORAGE: 0x0080;
+    const INDIRECT: 0x0100;
+    const QUERY_RESOLVE: 0x0200;
+}
+
+declare namespace GPUColorWrite {
+    const RED: 0x1;
+    const GREEN: 0x2;
+    const BLUE: 0x4;
+    const ALPHA: 0x8;
+    const ALL: 0xF;
+}
+
+declare namespace GPUMapMode {
+    const READ: 0x0001;
+    const WRITE: 0x0002;
+}
+
+declare namespace GPUShaderStage {
+    const VERTEX: 0x1;
+    const FRAGMENT: 0x2;
+    const COMPUTE: 0x4;
+}
+
+declare namespace GPUTextureUsage {
+    const COPY_SRC: 0x01;
+    const COPY_DST: 0x02;
+    const TEXTURE_BINDING: 0x04;
+    const STORAGE_BINDING: 0x08;
+    const RENDER_ATTACHMENT: 0x10;
+    const TRANSIENT_ATTACHMENT: 0x20;
+}
+
 declare namespace WebAssembly {
     /** The **`WebAssembly.CompileError`** object indicates an error during WebAssembly decoding or validation. */
     interface CompileError extends Error {
@@ -14402,7 +14784,13 @@ declare namespace WebAssembly {
      * [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Global)
      */
     interface Global<T extends ValueType = ValueType> {
+        /**
+         * The **`value`** property of the WebAssembly.Global object prototype returns the value contained inside the global variable.
+         *
+         * [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Global/value)
+         */
         value: ValueTypeMap[T];
+        /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Global/valueOf) */
         valueOf(): ValueTypeMap[T];
     }
 
@@ -14477,7 +14865,7 @@ declare namespace WebAssembly {
 
     var Module: {
         prototype: Module;
-        new(bytes: BufferSource, options?: WebAssemblyCompileOptions): Module;
+        new(bytes: AllowSharedBufferSource, options?: WebAssemblyCompileOptions): Module;
         /**
          * The WebAssembly.**`Module.customSections()`** static method returns a copy of the contents of all custom sections in the given module with the given string name.
          *
@@ -14628,16 +15016,16 @@ declare namespace WebAssembly {
     type ValueType = keyof ValueTypeMap;
     var JSTag: Tag;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/compile_static) */
-    function compile(bytes: BufferSource, options?: WebAssemblyCompileOptions): Promise<Module>;
+    function compile(bytes: AllowSharedBufferSource, options?: WebAssemblyCompileOptions): Promise<Module>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/compileStreaming_static) */
     function compileStreaming(source: Response | PromiseLike<Response>, options?: WebAssemblyCompileOptions): Promise<Module>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/instantiate_static) */
-    function instantiate(bytes: BufferSource, importObject?: Imports, options?: WebAssemblyCompileOptions): Promise<WebAssemblyInstantiatedSource>;
+    function instantiate(bytes: AllowSharedBufferSource, importObject?: Imports, options?: WebAssemblyCompileOptions): Promise<WebAssemblyInstantiatedSource>;
     function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/instantiateStreaming_static) */
     function instantiateStreaming(source: Response | PromiseLike<Response>, importObject?: Imports, options?: WebAssemblyCompileOptions): Promise<WebAssemblyInstantiatedSource>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/validate_static) */
-    function validate(bytes: BufferSource, options?: WebAssemblyCompileOptions): boolean;
+    function validate(bytes: AllowSharedBufferSource, options?: WebAssemblyCompileOptions): boolean;
 }
 
 /** The **`console`** object provides access to the debugging console (e.g., the Web console in Firefox). */
@@ -14962,7 +15350,7 @@ declare function clearTimeout(id: number | undefined): void;
 declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
-declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+declare function fetch(input: RequestInfo | WorkerLocation | URL, init?: RequestInit): Promise<Response>;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/queueMicrotask) */
 declare function queueMicrotask(callback: VoidFunction): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/reportError) */
@@ -14989,6 +15377,7 @@ type AlgorithmIdentifier = Algorithm | string;
 type AllowSharedBufferSource = ArrayBufferLike | ArrayBufferView<ArrayBufferLike>;
 type BigInteger = Uint8Array<ArrayBuffer>;
 type BlobPart = BufferSource | Blob | string;
+type BluetoothServiceUUID = string | number;
 type BodyInit = ReadableStream | XMLHttpRequestBodyInit;
 type BufferSource = ArrayBufferView<ArrayBuffer> | ArrayBuffer;
 type CSSKeywordish = string | CSSKeywordValue;
@@ -15086,13 +15475,14 @@ type ClientTypes = "all" | "sharedworker" | "window" | "worker";
 type CodecState = "closed" | "configured" | "unconfigured";
 type ColorGamut = "p3" | "rec2020" | "srgb";
 type ColorSpaceConversion = "default" | "none";
-type CompressionFormat = "deflate" | "deflate-raw" | "gzip";
+type CompressionFormat = "brotli" | "deflate" | "deflate-raw" | "gzip";
 type CookieSameSite = "lax" | "none" | "strict";
 type DocumentVisibilityState = "hidden" | "visible";
 type EncodedAudioChunkType = "delta" | "key";
 type EncodedVideoChunkType = "delta" | "key";
 type EndingType = "native" | "transparent";
 type FileSystemHandleKind = "directory" | "file";
+type FlowControlType = "hardware" | "none";
 type FontDisplay = "auto" | "block" | "fallback" | "optional" | "swap";
 type FontFaceLoadStatus = "error" | "loaded" | "loading" | "unloaded";
 type FontFaceSetLoadStatus = "loaded" | "loading";
@@ -15129,7 +15519,7 @@ type GPUTextureDimension = "1d" | "2d" | "3d";
 type GPUTextureFormat = "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-snorm" | "bc4-r-unorm" | "bc5-rg-snorm" | "bc5-rg-unorm" | "bc6h-rgb-float" | "bc6h-rgb-ufloat" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "bgra8unorm" | "bgra8unorm-srgb" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "eac-r11snorm" | "eac-r11unorm" | "eac-rg11snorm" | "eac-rg11unorm" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "r16float" | "r16sint" | "r16snorm" | "r16uint" | "r16unorm" | "r32float" | "r32sint" | "r32uint" | "r8sint" | "r8snorm" | "r8uint" | "r8unorm" | "rg11b10ufloat" | "rg16float" | "rg16sint" | "rg16snorm" | "rg16uint" | "rg16unorm" | "rg32float" | "rg32sint" | "rg32uint" | "rg8sint" | "rg8snorm" | "rg8uint" | "rg8unorm" | "rgb10a2uint" | "rgb10a2unorm" | "rgb9e5ufloat" | "rgba16float" | "rgba16sint" | "rgba16snorm" | "rgba16uint" | "rgba16unorm" | "rgba32float" | "rgba32sint" | "rgba32uint" | "rgba8sint" | "rgba8snorm" | "rgba8uint" | "rgba8unorm" | "rgba8unorm-srgb" | "stencil8";
 type GPUTextureSampleType = "depth" | "float" | "sint" | "uint" | "unfilterable-float";
 type GPUTextureViewDimension = "1d" | "2d" | "2d-array" | "3d" | "cube" | "cube-array";
-type GPUVertexFormat = "float16" | "float16x2" | "float16x4" | "float32" | "float32x2" | "float32x3" | "float32x4" | "sint16" | "sint16x2" | "sint16x4" | "sint32" | "sint32x2" | "sint32x3" | "sint32x4" | "sint8" | "sint8x2" | "sint8x4" | "snorm16" | "snorm16x2" | "snorm16x4" | "snorm8" | "snorm8x2" | "snorm8x4" | "uint16" | "uint16x2" | "uint16x4" | "uint32" | "uint32x2" | "uint32x3" | "uint32x4" | "uint8" | "uint8x2" | "uint8x4" | "unorm10-10-10-2" | "unorm16" | "unorm16x2" | "unorm16x4" | "unorm8" | "unorm8x2" | "unorm8x4" | "unorm8x4-bgra";
+type GPUVertexFormat = "float16" | "float16x2" | "float16x4" | "float32" | "float32x2" | "float32x3" | "float32x4" | "sint16" | "sint16x2" | "sint16x4" | "sint32" | "sint32x2" | "sint32x3" | "sint32x4" | "sint8" | "sint8x2" | "sint8x4" | "snorm10-10-10-2" | "snorm16" | "snorm16x2" | "snorm16x4" | "snorm8" | "snorm8x2" | "snorm8x4" | "uint16" | "uint16x2" | "uint16x4" | "uint32" | "uint32x2" | "uint32x3" | "uint32x4" | "uint8" | "uint8x2" | "uint8x4" | "unorm10-10-10-2" | "unorm16" | "unorm16x2" | "unorm16x4" | "unorm8" | "unorm8x2" | "unorm8x4" | "unorm8x4-bgra";
 type GPUVertexStepMode = "instance" | "vertex";
 type GlobalCompositeOperation = "color" | "color-burn" | "color-dodge" | "copy" | "darken" | "destination-atop" | "destination-in" | "destination-out" | "destination-over" | "difference" | "exclusion" | "hard-light" | "hue" | "lighten" | "lighter" | "luminosity" | "multiply" | "overlay" | "saturation" | "screen" | "soft-light" | "source-atop" | "source-in" | "source-out" | "source-over" | "xor";
 type HardwareAcceleration = "no-preference" | "prefer-hardware" | "prefer-software";
@@ -15153,6 +15543,7 @@ type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
 type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2" | "webgpu";
 type OpusBitstreamFormat = "ogg" | "opus";
+type ParityType = "even" | "none" | "odd";
 type PermissionName = "camera" | "geolocation" | "microphone" | "midi" | "notifications" | "persistent-storage" | "push" | "screen-wake-lock" | "storage-access";
 type PermissionState = "denied" | "granted" | "prompt";
 type PredefinedColorSpace = "display-p3" | "srgb";
@@ -15164,7 +15555,7 @@ type ReadableStreamType = "bytes";
 type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin" | "origin-when-cross-origin" | "same-origin" | "strict-origin" | "strict-origin-when-cross-origin" | "unsafe-url";
 type RequestCache = "default" | "force-cache" | "no-cache" | "no-store" | "only-if-cached" | "reload";
 type RequestCredentials = "include" | "omit" | "same-origin";
-type RequestDestination = "" | "audio" | "audioworklet" | "document" | "embed" | "font" | "frame" | "iframe" | "image" | "manifest" | "object" | "paintworklet" | "report" | "script" | "sharedworker" | "style" | "track" | "video" | "worker" | "xslt";
+type RequestDestination = "" | "audio" | "audioworklet" | "document" | "embed" | "font" | "frame" | "iframe" | "image" | "json" | "manifest" | "object" | "paintworklet" | "report" | "script" | "sharedworker" | "style" | "track" | "video" | "worker" | "xslt";
 type RequestMode = "cors" | "navigate" | "no-cors" | "same-origin";
 type RequestPriority = "auto" | "high" | "low";
 type RequestRedirect = "error" | "follow" | "manual";
@@ -15183,6 +15574,7 @@ type VideoTransferCharacteristics = "bt709" | "iec61966-2-1" | "smpte170m";
 type WebGLPowerPreference = "default" | "high-performance" | "low-power";
 type WebTransportCongestionControl = "default" | "low-latency" | "throughput";
 type WebTransportErrorSource = "session" | "stream";
+type WebTransportReliabilityMode = "pending" | "reliable-only" | "supports-unreliable";
 type WorkerType = "classic" | "module";
 type WriteCommandType = "seek" | "truncate" | "write";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
