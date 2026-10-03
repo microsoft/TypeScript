@@ -10,7 +10,7 @@
 //  ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | any
+// | (index) IntrinsicElements[`foo${string}`]: any
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -18,7 +18,7 @@
 //  ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | any
+// | (index) IntrinsicElements[`foo${string}` | `foobar${string}`]: any
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nany\n```\n"
+        "value": "```typescript\n(index) IntrinsicElements[`foo${string}`]: any\n```\n"
       },
       "range": {
         "start": {
@@ -63,7 +63,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nany\n```\n"
+        "value": "```typescript\n(index) IntrinsicElements[`foo${string}` | `foobar${string}`]: any\n```\n"
       },
       "range": {
         "start": {
