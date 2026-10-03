@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/declarationEmitNegativeNumericConstLiterals.ts] ////
+
+=== declarationEmitNegativeNumericConstLiterals.ts ===
+declare function id<const T>(value: T): T;
+>id : Symbol(id, Decl(declarationEmitNegativeNumericConstLiterals.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitNegativeNumericConstLiterals.ts, 0, 20))
+>value : Symbol(value, Decl(declarationEmitNegativeNumericConstLiterals.ts, 0, 29))
+>T : Symbol(T, Decl(declarationEmitNegativeNumericConstLiterals.ts, 0, 20))
+>T : Symbol(T, Decl(declarationEmitNegativeNumericConstLiterals.ts, 0, 20))
+
+export const a = -1e500 as const;
+>a : Symbol(a, Decl(declarationEmitNegativeNumericConstLiterals.ts, 2, 12))
+>const : Symbol(const)
+
+export const b = -123456789012345678901234567890 as const;
+>b : Symbol(b, Decl(declarationEmitNegativeNumericConstLiterals.ts, 3, 12))
+>const : Symbol(const)
+
+export const c = ((-1e500)) as const;
+>c : Symbol(c, Decl(declarationEmitNegativeNumericConstLiterals.ts, 4, 12))
+>const : Symbol(const)
+
+export const d = { value: -1e500 } as const;
+>d : Symbol(d, Decl(declarationEmitNegativeNumericConstLiterals.ts, 5, 12))
+>value : Symbol(value, Decl(declarationEmitNegativeNumericConstLiterals.ts, 5, 18))
+>const : Symbol(const)
+
+export const e = [-1e500] as const;
+>e : Symbol(e, Decl(declarationEmitNegativeNumericConstLiterals.ts, 6, 12))
+>const : Symbol(const)
+
+export const f = id(-1e500);
+>f : Symbol(f, Decl(declarationEmitNegativeNumericConstLiterals.ts, 7, 12))
+>id : Symbol(id, Decl(declarationEmitNegativeNumericConstLiterals.ts, 0, 0))
+
+export const g = -1e500;
+>g : Symbol(g, Decl(declarationEmitNegativeNumericConstLiterals.ts, 8, 12))
+
+export const h = 1e500;
+>h : Symbol(h, Decl(declarationEmitNegativeNumericConstLiterals.ts, 9, 12))
+
+export const i = { [-1e500]: 1 } as const;
+>i : Symbol(i, Decl(declarationEmitNegativeNumericConstLiterals.ts, 10, 12))
+>[-1e500] : Symbol([-1e500], Decl(declarationEmitNegativeNumericConstLiterals.ts, 10, 18))
+>const : Symbol(const)
+
