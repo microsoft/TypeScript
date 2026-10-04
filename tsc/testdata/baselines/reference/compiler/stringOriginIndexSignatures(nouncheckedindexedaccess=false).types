@@ -1,0 +1,210 @@
+//// [tests/cases/compiler/stringOriginIndexSignatures.ts] ////
+
+=== stringOriginIndexSignatures.ts ===
+type Key = "known" | string;
+>Key : string
+
+interface StringIndex {
+    [key: Key]: number;
+>key : string
+}
+
+declare const indexed: StringIndex;
+>indexed : StringIndex
+
+export const numericAccess = indexed[0];
+>numericAccess : number
+>indexed[0] : number
+>indexed : StringIndex
+>0 : 0
+
+export const stringAccess = indexed["other"];
+>stringAccess : number
+>indexed["other"] : number
+>indexed : StringIndex
+>"other" : "other"
+
+export const numericKey: keyof StringIndex = 0;
+>numericKey : string | number
+>0 : 0
+
+export const stringKey: keyof StringIndex = "other";
+>stringKey : string | number
+>"other" : "other"
+
+interface SpecificIndices {
+    [key: Key]: any;
+>key : string
+
+    [key: number]: number;
+>key : number
+
+    [key: `prefix${string}`]: boolean;
+>key : `prefix${string}`
+}
+
+declare const specific: SpecificIndices;
+>specific : SpecificIndices
+
+export const numericIndex = specific[0];
+>numericIndex : number
+>specific[0] : number
+>specific : SpecificIndices
+>0 : 0
+
+export const numericStringIndex = specific["0"];
+>numericStringIndex : number
+>specific["0"] : number
+>specific : SpecificIndices
+>"0" : "0"
+
+export const patternIndex = specific["prefixValue"];
+>patternIndex : boolean
+>specific["prefixValue"] : boolean
+>specific : SpecificIndices
+>"prefixValue" : "prefixValue"
+
+export const fallbackIndex = specific["other"];
+>fallbackIndex : any
+>specific["other"] : any
+>specific : SpecificIndices
+>"other" : "other"
+
+type Remapped<Value> = { [Property in keyof Value as Key]: Value[Property] };
+>Remapped : Remapped<Value>
+
+type RemappedValue = Remapped<{ value: number }>;
+>RemappedValue : Remapped<{ value: number; }>
+>value : number
+
+export const remappedNumericKey: keyof RemappedValue = 0;
+>remappedNumericKey : string | number
+>0 : 0
+
+declare const remapped: RemappedValue;
+>remapped : Remapped<{ value: number; }>
+
+export const remappedNumericAccess = remapped[0];
+>remappedNumericAccess : number
+>remapped[0] : number
+>remapped : Remapped<{ value: number; }>
+>0 : 0
+
+declare const invalidKey: {};
+>invalidKey : {}
+
+indexed[invalidKey];
+>indexed[invalidKey] : any
+>indexed : StringIndex
+>invalidKey : {}
+
+declare const symbolKey: unique symbol;
+>symbolKey : unique symbol
+
+const source = { value: 1, [symbolKey]: "symbol" };
+>source : { value: number; [symbolKey]: string; }
+>{ value: 1, [symbolKey]: "symbol" } : { value: number; [symbolKey]: string; }
+>value : number
+>1 : 1
+>[symbolKey] : string
+>symbolKey : unique symbol
+>"symbol" : "symbol"
+
+export const copied: StringIndex = { ...source };
+>copied : StringIndex
+>{ ...source } : { value: number; [symbolKey]: string; }
+>source : { value: number; [symbolKey]: string; }
+
+declare function inferValue<Value>(value: { [key: string]: Value }): Value;
+>inferValue : <Value>(value: { [key: string]: Value; }) => Value
+>value : { [key: string]: Value; }
+>key : string
+
+export const inferredValue = inferValue(indexed);
+>inferredValue : number
+>inferValue(indexed) : number
+>inferValue : <Value>(value: { [key: string]: Value; }) => Value
+>indexed : StringIndex
+
+export const canonicalIndex: { [key: string]: number } = indexed;
+>canonicalIndex : { [key: string]: number; }
+>key : string
+>indexed : StringIndex
+
+export const clonedIndex: StringIndex = canonicalIndex;
+>clonedIndex : StringIndex
+>canonicalIndex : { [key: string]: number; }
+
+interface AnyIndex {
+    [key: Key]: any;
+>key : string
+}
+interface ObjectValue {
+    value: number;
+>value : number
+}
+declare const objectValue: ObjectValue;
+>objectValue : ObjectValue
+
+export const anyIndex: AnyIndex = objectValue;
+>anyIndex : AnyIndex
+>objectValue : ObjectValue
+
+declare const wrapped: String;
+>wrapped : String
+
+const primitive: Key = wrapped;
+>primitive : string
+>wrapped : String
+
+declare const unionValue: Key | number;
+>unionValue : string | number
+
+export const unionAssignment: Key | number = "value";
+>unionAssignment : string | number
+>"value" : "value"
+
+export const reducedUnion = typeof unionValue === "string" ? unionValue : "known";
+>reducedUnion : string
+>typeof unionValue === "string" ? unionValue : "known" : string
+>typeof unionValue === "string" : boolean
+>typeof unionValue : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>unionValue : string | number
+>"string" : "string"
+>unionValue : string
+>"known" : "known"
+
+declare const intersected: { [key: Key]: { first: number } } & { [key: "other" | string]: { second: string } };
+>intersected : { [key: string]: { first: number; }; } & { [key: string]: { second: string; }; }
+>key : string
+>first : number
+>key : string
+>second : string
+
+export const mergedIndex = intersected["value"]!;
+>mergedIndex : { first: number; } & { second: string; }
+>intersected["value"]! : { first: number; } & { second: string; }
+>intersected["value"] : { first: number; } & { second: string; }
+>intersected : { [key: string]: { first: number; }; } & { [key: string]: { second: string; }; }
+>"value" : "value"
+
+export const first = mergedIndex.first;
+>first : number
+>mergedIndex.first : number
+>mergedIndex : { first: number; } & { second: string; }
+>first : number
+
+export const second = mergedIndex.second;
+>second : string
+>mergedIndex.second : string
+>mergedIndex : { first: number; } & { second: string; }
+>second : string
+
+declare const incompatible: { [key: string]: string };
+>incompatible : { [key: string]: string; }
+>key : string
+
+const rejected: StringIndex = incompatible;
+>rejected : StringIndex
+>incompatible : { [key: string]: string; }
+

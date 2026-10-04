@@ -1929,6 +1929,9 @@ func getStringLiteralTypes(t *checker.Type, uniques *collections.Set[string], ty
 		uniques = &collections.Set[string]{}
 	}
 	t = skipConstraint(t, typeChecker)
+	if origin := typeChecker.GetTypeOrigin(t); origin != nil && origin.IsUnion() {
+		return getStringLiteralTypes(origin, uniques, typeChecker)
+	}
 	if t.IsUnion() {
 		var types []*checker.StringLiteralType
 		for _, elementType := range t.Types() {
