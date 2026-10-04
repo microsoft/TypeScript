@@ -1120,6 +1120,11 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 	members := make(ast.SymbolTable)
 	limitedConstraint := c.getLimitedConstraint(t)
 	for _, prop := range c.getPropertiesOfType(r.source) {
+		// Private and protected properties are never produced by keyof, so they have no counterpart in a
+		// reverse mapped type. Copying them would surface them as public properties of the inferred type.
+		if getDeclarationModifierFlagsFromSymbol(prop)&ast.ModifierFlagsNonPublicAccessibilityModifier != 0 {
+			continue
+		}
 		// In case of a reverse mapped type with an intersection constraint, if we were able to
 		// extract the filtering type literals we skip those properties that are not assignable to them,
 		// because the extra properties wouldn't get through the application of the mapped type anyway
