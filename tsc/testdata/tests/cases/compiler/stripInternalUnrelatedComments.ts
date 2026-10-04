@@ -60,6 +60,19 @@ export const x = 1;
 /** Public declaration. */
 export const publicValue = 2;
 
+export class InternalTypeParameter<
+    /** @internal */ T = unknown,
+    U = unknown
+> {}
+
+export class PublicTypeParameters<
+    // TODO: maybe make this @internal?
+    /** Public type parameter. */
+    T = unknown,
+    /** Public documentation mentioning `@internal`. */
+    U = unknown
+> {}
+
 // @filename: unrelatedJs.js
 export class Bar {
     /** @internal */
