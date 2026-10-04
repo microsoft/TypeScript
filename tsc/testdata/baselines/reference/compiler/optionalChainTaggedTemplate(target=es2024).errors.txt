@@ -1,0 +1,26 @@
+repro.ts(1,1): error TS2304: Cannot find name 'e'.
+repro.ts(2,1): error TS1005: ')' expected.
+siblings.ts(2,5): error TS1358: Tagged template expressions are not permitted in an optional chain.
+siblings.ts(3,5): error TS1358: Tagged template expressions are not permitted in an optional chain.
+siblings.ts(4,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
+
+
+==== repro.ts (2 errors) ====
+    e?.``(
+    ~
+!!! error TS2304: Cannot find name 'e'.
+    
+    
+!!! error TS1005: ')' expected.
+==== siblings.ts (3 errors) ====
+    declare var a: any;
+    a?.b`c`;
+        ~~~
+!!! error TS1358: Tagged template expressions are not permitted in an optional chain.
+    a?.b`c`();
+        ~~~
+!!! error TS1358: Tagged template expressions are not permitted in an optional chain.
+    a?.``.x;
+       ~~
+!!! error TS1358: Tagged template expressions are not permitted in an optional chain.
+    
