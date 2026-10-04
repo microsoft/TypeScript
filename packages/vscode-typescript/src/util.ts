@@ -299,7 +299,7 @@ async function getTsdkCandidates(options?: { nativeOnly?: boolean; filter?: (can
     return candidates.filter(options?.filter ?? (() => true)).sort(compareExplicitConfigValues);
 }
 
-async function pathHasTsserverJs(tsdkPath: string): Promise<boolean> {
+export async function pathHasTsserverJs(tsdkPath: string): Promise<boolean> {
     const resolved = workspaceResolve(tsdkPath);
     for (const candidate of [vscode.Uri.joinPath(resolved, "tsserver.js"), vscode.Uri.joinPath(resolved, "lib", "tsserver.js")]) {
         try {
