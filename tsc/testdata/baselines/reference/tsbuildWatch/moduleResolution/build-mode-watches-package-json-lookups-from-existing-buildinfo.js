@@ -168,6 +168,7 @@ declare const console: { log(msg: any): void; };
 
 Watch Registrations::
 Directory watches::
+  /home/src/tslibs/TS/Lib
   /user/username/projects/myproject
   /user/username/projects/myproject/node_modules
   /user/username/projects/myproject/node_modules/pkg2

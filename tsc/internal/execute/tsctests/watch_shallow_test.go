@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
@@ -132,4 +133,42 @@ func TestBuildWatchShallowProjectRecreatedRootFile(t *testing.T) {
 	assert.Assert(t, result.Watcher != nil)
 
 	deleteAndRecreateShallowRootFile(t, sys, result.Watcher)
+}
+
+func TestWatchShallowSymlinkTarget(t *testing.T) {
+	t.Parallel()
+	for _, mode := range []string{"watch", "build"} {
+		t.Run(mode, func(t *testing.T) {
+			t.Parallel()
+			for _, kind := range []string{"file", "directory"} {
+				t.Run(kind, func(t *testing.T) {
+					t.Parallel()
+					files := FileMap{
+						"/app/tsconfig.json": `{"compilerOptions":{"noEmit":true,"types":[]},"files":["index.ts","common/s.ts"]}`,
+						"/app/index.ts":      `import { s } from "./common/s"; const n: number = s;`,
+						"/shared/s.ts":       `export const s = 1;`,
+					}
+					if kind == "file" {
+						files["/app/common/s.ts"] = vfstest.Symlink("/shared/s.ts")
+					} else {
+						files["/app/common"] = vfstest.Symlink("/shared")
+					}
+					sys := newTestSys(&tscInput{files: files, cwd: "/app"}, false)
+					args := []string{"--watch"}
+					if mode == "build" {
+						args = []string{"--build", "--watch"}
+					}
+					ctx, cancel := context.WithCancel(t.Context())
+					defer cancel()
+					result := execute.CommandLine(ctx, sys, args, sys)
+					assert.Assert(t, result.Watcher != nil)
+					assertShallowProjectWatches(t, sys)
+					sys.writeFileNoError("/shared/s.ts", `export const s = "changed";`)
+					sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: "/shared/s.ts"}})
+					result.Watcher.DoCycle()
+					assert.Assert(t, strings.Contains(sys.currentWrite.String(), "TS2322"), sys.currentWrite.String())
+				})
+			}
+		})
+	}
 }
