@@ -605,14 +605,13 @@ func (m *MapFS) Remove(path string) error {
 func (m *MapFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	canonical := m.getCanonicalPath(path)
-	canonicalString := string(canonical)
-	fileInfo := m.m[canonicalString]
-	if fileInfo == nil {
-		// file does not exist
-		return fs.ErrNotExist
+
+	// Like [os.Chtimes], follow symlinks, including symlinked parent directories.
+	file, _, err := m.getFollowingSymlinks(m.getCanonicalPath(path))
+	if err != nil {
+		return err
 	}
-	fileInfo.ModTime = mTime
+	file.ModTime = mTime
 	return nil
 }
 
