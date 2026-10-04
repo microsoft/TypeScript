@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/malformedObjectDestructuringAssignmentESDecorators.ts] ////
+
+=== malformedObjectDestructuringAssignmentESDecorators.ts ===
+declare function dec(...args: any[]): any;
+>dec : (...args: any[]) => any
+>args : any[]
+
+@dec
+>dec : (...args: any[]) => any
+
+class C {
+>C : C
+
+    static {
+        ({ m() {}, get g() { return 1; }, set s(v) {} } = this);
+>({ m() {}, get g() { return 1; }, set s(v) {} } = this) : typeof C
+>{ m() {}, get g() { return 1; }, set s(v) {} } = this : typeof C
+>{ m() {}, get g() { return 1; }, set s(v) {} } : { m(): void; readonly g: number; s: any; }
+>m : () => void
+>g : number
+>1 : 1
+>s : any
+>v : any
+>this : typeof C
+    }
+}
+
