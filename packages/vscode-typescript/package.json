@@ -368,9 +368,9 @@
         "package.nls.json"
     ],
     "scripts": {
-        "build": "tsc && npm run bundle",
+        "build": "tsc -b && npm run bundle",
         "bundle": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.bundle.js --sourcemap",
-        "test": "tsc -p test && esbuild test/index.test.ts --bundle --platform=node --format=cjs --outfile=dist/test/index.test.cjs && node --test dist/test/index.test.cjs",
+        "test": "tsc -b test && esbuild test/index.test.ts --bundle --platform=node --format=cjs --outfile=dist/test/index.test.cjs && node --test dist/test/index.test.cjs",
         "watch": "npm run bundle -- --watch",
         "generateLocTest": "node ../../tools/scripts/gen/extensionLocalization.mts pseudo",
         "generateLocBundle": "node ../../tools/scripts/gen/extensionLocalization.mts bundle",
@@ -383,6 +383,7 @@
         "vscode-tas-client": "^0.3.3"
     },
     "devDependencies": {
+        "@typescript/typescript": "0.0.0",
         "@types/vscode": "~1.125.0",
         "@typescript/bundled-typescript": "npm:typescript@7.0.2",
         "@vscode/vsce": "4.0.0",

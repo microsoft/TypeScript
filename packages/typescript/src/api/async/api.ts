@@ -30,7 +30,9 @@ import {
     type NamedTupleMember,
     type Node,
     type ParameterDeclaration,
-    type Path,
+    type PathKey,
+    type RootedDirectoryPath,
+    type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
     type SyntaxKind,
@@ -45,8 +47,11 @@ import {
 import {
     decodeNode,
     getNodeId,
-    parseNodeHandle,
+    parseNodeHandleFromCompiler,
+    readParseOptionsKey,
+    readSourceFileHash,
     readSourceFileLease,
+    RemoteNode,
     RemoteSourceFile,
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
@@ -55,9 +60,13 @@ import type {
     LSPConnectionOptions,
 } from "../options.ts";
 import {
-    createGetCanonicalFileName,
-    toPath,
+    canonicalize,
+    CaseSensitivity,
+    pathKey,
+    toRootedDirectoryPath,
+    toRootedPath,
 } from "../path.ts";
+import { prepareCompilerOptions } from "../prepareCompilerOptions.generated.ts";
 import type {
     BuildResponse,
     CleanBuildResponse,
@@ -89,6 +98,7 @@ import type {
     ProjectReference,
     ProjectResponse,
     ProtocolSymbolResponse,
+    RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
     ResolutionMode,
@@ -124,6 +134,7 @@ import {
 import type {
     RequestTiming,
     TimingAccumulators,
+    TimingCollector,
     TimingInfo,
 } from "../timing.ts";
 import {
@@ -228,6 +239,7 @@ export type {
     ParsedCommandLine,
     ProjectId,
     ProjectReference,
+    RawCompilerOptions,
     ReadConfigFileResponse,
     RequestTiming,
     ResolutionMode,
@@ -273,8 +285,9 @@ export type InProgressSnapshot = number & { readonly [inProgressSnapshotBrand]: 
 
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => StaticModuleResolution | undefined | Promise<StaticModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => StaticModuleResolution | undefined;
 
-export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
+export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver" | "projectReferences"> & {
     moduleResolver?: ModuleResolver | undefined;
+    projectReferences?: readonly (Omit<ProjectReference, "path"> & { path: string; })[] | undefined;
 };
 export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
 export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
@@ -316,7 +329,7 @@ function registerModuleResolutionCallback(client: Client, callback: ResolveModul
 }
 
 export interface TranspileOptions {
-    compilerOptions?: CompilerOptions | undefined;
+    compilerOptions?: RawCompilerOptions | undefined;
     fileName?: string | undefined;
     reportDiagnostics?: boolean | undefined;
 }
@@ -334,12 +347,14 @@ export interface TranspileOutput {
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
-    private client: Client;
-    private sourceFileCache: SourceFileCache<Symbol>;
-    private toPath: ((fileName: string) => Path) | undefined;
-    private currentDirectory: string | undefined;
+    /** @internal */
+    readonly client: Client;
+    /** @internal */
+    readonly sourceFileCache: SourceFileCache<Symbol>;
+    private toPath: ((fileName: string, basePath?: string) => PathKey) | undefined;
     private readonly decoder = new Wtf8Decoder();
-    private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
+    private currentDirectory: RootedDirectoryPath | undefined;
+    private caseSensitivity: CaseSensitivity | undefined;
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Map<number, Snapshot> = new Map();
@@ -353,6 +368,56 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
         this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
+    }
+
+    /**
+     * Looks up a remote declaration's binder symbol. Throws for synthesized or configuration ASTs.
+     */
+    async getSymbol(declaration: Declaration): Promise<Symbol> {
+        const file = getRemoteSourceFile(declaration);
+        if (!file) throw new Error(`Source file not found for declaration`);
+        const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
+        if (!record) throw new Error(`Cached source file not found for declaration`);
+        const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
+        const cached = record.symbolsByDeclarationNodeIndex.get(index);
+        if (cached) return cached;
+        // @sync-only-start
+        // return this.fetchDeclarationSymbol(record, index);
+        // @sync-only-end
+        // @sync-skip-block-start
+        let request = record.declarationSymbolRequests.get(index);
+        if (!request) {
+            request = this.fetchDeclarationSymbol(record, index);
+            record.declarationSymbolRequests.set(index, request);
+        }
+        try {
+            return await request;
+        }
+        finally {
+            record.declarationSymbolRequests.delete(index);
+        }
+        // @sync-skip-block-end
+    }
+
+    private async fetchDeclarationSymbol(record: CachedSourceFile<Symbol>, index: number): Promise<Symbol> {
+        const data = await this.client.apiRequest("getSymbolOfDeclaration", {
+            file: record.descriptor,
+            index,
+        });
+        validateSymbolResponse(data);
+        const reference = data.reference;
+        if (reference.kind !== SymbolOwnerKind.File) {
+            throw new Error(`Symbol ${reference.id} is not file-owned`);
+        }
+        const fileOwner: SourceFileOwner = { record, api: this };
+        const symbol = this.sourceFileCache.getOrCreateSymbol(
+            record,
+            reference.file,
+            reference.id,
+            () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
+        );
+        record.symbolsByDeclarationNodeIndex.set(index, symbol);
+        return symbol;
     }
 
     /**
@@ -384,11 +449,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private async initializeWorker(): Promise<void> {
         try {
             const response = await this.client.apiRequest("initialize", null);
-            const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
-            const currentDirectory = response.currentDirectory;
-            this.getCanonicalFileNameWorker = getCanonicalFileName;
-            this.currentDirectory = currentDirectory;
-            this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+            this.currentDirectory = response.currentDirectory;
+            this.caseSensitivity = response.caseSensitivity;
+            this.toPath = (fileName: string, basePath = response.currentDirectory) => pathKey(toRootedPath(fileName, toRootedDirectoryPath(basePath, response.currentDirectory)), response.caseSensitivity);
             this.initialized = true;
         }
         catch (error) {
@@ -397,7 +460,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         }
     }
 
-    getCurrentDirectory(): string {
+    getCurrentDirectory(): RootedDirectoryPath {
         if (this.currentDirectory === undefined) {
             throw new Error("API has not been initialized");
         }
@@ -405,10 +468,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     getCanonicalFileName(fileName: string): string {
-        if (this.getCanonicalFileNameWorker === undefined) {
+        return canonicalize(fileName, this.getCaseSensitivity());
+    }
+
+    private getCaseSensitivity(): CaseSensitivity {
+        if (this.caseSensitivity === undefined) {
             throw new Error("API has not been initialized");
         }
-        return this.getCanonicalFileNameWorker(fileName);
+        return this.caseSensitivity;
     }
 
     getNewLine(): string {
@@ -420,6 +487,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
             ...buildOrchestratorOptions,
             ...buildOrchestratorOptions.overrideCompilerOptions,
+            cwd: buildOrchestratorOptions.cwd === undefined
+                ? undefined
+                : toRootedDirectoryPath(buildOrchestratorOptions.cwd, this.getCurrentDirectory()),
             rootNames,
         });
 
@@ -501,7 +571,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const lease = readSourceFileLease(view);
         try {
-            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector());
+            const decoded = new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector(), this);
             return this.addSourceFileLease(decoded, lease);
         }
         catch (error) {
@@ -520,7 +590,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private addSourceFileLease(sourceFile: RemoteSourceFile, lease: number): RetainedSourceFile {
         const cached = this.sourceFileCache.setForLease(sourceFile, lease);
-        const retained = new RetainedSourceFile(cached as unknown as SourceFile, lease, this.client, () => {
+        const retained = new RetainedSourceFile(cached as unknown as SourceFile, lease, () => {
             this.activeSourceFileLeases.delete(lease);
             this.sourceFileCache.releaseLease(lease);
         });
@@ -561,8 +631,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
         const snapshot = new Snapshot(
             data,
-            this.client,
-            this.sourceFileCache,
             this.toPath!,
             this,
             () => {
@@ -594,8 +662,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
         const snapshot = new Snapshot(
             data,
-            this.client,
-            this.sourceFileCache,
             this.toPath!,
             this,
             () => {
@@ -613,11 +679,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         if (!params) return undefined;
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
-            const { moduleResolver, ...rest } = options;
+            const { moduleResolver, projectReferences, ...rest } = options;
             moduleResolver?.ensureNotDisposed();
             return {
                 ...rest,
                 moduleResolver: moduleResolver?.id,
+                projectReferences: projectReferences?.map(reference => ({
+                    ...reference,
+                    path: toRootedPath(reference.path, this.getCurrentDirectory()),
+                })),
             };
         };
         return {
@@ -675,8 +745,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         }
         const snapshot = new Snapshot(
             data,
-            this.client,
-            this.sourceFileCache,
             this.toPath!,
             this,
             () => {
@@ -717,14 +785,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         }
     }
 
-    async createModuleResolver(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
+    async createModuleResolver(compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
         await this.ensureInitialized();
         const callback = options?.resolveModuleName
             ? registerModuleResolutionCallback(this.client, options.resolveModuleName, id => this.activeSnapshots.get(id))
             : undefined;
         try {
             const id = await this.client.apiRequest("createModuleResolver", {
-                compilerOptions,
+                compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
                 moduleResolutions: options?.moduleResolutions,
                 resolveModuleNameCallback: callback?.name,
             });
@@ -785,7 +853,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     /** Creates a program from current filesystem state. */
     async createProgram(
         rootFiles: readonly DocumentIdentifier[],
-        compilerOptions: CompilerOptions,
+        compilerOptions: RawCompilerOptions,
         createProgramOptions?: CreateProgramOptions,
     ): Promise<Program> {
         await this.ensureInitialized();
@@ -816,19 +884,48 @@ function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescripto
     };
 }
 
+function getRemoteSourceFile(node: Node): RemoteSourceFile | undefined {
+    if (!(node instanceof RemoteNode)) return undefined;
+    const file = node.getSourceFile();
+    return file instanceof RemoteSourceFile && file.api ? file : undefined;
+}
+
+function getNodeAPI(node: Node): API<boolean> | undefined {
+    const api = getRemoteSourceFile(node)?.api;
+    if (!api) return undefined;
+    if (!(api instanceof API)) throw new Error("Source file does not belong to the async API"); // @sync: if (!(api instanceof API)) throw new Error("Source file does not belong to the sync API");
+    return api;
+}
+
+/** Looks up a remote declaration's binder symbol through its API. Throws for non-remote declarations. */
+export async function getSymbol(declaration: Declaration): Promise<Symbol> {
+    const api = getNodeAPI(declaration);
+    if (!api) throw new Error("Source file not found for declaration");
+    return api.getSymbol(declaration);
+}
+
+// @sync-only-start
+// export declare namespace getSymbol {
+//     function gen(declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+// }
+// getSymbol.gen = function* (declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+//     const api = getNodeAPI(declaration);
+//     if (!api) throw new Error("Source file not found for declaration");
+//     return yield* api.getSymbol.gen(declaration);
+// };
+// @sync-only-end
+
 /** An independently retained source file and its disposable remote-lifetime lease. */
 export class RetainedSourceFile {
     readonly sourceFile: SourceFile;
     private readonly lease: number;
-    private readonly client: Client;
     private readonly onDispose: () => void;
     private disposed = false;
     private disposePromise: Promise<void> | undefined;
 
-    constructor(sourceFile: SourceFile, lease: number, client: Client, onDispose: () => void) {
+    constructor(sourceFile: SourceFile, lease: number, onDispose: () => void) {
         this.sourceFile = sourceFile;
         this.lease = lease;
-        this.client = client;
         this.onDispose = onDispose;
     }
 
@@ -842,9 +939,11 @@ export class RetainedSourceFile {
 
     private async disposeWorker(): Promise<void> {
         if (this.disposed) return;
+        const api = getNodeAPI(this.sourceFile);
+        if (!api) throw new Error("Retained source file has no owning API");
         this.disposed = true;
         try {
-            await this.client.apiRequest("releaseSourceFile", { lease: this.lease });
+            await api.client.apiRequest("releaseSourceFile", { lease: this.lease });
         }
         finally {
             this.onDispose();
@@ -867,13 +966,13 @@ export class InternalAPI {
         await this.client.apiRequest("startCPUProfile", { dir });
     }
 
-    async stopCPUProfile(): Promise<string> {
+    async stopCPUProfile(): Promise<RootedFilePath> {
         await this.ensureInitialized();
         const result = await this.client.apiRequest("stopCPUProfile", null);
         return result.file;
     }
 
-    async saveHeapProfile(dir: string): Promise<string> {
+    async saveHeapProfile(dir: string): Promise<RootedFilePath> {
         await this.ensureInitialized();
         const result = await this.client.apiRequest("saveHeapProfile", { dir });
         return result.file;
@@ -944,8 +1043,8 @@ export class Snapshot {
     readonly id: number;
     readonly operation: SnapshotOperation;
     private projectMap: Map<ProjectId, Project>;
-    private toPath: (fileName: string) => Path;
-    private client: Client;
+    private toPath: (fileName: string, basePath?: string) => PathKey;
+    private readonly api: API<boolean>;
     private disposed: boolean = false;
     private disposePromise: Promise<void> | undefined;
     private onDispose: () => void;
@@ -954,18 +1053,13 @@ export class Snapshot {
     private updateSnapshot: SnapshotUpdater;
     readonly internal: SnapshotInternalAPI;
 
-    constructor(
-        data: CreateSnapshotResponse,
-        client: Client,
-        sourceFileCache: SourceFileCache<Symbol>,
-        toPath: (fileName: string) => Path,
-        formatDiagnosticsHost: FormatDiagnosticsHost,
-        onDispose: () => void,
-        updateSnapshot: SnapshotUpdater,
-        baseSnapshot?: Snapshot,
-    ) {
+    private get client(): Client {
+        return this.api.client;
+    }
+
+    constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot) {
         this.id = data.snapshot;
-        this.client = client;
+        this.api = api;
         this.toPath = toPath;
         this.onDispose = onDispose;
         this.updateSnapshot = updateSnapshot;
@@ -981,7 +1075,7 @@ export class Snapshot {
         this.snapshotRegistry = new SnapshotObjectRegistry(this.id);
 
         for (const projData of this.projectDataMap.values()) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
+            const project = new Project(projData, this.id, toPath, api, this.snapshotRegistry);
             this.projectMap.set(projData.id, project);
         }
 
@@ -990,7 +1084,7 @@ export class Snapshot {
             openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
         };
 
-        this.internal = new SnapshotInternalAPI(this.id, client);
+        this.internal = new SnapshotInternalAPI(this.id, api.client);
     }
 
     getProjects(): readonly Project[] {
@@ -1000,7 +1094,8 @@ export class Snapshot {
 
     getConfiguredProject(configFileName: string): Project<ConfiguredProjectId> | undefined {
         this.ensureNotDisposed();
-        return this.projectMap.get(this.toPath(configFileName) as ConfiguredProjectId) as Project<ConfiguredProjectId> | undefined;
+        const id = this.toPath(configFileName) as ConfiguredProjectId;
+        return this.projectMap.get(id) as Project<ConfiguredProjectId> | undefined;
     }
 
     getProject<Id extends ProjectId>(projectId: Id): Project<Id> | undefined {
@@ -1168,27 +1263,25 @@ class SnapshotObjectRegistry {
 }
 
 class ProjectObjectRegistry {
-    private client: Client;
     private snapshotId: number;
     readonly project: Project;
     private snapshotRegistry: SnapshotObjectRegistry;
-    private sourceFileCache: SourceFileCache<Symbol>;
     private types: Map<number, TypeObject> = new Map();
     private signatures: Map<number, Signature> = new Map();
     private disposed = false;
 
-    constructor(
-        client: Client,
-        snapshotId: number,
-        project: Project,
-        snapshotRegistry: SnapshotObjectRegistry,
-        sourceFileCache: SourceFileCache<Symbol>,
-    ) {
-        this.client = client;
+    private get client(): Client {
+        return this.project.api.client;
+    }
+
+    private get sourceFileCache(): SourceFileCache<Symbol> {
+        return this.project.api.sourceFileCache;
+    }
+
+    constructor(snapshotId: number, project: Project, snapshotRegistry: SnapshotObjectRegistry) {
         this.snapshotId = snapshotId;
         this.project = project;
         this.snapshotRegistry = snapshotRegistry;
-        this.sourceFileCache = sourceFileCache;
         snapshotRegistry.addProjectRegistry(this);
     }
 
@@ -1203,7 +1296,7 @@ class ProjectObjectRegistry {
         return this.sourceFileCache.getOrCreateSymbol(record, reference.file, reference.id, () =>
             new Symbol(data, {
                 kind: SymbolOwnerKind.File,
-                owner: { record, cache: this.sourceFileCache, client: this.client },
+                owner: { record, api: this.project.api },
             }));
     }
 
@@ -1214,7 +1307,7 @@ class ProjectObjectRegistry {
             return this.snapshotRegistry.getSymbol(reference.id);
         }
         const record = this.sourceFileCache.findRecord(reference.file);
-        const symbol = record?.symbols.get(reference.id);
+        const symbol = record?.symbolsById.get(reference.id);
         if (record && symbol) {
             this.sourceFileCache.retainRecord(record, this.snapshotId, this.project.id);
         }
@@ -1438,32 +1531,26 @@ class ProjectObjectRegistry {
 }
 
 export class Project<Id extends ProjectId = ProjectId> {
+    /** @internal */
+    readonly api: API<boolean>;
     readonly id: Id;
-    readonly configFileName: string;
-    readonly currentDirectory: string;
+    readonly configFileName: RootedFilePath | undefined;
+    readonly currentDirectory: RootedDirectoryPath;
     readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
     /** @deprecated Use `parsedCommandLine.fileNames`. */
-    readonly rootFiles: readonly string[];
+    readonly rootFiles: readonly RootedFilePath[];
 
     readonly program: Program<Id>;
     readonly checker: Checker;
     readonly languageService: LanguageService;
-    private client: Client;
     private snapshotId: number;
 
-    constructor(
-        data: ProjectResponse,
-        snapshotId: number,
-        client: Client,
-        sourceFileCache: SourceFileCache<Symbol>,
-        toPath: (fileName: string) => Path,
-        formatDiagnosticsHost: FormatDiagnosticsHost,
-        snapshotRegistry: SnapshotObjectRegistry,
-    ) {
+    constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
+        this.api = api;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
         this.dirty = data.dirty;
@@ -1473,24 +1560,11 @@ export class Project<Id extends ProjectId = ProjectId> {
         this.parsedCommandLine = data.parsedCommandLine;
         this.compilerOptions = this.parsedCommandLine.options;
         this.rootFiles = this.parsedCommandLine.fileNames;
-        this.client = client;
         this.snapshotId = snapshotId;
-        this.program = new Program(
-            snapshotId,
-            this,
-            client,
-            sourceFileCache,
-            toPath,
-            formatDiagnosticsHost,
-        );
-        const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry, sourceFileCache);
-        this.checker = new Checker(
-            snapshotId,
-            this,
-            client,
-            objectRegistry,
-        );
-        this.languageService = new LanguageService(snapshotId, this, client, objectRegistry);
+        this.program = new Program(snapshotId, this, toPath);
+        const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
+        this.checker = new Checker(snapshotId, this, objectRegistry);
+        this.languageService = new LanguageService(snapshotId, this, objectRegistry);
     }
 
     /** @deprecated Use `languageService.getImportAdderEdits`. */
@@ -1511,18 +1585,15 @@ export class Project<Id extends ProjectId = ProjectId> {
 export class LanguageService {
     private snapshotId: number;
     private project: Project;
-    private client: Client;
     private objectRegistry: ProjectObjectRegistry;
 
-    constructor(
-        snapshotId: number,
-        project: Project,
-        client: Client,
-        objectRegistry: ProjectObjectRegistry,
-    ) {
+    private get client(): Client {
+        return this.project.api.client;
+    }
+
+    constructor(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.snapshotId = snapshotId;
         this.project = project;
-        this.client = client;
         this.objectRegistry = objectRegistry;
     }
 
@@ -1622,38 +1693,33 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     readonly snapshotId: number;
     readonly id: Id;
     private readonly project: Project<Id>;
-    private readonly client: Client;
-    private readonly sourceFileCache: SourceFileCache<Symbol>;
-    private readonly toPath: (fileName: string) => Path;
-    private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
+    private readonly toPath: (fileName: string, basePath?: string) => PathKey;
     private readonly decoder = new Wtf8Decoder();
-    private readonly sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
+    private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
 
-    constructor(
-        snapshotId: number,
-        project: Project<Id>,
-        client: Client,
-        sourceFileCache: SourceFileCache<Symbol>,
-        toPath: (fileName: string) => Path,
-        formatDiagnosticsHost: FormatDiagnosticsHost,
-    ) {
+    private get client(): Client {
+        return this.project.api.client;
+    }
+
+    private get sourceFileCache(): SourceFileCache<Symbol> {
+        return this.project.api.sourceFileCache;
+    }
+
+    constructor(snapshotId: number, project: Project<Id>, toPath: (fileName: string, basePath?: string) => PathKey) {
         this.snapshotId = snapshotId;
         this.id = project.id;
         this.project = project;
-        this.client = client;
-        this.sourceFileCache = sourceFileCache;
         this.toPath = toPath;
-        this.formatDiagnosticsHost = formatDiagnosticsHost;
     }
 
-    getCurrentDirectory(): string {
+    getCurrentDirectory(): RootedDirectoryPath {
         return this.project.currentDirectory;
     }
 
     getCanonicalFileName(fileName: string): string {
-        return this.formatDiagnosticsHost.getCanonicalFileName(fileName);
+        return this.project.api.getCanonicalFileName(fileName);
     }
 
     getNewLine(): string {
@@ -1685,8 +1751,22 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
         const fileName = resolveFileName(file);
-        const path = this.toPath(fileName);
+        const path = this.pathKeyForFileName(fileName);
+        return this.getSourceFileWorker(file, path);
+    }
 
+    /**
+     * Returns the source file for an already-canonical path.
+     *
+     * @internal
+     */
+    getSourceFileByPath(path: PathKey): Promise<SourceFile | undefined> {
+        // The wire format is a string, but the cache key remains the supplied
+        // PathKey and is never treated as a RootedPath.
+        return this.getSourceFileWorker(path, path);
+    }
+
+    private async getSourceFileWorker(file: DocumentIdentifier, path: PathKey): Promise<SourceFile | undefined> {
         // Check if we already have a retained cache entry for this (snapshot, project) pair
         const retained = this.sourceFileCache.getRetained(path, this.snapshotId, this.project.id);
         if (retained) {
@@ -1704,7 +1784,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         }
 
         // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-        const decoded = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector());
+        const decoded = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector(), this.project.api);
         return this.sourceFileCache.set(decoded, this.snapshotId, this.project.id) as unknown as SourceFile;
     }
 
@@ -1783,7 +1863,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return result ?? undefined;
     }
 
-    async getSourceFileNames(): Promise<readonly string[]> {
+    async getSourceFileNames(): Promise<readonly RootedFilePath[]> {
         const data = await this.client.apiRequest("getSourceFileNames", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1797,7 +1877,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
      * `Program` instance.
      */
     getSourceFileMetadata(file: DocumentIdentifier): Promise<SourceFileMetadata | undefined> {
-        return this.getSourceFileMetadataByPath(this.toPath(resolveFileName(file)));
+        return this.getSourceFileMetadataByPath(this.pathKeyForFileName(resolveFileName(file)));
     }
 
     /**
@@ -1806,7 +1886,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
      * the file name to path conversion. Metadata is fetched lazily per file and cached on
      * this `Program` instance.
      */
-    getSourceFileMetadataByPath(path: Path): Promise<SourceFileMetadata | undefined> {
+    getSourceFileMetadataByPath(path: PathKey): Promise<SourceFileMetadata | undefined> {
         let metadata = this.sourceFileMetadataCache.get(path);
         if (metadata === undefined) {
             metadata = this.fetchSourceFileMetadata(path);
@@ -1815,13 +1895,19 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return metadata;
     }
 
-    private async fetchSourceFileMetadata(path: Path): Promise<SourceFileMetadata | undefined> {
+    private async fetchSourceFileMetadata(path: PathKey): Promise<SourceFileMetadata | undefined> {
+        // PathKey is serialized as a string; the server deliberately treats all
+        // client-provided path text as untrusted input.
         const data = await this.client.apiRequest("getSourceFileMetadata", {
             snapshot: this.snapshotId,
             project: this.project.id,
             file: path,
         });
         return data ?? undefined;
+    }
+
+    private pathKeyForFileName(fileName: string): PathKey {
+        return this.toPath(fileName, this.project.currentDirectory);
     }
 
     /**
@@ -1848,7 +1934,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
      * Get all config source file names associated with this program's project config.
      * Includes the root config file and any extended config files.
      */
-    async getConfigFileNames(): Promise<readonly string[]> {
+    async getConfigFileNames(): Promise<readonly RootedFilePath[]> {
         const data = await this.client.apiRequest("getConfigFileNames", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1870,7 +1956,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             return undefined;
         }
 
-        return new RemoteSourceFile(binaryData, this.decoder) as unknown as SourceFile;
+        return new RemoteSourceFile(binaryData, this.decoder, undefined, this.project.api) as unknown as SourceFile;
     }
 
     /**
@@ -2154,7 +2240,7 @@ export class BuildOrchestrator {
 }
 
 function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
-    const outputFiles = new Map<string, EmitOutputFile>();
+    const outputFiles = new Map<RootedFilePath, EmitOutputFile>();
     for (const { fileName, ...outputFile } of response.outputFiles) {
         outputFiles.set(fileName, outputFile);
     }
@@ -2168,25 +2254,66 @@ function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
 export class Checker {
     private snapshotId: number;
     private project: Project;
-    private client: Client;
     private objectRegistry: ProjectObjectRegistry;
     private wellKnownSymbols: Promise<{ unknown: number; undefined: number; arguments: number; }> | undefined;
     private wellKnownSignatures: Promise<{ unknown: number; }> | undefined;
 
-    constructor(
-        snapshotId: number,
-        project: Project,
-        client: Client,
-        objectRegistry: ProjectObjectRegistry,
-    ) {
+    private get client(): Client {
+        return this.project.api.client;
+    }
+
+    constructor(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.snapshotId = snapshotId;
         this.project = project;
-        this.client = client;
         this.objectRegistry = objectRegistry;
     }
 
     dispose(): void {
         this.objectRegistry.clear();
+    }
+
+    /** Get the merged symbol, or the original symbol if it has not been merged. */
+    async getMergedSymbol(symbol: Symbol): Promise<Symbol> {
+        const data = await this.client.apiRequest("getMergedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
+    }
+
+    /**
+     * Get a node's merged symbol. For a declaration, prefer
+     * {@link Checker.getSymbolOfDeclaration} for a non-nullable result.
+     */
+    async getSymbolOfNode(node: Node): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest("getSymbolOfNode", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    /** Get a declaration's merged symbol. */
+    async getSymbolOfDeclaration(node: Declaration): Promise<Symbol> {
+        const data = await this.client.apiRequest("getSymbolOfDeclarationForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            location: getNodeId(node),
+        });
+        // Declarations normally have symbols, but preserve unexpected null results at runtime.
+        return (data && this.objectRegistry.getOrCreateSymbol(data))!;
+    }
+
+    /** Get a symbol's merged parent, if any. */
+    async getParentOfSymbol(symbol: Symbol): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest("getParentOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.reference,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     getSymbolAtLocation(node: Node): Promise<Symbol | undefined>;
@@ -3087,10 +3214,10 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly fileOwner: SourceFileOwner | undefined;
     readonly index: number;
     readonly kind: SyntaxKind;
-    readonly path: Path;
+    readonly path: PathKey;
 
     constructor(handle: string, canonicalProject: Project | undefined, fileOwner?: SourceFileOwner) {
-        const parsed = parseNodeHandle(handle);
+        const parsed = parseNodeHandleFromCompiler(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
         this.path = parsed.path;
@@ -3110,7 +3237,7 @@ export class NodeHandle<out T extends Node = Node> {
             return sourceFile.getOrCreateNodeAtIndex(this.index) as T | undefined;
         }
         if (!project) throw new Error(`Node handle for '${this.path}' has no project context`);
-        const sourceFile = await project.program.getSourceFile(this.path);
+        const sourceFile = await project.program.getSourceFileByPath(this.path);
         if (!sourceFile) {
             return undefined;
         }
@@ -3118,9 +3245,12 @@ export class NodeHandle<out T extends Node = Node> {
     }
 
     private async fetchOwnerFile(fileOwner: SourceFileOwner): Promise<RemoteSourceFile> {
-        const data = await fileOwner.client.apiRequestBinary("getCachedSourceFile", { file: fileOwner.record.descriptor });
+        const data = await fileOwner.api.client.apiRequestBinary("getCachedSourceFile", { file: fileOwner.record.descriptor });
         if (!data) throw new Error(`Source file '${fileOwner.record.descriptor.fileName}' is not available`);
-        return fileOwner.cache.attachFile(fileOwner.record, new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.client.getTimingCollector()));
+        return fileOwner.api.sourceFileCache.attachFile(
+            fileOwner.record,
+            new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.api.client.getTimingCollector(), fileOwner.api),
+        );
     }
 }
 
@@ -3142,11 +3272,10 @@ export interface SignatureUsage {
     call?: NodeHandle | undefined;
 }
 
-/** A cached source-file record and the dependencies needed to materialize or extend it. */
+/** A cached source-file record and its owning API. */
 interface SourceFileOwner {
     readonly record: CachedSourceFile<Symbol>;
-    readonly cache: SourceFileCache<Symbol>;
-    readonly client: Client;
+    readonly api: API<boolean>;
 }
 
 type SymbolStorage =
@@ -3244,9 +3373,9 @@ export class Symbol {
         }
         const fileOwner = this.storage.owner;
         // A file-owned symbol's relationships are always owned by the same file.
-        const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbols.get(reference.id) : undefined;
+        const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbolsById.get(reference.id) : undefined;
         if (cached) return cached;
-        const data = await fileOwner.client.apiRequest(method, { symbol: this.reference });
+        const data = await fileOwner.api.client.apiRequest(method, { symbol: this.reference });
         if (!data) throw new Error(`${method} returned null symbol for Symbol ${this.id}`);
         return this.internFileSymbol(fileOwner, data);
     }
@@ -3256,7 +3385,7 @@ export class Symbol {
             return this.storage.registry.fetchSymbols(this, method);
         }
         const fileOwner = this.storage.owner;
-        const data = await fileOwner.client.apiRequest(method, { symbol: this.reference });
+        const data = await fileOwner.api.client.apiRequest(method, { symbol: this.reference });
         return data?.map(symbol => this.internFileSymbol(fileOwner, symbol)) ?? [];
     }
 
@@ -3264,7 +3393,7 @@ export class Symbol {
         validateSymbolResponse(data);
         const reference = data.reference;
         if (reference.kind !== SymbolOwnerKind.File) throw new Error(`Symbol ${reference.id} is not file-owned`);
-        return fileOwner.cache.getOrCreateSymbol(fileOwner.record, reference.file, reference.id, () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }));
+        return fileOwner.api.sourceFileCache.getOrCreateSymbol(fileOwner.record, reference.file, reference.id, () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }));
     }
 }
 

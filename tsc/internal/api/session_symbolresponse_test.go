@@ -17,9 +17,10 @@ import (
 
 func parseAndBind(t *testing.T, fileName string, text string) *ast.SourceFile {
 	t.Helper()
+	rootedFileName := tspath.ToRootedFilePath(fileName, "/")
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: fileName,
-		Path:     tspath.Path(fileName),
+		FileName: rootedFileName,
+		PathKey:  tspath.CaseSensitive.PathKey(rootedFileName.AsPath()),
 	}, text, core.ScriptKindTS)
 	binder.BindSourceFile(sourceFile)
 	return sourceFile
@@ -94,7 +95,7 @@ func TestContentMappedSymbolsAreSnapshotOwned(t *testing.T) {
 	t.Parallel()
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/component.vue.ts",
-		Path:     tspath.Path("/component.vue.ts"),
+		PathKey:  "/component.vue.ts",
 	}, `export class C { property = 1 }`, core.ScriptKindTS)
 	sourceFile.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{ContentMapper: "mapper"})
 	binder.BindSourceFile(sourceFile)

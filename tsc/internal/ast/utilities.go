@@ -2006,7 +2006,7 @@ func IsExpressionNode(node *Node) bool {
 		KindJsxFragment, KindYieldExpression, KindAwaitExpression:
 		return true
 	case KindMetaProperty:
-		// `import.defer` in `import.defer(...)` is not an expression
+		// `import.<phase>` in `import.<phase>(...)` is not an expression
 		return !IsImportCall(node.Parent) || node.Parent.Expression() != node
 	case KindExpressionWithTypeArguments:
 		return !IsHeritageClause(node.Parent)
@@ -2147,7 +2147,35 @@ func IsImportCall(node *Node) bool {
 		return false
 	}
 	e := node.Expression()
-	return e.Kind == KindImportKeyword || IsMetaProperty(e) && e.AsMetaProperty().KeywordToken == KindImportKeyword && e.Text() == "defer"
+	return e.Kind == KindImportKeyword || IsImportPhaseMetaProperty(e)
+}
+
+func IsImportPhaseMetaProperty(node *Node) bool {
+	return IsImportDeferMetaProperty(node) || IsImportSourceMetaProperty(node)
+}
+
+func IsImportDeferMetaProperty(node *Node) bool {
+	return isImportMetaProperty(node, "defer")
+}
+
+func IsImportSourceMetaProperty(node *Node) bool {
+	return isImportMetaProperty(node, "source")
+}
+
+func isImportMetaProperty(node *Node, name string) bool {
+	return IsMetaProperty(node) && node.AsMetaProperty().KeywordToken == KindImportKeyword && node.AsMetaProperty().Name().Text() == name
+}
+
+func IsSourcePhaseImport(node *Node) bool {
+	if IsImportDeclaration(node) {
+		clause := node.AsImportDeclaration().ImportClause
+		return clause != nil && clause.AsImportClause().PhaseModifier == KindSourceKeyword
+	}
+	return IsSourcePhaseImportCall(node)
+}
+
+func IsSourcePhaseImportCall(node *Node) bool {
+	return IsCallExpression(node) && IsImportSourceMetaProperty(node.Expression())
 }
 
 func IsComputedNonLiteralName(name *Node) bool {
@@ -2601,20 +2629,20 @@ func IsDefaultImport(node *Node /*ImportDeclaration | ImportEqualsDeclaration | 
 	return false
 }
 
-func GetImpliedNodeFormatForFile(path string, packageJsonType string) core.ModuleKind {
+func GetImpliedNodeFormatForFile(fileName tspath.RootedFilePath, packageJsonType string) core.ModuleKind {
 	impliedNodeFormat := core.ResolutionModeNone
-	if tspath.FileExtensionIsOneOf(path, []string{tspath.ExtensionDmts, tspath.ExtensionMts, tspath.ExtensionMjs}) {
+	if fileName.ExtensionIsOneOf([]string{tspath.ExtensionDmts, tspath.ExtensionMts, tspath.ExtensionMjs}) {
 		impliedNodeFormat = core.ResolutionModeESM
-	} else if tspath.FileExtensionIsOneOf(path, []string{tspath.ExtensionDcts, tspath.ExtensionCts, tspath.ExtensionCjs}) {
+	} else if fileName.ExtensionIsOneOf([]string{tspath.ExtensionDcts, tspath.ExtensionCts, tspath.ExtensionCjs}) {
 		impliedNodeFormat = core.ResolutionModeCommonJS
-	} else if tspath.FileExtensionIsOneOf(path, []string{tspath.ExtensionDts, tspath.ExtensionTs, tspath.ExtensionTsx, tspath.ExtensionJs, tspath.ExtensionJsx}) {
+	} else if fileName.ExtensionIsOneOf([]string{tspath.ExtensionDts, tspath.ExtensionTs, tspath.ExtensionTsx, tspath.ExtensionJs, tspath.ExtensionJsx}) {
 		impliedNodeFormat = core.IfElse(packageJsonType == "module", core.ResolutionModeESM, core.ResolutionModeCommonJS)
 	}
 
 	return impliedNodeFormat
 }
 
-func GetEmitModuleFormatOfFileWorker(fileName string, options *core.CompilerOptions, sourceFileMetaData SourceFileMetaData) core.ModuleKind {
+func GetEmitModuleFormatOfFileWorker(fileName tspath.RootedFilePath, options *core.CompilerOptions, sourceFileMetaData SourceFileMetaData) core.ModuleKind {
 	result := GetImpliedNodeFormatForEmitWorker(fileName, options.GetEmitModuleKind(), sourceFileMetaData)
 	if result != core.ModuleKindNone {
 		return result
@@ -2622,18 +2650,18 @@ func GetEmitModuleFormatOfFileWorker(fileName string, options *core.CompilerOpti
 	return options.GetEmitModuleKind()
 }
 
-func GetImpliedNodeFormatForEmitWorker(fileName string, emitModuleKind core.ModuleKind, sourceFileMetaData SourceFileMetaData) core.ResolutionMode {
+func GetImpliedNodeFormatForEmitWorker(fileName tspath.RootedFilePath, emitModuleKind core.ModuleKind, sourceFileMetaData SourceFileMetaData) core.ResolutionMode {
 	if core.ModuleKindNode16 <= emitModuleKind && emitModuleKind <= core.ModuleKindNodeNext {
 		return sourceFileMetaData.ImpliedNodeFormat
 	}
 	if sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS &&
 		(sourceFileMetaData.PackageJsonType == "commonjs" ||
-			tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionCjs, tspath.ExtensionCts})) {
+			fileName.ExtensionIsOneOf([]string{tspath.ExtensionCjs, tspath.ExtensionCts})) {
 		return core.ModuleKindCommonJS
 	}
 	if sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindESNext &&
 		(sourceFileMetaData.PackageJsonType == "module" ||
-			tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMjs, tspath.ExtensionMts})) {
+			fileName.ExtensionIsOneOf([]string{tspath.ExtensionMjs, tspath.ExtensionMts})) {
 		return core.ModuleKindESNext
 	}
 	return core.ModuleKindNone
@@ -3748,7 +3776,7 @@ func IsRightSideOfQualifiedNameOrPropertyAccess(node *Node) bool {
 	return false
 }
 
-func ShouldTransformImportCall(fileName string, options *core.CompilerOptions, impliedNodeFormatForEmit core.ModuleKind) bool {
+func ShouldTransformImportCall(fileName tspath.RootedFilePath, options *core.CompilerOptions, impliedNodeFormatForEmit core.ModuleKind) bool {
 	moduleKind := options.GetEmitModuleKind()
 	if core.ModuleKindNode16 <= moduleKind && moduleKind <= core.ModuleKindNodeNext || moduleKind == core.ModuleKindPreserve {
 		return false
@@ -3815,22 +3843,22 @@ func HasDecorators(node *Node) bool {
 }
 
 type hasFileNameImpl struct {
-	fileName string
-	path     tspath.Path
+	fileName tspath.RootedFilePath
+	path     tspath.PathKey
 }
 
-func NewHasFileName(fileName string, path tspath.Path) HasFileName {
+func NewHasFileName(fileName tspath.RootedFilePath, path tspath.PathKey) HasFileName {
 	return &hasFileNameImpl{
 		fileName: fileName,
 		path:     path,
 	}
 }
 
-func (h *hasFileNameImpl) FileName() string {
+func (h *hasFileNameImpl) FileName() tspath.RootedFilePath {
 	return h.fileName
 }
 
-func (h *hasFileNameImpl) Path() tspath.Path {
+func (h *hasFileNameImpl) PathKey() tspath.PathKey {
 	return h.path
 }
 

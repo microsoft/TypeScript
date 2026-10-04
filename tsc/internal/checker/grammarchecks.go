@@ -780,7 +780,7 @@ func (c *Checker) checkGrammarArrowFunction(node *ast.Node, file *ast.SourceFile
 		typeParamNodes := typeParameters.Nodes
 		hasConstraint := len(typeParamNodes) > 0 && typeParamNodes[0].AsTypeParameterDeclaration().Constraint != nil
 		if !(len(typeParamNodes) > 1 || typeParameters.HasTrailingComma() || hasConstraint) {
-			if tspath.FileExtensionIsOneOf(file.FileName(), []string{tspath.ExtensionMts, tspath.ExtensionCts}) {
+			if file.FileName().ExtensionIsOneOf([]string{tspath.ExtensionMts, tspath.ExtensionCts}) {
 				// TODO(danielr): should we return early here?
 				c.grammarErrorOnNode(typeParameters.Nodes[0], diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint)
 			}
@@ -1195,7 +1195,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 					}
 					switch c.moduleKind {
 					case core.ModuleKindNode16, core.ModuleKindNode18, core.ModuleKindNode20, core.ModuleKindNodeNext:
-						sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.Path())
+						sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.PathKey())
 						if sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS {
 							c.addDiagnostic(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
 							break
@@ -1693,7 +1693,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 					core.ModuleKindNode18,
 					core.ModuleKindNode20,
 					core.ModuleKindNodeNext:
-					sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.Path())
+					sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.PathKey())
 					if sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS {
 						if !spanCalculated {
 							span = scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos())
@@ -1822,13 +1822,13 @@ func (c *Checker) checkGrammarMetaProperty(node *ast.MetaProperty) bool {
 	case ast.KindImportKeyword:
 		if nameText != "meta" {
 			isCallee := ast.IsCallExpression(node.Parent) && node.Parent.Expression() == node.AsNode()
-			if nameText == "defer" {
+			if ast.IsImportPhaseMetaProperty(node.AsNode()) {
 				if !isCallee {
 					return c.grammarErrorAtPos(node.AsNode(), node.AsNode().End(), 0, diagnostics.X_0_expected, "(")
 				}
 			} else {
 				if isCallee {
-					return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, nameText)
+					return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source, nameText)
 				}
 				return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, nameText, scanner.TokenToString(node.KeywordToken), "meta")
 			}
@@ -2113,9 +2113,25 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
 			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
 		}
-		if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
-			return c.grammarErrorOnNode(&node.Node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+		if c.moduleKind.SupportsDeferredImports() {
+			break
 		}
+		return c.grammarErrorOnNode(&node.Node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+	case ast.KindSourceKeyword:
+		if node.NamedBindings != nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import)
+		}
+		if node.Name() == nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.A_source_phase_import_must_specify_a_local_binding)
+		}
+		if c.moduleKind.SupportsSourcePhaseImports() {
+			moduleSpecifier := getModuleSpecifierFromNode(node.Parent)
+			if c.getEmitSyntaxForModuleSpecifierExpression(moduleSpecifier) == core.ModuleKindCommonJS {
+				return c.grammarErrorOnNode(&node.Node, diagnostics.Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls)
+			}
+			break
+		}
+		return c.grammarErrorOnNode(&node.Node, diagnostics.Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve)
 	}
 	return false
 }
@@ -2159,15 +2175,25 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 		return c.grammarErrorOnNode(node, getVerbatimModuleSyntaxErrorMessage(node))
 	}
 
-	if node.Expression().Kind == ast.KindMetaProperty {
-		if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
-			return c.grammarErrorOnNode(node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+	switch {
+	case ast.IsImportSourceMetaProperty(node.Expression()):
+		if c.moduleKind.SupportsSourcePhaseImports() {
+			break
 		}
-	} else if c.moduleKind == core.ModuleKindES2015 {
+		return c.grammarErrorOnNode(node, diagnostics.Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve)
+	case ast.IsImportDeferMetaProperty(node.Expression()):
+		if c.moduleKind.SupportsDeferredImports() {
+			break
+		}
+		return c.grammarErrorOnNode(node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+	case c.moduleKind == core.ModuleKindES2015:
 		return c.grammarErrorOnNode(node, diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_node20_or_nodenext)
 	}
 
 	nodeAsCall := node.AsCallExpression()
+	if ast.IsSourcePhaseImportCall(node) && nodeAsCall.QuestionDotToken != nil {
+		return c.grammarErrorOnNode(nodeAsCall.QuestionDotToken, diagnostics.Optional_chaining_cannot_be_used_with_import_source)
+	}
 	if nodeAsCall.TypeArguments != nil {
 		return c.grammarErrorOnNode(node, diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments)
 	}

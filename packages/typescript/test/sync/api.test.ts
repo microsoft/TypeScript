@@ -27,6 +27,9 @@ import {
     isJSDocParameterTag,
     isModuleDeclaration,
     isNamedImports,
+    isObjectLiteralExpression,
+    isPropertyAssignment,
+    isPropertyDeclaration,
     isReturnStatement,
     isShorthandPropertyAssignment,
     isStringLiteral,
@@ -40,12 +43,15 @@ import {
     type Node,
     type NodeArray,
     NodeFlags,
-    type Path,
+    type PathKey,
+    type RootedFilePath,
+    type SourceFile,
     SyntaxKind,
     tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
 } from "@typescript/typescript/unstable/ast";
 import {
+    cloneNode,
     createArrayTypeNode,
     createFunctionTypeNode,
     createIdentifier,
@@ -70,15 +76,24 @@ import {
     serverFS,
 } from "@typescript/typescript/unstable/fs";
 import {
+    rootedDirectoryPathFromPath,
+    rootedFilePathFromPath,
+    toRootedDirectoryPath,
+    toRootedFilePath,
+} from "@typescript/typescript/unstable/path";
+import {
     API,
     type BigIntLiteralType,
     CheckFlags,
+    type CompilerOptions,
     type ConditionalType,
     type ConfiguredProjectId,
     DiagnosticCategory,
     type DocumentIdentifier,
     EmitOnly,
+    type FormatDiagnosticsHost,
     type FreshableType,
+    getSymbol,
     type ImportAdderAction,
     type IndexedAccessType,
     IndexKind,
@@ -100,6 +115,7 @@ import {
     type Program,
     type Project,
     type ProjectId,
+    type RawCompilerOptions,
     ScriptKind,
     type Signature,
     SignatureKind,
@@ -125,6 +141,11 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import {
+    getNodeId,
+    parseNodeHandleFromCompiler,
+    RemoteSourceFile,
+} from "../../src/api/node/node.ts";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import {
     areTestsFiltered,
@@ -158,6 +179,15 @@ describe("API", { concurrency }, () => {
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
             void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: {}, options: { projectReferences: [{ path: "/tsconfig.json" }] } }] });
+            void standalone.createModuleResolver({ outDir: "dist", rootDirs: ["src"], typeRoots: ["types"] });
+            void standalone.transpileModule("", { compilerOptions: { outDir: "dist" } });
+
+            const formatDiagnosticsHost: FormatDiagnosticsHost = {
+                getCurrentDirectory: () => "/workspace",
+                getCanonicalFileName: fileName => fileName,
+                getNewLine: () => "\n",
+            };
+            void formatDiagnosticsHost;
 
             // @ts-expect-error Snapshot parameters are excess-property checked.
             void standalone.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
@@ -175,7 +205,7 @@ describe("API", { concurrency }, () => {
             const configured = undefined! as ConfiguredProjectId;
             const inferred = undefined! as InferredProjectId;
             const synthetic = undefined! as SyntheticProjectId;
-            const path: Path = configured;
+            const path: PathKey = configured;
             const projectIds: ProjectId[] = [configured, inferred, synthetic];
             void path;
             void projectIds;
@@ -188,7 +218,7 @@ describe("API", { concurrency }, () => {
                 fileExists: serverFS.useOS,
                 getAccessibleEntries: serverFS.useOS,
                 readFile: serverFS.useOS,
-                realpath: serverFS.identity,
+                realpath: path => `${path}`,
                 stat: serverFS.fakeStat,
                 writeFile: serverFS.useOS,
                 removeFile: serverFS.useOS,
@@ -456,9 +486,7 @@ describe("API", { concurrency }, () => {
 
         using retainedAgain = api.createSourceFile("/component.tsx", sourceText);
         assert.strictEqual(retainedAgain.sourceFile, sourceFile);
-
-        using empty = api.createSourceFile("", "");
-        assert.equal(empty.sourceFile.scriptKind, ScriptKind.TS);
+        assert.throws(() => api.createSourceFile("", ""), /fileName must not be empty/);
         using dot = api.createSourceFile(".", "");
         assert.equal(dot.sourceFile.scriptKind, ScriptKind.TS);
 
@@ -482,6 +510,144 @@ describe("API", { concurrency }, () => {
         retained.dispose();
         using retainedAfterDispose = api.createSourceFile("/component.tsx", sourceText);
         assert.strictEqual(retainedAfterDispose.sourceFile, retainedAgain.sourceFile);
+    });
+
+    test("remote declarations lazily fetch and cache binder symbols", () => {
+        const sourceText = "function present() {}";
+        using api = spawnAPI({
+            "/symbols.ts": sourceText,
+        });
+        const snapshot = api.createSnapshot({ openFiles: ["/symbols.ts"] });
+        const project = snapshot.getProjects()[0];
+        const sourceFile = project.program.getSourceFile("/symbols.ts");
+        assert.ok(sourceFile);
+        const declaration = sourceFile.statements[0];
+        assert.ok(isFunctionDeclaration(declaration));
+        const checkerSymbol = project.checker.getSymbolAtPosition("/symbols.ts", sourceText.indexOf("present"));
+        assert.ok(checkerSymbol);
+
+        const client = (api as unknown as {
+            client: { apiRequest(method: string, params: unknown): unknown; };
+        }).client;
+        const apiRequest = client.apiRequest.bind(client);
+        let symbolRequests = 0;
+        client.apiRequest = (method, params) => {
+            if (method === "getSymbolOfDeclaration") symbolRequests++;
+            return apiRequest(method, params);
+        };
+
+        const first = getSymbol(declaration);
+        const concurrent = api.getSymbol(declaration);
+        assert.ok(first);
+        assert.strictEqual(first, checkerSymbol);
+        assert.strictEqual(concurrent, first);
+        assert.strictEqual(getSymbol(declaration), first);
+        assert.equal(symbolRequests, 1);
+
+        snapshot.dispose();
+    });
+
+    test("getSymbol rejects synthesized declarations", () => {
+        using api = spawnAPI();
+        const local = createVariableDeclaration(createIdentifier("local"), undefined, undefined, undefined);
+        assert.throws(() => getSymbol(local), /Source file not found/);
+        assert.throws(() => api.getSymbol(local), /Source file not found/);
+
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        assert.ok(getSymbol(declaration));
+        const shallowClone = cloneNode(declaration);
+        const deepClone = getSynthesizedDeepClone(declaration);
+        assert.throws(() => getSymbol(shallowClone), /Source file not found/);
+        assert.throws(() => api.getSymbol(deepClone), /Source file not found/);
+        assert.equal("getSymbol" in declaration, false);
+    });
+
+    test("source files own separate declaration result and request caches", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        const file = lease.sourceFile;
+        assert.ok(file instanceof RemoteSourceFile);
+        const cache = file.symbolCache;
+        assert.ok(cache);
+        const declaration = cast(file.statements[0], isFunctionDeclaration);
+        const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
+        const request = getSymbol(declaration);
+        const symbol = request;
+        assert.ok(symbol);
+        assert.strictEqual(cache.symbolsByDeclarationNodeIndex.get(index), symbol);
+        assert.strictEqual(cache.symbolsById.get(symbol.reference.id), symbol);
+        assert.equal(cache.declarationSymbolRequests.has(index), false);
+        api.clearSourceFileCache();
+        assert.strictEqual(file.symbolCache, cache);
+    });
+
+    test("standalone getSymbol delegates to the source file's API", context => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        assert.ok(lease.sourceFile instanceof RemoteSourceFile);
+        assert.strictEqual(lease.sourceFile.api, api);
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        // Materialize the sync API's lazy method before mocking it.
+        void api.getSymbol;
+        const method = context.mock.method(api, "getSymbol");
+        const symbol = getSymbol(declaration);
+        assert.ok(symbol);
+        assert.equal(method.mock.callCount(), 1);
+        assert.strictEqual(api.getSymbol(declaration), symbol);
+    });
+
+    test("declaration symbol results survive releasing the last lease", () => {
+        using api = spawnAPI();
+        const lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        const symbol = getSymbol(declaration);
+        assert.ok(symbol);
+
+        lease.dispose();
+        assert.strictEqual(getSymbol(declaration), symbol);
+    });
+
+    test("declaration symbols can be fetched after clearing the client cache", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function first() {} function second() {}");
+        const first = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        const second = cast(lease.sourceFile.statements[1], isFunctionDeclaration);
+        const firstSymbol = getSymbol(first);
+        assert.ok(firstSymbol);
+
+        api.clearSourceFileCache();
+        const secondSymbol = getSymbol(second);
+        assert.ok(secondSymbol);
+        assert.equal(secondSymbol.name, "second");
+        assert.strictEqual(getSymbol(first), firstSymbol);
+
+        using retained = api.retainSourceFile(lease.sourceFile);
+        assert.strictEqual(retained.sourceFile, lease.sourceFile);
+        assert.strictEqual(getSymbol(first), firstSymbol);
+        assert.strictEqual(getSymbol(second), secondSymbol);
+    });
+
+    test("declaration lookup rejects unavailable and recreated files without caching failures", () => {
+        using api = spawnAPI();
+        const text = "function present() {}";
+        const lease = api.createSourceFile("/symbols.ts", text);
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        assert.ok(lease.sourceFile instanceof RemoteSourceFile);
+        const cache = lease.sourceFile.symbolCache;
+        assert.ok(cache);
+        const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
+        lease.dispose();
+
+        assert.throws(() => getSymbol(declaration), /source file is not available/);
+        assert.equal(cache.symbolsByDeclarationNodeIndex.has(index), false);
+        assert.equal(cache.declarationSymbolRequests.has(index), false);
+        using recreated = api.createSourceFile("/symbols.ts", text);
+        assert.throws(() => getSymbol(declaration), /source file descriptor no longer identifies/);
+        assert.equal(cache.symbolsByDeclarationNodeIndex.has(index), false);
+        assert.equal(cache.declarationSymbolRequests.has(index), false);
+        const recreatedDeclaration = cast(recreated.sourceFile.statements[0], isFunctionDeclaration);
+        assert.equal((getSymbol(recreatedDeclaration))?.name, "present");
     });
 
     test("createSourceFile can be used with a compatible program", () => {
@@ -528,7 +694,7 @@ describe("API", { concurrency }, () => {
         using recreated = api.createSourceFile("/retained.d.ts", sourceText);
         assert.strictEqual(recreated.sourceFile, sourceFile);
 
-        const local = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", "/local.ts", "/local.ts" as Path);
+        const local = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", "/local.ts" as RootedFilePath, "/local.ts" as PathKey);
         assert.throws(() => api.retainSourceFile(local), /Only remote source files can be retained/);
     });
 
@@ -650,14 +816,15 @@ describe("API", { concurrency }, () => {
     });
 
     test("snapshot.update reconfigures module resolution providers", () => {
-        const root = "/src/index.ts";
-        const providedA = "/a.d.ts";
-        const providedB = "/b.d.ts";
+        const root = toRootedFilePath("/src/index.ts", undefined);
+        const providedA = toRootedFilePath("/a.d.ts", undefined);
+        const providedB = toRootedFilePath("/b.d.ts", undefined);
         const { api: disposableAPI, fs } = spawnAPIWithFS({
             [root]: `import { value } from "pkg"; export { value };`,
             [providedA]: `export declare const value: "a";`,
             [providedB]: `export declare const value: "b";`,
         });
+
         using api = disposableAPI;
         const compilerOptions = {
             noLib: true,
@@ -735,8 +902,22 @@ describe("API", { concurrency }, () => {
         assert.equal(callbackCalls, 1);
     });
 
+    test("module resolver normalizes raw compiler option paths", () => {
+        using api = spawnAPI();
+        const resolver = api.createModuleResolver({
+            noLib: true,
+            outDir: "dist",
+            rootDirs: ["src", "generated"],
+            tsBuildInfoFile: "cache/build.tsbuildinfo",
+            typeRoots: ["types"],
+        });
+        const result = resolver.resolveModuleName("./missing", "/src", undefined);
+        assert.equal(result.resolvedModule, undefined);
+    });
+
     test("module resolver runs against snapshots or the host filesystem", () => {
-        const packageJson = "/node_modules/pkg/package.json";
+        const packageJson = toRootedFilePath("/node_modules/pkg/package.json", undefined);
+        const packageB = toRootedFilePath("/node_modules/pkg/b.d.ts", undefined);
         const { api: disposableAPI, fs } = spawnAPIWithFS({
             [packageJson]: JSON.stringify({ name: "pkg", version: "1.0.0", types: "a.d.ts" }),
             "/node_modules/pkg/a.d.ts": `export declare const value: "a";`,
@@ -749,30 +930,55 @@ describe("API", { concurrency }, () => {
         const firstSnapshot = api.createSnapshot();
         assert.equal(
             (resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
-            "/node_modules/pkg/a.d.ts",
+            toRootedFilePath("/node_modules/pkg/a.d.ts", undefined),
         );
 
         fs.writeFile!(packageJson, JSON.stringify({ name: "pkg", version: "1.0.0", types: "b.d.ts" }));
-        fs.writeFile!("/node_modules/pkg/b.d.ts", `export declare const value: "b";`);
+        fs.writeFile!(packageB, `export declare const value: "b";`);
         const secondSnapshot = firstSnapshot.update({
             fileNotifications: {
                 changed: [packageJson],
-                created: ["/node_modules/pkg/b.d.ts"],
+                created: [packageB],
             },
         });
 
         assert.equal(
             (resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
-            "/node_modules/pkg/a.d.ts",
+            toRootedFilePath("/node_modules/pkg/a.d.ts", undefined),
         );
         assert.equal(
             (resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: secondSnapshot })).resolvedModule?.resolvedFileName,
-            "/node_modules/pkg/b.d.ts",
+            toRootedFilePath("/node_modules/pkg/b.d.ts", undefined),
         );
         assert.equal(
             (resolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/b.d.ts",
         );
+    });
+
+    test("source imports do not request module resolution", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `import source a from "pkg";
+import.source("missing");
+import { value } from "pkg";`,
+            "/pkg.d.ts": "export const value: number;",
+        });
+        const compilerOptions = { noLib: true, module: ModuleKind.ESNext };
+        const requests: string[] = [];
+        const resolver = api.createModuleResolver(compilerOptions, {
+            resolveModuleName: name => {
+                requests.push(name);
+                return { resolvedFileName: "/pkg.d.ts" };
+            },
+        });
+        const program = api.createProgram(["/src/index.ts"], compilerOptions, { moduleResolver: resolver });
+        assert.deepEqual(requests, ["pkg"]);
+        const file = program.getSourceFile("/src/index.ts");
+        assert.ok(file);
+        const source = cast(cast(file.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
+        const evaluation = cast(cast(file.statements[2], isImportDeclaration).moduleSpecifier, isStringLiteral);
+        assert.equal(program.getResolvedModuleFromModuleSpecifier(source), undefined);
+        assert.equal((program.getResolvedModuleFromModuleSpecifier(evaluation))?.resolvedFileName, "/pkg.d.ts");
     });
 
     test("module resolver callbacks can delegate to another resolver", () => {
@@ -1063,6 +1269,51 @@ declare module "augmentation" {}`,
         program.dispose();
     });
 
+    test("createProgram resolves raw compiler option paths", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `import { value } from "ba"; export { value };`,
+            "/src/first.ts": `export const value = 1;`,
+            "/src/fallback.ts": `export const value = 2;`,
+            "/src/component.vue": `export const component = 1;`,
+        });
+        const rawOptions: RawCompilerOptions = {
+            noLib: true,
+            allowNonTsExtensions: true,
+            outDir: "dist",
+            paths: { "*a": ["/src/first.ts"], "*": ["/src/fallback.ts"] },
+            rootDirs: ["src", "generated"],
+            suppressOutputPathCheck: true,
+            tsBuildInfoFile: "cache/build.tsbuildinfo",
+        };
+        // @ts-expect-error raw path strings are not finalized compiler options
+        const _finalizedOptions: CompilerOptions = rawOptions;
+        const _rawOptions: RawCompilerOptions = undefined! as CompilerOptions;
+
+        const program = api.createProgram(["/src/index.ts", "/src/component.vue"], rawOptions);
+        const compilerOptions: CompilerOptions = program.getCompilerOptions();
+        const serverCurrentDirectory = resolve("../..");
+        assert.deepEqual(
+            compilerOptions,
+            {
+                noLib: true,
+                allowNonTsExtensions: true,
+                outDir: toRootedDirectoryPath(resolve(serverCurrentDirectory, "dist"), undefined),
+                paths: { "*a": ["/src/first.ts"], "*": ["/src/fallback.ts"] },
+                rootDirs: [
+                    toRootedDirectoryPath(resolve(serverCurrentDirectory, "src"), undefined),
+                    toRootedDirectoryPath(resolve(serverCurrentDirectory, "generated"), undefined),
+                ],
+                suppressOutputPathCheck: true,
+                tsBuildInfoFile: toRootedFilePath(resolve(serverCurrentDirectory, "cache/build.tsbuildinfo"), undefined),
+            } satisfies CompilerOptions,
+        );
+        assert.equal((program.getSemanticDiagnostics("/src/index.ts")).length, 0);
+        assert(program.getSourceFile("/src/first.ts"));
+        assert.equal(program.getSourceFile("/src/fallback.ts"), undefined);
+        assert(program.getSourceFile("/src/component.vue"));
+        program.dispose();
+    });
+
     test("createProgram ignores an on-disk tsconfig", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
@@ -1085,21 +1336,20 @@ declare module "augmentation" {}`,
         program.dispose();
     });
 
-    test("createProgram includes project references", () => {
-        const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
+    test("createProgram rejects invalid project reference paths", () => {
         using api = spawnAPI({
             "/src/index.ts": `export const value = 1;`,
-            "/lib/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true, noLib: true }, files: ["index.ts"] }),
-            "/lib/index.ts": `export const lib = 1;`,
         });
 
-        const program = api.createProgram(
-            ["/src/index.ts"],
-            { noLib: true },
-            { projectReferences: [reference] },
+        assert.throws(
+            () =>
+                api.createProgram(
+                    ["/src/index.ts"],
+                    { noLib: true },
+                    { projectReferences: [{ path: "" }] },
+                ),
+            /Path must not be empty/,
         );
-        assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
-        program.dispose();
     });
 
     test("createProgram includes config file parsing diagnostics", () => {
@@ -1293,8 +1543,8 @@ describe("BuildOrchestrator", () => {
         );
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 1/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
     });
 
     test("returns diagnostics in build response information", () => {
@@ -1417,8 +1667,8 @@ describe("BuildOrchestrator", () => {
         ]);
         assert.equal(response.statistics.Projects, 1);
         assert.equal(response.statistics.ProjectsBuilt, 0);
-        assert.equal(fs.readFile!("/a/dist/index.d.ts"), serverFS.useOS);
-        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.d.ts", undefined)), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
     });
 
     test("rebuilds projects after multiple file system changes", () => {
@@ -1430,24 +1680,24 @@ describe("BuildOrchestrator", () => {
         );
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 1/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
 
-        fs.writeFile!("/a/src/index.ts", `export const a = 10;`);
+        fs.writeFile!(toRootedFilePath("/a/src/index.ts", undefined), `export const a = 10;`);
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 10/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
 
-        fs.writeFile!("/b/src/index.ts", `export const b = 20;`);
+        fs.writeFile!(toRootedFilePath("/b/src/index.ts", undefined), `export const b = 20;`);
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 20/);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 10/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 20/);
 
-        fs.writeFile!("/a/src/index.ts", `export const a = 100;`);
-        fs.writeFile!("/b/src/index.ts", `export const b = 200;`);
+        fs.writeFile!(toRootedFilePath("/a/src/index.ts", undefined), `export const a = 100;`);
+        fs.writeFile!(toRootedFilePath("/b/src/index.ts", undefined), `export const b = 200;`);
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 100/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 200/);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 100/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 200/);
     });
 
     test("clean removes build outputs", () => {
@@ -1459,13 +1709,13 @@ describe("BuildOrchestrator", () => {
         );
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.ok(fs.readFile!("/c/dist/index.js"));
-        assert.ok(fs.readFile!("/b/dist/index.js"));
-        assert.ok(fs.readFile!("/a/dist/index.js"));
+        assert.ok(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)));
+        assert.ok(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)));
+        assert.ok(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)));
         assert.equal((orchestrator.clean()).status, 0);
-        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
-        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
-        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
     });
 
     test("builds and cleans selected projects after file system changes", () => {
@@ -1477,35 +1727,35 @@ describe("BuildOrchestrator", () => {
         );
 
         assert.equal((orchestrator.build("/a/tsconfig.json")).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
-        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
-        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 1/);
+        assert.equal(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)), serverFS.useOS);
 
-        fs.writeFile!("/a/src/index.ts", `export const a = 10;`);
+        fs.writeFile!(toRootedFilePath("/a/src/index.ts", undefined), `export const a = 10;`);
         assert.equal((orchestrator.build("/b/tsconfig.json")).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
-        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 1/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
+        assert.equal(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)), serverFS.useOS);
 
-        fs.writeFile!("/b/src/index.ts", `export const b = 20;`);
+        fs.writeFile!(toRootedFilePath("/b/src/index.ts", undefined), `export const b = 20;`);
         assert.equal((orchestrator.clean("/a/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
-        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
+        assert.equal(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)), serverFS.useOS);
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
-        assert.match(fs.readFile!("/c/dist/index.js")!, /export const c = 3/);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 10/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
+        assert.match(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined))!, /export const c = 3/);
 
         assert.equal((orchestrator.clean("/b/tsconfig.json")).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
-        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
-        assert.match(fs.readFile!("/c/dist/index.js")!, /export const c = 3/);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 10/);
+        assert.equal(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)), serverFS.useOS);
+        assert.match(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined))!, /export const c = 3/);
 
-        fs.writeFile!("/b/dist/index.js", `export const b = 2`);
+        fs.writeFile!(toRootedFilePath("/b/dist/index.js", undefined), `export const b = 2`);
         assert.equal((orchestrator.clean("/b/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)), serverFS.useOS);
     });
 
     test("builds only references of a selected project", () => {
@@ -1520,9 +1770,9 @@ describe("BuildOrchestrator", () => {
         );
 
         assert.equal((orchestrator.buildReferences("/c/tsconfig.json")).status, 0);
-        assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
-        assert.match(fs.readFile!("/b/dist/index.js")!, /export const b = 2/);
-        assert.equal(fs.readFile!("/c/dist/index.js"), serverFS.useOS);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 1/);
+        assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
+        assert.equal(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)), serverFS.useOS);
     });
 
     test("cleans only references of a selected project", () => {
@@ -1536,22 +1786,22 @@ describe("BuildOrchestrator", () => {
         );
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.ok(fs.readFile!("/a/dist/index.js"));
-        assert.ok(fs.readFile!("/b/dist/index.js"));
-        assert.ok(fs.readFile!("/c/dist/index.js"));
+        assert.ok(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)));
+        assert.ok(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)));
+        assert.ok(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)));
 
         assert.equal((orchestrator.cleanReferences("/c/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
-        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
-        assert.ok(fs.readFile!("/c/dist/index.js"));
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)), serverFS.useOS);
+        assert.ok(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)));
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.ok(fs.readFile!("/a/dist/index.js"));
-        assert.ok(fs.readFile!("/b/dist/index.js"));
+        assert.ok(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)));
+        assert.ok(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)));
         assert.equal((orchestrator.cleanReferences()).status, 0);
-        assert.equal(fs.readFile!("/a/dist/index.js"), serverFS.useOS);
-        assert.equal(fs.readFile!("/b/dist/index.js"), serverFS.useOS);
-        assert.ok(fs.readFile!("/c/dist/index.js"));
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
+        assert.equal(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined)), serverFS.useOS);
+        assert.ok(fs.readFile!(toRootedFilePath("/c/dist/index.js", undefined)));
     });
 
     test("handles invalidated projects and cleans the last built configuration", () => {
@@ -1575,24 +1825,24 @@ describe("BuildOrchestrator", () => {
         );
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/d/dist/index.js")!, /export const d = 4/);
+        assert.match(fs.readFile!(toRootedFilePath("/d/dist/index.js", undefined))!, /export const d = 4/);
 
         fs.writeFile!(
-            "/d/tsconfig.json",
+            toRootedFilePath("/d/tsconfig.json", undefined),
             JSON.stringify({
                 compilerOptions: { composite: true, outDir: "lib", rootDir: "src" },
                 files: ["src/index.ts"],
             }),
         );
-        fs.writeFile!("/d/lib/index.js", `export const d = 40;`);
+        fs.writeFile!(toRootedFilePath("/d/lib/index.js", undefined), `export const d = 40;`);
 
         assert.equal((orchestrator.clean("/d/tsconfig.json")).status, 0);
-        assert.equal(fs.readFile!("/d/dist/index.js"), serverFS.useOS);
-        assert.ok(fs.readFile!("/d/lib/index.js"));
+        assert.equal(fs.readFile!(toRootedFilePath("/d/dist/index.js", undefined)), serverFS.useOS);
+        assert.ok(fs.readFile!(toRootedFilePath("/d/lib/index.js", undefined)));
 
         assert.equal((orchestrator.build()).status, 0);
-        assert.match(fs.readFile!("/d/lib/index.js")!, /export const d = 4/);
-        assert.equal(fs.readFile!("/d/dist/index.js"), serverFS.useOS);
+        assert.match(fs.readFile!(toRootedFilePath("/d/lib/index.js", undefined))!, /export const d = 4/);
+        assert.equal(fs.readFile!(toRootedFilePath("/d/dist/index.js", undefined)), serverFS.useOS);
     });
 });
 
@@ -1847,6 +2097,30 @@ describe("LanguageService - imports", { concurrency }, () => {
         ]);
 
         assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\n\nconst value = foo + bar;\n`);
+    });
+
+    test("getImportAdderEdits roots relative files at the project directory", () => {
+        const source = `const value = foo;\n`;
+        const api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": source,
+            "/outside/src/foo.ts": `export const foo = 1;\n`,
+        });
+        try {
+            const snapshot = api.createSnapshot({ openProject: "/outside/tsconfig.json" });
+            const project = snapshot.getConfiguredProject("/outside/tsconfig.json")!;
+            const foo = project.checker.getSymbolAtPosition("/outside/src/foo.ts", "export const ".length);
+            assert.ok(foo);
+
+            const edits = project.languageService.getImportAdderEdits("src/index.ts", [
+                { kind: "importSymbol", symbol: foo.getExportSymbol() },
+            ]);
+
+            assert.equal(applyTextEdits(source, edits), `import { foo } from "./foo";\n\nconst value = foo;\n`);
+        }
+        finally {
+            api.close();
+        }
     });
 
     test("getImportAdderEdits adds to an existing import", () => {
@@ -2151,6 +2425,21 @@ describe("Checker - getMemberInModuleExports", { concurrency }, () => {
 });
 
 describe("SourceFile", { concurrency }, () => {
+    test("relative and absolute identifiers share the project source file cache", () => {
+        using api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": "export const value = 1;",
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/outside/tsconfig.json" });
+        const program = snapshot.getConfiguredProject("/outside/tsconfig.json")!.program;
+        const absolute = program.getSourceFile("/outside/src/index.ts");
+        const relative = program.getSourceFile("src/index.ts");
+
+        assert.ok(absolute);
+        assert.strictEqual(relative, absolute);
+    });
+
     test("getSourceFile rejects invalid document identifiers", () => {
         using api = spawnAPI();
 
@@ -2488,7 +2777,7 @@ describe("Multiple snapshots", { concurrency }, () => {
         assert.equal(sf1.text, `export const foo = 42;`);
 
         // Mutate the file and create a new snapshot with the change
-        fs.writeFile!("/src/foo.ts", `export const foo = "changed";`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = "changed";`);
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
             fileNotifications: { changed: ["/src/foo.ts"] },
@@ -2524,7 +2813,7 @@ describe("Multiple snapshots", { concurrency }, () => {
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
 
         // Add a brand new file
-        fs.writeFile!("/src/bar.ts", `export const bar = true;`);
+        fs.writeFile!(toRootedFilePath("/src/bar.ts", undefined), `export const bar = true;`);
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
             fileNotifications: { created: ["/src/bar.ts"] },
@@ -2552,7 +2841,7 @@ describe("Multiple snapshots", { concurrency }, () => {
         ];
 
         for (const version of versions) {
-            fs.writeFile!("/src/foo.ts", version);
+            fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), version);
             const snap = api.createSnapshot({
                 openProject: "/tsconfig.json",
                 fileNotifications: { changed: ["/src/foo.ts"] },
@@ -2578,7 +2867,7 @@ describe("Multiple snapshots", { concurrency }, () => {
         const baseFirst = base.getConfiguredProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts");
         const baseSecondProject = base.getConfiguredProject("/second/tsconfig.json")!;
 
-        fs.writeFile!("/first/index.ts", `export const first = 2;`);
+        fs.writeFile!(toRootedFilePath("/first/index.ts", undefined), `export const first = 2;`);
         const updated = base.update({
             fileNotifications: { changed: ["/first/index.ts"] },
             ensurePrograms: [base.getConfiguredProject("/first/tsconfig.json")!.id],
@@ -2629,9 +2918,9 @@ describe("Multiple snapshots", { concurrency }, () => {
             assert.equal(project.dirty, false, `${project.id} should be ensured when opened or created`);
         }
 
-        fs.writeFile!("/configured/index.ts", `export const configured = 2;`);
-        fs.writeFile!("/inferred.ts", `export const inferred = 2;`);
-        fs.writeFile!("/synthetic.ts", `export const synthetic = 2;`);
+        fs.writeFile!(toRootedFilePath("/configured/index.ts", undefined), `export const configured = 2;`);
+        fs.writeFile!(toRootedFilePath("/inferred.ts", undefined), `export const inferred = 2;`);
+        fs.writeFile!(toRootedFilePath("/synthetic.ts", undefined), `export const synthetic = 2;`);
         const dirty = created.update({
             fileNotifications: { changed: ["/configured/index.ts", "/inferred.ts", "/synthetic.ts"] },
         });
@@ -2694,7 +2983,7 @@ describe("Source file caching", { concurrency }, () => {
         assert.equal(sf1.text, `export const foo = 42;`);
 
         // Mutate the file in the VFS
-        fs.writeFile!("/src/foo.ts", `export const foo = 100;`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = 100;`);
 
         // Notify the server about the change
         const snap2 = api.createSnapshot({
@@ -2718,7 +3007,7 @@ describe("Source file caching", { concurrency }, () => {
         assert.ok(sf1);
 
         // Mutate a different file
-        fs.writeFile!("/src/foo.ts", `export const foo = 999;`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = 999;`);
 
         // Notify the server about the change to foo.ts only
         const snap2 = api.createSnapshot({
@@ -2759,7 +3048,7 @@ describe("Source file caching", { concurrency }, () => {
         assert.equal(sf1.text, `export const foo = 42;`);
 
         // Mutate the file
-        fs.writeFile!("/src/foo.ts", `export const foo = "hello";`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = "hello";`);
 
         // Use invalidateAll to force re-fetch
         const snap2 = api.createSnapshot({
@@ -2799,7 +3088,7 @@ describe("Source file caching", { concurrency }, () => {
         assert.ok(type1.flags & TypeFlags.Number);
 
         // Snapshot 2: change a different file
-        fs.writeFile!("/src/other.ts", `export const x = 2;`);
+        fs.writeFile!(toRootedFilePath("/src/other.ts", undefined), `export const x = 2;`);
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
             fileNotifications: { changed: ["/src/other.ts"] },
@@ -3515,6 +3804,7 @@ export const value = 1;
         assert.ok(declaration);
         assert.equal(declaration.getSourceFile().fileName, "/src/mod.ts");
         assert.equal((api.getTimingInfo()).totals.sourceFilesFetched, 1);
+        assert.equal((getSymbol(cast(declaration, isClassDeclaration)))?.name, "Animal");
     });
 
     test("file-owned symbol properties do not require a snapshot or project", () => {
@@ -3526,6 +3816,10 @@ export const value = 1;
         using retained = api.retainSourceFile(sourceFile);
         const animal = project.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
         assert.ok(animal);
+        const storage = animal["storage"];
+        assert.ok("owner" in storage);
+        assert.strictEqual(storage.owner.api, api);
+        assert.deepEqual(Object.keys(storage.owner).sort(), ["api", "record"]);
 
         snapshot.dispose();
         const members = animal.getMembers();
@@ -3549,6 +3843,69 @@ export const value = 1;
         assert.ok(first);
         assert.ok(second);
         assert.notStrictEqual(second, first);
+    });
+
+    test("checker symbol methods merge declarations and parents in their project", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: ["/src/a.ts", "/src/b.ts"] }),
+            "/single/tsconfig.json": JSON.stringify({ files: ["/src/a.ts"] }),
+            "/src/a.ts": "namespace Merged { export const a = 1; }",
+            "/src/b.ts": "namespace Merged { export const b = 1; }",
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json", "/single/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const singleProject = snapshot.getConfiguredProject("/single/tsconfig.json")!;
+        const fileA = project.program.getSourceFile("/src/a.ts");
+        const fileB = project.program.getSourceFile("/src/b.ts");
+        assert.ok(fileA && fileB);
+        const declarationA = cast(fileA.statements[0], isModuleDeclaration);
+        const declarationB = cast(fileB.statements[0], isModuleDeclaration);
+        const rawA = getSymbol(declarationA);
+        const rawB = getSymbol(declarationB);
+        assert.notStrictEqual(rawA, rawB);
+
+        const merged = project.checker.getSymbolOfDeclaration(declarationA);
+        assert.strictEqual(project.checker.getSymbolOfDeclaration(declarationB), merged);
+        assert.strictEqual(project.checker.getSymbolOfNode(declarationA), merged);
+        assert.strictEqual(project.checker.getMergedSymbol(rawA), merged);
+        assert.strictEqual(project.checker.getMergedSymbol(rawB), merged);
+        assert.strictEqual(project.checker.getMergedSymbol(merged), merged);
+        assert.strictEqual(singleProject.checker.getMergedSymbol(rawA), rawA);
+        assert.strictEqual(singleProject.checker.getSymbolOfDeclaration(declarationA), rawA);
+        assert.equal(project.checker.getSymbolOfNode(declarationA.name), undefined);
+        assert.equal(project.checker.getSymbolOfNode(fileA), undefined);
+        assert.equal(project.checker.getParentOfSymbol(merged), undefined);
+
+        const member = (rawA.getExports()).get("a" as __String);
+        assert.ok(member);
+        assert.strictEqual(member.getParent(), rawA);
+        assert.strictEqual(project.checker.getParentOfSymbol(member), merged);
+        assert.strictEqual(singleProject.checker.getParentOfSymbol(member), rawA);
+    });
+
+    test("checker symbol methods late-bind computed members", () => {
+        using api = spawnAPI({
+            "/src/computed.ts": "declare const key: unique symbol;\nclass Container { [key] = 1; ordinary = 2; }\nimport {} from './missing';",
+        });
+        const snapshot = api.createSnapshot({ openFiles: ["/src/computed.ts"] });
+        const project = snapshot.getProjects()[0];
+        const file = project.program.getSourceFile("/src/computed.ts");
+        assert.ok(file);
+        const declaration = cast(file.statements[1], isClassDeclaration);
+        const memberDeclaration = cast(declaration.members[0], isPropertyDeclaration);
+        const raw = getSymbol(memberDeclaration);
+        const lateBound = project.checker.getSymbolOfDeclaration(memberDeclaration);
+        assert.notStrictEqual(lateBound, raw);
+        assert.strictEqual(project.checker.getSymbolOfNode(memberDeclaration), lateBound);
+        const container = project.checker.getSymbolOfDeclaration(declaration);
+        assert.strictEqual(project.checker.getParentOfSymbol(lateBound), container);
+        const type = project.checker.getDeclaredTypeOfSymbol(container);
+        const property = (type.getProperties()).find(symbol => symbol.escapedName === lateBound.escapedName);
+        assert.ok(property);
+        assert.strictEqual(project.checker.getTargetSymbol(property), lateBound);
+        const ordinary = cast(declaration.members[1], isPropertyDeclaration);
+        assert.strictEqual(project.checker.getSymbolOfDeclaration(ordinary), getSymbol(ordinary));
+        assert.equal(project.checker.getSymbolOfNode(file.statements[2]), undefined);
     });
 
     test("snapshot-owned symbols resolve cached file-owned parents", () => {
@@ -3635,7 +3992,7 @@ export const value = 1;
         const animal = firstSnapshot.getConfiguredProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
         assert.ok(animal);
 
-        fs.writeFile!("/src/other.ts", `export const other = 2;`);
+        fs.writeFile!(toRootedFilePath("/src/other.ts", undefined), `export const other = 2;`);
         const secondSnapshot = api.createSnapshot({ openProject: "/tsconfig.json", fileNotifications: { changed: ["/src/other.ts"] } });
         const type = secondSnapshot.getConfiguredProject("/tsconfig.json")!.checker.getTypeOfSymbol(animal);
         assert.ok(type);
@@ -3649,7 +4006,7 @@ export const value = 1;
         const animal = firstSnapshot.getConfiguredProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
         assert.ok(animal);
 
-        fs.writeFile!("/src/mod.ts", `${symbolFiles["/src/mod.ts"]}\nexport const added = 2;`);
+        fs.writeFile!(toRootedFilePath("/src/mod.ts", undefined), `${symbolFiles["/src/mod.ts"]}\nexport const added = 2;`);
         const secondSnapshot = api.createSnapshot({ openProject: "/tsconfig.json", fileNotifications: { changed: ["/src/mod.ts"] } });
         const secondProject = secondSnapshot.getConfiguredProject("/tsconfig.json")!;
         assert.throws(() => secondProject.checker.getTypeOfSymbol(animal), /source file is not part of the requested program/);
@@ -4442,6 +4799,34 @@ describe("readFile callback semantics", { concurrency }, () => {
         );
     });
 
+    test("realpath callback string results are resolved and normalized by the server", () => {
+        const fs = createVirtualFileSystem({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { module: "nodenext", moduleResolution: "nodenext" },
+                files: ["index.ts"],
+            }),
+            "/index.ts": `import "pkg";`,
+            "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/pkg/index.d.ts": `export {};`,
+        });
+        for (
+            const realpath of [
+                (path: string) => path.replaceAll("/", "\\"),
+                (path: string) => path.slice(path.lastIndexOf("/") + 1),
+                (path: string) => "../" + path.split("/").slice(-2).join("/"),
+            ]
+        ) {
+            const callbacks: FileSystemCallbacks = { ...fs, realpath };
+            using api = new API({ cwd: "/", fs: callbacks });
+
+            using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+            assert.ok(
+                (snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFileNames())
+                    .includes(toRootedFilePath("/node_modules/pkg/index.d.ts", undefined)),
+            );
+        }
+    });
+
     test("readFile: string returns content, undefined blocks fallback, useOS falls through to the server OS", () => {
         const virtualFiles: Record<string, string> = {
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -4452,7 +4837,7 @@ describe("readFile callback semantics", { concurrency }, () => {
 
         const fs: FileSystemCallbacks = {
             ...vfs,
-            readFile: (fileName: string) => {
+            readFile: fileName => {
                 if (fileName === blockedPath) {
                     return undefined;
                 }
@@ -4610,8 +4995,8 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             },
             stat: path => {
                 callbackCalls.push(`stat:${path}`);
-                if (host.directoryExists(path)) return { mode: 0o040555, size: 0, mtime: new Date(0) };
-                if (host.fileExists(path)) return { mode: 0o100444, size: 0, mtime: new Date(0) };
+                if (host.directoryExists(rootedDirectoryPathFromPath(path))) return { mode: 0o040555, size: 0, mtime: new Date(0) };
+                if (host.fileExists(rootedFilePathFromPath(path))) return { mode: 0o100444, size: 0, mtime: new Date(0) };
                 return undefined;
             },
             writeFile: (path, content) => {
@@ -5062,7 +5447,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
         const result = program.emit();
         assert.equal(result.fileSystem, undefined);
-        assert.equal(host.readFile!("/out/main.js"), `export const value = 1;\n`);
+        assert.equal(host.readFile!(toRootedFilePath("/out/main.js", undefined)), `export const value = 1;\n`);
     });
 
     test("full file system can link node_modules from the host", () => {
@@ -5108,7 +5493,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         const project = snapshot.getConfiguredProject("/project/tsconfig.json")!;
         const sourceFileNames = project.program.getSourceFileNames();
         assert.ok(
-            sourceFileNames.includes("/host/node_modules/pkg/index.d.ts"),
+            sourceFileNames.includes("/host/node_modules/pkg/index.d.ts" as RootedFilePath),
             JSON.stringify({ sourceFileNames, readFileCalls, directoryExistsCalls, fileExistsCalls }),
         );
         assert.equal(
@@ -7523,9 +7908,10 @@ describe("Program - selected file emit", { concurrency }, () => {
             "/src/b.js",
             "/src/b.js.map",
         ]);
-        assert.equal(result.outputFiles.get("/src/a.js")?.sourceFileName, "/src/a.ts");
-        assert.match(result.outputFiles.get("/src/a.js")!.text, /export const a = 1/);
-        assert.equal(fs.readFile("/src/a.js"), serverFS.useOS);
+        const outputFileName = toRootedFilePath("/src/a.js", undefined);
+        assert.equal(result.outputFiles.get(outputFileName)?.sourceFileName, "/src/a.ts");
+        assert.match(result.outputFiles.get(outputFileName)!.text, /export const a = 1/);
+        assert.equal(fs.readFile(toRootedFilePath("/src/a.js", undefined)), serverFS.useOS);
     });
 
     test("getDeclarationEmit forces declarations and declaration maps", () => {
@@ -7542,8 +7928,8 @@ describe("Program - selected file emit", { concurrency }, () => {
             "/src/b.d.ts",
             "/src/b.d.ts.map",
         ]);
-        assert.equal(result.outputFiles.get("/src/a.d.ts")?.sourceFileName, "/src/a.ts");
-        assert.equal(fs.readFile("/src/a.d.ts"), serverFS.useOS);
+        assert.equal(result.outputFiles.get(toRootedFilePath("/src/a.d.ts", undefined))?.sourceFileName, "/src/a.ts");
+        assert.equal(fs.readFile(toRootedFilePath("/src/a.d.ts", undefined)), serverFS.useOS);
     });
 
     test("selected file emit accepts empty arrays", () => {
@@ -8035,8 +8421,12 @@ describe("Program - diagnostics", { concurrency }, () => {
         assert.ok(rootConfig);
         assert.equal(rootConfig.fileName, "/tsconfig.json");
         assert.equal(project.program.getSourceFile("/tsconfig.json"), undefined);
+        const configObject = cast(cast(rootConfig.statements[0], isExpressionStatement).expression, isObjectLiteralExpression);
+        const configProperty = cast(configObject.properties[0], isPropertyAssignment);
+        assert.throws(() => getSymbol(configProperty), /Cached source file not found/);
+        assert.throws(() => api.getSymbol(configProperty), /Cached source file not found/);
 
-        fs.writeFile!("/tsconfig.base.json", `{ "compilerOptions": { "strict": false } }`);
+        fs.writeFile!(toRootedFilePath("/tsconfig.base.json", undefined), `{ "compilerOptions": { "strict": false } }`);
         const extendedConfig = project.program.getConfigSourceFile("/tsconfig.base.json");
         assert.ok(extendedConfig);
         assert.equal(extendedConfig.fileName, "/tsconfig.base.json");
@@ -8274,7 +8664,7 @@ describe("getDefaultProjectForFile", { concurrency }, () => {
         const updated = snapshot.update({ openFiles: [fileName] });
         const project = updated.getDefaultProjectForFile(fileName);
         assert.ok(project);
-        assert.equal(project.configFileName, "");
+        assert.equal(project.configFileName, undefined);
         assert.equal((project.program.getSourceFile(fileName))?.text, source);
         assert.equal(snapshot.getDefaultProjectForFile(fileName), undefined);
         assert.ok(updated.getConfiguredProject("/tsconfig.json"));
@@ -8329,7 +8719,7 @@ describe("getDefaultProjectForFile", { concurrency }, () => {
         assert.equal(sf1.text, `export const foo = 1;`);
 
         // Mutate the file and notify only via fileChanges — no follow-up openFiles/closeFiles.
-        fs.writeFile!("/loose.ts", `export const foo = 2;`);
+        fs.writeFile!(toRootedFilePath("/loose.ts", undefined), `export const foo = 2;`);
         const snapshot2 = api.createSnapshot({
             openFiles: ["/loose.ts"],
             fileNotifications: { changed: ["/loose.ts"] },
@@ -8460,10 +8850,10 @@ describe("Program - emit", { concurrency }, () => {
             fileSystem: undefined,
         });
 
-        const js = fs.readFile?.("/dist/src/index.js");
-        const dts = fs.readFile?.("/dist/src/index.d.ts");
-        const js2 = fs.readFile?.("/dist/src/testing.js");
-        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        const js = fs.readFile?.(toRootedFilePath("/dist/src/index.js", undefined));
+        const dts = fs.readFile?.(toRootedFilePath("/dist/src/index.d.ts", undefined));
+        const js2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.js", undefined));
+        const dts2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.d.ts", undefined));
         assert.strictEqual(js, `export const x = 1;\n`);
         assert.strictEqual(dts, `export declare const x: number;\n`);
         assert.strictEqual(js2, `export const y = 'typescript';\n`);
@@ -8491,10 +8881,10 @@ describe("Program - emit", { concurrency }, () => {
             fileSystem: undefined,
         });
 
-        const js = fs.readFile?.("/dist/src/index.js");
-        const dts = fs.readFile?.("/dist/src/index.d.ts");
-        const js2 = fs.readFile?.("/dist/src/testing.js");
-        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        const js = fs.readFile(toRootedFilePath("/dist/src/index.js", undefined));
+        const dts = fs.readFile(toRootedFilePath("/dist/src/index.d.ts", undefined));
+        const js2 = fs.readFile(toRootedFilePath("/dist/src/testing.js", undefined));
+        const dts2 = fs.readFile(toRootedFilePath("/dist/src/testing.d.ts", undefined));
         assert.strictEqual(js, serverFS.useOS);
         assert.strictEqual(dts, `export declare const x: number;\n`);
         assert.strictEqual(js2, serverFS.useOS);
@@ -8522,10 +8912,10 @@ describe("Program - emit", { concurrency }, () => {
             fileSystem: undefined,
         });
 
-        const js = fs.readFile?.("/dist/src/index.js");
-        const dts = fs.readFile?.("/dist/src/index.d.ts");
-        const js2 = fs.readFile?.("/dist/src/testing.js");
-        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        const js = fs.readFile?.(toRootedFilePath("/dist/src/index.js", undefined));
+        const dts = fs.readFile?.(toRootedFilePath("/dist/src/index.d.ts", undefined));
+        const js2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.js", undefined));
+        const dts2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.d.ts", undefined));
         assert.strictEqual(js, `export const x = 1;\n`);
         assert.strictEqual(dts, serverFS.useOS);
         assert.strictEqual(js2, `export const y = 'typescript';\n`);
@@ -8543,7 +8933,7 @@ describe("Program - emit", { concurrency }, () => {
             "/dist/src/index.d.ts",
             "/dist/src/testing.d.ts",
         ]);
-        assert.equal(fs.readFile("/dist/src/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile(toRootedFilePath("/dist/src/index.js", undefined)), serverFS.useOS);
     });
 
     test("whole-program emit includes option-controlled maps", () => {
@@ -8573,8 +8963,8 @@ describe("Program - emit", { concurrency }, () => {
                 "/dist/src/index.d.ts.map",
             ]),
         );
-        assert.ok(fs.fileExists?.("/dist/src/index.js.map"));
-        assert.ok(fs.fileExists?.("/dist/src/index.d.ts.map"));
+        assert.ok(fs.fileExists?.(toRootedFilePath("/dist/src/index.js.map", undefined)));
+        assert.ok(fs.fileExists?.(toRootedFilePath("/dist/src/index.d.ts.map", undefined)));
 
         const js = project.program.emitToString(EmitOnly.OnlyJs);
         assert.deepEqual([...js.outputFiles.keys()], [
@@ -8608,8 +8998,8 @@ describe("Program - emit", { concurrency }, () => {
         assert.equal(result.emitSkipped, true);
         assert.ok(result.diagnostics.some(d => d.code === 1109));
         assert.deepEqual(result.emittedFiles, []);
-        assert.equal(fs.readFile("/dist/src/bad.js"), serverFS.useOS);
-        assert.equal(fs.readFile("/dist/src/good.js"), serverFS.useOS);
+        assert.equal(fs.readFile(toRootedFilePath("/dist/src/bad.js", undefined)), serverFS.useOS);
+        assert.equal(fs.readFile(toRootedFilePath("/dist/src/good.js", undefined)), serverFS.useOS);
 
         const stringResult = project.program.emitToString();
         assert.equal(stringResult.emitSkipped, true);
@@ -8637,7 +9027,7 @@ describe("Program - emit", { concurrency }, () => {
             emitSkipped: false,
             outputFiles: new Map(),
         });
-        assert.equal(fs.readFile("/src/index.js"), serverFS.useOS);
+        assert.equal(fs.readFile(toRootedFilePath("/src/index.js", undefined)), serverFS.useOS);
     });
 
     test("emit rejects unknown files and invalid emitOnly values", () => {
@@ -8859,7 +9249,7 @@ describe("runWithTemporaryFileUpdate", { concurrency }, () => {
             const secondProject = tempSnapshot.getConfiguredProject("/second/tsconfig.json");
             assert.ok(secondProject);
             assert.notStrictEqual(secondProject, originalSecondProject);
-            assert.equal((secondProject.program.getSourceFileNames()).includes("/second/index.ts"), true);
+            assert.equal((secondProject.program.getSourceFileNames()).includes("/second/index.ts" as RootedFilePath), true);
         });
     });
 
