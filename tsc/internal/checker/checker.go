@@ -28815,7 +28815,8 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 		if ast.IsPropertyAccessOrQualifiedName(location) {
 			topProp := location
 			for ast.IsPropertyAccessOrQualifiedName(topProp) {
-				if ast.IsPartOfTypeNode(topProp) {
+				// Names in an import type's qualifier (`ns.y` in `typeof import("./b").ns.y`) are exports of the imported module, not references to this file's imports
+				if ast.IsPartOfTypeNode(topProp) || isImportTypeQualifierPart(topProp) != nil {
 					return
 				}
 				topProp = topProp.Parent
