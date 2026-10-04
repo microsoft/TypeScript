@@ -1,0 +1,271 @@
+// === SignatureHelp ===
+=== /trailingCommaSignatureHelpVS.ts ===
+// function str(n: number): string;
+// /**
+//  * Stringifies a number with radix
+//  * @param radix The radix
+//  */
+// function str(n: number, radix: number): string;
+// function str(n: number, radix?: number): string { return ""; }
+// 
+// str(1, )
+//        ^
+// | ----------------------------------------------------------------------
+// | str(n: number, **radix: number**): string
+// | - `radix: number`: The radix
+// | Stringifies a number with radix
+// | ----------------------------------------------------------------------
+// 
+// declare function f<T>(a: T): T;
+// f(2, );
+//      ^
+// | ----------------------------------------------------------------------
+// | f(a: 2): 2
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 221,
+      "LSPosition": {
+        "line": 8,
+        "character": 7
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "str(n: number): string",
+          "parameters": [
+            {
+              "label": "n: number"
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "str",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "n",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        },
+        {
+          "label": "str(n: number, radix: number): string",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Stringifies a number with radix"
+          },
+          "parameters": [
+            {
+              "label": "n: number"
+            },
+            {
+              "label": "radix: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The radix"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "str",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "n",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ", ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "radix",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        }
+      ],
+      "activeSignature": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 261,
+      "LSPosition": {
+        "line": 11,
+        "character": 5
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f(a: 2): 2",
+          "parameters": [
+            {
+              "label": "a: 2"
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "f",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "string",
+                "Text": "2",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "string",
+                "Text": "2",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

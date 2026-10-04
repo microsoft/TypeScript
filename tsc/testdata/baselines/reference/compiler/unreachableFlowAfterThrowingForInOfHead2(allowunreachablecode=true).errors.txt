@@ -1,0 +1,13 @@
+unreachableFlowAfterThrowingForInOfHead2.ts(2,21): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'never'.
+
+
+==== unreachableFlowAfterThrowingForInOfHead2.ts (1 errors) ====
+    try {
+        for (const x in (function () { throw "1"; })()) {
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'never'.
+            console.log("1");
+        }
+    }
+    catch (e) { }
+    

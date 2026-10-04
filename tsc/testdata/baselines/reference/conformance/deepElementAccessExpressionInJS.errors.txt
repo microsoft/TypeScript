@@ -1,0 +1,24 @@
+elementAccessExpressionInJS.js(1,5): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ exports: { [key: string]: any; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ exports: { [key: string]: any; }; }'.
+elementAccessExpressionInJS.js(3,32): error TS7006: Parameter 'index' implicitly has an 'any' type.
+
+
+==== declarations.d.ts (0 errors) ====
+    declare var module: {
+        exports: {
+            [key: string]: any;
+        };
+    }
+==== elementAccessExpressionInJS.js (2 errors) ====
+    if (module[calculatePropertyName(1)]) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ exports: { [key: string]: any; }; }'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{ exports: { [key: string]: any; }; }'.
+    }
+    function calculatePropertyName(index) {
+                                   ~~~~~
+!!! error TS7006: Parameter 'index' implicitly has an 'any' type.
+        // this would be some webpack index in real life
+        return `property${index}`;
+    }
+    

@@ -1,0 +1,30 @@
+// === findAllReferences ===
+// === /findAllRefsParameterPropertyDeclaration3.ts ===
+// class Foo {
+//     constructor(protected /*FIND ALL REFS*/[|protectedParam|]: number) {
+//         let localProtected = [|protectedParam|];
+//         this.[|protectedParam|] += 10;
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsParameterPropertyDeclaration3.ts ===
+// class Foo {
+//     constructor(protected [|protectedParam|]: number) {
+//         let localProtected = /*FIND ALL REFS*/[|protectedParam|];
+//         this.[|protectedParam|] += 10;
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsParameterPropertyDeclaration3.ts ===
+// class Foo {
+//     constructor(protected [|protectedParam|]: number) {
+//         let localProtected = [|protectedParam|];
+//         this./*FIND ALL REFS*/[|protectedParam|] += 10;
+//     }
+// }

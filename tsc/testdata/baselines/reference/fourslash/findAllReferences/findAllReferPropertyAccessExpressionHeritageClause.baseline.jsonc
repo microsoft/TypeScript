@@ -1,0 +1,30 @@
+// === findAllReferences ===
+// === /findAllReferPropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {/*FIND ALL REFS*/[|B|]: B};
+// }
+// class C extends (foo()).[|B|] {}
+// class C1 extends foo().[|B|] {}
+
+
+
+// === findAllReferences ===
+// === /findAllReferPropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {[|B|]: B};
+// }
+// class C extends (foo())./*FIND ALL REFS*/[|B|] {}
+// class C1 extends foo().[|B|] {}
+
+
+
+// === findAllReferences ===
+// === /findAllReferPropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {[|B|]: B};
+// }
+// class C extends (foo()).[|B|] {}
+// class C1 extends foo()./*FIND ALL REFS*/[|B|] {}

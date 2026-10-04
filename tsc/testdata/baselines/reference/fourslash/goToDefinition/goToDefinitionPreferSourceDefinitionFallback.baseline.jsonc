@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.d.ts ===
+// <|export interface [|Config|] {
+//     enabled: boolean;
+// }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import type { Config } from "pkg";
+// let value: /*GOTO DEF*/Config;

@@ -1,0 +1,50 @@
+// === Document Symbols ===
+// === /navigationItemsExportEqualsExpression2.ts ===
+// export const <|[|{| name: foo, kind: Variable |}foo|] = {
+//   <|[|{| name: foo, kind: Property |}foo|]: {}|>,
+// }|>;
+// 
+// <|[|{| name: export=, kind: Variable |}export = {
+//   <|[|{| name: foo, kind: Property |}foo|]: {}|>,
+// };|]|>
+// 
+// <|[|{| name: export=, kind: Variable |}export = {
+//   <|[|{| name: foo, kind: Property |}foo|]: {}|>,
+// };|]|>
+// 
+// <|type [|{| name: Type, kind: Class |}Type|] = typeof foo;|>
+// 
+// <|[|{| name: export=, kind: Variable |}export = {
+//   <|[|{| name: foo, kind: Property |}foo|]: {}|>,
+// } as Type;|]|>
+// 
+// <|[|{| name: export=, kind: Variable |}export = {
+//   <|[|{| name: foo, kind: Property |}foo|]: {}|>,
+// } satisfies Type;|]|>
+// 
+// <|[|{| name: export=, kind: Variable |}export = (<|[|{| name: export=, kind: Class |}|]class {
+//   <|[|{| name: prop, kind: Property |}prop|] = 42;|>
+// }|>);|]|>
+// 
+// <|[|{| name: export=, kind: Variable |}export = (<|class [|{| name: Cls, kind: Class |}Cls|] {
+//   <|[|{| name: prop, kind: Property |}prop|] = 42;|>
+// }|>);|]|>
+
+// === Details ===
+(Variable) foo
+  (Property) foo
+(Variable) export=
+  (Property) foo
+(Variable) export=
+  (Property) foo
+(Class) Type
+(Variable) export=
+  (Property) foo
+(Variable) export=
+  (Property) foo
+(Variable) export=
+  (Class) export=
+    (Property) prop
+(Variable) export=
+  (Class) Cls
+    (Property) prop

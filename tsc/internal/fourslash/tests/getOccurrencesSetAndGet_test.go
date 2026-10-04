@@ -1,0 +1,39 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGetOccurrencesSetAndGet(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class Foo {
+    [|set|] bar(b: any) {
+    }
+
+    public [|get|] bar(): any {
+        return undefined;
+    }
+
+    public set set(s: any) {
+    }
+
+    public get set(): any {
+        return undefined;
+    }
+
+    public set get(g: any) {
+    }
+
+    public get get(): any {
+        return undefined;
+    }
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
+}

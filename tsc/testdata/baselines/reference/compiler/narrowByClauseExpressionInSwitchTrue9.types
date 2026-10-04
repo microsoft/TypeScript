@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue9.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue9.ts ===
+interface IProps {
+    one: boolean;
+>one : boolean
+}
+
+class Foo {
+>Foo : Foo
+
+    mine: string = "";
+>mine : string
+>"" : ""
+
+    myMethod(x: IProps) {
+>myMethod : (x: IProps) => void
+>x : IProps
+
+        const { one } = x;
+>one : boolean
+>x : IProps
+
+        switch (true) {
+>true : true
+
+            case one:
+>one : boolean
+
+                break;
+            default:
+                let x = this.mine;
+>x : string
+>this.mine : string
+>this : this
+>mine : string
+        }
+    }
+}
+

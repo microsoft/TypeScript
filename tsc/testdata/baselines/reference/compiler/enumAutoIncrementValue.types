@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/enumAutoIncrementValue.ts] ////
+
+=== a.ts ===
+enum E {
+>E : E
+
+    A = 0 / 0,
+>A : E.A
+>0 / 0 : number
+>0 : 0
+>0 : 0
+
+    B,
+>B : E.A
+}
+

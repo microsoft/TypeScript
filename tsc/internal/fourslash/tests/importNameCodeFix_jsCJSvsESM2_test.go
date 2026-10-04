@@ -1,0 +1,31 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestImportNameCodeFix_jsCJSvsESM2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @checkJs: true
+// @Filename: types/dep.d.ts
+export declare class Dep {}
+// @Filename: index.js
+Dep/**/
+// @Filename: util1.ts
+import fs from 'fs';
+// @Filename: util2.js
+const fs = require('fs');`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "")
+	f.VerifyImportFixAtPosition(t, []string{
+		`const { Dep } = require("./types/dep");
+
+Dep`,
+	}, nil /*preferences*/)
+}

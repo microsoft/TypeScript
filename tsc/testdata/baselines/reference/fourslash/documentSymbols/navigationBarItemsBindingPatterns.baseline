@@ -1,0 +1,23 @@
+// === Document Symbols ===
+// === /navigationBarItemsBindingPatterns.ts ===
+// 'use strict'
+// var <|[|{| name: foo, kind: Variable |}foo|]|>, {}
+// var <|[|{| name: bar, kind: Variable |}bar|]|>, []
+// let <|[|{| name: foo1, kind: Variable |}foo1|]|>, {<|[|{| name: a, kind: Variable |}a|]|>, <|[|{| name: b, kind: Variable |}b|]|>}
+// const <|[|{| name: bar1, kind: Variable |}bar1|]|>, [<|[|{| name: c, kind: Variable |}c|]|>, <|[|{| name: d, kind: Variable |}d|]|>]
+// var {<|[|{| name: e, kind: Variable |}e|]|>, x: [<|[|{| name: f, kind: Variable |}f|]|>, <|[|{| name: g, kind: Variable |}g|]|>]} = {a:1, x:[]};
+// var { <|h: [|{| name: i, kind: Variable |}i|] = function j() {}|> } = obj;
+
+// === Details ===
+(Variable) foo
+(Variable) bar
+(Variable) foo1
+(Variable) a
+(Variable) b
+(Variable) bar1
+(Variable) c
+(Variable) d
+(Variable) e
+(Variable) f
+(Variable) g
+(Variable) i

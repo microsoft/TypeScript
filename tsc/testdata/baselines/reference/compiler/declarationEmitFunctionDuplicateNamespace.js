@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts] ////
+
+//// [declarationEmitFunctionDuplicateNamespace.ts]
+function f(a: 0): 0;
+function f(a: 1): 1;
+function f(a: 0 | 1) {
+    return a;
+}
+
+f.x = 2;
+
+
+//// [declarationEmitFunctionDuplicateNamespace.js]
+"use strict";
+function f(a) {
+    return a;
+}
+f.x = 2;
+
+
+//// [declarationEmitFunctionDuplicateNamespace.d.ts]
+declare function f(a: 0): 0;
+declare namespace f {
+    var x: number;
+}
+declare function f(a: 1): 1;

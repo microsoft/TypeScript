@@ -1,0 +1,49 @@
+// === documentHighlights ===
+// === /file1.ts ===
+// interface interface1 extends interface1 {
+//    /*HIGHLIGHTS*/[|doStuff|](): void;
+//    propName: string;
+// }
+// 
+// var v: interface1;
+// v.propName;
+// v.[|doStuff|]();
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// interface interface1 extends interface1 {
+//    doStuff(): void;
+//    /*HIGHLIGHTS*/[|propName|]: string;
+// }
+// 
+// var v: interface1;
+// v.[|propName|];
+// v.doStuff();
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// interface interface1 extends interface1 {
+//    doStuff(): void;
+//    [|propName|]: string;
+// }
+// 
+// var v: interface1;
+// v./*HIGHLIGHTS*/[|propName|];
+// v.doStuff();
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// interface interface1 extends interface1 {
+//    [|doStuff|](): void;
+//    propName: string;
+// }
+// 
+// var v: interface1;
+// v.propName;
+// v./*HIGHLIGHTS*/[|doStuff|]();

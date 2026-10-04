@@ -1,0 +1,46 @@
+index.js(7,19): error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
+index.js(14,18): error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
+
+
+==== test.js (0 errors) ====
+    const {Render} = require("./index");
+    let render = new Render();
+    
+    render.addRectangle();
+    console.log("Objects", render.objects);
+==== rectangle.js (0 errors) ====
+    class Rectangle {
+        constructor() {
+            console.log("I'm a rectangle!");
+        }
+    }
+    
+    module.exports = { Rectangle };
+==== index.js (2 errors) ====
+    const {Rectangle} = require('./rectangle');
+    
+    class Render {
+        constructor() {
+            /**
+             * Object list
+             * @type {Rectangle[]}
+                      ~~~~~~~~~
+!!! error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
+             */
+            this.objects = [];
+        }
+        /**
+         * Adds a rectangle
+         * 
+         * @returns {Rectangle} the rect
+                     ~~~~~~~~~
+!!! error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
+         */
+        addRectangle() {
+            const obj = new Rectangle();
+            this.objects.push(obj);
+            return obj;
+        }
+    }
+    
+    module.exports = { Render };

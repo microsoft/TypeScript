@@ -1,0 +1,33 @@
+// === findAllReferences ===
+// === /a.ts ===
+// import * as foo from "foo";
+// declare module "foo" {
+//     export const x: [|T|];
+// }
+
+// === /node_modules/foo/index.d.ts ===
+// /*FIND ALL REFS*/export type [|T|] = number;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// import * as foo from "foo";
+// declare module "foo" {
+//     export const x: [|T|];
+// }
+
+// === /node_modules/foo/index.d.ts ===
+// export type /*FIND ALL REFS*/[|T|] = number;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// import * as foo from "foo";
+// declare module "foo" {
+//     export const x: /*FIND ALL REFS*/[|T|];
+// }
+
+// === /node_modules/foo/index.d.ts ===
+// export type [|T|] = number;

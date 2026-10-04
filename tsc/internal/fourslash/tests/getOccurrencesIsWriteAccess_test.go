@@ -1,0 +1,33 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGetOccurrencesIsWriteAccess(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `var [|{| "isWriteAccess": true |}x|] = 0;
+var assignmentRightHandSide = [|{| "isWriteAccess": false |}x|];
+var assignmentRightHandSide2 = 1 + [|{| "isWriteAccess": false |}x|];
+
+[|{| "isWriteAccess": true |}x|] = 1;
+[|{| "isWriteAccess": true |}x|] = [|{| "isWriteAccess": false |}x|] + [|{| "isWriteAccess": false |}x|];
+
+[|{| "isWriteAccess": false |}x|] == 1;
+[|{| "isWriteAccess": false |}x|] <= 1;
+
+var preIncrement = ++[|{| "isWriteAccess": true |}x|];
+var postIncrement = [|{| "isWriteAccess": true |}x|]++;
+var preDecrement = --[|{| "isWriteAccess": true |}x|];
+var postDecrement = [|{| "isWriteAccess": true |}x|]--;
+
+[|{| "isWriteAccess": true |}x|] += 1;
+[|{| "isWriteAccess": true |}x|] <<= 1;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, f.Ranges()[0])
+}

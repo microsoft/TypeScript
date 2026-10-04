@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/declarationEmitForMixinsWithStaticAccessors1.ts] ////
+
+=== declarationEmitForMixinsWithStaticAccessors1.ts ===
+// Regression test: when a class extends a mixin that returns an intersection,
+// the class's anonymous constructor type inherits static accessor properties from the
+// intersection. These synthetic properties can have a nil parent symbol when the
+// constituent accessor declarations differ. Declaration emit must not crash when
+// serializing these properties.
+
+function mix<T extends new (...args: any[]) => any, U extends new (...args: any[]) => any>(
+>mix : <T extends new (...args: any[]) => any, U extends new (...args: any[]) => any>(base1: T, base2: U) => T & U
+>args : any[]
+>args : any[]
+
+    base1: T, base2: U
+>base1 : T
+>base2 : U
+
+): T & U {
+    return null as any;
+>null as any : any
+}
+
+class A {
+>A : A
+
+    static get shared(): number { return 1; }
+>shared : number
+>1 : 1
+
+    static set shared(v: number) { }
+>shared : number
+>v : number
+
+    x: string = "";
+>x : string
+>"" : ""
+}
+
+class B {
+>B : B
+
+    static get shared(): number { return 2; }
+>shared : number
+>2 : 2
+
+    static set shared(v: number) { }
+>shared : number
+>v : number
+
+    y: number = 0;
+>y : number
+>0 : 0
+}
+
+function make() {
+>make : () => typeof C
+
+    class C extends mix(A, B) {
+>C : C
+>mix(A, B) : A
+>mix : <T extends new (...args: any[]) => any, U extends new (...args: any[]) => any>(base1: T, base2: U) => T & U
+>A : typeof A
+>B : typeof B
+
+        z: boolean = true;
+>z : boolean
+>true : true
+    }
+    return C;
+>C : typeof C
+}
+
+export const MixedClass = make();
+>MixedClass : typeof C
+>make() : typeof C
+>make : () => typeof C
+

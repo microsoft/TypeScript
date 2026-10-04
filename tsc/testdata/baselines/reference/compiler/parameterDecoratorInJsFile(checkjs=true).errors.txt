@@ -1,0 +1,24 @@
+a.js(1,14): error TS7006: Parameter 'target' implicitly has an 'any' type.
+a.js(1,22): error TS7006: Parameter 'key' implicitly has an 'any' type.
+a.js(1,27): error TS7006: Parameter 'index' implicitly has an 'any' type.
+a.js(4,12): error TS1206: Decorators are not valid here.
+a.js(4,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+
+
+==== a.js (5 errors) ====
+    function dec(target, key, index) {}
+                 ~~~~~~
+!!! error TS7006: Parameter 'target' implicitly has an 'any' type.
+                         ~~~
+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
+                              ~~~~~
+!!! error TS7006: Parameter 'index' implicitly has an 'any' type.
+    
+    class Foo {
+        method(@dec x) {}
+               ~
+!!! error TS1206: Decorators are not valid here.
+               ~~~~~~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    }
+    

@@ -1,0 +1,40 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestIssue57429(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: true
+function Builder<I>(def: I) {
+  return def;
+}
+
+interface IThing {
+  doThing: (args: { value: object }) => string
+  doAnotherThing: () => void
+}
+
+Builder<IThing>({
+  doThing(args: { value: object }) {
+    const { v/*1*/alue } = this.[|args|]
+    return ` + "`" + `${value}` + "`" + `
+  },
+  doAnotherThing() { },
+})`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "1", "const value: any", "")
+	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("Property 'args' does not exist on type 'IThing'.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(2339))},
+		},
+	})
+}

@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/jsDeclarationEmitPrivateStaticMethod.ts] ////
+
+=== a.js ===
+export class C {
+>C : C
+
+    /** @private */
+    static foo() {}
+>foo : () => void
+
+    /** @protected */
+    static bar() {}
+>bar : () => void
+}
+

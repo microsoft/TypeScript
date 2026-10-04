@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/enumComputedPropertyDeclarationEmit.ts] ////
+
+=== enumComputedPropertyDeclarationEmit.ts ===
+export enum StringEnum {
+>StringEnum : Symbol(StringEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 0))
+
+    A = "a",
+>A : Symbol(StringEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 24))
+
+    B = "not-an-identifier",
+>B : Symbol(StringEnum.B, Decl(enumComputedPropertyDeclarationEmit.ts, 1, 12))
+
+    Unused = "unused",
+>Unused : Symbol(StringEnum.Unused, Decl(enumComputedPropertyDeclarationEmit.ts, 2, 28))
+}
+
+export const stringRecord = {
+>stringRecord : Symbol(stringRecord, Decl(enumComputedPropertyDeclarationEmit.ts, 6, 12))
+
+    [StringEnum.A]: StringEnum.A,
+>[StringEnum.A] : Symbol([StringEnum.A], Decl(enumComputedPropertyDeclarationEmit.ts, 6, 29))
+>StringEnum.A : Symbol(StringEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 24))
+>StringEnum : Symbol(StringEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 0))
+>A : Symbol(StringEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 24))
+>StringEnum.A : Symbol(StringEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 24))
+>StringEnum : Symbol(StringEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 0))
+>A : Symbol(StringEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 24))
+
+    [StringEnum.B]: StringEnum.B,
+>[StringEnum.B] : Symbol([StringEnum.B], Decl(enumComputedPropertyDeclarationEmit.ts, 7, 33))
+>StringEnum.B : Symbol(StringEnum.B, Decl(enumComputedPropertyDeclarationEmit.ts, 1, 12))
+>StringEnum : Symbol(StringEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 0))
+>B : Symbol(StringEnum.B, Decl(enumComputedPropertyDeclarationEmit.ts, 1, 12))
+>StringEnum.B : Symbol(StringEnum.B, Decl(enumComputedPropertyDeclarationEmit.ts, 1, 12))
+>StringEnum : Symbol(StringEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 0))
+>B : Symbol(StringEnum.B, Decl(enumComputedPropertyDeclarationEmit.ts, 1, 12))
+
+} as const;
+>const : Symbol(const)
+
+export type StringKey = keyof typeof stringRecord;
+>StringKey : Symbol(StringKey, Decl(enumComputedPropertyDeclarationEmit.ts, 9, 11))
+>stringRecord : Symbol(stringRecord, Decl(enumComputedPropertyDeclarationEmit.ts, 6, 12))
+
+export enum NumericEnum {
+>NumericEnum : Symbol(NumericEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 11, 50))
+
+    Zero = 0,
+>Zero : Symbol(NumericEnum.Zero, Decl(enumComputedPropertyDeclarationEmit.ts, 13, 25))
+
+    Negative = -1,
+>Negative : Symbol(NumericEnum.Negative, Decl(enumComputedPropertyDeclarationEmit.ts, 14, 13))
+
+    Unused = 1,
+>Unused : Symbol(NumericEnum.Unused, Decl(enumComputedPropertyDeclarationEmit.ts, 15, 18))
+}
+
+export const numericRecord = {
+>numericRecord : Symbol(numericRecord, Decl(enumComputedPropertyDeclarationEmit.ts, 19, 12))
+
+    [NumericEnum.Zero]: NumericEnum.Zero,
+>[NumericEnum.Zero] : Symbol([NumericEnum.Zero], Decl(enumComputedPropertyDeclarationEmit.ts, 19, 30))
+>NumericEnum.Zero : Symbol(NumericEnum.Zero, Decl(enumComputedPropertyDeclarationEmit.ts, 13, 25))
+>NumericEnum : Symbol(NumericEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 11, 50))
+>Zero : Symbol(NumericEnum.Zero, Decl(enumComputedPropertyDeclarationEmit.ts, 13, 25))
+>NumericEnum.Zero : Symbol(NumericEnum.Zero, Decl(enumComputedPropertyDeclarationEmit.ts, 13, 25))
+>NumericEnum : Symbol(NumericEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 11, 50))
+>Zero : Symbol(NumericEnum.Zero, Decl(enumComputedPropertyDeclarationEmit.ts, 13, 25))
+
+    [NumericEnum.Negative]: NumericEnum.Negative,
+>[NumericEnum.Negative] : Symbol([NumericEnum.Negative], Decl(enumComputedPropertyDeclarationEmit.ts, 20, 41))
+>NumericEnum.Negative : Symbol(NumericEnum.Negative, Decl(enumComputedPropertyDeclarationEmit.ts, 14, 13))
+>NumericEnum : Symbol(NumericEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 11, 50))
+>Negative : Symbol(NumericEnum.Negative, Decl(enumComputedPropertyDeclarationEmit.ts, 14, 13))
+>NumericEnum.Negative : Symbol(NumericEnum.Negative, Decl(enumComputedPropertyDeclarationEmit.ts, 14, 13))
+>NumericEnum : Symbol(NumericEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 11, 50))
+>Negative : Symbol(NumericEnum.Negative, Decl(enumComputedPropertyDeclarationEmit.ts, 14, 13))
+
+} as const;
+>const : Symbol(const)
+
+export type NumericKey = keyof typeof numericRecord;
+>NumericKey : Symbol(NumericKey, Decl(enumComputedPropertyDeclarationEmit.ts, 22, 11))
+>numericRecord : Symbol(numericRecord, Decl(enumComputedPropertyDeclarationEmit.ts, 19, 12))
+
+type Assignability<T extends StringEnum | NumericEnum> = T;
+>Assignability : Symbol(Assignability, Decl(enumComputedPropertyDeclarationEmit.ts, 24, 52))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 26, 19))
+>StringEnum : Symbol(StringEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 0, 0))
+>NumericEnum : Symbol(NumericEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 11, 50))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 26, 19))
+
+export type StringDemo<T extends StringKey> = Assignability<T>;
+>StringDemo : Symbol(StringDemo, Decl(enumComputedPropertyDeclarationEmit.ts, 26, 59))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 27, 23))
+>StringKey : Symbol(StringKey, Decl(enumComputedPropertyDeclarationEmit.ts, 9, 11))
+>Assignability : Symbol(Assignability, Decl(enumComputedPropertyDeclarationEmit.ts, 24, 52))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 27, 23))
+
+export type NumericDemo<T extends NumericKey> = Assignability<T>;
+>NumericDemo : Symbol(NumericDemo, Decl(enumComputedPropertyDeclarationEmit.ts, 27, 63))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 28, 24))
+>NumericKey : Symbol(NumericKey, Decl(enumComputedPropertyDeclarationEmit.ts, 22, 11))
+>Assignability : Symbol(Assignability, Decl(enumComputedPropertyDeclarationEmit.ts, 24, 52))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 28, 24))
+
+export namespace Namespace {
+>Namespace : Symbol(Namespace, Decl(enumComputedPropertyDeclarationEmit.ts, 28, 65))
+
+    enum NamespaceEnum {
+>NamespaceEnum : Symbol(NamespaceEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 30, 28))
+
+        A = "a",
+>A : Symbol(NamespaceEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 31, 24))
+    }
+
+    export const record = {
+>record : Symbol(record, Decl(enumComputedPropertyDeclarationEmit.ts, 35, 16))
+
+        [NamespaceEnum.A]: NamespaceEnum.A,
+>[NamespaceEnum.A] : Symbol([NamespaceEnum.A], Decl(enumComputedPropertyDeclarationEmit.ts, 35, 27))
+>NamespaceEnum.A : Symbol(NamespaceEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 31, 24))
+>NamespaceEnum : Symbol(NamespaceEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 30, 28))
+>A : Symbol(NamespaceEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 31, 24))
+>NamespaceEnum.A : Symbol(NamespaceEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 31, 24))
+>NamespaceEnum : Symbol(NamespaceEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 30, 28))
+>A : Symbol(NamespaceEnum.A, Decl(enumComputedPropertyDeclarationEmit.ts, 31, 24))
+
+    } as const;
+>const : Symbol(const)
+
+    export type Key = keyof typeof record;
+>Key : Symbol(Key, Decl(enumComputedPropertyDeclarationEmit.ts, 37, 15))
+>record : Symbol(record, Decl(enumComputedPropertyDeclarationEmit.ts, 35, 16))
+
+    type NamespaceAssignability<T extends NamespaceEnum> = T;
+>NamespaceAssignability : Symbol(NamespaceAssignability, Decl(enumComputedPropertyDeclarationEmit.ts, 39, 42))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 41, 32))
+>NamespaceEnum : Symbol(NamespaceEnum, Decl(enumComputedPropertyDeclarationEmit.ts, 30, 28))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 41, 32))
+
+    export type Demo<T extends Key> = NamespaceAssignability<T>;
+>Demo : Symbol(Demo, Decl(enumComputedPropertyDeclarationEmit.ts, 41, 61))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 42, 21))
+>Key : Symbol(Key, Decl(enumComputedPropertyDeclarationEmit.ts, 37, 15))
+>NamespaceAssignability : Symbol(NamespaceAssignability, Decl(enumComputedPropertyDeclarationEmit.ts, 39, 42))
+>T : Symbol(T, Decl(enumComputedPropertyDeclarationEmit.ts, 42, 21))
+}
+

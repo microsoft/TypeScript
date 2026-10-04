@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/unresolvedTypeDirectiveError.ts] ////
+
+=== /a.ts ===
+
+export {};
+

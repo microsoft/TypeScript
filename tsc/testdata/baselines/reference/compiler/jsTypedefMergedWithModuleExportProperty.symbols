@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/jsTypedefMergedWithModuleExportProperty.ts] ////
+
+=== local-lib/ModuleGraphConnection.js ===
+/** @typedef {typeof T} T */
+const T = Symbol();
+>T : Symbol(T, Decl(ModuleGraphConnection.js, 1, 5), Decl(ModuleGraphConnection.js, 0, 4))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+module.exports = class ModuleGraphConnection {};
+>module.exports : Symbol(exports, Decl(ModuleGraphConnection.js, 0, 0))
+>module : Symbol(module, Decl(ModuleGraphConnection.js, 0, 0))
+>exports : Symbol(exports, Decl(ModuleGraphConnection.js, 0, 0))
+>ModuleGraphConnection : Symbol(ModuleGraphConnection, Decl(ModuleGraphConnection.js, 2, 16))
+
+module.exports.T = T;
+>module.exports : Symbol(exports, Decl(ModuleGraphConnection.js, 0, 0))
+>module : Symbol(module, Decl(ModuleGraphConnection.js, 0, 0))
+>exports : Symbol(exports, Decl(ModuleGraphConnection.js, 0, 0))
+>T : Symbol(T, Decl(ModuleGraphConnection.js, 1, 5), Decl(ModuleGraphConnection.js, 0, 4))
+
+=== repro.js ===
+'use strict';
+/** @typedef {import('./local-lib/ModuleGraphConnection')} ImportedType */
+/** @type {ImportedType} */
+module.exports = class Repro {};
+>module.exports : Symbol(exports, Decl(repro.js, 0, 0))
+>module : Symbol(module, Decl(repro.js, 0, 0))
+>exports : Symbol(exports, Decl(repro.js, 0, 0))
+>Repro : Symbol(Repro, Decl(repro.js, 3, 16))
+

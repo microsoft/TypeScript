@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/reexportMissingDefault7.ts] ////
+
+=== b.ts ===
+export const b = null;
+>b : any
+
+=== a.ts ===
+export { b } from "./b";
+>b : any
+
+export { default } from "./b";
+>default : any
+

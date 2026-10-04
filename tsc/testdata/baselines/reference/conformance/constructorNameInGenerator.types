@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/salsa/constructorNameInGenerator.ts] ////
+
+=== constructorNameInGenerator.ts ===
+class C2 {
+>C2 : C2
+
+    *constructor() {}
+>constructor : () => Generator<never, void, unknown>
+}
+

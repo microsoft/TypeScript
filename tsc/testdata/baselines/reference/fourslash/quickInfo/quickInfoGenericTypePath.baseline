@@ -1,0 +1,163 @@
+// === QuickInfo ===
+=== /quickInfoGenericTypePath.ts ===
+// 
+// function f<T>(x: T) {
+//   class C {
+//     value = x
+//   }
+//   return new C()
+// }
+// 
+// class Box<T> {
+//   public value: T;
+//   constructor(value: T) {
+//     this.value = value;
+//   }
+// }
+// 
+// const instance = f("hello");
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f<string>(x: string): f<string>.C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// const b1 = new Box(instance);
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const b1: Box<f<string>.C>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor Box<f<string>.C>(value: f<string>.C): Box<f<string>.C>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// declare const b2: Box<typeof instance>;
+//               ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const b2: Box<f<string>.C>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 182,
+      "LSPosition": {
+        "line": 15,
+        "character": 18
+      },
+      "Name": "callF",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f<string>(x: string): f<string>.C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 17
+        },
+        "end": {
+          "line": 15,
+          "character": 18
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 201,
+      "LSPosition": {
+        "line": 16,
+        "character": 8
+      },
+      "Name": "b1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst b1: Box<f<string>.C>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 6
+        },
+        "end": {
+          "line": 16,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 211,
+      "LSPosition": {
+        "line": 16,
+        "character": 18
+      },
+      "Name": "newBox",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor Box<f<string>.C>(value: f<string>.C): Box<f<string>.C>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 15
+        },
+        "end": {
+          "line": 16,
+          "character": 18
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 239,
+      "LSPosition": {
+        "line": 17,
+        "character": 16
+      },
+      "Name": "b2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst b2: Box<f<string>.C>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 14
+        },
+        "end": {
+          "line": 17,
+          "character": 16
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/declarationEmitObjectLiteralMethodGenericNoSuffix.ts] ////
+
+=== declarationEmitObjectLiteralMethodGenericNoSuffix.ts ===
+export const o = {
+>o : { foo<M extends string>(): void; bar<M extends string>(): void; }
+>{    foo<M extends string>(): void { },    bar<M extends string>(): void { },} : { foo<M extends string>(): void; bar<M extends string>(): void; }
+
+    foo<M extends string>(): void { },
+>foo : <M extends string>() => void
+
+    bar<M extends string>(): void { },
+>bar : <M extends string>() => void
+
+};
+
+export const o2 = {
+>o2 : { foo<T>(value: T): T; bar<T>(value: T): T; baz<T, U>(a: T, b: U): [T, U]; }
+>{    foo<T>(value: T): T { return value; },    bar<T>(value: T): T { return value; },    baz<T, U>(a: T, b: U): [T, U] { return [a, b]; },} : { foo<T>(value: T): T; bar<T>(value: T): T; baz<T, U>(a: T, b: U): [T, U]; }
+
+    foo<T>(value: T): T { return value; },
+>foo : <T>(value: T) => T
+>value : T
+>value : T
+
+    bar<T>(value: T): T { return value; },
+>bar : <T>(value: T) => T
+>value : T
+>value : T
+
+    baz<T, U>(a: T, b: U): [T, U] { return [a, b]; },
+>baz : <T, U>(a: T, b: U) => [T, U]
+>a : T
+>b : U
+>[a, b] : [T, U]
+>a : T
+>b : U
+
+};
+

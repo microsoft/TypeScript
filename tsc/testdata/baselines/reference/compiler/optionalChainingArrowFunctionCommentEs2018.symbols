@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/optionalChainingArrowFunctionCommentEs2018.ts] ////
+
+=== optionalChainingArrowFunctionCommentEs2018.ts ===
+const thing = { nested: { condition: true } };
+>thing : Symbol(thing, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 5))
+>nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+
+const wat = () =>
+>wat : Symbol(wat, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 2, 5))
+
+    // explanatory comment
+    thing?.nested?.condition ? "pass" : "fail";
+>thing?.nested?.condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+>thing?.nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>thing : Symbol(thing, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 5))
+>nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+
+const watInline = () => /* inline explanatory comment */ thing?.nested?.condition ? "pass" : "fail";
+>watInline : Symbol(watInline, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 6, 5))
+>thing?.nested?.condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+>thing?.nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>thing : Symbol(thing, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 5))
+>nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+
+const watInlineMultiline = () => /* inline
+>watInlineMultiline : Symbol(watInlineMultiline, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 8, 5))
+
+explanatory comment */ thing?.nested?.condition ? "pass" : "fail";
+>thing?.nested?.condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+>thing?.nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>thing : Symbol(thing, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 5))
+>nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+
+const watInlineThenLeading = () => /* inline explanatory comment */
+>watInlineThenLeading : Symbol(watInlineThenLeading, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 11, 5))
+
+    // leading explanatory comment
+    thing?.nested?.condition ? "pass" : "fail";
+>thing?.nested?.condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+>thing?.nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>thing : Symbol(thing, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 5))
+>nested : Symbol(nested, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 15))
+>condition : Symbol(condition, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 0, 25))
+
+declare const o: { a?: number[] };
+>o : Symbol(o, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 15, 13))
+>a : Symbol(a, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 15, 18))
+
+export const f = () =>
+>f : Symbol(f, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 17, 12))
+
+    // comment
+    o.a?.length;
+>o.a?.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>o.a : Symbol(a, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 15, 18))
+>o : Symbol(o, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 15, 13))
+>a : Symbol(a, Decl(optionalChainingArrowFunctionCommentEs2018.ts, 15, 18))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+

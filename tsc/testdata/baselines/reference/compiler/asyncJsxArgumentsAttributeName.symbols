@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/asyncJsxArgumentsAttributeName.ts] ////
+
+=== test.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(test.tsx, 0, 0))
+
+  interface IntrinsicElements { div: any; }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(test.tsx, 0, 23))
+>div : Symbol(IntrinsicElements.div, Decl(test.tsx, 1, 31))
+}
+
+async function f() {
+>f : Symbol(f, Decl(test.tsx, 2, 1))
+
+  return <div arguments={42} />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(test.tsx, 1, 31))
+>arguments : Symbol(arguments, Decl(test.tsx, 5, 13))
+}
+

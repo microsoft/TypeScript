@@ -1,0 +1,14 @@
+functionTypeParameterNameFromTupleLabel.ts(3,1): error TS2322: Type '(a: string) => void' is not assignable to type '(x: number) => void'.
+  Types of parameters 'a' and 'x' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== functionTypeParameterNameFromTupleLabel.ts (1 errors) ====
+    declare let f: (...args: [x: number]) => void;
+    declare let g: (a: string) => void;
+    f = g;
+    ~
+!!! error TS2322: Type '(a: string) => void' is not assignable to type '(x: number) => void'.
+!!! error TS2322:   Types of parameters 'a' and 'x' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    

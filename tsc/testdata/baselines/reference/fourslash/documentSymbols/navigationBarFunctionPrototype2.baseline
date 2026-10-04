@@ -1,0 +1,12 @@
+// === Document Symbols ===
+// === /foo.js ===
+// <|A.prototype.[|{| name: a, kind: Variable |}a|]|> = <|[|{| name: a, kind: Function |}|]function() { }|>;
+// <|A.prototype.[|{| name: b, kind: Variable |}b|]|> = <|[|{| name: b, kind: Function |}|]function() { }|>;
+// <|function [|{| name: A, kind: Function |}A|]() {}|>
+
+// === Details ===
+(Function) A
+  (Variable) a
+    (Function) a
+  (Variable) b
+    (Function) b

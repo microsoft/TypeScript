@@ -1,0 +1,9 @@
+// === Document Symbols ===
+// === /navigationBarItemsItemsExternalModules.ts ===
+// <|export class [|{| name: Bar, kind: Class |}Bar|] {
+//     <|public [|{| name: s, kind: Property |}s|]: string;|>
+// }|>
+
+// === Details ===
+(Class) Bar
+  (Property) s

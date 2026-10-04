@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/decorators/decoratorMetadataWithTypeOnlyImport.ts] ////
+
+=== service.ts ===
+export class Service {
+>Service : Service
+}
+=== component.ts ===
+import type { Service } from "./service";
+>Service : Service
+
+declare var decorator: any;
+>decorator : any
+
+@decorator
+>decorator : any
+
+class MyComponent {
+>MyComponent : MyComponent
+
+    constructor(public Service: Service) {
+>Service : Service
+    }
+
+    @decorator
+>decorator : any
+
+    method(x: this) {
+>method : (x: this) => void
+>x : this
+    }
+}

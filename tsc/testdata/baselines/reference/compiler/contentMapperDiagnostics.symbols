@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/contentMapperDiagnostics.ts] ////
+
+=== /widget.box ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(widget.box, 0, 5))
+
+export const count: number = "not a number";
+>count : Symbol(count, Decl(widget.box, 1, 12))
+
+export const label: string = 7;
+>label : Symbol(label, Decl(widget.box, 2, 12))
+
+export const broken = undefined
+>broken : Symbol(broken, Decl(widget.box, 3, 12))
+>undefined : Symbol(undefined)
+

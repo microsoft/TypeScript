@@ -1,0 +1,15 @@
+// === Document Symbols ===
+// === /navigationBarItemsPropertiesDefinedInConstructors.ts ===
+// <|class [|{| name: List, kind: Class |}List|]<T> {
+//     <|[|{| name: constructor, kind: Constructor |}|]constructor(<|public [|{| name: a, kind: Property |}a|]: boolean|>, <|private [|{| name: b, kind: Property |}b|]: T|>, <|readonly [|{| name: c, kind: Property |}c|]: string|>, d: number) {
+//         var <|[|{| name: local, kind: Variable |}local|] = 0|>;
+//     }|>
+// }|>
+
+// === Details ===
+(Class) List
+  (Constructor) constructor
+    (Variable) local
+  (Property) a
+  (Property) b
+  (Property) c

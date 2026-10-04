@@ -1,0 +1,33 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixInferFromUsageInaccessibleTypes(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: false
+// @noImplicitAny: true
+function f1(a) { a; }
+function h1() {
+    class C { p: number };
+    f1({ ofTypeC: new C() });
+}
+
+function f2(a) { a; }
+function h2() {
+    interface I { a: number }
+    var i: I = {a : 1};
+    f2(i);
+    f2(2);
+    f2(false);
+}
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFixNotAvailable(t)
+}

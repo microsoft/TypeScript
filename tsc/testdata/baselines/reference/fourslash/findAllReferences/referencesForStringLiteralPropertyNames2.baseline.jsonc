@@ -1,0 +1,30 @@
+// === findAllReferences ===
+// === /referencesForStringLiteralPropertyNames2.ts ===
+// class Foo {
+//     /*FIND ALL REFS*/"[|blah|]"() { return 0; }
+// }
+// 
+// var x: Foo;
+// x.[|blah|];
+
+
+
+// === findAllReferences ===
+// === /referencesForStringLiteralPropertyNames2.ts ===
+// class Foo {
+//     "/*FIND ALL REFS*/[|blah|]"() { return 0; }
+// }
+// 
+// var x: Foo;
+// x.[|blah|];
+
+
+
+// === findAllReferences ===
+// === /referencesForStringLiteralPropertyNames2.ts ===
+// class Foo {
+//     "[|blah|]"() { return 0; }
+// }
+// 
+// var x: Foo;
+// x./*FIND ALL REFS*/[|blah|];

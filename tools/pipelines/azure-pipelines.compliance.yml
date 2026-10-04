@@ -1,0 +1,49 @@
+trigger:
+  branches:
+    include:
+      - main
+
+resources:
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  parameters:
+    pool:
+      name: TypeScript-AzurePipelines-EO
+      image: 1ESPT-AzureLinux3
+      os: linux
+
+    sdl:
+      git:
+        submodules: false
+        fetchDepth: 1
+        fetchTags: false
+        retryCount: 3
+      sourceAnalysisPool:
+        name: TypeScript-AzurePipelines-EO
+        image: 1ESPT-Windows2022
+        os: windows
+
+    stages:
+      - stage: Build
+        displayName: Build
+        jobs:
+          - job: Build
+            displayName: Build
+
+            steps:
+              - checkout: self
+                clean: true
+                fetchDepth: 1
+                fetchTags: false
+                submodules: false
+                retryCountOnTaskFailure: 3
+
+              - task: ComponentGovernanceComponentDetection@0
+                condition: succeededOrFailed()
+                continueOnError: True

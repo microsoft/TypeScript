@@ -1,0 +1,11 @@
+/foo.js(1,25): error TS2306: File '/foo.js' is not a module.
+/foo.js(1,38): error TS1005: '{' expected.
+
+
+==== /foo.js (2 errors) ====
+    /** @import * as f from "./foo" with */
+                            ~~~~~~~
+!!! error TS2306: File '/foo.js' is not a module.
+                                         
+!!! error TS1005: '{' expected.
+    

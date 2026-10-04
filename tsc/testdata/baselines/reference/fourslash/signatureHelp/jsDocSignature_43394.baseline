@@ -1,0 +1,25 @@
+// === SignatureHelp ===
+=== /jsDocSignature_43394.ts ===
+// /**
+//  * @typedef {Object} Foo
+//  * @property {number} ...
+//  * @typedef {number} Bar
+//    ^
+// | ----------------------------------------------------------------------
+// | No signaturehelp at /**/.
+// | ----------------------------------------------------------------------
+//  */
+[
+  {
+    "marker": {
+      "Position": 58,
+      "LSPosition": {
+        "line": 3,
+        "character": 3
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": null
+  }
+]

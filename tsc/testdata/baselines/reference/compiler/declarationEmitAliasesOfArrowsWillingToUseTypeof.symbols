@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/declarationEmitAliasesOfArrowsWillingToUseTypeof.ts] ////
+
+=== src/component.ts ===
+export function FunctionComponent(props: { x: number; y: number; z: number; }) {
+>FunctionComponent : Symbol(FunctionComponent, Decl(component.ts, 0, 0))
+>props : Symbol(props, Decl(component.ts, 0, 34))
+>x : Symbol(x, Decl(component.ts, 0, 42))
+>y : Symbol(y, Decl(component.ts, 0, 53))
+>z : Symbol(z, Decl(component.ts, 0, 64))
+
+    return null;
+}
+FunctionComponent.args = { x: 3, y: 4, z: 5 };
+>FunctionComponent.args : Symbol(FunctionComponent.args, Decl(component.ts, 2, 1))
+>FunctionComponent : Symbol(FunctionComponent, Decl(component.ts, 0, 0))
+>args : Symbol(FunctionComponent.args, Decl(component.ts, 2, 1))
+>x : Symbol(x, Decl(component.ts, 3, 26))
+>y : Symbol(y, Decl(component.ts, 3, 32))
+>z : Symbol(z, Decl(component.ts, 3, 38))
+
+export const ArrowComponent = (props: { x: number; y: number; z: number; }) => {
+>ArrowComponent : Symbol(ArrowComponent, Decl(component.ts, 5, 12))
+>props : Symbol(props, Decl(component.ts, 5, 31))
+>x : Symbol(x, Decl(component.ts, 5, 39))
+>y : Symbol(y, Decl(component.ts, 5, 50))
+>z : Symbol(z, Decl(component.ts, 5, 61))
+
+    return null;
+}
+ArrowComponent.args = { x: 5, y: 12, z: 13 };
+>ArrowComponent.args : Symbol(ArrowComponent.args, Decl(component.ts, 7, 1))
+>ArrowComponent : Symbol(ArrowComponent, Decl(component.ts, 5, 12))
+>args : Symbol(ArrowComponent.args, Decl(component.ts, 7, 1))
+>x : Symbol(x, Decl(component.ts, 8, 23))
+>y : Symbol(y, Decl(component.ts, 8, 29))
+>z : Symbol(z, Decl(component.ts, 8, 36))
+
+=== src/main.js ===
+import { FunctionComponent, ArrowComponent } from './component.js'
+>FunctionComponent : Symbol(FunctionComponent, Decl(main.js, 0, 8))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main.js, 0, 27))
+
+const FunctionComponentAlias = FunctionComponent;
+>FunctionComponentAlias : Symbol(FunctionComponentAlias, Decl(main.js, 2, 5))
+>FunctionComponent : Symbol(FunctionComponent, Decl(main.js, 0, 8))
+
+const ArrowComponentAlias = ArrowComponent;
+>ArrowComponentAlias : Symbol(ArrowComponentAlias, Decl(main.js, 3, 5))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main.js, 0, 27))
+
+export default { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>FunctionComponent : Symbol(FunctionComponent, Decl(main.js, 5, 16))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main.js, 5, 35))
+>FunctionComponentAlias : Symbol(FunctionComponentAlias, Decl(main.js, 5, 51))
+>ArrowComponentAlias : Symbol(ArrowComponentAlias, Decl(main.js, 5, 75))
+
+export { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>FunctionComponent : Symbol(FunctionComponent, Decl(main.js, 6, 8))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main.js, 6, 27))
+>FunctionComponentAlias : Symbol(FunctionComponentAlias, Decl(main.js, 6, 43))
+>ArrowComponentAlias : Symbol(ArrowComponentAlias, Decl(main.js, 6, 67))
+
+=== src/main2.ts ===
+import { FunctionComponent, ArrowComponent } from './component.js'
+>FunctionComponent : Symbol(FunctionComponent, Decl(main2.ts, 0, 8))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main2.ts, 0, 27))
+
+const FunctionComponentAlias = FunctionComponent;
+>FunctionComponentAlias : Symbol(FunctionComponentAlias, Decl(main2.ts, 2, 5))
+>FunctionComponent : Symbol(FunctionComponent, Decl(main2.ts, 0, 8))
+
+const ArrowComponentAlias = ArrowComponent;
+>ArrowComponentAlias : Symbol(ArrowComponentAlias, Decl(main2.ts, 3, 5))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main2.ts, 0, 27))
+
+export default { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>FunctionComponent : Symbol(FunctionComponent, Decl(main2.ts, 5, 16))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main2.ts, 5, 35))
+>FunctionComponentAlias : Symbol(FunctionComponentAlias, Decl(main2.ts, 5, 51))
+>ArrowComponentAlias : Symbol(ArrowComponentAlias, Decl(main2.ts, 5, 75))
+
+export { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>FunctionComponent : Symbol(FunctionComponent, Decl(main2.ts, 6, 8))
+>ArrowComponent : Symbol(ArrowComponent, Decl(main2.ts, 6, 27))
+>FunctionComponentAlias : Symbol(FunctionComponentAlias, Decl(main2.ts, 6, 43))
+>ArrowComponentAlias : Symbol(ArrowComponentAlias, Decl(main2.ts, 6, 67))
+

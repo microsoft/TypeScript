@@ -1,0 +1,2274 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInInterface.ts ===
+// interface I<T> {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new <U>(a: U, b: T): U;
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in new new <U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in new new <U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in new new <U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     <U>(a: U, b: T): U;
+//      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in <U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in <U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in <U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method<U>(a: U, b: T): U;
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) I<T>.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in I<T>.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in I<T>.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in I<T>.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var iVal: I<string>;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new iVal("hello", "hello");
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: new <"hello">(a: "hello", b: string) => "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal("hello", "hello");
+// ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: <"hello">(a: "hello", b: string) => "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal.method("hello", "hello");
+// ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//      ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) I<string>.method<"hello">(a: "hello", b: string): "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// interface I1<T extends I<string>> {
+//           ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends I<string> in I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new <U extends I<string>>(a: U, b: T): U;
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                  ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends I<string> in I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     <U extends I<string>>(a: U, b: T): U;
+//      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends I<string> in I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method<U extends I<string>>(a: U, b: T): U;
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends I<string> in I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var iVal1: I1<I<string>>;
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal1: I1<I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new iVal1(iVal, iVal);
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal1: new <I<string>>(a: I<string>, b: I<string>) => I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal1(iVal, iVal);
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal1.method(iVal, iVal);
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal1: I1<I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//       ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) I1<I<string>>.method<I<string>>(a: I<string>, b: I<string>): I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 10
+        },
+        "end": {
+          "line": 0,
+          "character": 11
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 12,
+      "LSPosition": {
+        "line": 0,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 12
+        },
+        "end": {
+          "line": 0,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 12
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 12
+        },
+        "end": {
+          "line": 1,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 15
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 15
+        },
+        "end": {
+          "line": 1,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 35,
+      "LSPosition": {
+        "line": 1,
+        "character": 18
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 18
+        },
+        "end": {
+          "line": 1,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 38,
+      "LSPosition": {
+        "line": 1,
+        "character": 21
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 21
+        },
+        "end": {
+          "line": 1,
+          "character": 22
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 42,
+      "LSPosition": {
+        "line": 1,
+        "character": 25
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 25
+        },
+        "end": {
+          "line": 1,
+          "character": 26
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 50,
+      "LSPosition": {
+        "line": 2,
+        "character": 5
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 5
+        },
+        "end": {
+          "line": 2,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 53,
+      "LSPosition": {
+        "line": 2,
+        "character": 8
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 8
+        },
+        "end": {
+          "line": 2,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 56,
+      "LSPosition": {
+        "line": 2,
+        "character": 11
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 11
+        },
+        "end": {
+          "line": 2,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 59,
+      "LSPosition": {
+        "line": 2,
+        "character": 14
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 14
+        },
+        "end": {
+          "line": 2,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 62,
+      "LSPosition": {
+        "line": 2,
+        "character": 17
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 17
+        },
+        "end": {
+          "line": 2,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 66,
+      "LSPosition": {
+        "line": 2,
+        "character": 21
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 21
+        },
+        "end": {
+          "line": 2,
+          "character": 22
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 73,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "15",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) I<T>.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 80,
+      "LSPosition": {
+        "line": 3,
+        "character": 11
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in I<T>.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 11
+        },
+        "end": {
+          "line": 3,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 83,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "17",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 14
+        },
+        "end": {
+          "line": 3,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 3,
+        "character": 17
+      },
+      "Name": "18",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in I<T>.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 17
+        },
+        "end": {
+          "line": 3,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 3,
+        "character": 20
+      },
+      "Name": "19",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 20
+        },
+        "end": {
+          "line": 3,
+          "character": 21
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 92,
+      "LSPosition": {
+        "line": 3,
+        "character": 23
+      },
+      "Name": "20",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 23
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 96,
+      "LSPosition": {
+        "line": 3,
+        "character": 27
+      },
+      "Name": "21",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in I<T>.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 27
+        },
+        "end": {
+          "line": 3,
+          "character": 28
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 105,
+      "LSPosition": {
+        "line": 5,
+        "character": 4
+      },
+      "Name": "22",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 111,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "23",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 10
+        },
+        "end": {
+          "line": 5,
+          "character": 11
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 126,
+      "LSPosition": {
+        "line": 6,
+        "character": 4
+      },
+      "Name": "24",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: new <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 4
+        },
+        "end": {
+          "line": 6,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 150,
+      "LSPosition": {
+        "line": 7,
+        "character": 0
+      },
+      "Name": "25",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 0
+        },
+        "end": {
+          "line": 7,
+          "character": 4
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 174,
+      "LSPosition": {
+        "line": 8,
+        "character": 0
+      },
+      "Name": "26",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 4
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 179,
+      "LSPosition": {
+        "line": 8,
+        "character": 5
+      },
+      "Name": "27",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) I<string>.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 5
+        },
+        "end": {
+          "line": 8,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 215,
+      "LSPosition": {
+        "line": 9,
+        "character": 10
+      },
+      "Name": "28",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 10
+        },
+        "end": {
+          "line": 9,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 218,
+      "LSPosition": {
+        "line": 9,
+        "character": 13
+      },
+      "Name": "29",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 13
+        },
+        "end": {
+          "line": 9,
+          "character": 14
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 228,
+      "LSPosition": {
+        "line": 9,
+        "character": 23
+      },
+      "Name": "30",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 23
+        },
+        "end": {
+          "line": 9,
+          "character": 24
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 250,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "31",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 9
+        },
+        "end": {
+          "line": 10,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 260,
+      "LSPosition": {
+        "line": 10,
+        "character": 19
+      },
+      "Name": "32",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 19
+        },
+        "end": {
+          "line": 10,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 271,
+      "LSPosition": {
+        "line": 10,
+        "character": 30
+      },
+      "Name": "33",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 30
+        },
+        "end": {
+          "line": 10,
+          "character": 31
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 274,
+      "LSPosition": {
+        "line": 10,
+        "character": 33
+      },
+      "Name": "34",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 33
+        },
+        "end": {
+          "line": 10,
+          "character": 34
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 277,
+      "LSPosition": {
+        "line": 10,
+        "character": 36
+      },
+      "Name": "35",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 36
+        },
+        "end": {
+          "line": 10,
+          "character": 37
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 280,
+      "LSPosition": {
+        "line": 10,
+        "character": 39
+      },
+      "Name": "36",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 39
+        },
+        "end": {
+          "line": 10,
+          "character": 40
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 284,
+      "LSPosition": {
+        "line": 10,
+        "character": 43
+      },
+      "Name": "37",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 43
+        },
+        "end": {
+          "line": 10,
+          "character": 44
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 292,
+      "LSPosition": {
+        "line": 11,
+        "character": 5
+      },
+      "Name": "38",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 5
+        },
+        "end": {
+          "line": 11,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 302,
+      "LSPosition": {
+        "line": 11,
+        "character": 15
+      },
+      "Name": "39",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 15
+        },
+        "end": {
+          "line": 11,
+          "character": 16
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 313,
+      "LSPosition": {
+        "line": 11,
+        "character": 26
+      },
+      "Name": "40",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 26
+        },
+        "end": {
+          "line": 11,
+          "character": 27
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 316,
+      "LSPosition": {
+        "line": 11,
+        "character": 29
+      },
+      "Name": "41",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 29
+        },
+        "end": {
+          "line": 11,
+          "character": 30
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 11,
+        "character": 32
+      },
+      "Name": "42",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 32
+        },
+        "end": {
+          "line": 11,
+          "character": 33
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 322,
+      "LSPosition": {
+        "line": 11,
+        "character": 35
+      },
+      "Name": "43",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 35
+        },
+        "end": {
+          "line": 11,
+          "character": 36
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 326,
+      "LSPosition": {
+        "line": 11,
+        "character": 39
+      },
+      "Name": "44",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 39
+        },
+        "end": {
+          "line": 11,
+          "character": 40
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 333,
+      "LSPosition": {
+        "line": 12,
+        "character": 4
+      },
+      "Name": "45",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 4
+        },
+        "end": {
+          "line": 12,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 340,
+      "LSPosition": {
+        "line": 12,
+        "character": 11
+      },
+      "Name": "46",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 11
+        },
+        "end": {
+          "line": 12,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 350,
+      "LSPosition": {
+        "line": 12,
+        "character": 21
+      },
+      "Name": "47",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 21
+        },
+        "end": {
+          "line": 12,
+          "character": 22
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 361,
+      "LSPosition": {
+        "line": 12,
+        "character": 32
+      },
+      "Name": "48",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 32
+        },
+        "end": {
+          "line": 12,
+          "character": 33
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 364,
+      "LSPosition": {
+        "line": 12,
+        "character": 35
+      },
+      "Name": "49",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 35
+        },
+        "end": {
+          "line": 12,
+          "character": 36
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 367,
+      "LSPosition": {
+        "line": 12,
+        "character": 38
+      },
+      "Name": "50",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 38
+        },
+        "end": {
+          "line": 12,
+          "character": 39
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 370,
+      "LSPosition": {
+        "line": 12,
+        "character": 41
+      },
+      "Name": "51",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 41
+        },
+        "end": {
+          "line": 12,
+          "character": 42
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 374,
+      "LSPosition": {
+        "line": 12,
+        "character": 45
+      },
+      "Name": "52",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 45
+        },
+        "end": {
+          "line": 12,
+          "character": 46
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 383,
+      "LSPosition": {
+        "line": 14,
+        "character": 4
+      },
+      "Name": "53",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal1: I1<I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 4
+        },
+        "end": {
+          "line": 14,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 390,
+      "LSPosition": {
+        "line": 14,
+        "character": 11
+      },
+      "Name": "54",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 11
+        },
+        "end": {
+          "line": 14,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 393,
+      "LSPosition": {
+        "line": 14,
+        "character": 14
+      },
+      "Name": "55",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 14
+        },
+        "end": {
+          "line": 14,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 409,
+      "LSPosition": {
+        "line": 15,
+        "character": 4
+      },
+      "Name": "56",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal1: new <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 4
+        },
+        "end": {
+          "line": 15,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 415,
+      "LSPosition": {
+        "line": 15,
+        "character": 10
+      },
+      "Name": "57",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 10
+        },
+        "end": {
+          "line": 15,
+          "character": 14
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 421,
+      "LSPosition": {
+        "line": 15,
+        "character": 16
+      },
+      "Name": "58",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 16
+        },
+        "end": {
+          "line": 15,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 428,
+      "LSPosition": {
+        "line": 16,
+        "character": 0
+      },
+      "Name": "59",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 5
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 434,
+      "LSPosition": {
+        "line": 16,
+        "character": 6
+      },
+      "Name": "60",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 6
+        },
+        "end": {
+          "line": 16,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 440,
+      "LSPosition": {
+        "line": 16,
+        "character": 12
+      },
+      "Name": "61",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 12
+        },
+        "end": {
+          "line": 16,
+          "character": 16
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 447,
+      "LSPosition": {
+        "line": 17,
+        "character": 0
+      },
+      "Name": "62",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal1: I1<I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 5
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 453,
+      "LSPosition": {
+        "line": 17,
+        "character": 6
+      },
+      "Name": "63",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) I1<I<string>>.method<I<string>>(a: I<string>, b: I<string>): I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 6
+        },
+        "end": {
+          "line": 17,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 460,
+      "LSPosition": {
+        "line": 17,
+        "character": 13
+      },
+      "Name": "64",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 13
+        },
+        "end": {
+          "line": 17,
+          "character": 17
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 466,
+      "LSPosition": {
+        "line": 17,
+        "character": 19
+      },
+      "Name": "65",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 19
+        },
+        "end": {
+          "line": 17,
+          "character": 23
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/missingCommaInTemplateStringsArray.ts] ////
+
+=== missingCommaInTemplateStringsArray.ts ===
+var array = [
+>array : any[]
+>[    `template string 1`    `template string 2`  ] : any[]
+
+    `template string 1`
+>`template string 1`    `template string 2` : any
+>`template string 1` : "template string 1"
+
+    `template string 2`
+>`template string 2` : "template string 2"
+
+  ];

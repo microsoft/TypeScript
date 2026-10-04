@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsPromiseNeedsJSDocHint.ts] ////
+
+=== main.js ===
+new Promise((resolve) => resolve());
+>new Promise((resolve) => resolve()) : Promise<any>
+>Promise : PromiseConstructor
+>(resolve) => resolve() : (resolve: (value: any) => void) => void
+>resolve : (value: any) => void
+>resolve() : void
+>resolve : (value: any) => void
+

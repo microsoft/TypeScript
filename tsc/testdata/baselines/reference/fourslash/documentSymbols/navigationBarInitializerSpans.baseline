@@ -1,0 +1,15 @@
+// === Document Symbols ===
+// === /navigationBarInitializerSpans.ts ===
+// // get the name for the navbar from the variable name rather than the function name
+// const <|[|{| name: x, kind: Variable |}x|] = () => { var <|[|{| name: a, kind: Variable |}a|]|>; }|>;
+// const <|[|{| name: f, kind: Variable |}f|] = function f() { var <|[|{| name: b, kind: Variable |}b|]|>; }|>;
+// const <|[|{| name: y, kind: Variable |}y|] = { <|[|{| name: z, kind: Property |}z|]: function z() { var <|[|{| name: c, kind: Variable |}c|]|>; }|> }|>;
+
+// === Details ===
+(Variable) x
+  (Variable) a
+(Variable) f
+  (Variable) b
+(Variable) y
+  (Property) z
+    (Variable) c

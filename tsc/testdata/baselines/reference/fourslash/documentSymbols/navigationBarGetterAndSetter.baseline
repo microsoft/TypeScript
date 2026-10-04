@@ -1,0 +1,15 @@
+// === Document Symbols ===
+// === /navigationBarGetterAndSetter.ts ===
+// <|class [|{| name: X, kind: Class |}X|] {
+//     <|get [|{| name: x, kind: Property |}x|]() {}|>
+//     <|set [|{| name: x, kind: Property |}x|](value) {
+//         // Inner declaration should make the setter top-level.
+//         <|function [|{| name: f, kind: Function |}f|]() {}|>
+//     }|>
+// }|>
+
+// === Details ===
+(Class) X
+  (Property) x
+  (Property) x
+    (Function) f

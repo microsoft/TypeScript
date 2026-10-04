@@ -1,0 +1,7 @@
+// === documentHighlights ===
+// === /documentHighlightMultilineTemplateStrings.ts ===
+// const foo = `
+//     a
+//     /*HIGHLIGHTS*/b
+//     c
+// `

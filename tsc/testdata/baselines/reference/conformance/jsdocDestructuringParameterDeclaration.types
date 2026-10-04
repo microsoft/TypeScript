@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/jsdoc/jsdocDestructuringParameterDeclaration.ts] ////
+
+=== /a.js ===
+/**
+ * @param {{ a: number; b: string }} args
+ */
+function f({ a, b }) {}
+>f : ({ a, b }: { a: number; b: string; }) => void
+>a : number
+>b : string
+

@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export default function [|createThing|]() { return { value: 42 }; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import /*GOTO SOURCE DEF*/createThing from "pkg";
+// createThing();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export default function [|createThing|]() { return { value: 42 }; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import createThing from "pkg";
+// createThing/*GOTO SOURCE DEF*/();

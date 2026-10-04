@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/tryCatchFinally.ts] ////
+
+=== tryCatchFinally.ts ===
+try { } catch(e) { } finally { } 
+>e : unknown
+
+try {} catch(e) {}
+>e : unknown
+
+try {} finally {}

@@ -1,0 +1,48 @@
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /a.ts ===
+// function /*HIGHLIGHTS*/[|foo|] () {
+// 	return 1;
+// }
+// [|foo|]();
+
+// === /b.ts ===
+// /// <reference path="a.ts"/>
+// [|foo|]();
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /a.ts ===
+// function [|foo|] () {
+// 	return 1;
+// }
+// /*HIGHLIGHTS*/[|foo|]();
+
+// === /b.ts ===
+// /// <reference path="a.ts"/>
+// [|foo|]();
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /a.ts ===
+// function [|foo|] () {
+// 	return 1;
+// }
+// [|foo|]();
+
+// === /b.ts ===
+// /// <reference path="a.ts"/>
+// /*HIGHLIGHTS*/[|foo|]();

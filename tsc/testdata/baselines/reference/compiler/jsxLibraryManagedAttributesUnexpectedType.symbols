@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/jsxLibraryManagedAttributesUnexpectedType.tsx] ////
+
+=== jsxLibraryManagedAttributesUnexpectedType.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxLibraryManagedAttributesUnexpectedType.tsx, 0, 0))
+
+  enum LibraryManagedAttributes {}
+>LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(jsxLibraryManagedAttributesUnexpectedType.tsx, 0, 23))
+}
+
+declare const C: () => any;
+>C : Symbol(C, Decl(jsxLibraryManagedAttributesUnexpectedType.tsx, 4, 13))
+
+const x = <C />;
+>x : Symbol(x, Decl(jsxLibraryManagedAttributesUnexpectedType.tsx, 6, 5))
+>C : Symbol(C, Decl(jsxLibraryManagedAttributesUnexpectedType.tsx, 4, 13))
+

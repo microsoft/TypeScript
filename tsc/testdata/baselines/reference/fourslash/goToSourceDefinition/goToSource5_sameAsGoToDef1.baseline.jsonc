@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/a.ts ===
+// export const [|a|] = 'a';
+
+// === /home/src/workspaces/project/b.ts ===
+// import { a } from './a';
+// a/*GOTO SOURCE DEF*/

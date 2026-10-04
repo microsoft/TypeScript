@@ -1,0 +1,14 @@
+error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2488: Type 'number[] | null' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+!!! error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+==== destructuringArrayBindingPatternAndAssignment4.ts (1 errors) ====
+    // #35497
+    
+    
+    declare const data: number[] | null;
+    const [value] = data; // Error
+          ~~~~~~~
+!!! error TS2488: Type 'number[] | null' must have a '[Symbol.iterator]()' method that returns an iterator.
+    

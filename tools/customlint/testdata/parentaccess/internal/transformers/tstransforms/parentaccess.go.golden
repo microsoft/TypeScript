@@ -1,0 +1,24 @@
+	package tstransforms
+	
+	type Node struct{}
+	
+	func (n *Node) Parent() *Node {
+		return nil
+	}
+	
+	type WithField struct {
+		Parent *Node
+	}
+	
+	func badCall(n *Node) {
+		_ = n.Parent()
+		      ~~~~~~
+!!! forbidparentaccess: Transformers are run on nodes with potentially unset .Parent pointers, do not use them in transformers. Track context in the transform itself, instead.
+	}
+	
+	func badFieldAccess(w *WithField) {
+		_ = w.Parent
+		      ~~~~~~
+!!! forbidparentaccess: Transformers are run on nodes with potentially unset .Parent pointers, do not use them in transformers. Track context in the transform itself, instead.
+	}
+	

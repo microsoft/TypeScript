@@ -1,0 +1,40 @@
+// === QuickInfo ===
+=== /quickInfoCircularInstantiationExpression.ts ===
+// declare function foo<T>(t: T): typeof foo<T>;
+// foo("");
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo<string>(t: string): (t: string) => ...
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 46,
+      "LSPosition": {
+        "line": 1,
+        "character": 0
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo<string>(t: string): (t: string) => ...\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 3
+        }
+      }
+    }
+  }
+]

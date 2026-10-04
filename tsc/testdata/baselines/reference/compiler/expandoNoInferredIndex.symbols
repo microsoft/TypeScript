@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/expandoNoInferredIndex.ts] ////
+
+=== main.js ===
+export class C {
+>C : Symbol(C, Decl(main.js, 0, 0))
+
+    method() {
+>method : Symbol(C.method, Decl(main.js, 0, 16))
+
+        const obj = {};
+>obj : Symbol(obj, Decl(main.js, 2, 13))
+
+        obj.foo = 'foo';
+>obj.foo : Symbol(foo, Decl(main.js, 2, 23))
+>obj : Symbol(obj, Decl(main.js, 2, 13))
+>foo : Symbol(foo, Decl(main.js, 2, 23))
+
+        obj.bar = 'bar';
+>obj.bar : Symbol(bar, Decl(main.js, 3, 24))
+>obj : Symbol(obj, Decl(main.js, 2, 13))
+>bar : Symbol(bar, Decl(main.js, 3, 24))
+
+        obj.buzz = Object.values(obj);
+>obj.buzz : Symbol(buzz, Decl(main.js, 4, 24))
+>obj : Symbol(obj, Decl(main.js, 2, 13))
+>buzz : Symbol(buzz, Decl(main.js, 4, 24))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>obj : Symbol(obj, Decl(main.js, 2, 13))
+    }
+}
+

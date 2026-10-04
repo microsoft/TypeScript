@@ -1,0 +1,11 @@
+// === goToImplementation ===
+// === /combined.d.ts ===
+// <|[|export|] dec|>lare class Bar {
+//     method(): void;
+// }
+// //# sourceMappingURL=combined.d.ts.map
+
+// === /user.ts ===
+// import { Bar } from './combined';
+// declare const bar: Bar;
+// bar./*GOTO IMPL*/method();

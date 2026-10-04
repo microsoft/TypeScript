@@ -1,0 +1,184 @@
+//// [tests/cases/compiler/jsdocTypesWithPrefixesAndUnionTypes1.ts] ////
+
+=== src/question.js ===
+/** @param {?} x */
+export function f0(x) {}
+>f0 : Symbol(f0, Decl(question.js, 0, 0))
+>x : Symbol(x, Decl(question.js, 1, 19))
+
+/** @param {?never} x */
+export function f1(x) {}
+>f1 : Symbol(f1, Decl(question.js, 1, 24))
+>x : Symbol(x, Decl(question.js, 4, 19))
+
+/** @param {never?} x */
+export function f2(x) {}
+>f2 : Symbol(f2, Decl(question.js, 4, 24))
+>x : Symbol(x, Decl(question.js, 7, 19))
+
+/** @param {? | never} x */
+export function f3(x) {}
+>f3 : Symbol(f3, Decl(question.js, 7, 24))
+>x : Symbol(x, Decl(question.js, 10, 19))
+
+/** @param {? | string} x */
+export function f4(x) {}
+>f4 : Symbol(f4, Decl(question.js, 10, 24))
+>x : Symbol(x, Decl(question.js, 13, 19))
+
+/** @param {number | ? | string} x */
+export function f5(x) {}
+>f5 : Symbol(f5, Decl(question.js, 13, 24))
+>x : Symbol(x, Decl(question.js, 16, 19))
+
+/** @param {number | string | ?} x */
+export function f6(x) {}
+>f6 : Symbol(f6, Decl(question.js, 16, 24))
+>x : Symbol(x, Decl(question.js, 19, 19))
+
+/** @param {? number | string} x */
+export function f7(x) {}
+>f7 : Symbol(f7, Decl(question.js, 19, 24))
+>x : Symbol(x, Decl(question.js, 22, 19))
+
+/** @param {number? | string} x */
+export function f8(x) {}
+>f8 : Symbol(f8, Decl(question.js, 22, 24))
+>x : Symbol(x, Decl(question.js, 25, 19))
+
+/** @param {number | ? string} x */
+export function f9(x) {}
+>f9 : Symbol(f9, Decl(question.js, 25, 24))
+>x : Symbol(x, Decl(question.js, 28, 19))
+
+/** @param {? { a: number } & { b: number }} x */
+export function f10(x) {}
+>f10 : Symbol(f10, Decl(question.js, 28, 24))
+>x : Symbol(x, Decl(question.js, 31, 20))
+
+/** @param {{ a: number } & ? { b: number }} x */
+export function f11(x) {}
+>f11 : Symbol(f11, Decl(question.js, 31, 25))
+>x : Symbol(x, Decl(question.js, 34, 20))
+
+/** @param {? { a: number } & { b: number } | string} x */
+export function f12(x) {}
+>f12 : Symbol(f12, Decl(question.js, 34, 25))
+>x : Symbol(x, Decl(question.js, 37, 20))
+
+/** @param {{ a: number } & ? { b: number } | string} x */
+export function f13(x) {}
+>f13 : Symbol(f13, Decl(question.js, 37, 25))
+>x : Symbol(x, Decl(question.js, 40, 20))
+
+/** @param {?readonly number[]} x */
+export function f14(x) {}
+>f14 : Symbol(f14, Decl(question.js, 40, 25))
+>x : Symbol(x, Decl(question.js, 43, 20))
+
+/** @param {string | ?readonly number[]} x */
+export function f15(x) {}
+>f15 : Symbol(f15, Decl(question.js, 43, 25))
+>x : Symbol(x, Decl(question.js, 46, 20))
+
+/** @param {?readonly number[] | string} x */
+export function f16(x) {}
+>f16 : Symbol(f16, Decl(question.js, 46, 25))
+>x : Symbol(x, Decl(question.js, 49, 20))
+
+/** @param {?readonly ?number[] | string} x */
+export function f17(x) {}
+>f17 : Symbol(f17, Decl(question.js, 49, 25))
+>x : Symbol(x, Decl(question.js, 52, 20))
+
+=== src/exclamation.js ===
+/** @param {!} x */
+export function g0(x) {}
+>g0 : Symbol(g0, Decl(exclamation.js, 0, 0))
+>x : Symbol(x, Decl(exclamation.js, 1, 19))
+
+/** @param {!never} x */
+export function g1(x) {}
+>g1 : Symbol(g1, Decl(exclamation.js, 1, 24))
+>x : Symbol(x, Decl(exclamation.js, 4, 19))
+
+/** @param {never!} x */
+export function g2(x) {}
+>g2 : Symbol(g2, Decl(exclamation.js, 4, 24))
+>x : Symbol(x, Decl(exclamation.js, 7, 19))
+
+/** @param {! | never} x */
+export function g3(x) {}
+>g3 : Symbol(g3, Decl(exclamation.js, 7, 24))
+>x : Symbol(x, Decl(exclamation.js, 10, 19))
+
+/** @param {! | string} x */
+export function g4(x) {}
+>g4 : Symbol(g4, Decl(exclamation.js, 10, 24))
+>x : Symbol(x, Decl(exclamation.js, 13, 19))
+
+/** @param {number | ! | string} x */
+export function g5(x) {}
+>g5 : Symbol(g5, Decl(exclamation.js, 13, 24))
+>x : Symbol(x, Decl(exclamation.js, 16, 19))
+
+/** @param {number | string | !} x */
+export function g6(x) {}
+>g6 : Symbol(g6, Decl(exclamation.js, 16, 24))
+>x : Symbol(x, Decl(exclamation.js, 19, 19))
+
+/** @param {! number | string} x */
+export function g7(x) {}
+>g7 : Symbol(g7, Decl(exclamation.js, 19, 24))
+>x : Symbol(x, Decl(exclamation.js, 22, 19))
+
+/** @param {number! | string} x */
+export function g8(x) {}
+>g8 : Symbol(g8, Decl(exclamation.js, 22, 24))
+>x : Symbol(x, Decl(exclamation.js, 25, 19))
+
+/** @param {number | ! string} x */
+export function g9(x) {}
+>g9 : Symbol(g9, Decl(exclamation.js, 25, 24))
+>x : Symbol(x, Decl(exclamation.js, 28, 19))
+
+/** @param {! { a: number } & { b: number }} x */
+export function g10(x) {}
+>g10 : Symbol(g10, Decl(exclamation.js, 28, 24))
+>x : Symbol(x, Decl(exclamation.js, 31, 20))
+
+/** @param {{ a: number } & ! { b: number }} x */
+export function g11(x) {}
+>g11 : Symbol(g11, Decl(exclamation.js, 31, 25))
+>x : Symbol(x, Decl(exclamation.js, 34, 20))
+
+/** @param {! { a: number } & { b: number } | string} x */
+export function g12(x) {}
+>g12 : Symbol(g12, Decl(exclamation.js, 34, 25))
+>x : Symbol(x, Decl(exclamation.js, 37, 20))
+
+/** @param {{ a: number } & ! { b: number } | string} x */
+export function g13(x) {}
+>g13 : Symbol(g13, Decl(exclamation.js, 37, 25))
+>x : Symbol(x, Decl(exclamation.js, 40, 20))
+
+/** @param {!readonly number[]} x */
+export function g14(x) {}
+>g14 : Symbol(g14, Decl(exclamation.js, 40, 25))
+>x : Symbol(x, Decl(exclamation.js, 43, 20))
+
+/** @param {string | !readonly number[]} x */
+export function g15(x) {}
+>g15 : Symbol(g15, Decl(exclamation.js, 43, 25))
+>x : Symbol(x, Decl(exclamation.js, 46, 20))
+
+/** @param {!readonly number[] | string} x */
+export function g16(x) {}
+>g16 : Symbol(g16, Decl(exclamation.js, 46, 25))
+>x : Symbol(x, Decl(exclamation.js, 49, 20))
+
+/** @param {!readonly !number[] | string} x */
+export function g17(x) {}
+>g17 : Symbol(g17, Decl(exclamation.js, 49, 25))
+>x : Symbol(x, Decl(exclamation.js, 52, 20))
+

@@ -1,0 +1,112 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsInterface.ts ===
+// interface i {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface i
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var iInstance: i;
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iInstance: i
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface i
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface i\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 10
+        },
+        "end": {
+          "line": 0,
+          "character": 11
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iInstance: i\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 31,
+      "LSPosition": {
+        "line": 2,
+        "character": 15
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface i\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 15
+        },
+        "end": {
+          "line": 2,
+          "character": 16
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

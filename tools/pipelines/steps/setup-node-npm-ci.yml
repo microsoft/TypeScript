@@ -1,0 +1,21 @@
+steps:
+  - task: UseNode@1
+    inputs:
+      version: 24.x
+    displayName: 'Install Node'
+
+  - bash: |
+      cat > .npmrc << 'EOF'
+      registry=https://packagefeedproxy.microsoft.io/npm/
+      EOF
+    displayName: 'Set up .npmrc'
+
+  - pwsh: |
+      $ErrorActionPreference = 'Stop'
+      $PSNativeCommandUseErrorActionPreference = $true
+      npm install -g --userconfig .npmrc (Get-Content package.json | ConvertFrom-Json).packageManager
+      npm --version
+    displayName: 'Install packageManager from package.json'
+
+  - pwsh: npm ci
+    displayName: 'npm ci'

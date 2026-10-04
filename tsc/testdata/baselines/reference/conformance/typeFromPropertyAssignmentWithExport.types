@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignmentWithExport.ts] ////
+
+=== a.js ===
+// this is a javascript file...
+
+export const Adapter = {};
+>Adapter : { prop: {}; asyncMethod: () => void; }
+>{} : { prop: {}; asyncMethod: () => void; }
+
+Adapter.prop = {};
+>Adapter.prop = {} : {}
+>Adapter.prop : {}
+>Adapter : { prop: {}; asyncMethod: () => void; }
+>prop : {}
+>{} : {}
+
+// comment this out, and it works
+Adapter.asyncMethod = function() {}
+>Adapter.asyncMethod = function() {} : () => void
+>Adapter.asyncMethod : () => void
+>Adapter : { prop: {}; asyncMethod: () => void; }
+>asyncMethod : () => void
+>function() {} : () => void
+

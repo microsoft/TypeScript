@@ -1,0 +1,21 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|helper|]() {}|>
+// export const value = 42;
+
+// === /home/src/workspaces/project/index.ts ===
+// import * as pkg from "pkg";
+// pkg./*GOTO SOURCE DEF*/helper();
+// pkg.value;
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export function helper() {}
+// <|export const [|value|] = 42;|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import * as pkg from "pkg";
+// pkg.helper();
+// pkg./*GOTO SOURCE DEF*/value;

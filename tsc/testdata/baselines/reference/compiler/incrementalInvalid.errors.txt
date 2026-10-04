@@ -1,0 +1,8 @@
+error TS5074: Option '--incremental' is only valid with a known configuration file (like 'tsconfig.json') or when '--tsBuildInfoFile' is explicitly provided.
+
+
+!!! error TS5074: Option '--incremental' is only valid with a known configuration file (like 'tsconfig.json') or when '--tsBuildInfoFile' is explicitly provided.
+==== incrementalInvalid.ts (0 errors) ====
+    const x = 10;
+    
+    

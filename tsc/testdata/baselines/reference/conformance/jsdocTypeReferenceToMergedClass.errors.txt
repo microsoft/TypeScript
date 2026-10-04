@@ -1,0 +1,16 @@
+jsdocTypeReferenceToMergedClass.js(2,12): error TS2503: Cannot find namespace 'Workspace'.
+
+
+==== jsdocTypeReferenceToMergedClass.js (1 errors) ====
+    var Workspace = {}
+    /** @type {Workspace.Project} */
+               ~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'Workspace'.
+    var p;
+    p.isServiceProject()
+    
+    Workspace.Project = function wp() { }
+    Workspace.Project.prototype = {
+      isServiceProject() {}
+    }
+    

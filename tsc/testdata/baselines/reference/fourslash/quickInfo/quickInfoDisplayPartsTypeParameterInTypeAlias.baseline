@@ -1,0 +1,210 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInTypeAlias.ts ===
+// type List<T> = T[]
+//      ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type List<T> = T[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in type List<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in type List<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// type List2<T extends string> = T[];
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type List2<T extends string> = T[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends string in type List2<T extends string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends string in type List2<T extends string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 5,
+      "LSPosition": {
+        "line": 0,
+        "character": 5
+      },
+      "Name": "0",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype List<T> = T[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 5
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in type List<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 10
+        },
+        "end": {
+          "line": 0,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 15,
+      "LSPosition": {
+        "line": 0,
+        "character": 15
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in type List<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 15
+        },
+        "end": {
+          "line": 0,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype List2<T extends string> = T[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 5
+        },
+        "end": {
+          "line": 1,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends string in type List2<T extends string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 11
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 50,
+      "LSPosition": {
+        "line": 1,
+        "character": 31
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends string in type List2<T extends string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 31
+        },
+        "end": {
+          "line": 1,
+          "character": 32
+        }
+      }
+    }
+  }
+]

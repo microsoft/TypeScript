@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitNestedExpandoPropsRegression.ts] ////
+
+=== declarationEmitNestedExpandoPropsRegression.ts ===
+function Foo(): void { }
+>Foo : Symbol(Foo, Decl(declarationEmitNestedExpandoPropsRegression.ts, 0, 0))
+
+Foo.top = 1;
+>Foo.top : Symbol(Foo.top, Decl(declarationEmitNestedExpandoPropsRegression.ts, 0, 24))
+>Foo : Symbol(Foo, Decl(declarationEmitNestedExpandoPropsRegression.ts, 0, 0))
+>top : Symbol(Foo.top, Decl(declarationEmitNestedExpandoPropsRegression.ts, 0, 24))
+
+let d: number = (Foo.inInitializer = 2);
+>d : Symbol(d, Decl(declarationEmitNestedExpandoPropsRegression.ts, 2, 3))
+>Foo.inInitializer : Symbol(Foo.inInitializer, Decl(declarationEmitNestedExpandoPropsRegression.ts, 2, 17))
+>Foo : Symbol(Foo, Decl(declarationEmitNestedExpandoPropsRegression.ts, 0, 0))
+>inInitializer : Symbol(Foo.inInitializer, Decl(declarationEmitNestedExpandoPropsRegression.ts, 2, 17))
+
+if (true) {
+    Foo.inBlock = 3;
+>Foo.inBlock : Symbol(Foo.inBlock, Decl(declarationEmitNestedExpandoPropsRegression.ts, 3, 11))
+>Foo : Symbol(Foo, Decl(declarationEmitNestedExpandoPropsRegression.ts, 0, 0))
+>inBlock : Symbol(Foo.inBlock, Decl(declarationEmitNestedExpandoPropsRegression.ts, 3, 11))
+}

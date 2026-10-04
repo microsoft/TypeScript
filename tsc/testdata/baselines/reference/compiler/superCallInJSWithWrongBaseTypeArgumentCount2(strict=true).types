@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/superCallInJSWithWrongBaseTypeArgumentCount2.ts] ////
+
+=== a.ts ===
+export class A<T> {}
+>A : A<T>
+
+=== b.js ===
+import { A } from './a.js';
+>A : typeof A
+
+/** @extends {A} */
+export class B1 extends A {
+>B1 : B1
+>A : A<any>
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof A
+    }
+}
+
+/** @extends {A<string>} */
+export class B2 extends A {
+>B2 : B2
+>A : A<string>
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof A
+    }
+}
+
+/** @extends {A<string, string>} */
+export class B3 extends A {
+>B3 : B3
+>A : A<string>
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof A
+    }
+}

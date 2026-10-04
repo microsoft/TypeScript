@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/optionsInlineSourceMapMapRoot.ts] ////
+
+//// [optionsInlineSourceMapMapRoot.ts]
+var a = 10;
+
+//// [optionsInlineSourceMapMapRoot.js]
+"use strict";
+var a = 10;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3B0aW9uc0lubGluZVNvdXJjZU1hcE1hcFJvb3QuanMiLCJzb3VyY2VzIjpbIi4uL29wdGlvbnNJbmxpbmVTb3VyY2VNYXBNYXBSb290LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSxJQUFJLENBQUMsR0FBRyxFQUFFLENBQUMifQ==

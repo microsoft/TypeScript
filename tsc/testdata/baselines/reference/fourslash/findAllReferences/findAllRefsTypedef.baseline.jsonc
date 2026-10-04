@@ -1,0 +1,36 @@
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @typedef I {Object}
+//  * /*FIND ALL REFS*/@prop p {number}
+//  */
+// 
+// /** @type {I} */
+// let x;
+// x.p;
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @typedef I {Object}
+//  * @prop /*FIND ALL REFS*/[|p|] {number}
+//  */
+// 
+// /** @type {I} */
+// let x;
+// x.[|p|];
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @typedef I {Object}
+//  * @prop [|p|] {number}
+//  */
+// 
+// /** @type {I} */
+// let x;
+// x./*FIND ALL REFS*/[|p|];

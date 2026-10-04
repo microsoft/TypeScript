@@ -1,0 +1,98 @@
+// === findAllReferences ===
+// === /app.ts ===
+// import { foo } from './foo/types';
+// export type fullType = foo.[|Full|];
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').foo.[|Full|];
+
+// === /foo/types/types.ts ===
+// export type /*FIND ALL REFS*/[|Full|] = { prop: string; };
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// import { foo } from './foo/types';
+// export type fullType = foo./*FIND ALL REFS*/[|Full|];
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').foo.[|Full|];
+
+// === /foo/types/types.ts ===
+// export type [|Full|] = { prop: string; };
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// import { foo } from './foo/types';
+// export type fullType = foo.[|Full|];
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').foo./*FIND ALL REFS*/[|Full|];
+
+// === /foo/types/types.ts ===
+// export type [|Full|] = { prop: string; };
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// import { [|foo|] } from './foo/types';
+// export type fullType = [|foo|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|foo|].Full;
+
+// === /foo/types/index.ts ===
+// import * as /*FIND ALL REFS*/[|foo|] from './types';
+// export { [|foo|] };
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// import { [|foo|] } from './foo/types';
+// export type fullType = [|foo|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|foo|].Full;
+
+// === /foo/types/index.ts ===
+// import * as [|foo|] from './types';
+// export { /*FIND ALL REFS*/[|foo|] };
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// import { /*FIND ALL REFS*/[|foo|] } from './foo/types';
+// export type fullType = [|foo|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|foo|].Full;
+
+// === /foo/types/index.ts ===
+// import * as [|foo|] from './types';
+// export { [|foo|] };
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// import { [|foo|] } from './foo/types';
+// export type fullType = /*FIND ALL REFS*/[|foo|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|foo|].Full;
+
+// === /foo/types/index.ts ===
+// import * as [|foo|] from './types';
+// export { [|foo|] };
+
+
+
+// === findAllReferences ===
+// === /app.ts ===
+// import { [|foo|] } from './foo/types';
+// export type fullType = [|foo|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types')./*FIND ALL REFS*/[|foo|].Full;
+
+// === /foo/types/index.ts ===
+// import * as [|foo|] from './types';
+// export { [|foo|] };

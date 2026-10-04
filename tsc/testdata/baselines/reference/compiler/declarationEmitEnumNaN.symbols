@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitEnumNaN.ts] ////
+
+=== declarationEmitEnumNaN.ts ===
+export declare enum E {
+>E : Symbol(E, Decl(declarationEmitEnumNaN.ts, 0, 0))
+
+    A = -NaN,
+>A : Symbol(E.A, Decl(declarationEmitEnumNaN.ts, 0, 23))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+    B = NaN,
+>B : Symbol(E.B, Decl(declarationEmitEnumNaN.ts, 1, 13))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+    C = Infinity,
+>C : Symbol(E.C, Decl(declarationEmitEnumNaN.ts, 2, 12))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+
+    D = -Infinity,
+>D : Symbol(E.D, Decl(declarationEmitEnumNaN.ts, 3, 17))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+}
+

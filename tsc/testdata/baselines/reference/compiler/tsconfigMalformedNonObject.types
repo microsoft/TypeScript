@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/tsconfigMalformedNonObject.ts] ////
+
+=== index.ts ===
+export const x = 1;
+>x : 1
+>1 : 1
+

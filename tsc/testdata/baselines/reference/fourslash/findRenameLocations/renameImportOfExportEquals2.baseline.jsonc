@@ -1,0 +1,111 @@
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// declare namespace /*RENAME*/[|NRENAME|] {
+//     export var x: number;
+// }
+// declare module "mod" {
+//     export = [|NRENAME|];
+// }
+// declare module "a" {
+//     import * as O from "mod";
+// --- (line: 9) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// declare namespace [|NRENAME|] {
+//     export var x: number;
+// }
+// declare module "mod" {
+//     export = /*RENAME*/[|NRENAME|];
+// }
+// declare module "a" {
+//     import * as O from "mod";
+// --- (line: 9) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// --- (line: 4) skipped ---
+//     export = N;
+// }
+// declare module "a" {
+//     import * as /*RENAME*/[|ORENAME|] from "mod";
+//     export { [|ORENAME|] as P }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { P as Q } from "a";
+//     export const y: typeof Q.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// --- (line: 4) skipped ---
+//     export = N;
+// }
+// declare module "a" {
+//     import * as [|ORENAME|] from "mod";
+//     export { /*RENAME*/[|ORENAME|] as P }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { P as Q } from "a";
+//     export const y: typeof Q.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// --- (line: 5) skipped ---
+// }
+// declare module "a" {
+//     import * as O from "mod";
+//     export { O as /*RENAME*/[|PRENAME|] }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { [|PRENAME|] as Q } from "a";
+//     export const y: typeof Q.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// --- (line: 5) skipped ---
+// }
+// declare module "a" {
+//     import * as O from "mod";
+//     export { O as [|PRENAME|] }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { /*RENAME*/[|PRENAME|] as Q } from "a";
+//     export const y: typeof Q.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// --- (line: 8) skipped ---
+//     export { O as P }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { P as /*RENAME*/[|QRENAME|] } from "a";
+//     export const y: typeof [|QRENAME|].x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals2.ts ===
+// --- (line: 8) skipped ---
+//     export { O as P }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { P as [|QRENAME|] } from "a";
+//     export const y: typeof /*RENAME*/[|QRENAME|].x;
+// }

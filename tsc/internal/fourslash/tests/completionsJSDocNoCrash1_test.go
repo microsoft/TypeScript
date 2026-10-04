@@ -1,0 +1,48 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsJSDocNoCrash1(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: true
+// @checkJs: true
+// @allowJs: true
+// @filename: index.js
+/**
+ * @example
+  <file name="glyphicons.css">
+    @import url(//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css);
+  </file>
+  <example module="ngAnimate" deps="angular-animate.js" animations="true">
+    <file name="animations.css">
+      .animate-show.ng-hide-add.ng-hide-add-active,
+      .animate-show.ng-hide-remove.ng-hide-remove-active {
+        transition:all linear 0./**/5s;
+      }
+    </file>
+  </example>
+ */
+var ngShowDirective = ['$animate', function($animate) {}];`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				"url",
+			},
+		},
+	})
+}

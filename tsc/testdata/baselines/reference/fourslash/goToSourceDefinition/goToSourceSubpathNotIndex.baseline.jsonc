@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/lib/utils.js ===
+// <|export function [|util|]() {}|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { util } from "pkg";
+// util/*GOTO SOURCE DEF*/();

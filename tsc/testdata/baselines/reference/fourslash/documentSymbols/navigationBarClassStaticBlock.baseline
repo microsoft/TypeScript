@@ -1,0 +1,11 @@
+// === Document Symbols ===
+// === /navigationBarClassStaticBlock.ts ===
+// <|class [|{| name: C, kind: Class |}C|] {
+//   static {
+//     let <|[|{| name: x, kind: Variable |}x|]|>;
+//   }
+// }|>
+
+// === Details ===
+(Class) C
+  (Variable) x

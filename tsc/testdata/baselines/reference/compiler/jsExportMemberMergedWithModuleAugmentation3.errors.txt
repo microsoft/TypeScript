@@ -1,0 +1,15 @@
+/x.js(1,16): error TS2339: Property 'x' does not exist on type 'typeof import("/y")'.
+/x.js(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== /x.js (2 errors) ====
+    module.exports.x = 1;
+                   ~
+!!! error TS2339: Property 'x' does not exist on type 'typeof import("/y")'.
+    module.exports = require("./y.js");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    
+==== /y.d.ts (0 errors) ====
+    export declare type x = 1;
+    

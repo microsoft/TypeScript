@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitExpandoOverloads.ts] ////
+
+=== declarationEmitExpandoOverloads.ts ===
+export function A(a: number): void;
+>A : { (a: number): void; (a: string): void; a: number; }
+>a : number
+
+export function A(a: string): void;
+>A : { (a: number): void; (a: string): void; a: number; }
+>a : string
+
+export function A(a: number | string) {}
+>A : { (a: number): void; (a: string): void; a: number; }
+>a : string | number
+
+A.a = 1;
+>A.a = 1 : 1
+>A.a : number
+>A : { (a: number): void; (a: string): void; a: number; }
+>a : number
+>1 : 1
+

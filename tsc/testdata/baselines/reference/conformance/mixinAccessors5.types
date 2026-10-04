@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/classes/mixinAccessors5.ts] ////
+
+=== mixinAccessors5.ts ===
+// https://github.com/microsoft/TypeScript/issues/61967
+
+declare function basicMixin<T extends object, U extends object>(
+>basicMixin : <T extends object, U extends object>(t: T, u: U) => T & U
+
+  t: T,
+>t : T
+
+  u: U,
+>u : U
+
+): T & U;
+  
+declare class GetterA {
+>GetterA : GetterA
+
+  constructor(...args: any[]);
+>args : any[]
+
+  get inCompendium(): boolean;
+>inCompendium : boolean
+}
+  
+declare class GetterB {
+>GetterB : GetterB
+
+  constructor(...args: any[]);
+>args : any[]
+
+  get inCompendium(): boolean;
+>inCompendium : boolean
+}
+  
+declare class TestB extends basicMixin(GetterA, GetterB) {
+>TestB : TestB
+>basicMixin(GetterA, GetterB) : GetterA & GetterB
+>basicMixin : <T extends object, U extends object>(t: T, u: U) => T & U
+>GetterA : typeof GetterA
+>GetterB : typeof GetterB
+
+  override get inCompendium(): boolean;
+>inCompendium : boolean
+}
+  

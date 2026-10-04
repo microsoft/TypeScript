@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/lib.js ===
+// <|export function [|helper|]() { return "ok"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// /// <reference path="./node_modules/pkg/lib.d.ts/*GOTO SOURCE DEF*/" />
+// declare function helper(): string;

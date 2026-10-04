@@ -1,0 +1,26 @@
+// === Document Symbols ===
+// === /navigationBarNestedObjectLiterals.ts ===
+// var <|[|{| name: a, kind: Variable |}a|] = {
+//     <|[|{| name: b, kind: Property |}b|]: 0|>,
+//     <|[|{| name: c, kind: Property |}c|]: {}|>,
+//     <|[|{| name: d, kind: Property |}d|]: {
+//         <|[|{| name: e, kind: Property |}e|]: 1|>,
+//     }|>,
+//     <|[|{| name: f, kind: Property |}f|]: {
+//         <|[|{| name: g, kind: Property |}g|]: 2|>,
+//         <|[|{| name: h, kind: Property |}h|]: {
+//             <|[|{| name: i, kind: Property |}i|]: 3|>,
+//         }|>,
+//     }|>,
+// }|>
+
+// === Details ===
+(Variable) a
+  (Property) b
+  (Property) c
+  (Property) d
+    (Property) e
+  (Property) f
+    (Property) g
+    (Property) h
+      (Property) i

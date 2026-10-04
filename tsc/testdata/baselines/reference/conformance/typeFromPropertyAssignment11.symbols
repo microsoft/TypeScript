@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment11.ts] ////
+
+=== module.js ===
+var Inner = function() {}
+>Inner : Symbol(Inner, Decl(module.js, 0, 3))
+
+Inner.prototype = {
+>Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+
+    m() { },
+>m : Symbol(m, Decl(module.js, 1, 19))
+
+    i: 1
+>i : Symbol(i, Decl(module.js, 2, 12))
+}
+// incremental assignments still work
+Inner.prototype.j = 2
+>Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+
+/** @type {string} */
+Inner.prototype.k;
+>Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+
+var inner = new Inner()
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3))
+
+inner.m()
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+
+inner.i
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+
+inner.j
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+
+inner.k
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+

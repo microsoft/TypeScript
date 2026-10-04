@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/typePredicateParameterMismatch.ts] ////
+
+=== typePredicateParameterMismatch.ts ===
+// This test verifies that the checker doesn't panic when a type predicate
+// references a parameter name that doesn't match any actual function parameter.
+
+type TypeA = { kind: 'a' };
+>TypeA : TypeA
+>kind : "a"
+
+type TypeB = { kind: 'b' };
+>TypeB : TypeB
+>kind : "b"
+
+type UnionType = TypeA | TypeB;
+>UnionType : UnionType
+
+function isTypeA(
+>isTypeA : (_value: UnionType) => value is TypeA
+
+  _value: UnionType
+>_value : UnionType
+
+): value is TypeA {  // "value" doesn't match parameter "_value"
+  return true;
+>true : true
+}
+
+function test(input: UnionType): void {
+>test : (input: UnionType) => void
+>input : UnionType
+
+  if (isTypeA(input)) {
+>isTypeA(input) : boolean
+>isTypeA : (_value: UnionType) => value is TypeA
+>input : UnionType
+
+    console.log(input.kind);
+>console.log(input.kind) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>input.kind : "a" | "b"
+>input : UnionType
+>kind : "a" | "b"
+  }
+}
+

@@ -1,0 +1,20 @@
+asyncFunctionReturnNonPromiseThenable.ts(5,30): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
+asyncFunctionReturnNonPromiseThenable.ts(6,5): error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
+
+
+==== asyncFunctionReturnNonPromiseThenable.ts (2 errors) ====
+    export interface MyThenable {
+        then(): void;
+    }
+    
+    export async function foo(): MyThenable {
+                                 ~~~~~~~~~~
+!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
+        return {
+        ~~~~~~
+!!! error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
+            then() {
+            }
+        };
+    }
+    

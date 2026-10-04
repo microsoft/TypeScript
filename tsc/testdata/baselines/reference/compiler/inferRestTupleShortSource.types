@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/inferRestTupleShortSource.ts] ////
+
+=== inferRestTupleShortSource.ts ===
+// Regression test: tsgo panics when inferring [...rest, ...T] from a tuple shorter than fixed-arity constraint
+
+function f<T extends [string]>(args: [...string[], ...T]) {
+>f : <T extends [string]>(args: [...string[], ...T]) => void
+>args : [...string[], ...T]
+
+  // ...
+}
+
+f([])
+>f([]) : void
+>f : <T extends [string]>(args: [...string[], ...T]) => void
+>[] : []
+

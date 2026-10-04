@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/jsdocParamTagNoName.ts] ////
+
+=== a.js ===
+/**
+ * @param {(x: string) => string}
+ */
+function foo(f) {
+>foo : (f: (x: string) => string) => string
+>f : (x: string) => string
+
+    return f(123);
+>f(123) : string
+>f : (x: string) => string
+>123 : 123
+}
+

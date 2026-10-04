@@ -1,0 +1,8 @@
+contextuallyTypedFunctionOptionalAndRest.ts(1,24): error TS7006: Parameter 'a' implicitly has an 'any' type.
+
+
+==== contextuallyTypedFunctionOptionalAndRest.ts (1 errors) ====
+    const f: () => void = (a?, ...b) => {};
+                           ~~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+    

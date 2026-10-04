@@ -1,0 +1,8 @@
+// === Syntax and Semantic Diagnostics ===
+/a.js(1,15): error TS8010: Type annotations can only be used in TypeScript files.
+
+
+==== /a.js (1 errors) ====
+    function F(): number { }
+                  ~~~~~~
+!!! error TS8010: Type annotations can only be used in TypeScript files.

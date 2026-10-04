@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/functionLikeInParameterInitializer.ts] ////
+
+=== functionLikeInParameterInitializer.ts ===
+// error
+export function bar(func = () => foo) {
+>bar : (func?: () => any) => void
+>func : () => any
+>() => foo : () => any
+>foo : any
+
+    let foo = "in";
+>foo : string
+>"in" : "in"
+}
+// error
+export function baz1(func = { f() { return foo } }) {
+>baz1 : (func?: { f(): any; }) => void
+>func : { f(): any; }
+>{ f() { return foo } } : { f(): any; }
+>f : () => any
+>foo : any
+
+    let foo = "in";
+>foo : string
+>"in" : "in"
+}
+
+// error
+export function baz2(func = function () { return foo }) {
+>baz2 : (func?: () => any) => void
+>func : () => any
+>function () { return foo } : () => any
+>foo : any
+
+    let foo = "in";
+>foo : string
+>"in" : "in"
+}
+
+// error
+export function baz3(func = class { x = foo }) {
+>baz3 : (func?: typeof (Anonymous class)) => void
+>func : typeof (Anonymous class)
+>class { x = foo } : typeof (Anonymous class)
+>x : any
+>foo : any
+
+    let foo = "in";
+>foo : string
+>"in" : "in"
+}
+

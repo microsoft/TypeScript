@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/declarationEmitReadonly.ts] ////
+
+=== declarationEmitReadonly.ts ===
+class C {
+>C : C
+
+    constructor(readonly x: number) {}
+>x : number
+}

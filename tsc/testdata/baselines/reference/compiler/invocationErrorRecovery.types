@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/invocationErrorRecovery.ts] ////
+
+=== foo.d.ts ===
+declare function foo(): void;
+>foo : () => void
+
+declare namespace foo {}
+export = foo;
+>foo : () => void
+
+=== index.ts ===
+import * as foo from "./foo";
+>foo : { default: () => void; }
+
+foo()
+>foo() : any
+>foo : { default: () => void; }
+

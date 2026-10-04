@@ -1,0 +1,33 @@
+// === Inlay Hints ===
+    A,
+     ^
+{
+  "position": {
+    "line": 1,
+    "character": 5
+  },
+  "label": "= 0",
+  "paddingLeft": true
+}
+
+    AA,
+      ^
+{
+  "position": {
+    "line": 2,
+    "character": 6
+  },
+  "label": "= 1",
+  "paddingLeft": true
+}
+
+    BB,
+      ^
+{
+  "position": {
+    "line": 4,
+    "character": 6
+  },
+  "label": "= 11",
+  "paddingLeft": true
+}

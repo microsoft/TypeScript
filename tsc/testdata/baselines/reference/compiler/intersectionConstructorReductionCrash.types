@@ -1,0 +1,960 @@
+//// [tests/cases/compiler/intersectionConstructorReductionCrash.ts] ////
+
+=== intersectionConstructorReductionCrash.ts ===
+// https://github.com/microsoft/TypeScript/issues/63560
+
+type AnyConstructor<T extends object = object> = new (...args: any[]) => T;
+>AnyConstructor : AnyConstructor<T>
+>args : any[]
+
+type ClassStatics<C> = Omit<C, "prototype">;
+>ClassStatics : ClassStatics<C>
+
+type RuntimeMixinClass<RequiredBase extends object = object> = { readonly marker?: RequiredBase };
+>RuntimeMixinClass : RuntimeMixinClass<RequiredBase>
+>marker : RequiredBase | undefined
+
+class Mixin0 extends (Object as unknown as AnyConstructor & RuntimeMixinClass) {
+>Mixin0 : Mixin0
+>(Object as unknown as AnyConstructor & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & RuntimeMixinClass : AnyConstructor<object> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+
+    public value0_0: number = 0;
+>value0_0 : number
+>0 : 0
+}
+
+interface __Mixin1Base extends Mixin0 {}
+class __Mixin1Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & RuntimeMixinClass) {}
+>__Mixin1Base : __Mixin1Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+
+class Mixin1 extends __Mixin1Base implements Mixin0 {
+>Mixin1 : Mixin1
+>__Mixin1Base : __Mixin1Base
+
+    public value1_0: number = 1000;
+>value1_0 : number
+>1000 : 1000
+}
+
+interface __Mixin2Base extends Mixin1, Mixin0 {}
+class __Mixin2Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & RuntimeMixinClass) {}
+>__Mixin2Base : __Mixin2Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+
+class Mixin2 extends __Mixin2Base implements Mixin1, Mixin0 {
+>Mixin2 : Mixin2
+>__Mixin2Base : __Mixin2Base
+
+    public value2_0: number = 2000;
+>value2_0 : number
+>2000 : 2000
+}
+
+interface __Mixin3Base extends Mixin2, Mixin1, Mixin0 {}
+class __Mixin3Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & RuntimeMixinClass) {}
+>__Mixin3Base : __Mixin3Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+
+class Mixin3 extends __Mixin3Base implements Mixin2, Mixin1, Mixin0 {
+>Mixin3 : Mixin3
+>__Mixin3Base : __Mixin3Base
+
+    public value3_0: number = 3000;
+>value3_0 : number
+>3000 : 3000
+}
+
+interface __Mixin4Base extends Mixin3, Mixin2, Mixin1, Mixin0 {}
+class __Mixin4Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & RuntimeMixinClass) {}
+>__Mixin4Base : __Mixin4Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+
+class Mixin4 extends __Mixin4Base implements Mixin3, Mixin2, Mixin1, Mixin0 {
+>Mixin4 : Mixin4
+>__Mixin4Base : __Mixin4Base
+
+    public value4_0: number = 4000;
+>value4_0 : number
+>4000 : 4000
+}
+
+interface __Mixin5Base extends Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {}
+class __Mixin5Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & RuntimeMixinClass) {}
+>__Mixin5Base : __Mixin5Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+
+class Mixin5 extends __Mixin5Base implements Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {
+>Mixin5 : Mixin5
+>__Mixin5Base : __Mixin5Base
+
+    public value5_0: number = 5000;
+>value5_0 : number
+>5000 : 5000
+}
+
+interface __Mixin6Base extends Mixin5, Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {}
+class __Mixin6Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & RuntimeMixinClass) {}
+>__Mixin6Base : __Mixin6Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+
+class Mixin6 extends __Mixin6Base implements Mixin5, Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {
+>Mixin6 : Mixin6
+>__Mixin6Base : __Mixin6Base
+
+    public value6_0: number = 6000;
+>value6_0 : number
+>6000 : 6000
+}
+
+interface __Mixin7Base extends Mixin6, Mixin5, Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {}
+class __Mixin7Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & RuntimeMixinClass) {}
+>__Mixin7Base : __Mixin7Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+
+class Mixin7 extends __Mixin7Base implements Mixin6, Mixin5, Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {
+>Mixin7 : Mixin7
+>__Mixin7Base : __Mixin7Base
+
+    public value7_0: number = 7000;
+>value7_0 : number
+>7000 : 7000
+}
+
+interface __Mixin8Base extends Mixin7, Mixin6, Mixin5, Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {}
+class __Mixin8Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & RuntimeMixinClass) {}
+>__Mixin8Base : __Mixin8Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+
+class Mixin8 extends __Mixin8Base implements Mixin7, Mixin6, Mixin5, Mixin4, Mixin3, Mixin2, Mixin1, Mixin0 {
+>Mixin8 : Mixin8
+>__Mixin8Base : __Mixin8Base
+
+    public value8_0: number = 8000;
+>value8_0 : number
+>8000 : 8000
+}
+
+interface __Mixin9Base extends Mixin8, Mixin7, Mixin6, Mixin5, Mixin4, Mixin3, Mixin2, Mixin1 {}
+class __Mixin9Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & RuntimeMixinClass) {}
+>__Mixin9Base : __Mixin9Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+
+class Mixin9 extends __Mixin9Base implements Mixin8, Mixin7, Mixin6, Mixin5, Mixin4, Mixin3, Mixin2, Mixin1 {
+>Mixin9 : Mixin9
+>__Mixin9Base : __Mixin9Base
+
+    public value9_0: number = 9000;
+>value9_0 : number
+>9000 : 9000
+}
+
+interface __Mixin10Base extends Mixin9, Mixin8, Mixin7, Mixin6, Mixin5, Mixin4, Mixin3, Mixin2 {}
+class __Mixin10Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & RuntimeMixinClass) {}
+>__Mixin10Base : __Mixin10Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+
+class Mixin10 extends __Mixin10Base implements Mixin9, Mixin8, Mixin7, Mixin6, Mixin5, Mixin4, Mixin3, Mixin2 {
+>Mixin10 : Mixin10
+>__Mixin10Base : __Mixin10Base
+
+    public value10_0: number = 10000;
+>value10_0 : number
+>10000 : 10000
+}
+
+interface __Mixin11Base extends Mixin10, Mixin9, Mixin8, Mixin7, Mixin6, Mixin5, Mixin4, Mixin3 {}
+class __Mixin11Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & RuntimeMixinClass) {}
+>__Mixin11Base : __Mixin11Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+
+class Mixin11 extends __Mixin11Base implements Mixin10, Mixin9, Mixin8, Mixin7, Mixin6, Mixin5, Mixin4, Mixin3 {
+>Mixin11 : Mixin11
+>__Mixin11Base : __Mixin11Base
+
+    public value11_0: number = 11000;
+>value11_0 : number
+>11000 : 11000
+}
+
+interface __Mixin12Base extends Mixin11, Mixin10, Mixin9, Mixin8, Mixin7, Mixin6, Mixin5, Mixin4 {}
+class __Mixin12Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & RuntimeMixinClass) {}
+>__Mixin12Base : __Mixin12Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+
+class Mixin12 extends __Mixin12Base implements Mixin11, Mixin10, Mixin9, Mixin8, Mixin7, Mixin6, Mixin5, Mixin4 {
+>Mixin12 : Mixin12
+>__Mixin12Base : __Mixin12Base
+
+    public value12_0: number = 12000;
+>value12_0 : number
+>12000 : 12000
+}
+
+interface __Mixin13Base extends Mixin12, Mixin11, Mixin10, Mixin9, Mixin8, Mixin7, Mixin6, Mixin5 {}
+class __Mixin13Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & RuntimeMixinClass) {}
+>__Mixin13Base : __Mixin13Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+
+class Mixin13 extends __Mixin13Base implements Mixin12, Mixin11, Mixin10, Mixin9, Mixin8, Mixin7, Mixin6, Mixin5 {
+>Mixin13 : Mixin13
+>__Mixin13Base : __Mixin13Base
+
+    public value13_0: number = 13000;
+>value13_0 : number
+>13000 : 13000
+}
+
+interface __Mixin14Base extends Mixin13, Mixin12, Mixin11, Mixin10, Mixin9, Mixin8, Mixin7, Mixin6 {}
+class __Mixin14Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & RuntimeMixinClass) {}
+>__Mixin14Base : __Mixin14Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+
+class Mixin14 extends __Mixin14Base implements Mixin13, Mixin12, Mixin11, Mixin10, Mixin9, Mixin8, Mixin7, Mixin6 {
+>Mixin14 : Mixin14
+>__Mixin14Base : __Mixin14Base
+
+    public value14_0: number = 14000;
+>value14_0 : number
+>14000 : 14000
+}
+
+interface __Mixin15Base extends Mixin14, Mixin13, Mixin12, Mixin11, Mixin10, Mixin9, Mixin8, Mixin7 {}
+class __Mixin15Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & RuntimeMixinClass) {}
+>__Mixin15Base : __Mixin15Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+
+class Mixin15 extends __Mixin15Base implements Mixin14, Mixin13, Mixin12, Mixin11, Mixin10, Mixin9, Mixin8, Mixin7 {
+>Mixin15 : Mixin15
+>__Mixin15Base : __Mixin15Base
+
+    public value15_0: number = 15000;
+>value15_0 : number
+>15000 : 15000
+}
+
+interface __Mixin16Base extends Mixin15, Mixin14, Mixin13, Mixin12, Mixin11, Mixin10, Mixin9, Mixin8 {}
+class __Mixin16Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & RuntimeMixinClass) {}
+>__Mixin16Base : __Mixin16Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+
+class Mixin16 extends __Mixin16Base implements Mixin15, Mixin14, Mixin13, Mixin12, Mixin11, Mixin10, Mixin9, Mixin8 {
+>Mixin16 : Mixin16
+>__Mixin16Base : __Mixin16Base
+
+    public value16_0: number = 16000;
+>value16_0 : number
+>16000 : 16000
+}
+
+interface __Mixin17Base extends Mixin16, Mixin15, Mixin14, Mixin13, Mixin12, Mixin11, Mixin10, Mixin9 {}
+class __Mixin17Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & RuntimeMixinClass) {}
+>__Mixin17Base : __Mixin17Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+
+class Mixin17 extends __Mixin17Base implements Mixin16, Mixin15, Mixin14, Mixin13, Mixin12, Mixin11, Mixin10, Mixin9 {
+>Mixin17 : Mixin17
+>__Mixin17Base : __Mixin17Base
+
+    public value17_0: number = 17000;
+>value17_0 : number
+>17000 : 17000
+}
+
+interface __Mixin18Base extends Mixin17, Mixin16, Mixin15, Mixin14, Mixin13, Mixin12, Mixin11, Mixin10 {}
+class __Mixin18Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & RuntimeMixinClass) {}
+>__Mixin18Base : __Mixin18Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+
+class Mixin18 extends __Mixin18Base implements Mixin17, Mixin16, Mixin15, Mixin14, Mixin13, Mixin12, Mixin11, Mixin10 {
+>Mixin18 : Mixin18
+>__Mixin18Base : __Mixin18Base
+
+    public value18_0: number = 18000;
+>value18_0 : number
+>18000 : 18000
+}
+
+interface __Mixin19Base extends Mixin18, Mixin17, Mixin16, Mixin15, Mixin14, Mixin13, Mixin12, Mixin11 {}
+class __Mixin19Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & RuntimeMixinClass) {}
+>__Mixin19Base : __Mixin19Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+
+class Mixin19 extends __Mixin19Base implements Mixin18, Mixin17, Mixin16, Mixin15, Mixin14, Mixin13, Mixin12, Mixin11 {
+>Mixin19 : Mixin19
+>__Mixin19Base : __Mixin19Base
+
+    public value19_0: number = 19000;
+>value19_0 : number
+>19000 : 19000
+}
+
+interface __Mixin20Base extends Mixin19, Mixin18, Mixin17, Mixin16, Mixin15, Mixin14, Mixin13, Mixin12 {}
+class __Mixin20Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & RuntimeMixinClass) {}
+>__Mixin20Base : __Mixin20Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+
+class Mixin20 extends __Mixin20Base implements Mixin19, Mixin18, Mixin17, Mixin16, Mixin15, Mixin14, Mixin13, Mixin12 {
+>Mixin20 : Mixin20
+>__Mixin20Base : __Mixin20Base
+
+    public value20_0: number = 20000;
+>value20_0 : number
+>20000 : 20000
+}
+
+interface __Mixin21Base extends Mixin20, Mixin19, Mixin18, Mixin17, Mixin16, Mixin15, Mixin14, Mixin13 {}
+class __Mixin21Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & RuntimeMixinClass) {}
+>__Mixin21Base : __Mixin21Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+
+class Mixin21 extends __Mixin21Base implements Mixin20, Mixin19, Mixin18, Mixin17, Mixin16, Mixin15, Mixin14, Mixin13 {
+>Mixin21 : Mixin21
+>__Mixin21Base : __Mixin21Base
+
+    public value21_0: number = 21000;
+>value21_0 : number
+>21000 : 21000
+}
+
+interface __Mixin22Base extends Mixin21, Mixin20, Mixin19, Mixin18, Mixin17, Mixin16, Mixin15, Mixin14 {}
+class __Mixin22Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & RuntimeMixinClass) {}
+>__Mixin22Base : __Mixin22Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+>Mixin21 : typeof Mixin21
+
+class Mixin22 extends __Mixin22Base implements Mixin21, Mixin20, Mixin19, Mixin18, Mixin17, Mixin16, Mixin15, Mixin14 {
+>Mixin22 : Mixin22
+>__Mixin22Base : __Mixin22Base
+
+    public value22_0: number = 22000;
+>value22_0 : number
+>22000 : 22000
+}
+
+interface __Mixin23Base extends Mixin22, Mixin21, Mixin20, Mixin19, Mixin18, Mixin17, Mixin16, Mixin15 {}
+class __Mixin23Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & RuntimeMixinClass) {}
+>__Mixin23Base : __Mixin23Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+>Mixin21 : typeof Mixin21
+>Mixin22 : typeof Mixin22
+
+class Mixin23 extends __Mixin23Base implements Mixin22, Mixin21, Mixin20, Mixin19, Mixin18, Mixin17, Mixin16, Mixin15 {
+>Mixin23 : Mixin23
+>__Mixin23Base : __Mixin23Base
+
+    public value23_0: number = 23000;
+>value23_0 : number
+>23000 : 23000
+}
+
+interface __Mixin24Base extends Mixin23, Mixin22, Mixin21, Mixin20, Mixin19, Mixin18, Mixin17, Mixin16 {}
+class __Mixin24Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & RuntimeMixinClass) {}
+>__Mixin24Base : __Mixin24Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+>Mixin21 : typeof Mixin21
+>Mixin22 : typeof Mixin22
+>Mixin23 : typeof Mixin23
+
+class Mixin24 extends __Mixin24Base implements Mixin23, Mixin22, Mixin21, Mixin20, Mixin19, Mixin18, Mixin17, Mixin16 {
+>Mixin24 : Mixin24
+>__Mixin24Base : __Mixin24Base
+
+    public value24_0: number = 24000;
+>value24_0 : number
+>24000 : 24000
+}
+
+interface __Mixin25Base extends Mixin24, Mixin23, Mixin22, Mixin21, Mixin20, Mixin19, Mixin18, Mixin17 {}
+class __Mixin25Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & RuntimeMixinClass) {}
+>__Mixin25Base : __Mixin25Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+>Mixin21 : typeof Mixin21
+>Mixin22 : typeof Mixin22
+>Mixin23 : typeof Mixin23
+>Mixin24 : typeof Mixin24
+
+class Mixin25 extends __Mixin25Base implements Mixin24, Mixin23, Mixin22, Mixin21, Mixin20, Mixin19, Mixin18, Mixin17 {
+>Mixin25 : Mixin25
+>__Mixin25Base : __Mixin25Base
+
+    public value25_0: number = 25000;
+>value25_0 : number
+>25000 : 25000
+}
+
+interface __Mixin26Base extends Mixin25, Mixin24, Mixin23, Mixin22, Mixin21, Mixin20, Mixin19, Mixin18 {}
+class __Mixin26Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & RuntimeMixinClass) {}
+>__Mixin26Base : __Mixin26Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+>Mixin21 : typeof Mixin21
+>Mixin22 : typeof Mixin22
+>Mixin23 : typeof Mixin23
+>Mixin24 : typeof Mixin24
+>Mixin25 : typeof Mixin25
+
+class Mixin26 extends __Mixin26Base implements Mixin25, Mixin24, Mixin23, Mixin22, Mixin21, Mixin20, Mixin19, Mixin18 {
+>Mixin26 : Mixin26
+>__Mixin26Base : __Mixin26Base
+
+    public value26_0: number = 26000;
+>value26_0 : number
+>26000 : 26000
+}
+
+interface __Mixin27Base extends Mixin26, Mixin25, Mixin24, Mixin23, Mixin22, Mixin21, Mixin20, Mixin19 {}
+class __Mixin27Base extends (Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass) {}
+>__Mixin27Base : __Mixin27Base
+>(Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass) : object
+>Object as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass<object>
+>Object as unknown : unknown
+>Object : ObjectConstructor
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+>Mixin21 : typeof Mixin21
+>Mixin22 : typeof Mixin22
+>Mixin23 : typeof Mixin23
+>Mixin24 : typeof Mixin24
+>Mixin25 : typeof Mixin25
+>Mixin26 : typeof Mixin26
+
+class Mixin27 extends __Mixin27Base implements Mixin26, Mixin25, Mixin24, Mixin23, Mixin22, Mixin21, Mixin20, Mixin19 {
+>Mixin27 : Mixin27
+>__Mixin27Base : __Mixin27Base
+
+    public value27_0: number = 27000;
+>value27_0 : number
+>27000 : 27000
+}
+
+class __ConsumerEmpty {}
+>__ConsumerEmpty : __ConsumerEmpty
+
+interface __ConsumerBase extends Mixin27, Mixin26, Mixin25, Mixin24, Mixin23, Mixin22, Mixin21, Mixin20 {}
+class __ConsumerBase extends (__ConsumerEmpty as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass) {}
+>__ConsumerBase : __ConsumerBase
+>(__ConsumerEmpty as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass) : object
+>__ConsumerEmpty as unknown as AnyConstructor & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass : AnyConstructor<object> & ClassStatics<typeof Mixin0> & ClassStatics<typeof Mixin1> & ClassStatics<typeof Mixin2> & ClassStatics<typeof Mixin3> & ClassStatics<typeof Mixin4> & ClassStatics<typeof Mixin5> & ClassStatics<typeof Mixin6> & ClassStatics<typeof Mixin7> & ClassStatics<typeof Mixin8> & ClassStatics<typeof Mixin9> & ClassStatics<typeof Mixin10> & ClassStatics<typeof Mixin11> & ClassStatics<typeof Mixin12> & ClassStatics<typeof Mixin13> & ClassStatics<typeof Mixin14> & ClassStatics<typeof Mixin15> & ClassStatics<typeof Mixin16> & ClassStatics<typeof Mixin17> & ClassStatics<typeof Mixin18> & ClassStatics<typeof Mixin19> & ClassStatics<typeof Mixin20> & ClassStatics<typeof Mixin21> & ClassStatics<typeof Mixin22> & ClassStatics<typeof Mixin23> & ClassStatics<typeof Mixin24> & ClassStatics<typeof Mixin25> & ClassStatics<typeof Mixin26> & RuntimeMixinClass<object>
+>__ConsumerEmpty as unknown : unknown
+>__ConsumerEmpty : typeof __ConsumerEmpty
+>Mixin0 : typeof Mixin0
+>Mixin1 : typeof Mixin1
+>Mixin2 : typeof Mixin2
+>Mixin3 : typeof Mixin3
+>Mixin4 : typeof Mixin4
+>Mixin5 : typeof Mixin5
+>Mixin6 : typeof Mixin6
+>Mixin7 : typeof Mixin7
+>Mixin8 : typeof Mixin8
+>Mixin9 : typeof Mixin9
+>Mixin10 : typeof Mixin10
+>Mixin11 : typeof Mixin11
+>Mixin12 : typeof Mixin12
+>Mixin13 : typeof Mixin13
+>Mixin14 : typeof Mixin14
+>Mixin15 : typeof Mixin15
+>Mixin16 : typeof Mixin16
+>Mixin17 : typeof Mixin17
+>Mixin18 : typeof Mixin18
+>Mixin19 : typeof Mixin19
+>Mixin20 : typeof Mixin20
+>Mixin21 : typeof Mixin21
+>Mixin22 : typeof Mixin22
+>Mixin23 : typeof Mixin23
+>Mixin24 : typeof Mixin24
+>Mixin25 : typeof Mixin25
+>Mixin26 : typeof Mixin26
+
+class Consumer extends __ConsumerBase implements Mixin27, Mixin26, Mixin25, Mixin24, Mixin23, Mixin22, Mixin21, Mixin20 {}
+>Consumer : Consumer
+>__ConsumerBase : __ConsumerBase
+
+const consumer = new Consumer();
+>consumer : Consumer
+>new Consumer() : Consumer
+>Consumer : typeof Consumer
+
+void consumer.value27_0;
+>void consumer.value27_0 : undefined
+>consumer.value27_0 : number
+>consumer : Consumer
+>value27_0 : number
+
+void consumer.value26_0;
+>void consumer.value26_0 : undefined
+>consumer.value26_0 : number
+>consumer : Consumer
+>value26_0 : number
+
+void consumer.value25_0;
+>void consumer.value25_0 : undefined
+>consumer.value25_0 : number
+>consumer : Consumer
+>value25_0 : number
+
+void consumer.value24_0;
+>void consumer.value24_0 : undefined
+>consumer.value24_0 : number
+>consumer : Consumer
+>value24_0 : number
+
+void consumer.value23_0;
+>void consumer.value23_0 : undefined
+>consumer.value23_0 : number
+>consumer : Consumer
+>value23_0 : number
+
+void consumer.value22_0;
+>void consumer.value22_0 : undefined
+>consumer.value22_0 : number
+>consumer : Consumer
+>value22_0 : number
+
+void consumer.value21_0;
+>void consumer.value21_0 : undefined
+>consumer.value21_0 : number
+>consumer : Consumer
+>value21_0 : number
+
+void consumer.value20_0;
+>void consumer.value20_0 : undefined
+>consumer.value20_0 : number
+>consumer : Consumer
+>value20_0 : number
+

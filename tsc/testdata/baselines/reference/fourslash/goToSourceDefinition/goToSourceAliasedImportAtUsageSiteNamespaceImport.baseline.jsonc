@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|helper|]() { return "ok"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import * as ns from "pkg";
+// ns./*GOTO SOURCE DEF*/helper();

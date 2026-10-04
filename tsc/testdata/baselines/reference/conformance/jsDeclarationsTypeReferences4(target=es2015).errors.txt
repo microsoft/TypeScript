@@ -1,0 +1,26 @@
+index.js(4,18): error TS8006: 'namespace' declarations can only be used in TypeScript files.
+index.js(6,22): error TS8006: 'namespace' declarations can only be used in TypeScript files.
+
+
+==== index.js (2 errors) ====
+    /// <reference types="node" />
+    export const Something = 2; // to show conflict that can occur
+    // @ts-ignore
+    export namespace A {
+                     ~
+!!! error TS8006: 'namespace' declarations can only be used in TypeScript files.
+        // @ts-ignore
+        export namespace B {
+                         ~
+!!! error TS8006: 'namespace' declarations can only be used in TypeScript files.
+            const Something = require("fs").Something;
+            const thing = new Something();
+            // @ts-ignore
+            export { thing };
+        }
+    }
+    
+==== node_modules/@types/node/index.d.ts (0 errors) ====
+    declare module "fs" {
+        export class Something {}
+    }

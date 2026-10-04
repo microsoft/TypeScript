@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesNotAllowedAsDestructuringPatterns.ts] ////
+
+=== privateNamesNotAllowedAsDestructuringPatterns.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 0, 0))
+
+    #foo = 1;
+>#foo : Symbol(A.#foo, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 0, 9))
+
+    bar() {
+>bar : Symbol(A.bar, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 1, 13))
+
+        const { #foo: foo } = this;
+>foo : Symbol(foo, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 3, 15))
+>this : Symbol(A, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 0, 0))
+
+        let bar;
+>bar : Symbol(bar, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 4, 11))
+
+        ({ #foo: bar } = this);
+>#foo : Symbol(#foo, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 5, 10))
+>bar : Symbol(bar, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 4, 11))
+>this : Symbol(A, Decl(privateNamesNotAllowedAsDestructuringPatterns.ts, 0, 0))
+    }
+}
+

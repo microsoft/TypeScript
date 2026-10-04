@@ -1,0 +1,17 @@
+index.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+index.js(8,16): error TS2339: Property 'additional' does not exist on type 'Foo'.
+
+
+==== index.js (2 errors) ====
+    class Foo {
+        static stat = 10;
+        member = 10;
+    }
+    
+    module.exports = new Foo();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    
+    module.exports.additional = 20;
+                   ~~~~~~~~~~
+!!! error TS2339: Property 'additional' does not exist on type 'Foo'.

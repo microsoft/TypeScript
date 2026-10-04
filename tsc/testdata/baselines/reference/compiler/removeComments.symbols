@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/removeComments.ts] ////
+
+=== removeComments.ts ===
+function t1() {
+>t1 : Symbol(t1, Decl(removeComments.ts, 0, 0))
+
+    if (this.a < 2) { // comment after if
+        console.log('t1', this.a)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        // comment after empty line in if block
+    }
+}
+
+function t2() {
+>t2 : Symbol(t2, Decl(removeComments.ts, 6, 1))
+
+    console.log("t2");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    const obj = // comment here
+>obj : Symbol(obj, Decl(removeComments.ts, 11, 9))
+    {
+        a: 1,   // comment a
+>a : Symbol(a, Decl(removeComments.ts, 12, 5))
+
+        b: 2,   // comment b
+>b : Symbol(b, Decl(removeComments.ts, 13, 13))
+
+        c: 3,   // comment c (removed)
+>c : Symbol(c, Decl(removeComments.ts, 14, 13))
+    }
+
+    console.log(
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        "test", // comment 1
+        {
+            a: this.a,  // comment a
+>a : Symbol(a, Decl(removeComments.ts, 20, 9))
+
+            b: this.b,  // comment b
+>b : Symbol(b, Decl(removeComments.ts, 21, 22))
+
+            c: this.c,  // comment c (removed)
+>c : Symbol(c, Decl(removeComments.ts, 22, 22))
+
+        }, obj)
+>obj : Symbol(obj, Decl(removeComments.ts, 11, 9))
+}
+

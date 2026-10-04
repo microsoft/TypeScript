@@ -1,0 +1,27 @@
+// === findAllReferences ===
+// === /isDefinitionInterfaceImplementation.ts ===
+// interface I {
+//     /*FIND ALL REFS*/[|M|](): void;
+// }
+// 
+// class C implements I {
+//     [|M|]() { }
+// }
+// 
+// ({} as I).[|M|]();
+// ({} as C).[|M|]();
+
+
+
+// === findAllReferences ===
+// === /isDefinitionInterfaceImplementation.ts ===
+// interface I {
+//     [|M|](): void;
+// }
+// 
+// class C implements I {
+//     /*FIND ALL REFS*/[|M|]() { }
+// }
+// 
+// ({} as I).[|M|]();
+// ({} as C).[|M|]();

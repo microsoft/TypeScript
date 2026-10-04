@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsonImportMultipleTopLevelObjects.ts] ////
+
+=== data.json ===
+{"a": 1}
+>{"a": 1}{"b": 2} : ({ a: number; } | { b: number; })[]
+>{"a": 1} : { a: number; }
+>"a" : number
+>1 : 1
+
+{"b": 2}
+>{"b": 2} : { b: number; }
+>"b" : number
+>2 : 2
+
+=== index.ts ===
+import data from "./data.json";
+>data : ({ a: number; b?: undefined; } | { a?: undefined; b: number; })[]
+

@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/genericClassStaticMethod.ts] ////
+
+=== genericClassStaticMethod.ts ===
+class Foo<T> {
+>Foo : Foo<T>
+
+    static getFoo() {
+>getFoo : () => void
+    }
+}
+
+class Bar<T> extends Foo<T> {
+>Bar : Bar<T>
+>Foo : Foo<T>
+
+    static getFoo() {
+>getFoo : () => void
+    }
+}
+

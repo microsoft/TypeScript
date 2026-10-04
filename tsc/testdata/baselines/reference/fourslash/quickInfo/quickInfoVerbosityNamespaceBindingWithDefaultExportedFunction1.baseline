@@ -1,0 +1,86 @@
+// === QuickInfo ===
+=== /b.ts ===
+// import * as ns from "./a";
+// 
+// ns;
+// ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) module "/a" {
+// |     export { default };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) module "./a"
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 2,
+        "character": 2
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(alias) module \"./a\"\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 0
+          },
+          "end": {
+            "line": 2,
+            "character": 2
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 2,
+        "character": 2
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(alias) module \"/a\" {\n    export { default };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 0
+          },
+          "end": {
+            "line": 2,
+            "character": 2
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

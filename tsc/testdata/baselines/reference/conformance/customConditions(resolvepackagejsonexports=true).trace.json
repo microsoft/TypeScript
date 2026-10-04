@@ -1,0 +1,19 @@
+======== Resolving module 'lodash' from '/index.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types', 'webpack', 'browser'.
+File '/package.json' does not exist.
+Loading module 'lodash' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Found 'package.json' at '/node_modules/lodash/package.json'.
+Entering conditional exports.
+Matched 'exports' condition 'browser'.
+Using 'exports' subpath '.' with target './browser.js'.
+File name '/node_modules/lodash/browser.js' has a '.js' extension - stripping it.
+File '/node_modules/lodash/browser.ts' does not exist.
+File '/node_modules/lodash/browser.tsx' does not exist.
+File '/node_modules/lodash/browser.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
+Resolved under condition 'browser'.
+Exiting conditional exports.
+Resolving real path for '/node_modules/lodash/browser.d.ts', result '/node_modules/lodash/browser.d.ts'.
+======== Module name 'lodash' was successfully resolved to '/node_modules/lodash/browser.d.ts' with Package ID 'lodash/browser.d.ts@1.0.0'. ========

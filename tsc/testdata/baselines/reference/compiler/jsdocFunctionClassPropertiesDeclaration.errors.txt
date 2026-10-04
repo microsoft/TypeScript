@@ -1,0 +1,30 @@
+/a.js(6,11): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+/a.js(7,16): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+/a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+/a.js(10,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== /a.js (4 errors) ====
+    /**
+     * @param {number | undefined} x
+     * @param {number | undefined} y
+     */
+    export function Foo(x, y) {
+        if (!(this instanceof Foo)) {
+              ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 /a.js:5:17: An outer value of 'this' is shadowed by this container.
+            return new Foo(x, y);
+                   ~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+        }
+        this.x = x;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 /a.js:5:17: An outer value of 'this' is shadowed by this container.
+        this.y = y;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 /a.js:5:17: An outer value of 'this' is shadowed by this container.
+    }
+    

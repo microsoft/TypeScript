@@ -1,0 +1,95 @@
+// === goToType ===
+// === /ProfileCard.vue ===
+// --- (line: 4) skipped ---
+// </template>
+// <script lang="ts">
+// import { ExternalShape } from "./models";
+// <|export interface [|LocalShape|] { area: number }|>
+// export const localShape: LocalShape = { area: 1 };
+// export const externalShape: ExternalShape = { area: 2 };
+// local/*GOTO TYPE*/Shape;
+// externalShape;
+// </script>
+// 
+
+
+
+// === goToType ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <p>{{ lo/*GOTO TYPE*/calShape.area }}</p>
+//   <span class="shape">Shape</span>
+// </template>
+// <script lang="ts">
+// import { ExternalShape } from "./models";
+// <|export interface [|LocalShape|] { area: number }|>
+// export const localShape: LocalShape = { area: 1 };
+// export const externalShape: ExternalShape = { area: 2 };
+// localShape;
+// --- (line: 12) skipped ---
+
+
+
+// === goToType ===
+// === /ProfileCard.vue ===
+// --- (line: 4) skipped ---
+// </template>
+// <script lang="ts">
+// import { ExternalShape } from "./models";
+// <|export interface [|LocalShape|] { area: number }|>
+// export const localShape: LocalShape = { area: 1 };
+// export const externalShape: ExternalShape = { area: 2 };
+// localShape;
+// --- (line: 12) skipped ---
+
+// === /main.ts ===
+// import { ProfileCard, localShape } from "./ProfileCard.vue";
+// local/*GOTO TYPE*/Shape;
+// ProfileCard;
+// 
+
+
+
+// === goToType ===
+// === /models.ts ===
+// <|export interface [|ExternalShape|] { area: number }|>
+// 
+
+// === /ProfileCard.vue ===
+// --- (line: 8) skipped ---
+// export const localShape: LocalShape = { area: 1 };
+// export const externalShape: ExternalShape = { area: 2 };
+// localShape;
+// external/*GOTO TYPE*/Shape;
+// </script>
+// 
+
+
+
+// === goToType ===
+// === /ProfileCard.vue ===
+// <component name="[|ProfileCard|]">
+// <template>
+//   <p>{{ localShape.area }}</p>
+//   <span class="shape">Shape</span>
+// --- (line: 5) skipped ---
+
+// === /main.ts ===
+// import { ProfileCard, localShape } from "./ProfileCard.vue";
+// localShape;
+// Profile/*GOTO TYPE*/Card;
+// 
+
+
+
+// === goToType ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <p>{{ localShape.area }}</p>
+//   <span class="shape/*GOTO TYPE*/">Shape</span>
+// </template>
+// <script lang="ts">
+// import { ExternalShape } from "./models";
+// --- (line: 8) skipped ---

@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/braceEscapedSurrogatePairLiteralType.ts] ////
+
+=== braceEscapedSurrogatePairLiteralType.ts ===
+// In JavaScript, "\u{D83D}\u{DE00}", "\uD83D\uDE00", and "😀" are all the
+// same string, so they should all have the same string literal type.
+const literal = "😀" as const;
+>literal : Symbol(literal, Decl(braceEscapedSurrogatePairLiteralType.ts, 2, 5))
+>const : Symbol(const)
+
+const braceEscaped = "\u{D83D}\u{DE00}" as const;
+>braceEscaped : Symbol(braceEscaped, Decl(braceEscapedSurrogatePairLiteralType.ts, 3, 5))
+>const : Symbol(const)
+
+const adjacentEscaped = "\uD83D\uDE00" as const;
+>adjacentEscaped : Symbol(adjacentEscaped, Decl(braceEscapedSurrogatePairLiteralType.ts, 4, 5))
+>const : Symbol(const)
+
+const a: "😀" = braceEscaped;
+>a : Symbol(a, Decl(braceEscapedSurrogatePairLiteralType.ts, 6, 5))
+>braceEscaped : Symbol(braceEscaped, Decl(braceEscapedSurrogatePairLiteralType.ts, 3, 5))
+
+const b: typeof literal = braceEscaped;
+>b : Symbol(b, Decl(braceEscapedSurrogatePairLiteralType.ts, 7, 5))
+>literal : Symbol(literal, Decl(braceEscapedSurrogatePairLiteralType.ts, 2, 5))
+>braceEscaped : Symbol(braceEscaped, Decl(braceEscapedSurrogatePairLiteralType.ts, 3, 5))
+
+const c: typeof adjacentEscaped = braceEscaped;
+>c : Symbol(c, Decl(braceEscapedSurrogatePairLiteralType.ts, 8, 5))
+>adjacentEscaped : Symbol(adjacentEscaped, Decl(braceEscapedSurrogatePairLiteralType.ts, 4, 5))
+>braceEscaped : Symbol(braceEscaped, Decl(braceEscapedSurrogatePairLiteralType.ts, 3, 5))
+

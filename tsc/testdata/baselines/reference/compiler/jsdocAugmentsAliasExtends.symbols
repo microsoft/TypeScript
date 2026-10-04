@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/jsdocAugmentsAliasExtends.ts] ////
+
+=== jsdocAugmentsAliasExtends.ts ===
+declare class Base {
+>Base : Symbol(Base, Decl(jsdocAugmentsAliasExtends.ts, 0, 0))
+}
+declare class Other {
+>Other : Symbol(Other, Decl(jsdocAugmentsAliasExtends.ts, 1, 1))
+}
+declare const StateDependencies_base: typeof Base;
+>StateDependencies_base : Symbol(StateDependencies_base, Decl(jsdocAugmentsAliasExtends.ts, 4, 13))
+>Base : Symbol(Base, Decl(jsdocAugmentsAliasExtends.ts, 0, 0))
+
+/**
+ * @augments {Base}
+ */
+export declare class StateDependencies extends StateDependencies_base {
+>StateDependencies : Symbol(StateDependencies, Decl(jsdocAugmentsAliasExtends.ts, 4, 50))
+>StateDependencies_base : Symbol(StateDependencies_base, Decl(jsdocAugmentsAliasExtends.ts, 4, 13))
+}
+/**
+ * @augments {Base}
+ */
+export declare class TypeScriptStateDependencies extends Other {
+>TypeScriptStateDependencies : Symbol(TypeScriptStateDependencies, Decl(jsdocAugmentsAliasExtends.ts, 9, 1))
+>Other : Symbol(Other, Decl(jsdocAugmentsAliasExtends.ts, 1, 1))
+}
+

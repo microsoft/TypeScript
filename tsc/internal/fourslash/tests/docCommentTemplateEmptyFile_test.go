@@ -1,0 +1,20 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestDocCommentTemplateEmptyFile(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: emptyFile.ts
+/*0*/`
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(false)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
+	defer done()
+	f.VerifyNoJSDocCompletion(t, "0")
+}

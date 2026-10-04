@@ -1,0 +1,34 @@
+// === goToDefinition ===
+// === /goToDefinitionClassStaticBlocks.ts ===
+// class ClassStaticBocks {
+//     static x;
+//     /*GOTO DEF*/static {}
+//     static y;
+//     static {}
+//     static y;
+//     static {}
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionClassStaticBlocks.ts ===
+// class ClassStaticBocks {
+//     static x;
+//     static {}
+//     static y;
+//     /*GOTO DEF*/static {}
+//     static y;
+//     static {}
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionClassStaticBlocks.ts ===
+// --- (line: 3) skipped ---
+//     static y;
+//     static {}
+//     static y;
+//     /*GOTO DEF*/static {}
+// }

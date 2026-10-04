@@ -1,0 +1,37 @@
+file.js(2,2): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+file.js(10,2): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+file.js(15,11): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+file.js(15,42): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+file.js(16,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== file.js (5 errors) ====
+    const SomeConstructor = function Named() {
+    	this.x = 1;
+    	~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    
+    const SomeConstructor2 = function Named() {
+    };
+    SomeConstructor2.staticMember = "str";
+    
+    const SomeConstructor3 = function Named() {
+    	this.x = 1;
+    	~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    SomeConstructor3.staticMember = "str";
+    
+    const SelfReference = function Named() {
+        if (!(this instanceof Named)) return new Named();
+              ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+                                             ~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+        this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    SelfReference.staticMember = "str";
+    

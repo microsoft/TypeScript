@@ -1,0 +1,6 @@
+// === goToImplementation ===
+// === /goToImplementationLocal_02.ts ===
+// const x = { <|[|hello|]: () => {}|> };
+// 
+// x.he/*GOTO IMPL*/llo();
+// 

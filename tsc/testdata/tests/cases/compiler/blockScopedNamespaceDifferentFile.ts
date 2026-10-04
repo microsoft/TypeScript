@@ -1,0 +1,23 @@
+// @strict: false
+// @target: es5, es2015
+// @outDir: out
+// @module: commonjs
+
+// #15734 failed when test.ts comes before typings.d.ts
+// @Filename: test.ts
+namespace C {
+    export class Name {
+        static funcData = A.AA.func();
+        static someConst = A.AA.foo;
+
+        constructor(parameters) {}
+    }
+}
+
+// @Filename: typings.d.ts
+declare namespace A {
+    namespace AA {
+        function func(): number;
+        const foo = "";
+    }
+}

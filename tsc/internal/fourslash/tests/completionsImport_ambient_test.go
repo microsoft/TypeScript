@@ -1,0 +1,79 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsImport_ambient(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+// @module: commonjs
+// @Filename: a.d.ts
+declare namespace foo { class Bar {} }
+declare module 'path1' {
+  import Bar = foo.Bar;
+  export default Bar;
+}
+declare module 'path2longer' {
+  import Bar = foo.Bar;
+  export {Bar};
+}
+
+// @Filename: b.ts
+Ba/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: CompletionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:    "foo",
+						SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+					},
+					&lsproto.CompletionItem{
+						Label: "Bar",
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportFix{
+								ModuleSpecifier: "path1",
+							},
+						},
+						AdditionalTextEdits: fourslash.AnyTextEdits,
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+					},
+					&lsproto.CompletionItem{
+						Label: "Bar",
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportFix{
+								ModuleSpecifier: "path2longer",
+							},
+						},
+						AdditionalTextEdits: fourslash.AnyTextEdits,
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+					},
+				}, false,
+			),
+		},
+	})
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:        "Bar",
+		Source:      "path2longer",
+		Description: "Add import from \"path2longer\"",
+		NewFileContent: new(`import { Bar } from "path2longer";
+
+Ba`),
+		UserPreferences: nil, /*preferences*/
+	})
+}

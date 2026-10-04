@@ -1,0 +1,41 @@
+// === Document Symbols ===
+// === /navigationBarItemsMultilineStringIdentifiers1.ts ===
+// <|declare module [|{| name: "Multiline\r\nMadness", kind: Namespace |}"Multiline\r\nMadness"|] {
+// }|>
+// 
+// <|declare module [|{| name: "MultilineMadness", kind: Namespace |}"Multiline\
+// Madness"|] {
+// }|>
+// declare module "MultilineMadness" {}
+// 
+// <|declare module [|{| name: "MultilineMadness2", kind: Namespace |}"Multiline\
+// Madness2"|] {
+// }|>
+// 
+// <|interface [|{| name: Foo, kind: Interface |}Foo|] {
+//     <|[|{| name: "a1\\\r\nb", kind: Property |}"a1\\\r\nb"|];|>
+//     <|[|{| name: "a2        b", kind: Method |}"a2\
+//     \
+//     b"|](): Foo;|>
+// }|>
+// 
+// <|class [|{| name: Bar, kind: Class |}Bar|] implements Foo {
+//     <|[|{| name: "a1\\\r\nb", kind: Property |}'a1\\\r\nb'|]: Foo;|>
+// 
+//     <|[|{| name: "a2        b", kind: Method |}'a2\
+//     \
+//     b'|](): Foo {
+//         return this;
+//     }|>
+// }|>
+
+// === Details ===
+(Namespace) "Multiline\r\nMadness"
+(Namespace) "MultilineMadness"
+(Namespace) "MultilineMadness2"
+(Interface) Foo
+  (Property) "a1\\\r\nb"
+  (Method) "a2        b"
+(Class) Bar
+  (Property) "a1\\\r\nb"
+  (Method) "a2        b"

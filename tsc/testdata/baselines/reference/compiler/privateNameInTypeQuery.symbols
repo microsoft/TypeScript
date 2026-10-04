@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/privateNameInTypeQuery.ts] ////
+
+=== privateNameInTypeQuery.ts ===
+export class C1 {
+>C1 : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+
+    #a = 1;
+>#a : Symbol(C1.#a, Decl(privateNameInTypeQuery.ts, 0, 17))
+
+    static #b = "";
+>#b : Symbol(C1.#b, Decl(privateNameInTypeQuery.ts, 1, 11))
+
+    #c() {
+>#c : Symbol(C1.#c, Decl(privateNameInTypeQuery.ts, 3, 19))
+
+        return 1 as const;
+>const : Symbol(const)
+    }
+
+    get #d() {
+>#d : Symbol(C1.#d, Decl(privateNameInTypeQuery.ts, 7, 5))
+
+        return new Date();
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+    }
+
+    ["#a"] = true;
+>["#a"] : Symbol(C1["#a"], Decl(privateNameInTypeQuery.ts, 11, 5))
+>"#a" : Symbol(C1["#a"], Decl(privateNameInTypeQuery.ts, 11, 5))
+
+    a: typeof this.#a = 1;
+>a : Symbol(C1.a, Decl(privateNameInTypeQuery.ts, 13, 18))
+>this.#a : Symbol(C1.#a, Decl(privateNameInTypeQuery.ts, 0, 17))
+>this : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+
+    test1(a: C1) {
+>test1 : Symbol(C1.test1, Decl(privateNameInTypeQuery.ts, 15, 26))
+>a : Symbol(a, Decl(privateNameInTypeQuery.ts, 17, 10))
+>C1 : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+
+        const b: typeof a.#a = 1;
+>b : Symbol(b, Decl(privateNameInTypeQuery.ts, 18, 13))
+>a.#a : Symbol(C1.#a, Decl(privateNameInTypeQuery.ts, 0, 17))
+>a : Symbol(a, Decl(privateNameInTypeQuery.ts, 17, 10))
+
+        const c: typeof C1.#b = "";
+>c : Symbol(c, Decl(privateNameInTypeQuery.ts, 19, 13))
+>C1.#b : Symbol(C1.#b, Decl(privateNameInTypeQuery.ts, 1, 11))
+>C1 : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+
+        type D = typeof C1.#a;
+>D : Symbol(D, Decl(privateNameInTypeQuery.ts, 19, 35))
+>C1 : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+
+        var d: D = 1;
+>d : Symbol(d, Decl(privateNameInTypeQuery.ts, 22, 11))
+>D : Symbol(D, Decl(privateNameInTypeQuery.ts, 19, 35))
+
+        return [b, c, d] as const;
+>b : Symbol(b, Decl(privateNameInTypeQuery.ts, 18, 13))
+>c : Symbol(c, Decl(privateNameInTypeQuery.ts, 19, 13))
+>d : Symbol(d, Decl(privateNameInTypeQuery.ts, 22, 11))
+>const : Symbol(const)
+    }
+
+    test2<T extends C1>(a: T): typeof a.#a {
+>test2 : Symbol(C1.test2, Decl(privateNameInTypeQuery.ts, 25, 5))
+>T : Symbol(T, Decl(privateNameInTypeQuery.ts, 27, 10))
+>C1 : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+>a : Symbol(a, Decl(privateNameInTypeQuery.ts, 27, 24))
+>T : Symbol(T, Decl(privateNameInTypeQuery.ts, 27, 10))
+>a.#a : Symbol(C1.#a, Decl(privateNameInTypeQuery.ts, 0, 17))
+>a : Symbol(a, Decl(privateNameInTypeQuery.ts, 27, 24))
+
+        const b: typeof a.#a = a.#a;
+>b : Symbol(b, Decl(privateNameInTypeQuery.ts, 28, 13))
+>a.#a : Symbol(C1.#a, Decl(privateNameInTypeQuery.ts, 0, 17))
+>a : Symbol(a, Decl(privateNameInTypeQuery.ts, 27, 24))
+>a.#a : Symbol(C1.#a, Decl(privateNameInTypeQuery.ts, 0, 17))
+>a : Symbol(a, Decl(privateNameInTypeQuery.ts, 27, 24))
+
+        return b;
+>b : Symbol(b, Decl(privateNameInTypeQuery.ts, 28, 13))
+    }
+
+    test3<T extends C1 | { a: string }>(): typeof this.#a {
+>test3 : Symbol(C1.test3, Decl(privateNameInTypeQuery.ts, 30, 5))
+>T : Symbol(T, Decl(privateNameInTypeQuery.ts, 32, 10))
+>C1 : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+>a : Symbol(a, Decl(privateNameInTypeQuery.ts, 32, 26))
+>this.#a : Symbol(C1.#a, Decl(privateNameInTypeQuery.ts, 0, 17))
+>this : Symbol(C1, Decl(privateNameInTypeQuery.ts, 0, 0))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    test4(): any.#a {
+>test4 : Symbol(C1.test4, Decl(privateNameInTypeQuery.ts, 34, 5))
+>any : Symbol(any)
+> : Symbol(unknown)
+
+        return "";
+    }
+
+    test5(): never.#a {
+>test5 : Symbol(C1.test5, Decl(privateNameInTypeQuery.ts, 38, 5))
+>never : Symbol(never)
+> : Symbol(unknown)
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+}
+

@@ -1,0 +1,38 @@
+error TS6504: File '/node_modules/tslib/tslib.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+/privateIdentifierPropertyAccessDestructuringAssignmentES6.ts(5,19): error TS2343: This syntax requires an imported helper named '__classPrivateFieldSet' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+
+
+!!! error TS6504: File '/node_modules/tslib/tslib.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+==== /privateIdentifierPropertyAccessDestructuringAssignmentES6.ts (1 errors) ====
+    class Example {
+        #state = { value: 0 };
+    
+        update(source: { value: { value: number } }) {
+            ({ value: this.#state } = source);
+                      ~~~~~~~~~~~
+!!! error TS2343: This syntax requires an imported helper named '__classPrivateFieldSet' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+        }
+    }
+    
+    new Example().update({ value: { value: 1 } });
+    
+    export {};
+    
+==== /node_modules/tslib/package.json (0 errors) ====
+    {
+        "name": "tslib",
+        "main": "tslib.js",
+        "typings": "tslib.d.ts"
+    }
+    
+==== /node_modules/tslib/tslib.d.ts (0 errors) ====
+    export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
+    
+==== /node_modules/tslib/tslib.js (0 errors) ====
+    module.exports.__classPrivateFieldGet = function (receiver, state, kind, f) {
+        return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+    };

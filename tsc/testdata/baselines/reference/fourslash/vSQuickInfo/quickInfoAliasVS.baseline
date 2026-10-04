@@ -1,0 +1,247 @@
+// === VSQuickInfo ===
+=== /b.ts ===
+// import { x } from "./a";
+// x;
+// ^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x26C }
+// |     ClassifiedTextElement
+// |       [punctuation] "("
+// |       [text] "alias"
+// |       [punctuation] ") "
+// |       [keyword] "const "
+// |       [local name] "x"
+// |       [punctuation] ": "
+// |       [string] "0"
+// |   ClassifiedTextElement
+// |     [text] "Doc"
+// | ----------------------------------------------------------------------
+=== /c.ts ===
+// /**
+//  * Doc 2
+//  * @tag Tag text 2
+//  */
+// import {
+//     /**
+//      * Doc 3
+//      * @tag Tag text 3
+//      */
+//     x
+// } from "./a";
+// x;
+// ^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x26C }
+// |     ClassifiedTextElement
+// |       [punctuation] "("
+// |       [text] "alias"
+// |       [punctuation] ") "
+// |       [keyword] "const "
+// |       [local name] "x"
+// |       [punctuation] ": "
+// |       [string] "0"
+// |   ClassifiedTextElement
+// |     [text] "Doc"
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 1
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 620,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "text",
+                    "Text": "alias",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ") ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "const ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "local name",
+                    "Text": "x",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "0",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Doc",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 118,
+      "LSPosition": {
+        "line": 11,
+        "character": 1
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 0
+        },
+        "end": {
+          "line": 11,
+          "character": 1
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 620,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "text",
+                    "Text": "alias",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ") ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "const ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "local name",
+                    "Text": "x",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ": ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "string",
+                    "Text": "0",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Doc",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  }
+]

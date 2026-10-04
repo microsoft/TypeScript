@@ -1,0 +1,17 @@
+// @target: es2015
+// @strict: false
+// @module: commonjs
+
+// @filename: a.ts
+export class A {
+    protected _f: number;
+    getF() { return this._f; }
+}
+
+// @filename: b.ts
+export {}
+declare module "./a" {
+    interface A {
+        run();
+    }
+}

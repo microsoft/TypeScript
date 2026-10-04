@@ -1,0 +1,26 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGoToDefinitionOverriddenMember22(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: true
+// @target: esnext
+// @lib: esnext
+const prop = "foo" as const;
+
+abstract class A {}
+
+export class B extends A {
+  [|/*1*/override|] readonly [prop] = "B";
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineGoToDefinition(t, true, "1")
+}

@@ -1,0 +1,16 @@
+anonymousClassDecoratorEs2022.ts(1,1): error TS1211: A class declaration without the 'default' modifier must have a name.
+anonymousClassDecoratorEs2022.ts(2,4): error TS2304: Cannot find name 'x'.
+
+
+==== anonymousClassDecoratorEs2022.ts (2 errors) ====
+    class {
+    ~~~~~
+!!! error TS1211: A class declaration without the 'default' modifier must have a name.
+      @x
+       ~
+!!! error TS2304: Cannot find name 'x'.
+      m() {
+        // ...
+      }
+    };
+    

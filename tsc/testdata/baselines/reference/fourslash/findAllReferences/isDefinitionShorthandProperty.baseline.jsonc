@@ -1,0 +1,18 @@
+// === findAllReferences ===
+// === /isDefinitionShorthandProperty.ts ===
+// const /*FIND ALL REFS*/[|x|] = 1;
+// const y: { x: number } = { [|x|] };
+
+
+
+// === findAllReferences ===
+// === /isDefinitionShorthandProperty.ts ===
+// const x = 1;
+// const y: { /*FIND ALL REFS*/[|x|]: number } = { [|x|] };
+
+
+
+// === findAllReferences ===
+// === /isDefinitionShorthandProperty.ts ===
+// const [|x|] = 1;
+// const y: { [|x|]: number } = { /*FIND ALL REFS*/[|x|] };

@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/circularDestructuring.ts] ////
+
+=== circularDestructuring.ts ===
+const { c, f }: string | number = { c: 0, f };
+>c : Symbol(c, Decl(circularDestructuring.ts, 0, 7))
+>f : Symbol(f, Decl(circularDestructuring.ts, 0, 10))
+>c : Symbol(c, Decl(circularDestructuring.ts, 0, 35))
+>f : Symbol(f, Decl(circularDestructuring.ts, 0, 41))
+

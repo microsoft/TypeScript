@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/jsDocGenericOverloads.ts] ////
+
+=== main.js ===
+const createElementC = /**
+>createElementC : <T extends keyof HTMLElementTagNameMap>(t: T, c?: (NodeList | HTMLCollection) | undefined) => HTMLElementTagNameMap[T]
+
+	 * @template {keyof HTMLElementTagNameMap} T
+	 * @param {T}t
+	 * @param {NodeList|HTMLCollection=}c
+	 *
+	 * @overload
+	 * @param {T}t
+	 * @return {HTMLElementTagNameMap[T]}
+	 *
+	 * @overload
+	 * @param {T}t
+	 * @param {NodeList|HTMLCollection}c
+	 * @return {HTMLElementTagNameMap[T]}
+	 */(t, c) => {
+>(t, c) => {		/* ... omitted for brevity ... */ return document.createElement(t)	} : <T extends keyof HTMLElementTagNameMap>(t: T, c?: (NodeList | HTMLCollection) | undefined) => HTMLElementTagNameMap[T]
+>t : T
+>c : HTMLCollection | NodeList | undefined
+
+		/* ... omitted for brevity ... */ return document.createElement(t)
+>document.createElement(t) : HTMLElementTagNameMap[T]
+>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>t : T
+	}
+
+/**
+ * @template {keyof HTMLElementTagNameMap} T
+ * @param {T}t
+ * @param {NodeList|HTMLCollection=}c
+ *
+ * @overload
+ * @param {T}t
+ * @return {HTMLElementTagNameMap[T]}
+ *
+ * @overload
+ * @param {T}t
+ * @param {NodeList|HTMLCollection}c
+ * @return {HTMLElementTagNameMap[T]}
+ */
+function createElementF(t, c) {
+>createElementF : { <T_1 extends keyof HTMLElementTagNameMap>(t: T_1): HTMLElementTagNameMap[T_1]; <T_1 extends keyof HTMLElementTagNameMap>(t: T_1, c: NodeList | HTMLCollection): HTMLElementTagNameMap[T_1]; }
+>t : T
+>c : HTMLCollection | NodeList | undefined
+
+	/* ... omitted for brevity ... */ return document.createElement(t)
+>document.createElement(t) : HTMLElementTagNameMap[T]
+>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>t : T
+}
+

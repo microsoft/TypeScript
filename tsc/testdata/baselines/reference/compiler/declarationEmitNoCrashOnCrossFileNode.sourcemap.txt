@@ -1,0 +1,161 @@
+===================================================================
+JsFile: other.d.ts
+mapUrl: other.d.ts.map
+sourceRoot: 
+sources: other.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/other.d.ts
+sourceFile:other.ts
+-------------------------------------------------------------------
+>>>/**
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>> * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu aliquet lectus, nec rhoncus metus. Donec dapibus consectetur risus vitae porta. Aenean nisi neque, dignissim quis varius vel, volutpat vel tellus. Praesent lacinia molestie est, vel convallis odio ornare id. Pellentesque quis purus ante. Morbi a nisl justo. Etiam malesuada ipsum sem, fringilla rhoncus turpis ullamcorper et. Aenean laoreet, nisl id tempus pellentesque, elit elit congue felis, sit amet luctus nulla orci sit amet velit. Praesent non tincidunt nisi, at tempor eros. Quisque tincidunt euismod posuere. Ut blandit mauris elit, a porttitor orci aliquam ac. Duis imperdiet gravida ultrices. In.
+>>> */
+1->^^^
+2 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->/**
+  > * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu aliquet lectus, nec rhoncus metus. Donec dapibus consectetur risus vitae porta. Aenean nisi neque, dignissim quis varius vel, volutpat vel tellus. Praesent lacinia molestie est, vel convallis odio ornare id. Pellentesque quis purus ante. Morbi a nisl justo. Etiam malesuada ipsum sem, fringilla rhoncus turpis ullamcorper et. Aenean laoreet, nisl id tempus pellentesque, elit elit congue felis, sit amet luctus nulla orci sit amet velit. Praesent non tincidunt nisi, at tempor eros. Quisque tincidunt euismod posuere. Ut blandit mauris elit, a porttitor orci aliquam ac. Duis imperdiet gravida ultrices. In.
+  > */
+1->Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+---
+>>>export declare function foo(): ({ a, b }: {
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^
+4 >                           ^^^^
+5 >                               ^
+6 >                                ^^
+7 >                                  ^
+8 >                                   ^^
+9 >                                     ^
+10>                                      ^^
+11>                                        ^^
+1->
+  >
+  >
+2 >export function 
+3 >                        foo
+4 >                           (): 
+5 >                               (
+6 >                                { 
+7 >                                  a
+8 >                                   , 
+9 >                                     b
+10>                                       }
+11>                                        : 
+1->Emitted(4, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(4, 25) Source(5, 17) + SourceIndex(0)
+3 >Emitted(4, 28) Source(5, 20) + SourceIndex(0)
+4 >Emitted(4, 32) Source(5, 24) + SourceIndex(0)
+5 >Emitted(4, 33) Source(5, 25) + SourceIndex(0)
+6 >Emitted(4, 35) Source(5, 27) + SourceIndex(0)
+7 >Emitted(4, 36) Source(5, 28) + SourceIndex(0)
+8 >Emitted(4, 38) Source(5, 30) + SourceIndex(0)
+9 >Emitted(4, 39) Source(5, 31) + SourceIndex(0)
+10>Emitted(4, 41) Source(5, 33) + SourceIndex(0)
+11>Emitted(4, 43) Source(5, 35) + SourceIndex(0)
+---
+>>>    a: string;
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^^^^
+5 >             ^
+6 >              ^->
+1 >{ 
+2 >    a
+3 >     : 
+4 >       string
+5 >             ,
+1 >Emitted(5, 5) Source(5, 37) + SourceIndex(0)
+2 >Emitted(5, 6) Source(5, 38) + SourceIndex(0)
+3 >Emitted(5, 8) Source(5, 40) + SourceIndex(0)
+4 >Emitted(5, 14) Source(5, 46) + SourceIndex(0)
+5 >Emitted(5, 15) Source(5, 47) + SourceIndex(0)
+---
+>>>    b: string;
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^^^^
+5 >             ^
+1-> 
+2 >    b
+3 >     : 
+4 >       string
+5 >             
+1->Emitted(6, 5) Source(5, 48) + SourceIndex(0)
+2 >Emitted(6, 6) Source(5, 49) + SourceIndex(0)
+3 >Emitted(6, 8) Source(5, 51) + SourceIndex(0)
+4 >Emitted(6, 14) Source(5, 57) + SourceIndex(0)
+5 >Emitted(6, 15) Source(5, 57) + SourceIndex(0)
+---
+>>>}) => void;
+1 >^
+2 > ^^^^^
+3 >      ^^^^
+4 >          ^
+5 >           ^^^^^^^^^^^^^^^^^^^^^^^->
+1 > }
+2 > ) => 
+3 >      void
+4 >           {
+  >              return () => {}
+  >          }
+1 >Emitted(7, 2) Source(5, 59) + SourceIndex(0)
+2 >Emitted(7, 7) Source(5, 64) + SourceIndex(0)
+3 >Emitted(7, 11) Source(5, 68) + SourceIndex(0)
+4 >Emitted(7, 12) Source(7, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=other.d.ts.map===================================================================
+JsFile: index.d.ts
+mapUrl: index.d.ts.map
+sourceRoot: 
+sources: index.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/index.d.ts
+sourceFile:index.ts
+-------------------------------------------------------------------
+>>>export declare class Foo {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^
+3 >                     ^^^
+1 >import { foo } from './other';
+  >
+2 >export class 
+3 >                     Foo
+1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(1, 22) Source(2, 14) + SourceIndex(0)
+3 >Emitted(1, 25) Source(2, 17) + SourceIndex(0)
+---
+>>>    bar: ({ a, b }: {
+1 >^^^^
+2 >    ^^^
+3 >       ^^^^^^^^^^^^->
+1 > {
+  >    public 
+2 >    bar
+1 >Emitted(2, 5) Source(3, 12) + SourceIndex(0)
+2 >Emitted(2, 8) Source(3, 15) + SourceIndex(0)
+---
+>>>        a: string;
+>>>        b: string;
+>>>    }) => void;
+1->^^^^^^^^^^^^^^^
+1-> = foo();
+1->Emitted(5, 16) Source(3, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(6, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=index.d.ts.map

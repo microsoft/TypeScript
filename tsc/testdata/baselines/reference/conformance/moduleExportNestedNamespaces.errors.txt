@@ -1,0 +1,40 @@
+mod.js(2,18): error TS2339: Property 'K' does not exist on type '{}'.
+mod.js(3,10): error TS2339: Property 'x' does not exist on type '{}'.
+use.js(3,17): error TS2339: Property 'K' does not exist on type '{}'.
+use.js(8,15): error TS2694: Namespace '"mod"' has no exported member 'n'.
+
+
+==== mod.js (2 errors) ====
+    module.exports.n = {};
+    module.exports.n.K = function C() {
+                     ~
+!!! error TS2339: Property 'K' does not exist on type '{}'.
+        this.x = 10;
+             ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    }
+    module.exports.Classic = class {
+        constructor() {
+            this.p = 1
+        }
+    }
+    
+==== use.js (2 errors) ====
+    import * as s from './mod'
+    
+    var k = new s.n.K()
+                    ~
+!!! error TS2339: Property 'K' does not exist on type '{}'.
+    k.x
+    var classic = new s.Classic()
+    
+    
+    /** @param {s.n.K} c
+                  ~
+!!! error TS2694: Namespace '"mod"' has no exported member 'n'.
+        @param {s.Classic} classic */
+    function f(c, classic) {
+        c.x
+        classic.p
+    }
+    

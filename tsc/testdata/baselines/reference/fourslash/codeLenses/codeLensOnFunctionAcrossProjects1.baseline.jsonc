@@ -1,0 +1,10 @@
+// === Code Lenses ===
+// === /a/src/foo.ts ===
+// export function /*CODELENS: 2 references*/aaa() {}
+// [|aaa|]();
+// 
+
+// === /b/src/bar.ts ===
+// import * as foo from '../../a/dist/foo.js';
+// foo.[|aaa|]();
+// 

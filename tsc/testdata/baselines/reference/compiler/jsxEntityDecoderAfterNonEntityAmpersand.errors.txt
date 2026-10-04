@@ -1,0 +1,54 @@
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(1,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(1,12): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(1,22): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(2,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(2,12): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(2,32): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(3,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(3,12): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(3,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(4,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(4,12): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(4,27): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(5,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(5,12): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+jsxEntityDecoderAfterNonEntityAmpersand.tsx(5,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== jsxEntityDecoderAfterNonEntityAmpersand.tsx (15 errors) ====
+    const a = <div>&&amp;</div>;
+              ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+               ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+                         ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    const b = <div>a&b&amp;c&d&lt;e</div>;
+              ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+               ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+                                   ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    const c = <div>&amp;&amp;</div>;
+              ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+               ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+                             ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    const d = <div>&amp;&&amp;</div>;
+              ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+               ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+                              ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    const e = <div>a&b&c&amp;</div>;
+              ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+               ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+                             ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /home/src/workspaces/project/a.d.ts ===
+// <|export declare const [|a|]: string;|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { a } from "./a";
+// a/*GOTO DEF*/
+
+
+
+// === goToDefinition ===
+// === /home/src/workspaces/project/a.js ===
+// <|export const [|a|] = "a";|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { a } from "./a";
+// a/*GOTO DEF*/

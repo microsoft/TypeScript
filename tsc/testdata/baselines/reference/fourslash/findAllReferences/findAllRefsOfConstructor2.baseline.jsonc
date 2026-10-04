@@ -1,0 +1,57 @@
+// === findAllReferences ===
+// === /findAllRefsOfConstructor2.ts ===
+// class A {
+//     /*FIND ALL REFS*/[|constructor|](s: string) {}
+// }
+// class B extends A {
+//     constructor() { [|super|](""); }
+// }
+// class C extends B {
+//     constructor() {
+//         super();
+//     }
+// }
+// class D extends B { }
+// const a = new [|A|]("a");
+// const b = new B();
+// const c = new C();
+// const d = new D();
+
+
+
+// === findAllReferences ===
+// === /findAllRefsOfConstructor2.ts ===
+// class A {
+//     constructor(s: string) {}
+// }
+// class B extends A {
+//     /*FIND ALL REFS*/[|constructor|]() { super(""); }
+// }
+// class C extends B {
+//     constructor() {
+//         [|super|]();
+//     }
+// }
+// class D extends B { }
+// const a = new A("a");
+// const b = new [|B|]();
+// const c = new C();
+// const d = new [|D|]();
+
+
+
+// === findAllReferences ===
+// === /findAllRefsOfConstructor2.ts ===
+// --- (line: 4) skipped ---
+//     constructor() { super(""); }
+// }
+// class C extends B {
+//     /*FIND ALL REFS*/[|constructor|]() {
+//         super();
+//     }
+// }
+// class D extends B { }
+// const a = new A("a");
+// const b = new B();
+// const c = new [|C|]();
+// const d = new D();

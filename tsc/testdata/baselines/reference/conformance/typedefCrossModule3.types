@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule3.ts] ////
+
+=== mod2.js ===
+/** @typedef {number} Foo */
+const ns = {};
+>ns : { Foo: typeof Foo; }
+>{} : { Foo: typeof Foo; }
+
+ns.Foo = class {}
+>ns.Foo = class {} : typeof Foo
+>ns.Foo : typeof Foo
+>ns : { Foo: typeof Foo; }
+>Foo : typeof Foo
+>class {} : typeof Foo
+
+module.exports = ns;
+>module.exports = ns : { Foo: typeof Foo; }
+>module.exports : { Foo: typeof Foo; }
+>module : { exports: { Foo: typeof Foo; }; }
+>exports : { Foo: typeof Foo; }
+>ns : { Foo: typeof Foo; }
+
+

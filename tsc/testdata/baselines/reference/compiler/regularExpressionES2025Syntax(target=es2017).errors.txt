@@ -1,0 +1,57 @@
+regularExpressionES2025Syntax.ts(2,24): error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+regularExpressionES2025Syntax.ts(3,27): error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+regularExpressionES2025Syntax.ts(4,34): error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+regularExpressionES2025Syntax.ts(10,27): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(10,55): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(11,40): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(11,53): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(14,26): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(14,34): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(17,28): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(17,37): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionES2025Syntax.ts(17,38): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+
+
+==== regularExpressionES2025Syntax.ts (12 errors) ====
+    // Pattern modifiers are only available from ES2025.
+    const addModifier = /(?i:abc)/;
+                           ~
+!!! error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+    const removeModifier = /(?-i:abc)/;
+                              ~~
+!!! error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+    const addAndRemoveModifiers = /(?i-ms:abc)/;
+                                     ~~~~
+!!! error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+    
+    // A plain non-capturing group is not a pattern modifier and is available at every target.
+    const nonCapturingGroup = /(?:abc)/;
+    
+    // Duplicate named capturing groups are only available from ES2025.
+    const duplicateNames = /(?<year>\d{4})-\d{2}|\d{2}\/(?<year>\d{4})/;
+                              ~~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                                          ~~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+    const duplicateNamesWithReference = /(?<a>x)\k<a>|(?<a>y)/;
+                                           ~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                                        ~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+    
+    // Named capturing groups that are not duplicated remain available from ES2018.
+    const distinctNames = /(?<a>x)|(?<b>y)/;
+                             ~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                     ~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+    
+    // Duplicate names within the same alternative are an error at every target.
+    const sameAlternative = /(?<dup>x)(?<dup>y)/;
+                               ~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                        ~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                         ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    

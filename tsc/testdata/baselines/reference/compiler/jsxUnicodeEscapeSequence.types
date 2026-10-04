@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/jsxUnicodeEscapeSequence.tsx] ////
+
+=== jsxUnicodeEscapeSequence.tsx ===
+/// <reference path="react16.d.ts" />
+
+export const InlineUnicodeChar = () => {
+>InlineUnicodeChar : () => JSX.Element
+>() => {    // This should work correctly - inline character with other content    return <div><span>Warning: ⚠ Error</span></div>;} : () => JSX.Element
+
+    // This should work correctly - inline character with other content
+    return <div><span>Warning: ⚠ Error</span></div>;
+><div><span>Warning: ⚠ Error</span></div> : JSX.Element
+>div : any
+><span>Warning: ⚠ Error</span> : JSX.Element
+>span : any
+>span : any
+>div : any
+
+};
+
+export const StandaloneUnicodeChar = () => {
+>StandaloneUnicodeChar : () => JSX.Element
+>() => {    // This should reproduce the issue - unicode character on its own line    return (<div><span>⚠</span>        ⚠    </div>);} : () => JSX.Element
+
+    // This should reproduce the issue - unicode character on its own line
+    return (<div><span>⚠</span>
+>(<div><span>⚠</span>        ⚠    </div>) : JSX.Element
+><div><span>⚠</span>        ⚠    </div> : JSX.Element
+>div : any
+><span>⚠</span> : JSX.Element
+>span : any
+>span : any
+
+        ⚠
+    </div>);
+>div : any
+
+};
+
+export const MultipleUnicodeChars = () => {
+>MultipleUnicodeChars : () => JSX.Element
+>() => {    // Test multiple unicode characters    return (<div>        ⚠        ⛔        🚨    </div>);} : () => JSX.Element
+
+    // Test multiple unicode characters
+    return (<div>
+>(<div>        ⚠        ⛔        🚨    </div>) : JSX.Element
+><div>        ⚠        ⛔        🚨    </div> : JSX.Element
+>div : any
+
+        ⚠
+        ⛔
+        🚨
+    </div>);
+>div : any
+
+};
+

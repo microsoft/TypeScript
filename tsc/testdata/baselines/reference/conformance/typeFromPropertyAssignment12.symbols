@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment12.ts] ////
+
+=== module.js ===
+var Outer = function(element, config) {};
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+>element : Symbol(element, Decl(module.js, 0, 21))
+>config : Symbol(config, Decl(module.js, 0, 29))
+
+=== usage.js ===
+/** @constructor */
+Outer.Pos = function (line, ch) {};
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+>line : Symbol(line, Decl(usage.js, 1, 22))
+>ch : Symbol(ch, Decl(usage.js, 1, 27))
+
+/** @type {number} */
+Outer.Pos.prototype.line;
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+var pos = new Outer.Pos(1, 'x');
+>pos : Symbol(pos, Decl(usage.js, 4, 3))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+pos.line;
+>pos : Symbol(pos, Decl(usage.js, 4, 3))
+
+

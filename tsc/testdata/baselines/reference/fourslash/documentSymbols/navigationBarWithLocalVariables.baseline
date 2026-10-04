@@ -1,0 +1,10 @@
+// === Document Symbols ===
+// === /navigationBarWithLocalVariables.ts ===
+// <|function [|{| name: x, kind: Function |}x|](){
+// 	const <|[|{| name: x, kind: Variable |}x|] = Object()|>
+// 	x.foo = ""
+// }|>
+
+// === Details ===
+(Function) x
+  (Variable) x

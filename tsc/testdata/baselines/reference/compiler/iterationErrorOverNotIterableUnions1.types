@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/iterationErrorOverNotIterableUnions1.ts] ////
+
+=== iterationErrorOverNotIterableUnions1.ts ===
+type A = { a: string };
+>A : A
+>a : string
+
+type B = { b: string };
+>B : B
+>b : string
+
+declare const data: A[] | B;
+>data : A[] | B
+
+for (const item of data) {
+>item : any
+>data : A[] | B
+
+    item.b;
+>item.b : any
+>item : any
+>b : any
+}
+
+for (const ignoredItem of data) {
+>ignoredItem : any
+>data : A[] | B
+
+    ignoredItem.b;
+>ignoredItem.b : any
+>ignoredItem : any
+>b : any
+}
+
+const [el] = data;
+>el : any
+>data : A[] | B
+
+el.b;
+>el.b : any
+>el : any
+>b : any
+
+const el2 = data[0];
+>el2 : any
+>data[0] : any
+>data : A[] | B
+>0 : 0
+
+el2.b;
+>el2.b : any
+>el2 : any
+>b : any
+

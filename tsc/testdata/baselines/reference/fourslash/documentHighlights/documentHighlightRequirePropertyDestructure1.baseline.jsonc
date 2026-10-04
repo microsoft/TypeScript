@@ -1,0 +1,4 @@
+// === documentHighlights ===
+// === /a.js ===
+// const { [|a|] } = require("m").f;
+// [|a|]/*HIGHLIGHTS*/;

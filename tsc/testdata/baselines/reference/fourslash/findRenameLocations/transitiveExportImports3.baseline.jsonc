@@ -1,0 +1,43 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// export function /*RENAME*/[|fRENAME|]() {}
+
+// === /b.ts ===
+// export { [|fRENAME|] as g } from "./a";
+// import { [|fRENAME|] } from "./a";
+// import { g } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// export function [|fRENAME|]() {}
+
+// === /b.ts ===
+// export { /*RENAME*/[|fRENAME|] as g } from "./a";
+// import { [|fRENAME|] } from "./a";
+// import { g } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// export { f as g } from "./a";
+// import { /*START PREFIX*/f as /*RENAME*/[|fRENAME|] } from "./a";
+// import { g } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// export { f as /*RENAME*/[|gRENAME|] } from "./a";
+// import { f } from "./a";
+// import { [|gRENAME|] } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// export { f as g } from "./a";
+// import { f } from "./a";
+// import { /*START PREFIX*/g as /*RENAME*/[|gRENAME|] } from "./b";

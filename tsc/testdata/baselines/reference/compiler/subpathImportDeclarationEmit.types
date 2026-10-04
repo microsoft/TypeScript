@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/subpathImportDeclarationEmit.ts] ////
+
+=== /src/main.ts ===
+import { bar } from "./indirect.js";
+>bar : () => Promise<string>
+
+console.log(await bar());
+>console.log(await bar()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>await bar() : string
+>bar() : Promise<string>
+>bar : () => Promise<string>
+
+=== /src/subpath.ts ===
+async function bar(): Promise<string> {
+>bar : () => Promise<string>
+
+  return "bar";
+>"bar" : "bar"
+}
+export const barrel = { bar };
+>barrel : { bar: () => Promise<string>; }
+>{ bar } : { bar: () => Promise<string>; }
+>bar : () => Promise<string>
+
+=== /src/indirect.ts ===
+import { barrel } from "#subpath";
+>barrel : { bar: () => Promise<string>; }
+
+const { bar } = barrel;
+>bar : () => Promise<string>
+>barrel : { bar: () => Promise<string>; }
+
+export { bar };
+>bar : () => Promise<string>
+

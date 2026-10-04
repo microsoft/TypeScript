@@ -1,0 +1,94 @@
+// === SignatureHelp ===
+=== /b.js ===
+// /**
+//  * @import {
+//  *     Foo
+//  * } from './a'
+//  */
+// 
+// /**
+//  * @param {Foo} a
+//  */
+// function foo(a) {}
+// foo()
+//     ^
+// | ----------------------------------------------------------------------
+// | foo(**a: Foo**): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 98,
+      "LSPosition": {
+        "line": 10,
+        "character": 4
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "foo(a: Foo): void",
+          "parameters": [
+            {
+              "label": "a: Foo"
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foo",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Foo",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "void",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

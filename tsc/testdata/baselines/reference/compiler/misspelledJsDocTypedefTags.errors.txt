@@ -1,0 +1,11 @@
+a.js(4,59): error TS1003: Identifier expected.
+
+
+==== a.js (1 errors) ====
+    /** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
+    Animation.AnimationModel.ScreenshotCapture.Request;
+    
+    /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
+                                                              ~
+!!! error TS1003: Identifier expected.
+    Animation.AnimationModel.ScreenshotCapture.Request;

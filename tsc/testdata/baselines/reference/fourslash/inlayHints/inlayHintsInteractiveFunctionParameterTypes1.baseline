@@ -1,0 +1,863 @@
+// === Inlay Hints ===
+ const f1: F1 = (a, b) => { }
+                  ^
+{
+  "position": {
+    "line": 1,
+    "character": 18
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const f1: F1 = (a, b) => { }
+                     ^
+{
+  "position": {
+    "line": 1,
+    "character": 21
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const f2: F1 = (a, b: number) => { }
+                  ^
+{
+  "position": {
+    "line": 2,
+    "character": 18
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo1((a) => { })
+        ^
+{
+  "position": {
+    "line": 4,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo2((a) => { })
+        ^
+{
+  "position": {
+    "line": 6,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo3(a => {
+       ^
+{
+  "position": {
+    "line": 8,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 24
+          },
+          "end": {
+            "line": 7,
+            "character": 25
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 28
+          },
+          "end": {
+            "line": 7,
+            "character": 29
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+     a(d => {})
+        ^
+{
+  "position": {
+    "line": 9,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo4(1, a => { })
+          ^
+{
+  "position": {
+    "line": 12,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const foo5: F2 = (a) => { }
+                    ^
+{
+  "position": {
+    "line": 25,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 6
+          },
+          "end": {
+            "line": 22,
+            "character": 7
+          }
+        }
+      }
+    },
+    {
+      "value": ", "
+    },
+    {
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 9
+          },
+          "end": {
+            "line": 22,
+            "character": 10
+          }
+        }
+      }
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "x",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 12
+          },
+          "end": {
+            "line": 22,
+            "character": 13
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 6
+          },
+          "end": {
+            "line": 22,
+            "character": 7
+          }
+        }
+      }
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 9
+          },
+          "end": {
+            "line": 22,
+            "character": 10
+          }
+        }
+      }
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "i"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 5
+          },
+          "end": {
+            "line": 14,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 5
+          },
+          "end": {
+            "line": 15,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "readonly"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 14
+          },
+          "end": {
+            "line": 16,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "boolean"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 5
+          },
+          "end": {
+            "line": 17,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": "?"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "undefined"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "e",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 18,
+            "character": 5
+          },
+          "end": {
+            "line": 18,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "f",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 5
+          },
+          "end": {
+            "line": 19,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": "?"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "boolean"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "g",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 5
+          },
+          "end": {
+            "line": 20,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "T",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 7
+          },
+          "end": {
+            "line": 20,
+            "character": 8
+          }
+        }
+      }
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "T",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 7
+          },
+          "end": {
+            "line": 20,
+            "character": 8
+          }
+        }
+      }
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "h",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 5
+          },
+          "end": {
+            "line": 21,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": "?"
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 8
+          },
+          "end": {
+            "line": 21,
+            "character": 9
+          }
+        }
+      }
+    },
+    {
+      "value": ", "
+    },
+    {
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 11
+          },
+          "end": {
+            "line": 21,
+            "character": 12
+          }
+        }
+      }
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "x",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 14
+          },
+          "end": {
+            "line": 21,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 8
+          },
+          "end": {
+            "line": 21,
+            "character": 9
+          }
+        }
+      }
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 11
+          },
+          "end": {
+            "line": 21,
+            "character": 12
+          }
+        }
+      }
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const foo6: F3 = (a) => { }
+                    ^
+{
+  "position": {
+    "line": 29,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "42"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+foo4(p => {})
+      ^
+{
+  "position": {
+    "line": 32,
+    "character": 6
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Thing",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 10
+          },
+          "end": {
+            "line": 30,
+            "character": 15
+          }
+        }
+      }
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const foo5: F4 = (a) => { }
+                    ^
+{
+  "position": {
+    "line": 36,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "x"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

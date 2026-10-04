@@ -1,0 +1,14 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// "use strict";
+// Object.defineProperty(exports, "__esModule", { value: true });
+// exports.TargetPopulation = void 0;
+// <|var [|TargetPopulation|];|>
+// (function (TargetPopulation) {
+//     TargetPopulation["Team"] = "team";
+//     TargetPopulation["Internal"] = "internal";
+// --- (line: 8) skipped ---
+
+// === /home/src/workspaces/project/index.ts ===
+// import * as tas from "pkg";
+// tas./*GOTO SOURCE DEF*/TargetPopulation.Public;

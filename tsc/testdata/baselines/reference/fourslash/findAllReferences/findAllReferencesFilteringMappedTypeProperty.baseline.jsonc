@@ -1,0 +1,21 @@
+// === findAllReferences ===
+// === /findAllReferencesFilteringMappedTypeProperty.ts ===
+// const obj = { /*FIND ALL REFS*/[|a|]: 1, b: 2 };
+// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { [|a|]: 0 };
+// filtered.[|a|];
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesFilteringMappedTypeProperty.ts ===
+// const obj = { [|a|]: 1, b: 2 };
+// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { /*FIND ALL REFS*/[|a|]: 0 };
+// filtered.[|a|];
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesFilteringMappedTypeProperty.ts ===
+// const obj = { [|a|]: 1, b: 2 };
+// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { [|a|]: 0 };
+// filtered./*FIND ALL REFS*/[|a|];

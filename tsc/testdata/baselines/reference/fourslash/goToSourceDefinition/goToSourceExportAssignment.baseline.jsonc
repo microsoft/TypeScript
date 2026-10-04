@@ -1,0 +1,8 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/legacy/index.js ===
+// <|function [|legacyFn|]() { return "ok"; }|>
+// module.exports = legacyFn;
+
+// === /home/src/workspaces/project/index.ts ===
+// import /*GOTO SOURCE DEF*/legacyFn from "legacy";
+// legacyFn();

@@ -1,0 +1,812 @@
+//// [tests/cases/compiler/veryDeepRelations.ts] ////
+
+=== veryDeepRelations.ts ===
+interface A0 {
+>A0 : Symbol(A0, Decl(veryDeepRelations.ts, 0, 0))
+
+  name: string;
+>name : Symbol(A0.name, Decl(veryDeepRelations.ts, 0, 14))
+
+  next?: A1[];
+>next : Symbol(A0.next, Decl(veryDeepRelations.ts, 1, 15))
+>A1 : Symbol(A1, Decl(veryDeepRelations.ts, 3, 1))
+}
+interface A1 {
+>A1 : Symbol(A1, Decl(veryDeepRelations.ts, 3, 1))
+
+  name: string;
+>name : Symbol(A1.name, Decl(veryDeepRelations.ts, 4, 14))
+
+  next?: A2[];
+>next : Symbol(A1.next, Decl(veryDeepRelations.ts, 5, 15))
+>A2 : Symbol(A2, Decl(veryDeepRelations.ts, 7, 1))
+}
+interface A2 {
+>A2 : Symbol(A2, Decl(veryDeepRelations.ts, 7, 1))
+
+  name: string;
+>name : Symbol(A2.name, Decl(veryDeepRelations.ts, 8, 14))
+
+  next?: A3[];
+>next : Symbol(A2.next, Decl(veryDeepRelations.ts, 9, 15))
+>A3 : Symbol(A3, Decl(veryDeepRelations.ts, 11, 1))
+}
+interface A3 {
+>A3 : Symbol(A3, Decl(veryDeepRelations.ts, 11, 1))
+
+  name: string;
+>name : Symbol(A3.name, Decl(veryDeepRelations.ts, 12, 14))
+
+  next?: A4[];
+>next : Symbol(A3.next, Decl(veryDeepRelations.ts, 13, 15))
+>A4 : Symbol(A4, Decl(veryDeepRelations.ts, 15, 1))
+}
+interface A4 {
+>A4 : Symbol(A4, Decl(veryDeepRelations.ts, 15, 1))
+
+  name: string;
+>name : Symbol(A4.name, Decl(veryDeepRelations.ts, 16, 14))
+
+  next?: A5[];
+>next : Symbol(A4.next, Decl(veryDeepRelations.ts, 17, 15))
+>A5 : Symbol(A5, Decl(veryDeepRelations.ts, 19, 1))
+}
+interface A5 {
+>A5 : Symbol(A5, Decl(veryDeepRelations.ts, 19, 1))
+
+  name: string;
+>name : Symbol(A5.name, Decl(veryDeepRelations.ts, 20, 14))
+
+  next?: A6[];
+>next : Symbol(A5.next, Decl(veryDeepRelations.ts, 21, 15))
+>A6 : Symbol(A6, Decl(veryDeepRelations.ts, 23, 1))
+}
+interface A6 {
+>A6 : Symbol(A6, Decl(veryDeepRelations.ts, 23, 1))
+
+  name: string;
+>name : Symbol(A6.name, Decl(veryDeepRelations.ts, 24, 14))
+
+  next?: A7[];
+>next : Symbol(A6.next, Decl(veryDeepRelations.ts, 25, 15))
+>A7 : Symbol(A7, Decl(veryDeepRelations.ts, 27, 1))
+}
+interface A7 {
+>A7 : Symbol(A7, Decl(veryDeepRelations.ts, 27, 1))
+
+  name: string;
+>name : Symbol(A7.name, Decl(veryDeepRelations.ts, 28, 14))
+
+  next?: A8[];
+>next : Symbol(A7.next, Decl(veryDeepRelations.ts, 29, 15))
+>A8 : Symbol(A8, Decl(veryDeepRelations.ts, 31, 1))
+}
+interface A8 {
+>A8 : Symbol(A8, Decl(veryDeepRelations.ts, 31, 1))
+
+  name: string;
+>name : Symbol(A8.name, Decl(veryDeepRelations.ts, 32, 14))
+
+  next?: A9[];
+>next : Symbol(A8.next, Decl(veryDeepRelations.ts, 33, 15))
+>A9 : Symbol(A9, Decl(veryDeepRelations.ts, 35, 1))
+}
+interface A9 {
+>A9 : Symbol(A9, Decl(veryDeepRelations.ts, 35, 1))
+
+  name: string;
+>name : Symbol(A9.name, Decl(veryDeepRelations.ts, 36, 14))
+
+  next?: A10[];
+>next : Symbol(A9.next, Decl(veryDeepRelations.ts, 37, 15))
+>A10 : Symbol(A10, Decl(veryDeepRelations.ts, 39, 1))
+}
+interface A10 {
+>A10 : Symbol(A10, Decl(veryDeepRelations.ts, 39, 1))
+
+  name: string;
+>name : Symbol(A10.name, Decl(veryDeepRelations.ts, 40, 15))
+
+  next?: A11[];
+>next : Symbol(A10.next, Decl(veryDeepRelations.ts, 41, 15))
+>A11 : Symbol(A11, Decl(veryDeepRelations.ts, 43, 1))
+}
+interface A11 {
+>A11 : Symbol(A11, Decl(veryDeepRelations.ts, 43, 1))
+
+  name: string;
+>name : Symbol(A11.name, Decl(veryDeepRelations.ts, 44, 15))
+
+  next?: A12[];
+>next : Symbol(A11.next, Decl(veryDeepRelations.ts, 45, 15))
+>A12 : Symbol(A12, Decl(veryDeepRelations.ts, 47, 1))
+}
+interface A12 {
+>A12 : Symbol(A12, Decl(veryDeepRelations.ts, 47, 1))
+
+  name: string;
+>name : Symbol(A12.name, Decl(veryDeepRelations.ts, 48, 15))
+
+  next?: A13[];
+>next : Symbol(A12.next, Decl(veryDeepRelations.ts, 49, 15))
+>A13 : Symbol(A13, Decl(veryDeepRelations.ts, 51, 1))
+}
+interface A13 {
+>A13 : Symbol(A13, Decl(veryDeepRelations.ts, 51, 1))
+
+  name: string;
+>name : Symbol(A13.name, Decl(veryDeepRelations.ts, 52, 15))
+
+  next?: A14[];
+>next : Symbol(A13.next, Decl(veryDeepRelations.ts, 53, 15))
+>A14 : Symbol(A14, Decl(veryDeepRelations.ts, 55, 1))
+}
+interface A14 {
+>A14 : Symbol(A14, Decl(veryDeepRelations.ts, 55, 1))
+
+  name: string;
+>name : Symbol(A14.name, Decl(veryDeepRelations.ts, 56, 15))
+
+  next?: A15[];
+>next : Symbol(A14.next, Decl(veryDeepRelations.ts, 57, 15))
+>A15 : Symbol(A15, Decl(veryDeepRelations.ts, 59, 1))
+}
+interface A15 {
+>A15 : Symbol(A15, Decl(veryDeepRelations.ts, 59, 1))
+
+  name: string;
+>name : Symbol(A15.name, Decl(veryDeepRelations.ts, 60, 15))
+
+  next?: A16[];
+>next : Symbol(A15.next, Decl(veryDeepRelations.ts, 61, 15))
+>A16 : Symbol(A16, Decl(veryDeepRelations.ts, 63, 1))
+}
+interface A16 {
+>A16 : Symbol(A16, Decl(veryDeepRelations.ts, 63, 1))
+
+  name: string;
+>name : Symbol(A16.name, Decl(veryDeepRelations.ts, 64, 15))
+
+  next?: A17[];
+>next : Symbol(A16.next, Decl(veryDeepRelations.ts, 65, 15))
+>A17 : Symbol(A17, Decl(veryDeepRelations.ts, 67, 1))
+}
+interface A17 {
+>A17 : Symbol(A17, Decl(veryDeepRelations.ts, 67, 1))
+
+  name: string;
+>name : Symbol(A17.name, Decl(veryDeepRelations.ts, 68, 15))
+
+  next?: A18[];
+>next : Symbol(A17.next, Decl(veryDeepRelations.ts, 69, 15))
+>A18 : Symbol(A18, Decl(veryDeepRelations.ts, 71, 1))
+}
+interface A18 {
+>A18 : Symbol(A18, Decl(veryDeepRelations.ts, 71, 1))
+
+  name: string;
+>name : Symbol(A18.name, Decl(veryDeepRelations.ts, 72, 15))
+
+  next?: A19[];
+>next : Symbol(A18.next, Decl(veryDeepRelations.ts, 73, 15))
+>A19 : Symbol(A19, Decl(veryDeepRelations.ts, 75, 1))
+}
+interface A19 {
+>A19 : Symbol(A19, Decl(veryDeepRelations.ts, 75, 1))
+
+  name: string;
+>name : Symbol(A19.name, Decl(veryDeepRelations.ts, 76, 15))
+
+  next?: A20[];
+>next : Symbol(A19.next, Decl(veryDeepRelations.ts, 77, 15))
+>A20 : Symbol(A20, Decl(veryDeepRelations.ts, 79, 1))
+}
+interface A20 {
+>A20 : Symbol(A20, Decl(veryDeepRelations.ts, 79, 1))
+
+  name: string;
+>name : Symbol(A20.name, Decl(veryDeepRelations.ts, 80, 15))
+
+  next?: A21[];
+>next : Symbol(A20.next, Decl(veryDeepRelations.ts, 81, 15))
+>A21 : Symbol(A21, Decl(veryDeepRelations.ts, 83, 1))
+}
+interface A21 {
+>A21 : Symbol(A21, Decl(veryDeepRelations.ts, 83, 1))
+
+  name: string;
+>name : Symbol(A21.name, Decl(veryDeepRelations.ts, 84, 15))
+
+  next?: A22[];
+>next : Symbol(A21.next, Decl(veryDeepRelations.ts, 85, 15))
+>A22 : Symbol(A22, Decl(veryDeepRelations.ts, 87, 1))
+}
+interface A22 {
+>A22 : Symbol(A22, Decl(veryDeepRelations.ts, 87, 1))
+
+  name: string;
+>name : Symbol(A22.name, Decl(veryDeepRelations.ts, 88, 15))
+
+  next?: A23[];
+>next : Symbol(A22.next, Decl(veryDeepRelations.ts, 89, 15))
+>A23 : Symbol(A23, Decl(veryDeepRelations.ts, 91, 1))
+}
+interface A23 {
+>A23 : Symbol(A23, Decl(veryDeepRelations.ts, 91, 1))
+
+  name: string;
+>name : Symbol(A23.name, Decl(veryDeepRelations.ts, 92, 15))
+
+  next?: A24[];
+>next : Symbol(A23.next, Decl(veryDeepRelations.ts, 93, 15))
+>A24 : Symbol(A24, Decl(veryDeepRelations.ts, 95, 1))
+}
+interface A24 {
+>A24 : Symbol(A24, Decl(veryDeepRelations.ts, 95, 1))
+
+  name: string;
+>name : Symbol(A24.name, Decl(veryDeepRelations.ts, 96, 15))
+
+  next?: A25[];
+>next : Symbol(A24.next, Decl(veryDeepRelations.ts, 97, 15))
+>A25 : Symbol(A25, Decl(veryDeepRelations.ts, 99, 1))
+}
+interface A25 {
+>A25 : Symbol(A25, Decl(veryDeepRelations.ts, 99, 1))
+
+  name: string;
+>name : Symbol(A25.name, Decl(veryDeepRelations.ts, 100, 15))
+
+  next?: A26[];
+>next : Symbol(A25.next, Decl(veryDeepRelations.ts, 101, 15))
+>A26 : Symbol(A26, Decl(veryDeepRelations.ts, 103, 1))
+}
+interface A26 {
+>A26 : Symbol(A26, Decl(veryDeepRelations.ts, 103, 1))
+
+  name: string;
+>name : Symbol(A26.name, Decl(veryDeepRelations.ts, 104, 15))
+
+  next?: A27[];
+>next : Symbol(A26.next, Decl(veryDeepRelations.ts, 105, 15))
+>A27 : Symbol(A27, Decl(veryDeepRelations.ts, 107, 1))
+}
+interface A27 {
+>A27 : Symbol(A27, Decl(veryDeepRelations.ts, 107, 1))
+
+  name: string;
+>name : Symbol(A27.name, Decl(veryDeepRelations.ts, 108, 15))
+
+  next?: A28[];
+>next : Symbol(A27.next, Decl(veryDeepRelations.ts, 109, 15))
+>A28 : Symbol(A28, Decl(veryDeepRelations.ts, 111, 1))
+}
+interface A28 {
+>A28 : Symbol(A28, Decl(veryDeepRelations.ts, 111, 1))
+
+  name: string;
+>name : Symbol(A28.name, Decl(veryDeepRelations.ts, 112, 15))
+
+  next?: A29[];
+>next : Symbol(A28.next, Decl(veryDeepRelations.ts, 113, 15))
+>A29 : Symbol(A29, Decl(veryDeepRelations.ts, 115, 1))
+}
+interface A29 {
+>A29 : Symbol(A29, Decl(veryDeepRelations.ts, 115, 1))
+
+  name: string;
+>name : Symbol(A29.name, Decl(veryDeepRelations.ts, 116, 15))
+
+  next?: A30[];
+>next : Symbol(A29.next, Decl(veryDeepRelations.ts, 117, 15))
+>A30 : Symbol(A30, Decl(veryDeepRelations.ts, 119, 1))
+}
+interface A30 {
+>A30 : Symbol(A30, Decl(veryDeepRelations.ts, 119, 1))
+
+  name: string;
+>name : Symbol(A30.name, Decl(veryDeepRelations.ts, 120, 15))
+
+  next?: A31[];
+>next : Symbol(A30.next, Decl(veryDeepRelations.ts, 121, 15))
+>A31 : Symbol(A31, Decl(veryDeepRelations.ts, 123, 1))
+}
+interface A31 {
+>A31 : Symbol(A31, Decl(veryDeepRelations.ts, 123, 1))
+
+  name: string;
+>name : Symbol(A31.name, Decl(veryDeepRelations.ts, 124, 15))
+
+  next?: A32[];
+>next : Symbol(A31.next, Decl(veryDeepRelations.ts, 125, 15))
+>A32 : Symbol(A32, Decl(veryDeepRelations.ts, 127, 1))
+}
+interface A32 {
+>A32 : Symbol(A32, Decl(veryDeepRelations.ts, 127, 1))
+
+  name: string;
+>name : Symbol(A32.name, Decl(veryDeepRelations.ts, 128, 15))
+
+  next?: A33[];
+>next : Symbol(A32.next, Decl(veryDeepRelations.ts, 129, 15))
+>A33 : Symbol(A33, Decl(veryDeepRelations.ts, 131, 1))
+}
+interface A33 {
+>A33 : Symbol(A33, Decl(veryDeepRelations.ts, 131, 1))
+
+  name: string;
+>name : Symbol(A33.name, Decl(veryDeepRelations.ts, 132, 15))
+
+  next?: A34[];
+>next : Symbol(A33.next, Decl(veryDeepRelations.ts, 133, 15))
+>A34 : Symbol(A34, Decl(veryDeepRelations.ts, 135, 1))
+}
+interface A34 {
+>A34 : Symbol(A34, Decl(veryDeepRelations.ts, 135, 1))
+
+  name: string;
+>name : Symbol(A34.name, Decl(veryDeepRelations.ts, 136, 15))
+
+  next?: A35[];
+>next : Symbol(A34.next, Decl(veryDeepRelations.ts, 137, 15))
+>A35 : Symbol(A35, Decl(veryDeepRelations.ts, 139, 1))
+}
+interface A35 {
+>A35 : Symbol(A35, Decl(veryDeepRelations.ts, 139, 1))
+
+  name: string;
+>name : Symbol(A35.name, Decl(veryDeepRelations.ts, 140, 15))
+
+  next?: A36[];
+>next : Symbol(A35.next, Decl(veryDeepRelations.ts, 141, 15))
+>A36 : Symbol(A36, Decl(veryDeepRelations.ts, 143, 1))
+}
+interface A36 {
+>A36 : Symbol(A36, Decl(veryDeepRelations.ts, 143, 1))
+
+  name: string;
+>name : Symbol(A36.name, Decl(veryDeepRelations.ts, 144, 15))
+
+  next?: A37[];
+>next : Symbol(A36.next, Decl(veryDeepRelations.ts, 145, 15))
+>A37 : Symbol(A37, Decl(veryDeepRelations.ts, 147, 1))
+}
+interface A37 {
+>A37 : Symbol(A37, Decl(veryDeepRelations.ts, 147, 1))
+
+  name: string;
+>name : Symbol(A37.name, Decl(veryDeepRelations.ts, 148, 15))
+
+  next?: A38[];
+>next : Symbol(A37.next, Decl(veryDeepRelations.ts, 149, 15))
+>A38 : Symbol(A38, Decl(veryDeepRelations.ts, 151, 1))
+}
+interface A38 {
+>A38 : Symbol(A38, Decl(veryDeepRelations.ts, 151, 1))
+
+  name: string;
+>name : Symbol(A38.name, Decl(veryDeepRelations.ts, 152, 15))
+
+  next?: A39[];
+>next : Symbol(A38.next, Decl(veryDeepRelations.ts, 153, 15))
+>A39 : Symbol(A39, Decl(veryDeepRelations.ts, 155, 1))
+}
+interface A39 {
+>A39 : Symbol(A39, Decl(veryDeepRelations.ts, 155, 1))
+
+  name: string;
+>name : Symbol(A39.name, Decl(veryDeepRelations.ts, 156, 15))
+
+  next?: A0[];
+>next : Symbol(A39.next, Decl(veryDeepRelations.ts, 157, 15))
+>A0 : Symbol(A0, Decl(veryDeepRelations.ts, 0, 0))
+}
+interface B0 {
+>B0 : Symbol(B0, Decl(veryDeepRelations.ts, 159, 1))
+
+  name: string;
+>name : Symbol(B0.name, Decl(veryDeepRelations.ts, 160, 14))
+
+  next?: B1[];
+>next : Symbol(B0.next, Decl(veryDeepRelations.ts, 161, 15))
+>B1 : Symbol(B1, Decl(veryDeepRelations.ts, 163, 1))
+}
+interface B1 {
+>B1 : Symbol(B1, Decl(veryDeepRelations.ts, 163, 1))
+
+  name: string;
+>name : Symbol(B1.name, Decl(veryDeepRelations.ts, 164, 14))
+
+  next?: B2[];
+>next : Symbol(B1.next, Decl(veryDeepRelations.ts, 165, 15))
+>B2 : Symbol(B2, Decl(veryDeepRelations.ts, 167, 1))
+}
+interface B2 {
+>B2 : Symbol(B2, Decl(veryDeepRelations.ts, 167, 1))
+
+  name: string;
+>name : Symbol(B2.name, Decl(veryDeepRelations.ts, 168, 14))
+
+  next?: B3[];
+>next : Symbol(B2.next, Decl(veryDeepRelations.ts, 169, 15))
+>B3 : Symbol(B3, Decl(veryDeepRelations.ts, 171, 1))
+}
+interface B3 {
+>B3 : Symbol(B3, Decl(veryDeepRelations.ts, 171, 1))
+
+  name: string;
+>name : Symbol(B3.name, Decl(veryDeepRelations.ts, 172, 14))
+
+  next?: B4[];
+>next : Symbol(B3.next, Decl(veryDeepRelations.ts, 173, 15))
+>B4 : Symbol(B4, Decl(veryDeepRelations.ts, 175, 1))
+}
+interface B4 {
+>B4 : Symbol(B4, Decl(veryDeepRelations.ts, 175, 1))
+
+  name: string;
+>name : Symbol(B4.name, Decl(veryDeepRelations.ts, 176, 14))
+
+  next?: B5[];
+>next : Symbol(B4.next, Decl(veryDeepRelations.ts, 177, 15))
+>B5 : Symbol(B5, Decl(veryDeepRelations.ts, 179, 1))
+}
+interface B5 {
+>B5 : Symbol(B5, Decl(veryDeepRelations.ts, 179, 1))
+
+  name: string;
+>name : Symbol(B5.name, Decl(veryDeepRelations.ts, 180, 14))
+
+  next?: B6[];
+>next : Symbol(B5.next, Decl(veryDeepRelations.ts, 181, 15))
+>B6 : Symbol(B6, Decl(veryDeepRelations.ts, 183, 1))
+}
+interface B6 {
+>B6 : Symbol(B6, Decl(veryDeepRelations.ts, 183, 1))
+
+  name: string;
+>name : Symbol(B6.name, Decl(veryDeepRelations.ts, 184, 14))
+
+  next?: B7[];
+>next : Symbol(B6.next, Decl(veryDeepRelations.ts, 185, 15))
+>B7 : Symbol(B7, Decl(veryDeepRelations.ts, 187, 1))
+}
+interface B7 {
+>B7 : Symbol(B7, Decl(veryDeepRelations.ts, 187, 1))
+
+  name: string;
+>name : Symbol(B7.name, Decl(veryDeepRelations.ts, 188, 14))
+
+  next?: B8[];
+>next : Symbol(B7.next, Decl(veryDeepRelations.ts, 189, 15))
+>B8 : Symbol(B8, Decl(veryDeepRelations.ts, 191, 1))
+}
+interface B8 {
+>B8 : Symbol(B8, Decl(veryDeepRelations.ts, 191, 1))
+
+  name: string;
+>name : Symbol(B8.name, Decl(veryDeepRelations.ts, 192, 14))
+
+  next?: B9[];
+>next : Symbol(B8.next, Decl(veryDeepRelations.ts, 193, 15))
+>B9 : Symbol(B9, Decl(veryDeepRelations.ts, 195, 1))
+}
+interface B9 {
+>B9 : Symbol(B9, Decl(veryDeepRelations.ts, 195, 1))
+
+  name: string;
+>name : Symbol(B9.name, Decl(veryDeepRelations.ts, 196, 14))
+
+  next?: B10[];
+>next : Symbol(B9.next, Decl(veryDeepRelations.ts, 197, 15))
+>B10 : Symbol(B10, Decl(veryDeepRelations.ts, 199, 1))
+}
+interface B10 {
+>B10 : Symbol(B10, Decl(veryDeepRelations.ts, 199, 1))
+
+  name: string;
+>name : Symbol(B10.name, Decl(veryDeepRelations.ts, 200, 15))
+
+  next?: B11[];
+>next : Symbol(B10.next, Decl(veryDeepRelations.ts, 201, 15))
+>B11 : Symbol(B11, Decl(veryDeepRelations.ts, 203, 1))
+}
+interface B11 {
+>B11 : Symbol(B11, Decl(veryDeepRelations.ts, 203, 1))
+
+  name: string;
+>name : Symbol(B11.name, Decl(veryDeepRelations.ts, 204, 15))
+
+  next?: B12[];
+>next : Symbol(B11.next, Decl(veryDeepRelations.ts, 205, 15))
+>B12 : Symbol(B12, Decl(veryDeepRelations.ts, 207, 1))
+}
+interface B12 {
+>B12 : Symbol(B12, Decl(veryDeepRelations.ts, 207, 1))
+
+  name: string;
+>name : Symbol(B12.name, Decl(veryDeepRelations.ts, 208, 15))
+
+  next?: B13[];
+>next : Symbol(B12.next, Decl(veryDeepRelations.ts, 209, 15))
+>B13 : Symbol(B13, Decl(veryDeepRelations.ts, 211, 1))
+}
+interface B13 {
+>B13 : Symbol(B13, Decl(veryDeepRelations.ts, 211, 1))
+
+  name: string;
+>name : Symbol(B13.name, Decl(veryDeepRelations.ts, 212, 15))
+
+  next?: B14[];
+>next : Symbol(B13.next, Decl(veryDeepRelations.ts, 213, 15))
+>B14 : Symbol(B14, Decl(veryDeepRelations.ts, 215, 1))
+}
+interface B14 {
+>B14 : Symbol(B14, Decl(veryDeepRelations.ts, 215, 1))
+
+  name: string;
+>name : Symbol(B14.name, Decl(veryDeepRelations.ts, 216, 15))
+
+  next?: B15[];
+>next : Symbol(B14.next, Decl(veryDeepRelations.ts, 217, 15))
+>B15 : Symbol(B15, Decl(veryDeepRelations.ts, 219, 1))
+}
+interface B15 {
+>B15 : Symbol(B15, Decl(veryDeepRelations.ts, 219, 1))
+
+  name: string;
+>name : Symbol(B15.name, Decl(veryDeepRelations.ts, 220, 15))
+
+  next?: B16[];
+>next : Symbol(B15.next, Decl(veryDeepRelations.ts, 221, 15))
+>B16 : Symbol(B16, Decl(veryDeepRelations.ts, 223, 1))
+}
+interface B16 {
+>B16 : Symbol(B16, Decl(veryDeepRelations.ts, 223, 1))
+
+  name: string;
+>name : Symbol(B16.name, Decl(veryDeepRelations.ts, 224, 15))
+
+  next?: B17[];
+>next : Symbol(B16.next, Decl(veryDeepRelations.ts, 225, 15))
+>B17 : Symbol(B17, Decl(veryDeepRelations.ts, 227, 1))
+}
+interface B17 {
+>B17 : Symbol(B17, Decl(veryDeepRelations.ts, 227, 1))
+
+  name: string;
+>name : Symbol(B17.name, Decl(veryDeepRelations.ts, 228, 15))
+
+  next?: B18[];
+>next : Symbol(B17.next, Decl(veryDeepRelations.ts, 229, 15))
+>B18 : Symbol(B18, Decl(veryDeepRelations.ts, 231, 1))
+}
+interface B18 {
+>B18 : Symbol(B18, Decl(veryDeepRelations.ts, 231, 1))
+
+  name: string;
+>name : Symbol(B18.name, Decl(veryDeepRelations.ts, 232, 15))
+
+  next?: B19[];
+>next : Symbol(B18.next, Decl(veryDeepRelations.ts, 233, 15))
+>B19 : Symbol(B19, Decl(veryDeepRelations.ts, 235, 1))
+}
+interface B19 {
+>B19 : Symbol(B19, Decl(veryDeepRelations.ts, 235, 1))
+
+  name: string;
+>name : Symbol(B19.name, Decl(veryDeepRelations.ts, 236, 15))
+
+  next?: B20[];
+>next : Symbol(B19.next, Decl(veryDeepRelations.ts, 237, 15))
+>B20 : Symbol(B20, Decl(veryDeepRelations.ts, 239, 1))
+}
+interface B20 {
+>B20 : Symbol(B20, Decl(veryDeepRelations.ts, 239, 1))
+
+  name: string;
+>name : Symbol(B20.name, Decl(veryDeepRelations.ts, 240, 15))
+
+  next?: B21[];
+>next : Symbol(B20.next, Decl(veryDeepRelations.ts, 241, 15))
+>B21 : Symbol(B21, Decl(veryDeepRelations.ts, 243, 1))
+}
+interface B21 {
+>B21 : Symbol(B21, Decl(veryDeepRelations.ts, 243, 1))
+
+  name: string;
+>name : Symbol(B21.name, Decl(veryDeepRelations.ts, 244, 15))
+
+  next?: B22[];
+>next : Symbol(B21.next, Decl(veryDeepRelations.ts, 245, 15))
+>B22 : Symbol(B22, Decl(veryDeepRelations.ts, 247, 1))
+}
+interface B22 {
+>B22 : Symbol(B22, Decl(veryDeepRelations.ts, 247, 1))
+
+  name: string;
+>name : Symbol(B22.name, Decl(veryDeepRelations.ts, 248, 15))
+
+  next?: B23[];
+>next : Symbol(B22.next, Decl(veryDeepRelations.ts, 249, 15))
+>B23 : Symbol(B23, Decl(veryDeepRelations.ts, 251, 1))
+}
+interface B23 {
+>B23 : Symbol(B23, Decl(veryDeepRelations.ts, 251, 1))
+
+  name: string;
+>name : Symbol(B23.name, Decl(veryDeepRelations.ts, 252, 15))
+
+  next?: B24[];
+>next : Symbol(B23.next, Decl(veryDeepRelations.ts, 253, 15))
+>B24 : Symbol(B24, Decl(veryDeepRelations.ts, 255, 1))
+}
+interface B24 {
+>B24 : Symbol(B24, Decl(veryDeepRelations.ts, 255, 1))
+
+  name: string;
+>name : Symbol(B24.name, Decl(veryDeepRelations.ts, 256, 15))
+
+  next?: B25[];
+>next : Symbol(B24.next, Decl(veryDeepRelations.ts, 257, 15))
+>B25 : Symbol(B25, Decl(veryDeepRelations.ts, 259, 1))
+}
+interface B25 {
+>B25 : Symbol(B25, Decl(veryDeepRelations.ts, 259, 1))
+
+  name: string;
+>name : Symbol(B25.name, Decl(veryDeepRelations.ts, 260, 15))
+
+  next?: B26[];
+>next : Symbol(B25.next, Decl(veryDeepRelations.ts, 261, 15))
+>B26 : Symbol(B26, Decl(veryDeepRelations.ts, 263, 1))
+}
+interface B26 {
+>B26 : Symbol(B26, Decl(veryDeepRelations.ts, 263, 1))
+
+  name: string;
+>name : Symbol(B26.name, Decl(veryDeepRelations.ts, 264, 15))
+
+  next?: B27[];
+>next : Symbol(B26.next, Decl(veryDeepRelations.ts, 265, 15))
+>B27 : Symbol(B27, Decl(veryDeepRelations.ts, 267, 1))
+}
+interface B27 {
+>B27 : Symbol(B27, Decl(veryDeepRelations.ts, 267, 1))
+
+  name: string;
+>name : Symbol(B27.name, Decl(veryDeepRelations.ts, 268, 15))
+
+  next?: B28[];
+>next : Symbol(B27.next, Decl(veryDeepRelations.ts, 269, 15))
+>B28 : Symbol(B28, Decl(veryDeepRelations.ts, 271, 1))
+}
+interface B28 {
+>B28 : Symbol(B28, Decl(veryDeepRelations.ts, 271, 1))
+
+  name: string;
+>name : Symbol(B28.name, Decl(veryDeepRelations.ts, 272, 15))
+
+  next?: B29[];
+>next : Symbol(B28.next, Decl(veryDeepRelations.ts, 273, 15))
+>B29 : Symbol(B29, Decl(veryDeepRelations.ts, 275, 1))
+}
+interface B29 {
+>B29 : Symbol(B29, Decl(veryDeepRelations.ts, 275, 1))
+
+  name: string;
+>name : Symbol(B29.name, Decl(veryDeepRelations.ts, 276, 15))
+
+  next?: B30[];
+>next : Symbol(B29.next, Decl(veryDeepRelations.ts, 277, 15))
+>B30 : Symbol(B30, Decl(veryDeepRelations.ts, 279, 1))
+}
+interface B30 {
+>B30 : Symbol(B30, Decl(veryDeepRelations.ts, 279, 1))
+
+  name: string;
+>name : Symbol(B30.name, Decl(veryDeepRelations.ts, 280, 15))
+
+  next?: B31[];
+>next : Symbol(B30.next, Decl(veryDeepRelations.ts, 281, 15))
+>B31 : Symbol(B31, Decl(veryDeepRelations.ts, 283, 1))
+}
+interface B31 {
+>B31 : Symbol(B31, Decl(veryDeepRelations.ts, 283, 1))
+
+  name: string;
+>name : Symbol(B31.name, Decl(veryDeepRelations.ts, 284, 15))
+
+  next?: B32[];
+>next : Symbol(B31.next, Decl(veryDeepRelations.ts, 285, 15))
+>B32 : Symbol(B32, Decl(veryDeepRelations.ts, 287, 1))
+}
+interface B32 {
+>B32 : Symbol(B32, Decl(veryDeepRelations.ts, 287, 1))
+
+  name: string;
+>name : Symbol(B32.name, Decl(veryDeepRelations.ts, 288, 15))
+
+  next?: B33[];
+>next : Symbol(B32.next, Decl(veryDeepRelations.ts, 289, 15))
+>B33 : Symbol(B33, Decl(veryDeepRelations.ts, 291, 1))
+}
+interface B33 {
+>B33 : Symbol(B33, Decl(veryDeepRelations.ts, 291, 1))
+
+  name: string;
+>name : Symbol(B33.name, Decl(veryDeepRelations.ts, 292, 15))
+
+  next?: B34[];
+>next : Symbol(B33.next, Decl(veryDeepRelations.ts, 293, 15))
+>B34 : Symbol(B34, Decl(veryDeepRelations.ts, 295, 1))
+}
+interface B34 {
+>B34 : Symbol(B34, Decl(veryDeepRelations.ts, 295, 1))
+
+  name: string;
+>name : Symbol(B34.name, Decl(veryDeepRelations.ts, 296, 15))
+
+  next?: B35[];
+>next : Symbol(B34.next, Decl(veryDeepRelations.ts, 297, 15))
+>B35 : Symbol(B35, Decl(veryDeepRelations.ts, 299, 1))
+}
+interface B35 {
+>B35 : Symbol(B35, Decl(veryDeepRelations.ts, 299, 1))
+
+  name: string;
+>name : Symbol(B35.name, Decl(veryDeepRelations.ts, 300, 15))
+
+  next?: B36[];
+>next : Symbol(B35.next, Decl(veryDeepRelations.ts, 301, 15))
+>B36 : Symbol(B36, Decl(veryDeepRelations.ts, 303, 1))
+}
+interface B36 {
+>B36 : Symbol(B36, Decl(veryDeepRelations.ts, 303, 1))
+
+  name: string;
+>name : Symbol(B36.name, Decl(veryDeepRelations.ts, 304, 15))
+
+  next?: B37[];
+>next : Symbol(B36.next, Decl(veryDeepRelations.ts, 305, 15))
+>B37 : Symbol(B37, Decl(veryDeepRelations.ts, 307, 1))
+}
+interface B37 {
+>B37 : Symbol(B37, Decl(veryDeepRelations.ts, 307, 1))
+
+  name: string;
+>name : Symbol(B37.name, Decl(veryDeepRelations.ts, 308, 15))
+
+  next?: B38[];
+>next : Symbol(B37.next, Decl(veryDeepRelations.ts, 309, 15))
+>B38 : Symbol(B38, Decl(veryDeepRelations.ts, 311, 1))
+}
+interface B38 {
+>B38 : Symbol(B38, Decl(veryDeepRelations.ts, 311, 1))
+
+  name: string;
+>name : Symbol(B38.name, Decl(veryDeepRelations.ts, 312, 15))
+
+  next?: B39[];
+>next : Symbol(B38.next, Decl(veryDeepRelations.ts, 313, 15))
+>B39 : Symbol(B39, Decl(veryDeepRelations.ts, 315, 1))
+}
+interface B39 {
+>B39 : Symbol(B39, Decl(veryDeepRelations.ts, 315, 1))
+
+  name: string;
+>name : Symbol(B39.name, Decl(veryDeepRelations.ts, 316, 15))
+
+  next?: B0[];
+>next : Symbol(B39.next, Decl(veryDeepRelations.ts, 317, 15))
+>B0 : Symbol(B0, Decl(veryDeepRelations.ts, 159, 1))
+}
+declare const a: A0;
+>a : Symbol(a, Decl(veryDeepRelations.ts, 320, 13))
+>A0 : Symbol(A0, Decl(veryDeepRelations.ts, 0, 0))
+
+const assigned: B0 = a;
+>assigned : Symbol(assigned, Decl(veryDeepRelations.ts, 321, 5))
+>B0 : Symbol(B0, Decl(veryDeepRelations.ts, 159, 1))
+>a : Symbol(a, Decl(veryDeepRelations.ts, 320, 13))
+

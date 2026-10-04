@@ -1,0 +1,43 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsDocAugmentsAndExtends(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @checkJs: true
+// @Filename: dummy.js
+/**
+ * @augments {Thing<number>}
+ * [|@extends {Thing<string>}|]
+ */
+class MyStringThing extends Thing {
+    constructor() {
+        super();
+        var x = this.mine;
+        x/**/;
+    }
+}
+// @Filename: declarations.d.ts
+declare class Thing<T> {
+    mine: T;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "")
+	f.VerifyQuickInfoIs(t, "(local var) x: number", "")
+	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("Class declarations cannot have more than one '@augments' or '@extends' tag.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(8025))},
+		},
+	})
+}

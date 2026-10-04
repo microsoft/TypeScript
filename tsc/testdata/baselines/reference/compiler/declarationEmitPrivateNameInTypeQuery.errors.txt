@@ -1,0 +1,50 @@
+declarationEmitPrivateNameInTypeQuery.ts(16,15): error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+declarationEmitPrivateNameInTypeQuery.ts(31,26): error TS7080: Declaration emit elides private members, but '#b' refers to a private member. Write an explicit type here.
+
+
+==== declarationEmitPrivateNameInTypeQuery.ts (2 errors) ====
+    export class C1 {
+        #a = 1;
+    
+        static #b = "";
+    
+        #c() {
+            return 1 as const;
+        }
+    
+        get #d() {
+            return new Date();
+        }
+    
+        ["#a"] = true;
+    
+        a: typeof this.#a = 1;
+                  ~~~~~~~
+!!! error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+    
+        test1(a: C1) {
+            const b: typeof a.#a = 1;
+            const c: typeof C1.#b = "";
+    
+            return [b, c] as const;
+        }
+    
+    }
+    
+    export class C2 {
+        #a = 1;
+    
+        static #b = "";
+        public prop!: typeof C2.#b;
+                             ~~~~~
+!!! error TS7080: Declaration emit elides private members, but '#b' refers to a private member. Write an explicit type here.
+    
+        test1() {
+            class C {
+                test1(a: C2): typeof a.#a {
+                    return 1;
+                }
+            }
+            return new C().test1(this);
+        }
+    }

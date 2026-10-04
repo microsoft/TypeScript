@@ -1,0 +1,34 @@
+a.js(8,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+a.js(15,16): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+a.js(20,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== a.js (3 errors) ====
+    /** @param {number} x */
+    function C(x) {
+        this.x = x
+    }
+    C.prototype.m = function() {
+        this.y = 12
+    }
+    var c = new C(1)
+            ~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    c.x = undefined // should error
+    c.y = undefined // ok
+    
+    /** @param {number} x */
+    function A(x) {
+        if (!(this instanceof A)) {
+            return new A(x)
+                   ~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+        }
+        this.x = x
+    }
+    var k = A(1)
+    var j = new A(2)
+            ~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    k.x === j.x
+    

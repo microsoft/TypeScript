@@ -1,0 +1,118 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports28_long_types(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: false
+// @isolatedDeclarations: true
+// @declaration: true
+export const sessionLoader = {
+    async loadSession() {
+        if (Math.random() > 0.5) {
+            return {
+                PROP_1: {
+                    name: false,
+                },
+                PROPERTY_2: {
+                    name: 1,
+                },
+                PROPERTY_3: {
+                    name: 1
+                },
+                PROPERTY_4: {
+                    name: 315,
+                },
+            };
+        }
+
+        return {
+            PROP_1: {
+                name: false,
+            },
+            PROPERTY_2: {
+                name: undefined,
+            },
+            PROPERTY_3: {
+            },
+            PROPERTY_4: {
+                name: 576,
+            },
+        };
+    },
+};`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFixAvailable(t, []string{"Add return type 'Promise<{\n    PROP_1: {\n        name: boolean;\n    };\n    PROPERTY_2: {\n        name: number;\n    };\n    PROPERTY_3: {\n        name: number;\n    };\n    PROPE...'"})
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add return type 'Promise<{\n    PROP_1: {\n        name: boolean;\n    };\n    PROPERTY_2: {\n        name: number;\n    };\n    PROPERTY_3: {\n        name: number;\n    };\n    PROPE...'",
+		NewFileContent: `export const sessionLoader = {
+    async loadSession(): Promise<{
+        PROP_1: {
+            name: boolean;
+        };
+        PROPERTY_2: {
+            name: number;
+        };
+        PROPERTY_3: {
+            name: number;
+        };
+        PROPERTY_4: {
+            name: number;
+        };
+    } | {
+        PROP_1: {
+            name: boolean;
+        };
+        PROPERTY_2: {
+            name: any;
+        };
+        PROPERTY_3: {
+            name?: undefined;
+        };
+        PROPERTY_4: {
+            name: number;
+        };
+    }> {
+        if (Math.random() > 0.5) {
+            return {
+                PROP_1: {
+                    name: false,
+                },
+                PROPERTY_2: {
+                    name: 1,
+                },
+                PROPERTY_3: {
+                    name: 1
+                },
+                PROPERTY_4: {
+                    name: 315,
+                },
+            };
+        }
+
+        return {
+            PROP_1: {
+                name: false,
+            },
+            PROPERTY_2: {
+                name: undefined,
+            },
+            PROPERTY_3: {
+            },
+            PROPERTY_4: {
+                name: 576,
+            },
+        };
+    },
+};`,
+		Index: 0,
+	})
+}

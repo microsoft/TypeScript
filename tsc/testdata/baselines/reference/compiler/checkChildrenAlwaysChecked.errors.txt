@@ -1,0 +1,40 @@
+exportAssignmentInNamespace.ts(3,5): error TS1063: An export assignment cannot be used in a namespace.
+exportAssignmentInNamespace.ts(3,14): error TS2304: Cannot find name 'exportOperandName'.
+returnInStaticBlock.ts(4,9): error TS18041: A 'return' statement cannot be used inside a class static block.
+returnInStaticBlock.ts(4,16): error TS2304: Cannot find name 'returnOperandName'.
+yieldOutsideGenerator.ts(3,5): error TS1163: A 'yield' expression is only allowed in a generator body.
+yieldOutsideGenerator.ts(3,11): error TS2304: Cannot find name 'yieldOperandName'.
+
+
+==== yieldOutsideGenerator.ts (2 errors) ====
+    function notAGenerator() {
+        // The operand is now checked even though the yield is not in a generator.
+        yield yieldOperandName;
+        ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+              ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'yieldOperandName'.
+    }
+    
+==== returnInStaticBlock.ts (2 errors) ====
+    class C {
+        static {
+            // The expression is now checked even though `return` is illegal here.
+            return returnOperandName;
+            ~~~~~~
+!!! error TS18041: A 'return' statement cannot be used inside a class static block.
+                   ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'returnOperandName'.
+        }
+    }
+    
+==== exportAssignmentInNamespace.ts (2 errors) ====
+    namespace N {
+        // The expression is now checked even though `export =` is illegal here.
+        export = exportOperandName;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1063: An export assignment cannot be used in a namespace.
+                 ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'exportOperandName'.
+    }
+    

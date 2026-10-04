@@ -1,5 +1,0 @@
-// === goToDefinition ===
-// === /tests/cases/fourslash/file.js ===
-// class Tex {
-//     type = (/** @type {/*GOTO DEF*/const} */'Text');
-// }

@@ -1,0 +1,4 @@
+// === goToImplementation ===
+// === /goToImplementationLocal_08.ts ===
+// <|declare function [|someFunction|](): () => void;|>
+// someFun/*GOTO IMPL*/ction();

@@ -1,0 +1,12 @@
+// === findAllReferences ===
+// === /app.ts ===
+// export function [|he/*FIND ALL REFS*/llo|]() {};
+
+// === /direct-use.ts ===
+// async function main() {
+//     const mod = await import("./app")
+//     mod.[|hello|]();
+// }
+
+// === /indirect-use.ts ===
+// import("./re-export").then(mod => mod.services.app.[|hello|]());

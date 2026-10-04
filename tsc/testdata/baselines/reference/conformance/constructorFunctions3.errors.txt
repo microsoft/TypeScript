@@ -1,0 +1,58 @@
+a.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+a.js(18,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(20,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(30,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== a.js (7 errors) ====
+    function Instance() {
+        this.i = 'simple'
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    var i = new Instance();
+            ~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    Instance;
+    i;
+    
+    function StaticToo() {
+        this.i = 'more complex'
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    StaticToo.property = 'yep'
+    var s = new StaticToo();
+            ~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    s;
+    StaticToo;
+    
+    // Both!
+    function A () {
+        this.x = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        /** @type {1} */
+        this.second = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    /** @param {number} n */
+    A.prototype.z = function f(n) {
+        return n + this.x
+    }
+    /** @param {number} m */
+    A.t = function g(m) {
+        return m + 1
+    }
+    var a = new A()
+            ~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    a.z(3)
+    A.t(2)
+    a.second = 1
+    

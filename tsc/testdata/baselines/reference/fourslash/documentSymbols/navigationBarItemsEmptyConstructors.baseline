@@ -1,0 +1,10 @@
+// === Document Symbols ===
+// === /navigationBarItemsEmptyConstructors.ts ===
+// <|class [|{| name: Test, kind: Class |}Test|] {
+//     <|[|{| name: constructor, kind: Constructor |}|]constructor() {
+//     }|>
+// }|>
+
+// === Details ===
+(Class) Test
+  (Constructor) constructor

@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/impl.js ===
+// <|export const [|value|] = 42;|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/value } from "pkg";
+// console.log(value);

@@ -1,0 +1,23 @@
+// === findAllReferences ===
+// === /findAllRefsForRest.ts ===
+// interface Gen {
+//     x: number
+//     /*FIND ALL REFS*/[|parent|]: Gen;
+//     millenial: string;
+// }
+// let t: Gen;
+// var { x, ...rest } = t;
+// rest.[|parent|];
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForRest.ts ===
+// interface Gen {
+//     x: number
+//     [|parent|]: Gen;
+//     millenial: string;
+// }
+// let t: Gen;
+// var { x, ...rest } = t;
+// rest./*FIND ALL REFS*/[|parent|];

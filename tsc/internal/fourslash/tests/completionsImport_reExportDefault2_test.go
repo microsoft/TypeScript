@@ -1,0 +1,58 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsImport_reExportDefault2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+// @module: preserve
+// @checkJs: true
+// @Filename: /node_modules/example/package.json
+{ "name": "example", "version": "1.0.0", "main": "dist/index.js" }
+// @Filename: /node_modules/example/dist/nested/module.d.ts
+declare const defaultExport: () => void;
+declare const namedExport: () => void;
+
+export default defaultExport;
+export { namedExport };
+// @Filename: /node_modules/example/dist/index.d.ts
+export { default, namedExport } from "./nested/module";
+// @Filename: /index.mjs
+import { namedExport } from "example";
+defaultExp/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: CompletionGlobalsInJSPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"namedExport",
+					&lsproto.CompletionItem{
+						Label: "defaultExport",
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportFix{
+								ModuleSpecifier: "example",
+							},
+						},
+						AdditionalTextEdits: fourslash.AnyTextEdits,
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+					},
+				}, false,
+			),
+		},
+	})
+}

@@ -1,0 +1,133 @@
+//// [tests/cases/conformance/jsx/unicodeEscapesInJsxtags.tsx] ////
+
+=== file.tsx ===
+/// <reference path="react.d.ts" />
+import * as React from "react";
+>React : typeof React
+
+declare global {
+>global : any
+
+    namespace JSX {
+        interface IntrinsicElements {
+            "a-b": any;
+>"a-b" : any
+
+            "a-c": any;
+>"a-c" : any
+
+            "abcde:abcde": any;
+>"abcde:abcde" : any
+
+            "namespace-name:tagname-tag": any;
+>"namespace-name:tagname-tag" : any
+        }
+    }
+}
+const Compa = (x: {x: number}) => <div>{"" + x}</div>;
+>Compa : (x: { x: number; }) => JSX.Element
+>(x: {x: number}) => <div>{"" + x}</div> : (x: { x: number; }) => JSX.Element
+>x : { x: number; }
+>x : number
+><div>{"" + x}</div> : JSX.Element
+>div : any
+>"" + x : string
+>"" : ""
+>x : { x: number; }
+>div : any
+
+const x = { video: () => null }
+>x : { video: () => null; }
+>{ video: () => null } : { video: () => null; }
+>video : () => null
+>() => null : () => null
+
+// unicode escape sequence is not allowed in tag name or JSX attribute name.
+// tag name:
+; <\u0061></a>
+><\u0061></a> : JSX.Element
+>\u0061 : any
+>a : any
+
+; <\u0061-b></a-b>
+><\u0061-b></a-b> : JSX.Element
+>\u0061-b : any
+>a-b : any
+
+; <a-\u0063></a-c>
+><a-\u0063></a-c> : JSX.Element
+>a-\u0063 : any
+>a-c : any
+
+; <Comp\u0061 x={12} />
+><Comp\u0061 x={12} /> : JSX.Element
+>Comp\u0061 : (x: { x: number; }) => JSX.Element
+>x : number
+>12 : 12
+
+; <x.\u0076ideo />
+><x.\u0076ideo /> : JSX.Element
+>x.\u0076ideo : () => null
+>x : { video: () => null; }
+>\u0076ideo : () => null
+
+; <\u{0061}></a>
+><\u{0061}></a> : JSX.Element
+>\u{0061} : any
+>a : any
+
+; <\u{0061}-b></a-b>
+><\u{0061}-b></a-b> : JSX.Element
+>\u{0061}-b : any
+>a-b : any
+
+; <a-\u{0063}></a-c>
+><a-\u{0063}></a-c> : JSX.Element
+>a-\u{0063} : any
+>a-c : any
+
+; <Comp\u{0061} x={12} />
+><Comp\u{0061} x={12} /> : JSX.Element
+>Comp\u{0061} : (x: { x: number; }) => JSX.Element
+>x : number
+>12 : 12
+
+; <a\u0062c\u0064e:a\u{62}c\u{64}e x={12}></abcde:abcde>
+><a\u0062c\u0064e:a\u{62}c\u{64}e x={12}></abcde:abcde> : JSX.Element
+>a\u0062c\u0064e : any
+>a\u{62}c\u{64}e : any
+>x : number
+>12 : 12
+>abcde : any
+>abcde : any
+
+; <n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de:\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 x={12}></namespace-name:tagname-tag>
+><n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de:\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 x={12}></namespace-name:tagname-tag> : JSX.Element
+>n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de : any
+>\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 : any
+>x : number
+>12 : 12
+>namespace-name : any
+>tagname-tag : any
+
+// attribute name
+;<video data-\u0076ideo />
+><video data-\u0076ideo /> : JSX.Element
+>video : any
+>data-\u0076ideo : true
+
+;<video \u0073rc="" />
+><video \u0073rc="" /> : JSX.Element
+>video : any
+>\u0073rc : string
+
+;<video m\u0075t\u0065d />
+><video m\u0075t\u0065d /> : JSX.Element
+>video : any
+>m\u0075t\u0065d : true
+
+;<video m\u{75}t\u{65}d />
+><video m\u{75}t\u{65}d /> : JSX.Element
+>video : any
+>m\u{75}t\u{65}d : true
+

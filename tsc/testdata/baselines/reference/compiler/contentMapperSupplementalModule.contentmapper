@@ -1,0 +1,9 @@
+//// [/component.vue] (ScriptKind: ScriptKindTS, ContentMapper: [.vue])
+--- Original ---
+component
+--- Transformed ---
+export default 1;
+
+=== Diagnostics ===
+
+<no content>

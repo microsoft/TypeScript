@@ -1,0 +1,28 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGoToDefinitionOverriddenMember18(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: true
+// @target: esnext
+// @lib: esnext
+const entityKind = Symbol.for("drizzle:entityKind");
+
+abstract class MySqlColumn {
+  readonly /*2*/[entityKind]: string = "MySqlColumn";
+}
+
+export class MySqlVarBinary extends MySqlColumn {
+  [|/*1*/override|] readonly [entityKind]: string = "MySqlVarBinary";
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineGoToDefinition(t, true, "1")
+}

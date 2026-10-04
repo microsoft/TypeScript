@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/jsDocCommentOfElidedImportPreserved.ts] ////
+
+=== index.ts ===
+export interface Foo {}
+>Foo : Symbol(Foo, Decl(index.ts, 0, 0))
+
+=== main.ts ===
+/**
+ * Some random docs not related to foo
+ */
+/* trigger */
+import * as x from './index.js';
+>x : Symbol(x, Decl(main.ts, 4, 6))
+
+export const foo = 1;
+>foo : Symbol(foo, Decl(main.ts, 5, 12))
+
+=== detachedCopyright.ts ===
+/**
+ * Copyright header
+ */
+
+import * as x from './index.js';
+>x : Symbol(x, Decl(detachedCopyright.ts, 4, 6))
+
+export const bar = 2;
+>bar : Symbol(bar, Decl(detachedCopyright.ts, 5, 12))
+
+=== detachedCopyrightNonJSDoc.ts ===
+/* Non-JSDoc copyright header */
+
+import * as x from './index.js';
+>x : Symbol(x, Decl(detachedCopyrightNonJSDoc.ts, 2, 6))
+
+export const baz = 3;
+>baz : Symbol(baz, Decl(detachedCopyrightNonJSDoc.ts, 3, 12))
+

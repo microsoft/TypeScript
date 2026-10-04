@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsxEntityDecoderAfterNonEntityAmpersand.tsx] ////
+
+=== jsxEntityDecoderAfterNonEntityAmpersand.tsx ===
+const a = <div>&&amp;</div>;
+>a : any
+><div>&&amp;</div> : any
+>div : any
+>div : any
+
+const b = <div>a&b&amp;c&d&lt;e</div>;
+>b : any
+><div>a&b&amp;c&d&lt;e</div> : any
+>div : any
+>div : any
+
+const c = <div>&amp;&amp;</div>;
+>c : any
+><div>&amp;&amp;</div> : any
+>div : any
+>div : any
+
+const d = <div>&amp;&&amp;</div>;
+>d : any
+><div>&amp;&&amp;</div> : any
+>div : any
+>div : any
+
+const e = <div>a&b&c&amp;</div>;
+>e : any
+><div>a&b&c&amp;</div> : any
+>div : any
+>div : any
+

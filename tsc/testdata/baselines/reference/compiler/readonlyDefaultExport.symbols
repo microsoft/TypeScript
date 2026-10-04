@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/readonlyDefaultExport.ts] ////
+
+=== a.ts ===
+const foo = {
+>foo : Symbol(foo, Decl(a.ts, 0, 5))
+
+  a: 1
+>a : Symbol(a, Decl(a.ts, 0, 13))
+}
+
+export default foo as Readonly<typeof foo>
+>foo : Symbol(foo, Decl(a.ts, 0, 5))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(a.ts, 0, 5))
+
+=== b.ts ===
+import foo from './a'
+>foo : Symbol(foo, Decl(b.ts, 0, 6))
+
+foo.a = 2
+>foo.a : Symbol(a, Decl(a.ts, 0, 13))
+>foo : Symbol(foo, Decl(b.ts, 0, 6))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+

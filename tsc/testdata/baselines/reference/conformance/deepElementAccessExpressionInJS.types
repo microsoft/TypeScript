@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/salsa/deepElementAccessExpressionInJS.ts] ////
+
+=== declarations.d.ts ===
+declare var module: {
+>module : { exports: { [key: string]: any; }; }
+
+    exports: {
+>exports : { [key: string]: any; }
+
+        [key: string]: any;
+>key : string
+
+    };
+}
+=== elementAccessExpressionInJS.js ===
+if (module[calculatePropertyName(1)]) {
+>module[calculatePropertyName(1)] : any
+>module : { exports: { [key: string]: any; }; }
+>calculatePropertyName(1) : string
+>calculatePropertyName : (index: any) => string
+>1 : 1
+}
+function calculatePropertyName(index) {
+>calculatePropertyName : (index: any) => string
+>index : any
+
+    // this would be some webpack index in real life
+    return `property${index}`;
+>`property${index}` : string
+>index : any
+}
+

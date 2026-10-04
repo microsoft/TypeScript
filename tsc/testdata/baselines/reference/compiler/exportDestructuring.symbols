@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/exportDestructuring.ts] ////
+
+=== exportDestructuring.ts ===
+const arr = [1, 2];
+>arr : Symbol(arr, Decl(exportDestructuring.ts, 0, 5))
+
+export const [a, b] = arr;
+>a : Symbol(a, Decl(exportDestructuring.ts, 1, 14))
+>b : Symbol(b, Decl(exportDestructuring.ts, 1, 16))
+>arr : Symbol(arr, Decl(exportDestructuring.ts, 0, 5))
+

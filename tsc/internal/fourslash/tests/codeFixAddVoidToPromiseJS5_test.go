@@ -1,0 +1,24 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixAddVoidToPromiseJS5(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @target: esnext
+// @lib: es2015
+// @strict: true
+// @allowJS: true
+// @checkJS: true
+// @filename: main.js
+/** @type {Promise<number>} */
+const p2 = new Promise(resolve => resolve());`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFixNotAvailable(t, "Add 'void' to Promise resolved without a value")
+}

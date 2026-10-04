@@ -1,0 +1,17 @@
+b.ts(3,5): error TS2540: Cannot assign to 'a' because it is a read-only property.
+
+
+==== a.ts (0 errors) ====
+    const foo = {
+      a: 1
+    }
+    
+    export default foo as Readonly<typeof foo>
+    
+==== b.ts (1 errors) ====
+    import foo from './a'
+    
+    foo.a = 2
+        ~
+!!! error TS2540: Cannot assign to 'a' because it is a read-only property.
+    

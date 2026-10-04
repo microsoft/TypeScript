@@ -1,0 +1,132 @@
+//// [tests/cases/compiler/esDecoratorsPropertyAccessSameNameAsClass.ts] ////
+
+=== esDecoratorsPropertyAccessSameNameAsClass.ts ===
+export enum MyEnum {
+>MyEnum : MyEnum
+
+    Foo = "FooValue",
+>Foo : MyEnum.Foo
+>"FooValue" : "FooValue"
+
+    Bar = "BarValue",
+>Bar : MyEnum.Bar
+>"BarValue" : "BarValue"
+}
+
+function myDecorator(target: any, context: ClassDecoratorContext) {
+>myDecorator : (target: any, context: ClassDecoratorContext) => any
+>target : any
+>context : ClassDecoratorContext<abstract new (...args: any) => any>
+
+    return target;
+>target : any
+}
+
+// ES decorators with enum member access sharing a class name
+@myDecorator
+>myDecorator : (target: any, context: ClassDecoratorContext) => any
+
+export class Foo {
+>Foo : Foo
+
+    type: MyEnum = MyEnum.Foo;
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+
+    getType(): MyEnum {
+>getType : () => MyEnum
+
+        return this.type || MyEnum.Foo;
+>this.type || MyEnum.Foo : MyEnum
+>this.type : MyEnum
+>this : this
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+    }
+}
+
+// Property access on objects
+declare const obj: { Bar: string };
+>obj : { Bar: string; }
+>Bar : string
+
+@myDecorator
+>myDecorator : (target: any, context: ClassDecoratorContext) => any
+
+export class Bar {
+>Bar : Bar
+
+    prop = obj.Bar;
+>prop : string
+>obj.Bar : string
+>obj : { Bar: string; }
+>Bar : string
+
+    method() {
+>method : () => string
+
+        return obj.Bar;
+>obj.Bar : string
+>obj : { Bar: string; }
+>Bar : string
+    }
+}
+
+// Static member of another class
+class Other {
+>Other : Other
+
+    static Baz = 42;
+>Baz : number
+>42 : 42
+}
+
+@myDecorator
+>myDecorator : (target: any, context: ClassDecoratorContext) => any
+
+export class Baz {
+>Baz : Baz
+
+    prop = Other.Baz;
+>prop : number
+>Other.Baz : number
+>Other : typeof Other
+>Baz : number
+}
+
+// ES decorators with static fields trigger class fields transformer aliases at target < ES2022.
+// Property access names must not be substituted through the class fields transformer path.
+declare const obj2: { Quux: number };
+>obj2 : { Quux: number; }
+>Quux : number
+
+@myDecorator
+>myDecorator : (target: any, context: ClassDecoratorContext) => any
+
+export class Quux {
+>Quux : Quux
+
+    static count = 1;
+>count : number
+>1 : 1
+
+    prop = obj2.Quux;
+>prop : number
+>obj2.Quux : number
+>obj2 : { Quux: number; }
+>Quux : number
+
+    method() {
+>method : () => number
+
+        return obj2.Quux;
+>obj2.Quux : number
+>obj2 : { Quux: number; }
+>Quux : number
+    }
+}
+

@@ -1,0 +1,104 @@
+//// [tests/cases/conformance/jsx/unicodeEscapesInJsxtags.tsx] ////
+
+=== file.tsx ===
+/// <reference path="react.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(file.tsx, 1, 6))
+
+declare global {
+>global : Symbol(global, Decl(file.tsx, 1, 31))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1), Decl(file.tsx, 2, 16))
+
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 2370, 78), Decl(file.tsx, 3, 19))
+
+            "a-b": any;
+>"a-b" : Symbol(IntrinsicElements["a-b"], Decl(file.tsx, 4, 37))
+
+            "a-c": any;
+>"a-c" : Symbol(IntrinsicElements["a-c"], Decl(file.tsx, 5, 23))
+
+            "abcde:abcde": any;
+>"abcde:abcde" : Symbol(IntrinsicElements["abcde:abcde"], Decl(file.tsx, 6, 23))
+
+            "namespace-name:tagname-tag": any;
+>"namespace-name:tagname-tag" : Symbol(IntrinsicElements["namespace-name:tagname-tag"], Decl(file.tsx, 7, 31))
+        }
+    }
+}
+const Compa = (x: {x: number}) => <div>{"" + x}</div>;
+>Compa : Symbol(Compa, Decl(file.tsx, 12, 5))
+>x : Symbol(x, Decl(file.tsx, 12, 15))
+>x : Symbol(x, Decl(file.tsx, 12, 19))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>x : Symbol(x, Decl(file.tsx, 12, 15))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+
+const x = { video: () => null }
+>x : Symbol(x, Decl(file.tsx, 13, 5))
+>video : Symbol(video, Decl(file.tsx, 13, 11))
+
+// unicode escape sequence is not allowed in tag name or JSX attribute name.
+// tag name:
+; <\u0061></a>
+>\u0061 : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2372, 33))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2372, 33))
+
+; <\u0061-b></a-b>
+>\u0061-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 4, 37))
+>a-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 4, 37))
+
+; <a-\u0063></a-c>
+>a-\u0063 : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 5, 23))
+>a-c : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 5, 23))
+
+; <Comp\u0061 x={12} />
+>Comp\u0061 : Symbol(Compa, Decl(file.tsx, 12, 5))
+>x : Symbol(x, Decl(file.tsx, 20, 13))
+
+; <x.\u0076ideo />
+>x.\u0076ideo : Symbol(video, Decl(file.tsx, 13, 11))
+>x : Symbol(x, Decl(file.tsx, 13, 5))
+>\u0076ideo : Symbol(video, Decl(file.tsx, 13, 11))
+
+; <\u{0061}></a>
+>\u{0061} : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2372, 33))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2372, 33))
+
+; <\u{0061}-b></a-b>
+>\u{0061}-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 4, 37))
+>a-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 4, 37))
+
+; <a-\u{0063}></a-c>
+>a-\u{0063} : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 5, 23))
+>a-c : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 5, 23))
+
+; <Comp\u{0061} x={12} />
+>Comp\u{0061} : Symbol(Compa, Decl(file.tsx, 12, 5))
+>x : Symbol(x, Decl(file.tsx, 25, 15))
+
+; <a\u0062c\u0064e:a\u{62}c\u{64}e x={12}></abcde:abcde>
+>x : Symbol(x, Decl(file.tsx, 26, 34))
+
+; <n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de:\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 x={12}></namespace-name:tagname-tag>
+>x : Symbol(x, Decl(file.tsx, 27, 84))
+
+// attribute name
+;<video data-\u0076ideo />
+>video : Symbol(JSX.IntrinsicElements.video, Decl(react.d.ts, 2483, 44))
+>data-\u0076ideo : Symbol(data-\u0076ideo, Decl(file.tsx, 30, 7))
+
+;<video \u0073rc="" />
+>video : Symbol(JSX.IntrinsicElements.video, Decl(react.d.ts, 2483, 44))
+>\u0073rc : Symbol(\u0073rc, Decl(file.tsx, 31, 7))
+
+;<video m\u0075t\u0065d />
+>video : Symbol(JSX.IntrinsicElements.video, Decl(react.d.ts, 2483, 44))
+>m\u0075t\u0065d : Symbol(m\u0075t\u0065d, Decl(file.tsx, 32, 7))
+
+;<video m\u{75}t\u{65}d />
+>video : Symbol(JSX.IntrinsicElements.video, Decl(react.d.ts, 2483, 44))
+>m\u{75}t\u{65}d : Symbol(m\u{75}t\u{65}d, Decl(file.tsx, 33, 7))
+

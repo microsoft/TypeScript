@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/iterationErrorOverNotIterableUnions1.ts] ////
+
+=== iterationErrorOverNotIterableUnions1.ts ===
+type A = { a: string };
+>A : Symbol(A, Decl(iterationErrorOverNotIterableUnions1.ts, 0, 0))
+>a : Symbol(a, Decl(iterationErrorOverNotIterableUnions1.ts, 0, 10))
+
+type B = { b: string };
+>B : Symbol(B, Decl(iterationErrorOverNotIterableUnions1.ts, 0, 23))
+>b : Symbol(b, Decl(iterationErrorOverNotIterableUnions1.ts, 1, 10))
+
+declare const data: A[] | B;
+>data : Symbol(data, Decl(iterationErrorOverNotIterableUnions1.ts, 3, 13))
+>A : Symbol(A, Decl(iterationErrorOverNotIterableUnions1.ts, 0, 0))
+>B : Symbol(B, Decl(iterationErrorOverNotIterableUnions1.ts, 0, 23))
+
+for (const item of data) {
+>item : Symbol(item, Decl(iterationErrorOverNotIterableUnions1.ts, 5, 10))
+>data : Symbol(data, Decl(iterationErrorOverNotIterableUnions1.ts, 3, 13))
+
+    item.b;
+>item : Symbol(item, Decl(iterationErrorOverNotIterableUnions1.ts, 5, 10))
+}
+
+for (const ignoredItem of data) {
+>ignoredItem : Symbol(ignoredItem, Decl(iterationErrorOverNotIterableUnions1.ts, 9, 10))
+>data : Symbol(data, Decl(iterationErrorOverNotIterableUnions1.ts, 3, 13))
+
+    ignoredItem.b;
+>ignoredItem : Symbol(ignoredItem, Decl(iterationErrorOverNotIterableUnions1.ts, 9, 10))
+}
+
+const [el] = data;
+>el : Symbol(el, Decl(iterationErrorOverNotIterableUnions1.ts, 13, 7))
+>data : Symbol(data, Decl(iterationErrorOverNotIterableUnions1.ts, 3, 13))
+
+el.b;
+>el : Symbol(el, Decl(iterationErrorOverNotIterableUnions1.ts, 13, 7))
+
+const el2 = data[0];
+>el2 : Symbol(el2, Decl(iterationErrorOverNotIterableUnions1.ts, 16, 5))
+>data : Symbol(data, Decl(iterationErrorOverNotIterableUnions1.ts, 3, 13))
+
+el2.b;
+>el2 : Symbol(el2, Decl(iterationErrorOverNotIterableUnions1.ts, 16, 5))
+

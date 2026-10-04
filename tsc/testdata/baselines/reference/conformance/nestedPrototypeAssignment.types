@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/salsa/nestedPrototypeAssignment.ts] ////
+
+=== mod.js ===
+// #24111 -- shouldn't assert
+C.prototype = {}
+>C.prototype = {} : {}
+>C.prototype : any
+>C : any
+>prototype : any
+>{} : {}
+
+C.prototype.bar.foo = {};
+>C.prototype.bar.foo = {} : {}
+>C.prototype.bar.foo : any
+>C.prototype.bar : any
+>C.prototype : any
+>C : any
+>prototype : any
+>bar : any
+>foo : any
+>{} : {}
+

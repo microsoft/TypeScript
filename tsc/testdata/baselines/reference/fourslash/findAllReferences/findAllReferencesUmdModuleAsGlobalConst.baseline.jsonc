@@ -1,0 +1,39 @@
+// === findAllReferences ===
+// === /node_modules/@types/three/index.d.ts ===
+// export * from "./three-core";
+// export as namespace /*FIND ALL REFS*/[|THREE|];
+
+
+
+// === findAllReferences ===
+// === /typings/global.d.ts ===
+// import * as _THREE from '/*FIND ALL REFS*/[|three|]';
+// declare global {
+//     const THREE: typeof _THREE;
+// }
+
+
+
+// === findAllReferences ===
+// === /src/index.ts ===
+// export const a = {};
+// let v = new [|THREE|].Vector2();
+
+// === /typings/global.d.ts ===
+// import * as _THREE from 'three';
+// declare global {
+//     const /*FIND ALL REFS*/[|THREE|]: typeof _THREE;
+// }
+
+
+
+// === findAllReferences ===
+// === /src/index.ts ===
+// export const a = {};
+// let v = new /*FIND ALL REFS*/[|THREE|].Vector2();
+
+// === /typings/global.d.ts ===
+// import * as _THREE from 'three';
+// declare global {
+//     const [|THREE|]: typeof _THREE;
+// }

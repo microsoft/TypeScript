@@ -1,0 +1,15 @@
+// === findAllReferences ===
+// === /a.ts ===
+// export function /*FIND ALL REFS*/[|f|]() {}
+
+// === /b.ts ===
+// import { [|f|] } from "./a";
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export function [|f|]() {}
+
+// === /b.ts ===
+// import { /*FIND ALL REFS*/[|f|] } from "./a";

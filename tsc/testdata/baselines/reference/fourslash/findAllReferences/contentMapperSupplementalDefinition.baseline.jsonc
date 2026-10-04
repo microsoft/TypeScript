@@ -1,0 +1,6 @@
+// === findAllReferences ===
+// === /globals.astro ===
+// const [|supplementalValue|] = 1;
+// [|supplemental/*FIND ALL REFS*/Value|];
+// supplementalV;
+// 

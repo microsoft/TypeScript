@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/constructSignatureWithInferReturnType.ts] ////
+
+=== constructSignatureWithInferReturnType.ts ===
+type ExtractReturn<T> = T extends { new(): infer R } ? R : never;
+>ExtractReturn : Symbol(ExtractReturn, Decl(constructSignatureWithInferReturnType.ts, 0, 0))
+>T : Symbol(T, Decl(constructSignatureWithInferReturnType.ts, 0, 19))
+>T : Symbol(T, Decl(constructSignatureWithInferReturnType.ts, 0, 19))
+>R : Symbol(R, Decl(constructSignatureWithInferReturnType.ts, 0, 48))
+>R : Symbol(R, Decl(constructSignatureWithInferReturnType.ts, 0, 48))
+

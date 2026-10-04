@@ -1,0 +1,126 @@
+	package checkchildren
+	
+	type Node struct{}
+	
+	func (n *Node) Expression() *Node { return nil }
+	
+	type Type struct{}
+	
+	type CheckMode int
+	
+	type Checker struct {
+		errorType *Type
+	}
+	
+	func (c *Checker) checkExpression(node *Node, checkMode CheckMode) *Type { return nil }
+	
+	func (c *Checker) checkExpressionCached(node *Node) *Type { return nil }
+	
+	func (c *Checker) checkSourceElement(node *Node) {}
+	
+	func (c *Checker) resolveCall(node *Node) *Type { return nil }
+	
+	func (c *Checker) grammarError(node *Node) bool { return false }
+	
+	func (c *Checker) checkSourceElementWorker(node *Node) {
+		switch {
+		case node == nil:
+			c.checkChecksFirst(node)
+		case node != nil:
+			c.checkEarlyReturn(node)
+			c.checkConditionalUpfront(node)
+		default:
+			c.checkLeaf(node)
+		}
+	}
+	
+	func (c *Checker) checkExpressionWorker(node *Node, checkMode CheckMode) *Type {
+		switch {
+		case node == nil:
+			return c.checkCallLike(node)
+		case node != nil:
+			return c.checkNilGuardedReturn(node)
+		default:
+			return c.checkReturnsInReturn(node)
+		}
+	}
+	
+	// checkChecksFirst checks its child before any early return, so it is fine.
+	func (c *Checker) checkChecksFirst(node *Node) {
+		c.checkExpressionCached(node)
+		if c.grammarError(node) {
+			return
+		}
+	}
+	
+	// checkEarlyReturn returns before its child is ever checked.
+	// The first return is flagged as an issue since it doesn't check
+	// children, while the second is not since it checks nilness, presumably to prove
+	// that the children don't exist to check.
+	func (c *Checker) checkEarlyReturn(node *Node) {
+		if c.grammarError(node) {
+			return
+			~~~~~~
+!!! checkchildren: checkEarlyReturn returns before checking its child nodes; check children (e.g. via checkExpression, checkSourceElement, or resolveCall) on all paths so diagnostics are stable regardless of traversal order
+		}
+		if node == nil {
+			return
+		}
+		c.checkExpressionCached(node)
+	}
+	
+	// checkLeaf never checks any children, so its early return is not flagged.
+	func (c *Checker) checkLeaf(node *Node) {
+		if c.grammarError(node) {
+			return
+		}
+	}
+	
+	// checkConditionalUpfront checks its child up front (guarded by the child's
+	// existence) before the early return, so the early return is not flagged.
+	func (c *Checker) checkConditionalUpfront(node *Node) {
+		var exprType *Type
+		if node.Expression() != nil {
+			exprType = c.checkExpressionCached(node.Expression())
+		}
+		if c.grammarError(node) {
+			return
+		}
+		_ = exprType
+	}
+	
+	// checkCallLike returns errorType before resolving the call's children, so the
+	// early return is flagged.
+	func (c *Checker) checkCallLike(node *Node) *Type {
+		if c.grammarError(node) {
+			return c.errorType
+			~~~~~~~~~~~~~~~~~~
+!!! checkchildren: checkCallLike returns before checking its child nodes; check children (e.g. via checkExpression, checkSourceElement, or resolveCall) on all paths so diagnostics are stable regardless of traversal order
+		}
+		return c.resolveCall(node)
+	}
+	
+	// checkReturnsInReturn checks its child as part of the return expression, so it
+	// is fine.
+	func (c *Checker) checkReturnsInReturn(node *Node) *Type {
+		return c.checkExpression(node, 0)
+	}
+	
+	// checkNilGuardedReturn returns early only when the child it would check is
+	// absent (a nil guard on that same child), so the early return is not flagged.
+	func (c *Checker) checkNilGuardedReturn(node *Node) *Type {
+		c.grammarError(node)
+		if node.Expression() == nil {
+			return c.errorType
+		}
+		return c.checkExpression(node.Expression(), 0)
+	}
+	
+	// checkNeverDispatched is not reachable from a worker, so it is never analyzed.
+	func (c *Checker) checkNeverDispatched(node *Node) *Type {
+		if c.grammarError(node) {
+			return c.errorType
+		}
+		return c.checkExpression(node, 0)
+	}
+	

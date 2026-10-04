@@ -1,7 +1,0 @@
-{
-    "scenario": "relative paths",
-    "projectRoot": "tests/cases/projects/RelativePaths",
-    "inputFiles": [
-        "app.ts"
-    ]
-}

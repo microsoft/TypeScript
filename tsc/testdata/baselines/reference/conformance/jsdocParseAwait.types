@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/jsdocParseAwait.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {object} T
+ * @property {boolean} await
+ */
+
+/** @type {T} */
+const a = 1;
+>a : T
+>1 : 1
+
+/** @type {T} */
+const b = {
+>b : T
+>{    await: false,} : { await: false; }
+
+    await: false,
+>await : false
+>false : false
+
+};
+
+/**
+ * @param {boolean} await
+ */
+function c(await) {}
+>c : (await: boolean) => void
+>await : boolean
+

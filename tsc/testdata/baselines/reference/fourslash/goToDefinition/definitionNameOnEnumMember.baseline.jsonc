@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /definitionNameOnEnumMember.ts ===
+// enum e {
+//     firstMember,
+//     secondMember,
+//     [|thirdMember|]
+// }
+// var enumMember = e./*GOTO DEF*/thirdMember;

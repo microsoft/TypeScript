@@ -1,0 +1,177 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityConstMergedWithNamespace.ts ===
+// 
+// declare function create(x: string): number;
+//                  ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function create(x: string): number
+// | namespace create {
+// |     let version: string;
+// |     function reset(): void;
+// |     namespace reset { }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                  ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function create(x: string): number
+// | namespace create
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare namespace create {
+//                   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function create(x: string): number
+// | namespace create {
+// |     let version: string;
+// |     function reset(): void;
+// |     namespace reset { }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function create(x: string): number
+// | namespace create
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     var version: string;
+//     function reset(): void;
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 1,
+        "character": 23
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction create(x: string): number\nnamespace create\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 17
+          },
+          "end": {
+            "line": 1,
+            "character": 23
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 1,
+        "character": 23
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction create(x: string): number\nnamespace create {\n    let version: string;\n    function reset(): void;\n    namespace reset { }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 17
+          },
+          "end": {
+            "line": 1,
+            "character": 23
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 69,
+      "LSPosition": {
+        "line": 2,
+        "character": 24
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction create(x: string): number\nnamespace create\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 18
+          },
+          "end": {
+            "line": 2,
+            "character": 24
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 69,
+      "LSPosition": {
+        "line": 2,
+        "character": 24
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction create(x: string): number\nnamespace create {\n    let version: string;\n    function reset(): void;\n    namespace reset { }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 18
+          },
+          "end": {
+            "line": 2,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

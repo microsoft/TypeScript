@@ -1,0 +1,12 @@
+main.ts(2,1): error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
+
+
+==== a.ts (0 errors) ====
+    export {};
+    
+==== main.ts (1 errors) ====
+    export {};
+    import.defer("./a");
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
+    

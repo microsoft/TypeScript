@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/declarationEmitImportSpecifierWithTsExtensionRelativeImport.ts] ////
+
+=== /node_modules/mylib/lib/Box.d.ts ===
+export interface Box<T> { readonly value: T }
+>Box : Symbol(Box, Decl(Box.d.ts, 0, 0))
+>T : Symbol(T, Decl(Box.d.ts, 0, 21))
+>value : Symbol(Box.value, Decl(Box.d.ts, 0, 25))
+>T : Symbol(T, Decl(Box.d.ts, 0, 21))
+
+export declare function box<T>(value: T): Box<T>;
+>box : Symbol(box, Decl(Box.d.ts, 0, 45))
+>T : Symbol(T, Decl(Box.d.ts, 1, 28))
+>value : Symbol(value, Decl(Box.d.ts, 1, 31))
+>T : Symbol(T, Decl(Box.d.ts, 1, 28))
+>Box : Symbol(Box, Decl(Box.d.ts, 0, 0))
+>T : Symbol(T, Decl(Box.d.ts, 1, 28))
+
+=== /helper.ts ===
+import * as B from 'mylib/lib/Box.js';
+>B : Symbol(B, Decl(helper.ts, 0, 6))
+
+export const inner = B.box('hello');
+>inner : Symbol(inner, Decl(helper.ts, 1, 12))
+>B.box : Symbol(B.box, Decl(Box.d.ts, 0, 45))
+>B : Symbol(B, Decl(helper.ts, 0, 6))
+>box : Symbol(B.box, Decl(Box.d.ts, 0, 45))
+
+=== /mod.ts ===
+import { inner } from './helper.ts';
+>inner : Symbol(inner, Decl(mod.ts, 0, 8))
+
+export const out = inner;
+>out : Symbol(out, Decl(mod.ts, 1, 12))
+>inner : Symbol(inner, Decl(mod.ts, 0, 8))
+

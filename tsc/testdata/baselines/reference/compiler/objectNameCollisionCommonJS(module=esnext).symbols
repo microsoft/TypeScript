@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/objectNameCollisionCommonJS.ts] ////
+
+=== objectNameCollisionCommonJS.ts ===
+let Object = 0;
+>Object : Symbol(Object, Decl(objectNameCollisionCommonJS.ts, 0, 3))
+
+export const x = 1;
+>x : Symbol(x, Decl(objectNameCollisionCommonJS.ts, 1, 12))
+

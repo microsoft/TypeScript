@@ -1,0 +1,92 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "rootDir": "src",
+    "outDir": "dist"
+  }
+}
+// @Filename: /home/src/workspaces/project/package.json
+{
+  "name": "salesforce-pageobjects",
+  "version": "1.0.0",
+  "imports": {
+    "#*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "default": "./dist/*.js"
+    }
+  }
+}
+// @Filename: /home/src/workspaces/project/src/action/pageObjects/actionRenderer.ts
+export const actionRenderer = 0;
+// @Filename: /home/src/workspaces/project/src/index.mts
+import { } from "/**/";`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.MarkTestAsStradaServer()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "#action",
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("#action"),
+				},
+			},
+		},
+	})
+	f.Insert(t, "#action/")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "pageObjects",
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("pageObjects"),
+				},
+			},
+		},
+	})
+	f.Insert(t, "pageObjects/")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "actionRenderer",
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("actionRenderer.ts"),
+				},
+			},
+		},
+	})
+}

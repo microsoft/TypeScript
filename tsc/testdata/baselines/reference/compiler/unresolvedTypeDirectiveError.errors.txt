@@ -1,0 +1,11 @@
+error TS2688: Cannot find type definition file for 'node'.
+  The file is in the program because:
+    Entry point of type library 'node' specified in compilerOptions
+
+
+!!! error TS2688: Cannot find type definition file for 'node'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library 'node' specified in compilerOptions
+==== /a.ts (0 errors) ====
+    export {};
+    

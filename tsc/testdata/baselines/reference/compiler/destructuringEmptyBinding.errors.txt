@@ -1,0 +1,11 @@
+a.ts(1,16): error TS1003: Identifier expected.
+a.ts(1,23): error TS2304: Cannot find name 'x'.
+
+
+==== a.ts (2 errors) ====
+    export var {...{ }} = x;
+                   ~
+!!! error TS1003: Identifier expected.
+                          ~
+!!! error TS2304: Cannot find name 'x'.
+    

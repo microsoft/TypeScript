@@ -1,0 +1,12 @@
+//// [/expression.lisp] (ScriptKind: ScriptKindTS, ContentMapper: [.lisp])
+--- Original ---
+(+ 1 2 "oops")
+--- Transformed ---
+add(1, 2, "oops");
+
+=== Diagnostics ===
+
+/expression.lisp:1:2 - error TS2304: Cannot find name '+'.
+
+1 (+ 1 2 "oops")
+   ~

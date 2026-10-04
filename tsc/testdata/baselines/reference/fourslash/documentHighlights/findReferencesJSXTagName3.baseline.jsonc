@@ -1,0 +1,124 @@
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         /*HIGHLIGHTS*/[|div|]: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <[|div|]>
+//         Some content
+//         <[|div|]>More content</[|div|]>
+//     </[|div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 5) skipped ---
+// }
+// 
+// const Comp = () =>
+//     [|</*HIGHLIGHTS*/div>|]
+//         Some content
+//         <div>More content</div>
+//     [|</div>|];
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 7) skipped ---
+// const Comp = () =>
+//     <div>
+//         Some content
+//         [|</*HIGHLIGHTS*/div>|]More content[|</div>|]
+//     </div>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 7) skipped ---
+// const Comp = () =>
+//     <div>
+//         Some content
+//         [|<div>|]More content[|<//*HIGHLIGHTS*/div>|]
+//     </div>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 5) skipped ---
+// }
+// 
+// const Comp = () =>
+//     [|<div>|]
+//         Some content
+//         <div>More content</div>
+//     [|<//*HIGHLIGHTS*/div>|];
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
+//     }
+// }
+// 
+// const /*HIGHLIGHTS*/[|Comp|] = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = <[|Comp|]>
+//     Content
+// </[|Comp|]>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 10) skipped ---
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = [|</*HIGHLIGHTS*/Comp>|]
+//     Content
+// [|</Comp>|];
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 10) skipped ---
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = [|<Comp>|]
+//     Content
+// [|<//*HIGHLIGHTS*/Comp>|];

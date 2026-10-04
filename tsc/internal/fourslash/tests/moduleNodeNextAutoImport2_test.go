@@ -1,0 +1,31 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestModuleNodeNextAutoImport2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /tsconfig.json
+{ "compilerOptions": { "module": "nodenext" } }
+// @Filename: /package.json
+{ "type": "module" }
+// @Filename: /mobx.d.cts
+export declare function autorun(): void;
+// @Filename: /index.ts
+autorun/**/
+// @Filename: /utils.ts
+import "./mobx.cjs";`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "")
+	f.VerifyImportFixAtPosition(t, []string{
+		`import { autorun } from "./mobx.cjs";
+
+autorun`,
+	}, nil /*preferences*/)
+}

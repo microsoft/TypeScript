@@ -1,0 +1,22 @@
+// === Document Symbols ===
+// === /navigationBarFunctionIndirectlyInVariableDeclaration.ts ===
+// var <|[|{| name: a, kind: Variable |}a|] = {
+//     <|[|{| name: propA, kind: Property |}propA|]: function() {
+//         var <|[|{| name: c, kind: Variable |}c|]|>;
+//     }|>
+// }|>;
+// var <|[|{| name: b, kind: Variable |}b|]|>;
+// b = {
+//     <|[|{| name: propB, kind: Property |}propB|]: function() {
+//     // function must not have an empty body to appear top level
+//         var <|[|{| name: d, kind: Variable |}d|]|>;
+//     }|>
+// };
+
+// === Details ===
+(Variable) a
+  (Property) propA
+    (Variable) c
+(Variable) b
+(Property) propB
+  (Variable) d

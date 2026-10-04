@@ -1,0 +1,21 @@
+// === SignatureHelp ===
+=== /signatureHelpOnImportDefer.ts ===
+// let m = import.defer()
+//                      ^
+// | ----------------------------------------------------------------------
+// | No signaturehelp at /**/.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 0,
+        "character": 21
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": null
+  }
+]

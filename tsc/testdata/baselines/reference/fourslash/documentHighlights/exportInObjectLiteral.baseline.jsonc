@@ -1,0 +1,8 @@
+// === documentHighlights ===
+// filesToSearch:
+//   /a.ts
+
+// === /a.ts ===
+// const k = {
+//     /*HIGHLIGHTS*/export f() { }
+// }

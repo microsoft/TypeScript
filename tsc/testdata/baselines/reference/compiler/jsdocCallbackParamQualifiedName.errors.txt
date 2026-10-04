@@ -1,0 +1,31 @@
+bug.js(23,14): error TS2339: Property 'y' does not exist on type 'object'.
+
+
+==== bug.js (1 errors) ====
+    /**
+     * @callback cb
+     * @param x.y
+     */
+    
+    /**
+     * @callback cb2
+     * @param {object} x
+     * @param {string} x.y
+     */
+    
+    /**
+     * @overload
+     * @param {object} x
+     * @param {string} x.y
+     * @returns {string}
+     */
+    /**
+     * @param {object} x
+     * @returns {string}
+     */
+    function foo(x) {
+        return x.y;
+                 ~
+!!! error TS2339: Property 'y' does not exist on type 'object'.
+    }
+    

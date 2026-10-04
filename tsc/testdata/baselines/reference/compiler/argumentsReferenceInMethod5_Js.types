@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod5_Js.ts] ////
+
+=== /a.js ===
+const bar = {
+>bar : { arguments: {}; }
+>{	arguments: {}} : { arguments: {}; }
+
+	arguments: {}
+>arguments : {}
+>{} : {}
+}
+
+class A {
+>A : A
+
+	/**
+	 * @param {object} [foo={}]
+	 */
+	m(foo = {}) {
+>m : (foo?: object) => void
+>foo : object | undefined
+>{} : {}
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this.foo = foo : object
+>this.foo : object
+>this : this
+>foo : object
+>foo : object
+
+		/**
+		 * @type object
+		 */
+		this.bar = bar.arguments;
+>this.bar = bar.arguments : {}
+>this.bar : object
+>this : this
+>bar : object
+>bar.arguments : {}
+>bar : { arguments: {}; }
+>arguments : {}
+	}
+}
+

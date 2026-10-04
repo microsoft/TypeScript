@@ -1,0 +1,5 @@
+// === documentHighlights ===
+// === /getOccurrencesReadonly2.ts ===
+// type T = {
+//   /*HIGHLIGHTS*/[|readonly|] prop: string;
+// }

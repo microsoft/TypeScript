@@ -1,0 +1,6 @@
+// === goToImplementation ===
+// === /file2.ts ===
+// import { MyInterface } from "./file1";
+// 
+// const x: /*GOTO IMPL*/MyInterface = [|{ P: 2 }|];
+// 

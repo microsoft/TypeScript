@@ -1,0 +1,16 @@
+b.js(3,24): error TS2306: File 'a.js' is not a module.
+
+
+==== a.js (0 errors) ====
+    /** @typedef {string} A */
+    
+==== b.js (1 errors) ====
+    module.exports = {
+      create() {
+        /** @param {import("./a").A} x */
+                           ~~~~~
+!!! error TS2306: File 'a.js' is not a module.
+        function f(x) {}
+        return f("hi");
+      }
+    }

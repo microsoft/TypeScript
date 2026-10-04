@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/optionalChainingArrowFunctionCommentEs2018.ts] ////
+
+=== optionalChainingArrowFunctionCommentEs2018.ts ===
+const thing = { nested: { condition: true } };
+>thing : { nested: { condition: boolean; }; }
+>{ nested: { condition: true } } : { nested: { condition: boolean; }; }
+>nested : { condition: boolean; }
+>{ condition: true } : { condition: boolean; }
+>condition : boolean
+>true : true
+
+const wat = () =>
+>wat : () => "fail" | "pass"
+>() =>    // explanatory comment    thing?.nested?.condition ? "pass" : "fail" : () => "fail" | "pass"
+
+    // explanatory comment
+    thing?.nested?.condition ? "pass" : "fail";
+>thing?.nested?.condition ? "pass" : "fail" : "fail" | "pass"
+>thing?.nested?.condition : boolean
+>thing?.nested : { condition: boolean; }
+>thing : { nested: { condition: boolean; }; }
+>nested : { condition: boolean; }
+>condition : boolean
+>"pass" : "pass"
+>"fail" : "fail"
+
+const watInline = () => /* inline explanatory comment */ thing?.nested?.condition ? "pass" : "fail";
+>watInline : () => "fail" | "pass"
+>() => /* inline explanatory comment */ thing?.nested?.condition ? "pass" : "fail" : () => "fail" | "pass"
+>thing?.nested?.condition ? "pass" : "fail" : "fail" | "pass"
+>thing?.nested?.condition : boolean
+>thing?.nested : { condition: boolean; }
+>thing : { nested: { condition: boolean; }; }
+>nested : { condition: boolean; }
+>condition : boolean
+>"pass" : "pass"
+>"fail" : "fail"
+
+const watInlineMultiline = () => /* inline
+>watInlineMultiline : () => "fail" | "pass"
+>() => /* inlineexplanatory comment */ thing?.nested?.condition ? "pass" : "fail" : () => "fail" | "pass"
+
+explanatory comment */ thing?.nested?.condition ? "pass" : "fail";
+>thing?.nested?.condition ? "pass" : "fail" : "fail" | "pass"
+>thing?.nested?.condition : boolean
+>thing?.nested : { condition: boolean; }
+>thing : { nested: { condition: boolean; }; }
+>nested : { condition: boolean; }
+>condition : boolean
+>"pass" : "pass"
+>"fail" : "fail"
+
+const watInlineThenLeading = () => /* inline explanatory comment */
+>watInlineThenLeading : () => "fail" | "pass"
+>() => /* inline explanatory comment */    // leading explanatory comment    thing?.nested?.condition ? "pass" : "fail" : () => "fail" | "pass"
+
+    // leading explanatory comment
+    thing?.nested?.condition ? "pass" : "fail";
+>thing?.nested?.condition ? "pass" : "fail" : "fail" | "pass"
+>thing?.nested?.condition : boolean
+>thing?.nested : { condition: boolean; }
+>thing : { nested: { condition: boolean; }; }
+>nested : { condition: boolean; }
+>condition : boolean
+>"pass" : "pass"
+>"fail" : "fail"
+
+declare const o: { a?: number[] };
+>o : { a?: number[]; }
+>a : number[] | undefined
+
+export const f = () =>
+>f : () => number | undefined
+>() =>    // comment    o.a?.length : () => number | undefined
+
+    // comment
+    o.a?.length;
+>o.a?.length : number | undefined
+>o.a : number[] | undefined
+>o : { a?: number[]; }
+>a : number[] | undefined
+>length : number | undefined
+

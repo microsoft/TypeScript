@@ -1,0 +1,19 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|helper|]() {}|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { helper } from "pkg";
+// helper/*GOTO SOURCE DEF*/();
+// export { helper as myHelper } from "pkg";
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|helper|]() {}|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { helper } from "pkg";
+// helper();
+// export { helper as /*GOTO SOURCE DEF*/myHelper } from "pkg";

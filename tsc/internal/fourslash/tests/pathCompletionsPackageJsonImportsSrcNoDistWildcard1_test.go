@@ -1,0 +1,79 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard1(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "rootDir": "src",
+    "outDir": "dist"
+  }
+}
+// @Filename: /home/src/workspaces/project/package.json
+{
+  "name": "foo",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "imports": {
+    "#*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "default": "./dist/*.js"
+    },
+    "#arguments": {
+      "types": "./dist/arguments/index.d.ts",
+      "import": "./dist/arguments/index.mjs",
+      "default": "./dist/arguments/index.js"
+    }
+  }
+}
+// @Filename: /home/src/workspaces/project/src/index.ts
+export const index = 0;
+// @Filename: /home/src/workspaces/project/src/blah.ts
+export const blah = 0;
+// @Filename: /home/src/workspaces/project/src/arguments/index.ts
+export const arguments = 0;
+// @Filename: /home/src/workspaces/project/src/m.mts
+import { } from "/**/";`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.MarkTestAsStradaServer()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "#blah",
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#blah.ts"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "#index",
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#index.ts"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "#arguments",
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#arguments.d.ts"),
+				},
+			},
+		},
+	})
+}

@@ -1,0 +1,20 @@
+local-lib/ModuleGraphConnection.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+local-lib/ModuleGraphConnection.js(4,16): error TS2339: Property 'T' does not exist on type 'typeof ModuleGraphConnection'.
+
+
+==== local-lib/ModuleGraphConnection.js (2 errors) ====
+    /** @typedef {typeof T} T */
+    const T = Symbol();
+    module.exports = class ModuleGraphConnection {};
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.T = T;
+                   ~
+!!! error TS2339: Property 'T' does not exist on type 'typeof ModuleGraphConnection'.
+    
+==== repro.js (0 errors) ====
+    'use strict';
+    /** @typedef {import('./local-lib/ModuleGraphConnection')} ImportedType */
+    /** @type {ImportedType} */
+    module.exports = class Repro {};
+    

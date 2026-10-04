@@ -1,0 +1,570 @@
+//// [tests/cases/compiler/veryDeepRelations.ts] ////
+
+=== veryDeepRelations.ts ===
+interface A0 {
+  name: string;
+>name : string
+
+  next?: A1[];
+>next : A1[] | undefined
+}
+interface A1 {
+  name: string;
+>name : string
+
+  next?: A2[];
+>next : A2[] | undefined
+}
+interface A2 {
+  name: string;
+>name : string
+
+  next?: A3[];
+>next : A3[] | undefined
+}
+interface A3 {
+  name: string;
+>name : string
+
+  next?: A4[];
+>next : A4[] | undefined
+}
+interface A4 {
+  name: string;
+>name : string
+
+  next?: A5[];
+>next : A5[] | undefined
+}
+interface A5 {
+  name: string;
+>name : string
+
+  next?: A6[];
+>next : A6[] | undefined
+}
+interface A6 {
+  name: string;
+>name : string
+
+  next?: A7[];
+>next : A7[] | undefined
+}
+interface A7 {
+  name: string;
+>name : string
+
+  next?: A8[];
+>next : A8[] | undefined
+}
+interface A8 {
+  name: string;
+>name : string
+
+  next?: A9[];
+>next : A9[] | undefined
+}
+interface A9 {
+  name: string;
+>name : string
+
+  next?: A10[];
+>next : A10[] | undefined
+}
+interface A10 {
+  name: string;
+>name : string
+
+  next?: A11[];
+>next : A11[] | undefined
+}
+interface A11 {
+  name: string;
+>name : string
+
+  next?: A12[];
+>next : A12[] | undefined
+}
+interface A12 {
+  name: string;
+>name : string
+
+  next?: A13[];
+>next : A13[] | undefined
+}
+interface A13 {
+  name: string;
+>name : string
+
+  next?: A14[];
+>next : A14[] | undefined
+}
+interface A14 {
+  name: string;
+>name : string
+
+  next?: A15[];
+>next : A15[] | undefined
+}
+interface A15 {
+  name: string;
+>name : string
+
+  next?: A16[];
+>next : A16[] | undefined
+}
+interface A16 {
+  name: string;
+>name : string
+
+  next?: A17[];
+>next : A17[] | undefined
+}
+interface A17 {
+  name: string;
+>name : string
+
+  next?: A18[];
+>next : A18[] | undefined
+}
+interface A18 {
+  name: string;
+>name : string
+
+  next?: A19[];
+>next : A19[] | undefined
+}
+interface A19 {
+  name: string;
+>name : string
+
+  next?: A20[];
+>next : A20[] | undefined
+}
+interface A20 {
+  name: string;
+>name : string
+
+  next?: A21[];
+>next : A21[] | undefined
+}
+interface A21 {
+  name: string;
+>name : string
+
+  next?: A22[];
+>next : A22[] | undefined
+}
+interface A22 {
+  name: string;
+>name : string
+
+  next?: A23[];
+>next : A23[] | undefined
+}
+interface A23 {
+  name: string;
+>name : string
+
+  next?: A24[];
+>next : A24[] | undefined
+}
+interface A24 {
+  name: string;
+>name : string
+
+  next?: A25[];
+>next : A25[] | undefined
+}
+interface A25 {
+  name: string;
+>name : string
+
+  next?: A26[];
+>next : A26[] | undefined
+}
+interface A26 {
+  name: string;
+>name : string
+
+  next?: A27[];
+>next : A27[] | undefined
+}
+interface A27 {
+  name: string;
+>name : string
+
+  next?: A28[];
+>next : A28[] | undefined
+}
+interface A28 {
+  name: string;
+>name : string
+
+  next?: A29[];
+>next : A29[] | undefined
+}
+interface A29 {
+  name: string;
+>name : string
+
+  next?: A30[];
+>next : A30[] | undefined
+}
+interface A30 {
+  name: string;
+>name : string
+
+  next?: A31[];
+>next : A31[] | undefined
+}
+interface A31 {
+  name: string;
+>name : string
+
+  next?: A32[];
+>next : A32[] | undefined
+}
+interface A32 {
+  name: string;
+>name : string
+
+  next?: A33[];
+>next : A33[] | undefined
+}
+interface A33 {
+  name: string;
+>name : string
+
+  next?: A34[];
+>next : A34[] | undefined
+}
+interface A34 {
+  name: string;
+>name : string
+
+  next?: A35[];
+>next : A35[] | undefined
+}
+interface A35 {
+  name: string;
+>name : string
+
+  next?: A36[];
+>next : A36[] | undefined
+}
+interface A36 {
+  name: string;
+>name : string
+
+  next?: A37[];
+>next : A37[] | undefined
+}
+interface A37 {
+  name: string;
+>name : string
+
+  next?: A38[];
+>next : A38[] | undefined
+}
+interface A38 {
+  name: string;
+>name : string
+
+  next?: A39[];
+>next : A39[] | undefined
+}
+interface A39 {
+  name: string;
+>name : string
+
+  next?: A0[];
+>next : A0[] | undefined
+}
+interface B0 {
+  name: string;
+>name : string
+
+  next?: B1[];
+>next : B1[] | undefined
+}
+interface B1 {
+  name: string;
+>name : string
+
+  next?: B2[];
+>next : B2[] | undefined
+}
+interface B2 {
+  name: string;
+>name : string
+
+  next?: B3[];
+>next : B3[] | undefined
+}
+interface B3 {
+  name: string;
+>name : string
+
+  next?: B4[];
+>next : B4[] | undefined
+}
+interface B4 {
+  name: string;
+>name : string
+
+  next?: B5[];
+>next : B5[] | undefined
+}
+interface B5 {
+  name: string;
+>name : string
+
+  next?: B6[];
+>next : B6[] | undefined
+}
+interface B6 {
+  name: string;
+>name : string
+
+  next?: B7[];
+>next : B7[] | undefined
+}
+interface B7 {
+  name: string;
+>name : string
+
+  next?: B8[];
+>next : B8[] | undefined
+}
+interface B8 {
+  name: string;
+>name : string
+
+  next?: B9[];
+>next : B9[] | undefined
+}
+interface B9 {
+  name: string;
+>name : string
+
+  next?: B10[];
+>next : B10[] | undefined
+}
+interface B10 {
+  name: string;
+>name : string
+
+  next?: B11[];
+>next : B11[] | undefined
+}
+interface B11 {
+  name: string;
+>name : string
+
+  next?: B12[];
+>next : B12[] | undefined
+}
+interface B12 {
+  name: string;
+>name : string
+
+  next?: B13[];
+>next : B13[] | undefined
+}
+interface B13 {
+  name: string;
+>name : string
+
+  next?: B14[];
+>next : B14[] | undefined
+}
+interface B14 {
+  name: string;
+>name : string
+
+  next?: B15[];
+>next : B15[] | undefined
+}
+interface B15 {
+  name: string;
+>name : string
+
+  next?: B16[];
+>next : B16[] | undefined
+}
+interface B16 {
+  name: string;
+>name : string
+
+  next?: B17[];
+>next : B17[] | undefined
+}
+interface B17 {
+  name: string;
+>name : string
+
+  next?: B18[];
+>next : B18[] | undefined
+}
+interface B18 {
+  name: string;
+>name : string
+
+  next?: B19[];
+>next : B19[] | undefined
+}
+interface B19 {
+  name: string;
+>name : string
+
+  next?: B20[];
+>next : B20[] | undefined
+}
+interface B20 {
+  name: string;
+>name : string
+
+  next?: B21[];
+>next : B21[] | undefined
+}
+interface B21 {
+  name: string;
+>name : string
+
+  next?: B22[];
+>next : B22[] | undefined
+}
+interface B22 {
+  name: string;
+>name : string
+
+  next?: B23[];
+>next : B23[] | undefined
+}
+interface B23 {
+  name: string;
+>name : string
+
+  next?: B24[];
+>next : B24[] | undefined
+}
+interface B24 {
+  name: string;
+>name : string
+
+  next?: B25[];
+>next : B25[] | undefined
+}
+interface B25 {
+  name: string;
+>name : string
+
+  next?: B26[];
+>next : B26[] | undefined
+}
+interface B26 {
+  name: string;
+>name : string
+
+  next?: B27[];
+>next : B27[] | undefined
+}
+interface B27 {
+  name: string;
+>name : string
+
+  next?: B28[];
+>next : B28[] | undefined
+}
+interface B28 {
+  name: string;
+>name : string
+
+  next?: B29[];
+>next : B29[] | undefined
+}
+interface B29 {
+  name: string;
+>name : string
+
+  next?: B30[];
+>next : B30[] | undefined
+}
+interface B30 {
+  name: string;
+>name : string
+
+  next?: B31[];
+>next : B31[] | undefined
+}
+interface B31 {
+  name: string;
+>name : string
+
+  next?: B32[];
+>next : B32[] | undefined
+}
+interface B32 {
+  name: string;
+>name : string
+
+  next?: B33[];
+>next : B33[] | undefined
+}
+interface B33 {
+  name: string;
+>name : string
+
+  next?: B34[];
+>next : B34[] | undefined
+}
+interface B34 {
+  name: string;
+>name : string
+
+  next?: B35[];
+>next : B35[] | undefined
+}
+interface B35 {
+  name: string;
+>name : string
+
+  next?: B36[];
+>next : B36[] | undefined
+}
+interface B36 {
+  name: string;
+>name : string
+
+  next?: B37[];
+>next : B37[] | undefined
+}
+interface B37 {
+  name: string;
+>name : string
+
+  next?: B38[];
+>next : B38[] | undefined
+}
+interface B38 {
+  name: string;
+>name : string
+
+  next?: B39[];
+>next : B39[] | undefined
+}
+interface B39 {
+  name: string;
+>name : string
+
+  next?: B0[];
+>next : B0[] | undefined
+}
+declare const a: A0;
+>a : A0
+
+const assigned: B0 = a;
+>assigned : B0
+>a : A0
+

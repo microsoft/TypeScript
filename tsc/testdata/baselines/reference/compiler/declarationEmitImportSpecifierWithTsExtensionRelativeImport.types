@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/declarationEmitImportSpecifierWithTsExtensionRelativeImport.ts] ////
+
+=== /node_modules/mylib/lib/Box.d.ts ===
+export interface Box<T> { readonly value: T }
+>value : T
+
+export declare function box<T>(value: T): Box<T>;
+>box : <T>(value: T) => Box<T>
+>value : T
+
+=== /helper.ts ===
+import * as B from 'mylib/lib/Box.js';
+>B : typeof B
+
+export const inner = B.box('hello');
+>inner : B.Box<string>
+>B.box('hello') : B.Box<string>
+>B.box : <T>(value: T) => B.Box<T>
+>B : typeof B
+>box : <T>(value: T) => B.Box<T>
+>'hello' : "hello"
+
+=== /mod.ts ===
+import { inner } from './helper.ts';
+>inner : import("mylib/lib/Box.js").Box<string>
+
+export const out = inner;
+>out : import("mylib/lib/Box.js").Box<string>
+>inner : import("mylib/lib/Box.js").Box<string>
+

@@ -1,0 +1,16 @@
+b.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ (): void; a: () => void; }', but here has type 'number'.
+
+
+==== a.js (0 errors) ====
+    var /*1*/x = function foo() {
+    }
+    x.a = function bar() {
+    }
+==== b.ts (1 errors) ====
+    var x = function () {
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ (): void; a: () => void; }', but here has type 'number'.
+!!! related TS6203 a.js:1:10: 'x' was also declared here.
+        return 1;
+    }();
+    

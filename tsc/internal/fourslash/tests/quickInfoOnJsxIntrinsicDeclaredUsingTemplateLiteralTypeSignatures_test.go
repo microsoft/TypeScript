@@ -1,0 +1,26 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickInfoOnJsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @jsx: react
+// @filename: /a.tsx
+declare namespace JSX {
+  interface IntrinsicElements {
+    [k: ` + "`" + `foo${string}` + "`" + `]: any;
+    [k: ` + "`" + `foobar${string}` + "`" + `]: any;
+  }
+}
+</*1*/foobaz />;
+</*2*/foobarbaz />;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineHover(t)
+}

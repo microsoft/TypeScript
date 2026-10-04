@@ -1,0 +1,6 @@
+// === documentHighlights ===
+// === /B.ts ===
+// export default class /*HIGHLIGHTS*/[|B|] {
+//     test() {
+//     }
+// }

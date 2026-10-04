@@ -1,0 +1,219 @@
+package tsctests
+
+import (
+	"fmt"
+	"io"
+	"path"
+	"slices"
+	"strings"
+	"sync"
+
+	"github.com/microsoft/TypeScript/tsc/internal/execute/watchmanager"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/fsbaselineutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+)
+
+// MockWatchBackend implements watchmanager.WatchBackend for testing. It
+// records all WatchDirectory calls so tests can verify that
+// the correct watches are registered.  Events can be delivered through
+// SendEvents, which routes them only through watches whose paths
+// match, enforcing that tests fail if the wrong watches are set up.
+type MockWatchBackend struct {
+	mu              sync.Mutex
+	Dirs            map[tspath.RootedDirectoryPath]*MockWatch
+	DirectoryExists func(tspath.RootedDirectoryPath) bool // if set, WatchDirectory fails for non-existent dirs
+	CaseSensitivity tspath.CaseSensitivity
+}
+
+var _ watchmanager.WatchBackend = (*MockWatchBackend)(nil)
+
+// NewMockWatchBackend creates a ready-to-use mock backend.
+func NewMockWatchBackend() *MockWatchBackend {
+	return &MockWatchBackend{
+		Dirs: make(map[tspath.RootedDirectoryPath]*MockWatch),
+	}
+}
+
+// HasWatches reports whether any watches have been registered.
+func (m *MockWatchBackend) HasWatches() bool {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return len(m.Dirs) > 0
+}
+
+// MockWatch records a single registered watch.
+type MockWatch struct {
+	Path      tspath.RootedDirectoryPath
+	Callback  watchmanager.WatchCallback
+	Recursive bool
+	Ignore    func(tspath.RootedPath) bool
+	Closed    bool
+}
+
+func (w *MockWatch) Close() error {
+	w.Closed = true
+	return nil
+}
+
+func (m *MockWatchBackend) WatchDirectories(requests []watchmanager.WatchDirectoryRequest) ([]io.Closer, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	for _, request := range requests {
+		if m.DirectoryExists != nil && !m.DirectoryExists(request.Dir) {
+			return nil, fmt.Errorf("directory does not exist: %s", request.Dir)
+		}
+	}
+	closers := make([]io.Closer, len(requests))
+	for i, request := range requests {
+		w := &MockWatch{Path: request.Dir, Callback: request.Callback, Recursive: request.Recursive, Ignore: request.Ignore}
+		m.Dirs[request.Dir] = w
+		closers[i] = w
+	}
+	return closers, nil
+}
+
+// SendEvents routes events through the registered watch callbacks
+// that match each event's path. Directory watches match if the event
+// path is a child (or recursive descendant) of the watched directory.
+// Events that match no watch are silently dropped — this is by design
+// so that tests fail when the production code doesn't register the
+// needed watches.
+func (m *MockWatchBackend) SendEvents(events []fswatch.Event) {
+	// Snapshot callbacks under the lock, then invoke outside the lock
+	// to avoid deadlock if the callback re-enters the mock.
+	m.mu.Lock()
+	type target struct {
+		cb     watchmanager.WatchCallback
+		events []watchmanager.WatchEvent
+	}
+	targets := make(map[*MockWatch]*target)
+
+	for _, e := range events {
+		// Check directory watches.
+		for _, w := range m.Dirs {
+			if w.Closed {
+				continue
+			}
+			eventPath := tspath.ToRootedPath(e.Path, w.Path)
+			if w.Ignore != nil && w.Ignore(eventPath) {
+				continue
+			}
+			if !pathIsUnder(eventPath, w.Path, w.Recursive, m.CaseSensitivity) {
+				continue
+			}
+			if t, ok := targets[w]; ok {
+				t.events = append(t.events, watchmanager.WatchEvent{Path: eventPath, Kind: e.Kind})
+			} else {
+				targets[w] = &target{cb: w.Callback, events: []watchmanager.WatchEvent{{Path: eventPath, Kind: e.Kind}}}
+			}
+		}
+	}
+	m.mu.Unlock()
+
+	for _, t := range targets {
+		t.cb(t.events, nil)
+	}
+}
+
+// SendOverflow simulates a kernel event-queue overflow by invoking every
+// active watch callback with fswatch.ErrOverflow. The watch manager treats
+// this as a signal that events were dropped and a full rebuild is required.
+func (m *MockWatchBackend) SendOverflow() {
+	m.mu.Lock()
+	var cbs []watchmanager.WatchCallback
+	for _, w := range m.Dirs {
+		if !w.Closed {
+			cbs = append(cbs, w.Callback)
+		}
+	}
+	m.mu.Unlock()
+	for _, cb := range cbs {
+		cb(nil, fswatch.ErrOverflow)
+	}
+}
+
+// SendChangedPaths converts a list of file changes into fswatch
+// events with appropriate event kinds and routes them through
+// registered watches via SendEvents. For new/modified files, it also
+// emits update events for their parent directories, simulating how
+// real filesystem watchers report directory events.
+func (m *MockWatchBackend) SendChangedPaths(changes []fsbaselineutil.FileChange) {
+	events := make([]fswatch.Event, 0, len(changes)*2)
+	seenDirs := make(map[string]struct{})
+	for _, c := range changes {
+		kind := fswatch.EventUpdate
+		if c.Deleted {
+			kind = fswatch.EventDelete
+		}
+		events = append(events, fswatch.Event{Kind: kind, Path: c.Path})
+		// Emit update events for parent directories of changed files.
+		// Real filesystem watchers deliver events to non-recursive watches
+		// when a child directory is created, which the mock must replicate.
+		dir := path.Dir(c.Path)
+		for dir != "" && dir != "/" && dir != "." {
+			if _, seen := seenDirs[dir]; seen {
+				break
+			}
+			seenDirs[dir] = struct{}{}
+			events = append(events, fswatch.Event{Kind: fswatch.EventUpdate, Path: dir})
+			parent := path.Dir(dir)
+			if parent == dir {
+				break
+			}
+			dir = parent
+		}
+	}
+	m.SendEvents(events)
+}
+
+// pathIsUnder reports whether eventPath is inside dir. If recursive is
+// false, only direct children match.
+func pathIsUnder(eventPath tspath.RootedPath, dir tspath.RootedDirectoryPath, recursive bool, caseSensitivity tspath.CaseSensitivity) bool {
+	dirKey := caseSensitivity.PathKey(dir.AsPath())
+	eventKey := caseSensitivity.PathKey(eventPath)
+	if dirKey == eventKey || !dirKey.ContainsPath(eventKey) {
+		return false
+	}
+	if recursive {
+		return true
+	}
+	return caseSensitivity.PathKey(eventPath.Directory().AsPath()) == dirKey
+}
+
+// WatchState returns a deterministic, human-readable summary of all
+// active watches. This is intended to be included in test baselines
+// so that watch registration correctness is verified via snapshot diffs.
+func (m *MockWatchBackend) WatchState() string {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	var b strings.Builder
+	b.WriteString("Watch Registrations::\n")
+
+	// Directory watches, sorted by path.
+	var dirs []tspath.RootedDirectoryPath
+	for dir, w := range m.Dirs {
+		if !w.Closed {
+			dirs = append(dirs, dir)
+		}
+	}
+	slices.SortFunc(dirs, func(a, b tspath.RootedDirectoryPath) int {
+		return a.Compare(b)
+	})
+
+	b.WriteString("Directory watches::\n")
+	if len(dirs) == 0 {
+		b.WriteString("  (none)\n")
+	}
+	for _, d := range dirs {
+		w := m.Dirs[d]
+		if w.Recursive {
+			fmt.Fprintf(&b, "  %s (recursive)\n", d)
+		} else {
+			fmt.Fprintf(&b, "  %s\n", d)
+		}
+	}
+
+	return b.String()
+}

@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceExports.ts] ////
+
+=== bug27342.js ===
+module.exports = {}
+>module.exports = {} : {}
+>module.exports : {}
+>module : { exports: {}; }
+>exports : {}
+>{} : {}
+
+/**
+ * @type {exports}
+ */
+var x
+>x : exports
+
+

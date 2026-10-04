@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /getOccurrencesExport3.ts ===
+// 
+// declare var x;
+// /*HIGHLIGHTS*/[|export|] declare var y, z;
+// 
+// namespace m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// declare [|export|] var v1, v2;
+// declare namespace dm { }
+// [|export|] class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesExport3.ts ===
+// 
+// declare var x;
+// [|export|] declare var y, z;
+// 
+// namespace m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// declare /*HIGHLIGHTS*/[|export|] var v1, v2;
+// declare namespace dm { }
+// [|export|] class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesExport3.ts ===
+// 
+// declare var x;
+// [|export|] declare var y, z;
+// 
+// namespace m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// declare [|export|] var v1, v2;
+// declare namespace dm { }
+// /*HIGHLIGHTS*/[|export|] class EC { }

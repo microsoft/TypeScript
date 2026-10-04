@@ -1,0 +1,25 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassImplementInterfaceTypeParamInstantiateU(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface I<T> { x: T; }
+class C<U> implements I<U> {}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'I<U>'",
+		NewFileContent: `interface I<T> { x: T; }
+class C<U> implements I<U> {
+    x: U;
+}`,
+		Index: 0,
+	})
+}

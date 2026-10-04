@@ -1,0 +1,174 @@
+//// [tests/cases/compiler/jsDeclarationEmitThisAssignmentDuplicatingMethod.ts] ////
+
+=== main.js ===
+export class A {
+>A : A
+
+    constructor() {
+        this.foo = this.foo.bind(this);
+>this.foo = this.foo.bind(this) : () => void
+>this.foo : () => void
+>this : this
+>foo : () => void
+>this.foo.bind(this) : () => void
+>this.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this.foo : () => void
+>this : this
+>foo : () => void
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this : this
+    }
+    foo() {}
+>foo : () => void
+}
+
+export class B {
+>B : B
+
+    constructor() {
+        this.#foo = this.#foo.bind(this);
+>this.#foo = this.#foo.bind(this) : () => void
+>this.#foo : () => void
+>this : this
+>this.#foo.bind(this) : () => void
+>this.#foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this.#foo : () => void
+>this : this
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this : this
+    }
+    #foo = () => {}
+>#foo : () => void
+>() => {} : () => void
+}
+
+const sym = Symbol();
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export class C {
+>C : C
+
+    constructor() {
+        this[sym] = this[sym].bind(this);
+>this[sym] = this[sym].bind(this) : () => void
+>this[sym] : () => void
+>this : this
+>sym : unique symbol
+>this[sym].bind(this) : () => void
+>this[sym].bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this[sym] : () => void
+>this : this
+>sym : unique symbol
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this : this
+    }
+    [sym]() {}
+>[sym] : () => void
+>sym : unique symbol
+}
+
+export class D {
+>D : D
+
+    constructor() {
+        this.bar = 1;
+>this.bar = 1 : 1
+>this.bar : any
+>this : this
+>bar : any
+>1 : 1
+    }
+    static bar() {}
+>bar : () => void
+}
+
+export class E {
+>E : E
+
+    static init() {
+>init : () => void
+
+        this.baz = 1;
+>this.baz = 1 : 1
+>this.baz : number | undefined
+>this : typeof E
+>baz : number | undefined
+>1 : 1
+    }
+    baz() {}
+>baz : () => void
+}
+
+export class F {
+>F : F
+
+    static #foo = () => {}
+>#foo : () => void
+>() => {} : () => void
+
+    static {
+        this.#foo = this.#foo.bind(this);
+>this.#foo = this.#foo.bind(this) : () => void
+>this.#foo : () => void
+>this : typeof F
+>this.#foo.bind(this) : () => void
+>this.#foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this.#foo : () => void
+>this : typeof F
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this : typeof F
+    }
+}
+
+const sym2 = Symbol();
+>sym2 : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export class G {
+>G : G
+
+    static {
+        this[sym2] = this[sym2].bind(this);
+>this[sym2] = this[sym2].bind(this) : () => void
+>this[sym2] : () => void
+>this : typeof G
+>sym2 : unique symbol
+>this[sym2].bind(this) : () => void
+>this[sym2].bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this[sym2] : () => void
+>this : typeof G
+>sym2 : unique symbol
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this : typeof G
+    }
+    static[sym2]() {}
+>[sym2] : () => void
+>sym2 : unique symbol
+}
+
+export class H {
+>H : H
+
+    static foo = () => {}
+>foo : () => void
+>() => {} : () => void
+
+    static {
+        this.foo = this.foo.bind(this);
+>this.foo = this.foo.bind(this) : () => void
+>this.foo : () => void
+>this : typeof H
+>foo : () => void
+>this.foo.bind(this) : () => void
+>this.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this.foo : () => void
+>this : typeof H
+>foo : () => void
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this : typeof H
+    }
+}
+

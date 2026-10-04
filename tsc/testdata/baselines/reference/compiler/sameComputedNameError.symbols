@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/sameComputedNameError.ts] ////
+
+=== sameComputedNameError.ts ===
+declare const s: unique symbol;
+>s : Symbol(s, Decl(sameComputedNameError.ts, 0, 13))
+
+class A {
+>A : Symbol(A, Decl(sameComputedNameError.ts, 0, 31))
+
+  [s]: number = 1;
+>[s] : Symbol(A[s], Decl(sameComputedNameError.ts, 2, 9))
+>s : Symbol(s, Decl(sameComputedNameError.ts, 0, 13))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(sameComputedNameError.ts, 4, 1))
+>A : Symbol(A, Decl(sameComputedNameError.ts, 0, 31))
+
+  [s]: string = "x";
+>[s] : Symbol(B[s], Decl(sameComputedNameError.ts, 6, 19))
+>s : Symbol(s, Decl(sameComputedNameError.ts, 0, 13))
+}
+

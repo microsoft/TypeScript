@@ -1,0 +1,10 @@
+// === findRenameLocations ===
+// @useAliasesForRename: false
+
+// === /a.ts ===
+// const name = {};
+// export { name as [|nameRENAME|]/*RENAME*/ };
+
+// === /b.ts ===
+// import { [|nameRENAME|] } from './a';
+// const x = [|nameRENAME|].toString();

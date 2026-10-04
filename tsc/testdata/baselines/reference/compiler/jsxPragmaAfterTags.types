@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/jsxPragmaAfterTags.tsx] ////
+
+=== jsxPragmaAfterTags.tsx ===
+/**
+ * @fileoverview comment
+ * @jsx h
+ */
+declare var h: any;
+>h : any
+
+declare var Fragment: any;
+>Fragment : any
+
+declare namespace JSX {
+    interface Element {}
+}
+
+const x = <Fragment></Fragment>;
+>x : JSX.Element
+><Fragment></Fragment> : JSX.Element
+>Fragment : any
+>Fragment : any
+

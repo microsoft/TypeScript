@@ -1,8 +1,0 @@
-//// [tests/cases/compiler/declareModifierOnImport1.ts] ////
-
-//// [declareModifierOnImport1.ts]
-declare import a = b;
-
-//// [declareModifierOnImport1.js]
-"use strict";
-var a = b;

@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/privateFieldsInClassExpressionDeclaration.ts] ////
+
+=== privateFieldsInClassExpressionDeclaration.ts ===
+export const ClassExpression = class {
+>ClassExpression : typeof ClassExpression
+>class {    #context = 0;    #method() { return 42; }    public value = 1;} : typeof ClassExpression
+
+    #context = 0;
+>#context : number
+>0 : 0
+
+    #method() { return 42; }
+>#method : () => number
+>42 : 42
+
+    public value = 1;
+>value : number
+>1 : 1
+
+};
+
+// Additional test with static private fields
+export const ClassExpressionStatic = class {
+>ClassExpressionStatic : typeof ClassExpressionStatic
+>class {    static #staticPrivate = "hidden";    #instancePrivate = true;    public exposed = "visible";} : typeof ClassExpressionStatic
+
+    static #staticPrivate = "hidden";
+>#staticPrivate : string
+>"hidden" : "hidden"
+
+    #instancePrivate = true;
+>#instancePrivate : boolean
+>true : true
+
+    public exposed = "visible";
+>exposed : string
+>"visible" : "visible"
+
+};

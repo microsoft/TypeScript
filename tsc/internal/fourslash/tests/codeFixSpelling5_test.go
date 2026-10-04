@@ -1,0 +1,22 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixSpelling5(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: f1.ts
+export const fooooooooo = 1;
+// @Filename: f2.ts
+import {[|fooooooooa|]} from "./f1"; fooooooooa;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "f2.ts")
+	f.VerifyRangeAfterCodeFix(t, `fooooooooo`, false, 0, 0)
+}

@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/extendsTagEmit.ts] ////
+
+=== super.js ===
+export class B { }
+>B : B
+
+=== main.js ===
+import { B } from './super'
+>B : typeof B
+
+/** @extends {Mismatch} */
+class C extends B { }
+>C : C
+>B : B
+
+

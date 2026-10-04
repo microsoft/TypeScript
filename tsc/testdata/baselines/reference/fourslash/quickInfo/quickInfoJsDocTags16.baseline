@@ -1,0 +1,92 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTags16.ts ===
+// class A {
+//     /**
+//      * Description text here.
+//      *
+//      * @virtual
+//      */
+//     foo() { }
+// }
+// 
+// class B extends A {
+//     override foo() { }
+//              ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) B.foo(): void
+// | ```
+// | Description text here.
+// | 
+// | *@virtual*
+// | ----------------------------------------------------------------------
+// }
+// 
+// class C extends B {
+//     override foo() { }
+//              ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) C.foo(): void
+// | ```
+// | Description text here.
+// | 
+// | *@virtual*
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 129,
+      "LSPosition": {
+        "line": 10,
+        "character": 13
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) B.foo(): void\n```\nDescription text here.\n\n*@virtual*"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 175,
+      "LSPosition": {
+        "line": 14,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) C.foo(): void\n```\nDescription text here.\n\n*@virtual*"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 13
+        },
+        "end": {
+          "line": 14,
+          "character": 16
+        }
+      }
+    }
+  }
+]

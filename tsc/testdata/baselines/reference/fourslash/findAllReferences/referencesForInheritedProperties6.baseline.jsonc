@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /referencesForInheritedProperties6.ts ===
+// class class1 extends class1 {
+//     /*FIND ALL REFS*/[|doStuff|]() { }
+// }
+// class class2 extends class1 {
+//     [|doStuff|]() { }
+// }
+// 
+// var v: class2;
+// v.[|doStuff|]();

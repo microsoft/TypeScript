@@ -1,0 +1,30 @@
+// === findRenameLocations ===
+// === /renamePropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {/*RENAME*/[|BRENAME|]: B};
+// }
+// class C extends (foo()).[|BRENAME|] {}
+// class C1 extends foo().[|BRENAME|] {}
+
+
+
+// === findRenameLocations ===
+// === /renamePropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {[|BRENAME|]: B};
+// }
+// class C extends (foo())./*RENAME*/[|BRENAME|] {}
+// class C1 extends foo().[|BRENAME|] {}
+
+
+
+// === findRenameLocations ===
+// === /renamePropertyAccessExpressionHeritageClause.ts ===
+// class B {}
+// function foo() {
+//     return {[|BRENAME|]: B};
+// }
+// class C extends (foo()).[|BRENAME|] {}
+// class C1 extends foo()./*RENAME*/[|BRENAME|] {}

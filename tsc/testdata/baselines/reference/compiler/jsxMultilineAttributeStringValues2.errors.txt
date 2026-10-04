@@ -1,0 +1,41 @@
+jsxMultilineAttributeStringValues2.tsx(1,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeStringValues2.tsx(5,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeStringValues2.tsx(9,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeStringValues2.tsx(14,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== jsxMultilineAttributeStringValues2.tsx (4 errors) ====
+    const a = <div className= "foo
+              ~~~~~~~~~~~~~~~~~~~~
+    
+    
+     bar" />;
+    ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    const b = <div className=	"foo
+              ~~~~~~~~~~~~~~~~~~~~
+    
+    
+     bar" />;
+    ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    const c = <div className=
+              ~~~~~~~~~~~~~~~
+    "foo
+    ~~~~
+    
+    
+     bar" />;
+    ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    const d = <div className=   "foo
+              ~~~~~~~~~~~~~~~~~~~~~~
+    
+    
+     bar" />;
+    ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

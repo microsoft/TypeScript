@@ -1,0 +1,77 @@
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// 
+// /*HIGHLIGHTS*/[|declare|] var x;
+// export [|declare|] var y, z;
+// 
+// namespace m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|declare|] export var v1, v2;
+// [|declare|] namespace dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// 
+// [|declare|] var x;
+// export /*HIGHLIGHTS*/[|declare|] var y, z;
+// 
+// namespace m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|declare|] export var v1, v2;
+// [|declare|] namespace dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// 
+// [|declare|] var x;
+// export [|declare|] var y, z;
+// 
+// namespace m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// /*HIGHLIGHTS*/[|declare|] export var v1, v2;
+// [|declare|] namespace dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// 
+// [|declare|] var x;
+// export [|declare|] var y, z;
+// 
+// namespace m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|declare|] export var v1, v2;
+// /*HIGHLIGHTS*/[|declare|] namespace dm { }
+// export class EC { }

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/decoratedClassWithStaticAccessor.ts] ////
+
+=== a.ts ===
+declare function d(target: any): any;
+>d : (target: any) => any
+>target : any
+
+@d
+>d : (target: any) => any
+
+export class C {
+>C : C
+
+  static get value() { return 1; }
+>value : number
+>1 : 1
+}
+

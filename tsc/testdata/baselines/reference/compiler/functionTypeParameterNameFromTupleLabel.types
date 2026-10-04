@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/functionTypeParameterNameFromTupleLabel.ts] ////
+
+=== functionTypeParameterNameFromTupleLabel.ts ===
+declare let f: (...args: [x: number]) => void;
+>f : (x: number) => void
+>args : [x: number]
+
+declare let g: (a: string) => void;
+>g : (a: string) => void
+>a : string
+
+f = g;
+>f = g : (a: string) => void
+>f : (x: number) => void
+>g : (a: string) => void
+

@@ -1,0 +1,417 @@
+// === vsFindAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/var [|x|]: number;
+
+// === /b.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+// === /c.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///a.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "var ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "local name",
+          "Text": "x",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ": ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "number",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  },
+  {
+    "_vs_id": 2,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///c.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]
+
+
+
+// === vsFindAllReferences ===
+// === /a.ts ===
+// var /*FIND ALL REFS*/[|x|]: number;
+
+// === /b.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+// === /c.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///a.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "var ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "local name",
+          "Text": "x",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ": ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "number",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  },
+  {
+    "_vs_id": 2,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///c.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]
+
+
+
+// === vsFindAllReferences ===
+// === /a.ts ===
+// var [|x|]: number;
+
+// === /b.ts ===
+// /// <reference path="a.ts" />
+// /*FIND ALL REFS*/[|x|]++;
+
+// === /c.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///a.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "var ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "local name",
+          "Text": "x",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ": ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "number",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  },
+  {
+    "_vs_id": 2,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///c.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]
+
+
+
+// === vsFindAllReferences ===
+// === /a.ts ===
+// var [|x|]: number;
+
+// === /b.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+// === /c.ts ===
+// /// <reference path="a.ts" />
+// /*FIND ALL REFS*/[|x|]++;
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///a.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "var ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "local name",
+          "Text": "x",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ": ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "number",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  },
+  {
+    "_vs_id": 2,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      4
+    ],
+    "_vs_location": {
+      "uri": "file:///c.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]

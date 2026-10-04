@@ -1,0 +1,34 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionListInComments3(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+ /*{| "name": "1" |}
+ /*  {| "name": "2" |}
+ /*  *{| "name": "3" |}
+ /*  */{| "name": "4" |}
+ {| "name": "5" |}/*  */
+/* {| "name": "6" |}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, []string{"1", "2", "3", "6"}, nil)
+	f.VerifyCompletions(t, []string{"4", "5"}, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: CompletionGlobals,
+		},
+	})
+}

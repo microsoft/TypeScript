@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/declarationMapWithInlineSourceMap.ts] ////
+
+=== declarationMapWithInlineSourceMap.ts ===
+export const x = 1;
+>x : Symbol(x, Decl(declarationMapWithInlineSourceMap.ts, 0, 12))
+

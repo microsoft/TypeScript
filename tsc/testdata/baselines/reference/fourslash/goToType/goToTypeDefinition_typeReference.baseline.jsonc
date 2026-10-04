@@ -1,0 +1,6 @@
+// === goToType ===
+// === /goToTypeDefinition_typeReference.ts ===
+// type User = { name: string };
+// type Box<T> = [|{ value: T }|];
+// declare const boxedUser: Box<User>
+// /*GOTO TYPE*/boxedUser

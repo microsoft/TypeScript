@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/globalArrayAugmentationWithAmbientModuleReexportMerge1.ts] ////
+
+=== /node_modules/foo/index.d.ts ===
+declare function foo(): void;
+>foo : Symbol(foo, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 29))
+
+declare namespace foo { export const items: string[]; }
+>foo : Symbol(foo, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 29))
+>items : Symbol(items, Decl(index.d.ts, 1, 36))
+
+export = foo;
+>foo : Symbol(foo, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 29))
+
+=== /a.d.ts ===
+declare module 'mymod' { import * as foo from 'foo'; export { foo }; }
+>'mymod' : Symbol("mymod", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0))
+>foo : Symbol(foo, Decl(a.d.ts, 0, 31))
+>foo : Symbol(foo, Decl(a.d.ts, 0, 61))
+
+=== /b.d.ts ===
+declare module 'mymod' { export const foo: number; }
+>'mymod' : Symbol("mymod", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0))
+>foo : Symbol(foo, Decl(b.d.ts, 0, 37))
+
+=== /augment.ts ===
+declare global {
+>global : Symbol(global, Decl(augment.ts, 0, 0))
+
+    interface Array<T> {
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(augment.ts, 0, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(augment.ts, 1, 20))
+
+        customMethod(): T;
+>customMethod : Symbol(Array.customMethod, Decl(augment.ts, 1, 24))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(augment.ts, 1, 20))
+    }
+}
+export {};
+
+=== /index.ts ===
+import * as foo from 'foo';
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+
+const items = foo.items;
+>items : Symbol(items, Decl(index.ts, 1, 5))
+>foo.items : Symbol(items, Decl(index.d.ts, 1, 36))
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+>items : Symbol(items, Decl(index.d.ts, 1, 36))
+
+const result: string = items.customMethod();
+>result : Symbol(result, Decl(index.ts, 2, 5))
+>items.customMethod : Symbol(Array.customMethod, Decl(augment.ts, 1, 24))
+>items : Symbol(items, Decl(index.ts, 1, 5))
+>customMethod : Symbol(Array.customMethod, Decl(augment.ts, 1, 24))
+
+const fresh: string[] = [];
+>fresh : Symbol(fresh, Decl(index.ts, 4, 5))
+
+const result2: string = fresh.customMethod();
+>result2 : Symbol(result2, Decl(index.ts, 5, 5))
+>fresh.customMethod : Symbol(Array.customMethod, Decl(augment.ts, 1, 24))
+>fresh : Symbol(fresh, Decl(index.ts, 4, 5))
+>customMethod : Symbol(Array.customMethod, Decl(augment.ts, 1, 24))
+

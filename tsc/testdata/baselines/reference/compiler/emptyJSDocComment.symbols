@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/emptyJSDocComment.ts] ////
+
+=== emptyJSDocComment.ts ===
+/***/
+export const foo = 1;
+>foo : Symbol(foo, Decl(emptyJSDocComment.ts, 1, 12))
+

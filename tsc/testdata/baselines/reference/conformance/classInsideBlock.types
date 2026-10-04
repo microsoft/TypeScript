@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/classes/classDeclarations/classInsideBlock.ts] ////
+
+=== classInsideBlock.ts ===
+function foo() {
+>foo : () => void
+
+    class C { }
+>C : C
+}

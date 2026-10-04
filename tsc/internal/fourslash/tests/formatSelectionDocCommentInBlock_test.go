@@ -1,0 +1,53 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestFormatSelectionDocCommentInBlock(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `{
+    /*1*//**
+     * Some doc comment
+     *//*2*/
+    const a = 1;
+}
+
+while (true) {
+/*3*//**
+ * Some doc comment
+ *//*4*/
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.FormatSelection(t, "1", "2")
+	f.VerifyCurrentFileContent(t, `{
+    /**
+     * Some doc comment
+     */
+    const a = 1;
+}
+
+while (true) {
+/**
+ * Some doc comment
+ */
+}`)
+	f.FormatSelection(t, "3", "4")
+	f.VerifyCurrentFileContent(t, `{
+    /**
+     * Some doc comment
+     */
+    const a = 1;
+}
+
+while (true) {
+    /**
+     * Some doc comment
+     */
+}`)
+}

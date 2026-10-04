@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/jsxNestedIndentation.tsx] ////
+
+=== jsxNestedIndentation.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(jsxNestedIndentation.tsx, 0, 11))
+
+declare function Child(props: { children?: any }): any;
+>Child : Symbol(Child, Decl(jsxNestedIndentation.tsx, 0, 23))
+>props : Symbol(props, Decl(jsxNestedIndentation.tsx, 1, 23))
+>children : Symbol(children, Decl(jsxNestedIndentation.tsx, 1, 31))
+
+function Test() {
+>Test : Symbol(Test, Decl(jsxNestedIndentation.tsx, 1, 55))
+
+    return <Child>
+>Child : Symbol(Child, Decl(jsxNestedIndentation.tsx, 0, 23))
+
+        <Child>
+>Child : Symbol(Child, Decl(jsxNestedIndentation.tsx, 0, 23))
+
+            <Child></Child>
+>Child : Symbol(Child, Decl(jsxNestedIndentation.tsx, 0, 23))
+>Child : Symbol(Child, Decl(jsxNestedIndentation.tsx, 0, 23))
+
+        </Child>
+>Child : Symbol(Child, Decl(jsxNestedIndentation.tsx, 0, 23))
+
+    </Child>
+>Child : Symbol(Child, Decl(jsxNestedIndentation.tsx, 0, 23))
+}
+

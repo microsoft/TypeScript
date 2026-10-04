@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/genericArrowFunctionInEsmExtensionFile.ts] ////
+
+=== a.mts ===
+// @see https://github.com/microsoft/TypeScript/issues/44442
+const a = <T,>(arg: T): T => {
+>a : Symbol(a, Decl(a.mts, 1, 5))
+>T : Symbol(T, Decl(a.mts, 1, 11))
+>arg : Symbol(arg, Decl(a.mts, 1, 15))
+>T : Symbol(T, Decl(a.mts, 1, 11))
+>T : Symbol(T, Decl(a.mts, 1, 11))
+
+  return arg;
+>arg : Symbol(arg, Decl(a.mts, 1, 15))
+
+};
+
+const b = <T>(arg: T): T => {
+>b : Symbol(b, Decl(a.mts, 5, 5))
+>T : Symbol(T, Decl(a.mts, 5, 11))
+>arg : Symbol(arg, Decl(a.mts, 5, 14))
+>T : Symbol(T, Decl(a.mts, 5, 11))
+>T : Symbol(T, Decl(a.mts, 5, 11))
+
+  return arg;
+>arg : Symbol(arg, Decl(a.mts, 5, 14))
+
+};
+

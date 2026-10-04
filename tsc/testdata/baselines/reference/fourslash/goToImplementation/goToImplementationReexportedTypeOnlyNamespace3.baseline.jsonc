@@ -1,0 +1,11 @@
+// === goToImplementation ===
+// === /node_modules/@typescript-eslint/utils/index.d.ts ===
+// <|export { [|TSESTree|] } from '@typescript-eslint/types';|>
+// 
+
+// === /src/check-license.ts ===
+// import type {TSE/*GOTO IMPL*/STree} from '@typescript-eslint/utils';
+// 
+// let node: TSESTree.Node | undefined;
+// export default node;
+// 

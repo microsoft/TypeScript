@@ -1,0 +1,24 @@
+bug25926.js(4,18): error TS7006: Parameter 'n' implicitly has an 'any' type.
+bug25926.js(11,27): error TS7006: Parameter 'm' implicitly has an 'any' type.
+
+
+==== bug25926.js (2 errors) ====
+    /** @type {{ a(): void; b?(n: number): number; }} */
+    const o1 = {
+        a() {
+            this.b = n => n;
+                     ~
+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+        }
+    };
+    
+    /** @type {{ d(): void; e?(n: number): number; f?(n: number): number; g?: number }} */
+    const o2 = {
+        d() {
+            this.e = this.f = m => this.g || m;
+                              ~
+!!! error TS7006: Parameter 'm' implicitly has an 'any' type.
+        }
+    };
+    
+    

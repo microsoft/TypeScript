@@ -1,0 +1,154 @@
+//// [tests/cases/compiler/jsDeclarationEmitThisAssignmentWithBaseProperty.ts] ////
+
+=== component.d.ts ===
+export class Component {
+>Component : Symbol(Component, Decl(component.d.ts, 0, 0))
+
+    state: any;
+>state : Symbol(Component.state, Decl(component.d.ts, 0, 24))
+
+    constructor(props?: any);
+>props : Symbol(props, Decl(component.d.ts, 2, 16))
+}
+
+export class WithAccessor {
+>WithAccessor : Symbol(WithAccessor, Decl(component.d.ts, 3, 1))
+
+    get value(): number;
+>value : Symbol(WithAccessor.value, Decl(component.d.ts, 5, 27), Decl(component.d.ts, 6, 24))
+
+    set value(v: number);
+>value : Symbol(WithAccessor.value, Decl(component.d.ts, 5, 27), Decl(component.d.ts, 6, 24))
+>v : Symbol(v, Decl(component.d.ts, 7, 14))
+}
+
+export class WithMethod {
+>WithMethod : Symbol(WithMethod, Decl(component.d.ts, 8, 1))
+
+    method(): void;
+>method : Symbol(WithMethod.method, Decl(component.d.ts, 10, 25))
+}
+
+=== main.js ===
+import { Component, WithAccessor, WithMethod } from "./component";
+>Component : Symbol(Component, Decl(main.js, 0, 8))
+>WithAccessor : Symbol(WithAccessor, Decl(main.js, 0, 19))
+>WithMethod : Symbol(WithMethod, Decl(main.js, 0, 33))
+
+export class C1 extends Component {
+>C1 : Symbol(C1, Decl(main.js, 0, 66))
+>Component : Symbol(Component, Decl(main.js, 0, 8))
+
+    state = { count: 0 };
+>state : Symbol(C1.state, Decl(main.js, 2, 35))
+>count : Symbol(count, Decl(main.js, 3, 13))
+}
+
+export class C2 extends Component {
+>C2 : Symbol(C2, Decl(main.js, 4, 1))
+>Component : Symbol(Component, Decl(main.js, 0, 8))
+
+    constructor() {
+        super({});
+>super : Symbol(Component, Decl(component.d.ts, 0, 0))
+
+        this.state = { count: 0 };
+>this.state : Symbol(C2.state, Decl(main.js, 8, 18))
+>this : Symbol(C2, Decl(main.js, 4, 1))
+>state : Symbol(C2.state, Decl(main.js, 8, 18))
+>count : Symbol(count, Decl(main.js, 9, 22))
+    }
+}
+
+export class C3 extends Component {
+>C3 : Symbol(C3, Decl(main.js, 11, 1))
+>Component : Symbol(Component, Decl(main.js, 0, 8))
+
+    update() {
+>update : Symbol(C3.update, Decl(main.js, 13, 35))
+
+        this.state = { count: 1 };
+>this.state : Symbol(C3.state, Decl(main.js, 14, 14))
+>this : Symbol(C3, Decl(main.js, 11, 1))
+>state : Symbol(C3.state, Decl(main.js, 14, 14))
+>count : Symbol(count, Decl(main.js, 15, 22))
+    }
+}
+
+export class C4 extends WithAccessor {
+>C4 : Symbol(C4, Decl(main.js, 17, 1))
+>WithAccessor : Symbol(WithAccessor, Decl(main.js, 0, 19))
+
+    constructor() {
+        super();
+>super : Symbol(WithAccessor, Decl(component.d.ts, 3, 1))
+
+        this.value = 1;
+>this.value : Symbol(C4.value, Decl(main.js, 21, 16))
+>this : Symbol(C4, Decl(main.js, 17, 1))
+>value : Symbol(C4.value, Decl(main.js, 21, 16))
+    }
+}
+
+/** @implements {WithAccessor} */
+export class C5 {
+>C5 : Symbol(C5, Decl(main.js, 24, 1))
+
+    constructor() {
+        this.value = 1;
+>this.value : Symbol(C5.value, Decl(main.js, 28, 19))
+>this : Symbol(C5, Decl(main.js, 24, 1))
+>value : Symbol(C5.value, Decl(main.js, 28, 19))
+    }
+}
+
+export class C6 extends WithMethod {
+>C6 : Symbol(C6, Decl(main.js, 31, 1))
+>WithMethod : Symbol(WithMethod, Decl(main.js, 0, 33))
+
+    constructor() {
+        super();
+>super : Symbol(WithMethod, Decl(component.d.ts, 8, 1))
+
+        this.method = this.method.bind(this);
+>this.method : Symbol(C6.method, Decl(main.js, 35, 16))
+>this : Symbol(C6, Decl(main.js, 31, 1))
+>method : Symbol(C6.method, Decl(main.js, 35, 16))
+>this.method.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.method : Symbol(C6.method, Decl(main.js, 35, 16))
+>this : Symbol(C6, Decl(main.js, 31, 1))
+>method : Symbol(C6.method, Decl(main.js, 35, 16))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(C6, Decl(main.js, 31, 1))
+    }
+}
+
+=== mainTs.ts ===
+import { Component } from "./component";
+>Component : Symbol(Component, Decl(mainTs.ts, 0, 8))
+
+export class C1 extends Component {
+>C1 : Symbol(C1, Decl(mainTs.ts, 0, 40))
+>Component : Symbol(Component, Decl(mainTs.ts, 0, 8))
+
+    state = { count: 0 };
+>state : Symbol(C1.state, Decl(mainTs.ts, 2, 35))
+>count : Symbol(count, Decl(mainTs.ts, 3, 13))
+}
+
+export class C2 extends Component {
+>C2 : Symbol(C2, Decl(mainTs.ts, 4, 1))
+>Component : Symbol(Component, Decl(mainTs.ts, 0, 8))
+
+    constructor() {
+        super({});
+>super : Symbol(Component, Decl(component.d.ts, 0, 0))
+
+        this.state = { count: 0 };
+>this.state : Symbol(Component.state, Decl(component.d.ts, 0, 24))
+>this : Symbol(C2, Decl(mainTs.ts, 4, 1))
+>state : Symbol(Component.state, Decl(component.d.ts, 0, 24))
+>count : Symbol(count, Decl(mainTs.ts, 9, 22))
+    }
+}
+

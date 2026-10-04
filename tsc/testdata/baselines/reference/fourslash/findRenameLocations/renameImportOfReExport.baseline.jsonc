@@ -1,0 +1,51 @@
+// === findRenameLocations ===
+// === /renameImportOfReExport.ts ===
+// declare module "a" {
+//     export class /*RENAME*/[|CRENAME|] {}
+// }
+// declare module "b" {
+//     export { [|CRENAME|] as C/*END SUFFIX*/ } from "a";
+// }
+// declare module "c" {
+//     import { C } from "b";
+//     export function f(c: C): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfReExport.ts ===
+// declare module "a" {
+//     export class C {}
+// }
+// declare module "b" {
+//     export { /*START PREFIX*/C as /*RENAME*/[|CRENAME|] } from "a";
+// }
+// declare module "c" {
+//     import { [|CRENAME|] } from "b";
+//     export function f(c: [|CRENAME|]): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfReExport.ts ===
+// --- (line: 4) skipped ---
+//     export { C } from "a";
+// }
+// declare module "c" {
+//     import { /*START PREFIX*/C as /*RENAME*/[|CRENAME|] } from "b";
+//     export function f(c: [|CRENAME|]): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfReExport.ts ===
+// --- (line: 4) skipped ---
+//     export { C } from "a";
+// }
+// declare module "c" {
+//     import { /*START PREFIX*/C as [|CRENAME|] } from "b";
+//     export function f(c: /*RENAME*/[|CRENAME|]): void;
+// }

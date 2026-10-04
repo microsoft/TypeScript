@@ -1,0 +1,98 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment8.ts] ////
+
+=== a.js ===
+var my = my || {};
+>my : any
+>my || {} : any
+>my : any
+>{} : {}
+
+my.app = my.app || {};
+>my.app = my.app || {} : any
+>my.app : any
+>my : any
+>app : any
+>my.app || {} : any
+>my.app : any
+>my : any
+>app : any
+>{} : {}
+
+my.app.Application = (function () {
+>my.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
+>my.app.Application : any
+>my.app : any
+>my : any
+>app : any
+>Application : any
+>(function () {var Application = function () {    //...};return Application;})() : () => void
+>(function () {var Application = function () {    //...};return Application;}) : () => () => void
+>function () {var Application = function () {    //...};return Application;} : () => () => void
+
+var Application = function () {
+>Application : () => void
+>function () {    //...} : () => void
+
+    //...
+};
+return Application;
+>Application : () => void
+
+})();
+my.app.Application()
+>my.app.Application() : any
+>my.app.Application : any
+>my.app : any
+>my : any
+>app : any
+>Application : any
+
+=== b.js ===
+var min = window.min || {};
+>min : any
+>window.min || {} : any
+>window.min : any
+>window : Window & typeof globalThis
+>min : any
+>{} : {}
+
+min.app = min.app || {};
+>min.app = min.app || {} : any
+>min.app : any
+>min : any
+>app : any
+>min.app || {} : any
+>min.app : any
+>min : any
+>app : any
+>{} : {}
+
+min.app.Application = (function () {
+>min.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
+>min.app.Application : any
+>min.app : any
+>min : any
+>app : any
+>Application : any
+>(function () {var Application = function () {    //...};return Application;})() : () => void
+>(function () {var Application = function () {    //...};return Application;}) : () => () => void
+>function () {var Application = function () {    //...};return Application;} : () => () => void
+
+var Application = function () {
+>Application : () => void
+>function () {    //...} : () => void
+
+    //...
+};
+return Application;
+>Application : () => void
+
+})();
+min.app.Application()
+>min.app.Application() : any
+>min.app.Application : any
+>min.app : any
+>min : any
+>app : any
+>Application : any
+

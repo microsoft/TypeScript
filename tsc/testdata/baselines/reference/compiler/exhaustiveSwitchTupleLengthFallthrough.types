@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/exhaustiveSwitchTupleLengthFallthrough.ts] ////
+
+=== exhaustiveSwitchTupleLengthFallthrough.ts ===
+type F =
+>F : F
+
+    | readonly [0, readonly [number]]
+    | readonly [0 | 1, readonly [number, number]]
+    | readonly [1, readonly [number, number, number]];
+
+const f = ([i, x]: F): undefined => {
+>f : ([i, x]: F) => undefined
+>([i, x]: F): undefined => {    switch (i) {        case 0: {            switch (x.length) {                case 1: case 2: return undefined;            }        }        case 1: {            const _: 2 | 3 = x.length;        }    }} : ([i, x]: F) => undefined
+>i : 0 | 1
+>x : readonly [number] | readonly [number, number] | readonly [number, number, number]
+
+    switch (i) {
+>i : 0 | 1
+
+        case 0: {
+>0 : 0
+
+            switch (x.length) {
+>x.length : 1 | 2
+>x : readonly [number] | readonly [number, number]
+>length : 1 | 2
+
+                case 1: case 2: return undefined;
+>1 : 1
+>2 : 2
+>undefined : undefined
+            }
+        }
+        case 1: {
+>1 : 1
+
+            const _: 2 | 3 = x.length;
+>_ : 2 | 3
+>x.length : 2 | 3
+>x : readonly [number, number] | readonly [number, number, number]
+>length : 2 | 3
+        }
+    }
+};
+

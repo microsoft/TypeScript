@@ -1,0 +1,8 @@
+/src/index.ts(1,8): error TS2882: Cannot find module or type declarations for side-effect import of 'https://deno.land/std@0.208.0/path/mod.ts'.
+
+
+==== /src/index.ts (1 errors) ====
+    import "https://deno.land/std@0.208.0/path/mod.ts"
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'https://deno.land/std@0.208.0/path/mod.ts'.
+    

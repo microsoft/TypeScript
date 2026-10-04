@@ -1,0 +1,90 @@
+// === findRenameLocations ===
+// === /c.ts ===
+// import [|aRENAME|] from "a";
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function /*RENAME*/[|aRENAME|](): void;
+// declare namespace [|aRENAME|] {
+//     export const x: number;
+// }
+// export = [|aRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import [|aRENAME|] from "a";
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function [|aRENAME|](): void;
+// declare namespace /*RENAME*/[|aRENAME|] {
+//     export const x: number;
+// }
+// export = [|aRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import [|aRENAME|] from "a";
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function [|aRENAME|](): void;
+// declare namespace [|aRENAME|] {
+//     export const x: number;
+// }
+// export = /*RENAME*/[|aRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import /*RENAME*/[|bRENAME|] from "a";
+// [|bRENAME|]();
+// [|bRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import [|bRENAME|] from "a";
+// /*RENAME*/[|bRENAME|]();
+// [|bRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import [|bRENAME|] from "a";
+// [|bRENAME|]();
+// /*RENAME*/[|bRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import /*RENAME*/[|aRENAME|] from "a";
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import [|aRENAME|] from "a";
+// /*RENAME*/[|aRENAME|]();
+// [|aRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import [|aRENAME|] from "a";
+// [|aRENAME|]();
+// /*RENAME*/[|aRENAME|].x;

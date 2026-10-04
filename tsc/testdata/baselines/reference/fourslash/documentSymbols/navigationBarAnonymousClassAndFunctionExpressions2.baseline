@@ -1,0 +1,12 @@
+// === Document Symbols ===
+// === /navigationBarAnonymousClassAndFunctionExpressions2.ts ===
+// console.log(console.log(<|class [|{| name: Y, kind: Class |}Y|] {}|>, <|class [|{| name: X, kind: Class |}X|] {}|>), console.log(<|class [|{| name: B, kind: Class |}B|] {}|>, <|class [|{| name: A, kind: Class |}A|] {}|>));
+// console.log(<|class [|{| name: Cls, kind: Class |}Cls|] { <|[|{| name: meth, kind: Method |}meth|]() {}|> }|>);
+
+// === Details ===
+(Class) Y
+(Class) X
+(Class) B
+(Class) A
+(Class) Cls
+  (Method) meth

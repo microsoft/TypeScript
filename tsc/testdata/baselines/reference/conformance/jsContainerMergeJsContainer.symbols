@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/salsa/jsContainerMergeJsContainer.ts] ////
+
+=== a.js ===
+const a = {};
+>a : Symbol(a, Decl(a.js, 0, 5))
+
+a.d = function() {};
+>a.d : Symbol(d, Decl(a.js, 0, 13))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>d : Symbol(d, Decl(a.js, 0, 13))
+
+=== b.js ===
+a.d.prototype = {};
+>a.d.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>a.d : Symbol(d, Decl(a.js, 0, 13))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>d : Symbol(d, Decl(a.js, 0, 13))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+

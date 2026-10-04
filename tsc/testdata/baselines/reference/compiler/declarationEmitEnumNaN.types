@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitEnumNaN.ts] ////
+
+=== declarationEmitEnumNaN.ts ===
+export declare enum E {
+>E : E
+
+    A = -NaN,
+>A : E.A
+>-NaN : number
+>NaN : number
+
+    B = NaN,
+>B : E.A
+>NaN : number
+
+    C = Infinity,
+>C : E.C
+>Infinity : number
+
+    D = -Infinity,
+>D : E.D
+>-Infinity : number
+>Infinity : number
+}
+

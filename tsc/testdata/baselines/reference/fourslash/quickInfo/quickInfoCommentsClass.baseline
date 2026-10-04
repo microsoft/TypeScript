@@ -1,0 +1,971 @@
+// === QuickInfo ===
+=== /quickInfoCommentsClass.ts ===
+// /** This is class c2 without constructor*/
+// class c2 {
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c2
+// | ```
+// | This is class c2 without constructor
+// | ----------------------------------------------------------------------
+// }
+// var i2 = new c2();
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i2: c2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c2(): c2
+// | ```
+// | This is class c2 without constructor
+// | ----------------------------------------------------------------------
+// var i2_c = c2;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i2_c: typeof c2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c2
+// | ```
+// | This is class c2 without constructor
+// | ----------------------------------------------------------------------
+// class c3 {
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c3
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     /** Constructor comment*/
+//     constructor() {
+//     }
+// }
+// var i3 = new c3();
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i3: c3
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c3(): c3
+// | ```
+// | Constructor comment
+// | ----------------------------------------------------------------------
+// var i3_c = c3;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i3_c: typeof c3
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c3
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** Class comment*/
+// class c4 {
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c4
+// | ```
+// | Class comment
+// | ----------------------------------------------------------------------
+//     /** Constructor comment*/
+//     constructor() {
+//     }
+// }
+// var i4 = new c4();
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i4: c4
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c4(): c4
+// | ```
+// | Constructor comment
+// | ----------------------------------------------------------------------
+// var i4_c = c4;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i4_c: typeof c4
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c4
+// | ```
+// | Class comment
+// | ----------------------------------------------------------------------
+// /** Class with statics*/
+// class c5 {
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c5
+// | ```
+// | Class with statics
+// | ----------------------------------------------------------------------
+//     static s1: number;
+// }
+// var i5 = new c5();
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i5: c5
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c5(): c5
+// | ```
+// | Class with statics
+// | ----------------------------------------------------------------------
+// var i5_c = c5;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i5_c: typeof c5
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c5
+// | ```
+// | Class with statics
+// | ----------------------------------------------------------------------
+// /** class with statics and constructor*/
+// class c6 {
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c6
+// | ```
+// | class with statics and constructor
+// | ----------------------------------------------------------------------
+//     /** s1 comment*/
+//     static s1: number;
+//     /** constructor comment*/
+//     constructor() {
+//     }
+// }
+// var i6 = new c6();
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i6: c6
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c6(): c6
+// | ```
+// | constructor comment
+// | ----------------------------------------------------------------------
+// var i6_c = c6;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var i6_c: typeof c6
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c6
+// | ```
+// | class with statics and constructor
+// | ----------------------------------------------------------------------
+// 
+// class a {
+//     /**
+//     constructor for a
+//     @param a this is my a
+//     */
+//     constructor(a: string) {
+//     }
+// }
+// new a("Hello");
+// namespace m {
+//     export namespace m2 {
+//         /** class comment */
+//         export class c1 {
+//             /** constructor comment*/
+//             constructor() {
+//             }
+//         }
+//     }
+// }
+// var myVar = new m.m2.c1();
+//                      ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor m.m2.c1(): m.m2.c1
+// | ```
+// | constructor comment
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 50,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c2\n```\nThis is class c2 without constructor"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 6
+        },
+        "end": {
+          "line": 1,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 61,
+      "LSPosition": {
+        "line": 3,
+        "character": 5
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i2: c2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 70,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "28",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c2(): c2\n```\nThis is class c2 without constructor"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 13
+        },
+        "end": {
+          "line": 3,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 81,
+      "LSPosition": {
+        "line": 4,
+        "character": 6
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i2_c: typeof c2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 4
+        },
+        "end": {
+          "line": 4,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 87,
+      "LSPosition": {
+        "line": 4,
+        "character": 12
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c2\n```\nThis is class c2 without constructor"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 11
+        },
+        "end": {
+          "line": 4,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 97,
+      "LSPosition": {
+        "line": 5,
+        "character": 7
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 6
+        },
+        "end": {
+          "line": 5,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 164,
+      "LSPosition": {
+        "line": 10,
+        "character": 5
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i3: c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 4
+        },
+        "end": {
+          "line": 10,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 173,
+      "LSPosition": {
+        "line": 10,
+        "character": 14
+      },
+      "Name": "29",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c3(): c3\n```\nConstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 184,
+      "LSPosition": {
+        "line": 11,
+        "character": 6
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i3_c: typeof c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 190,
+      "LSPosition": {
+        "line": 11,
+        "character": 12
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 11
+        },
+        "end": {
+          "line": 11,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 220,
+      "LSPosition": {
+        "line": 13,
+        "character": 7
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c4\n```\nClass comment"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 6
+        },
+        "end": {
+          "line": 13,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 287,
+      "LSPosition": {
+        "line": 18,
+        "character": 5
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i4: c4\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 4
+        },
+        "end": {
+          "line": 18,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 296,
+      "LSPosition": {
+        "line": 18,
+        "character": 14
+      },
+      "Name": "30",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c4(): c4\n```\nConstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 13
+        },
+        "end": {
+          "line": 18,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 307,
+      "LSPosition": {
+        "line": 19,
+        "character": 6
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i4_c: typeof c4\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 4
+        },
+        "end": {
+          "line": 19,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 313,
+      "LSPosition": {
+        "line": 19,
+        "character": 12
+      },
+      "Name": "15",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c4\n```\nClass comment"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 11
+        },
+        "end": {
+          "line": 19,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 348,
+      "LSPosition": {
+        "line": 21,
+        "character": 7
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c5\n```\nClass with statics"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 6
+        },
+        "end": {
+          "line": 21,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 382,
+      "LSPosition": {
+        "line": 24,
+        "character": 5
+      },
+      "Name": "17",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i5: c5\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 4
+        },
+        "end": {
+          "line": 24,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 391,
+      "LSPosition": {
+        "line": 24,
+        "character": 14
+      },
+      "Name": "31",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c5(): c5\n```\nClass with statics"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 13
+        },
+        "end": {
+          "line": 24,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 403,
+      "LSPosition": {
+        "line": 25,
+        "character": 7
+      },
+      "Name": "19",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i5_c: typeof c5\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 4
+        },
+        "end": {
+          "line": 25,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 408,
+      "LSPosition": {
+        "line": 25,
+        "character": 12
+      },
+      "Name": "20",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c5\n```\nClass with statics"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 11
+        },
+        "end": {
+          "line": 25,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 459,
+      "LSPosition": {
+        "line": 27,
+        "character": 7
+      },
+      "Name": "21",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c6\n```\nclass with statics and constructor"
+      },
+      "range": {
+        "start": {
+          "line": 27,
+          "character": 6
+        },
+        "end": {
+          "line": 27,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 570,
+      "LSPosition": {
+        "line": 34,
+        "character": 5
+      },
+      "Name": "22",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i6: c6\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 34,
+          "character": 4
+        },
+        "end": {
+          "line": 34,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 579,
+      "LSPosition": {
+        "line": 34,
+        "character": 14
+      },
+      "Name": "32",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c6(): c6\n```\nconstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 34,
+          "character": 13
+        },
+        "end": {
+          "line": 34,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 590,
+      "LSPosition": {
+        "line": 35,
+        "character": 6
+      },
+      "Name": "24",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar i6_c: typeof c6\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 35,
+          "character": 4
+        },
+        "end": {
+          "line": 35,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 596,
+      "LSPosition": {
+        "line": 35,
+        "character": 12
+      },
+      "Name": "25",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c6\n```\nclass with statics and constructor"
+      },
+      "range": {
+        "start": {
+          "line": 35,
+          "character": 11
+        },
+        "end": {
+          "line": 35,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 941,
+      "LSPosition": {
+        "line": 56,
+        "character": 22
+      },
+      "Name": "33",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor m.m2.c1(): m.m2.c1\n```\nconstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 56,
+          "character": 21
+        },
+        "end": {
+          "line": 56,
+          "character": 23
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

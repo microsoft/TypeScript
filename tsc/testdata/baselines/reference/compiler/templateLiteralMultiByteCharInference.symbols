@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/templateLiteralMultiByteCharInference.ts] ////
+
+=== templateLiteralMultiByteCharInference.ts ===
+// Verifies that template literal type inference handles multi-byte characters correctly,
+// slicing by Unicode code point (rune) instead of by byte.
+
+type GetFirst<S extends string> = S extends `${infer Head}${string}` ? Head : never;
+>GetFirst : Symbol(GetFirst, Decl(templateLiteralMultiByteCharInference.ts, 0, 0))
+>S : Symbol(S, Decl(templateLiteralMultiByteCharInference.ts, 3, 14))
+>S : Symbol(S, Decl(templateLiteralMultiByteCharInference.ts, 3, 14))
+>Head : Symbol(Head, Decl(templateLiteralMultiByteCharInference.ts, 3, 52))
+>Head : Symbol(Head, Decl(templateLiteralMultiByteCharInference.ts, 3, 52))
+
+type GetRest<S extends string> = S extends `${string}${infer Rest}` ? Rest : never;
+>GetRest : Symbol(GetRest, Decl(templateLiteralMultiByteCharInference.ts, 3, 84))
+>S : Symbol(S, Decl(templateLiteralMultiByteCharInference.ts, 4, 13))
+>S : Symbol(S, Decl(templateLiteralMultiByteCharInference.ts, 4, 13))
+>Rest : Symbol(Rest, Decl(templateLiteralMultiByteCharInference.ts, 4, 60))
+>Rest : Symbol(Rest, Decl(templateLiteralMultiByteCharInference.ts, 4, 60))
+
+type Split<S extends string> = S extends `${infer Head}${infer Rest}` ? [Head, Rest] : never;
+>Split : Symbol(Split, Decl(templateLiteralMultiByteCharInference.ts, 4, 83))
+>S : Symbol(S, Decl(templateLiteralMultiByteCharInference.ts, 5, 11))
+>S : Symbol(S, Decl(templateLiteralMultiByteCharInference.ts, 5, 11))
+>Head : Symbol(Head, Decl(templateLiteralMultiByteCharInference.ts, 5, 49))
+>Rest : Symbol(Rest, Decl(templateLiteralMultiByteCharInference.ts, 5, 62))
+>Head : Symbol(Head, Decl(templateLiteralMultiByteCharInference.ts, 5, 49))
+>Rest : Symbol(Rest, Decl(templateLiteralMultiByteCharInference.ts, 5, 62))
+
+// Single-byte (ASCII) characters
+type A = GetFirst<"ABC">;  // "A"
+>A : Symbol(A, Decl(templateLiteralMultiByteCharInference.ts, 5, 93))
+>GetFirst : Symbol(GetFirst, Decl(templateLiteralMultiByteCharInference.ts, 0, 0))
+
+type BC = GetRest<"ABC">;  // "BC"
+>BC : Symbol(BC, Decl(templateLiteralMultiByteCharInference.ts, 8, 25))
+>GetRest : Symbol(GetRest, Decl(templateLiteralMultiByteCharInference.ts, 3, 84))
+
+type ABC_Split = Split<"ABC">;  // ["A", "BC"]
+>ABC_Split : Symbol(ABC_Split, Decl(templateLiteralMultiByteCharInference.ts, 9, 25))
+>Split : Symbol(Split, Decl(templateLiteralMultiByteCharInference.ts, 4, 83))
+
+// Multi-byte characters (Japanese, 3 bytes in UTF-8, 1 code unit in UTF-16)
+type Ah = GetFirst<"あいう">;  // "あ"
+>Ah : Symbol(Ah, Decl(templateLiteralMultiByteCharInference.ts, 10, 30))
+>GetFirst : Symbol(GetFirst, Decl(templateLiteralMultiByteCharInference.ts, 0, 0))
+
+type IU = GetRest<"あいう">;  // "いう"
+>IU : Symbol(IU, Decl(templateLiteralMultiByteCharInference.ts, 13, 26))
+>GetRest : Symbol(GetRest, Decl(templateLiteralMultiByteCharInference.ts, 3, 84))
+
+type AIU_Split = Split<"あいう">;  // ["あ", "いう"]
+>AIU_Split : Symbol(AIU_Split, Decl(templateLiteralMultiByteCharInference.ts, 14, 25))
+>Split : Symbol(Split, Decl(templateLiteralMultiByteCharInference.ts, 4, 83))
+
+// Mixed single-byte and multi-byte
+type M1 = GetFirst<"aあ">;  // "a"
+>M1 : Symbol(M1, Decl(templateLiteralMultiByteCharInference.ts, 15, 30))
+>GetFirst : Symbol(GetFirst, Decl(templateLiteralMultiByteCharInference.ts, 0, 0))
+
+type M2 = GetFirst<"あa">;  // "あ"
+>M2 : Symbol(M2, Decl(templateLiteralMultiByteCharInference.ts, 18, 25))
+>GetFirst : Symbol(GetFirst, Decl(templateLiteralMultiByteCharInference.ts, 0, 0))
+
+// 2-byte UTF-8 characters (Latin Extended, 1 code unit in UTF-16)
+type E = GetFirst<"éàü">;  // "é"
+>E : Symbol(E, Decl(templateLiteralMultiByteCharInference.ts, 19, 25))
+>GetFirst : Symbol(GetFirst, Decl(templateLiteralMultiByteCharInference.ts, 0, 0))
+
+// Emoji (4 bytes in UTF-8, 2 code units in UTF-16 as surrogate pair)
+type Emoji = GetFirst<"😀abc">;
+>Emoji : Symbol(Emoji, Decl(templateLiteralMultiByteCharInference.ts, 22, 25))
+>GetFirst : Symbol(GetFirst, Decl(templateLiteralMultiByteCharInference.ts, 0, 0))
+
+// Verification
+type Expect<T, Expected> = T extends Expected ? true : false;
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>T : Symbol(T, Decl(templateLiteralMultiByteCharInference.ts, 28, 12))
+>Expected : Symbol(Expected, Decl(templateLiteralMultiByteCharInference.ts, 28, 14))
+>T : Symbol(T, Decl(templateLiteralMultiByteCharInference.ts, 28, 12))
+>Expected : Symbol(Expected, Decl(templateLiteralMultiByteCharInference.ts, 28, 14))
+
+const check1: Expect<A, "A"> = true;
+>check1 : Symbol(check1, Decl(templateLiteralMultiByteCharInference.ts, 29, 5))
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>A : Symbol(A, Decl(templateLiteralMultiByteCharInference.ts, 5, 93))
+
+const check2: Expect<Ah, "あ"> = true;
+>check2 : Symbol(check2, Decl(templateLiteralMultiByteCharInference.ts, 30, 5))
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>Ah : Symbol(Ah, Decl(templateLiteralMultiByteCharInference.ts, 10, 30))
+
+const check3: Expect<BC, "BC"> = true;
+>check3 : Symbol(check3, Decl(templateLiteralMultiByteCharInference.ts, 31, 5))
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>BC : Symbol(BC, Decl(templateLiteralMultiByteCharInference.ts, 8, 25))
+
+const check4: Expect<IU, "いう"> = true;
+>check4 : Symbol(check4, Decl(templateLiteralMultiByteCharInference.ts, 32, 5))
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>IU : Symbol(IU, Decl(templateLiteralMultiByteCharInference.ts, 13, 26))
+
+const check5: Expect<M1, "a"> = true;
+>check5 : Symbol(check5, Decl(templateLiteralMultiByteCharInference.ts, 33, 5))
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>M1 : Symbol(M1, Decl(templateLiteralMultiByteCharInference.ts, 15, 30))
+
+const check6: Expect<M2, "あ"> = true;
+>check6 : Symbol(check6, Decl(templateLiteralMultiByteCharInference.ts, 34, 5))
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>M2 : Symbol(M2, Decl(templateLiteralMultiByteCharInference.ts, 18, 25))
+
+const check7: Expect<E, "é"> = true;
+>check7 : Symbol(check7, Decl(templateLiteralMultiByteCharInference.ts, 35, 5))
+>Expect : Symbol(Expect, Decl(templateLiteralMultiByteCharInference.ts, 25, 31))
+>E : Symbol(E, Decl(templateLiteralMultiByteCharInference.ts, 19, 25))
+

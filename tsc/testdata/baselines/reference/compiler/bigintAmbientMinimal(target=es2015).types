@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/bigintAmbientMinimal.ts] ////
+
+=== /ambient.d.ts ===
+declare const fromDts = 789n;
+>fromDts : 789n
+>789n : 789n
+
+declare namespace Lib {
+>Lib : typeof Lib
+
+    const value = 999n;
+>value : 999n
+>999n : 999n
+}
+
+=== /main.ts ===
+// Minimal repro from issue
+declare const n = 123n;
+>n : 123n
+>123n : 123n
+
+// Non-ambient for comparison
+const regular = 456n;
+>regular : 456n
+>456n : 456n
+

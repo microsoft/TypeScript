@@ -1,0 +1,84 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTagsFunctionOverload01.ts ===
+// /**
+//  * Doc foo
+//  */
+// declare function foo(): void;
+//                  ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(): void
+// | ```
+// | Doc foo
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * Doc foo overloaded
+//  * @tag Tag text
+//  */
+// declare function foo(x: number): void
+//                  ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(x: number): void
+// | ```
+// | Doc foo overloaded
+// | 
+// | *@tag* — Tag text
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 36,
+      "LSPosition": {
+        "line": 3,
+        "character": 17
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(): void\n```\nDoc foo"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 17
+        },
+        "end": {
+          "line": 3,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 114,
+      "LSPosition": {
+        "line": 9,
+        "character": 17
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(x: number): void\n```\nDoc foo overloaded\n\n*@tag* — Tag text"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 17
+        },
+        "end": {
+          "line": 9,
+          "character": 20
+        }
+      }
+    }
+  }
+]

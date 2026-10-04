@@ -1,0 +1,530 @@
+//// [tests/cases/compiler/varianceComputationNoCrash.ts] ////
+
+=== helpers.ts ===
+export type Whitespace = '\u{9}' | '\u{A}' | '\u{B}' | '\u{C}' | '\u{D}' | '\u{20}' | '\u{85}' | '\u{A0}' | '\u{1680}' | '\u{2000}' | '\u{2001}' | '\u{2002}' | '\u{2003}' | '\u{2004}' | '\u{2005}' | '\u{2006}' | '\u{2007}' | '\u{2008}' | '\u{2009}' | '\u{200A}' | '\u{2028}' | '\u{2029}' | '\u{202F}' | '\u{205F}' | '\u{3000}' | '\u{FEFF}';
+>Whitespace : Symbol(Whitespace, Decl(helpers.ts, 0, 0))
+
+export type WordSeparators = '-' | '_' | Whitespace;
+>WordSeparators : Symbol(WordSeparators, Decl(helpers.ts, 0, 340))
+>Whitespace : Symbol(Whitespace, Decl(helpers.ts, 0, 0))
+
+export type Simplify<T> = {[KeyType in keyof T]: T[KeyType]} & {};
+>Simplify : Symbol(Simplify, Decl(helpers.ts, 1, 52))
+>T : Symbol(T, Decl(helpers.ts, 2, 21))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 2, 28))
+>T : Symbol(T, Decl(helpers.ts, 2, 21))
+>T : Symbol(T, Decl(helpers.ts, 2, 21))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 2, 28))
+
+export type IsAny<T> = 0 extends 1 & T ? true : false;
+>IsAny : Symbol(IsAny, Decl(helpers.ts, 2, 66))
+>T : Symbol(T, Decl(helpers.ts, 3, 18))
+>T : Symbol(T, Decl(helpers.ts, 3, 18))
+
+export type IsNever<T> = [T] extends [never] ? true : false;
+>IsNever : Symbol(IsNever, Decl(helpers.ts, 3, 54))
+>T : Symbol(T, Decl(helpers.ts, 4, 20))
+>T : Symbol(T, Decl(helpers.ts, 4, 20))
+
+export type IfAny<T, TypeIfAny = true, TypeIfNotAny = false> = IsAny<T> extends true ? TypeIfAny : TypeIfNotAny;
+>IfAny : Symbol(IfAny, Decl(helpers.ts, 4, 60))
+>T : Symbol(T, Decl(helpers.ts, 5, 18))
+>TypeIfAny : Symbol(TypeIfAny, Decl(helpers.ts, 5, 20))
+>TypeIfNotAny : Symbol(TypeIfNotAny, Decl(helpers.ts, 5, 38))
+>IsAny : Symbol(IsAny, Decl(helpers.ts, 2, 66))
+>T : Symbol(T, Decl(helpers.ts, 5, 18))
+>TypeIfAny : Symbol(TypeIfAny, Decl(helpers.ts, 5, 20))
+>TypeIfNotAny : Symbol(TypeIfNotAny, Decl(helpers.ts, 5, 38))
+
+export type IfNever<T, TypeIfNever = true, TypeIfNotNever = false> = IsNever<T> extends true ? TypeIfNever : TypeIfNotNever;
+>IfNever : Symbol(IfNever, Decl(helpers.ts, 5, 112))
+>T : Symbol(T, Decl(helpers.ts, 6, 20))
+>TypeIfNever : Symbol(TypeIfNever, Decl(helpers.ts, 6, 22))
+>TypeIfNotNever : Symbol(TypeIfNotNever, Decl(helpers.ts, 6, 42))
+>IsNever : Symbol(IsNever, Decl(helpers.ts, 3, 54))
+>T : Symbol(T, Decl(helpers.ts, 6, 20))
+>TypeIfNever : Symbol(TypeIfNever, Decl(helpers.ts, 6, 22))
+>TypeIfNotNever : Symbol(TypeIfNotNever, Decl(helpers.ts, 6, 42))
+
+export type RequiredKeysOf<BaseType extends object> = Exclude<{[Key in keyof BaseType]: BaseType extends Record<Key, BaseType[Key]> ? Key : never}[keyof BaseType], undefined>;
+>RequiredKeysOf : Symbol(RequiredKeysOf, Decl(helpers.ts, 6, 124))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 7, 27))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Key : Symbol(Key, Decl(helpers.ts, 7, 64))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 7, 27))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 7, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Key : Symbol(Key, Decl(helpers.ts, 7, 64))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 7, 27))
+>Key : Symbol(Key, Decl(helpers.ts, 7, 64))
+>Key : Symbol(Key, Decl(helpers.ts, 7, 64))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 7, 27))
+
+export type OptionalKeysOf<BaseType extends object> = Exclude<{[Key in keyof BaseType]: BaseType extends Record<Key, BaseType[Key]> ? never : Key}[keyof BaseType], undefined>;
+>OptionalKeysOf : Symbol(OptionalKeysOf, Decl(helpers.ts, 7, 175))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 8, 27))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Key : Symbol(Key, Decl(helpers.ts, 8, 64))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 8, 27))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 8, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Key : Symbol(Key, Decl(helpers.ts, 8, 64))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 8, 27))
+>Key : Symbol(Key, Decl(helpers.ts, 8, 64))
+>Key : Symbol(Key, Decl(helpers.ts, 8, 64))
+>BaseType : Symbol(BaseType, Decl(helpers.ts, 8, 27))
+
+export type OmitIndexSignature<ObjectType> = {[KeyType in keyof ObjectType as {} extends Record<KeyType, unknown> ? never : KeyType]: ObjectType[KeyType]};
+>OmitIndexSignature : Symbol(OmitIndexSignature, Decl(helpers.ts, 8, 175))
+>ObjectType : Symbol(ObjectType, Decl(helpers.ts, 9, 31))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 9, 47))
+>ObjectType : Symbol(ObjectType, Decl(helpers.ts, 9, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 9, 47))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 9, 47))
+>ObjectType : Symbol(ObjectType, Decl(helpers.ts, 9, 31))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 9, 47))
+
+export type PickIndexSignature<ObjectType> = {[KeyType in keyof ObjectType as {} extends Record<KeyType, unknown> ? KeyType : never]: ObjectType[KeyType]};
+>PickIndexSignature : Symbol(PickIndexSignature, Decl(helpers.ts, 9, 155))
+>ObjectType : Symbol(ObjectType, Decl(helpers.ts, 10, 31))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 10, 47))
+>ObjectType : Symbol(ObjectType, Decl(helpers.ts, 10, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 10, 47))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 10, 47))
+>ObjectType : Symbol(ObjectType, Decl(helpers.ts, 10, 31))
+>KeyType : Symbol(KeyType, Decl(helpers.ts, 10, 47))
+
+type SimpleMerge<Destination, Source> = {[Key in keyof Destination as Key extends keyof Source ? never : Key]: Destination[Key]} & Source;
+>SimpleMerge : Symbol(SimpleMerge, Decl(helpers.ts, 10, 155))
+>Destination : Symbol(Destination, Decl(helpers.ts, 11, 17))
+>Source : Symbol(Source, Decl(helpers.ts, 11, 29))
+>Key : Symbol(Key, Decl(helpers.ts, 11, 42))
+>Destination : Symbol(Destination, Decl(helpers.ts, 11, 17))
+>Key : Symbol(Key, Decl(helpers.ts, 11, 42))
+>Source : Symbol(Source, Decl(helpers.ts, 11, 29))
+>Key : Symbol(Key, Decl(helpers.ts, 11, 42))
+>Destination : Symbol(Destination, Decl(helpers.ts, 11, 17))
+>Key : Symbol(Key, Decl(helpers.ts, 11, 42))
+>Source : Symbol(Source, Decl(helpers.ts, 11, 29))
+
+export type Merge<Destination, Source> = Simplify<SimpleMerge<PickIndexSignature<Destination>, PickIndexSignature<Source>> & SimpleMerge<OmitIndexSignature<Destination>, OmitIndexSignature<Source>>>;
+>Merge : Symbol(Merge, Decl(helpers.ts, 11, 138))
+>Destination : Symbol(Destination, Decl(helpers.ts, 12, 18))
+>Source : Symbol(Source, Decl(helpers.ts, 12, 30))
+>Simplify : Symbol(Simplify, Decl(helpers.ts, 1, 52))
+>SimpleMerge : Symbol(SimpleMerge, Decl(helpers.ts, 10, 155))
+>PickIndexSignature : Symbol(PickIndexSignature, Decl(helpers.ts, 9, 155))
+>Destination : Symbol(Destination, Decl(helpers.ts, 12, 18))
+>PickIndexSignature : Symbol(PickIndexSignature, Decl(helpers.ts, 9, 155))
+>Source : Symbol(Source, Decl(helpers.ts, 12, 30))
+>SimpleMerge : Symbol(SimpleMerge, Decl(helpers.ts, 10, 155))
+>OmitIndexSignature : Symbol(OmitIndexSignature, Decl(helpers.ts, 8, 175))
+>Destination : Symbol(Destination, Decl(helpers.ts, 12, 18))
+>OmitIndexSignature : Symbol(OmitIndexSignature, Decl(helpers.ts, 8, 175))
+>Source : Symbol(Source, Decl(helpers.ts, 12, 30))
+
+type TrimLeft<V extends string> = V extends `${Whitespace}${infer R}` ? TrimLeft<R> : V;
+>TrimLeft : Symbol(TrimLeft, Decl(helpers.ts, 12, 199))
+>V : Symbol(V, Decl(helpers.ts, 13, 14))
+>V : Symbol(V, Decl(helpers.ts, 13, 14))
+>Whitespace : Symbol(Whitespace, Decl(helpers.ts, 0, 0))
+>R : Symbol(R, Decl(helpers.ts, 13, 65))
+>TrimLeft : Symbol(TrimLeft, Decl(helpers.ts, 12, 199))
+>R : Symbol(R, Decl(helpers.ts, 13, 65))
+>V : Symbol(V, Decl(helpers.ts, 13, 14))
+
+type TrimRight<V extends string> = V extends `${infer R}${Whitespace}` ? TrimRight<R> : V;
+>TrimRight : Symbol(TrimRight, Decl(helpers.ts, 13, 88))
+>V : Symbol(V, Decl(helpers.ts, 14, 15))
+>V : Symbol(V, Decl(helpers.ts, 14, 15))
+>R : Symbol(R, Decl(helpers.ts, 14, 53))
+>Whitespace : Symbol(Whitespace, Decl(helpers.ts, 0, 0))
+>TrimRight : Symbol(TrimRight, Decl(helpers.ts, 13, 88))
+>R : Symbol(R, Decl(helpers.ts, 14, 53))
+>V : Symbol(V, Decl(helpers.ts, 14, 15))
+
+export type Trim<V extends string> = TrimLeft<TrimRight<V>>;
+>Trim : Symbol(Trim, Decl(helpers.ts, 14, 90))
+>V : Symbol(V, Decl(helpers.ts, 15, 17))
+>TrimLeft : Symbol(TrimLeft, Decl(helpers.ts, 12, 199))
+>TrimRight : Symbol(TrimRight, Decl(helpers.ts, 13, 88))
+>V : Symbol(V, Decl(helpers.ts, 15, 17))
+
+export type IsLowerCase<T extends string> = T extends Lowercase<T> ? true : false;
+>IsLowerCase : Symbol(IsLowerCase, Decl(helpers.ts, 15, 60))
+>T : Symbol(T, Decl(helpers.ts, 16, 24))
+>T : Symbol(T, Decl(helpers.ts, 16, 24))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(helpers.ts, 16, 24))
+
+export type IsUpperCase<T extends string> = T extends Uppercase<T> ? true : false;
+>IsUpperCase : Symbol(IsUpperCase, Decl(helpers.ts, 16, 82))
+>T : Symbol(T, Decl(helpers.ts, 17, 24))
+>T : Symbol(T, Decl(helpers.ts, 17, 24))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(helpers.ts, 17, 24))
+
+export type IsNumeric<T extends string> = T extends `${number}` ? Trim<T> extends T ? true : false : false;
+>IsNumeric : Symbol(IsNumeric, Decl(helpers.ts, 17, 82))
+>T : Symbol(T, Decl(helpers.ts, 18, 22))
+>T : Symbol(T, Decl(helpers.ts, 18, 22))
+>Trim : Symbol(Trim, Decl(helpers.ts, 14, 90))
+>T : Symbol(T, Decl(helpers.ts, 18, 22))
+>T : Symbol(T, Decl(helpers.ts, 18, 22))
+
+export type ApplyDefaultOptions<
+>ApplyDefaultOptions : Symbol(ApplyDefaultOptions, Decl(helpers.ts, 18, 107))
+
+    Options extends object,
+>Options : Symbol(Options, Decl(helpers.ts, 19, 32))
+
+    Defaults extends Simplify<Omit<Required<Options>, RequiredKeysOf<Options>> & Partial<Record<RequiredKeysOf<Options>, never>>>,
+>Defaults : Symbol(Defaults, Decl(helpers.ts, 20, 27))
+>Simplify : Symbol(Simplify, Decl(helpers.ts, 1, 52))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Options : Symbol(Options, Decl(helpers.ts, 19, 32))
+>RequiredKeysOf : Symbol(RequiredKeysOf, Decl(helpers.ts, 6, 124))
+>Options : Symbol(Options, Decl(helpers.ts, 19, 32))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>RequiredKeysOf : Symbol(RequiredKeysOf, Decl(helpers.ts, 6, 124))
+>Options : Symbol(Options, Decl(helpers.ts, 19, 32))
+
+    SpecifiedOptions extends Options,
+>SpecifiedOptions : Symbol(SpecifiedOptions, Decl(helpers.ts, 21, 130))
+>Options : Symbol(Options, Decl(helpers.ts, 19, 32))
+
+> = IfAny<SpecifiedOptions, Defaults, IfNever<SpecifiedOptions, Defaults, Simplify<Merge<Defaults, {[Key in keyof SpecifiedOptions as Key extends OptionalKeysOf<Options> ? undefined extends SpecifiedOptions[Key] ? never : Key : Key]: SpecifiedOptions[Key]}> & Required<Options>>>>;
+>IfAny : Symbol(IfAny, Decl(helpers.ts, 4, 60))
+>SpecifiedOptions : Symbol(SpecifiedOptions, Decl(helpers.ts, 21, 130))
+>Defaults : Symbol(Defaults, Decl(helpers.ts, 20, 27))
+>IfNever : Symbol(IfNever, Decl(helpers.ts, 5, 112))
+>SpecifiedOptions : Symbol(SpecifiedOptions, Decl(helpers.ts, 21, 130))
+>Defaults : Symbol(Defaults, Decl(helpers.ts, 20, 27))
+>Simplify : Symbol(Simplify, Decl(helpers.ts, 1, 52))
+>Merge : Symbol(Merge, Decl(helpers.ts, 11, 138))
+>Defaults : Symbol(Defaults, Decl(helpers.ts, 20, 27))
+>Key : Symbol(Key, Decl(helpers.ts, 23, 101))
+>SpecifiedOptions : Symbol(SpecifiedOptions, Decl(helpers.ts, 21, 130))
+>Key : Symbol(Key, Decl(helpers.ts, 23, 101))
+>OptionalKeysOf : Symbol(OptionalKeysOf, Decl(helpers.ts, 7, 175))
+>Options : Symbol(Options, Decl(helpers.ts, 19, 32))
+>SpecifiedOptions : Symbol(SpecifiedOptions, Decl(helpers.ts, 21, 130))
+>Key : Symbol(Key, Decl(helpers.ts, 23, 101))
+>Key : Symbol(Key, Decl(helpers.ts, 23, 101))
+>Key : Symbol(Key, Decl(helpers.ts, 23, 101))
+>SpecifiedOptions : Symbol(SpecifiedOptions, Decl(helpers.ts, 21, 130))
+>Key : Symbol(Key, Decl(helpers.ts, 23, 101))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Options : Symbol(Options, Decl(helpers.ts, 19, 32))
+
+=== camelcase.ts ===
+import type { ApplyDefaultOptions, WordSeparators, IsLowerCase, IsUpperCase, IsNumeric } from "./helpers";
+>ApplyDefaultOptions : Symbol(ApplyDefaultOptions, Decl(camelcase.ts, 0, 13))
+>WordSeparators : Symbol(WordSeparators, Decl(camelcase.ts, 0, 34))
+>IsLowerCase : Symbol(IsLowerCase, Decl(camelcase.ts, 0, 50))
+>IsUpperCase : Symbol(IsUpperCase, Decl(camelcase.ts, 0, 63))
+>IsNumeric : Symbol(IsNumeric, Decl(camelcase.ts, 0, 76))
+
+type SkipEmptyWord<Word extends string> = Word extends '' ? [] : [Word];
+>SkipEmptyWord : Symbol(SkipEmptyWord, Decl(camelcase.ts, 0, 106))
+>Word : Symbol(Word, Decl(camelcase.ts, 2, 19))
+>Word : Symbol(Word, Decl(camelcase.ts, 2, 19))
+>Word : Symbol(Word, Decl(camelcase.ts, 2, 19))
+
+type RemoveLastCharacter<Sentence extends string, Character extends string> = Sentence extends `${infer LeftSide}${Character}` ? SkipEmptyWord<LeftSide> : never;
+>RemoveLastCharacter : Symbol(RemoveLastCharacter, Decl(camelcase.ts, 2, 72))
+>Sentence : Symbol(Sentence, Decl(camelcase.ts, 3, 25))
+>Character : Symbol(Character, Decl(camelcase.ts, 3, 49))
+>Sentence : Symbol(Sentence, Decl(camelcase.ts, 3, 25))
+>LeftSide : Symbol(LeftSide, Decl(camelcase.ts, 3, 103))
+>Character : Symbol(Character, Decl(camelcase.ts, 3, 49))
+>SkipEmptyWord : Symbol(SkipEmptyWord, Decl(camelcase.ts, 0, 106))
+>LeftSide : Symbol(LeftSide, Decl(camelcase.ts, 3, 103))
+
+type WordsOptions = { splitOnNumbers?: boolean };
+>WordsOptions : Symbol(WordsOptions, Decl(camelcase.ts, 3, 161))
+>splitOnNumbers : Symbol(splitOnNumbers, Decl(camelcase.ts, 4, 21))
+
+type DefaultWordsOptions = { splitOnNumbers: true };
+>DefaultWordsOptions : Symbol(DefaultWordsOptions, Decl(camelcase.ts, 4, 49))
+>splitOnNumbers : Symbol(splitOnNumbers, Decl(camelcase.ts, 5, 28))
+
+type WordsImplementation<
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+
+    Sentence extends string,
+>Sentence : Symbol(Sentence, Decl(camelcase.ts, 7, 25))
+
+    Options extends Required<WordsOptions>,
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>WordsOptions : Symbol(WordsOptions, Decl(camelcase.ts, 3, 161))
+
+    LastCharacter extends string = '',
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+
+    CurrentWord extends string = '',
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+
+> = Sentence extends `${infer FirstCharacter}${infer RemainingCharacters}`
+>Sentence : Symbol(Sentence, Decl(camelcase.ts, 7, 25))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+
+    ? FirstCharacter extends WordSeparators
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>WordSeparators : Symbol(WordSeparators, Decl(camelcase.ts, 0, 34))
+
+        ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options>]
+>SkipEmptyWord : Symbol(SkipEmptyWord, Decl(camelcase.ts, 0, 106))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+
+        : LastCharacter extends ''
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+
+            ? WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+            : [false, true] extends [IsNumeric<LastCharacter>, IsNumeric<FirstCharacter>]
+>IsNumeric : Symbol(IsNumeric, Decl(camelcase.ts, 0, 76))
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+>IsNumeric : Symbol(IsNumeric, Decl(camelcase.ts, 0, 76))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                ? Options['splitOnNumbers'] extends true
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+
+                    ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>]
+>SkipEmptyWord : Symbol(SkipEmptyWord, Decl(camelcase.ts, 0, 106))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                    : WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                : [true, false] extends [IsNumeric<LastCharacter>, IsNumeric<FirstCharacter>]
+>IsNumeric : Symbol(IsNumeric, Decl(camelcase.ts, 0, 76))
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+>IsNumeric : Symbol(IsNumeric, Decl(camelcase.ts, 0, 76))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                    ? Options['splitOnNumbers'] extends true
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+
+                        ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>]
+>SkipEmptyWord : Symbol(SkipEmptyWord, Decl(camelcase.ts, 0, 106))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                        : WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                    : [true, true] extends [IsNumeric<LastCharacter>, IsNumeric<FirstCharacter>]
+>IsNumeric : Symbol(IsNumeric, Decl(camelcase.ts, 0, 76))
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+>IsNumeric : Symbol(IsNumeric, Decl(camelcase.ts, 0, 76))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                        ? WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                        : [true, true] extends [IsLowerCase<LastCharacter>, IsUpperCase<FirstCharacter>]
+>IsLowerCase : Symbol(IsLowerCase, Decl(camelcase.ts, 0, 50))
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+>IsUpperCase : Symbol(IsUpperCase, Decl(camelcase.ts, 0, 63))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                            ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>]
+>SkipEmptyWord : Symbol(SkipEmptyWord, Decl(camelcase.ts, 0, 106))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                            : [true, true] extends [IsUpperCase<LastCharacter>, IsLowerCase<FirstCharacter>]
+>IsUpperCase : Symbol(IsUpperCase, Decl(camelcase.ts, 0, 63))
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+>IsLowerCase : Symbol(IsLowerCase, Decl(camelcase.ts, 0, 50))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                                ? [...RemoveLastCharacter<CurrentWord, LastCharacter>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${LastCharacter}${FirstCharacter}`>]
+>RemoveLastCharacter : Symbol(RemoveLastCharacter, Decl(camelcase.ts, 2, 72))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>LastCharacter : Symbol(LastCharacter, Decl(camelcase.ts, 9, 43))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+                                : WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>RemainingCharacters : Symbol(RemainingCharacters, Decl(camelcase.ts, 12, 52))
+>Options : Symbol(Options, Decl(camelcase.ts, 8, 28))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+>FirstCharacter : Symbol(FirstCharacter, Decl(camelcase.ts, 12, 29))
+
+    : [...SkipEmptyWord<CurrentWord>];
+>SkipEmptyWord : Symbol(SkipEmptyWord, Decl(camelcase.ts, 0, 106))
+>CurrentWord : Symbol(CurrentWord, Decl(camelcase.ts, 10, 38))
+
+type Words<Sentence extends string, Options extends WordsOptions = {}> =
+>Words : Symbol(Words, Decl(camelcase.ts, 32, 38))
+>Sentence : Symbol(Sentence, Decl(camelcase.ts, 34, 11))
+>Options : Symbol(Options, Decl(camelcase.ts, 34, 35))
+>WordsOptions : Symbol(WordsOptions, Decl(camelcase.ts, 3, 161))
+
+    WordsImplementation<Sentence, ApplyDefaultOptions<WordsOptions, DefaultWordsOptions, Options>>;
+>WordsImplementation : Symbol(WordsImplementation, Decl(camelcase.ts, 5, 52))
+>Sentence : Symbol(Sentence, Decl(camelcase.ts, 34, 11))
+>ApplyDefaultOptions : Symbol(ApplyDefaultOptions, Decl(camelcase.ts, 0, 13))
+>WordsOptions : Symbol(WordsOptions, Decl(camelcase.ts, 3, 161))
+>DefaultWordsOptions : Symbol(DefaultWordsOptions, Decl(camelcase.ts, 4, 49))
+>Options : Symbol(Options, Decl(camelcase.ts, 34, 35))
+
+type CamelCaseOptions = { preserveConsecutiveUppercase?: boolean };
+>CamelCaseOptions : Symbol(CamelCaseOptions, Decl(camelcase.ts, 35, 99))
+>preserveConsecutiveUppercase : Symbol(preserveConsecutiveUppercase, Decl(camelcase.ts, 37, 25))
+
+type DefaultCamelCaseOptions = { preserveConsecutiveUppercase: true };
+>DefaultCamelCaseOptions : Symbol(DefaultCamelCaseOptions, Decl(camelcase.ts, 37, 67))
+>preserveConsecutiveUppercase : Symbol(preserveConsecutiveUppercase, Decl(camelcase.ts, 38, 32))
+
+type CamelCaseFromArray<
+>CamelCaseFromArray : Symbol(CamelCaseFromArray, Decl(camelcase.ts, 38, 70))
+
+    W extends string[],
+>W : Symbol(W, Decl(camelcase.ts, 40, 24))
+
+    Options extends Required<CamelCaseOptions>,
+>Options : Symbol(Options, Decl(camelcase.ts, 41, 23))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>CamelCaseOptions : Symbol(CamelCaseOptions, Decl(camelcase.ts, 35, 99))
+
+    OutputString extends string = '',
+>OutputString : Symbol(OutputString, Decl(camelcase.ts, 42, 47))
+
+> = W extends [infer FirstWord extends string, ...infer RemainingWords extends string[]]
+>W : Symbol(W, Decl(camelcase.ts, 40, 24))
+>FirstWord : Symbol(FirstWord, Decl(camelcase.ts, 44, 20))
+>RemainingWords : Symbol(RemainingWords, Decl(camelcase.ts, 44, 55))
+
+    ? Options['preserveConsecutiveUppercase'] extends true
+>Options : Symbol(Options, Decl(camelcase.ts, 41, 23))
+
+        ? `${Capitalize<FirstWord>}${CamelCaseFromArray<RemainingWords, Options>}`
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>FirstWord : Symbol(FirstWord, Decl(camelcase.ts, 44, 20))
+>CamelCaseFromArray : Symbol(CamelCaseFromArray, Decl(camelcase.ts, 38, 70))
+>RemainingWords : Symbol(RemainingWords, Decl(camelcase.ts, 44, 55))
+>Options : Symbol(Options, Decl(camelcase.ts, 41, 23))
+
+        : `${Capitalize<Lowercase<FirstWord>>}${CamelCaseFromArray<RemainingWords, Options>}`
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>FirstWord : Symbol(FirstWord, Decl(camelcase.ts, 44, 20))
+>CamelCaseFromArray : Symbol(CamelCaseFromArray, Decl(camelcase.ts, 38, 70))
+>RemainingWords : Symbol(RemainingWords, Decl(camelcase.ts, 44, 55))
+>Options : Symbol(Options, Decl(camelcase.ts, 41, 23))
+
+    : OutputString;
+>OutputString : Symbol(OutputString, Decl(camelcase.ts, 42, 47))
+
+export type CamelCase<Type, Options extends CamelCaseOptions = {}> = Type extends string
+>CamelCase : Symbol(CamelCase, Decl(camelcase.ts, 48, 19))
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+>Options : Symbol(Options, Decl(camelcase.ts, 50, 27))
+>CamelCaseOptions : Symbol(CamelCaseOptions, Decl(camelcase.ts, 35, 99))
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+
+    ? string extends Type
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+
+        ? Type
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+
+        : Uncapitalize<CamelCaseFromArray<
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>CamelCaseFromArray : Symbol(CamelCaseFromArray, Decl(camelcase.ts, 38, 70))
+
+            Words<Type extends Uppercase<Type> ? Lowercase<Type> : Type>,
+>Words : Symbol(Words, Decl(camelcase.ts, 32, 38))
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+
+            ApplyDefaultOptions<CamelCaseOptions, DefaultCamelCaseOptions, Options>
+>ApplyDefaultOptions : Symbol(ApplyDefaultOptions, Decl(camelcase.ts, 0, 13))
+>CamelCaseOptions : Symbol(CamelCaseOptions, Decl(camelcase.ts, 35, 99))
+>DefaultCamelCaseOptions : Symbol(DefaultCamelCaseOptions, Decl(camelcase.ts, 37, 67))
+>Options : Symbol(Options, Decl(camelcase.ts, 50, 27))
+
+        >>
+    : Type;
+>Type : Symbol(Type, Decl(camelcase.ts, 50, 22))
+
+=== main.ts ===
+import type { CamelCase } from "./camelcase";
+>CamelCase : Symbol(CamelCase, Decl(main.ts, 0, 13))
+
+// This would cause a stack overflow during variance computation
+function boom<T>(x: CamelCase<T>, y: CamelCase<T, {}>) {
+>boom : Symbol(boom, Decl(main.ts, 0, 45))
+>T : Symbol(T, Decl(main.ts, 3, 14))
+>x : Symbol(x, Decl(main.ts, 3, 17))
+>CamelCase : Symbol(CamelCase, Decl(main.ts, 0, 13))
+>T : Symbol(T, Decl(main.ts, 3, 14))
+>y : Symbol(y, Decl(main.ts, 3, 33))
+>CamelCase : Symbol(CamelCase, Decl(main.ts, 0, 13))
+>T : Symbol(T, Decl(main.ts, 3, 14))
+
+    x = y
+>x : Symbol(x, Decl(main.ts, 3, 17))
+>y : Symbol(y, Decl(main.ts, 3, 33))
+
+    y = x
+>y : Symbol(y, Decl(main.ts, 3, 33))
+>x : Symbol(x, Decl(main.ts, 3, 17))
+}
+

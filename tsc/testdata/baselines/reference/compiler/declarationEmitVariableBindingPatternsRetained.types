@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitVariableBindingPatternsRetained.ts] ////
+
+=== declarationEmitVariableBindingPatternsRetained.ts ===
+const func = () => "ok"
+>func : () => string
+>() => "ok" : () => string
+>"ok" : "ok"
+
+const b = { a: func }
+>b : { a: () => string; }
+>{ a: func } : { a: () => string; }
+>a : () => string
+>func : () => string
+
+export const { a } = b
+>a : () => string
+>b : { a: () => string; }
+
+export const { a: q } = b
+>a : any
+>q : () => string
+>b : { a: () => string; }
+

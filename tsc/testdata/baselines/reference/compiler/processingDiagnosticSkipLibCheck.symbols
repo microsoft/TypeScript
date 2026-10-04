@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/processingDiagnosticSkipLibCheck.ts] ////
+
+=== /index.ts ===
+import { foo } from 'foo';
+>foo : Symbol(foo, Decl(index.ts, 0, 8))
+
+const y = foo;
+>y : Symbol(y, Decl(index.ts, 1, 5))
+>foo : Symbol(foo, Decl(index.ts, 0, 8))
+
+=== /node_modules/foo/index.d.ts ===
+/// <reference types="cookie-session"/>
+export const foo = 1;
+>foo : Symbol(foo, Decl(index.d.ts, 1, 12))
+

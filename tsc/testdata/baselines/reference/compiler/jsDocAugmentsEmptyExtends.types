@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsDocAugmentsEmptyExtends.ts] ////
+
+=== file.js ===
+/** @augments X */
+class C extends {}
+>C : C
+
+/** @extends X */
+class D extends {}
+>D : D
+

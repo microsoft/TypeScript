@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /findAllRefsDefinition.ts ===
+// const /*FIND ALL REFS*/[|x|] = 0;
+// [|x|];
+
+
+
+// === findAllReferences ===
+// === /findAllRefsDefinition.ts ===
+// const [|x|] = 0;
+// /*FIND ALL REFS*/[|x|];

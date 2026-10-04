@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/duplicateFunctionImplementationInJsFile.ts] ////
+
+=== a.js ===
+function f() {}
+>f : () => void
+
+function f(a) {}
+>f : () => void
+>a : any
+

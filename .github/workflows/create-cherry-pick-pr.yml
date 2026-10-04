@@ -34,6 +34,7 @@ run-name: ${{ github.workflow }}${{ inputs.distinct_id && format(' (bot run {0})
 
 permissions:
   contents: read
+  id-token: write
 
 # Ensure scripts are run with pipefail. See:
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
@@ -44,16 +45,52 @@ defaults:
 jobs:
   open-pr:
     runs-on: ubuntu-latest
+    environment:
+      name: azure
+      deployment: false
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
           fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
-          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-
-      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: ./.github/actions/setup-go
+      - name: Check out target branch
+        env:
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+        run: git switch --detach "origin/$TARGET_BRANCH"
+      - run: npm ci
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Create GitHub App token
+        id: app-token
+        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        with:
+          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
+          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
+          owner: microsoft
+          repositories: TypeScript
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
+      - name: Configure git for GitHub App token
+        shell: bash
+        env:
+          GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
+          echo "::add-mask::$basic_auth"
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         id: open-pr
         env:
           PR: ${{ inputs.pr }}
@@ -64,7 +101,7 @@ jobs:
           STATUS_COMMENT: ${{ inputs.status_comment }}
         with:
           retries: 3
-          github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          github-token: ${{ steps.app-token.outputs.token }}
           result-encoding: string
           script: |
             const {
@@ -82,15 +119,16 @@ jobs:
               pull_number: +PR,
             });
 
-            if (!pr.data.merge_commit_sha) throw new Error("No merge commit sha found");
+            if (!pr.data.merged || !pr.data.merge_commit_sha) {
+              throw new Error(`PR #${PR} has not been merged`);
+            }
 
             const pickBranch = `cherry-pick/${PR}/${TARGET_BRANCH}`;
 
             const title = `🤖 Pick PR #${PR} (${pr.data.title.substring(0, 35)}${pr.data.title.length > 35 ? "..." : ""}) into ${TARGET_BRANCH}`;
 
-            await exec.exec("git", ["config", "user.email", "typescriptbot@microsoft.com"]);
-            await exec.exec("git", ["config", "user.name", "TypeScript Bot"]);
-            await exec.exec("git", ["switch", "--detach", `origin/${TARGET_BRANCH}`]);
+            await exec.exec("git", ["config", "user.email", "290192711+typescript-automation[bot]@users.noreply.github.com"]);
+            await exec.exec("git", ["config", "user.name", "typescript-automation[bot]"]);
             await exec.exec("git", ["switch", "-c", pickBranch]);
 
             let updatedBaselinesMessage = "";
@@ -99,29 +137,38 @@ jobs:
             } catch (e) {
               console.log(e);
 
-              // The cherry-pick failed. If all of the conflicts are in tests/baselines,
+              // The cherry-pick failed. If all conflicts are compiler baselines,
               // try to run the tests and accept the new baselines.
 
-              await exec.exec("git", ["add", "tests/baselines"]);
-              // This will fail if any other files were modified.
+              const conflictsOutput = await exec.getExecOutput("git", ["diff", "--name-only", "--diff-filter=U"]);
+              const conflictedFiles = conflictsOutput.stdout.trim().split("\n").filter(Boolean);
+              const baselineDirs = ["tsc/testdata/baselines", "tests/baselines"];
+              if (!conflictedFiles.length || conflictedFiles.some(file => !baselineDirs.some(dir => file.startsWith(`${dir}/`)))) {
+                throw new Error(`Cherry-pick has non-baseline conflicts:\n${conflictedFiles.join("\n")}`);
+              }
+
+              await exec.exec("git", ["add", "--all", "--", ...conflictedFiles]);
               await exec.exec("git", ["-c", "core.editor=true", "cherry-pick", "--continue"]);
 
-              await exec.exec("npm", ["ci"]);
-
               try {
-                await exec.exec("npm", ["test", "--", "--no-lint"]);
+                await exec.exec("npx", ["hereby", "test"]);
               } catch {
                 // Expected to fail.
               }
 
               await exec.exec("npx", ["hereby", "baseline-accept"]);
-              await exec.exec("git", ["add", "tests/baselines"]);
-              await exec.exec("git", ["commit", "-m", "Update baselines"]);
+              await exec.exec("npx", ["hereby", "test"]);
+              const existingBaselineDirs = baselineDirs.filter(dir => conflictedFiles.some(file => file.startsWith(`${dir}/`)));
+              await exec.exec("git", ["add", "--all", "--", ...existingBaselineDirs]);
+              const staged = await exec.getExecOutput("git", ["diff", "--cached", "--quiet"], { ignoreReturnCode: true });
+              if (staged.exitCode !== 0) {
+                await exec.exec("git", ["commit", "-m", "Update baselines"]);
+              }
 
               updatedBaselinesMessage = " This involved updating baselines; please check the diff.";
             }
 
-            await exec.exec("git", ["push", "--force", "--set-upstream", "origin", pickBranch]);
+            await exec.exec("git", ["push", "--force-with-lease", "--set-upstream", "origin", pickBranch]);
 
             const existingPulls = await github.rest.pulls.list({
               owner: context.repo.owner,
@@ -152,11 +199,12 @@ jobs:
                 assignees: ["DanielRosenwasser"],
               });
 
+              const reviewers = ["DanielRosenwasser", REQUESTING_USER].filter(Boolean);
               await github.rest.pulls.requestReviewers({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: newPr.data.number,
-                reviewers: ["DanielRosenwasser", REQUESTING_USER],
+                reviewers,
               });
 
               commentBody = `I've created #${newPr.data.number} for you.${updatedBaselinesMessage}`;
@@ -177,12 +225,12 @@ jobs:
 
             return commentBody;
 
-      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@08bcbbf253fd6bc533dd8b9ab47a58582be57fbe # master
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
           success_comment: ${{ steps.open-pr.outputs.result }}
           failure_comment: 'I was unable to cherry-pick this PR.'
-          github_token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          github_token: ${{ steps.app-token.outputs.token }}
           distinct_id: ${{ inputs.distinct_id }}
           source_issue: ${{ inputs.source_issue }}
           requesting_user: ${{ inputs.requesting_user }}

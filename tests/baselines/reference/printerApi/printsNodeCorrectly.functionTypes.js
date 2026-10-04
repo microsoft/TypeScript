@@ -1,1 +1,0 @@
-[(args) => any, <T>(args) => any, (...args) => any, (args?) => any, (args: any) => any, ({}) => any]

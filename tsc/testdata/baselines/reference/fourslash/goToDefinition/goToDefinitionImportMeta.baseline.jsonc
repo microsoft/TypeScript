@@ -1,0 +1,4 @@
+// === goToDefinition ===
+// === /foo.ts ===
+// /// <reference path='./bar.d.ts' />
+// import.me/*GOTO DEF*/ta;

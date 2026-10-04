@@ -1,0 +1,298 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsInternalModuleAlias.ts ===
+// namespace m.m1 {
+//     export class c {
+//     }
+// }
+// namespace m2 {
+//     import a1 = m;
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a1.m1.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     import a2 = m.m1;
+//            ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a2.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export import a3 = m;
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a3.m1.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export import a4 = m.m1;
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a4.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 72,
+      "LSPosition": {
+        "line": 5,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 11
+        },
+        "end": {
+          "line": 5,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 88,
+      "LSPosition": {
+        "line": 6,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 8
+        },
+        "end": {
+          "line": 6,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 110,
+      "LSPosition": {
+        "line": 7,
+        "character": 11
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m.m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 11
+        },
+        "end": {
+          "line": 7,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 129,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m.m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 8
+        },
+        "end": {
+          "line": 8,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 155,
+      "LSPosition": {
+        "line": 9,
+        "character": 18
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 18
+        },
+        "end": {
+          "line": 9,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 171,
+      "LSPosition": {
+        "line": 10,
+        "character": 8
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 8
+        },
+        "end": {
+          "line": 10,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 11,
+        "character": 18
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m.m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 18
+        },
+        "end": {
+          "line": 11,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 219,
+      "LSPosition": {
+        "line": 12,
+        "character": 8
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) namespace m.m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 8
+        },
+        "end": {
+          "line": 12,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

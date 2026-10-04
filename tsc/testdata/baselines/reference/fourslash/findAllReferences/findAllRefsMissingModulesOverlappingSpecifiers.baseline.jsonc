@@ -1,0 +1,13 @@
+// === findAllReferences ===
+// === /findAllRefsMissingModulesOverlappingSpecifiers.ts ===
+// // https://github.com/microsoft/TypeScript/issues/5551
+// import { resolve/*FIND ALL REFS*/ as resolveUrl } from "idontcare";
+// import { resolve } from "whatever";
+
+
+
+// === findAllReferences ===
+// === /findAllRefsMissingModulesOverlappingSpecifiers.ts ===
+// // https://github.com/microsoft/TypeScript/issues/5551
+// import { resolve as resolveUrl } from "idontcare";
+// import { [|resolve|]/*FIND ALL REFS*/ } from "whatever";

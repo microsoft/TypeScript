@@ -1,0 +1,89 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityClassWithMixinBase.ts ===
+// 
+// class Base {}
+// 
+// declare const Mixin: new () => Base & { mixed: string };
+// 
+// class Derived extends Mixin {}
+//       ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class Derived extends Mixin {
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class Derived
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 87,
+      "LSPosition": {
+        "line": 5,
+        "character": 13
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nclass Derived\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 87,
+      "LSPosition": {
+        "line": 5,
+        "character": 13
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nclass Derived extends Mixin {\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

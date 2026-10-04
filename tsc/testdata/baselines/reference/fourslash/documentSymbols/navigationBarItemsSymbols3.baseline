@@ -1,0 +1,10 @@
+// === Document Symbols ===
+// === /navigationBarItemsSymbols3.ts ===
+// <|enum [|{| name: E, kind: Enum |}E|] {
+//     // No nav bar entry for this
+//     <|[|{| name: [Symbol.isRegExp], kind: EnumMember |}[Symbol.isRegExp]|] = 0|>
+// }|>
+
+// === Details ===
+(Enum) E
+  (EnumMember) [Symbol.isRegExp]

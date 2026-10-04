@@ -1,0 +1,28 @@
+npm-install.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+npm-install.js(4,49): error TS7006: Parameter 'next' implicitly has an 'any' type.
+npm-install.js(6,6): error TS7006: Parameter 'args' implicitly has an 'any' type.
+npm-install.js(11,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== npm-install.js (4 errors) ====
+    function Installer () {
+        this.args = 0
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    Installer.prototype.loadArgMetadata = function (next) {
+                                                    ~~~~
+!!! error TS7006: Parameter 'next' implicitly has an 'any' type.
+        // ArrowFunction isn't treated as a this-container
+        (args) => {
+         ~~~~
+!!! error TS7006: Parameter 'args' implicitly has an 'any' type.
+            this.args = 'hi'
+            this.newProperty = 1
+        }
+    }
+    var i = new Installer()
+            ~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    i.newProperty = i.args // ok, number ==> number | undefined
+    

@@ -1,0 +1,11 @@
+foo.js(1,13): error TS2749: 'Image' refers to a value, but is being used as a type here. Did you mean 'typeof Image'?
+
+
+==== foo.js (1 errors) ====
+    /** @param {Image} image */
+                ~~~~~
+!!! error TS2749: 'Image' refers to a value, but is being used as a type here. Did you mean 'typeof Image'?
+    function process(image) {
+        return new image(1, 1)
+    }
+    

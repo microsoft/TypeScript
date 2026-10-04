@@ -1,0 +1,78 @@
+privateNameInTypeQuery.ts(6,5): error TS6133: '#c' is declared but its value is never read.
+privateNameInTypeQuery.ts(10,9): error TS6133: '#d' is declared but its value is never read.
+privateNameInTypeQuery.ts(16,15): error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+privateNameInTypeQuery.ts(22,28): error TS2339: Property '#a' does not exist on type 'typeof C1'.
+privateNameInTypeQuery.ts(28,39): error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+privateNameInTypeQuery.ts(33,51): error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+privateNameInTypeQuery.ts(37,14): error TS2693: 'any' only refers to a type, but is being used as a value here.
+privateNameInTypeQuery.ts(37,20): error TS1003: Identifier expected.
+privateNameInTypeQuery.ts(41,14): error TS2693: 'never' only refers to a type, but is being used as a value here.
+privateNameInTypeQuery.ts(41,22): error TS1003: Identifier expected.
+
+
+==== privateNameInTypeQuery.ts (10 errors) ====
+    export class C1 {
+        #a = 1;
+    
+        static #b = "";
+    
+        #c() {
+        ~~
+!!! error TS6133: '#c' is declared but its value is never read.
+            return 1 as const;
+        }
+    
+        get #d() {
+            ~~
+!!! error TS6133: '#d' is declared but its value is never read.
+            return new Date();
+        }
+    
+        ["#a"] = true;
+    
+        a: typeof this.#a = 1;
+                  ~~~~~~~
+!!! error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+    
+        test1(a: C1) {
+            const b: typeof a.#a = 1;
+            const c: typeof C1.#b = "";
+    
+            type D = typeof C1.#a;
+                               ~~
+!!! error TS2339: Property '#a' does not exist on type 'typeof C1'.
+            var d: D = 1;
+    
+            return [b, c, d] as const;
+        }
+    
+        test2<T extends C1>(a: T): typeof a.#a {
+                                          ~~~~
+!!! error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+            const b: typeof a.#a = a.#a;
+            return b;
+        }
+    
+        test3<T extends C1 | { a: string }>(): typeof this.#a {
+                                                      ~~~~~~~
+!!! error TS7080: Declaration emit elides private members, but '#a' refers to a private member. Write an explicit type here.
+            return undefined as any;
+        }
+    
+        test4(): any.#a {
+                 ~~~
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
+                       
+!!! error TS1003: Identifier expected.
+            return "";
+        }
+    
+        test5(): never.#a {
+                 ~~~~~
+!!! error TS2693: 'never' only refers to a type, but is being used as a value here.
+                         
+!!! error TS1003: Identifier expected.
+            throw new Error();
+        }
+    }
+    

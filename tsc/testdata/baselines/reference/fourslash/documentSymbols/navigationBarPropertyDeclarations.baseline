@@ -1,0 +1,58 @@
+// === Document Symbols ===
+// === /navigationBarPropertyDeclarations.ts ===
+// <|class [|{| name: A, kind: Class |}A|] {
+//     <|public [|{| name: A1, kind: Property |}A1|] = class {
+//         <|public [|{| name: x, kind: Property |}x|] = 1;|>
+//         <|private [|{| name: y, kind: Method |}y|]() {}|>
+//         <|protected [|{| name: z, kind: Method |}z|]() {}|>
+//     }|>
+// 
+//     <|public [|{| name: A2, kind: Property |}A2|] = {
+//         <|[|{| name: x, kind: Property |}x|]: 1|>,
+//         <|[|{| name: y, kind: Method |}y|]() {}|>,
+//         <|[|{| name: z, kind: Method |}z|]() {}|>
+//     }|>
+// 
+//     <|public [|{| name: A3, kind: Property |}A3|] = function () {}|>
+//     <|public [|{| name: A4, kind: Property |}A4|] = () => {}|>
+//     <|public [|{| name: A5, kind: Property |}A5|] = 1;|>
+//     <|public [|{| name: A6, kind: Property |}A6|] = "A6";|>
+// 
+//     <|public [|{| name: "A7", kind: Property |}["A7"]|] = class {
+//         <|public [|{| name: x, kind: Property |}x|] = 1;|>
+//         <|private [|{| name: y, kind: Method |}y|]() {}|>
+//         <|protected [|{| name: z, kind: Method |}z|]() {}|>
+//     }|>
+// 
+//     <|public [|{| name: 1, kind: Property |}[1]|] = {
+//         <|[|{| name: x, kind: Property |}x|]: 1|>,
+//         <|[|{| name: y, kind: Method |}y|]() {}|>,
+//         <|[|{| name: z, kind: Method |}z|]() {}|>
+//     }|>
+// 
+//     <|public [|{| name: [1 + 1], kind: Property |}[1 + 1]|] = 1;|>
+// }|>
+
+// === Details ===
+(Class) A
+  (Property) A1
+    (Property) x
+    (Method) y
+    (Method) z
+  (Property) A2
+    (Property) x
+    (Method) y
+    (Method) z
+  (Property) A3
+  (Property) A4
+  (Property) A5
+  (Property) A6
+  (Property) "A7"
+    (Property) x
+    (Method) y
+    (Method) z
+  (Property) 1
+    (Property) x
+    (Method) y
+    (Method) z
+  (Property) [1 + 1]

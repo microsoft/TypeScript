@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/parenthesizedAsyncArrowFunction.ts] ////
+
+=== parenthesizedAsyncArrowFunction.ts ===
+// Repro from #20096
+
+let foo = (async bar => bar);
+>foo : (bar: any) => Promise<any>
+>(async bar => bar) : (bar: any) => Promise<any>
+>async bar => bar : (bar: any) => Promise<any>
+>bar : any
+>bar : any
+

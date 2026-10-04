@@ -1,0 +1,82 @@
+// === Inlay Hints ===
+const p = (a: Foo[]) => a;
+       ^
+{
+  "position": {
+    "line": 1,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsIdentifierLocation.ts",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 11
+          },
+          "end": {
+            "line": 1,
+            "character": 12
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "Foo",
+      "location": {
+        "uri": "file:///inlayHintsIdentifierLocation.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 13
+          }
+        }
+      }
+    },
+    {
+      "value": "[]"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "Foo",
+      "location": {
+        "uri": "file:///inlayHintsIdentifierLocation.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 13
+          }
+        }
+      }
+    },
+    {
+      "value": "[]"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

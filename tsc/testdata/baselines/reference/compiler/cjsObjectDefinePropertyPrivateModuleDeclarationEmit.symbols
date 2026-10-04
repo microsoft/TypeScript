@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/cjsObjectDefinePropertyPrivateModuleDeclarationEmit.ts] ////
+
+=== /index.cjs ===
+Object.defineProperty(exports, "api", { value: require("pkg") });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol(exports, Decl(index.cjs, 0, 0))
+>"api" : Symbol("api", Decl(index.cjs, 0, 0))
+>value : Symbol(value, Decl(index.cjs, 0, 39))
+>require : Symbol(require)
+
+=== /node_modules/@types/pkg/index.d.ts ===
+interface Private {}
+>Private : Symbol(Private, Decl(index.d.ts, 0, 0))
+
+declare const obj: { fn(x: Private): void };
+>obj : Symbol(obj, Decl(index.d.ts, 1, 13))
+>fn : Symbol(fn, Decl(index.d.ts, 1, 20))
+>x : Symbol(x, Decl(index.d.ts, 1, 24))
+>Private : Symbol(Private, Decl(index.d.ts, 0, 0))
+
+export = obj;
+>obj : Symbol(obj, Decl(index.d.ts, 1, 13))
+

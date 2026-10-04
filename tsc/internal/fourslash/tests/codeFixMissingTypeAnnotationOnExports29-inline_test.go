@@ -1,0 +1,33 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports29_inline(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+function getString() {
+    return ""
+}
+export const exp = {
+    prop: getString()
+};`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add satisfies and an inline type assertion with 'string'",
+		NewFileContent: `function getString() {
+    return ""
+}
+export const exp = {
+    prop: getString() satisfies string as string
+};`,
+		Index: 1,
+	})
+}

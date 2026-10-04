@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/staticInterfaceAssignmentCompat.ts] ////
+
+=== staticInterfaceAssignmentCompat.ts ===
+class Shape {
+>Shape : Shape
+
+    static create(): Shape {
+>create : () => Shape
+
+        return new Shape();
+>new Shape() : Shape
+>Shape : typeof Shape
+    }
+}
+
+interface ShapeFactory {
+    create(): Shape;
+>create : () => Shape
+}
+
+var x: ShapeFactory = Shape;
+>x : ShapeFactory
+>Shape : typeof Shape
+

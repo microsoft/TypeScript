@@ -1,0 +1,7 @@
+a.ts(1,3): error TS1109: Expression expected.
+
+
+==== a.ts (1 errors) ====
+    do
+      
+!!! error TS1109: Expression expected.

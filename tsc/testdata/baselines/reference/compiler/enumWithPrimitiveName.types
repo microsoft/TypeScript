@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/enumWithPrimitiveName.ts] ////
+
+=== enumWithPrimitiveName.ts ===
+enum string { }
+>string : string
+
+enum number { }
+>number : number
+
+enum any { }
+>any : any
+

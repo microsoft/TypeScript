@@ -1,0 +1,13 @@
+// === findRenameLocations ===
+// === /index.ts ===
+// import { /*START PREFIX*/Foo as /*RENAME*/[|FooRENAME|] } from "foo";
+// declare const f: [|FooRENAME|];
+
+
+
+// === findRenameLocations ===
+// @useAliasesForRename: true
+
+// === /index.ts ===
+// import { /*START PREFIX*/Foo as /*RENAME*/[|FooRENAME|] } from "foo";
+// declare const f: [|FooRENAME|];

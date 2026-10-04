@@ -1,0 +1,52 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassImplementInterfaceHeritageClauseAlreadyHaveMember(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: false
+class Base {
+    foo: number;
+}
+
+class D extends Base {
+    bar: number;
+}
+
+interface I {
+    foo: number;
+    bar: number;
+    baz: number;
+}
+
+class C extends D implements I { }`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'I'",
+		NewFileContent: `class Base {
+    foo: number;
+}
+
+class D extends Base {
+    bar: number;
+}
+
+interface I {
+    foo: number;
+    bar: number;
+    baz: number;
+}
+
+class C extends D implements I {
+    baz: number;
+}`,
+		Index: 0,
+	})
+}

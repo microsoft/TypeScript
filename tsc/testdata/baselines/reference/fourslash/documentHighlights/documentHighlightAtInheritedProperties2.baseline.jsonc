@@ -1,0 +1,15 @@
+// === documentHighlights ===
+// === /file1.ts ===
+// class class1 extends class1 {
+//    /*HIGHLIGHTS*/[|doStuff|]() { }
+//    propName: string;
+// }
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    /*HIGHLIGHTS*/[|propName|]: string;
+// }

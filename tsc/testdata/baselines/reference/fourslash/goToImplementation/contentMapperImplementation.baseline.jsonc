@@ -1,0 +1,83 @@
+// === goToImplementation ===
+// === /ProfileCard.vue ===
+// --- (line: 4) skipped ---
+// </template>
+// <script lang="ts">
+// import * as models from "./models";
+// export interface Local/*GOTO IMPL*/Shape { area: number }
+// <|export class [|LocalSquare|] implements LocalShape { area = 1 }|>
+// export class ExternalSquare extends models.ExternalShape {}
+// const localShape: LocalShape = new LocalSquare();
+// models.ExternalShape;
+// </script>
+// 
+
+
+
+// === goToImplementation ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <p>{{ local/*GOTO IMPL*/Shape.area }}</p>
+//   <span class="shape">Shape</span>
+// </template>
+// <script lang="ts">
+// import * as models from "./models";
+// export interface LocalShape { area: number }
+// export class LocalSquare implements LocalShape { area = 1 }
+// export class ExternalSquare extends models.ExternalShape {}
+// <|const [|localShape|]: LocalShape = new LocalSquare();|>
+// models.ExternalShape;
+// </script>
+// 
+
+
+
+// === goToImplementation ===
+// === /ProfileCard.vue ===
+// --- (line: 5) skipped ---
+// <script lang="ts">
+// import * as models from "./models";
+// export interface LocalShape { area: number }
+// <|export class [|LocalSquare|] implements LocalShape { area = 1 }|>
+// export class ExternalSquare extends models.ExternalShape {}
+// const localShape: LocalShape = new LocalSquare();
+// models.ExternalShape;
+// </script>
+// 
+
+// === /main.ts ===
+// import { LocalShape } from "./ProfileCard.vue";
+// let shape: Local/*GOTO IMPL*/Shape;
+// 
+
+
+
+// === goToImplementation ===
+// === /ProfileCard.vue ===
+// --- (line: 6) skipped ---
+// import * as models from "./models";
+// export interface LocalShape { area: number }
+// export class LocalSquare implements LocalShape { area = 1 }
+// <|export class [|ExternalSquare|] extends models.ExternalShape {}|>
+// const localShape: LocalShape = new LocalSquare();
+// models.External/*GOTO IMPL*/Shape;
+// </script>
+// 
+
+// === /models.ts ===
+// <|export class [|ExternalShape|] { area = 2 }|>
+// 
+
+
+
+// === goToImplementation ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <p>{{ localShape.area }}</p>
+//   <span class="shape/*GOTO IMPL*/">Shape</span>
+// </template>
+// <script lang="ts">
+// import * as models from "./models";
+// --- (line: 8) skipped ---

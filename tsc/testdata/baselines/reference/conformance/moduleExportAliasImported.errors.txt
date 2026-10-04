@@ -1,0 +1,16 @@
+bug28014.js(1,9): error TS2339: Property 'version' does not exist on type '() => void'.
+bug28014.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== bug28014.js (2 errors) ====
+    exports.version = 1
+            ~~~~~~~
+!!! error TS2339: Property 'version' does not exist on type '() => void'.
+    function alias() { }
+    module.exports = alias
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    
+==== importer.js (0 errors) ====
+    import('./bug28014')
+    

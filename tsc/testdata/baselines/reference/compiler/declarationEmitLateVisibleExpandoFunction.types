@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/declarationEmitLateVisibleExpandoFunction.ts] ////
+
+=== mainTs.ts ===
+declare function wrap<T>(component: T): T;
+>wrap : <T>(component: T) => T
+>component : T
+
+function FunctionComponent() { return null; }
+>FunctionComponent : { (): null; propTypes: { num: number; }; }
+
+FunctionComponent.propTypes = { num: 0 };
+>FunctionComponent.propTypes = { num: 0 } : { num: number; }
+>FunctionComponent.propTypes : { num: number; }
+>FunctionComponent : { (): null; propTypes: { num: number; }; }
+>propTypes : { num: number; }
+>{ num: 0 } : { num: number; }
+>num : number
+>0 : 0
+
+const ArrowComponent = () => null;
+>ArrowComponent : { (): null; propTypes: { num: number; }; }
+>() => null : { (): null; propTypes: { num: number; }; }
+
+ArrowComponent.propTypes = { num: 0 };
+>ArrowComponent.propTypes = { num: 0 } : { num: number; }
+>ArrowComponent.propTypes : { num: number; }
+>ArrowComponent : { (): null; propTypes: { num: number; }; }
+>propTypes : { num: number; }
+>{ num: 0 } : { num: number; }
+>num : number
+>0 : 0
+
+function UnusedComponent() { return null; }
+>UnusedComponent : { (): null; propTypes: { num: number; }; }
+
+UnusedComponent.propTypes = { num: 0 };
+>UnusedComponent.propTypes = { num: 0 } : { num: number; }
+>UnusedComponent.propTypes : { num: number; }
+>UnusedComponent : { (): null; propTypes: { num: number; }; }
+>propTypes : { num: number; }
+>{ num: 0 } : { num: number; }
+>num : number
+>0 : 0
+
+export const WrappedFunction = wrap(FunctionComponent);
+>WrappedFunction : { (): null; propTypes: { num: number; }; }
+>wrap(FunctionComponent) : { (): null; propTypes: { num: number; }; }
+>wrap : <T>(component: T) => T
+>FunctionComponent : { (): null; propTypes: { num: number; }; }
+
+export const WrappedArrow = wrap(ArrowComponent);
+>WrappedArrow : { (): null; propTypes: { num: number; }; }
+>wrap(ArrowComponent) : { (): null; propTypes: { num: number; }; }
+>wrap : <T>(component: T) => T
+>ArrowComponent : { (): null; propTypes: { num: number; }; }
+
+=== mainJs.js ===
+/**
+ * @template T
+ * @param {T} component
+ * @returns {T}
+ */
+function wrap(component) { return component; }
+>wrap : <T>(component: T) => T
+>component : T
+>component : T
+
+function FunctionComponent() { return null; }
+>FunctionComponent : { (): null; propTypes: { num: number; }; }
+
+FunctionComponent.propTypes = { num: 0 };
+>FunctionComponent.propTypes = { num: 0 } : { num: number; }
+>FunctionComponent.propTypes : { num: number; }
+>FunctionComponent : { (): null; propTypes: { num: number; }; }
+>propTypes : { num: number; }
+>{ num: 0 } : { num: number; }
+>num : number
+>0 : 0
+
+export const WrappedFunction = wrap(FunctionComponent);
+>WrappedFunction : { (): null; propTypes: { num: number; }; }
+>wrap(FunctionComponent) : { (): null; propTypes: { num: number; }; }
+>wrap : <T>(component: T) => T
+>FunctionComponent : { (): null; propTypes: { num: number; }; }
+

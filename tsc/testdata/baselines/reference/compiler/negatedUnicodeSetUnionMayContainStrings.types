@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/negatedUnicodeSetUnionMayContainStrings.ts] ////
+
+=== negatedUnicodeSetUnionMayContainStrings.ts ===
+const a = /[^\q{xy}b]/v;
+>a : RegExp
+>/[^\q{xy}b]/v : RegExp
+
+const b = /[^b\q{xy}]/v;
+>b : RegExp
+>/[^b\q{xy}]/v : RegExp
+
+const c = /[^[b\q{xy}c]]/v;
+>c : RegExp
+>/[^[b\q{xy}c]]/v : RegExp
+

@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/exportAssignmentMerging6.ts] ////
+
+=== b.js ===
+const a = require("./a");
+>a : typeof a
+>require("./a") : typeof a
+>require : any
+>"./a" : "./a"
+
+const c1 = a.a;
+>c1 : any
+>a.a : any
+>a : typeof a
+>a : any
+
+const c2 = a.b;
+>c2 : any
+>a.b : any
+>a : typeof a
+>b : any
+
+/** @type {a.Foo} */
+let v1 = { x: "test" };
+>v1 : a.Foo
+>{ x: "test" } : { x: string; }
+>x : string
+>"test" : "test"
+
+=== a.js ===
+/**
+ * @typedef {{x: string}} Foo
+ */
+export const x = 1; // Causes error
+>x : 1
+>1 : 1
+
+module.exports = { a: 1, b: "hello" };
+>module.exports = { a: 1, b: "hello" } : { a: number; b: string; }
+>module.exports : any
+>module : any
+>exports : any
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+

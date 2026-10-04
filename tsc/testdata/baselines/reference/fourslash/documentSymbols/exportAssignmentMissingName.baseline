@@ -1,0 +1,6 @@
+// === Document Symbols ===
+// === /exportAssignmentMissingName.ts ===
+// <|[|{| name: export=, kind: Variable |}export =|]|> 
+
+// === Details ===
+(Variable) export=

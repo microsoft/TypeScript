@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/declarationEmitPrivateNameInTypeQuery.ts] ////
+
+=== declarationEmitPrivateNameInTypeQuery.ts ===
+export class C1 {
+>C1 : C1
+
+    #a = 1;
+>#a : number
+>1 : 1
+
+    static #b = "";
+>#b : string
+>"" : ""
+
+    #c() {
+>#c : () => 1
+
+        return 1 as const;
+>1 as const : 1
+>1 : 1
+    }
+
+    get #d() {
+>#d : Date
+
+        return new Date();
+>new Date() : Date
+>Date : DateConstructor
+    }
+
+    ["#a"] = true;
+>["#a"] : boolean
+>"#a" : "#a"
+>true : true
+
+    a: typeof this.#a = 1;
+>a : number
+>this.#a : number
+>this : this
+>1 : 1
+
+    test1(a: C1) {
+>test1 : (a: C1) => readonly [number, string]
+>a : C1
+
+        const b: typeof a.#a = 1;
+>b : number
+>a.#a : number
+>a : C1
+>1 : 1
+
+        const c: typeof C1.#b = "";
+>c : string
+>C1.#b : string
+>C1 : typeof C1
+>"" : ""
+
+        return [b, c] as const;
+>[b, c] as const : readonly [number, string]
+>[b, c] : readonly [number, string]
+>b : number
+>c : string
+    }
+
+}
+
+export class C2 {
+>C2 : C2
+
+    #a = 1;
+>#a : number
+>1 : 1
+
+    static #b = "";
+>#b : string
+>"" : ""
+
+    public prop!: typeof C2.#b;
+>prop : string
+>C2.#b : string
+>C2 : typeof C2
+
+    test1() {
+>test1 : () => number
+
+        class C {
+>C : C
+
+            test1(a: C2): typeof a.#a {
+>test1 : (a: C2) => typeof a.#a
+>a : C2
+>a.#a : number
+>a : C2
+
+                return 1;
+>1 : 1
+            }
+        }
+        return new C().test1(this);
+>new C().test1(this) : number
+>new C().test1 : (a: C2) => typeof a.#a
+>new C() : C
+>C : typeof C
+>test1 : (a: C2) => typeof a.#a
+>this : this
+    }
+}

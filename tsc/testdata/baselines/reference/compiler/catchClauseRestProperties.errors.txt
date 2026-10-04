@@ -1,0 +1,12 @@
+catchClauseRestProperties.ts(3,15): error TS2700: Rest types may only be created from object types.
+
+
+==== catchClauseRestProperties.ts (1 errors) ====
+    try {
+      // ...
+    } catch ({ ...rest }) {
+                  ~~~~
+!!! error TS2700: Rest types may only be created from object types.
+      // ...
+    }
+    

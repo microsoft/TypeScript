@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/jsxImportSourceCheckJs.ts] ////
+
+=== /node_modules/preact/jsx-runtime/index.d.ts ===
+export namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(index.d.ts, 0, 22))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 1, 24))
+
+        div: {};
+>div : Symbol(IntrinsicElements.div, Decl(index.d.ts, 2, 33))
+    }
+}
+
+=== /index.js ===
+<div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 2, 33))
+

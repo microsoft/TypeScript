@@ -1,0 +1,230 @@
+// === QuickInfo ===
+=== /quickInfoForJSDocWithHttpLinks.js ===
+// /** @typedef {number} https://wat */
+//                       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type https = number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// /**
+// * @typedef {Object} Oops
+// * @property {number} https://wass
+//                      ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) https: number
+// | ```
+// | ://wass
+// | ----------------------------------------------------------------------
+// */
+// 
+// 
+// /** @callback http://vad */
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type http = () => any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// /** @see https://hvad */
+// var see1 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var see1: boolean
+// | ```
+// | 
+// | 
+// | *@see* — https://hvad
+// | ----------------------------------------------------------------------
+// 
+// /** @see {@link https://hva} */
+// var see2 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var see2: boolean
+// | ```
+// | 
+// | 
+// | *@see* — [https://hva](https://hva)
+// | ----------------------------------------------------------------------
+// 
+// /** {@link https://hvaD} */
+// var see3 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var see3: boolean
+// | ```
+// | [https://hvaD](https://hvaD)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 0,
+        "character": 22
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype https = number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 22
+        },
+        "end": {
+          "line": 0,
+          "character": 27
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 88,
+      "LSPosition": {
+        "line": 4,
+        "character": 21
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) https: number\n```\n://wass"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 21
+        },
+        "end": {
+          "line": 4,
+          "character": 26
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 120,
+      "LSPosition": {
+        "line": 8,
+        "character": 14
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype http = () => any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 14
+        },
+        "end": {
+          "line": 8,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 164,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar see1: boolean\n```\n\n\n*@see* — https://hvad"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 213,
+      "LSPosition": {
+        "line": 14,
+        "character": 4
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar see2: boolean\n```\n\n\n*@see* — [https://hva](https://hva)"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 4
+        },
+        "end": {
+          "line": 14,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 258,
+      "LSPosition": {
+        "line": 17,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar see3: boolean\n```\n[https://hvaD](https://hvaD)"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 8
+        }
+      }
+    }
+  }
+]

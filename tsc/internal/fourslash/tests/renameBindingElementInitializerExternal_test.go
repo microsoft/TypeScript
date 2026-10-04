@@ -1,0 +1,30 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestRenameBindingElementInitializerExternal(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+[|const [|{| "contextRangeIndex": 0 |}external|] = true;|]
+
+function f({
+    lvl1 = [|external|],
+    nested: { lvl2 = [|external|]},
+    oldName: newName = [|external|]
+}) {}
+
+const {
+    lvl1 = [|external|],
+    nested: { lvl2 = [|external|]},
+    oldName: newName = [|external|]
+} = obj;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "external")
+}

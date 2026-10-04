@@ -1,0 +1,89 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespaceInterfaceHeritageCrash.ts ===
+// 
+// declare namespace NS {
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace NS {
+// |     interface Config extends Record<string, any> {
+// |     }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace NS
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     interface Config extends Record<string, any> {}
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace NS\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace NS {\n    interface Config extends Record<string, any> {\n    }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 20
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

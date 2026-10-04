@@ -1,0 +1,12 @@
+usingDeclarationWithNewline.ts(1,1): error TS2304: Cannot find name 'using'.
+usingDeclarationWithNewline.ts(2,1): error TS2304: Cannot find name 'identifier'.
+
+
+==== usingDeclarationWithNewline.ts (2 errors) ====
+    using
+    ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+    identifier;
+    ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'identifier'.
+    

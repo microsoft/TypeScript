@@ -1,0 +1,31 @@
+other.js(2,11): error TS2503: Cannot find namespace 'Ns'.
+other.js(7,11): error TS2503: Cannot find namespace 'Ns'.
+
+
+==== prototypePropertyAssignmentMergeAcrossFiles2.js (0 errors) ====
+    var Ns = {}
+    Ns.One = function() {};
+    Ns.Two = function() {};
+    
+    Ns.One.prototype = {
+      ok() {},
+    };
+    Ns.Two.prototype = {
+    }
+    
+==== other.js (2 errors) ====
+    /**
+     * @type {Ns.One}
+              ~~
+!!! error TS2503: Cannot find namespace 'Ns'.
+     */
+    var one = undefined;
+    one.wat;
+    /**
+     * @type {Ns.Two}
+              ~~
+!!! error TS2503: Cannot find namespace 'Ns'.
+     */
+    var two = undefined;
+    two.wat;
+    

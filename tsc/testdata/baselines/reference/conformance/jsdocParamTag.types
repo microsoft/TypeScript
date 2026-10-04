@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsdoc/jsdocParamTag.ts] ////
+
+=== a.js ===
+export class C {
+>C : C
+
+    /**
+     * @param {string} foo
+     * @param {number} bar
+     */
+    method(foo) {}
+>method : (foo: string) => void
+>foo : string
+
+    /**
+     * @param {string} foo
+     * @param {number} bar
+     */
+    field = (foo) => {}
+>field : (foo: string) => void
+>(foo) => {} : (foo: string) => void
+>foo : string
+}
+

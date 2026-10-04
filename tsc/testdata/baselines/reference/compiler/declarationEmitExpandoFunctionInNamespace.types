@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/declarationEmitExpandoFunctionInNamespace.ts] ////
+
+=== declarationEmitExpandoFunctionInNamespace.ts ===
+namespace NS {
+>NS : typeof NS
+
+    export function f(): void {}
+>f : { (): void; a: string; }
+
+    f.a = "";
+>f.a = "" : ""
+>f.a : string
+>f : { (): void; a: string; }
+>a : string
+>"" : ""
+}
+
+namespace Outer {
+>Outer : typeof Outer
+
+    export namespace Inner {
+>Inner : typeof Inner
+
+        export function g(): void {}
+>g : { (): void; b: number; }
+
+        g.b = 0;
+>g.b = 0 : 0
+>g.b : number
+>g : { (): void; b: number; }
+>b : number
+>0 : 0
+    }
+}
+

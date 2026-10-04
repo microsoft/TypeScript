@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/braceEscapedSurrogatePairLiteralType.ts] ////
+
+=== braceEscapedSurrogatePairLiteralType.ts ===
+// In JavaScript, "\u{D83D}\u{DE00}", "\uD83D\uDE00", and "😀" are all the
+// same string, so they should all have the same string literal type.
+const literal = "😀" as const;
+>literal : "😀"
+>"😀" as const : "😀"
+>"😀" : "😀"
+
+const braceEscaped = "\u{D83D}\u{DE00}" as const;
+>braceEscaped : "😀"
+>"\u{D83D}\u{DE00}" as const : "😀"
+>"\u{D83D}\u{DE00}" : "😀"
+
+const adjacentEscaped = "\uD83D\uDE00" as const;
+>adjacentEscaped : "😀"
+>"\uD83D\uDE00" as const : "😀"
+>"\uD83D\uDE00" : "😀"
+
+const a: "😀" = braceEscaped;
+>a : "😀"
+>braceEscaped : "😀"
+
+const b: typeof literal = braceEscaped;
+>b : "😀"
+>literal : "😀"
+>braceEscaped : "😀"
+
+const c: typeof adjacentEscaped = braceEscaped;
+>c : "😀"
+>adjacentEscaped : "😀"
+>braceEscaped : "😀"
+

@@ -1,0 +1,11 @@
+// === goToImplementation ===
+// === /goToImplementationSuper_01.ts ===
+// <|class [|Foo|] {
+//     hello() {}
+// }|>
+// 
+// <|class [|Bar|] extends Foo {
+//     hello() {
+//         sup/*GOTO IMPL*/er.hello();
+//     }
+// }|>

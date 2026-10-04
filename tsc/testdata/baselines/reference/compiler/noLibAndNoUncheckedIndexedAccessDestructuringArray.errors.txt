@@ -1,0 +1,21 @@
+input.ts(2,6): error TS2339: Property '0' does not exist on type 'string[]'.
+
+
+==== globals.ts (0 errors) ====
+    interface Array<T> {}
+    interface Boolean {}
+    interface Function {}
+    interface CallableFunction {}
+    interface NewableFunction {}
+    interface IArguments {}
+    interface Number {}
+    interface Object {}
+    interface RegExp {}
+    interface String {}
+    
+==== input.ts (1 errors) ====
+    declare var x: string[];
+    var [a] = x;
+         ~
+!!! error TS2339: Property '0' does not exist on type 'string[]'.
+    

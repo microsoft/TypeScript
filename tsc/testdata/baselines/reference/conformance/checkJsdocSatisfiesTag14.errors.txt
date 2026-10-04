@@ -1,0 +1,20 @@
+/a.js(7,15): error TS1005: '{' expected.
+/a.js(10,27): error TS1005: '{' expected.
+
+
+==== /a.js (2 errors) ====
+    /**
+     * @typedef {Object} T1
+     * @property {number} a
+     */
+    
+    /**
+     * @satisfies T1
+                  ~~
+!!! error TS1005: '{' expected.
+     */
+    const t1 = { a: 1 };
+    const t2 = /** @satisfies T1 */ ({ a: 1 });
+                              ~~
+!!! error TS1005: '{' expected.
+    

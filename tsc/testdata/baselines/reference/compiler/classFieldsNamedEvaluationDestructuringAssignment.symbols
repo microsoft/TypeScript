@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/classFieldsNamedEvaluationDestructuringAssignment.ts] ////
+
+=== classFieldsNamedEvaluationDestructuringAssignment.ts ===
+// Bug 2: Named evaluation missing in destructuring assignment elements.
+// Anonymous class expressions used as default values in destructuring
+// assignments should receive their inferred name.
+
+let x: any;
+>x : Symbol(x, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 4, 3))
+
+// Array destructuring assignment with anonymous class default
+[x = class { static #y = 1; }] = [];
+>x : Symbol(x, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 4, 3))
+>#y : Symbol(x.#y, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 7, 12))
+
+// Object destructuring assignment (shorthand) with anonymous class default
+({ x = class { static #z = 2; } } = {} as any);
+>x : Symbol(x, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 10, 2))
+>#z : Symbol((Anonymous class).#z, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 10, 14))
+
+// Object destructuring assignment (property) with anonymous class default
+({ y: x = class { static #w = 3; } } = {} as any);
+>y : Symbol(y, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 13, 2))
+>x : Symbol(x, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 4, 3))
+>#w : Symbol(x.#w, Decl(classFieldsNamedEvaluationDestructuringAssignment.ts, 13, 17))
+

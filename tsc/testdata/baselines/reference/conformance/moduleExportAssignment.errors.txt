@@ -1,0 +1,40 @@
+npmlog.js(5,14): error TS2309: An export assignment cannot be used in a module with other exported elements.
+npmlog.js(10,8): error TS2339: Property 'x' does not exist on type 'EE'.
+npmlog.js(11,16): error TS2339: Property 'y' does not exist on type 'EE'.
+npmlog.js(12,8): error TS2339: Property 'y' does not exist on type 'EE'.
+npmlog.js(13,16): error TS2339: Property 'x' does not exist on type 'EE'.
+use.js(2,8): error TS2339: Property 'x' does not exist on type 'EE'.
+
+
+==== use.js (1 errors) ====
+    var npmlog = require('./npmlog')
+    npmlog.x
+           ~
+!!! error TS2339: Property 'x' does not exist on type 'EE'.
+    npmlog.on
+    
+==== npmlog.js (5 errors) ====
+    class EE {
+        /** @param {string} s */
+        on(s) { }
+    }
+    var npmlog = module.exports = new EE()
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    
+    npmlog.on('hi') // both references should see EE.on
+    module.exports.on('hi') // here too
+    
+    npmlog.x = 1
+           ~
+!!! error TS2339: Property 'x' does not exist on type 'EE'.
+    module.exports.y = 2
+                   ~
+!!! error TS2339: Property 'y' does not exist on type 'EE'.
+    npmlog.y
+           ~
+!!! error TS2339: Property 'y' does not exist on type 'EE'.
+    module.exports.x
+                   ~
+!!! error TS2339: Property 'x' does not exist on type 'EE'.
+    

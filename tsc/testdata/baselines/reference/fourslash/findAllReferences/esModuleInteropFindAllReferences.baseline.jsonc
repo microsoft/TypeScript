@@ -1,0 +1,29 @@
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     /*FIND ALL REFS*/export const x: number;
+// }
+
+
+
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     export const /*FIND ALL REFS*/[|x|]: number;
+// }
+
+// === /b.ts ===
+// import a from "a";
+// a.[|x|];
+
+
+
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     export const [|x|]: number;
+// }
+
+// === /b.ts ===
+// import a from "a";
+// a./*FIND ALL REFS*/[|x|];

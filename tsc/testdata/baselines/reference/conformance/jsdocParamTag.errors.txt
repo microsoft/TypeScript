@@ -1,0 +1,23 @@
+a.js(4,24): error TS8024: JSDoc '@param' tag has name 'bar', but there is no parameter with that name.
+a.js(10,24): error TS8024: JSDoc '@param' tag has name 'bar', but there is no parameter with that name.
+
+
+==== a.js (2 errors) ====
+    export class C {
+        /**
+         * @param {string} foo
+         * @param {number} bar
+                           ~~~
+!!! error TS8024: JSDoc '@param' tag has name 'bar', but there is no parameter with that name.
+         */
+        method(foo) {}
+    
+        /**
+         * @param {string} foo
+         * @param {number} bar
+                           ~~~
+!!! error TS8024: JSDoc '@param' tag has name 'bar', but there is no parameter with that name.
+         */
+        field = (foo) => {}
+    }
+    

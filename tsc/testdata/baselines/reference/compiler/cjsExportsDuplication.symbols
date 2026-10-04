@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/cjsExportsDuplication.ts] ////
+
+=== file.js ===
+exports.foo = 42
+>exports.foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 16), Decl(file.js, 1, 21))
+>exports : Symbol(exports, Decl(file.js, 0, 0))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 16), Decl(file.js, 1, 21))
+
+exports.foo = "hello"
+>exports.foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 16), Decl(file.js, 1, 21))
+>exports : Symbol(exports, Decl(file.js, 0, 0))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 16), Decl(file.js, 1, 21))
+
+exports.foo = true
+>exports.foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 16), Decl(file.js, 1, 21))
+>exports : Symbol(exports, Decl(file.js, 0, 0))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 16), Decl(file.js, 1, 21))
+
+=== file2.js ===
+exports.foo = 42
+>exports.foo : Symbol(foo, Decl(file2.js, 0, 0), Decl(file2.js, 0, 16), Decl(file2.js, 2, 21))
+>exports : Symbol(exports, Decl(file2.js, 0, 0))
+>foo : Symbol(foo, Decl(file2.js, 0, 0), Decl(file2.js, 0, 16), Decl(file2.js, 2, 21))
+
+/** @type {string} */
+exports.foo = "hello"
+>exports.foo : Symbol(foo, Decl(file2.js, 0, 0), Decl(file2.js, 0, 16), Decl(file2.js, 2, 21))
+>exports : Symbol(exports, Decl(file2.js, 0, 0))
+>foo : Symbol(foo, Decl(file2.js, 0, 0), Decl(file2.js, 0, 16), Decl(file2.js, 2, 21))
+
+/** @type {boolean} */
+exports.foo = true
+>exports.foo : Symbol(foo, Decl(file2.js, 0, 0), Decl(file2.js, 0, 16), Decl(file2.js, 2, 21))
+>exports : Symbol(exports, Decl(file2.js, 0, 0))
+>foo : Symbol(foo, Decl(file2.js, 0, 0), Decl(file2.js, 0, 16), Decl(file2.js, 2, 21))
+

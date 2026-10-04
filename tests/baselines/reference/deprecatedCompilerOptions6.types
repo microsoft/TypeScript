@@ -1,9 +1,0 @@
-//// [tests/cases/compiler/deprecatedCompilerOptions6.ts] ////
-
-=== /foo/a.ts ===
-const a = 1;
->a : 1
->  : ^
->1 : 1
->  : ^
-

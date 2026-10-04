@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/narrowingTypeofParenthesized1.ts] ////
+
+=== narrowingTypeofParenthesized1.ts ===
+// https://github.com/microsoft/TypeScript/issues/42203
+
+declare const foo: string;
+>foo : string
+
+if ((typeof foo) === "string") {
+>(typeof foo) === "string" : boolean
+>(typeof foo) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo : string
+>"string" : "string"
+
+  foo;
+>foo : string
+
+} else {
+  foo;
+>foo : never
+}
+
+if (typeof foo === ("string")) {
+>typeof foo === ("string") : boolean
+>typeof foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo : string
+>("string") : "string"
+>"string" : "string"
+
+  foo;
+>foo : string
+
+} else {
+  foo;
+>foo : never
+}
+

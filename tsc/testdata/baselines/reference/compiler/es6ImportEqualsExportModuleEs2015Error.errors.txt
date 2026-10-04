@@ -1,0 +1,15 @@
+a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== a.ts (1 errors) ====
+    class a { }
+    export = a;
+    ~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    
+==== main.ts (0 errors) ====
+    import * as a from "./a";
+    a;
+    
+    
+    

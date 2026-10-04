@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/panicForInEmptyDeclarationList.ts] ////
+
+=== panicForInEmptyDeclarationList.ts ===
+let x: string[] = [];
+>x : string[]
+>[] : never[]
+
+let i = 0;
+>i : number
+>0 : 0
+
+function f() {
+>f : () => string | undefined
+
+  for (let in) {
+> : any
+
+    let y = x[i];
+>y : string
+>x[i] : string
+>x : string[]
+>i : number
+
+    return y;
+>y : string
+  }
+}
+

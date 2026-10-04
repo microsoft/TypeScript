@@ -1,0 +1,211 @@
+// === SignatureHelp ===
+=== /Foo.js ===
+// /**
+//  * Filters a path based on a regexp or glob pattern.
+//  * @param {String} basePath The base path where the search will be performed.
+//  * @param {String} pattern A string defining a regexp of a glob pattern.
+//  * @param {String} type The search pattern type, can be a regexp or a glob.
+//  * @param {Object} options A object containing options to the search.
+//  * @return {Array} A list containing the filtered paths.
+//  */
+// function pathFilter(basePath, pattern, type, options){
+// //...
+// }
+// pathFilter('foo', 'bar', 'baz', {});
+//            ^
+// | ----------------------------------------------------------------------
+// | pathFilter(**basePath: string**, pattern: string, type: string, options: Object): any[]
+// | - `basePath: string`: The base path where the search will be performed.
+// | Filters a path based on a regexp or glob pattern.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 489,
+      "LSPosition": {
+        "line": 11,
+        "character": 11
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "pathFilter(basePath: string, pattern: string, type: string, options: Object): any[]",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Filters a path based on a regexp or glob pattern."
+          },
+          "parameters": [
+            {
+              "label": "basePath: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The base path where the search will be performed."
+              }
+            },
+            {
+              "label": "pattern: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A string defining a regexp of a glob pattern."
+              }
+            },
+            {
+              "label": "type: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The search pattern type, can be a regexp or a glob."
+              }
+            },
+            {
+              "label": "options: Object",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A object containing options to the search."
+              }
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "pathFilter",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "basePath",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ", ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "pattern",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ", ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "type",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ", ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "options",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Object",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "[",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "]",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

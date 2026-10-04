@@ -1,0 +1,126 @@
+// === QuickInfo ===
+=== /quickInfoJSDocAtBeforeSpace.ts ===
+// /**
+//  * @return Don't @ me
+//  */
+// function f() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f(): void
+// | ```
+// | 
+// | 
+// | *@return* — Don't @ me
+// | ----------------------------------------------------------------------
+// /**
+//  * @return One final @
+//  */
+// function g() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function g(): void
+// | ```
+// | 
+// | 
+// | *@return* — One final @
+// | ----------------------------------------------------------------------
+// /**
+//  * @return An @
+//  * But another line
+//  */
+// function h() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function h(): void
+// | ```
+// | 
+// | 
+// | *@return* — An @
+// | But another line
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 39,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f(): void\n```\n\n\n*@return* — Don't @ me"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 9
+        },
+        "end": {
+          "line": 3,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 87,
+      "LSPosition": {
+        "line": 7,
+        "character": 9
+      },
+      "Name": "g",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction g(): void\n```\n\n\n*@return* — One final @"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 9
+        },
+        "end": {
+          "line": 7,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 148,
+      "LSPosition": {
+        "line": 12,
+        "character": 9
+      },
+      "Name": "h",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction h(): void\n```\n\n\n*@return* — An @\nBut another line"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 9
+        },
+        "end": {
+          "line": 12,
+          "character": 10
+        }
+      }
+    }
+  }
+]

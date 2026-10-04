@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/declarationEmitExpandoOverloads.ts] ////
+
+=== declarationEmitExpandoOverloads.ts ===
+export function A(a: number): void;
+>A : Symbol(A, Decl(declarationEmitExpandoOverloads.ts, 0, 0), Decl(declarationEmitExpandoOverloads.ts, 0, 35), Decl(declarationEmitExpandoOverloads.ts, 1, 35))
+>a : Symbol(a, Decl(declarationEmitExpandoOverloads.ts, 0, 18))
+
+export function A(a: string): void;
+>A : Symbol(A, Decl(declarationEmitExpandoOverloads.ts, 0, 0), Decl(declarationEmitExpandoOverloads.ts, 0, 35), Decl(declarationEmitExpandoOverloads.ts, 1, 35))
+>a : Symbol(a, Decl(declarationEmitExpandoOverloads.ts, 1, 18))
+
+export function A(a: number | string) {}
+>A : Symbol(A, Decl(declarationEmitExpandoOverloads.ts, 0, 0), Decl(declarationEmitExpandoOverloads.ts, 0, 35), Decl(declarationEmitExpandoOverloads.ts, 1, 35))
+>a : Symbol(a, Decl(declarationEmitExpandoOverloads.ts, 2, 18))
+
+A.a = 1;
+>A.a : Symbol(A.a, Decl(declarationEmitExpandoOverloads.ts, 2, 40))
+>A : Symbol(A, Decl(declarationEmitExpandoOverloads.ts, 0, 0), Decl(declarationEmitExpandoOverloads.ts, 0, 35), Decl(declarationEmitExpandoOverloads.ts, 1, 35))
+>a : Symbol(A.a, Decl(declarationEmitExpandoOverloads.ts, 2, 40))
+

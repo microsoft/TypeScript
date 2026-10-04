@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/jsxMultilineAttributeStringValues2.tsx] ////
+
+=== jsxMultilineAttributeStringValues2.tsx ===
+const a = <div className= "foo
+>a : Symbol(a, Decl(jsxMultilineAttributeStringValues2.tsx, 0, 5))
+>className : Symbol(className, Decl(jsxMultilineAttributeStringValues2.tsx, 0, 14))
+
+ bar" />;
+
+const b = <div className=	"foo
+>b : Symbol(b, Decl(jsxMultilineAttributeStringValues2.tsx, 4, 5))
+>className : Symbol(className, Decl(jsxMultilineAttributeStringValues2.tsx, 4, 14))
+
+ bar" />;
+
+const c = <div className=
+>c : Symbol(c, Decl(jsxMultilineAttributeStringValues2.tsx, 8, 5))
+>className : Symbol(className, Decl(jsxMultilineAttributeStringValues2.tsx, 8, 14))
+
+"foo
+
+ bar" />;
+
+const d = <div className=   "foo
+>d : Symbol(d, Decl(jsxMultilineAttributeStringValues2.tsx, 13, 5))
+>className : Symbol(className, Decl(jsxMultilineAttributeStringValues2.tsx, 13, 14))
+
+ bar" />;
+

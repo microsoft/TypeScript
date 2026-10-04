@@ -1,0 +1,47 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// class /*RENAME*/[|ARENAME|] {
+// }
+// export = [|ARENAME|];
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// class [|ARENAME|] {
+// }
+// export = /*RENAME*/[|ARENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// export import /*RENAME*/[|bRENAME|] = require('./a');
+
+// === /c.ts ===
+// import b = require('./b');
+// var a = new b.[|bRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// export import [|bRENAME|] = require('./a');
+
+// === /c.ts ===
+// import b = require('./b');
+// var a = new b./*RENAME*/[|bRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import /*RENAME*/[|bRENAME|] = require('./b');
+// var a = new [|bRENAME|].b();
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import [|bRENAME|] = require('./b');
+// var a = new /*RENAME*/[|bRENAME|].b();

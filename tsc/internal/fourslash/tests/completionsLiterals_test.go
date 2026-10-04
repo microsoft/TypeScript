@@ -1,0 +1,80 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsLiterals(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `const x: 0 | "one" = /**/;
+const y: 0 | "one" | 1n = /*1*/;
+const y2: 0 | "one" | 1n = 'one'/*2*/;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "0",
+					Kind:   new(lsproto.CompletionItemKindConstant),
+					Detail: new("0"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "\"one\"",
+					Kind:   new(lsproto.CompletionItemKindConstant),
+					Detail: new("\"one\""),
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "0",
+					Kind:   new(lsproto.CompletionItemKindConstant),
+					Detail: new("0"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "\"one\"",
+					Kind:   new(lsproto.CompletionItemKindConstant),
+					Detail: new("\"one\""),
+				},
+				&lsproto.CompletionItem{
+					Label:  "1n",
+					Kind:   new(lsproto.CompletionItemKindConstant),
+					Detail: new("1n"),
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Excludes: []string{
+				"\"one\"",
+			},
+		},
+	})
+}

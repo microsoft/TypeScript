@@ -1,0 +1,12 @@
+a.js(4,12): error TS1206: Decorators are not valid here.
+
+
+==== a.js (1 errors) ====
+    function dec(target, key, index) {}
+    
+    class Foo {
+        method(@dec x) {}
+               ~~~~
+!!! error TS1206: Decorators are not valid here.
+    }
+    

@@ -1,0 +1,4 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/index.ts ===
+// /// <reference /*GOTO SOURCE DEF*/path="nonexistent.ts" />
+// export {};

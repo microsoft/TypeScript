@@ -1,0 +1,567 @@
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "/*RENAME*/[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "/*RENAME*/[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 

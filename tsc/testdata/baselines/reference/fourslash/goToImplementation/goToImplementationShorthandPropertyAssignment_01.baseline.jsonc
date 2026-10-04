@@ -1,0 +1,31 @@
+// === goToImplementation ===
+// === /goToImplementationShorthandPropertyAssignment_01.ts ===
+// --- (line: 10) skipped ---
+// }
+// 
+// // Class expression that gets used in a bar implementation
+// var x = <|class [|Foo|] {
+//     createBarInClassExpression(): Bar {
+//         return {
+//             Foo
+//         };
+//     }
+// 
+//     someFunction() {}
+// }|>;
+// 
+// // Class declaration that gets used in a bar implementation. This class has multiple definitions
+// // (the class declaration and the interface above), but we only want the class returned
+// <|class [|Foo|] {
+// 
+// }|>
+// 
+// function createBarUsingClassDeclaration(): Bar {
+//     return {
+// --- (line: 32) skipped ---
+
+// --- (line: 37) skipped ---
+//     someFunction() {}
+// };
+// 
+// createBarUsingClassDeclaration().Fo/*GOTO IMPL*/o;

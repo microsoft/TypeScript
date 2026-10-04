@@ -1,0 +1,86 @@
+awaitInNamespaceExportedClassComputedProperty.ts(3,16): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNamespaceExportedClassComputedProperty.ts(5,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNamespaceExportedClassComputedProperty.ts(6,17): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNamespaceExportedClassComputedProperty.ts(20,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNamespaceExportedClassComputedProperty.ts(21,17): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNamespaceExportedClassComputedProperty.ts(33,16): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNamespaceExportedClassComputedProperty.ts(43,24): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+
+
+==== awaitInNamespaceExportedClassComputedProperty.ts (7 errors) ====
+    declare const x: string;
+    namespace N {
+        class A { [await x]() {} }
+                   ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:3:15: Did you mean to mark this function as 'async'?
+        export class B {
+            [await x]() {}
+             ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:5:9: Did you mean to mark this function as 'async'?
+            static [await x]() {}
+                    ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:6:16: Did you mean to mark this function as 'async'?
+        }
+    }
+    export class C {
+        [await x]() {}
+        static [await x]() {}
+    }
+    
+    {
+        class D { [await x]() {} }
+    }
+    
+    function f() {
+        class E {
+            [await x]() {}
+             ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:20:9: Did you mean to mark this function as 'async'?
+            static [await x]() {}
+                    ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:21:16: Did you mean to mark this function as 'async'?
+        }
+    }
+    
+    async function af() {
+        class F {
+            [await x]() {}
+            static [await x]() {}
+        }
+    }
+    
+    function* gf() {
+        class G { [await x]() {} }
+                   ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:33:15: Did you mean to mark this function as 'async'?
+    }
+    
+    async function* agf() {
+        class H { [await x]() {} }
+    }
+    
+    function switchSync() {
+        switch (0) {
+            case 0:
+                class I { [await x]() {} }
+                           ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:43:23: Did you mean to mark this function as 'async'?
+        }
+    }
+    
+    async function switchAsync() {
+        switch (0) {
+            case 0:
+                class J { [await x]() {} }
+        }
+    }
+    
+    export {};
+    

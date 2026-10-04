@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /node_modules/a/node_modules/x/index.d.ts ===
+// <|export default class [|X|] {
+//     private x: number;
+// }|>
+
+// === /node_modules/a/index.d.ts ===
+// import [|X|]/*GOTO DEF*/ from "x";
+// export function a(x: X): void;
+
+
+
+// === goToDefinition ===
+// === /node_modules/a/node_modules/x/index.d.ts ===
+// <|export default class [|X|] {
+//     private x: number;
+// }|>
+
+// === /node_modules/b/index.d.ts ===
+// import [|X|]/*GOTO DEF*/ from "x";
+// export const b: X;

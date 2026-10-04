@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/functionTypeParameterNameFromTupleLabel.ts] ////
+
+=== functionTypeParameterNameFromTupleLabel.ts ===
+declare let f: (...args: [x: number]) => void;
+>f : Symbol(f, Decl(functionTypeParameterNameFromTupleLabel.ts, 0, 11))
+>args : Symbol(args, Decl(functionTypeParameterNameFromTupleLabel.ts, 0, 16))
+
+declare let g: (a: string) => void;
+>g : Symbol(g, Decl(functionTypeParameterNameFromTupleLabel.ts, 1, 11))
+>a : Symbol(a, Decl(functionTypeParameterNameFromTupleLabel.ts, 1, 16))
+
+f = g;
+>f : Symbol(f, Decl(functionTypeParameterNameFromTupleLabel.ts, 0, 11))
+>g : Symbol(g, Decl(functionTypeParameterNameFromTupleLabel.ts, 1, 11))
+

@@ -1,0 +1,249 @@
+//// [tests/cases/compiler/thisPropertyAssignmentTyping.ts] ////
+
+=== main.js ===
+class C1 {
+>C1 : C1
+
+    constructor() {
+        this.foo = [3];
+>this.foo = [3] : number[]
+>this.foo : any
+>this : this
+>foo : any
+>[3] : number[]
+>3 : 3
+
+        this.foo = [this.foo[0] * 2];
+>this.foo = [this.foo[0] * 2] : number[]
+>this.foo : any
+>this : this
+>foo : any
+>[this.foo[0] * 2] : number[]
+>this.foo[0] * 2 : number
+>this.foo[0] : number
+>this.foo : number[]
+>this : this
+>foo : number[]
+>0 : 0
+>2 : 2
+
+        this.foo;  // number[]
+>this.foo : number[]
+>this : this
+>foo : number[]
+    }
+}
+
+class C2 {
+>C2 : C2
+
+    constructor() {
+        this.foo = [3];
+>this.foo = [3] : number[]
+>this.foo : any
+>this : this
+>foo : any
+>[3] : number[]
+>3 : 3
+
+        this.foo;  // number[]
+>this.foo : number[]
+>this : this
+>foo : number[]
+    }
+    method1() {
+>method1 : () => void
+
+        this.foo = [this.foo[0] * 2];
+>this.foo = [this.foo[0] * 2] : number[]
+>this.foo : number[]
+>this : this
+>foo : number[]
+>[this.foo[0] * 2] : number[]
+>this.foo[0] * 2 : number
+>this.foo[0] : number
+>this.foo : number[]
+>this : this
+>foo : number[]
+>0 : 0
+>2 : 2
+    }
+}
+
+class C4 {
+>C4 : C4
+
+    constructor() {
+        this.bar = [];
+>this.bar = [] : never[]
+>this.bar : any
+>this : this
+>bar : any
+>[] : never[]
+
+        this.bar.push("baz");
+>this.bar.push("baz") : number
+>this.bar.push : (...items: any[]) => number
+>this.bar : any[]
+>this : this
+>bar : any[]
+>push : (...items: any[]) => number
+>"baz" : "baz"
+
+        this.bar;  // string[]
+>this.bar : string[]
+>this : this
+>bar : string[]
+    }
+}
+
+// When this.xxx assignment declarations occur only in methods, the declared type of the
+// property is a union of the types of all assigned values, excluding values from self-referential
+// assignments, plus undefined. Local CFA removes the undefined when possible.
+
+class C5 {
+>C5 : C5
+
+    method1() {
+>method1 : () => void
+
+        this.foo;  // number[] | undefined
+>this.foo : number[] | undefined
+>this : this
+>foo : number[] | undefined
+
+        this.foo = [3]
+>this.foo = [3] : number[]
+>this.foo : number[] | undefined
+>this : this
+>foo : number[] | undefined
+>[3] : number[]
+>3 : 3
+
+        this.foo = [this.foo[0] * 2]
+>this.foo = [this.foo[0] * 2] : number[]
+>this.foo : number[] | undefined
+>this : this
+>foo : number[] | undefined
+>[this.foo[0] * 2] : number[]
+>this.foo[0] * 2 : number
+>this.foo[0] : number
+>this.foo : number[]
+>this : this
+>foo : number[]
+>0 : 0
+>2 : 2
+
+        this.foo;  // number[]
+>this.foo : number[]
+>this : this
+>foo : number[]
+    }
+}
+
+class C6 {
+>C6 : C6
+
+    method1() {
+>method1 : () => void
+
+        this.foo = [3];
+>this.foo = [3] : number[]
+>this.foo : number[] | undefined
+>this : this
+>foo : number[] | undefined
+>[3] : number[]
+>3 : 3
+
+        this.foo;  // number[]
+>this.foo : number[]
+>this : this
+>foo : number[]
+    }
+    method2() {
+>method2 : () => void
+
+        this.foo;  // number[] | undefined
+>this.foo : number[] | undefined
+>this : this
+>foo : number[] | undefined
+
+        this.foo = [this.foo[0] * 2];  // Error: Object is possibly undefined
+>this.foo = [this.foo[0] * 2] : number[]
+>this.foo : number[] | undefined
+>this : this
+>foo : number[] | undefined
+>[this.foo[0] * 2] : number[]
+>this.foo[0] * 2 : number
+>this.foo[0] : number
+>this.foo : number[] | undefined
+>this : this
+>foo : number[] | undefined
+>0 : 0
+>2 : 2
+
+        this.foo;  // number[]
+>this.foo : number[]
+>this : this
+>foo : number[]
+    }
+}
+
+class C7 {
+>C7 : C7
+
+    method1() {
+>method1 : () => void
+
+        this.foo = 0;
+>this.foo = 0 : 0
+>this.foo : number | undefined
+>this : this
+>foo : number | undefined
+>0 : 0
+
+        this.foo = this.foo + "abc";  // Error, 'string' not assignable to 'number'
+>this.foo = this.foo + "abc" : string
+>this.foo : number | undefined
+>this : this
+>foo : number | undefined
+>this.foo + "abc" : string
+>this.foo : number
+>this : this
+>foo : number
+>"abc" : "abc"
+    }
+}
+
+// When this.xxx assigmment declarations occur only in methods, an assigned empty array
+// literal value is given type 'any[]'.
+
+class C8 {
+>C8 : C8
+
+    method1() {
+>method1 : () => void
+
+        this.bar = [];  // Error: Implicit any[]
+>this.bar = [] : never[]
+>this.bar : any[] | undefined
+>this : this
+>bar : any[] | undefined
+>[] : never[]
+
+        this.bar.push("baz");
+>this.bar.push("baz") : number
+>this.bar.push : (...items: any[]) => number
+>this.bar : any[]
+>this : this
+>bar : any[]
+>push : (...items: any[]) => number
+>"baz" : "baz"
+
+        this.bar;  // any[]
+>this.bar : any[]
+>this : this
+>bar : any[]
+    }    
+}
+

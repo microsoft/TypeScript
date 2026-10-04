@@ -1,0 +1,33 @@
+a.d.ts(20,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== a.d.ts (1 errors) ====
+    declare namespace A {
+        class Base<T> {
+            a: T;
+        }
+    }
+    
+    declare namespace B {
+        class Base<T> {
+            b: T;
+        }
+    }
+    
+    declare module "m" {
+        export class Base<T> {
+            top: T;
+        }
+    
+        const value: typeof A | typeof B;
+    
+        export = value;
+        ~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    }
+    
+==== b.ts (0 errors) ====
+    import { Base } from "m";
+    
+    class Derived extends Base<string> {}
+    

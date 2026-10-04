@@ -1,0 +1,19 @@
+// === documentHighlights ===
+// === /getOccurrencesIsWriteAccess.ts ===
+// var /*HIGHLIGHTS*/[|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
+// 
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
+// 
+// [|x|] == 1;
+// [|x|] <= 1;
+// 
+// var preIncrement = ++[|x|];
+// var postIncrement = [|x|]++;
+// var preDecrement = --[|x|];
+// var postDecrement = [|x|]--;
+// 
+// [|x|] += 1;
+// [|x|] <<= 1;

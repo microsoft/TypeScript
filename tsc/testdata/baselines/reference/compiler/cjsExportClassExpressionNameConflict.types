@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/cjsExportClassExpressionNameConflict.ts] ////
+
+=== index.js ===
+module.exports.A = class B {f1 = 1; self = new B();}
+>module.exports.A = class B {f1 = 1; self = new B();} : typeof A
+>module.exports.A : typeof A
+>module.exports : typeof import(".")
+>module : { exports: typeof import("."); }
+>exports : typeof import(".")
+>A : typeof A
+>class B {f1 = 1; self = new B();} : typeof A
+>B : typeof B
+>f1 : number
+>1 : 1
+>self : B
+>new B() : B
+>B : typeof B
+
+module.exports.B = class B {f1 = "ok"; self = new B();}
+>module.exports.B = class B {f1 = "ok"; self = new B();} : typeof B
+>module.exports.B : typeof B
+>module.exports : typeof import(".")
+>module : { exports: typeof import("."); }
+>exports : typeof import(".")
+>B : typeof B
+>class B {f1 = "ok"; self = new B();} : typeof B
+>B : typeof B
+>f1 : string
+>"ok" : "ok"
+>self : B
+>new B() : B
+>B : typeof B
+

@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/unclosedExportClause02.ts] ////
+
+=== t1.ts ===
+export var x = "x";
+>x : string
+>"x" : "x"
+
+=== t2.ts ===
+export { x, from
+>x : string
+
+    "./t1";
+
+=== t3.ts ===
+
+export { from
+    "./t1";
+
+=== t4.ts ===
+export { x as a from
+>x : string
+>a : string
+
+    "./t1";
+
+=== t5.ts ===
+export { x as a, from
+>x : string
+>a : string
+
+    "./t1";

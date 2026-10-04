@@ -1,0 +1,15 @@
+isolatedDeclarationsTypePredicate.ts(1,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+
+
+==== isolatedDeclarationsTypePredicate.ts (1 errors) ====
+    export function isString(value: unknown) {
+                    ~~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 isolatedDeclarationsTypePredicate.ts:1:17: Add a return type to the function declaration.
+      return typeof value === "string";
+    }
+    
+    export function isExplicitString(value: unknown): value is string {
+      return typeof value === "string";
+    }
+    

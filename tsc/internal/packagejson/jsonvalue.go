@@ -1,0 +1,142 @@
+package packagejson
+
+import (
+	"fmt"
+
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+)
+
+type JSONValueType int8
+
+const (
+	JSONValueTypeNotPresent JSONValueType = iota
+	JSONValueTypeNull
+	JSONValueTypeString
+	JSONValueTypeNumber
+	JSONValueTypeBoolean
+	JSONValueTypeArray
+	JSONValueTypeObject
+)
+
+func (t JSONValueType) String() string {
+	switch t {
+	case JSONValueTypeNull:
+		return "null"
+	case JSONValueTypeString:
+		return "string"
+	case JSONValueTypeNumber:
+		return "number"
+	case JSONValueTypeBoolean:
+		return "boolean"
+	case JSONValueTypeArray:
+		return "array"
+	case JSONValueTypeObject:
+		return "object"
+	default:
+		return fmt.Sprintf("unknown(%d)", t)
+	}
+}
+
+type JSONValue struct {
+	Type  JSONValueType
+	Value any
+}
+
+func (v *JSONValue) IsPresent() bool {
+	return v.Type != JSONValueTypeNotPresent
+}
+
+func (v *JSONValue) IsFalsy() bool {
+	switch v.Type {
+	case JSONValueTypeNotPresent, JSONValueTypeNull:
+		return true
+	case JSONValueTypeString:
+		return v.Value == ""
+	case JSONValueTypeNumber:
+		return v.Value == 0
+	case JSONValueTypeBoolean:
+		return !v.Value.(bool)
+	default:
+		return false
+	}
+}
+
+func (v JSONValue) AsObject() *collections.OrderedMap[string, JSONValue] {
+	if v.Type != JSONValueTypeObject {
+		panic(fmt.Sprintf("expected object, got %v", v.Type))
+	}
+	return v.Value.(*collections.OrderedMap[string, JSONValue])
+}
+
+func (v JSONValue) AsArray() []JSONValue {
+	if v.Type != JSONValueTypeArray {
+		panic(fmt.Sprintf("expected array, got %v", v.Type))
+	}
+	return v.Value.([]JSONValue)
+}
+
+func (v JSONValue) AsString() string {
+	if v.Type != JSONValueTypeString {
+		panic(fmt.Sprintf("expected string, got %v", v.Type))
+	}
+	return v.Value.(string)
+}
+
+var _ json.UnmarshalerFrom = (*JSONValue)(nil)
+
+func (v *JSONValue) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return v.unmarshalJSONValueFrom[JSONValue](dec)
+}
+
+func (v *JSONValue) unmarshalJSONValueFrom[T any](dec *json.Decoder) error {
+	switch dec.PeekKind() {
+	case 'n': // json.Null.Kind()
+		if _, err := dec.ReadToken(); err != nil {
+			return err
+		}
+		v.Value = nil
+		v.Type = JSONValueTypeNull
+		return nil
+	case '"':
+		v.Type = JSONValueTypeString
+		if err := json.UnmarshalDecode(dec, &v.Value); err != nil {
+			return err
+		}
+	case '[':
+		if _, err := dec.ReadToken(); err != nil {
+			return err
+		}
+		var elements []T
+		for dec.PeekKind() != json.EndArray.Kind() {
+			var element T
+			if err := json.UnmarshalDecode(dec, &element); err != nil {
+				return err
+			}
+			elements = append(elements, element)
+		}
+		if _, err := dec.ReadToken(); err != nil {
+			return err
+		}
+		v.Type = JSONValueTypeArray
+		v.Value = elements
+	case '{':
+		var object collections.OrderedMap[string, T]
+		if err := json.UnmarshalDecode(dec, &object); err != nil {
+			return err
+		}
+		v.Type = JSONValueTypeObject
+		v.Value = &object
+	case 't', 'f': // json.True.Kind(), json.False.Kind()
+		v.Type = JSONValueTypeBoolean
+		if err := json.UnmarshalDecode(dec, &v.Value); err != nil {
+			return err
+		}
+	default:
+		v.Type = JSONValueTypeNumber
+		if err := json.UnmarshalDecode(dec, &v.Value); err != nil {
+			return err
+		}
+	}
+	return nil
+}

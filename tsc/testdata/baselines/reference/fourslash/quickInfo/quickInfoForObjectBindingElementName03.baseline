@@ -1,0 +1,48 @@
+// === QuickInfo ===
+=== /quickInfoForObjectBindingElementName03.ts ===
+// interface Options {
+//     /**
+//      * A description of foo
+//      */
+//     foo: string;
+// }
+// 
+// function f({ foo }: Options) {
+//     foo;
+//     ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) foo: string
+// | ```
+// | A description of foo
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 122,
+      "LSPosition": {
+        "line": 8,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) foo: string\n```\nA description of foo"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 4
+        },
+        "end": {
+          "line": 8,
+          "character": 7
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,27 @@
+specializedSignatureAsCallbackParameter1.ts(7,4): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
+specializedSignatureAsCallbackParameter1.ts(8,4): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== specializedSignatureAsCallbackParameter1.ts (2 errors) ====
+    function x3(a: number, cb: (x: number) => number);
+    function x3(a: string, cb: (x: number) => number);
+    function x3(a: any, cb: (x: number) => number) {
+       cb(a);
+    }
+    // both are errors
+    x3(1, (x: string) => 1); 
+       ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! related TS2771 specializedSignatureAsCallbackParameter1.ts:2:10: The last overload is declared here.
+    x3(1, (x: 'hm') => 1); 
+       ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! related TS2771 specializedSignatureAsCallbackParameter1.ts:2:10: The last overload is declared here.

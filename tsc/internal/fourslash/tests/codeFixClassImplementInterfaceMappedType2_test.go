@@ -1,0 +1,32 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassImplementInterfaceMappedType2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `type ListenerTemplate<T, S extends string, I extends string = "${1}"> = {
+    [K in keyof T as K extends string
+        ? S extends ` + "`" + `${infer F}${I}${infer R}` + "`" + ` ? ` + "`" + `${F}${K}${R}` + "`" + ` : K : K]
+        : (listener: (payload: T[K]) => void) => void;
+};
+type ListenActionable<E> = ListenerTemplate<E, "add*Listener" | "remove*Listener", "*">;
+type ClickEventSupport = ListenActionable<{ Click: 'some-click-event-payload' }>;
+
+[|class C implements ClickEventSupport { }|]`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'ClickEventSupport'",
+		NewRangeContent: `class C implements ClickEventSupport {
+    addClickListener: (listener: (payload: "some-click-event-payload") => void) => void;
+    removeClickListener: (listener: (payload: "some-click-event-payload") => void) => void;
+}`,
+		Index: 0,
+	})
+}

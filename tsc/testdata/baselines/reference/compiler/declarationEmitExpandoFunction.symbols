@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/declarationEmitExpandoFunction.ts] ////
+
+=== declarationEmitExpandoFunction.ts ===
+export function A() {
+>A : Symbol(A, Decl(declarationEmitExpandoFunction.ts, 0, 0))
+
+    return 'A';
+}
+
+export function B() {
+>B : Symbol(B, Decl(declarationEmitExpandoFunction.ts, 2, 1))
+
+    return 'B';
+}
+
+export enum C {
+>C : Symbol(C, Decl(declarationEmitExpandoFunction.ts, 6, 1))
+
+    C
+>C : Symbol(C.C, Decl(declarationEmitExpandoFunction.ts, 8, 15))
+}
+
+A.a = C;
+>A.a : Symbol(A.a, Decl(declarationEmitExpandoFunction.ts, 10, 1))
+>A : Symbol(A, Decl(declarationEmitExpandoFunction.ts, 0, 0))
+>a : Symbol(A.a, Decl(declarationEmitExpandoFunction.ts, 10, 1))
+>C : Symbol(C, Decl(declarationEmitExpandoFunction.ts, 6, 1))
+
+A.b = C;
+>A.b : Symbol(A.b, Decl(declarationEmitExpandoFunction.ts, 12, 8))
+>A : Symbol(A, Decl(declarationEmitExpandoFunction.ts, 0, 0))
+>b : Symbol(A.b, Decl(declarationEmitExpandoFunction.ts, 12, 8))
+>C : Symbol(C, Decl(declarationEmitExpandoFunction.ts, 6, 1))
+
+B.c = C;
+>B.c : Symbol(B.c, Decl(declarationEmitExpandoFunction.ts, 13, 8))
+>B : Symbol(B, Decl(declarationEmitExpandoFunction.ts, 2, 1))
+>c : Symbol(B.c, Decl(declarationEmitExpandoFunction.ts, 13, 8))
+>C : Symbol(C, Decl(declarationEmitExpandoFunction.ts, 6, 1))
+

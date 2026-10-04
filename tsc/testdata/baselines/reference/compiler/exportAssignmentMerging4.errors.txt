@@ -1,0 +1,19 @@
+a.ts(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== b.ts (0 errors) ====
+    import a = require("./a");
+    const c1 = a.a;
+    const c2 = a.b;
+    let v1: a.Foo = { x: "test" };
+    let v2: a.Bar.Baz = { y: 42 };
+    
+==== a.ts (1 errors) ====
+    export type Foo = { x: string };
+    export namespace Bar {
+        export interface Baz { y: number }
+    }
+    export const x = 42; // Causes error
+    export = { a: 1, b: "hello" };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

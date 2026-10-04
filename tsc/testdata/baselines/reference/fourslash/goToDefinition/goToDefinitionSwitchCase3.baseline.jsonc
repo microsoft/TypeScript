@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /goToDefinitionSwitchCase3.ts ===
+// [|switch|] (null) {
+//   /*GOTO DEF*/default: {
+//     switch (null) {
+//       default: break;
+//     }
+//   };
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionSwitchCase3.ts ===
+// switch (null) {
+//   default: {
+//     [|switch|] (null) {
+//       /*GOTO DEF*/default: break;
+//     }
+//   };
+// }

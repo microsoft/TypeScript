@@ -1,0 +1,22 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestDocCommentTemplateInsideFunctionDeclaration(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: functionDecl.ts
+f/*0*/unction /*1*/foo/*2*/(/*3*/) /*4*/{ /*5*/}`
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(false)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
+	defer done()
+	for _, marker := range f.Markers() {
+		f.VerifyNoJSDocCompletion(t, marker)
+	}
+}

@@ -1,0 +1,132 @@
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     /*FIND ALL REFS*/[|value1|] = 1,
+//     "value2" = [|value1|],
+//     111 = 11
+// }
+// 
+// E.[|value1|];
+// E["value2"];
+// E.value2;
+// E[111];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     /*FIND ALL REFS*/"[|value2|]" = value1,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["[|value2|]"];
+// E.[|value2|];
+// E[111];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     "/*FIND ALL REFS*/[|value2|]" = value1,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["[|value2|]"];
+// E.[|value2|];
+// E[111];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     [|value1|] = 1,
+//     "value2" = /*FIND ALL REFS*/[|value1|],
+//     111 = 11
+// }
+// 
+// E.[|value1|];
+// E["value2"];
+// E.value2;
+// E[111];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     "value2" = value1,
+//     /*FIND ALL REFS*/[|111|] = 11
+// }
+// 
+// E.value1;
+// E["value2"];
+// E.value2;
+// E[[|111|]];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     [|value1|] = 1,
+//     "value2" = [|value1|],
+//     111 = 11
+// }
+// 
+// E./*FIND ALL REFS*/[|value1|];
+// E["value2"];
+// E.value2;
+// E[111];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     "[|value2|]" = value1,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["/*FIND ALL REFS*/[|value2|]"];
+// E.[|value2|];
+// E[111];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     "[|value2|]" = value1,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["[|value2|]"];
+// E./*FIND ALL REFS*/[|value2|];
+// E[111];
+
+
+
+// === findAllReferences ===
+// === /referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     "value2" = value1,
+//     [|111|] = 11
+// }
+// 
+// E.value1;
+// E["value2"];
+// E.value2;
+// E[/*FIND ALL REFS*/[|111|]];

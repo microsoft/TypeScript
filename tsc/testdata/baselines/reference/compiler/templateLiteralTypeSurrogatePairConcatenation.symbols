@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/templateLiteralTypeSurrogatePairConcatenation.ts] ////
+
+=== templateLiteralTypeSurrogatePairConcatenation.ts ===
+// Concatenating a lone high surrogate and a lone low surrogate across template
+// literal type fragments forms a surrogate pair, exactly as in a JavaScript
+// string: "\uD83D" + "\uDE00" === "😀". The combined literal type should be
+// "😀", with no leftover lone surrogates.
+type Hi = "\uD83D";
+>Hi : Symbol(Hi, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 0, 0))
+
+type Lo = "\uDE00";
+>Lo : Symbol(Lo, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 4, 19))
+
+type Pair = `${Hi}${Lo}`;
+>Pair : Symbol(Pair, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 5, 19))
+>Hi : Symbol(Hi, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 0, 0))
+>Lo : Symbol(Lo, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 4, 19))
+
+const p: Pair = "😀";
+>p : Symbol(p, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 8, 5))
+>Pair : Symbol(Pair, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 5, 19))
+
+const q: "😀" = "x" as unknown as Pair;
+>q : Symbol(q, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 9, 5))
+>Pair : Symbol(Pair, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 5, 19))
+
+// A non-adjacent boundary must NOT combine: the gap keeps the halves lone.
+type Gapped = `${Hi}-${Lo}`;
+>Gapped : Symbol(Gapped, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 9, 39))
+>Hi : Symbol(Hi, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 0, 0))
+>Lo : Symbol(Lo, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 4, 19))
+
+const g: Gapped = "\uD83D-\uDE00";
+>g : Symbol(g, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 13, 5))
+>Gapped : Symbol(Gapped, Decl(templateLiteralTypeSurrogatePairConcatenation.ts, 9, 39))
+

@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/constEnumOnlyModuleImportAliasEmit.ts] ////
+
+=== mappa.ts ===
+namespace OnRtls.Mappa {
+>OnRtls : Symbol(OnRtls, Decl(mappa.ts, 0, 0), Decl(types.d.ts, 0, 0), Decl(sensmap.ts, 0, 0))
+>Mappa : Symbol(Mappa, Decl(mappa.ts, 0, 17), Decl(types.d.ts, 0, 25))
+
+    export const enum TipoCamera { Camera2D = 1, Camera3D = 2 }
+>TipoCamera : Symbol(TipoCamera, Decl(mappa.ts, 0, 24))
+>Camera2D : Symbol(TipoCamera.Camera2D, Decl(mappa.ts, 1, 34))
+>Camera3D : Symbol(TipoCamera.Camera3D, Decl(mappa.ts, 1, 48))
+
+    export class MappaViewModel {
+>MappaViewModel : Symbol(MappaViewModel, Decl(mappa.ts, 1, 63))
+
+        constructor(public canvas: any, public config: any, public tipo: TipoCamera) {}
+>canvas : Symbol(MappaViewModel.canvas, Decl(mappa.ts, 3, 20))
+>config : Symbol(MappaViewModel.config, Decl(mappa.ts, 3, 39))
+>tipo : Symbol(MappaViewModel.tipo, Decl(mappa.ts, 3, 59))
+>TipoCamera : Symbol(TipoCamera, Decl(mappa.ts, 0, 24))
+    }
+}
+
+=== types.d.ts ===
+declare namespace OnRtls.Mappa.Server {
+>OnRtls : Symbol(OnRtls, Decl(mappa.ts, 0, 0), Decl(types.d.ts, 0, 0), Decl(sensmap.ts, 0, 0))
+>Mappa : Symbol(Mappa, Decl(mappa.ts, 0, 17), Decl(types.d.ts, 0, 25))
+>Server : Symbol(Server, Decl(types.d.ts, 0, 31))
+
+    const enum SomeFlag { A = 0 }
+>SomeFlag : Symbol(SomeFlag, Decl(types.d.ts, 0, 39))
+>A : Symbol(SomeFlag.A, Decl(types.d.ts, 1, 25))
+}
+
+=== sensmap.ts ===
+namespace OnRtls.Carrello.Home {
+>OnRtls : Symbol(OnRtls, Decl(mappa.ts, 0, 0), Decl(types.d.ts, 0, 0), Decl(sensmap.ts, 0, 0))
+>Carrello : Symbol(Carrello, Decl(sensmap.ts, 0, 17))
+>Home : Symbol(Home, Decl(sensmap.ts, 0, 26))
+
+    import mappa = OnRtls.Mappa;
+>mappa : Symbol(mappa, Decl(sensmap.ts, 0, 32))
+>OnRtls : Symbol(OnRtls, Decl(mappa.ts, 0, 0), Decl(types.d.ts, 0, 0), Decl(sensmap.ts, 0, 0))
+>Mappa : Symbol(mappa, Decl(mappa.ts, 0, 17), Decl(types.d.ts, 0, 25))
+
+    export class SensmapViewModel {
+>SensmapViewModel : Symbol(SensmapViewModel, Decl(sensmap.ts, 1, 32))
+
+        constructor() {
+            var x = new mappa.MappaViewModel(null, null, mappa.TipoCamera.Camera3D);
+>x : Symbol(x, Decl(sensmap.ts, 4, 15))
+>mappa.MappaViewModel : Symbol(mappa.MappaViewModel, Decl(mappa.ts, 1, 63))
+>mappa : Symbol(mappa, Decl(sensmap.ts, 0, 32))
+>MappaViewModel : Symbol(mappa.MappaViewModel, Decl(mappa.ts, 1, 63))
+>mappa.TipoCamera.Camera3D : Symbol(mappa.TipoCamera.Camera3D, Decl(mappa.ts, 1, 48))
+>mappa.TipoCamera : Symbol(mappa.TipoCamera, Decl(mappa.ts, 0, 24))
+>mappa : Symbol(mappa, Decl(sensmap.ts, 0, 32))
+>TipoCamera : Symbol(mappa.TipoCamera, Decl(mappa.ts, 0, 24))
+>Camera3D : Symbol(mappa.TipoCamera.Camera3D, Decl(mappa.ts, 1, 48))
+        }
+    }
+}
+

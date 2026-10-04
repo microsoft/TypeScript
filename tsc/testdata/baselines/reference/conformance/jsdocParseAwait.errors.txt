@@ -1,0 +1,24 @@
+/a.js(7,7): error TS2322: Type 'number' is not assignable to type 'T'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef {object} T
+     * @property {boolean} await
+     */
+    
+    /** @type {T} */
+    const a = 1;
+          ~
+!!! error TS2322: Type 'number' is not assignable to type 'T'.
+    
+    /** @type {T} */
+    const b = {
+        await: false,
+    };
+    
+    /**
+     * @param {boolean} await
+     */
+    function c(await) {}
+    

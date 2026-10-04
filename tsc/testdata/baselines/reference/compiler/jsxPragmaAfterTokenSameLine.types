@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/jsxPragmaAfterTokenSameLine.tsx] ////
+
+=== jsxPragmaAfterTokenSameLine.tsx ===
+/** Authored by foo@example.com @jsx h */
+declare var h: any;
+>h : any
+
+declare var React: any;
+>React : any
+
+declare var Fragment: any;
+>Fragment : any
+
+declare namespace JSX {
+    interface Element {}
+}
+
+const x = <Fragment></Fragment>;
+>x : JSX.Element
+><Fragment></Fragment> : JSX.Element
+>Fragment : any
+>Fragment : any
+

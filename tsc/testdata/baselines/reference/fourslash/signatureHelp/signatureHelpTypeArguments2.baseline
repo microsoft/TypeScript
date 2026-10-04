@@ -1,0 +1,188 @@
+// === SignatureHelp ===
+=== /signatureHelpTypeArguments2.ts ===
+// /** some documentation
+//  * @template T some documentation 2
+//  * @template W
+//  * @template U,V others
+//  * @param a ok
+//  * @param b not ok
+//  */
+// function f<T, U, V, W>(a: number, b: string, c: boolean): void { }
+// f<;
+//   ^
+// | ----------------------------------------------------------------------
+// | f<**T**, U, V, W>(a: number, b: string, c: boolean): void
+// | some documentation
+// | ----------------------------------------------------------------------
+// f<number, ;
+//           ^
+// | ----------------------------------------------------------------------
+// | f<T, **U**, V, W>(a: number, b: string, c: boolean): void
+// | some documentation
+// | ----------------------------------------------------------------------
+// f<number, string, ;
+//                   ^
+// | ----------------------------------------------------------------------
+// | f<T, U, **V**, W>(a: number, b: string, c: boolean): void
+// | some documentation
+// | ----------------------------------------------------------------------
+// f<number, string, boolean, ;
+//                            ^
+// | ----------------------------------------------------------------------
+// | f<T, U, V, **W**>(a: number, b: string, c: boolean): void
+// | some documentation
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 205,
+      "LSPosition": {
+        "line": 8,
+        "character": 2
+      },
+      "Name": "f0",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f<T, U, V, W>(a: number, b: string, c: boolean): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "some documentation"
+          },
+          "parameters": [
+            {
+              "label": "T"
+            },
+            {
+              "label": "U"
+            },
+            {
+              "label": "V"
+            },
+            {
+              "label": "W"
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 217,
+      "LSPosition": {
+        "line": 9,
+        "character": 10
+      },
+      "Name": "f1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f<T, U, V, W>(a: number, b: string, c: boolean): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "some documentation"
+          },
+          "parameters": [
+            {
+              "label": "T"
+            },
+            {
+              "label": "U"
+            },
+            {
+              "label": "V"
+            },
+            {
+              "label": "W"
+            }
+          ],
+          "activeParameter": 1
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 237,
+      "LSPosition": {
+        "line": 10,
+        "character": 18
+      },
+      "Name": "f2",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f<T, U, V, W>(a: number, b: string, c: boolean): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "some documentation"
+          },
+          "parameters": [
+            {
+              "label": "T"
+            },
+            {
+              "label": "U"
+            },
+            {
+              "label": "V"
+            },
+            {
+              "label": "W"
+            }
+          ],
+          "activeParameter": 2
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 266,
+      "LSPosition": {
+        "line": 11,
+        "character": 27
+      },
+      "Name": "f3",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f<T, U, V, W>(a: number, b: string, c: boolean): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "some documentation"
+          },
+          "parameters": [
+            {
+              "label": "T"
+            },
+            {
+              "label": "U"
+            },
+            {
+              "label": "V"
+            },
+            {
+              "label": "W"
+            }
+          ],
+          "activeParameter": 3
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

@@ -1,0 +1,21 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export default class [|Widget|] {}|>
+// export function helper() {}
+
+// === /home/src/workspaces/project/index.ts ===
+// import /*GOTO SOURCE DEF*/Widget, { helper } from "pkg";
+// Widget;
+// helper();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export default class Widget {}
+// <|export function [|helper|]() {}|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import Widget, { /*GOTO SOURCE DEF*/helper } from "pkg";
+// Widget;
+// helper();

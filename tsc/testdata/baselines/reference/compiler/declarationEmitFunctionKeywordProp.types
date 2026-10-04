@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/declarationEmitFunctionKeywordProp.ts] ////
+
+=== declarationEmitFunctionKeywordProp.ts ===
+function foo() {}
+>foo : { (): void; null: boolean; }
+
+foo.null = true;
+>foo.null = true : true
+>foo.null : boolean
+>foo : { (): void; null: boolean; }
+>null : boolean
+>true : true
+
+function bar() {}
+>bar : { (): void; async: boolean; normal: boolean; }
+
+bar.async = true;
+>bar.async = true : true
+>bar.async : boolean
+>bar : { (): void; async: boolean; normal: boolean; }
+>async : boolean
+>true : true
+
+bar.normal = false;
+>bar.normal = false : false
+>bar.normal : boolean
+>bar : { (): void; async: boolean; normal: boolean; }
+>normal : boolean
+>false : false
+
+function baz() {}
+>baz : { (): void; class: boolean; normal: boolean; }
+
+baz.class = true;
+>baz.class = true : true
+>baz.class : boolean
+>baz : { (): void; class: boolean; normal: boolean; }
+>class : boolean
+>true : true
+
+baz.normal = false;
+>baz.normal = false : false
+>baz.normal : boolean
+>baz : { (): void; class: boolean; normal: boolean; }
+>normal : boolean
+>false : false
+

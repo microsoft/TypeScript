@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsxEntityDecoderAfterNonEntityAmpersand.tsx] ////
+
+=== jsxEntityDecoderAfterNonEntityAmpersand.tsx ===
+const a = <div>&&amp;</div>;
+>a : Symbol(a, Decl(jsxEntityDecoderAfterNonEntityAmpersand.tsx, 0, 5))
+
+const b = <div>a&b&amp;c&d&lt;e</div>;
+>b : Symbol(b, Decl(jsxEntityDecoderAfterNonEntityAmpersand.tsx, 1, 5))
+
+const c = <div>&amp;&amp;</div>;
+>c : Symbol(c, Decl(jsxEntityDecoderAfterNonEntityAmpersand.tsx, 2, 5))
+
+const d = <div>&amp;&&amp;</div>;
+>d : Symbol(d, Decl(jsxEntityDecoderAfterNonEntityAmpersand.tsx, 3, 5))
+
+const e = <div>a&b&c&amp;</div>;
+>e : Symbol(e, Decl(jsxEntityDecoderAfterNonEntityAmpersand.tsx, 4, 5))
+

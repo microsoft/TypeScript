@@ -1,0 +1,137 @@
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => /*HIGHLIGHTS*/[|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|return|];
+//             /*HIGHLIGHTS*/[|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|return|];
+//             [|return|];
+//             /*HIGHLIGHTS*/[|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 /*HIGHLIGHTS*/[|return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// ret/*HIGHLIGHTS*/urn;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+// --- (line: 5) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// return;
+// retu/*HIGHLIGHTS*/rn;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// class A {
+//     [|ret/*HIGHLIGHTS*/urn|];
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         [|return|] (function () {
+//             () => return;
+//             return;
+//             return;
+// --- (line: 9) skipped ---
+
+// --- (line: 14) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+// }
+// 
+// class A {
+//     return;
+//     [|r/*HIGHLIGHTS*/eturn|] 8675309;
+// }

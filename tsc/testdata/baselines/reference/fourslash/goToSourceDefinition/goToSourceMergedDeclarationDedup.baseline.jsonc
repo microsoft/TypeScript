@@ -1,0 +1,23 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export class [|Util|] {
+//     run() {}
+// }|>
+// Util.version = "1.0";
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/Util } from "pkg";
+// const u: Util = new Util();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export class [|Util|] {
+//     run() {}
+// }|>
+// Util.version = "1.0";
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Util } from "pkg";
+// const u: /*GOTO SOURCE DEF*/Util = new Util();

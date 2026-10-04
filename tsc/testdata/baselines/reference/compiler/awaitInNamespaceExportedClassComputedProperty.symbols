@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/awaitInNamespaceExportedClassComputedProperty.ts] ////
+
+=== awaitInNamespaceExportedClassComputedProperty.ts ===
+declare const x: string;
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+
+namespace N {
+>N : Symbol(N, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 24))
+
+    class A { [await x]() {} }
+>A : Symbol(A, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 1, 13))
+>[await x] : Symbol(A[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 2, 13))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+
+    export class B {
+>B : Symbol(B, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 2, 30))
+
+        [await x]() {}
+>[await x] : Symbol(B[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 3, 20))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+
+        static [await x]() {}
+>[await x] : Symbol(B[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 4, 22))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+    }
+}
+export class C {
+>C : Symbol(C, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 7, 1))
+
+    [await x]() {}
+>[await x] : Symbol(C[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 8, 16))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+
+    static [await x]() {}
+>[await x] : Symbol(C[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 9, 18))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+}
+
+{
+    class D { [await x]() {} }
+>D : Symbol(D, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 13, 1))
+>[await x] : Symbol(D[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 14, 13))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+}
+
+function f() {
+>f : Symbol(f, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 15, 1))
+
+    class E {
+>E : Symbol(E, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 17, 14))
+
+        [await x]() {}
+>[await x] : Symbol(E[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 18, 13))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+
+        static [await x]() {}
+>[await x] : Symbol(E[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 19, 22))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+    }
+}
+
+async function af() {
+>af : Symbol(af, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 22, 1))
+
+    class F {
+>F : Symbol(F, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 24, 21))
+
+        [await x]() {}
+>[await x] : Symbol(F[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 25, 13))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+
+        static [await x]() {}
+>[await x] : Symbol(F[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 26, 22))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+    }
+}
+
+function* gf() {
+>gf : Symbol(gf, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 29, 1))
+
+    class G { [await x]() {} }
+>G : Symbol(G, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 31, 16))
+>[await x] : Symbol(G[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 32, 13))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+}
+
+async function* agf() {
+>agf : Symbol(agf, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 33, 1))
+
+    class H { [await x]() {} }
+>H : Symbol(H, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 35, 23))
+>[await x] : Symbol(H[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 36, 13))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+}
+
+function switchSync() {
+>switchSync : Symbol(switchSync, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 37, 1))
+
+    switch (0) {
+        case 0:
+            class I { [await x]() {} }
+>I : Symbol(I, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 41, 15))
+>[await x] : Symbol(I[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 42, 21))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+    }
+}
+
+async function switchAsync() {
+>switchAsync : Symbol(switchAsync, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 44, 1))
+
+    switch (0) {
+        case 0:
+            class J { [await x]() {} }
+>J : Symbol(J, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 48, 15))
+>[await x] : Symbol(J[await x], Decl(awaitInNamespaceExportedClassComputedProperty.ts, 49, 21))
+>x : Symbol(x, Decl(awaitInNamespaceExportedClassComputedProperty.ts, 0, 13))
+    }
+}
+
+export {};
+

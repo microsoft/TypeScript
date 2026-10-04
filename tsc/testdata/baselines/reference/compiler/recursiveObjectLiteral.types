@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/recursiveObjectLiteral.ts] ////
+
+=== recursiveObjectLiteral.ts ===
+var a = { f: a };
+>a : any
+>{ f: a } : { f: any; }
+>f : any
+>a : any
+

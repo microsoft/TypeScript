@@ -1,0 +1,14 @@
+======== Resolving module 'react' from '/.src/app.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+'paths' option is specified, looking for a pattern to match module name 'react'.
+Module name 'react', matched pattern 'react'.
+Trying substitution './node_modules/preact/compat/', candidate module location: './node_modules/preact/compat/'.
+Loading module as file / folder, candidate module location '/.src/node_modules/preact/compat/', target file types: TypeScript, JavaScript, Declaration, JSON.
+Found 'package.json' at '/.src/node_modules/preact/compat/package.json'.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' has 'types' field './index.d.ts' that references '/.src/node_modules/preact/compat/index.d.ts'.
+File '/.src/node_modules/preact/compat/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/.src/node_modules/preact/compat/index.d.ts', result '/.src/node_modules/preact/compat/index.d.ts'.
+======== Module name 'react' was successfully resolved to '/.src/node_modules/preact/compat/index.d.ts'. ========

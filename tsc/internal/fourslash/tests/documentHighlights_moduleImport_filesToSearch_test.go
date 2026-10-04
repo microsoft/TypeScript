@@ -1,0 +1,26 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestDocumentHighlights_moduleImport_filesToSearch(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /node_modules/@types/foo/index.d.ts
+export const x: number;
+// @Filename: /a.ts
+import * as foo from "foo";
+foo.[|x|];
+// @Filename: /b.ts
+import { [|x|] } from "foo";
+// @Filename: /c.ts
+import { x } from "foo";`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineDocumentHighlightsWithOptions(t, nil /*preferences*/, []string{"/a.ts", "/b.ts"}, ToAny(f.Ranges())...)
+}

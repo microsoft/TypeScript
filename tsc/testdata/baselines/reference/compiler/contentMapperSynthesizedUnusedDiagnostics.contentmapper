@@ -1,0 +1,15 @@
+//// [/widget.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box])
+--- Original ---
+const mappedUnused = 1;
+export {};
+--- Transformed ---
+const __VERSION = "1.0.0";
+const mappedUnused = 1;
+export {};
+
+=== Diagnostics ===
+
+/widget.box:1:7 - error TS6133: 'mappedUnused' is declared but its value is never read.
+
+1 const mappedUnused = 1;
+        ~~~~~~~~~~~~

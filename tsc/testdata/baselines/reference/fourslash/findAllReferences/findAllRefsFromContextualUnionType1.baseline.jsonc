@@ -1,0 +1,17 @@
+// === findAllReferences ===
+// === /findAllRefsFromContextualUnionType1.ts ===
+// function test1(arg: { [|prop|]: "foo" }) {}
+// test1({ /*FIND ALL REFS*/[|prop|]: "bar" });
+// 
+// function test2(arg: { prop: "foo" } | undefined) {}
+// test2({ prop: "bar" });
+
+
+
+// === findAllReferences ===
+// === /findAllRefsFromContextualUnionType1.ts ===
+// function test1(arg: { prop: "foo" }) {}
+// test1({ prop: "bar" });
+// 
+// function test2(arg: { prop: "foo" } | undefined) {}
+// test2({ /*FIND ALL REFS*/[|prop|]: "bar" });

@@ -1,0 +1,37 @@
+/a.d.ts(1,63): error TS2451: Cannot redeclare block-scoped variable 'foo'.
+/b.d.ts(1,39): error TS2451: Cannot redeclare block-scoped variable 'foo'.
+
+
+==== /node_modules/foo/index.d.ts (0 errors) ====
+    declare function foo(): void;
+    declare namespace foo { export const items: string[]; }
+    export = foo;
+    
+==== /a.d.ts (1 errors) ====
+    declare module 'mymod' { import * as foo from 'foo'; export { foo }; }
+                                                                  ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
+!!! related TS6203 /b.d.ts:1:39: 'foo' was also declared here.
+    
+==== /b.d.ts (1 errors) ====
+    declare module 'mymod' { export const foo: number; }
+                                          ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
+!!! related TS6203 /a.d.ts:1:63: 'foo' was also declared here.
+    
+==== /augment.ts (0 errors) ====
+    declare global {
+        interface Array<T> {
+            customMethod(): T;
+        }
+    }
+    export {};
+    
+==== /index.ts (0 errors) ====
+    import * as foo from 'foo';
+    const items = foo.items;
+    const result: string = items.customMethod();
+    
+    const fresh: string[] = [];
+    const result2: string = fresh.customMethod();
+    

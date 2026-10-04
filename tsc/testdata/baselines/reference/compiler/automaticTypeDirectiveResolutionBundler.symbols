@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/automaticTypeDirectiveResolutionBundler.ts] ////
+
+=== /index.ts ===
+// The automatic type directive "pkg" from @types should resolve to esm.d.mts
+// because bundler resolution uses the "import" condition.
+// If the wrong file is resolved, we'll get a type error due to conflicting declarations.
+import type { PkgType } from "pkg";
+>PkgType : Symbol(PkgType, Decl(index.ts, 3, 13))
+
+// This should work if esm.d.mts is correctly resolved
+const x: PkgType = { esm: true };
+>x : Symbol(x, Decl(index.ts, 6, 5))
+>PkgType : Symbol(PkgType, Decl(index.ts, 3, 13))
+>esm : Symbol(esm, Decl(index.ts, 6, 20))
+
+=== /node_modules/pkg/esm.d.mts ===
+// This file should be resolved when using bundler resolution with "import" condition
+export interface PkgType {
+>PkgType : Symbol(PkgType, Decl(esm.d.mts, 0, 0))
+
+    esm: true;
+>esm : Symbol(PkgType.esm, Decl(esm.d.mts, 1, 26))
+}
+declare global {
+>global : Symbol(global, Decl(esm.d.mts, 3, 1))
+
+    var expectedCondition: "import";
+>expectedCondition : Symbol(expectedCondition, Decl(esm.d.mts, 5, 7))
+}
+

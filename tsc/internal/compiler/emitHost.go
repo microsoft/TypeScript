@@ -1,0 +1,143 @@
+package compiler
+
+import (
+	"context"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers/declarations"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+)
+
+// NOTE: EmitHost operations must be thread-safe
+type EmitHost interface {
+	printer.EmitHost
+	declarations.DeclarationEmitHost
+	Options() *core.CompilerOptions
+	SourceFiles() []*ast.SourceFile
+	CaseSensitivity() tspath.CaseSensitivity
+	BaseDirectory() tspath.RootedDirectoryPath
+	CommonSourceDirectory() tspath.RootedDirectoryPath
+	IsEmitBlocked(file tspath.RootedFilePath) bool
+}
+
+var _ EmitHost = (*emitHost)(nil)
+
+// NOTE: emitHost operations must be thread-safe
+type emitHost struct {
+	program      *Program
+	emitResolver printer.EmitResolver
+}
+
+func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
+	checker, done := program.GetTypeCheckerForFile(ctx, file)
+	return &emitHost{
+		program:      program,
+		emitResolver: checker.GetEmitResolver(),
+	}, done
+}
+
+func (host *emitHost) GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode {
+	return host.program.GetModeForUsageLocation(file, moduleSpecifier)
+}
+
+func (host *emitHost) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
+	return host.program.GetResolvedModuleFromModuleSpecifier(file, moduleSpecifier)
+}
+
+func (host *emitHost) GetDefaultResolutionModeForFile(file ast.HasFileName) core.ResolutionMode {
+	return host.program.GetDefaultResolutionModeForFile(file)
+}
+
+func (host *emitHost) GetEmitModuleFormatOfFile(file ast.HasFileName) core.ModuleKind {
+	return host.program.GetEmitModuleFormatOfFile(file)
+}
+
+func (host *emitHost) FileExists(path tspath.RootedFilePath) bool {
+	return host.program.FileExists(path)
+}
+
+func (host *emitHost) GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
+	return host.program.GetGlobalTypingsCacheLocation()
+}
+
+func (host *emitHost) GetNearestAncestorDirectoryWithPackageJson(dirname tspath.RootedDirectoryPath) tspath.RootedDirectoryPath {
+	return host.program.GetNearestAncestorDirectoryWithPackageJson(dirname)
+}
+
+func (host *emitHost) GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry {
+	return host.program.GetPackageJsonInfo(pkgJsonPath)
+}
+
+func (host *emitHost) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) tspath.RootedFilePath {
+	return host.program.GetSourceOfProjectReferenceIfOutputIncluded(file)
+}
+
+func (host *emitHost) GetProjectReferenceFromSource(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference {
+	return host.program.GetProjectReferenceFromSource(path)
+}
+
+func (host *emitHost) GetRedirectTargets(path tspath.PathKey) []tspath.RootedFilePath {
+	return host.program.GetRedirectTargets(path)
+}
+
+func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
+	return host.GetEmitResolver().GetEffectiveDeclarationFlags(node, flags)
+}
+
+func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
+	// TODO: cache
+	return outputpaths.GetOutputPathsFor(file, host.Options(), host, outputpaths.ForceEmitPaths{Dts: forceDtsPaths})
+}
+
+func (host *emitHost) SourceFileMayBeEmitted(file *ast.SourceFile, forceDtsEmit bool) bool {
+	return sourceFileMayBeEmitted(file, host, forceDtsEmit, false)
+}
+
+func (host *emitHost) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile {
+	return host.program.GetSourceFileFromReference(origin, ref)
+}
+
+func (host *emitHost) Options() *core.CompilerOptions { return host.program.Options() }
+func (host *emitHost) SourceFiles() []*ast.SourceFile { return host.program.SourceFiles() }
+func (host *emitHost) BaseDirectory() tspath.RootedDirectoryPath {
+	return host.program.BaseDirectory()
+}
+
+func (host *emitHost) CommonSourceDirectory() tspath.RootedDirectoryPath {
+	return host.program.CommonSourceDirectory()
+}
+
+func (host *emitHost) ContentMapperExtensions() []string {
+	return host.program.ContentMapperExtensions()
+}
+
+func (host *emitHost) CaseSensitivity() tspath.CaseSensitivity {
+	return host.program.CaseSensitivity()
+}
+
+func (host *emitHost) IsEmitBlocked(file tspath.RootedFilePath) bool {
+	return host.program.IsEmitBlocked(file)
+}
+
+func (host *emitHost) WriteFile(fileName tspath.RootedFilePath, text string) error {
+	return host.program.Host().FS().WriteFile(fileName, text)
+}
+
+func (host *emitHost) GetEmitResolver() printer.EmitResolver {
+	return host.emitResolver
+}
+
+func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
+	return host.program.IsSourceFileFromExternalLibrary(file)
+}
+
+func (host *emitHost) GetSymlinkCache() *symlinks.KnownSymlinks {
+	return host.program.GetSymlinkCache()
+}

@@ -1,0 +1,7 @@
+// === Document Symbols ===
+// === /app.astro ===
+// <|export function [|{| name: supplementalSymbol, kind: Function |}supplementalSymbol|]() {}|>
+// 
+
+// === Details ===
+(Function) supplementalSymbol

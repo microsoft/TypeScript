@@ -1,0 +1,374 @@
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     /*FIND ALL REFS*/[|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     common: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// --- (line: 4) skipped ---
+// 
+// interface B {
+//     b: number;
+//     /*FIND ALL REFS*/[|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, /*FIND ALL REFS*/[|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, /*FIND ALL REFS*/[|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, /*FIND ALL REFS*/[|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { /*FIND ALL REFS*/[|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, /*FIND ALL REFS*/[|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, /*FIND ALL REFS*/[|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, /*FIND ALL REFS*/[|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, [|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+
+
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties.ts ===
+// interface A {
+//     a: number;
+//     [|common|]: string;
+// }
+// 
+// interface B {
+//     b: number;
+//     [|common|]: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, [|common|]: "" };
+// var v2: A | B = { b: 0, [|common|]: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, [|common|]: 1 });
+// 
+// // Type cast
+// var c = <A | B> { [|common|]: 0, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// 
+// // Widened type
+// var w: A|B = { a:0, /*FIND ALL REFS*/[|common|]: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };

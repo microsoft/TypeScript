@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/regularExpressionES2025Syntax.ts] ////
+
+=== regularExpressionES2025Syntax.ts ===
+// Pattern modifiers are only available from ES2025.
+const addModifier = /(?i:abc)/;
+>addModifier : RegExp
+>/(?i:abc)/ : RegExp
+
+const removeModifier = /(?-i:abc)/;
+>removeModifier : RegExp
+>/(?-i:abc)/ : RegExp
+
+const addAndRemoveModifiers = /(?i-ms:abc)/;
+>addAndRemoveModifiers : RegExp
+>/(?i-ms:abc)/ : RegExp
+
+// A plain non-capturing group is not a pattern modifier and is available at every target.
+const nonCapturingGroup = /(?:abc)/;
+>nonCapturingGroup : RegExp
+>/(?:abc)/ : RegExp
+
+// Duplicate named capturing groups are only available from ES2025.
+const duplicateNames = /(?<year>\d{4})-\d{2}|\d{2}\/(?<year>\d{4})/;
+>duplicateNames : RegExp
+>/(?<year>\d{4})-\d{2}|\d{2}\/(?<year>\d{4})/ : RegExp
+
+const duplicateNamesWithReference = /(?<a>x)\k<a>|(?<a>y)/;
+>duplicateNamesWithReference : RegExp
+>/(?<a>x)\k<a>|(?<a>y)/ : RegExp
+
+// Named capturing groups that are not duplicated remain available from ES2018.
+const distinctNames = /(?<a>x)|(?<b>y)/;
+>distinctNames : RegExp
+>/(?<a>x)|(?<b>y)/ : RegExp
+
+// Duplicate names within the same alternative are an error at every target.
+const sameAlternative = /(?<dup>x)(?<dup>y)/;
+>sameAlternative : RegExp
+>/(?<dup>x)(?<dup>y)/ : RegExp
+

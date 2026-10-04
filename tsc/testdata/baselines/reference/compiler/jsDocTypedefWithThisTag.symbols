@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/jsDocTypedefWithThisTag.ts] ////
+
+=== bug.js ===
+/** @typedef T @this {object} */
+const x = 1;
+>x : Symbol(x, Decl(bug.js, 1, 5))
+

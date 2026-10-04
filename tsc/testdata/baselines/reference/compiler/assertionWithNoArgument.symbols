@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/assertionWithNoArgument.ts] ////
+
+=== assertionWithNoArgument.ts ===
+export function assertWeird(value?: string): asserts value {
+>assertWeird : Symbol(assertWeird, Decl(assertionWithNoArgument.ts, 0, 0))
+>value : Symbol(value, Decl(assertionWithNoArgument.ts, 0, 28))
+>value : Symbol(value, Decl(assertionWithNoArgument.ts, 0, 28))
+}
+
+assertWeird();
+>assertWeird : Symbol(assertWeird, Decl(assertionWithNoArgument.ts, 0, 0))
+
+assertWeird("hello");
+>assertWeird : Symbol(assertWeird, Decl(assertionWithNoArgument.ts, 0, 0))
+

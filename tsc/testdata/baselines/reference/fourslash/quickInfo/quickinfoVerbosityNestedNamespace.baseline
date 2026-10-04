@@ -1,0 +1,97 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNestedNamespace.ts ===
+// 
+// declare namespace Outer {
+//                   ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace Outer {
+// |     namespace Inner {
+// |         let x: number;
+// |         function f(): string;
+// |         namespace f { }
+// |     }
+// |     let outerVal: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace Outer
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     namespace Inner {
+//         const x: number;
+//         function f(): string;
+//     }
+//     const outerVal: boolean;
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 1,
+        "character": 23
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace Outer\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 23
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 1,
+        "character": 23
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace Outer {\n    namespace Inner {\n        let x: number;\n        function f(): string;\n        namespace f { }\n    }\n    let outerVal: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 23
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

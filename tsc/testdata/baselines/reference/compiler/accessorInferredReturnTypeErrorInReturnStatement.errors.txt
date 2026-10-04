@@ -1,0 +1,13 @@
+accessorInferredReturnTypeErrorInReturnStatement.ts(4,18): error TS2339: Property 'collection' does not exist on type '{ readonly primaryPath: any; }'.
+
+
+==== accessorInferredReturnTypeErrorInReturnStatement.ts (1 errors) ====
+    export var basePrototype = {
+      get primaryPath() {
+        var _this = this;
+        return _this.collection.schema.primaryPath;
+                     ~~~~~~~~~~
+!!! error TS2339: Property 'collection' does not exist on type '{ readonly primaryPath: any; }'.
+      },  
+    };
+    

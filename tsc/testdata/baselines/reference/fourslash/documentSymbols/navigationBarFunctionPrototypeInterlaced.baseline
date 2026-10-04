@@ -1,0 +1,24 @@
+// === Document Symbols ===
+// === /foo.js ===
+// var <|[|{| name: b, kind: Variable |}b|] = 1|>;
+// <|function [|{| name: A, kind: Function |}A|]() {}|>; 
+// <|A.prototype.[|{| name: a, kind: Variable |}a|]|> = <|[|{| name: a, kind: Function |}|]function() { }|>;
+// <|A.[|{| name: b, kind: Variable |}b|]|> = <|[|{| name: b, kind: Function |}|]function() { }|>;
+// b = 2
+// /* Comment */
+// <|A.prototype.[|{| name: c, kind: Variable |}c|]|> = <|[|{| name: c, kind: Function |}|]function() { }|>
+// var <|[|{| name: b, kind: Variable |}b|] = 2|>
+// <|A.prototype.[|{| name: d, kind: Variable |}d|]|> = <|[|{| name: d, kind: Function |}|]function() { }|>
+
+// === Details ===
+(Variable) b
+(Function) A
+  (Variable) a
+    (Function) a
+  (Variable) b
+    (Function) b
+  (Variable) c
+    (Function) c
+  (Variable) d
+    (Function) d
+(Variable) b

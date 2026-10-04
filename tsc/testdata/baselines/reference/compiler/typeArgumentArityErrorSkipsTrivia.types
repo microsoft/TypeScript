@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/typeArgumentArityErrorSkipsTrivia.ts] ////
+
+=== typeArgumentArityErrorSkipsTrivia.ts ===
+declare function f<T>(a: T): T;
+>f : <T>(a: T) => T
+>a : T
+
+f<   string, number>("a");
+>f<   string, number>("a") : string
+>f : <T>(a: T) => T
+>"a" : "a"
+
+f<
+>f<    string, number>("a") : string
+>f : <T>(a: T) => T
+
+    string, number>("a");
+>"a" : "a"
+

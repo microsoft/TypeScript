@@ -1,0 +1,9 @@
+// === goToImplementation ===
+// === /a.ts ===
+// interface /*GOTO IMPL*/I {
+// 	foo: string;
+// }
+// 
+// function f() {
+//     const foo = [|{ foo: '' }|] satisfies I;
+// }

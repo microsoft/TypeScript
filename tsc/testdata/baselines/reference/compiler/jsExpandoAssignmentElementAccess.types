@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/jsExpandoAssignmentElementAccess.ts] ////
+
+=== repro.js ===
+var x = {};
+>x : { if: number; else: number; }
+>{} : { if: number; else: number; }
+
+x['if'] = 1;
+>x['if'] = 1 : 1
+>x['if'] : number
+>x : { if: number; else: number; }
+>'if' : "if"
+>1 : 1
+
+x['else'] = 1;
+>x['else'] = 1 : 1
+>x['else'] : number
+>x : { if: number; else: number; }
+>'else' : "else"
+>1 : 1
+

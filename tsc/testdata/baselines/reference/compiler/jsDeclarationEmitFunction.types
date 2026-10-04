@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/jsDeclarationEmitFunction.ts] ////
+
+=== types.d.ts ===
+type Foo = () => void;
+>Foo : Foo
+
+=== a.js ===
+/** @type {Foo} */
+const f1 = function test() {};
+>f1 : Foo
+>function test() {} : () => void
+>test : () => void
+
+/** @type {Foo} */
+const f2 = function () {};
+>f2 : Foo
+>function () {} : () => void
+
+/** @type {Foo} */
+const f3 = () => {};
+>f3 : Foo
+>() => {} : () => void
+
+/** @type {Foo} */
+function f4 () {};
+>f4 : () => void
+

@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/shorthandPropertyUndefined.ts] ////
+
+=== shorthandPropertyUndefined.ts ===
+var a = { b };
+>a : { b: any; }
+>{ b } : { b: any; }
+>b : any
+

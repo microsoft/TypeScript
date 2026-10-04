@@ -1,0 +1,19 @@
+// === Inlay Hints ===
+export function fn(b = foo) {}
+                    ^
+{
+  "position": {
+    "line": 1,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "1n"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

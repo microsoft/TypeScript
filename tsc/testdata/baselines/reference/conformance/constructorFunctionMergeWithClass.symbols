@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/salsa/constructorFunctionMergeWithClass.ts] ////
+
+=== file1.js ===
+var SomeClass = function () {
+>SomeClass : Symbol(SomeClass, Decl(file1.js, 0, 3))
+
+    this.otherProp = 0;
+};
+
+new SomeClass();
+>SomeClass : Symbol(SomeClass, Decl(file1.js, 0, 3))
+
+=== file2.js ===
+class SomeClass { }
+>SomeClass : Symbol(SomeClass, Decl(file2.js, 0, 0))
+
+SomeClass.prop = 0
+>SomeClass : Symbol(SomeClass, Decl(file1.js, 0, 3))
+

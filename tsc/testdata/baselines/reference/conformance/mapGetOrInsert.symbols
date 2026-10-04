@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/es2026/mapGetOrInsert.ts] ////
+
+=== mapGetOrInsert.ts ===
+const map = new Map<string, number>();
+>map : Symbol(map, Decl(mapGetOrInsert.ts, 0, 5))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+
+const inserted: number = map.getOrInsert("a", 1);
+>inserted : Symbol(inserted, Decl(mapGetOrInsert.ts, 1, 5))
+>map.getOrInsert : Symbol(Map.getOrInsert, Decl(lib.es2026.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapGetOrInsert.ts, 0, 5))
+>getOrInsert : Symbol(Map.getOrInsert, Decl(lib.es2026.collection.d.ts, --, --))
+
+const computed: number = map.getOrInsertComputed("b", key => key.length);
+>computed : Symbol(computed, Decl(mapGetOrInsert.ts, 2, 5))
+>map.getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.es2026.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapGetOrInsert.ts, 0, 5))
+>getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.es2026.collection.d.ts, --, --))
+>key : Symbol(key, Decl(mapGetOrInsert.ts, 2, 53))
+>key.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(mapGetOrInsert.ts, 2, 53))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const weakMap = new WeakMap<object, number>();
+>weakMap : Symbol(weakMap, Decl(mapGetOrInsert.ts, 4, 5))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+
+const key = {};
+>key : Symbol(key, Decl(mapGetOrInsert.ts, 5, 5))
+
+const weakInserted: number = weakMap.getOrInsert(key, 1);
+>weakInserted : Symbol(weakInserted, Decl(mapGetOrInsert.ts, 6, 5))
+>weakMap.getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.es2026.collection.d.ts, --, --))
+>weakMap : Symbol(weakMap, Decl(mapGetOrInsert.ts, 4, 5))
+>getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.es2026.collection.d.ts, --, --))
+>key : Symbol(key, Decl(mapGetOrInsert.ts, 5, 5))
+
+const weakComputed: number = weakMap.getOrInsertComputed(key, value => value === key ? 1 : 0);
+>weakComputed : Symbol(weakComputed, Decl(mapGetOrInsert.ts, 7, 5))
+>weakMap.getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.es2026.collection.d.ts, --, --))
+>weakMap : Symbol(weakMap, Decl(mapGetOrInsert.ts, 4, 5))
+>getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.es2026.collection.d.ts, --, --))
+>key : Symbol(key, Decl(mapGetOrInsert.ts, 5, 5))
+>value : Symbol(value, Decl(mapGetOrInsert.ts, 7, 61))
+>value : Symbol(value, Decl(mapGetOrInsert.ts, 7, 61))
+>key : Symbol(key, Decl(mapGetOrInsert.ts, 5, 5))
+
+declare const readonlyMap: ReadonlyMap<string, number>;
+>readonlyMap : Symbol(readonlyMap, Decl(mapGetOrInsert.ts, 9, 13))
+>ReadonlyMap : Symbol(ReadonlyMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+readonlyMap.getOrInsert("a", 1);
+>readonlyMap : Symbol(readonlyMap, Decl(mapGetOrInsert.ts, 9, 13))
+

@@ -1,0 +1,15 @@
+main.js(6,9): error TS7022: 'buzz' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== main.js (1 errors) ====
+    export class C {
+        method() {
+            const obj = {};
+            obj.foo = 'foo';
+            obj.bar = 'bar';
+            obj.buzz = Object.values(obj);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7022: 'buzz' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        }
+    }
+    

@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/unusedTypeParameters8.ts] ////
+
+=== a.ts ===
+class C<T> { }
+>C : C<T>
+
+=== b.ts ===
+
+interface C<T> { }

@@ -1,0 +1,195 @@
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// /*HIGHLIGHTS*/[|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     /*HIGHLIGHTS*/[|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     /*HIGHLIGHTS*/[|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     /*HIGHLIGHTS*/[|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     /*HIGHLIGHTS*/[|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     /*HIGHLIGHTS*/[|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     /*HIGHLIGHTS*/[|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         /*HIGHLIGHTS*/[|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     /*HIGHLIGHTS*/[|case|] 16:
+// }

@@ -1,0 +1,11 @@
+// === Document Symbols ===
+// === /test/file.ts ===
+// <|export class [|{| name: Bar, kind: Class |}Bar|] {
+//     <|public [|{| name: s, kind: Property |}s|]: string;|>
+// }|>
+// export var <|[|{| name: x, kind: Variable |}x|]: number|>;
+
+// === Details ===
+(Class) Bar
+  (Property) s
+(Variable) x

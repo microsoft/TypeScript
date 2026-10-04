@@ -1,0 +1,39 @@
+file.js(1,15): error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
+file.js(4,12): error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
+
+
+==== base.js (0 errors) ====
+    class Base {
+        constructor() {}
+    }
+    
+    const BaseFactory = () => {
+        return new Base();
+    };
+    
+    BaseFactory.Base = Base;
+    
+    module.exports = BaseFactory;
+    
+==== file.js (2 errors) ====
+    /** @typedef {import('./base')} BaseFactory */
+                  ~~~~~~~~~~~~~~~~
+!!! error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
+    /**
+     * @callback BaseFactoryFactory
+     * @param {import('./base')} factory
+               ~~~~~~~~~~~~~~~~
+!!! error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
+     */
+    /** @enum {import('./base')} */
+    const couldntThinkOfAny = {}
+    
+    /**
+     *
+     * @param {InstanceType<BaseFactory["Base"]>} base
+     * @returns {InstanceType<BaseFactory["Base"]>}
+     */
+    const test = (base) => {
+        return base;
+    };
+    

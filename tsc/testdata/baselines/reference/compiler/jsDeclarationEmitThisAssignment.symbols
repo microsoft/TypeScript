@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/jsDeclarationEmitThisAssignment.ts] ////
+
+=== main.js ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(main.js, 0, 0))
+
+    static {
+        this.bar = 10;
+>this.bar : Symbol(Foo.bar, Decl(main.js, 1, 12))
+>this : Symbol(Foo, Decl(main.js, 0, 0))
+>bar : Symbol(Foo.bar, Decl(main.js, 1, 12))
+    }
+
+    constructor() {
+        this.baz = "hello";
+>this.baz : Symbol(Foo.baz, Decl(main.js, 5, 19))
+>this : Symbol(Foo, Decl(main.js, 0, 0))
+>baz : Symbol(Foo.baz, Decl(main.js, 5, 19))
+    }
+}
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(main.js, 8, 1))
+
+    constructor() {
+        this.x = 42;
+>this.x : Symbol(Bar.x, Decl(main.js, 11, 19))
+>this : Symbol(Bar, Decl(main.js, 8, 1))
+>x : Symbol(Bar.x, Decl(main.js, 11, 19))
+
+        this.y = true;
+>this.y : Symbol(Bar.y, Decl(main.js, 12, 20))
+>this : Symbol(Bar, Decl(main.js, 8, 1))
+>y : Symbol(Bar.y, Decl(main.js, 12, 20))
+    }
+}
+

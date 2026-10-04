@@ -1,0 +1,78 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsEnum4.ts ===
+// const enum Foo {
+// 	"\t" = 9,
+// 	"\u007f" = 127,
+// }
+// Foo["\t"]
+//      ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (enum member) (typeof Foo)["\t"] = 9
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// Foo["\u007f"]
+//      ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (enum member) (typeof Foo)[""] = 127
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 51,
+      "LSPosition": {
+        "line": 4,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(enum member) (typeof Foo)[\"\\t\"] = 9\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 5
+        },
+        "end": {
+          "line": 4,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 61,
+      "LSPosition": {
+        "line": 5,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(enum member) (typeof Foo)[\"\"] = 127\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 5
+        },
+        "end": {
+          "line": 5,
+          "character": 11
+        }
+      }
+    }
+  }
+]

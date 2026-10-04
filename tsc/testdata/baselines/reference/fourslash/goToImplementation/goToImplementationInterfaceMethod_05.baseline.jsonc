@@ -1,0 +1,31 @@
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_05.ts ===
+// interface Foo {
+//     hello (): void;
+// }
+// 
+// class SuperBar implements Foo {
+//     <|[|hello|]() {}|>
+// }
+// 
+// class Bar extends SuperBar {
+//     hello2() {}
+// }
+// 
+// class OtherBar extends SuperBar {
+//     <|[|hello|]() {}|>
+//     hello2() {}
+//     hello3() {}
+// }
+// --- (line: 18) skipped ---
+
+// --- (line: 22) skipped ---
+// }
+// 
+// class NotBar extends SuperBar {
+//     <|[|hello|]() {}|>         // Should not be returned because it is not structurally equivalent to Bar
+// }
+// 
+// function whatever(x: Bar) {
+//     x.he/*GOTO IMPL*/llo()
+// }

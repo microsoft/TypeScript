@@ -1,0 +1,27 @@
+// === documentHighlights ===
+// filesToSearch:
+//   /a.ts
+//   /b.ts
+//   /unknown.ts
+
+// === /a.ts ===
+// import * as foo from "foo";
+// foo./*HIGHLIGHTS*/[|x|];
+
+// === /b.ts ===
+// import { [|x|] } from "foo";
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   /a.ts
+//   /b.ts
+//   /unknown.ts
+
+// === /a.ts ===
+// import * as foo from "foo";
+// foo.[|x|];
+
+// === /b.ts ===
+// import { /*HIGHLIGHTS*/[|x|] } from "foo";

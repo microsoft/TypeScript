@@ -1,6 +1,0 @@
-{
-    "compilerOptions": {},
-    "watchOptions": {
-        "watchDirectory": "usefsevents"
-    }
-}

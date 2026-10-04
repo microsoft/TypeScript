@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/dependentDestructuringCrossFilePosition.ts] ////
+
+=== types.d.ts ===
+type U =
+>U : U
+
+    | { kind: "a"; payload: number }
+>kind : "a"
+>payload : number
+
+    | { kind: "b"; payload: string };
+>kind : "b"
+>payload : string
+
+declare function make(): U;
+>make : () => U
+
+=== a.ts ===
+const { kind, payload }: U = make();
+>kind : "a" | "b"
+>payload : string | number
+>make() : U
+>make : () => U
+
+=== b.ts ===
+if (kind === "a") payload.toFixed();
+>kind === "a" : boolean
+>kind : "a" | "b"
+>"a" : "a"
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number) => string
+>payload : number
+>toFixed : (fractionDigits?: number) => string
+

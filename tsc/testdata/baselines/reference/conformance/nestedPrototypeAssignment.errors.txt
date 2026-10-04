@@ -1,0 +1,13 @@
+mod.js(2,1): error TS2304: Cannot find name 'C'.
+mod.js(3,1): error TS2304: Cannot find name 'C'.
+
+
+==== mod.js (2 errors) ====
+    // #24111 -- shouldn't assert
+    C.prototype = {}
+    ~
+!!! error TS2304: Cannot find name 'C'.
+    C.prototype.bar.foo = {};
+    ~
+!!! error TS2304: Cannot find name 'C'.
+    

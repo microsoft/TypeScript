@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_referenceTypes.ts] ////
+
+=== /app.ts ===
+
+/// <reference types="library-a" />
+/// <reference types="library-b" />
+
+=== /node_modules/@types/library-a/index.d.ts ===
+declare class MyClass { private x: number; }
+>MyClass : MyClass
+>x : number
+
+=== /node_modules/@types/library-b/index.d.ts ===
+
+/// <reference types="library-a" />
+

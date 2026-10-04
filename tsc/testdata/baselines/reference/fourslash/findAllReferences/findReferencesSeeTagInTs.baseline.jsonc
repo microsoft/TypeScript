@@ -1,0 +1,7 @@
+// === findAllReferences ===
+// === /findReferencesSeeTagInTs.ts ===
+// function [|doStuffWithStuff|]/*FIND ALL REFS*/(stuff: { quantity: number }) {}
+// 
+// declare const stuff: { quantity: number };
+// /** @see {[|doStuffWithStuff|]} */
+// if (stuff.quantity) {}

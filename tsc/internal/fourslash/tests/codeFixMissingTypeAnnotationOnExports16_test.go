@@ -1,0 +1,39 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports16(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+function foo() {
+    return { x: 1, y: {42: {dd: "45"}, b: 2} };
+}
+function foo3(): "42" {
+    return "42";
+}
+export const { x: a , y: { [foo3()]: {dd: e} } } = foo();`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Extract binding expressions to variable",
+		NewFileContent: `function foo() {
+    return { x: 1, y: {42: {dd: "45"}, b: 2} };
+}
+function foo3(): "42" {
+    return "42";
+}
+const dest = foo();
+export const a: number = dest.x;
+const _a = foo3();
+export const e: string = (dest.y)[_a].dd;`,
+		Index: 0,
+	})
+}

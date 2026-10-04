@@ -1,0 +1,51 @@
+// === QuickInfo ===
+=== /quickInfoForObjectBindingElementName05.ts ===
+// interface A {
+//     /**
+//      * A description of a
+//      */
+//     a: number;
+// }
+// interface B {
+//     a: string;
+// }
+// 
+// function f({ a }: A | B) {
+//     a;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: string | number
+// | ```
+// | A description of a
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 137,
+      "LSPosition": {
+        "line": 11,
+        "character": 5
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: string | number\n```\nA description of a"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 5
+        }
+      }
+    }
+  }
+]

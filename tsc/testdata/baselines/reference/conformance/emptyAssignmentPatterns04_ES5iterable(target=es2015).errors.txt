@@ -1,0 +1,10 @@
+error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+
+
+!!! error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+==== emptyAssignmentPatterns04_ES5iterable.ts (0 errors) ====
+    var a: any;
+    let x, y, z, a1, a2, a3;
+    
+    ({ x, y, z } = {} = a);
+    ([ a1, a2, a3] = [] = a);

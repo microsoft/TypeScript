@@ -1,0 +1,22 @@
+file.js(2,2): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+file.js(10,2): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== file.js (2 errors) ====
+    const SomeConstructor = function () {
+    	this.x = 1;
+    	~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    
+    const SomeConstructor2 = function () {
+    };
+    SomeConstructor2.staticMember = "str";
+    
+    const SomeConstructor3 = function () {
+    	this.x = 1;
+    	~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    SomeConstructor3.staticMember = "str";
+    

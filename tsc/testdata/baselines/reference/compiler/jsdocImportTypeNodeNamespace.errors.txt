@@ -1,0 +1,16 @@
+Main.js(2,49): error TS2694: Namespace '"GeometryType"' has no exported member 'default'.
+
+
+==== GeometryType.d.ts (0 errors) ====
+    declare namespace _default {
+      export const POINT: string;
+    }
+    export default _default;
+    
+==== Main.js (1 errors) ====
+    export default function () {
+      return /** @type {import('./GeometryType.js').default} */ ('Point');
+                                                    ~~~~~~~
+!!! error TS2694: Namespace '"GeometryType"' has no exported member 'default'.
+    }
+    

@@ -1,0 +1,10 @@
+//// [/app.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box])
+--- Original ---
+export const version = #{target};
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const version = 7;
+
+=== Diagnostics ===
+
+<no content>

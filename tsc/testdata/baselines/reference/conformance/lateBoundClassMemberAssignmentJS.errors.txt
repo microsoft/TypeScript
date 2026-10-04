@@ -1,0 +1,29 @@
+lateBoundClassMemberAssignmentJS.js(4,9): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'MyClass'.
+  Property '[_sym]' does not exist on type 'MyClass'.
+lateBoundClassMemberAssignmentJS.js(8,9): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'MyClass'.
+  Property '[_sym]' does not exist on type 'MyClass'.
+lateBoundClassMemberAssignmentJS.js(9,19): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'MyClass'.
+  Property '[_sym]' does not exist on type 'MyClass'.
+
+
+==== lateBoundClassMemberAssignmentJS.js (3 errors) ====
+    const _sym = Symbol("_sym");
+    export class MyClass {
+        constructor() {
+            this[_sym] = "ok";
+            ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'MyClass'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'MyClass'.
+        }
+    
+        method() {
+            this[_sym] = "yep";
+            ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'MyClass'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'MyClass'.
+            const x = this[_sym];
+                      ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'MyClass'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'MyClass'.
+        }
+    }

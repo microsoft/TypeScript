@@ -1,0 +1,113 @@
+// === goToDefinition ===
+// === /ProfileCard.vue ===
+// --- (line: 4) skipped ---
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// <|export const [|title|] = "Profile";|>
+// export const heading = format(title);
+// export const localTitle = ti/*GOTO DEF*/tle;
+// </script>
+// 
+
+
+
+// === goToDefinition ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ ti/*GOTO DEF*/tle }}</h1>
+//   <p class="card">Profile</p>
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// <|export const [|title|] = "Profile";|>
+// export const heading = format(title);
+// export const localTitle = title;
+// </script>
+// 
+
+
+
+// === goToDefinition ===
+// === /ProfileCard.vue ===
+// --- (line: 4) skipped ---
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// <|export const [|title|] = "Profile";|>
+// export const heading = format(title);
+// export const localTitle = title;
+// </script>
+// 
+
+// === /main.ts ===
+// import DefaultCard, { ProfileCard, title } from "./ProfileCard.vue";
+// export const pageTitle = ti/*GOTO DEF*/tle;
+// export const component = ProfileCard;
+// export const fallback = DefaultCard;
+// 
+
+
+
+// === goToDefinition ===
+// === /format.ts ===
+// <|export function [|format|](value: string): string { return value.toUpperCase(); }|>
+// 
+
+// === /ProfileCard.vue ===
+// --- (line: 5) skipped ---
+// <script lang="ts">
+// import { format } from "./format";
+// export const title = "Profile";
+// export const heading = for/*GOTO DEF*/mat(title);
+// export const localTitle = title;
+// </script>
+// 
+
+
+
+// === goToDefinition ===
+// === /ProfileCard.vue ===
+// <component name="[|ProfileCard|]">
+// <template>
+//   <h1>{{ title }}</h1>
+//   <p class="card">Profile</p>
+// --- (line: 5) skipped ---
+
+// === /main.ts ===
+// import DefaultCard, { ProfileCard, title } from "./ProfileCard.vue";
+// export const pageTitle = title;
+// export const component = Profile/*GOTO DEF*/Card;
+// export const fallback = DefaultCard;
+// 
+
+
+
+// === goToDefinition ===
+// === /ProfileCard.vue ===
+// [||]<component name="ProfileCard">
+// <template>
+//   <h1>{{ title }}</h1>
+//   <p class="card">Profile</p>
+// --- (line: 5) skipped ---
+
+// === /main.ts ===
+// import DefaultCard, { ProfileCard, title } from "./ProfileCard.vue";
+// export const pageTitle = title;
+// export const component = ProfileCard;
+// export const fallback = Default/*GOTO DEF*/Card;
+// 
+
+
+
+// === goToDefinition ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ title }}</h1>
+//   <p class="card/*GOTO DEF*/">Profile</p>
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// --- (line: 8) skipped ---

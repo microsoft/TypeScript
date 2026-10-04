@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/functionExpandoPropertyDeclaration.ts] ////
+
+=== functionExpandoPropertyDeclaration.ts ===
+const foo = () => {}
+>foo : { (): void; bar: number; }
+>() => {} : { (): void; bar: number; }
+
+foo.bar = 42
+>foo.bar = 42 : 42
+>foo.bar : number
+>foo : { (): void; bar: number; }
+>bar : number
+>42 : 42
+
+export {}

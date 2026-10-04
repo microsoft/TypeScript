@@ -1,0 +1,16 @@
+// === Call Hierarchy ===
+╭ name: (anonymous)
+├ kind: class
+├ file: /main.ts
+├ span:
+│ ╭ /main.ts:3:25-3:30
+│ │ 3:     const badge = `<div class="badge">`;
+│ │                            ^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /main.ts:3:25-3:30
+│ │ 3:     const badge = `<div class="badge">`;
+│ │                            ^^^^^
+│ ╰
+├ incoming: none
+╰ outgoing: none

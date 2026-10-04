@@ -1,0 +1,47 @@
+// === QuickInfo ===
+=== /jsdocLink5.ts ===
+// function g() { }
+// /**
+//  * {@link g()} {@link g() } {@link g ()} {@link g () 0} {@link g()1} {@link g() 2}
+//  * {@link u()} {@link u() } {@link u ()} {@link u () 0} {@link u()1} {@link u() 2}
+//  */
+// function f(x) {
+// }
+// f()
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f(x: any): void
+// | ```
+// | [g()](file:///jsdocLink5.ts#1,10-1,11) [g()](file:///jsdocLink5.ts#1,10-1,11) [g()](file:///jsdocLink5.ts#1,10-1,11) [0](file:///jsdocLink5.ts#1,10-1,11) [1](file:///jsdocLink5.ts#1,10-1,11) [2](file:///jsdocLink5.ts#1,10-1,11)
+// | u () u () u () u () 0 u ()1 u () 2
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 210,
+      "LSPosition": {
+        "line": 7,
+        "character": 1
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f(x: any): void\n```\n[g()](file:///jsdocLink5.ts#1,10-1,11) [g()](file:///jsdocLink5.ts#1,10-1,11) [g()](file:///jsdocLink5.ts#1,10-1,11) [0](file:///jsdocLink5.ts#1,10-1,11) [1](file:///jsdocLink5.ts#1,10-1,11) [2](file:///jsdocLink5.ts#1,10-1,11)\nu () u () u () u () 0 u ()1 u () 2"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 0
+        },
+        "end": {
+          "line": 7,
+          "character": 1
+        }
+      }
+    }
+  }
+]

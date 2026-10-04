@@ -1,0 +1,13 @@
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfParameter.ts ===
+// function f(/*FIND ALL REFS*/[|x|]: number) {
+//   return [|x|] + 1
+// }
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfParameter.ts ===
+// function f([|x|]: number) {
+//   return /*FIND ALL REFS*/[|x|] + 1
+// }

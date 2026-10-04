@@ -1,0 +1,15 @@
+// @target: es2015
+//@module: commonjs
+//@declaration: true
+export = Foo;
+
+interface Foo<T> {
+}
+
+function Foo<T>(array: T[]): Foo<T> {
+    return undefined;
+}
+
+namespace Foo {
+    export var x = "hello";
+}

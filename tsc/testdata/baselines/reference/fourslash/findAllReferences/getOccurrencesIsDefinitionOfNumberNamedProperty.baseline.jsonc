@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfNumberNamedProperty.ts ===
+// let o = { /*FIND ALL REFS*/[|1|]: 12 };
+// let y = o[[|1|]];
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfNumberNamedProperty.ts ===
+// let o = { [|1|]: 12 };
+// let y = o[/*FIND ALL REFS*/[|1|]];

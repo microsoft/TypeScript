@@ -1,0 +1,8 @@
+typeOnlyExportAsIfBody.ts(1,11): error TS1233: An export declaration can only be used at the top level of a namespace or module.
+
+
+==== typeOnlyExportAsIfBody.ts (1 errors) ====
+    if (true) export type {};
+              ~~~~~~
+!!! error TS1233: An export declaration can only be used at the top level of a namespace or module.
+    

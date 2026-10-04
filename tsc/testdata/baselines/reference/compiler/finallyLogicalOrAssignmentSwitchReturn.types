@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/finallyLogicalOrAssignmentSwitchReturn.ts] ////
+
+=== finallyLogicalOrAssignmentSwitchReturn.ts ===
+let y = false
+>y : boolean
+>false : false
+
+function test1(x: boolean): number {
+>test1 : (x: boolean) => number
+>x : boolean
+
+    try {
+        switch (x) {
+>x : boolean
+
+            case true: return 1
+>true : true
+>1 : 1
+
+            case false: return 0
+>false : false
+>0 : 0
+        }
+    } finally { y ||= true }
+>y ||= true : true
+>y : boolean
+>true : true
+}
+
+let z = false
+>z : boolean
+>false : false
+
+function test2(x: boolean): number {
+>test2 : (x: boolean) => number
+>x : boolean
+
+    try {
+        switch (x) {
+>x : boolean
+
+            case true: return 1
+>true : true
+>1 : 1
+
+            case false: return 0
+>false : false
+>0 : 0
+        }
+        return 0
+>0 : 0
+
+    } finally { z ||= true }
+>z ||= true : true
+>z : boolean
+>true : true
+}
+

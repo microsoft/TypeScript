@@ -1,0 +1,12 @@
+data.json(2,1): error TS1012: Unexpected token.
+
+
+==== data.json (1 errors) ====
+    {"a": 1}
+    {"b": 2}
+    ~
+!!! error TS1012: Unexpected token.
+    
+==== index.ts (0 errors) ====
+    import data from "./data.json";
+    

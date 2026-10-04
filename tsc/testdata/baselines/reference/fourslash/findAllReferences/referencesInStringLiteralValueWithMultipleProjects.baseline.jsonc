@@ -1,0 +1,10 @@
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/a.ts ===
+// /// <reference path="../b/b.ts" />
+// const str: string = "hello/*FIND ALL REFS*/";
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/b/b.ts ===
+// const str2: string = "hello/*FIND ALL REFS*/";

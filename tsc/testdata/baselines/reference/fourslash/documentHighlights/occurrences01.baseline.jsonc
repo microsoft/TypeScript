@@ -1,0 +1,81 @@
+// === documentHighlights ===
+// === /occurrences01.ts ===
+// foo: /*HIGHLIGHTS*/[|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 3:
+//         [|break|];
+//         [|break|] foo;
+//         continue;
+//         continue foo;
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences01.ts ===
+// foo: [|switch|] (10) {
+//     /*HIGHLIGHTS*/[|case|] 1:
+//     [|case|] 2:
+//     [|case|] 3:
+//         [|break|];
+//         [|break|] foo;
+//         continue;
+//         continue foo;
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences01.ts ===
+// foo: [|switch|] (10) {
+//     [|case|] 1:
+//     /*HIGHLIGHTS*/[|case|] 2:
+//     [|case|] 3:
+//         [|break|];
+//         [|break|] foo;
+//         continue;
+//         continue foo;
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences01.ts ===
+// foo: [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     /*HIGHLIGHTS*/[|case|] 3:
+//         [|break|];
+//         [|break|] foo;
+//         continue;
+//         continue foo;
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences01.ts ===
+// foo: [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 3:
+//         /*HIGHLIGHTS*/[|break|];
+//         [|break|] foo;
+//         continue;
+//         continue foo;
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences01.ts ===
+// foo: [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 3:
+//         [|break|];
+//         /*HIGHLIGHTS*/[|break|] foo;
+//         continue;
+//         continue foo;
+// }

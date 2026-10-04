@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingAssignmentVsPrivateFieldsJsEmit1.ts] ////
+
+=== nullishCoalescingAssignmentVsPrivateFieldsJsEmit1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61109
+
+class Cls {
+>Cls : Cls
+
+  #privateProp: number | undefined;
+>#privateProp : number | undefined
+
+  problem() {
+>problem : () => void
+
+    this.#privateProp ??= false ? neverThis() : 20;
+>this.#privateProp ??= false ? neverThis() : 20 : number
+>this.#privateProp : number | undefined
+>this : this
+>false ? neverThis() : 20 : 20
+>false : false
+>neverThis() : never
+>neverThis : () => never
+>20 : 20
+  }
+}
+
+function neverThis(): never {
+>neverThis : () => never
+
+  throw new Error("This should really really never happen!");
+>new Error("This should really really never happen!") : Error
+>Error : ErrorConstructor
+>"This should really really never happen!" : "This should really really never happen!"
+}
+

@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/enumUnicodeEscapeMemberName.ts] ////
+
+=== enumUnicodeEscapeMemberName.ts ===
+enum E {
+>E : E
+
+  \u0041 = 1,
+>\u0041 : E.A
+>1 : 1
+}
+const a = E.A;
+>a : E.A
+>E.A : E
+>E : typeof E
+>A : E
+

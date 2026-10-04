@@ -1,0 +1,9 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/export const x = 0;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export const /*FIND ALL REFS*/[|x|] = 0;

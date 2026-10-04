@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/emitDecoratorMetadataParamDecoratorNoModifiers.ts] ////
+
+=== emitDecoratorMetadataParamDecoratorNoModifiers.ts ===
+declare function paramDec(target: any, propertyKey: string | symbol | undefined, parameterIndex: number): void;
+>paramDec : Symbol(paramDec, Decl(emitDecoratorMetadataParamDecoratorNoModifiers.ts, 0, 0))
+>target : Symbol(target, Decl(emitDecoratorMetadataParamDecoratorNoModifiers.ts, 0, 26))
+>propertyKey : Symbol(propertyKey, Decl(emitDecoratorMetadataParamDecoratorNoModifiers.ts, 0, 38))
+>parameterIndex : Symbol(parameterIndex, Decl(emitDecoratorMetadataParamDecoratorNoModifiers.ts, 0, 80))
+
+class C {
+>C : Symbol(C, Decl(emitDecoratorMetadataParamDecoratorNoModifiers.ts, 0, 111))
+
+    constructor(@paramDec _value: string) {}
+>paramDec : Symbol(paramDec, Decl(emitDecoratorMetadataParamDecoratorNoModifiers.ts, 0, 0))
+>_value : Symbol(_value, Decl(emitDecoratorMetadataParamDecoratorNoModifiers.ts, 3, 16))
+}
+

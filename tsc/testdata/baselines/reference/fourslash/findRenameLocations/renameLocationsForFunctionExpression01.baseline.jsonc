@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /renameLocationsForFunctionExpression01.ts ===
+// var x = function /*RENAME*/[|fRENAME|](g: any, h: any) {
+//     [|fRENAME|]([|fRENAME|], g);
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameLocationsForFunctionExpression01.ts ===
+// var x = function [|fRENAME|](g: any, h: any) {
+//     /*RENAME*/[|fRENAME|]([|fRENAME|], g);
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameLocationsForFunctionExpression01.ts ===
+// var x = function [|fRENAME|](g: any, h: any) {
+//     [|fRENAME|](/*RENAME*/[|fRENAME|], g);
+// }

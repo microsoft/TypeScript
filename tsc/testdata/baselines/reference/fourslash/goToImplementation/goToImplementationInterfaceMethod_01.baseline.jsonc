@@ -1,0 +1,31 @@
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_01.ts ===
+// --- (line: 3) skipped ---
+// }
+// 
+// class Bar implements Foo {
+//     <|[|hello|]() {}|>
+//     public sure() {}
+// }
+// 
+// function whatever(a: Foo) {
+//     a.he/*GOTO IMPL*/llo();
+// }
+// 
+// whatever(new Bar());
+
+
+
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_01.ts ===
+// interface Foo {
+//     hel/*GOTO IMPL*/lo(): void;
+//     okay?: number;
+// }
+// 
+// class Bar implements Foo {
+//     <|[|hello|]() {}|>
+//     public sure() {}
+// }
+// 
+// --- (line: 11) skipped ---

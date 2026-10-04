@@ -1,0 +1,20 @@
+// === findRenameLocations ===
+// @useAliasesForRename: false
+
+// === /a.ts ===
+// import { /*RENAME*/[|MyTypeARENAME|] } from "./b";
+// const type: [|MyTypeARENAME|] = { foo: "bar" };
+
+// === /b.ts ===
+// export interface [|MyTypeARENAME|] {
+//     foo: string;
+// }
+
+
+
+// === findRenameLocations ===
+// @useAliasesForRename: true
+
+// === /a.ts ===
+// import { /*START PREFIX*/MyTypeA as /*RENAME*/[|MyTypeARENAME|] } from "./b";
+// const type: [|MyTypeARENAME|] = { foo: "bar" };

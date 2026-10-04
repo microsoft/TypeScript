@@ -1,0 +1,49 @@
+// === documentHighlights ===
+// === /file1.ts ===
+// class class1 extends class1 {
+//    /*HIGHLIGHTS*/[|doStuff|]() { }
+//    propName: string;
+// }
+// 
+// var c: class1;
+// c.[|doStuff|]();
+// c.propName;
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    /*HIGHLIGHTS*/[|propName|]: string;
+// }
+// 
+// var c: class1;
+// c.doStuff();
+// c.[|propName|];
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class class1 extends class1 {
+//    [|doStuff|]() { }
+//    propName: string;
+// }
+// 
+// var c: class1;
+// c./*HIGHLIGHTS*/[|doStuff|]();
+// c.propName;
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    [|propName|]: string;
+// }
+// 
+// var c: class1;
+// c.doStuff();
+// c./*HIGHLIGHTS*/[|propName|];

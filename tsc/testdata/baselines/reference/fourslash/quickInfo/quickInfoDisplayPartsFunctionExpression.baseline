@@ -1,0 +1,216 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsFunctionExpression.ts ===
+// var x = function foo() {
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var x: () => void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     foo();
+//     ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// };
+// var y = function () {
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var y: () => void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// };
+// (function foo1() {
+//           ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo1(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     foo1();
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo1(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// })();
+[
+  {
+    "marker": {
+      "Position": 4,
+      "LSPosition": {
+        "line": 0,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar x: () => void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 17,
+      "LSPosition": {
+        "line": 0,
+        "character": 17
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 17
+        },
+        "end": {
+          "line": 0,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 43,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar y: () => void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 74,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo1(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 10
+        },
+        "end": {
+          "line": 5,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 87,
+      "LSPosition": {
+        "line": 6,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo1(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 4
+        },
+        "end": {
+          "line": 6,
+          "character": 8
+        }
+      }
+    }
+  }
+]

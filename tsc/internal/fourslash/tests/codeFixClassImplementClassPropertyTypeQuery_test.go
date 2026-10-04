@@ -1,0 +1,30 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassImplementClassPropertyTypeQuery(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: false
+class A {
+    A: typeof A;
+}
+class D implements A {[| |]}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'A'",
+		NewFileContent: `class A {
+    A: typeof A;
+}
+class D implements A {
+    A: typeof A;
+}`,
+		Index: 0,
+	})
+}

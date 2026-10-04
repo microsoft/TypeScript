@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/mergedNamespaceDeclarationMemberReferences.ts] ////
+
+=== mergedNamespaceDeclarationMemberReferences.ts ===
+// Unqualified namespace member references across merged namespace declarations
+namespace N {
+>N : Symbol(N, Decl(mergedNamespaceDeclarationMemberReferences.ts, 0, 0), Decl(mergedNamespaceDeclarationMemberReferences.ts, 11, 1))
+
+    export const x = 1;
+>x : Symbol(x, Decl(mergedNamespaceDeclarationMemberReferences.ts, 2, 16))
+
+    export function fn() {
+>fn : Symbol(fn, Decl(mergedNamespaceDeclarationMemberReferences.ts, 2, 23))
+
+        return 42;
+    }
+    export class A {
+>A : Symbol(A, Decl(mergedNamespaceDeclarationMemberReferences.ts, 5, 5))
+
+        method() {
+>method : Symbol(A.method, Decl(mergedNamespaceDeclarationMemberReferences.ts, 6, 20))
+
+            console.log("A.method");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+    }
+}
+
+namespace N {
+>N : Symbol(N, Decl(mergedNamespaceDeclarationMemberReferences.ts, 0, 0), Decl(mergedNamespaceDeclarationMemberReferences.ts, 11, 1))
+
+    export const y = x;
+>y : Symbol(y, Decl(mergedNamespaceDeclarationMemberReferences.ts, 14, 16))
+>x : Symbol(x, Decl(mergedNamespaceDeclarationMemberReferences.ts, 2, 16))
+
+    fn();
+>fn : Symbol(fn, Decl(mergedNamespaceDeclarationMemberReferences.ts, 2, 23))
+
+    export class B extends A {
+>B : Symbol(B, Decl(mergedNamespaceDeclarationMemberReferences.ts, 15, 9))
+>A : Symbol(A, Decl(mergedNamespaceDeclarationMemberReferences.ts, 5, 5))
+
+        override method() {
+>method : Symbol(B.method, Decl(mergedNamespaceDeclarationMemberReferences.ts, 16, 30))
+
+            console.log("B.method");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+    }
+    const a = new A();
+>a : Symbol(a, Decl(mergedNamespaceDeclarationMemberReferences.ts, 21, 9))
+>A : Symbol(A, Decl(mergedNamespaceDeclarationMemberReferences.ts, 5, 5))
+}
+

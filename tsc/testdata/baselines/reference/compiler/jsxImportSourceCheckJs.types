@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/jsxImportSourceCheckJs.ts] ////
+
+=== /node_modules/preact/jsx-runtime/index.d.ts ===
+export namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        div: {};
+>div : {}
+    }
+}
+
+=== /index.js ===
+<div />;
+><div /> : import("preact/jsx-runtime").JSX.Element
+>div : any
+

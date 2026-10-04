@@ -1,0 +1,40 @@
+// === Document Symbols ===
+// === /navigationItemsExportDefaultExpression2.ts ===
+// export const <|[|{| name: foo, kind: Variable |}foo|] = {
+//   <|[|{| name: foo, kind: Property |}foo|]: {}|>,
+// }|>;
+// 
+// export default {
+//   foo: {},
+// };
+// 
+// export default {
+//   foo: {},
+// };
+// 
+// <|type [|{| name: Type, kind: Class |}Type|] = typeof foo;|>
+// 
+// export default {
+//   foo: {},
+// } as Type;
+// 
+// export default {
+//   foo: {},
+// } satisfies Type;
+// 
+// export default (<|[|{| name: default, kind: Class |}|]class {
+//   <|[|{| name: prop, kind: Property |}prop|] = 42;|>
+// }|>);
+// 
+// export default (<|class [|{| name: Cls, kind: Class |}Cls|] {
+//   <|[|{| name: prop, kind: Property |}prop|] = 42;|>
+// }|>);
+
+// === Details ===
+(Variable) foo
+  (Property) foo
+(Class) Type
+(Class) default
+  (Property) prop
+(Class) Cls
+  (Property) prop

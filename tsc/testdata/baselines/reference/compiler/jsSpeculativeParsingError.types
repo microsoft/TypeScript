@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/jsSpeculativeParsingError.ts] ////
+
+=== t.js ===
+const is_morning = new Date().getHours() < 12;
+>is_morning : boolean
+>new Date().getHours() < 12 : boolean
+>new Date().getHours() : number
+>new Date().getHours : () => number
+>new Date() : Date
+>Date : DateConstructor
+>getHours : () => number
+>12 : 12
+
+// prettier-ignore
+const greeting = ([
+>greeting : string[]
+>([  is_morning ? 'good morning' : 'good evening']) : string[]
+>[  is_morning ? 'good morning' : 'good evening'] : string[]
+
+  is_morning ? 'good morning' : 'good evening'
+>is_morning ? 'good morning' : 'good evening' : "good evening" | "good morning"
+>is_morning : boolean
+>'good morning' : "good morning"
+>'good evening' : "good evening"
+
+]);
+

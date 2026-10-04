@@ -1,0 +1,15 @@
+/tsconfig.json(1,12): error TS5024: Compiler option 'files' requires a value of type Array.
+
+
+==== /tsconfig.json (1 errors) ====
+    { "files": "a.ts" }
+               ~~~~~~
+!!! error TS5024: Compiler option 'files' requires a value of type Array.
+    
+==== /a.ts (0 errors) ====
+    /// <reference types="jquery" />
+    $.x;
+    
+==== /node_modules/@types/jquery/index.d.ts (0 errors) ====
+    declare var $: { x: any };
+    

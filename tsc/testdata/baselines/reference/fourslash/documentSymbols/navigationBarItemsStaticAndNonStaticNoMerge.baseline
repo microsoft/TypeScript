@@ -1,0 +1,11 @@
+// === Document Symbols ===
+// === /navigationBarItemsStaticAndNonStaticNoMerge.ts ===
+// <|class [|{| name: C, kind: Class |}C|] {
+//     <|static [|{| name: x, kind: Property |}x|];|>
+//     <|[|{| name: x, kind: Property |}x|];|>
+// }|>
+
+// === Details ===
+(Class) C
+  (Property) x
+  (Property) x

@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/comparisonSameNamedAliases.ts] ////
+
+=== comparisonSameNamedAliases.ts ===
+interface First { first: string }
+>first : string
+
+interface Middle { middle: string }
+>middle : string
+
+interface ZLast { last: string }
+>last : string
+
+namespace A {
+    export type Alias<T> = (T extends string ? ZLast : First) & { common: unknown };
+>Alias : Alias<T>
+>common : unknown
+}
+namespace B {
+    export type Alias<T> = T & { common: unknown };
+>Alias : Alias<T>
+>common : unknown
+}
+
+declare const a: A.Alias<string>;
+>a : A.Alias<string>
+>A : any
+
+declare const b: A.Alias<number>;
+>b : A.Alias<number>
+>A : any
+
+declare const c: B.Alias<Middle>;
+>c : B.Alias<Middle>
+>B : any
+
+export const values = [a, b, c];
+>values : (A.Alias<string> | A.Alias<number> | B.Alias<Middle>)[]
+>[a, b, c] : (A.Alias<string> | A.Alias<number> | B.Alias<Middle>)[]
+>a : A.Alias<string>
+>b : A.Alias<number>
+>c : B.Alias<Middle>
+
+export const reversed = [c, b, a];
+>reversed : (A.Alias<string> | A.Alias<number> | B.Alias<Middle>)[]
+>[c, b, a] : (A.Alias<string> | A.Alias<number> | B.Alias<Middle>)[]
+>c : B.Alias<Middle>
+>b : A.Alias<number>
+>a : A.Alias<string>
+
+export const shuffled = [b, a, c];
+>shuffled : (A.Alias<string> | A.Alias<number> | B.Alias<Middle>)[]
+>[b, a, c] : (A.Alias<string> | A.Alias<number> | B.Alias<Middle>)[]
+>b : A.Alias<number>
+>a : A.Alias<string>
+>c : B.Alias<Middle>
+

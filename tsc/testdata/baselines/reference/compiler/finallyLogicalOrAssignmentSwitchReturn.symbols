@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/finallyLogicalOrAssignmentSwitchReturn.ts] ////
+
+=== finallyLogicalOrAssignmentSwitchReturn.ts ===
+let y = false
+>y : Symbol(y, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 0, 3))
+
+function test1(x: boolean): number {
+>test1 : Symbol(test1, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 0, 13))
+>x : Symbol(x, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 1, 15))
+
+    try {
+        switch (x) {
+>x : Symbol(x, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 1, 15))
+
+            case true: return 1
+            case false: return 0
+        }
+    } finally { y ||= true }
+>y : Symbol(y, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 0, 3))
+}
+
+let z = false
+>z : Symbol(z, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 10, 3))
+
+function test2(x: boolean): number {
+>test2 : Symbol(test2, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 10, 13))
+>x : Symbol(x, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 11, 15))
+
+    try {
+        switch (x) {
+>x : Symbol(x, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 11, 15))
+
+            case true: return 1
+            case false: return 0
+        }
+        return 0
+    } finally { z ||= true }
+>z : Symbol(z, Decl(finallyLogicalOrAssignmentSwitchReturn.ts, 10, 3))
+}
+

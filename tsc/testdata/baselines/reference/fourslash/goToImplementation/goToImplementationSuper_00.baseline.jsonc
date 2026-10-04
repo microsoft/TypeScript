@@ -1,0 +1,11 @@
+// === goToImplementation ===
+// === /goToImplementationSuper_00.ts ===
+// <|class [|Foo|] {
+//     constructor() {}
+// }|>
+// 
+// <|class [|Bar|] extends Foo {
+//     constructor() {
+//         su/*GOTO IMPL*/per();
+//     }
+// }|>

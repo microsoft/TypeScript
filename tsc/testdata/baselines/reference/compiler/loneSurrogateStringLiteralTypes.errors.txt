@@ -1,0 +1,8 @@
+loneSurrogateStringLiteralTypes.ts(1,7): error TS2322: Type '"\uDC00"' is not assignable to type '"\uD800"'.
+
+
+==== loneSurrogateStringLiteralTypes.ts (1 errors) ====
+    const x: "\uD800" = "\uDC00";
+          ~
+!!! error TS2322: Type '"\uDC00"' is not assignable to type '"\uD800"'.
+    

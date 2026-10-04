@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of44.ts] ////
+
+=== for-of44.ts ===
+var array: [number, string | boolean | symbol][] = [[0, ""], [0, true], [1, Symbol()]]
+>array : [number, string | symbol | boolean][]
+>[[0, ""], [0, true], [1, Symbol()]] : ([number, string] | [number, symbol] | [number, true])[]
+>[0, ""] : [number, string]
+>0 : 0
+>"" : ""
+>[0, true] : [number, true]
+>0 : 0
+>true : true
+>[1, Symbol()] : [number, symbol]
+>1 : 1
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+for (var [num, strBoolSym] of array) {
+>num : number
+>strBoolSym : string | symbol | boolean
+>array : [number, string | symbol | boolean][]
+
+    num;
+>num : number
+
+    strBoolSym;
+>strBoolSym : string | symbol | boolean
+}

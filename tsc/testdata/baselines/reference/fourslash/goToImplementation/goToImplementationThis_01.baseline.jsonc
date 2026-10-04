@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /goToImplementationThis_01.ts ===
+// <|class [|Bar|] extends Foo {
+//     hello(): th/*GOTO IMPL*/is {
+//         return this;
+//     }
+// }|>

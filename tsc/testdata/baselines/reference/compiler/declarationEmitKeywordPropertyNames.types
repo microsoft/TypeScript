@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/declarationEmitKeywordPropertyNames.ts] ////
+
+=== declarationEmitKeywordPropertyNames.ts ===
+export const a = {
+>a : { foo: string; bar: string; buzz: string; new: string; delete: string; break: string; continue: string; }
+>{    foo: "foo",    bar: "bar",    buzz: "buzz",    new: "new",    delete: "delete",    break: "break",    continue: "continue",} : { foo: string; bar: string; buzz: string; new: string; delete: string; break: string; continue: string; }
+
+    foo: "foo",
+>foo : string
+>"foo" : "foo"
+
+    bar: "bar",
+>bar : string
+>"bar" : "bar"
+
+    buzz: "buzz",
+>buzz : string
+>"buzz" : "buzz"
+
+    new: "new",
+>new : string
+>"new" : "new"
+
+    delete: "delete",
+>delete : string
+>"delete" : "delete"
+
+    break: "break",
+>break : string
+>"break" : "break"
+
+    continue: "continue",
+>continue : string
+>"continue" : "continue"
+
+};
+
+export const b = {
+>b : { readonly foo: "foo"; readonly bar: "bar"; readonly buzz: "buzz"; readonly new: "new"; readonly delete: "delete"; readonly break: "break"; readonly continue: "continue"; }
+>{    foo: "foo",    bar: "bar",    buzz: "buzz",    new: "new",    delete: "delete",    break: "break",    continue: "continue",} as const : { readonly foo: "foo"; readonly bar: "bar"; readonly buzz: "buzz"; readonly new: "new"; readonly delete: "delete"; readonly break: "break"; readonly continue: "continue"; }
+>{    foo: "foo",    bar: "bar",    buzz: "buzz",    new: "new",    delete: "delete",    break: "break",    continue: "continue",} : { readonly foo: "foo"; readonly bar: "bar"; readonly buzz: "buzz"; readonly new: "new"; readonly delete: "delete"; readonly break: "break"; readonly continue: "continue"; }
+
+    foo: "foo",
+>foo : "foo"
+>"foo" : "foo"
+
+    bar: "bar",
+>bar : "bar"
+>"bar" : "bar"
+
+    buzz: "buzz",
+>buzz : "buzz"
+>"buzz" : "buzz"
+
+    new: "new",
+>new : "new"
+>"new" : "new"
+
+    delete: "delete",
+>delete : "delete"
+>"delete" : "delete"
+
+    break: "break",
+>break : "break"
+>"break" : "break"
+
+    continue: "continue",
+>continue : "continue"
+>"continue" : "continue"
+
+} as const;
+

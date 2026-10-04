@@ -1,0 +1,50 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTags9.js ===
+// /**
+//  * @typedef {{ [x: string]: any, y: number }} Foo
+//  */
+// 
+// /**
+//  * @type {(t: T) => number}
+//  * @template {Foo} T Comment Text
+//  */
+// const foo = t => t.y;
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const foo: (t: T) => number
+// | ```
+// | 
+// | 
+// | *@template* `T` — Comment Text
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 135,
+      "LSPosition": {
+        "line": 8,
+        "character": 6
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst foo: (t: T) => number\n```\n\n\n*@template* `T` — Comment Text"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 6
+        },
+        "end": {
+          "line": 8,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

@@ -1,0 +1,238 @@
+//// [tests/cases/compiler/nonUniformUnionNarrowing.ts] ////
+
+=== nonUniformUnionNarrowing.ts ===
+enum E { A = 1, B = 2 }
+>E : E
+>A : E.A
+>1 : 1
+>B : E.B
+>2 : 2
+
+function f1(x: E | 1 | 2) {
+>f1 : (x: E | 1 | 2) => void
+>x : 1 | 2 | E
+
+    if (x === E.A) {
+>x === E.A : boolean
+>x : 1 | 2 | E
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+        x;  // 1 | E.A
+>x : 1 | E.A
+    }
+    else {
+        x;  // 2 | E.B
+>x : 2 | E.B
+    }
+}
+
+function f1s(x: E | 1 | 2) {
+>f1s : (x: E | 1 | 2) => void
+>x : 1 | 2 | E
+
+    switch (x) {
+>x : 1 | 2 | E
+
+        case E.A:
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+            x;  // 1 | E.A
+>x : 1 | E.A
+
+            break;
+        default:
+            x;  // 2 | E.B
+>x : 2 | E.B
+    }
+}
+
+function f2(x: E | 1 | 2) {
+>f2 : (x: E | 1 | 2) => void
+>x : 1 | 2 | E
+
+    if (x === 1) {
+>x === 1 : boolean
+>x : 1 | 2 | E
+>1 : 1
+
+        x;  // 1 | E.A
+>x : 1 | E.A
+    }
+    else {
+        x;  // 2 | E.B
+>x : 2 | E.B
+    }
+}
+
+function f2s(x: E | 1 | 2) {
+>f2s : (x: E | 1 | 2) => void
+>x : 1 | 2 | E
+
+    switch (x) {
+>x : 1 | 2 | E
+
+        case 1:
+>1 : 1
+
+            x;  // 1 | E.A
+>x : 1 | E.A
+
+            break;
+        default:
+            x;  // 2 | E.B
+>x : 2 | E.B
+    }
+}
+
+namespace N1 {
+>N1 : typeof N1
+
+    export enum E { A = 1, B = 2 }
+>E : E
+>A : E.A
+>1 : 1
+>B : E.B
+>2 : 2
+}
+namespace N2 {
+>N2 : typeof N2
+
+    export enum E { A = 1, B = 2 }
+>E : E
+>A : E.A
+>1 : 1
+>B : E.B
+>2 : 2
+}
+
+function f3(x: N1.E | N2.E) {
+>f3 : (x: N1.E | N2.E) => void
+>x : N1.E | N2.E
+>N1 : any
+>N2 : any
+
+    if (x === N1.E.A) {
+>x === N1.E.A : boolean
+>x : N1.E | N2.E
+>N1.E.A : N1.E.A
+>N1.E : typeof N1.E
+>N1 : typeof N1
+>E : typeof N1.E
+>A : N1.E.A
+
+        x;  // N1.E.A | N2.E.A
+>x : N1.E.A | N2.E.A
+    }
+    else {
+        x;  // N1.E.B | N2.E.B
+>x : N1.E.B | N2.E.B
+    }
+}
+
+function f3s(x: N1.E | N2.E) {
+>f3s : (x: N1.E | N2.E) => void
+>x : N1.E | N2.E
+>N1 : any
+>N2 : any
+
+    switch (x) {
+>x : N1.E | N2.E
+
+        case N1.E.A:
+>N1.E.A : N1.E.A
+>N1.E : typeof N1.E
+>N1 : typeof N1
+>E : typeof N1.E
+>A : N1.E.A
+
+            x;  // N1.E.A | N2.E.A
+>x : N1.E.A | N2.E.A
+
+            break;
+        default:
+            x;  // N1.E.B | N2.E.B
+>x : N1.E.B | N2.E.B
+    }
+}
+
+const sym = Symbol();
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+function f4(x: symbol | string) {
+>f4 : (x: symbol | string) => void
+>x : string | symbol
+
+    if (x === sym) {
+>x === sym : boolean
+>x : string | symbol
+>sym : unique symbol
+
+        x;  // symbol (not narrowed)
+>x : symbol
+    }
+}
+
+function f4s(x: symbol | string) {
+>f4s : (x: symbol | string) => void
+>x : string | symbol
+
+    switch (x) {
+>x : string | symbol
+
+        case sym:
+>sym : unique symbol
+
+            x;  // symbol (not narrowed)
+>x : symbol
+    }
+}
+
+declare enum EE { A, B }
+>EE : EE
+>A : EE.A
+>B : EE.B
+
+function f6(x: EE | 1 | 2) {
+>f6 : (x: EE | 1 | 2) => void
+>x : 1 | 2 | EE
+
+    if (x === 1) {
+>x === 1 : boolean
+>x : 1 | 2 | EE
+>1 : 1
+
+        x;  // 1 | EE (computed enum compares to any number)
+>x : 1 | EE
+    }
+    else {
+        x;  // 2
+>x : 2
+    }
+}
+
+function f6s(x: EE | 1 | 2) {
+>f6s : (x: EE | 1 | 2) => void
+>x : 1 | 2 | EE
+
+    switch (x) {
+>x : 1 | 2 | EE
+
+        case 1:
+>1 : 1
+
+            x;  // 1 | EE (computed enum compares to any number)
+>x : 1 | EE
+
+            break;
+        default:
+            x;  // 2
+>x : 2
+    }
+}
+

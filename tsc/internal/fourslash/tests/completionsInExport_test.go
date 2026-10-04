@@ -1,0 +1,124 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsInExport(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `const a = "a";
+type T = number;
+export { /**/ };`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+				"T",
+				&lsproto.CompletionItem{
+					Label:    "type",
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+		},
+	})
+	f.Insert(t, "a, ")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				"T",
+				&lsproto.CompletionItem{
+					Label:      "a?",
+					InsertText: new("a"),
+					FilterText: new("a"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "type",
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+		},
+	})
+	f.Insert(t, "T as ")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{},
+		},
+	})
+	f.Insert(t, "U, ")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				"T",
+				&lsproto.CompletionItem{
+					Label:      "a?",
+					InsertText: new("a"),
+					FilterText: new("a"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "type",
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+		},
+	})
+	f.Insert(t, "T, ")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "a?",
+					InsertText: new("a"),
+					FilterText: new("a"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "T?",
+					InsertText: new("T"),
+					FilterText: new("T"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "type",
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+		},
+	})
+}

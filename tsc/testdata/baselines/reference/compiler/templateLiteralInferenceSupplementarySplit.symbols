@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/templateLiteralInferenceSupplementarySplit.ts] ////
+
+=== templateLiteralInferenceSupplementarySplit.ts ===
+// Template literal type inference consumes one code point at a time, matching
+// the string iterator (`[x, ..._] = s`) rather than UTF-16 code-unit indexing
+// (`s[0]`). A supplementary code point is therefore kept whole rather than being
+// split into its surrogate halves: Head<"😀abc"> is "😀" and Rest<"😀abc"> is
+// "abc". This intentionally diverges from tsc, which advances one code unit at a
+// time and yields the high surrogate "\uD83D".
+type Head<S extends string> = S extends `${infer H}${infer _R}` ? H : never;
+>Head : Symbol(Head, Decl(templateLiteralInferenceSupplementarySplit.ts, 0, 0))
+>S : Symbol(S, Decl(templateLiteralInferenceSupplementarySplit.ts, 6, 10))
+>S : Symbol(S, Decl(templateLiteralInferenceSupplementarySplit.ts, 6, 10))
+>H : Symbol(H, Decl(templateLiteralInferenceSupplementarySplit.ts, 6, 48))
+>_R : Symbol(_R, Decl(templateLiteralInferenceSupplementarySplit.ts, 6, 58))
+>H : Symbol(H, Decl(templateLiteralInferenceSupplementarySplit.ts, 6, 48))
+
+type Rest<S extends string> = S extends `${infer _H}${infer R}` ? R : never;
+>Rest : Symbol(Rest, Decl(templateLiteralInferenceSupplementarySplit.ts, 6, 76))
+>S : Symbol(S, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 10))
+>S : Symbol(S, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 10))
+>_H : Symbol(_H, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 48))
+>R : Symbol(R, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 59))
+>R : Symbol(R, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 59))
+
+type H = Head<"\u{1F600}abc">;
+>H : Symbol(H, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 76))
+>Head : Symbol(Head, Decl(templateLiteralInferenceSupplementarySplit.ts, 0, 0))
+
+type R = Rest<"\u{1F600}abc">;
+>R : Symbol(R, Decl(templateLiteralInferenceSupplementarySplit.ts, 9, 30))
+>Rest : Symbol(Rest, Decl(templateLiteralInferenceSupplementarySplit.ts, 6, 76))
+
+const h: "\u{1F600}" = "x" as unknown as H;
+>h : Symbol(h, Decl(templateLiteralInferenceSupplementarySplit.ts, 12, 5))
+>H : Symbol(H, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 76))
+
+const r: "abc" = "x" as unknown as R;
+>r : Symbol(r, Decl(templateLiteralInferenceSupplementarySplit.ts, 13, 5))
+>R : Symbol(R, Decl(templateLiteralInferenceSupplementarySplit.ts, 9, 30))
+
+// Reassembling the head and rest reproduces the original string.
+type Both = `${H}${R}`;
+>Both : Symbol(Both, Decl(templateLiteralInferenceSupplementarySplit.ts, 13, 37))
+>H : Symbol(H, Decl(templateLiteralInferenceSupplementarySplit.ts, 7, 76))
+>R : Symbol(R, Decl(templateLiteralInferenceSupplementarySplit.ts, 9, 30))
+
+const both: "\u{1F600}abc" = "x" as unknown as Both;
+>both : Symbol(both, Decl(templateLiteralInferenceSupplementarySplit.ts, 17, 5))
+>Both : Symbol(Both, Decl(templateLiteralInferenceSupplementarySplit.ts, 13, 37))
+

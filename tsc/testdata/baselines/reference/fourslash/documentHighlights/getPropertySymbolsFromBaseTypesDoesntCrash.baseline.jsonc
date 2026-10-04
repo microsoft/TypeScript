@@ -1,0 +1,5 @@
+// === documentHighlights ===
+// === /file1.ts ===
+// class ClassA implements IInterface {
+//     private /*HIGHLIGHTS*/[|value|]: number;
+// }

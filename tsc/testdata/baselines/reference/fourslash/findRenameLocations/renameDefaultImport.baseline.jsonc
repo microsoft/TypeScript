@@ -1,0 +1,27 @@
+// === findRenameLocations ===
+// === /A.ts ===
+// import [|BRENAME|] from "./B";
+// let b = new [|BRENAME|]();
+// b.test();
+
+// === /B.ts ===
+// export default class /*RENAME*/[|BRENAME|] {
+//     test() {
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /A.ts ===
+// import /*RENAME*/[|BRENAME|] from "./B";
+// let b = new [|BRENAME|]();
+// b.test();
+
+
+
+// === findRenameLocations ===
+// === /A.ts ===
+// import [|BRENAME|] from "./B";
+// let b = new /*RENAME*/[|BRENAME|]();
+// b.test();

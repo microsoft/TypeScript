@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/enumUnicodeEscapeMemberName.ts] ////
+
+=== enumUnicodeEscapeMemberName.ts ===
+enum E {
+>E : Symbol(E, Decl(enumUnicodeEscapeMemberName.ts, 0, 0))
+
+  \u0041 = 1,
+>\u0041 : Symbol(E[\u0041], Decl(enumUnicodeEscapeMemberName.ts, 0, 8))
+}
+const a = E.A;
+>a : Symbol(a, Decl(enumUnicodeEscapeMemberName.ts, 3, 5))
+>E.A : Symbol(E[\u0041], Decl(enumUnicodeEscapeMemberName.ts, 0, 8))
+>E : Symbol(E, Decl(enumUnicodeEscapeMemberName.ts, 0, 0))
+>A : Symbol(E[\u0041], Decl(enumUnicodeEscapeMemberName.ts, 0, 8))
+

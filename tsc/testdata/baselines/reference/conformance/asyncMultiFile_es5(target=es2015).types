@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/async/es5/asyncMultiFile_es5.ts] ////
+
+=== a.ts ===
+async function f() {}
+>f : () => Promise<void>
+
+=== b.ts ===
+function g() { }
+>g : () => void
+

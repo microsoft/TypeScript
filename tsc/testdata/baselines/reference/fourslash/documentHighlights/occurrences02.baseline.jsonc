@@ -1,0 +1,29 @@
+// === documentHighlights ===
+// === /occurrences02.ts ===
+// function /*HIGHLIGHTS*/[|f|](x: typeof [|f|]) {
+//     [|f|]([|f|]);
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences02.ts ===
+// function [|f|](x: typeof /*HIGHLIGHTS*/[|f|]) {
+//     [|f|]([|f|]);
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences02.ts ===
+// function [|f|](x: typeof [|f|]) {
+//     /*HIGHLIGHTS*/[|f|]([|f|]);
+// }
+
+
+
+// === documentHighlights ===
+// === /occurrences02.ts ===
+// function [|f|](x: typeof [|f|]) {
+//     [|f|](/*HIGHLIGHTS*/[|f|]);
+// }

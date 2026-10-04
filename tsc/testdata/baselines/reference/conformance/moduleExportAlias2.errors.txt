@@ -1,0 +1,28 @@
+index.js(3,13): error TS2339: Property 'f' does not exist on type '() => void'.
+semver.js(2,11): error TS2309: An export assignment cannot be used in a module with other exported elements.
+semver.js(3,9): error TS2339: Property 'f' does not exist on type '() => void'.
+
+
+==== index.js (1 errors) ====
+    /// <reference path='node.d.ts' />
+    const C = require("./semver")
+    var two = C.f(1)
+                ~
+!!! error TS2339: Property 'f' does not exist on type '() => void'.
+    var c = new C
+    
+==== node.d.ts (0 errors) ====
+    declare function require(name: string): any;
+    declare var exports: any;
+    declare var module: { exports: any };
+==== semver.js (2 errors) ====
+    /// <reference path='node.d.ts' />
+    exports = module.exports = C
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    exports.f = n => n + 1
+            ~
+!!! error TS2339: Property 'f' does not exist on type '() => void'.
+    function C() {
+        this.p = 1
+    }

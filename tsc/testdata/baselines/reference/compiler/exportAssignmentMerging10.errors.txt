@@ -1,0 +1,27 @@
+a.ts(7,16): error TS2702: 'Base' only refers to a type, but is being used as a namespace here.
+a.ts(13,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== a.ts (2 errors) ====
+    class Foo {}
+    
+    export class Base<T> {
+        value!: T;
+    }
+    
+    import _Base = Base;
+                   ~~~~
+!!! error TS2702: 'Base' only refers to a type, but is being used as a namespace here.
+    
+    namespace Foo {
+        export import Base = _Base;
+    }
+    
+    export = Foo;
+    ~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    
+==== b.ts (0 errors) ====
+    import { Base } from "./a";
+    
+    class Derived extends Base<string> {}

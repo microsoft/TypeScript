@@ -1,0 +1,15 @@
+//// [/a.vue] (ScriptKind: ScriptKindTS, ContentMapper: [.vue])
+--- Original ---
+a
+--- Transformed ---
+export default shared.value;
+
+//// [/b.vue] (ScriptKind: ScriptKindTS, ContentMapper: [.vue])
+--- Original ---
+b
+--- Transformed ---
+export default shared.value;
+
+=== Diagnostics ===
+
+<no content>

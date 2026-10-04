@@ -1,1 +1,0 @@
-This file is just here so that git will create the directory.

@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importSpecifiers_js.ts] ////
+
+=== a.ts ===
+export interface A {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== a.js ===
+import { type A } from "./a";
+>A : Symbol(A, Decl(a.js, 0, 8))
+

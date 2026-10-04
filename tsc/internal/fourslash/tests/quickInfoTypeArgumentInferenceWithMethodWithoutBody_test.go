@@ -1,0 +1,28 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickInfoTypeArgumentInferenceWithMethodWithoutBody(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface ProxyHandler<T extends object> {
+    getPrototypeOf?(target: T): object | null;
+}
+interface ProxyConstructor {
+    new <T extends object>(target: T, handler: ProxyHandler<T>): T;
+}
+declare var Proxy: ProxyConstructor;
+let target = {}
+let proxy = new /**/Proxy(target, {
+    getPrototypeOf()
+})`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "")
+	f.VerifyQuickInfoExists(t)
+}

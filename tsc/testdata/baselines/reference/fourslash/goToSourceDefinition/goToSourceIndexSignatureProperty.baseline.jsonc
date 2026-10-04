@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export const config = { <|[|name|]: "test"|> };
+
+// === /home/src/workspaces/project/index.ts ===
+// import { config } from "pkg";
+// config./*GOTO SOURCE DEF*/name;

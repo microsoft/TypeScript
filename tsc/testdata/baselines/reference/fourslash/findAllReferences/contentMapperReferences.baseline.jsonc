@@ -1,0 +1,131 @@
+// === findAllReferences ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ [|title|] }}</h1>
+//   <p class="card">Profile</p>
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// export const [|ti/*FIND ALL REFS*/tle|] = "Profile";
+// export const heading = format([|title|]);
+// </script>
+// 
+
+// === /main.ts ===
+// import DefaultCard, { ProfileCard, [|title|] } from "./ProfileCard.vue";
+// export const pageTitle = [|title|];
+// export const component = ProfileCard;
+// export const fallback = DefaultCard;
+// 
+
+
+
+// === findAllReferences ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ [|ti/*FIND ALL REFS*/tle|] }}</h1>
+//   <p class="card">Profile</p>
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// export const [|title|] = "Profile";
+// export const heading = format([|title|]);
+// </script>
+// 
+
+// === /main.ts ===
+// import DefaultCard, { ProfileCard, [|title|] } from "./ProfileCard.vue";
+// export const pageTitle = [|title|];
+// export const component = ProfileCard;
+// export const fallback = DefaultCard;
+// 
+
+
+
+// === findAllReferences ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ [|title|] }}</h1>
+//   <p class="card">Profile</p>
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// export const [|title|] = "Profile";
+// export const heading = format([|title|]);
+// </script>
+// 
+
+// === /main.ts ===
+// import DefaultCard, { ProfileCard, [|title|] } from "./ProfileCard.vue";
+// export const pageTitle = [|ti/*FIND ALL REFS*/tle|];
+// export const component = ProfileCard;
+// export const fallback = DefaultCard;
+// 
+
+
+
+// === findAllReferences ===
+// === /ProfileCard.vue ===
+// --- (line: 3) skipped ---
+//   <p class="card">Profile</p>
+// </template>
+// <script lang="ts">
+// import { [|format|] } from "./format";
+// export const title = "Profile";
+// export const heading = [|for/*FIND ALL REFS*/mat|](title);
+// </script>
+// 
+
+// === /format.ts ===
+// export function [|format|](value: string): string { return value; }
+// 
+
+
+
+// === findAllReferences ===
+// === /ProfileCard.vue ===
+// <component name="[|ProfileCard|]">
+// <template>
+//   <h1>{{ title }}</h1>
+//   <p class="card">Profile</p>
+// --- (line: 5) skipped ---
+
+// === /main.ts ===
+// import DefaultCard, { [|ProfileCard|], title } from "./ProfileCard.vue";
+// export const pageTitle = title;
+// export const component = [|Profile/*FIND ALL REFS*/Card|];
+// export const fallback = DefaultCard;
+// 
+
+
+
+// === findAllReferences ===
+// === /ProfileCard.vue ===
+// [||]<component name="ProfileCard">
+// <template>
+//   <h1>{{ title }}</h1>
+//   <p class="card">Profile</p>
+// --- (line: 5) skipped ---
+
+// === /main.ts ===
+// import [|DefaultCard|], { ProfileCard, title } from "./ProfileCard.vue";
+// export const pageTitle = title;
+// export const component = ProfileCard;
+// export const fallback = [|Default/*FIND ALL REFS*/Card|];
+// 
+
+
+
+// === findAllReferences ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ title }}</h1>
+//   <p class="card/*FIND ALL REFS*/">Profile</p>
+// </template>
+// <script lang="ts">
+// import { format } from "./format";
+// --- (line: 8) skipped ---

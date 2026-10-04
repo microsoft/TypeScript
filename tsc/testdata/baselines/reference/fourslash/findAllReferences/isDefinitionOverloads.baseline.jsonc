@@ -1,0 +1,30 @@
+// === findAllReferences ===
+// === /isDefinitionOverloads.ts ===
+// function /*FIND ALL REFS*/[|f|](x: number): void;
+// function [|f|](x: string): void;
+// function [|f|](x: number | string) { }
+// 
+// [|f|](1);
+// [|f|]("a");
+
+
+
+// === findAllReferences ===
+// === /isDefinitionOverloads.ts ===
+// function [|f|](x: number): void;
+// function /*FIND ALL REFS*/[|f|](x: string): void;
+// function [|f|](x: number | string) { }
+// 
+// [|f|](1);
+// [|f|]("a");
+
+
+
+// === findAllReferences ===
+// === /isDefinitionOverloads.ts ===
+// function [|f|](x: number): void;
+// function [|f|](x: string): void;
+// function /*FIND ALL REFS*/[|f|](x: number | string) { }
+// 
+// [|f|](1);
+// [|f|]("a");

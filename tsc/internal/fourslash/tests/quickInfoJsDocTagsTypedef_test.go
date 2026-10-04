@@ -1,0 +1,34 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickInfoJsDocTagsTypedef(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @noEmit: true
+// @allowJs: true
+// @Filename: quickInfoJsDocTagsTypedef.js
+/**
+ * Bar comment
+ * @typedef {Object} /*1*/Bar
+ * @property {string} baz - baz comment
+ * @property {string} qux - qux comment
+ */
+
+/**
+ * foo comment
+ * @param {/*2*/Bar} x - x comment
+ * @returns {Bar}
+ */
+function foo(x) {
+    return x;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineHover(t)
+}

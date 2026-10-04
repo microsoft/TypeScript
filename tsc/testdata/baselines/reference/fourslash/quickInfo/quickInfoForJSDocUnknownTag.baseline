@@ -1,0 +1,264 @@
+// === QuickInfo ===
+=== /quickInfoForJSDocUnknownTag.ts ===
+// /**
+//  * @example
+//  * if (true) {
+//  *     foo()
+//  * }
+//  */
+// function foo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(): string
+// | ```
+// | 
+// | 
+// | *@example*
+// | ```tsx
+// | if (true) {
+// |     foo()
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  @example
+//  {
+//      foo()
+//  }
+//  */
+// function foo2() {
+//          ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo2(): string
+// | ```
+// | 
+// | 
+// | *@example*
+// | ```tsx
+// | {
+// |     foo()
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @example
+//  *   x y
+//  *   12345
+//  *      b
+//  */
+// function moo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function moo(): string
+// | ```
+// | 
+// | 
+// | *@example*
+// | ```tsx
+// |   x y
+// |   12345
+// |      b
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @func
+//  * @example
+//  *   x y
+//  *   12345
+//  *      b
+//  */
+// function boo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function boo(): string
+// | ```
+// | 
+// | 
+// | *@func*
+// | 
+// | *@example*
+// | ```tsx
+// |   x y
+// |   12345
+// |      b
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @func
+//  * @example    x y
+//  *             12345
+//  *                b
+//  */
+// function goo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function goo(): string
+// | ```
+// | 
+// | 
+// | *@func*
+// | 
+// | *@example*
+// | ```tsx
+// | x y
+// | 12345
+// |    b
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+[
+  {
+    "marker": {
+      "Position": 64,
+      "LSPosition": {
+        "line": 6,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(): string\n```\n\n\n*@example*\n```tsx\nif (true) {\n    foo()\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 9
+        },
+        "end": {
+          "line": 6,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 134,
+      "LSPosition": {
+        "line": 15,
+        "character": 11
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo2(): string\n```\n\n\n*@example*\n```tsx\n{\n    foo()\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 9
+        },
+        "end": {
+          "line": 15,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 219,
+      "LSPosition": {
+        "line": 24,
+        "character": 10
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction moo(): string\n```\n\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 9
+        },
+        "end": {
+          "line": 24,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 313,
+      "LSPosition": {
+        "line": 34,
+        "character": 10
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction boo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 34,
+          "character": 9
+        },
+        "end": {
+          "line": 34,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 426,
+      "LSPosition": {
+        "line": 43,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction goo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\nx y\n12345\n   b\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 43,
+          "character": 9
+        },
+        "end": {
+          "line": 43,
+          "character": 12
+        }
+      }
+    }
+  }
+]

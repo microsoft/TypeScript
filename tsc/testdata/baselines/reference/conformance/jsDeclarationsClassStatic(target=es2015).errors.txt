@@ -1,0 +1,32 @@
+source.js(15,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+source.js(16,16): error TS2339: Property 'Strings' does not exist on type 'typeof Handler'.
+
+
+==== source.js (2 errors) ====
+    class Handler {
+    	static get OPTIONS() {
+    		return 1;
+    	}
+    
+    	process() {
+    	}
+    }
+    Handler.statische = function() { }
+    const Strings = {
+        a: "A",
+        b: "B"
+    }
+    
+    module.exports = Handler;
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.Strings = Strings
+                   ~~~~~~~
+!!! error TS2339: Property 'Strings' does not exist on type 'typeof Handler'.
+    
+    /**
+     * @typedef {Object} HandlerOptions
+     * @property {String} name
+     * Should be able to export a type alias at the same time.
+     */
+    

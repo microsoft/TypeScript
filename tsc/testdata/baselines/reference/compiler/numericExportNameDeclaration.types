@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/numericExportNameDeclaration.ts] ////
+
+=== bug.js ===
+exports[1] = 2;
+>exports[1] = 2 : 2
+>exports[1] : any
+>exports : typeof import("./bug")
+>1 : 1
+>2 : 2
+
+module.exports[1] = 2;
+>module.exports[1] = 2 : 2
+>module.exports[1] : error
+>module.exports : typeof import("./bug")
+>module : { exports: typeof import("./bug"); }
+>exports : typeof import("./bug")
+>1 : 1
+>2 : 2
+
+Object.defineProperty(exports, 1, {});
+>Object.defineProperty(exports, 1, {}) : typeof import("./bug")
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>exports : typeof import("./bug")
+>1 : 1
+>{} : {}
+

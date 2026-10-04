@@ -1,9 +1,0 @@
-//// [tests/cases/compiler/noEmitAndIncremental.ts] ////
-
-=== /a.ts ===
-const x = 10;
->x : 10
->  : ^^
->10 : 10
->   : ^^
-

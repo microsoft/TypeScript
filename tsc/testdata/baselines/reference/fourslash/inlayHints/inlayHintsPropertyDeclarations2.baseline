@@ -1,0 +1,44 @@
+// === Inlay Hints ===
+    accessor a = 1
+              ^
+{
+  "position": {
+    "line": 1,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+    accessor d;
+              ^
+{
+  "position": {
+    "line": 4,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "null"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

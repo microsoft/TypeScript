@@ -1,0 +1,27 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|foo|]() { return "ok"; }|>
+// export function bar() { return 42; }
+
+// === /home/src/workspaces/project/reexport.ts ===
+// export { /*GOTO SOURCE DEF*/foo, bar } from "pkg";
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export function foo() { return "ok"; }
+// <|export function [|bar|]() { return 42; }|>
+
+// === /home/src/workspaces/project/reexport.ts ===
+// export { foo, /*GOTO SOURCE DEF*/bar } from "pkg";
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|foo|]() { return "ok"; }|>
+// export function bar() { return 42; }
+
+// === /home/src/workspaces/project/index.ts ===
+// import { foo, bar } from "pkg"/*GOTO SOURCE DEF*/;

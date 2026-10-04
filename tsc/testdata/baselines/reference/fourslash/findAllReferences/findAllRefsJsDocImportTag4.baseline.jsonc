@@ -1,0 +1,8 @@
+// === findAllReferences ===
+// === /player.js ===
+// import * as [|C|] from './component.js';
+// 
+// /**
+//  * @extends [|C|]/*FIND ALL REFS*/.Component
+//  */
+// export class Player extends Component {}

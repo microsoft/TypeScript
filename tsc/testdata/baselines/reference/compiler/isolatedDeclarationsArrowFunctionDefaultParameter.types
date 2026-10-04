@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/isolatedDeclarationsArrowFunctionDefaultParameter.ts] ////
+
+=== isolatedDeclarationsArrowFunctionDefaultParameter.ts ===
+export const foo = (one: string = "DEFAULT", two: string): string => {
+>foo : (one: string | undefined, two: string) => string
+>(one: string = "DEFAULT", two: string): string => {    return one + " " + two;} : (one: string | undefined, two: string) => string
+>one : string
+>"DEFAULT" : "DEFAULT"
+>two : string
+
+    return one + " " + two;
+>one + " " + two : string
+>one + " " : string
+>one : string
+>" " : " "
+>two : string
+
+};
+
+export const bar = (one: string | undefined = "DEFAULT", two: string): string => {
+>bar : (one: string | undefined, two: string) => string
+>(one: string | undefined = "DEFAULT", two: string): string => {    return one + " " + two;} : (one: string | undefined, two: string) => string
+>one : string | undefined
+>"DEFAULT" : "DEFAULT"
+>two : string
+
+    return one + " " + two;
+>one + " " + two : string
+>one + " " : string
+>one : string
+>" " : " "
+>two : string
+
+};
+
+// Arrow function where the default parameter is the last one (should be optional)
+export const baz = (one: string, two: string | undefined = "DEFAULT"): string => {
+>baz : (one: string, two?: string | undefined) => string
+>(one: string, two: string | undefined = "DEFAULT"): string => {    return one + " " + two;} : (one: string, two?: string | undefined) => string
+>one : string
+>two : string | undefined
+>"DEFAULT" : "DEFAULT"
+
+    return one + " " + two;
+>one + " " + two : string
+>one + " " : string
+>one : string
+>" " : " "
+>two : string
+
+};
+
+// Arrow function where all parameters have defaults
+export const qux = (one: string = "DEFAULT", two: string = "DEFAULT"): string => {
+>qux : (one?: string, two?: string) => string
+>(one: string = "DEFAULT", two: string = "DEFAULT"): string => {    return one + " " + two;} : (one?: string, two?: string) => string
+>one : string
+>"DEFAULT" : "DEFAULT"
+>two : string
+>"DEFAULT" : "DEFAULT"
+
+    return one + " " + two;
+>one + " " + two : string
+>one + " " : string
+>one : string
+>" " : " "
+>two : string
+
+};
+

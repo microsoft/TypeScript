@@ -1,0 +1,1396 @@
+// === VSQuickInfo ===
+=== /quickInfoDisplayPartsClassPropertyVS.ts ===
+// class c {
+//     public publicProperty: string;
+//            ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x984 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.publicProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//     private privateProperty: string;
+//             ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x982 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.privateProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//     protected protectedProperty: string;
+//               ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x983 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.protectedProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//     static staticProperty: string;
+//            ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x984 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.staticProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//     private static privateStaticProperty: string;
+//                    ^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x982 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.privateStaticProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//     protected static protectedStaticProperty: string;
+//                      ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x983 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.protectedStaticProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//     method() {
+//         this.publicProperty;
+//              ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x984 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.publicProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//         this.privateProperty;
+//              ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x982 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.privateProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//         this.protectedProperty;
+//              ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x983 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.protectedProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//         c.staticProperty;
+//           ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x984 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.staticProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//         c.privateStaticProperty;
+//           ^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x982 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.privateStaticProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//         c.protectedStaticProperty;
+//           ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x983 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.protectedStaticProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c();
+// cInstance.publicProperty;
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x6D3 }
+// |   ClassifiedTextElement
+// |     [keyword] "var "
+// |     [local name] "cInstance"
+// |     [punctuation] ": "
+// |     [class name] "c"
+// | ----------------------------------------------------------------------
+//           ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x984 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.publicProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+// c.staticProperty;
+// ^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x1D9 }
+// |   ClassifiedTextElement
+// |     [keyword] "class "
+// |     [class name] "c"
+// | ----------------------------------------------------------------------
+//   ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x984 }
+// |   ClassifiedTextElement
+// |     [punctuation] "("
+// |     [text] "property"
+// |     [punctuation] ") "
+// |     [property name] "c.staticProperty"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.publicProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 11
+        },
+        "end": {
+          "line": 1,
+          "character": 25
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2436,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.publicProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.privateProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 12
+        },
+        "end": {
+          "line": 2,
+          "character": 27
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2434,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.privateProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 96,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "21",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.protectedProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 14
+        },
+        "end": {
+          "line": 3,
+          "character": 31
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2435,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.protectedProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 134,
+      "LSPosition": {
+        "line": 4,
+        "character": 11
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.staticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 11
+        },
+        "end": {
+          "line": 4,
+          "character": 25
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2436,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.staticProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 177,
+      "LSPosition": {
+        "line": 5,
+        "character": 19
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.privateStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 19
+        },
+        "end": {
+          "line": 5,
+          "character": 40
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2434,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.privateStaticProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 229,
+      "LSPosition": {
+        "line": 6,
+        "character": 21
+      },
+      "Name": "41",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.protectedStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 21
+        },
+        "end": {
+          "line": 6,
+          "character": 44
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2435,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.protectedStaticProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 290,
+      "LSPosition": {
+        "line": 8,
+        "character": 13
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.publicProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 13
+        },
+        "end": {
+          "line": 8,
+          "character": 27
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2436,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.publicProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 9,
+        "character": 13
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.privateProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 13
+        },
+        "end": {
+          "line": 9,
+          "character": 28
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2434,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.privateProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 349,
+      "LSPosition": {
+        "line": 10,
+        "character": 13
+      },
+      "Name": "61",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.protectedProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 30
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2435,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.protectedProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 378,
+      "LSPosition": {
+        "line": 11,
+        "character": 10
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.staticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 10
+        },
+        "end": {
+          "line": 11,
+          "character": 24
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2436,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.staticProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 404,
+      "LSPosition": {
+        "line": 12,
+        "character": 10
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.privateStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 10
+        },
+        "end": {
+          "line": 12,
+          "character": 31
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2434,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.privateStaticProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 437,
+      "LSPosition": {
+        "line": 13,
+        "character": 10
+      },
+      "Name": "81",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.protectedStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 10
+        },
+        "end": {
+          "line": 13,
+          "character": 33
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2435,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.protectedStaticProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 495,
+      "LSPosition": {
+        "line": 17,
+        "character": 0
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance: c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 9
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1747,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "var ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "local name",
+                "Text": "cInstance",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "class name",
+                "Text": "c",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 505,
+      "LSPosition": {
+        "line": 17,
+        "character": 10
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.publicProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 10
+        },
+        "end": {
+          "line": 17,
+          "character": 24
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2436,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.publicProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 521,
+      "LSPosition": {
+        "line": 18,
+        "character": 0
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 0
+        },
+        "end": {
+          "line": 18,
+          "character": 1
+        }
+      },
+      "canIncreaseVerbosity": true,
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 473,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "class ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "class name",
+                "Text": "c",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 523,
+      "LSPosition": {
+        "line": 18,
+        "character": 2
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) c.staticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 2
+        },
+        "end": {
+          "line": 18,
+          "character": 16
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 2436,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "property",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ") ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "c.staticProperty",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  }
+]

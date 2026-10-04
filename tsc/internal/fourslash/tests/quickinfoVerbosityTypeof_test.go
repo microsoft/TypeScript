@@ -1,0 +1,29 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickinfoVerbosityTypeof(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface Apple {
+    color: string;
+    weight: number;
+}
+const a: Apple = { color: "red", weight: 150 };
+const b/*b*/: typeof a = { color: "green", weight: 120 };
+class Banana {
+    length: number;
+    constructor(length: number) {
+        this.length = length;
+    }
+}
+const c/*c*/: typeof Banana = Banana;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineHoverWithVerbosity(t, map[string][]int{"b": {0, 1}, "c": {0, 1}})
+}

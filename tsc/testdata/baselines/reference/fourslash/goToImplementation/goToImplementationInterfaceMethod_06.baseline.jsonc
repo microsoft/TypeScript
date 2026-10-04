@@ -1,0 +1,39 @@
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_06.ts ===
+// --- (line: 6) skipped ---
+// }
+// 
+// class Bar implements Foo {
+//      <|[|hello|]() {}|>
+//      someOtherFunction() {}
+// }
+// 
+// function createFoo(): Foo {
+//     return {
+//         <|[|hello|]() {}|>,
+//         someOtherFunction() {}
+//     };
+// }
+// 
+// var y: Foo = {
+//     <|[|hello|]() {}|>,
+//     someOtherFunction() {}
+// };
+// 
+// class FooLike implements SuperFoo {
+//      <|[|hello|]() {}|>
+//      someOtherFunction() {}
+// }
+// 
+// class NotRelatedToFoo {
+//      hello() {}                // This case is equivalent to the last case, but is not returned because it does not share a common ancestor with Foo
+//      someOtherFunction() {}
+// }
+// 
+// class NotFoo implements SuperFoo {
+//      <|[|hello|]() {}|>                // We only want implementations of Foo, even though the function is declared in SuperFoo
+// }
+// 
+// function (x: Foo) {
+//     x.he/*GOTO IMPL*/llo()
+// }

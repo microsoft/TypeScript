@@ -1,0 +1,34 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGetOccurrencesConstructor2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class C {
+    constructor();
+    constructor(x: number);
+    constructor(y: string, x: number);
+    constructor(a?: any, ...r: any[]) {
+        if (a === undefined && r.length === 0) {
+            return;
+        }
+
+        return;
+    }
+}
+
+class D {
+    [|con/**/structor|](public x: number, public y: number) {
+    }
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
+}

@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/typeofUnknownSymbol.ts] ////
+
+=== typeofUnknownSymbol.ts ===
+// previously gave no error here
+var x = typeof whatsthis
+>x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof whatsthis : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>whatsthis : any
+

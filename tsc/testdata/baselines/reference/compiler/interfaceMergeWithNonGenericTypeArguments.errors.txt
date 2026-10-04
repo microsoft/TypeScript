@@ -1,0 +1,14 @@
+interfaceMergeWithNonGenericTypeArguments.ts(4,34): error TS2315: Type 'SomeBaseClass' is not generic.
+
+
+==== interfaceMergeWithNonGenericTypeArguments.ts (1 errors) ====
+    export class SomeBaseClass { }
+    export interface SomeInterface { }
+    export interface MergedClass extends SomeInterface { }
+    export class MergedClass extends SomeBaseClass<any> {
+                                     ~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'SomeBaseClass' is not generic.
+    	public constructor() {
+    		super();
+    	}
+    }

@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName1.ts] ////
+
+=== parserES5ComputedPropertyName1.ts ===
+declare class C {
+>C : C
+
+    [e]: number 
+>[e] : number
+>e : any
+}

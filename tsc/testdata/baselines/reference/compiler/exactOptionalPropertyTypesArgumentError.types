@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/exactOptionalPropertyTypesArgumentError.ts] ////
+
+=== exactOptionalPropertyTypesArgumentError.ts ===
+declare function f(o: { y?: string }): void;
+>f : (o: { y?: string; }) => void
+>o : { y?: string; }
+>y : string | undefined
+
+f({ y: undefined });
+>f({ y: undefined }) : void
+>f : (o: { y?: string; }) => void
+>{ y: undefined } : { y: undefined; }
+>y : undefined
+>undefined : undefined
+

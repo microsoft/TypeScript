@@ -1,0 +1,11 @@
+error TS2688: Cannot find type definition file for 'n'.
+  The file is in the program because:
+    Entry point of type library 'n' specified in compilerOptions
+
+
+!!! error TS2688: Cannot find type definition file for 'n'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library 'n' specified in compilerOptions
+==== typeRootsRelativePath.ts (0 errors) ====
+    let x = 1;
+    

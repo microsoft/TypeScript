@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/expandoFunctionContextualTypesNoValue.ts] ////
+
+=== expandoFunctionContextualTypesNoValue.ts ===
+// GH #38532
+import Foo from "blah";
+>Foo : any
+
+export function Foo() { }
+>Foo : { (): void; bar: () => void; }
+
+Foo.bar = () => { };
+>Foo.bar = () => { } : () => void
+>Foo.bar : () => void
+>Foo : { (): void; bar: () => void; }
+>bar : () => void
+>() => { } : () => void
+

@@ -1,0 +1,13 @@
+parserSkippedTokens15.ts(2,1): error TS1127: Invalid character.
+parserSkippedTokens15.ts(3,1): error TS1127: Invalid character.
+
+
+==== parserSkippedTokens15.ts (2 errors) ====
+    /*existing trivia*/
+    \
+    ~
+!!! error TS1127: Invalid character.
+    \
+    ~
+!!! error TS1127: Invalid character.
+    ;

@@ -1,0 +1,972 @@
+// === QuickInfo ===
+=== /quickInfoJsDocInheritage.ts ===
+// interface A {
+//     /**
+//      * @description A.foo1
+//      */
+//     foo1: number;
+//     /**
+//      * @description A.foo2
+//      */
+//     foo2: (para1: string) => number;
+// }
+// 
+// interface B {
+//     /**
+//      * @description B.foo1
+//      */
+//     foo1: number;
+//     /**
+//      * @description B.foo2
+//      */
+//     foo2: (para2: string) => number;
+// }
+// 
+// // implement multi interfaces with duplicate name
+// // method for function signature
+// class C implements A, B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) C.foo1: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     foo2(q: string) { return 1 }
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) C.foo2(q: string): number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// 
+// // implement multi interfaces with duplicate name
+// // property for function signature
+// class D implements A, B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) D.foo1: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     foo2 = (q: string) => { return 1 }
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) D.foo2: (q: string) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// 
+// new C().foo1;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) C.foo1: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new C().foo2;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) C.foo2(q: string): number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new D().foo1;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) D.foo1: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new D().foo2;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) D.foo2: (q: string) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// class Base1 {
+//     /**
+//      * @description Base1.foo1 
+//      */
+//     foo1: number = 1;
+// 
+//     /**
+//      * 
+//      * @param q Base1.foo2 parameter
+//      * @returns Base1.foo2 return
+//      */
+//      foo2(q: string) { return 1 }
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // property override method
+// class Drived1 extends Base1 implements A {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived1.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base1.foo1
+// | ----------------------------------------------------------------------
+//     foo2(para1: string) { return 1 };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) Drived1.foo2(para1: string): number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | *@returns* — Base1.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // method override method
+// class Drived2 extends Base1 implements B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived2.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base1.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (para1: string) => { return 1; };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived2.foo2: (para1: string) => number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | *@returns* — Base1.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// class Base2 {
+//     /**
+//      * @description Base2.foo1 
+//      */
+//     foo1: number = 1;
+//     /**
+//      * 
+//      * @param q Base2.foo2 parameter
+//      * @returns Base2.foo2 return
+//      */
+//     foo2(q: string) { return 1 }
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // property override method
+// class Drived3 extends Base2 implements A {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived3.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base2.foo1
+// | ----------------------------------------------------------------------
+//     foo2(para1: string) { return 1 };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) Drived3.foo2(para1: string): number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | *@returns* — Base2.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // method override method
+// class Drived4 extends Base2 implements B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived4.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base2.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (para1: string) => { return 1; };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived4.foo2: (para1: string) => number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | *@returns* — Base2.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// new Drived1().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived1.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base1.foo1
+// | ----------------------------------------------------------------------
+// new Drived1().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) Drived1.foo2(para1: string): number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | *@returns* — Base1.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived2().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived2.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base1.foo1
+// | ----------------------------------------------------------------------
+// new Drived2().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived2.foo2: (para1: string) => number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | *@returns* — Base1.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived3().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived3.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base2.foo1
+// | ----------------------------------------------------------------------
+// new Drived3().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) Drived3.foo2(para1: string): number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | *@returns* — Base2.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived4().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived4.foo1: number
+// | ```
+// | 
+// | 
+// | *@description* — Base2.foo1
+// | ----------------------------------------------------------------------
+// new Drived4().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Drived4.foo2: (para1: string) => number
+// | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | *@returns* — Base2.foo2 return
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 429,
+      "LSPosition": {
+        "line": 25,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) C.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 4
+        },
+        "end": {
+          "line": 25,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 451,
+      "LSPosition": {
+        "line": 26,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) C.foo2(q: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 26,
+          "character": 4
+        },
+        "end": {
+          "line": 26,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 598,
+      "LSPosition": {
+        "line": 32,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) D.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 32,
+          "character": 4
+        },
+        "end": {
+          "line": 32,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 620,
+      "LSPosition": {
+        "line": 33,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) D.foo2: (q: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 33,
+          "character": 4
+        },
+        "end": {
+          "line": 33,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 666,
+      "LSPosition": {
+        "line": 36,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) C.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 36,
+          "character": 8
+        },
+        "end": {
+          "line": 36,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 680,
+      "LSPosition": {
+        "line": 37,
+        "character": 8
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) C.foo2(q: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 37,
+          "character": 8
+        },
+        "end": {
+          "line": 37,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 694,
+      "LSPosition": {
+        "line": 38,
+        "character": 8
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) D.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 38,
+          "character": 8
+        },
+        "end": {
+          "line": 38,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 708,
+      "LSPosition": {
+        "line": 39,
+        "character": 8
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) D.foo2: (q: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 39,
+          "character": 8
+        },
+        "end": {
+          "line": 39,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1069,
+      "LSPosition": {
+        "line": 58,
+        "character": 4
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived1.foo1: number\n```\n\n\n*@description* — Base1.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 58,
+          "character": 4
+        },
+        "end": {
+          "line": 58,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1091,
+      "LSPosition": {
+        "line": 59,
+        "character": 4
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) Drived1.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n*@returns* — Base1.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 59,
+          "character": 4
+        },
+        "end": {
+          "line": 59,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1263,
+      "LSPosition": {
+        "line": 65,
+        "character": 4
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived2.foo1: number\n```\n\n\n*@description* — Base1.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 65,
+          "character": 4
+        },
+        "end": {
+          "line": 65,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1285,
+      "LSPosition": {
+        "line": 66,
+        "character": 4
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived2.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n*@returns* — Base1.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 66,
+          "character": 4
+        },
+        "end": {
+          "line": 66,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1681,
+      "LSPosition": {
+        "line": 85,
+        "character": 4
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived3.foo1: number\n```\n\n\n*@description* — Base2.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 85,
+          "character": 4
+        },
+        "end": {
+          "line": 85,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1703,
+      "LSPosition": {
+        "line": 86,
+        "character": 4
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) Drived3.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n*@returns* — Base2.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 86,
+          "character": 4
+        },
+        "end": {
+          "line": 86,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1875,
+      "LSPosition": {
+        "line": 92,
+        "character": 4
+      },
+      "Name": "15",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived4.foo1: number\n```\n\n\n*@description* — Base2.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 92,
+          "character": 4
+        },
+        "end": {
+          "line": 92,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1897,
+      "LSPosition": {
+        "line": 93,
+        "character": 4
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived4.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n*@returns* — Base2.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 93,
+          "character": 4
+        },
+        "end": {
+          "line": 93,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1955,
+      "LSPosition": {
+        "line": 96,
+        "character": 14
+      },
+      "Name": "17",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived1.foo1: number\n```\n\n\n*@description* — Base1.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 96,
+          "character": 14
+        },
+        "end": {
+          "line": 96,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1975,
+      "LSPosition": {
+        "line": 97,
+        "character": 14
+      },
+      "Name": "18",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) Drived1.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n*@returns* — Base1.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 97,
+          "character": 14
+        },
+        "end": {
+          "line": 97,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1995,
+      "LSPosition": {
+        "line": 98,
+        "character": 14
+      },
+      "Name": "19",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived2.foo1: number\n```\n\n\n*@description* — Base1.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 98,
+          "character": 14
+        },
+        "end": {
+          "line": 98,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2015,
+      "LSPosition": {
+        "line": 99,
+        "character": 14
+      },
+      "Name": "20",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived2.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n*@returns* — Base1.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 99,
+          "character": 14
+        },
+        "end": {
+          "line": 99,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2035,
+      "LSPosition": {
+        "line": 100,
+        "character": 14
+      },
+      "Name": "21",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived3.foo1: number\n```\n\n\n*@description* — Base2.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 100,
+          "character": 14
+        },
+        "end": {
+          "line": 100,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2055,
+      "LSPosition": {
+        "line": 101,
+        "character": 14
+      },
+      "Name": "22",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) Drived3.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n*@returns* — Base2.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 101,
+          "character": 14
+        },
+        "end": {
+          "line": 101,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2075,
+      "LSPosition": {
+        "line": 102,
+        "character": 14
+      },
+      "Name": "23",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived4.foo1: number\n```\n\n\n*@description* — Base2.foo1"
+      },
+      "range": {
+        "start": {
+          "line": 102,
+          "character": 14
+        },
+        "end": {
+          "line": 102,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2095,
+      "LSPosition": {
+        "line": 103,
+        "character": 14
+      },
+      "Name": "24",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Drived4.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n*@returns* — Base2.foo2 return"
+      },
+      "range": {
+        "start": {
+          "line": 103,
+          "character": 14
+        },
+        "end": {
+          "line": 103,
+          "character": 18
+        }
+      }
+    }
+  }
+]

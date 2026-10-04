@@ -1,0 +1,19 @@
+// === Document Symbols ===
+// === /navigationBarFunctionLikePropertyAssignments.ts ===
+// var <|[|{| name: functions, kind: Variable |}functions|] = {
+//     <|[|{| name: a, kind: Property |}a|]: 0|>,
+//     <|[|{| name: b, kind: Property |}b|]: function () { }|>,
+//     <|[|{| name: c, kind: Property |}c|]: function x() { }|>,
+//     <|[|{| name: d, kind: Property |}d|]: () => { }|>,
+//     <|[|{| name: e, kind: Property |}e|]: y()|>,
+//     <|[|{| name: f, kind: Method |}f|]() { }|>
+// }|>;
+
+// === Details ===
+(Variable) functions
+  (Property) a
+  (Property) b
+  (Property) c
+  (Property) d
+  (Property) e
+  (Method) f

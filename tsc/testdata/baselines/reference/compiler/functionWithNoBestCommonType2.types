@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/functionWithNoBestCommonType2.ts] ////
+
+=== functionWithNoBestCommonType2.ts ===
+var v = function () {
+>v : () => void | true
+>function () {   return true;   return bar();} : () => void | true
+
+   return true;
+>true : true
+
+   return bar();
+>bar() : void
+>bar : () => void
+
+};
+
+function bar(): void {
+>bar : () => void
+}

@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export const nested = { inner: { <|[|value|]: 42|> } };
+
+// === /home/src/workspaces/project/index.ts ===
+// import { nested } from "pkg";
+// nested.inner./*GOTO SOURCE DEF*/value;

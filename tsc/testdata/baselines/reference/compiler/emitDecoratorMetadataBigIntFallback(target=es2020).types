@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/emitDecoratorMetadataBigIntFallback.ts] ////
+
+=== emitDecoratorMetadataBigIntFallback.ts ===
+declare function dec(...args: any[]): any;
+>dec : (...args: any[]) => any
+>args : any[]
+
+class C {
+>C : C
+
+    @dec prop!: bigint;
+>dec : (...args: any[]) => any
+>prop : bigint
+}
+

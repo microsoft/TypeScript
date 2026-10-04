@@ -1,0 +1,21 @@
+file.tsx(7,13): error TS2322: Type 'U' is not assignable to type 'IntrinsicAttributes & U'.
+  Type 'U' is not assignable to type 'IntrinsicAttributes'.
+
+
+==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
+    import React = require('react');
+    
+    declare function Component<T>(props: T) : JSX.Element;
+    const decorator = function <U>(props: U) {
+        return <Component {...props} />;
+                ~~~~~~~~~
+!!! error TS2322: Type 'U' is not assignable to type 'IntrinsicAttributes & U'.
+!!! error TS2322:   Type 'U' is not assignable to type 'IntrinsicAttributes'.
+!!! related TS2208 file.tsx:6:29: This type parameter might need an `extends IntrinsicAttributes` constraint.
+    }
+    
+    const decorator1 = function <U extends {x: string}>(props: U) {
+        return <Component {...props} x="hi"/>;
+    }

@@ -1,0 +1,16 @@
+arrayConcatMap.ts(1,20): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '{ a: number; }' is not assignable to type 'never'.
+arrayConcatMap.ts(2,23): error TS2339: Property 'a' does not exist on type 'never'.
+
+
+==== arrayConcatMap.ts (2 errors) ====
+    var x = [].concat([{ a: 1 }], [{ a: 2 }])
+                       ~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type '{ a: number; }' is not assignable to type 'never'.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+              .map(b => b.a);
+                          ~
+!!! error TS2339: Property 'a' does not exist on type 'never'.

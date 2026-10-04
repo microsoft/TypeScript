@@ -1,0 +1,13 @@
+// === findRenameLocations ===
+// === /a.js ===
+// exports./*RENAME*/[|areaRENAME|] = function (r) { return r * r; }
+
+
+
+// === findRenameLocations ===
+// === /a.js ===
+// exports.[|areaRENAME|] = function (r) { return r * r; }
+
+// === /b.js ===
+// var mod = require('./a');
+// var t = mod./*RENAME*/area(10);

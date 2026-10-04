@@ -1,0 +1,72 @@
+======== Resolving module '#/foo.js' from '/.src/index.ts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+Found 'package.json' at '/.src/package.json'.
+Using 'imports' subpath '#/*' with target './src/foo.js'.
+File name '/.src/src/foo.js' has a '.js' extension - stripping it.
+File '/.src/src/foo.ts' exists - use it as a name resolution result.
+======== Module name '#/foo.js' was successfully resolved to '/.src/src/foo.ts'. ========
+======== Resolving module '#/features/bar.js' from '/.src/index.ts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/features/bar.js'.
+File name '/.src/src/features/bar.js' has a '.js' extension - stripping it.
+File '/.src/src/features/bar.ts' exists - use it as a name resolution result.
+======== Module name '#/features/bar.js' was successfully resolved to '/.src/src/features/bar.ts'. ========
+======== Resolving module '#/nested/deep/baz.js' from '/.src/index.ts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/nested/deep/baz.js'.
+File name '/.src/src/nested/deep/baz.js' has a '.js' extension - stripping it.
+File '/.src/src/nested/deep/baz.ts' exists - use it as a name resolution result.
+======== Module name '#/nested/deep/baz.js' was successfully resolved to '/.src/src/nested/deep/baz.ts'. ========
+======== Resolving module '#/foo.js' from '/.src/index.mts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/foo.js'.
+File name '/.src/src/foo.js' has a '.js' extension - stripping it.
+File '/.src/src/foo.ts' exists - use it as a name resolution result.
+======== Module name '#/foo.js' was successfully resolved to '/.src/src/foo.ts'. ========
+======== Resolving module '#/features/bar.js' from '/.src/index.mts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/features/bar.js'.
+File name '/.src/src/features/bar.js' has a '.js' extension - stripping it.
+File '/.src/src/features/bar.ts' exists - use it as a name resolution result.
+======== Module name '#/features/bar.js' was successfully resolved to '/.src/src/features/bar.ts'. ========
+======== Resolving module '#/nested/deep/baz.js' from '/.src/index.mts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/nested/deep/baz.js'.
+File name '/.src/src/nested/deep/baz.js' has a '.js' extension - stripping it.
+File '/.src/src/nested/deep/baz.ts' exists - use it as a name resolution result.
+======== Module name '#/nested/deep/baz.js' was successfully resolved to '/.src/src/nested/deep/baz.ts'. ========
+======== Resolving module '#/foo.js' from '/.src/index.cts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/foo.js'.
+File name '/.src/src/foo.js' has a '.js' extension - stripping it.
+File '/.src/src/foo.ts' exists - use it as a name resolution result.
+======== Module name '#/foo.js' was successfully resolved to '/.src/src/foo.ts'. ========
+======== Resolving module '#/features/bar.js' from '/.src/index.cts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/features/bar.js'.
+File name '/.src/src/features/bar.js' has a '.js' extension - stripping it.
+File '/.src/src/features/bar.ts' exists - use it as a name resolution result.
+======== Module name '#/features/bar.js' was successfully resolved to '/.src/src/features/bar.ts'. ========
+======== Resolving module '#/nested/deep/baz.js' from '/.src/index.cts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
+File '/.src/package.json' exists according to earlier cached lookups.
+Using 'imports' subpath '#/*' with target './src/nested/deep/baz.js'.
+File name '/.src/src/nested/deep/baz.js' has a '.js' extension - stripping it.
+File '/.src/src/nested/deep/baz.ts' exists - use it as a name resolution result.
+======== Module name '#/nested/deep/baz.js' was successfully resolved to '/.src/src/nested/deep/baz.ts'. ========

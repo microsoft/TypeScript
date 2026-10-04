@@ -1,0 +1,32 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGoToDefinitionUnionTypeProperty2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface HasAOrB {
+    /*propertyDefinition1*/a: string;
+    b: string;
+}
+
+interface One {
+    common: { /*propertyDefinition2*/a : number; };
+}
+
+interface Two {
+    common: HasAOrB;
+}
+
+var x : One | Two;
+
+x.common.[|/*propertyReference*/a|];`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineGoToDefinition(t, true, "propertyReference")
+}

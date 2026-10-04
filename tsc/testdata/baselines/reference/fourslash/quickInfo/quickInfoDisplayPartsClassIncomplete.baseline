@@ -1,0 +1,57 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsClassIncomplete.ts ===
+// class  {
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class __missing
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*2*/.
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 0,
+      "LSPosition": {
+        "line": 0,
+        "character": 0
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass __missing\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 0
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": null
+  }
+]

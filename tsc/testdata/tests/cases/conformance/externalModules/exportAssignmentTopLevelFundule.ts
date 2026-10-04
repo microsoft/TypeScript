@@ -1,0 +1,16 @@
+// @target: es2015
+// @module: commonjs
+// @Filename: foo_0.ts
+function foo() {
+	return "test";
+}
+namespace foo {
+	export var answer = 42;
+}
+export = foo;
+
+// @Filename: foo_1.ts
+import foo = require("./foo_0");
+if(foo.answer === 42){
+	var x = foo();
+}

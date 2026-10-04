@@ -1,0 +1,5 @@
+// === goToType ===
+// === /foo.ts ===
+// let Foo: unresolved;
+// type Foo = { x: string };
+// /*GOTO TYPE*/Foo;

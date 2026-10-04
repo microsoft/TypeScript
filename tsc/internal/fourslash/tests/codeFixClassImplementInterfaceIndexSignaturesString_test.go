@@ -1,0 +1,31 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassImplementInterfaceIndexSignaturesString(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface I<X> {
+    [Ƚ: string]: X;
+}
+
+class C implements I<number> {}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'I<number>'",
+		NewFileContent: `interface I<X> {
+    [Ƚ: string]: X;
+}
+
+class C implements I<number> {
+    [Ƚ: string]: number;
+}`,
+		Index: 0,
+	})
+}

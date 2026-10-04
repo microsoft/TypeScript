@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/exportAssignmentMerging7.ts] ////
+
+=== a.ts ===
+class Foo {}
+>Foo : Foo
+
+class Bar {}
+>Bar : Bar
+
+export = Foo;
+>Foo : Foo
+
+export { Bar }; // Causes error
+>Bar : typeof Bar
+
+=== b.ts ===
+import { Bar } from "./a";
+>Bar : any
+
+const b = new Bar();
+>b : any
+>new Bar() : any
+>Bar : any
+
+

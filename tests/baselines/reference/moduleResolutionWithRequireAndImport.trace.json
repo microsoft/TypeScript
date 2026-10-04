@@ -1,8 +1,0 @@
-[
-    "======== Resolving module './other' from '/index.ts'. ========",
-    "Module resolution kind is not specified, using 'Bundler'.",
-    "Resolving in CJS mode with conditions 'require', 'types'.",
-    "Loading module as file / folder, candidate module location '/other', target file types: TypeScript, JavaScript, Declaration, JSON.",
-    "File '/other.ts' exists - use it as a name resolution result.",
-    "======== Module name './other' was successfully resolved to '/other.ts'. ========"
-]

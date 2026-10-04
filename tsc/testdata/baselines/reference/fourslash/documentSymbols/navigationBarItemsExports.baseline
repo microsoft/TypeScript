@@ -1,0 +1,14 @@
+// === Document Symbols ===
+// === /navigationBarItemsExports.ts ===
+// export { <|[|{| name: a, kind: Variable |}a|]|> } from "a";
+// 
+// export { <|b as [|{| name: B, kind: Variable |}B|]|> } from "a" 
+// 
+// <|export import [|{| name: e, kind: Variable |}e|] = require("a");|>
+// 
+// export * from "a"; // no bindings here
+
+// === Details ===
+(Variable) a
+(Variable) B
+(Variable) e

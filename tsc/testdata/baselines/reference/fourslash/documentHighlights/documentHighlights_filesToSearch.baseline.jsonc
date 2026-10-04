@@ -1,0 +1,9 @@
+// === documentHighlights ===
+// === /a.ts ===
+// export const /*HIGHLIGHTS*/[|x|] = 0;
+
+
+
+// === documentHighlights ===
+// === /b.ts ===
+// import { /*HIGHLIGHTS*/[|x|] } from "./a";

@@ -1,6 +1,0 @@
-// === findRenameLocations ===
-// @findInComments: true
-
-// === /tests/cases/fourslash/file1.ts ===
-// <|var /*RENAME*/[|testRENAME|] = "foo";|>
-// console.log([|testRENAME|]);

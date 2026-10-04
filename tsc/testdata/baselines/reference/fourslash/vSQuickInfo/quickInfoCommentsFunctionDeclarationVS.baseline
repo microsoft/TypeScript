@@ -1,0 +1,693 @@
+// === VSQuickInfo ===
+=== /quickInfoCommentsFunctionDeclarationVS.ts ===
+// /** This comment should appear for foo*/
+// function foo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |     ClassifiedTextElement
+// |       [keyword] "function "
+// |       [method name] "foo"
+// |       [punctuation] "("
+// |       [punctuation] ")"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "void"
+// |       [punctuation] ";"
+// |   ClassifiedTextElement
+// |     [text] "This comment should appear for foo"
+// | ----------------------------------------------------------------------
+// }
+// foo();
+// ^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |     ClassifiedTextElement
+// |       [keyword] "function "
+// |       [method name] "foo"
+// |       [punctuation] "("
+// |       [punctuation] ")"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "void"
+// |       [punctuation] ";"
+// |   ClassifiedTextElement
+// |     [text] "This comment should appear for foo"
+// | ----------------------------------------------------------------------
+// /** This is comment for function signature*/
+// function fooWithParameters(/** this is comment about a*/a: string,
+//          ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |     ClassifiedTextElement
+// |       [keyword] "function "
+// |       [method name] "fooWithParameters"
+// |       [punctuation] "("
+// |       [parameter name] "a"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "string"
+// |       [punctuation] ","
+// |       [whitespace] " "
+// |       [parameter name] "b"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "number"
+// |       [punctuation] ")"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "void"
+// |       [punctuation] ";"
+// |   ClassifiedTextElement
+// |     [text] "This is comment for function signature"
+// | ----------------------------------------------------------------------
+//     /** this is comment for b*/
+//     b: number) {
+//     var d = a;
+//         ^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x6D3 }
+// |   ClassifiedTextElement
+// |     [keyword] "var "
+// |     [local name] "d"
+// |     [punctuation] ": "
+// |     [keyword] "string"
+// | ----------------------------------------------------------------------
+// }
+// fooWithParameters("a",10);
+// ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Stacked)
+// |   ContainerElement (Style=Wrapped)
+// |     ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |     ClassifiedTextElement
+// |       [keyword] "function "
+// |       [method name] "fooWithParameters"
+// |       [punctuation] "("
+// |       [parameter name] "a"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "string"
+// |       [punctuation] ","
+// |       [whitespace] " "
+// |       [parameter name] "b"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "number"
+// |       [punctuation] ")"
+// |       [punctuation] ":"
+// |       [whitespace] " "
+// |       [keyword] "void"
+// |       [punctuation] ";"
+// |   ClassifiedTextElement
+// |     [text] "This is comment for function signature"
+// | ----------------------------------------------------------------------
+// /**
+// * Does something
+// * @param a a string
+// */
+// declare function fn(a: string);
+// fn("hello");
+[
+  {
+    "marker": {
+      "Position": 51,
+      "LSPosition": {
+        "line": 1,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(): void;\n```\nThis comment should appear for foo"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 1880,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "function ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "method name",
+                    "Text": "foo",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ")",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "void",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ";",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "This comment should appear for foo",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 61,
+      "LSPosition": {
+        "line": 3,
+        "character": 1
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(): void;\n```\nThis comment should appear for foo"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 3
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 1880,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "function ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "method name",
+                    "Text": "foo",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ")",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "void",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ";",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "This comment should appear for foo",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 123,
+      "LSPosition": {
+        "line": 5,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction fooWithParameters(a: string, b: number): void;\n```\nThis is comment for function signature"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 9
+        },
+        "end": {
+          "line": 5,
+          "character": 26
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 1880,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "function ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "method name",
+                    "Text": "fooWithParameters",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "parameter name",
+                    "Text": "a",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ",",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "parameter name",
+                    "Text": "b",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "number",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ")",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "void",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ";",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "This is comment for function signature",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 236,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar d: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 8
+        },
+        "end": {
+          "line": 8,
+          "character": 9
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1747,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "var ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "local name",
+                "Text": "d",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 257,
+      "LSPosition": {
+        "line": 10,
+        "character": 12
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction fooWithParameters(a: string, b: number): void;\n```\nThis is comment for function signature"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 0
+        },
+        "end": {
+          "line": 10,
+          "character": 17
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 1,
+        "Elements": [
+          {
+            "Style": 0,
+            "Elements": [
+              {
+                "ImageId": {
+                  "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+                  "Id": 1880,
+                  "_vs_type": "ImageId"
+                },
+                "_vs_type": "ImageElement"
+              },
+              {
+                "Runs": [
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "function ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "method name",
+                    "Text": "fooWithParameters",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": "(",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "parameter name",
+                    "Text": "a",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "string",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ",",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "parameter name",
+                    "Text": "b",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "number",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ")",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ":",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "whitespace",
+                    "Text": " ",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "keyword",
+                    "Text": "void",
+                    "_vs_type": "ClassifiedTextRun"
+                  },
+                  {
+                    "ClassificationTypeName": "punctuation",
+                    "Text": ";",
+                    "_vs_type": "ClassifiedTextRun"
+                  }
+                ],
+                "_vs_type": "ClassifiedTextElement"
+              }
+            ],
+            "_vs_type": "ContainerElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "This is comment for function signature",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  }
+]

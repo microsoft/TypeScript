@@ -1,3 +1,0 @@
-//// // [|TODO|]
-
-verify.todoCommentsInCurrentFile(["TODO"]);

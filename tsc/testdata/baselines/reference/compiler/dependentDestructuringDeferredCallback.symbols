@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/dependentDestructuringDeferredCallback.ts] ////
+
+=== dependentDestructuringDeferredCallback.ts ===
+type U =
+>U : Symbol(U, Decl(dependentDestructuringDeferredCallback.ts, 0, 0))
+
+    | { kind: "a"; payload: number; callback: () => void }
+>kind : Symbol(kind, Decl(dependentDestructuringDeferredCallback.ts, 1, 7))
+>payload : Symbol(payload, Decl(dependentDestructuringDeferredCallback.ts, 1, 18))
+>callback : Symbol(callback, Decl(dependentDestructuringDeferredCallback.ts, 1, 35))
+
+    | { kind: "b"; payload: string; callback: () => void };
+>kind : Symbol(kind, Decl(dependentDestructuringDeferredCallback.ts, 2, 7))
+>payload : Symbol(payload, Decl(dependentDestructuringDeferredCallback.ts, 2, 18))
+>callback : Symbol(callback, Decl(dependentDestructuringDeferredCallback.ts, 2, 35))
+
+const { kind, payload, callback }: U = {
+>kind : Symbol(kind, Decl(dependentDestructuringDeferredCallback.ts, 4, 7))
+>payload : Symbol(payload, Decl(dependentDestructuringDeferredCallback.ts, 4, 13))
+>callback : Symbol(callback, Decl(dependentDestructuringDeferredCallback.ts, 4, 22))
+>U : Symbol(U, Decl(dependentDestructuringDeferredCallback.ts, 0, 0))
+
+    kind: "a",
+>kind : Symbol(kind, Decl(dependentDestructuringDeferredCallback.ts, 4, 40))
+
+    payload: 1,
+>payload : Symbol(payload, Decl(dependentDestructuringDeferredCallback.ts, 5, 14))
+
+    callback: () => {
+>callback : Symbol(callback, Decl(dependentDestructuringDeferredCallback.ts, 6, 15))
+
+        if (kind === "a") payload.toFixed();
+>kind : Symbol(kind, Decl(dependentDestructuringDeferredCallback.ts, 4, 7))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuringDeferredCallback.ts, 4, 13))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    },
+};
+

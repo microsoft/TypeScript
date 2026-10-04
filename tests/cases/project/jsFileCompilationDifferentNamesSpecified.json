@@ -1,7 +1,0 @@
-{
-  "scenario": "Verify when different .ts and .js file exist and their names are specified in tsconfig.json",
-  "projectRoot": "tests/cases/projects/jsFileCompilation",
-  "baselineCheck": true,
-  "declaration": true,
-  "project": "DifferentNamesSpecified"
-}

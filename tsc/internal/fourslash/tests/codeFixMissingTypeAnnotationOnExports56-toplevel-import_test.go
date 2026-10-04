@@ -1,0 +1,38 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports56_toplevel_import(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @Filename: /person-code.ts
+export interface Person { x: string; }
+export function getPerson() : Person {
+  return null!
+}
+// @Filename: /code.ts
+import { getPerson } from "./person-code";
+export function wrapPerson() {
+  return { person: getPerson() }
+};`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "/code.ts")
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add return type '{ person: Person; }'",
+		NewFileContent: `import { getPerson, Person } from "./person-code";
+export function wrapPerson(): {
+    person: Person;
+} {
+  return { person: getPerson() }
+};`,
+		Index: 0,
+	})
+}

@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/jsDeclarationEmitThisAssignmentWithBaseProperty.ts] ////
+
+=== component.d.ts ===
+export class Component {
+>Component : Component
+
+    state: any;
+>state : any
+
+    constructor(props?: any);
+>props : any
+}
+
+export class WithAccessor {
+>WithAccessor : WithAccessor
+
+    get value(): number;
+>value : number
+
+    set value(v: number);
+>value : number
+>v : number
+}
+
+export class WithMethod {
+>WithMethod : WithMethod
+
+    method(): void;
+>method : () => void
+}
+
+=== main.js ===
+import { Component, WithAccessor, WithMethod } from "./component";
+>Component : typeof Component
+>WithAccessor : typeof WithAccessor
+>WithMethod : typeof WithMethod
+
+export class C1 extends Component {
+>C1 : C1
+>Component : Component
+
+    state = { count: 0 };
+>state : { count: number; }
+>{ count: 0 } : { count: number; }
+>count : number
+>0 : 0
+}
+
+export class C2 extends Component {
+>C2 : C2
+>Component : Component
+
+    constructor() {
+        super({});
+>super({}) : void
+>super : typeof Component
+>{} : {}
+
+        this.state = { count: 0 };
+>this.state = { count: 0 } : { count: number; }
+>this.state : any
+>this : this
+>state : any
+>{ count: 0 } : { count: number; }
+>count : number
+>0 : 0
+    }
+}
+
+export class C3 extends Component {
+>C3 : C3
+>Component : Component
+
+    update() {
+>update : () => void
+
+        this.state = { count: 1 };
+>this.state = { count: 1 } : { count: number; }
+>this.state : any
+>this : this
+>state : any
+>{ count: 1 } : { count: number; }
+>count : number
+>1 : 1
+    }
+}
+
+export class C4 extends WithAccessor {
+>C4 : C4
+>WithAccessor : WithAccessor
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof WithAccessor
+
+        this.value = 1;
+>this.value = 1 : 1
+>this.value : any
+>this : this
+>value : any
+>1 : 1
+    }
+}
+
+/** @implements {WithAccessor} */
+export class C5 {
+>C5 : C5
+
+    constructor() {
+        this.value = 1;
+>this.value = 1 : 1
+>this.value : any
+>this : this
+>value : any
+>1 : 1
+    }
+}
+
+export class C6 extends WithMethod {
+>C6 : C6
+>WithMethod : WithMethod
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof WithMethod
+
+        this.method = this.method.bind(this);
+>this.method = this.method.bind(this) : () => void
+>this.method : any
+>this : this
+>method : any
+>this.method.bind(this) : () => void
+>this.method.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this.method : () => void
+>this : this
+>method : () => void
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>this : this
+    }
+}
+
+=== mainTs.ts ===
+import { Component } from "./component";
+>Component : typeof Component
+
+export class C1 extends Component {
+>C1 : C1
+>Component : Component
+
+    state = { count: 0 };
+>state : { count: number; }
+>{ count: 0 } : { count: number; }
+>count : number
+>0 : 0
+}
+
+export class C2 extends Component {
+>C2 : C2
+>Component : Component
+
+    constructor() {
+        super({});
+>super({}) : void
+>super : typeof Component
+>{} : {}
+
+        this.state = { count: 0 };
+>this.state = { count: 0 } : { count: number; }
+>this.state : any
+>this : this
+>state : any
+>{ count: 0 } : { count: number; }
+>count : number
+>0 : 0
+    }
+}
+

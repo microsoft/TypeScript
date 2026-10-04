@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/dependentDestructuringDeferredCallback.ts] ////
+
+=== dependentDestructuringDeferredCallback.ts ===
+type U =
+>U : U
+
+    | { kind: "a"; payload: number; callback: () => void }
+>kind : "a"
+>payload : number
+>callback : () => void
+
+    | { kind: "b"; payload: string; callback: () => void };
+>kind : "b"
+>payload : string
+>callback : () => void
+
+const { kind, payload, callback }: U = {
+>kind : "a" | "b"
+>payload : string | number
+>callback : (() => void) | (() => void)
+>{    kind: "a",    payload: 1,    callback: () => {        if (kind === "a") payload.toFixed();    },} : { kind: "a"; payload: number; callback: () => void; }
+
+    kind: "a",
+>kind : "a"
+>"a" : "a"
+
+    payload: 1,
+>payload : number
+>1 : 1
+
+    callback: () => {
+>callback : () => void
+>() => {        if (kind === "a") payload.toFixed();    } : () => void
+
+        if (kind === "a") payload.toFixed();
+>kind === "a" : boolean
+>kind : "a" | "b"
+>"a" : "a"
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number) => string
+>payload : number
+>toFixed : (fractionDigits?: number) => string
+
+    },
+};
+

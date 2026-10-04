@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/classFieldsNamedEvaluationDestructuringAssignment.ts] ////
+
+=== classFieldsNamedEvaluationDestructuringAssignment.ts ===
+// Bug 2: Named evaluation missing in destructuring assignment elements.
+// Anonymous class expressions used as default values in destructuring
+// assignments should receive their inferred name.
+
+let x: any;
+>x : any
+
+// Array destructuring assignment with anonymous class default
+[x = class { static #y = 1; }] = [];
+>[x = class { static #y = 1; }] = [] : []
+>[x = class { static #y = 1; }] : [typeof x]
+>x = class { static #y = 1; } : typeof x
+>x : any
+>class { static #y = 1; } : typeof x
+>#y : number
+>1 : 1
+>[] : []
+
+// Object destructuring assignment (shorthand) with anonymous class default
+({ x = class { static #z = 2; } } = {} as any);
+>({ x = class { static #z = 2; } } = {} as any) : any
+>{ x = class { static #z = 2; } } = {} as any : any
+>{ x = class { static #z = 2; } } : { x?: any; }
+>x : any
+>class { static #z = 2; } : typeof (Anonymous class)
+>#z : number
+>2 : 2
+>{} as any : any
+>{} : {}
+
+// Object destructuring assignment (property) with anonymous class default
+({ y: x = class { static #w = 3; } } = {} as any);
+>({ y: x = class { static #w = 3; } } = {} as any) : any
+>{ y: x = class { static #w = 3; } } = {} as any : any
+>{ y: x = class { static #w = 3; } } : { y?: typeof x; }
+>y : typeof x
+>x = class { static #w = 3; } : typeof x
+>x : any
+>class { static #w = 3; } : typeof x
+>#w : number
+>3 : 3
+>{} as any : any
+>{} : {}
+

@@ -1,0 +1,43 @@
+// === Document Symbols ===
+// === /navbar_contains_no_duplicates.ts ===
+// <|declare namespace [|{| name: Windows, kind: Namespace |}Windows|] {
+//     <|export namespace [|{| name: Foundation, kind: Namespace |}Foundation|] {
+//         export var <|[|{| name: A, kind: Variable |}A|]|>;
+//         <|export class [|{| name: Test, kind: Class |}Test|] {
+//             <|public [|{| name: wow, kind: Method |}wow|]();|>
+//         }|>
+//     }|>
+// }|>
+// 
+// declare namespace Windows {
+//     export namespace Foundation {
+//         export var <|[|{| name: B, kind: Variable |}B|]|>;
+//         <|export namespace [|{| name: Test, kind: Namespace |}Test|] {
+//             <|export function [|{| name: Boom, kind: Function |}Boom|](): number;|>
+//         }|>
+//     }
+// }
+// 
+// <|class [|{| name: ABC, kind: Class |}ABC|] {
+//     <|public [|{| name: foo, kind: Method |}foo|]() {
+//         return 3;
+//     }|>
+// }|>
+// 
+// <|namespace [|{| name: ABC, kind: Namespace |}ABC|] {
+//     export var <|[|{| name: x, kind: Variable |}x|] = 3|>;
+// }|>
+
+// === Details ===
+(Namespace) Windows
+  (Namespace) Foundation
+    (Variable) A
+    (Class) Test
+      (Method) wow
+    (Variable) B
+    (Namespace) Test
+      (Function) Boom
+(Class) ABC
+  (Method) foo
+(Namespace) ABC
+  (Variable) x

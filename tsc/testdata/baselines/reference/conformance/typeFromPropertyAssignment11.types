@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment11.ts] ////
+
+=== module.js ===
+var Inner = function() {}
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>function() {} : { (): void; prototype: { m(): void; i: number; }; }
+
+Inner.prototype = {
+>Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
+>Inner.prototype : { m(): void; i: number; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>prototype : { m(): void; i: number; }
+>{    m() { },    i: 1} : { m(): void; i: number; }
+
+    m() { },
+>m : () => void
+
+    i: 1
+>i : number
+>1 : 1
+}
+// incremental assignments still work
+Inner.prototype.j = 2
+>Inner.prototype.j = 2 : 2
+>Inner.prototype.j : any
+>Inner.prototype : { m(): void; i: number; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>prototype : { m(): void; i: number; }
+>j : any
+>2 : 2
+
+/** @type {string} */
+Inner.prototype.k;
+>Inner.prototype.k : any
+>Inner.prototype : { m(): void; i: number; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>prototype : { m(): void; i: number; }
+>k : any
+
+var inner = new Inner()
+>inner : any
+>new Inner() : any
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+
+inner.m()
+>inner.m() : any
+>inner.m : any
+>inner : any
+>m : any
+
+inner.i
+>inner.i : any
+>inner : any
+>i : any
+
+inner.j
+>inner.j : any
+>inner : any
+>j : any
+
+inner.k
+>inner.k : any
+>inner : any
+>k : any
+

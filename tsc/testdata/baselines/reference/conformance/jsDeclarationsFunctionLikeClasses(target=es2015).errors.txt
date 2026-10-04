@@ -1,0 +1,43 @@
+referencer.js(4,12): error TS2749: 'Point' refers to a value, but is being used as a type here. Did you mean 'typeof Point'?
+source.js(6,11): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+source.js(7,16): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+source.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+source.js(10,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== source.js (4 errors) ====
+    /**
+     * @param {number} x
+     * @param {number} y
+     */
+    export function Point(x, y) {
+        if (!(this instanceof Point)) {
+              ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 source.js:5:17: An outer value of 'this' is shadowed by this container.
+            return new Point(x, y);
+                   ~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+        }
+        this.x = x;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 source.js:5:17: An outer value of 'this' is shadowed by this container.
+        this.y = y;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 source.js:5:17: An outer value of 'this' is shadowed by this container.
+    }
+    
+==== referencer.js (1 errors) ====
+    import {Point} from "./source";
+    
+    /**
+     * @param {Point} p
+               ~~~~~
+!!! error TS2749: 'Point' refers to a value, but is being used as a type here. Did you mean 'typeof Point'?
+     */
+    export function magnitude(p) {
+        return Math.sqrt(p.x ** 2 + p.y ** 2);
+    }
+    

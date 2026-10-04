@@ -1,0 +1,13 @@
+// === Document Symbols ===
+// === /navigationBarItemsClass6.ts ===
+// <|function [|{| name: Z, kind: Function |}Z|]() { }|>
+// 
+// <|Z.[|{| name: foo, kind: Variable |}foo|]|> = 42
+// 
+// <|class [|{| name: Z, kind: Class |}Z|] { }|>
+
+// === Details ===
+(Function) Z
+  (Variable) foo
+(Class) Z
+  (Variable) foo

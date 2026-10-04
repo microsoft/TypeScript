@@ -1,0 +1,59 @@
+// === QuickInfo ===
+=== /foo.ts ===
+// /// <reference path='./bar.d.ts' />
+// import.meta;
+//   ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | interface ImportMeta
+// | ```
+// | The type of `import.meta`.
+// | 
+// | If you need to declare that a given property exists on `import.meta`,
+// | this type may be augmented via interface merging.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 38,
+      "LSPosition": {
+        "line": 1,
+        "character": 2
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 45,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ninterface ImportMeta\n```\nThe type of `import.meta`.\n\nIf you need to declare that a given property exists on `import.meta`,\nthis type may be augmented via interface merging."
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 11
+        }
+      }
+    }
+  }
+]

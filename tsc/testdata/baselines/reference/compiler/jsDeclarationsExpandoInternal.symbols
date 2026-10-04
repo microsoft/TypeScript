@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/jsDeclarationsExpandoInternal.tsx] ////
+
+=== src/main.jsx ===
+/// <reference path="react16.d.ts" />
+import React from 'react';
+>React : Symbol(React, Decl(main.jsx, 1, 6))
+
+/**
+ * @param {Object} args
+ * @param {string} args.text
+ */
+function Internal(args) {
+>Internal : Symbol(Internal, Decl(main.jsx, 1, 26))
+>args : Symbol(args, Decl(main.jsx, 7, 18))
+
+    return <div>{args.text}</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+>args.text : Symbol(text, Decl(main.jsx, 5, 3))
+>args : Symbol(args, Decl(main.jsx, 7, 18))
+>text : Symbol(text, Decl(main.jsx, 5, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+}
+Internal.args = { text: 'text' };
+>Internal.args : Symbol(Internal.args, Decl(main.jsx, 9, 1))
+>Internal : Symbol(Internal, Decl(main.jsx, 1, 26))
+>args : Symbol(Internal.args, Decl(main.jsx, 9, 1))
+>text : Symbol(text, Decl(main.jsx, 10, 17))
+
+export const PublicInternalBinding = Internal.bind({});
+>PublicInternalBinding : Symbol(PublicInternalBinding, Decl(main.jsx, 12, 12))
+>Internal.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Internal : Symbol(Internal, Decl(main.jsx, 1, 26))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+PublicInternalBinding.args = { text: 'bind text' };
+>PublicInternalBinding.args : Symbol(Internal.args, Decl(main.jsx, 9, 1))
+>PublicInternalBinding : Symbol(PublicInternalBinding, Decl(main.jsx, 12, 12))
+>args : Symbol(Internal.args, Decl(main.jsx, 9, 1))
+>text : Symbol(text, Decl(main.jsx, 13, 30))
+
+/**
+ * @param {Object} args
+ * @param {string} args.text
+ */
+export function Exported(args) {
+>Exported : Symbol(Exported, Decl(main.jsx, 13, 51))
+>args : Symbol(args, Decl(main.jsx, 19, 25))
+
+    return <div>{args.text}</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+>args.text : Symbol(text, Decl(main.jsx, 17, 3))
+>args : Symbol(args, Decl(main.jsx, 19, 25))
+>text : Symbol(text, Decl(main.jsx, 17, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+}
+Exported.args = { text: 'text' };
+>Exported.args : Symbol(Exported.args, Decl(main.jsx, 21, 1))
+>Exported : Symbol(Exported, Decl(main.jsx, 13, 51))
+>args : Symbol(Exported.args, Decl(main.jsx, 21, 1))
+>text : Symbol(text, Decl(main.jsx, 22, 17))
+
+export const PublicExportedBinding = Exported.bind({});
+>PublicExportedBinding : Symbol(PublicExportedBinding, Decl(main.jsx, 24, 12))
+>Exported.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Exported : Symbol(Exported, Decl(main.jsx, 13, 51))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+PublicExportedBinding.args = { text: 'bind text' };
+>PublicExportedBinding.args : Symbol(Exported.args, Decl(main.jsx, 21, 1))
+>PublicExportedBinding : Symbol(PublicExportedBinding, Decl(main.jsx, 24, 12))
+>args : Symbol(Exported.args, Decl(main.jsx, 21, 1))
+>text : Symbol(text, Decl(main.jsx, 25, 30))
+

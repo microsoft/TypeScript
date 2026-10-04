@@ -1,0 +1,38 @@
+// === SignatureHelp ===
+=== /signatureHelpUnresolvedTypeInErrorRecoveredSignature.ts ===
+// function f(x: {
+//     a?: U =
+//     b?: (p: U) => void
+// }) {}
+// f();
+//   ^
+// | ----------------------------------------------------------------------
+// | f(**x: { a?: U; }**): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 59,
+      "LSPosition": {
+        "line": 4,
+        "character": 2
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f(x: { a?: U; }): void",
+          "parameters": [
+            {
+              "label": "x: { a?: U; }"
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

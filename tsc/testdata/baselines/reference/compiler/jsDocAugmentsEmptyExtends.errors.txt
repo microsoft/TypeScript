@@ -1,0 +1,15 @@
+file.js(2,16): error TS1097: 'extends' list cannot be empty.
+file.js(5,16): error TS1097: 'extends' list cannot be empty.
+
+
+==== file.js (2 errors) ====
+    /** @augments X */
+    class C extends {}
+                   
+!!! error TS1097: 'extends' list cannot be empty.
+    
+    /** @extends X */
+    class D extends {}
+                   
+!!! error TS1097: 'extends' list cannot be empty.
+    

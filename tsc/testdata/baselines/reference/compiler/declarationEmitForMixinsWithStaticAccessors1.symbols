@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/declarationEmitForMixinsWithStaticAccessors1.ts] ////
+
+=== declarationEmitForMixinsWithStaticAccessors1.ts ===
+// Regression test: when a class extends a mixin that returns an intersection,
+// the class's anonymous constructor type inherits static accessor properties from the
+// intersection. These synthetic properties can have a nil parent symbol when the
+// constituent accessor declarations differ. Declaration emit must not crash when
+// serializing these properties.
+
+function mix<T extends new (...args: any[]) => any, U extends new (...args: any[]) => any>(
+>mix : Symbol(mix, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 13))
+>args : Symbol(args, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 28))
+>U : Symbol(U, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 51))
+>args : Symbol(args, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 67))
+
+    base1: T, base2: U
+>base1 : Symbol(base1, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 91))
+>T : Symbol(T, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 13))
+>base2 : Symbol(base2, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 7, 13))
+>U : Symbol(U, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 51))
+
+): T & U {
+>T : Symbol(T, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 13))
+>U : Symbol(U, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 6, 51))
+
+    return null as any;
+}
+
+class A {
+>A : Symbol(A, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 10, 1))
+
+    static get shared(): number { return 1; }
+>shared : Symbol(A.shared, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 12, 9), Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 13, 45))
+
+    static set shared(v: number) { }
+>shared : Symbol(A.shared, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 12, 9), Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 13, 45))
+>v : Symbol(v, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 14, 22))
+
+    x: string = "";
+>x : Symbol(A.x, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 14, 36))
+}
+
+class B {
+>B : Symbol(B, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 16, 1))
+
+    static get shared(): number { return 2; }
+>shared : Symbol(B.shared, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 18, 9), Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 19, 45))
+
+    static set shared(v: number) { }
+>shared : Symbol(B.shared, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 18, 9), Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 19, 45))
+>v : Symbol(v, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 20, 22))
+
+    y: number = 0;
+>y : Symbol(B.y, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 20, 36))
+}
+
+function make() {
+>make : Symbol(make, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 22, 1))
+
+    class C extends mix(A, B) {
+>C : Symbol(C, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 24, 17))
+>mix : Symbol(mix, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 0, 0))
+>A : Symbol(A, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 10, 1))
+>B : Symbol(B, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 16, 1))
+
+        z: boolean = true;
+>z : Symbol(C.z, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 25, 31))
+    }
+    return C;
+>C : Symbol(C, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 24, 17))
+}
+
+export const MixedClass = make();
+>MixedClass : Symbol(MixedClass, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 31, 12))
+>make : Symbol(make, Decl(declarationEmitForMixinsWithStaticAccessors1.ts, 22, 1))
+

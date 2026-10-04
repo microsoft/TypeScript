@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/reexportMissingDefault8.ts] ////
+
+=== b.ts ===
+const b = null;
+>b : any
+
+export = b;
+>b : any
+
+=== a.ts ===
+export { default } from "./b";
+>default : any
+

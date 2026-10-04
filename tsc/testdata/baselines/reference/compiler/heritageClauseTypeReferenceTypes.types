@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/heritageClauseTypeReferenceTypes.ts] ////
+
+=== heritageClauseTypeReferenceTypes.ts ===
+namespace A {
+>A : typeof A
+
+    export const valueA = 0;
+>valueA : 0
+>0 : 0
+
+    export namespace B {
+>B : typeof B
+
+        export const valueB = 0;
+>valueB : 0
+>0 : 0
+
+        export interface C {}
+    }
+}
+
+class D implements A.B.C {}
+>D : D
+>A.B : any
+>A : any
+>B : any
+

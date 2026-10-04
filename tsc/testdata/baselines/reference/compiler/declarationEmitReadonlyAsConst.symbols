@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/declarationEmitReadonlyAsConst.ts] ////
+
+=== declarationEmitReadonlyAsConst.ts ===
+export const value = {
+>value : Symbol(value, Decl(declarationEmitReadonlyAsConst.ts, 0, 12))
+
+  method(): string {
+>method : Symbol(method, Decl(declarationEmitReadonlyAsConst.ts, 0, 22))
+
+    return "a";
+  },
+  prop: {
+>prop : Symbol(prop, Decl(declarationEmitReadonlyAsConst.ts, 3, 4))
+
+    nested: 1,
+>nested : Symbol(nested, Decl(declarationEmitReadonlyAsConst.ts, 4, 9))
+
+  },
+} as const;
+>const : Symbol(const)
+

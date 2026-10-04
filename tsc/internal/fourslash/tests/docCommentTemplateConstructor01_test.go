@@ -1,0 +1,44 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestDocCommentTemplateConstructor01(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class C {
+    private p;
+    /*0*/
+    constructor(a, b, c, d);
+    /*1*/
+    constructor(public a, private b, protected c, d, e?) {
+    }
+
+    foo();
+    foo(a?, b?, ...args) {
+    }
+}`
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(false)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
+	defer done()
+	f.VerifyJSDocCompletion(t, "0", 11, `/**
+     * 
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     */`, nil)
+	f.VerifyJSDocCompletion(t, "1", 11, `/**
+     * 
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param e
+     */`, nil)
+}

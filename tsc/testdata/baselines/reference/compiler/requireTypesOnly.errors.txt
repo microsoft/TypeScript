@@ -1,0 +1,12 @@
+main.js(1,7): error TS18042: 't' is a type and cannot be imported in JavaScript files. Use 'import("./t")' in a JSDoc type annotation.
+
+
+==== main.js (1 errors) ====
+    const t = require("./t")
+          ~
+!!! error TS18042: 't' is a type and cannot be imported in JavaScript files. Use 'import("./t")' in a JSDoc type annotation.
+    
+==== t.ts (0 errors) ====
+    type Strings = string[]
+    export = Strings
+    

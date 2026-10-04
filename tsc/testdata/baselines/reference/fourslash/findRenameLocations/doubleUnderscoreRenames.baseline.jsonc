@@ -1,0 +1,23 @@
+// === findRenameLocations ===
+// === /fileA.ts ===
+// export function /*RENAME*/[|__fooRENAME|]() {
+// }
+// 
+
+// === /fileB.ts ===
+// import { [|__fooRENAME|] as bar } from "./fileA";
+// 
+// bar();
+
+
+
+// === findRenameLocations ===
+// === /fileA.ts ===
+// export function [|__fooRENAME|]() {
+// }
+// 
+
+// === /fileB.ts ===
+// import { /*RENAME*/[|__fooRENAME|] as bar } from "./fileA";
+// 
+// bar();

@@ -1,0 +1,78 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsUsing.ts ===
+// using a = "a";
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | using a: "a"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// const f = async () => {
+//     await using b = { async [Symbol.asyncDispose]() {} };
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | await using b: {
+// |     [Symbol.asyncDispose](): Promise<void>;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// };
+[
+  {
+    "marker": {
+      "Position": 7,
+      "LSPosition": {
+        "line": 0,
+        "character": 7
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nusing a: \"a\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 6
+        },
+        "end": {
+          "line": 0,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 55,
+      "LSPosition": {
+        "line": 2,
+        "character": 16
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nawait using b: {\n    [Symbol.asyncDispose](): Promise<void>;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 16
+        },
+        "end": {
+          "line": 2,
+          "character": 17
+        }
+      }
+    }
+  }
+]

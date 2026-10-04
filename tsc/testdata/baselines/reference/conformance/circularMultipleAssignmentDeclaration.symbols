@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/salsa/circularMultipleAssignmentDeclaration.ts] ////
+
+=== circularMultipleAssignmentDeclaration.js ===
+ns.next = ns.next || { shared: {} };
+>shared : Symbol(shared, Decl(circularMultipleAssignmentDeclaration.js, 0, 22))
+
+ns.next.shared.mymethod = {};
+

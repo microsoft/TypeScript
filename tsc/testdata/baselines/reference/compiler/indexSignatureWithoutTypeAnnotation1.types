@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/indexSignatureWithoutTypeAnnotation1.ts] ////
+
+=== indexSignatureWithoutTypeAnnotation1.ts ===
+class C {
+>C : C
+
+  [a: number];
+>a : number
+}

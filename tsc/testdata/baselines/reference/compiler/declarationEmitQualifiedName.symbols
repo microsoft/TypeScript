@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/declarationEmitQualifiedName.ts] ////
+
+=== e.ts ===
+export enum E {
+>E : Symbol(E, Decl(e.ts, 0, 0))
+
+    A = 'a',
+>A : Symbol(E.A, Decl(e.ts, 0, 15))
+
+    B = 'b',
+>B : Symbol(E.B, Decl(e.ts, 1, 12))
+}
+
+=== a.ts ===
+import { E } from './e.js'
+>E : Symbol(E, Decl(a.ts, 0, 8))
+
+export const A = {
+>A : Symbol(A, Decl(a.ts, 1, 12))
+
+    item: {
+>item : Symbol(item, Decl(a.ts, 1, 18))
+
+        a: E.A,
+>a : Symbol(a, Decl(a.ts, 2, 11))
+>E.A : Symbol(E.A, Decl(e.ts, 0, 15))
+>E : Symbol(E, Decl(a.ts, 0, 8))
+>A : Symbol(E.A, Decl(e.ts, 0, 15))
+
+    },
+} as const
+>const : Symbol(const)
+
+=== b.ts ===
+import { A } from './a.js'
+>A : Symbol(A, Decl(b.ts, 0, 8))
+
+export const B = { ...A } as const
+>B : Symbol(B, Decl(b.ts, 1, 12))
+>A : Symbol(A, Decl(b.ts, 0, 8))
+>const : Symbol(const)
+

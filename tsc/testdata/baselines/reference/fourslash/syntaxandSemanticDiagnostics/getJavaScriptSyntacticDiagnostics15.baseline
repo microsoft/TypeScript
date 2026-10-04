@@ -1,0 +1,8 @@
+// === Syntax and Semantic Diagnostics ===
+/a.js(1,12): error TS8012: Parameter modifiers can only be used in TypeScript files.
+
+
+==== /a.js (1 errors) ====
+    function F(public p) { }
+               ~~~~~~
+!!! error TS8012: Parameter modifiers can only be used in TypeScript files.

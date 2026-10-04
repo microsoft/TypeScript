@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedVisibility.ts] ////
+
+//// [obj.js]
+module.exports = class Obj {
+    constructor() {
+        this.x = 12;
+    }
+}
+//// [index.js]
+const Obj = require("./obj");
+
+class Container {
+    constructor() {
+        this.usage = new Obj();
+    }
+}
+
+module.exports = Container;
+
+//// [obj.js]
+"use strict";
+module.exports = class Obj {
+    constructor() {
+        this.x = 12;
+    }
+};
+//// [index.js]
+"use strict";
+const Obj = require("./obj");
+class Container {
+    constructor() {
+        this.usage = new Obj();
+    }
+}
+module.exports = Container;
+
+
+//// [obj.d.ts]
+export = Obj;
+declare class Obj {
+    x: number;
+    constructor();
+}
+//// [index.d.ts]
+export = Container;
+import Obj = require("./obj");
+declare class Container {
+    usage: Obj;
+    constructor();
+}

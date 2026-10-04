@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/unusedFunctionsinNamespaces1.ts] ////
+
+=== unusedFunctionsinNamespaces1.ts ===
+namespace Validation {
+>Validation : typeof Validation
+
+    function function1() {
+>function1 : () => void
+    }
+}

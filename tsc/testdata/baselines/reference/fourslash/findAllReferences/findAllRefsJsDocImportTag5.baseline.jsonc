@@ -1,0 +1,15 @@
+// === findAllReferences ===
+// === /a.js ===
+// export default function /*FIND ALL REFS*/[|a|]() {}
+
+// === /b.js ===
+// /** @import [|a|], * as ns from "./a" */
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// export default function [|a|]() {}
+
+// === /b.js ===
+// /** @import /*FIND ALL REFS*/[|a|], * as ns from "./a" */

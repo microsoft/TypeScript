@@ -1,0 +1,5 @@
+// @module: commonjs,system,es2015,esnext
+// @target: esnext,es5
+// @noEmitHelpers: true
+// @noTypesAndSymbols: true
+export const { x, ...rest } = { x: 'x', y: 'y' };

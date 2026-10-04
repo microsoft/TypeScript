@@ -1,0 +1,31 @@
+a.js(1,20): error TS1005: '}' expected.
+a.js(2,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
+a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
+a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== a.js (4 errors) ====
+    /** @type {function(string): void} */
+                       ~
+!!! error TS1005: '}' expected.
+    const f = (value) => {
+               ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+    };
+    /** @type {(s: string) => void} */
+    function g(s) {
+    }
+    /** @type {{(s: string): void}} */
+    function h(s) {
+    }
+    
+    f() // should error
+    g() // should error
+    ~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 a.js:4:13: An argument for 's' was not provided.
+    h()
+    ~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 a.js:7:14: An argument for 's' was not provided.
+    

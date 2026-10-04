@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/widenedThisPropertyAssignment.ts] ////
+
+=== main.js ===
+export class CC {
+>CC : Symbol(CC, Decl(main.js, 0, 0))
+
+    constructor() {
+        this.stuffs = {}
+>this.stuffs : Symbol(CC.stuffs, Decl(main.js, 1, 19), Decl(main.js, 7, 23))
+>this : Symbol(CC, Decl(main.js, 0, 0))
+>stuffs : Symbol(CC.stuffs, Decl(main.js, 1, 19), Decl(main.js, 7, 23))
+    }
+    /**
+     * @param {Object} stuffs
+     */
+    addStuffs(stuffs) {
+>addStuffs : Symbol(CC.addStuffs, Decl(main.js, 3, 5))
+>stuffs : Symbol(stuffs, Decl(main.js, 7, 14))
+
+        this.stuffs = { ...stuffs, ...this.stuffs }
+>this.stuffs : Symbol(CC.stuffs, Decl(main.js, 1, 19), Decl(main.js, 7, 23))
+>this : Symbol(CC, Decl(main.js, 0, 0))
+>stuffs : Symbol(CC.stuffs, Decl(main.js, 1, 19), Decl(main.js, 7, 23))
+>stuffs : Symbol(stuffs, Decl(main.js, 7, 14))
+>this.stuffs : Symbol(CC.stuffs, Decl(main.js, 1, 19), Decl(main.js, 7, 23))
+>this : Symbol(CC, Decl(main.js, 0, 0))
+>stuffs : Symbol(CC.stuffs, Decl(main.js, 1, 19), Decl(main.js, 7, 23))
+    }
+}
+

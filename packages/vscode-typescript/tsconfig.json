@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "./dist",
+        "noEmit": true,
+
+        "target": "es2023",
+        "module": "preserve",
+        "moduleResolution": "bundler",
+        "types": ["node"],
+
+        "strict": true,
+        "noImplicitOverride": true
+    },
+    "include": ["./src/**/*"],
+    "references": [
+        { "path": "../typescript" }
+    ]
+}

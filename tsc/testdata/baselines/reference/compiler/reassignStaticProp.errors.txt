@@ -1,0 +1,24 @@
+reassignStaticProp.ts(3,12): error TS2300: Duplicate identifier 'bar'.
+reassignStaticProp.ts(5,12): error TS2300: Duplicate identifier 'bar'.
+reassignStaticProp.ts(5,12): error TS2717: Subsequent property declarations must have the same type.  Property 'bar' must be of type 'number', but here has type 'string'.
+
+
+==== reassignStaticProp.ts (3 errors) ====
+    class foo {
+     
+        static bar = 1;
+               ~~~
+!!! error TS2300: Duplicate identifier 'bar'.
+     
+        static bar:string; // errror - duplicate id
+               ~~~
+!!! error TS2300: Duplicate identifier 'bar'.
+               ~~~
+!!! error TS2717: Subsequent property declarations must have the same type.  Property 'bar' must be of type 'number', but here has type 'string'.
+!!! related TS6203 reassignStaticProp.ts:3:12: 'bar' was also declared here.
+     
+    }
+     
+     
+    
+    

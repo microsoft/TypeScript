@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/regularExpressionQuantifierBounds1.ts] ////
+
+=== regularExpressionQuantifierBounds1.ts ===
+const regexes: RegExp[] = [
+>regexes : Symbol(regexes, Decl(regularExpressionQuantifierBounds1.ts, 0, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+	/a{7,8}/,
+	/a{9223372036854775807,9223372036854775808}/,
+	/a{8,7}/,
+	/a{9223372036854775808,9223372036854775807}/,
+	/a{8,8}/,
+	/a{9223372036854775808,9223372036854775808}/,
+];
+

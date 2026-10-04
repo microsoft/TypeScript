@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/simpleRecursionWithBaseCase2.ts] ////
+
+=== simpleRecursionWithBaseCase2.ts ===
+async function rec1() {
+>rec1 : () => Promise<string>
+
+  if (Math.random() < 0.5) {
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+    return rec1();
+>rec1() : Promise<string>
+>rec1 : () => Promise<string>
+
+  } else {
+    return "hello";
+>"hello" : "hello"
+  }
+}
+
+async function rec2() {
+>rec2 : () => Promise<string>
+
+  if (Math.random() < 0.5) {
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+    return await rec2();
+>await rec2() : string
+>rec2() : Promise<string>
+>rec2 : () => Promise<string>
+
+  } else {
+    return "hello";
+>"hello" : "hello"
+  }
+}
+
+async function rec3() {
+>rec3 : () => Promise<never>
+
+  return rec3();
+>rec3() : Promise<never>
+>rec3 : () => Promise<never>
+}
+
+async function rec4() {
+>rec4 : () => Promise<never>
+
+  return await rec4();
+>await rec4() : never
+>rec4() : Promise<never>
+>rec4 : () => Promise<never>
+}
+
+async function rec5() {
+>rec5 : () => Promise<string>
+
+  if (Math.random() < 0.5) {
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+    return ((rec1()));
+>((rec1())) : Promise<string>
+>(rec1()) : Promise<string>
+>rec1() : Promise<string>
+>rec1 : () => Promise<string>
+
+  } else {
+    return "hello";
+>"hello" : "hello"
+  }
+}
+
+async function rec6() {
+>rec6 : () => Promise<string>
+
+  if (Math.random() < 0.5) {
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+    return await ((rec1()));
+>await ((rec1())) : string
+>((rec1())) : Promise<string>
+>(rec1()) : Promise<string>
+>rec1() : Promise<string>
+>rec1 : () => Promise<string>
+
+  } else {
+    return "hello";
+>"hello" : "hello"
+  }
+}
+
+declare const ps: Promise<string> | number;
+>ps : number | Promise<string>
+
+async function foo1() {
+>foo1 : () => Promise<string | number>
+
+  if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+    return ps;
+>ps : number | Promise<string>
+
+  } else {
+    return await foo1();
+>await foo1() : string | number
+>foo1() : Promise<string | number>
+>foo1 : () => Promise<string | number>
+  }
+}
+
+async function foo2() {
+>foo2 : () => Promise<string | number>
+
+  if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+    return ps;
+>ps : number | Promise<string>
+
+  } else {
+    return foo2();
+>foo2() : Promise<string | number>
+>foo2 : () => Promise<string | number>
+  }
+}
+

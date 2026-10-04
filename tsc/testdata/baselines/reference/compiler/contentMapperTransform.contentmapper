@@ -1,0 +1,14 @@
+//// [/app.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box])
+--- Original ---
+export const label: string = "widget";
+export const version = #{target};
+export const flavor = #{jsx};
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const label: string = "widget";
+export const version = 7;
+export const flavor = undefined;
+
+=== Diagnostics ===
+
+<no content>

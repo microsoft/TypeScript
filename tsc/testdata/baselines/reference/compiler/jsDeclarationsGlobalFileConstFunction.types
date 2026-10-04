@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/jsDeclarationsGlobalFileConstFunction.ts] ////
+
+=== file.js ===
+const SomeConstructor = function () {
+>SomeConstructor : () => void
+>function () {	this.x = 1;} : () => void
+
+	this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+
+};
+
+const SomeConstructor2 = function () {
+>SomeConstructor2 : { (): void; staticMember: string; }
+>function () {} : { (): void; staticMember: string; }
+
+};
+SomeConstructor2.staticMember = "str";
+>SomeConstructor2.staticMember = "str" : "str"
+>SomeConstructor2.staticMember : string
+>SomeConstructor2 : { (): void; staticMember: string; }
+>staticMember : string
+>"str" : "str"
+
+const SomeConstructor3 = function () {
+>SomeConstructor3 : { (): void; staticMember: string; }
+>function () {	this.x = 1;} : { (): void; staticMember: string; }
+
+	this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+
+};
+SomeConstructor3.staticMember = "str";
+>SomeConstructor3.staticMember = "str" : "str"
+>SomeConstructor3.staticMember : string
+>SomeConstructor3 : { (): void; staticMember: string; }
+>staticMember : string
+>"str" : "str"
+

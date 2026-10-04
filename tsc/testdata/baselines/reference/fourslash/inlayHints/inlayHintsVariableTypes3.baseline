@@ -1,0 +1,100 @@
+// === Inlay Hints ===
+const div = getCtor("div");
+         ^
+{
+  "position": {
+    "line": 9,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "new "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "DivElement",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes3.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "prototype",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes3.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 2
+          },
+          "end": {
+            "line": 2,
+            "character": 11
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "DivElement",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes3.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "undefined"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

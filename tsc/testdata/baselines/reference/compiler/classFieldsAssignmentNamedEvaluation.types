@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/classFieldsAssignmentNamedEvaluation.ts] ////
+
+=== classFieldsAssignmentNamedEvaluation.ts ===
+let x: any;
+>x : any
+
+x = class { static #foo = 1; };
+>x = class { static #foo = 1; } : typeof x
+>x : any
+>class { static #foo = 1; } : typeof x
+>#foo : number
+>1 : 1
+

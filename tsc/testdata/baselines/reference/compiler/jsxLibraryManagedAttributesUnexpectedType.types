@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsxLibraryManagedAttributesUnexpectedType.tsx] ////
+
+=== jsxLibraryManagedAttributesUnexpectedType.tsx ===
+declare namespace JSX {
+>JSX : typeof JSX
+
+  enum LibraryManagedAttributes {}
+>LibraryManagedAttributes : LibraryManagedAttributes
+}
+
+declare const C: () => any;
+>C : () => any
+
+const x = <C />;
+>x : any
+><C /> : any
+>C : () => any
+

@@ -1,0 +1,75 @@
+// === findAllReferences ===
+// === /referencesForInheritedProperties10.ts ===
+// interface IFeedbackHandler {
+//   /*FIND ALL REFS*/[|handleAccept|]?(): void;
+//   handleReject?(): void;
+// }
+// 
+// abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+// 
+// class FeedbackHandler extends AbstractFeedbackHandler {
+//   [|handleAccept|](): void {
+//     console.log("Feedback accepted");
+//   }
+// 
+//   handleReject(): void {
+//     console.log("Feedback rejected");
+//   }
+// }
+// 
+// function foo(handler: IFeedbackHandler) {
+//   handler.[|handleAccept|]?.();
+//   handler.handleReject?.();
+// }
+
+
+
+// === findAllReferences ===
+// === /referencesForInheritedProperties10.ts ===
+// interface IFeedbackHandler {
+//   [|handleAccept|]?(): void;
+//   handleReject?(): void;
+// }
+// 
+// abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+// 
+// class FeedbackHandler extends AbstractFeedbackHandler {
+//   /*FIND ALL REFS*/[|handleAccept|](): void {
+//     console.log("Feedback accepted");
+//   }
+// 
+//   handleReject(): void {
+//     console.log("Feedback rejected");
+//   }
+// }
+// 
+// function foo(handler: IFeedbackHandler) {
+//   handler.[|handleAccept|]?.();
+//   handler.handleReject?.();
+// }
+
+
+
+// === findAllReferences ===
+// === /referencesForInheritedProperties10.ts ===
+// interface IFeedbackHandler {
+//   [|handleAccept|]?(): void;
+//   handleReject?(): void;
+// }
+// 
+// abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+// 
+// class FeedbackHandler extends AbstractFeedbackHandler {
+//   [|handleAccept|](): void {
+//     console.log("Feedback accepted");
+//   }
+// 
+//   handleReject(): void {
+//     console.log("Feedback rejected");
+//   }
+// }
+// 
+// function foo(handler: IFeedbackHandler) {
+//   handler./*FIND ALL REFS*/[|handleAccept|]?.();
+//   handler.handleReject?.();
+// }

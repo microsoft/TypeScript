@@ -1,0 +1,10 @@
+// === Document Symbols ===
+// === /deleteClassWithEnumPresent.ts ===
+// <|enum [|{| name: Foo, kind: Enum |}Foo|] { <|[|{| name: a, kind: EnumMember |}a|]|>, <|[|{| name: b, kind: EnumMember |}b|]|>, <|[|{| name: c, kind: EnumMember |}c|]|> }|>
+// 
+
+// === Details ===
+(Enum) Foo
+  (EnumMember) a
+  (EnumMember) b
+  (EnumMember) c

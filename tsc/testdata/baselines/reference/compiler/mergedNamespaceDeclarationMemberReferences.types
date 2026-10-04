@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/mergedNamespaceDeclarationMemberReferences.ts] ////
+
+=== mergedNamespaceDeclarationMemberReferences.ts ===
+// Unqualified namespace member references across merged namespace declarations
+namespace N {
+>N : typeof N
+
+    export const x = 1;
+>x : 1
+>1 : 1
+
+    export function fn() {
+>fn : () => number
+
+        return 42;
+>42 : 42
+    }
+    export class A {
+>A : A
+
+        method() {
+>method : () => void
+
+            console.log("A.method");
+>console.log("A.method") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"A.method" : "A.method"
+        }
+    }
+}
+
+namespace N {
+>N : typeof N
+
+    export const y = x;
+>y : 1
+>x : 1
+
+    fn();
+>fn() : number
+>fn : () => number
+
+    export class B extends A {
+>B : B
+>A : A
+
+        override method() {
+>method : () => void
+
+            console.log("B.method");
+>console.log("B.method") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"B.method" : "B.method"
+        }
+    }
+    const a = new A();
+>a : A
+>new A() : A
+>A : typeof A
+}
+

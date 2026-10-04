@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/exportAssignmentMerging9.ts] ////
+
+=== a.d.ts ===
+declare namespace A {
+>A : typeof A
+
+    class Base<T> {
+>Base : Base<T>
+
+        a: T;
+>a : T
+    }
+}
+
+declare namespace B {
+>B : typeof B
+
+    class Base<T> {
+>Base : Base<T>
+
+        b: T;
+>b : T
+    }
+}
+
+declare module "m" {
+>"m" : typeof import("m")
+
+    export class Base<T> {
+>Base : Base<T>
+
+        top: T;
+>top : T
+    }
+
+    const value: typeof A | typeof B;
+>value : typeof A | typeof B
+>A : typeof A
+>B : typeof B
+
+    export = value;
+>value : typeof A | typeof B
+}
+
+=== b.ts ===
+import { Base } from "m";
+>Base : typeof Base
+
+class Derived extends Base<string> {}
+>Derived : Derived
+>Base : Base<string>
+

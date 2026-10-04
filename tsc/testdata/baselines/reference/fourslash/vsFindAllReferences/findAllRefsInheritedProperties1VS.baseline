@@ -1,0 +1,409 @@
+// === vsFindAllReferences ===
+// === /findAllRefsInheritedProperties1VS.ts ===
+// class class1 extends class1 {
+//    /*FIND ALL REFS*/[|doStuff|]() { }
+//    propName: string;
+// }
+// 
+// var v: class1;
+// v.[|doStuff|]();
+// v.propName;
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 3
+        },
+        "end": {
+          "line": 1,
+          "character": 10
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "text",
+          "Text": "method",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ") ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "method name",
+          "Text": "class1.doStuff",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ")",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ":",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "whitespace",
+          "Text": " ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "void",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ";",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      3
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 2
+        },
+        "end": {
+          "line": 6,
+          "character": 9
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]
+
+
+
+// === vsFindAllReferences ===
+// === /findAllRefsInheritedProperties1VS.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    /*FIND ALL REFS*/[|propName|]: string;
+// }
+// 
+// var v: class1;
+// v.doStuff();
+// v.[|propName|];
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 3
+        },
+        "end": {
+          "line": 2,
+          "character": 11
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "text",
+          "Text": "property",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ") ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "property name",
+          "Text": "class1.propName",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ": ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "string",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      3
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 2
+        },
+        "end": {
+          "line": 7,
+          "character": 10
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]
+
+
+
+// === vsFindAllReferences ===
+// === /findAllRefsInheritedProperties1VS.ts ===
+// class class1 extends class1 {
+//    [|doStuff|]() { }
+//    propName: string;
+// }
+// 
+// var v: class1;
+// v./*FIND ALL REFS*/[|doStuff|]();
+// v.propName;
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 3
+        },
+        "end": {
+          "line": 1,
+          "character": 10
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "text",
+          "Text": "method",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ") ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "method name",
+          "Text": "class1.doStuff",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ")",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ":",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "whitespace",
+          "Text": " ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "void",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ";",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      3
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 2
+        },
+        "end": {
+          "line": 6,
+          "character": 9
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]
+
+
+
+// === vsFindAllReferences ===
+// === /findAllRefsInheritedProperties1VS.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    [|propName|]: string;
+// }
+// 
+// var v: class1;
+// v.doStuff();
+// v./*FIND ALL REFS*/[|propName|];
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 3
+        },
+        "end": {
+          "line": 2,
+          "character": 11
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "text",
+          "Text": "property",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ") ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "property name",
+          "Text": "class1.propName",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ": ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "string",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      3
+    ],
+    "_vs_location": {
+      "uri": "file:///findAllRefsInheritedProperties1VS.ts",
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 2
+        },
+        "end": {
+          "line": 7,
+          "character": 10
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]

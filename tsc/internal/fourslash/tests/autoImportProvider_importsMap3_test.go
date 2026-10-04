@@ -1,0 +1,37 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestAutoImportProvider_importsMap3(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "lib": ["es5"],
+    "rootDir": "src",
+    "outDir": "dist"
+  }
+}
+// @Filename: /home/src/workspaces/project/package.json
+{
+  "type": "module",
+  "imports": {
+    "#internal/": "./dist/internal/"
+  }
+}
+// @Filename: /home/src/workspaces/project/src/internal/foo.ts
+export function something(name: string) {}
+// @Filename: /home/src/workspaces/project/src/a.ts
+something/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.MarkTestAsStradaServer()
+	f.VerifyImportFixModuleSpecifiers(t, "", []string{"#internal/foo.js"}, nil /*preferences*/)
+}

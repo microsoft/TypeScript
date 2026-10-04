@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/declarationEmitSubpathImportsReexport.ts] ////
+
+=== /packages/a/src/re_export.ts ===
+import type { B } from "package-b";
+>B : Symbol(B, Decl(re_export.ts, 0, 13))
+
+declare function foo(): Promise<B>
+>foo : Symbol(foo, Decl(re_export.ts, 0, 35))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>B : Symbol(B, Decl(re_export.ts, 0, 13))
+
+export const re = { foo };
+>re : Symbol(re, Decl(re_export.ts, 2, 12))
+>foo : Symbol(foo, Decl(re_export.ts, 2, 19))
+
+=== /packages/a/src/index.ts ===
+import { re } from "#re_export";
+>re : Symbol(re, Decl(index.ts, 0, 8))
+
+const { foo } = re;
+>foo : Symbol(foo, Decl(index.ts, 1, 7))
+>re : Symbol(re, Decl(index.ts, 0, 8))
+
+export { foo };
+>foo : Symbol(foo, Decl(index.ts, 2, 8))
+
+
+
+=== /packages/b/index.d.ts ===
+export interface B {
+>B : Symbol(B, Decl(index.d.ts, 0, 0))
+
+	b: "b";
+>b : Symbol(B.b, Decl(index.d.ts, 0, 20))
+}
+

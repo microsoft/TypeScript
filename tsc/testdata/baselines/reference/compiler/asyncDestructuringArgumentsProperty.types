@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/asyncDestructuringArgumentsProperty.ts] ////
+
+=== asyncDestructuringArgumentsProperty.ts ===
+async function f() {
+>f : () => Promise<number>
+
+  const { arguments: args } = await { arguments: 42 };
+>arguments : any
+>args : number
+>await { arguments: 42 } : { arguments: number; }
+>{ arguments: 42 } : { arguments: number; }
+>arguments : number
+>42 : 42
+
+  return args;
+>args : number
+}
+

@@ -1,0 +1,3 @@
+// === findAllReferences ===
+// === /referencesToStringLiteralValue.ts ===
+// const s: string = "some /*FIND ALL REFS*/ string";

@@ -1,0 +1,12 @@
+a.tsx(1,13): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+a.tsx(1,14): error TS2552: Cannot find name 'App'. Did you mean 'app'?
+
+
+==== a.tsx (2 errors) ====
+    const app = <App />;
+                ~~~~~~~
+!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+                 ~~~
+!!! error TS2552: Cannot find name 'App'. Did you mean 'app'?
+!!! related TS2728 a.tsx:1:7: 'app' is declared here.
+    

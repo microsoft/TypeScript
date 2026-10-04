@@ -1,0 +1,21 @@
+index.ts(2,21): error TS2307: Cannot find module '#/foo.js' or its corresponding type declarations.
+
+
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "imports": {
+            "#/*": "./src/*"
+        }
+    }
+==== src/foo.ts (0 errors) ====
+    export const foo = "foo";
+==== index.ts (1 errors) ====
+    // esm format file
+    import { foo } from "#/foo.js";
+                        ~~~~~~~~~~
+!!! error TS2307: Cannot find module '#/foo.js' or its corresponding type declarations.
+    foo;
+    

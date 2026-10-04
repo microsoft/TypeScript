@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts] ////
+
+=== classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts ===
+function f() {
+>f : () => void
+
+    new C2(); // OK
+>new C2() : C2
+>C2 : typeof C2
+}    
+class C2 { }
+>C2 : C2
+

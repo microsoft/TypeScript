@@ -1,0 +1,42 @@
+// === findAllReferences ===
+// === /renameImportOfReExport.ts ===
+// declare module "a" {
+//     export class /*FIND ALL REFS*/[|C|] {}
+// }
+// declare module "b" {
+//     export { [|C|] } from "a";
+// }
+// declare module "c" {
+//     import { [|C|] } from "b";
+//     export function f(c: [|C|]): void;
+// }
+
+
+
+// === findAllReferences ===
+// === /renameImportOfReExport.ts ===
+// declare module "a" {
+//     export class [|C|] {}
+// }
+// declare module "b" {
+//     export { /*FIND ALL REFS*/[|C|] } from "a";
+// }
+// declare module "c" {
+//     import { [|C|] } from "b";
+//     export function f(c: [|C|]): void;
+// }
+
+
+
+// === findAllReferences ===
+// === /renameImportOfReExport.ts ===
+// declare module "a" {
+//     export class [|C|] {}
+// }
+// declare module "b" {
+//     export { [|C|] } from "a";
+// }
+// declare module "c" {
+//     import { /*FIND ALL REFS*/[|C|] } from "b";
+//     export function f(c: [|C|]): void;
+// }

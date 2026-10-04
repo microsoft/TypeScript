@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/importAttributesWithValueComments.ts] ////
+
+=== /a.ts ===
+export default {
+    a: "a",
+>a : Symbol(a, Decl(a.ts, 0, 16))
+
+    b: "b",
+>b : Symbol(b, Decl(a.ts, 1, 11))
+
+    1: "1",
+>1 : Symbol(1, Decl(a.ts, 2, 11))
+}
+
+=== /b.ts ===
+import a from "./a" with { a: /* a */ "a", "b": /* b */ "b" };
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+a;
+>a : Symbol(a, Decl(b.ts, 0, 6))
+

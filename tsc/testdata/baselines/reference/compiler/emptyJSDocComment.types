@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/emptyJSDocComment.ts] ////
+
+=== emptyJSDocComment.ts ===
+/***/
+export const foo = 1;
+>foo : 1
+>1 : 1
+

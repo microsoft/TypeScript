@@ -1,0 +1,20 @@
+a.ts(2,5): error TS1042: 'async' modifier cannot be used here.
+a.ts(2,15): error TS2378: A 'get' accessor must return a value.
+a.ts(3,13): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+
+
+==== a.ts (3 errors) ====
+    class C {
+        async get x() {
+        ~~~~~
+!!! error TS1042: 'async' modifier cannot be used here.
+                  ~
+!!! error TS2378: A 'get' accessor must return a value.
+            for await (const y of []) {
+                ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 a.ts:2:15: Did you mean to mark this function as 'async'?
+            }
+        }
+    }
+    

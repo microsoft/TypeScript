@@ -1,0 +1,6 @@
+// === documentHighlights ===
+// === /a.ts ===
+// /// <reference path="/*HIGHLIGHTS*/[|./b.ts|]" />
+// 
+// const x = 1;
+// 

@@ -1,0 +1,13 @@
+// === documentHighlights ===
+// === /documentHighlightTemplateStrings.ts ===
+// type Foo = "[|a|]" | "b";
+// 
+// class C {
+//    p: Foo = `[|a|]`;
+//    m() {
+//        switch (this.p) {
+//            case `/*HIGHLIGHTS*/[|a|]`:
+//                return 1;
+//            case "b":
+//                return 2;
+// --- (line: 11) skipped ---

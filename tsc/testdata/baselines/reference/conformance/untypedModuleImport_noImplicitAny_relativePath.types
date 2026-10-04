@@ -1,0 +1,6 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_noImplicitAny_relativePath.ts] ////
+
+=== /a.ts ===
+import * as foo from "./node_modules/foo";
+>foo : any
+

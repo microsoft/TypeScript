@@ -1,0 +1,14 @@
+steps:
+  - bash: |
+      set -euo pipefail
+      version=$(grep -oP '^go \K[0-9]+\.[0-9]+' tsc/go.mod)
+      curl -SL -o '$(Agent.BuildDirectory)/golang.tar.gz' https://aka.ms/golang/release/latest/go${version}.linux-amd64.tar.gz
+      tar -C '$(Agent.BuildDirectory)' -xzf '$(Agent.BuildDirectory)/golang.tar.gz'
+      rm -f '$(Agent.BuildDirectory)/golang.tar.gz'
+      echo '##vso[task.prependpath]$(Agent.BuildDirectory)/go/bin'
+    displayName: 'Install Go'
+
+  - bash: |
+      which go
+      go version
+    displayName: 'Check Go version'

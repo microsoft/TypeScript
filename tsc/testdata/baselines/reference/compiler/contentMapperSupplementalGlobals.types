@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/contentMapperSupplementalGlobals.ts] ////
+
+=== /a.vue ===
+export default shared.value;
+>shared.value : string
+>shared : Shared
+>value : string
+
+=== /b.vue ===
+export default shared.value;
+>shared.value : string
+>shared : Shared
+>value : string
+
+=== /extra.d.ts ===
+interface Extra { extra: boolean }
+>extra : boolean
+

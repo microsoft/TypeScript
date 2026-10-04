@@ -1,0 +1,4 @@
+// === goToImplementation ===
+// === /goToImplementationLocal_01.ts ===
+// <|const [|hello|] = function() {};|>
+// he/*GOTO IMPL*/llo();

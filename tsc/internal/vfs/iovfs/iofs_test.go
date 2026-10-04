@@ -1,0 +1,81 @@
+package iovfs_test
+
+import (
+	"testing"
+	"testing/fstest"
+
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
+	"gotest.tools/v3/assert"
+)
+
+func TestIOFS(t *testing.T) {
+	t.Parallel()
+
+	testfs := fstest.MapFS{
+		"foo.ts": &fstest.MapFile{
+			Data: []byte("hello, world"),
+		},
+		"dir1/file1.ts": &fstest.MapFile{
+			Data: []byte("export const foo = 42;"),
+		},
+		"dir1/file2.ts": &fstest.MapFile{
+			Data: []byte("export const foo = 42;"),
+		},
+		"dir2/file1.ts": &fstest.MapFile{
+			Data: []byte("export const foo = 42;"),
+		},
+	}
+
+	fs := iovfs.From(testfs, tspath.CaseSensitive)
+
+	t.Run("ReadFile", func(t *testing.T) {
+		t.Parallel()
+
+		content, ok := fs.ReadFile("/foo.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, content, "hello, world")
+
+		content, ok = fs.ReadFile("/does/not/exist.ts")
+		assert.Assert(t, !ok)
+		assert.Equal(t, content, "")
+	})
+
+	t.Run("FileExists", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Assert(t, fs.FileExists("/foo.ts"))
+		assert.Assert(t, !fs.FileExists("/bar"))
+	})
+
+	t.Run("DirectoryExists", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Assert(t, fs.DirectoryExists("/"))
+		assert.Assert(t, fs.DirectoryExists("/dir1"))
+		assert.Assert(t, fs.DirectoryExists(tspath.RootedDirectoryPathFromAbsolute("/dir1/")))
+		assert.Assert(t, fs.DirectoryExists(tspath.RootedDirectoryPathFromAbsolute("/dir1/./")))
+		assert.Assert(t, !fs.DirectoryExists("/bar"))
+	})
+
+	t.Run("GetAccessibleEntries", func(t *testing.T) {
+		t.Parallel()
+
+		entries := fs.GetAccessibleEntries("/")
+		assert.DeepEqual(t, entries.Directories, []string{"dir1", "dir2"})
+		assert.DeepEqual(t, entries.Files, []string{"foo.ts"})
+	})
+
+	t.Run("Realpath", func(t *testing.T) {
+		t.Parallel()
+
+		realpath := fs.Realpath("/foo.ts")
+		assert.Equal(t, realpath.AsString(), "/foo.ts")
+	})
+
+	t.Run("CaseSensitivity", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Assert(t, fs.CaseSensitivity().IsCaseSensitive())
+	})
+}

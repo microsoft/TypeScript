@@ -1,7 +1,0 @@
-{
-    "scenario": "nested declare",
-    "projectRoot": "tests/cases/projects/NestedDeclare",
-    "inputFiles": [
-        "consume.ts"
-    ]
-}

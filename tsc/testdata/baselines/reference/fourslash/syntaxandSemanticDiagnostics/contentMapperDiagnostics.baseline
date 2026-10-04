@@ -1,0 +1,25 @@
+// === Syntax and Semantic Diagnostics ===
+/ProfileCard.vue(3,10): error TS2304: Cannot find name 'missingTitle'.
+/ProfileCard.vue(4,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+/ProfileCard.vue(7,14): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== /ProfileCard.vue (3 errors) ====
+    <component name="ProfileCard">
+    <template>
+      <h1>{{ missingTitle }}</h1>
+             ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'missingTitle'.
+      <p>{{ takesNumber(title + suffix) }}</p>
+                        ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    </template>
+    <script lang="ts">
+    export const bad: number = "wrong";
+                 ~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    const title = "Profile";
+    const suffix = "!";
+    function takesNumber(value: number) { return value; }
+    </script>
+    

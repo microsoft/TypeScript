@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/unusedImports1.ts] ////
+
+=== file1.ts ===
+export class Calculator {
+>Calculator : Calculator
+
+}
+
+=== file2.ts ===
+import {Calculator} from "./file1"
+>Calculator : typeof Calculator
+

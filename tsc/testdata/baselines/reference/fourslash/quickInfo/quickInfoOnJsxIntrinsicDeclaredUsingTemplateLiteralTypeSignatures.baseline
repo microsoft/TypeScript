@@ -1,0 +1,80 @@
+// === QuickInfo ===
+=== /a.tsx ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     [k: `foo${string}`]: any;
+//     [k: `foobar${string}`]: any;
+//   }
+// }
+// <foobaz />;
+//  ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// <foobarbaz />;
+//  ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 126,
+      "LSPosition": {
+        "line": 6,
+        "character": 1
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nany\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 1
+        },
+        "end": {
+          "line": 6,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 138,
+      "LSPosition": {
+        "line": 7,
+        "character": 1
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nany\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 10
+        }
+      }
+    }
+  }
+]

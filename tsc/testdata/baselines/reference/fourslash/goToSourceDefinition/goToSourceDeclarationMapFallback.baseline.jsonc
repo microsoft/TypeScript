@@ -1,0 +1,11 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/dist/index.js ===
+// "use strict";
+// Object.defineProperty(exports, "__esModule", { value: true });
+// exports.greet = greet;
+// console.log("side effect");
+// <|function [|greet|]() { return "hi"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { greet } from "pkg";
+// greet/*GOTO SOURCE DEF*/();

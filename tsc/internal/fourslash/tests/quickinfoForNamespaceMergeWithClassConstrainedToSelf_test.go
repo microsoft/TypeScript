@@ -1,0 +1,32 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickinfoForNamespaceMergeWithClassConstrainedToSelf(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `declare namespace AMap {
+    namespace MassMarks {
+        interface Data {
+            style?: number;
+        }
+    }
+    class MassMarks<D extends MassMarks.Data = MassMarks.Data> {
+        constructor(data: D[] | string);
+        clear(): void;
+    }
+}
+
+interface MassMarksCustomData extends AMap.MassMarks./*1*/Data {
+    name: string;
+    id: string;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "1", "interface AMap.MassMarks<D extends AMap.MassMarks.Data = AMap.MassMarks.Data>.Data", "")
+}

@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitConstObjectLiteralGenericMethod1.ts] ////
+
+=== declarationEmitConstObjectLiteralGenericMethod1.ts ===
+export const obj1 = {
+>obj1 : Symbol(obj1, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 0, 12))
+
+    id<T>(value: T) {
+>id : Symbol(id, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 0, 21))
+>T : Symbol(T, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 1, 7))
+>value : Symbol(value, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 1, 10))
+>T : Symbol(T, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 1, 7))
+
+        return value;
+>value : Symbol(value, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 1, 10))
+
+    },
+    pair<T>(left: T, right: T) {
+>pair : Symbol(pair, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 3, 6))
+>T : Symbol(T, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 4, 9))
+>left : Symbol(left, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 4, 12))
+>T : Symbol(T, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 4, 9))
+>right : Symbol(right, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 4, 20))
+>T : Symbol(T, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 4, 9))
+
+        return [left, right];
+>left : Symbol(left, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 4, 12))
+>right : Symbol(right, Decl(declarationEmitConstObjectLiteralGenericMethod1.ts, 4, 20))
+
+    },
+} as const;
+>const : Symbol(const)
+

@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/jsDocGenericOverloads.ts] ////
+
+=== main.js ===
+const createElementC = /**
+>createElementC : Symbol(createElementC, Decl(main.js, 0, 5))
+
+	 * @template {keyof HTMLElementTagNameMap} T
+	 * @param {T}t
+	 * @param {NodeList|HTMLCollection=}c
+	 *
+	 * @overload
+	 * @param {T}t
+	 * @return {HTMLElementTagNameMap[T]}
+	 *
+	 * @overload
+	 * @param {T}t
+	 * @param {NodeList|HTMLCollection}c
+	 * @return {HTMLElementTagNameMap[T]}
+	 */(t, c) => {
+>t : Symbol(t, Decl(main.js, 13, 5))
+>c : Symbol(c, Decl(main.js, 13, 7))
+
+		/* ... omitted for brevity ... */ return document.createElement(t)
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>t : Symbol(t, Decl(main.js, 13, 5))
+	}
+
+/**
+ * @template {keyof HTMLElementTagNameMap} T
+ * @param {T}t
+ * @param {NodeList|HTMLCollection=}c
+ *
+ * @overload
+ * @param {T}t
+ * @return {HTMLElementTagNameMap[T]}
+ *
+ * @overload
+ * @param {T}t
+ * @param {NodeList|HTMLCollection}c
+ * @return {HTMLElementTagNameMap[T]}
+ */
+function createElementF(t, c) {
+>createElementF : Symbol(createElementF, Decl(main.js, 22, 4), Decl(main.js, 26, 4), Decl(main.js, 15, 2))
+>t : Symbol(t, Decl(main.js, 31, 24))
+>c : Symbol(c, Decl(main.js, 31, 26))
+
+	/* ... omitted for brevity ... */ return document.createElement(t)
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>t : Symbol(t, Decl(main.js, 31, 24))
+}
+

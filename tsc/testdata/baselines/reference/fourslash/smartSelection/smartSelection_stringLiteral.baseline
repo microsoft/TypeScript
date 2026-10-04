@@ -1,0 +1,9 @@
+// === Smart Selection ===
+const a = 'a';
+const b = /**/'b';
+
+          'b' 
+const b = 'b';
+
+const a = 'a';
+const b = 'b';

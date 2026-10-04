@@ -1,0 +1,472 @@
+// === QuickInfo ===
+=== /jsDocTypeTag1.js ===
+// /** @type {String} */
+// var S;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var S: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Number} */
+// var N;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var N: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Boolean} */
+// var B;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var B: boolean
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Void} */
+// var V;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var V: void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Undefined} */
+// var U;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var U: undefined
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Null} */
+// var Nl;
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var Nl: null
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Array} */
+// var A;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var A: any[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Promise} */
+// var P;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var P: Promise<any>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Object} */
+// var Obj;
+//     ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var Obj: Object
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Function} */
+// var Func;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var Func: Function
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {*} */
+// var AnyType;
+//     ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var AnyType: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {?} */
+// var QType;
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var QType: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {String|Number} */
+// var SOrN;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var SOrN: string | number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar S: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 55,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar N: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 85,
+      "LSPosition": {
+        "line": 5,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar B: boolean\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 112,
+      "LSPosition": {
+        "line": 7,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar V: void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 4
+        },
+        "end": {
+          "line": 7,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 144,
+      "LSPosition": {
+        "line": 9,
+        "character": 4
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar U: undefined\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 4
+        },
+        "end": {
+          "line": 9,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 171,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar Nl: null\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 13,
+        "character": 4
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar A: any[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 15,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar P: Promise<any>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 4
+        },
+        "end": {
+          "line": 15,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 259,
+      "LSPosition": {
+        "line": 17,
+        "character": 4
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar Obj: Object\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 292,
+      "LSPosition": {
+        "line": 19,
+        "character": 4
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar Func: Function\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 4
+        },
+        "end": {
+          "line": 19,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 21,
+        "character": 4
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar AnyType: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 4
+        },
+        "end": {
+          "line": 21,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 349,
+      "LSPosition": {
+        "line": 23,
+        "character": 4
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar QType: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 23,
+          "character": 4
+        },
+        "end": {
+          "line": 23,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 389,
+      "LSPosition": {
+        "line": 25,
+        "character": 4
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar SOrN: string | number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 4
+        },
+        "end": {
+          "line": 25,
+          "character": 8
+        }
+      }
+    }
+  }
+]

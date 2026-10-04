@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsxElementTypeUnexpectedType.tsx] ////
+
+=== jsxElementTypeUnexpectedType.tsx ===
+declare namespace JSX {
+>JSX : typeof JSX
+
+  enum ElementType {}
+>ElementType : ElementType
+}
+
+declare const C: () => any;
+>C : () => any
+
+const x = <C />;
+>x : any
+><C /> : any
+>C : () => any
+

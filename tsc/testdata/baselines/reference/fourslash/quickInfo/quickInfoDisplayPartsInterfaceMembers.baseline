@@ -1,0 +1,324 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsInterfaceMembers.ts ===
+// interface I {
+//     property: string;
+//     ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) I.property: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method(): string;
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) I.method(): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     (): string;
+//     new (): I;
+// }
+// var iInstance: I;
+// iInstance.property = iInstance.method();
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) I.property: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) I.method(): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iInstance();
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iInstance: () => string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var anotherInstance = new iInstance();
+//     ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var anotherInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                           ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var iInstance: new () => I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 18,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) I.property: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) I.method(): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 109,
+      "LSPosition": {
+        "line": 7,
+        "character": 0
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 0
+        },
+        "end": {
+          "line": 7,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 7,
+        "character": 10
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) I.property: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 10
+        },
+        "end": {
+          "line": 7,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 130,
+      "LSPosition": {
+        "line": 7,
+        "character": 21
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 21
+        },
+        "end": {
+          "line": 7,
+          "character": 30
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 7,
+        "character": 31
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) I.method(): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 31
+        },
+        "end": {
+          "line": 7,
+          "character": 37
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 150,
+      "LSPosition": {
+        "line": 8,
+        "character": 0
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iInstance: () => string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 167,
+      "LSPosition": {
+        "line": 9,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar anotherInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 4
+        },
+        "end": {
+          "line": 9,
+          "character": 19
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 189,
+      "LSPosition": {
+        "line": 9,
+        "character": 26
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar iInstance: new () => I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 26
+        },
+        "end": {
+          "line": 9,
+          "character": 35
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

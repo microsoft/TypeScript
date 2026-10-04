@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/typeOnlyExportAsIfBody.ts] ////
+
+=== typeOnlyExportAsIfBody.ts ===
+if (true) export type {};
+>true : true
+

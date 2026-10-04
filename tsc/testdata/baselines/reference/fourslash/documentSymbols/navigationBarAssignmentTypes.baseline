@@ -1,0 +1,14 @@
+// === Document Symbols ===
+// === /navigationBarAssignmentTypes.ts ===
+// 'use strict'
+// const <|[|{| name: a, kind: Variable |}a|] = {
+//     <|...[|{| name: b, kind: Property |}b|]|>,
+//     <|[|{| name: c, kind: Property |}c|]|>,
+//     <|[|{| name: d, kind: Property |}d|]: 0|>
+// }|>;
+
+// === Details ===
+(Variable) a
+  (Property) b
+  (Property) c
+  (Property) d

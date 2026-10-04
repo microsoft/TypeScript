@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/declarationEmitConstObjectLiteralGenericMethod1.ts] ////
+
+=== declarationEmitConstObjectLiteralGenericMethod1.ts ===
+export const obj1 = {
+>obj1 : { readonly id: <T>(value: T) => T; readonly pair: <T>(left: T, right: T) => T[]; }
+>{    id<T>(value: T) {        return value;    },    pair<T>(left: T, right: T) {        return [left, right];    },} as const : { readonly id: <T>(value: T) => T; readonly pair: <T>(left: T, right: T) => T[]; }
+>{    id<T>(value: T) {        return value;    },    pair<T>(left: T, right: T) {        return [left, right];    },} : { readonly id: <T>(value: T) => T; readonly pair: <T>(left: T, right: T) => T[]; }
+
+    id<T>(value: T) {
+>id : <T>(value: T) => T
+>value : T
+
+        return value;
+>value : T
+
+    },
+    pair<T>(left: T, right: T) {
+>pair : <T>(left: T, right: T) => T[]
+>left : T
+>right : T
+
+        return [left, right];
+>[left, right] : T[]
+>left : T
+>right : T
+
+    },
+} as const;
+

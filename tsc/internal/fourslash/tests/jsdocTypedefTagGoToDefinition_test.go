@@ -1,0 +1,35 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsdocTypedefTagGoToDefinition(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+// @allowNonTsExtensions: true
+// @Filename: jsdocCompletion_typedef.js
+/**
+ * @typedef {Object} Person
+ * @property {string} /*1*/personName
+ * @property {number} personAge
+ */
+
+/**
+ * @typedef {{ /*2*/animalName: string, animalAge: number }} Animal
+ */
+
+/** @type {Person} */
+var person; person.[|personName/*3*/|]
+
+/** @type {Animal} */
+var animal; animal.[|animalName/*4*/|]`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.MarkTestAsStradaServer()
+	f.VerifyBaselineGoToDefinition(t, true, "3", "4")
+}

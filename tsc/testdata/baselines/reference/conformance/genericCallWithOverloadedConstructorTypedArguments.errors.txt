@@ -1,0 +1,86 @@
+genericCallWithOverloadedConstructorTypedArguments.ts(11,23): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'null' is not assignable to parameter of type 'string'.
+genericCallWithOverloadedConstructorTypedArguments.ts(14,18): error TS2454: Variable 'a' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(16,19): error TS2454: Variable 'b' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(28,19): error TS2454: Variable 'a' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(30,19): error TS2454: Variable 'b' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(36,19): error TS2454: Variable 'a' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(37,19): error TS2454: Variable 'b' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(43,23): error TS2454: Variable 'b' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(46,23): error TS2454: Variable 'c' is used before being assigned.
+genericCallWithOverloadedConstructorTypedArguments.ts(47,23): error TS2454: Variable 'c2' is used before being assigned.
+
+
+==== genericCallWithOverloadedConstructorTypedArguments.ts (10 errors) ====
+    // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
+    // Inferences are made quadratic-pairwise to and from these overload sets
+    
+    namespace NonGenericParameter {
+        var a: {
+            new(x: boolean): boolean;
+            new(x: string): string;
+        }
+    
+        function foo4(cb: typeof a) {
+            return new cb(null);
+                          ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'string'.
+!!! related TS2771 genericCallWithOverloadedConstructorTypedArguments.ts:7:9: The last overload is declared here.
+        }
+    
+        var r = foo4(a);
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        var b: { new <T>(x: T): T };
+        var r2 = foo4(b);
+                      ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    }
+    
+    namespace GenericParameter {
+        function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
+            return cb;
+        }
+    
+        var a: {
+            new (x: boolean): string;
+            new (x: number): boolean;
+        }
+        var r5 = foo5(a); // new{} => string; new(x:number) => {}
+                      ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        var b: { new<T>(x: T): string; new<T>(x: number): T; }
+        var r7 = foo5(b); // new any => string; new(x:number) => any
+                      ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+        function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
+            return cb;
+        }
+    
+        var r8 = foo6(a); // error
+                      ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        var r9 = foo6(b); // new any => string; new(x:any, y?:any) => string
+                      ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+        function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
+            return cb;
+        }
+    
+        var r13 = foo7(1, b); // new any => string; new(x:any, y?:any) => string
+                          ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        var c: { new <T>(x: T): string; <T>(x: number): T; }
+        var c2: { new <T>(x: T): string; new<T>(x: number): T; }
+        var r14 = foo7(1, c); // new any => string; new(x:any, y?:any) => string
+                          ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+        var r15 = foo7(1, c2); // new any => string; new(x:any, y?:any) => string
+                          ~~
+!!! error TS2454: Variable 'c2' is used before being assigned.
+    }

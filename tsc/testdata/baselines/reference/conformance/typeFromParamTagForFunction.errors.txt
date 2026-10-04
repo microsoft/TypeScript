@@ -1,0 +1,122 @@
+a-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(3,13): error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
+c-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+c.js(3,13): error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
+d-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+d.js(3,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
+f.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+f.js(5,13): error TS2749: 'F' refers to a value, but is being used as a type here. Did you mean 'typeof F'?
+g.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type here. Did you mean 'typeof G'?
+
+
+==== node.d.ts (0 errors) ====
+    declare function require(id: string): any;
+    declare var module: any, exports: any;
+    
+==== a-ext.js (1 errors) ====
+    exports.A = function () {
+        this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    
+==== a.js (1 errors) ====
+    const { A } = require("./a-ext");
+    
+    /** @param {A} p */
+                ~
+!!! error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
+    function a(p) { p.x; }
+    
+==== b-ext.js (0 errors) ====
+    exports.B = class {
+        constructor() {
+            this.x = 1;
+        }
+    };
+    
+==== b.js (0 errors) ====
+    const { B } = require("./b-ext");
+    
+    /** @param {B} p */
+    function b(p) { p.x; }
+    
+==== c-ext.js (1 errors) ====
+    export function C() {
+        this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 c-ext.js:1:17: An outer value of 'this' is shadowed by this container.
+    }
+    
+==== c.js (1 errors) ====
+    const { C } = require("./c-ext");
+    
+    /** @param {C} p */
+                ~
+!!! error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
+    function c(p) { p.x; }
+    
+==== d-ext.js (1 errors) ====
+    export var D = function() {
+        this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 d-ext.js:1:12: An outer value of 'this' is shadowed by this container.
+    };
+    
+==== d.js (1 errors) ====
+    const { D } = require("./d-ext");
+    
+    /** @param {D} p */
+                ~
+!!! error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
+    function d(p) { p.x; }
+    
+==== e-ext.js (0 errors) ====
+    export class E {
+        constructor() {
+            this.x = 1;
+        }
+    }
+    
+==== e.js (0 errors) ====
+    const { E } = require("./e-ext");
+    
+    /** @param {E} p */
+    function e(p) { p.x; }
+    
+==== f.js (2 errors) ====
+    var F = function () {
+        this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    
+    /** @param {F} p */
+                ~
+!!! error TS2749: 'F' refers to a value, but is being used as a type here. Did you mean 'typeof F'?
+    function f(p) { p.x; }
+    
+==== g.js (2 errors) ====
+    function G() {
+        this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    
+    /** @param {G} p */
+                ~
+!!! error TS2749: 'G' refers to a value, but is being used as a type here. Did you mean 'typeof G'?
+    function g(p) { p.x; }
+    
+==== h.js (0 errors) ====
+    class H {
+        constructor() {
+            this.x = 1;
+        }
+    }
+    
+    /** @param {H} p */
+    function h(p) { p.x; }

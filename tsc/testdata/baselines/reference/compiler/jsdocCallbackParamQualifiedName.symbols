@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/jsdocCallbackParamQualifiedName.ts] ////
+
+=== bug.js ===
+/**
+ * @callback cb
+ * @param x.y
+ */
+
+/**
+ * @callback cb2
+ * @param {object} x
+ * @param {string} x.y
+ */
+
+/**
+ * @overload
+ * @param {object} x
+ * @param {string} x.y
+ * @returns {string}
+ */
+/**
+ * @param {object} x
+ * @returns {string}
+ */
+function foo(x) {
+>foo : Symbol(foo, Decl(bug.js, 12, 4), Decl(bug.js, 0, 0))
+>x : Symbol(x, Decl(bug.js, 21, 13))
+
+    return x.y;
+>x : Symbol(x, Decl(bug.js, 21, 13))
+}
+

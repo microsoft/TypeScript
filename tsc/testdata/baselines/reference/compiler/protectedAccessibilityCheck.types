@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/protectedAccessibilityCheck.ts] ////
+
+=== protectedAccessibilityCheck.ts ===
+class C {
+>C : C
+
+  protected constructor() {}
+}
+
+class B<T = any> extends C {}
+>B : B<T>
+>C : C
+
+class A extends B {
+>A : A
+>B : B<any>
+
+  f() {
+>f : () => void
+
+    new A();
+>new A() : A
+>A : typeof A
+  }
+}
+

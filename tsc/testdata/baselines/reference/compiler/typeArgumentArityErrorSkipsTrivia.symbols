@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/typeArgumentArityErrorSkipsTrivia.ts] ////
+
+=== typeArgumentArityErrorSkipsTrivia.ts ===
+declare function f<T>(a: T): T;
+>f : Symbol(f, Decl(typeArgumentArityErrorSkipsTrivia.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentArityErrorSkipsTrivia.ts, 0, 19))
+>a : Symbol(a, Decl(typeArgumentArityErrorSkipsTrivia.ts, 0, 22))
+>T : Symbol(T, Decl(typeArgumentArityErrorSkipsTrivia.ts, 0, 19))
+>T : Symbol(T, Decl(typeArgumentArityErrorSkipsTrivia.ts, 0, 19))
+
+f<   string, number>("a");
+>f : Symbol(f, Decl(typeArgumentArityErrorSkipsTrivia.ts, 0, 0))
+
+f<
+>f : Symbol(f, Decl(typeArgumentArityErrorSkipsTrivia.ts, 0, 0))
+
+    string, number>("a");
+

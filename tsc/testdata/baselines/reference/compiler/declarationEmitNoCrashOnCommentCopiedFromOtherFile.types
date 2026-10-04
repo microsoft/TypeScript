@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitNoCrashOnCommentCopiedFromOtherFile.ts] ////
+
+=== export.ts ===
+/**
+ * blah blah blah blah
+ * blah blah blah blah
+ * blah blah blah blah
+ * blah blah blah blah
+ * blah blah blah blah
+ */
+
+export function foo() {
+>foo : () => (_item: unknown) => _item is boolean
+
+  return (_item: unknown): _item is boolean => {
+>(_item: unknown): _item is boolean => {    return true;  } : (_item: unknown) => _item is boolean
+>_item : unknown
+
+    return true;
+>true : true
+
+  };
+}
+=== import.ts ===
+import { foo } from './export';
+>foo : () => (_item: unknown) => _item is boolean
+
+export const x = foo();
+>x : (_item: unknown) => _item is boolean
+>foo() : (_item: unknown) => _item is boolean
+>foo : () => (_item: unknown) => _item is boolean
+

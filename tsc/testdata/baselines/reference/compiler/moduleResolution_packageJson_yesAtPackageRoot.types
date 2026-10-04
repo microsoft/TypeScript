@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/moduleResolution_packageJson_yesAtPackageRoot.ts] ////
+
+=== /a.ts ===
+import { x } from "foo/bar";
+>x : any
+

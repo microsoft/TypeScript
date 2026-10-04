@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsdocSatisfiesTagWithParamTag.ts] ////
+
+=== /a.js ===
+/** 
+ * @satisfies {(a: string, ...args: never) => void}
+ * @param {string} a
+ * @param {number} b
+ */
+export const fn1 = (a, b) => {};
+>fn1 : Symbol(fn1, Decl(a.js, 5, 12))
+>a : Symbol(a, Decl(a.js, 5, 20))
+>b : Symbol(b, Decl(a.js, 5, 22))
+
+/** 
+ * @satisfies {(a: string, ...args: number[]) => void}
+ * @param {string} a
+ * @param {string} b
+ */
+export const fn2 = (a, b) => {};
+>fn2 : Symbol(fn2, Decl(a.js, 12, 12))
+>a : Symbol(a, Decl(a.js, 12, 20))
+>b : Symbol(b, Decl(a.js, 12, 22))
+
+/** 
+ * @satisfies {(a: string, ...args: number[]) => void}
+ * @param {string} a
+ * @param {string | number} b
+ */
+export const fn3 = (a, b) => {};
+>fn3 : Symbol(fn3, Decl(a.js, 19, 12))
+>a : Symbol(a, Decl(a.js, 19, 20))
+>b : Symbol(b, Decl(a.js, 19, 22))
+

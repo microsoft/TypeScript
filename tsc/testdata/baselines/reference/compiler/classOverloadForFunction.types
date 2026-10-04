@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/classOverloadForFunction.ts] ////
+
+=== classOverloadForFunction.ts ===
+class foo { };
+>foo : foo
+
+function foo() {}
+>foo : typeof foo
+

@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts] ////
+
+=== ES5For-of7.ts ===
+for (var w of []) {
+>w : never
+>[] : never[]
+
+    var x = w;
+>x : never
+>w : never
+}
+
+for (var v of []) {
+>v : never
+>[] : never[]
+
+    var x = [w, v];
+>x : never
+>[w, v] : never[]
+>w : never
+>v : never
+}

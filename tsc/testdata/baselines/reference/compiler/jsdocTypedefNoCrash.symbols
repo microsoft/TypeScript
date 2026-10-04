@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsdocTypedefNoCrash.ts] ////
+
+=== export.js ===
+/**
+ * @typedef {{
+ * }}
+ */
+export const foo = 5;
+>foo : Symbol(foo, Decl(export.js, 4, 12))
+

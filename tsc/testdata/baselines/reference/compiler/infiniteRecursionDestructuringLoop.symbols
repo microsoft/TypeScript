@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/infiniteRecursionDestructuringLoop.ts] ////
+
+=== infiniteRecursionDestructuringLoop.ts ===
+// Repro from https://github.com/microsoft/TypeScript/issues/63192
+
+interface Node {
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(infiniteRecursionDestructuringLoop.ts, 0, 0))
+
+    children?: readonly Node[];
+>children : Symbol(Node.children, Decl(infiniteRecursionDestructuringLoop.ts, 2, 16))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(infiniteRecursionDestructuringLoop.ts, 0, 0))
+
+    index?: number;
+>index : Symbol(Node.index, Decl(infiniteRecursionDestructuringLoop.ts, 3, 31))
+}
+
+function IterateNodes(data: { node: Node }) {
+>IterateNodes : Symbol(IterateNodes, Decl(infiniteRecursionDestructuringLoop.ts, 5, 1))
+>data : Symbol(data, Decl(infiniteRecursionDestructuringLoop.ts, 7, 22))
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 7, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(infiniteRecursionDestructuringLoop.ts, 0, 0))
+
+    let node: Node | undefined = data.node;
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 8, 7))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(infiniteRecursionDestructuringLoop.ts, 0, 0))
+>data.node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 7, 29))
+>data : Symbol(data, Decl(infiniteRecursionDestructuringLoop.ts, 7, 22))
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 7, 29))
+
+    while (node) {
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 8, 7))
+
+        const { children, index = -1 } = node;
+>children : Symbol(children, Decl(infiniteRecursionDestructuringLoop.ts, 10, 15))
+>index : Symbol(index, Decl(infiniteRecursionDestructuringLoop.ts, 10, 25))
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 8, 7))
+
+        const activeNode: Node | undefined = index != -1 && children ? children[index] : undefined;
+>activeNode : Symbol(activeNode, Decl(infiniteRecursionDestructuringLoop.ts, 11, 13))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(infiniteRecursionDestructuringLoop.ts, 0, 0))
+>index : Symbol(index, Decl(infiniteRecursionDestructuringLoop.ts, 10, 25))
+>children : Symbol(children, Decl(infiniteRecursionDestructuringLoop.ts, 10, 15))
+>children : Symbol(children, Decl(infiniteRecursionDestructuringLoop.ts, 10, 15))
+>index : Symbol(index, Decl(infiniteRecursionDestructuringLoop.ts, 10, 25))
+>undefined : Symbol(undefined)
+
+        node = activeNode;
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 8, 7))
+>activeNode : Symbol(activeNode, Decl(infiniteRecursionDestructuringLoop.ts, 11, 13))
+    }
+}
+
+// Simplified repro
+interface MyNode {
+>MyNode : Symbol(MyNode, Decl(infiniteRecursionDestructuringLoop.ts, 15, 1))
+
+    children: MyNode[];
+>children : Symbol(MyNode.children, Decl(infiniteRecursionDestructuringLoop.ts, 18, 18))
+>MyNode : Symbol(MyNode, Decl(infiniteRecursionDestructuringLoop.ts, 15, 1))
+
+    index?: number;
+>index : Symbol(MyNode.index, Decl(infiniteRecursionDestructuringLoop.ts, 19, 23))
+}
+
+function f(init: MyNode) {
+>f : Symbol(f, Decl(infiniteRecursionDestructuringLoop.ts, 21, 1))
+>init : Symbol(init, Decl(infiniteRecursionDestructuringLoop.ts, 23, 11))
+>MyNode : Symbol(MyNode, Decl(infiniteRecursionDestructuringLoop.ts, 15, 1))
+
+    let node: MyNode | undefined = init;
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 24, 7))
+>MyNode : Symbol(MyNode, Decl(infiniteRecursionDestructuringLoop.ts, 15, 1))
+>init : Symbol(init, Decl(infiniteRecursionDestructuringLoop.ts, 23, 11))
+
+    while (node) {
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 24, 7))
+
+        const { children, index = 0 } = node;
+>children : Symbol(children, Decl(infiniteRecursionDestructuringLoop.ts, 26, 15))
+>index : Symbol(index, Decl(infiniteRecursionDestructuringLoop.ts, 26, 25))
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 24, 7))
+
+        node = children[index];
+>node : Symbol(node, Decl(infiniteRecursionDestructuringLoop.ts, 24, 7))
+>children : Symbol(children, Decl(infiniteRecursionDestructuringLoop.ts, 26, 15))
+>index : Symbol(index, Decl(infiniteRecursionDestructuringLoop.ts, 26, 25))
+    }
+}
+

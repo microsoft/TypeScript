@@ -1,0 +1,150 @@
+src/exclamation.js(1,14): error TS1110: Type expected.
+src/exclamation.js(10,15): error TS1110: Type expected.
+src/exclamation.js(13,15): error TS1110: Type expected.
+src/exclamation.js(16,24): error TS1110: Type expected.
+src/exclamation.js(19,32): error TS1110: Type expected.
+src/exclamation.js(52,14): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+src/question.js(1,14): error TS1110: Type expected.
+src/question.js(10,15): error TS1110: Type expected.
+src/question.js(13,15): error TS1110: Type expected.
+src/question.js(16,24): error TS1110: Type expected.
+src/question.js(19,32): error TS1110: Type expected.
+src/question.js(25,19): error TS1005: '}' expected.
+src/question.js(52,14): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+
+
+==== src/question.js (7 errors) ====
+    /** @param {?} x */
+                 ~
+!!! error TS1110: Type expected.
+    export function f0(x) {}
+    
+    /** @param {?never} x */
+    export function f1(x) {}
+    
+    /** @param {never?} x */
+    export function f2(x) {}
+    
+    /** @param {? | never} x */
+                  ~
+!!! error TS1110: Type expected.
+    export function f3(x) {}
+    
+    /** @param {? | string} x */
+                  ~
+!!! error TS1110: Type expected.
+    export function f4(x) {}
+    
+    /** @param {number | ? | string} x */
+                           ~
+!!! error TS1110: Type expected.
+    export function f5(x) {}
+    
+    /** @param {number | string | ?} x */
+                                   ~
+!!! error TS1110: Type expected.
+    export function f6(x) {}
+    
+    /** @param {? number | string} x */
+    export function f7(x) {}
+    
+    /** @param {number? | string} x */
+                      ~
+!!! error TS1005: '}' expected.
+    export function f8(x) {}
+    
+    /** @param {number | ? string} x */
+    export function f9(x) {}
+    
+    /** @param {? { a: number } & { b: number }} x */
+    export function f10(x) {}
+    
+    /** @param {{ a: number } & ? { b: number }} x */
+    export function f11(x) {}
+    
+    /** @param {? { a: number } & { b: number } | string} x */
+    export function f12(x) {}
+    
+    /** @param {{ a: number } & ? { b: number } | string} x */
+    export function f13(x) {}
+    
+    /** @param {?readonly number[]} x */
+    export function f14(x) {}
+    
+    /** @param {string | ?readonly number[]} x */
+    export function f15(x) {}
+    
+    /** @param {?readonly number[] | string} x */
+    export function f16(x) {}
+    
+    /** @param {?readonly ?number[] | string} x */
+                 ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+    export function f17(x) {}
+    
+==== src/exclamation.js (6 errors) ====
+    /** @param {!} x */
+                 ~
+!!! error TS1110: Type expected.
+    export function g0(x) {}
+    
+    /** @param {!never} x */
+    export function g1(x) {}
+    
+    /** @param {never!} x */
+    export function g2(x) {}
+    
+    /** @param {! | never} x */
+                  ~
+!!! error TS1110: Type expected.
+    export function g3(x) {}
+    
+    /** @param {! | string} x */
+                  ~
+!!! error TS1110: Type expected.
+    export function g4(x) {}
+    
+    /** @param {number | ! | string} x */
+                           ~
+!!! error TS1110: Type expected.
+    export function g5(x) {}
+    
+    /** @param {number | string | !} x */
+                                   ~
+!!! error TS1110: Type expected.
+    export function g6(x) {}
+    
+    /** @param {! number | string} x */
+    export function g7(x) {}
+    
+    /** @param {number! | string} x */
+    export function g8(x) {}
+    
+    /** @param {number | ! string} x */
+    export function g9(x) {}
+    
+    /** @param {! { a: number } & { b: number }} x */
+    export function g10(x) {}
+    
+    /** @param {{ a: number } & ! { b: number }} x */
+    export function g11(x) {}
+    
+    /** @param {! { a: number } & { b: number } | string} x */
+    export function g12(x) {}
+    
+    /** @param {{ a: number } & ! { b: number } | string} x */
+    export function g13(x) {}
+    
+    /** @param {!readonly number[]} x */
+    export function g14(x) {}
+    
+    /** @param {string | !readonly number[]} x */
+    export function g15(x) {}
+    
+    /** @param {!readonly number[] | string} x */
+    export function g16(x) {}
+    
+    /** @param {!readonly !number[] | string} x */
+                 ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+    export function g17(x) {}

@@ -1,0 +1,280 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsArrowFunctionExpression.ts ===
+// var x = a => 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var x: (a: any) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var y = (a, b) => 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var y: (a: any, b: any) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var z = (a: number) => 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var z: (a: number) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var z2 = () => 10;
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var z2: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 4,
+      "LSPosition": {
+        "line": 0,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar x: (a: any) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 8,
+      "LSPosition": {
+        "line": 0,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 8
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar y: (a: any, b: any) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 12
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 12
+        },
+        "end": {
+          "line": 1,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 43,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar z: (a: number) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 2,
+        "character": 9
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 9
+        },
+        "end": {
+          "line": 2,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 70,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar z2: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 6
+        }
+      }
+    }
+  }
+]

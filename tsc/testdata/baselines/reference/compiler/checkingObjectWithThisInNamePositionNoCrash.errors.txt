@@ -1,0 +1,13 @@
+checkingObjectWithThisInNamePositionNoCrash.ts(4,19): error TS2339: Property 'a' does not exist on type '{ doit(): { [x: number]: string; }; }'.
+
+
+==== checkingObjectWithThisInNamePositionNoCrash.ts (1 errors) ====
+    export const thing = {
+        doit() {
+            return {
+                [this.a]: "", // should refer to the outer object with the doit method, notably not present
+                      ~
+!!! error TS2339: Property 'a' does not exist on type '{ doit(): { [x: number]: string; }; }'.
+            }
+        }
+    }

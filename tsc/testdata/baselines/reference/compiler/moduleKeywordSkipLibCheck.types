@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/moduleKeywordSkipLibCheck.ts] ////
+
+=== decl.d.ts ===
+declare module Foo {
+>Foo : typeof Foo
+
+    export function bar(): void;
+>bar : () => void
+}
+
+=== main.ts ===
+Foo.bar();
+>Foo.bar() : void
+>Foo.bar : () => void
+>Foo : typeof Foo
+>bar : () => void
+

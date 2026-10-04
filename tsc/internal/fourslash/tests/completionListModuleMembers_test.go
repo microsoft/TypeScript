@@ -1,0 +1,64 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionListModuleMembers(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = ` namespace Module {
+     var innerVariable = 1;
+     function innerFunction() { }
+     class innerClass { }
+     namespace innerModule { }
+     interface innerInterface {}
+     export var exportedVariable = 1;
+     export function exportedFunction() { }
+     export class exportedClass { }
+     export namespace exportedModule { export var exportedInnerModuleVariable = 1; }
+     export interface exportedInterface {}
+ }
+
+Module./*ValueReference*/;
+
+var x : Module./*TypeReference*/
+
+class TestClass extends Module./*TypeReferenceInExtendsList*/ { }
+
+interface TestInterface implements Module./*TypeReferenceInImplementsList*/ { }`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, []string{"ValueReference", "TypeReferenceInExtendsList"}, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"exportedFunction",
+				"exportedVariable",
+				"exportedClass",
+				"exportedModule",
+			},
+		},
+	})
+	f.VerifyCompletions(t, []string{"TypeReference", "TypeReferenceInImplementsList"}, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"exportedClass",
+				"exportedInterface",
+			},
+		},
+	})
+}

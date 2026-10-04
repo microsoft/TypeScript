@@ -1,0 +1,157 @@
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: /*HIGHLIGHTS*/[|switch|] (1) {
+//     [|case|] 1:
+//     [|case|] 2:
+//         [|break|];
+//     [|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 [|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     [|default|]:
+//         [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: [|switch|] (1) {
+//     /*HIGHLIGHTS*/[|case|] 1:
+//     [|case|] 2:
+//         [|break|];
+//     [|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 [|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     [|default|]:
+//         [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: [|switch|] (1) {
+//     [|case|] 1:
+//     /*HIGHLIGHTS*/[|case|] 2:
+//         [|break|];
+//     [|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 [|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     [|default|]:
+//         [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: [|switch|] (1) {
+//     [|case|] 1:
+//     [|case|] 2:
+//         /*HIGHLIGHTS*/[|break|];
+//     [|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 [|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     [|default|]:
+//         [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: [|switch|] (1) {
+//     [|case|] 1:
+//     [|case|] 2:
+//         [|break|];
+//     /*HIGHLIGHTS*/[|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 [|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     [|default|]:
+//         [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: [|switch|] (1) {
+//     [|case|] 1:
+//     [|case|] 2:
+//         [|break|];
+//     [|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 /*HIGHLIGHTS*/[|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     [|default|]:
+//         [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: [|switch|] (1) {
+//     [|case|] 1:
+//     [|case|] 2:
+//         [|break|];
+//     [|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 [|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     /*HIGHLIGHTS*/[|default|]:
+//         [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault3.ts ===
+// foo: [|switch|] (1) {
+//     [|case|] 1:
+//     [|case|] 2:
+//         [|break|];
+//     [|case|] 3:
+//         switch (2) {
+//             case 1:
+//                 [|break|] foo;
+//                 continue; // invalid
+//             default:
+//                 break;
+//         }
+//     [|default|]:
+//         /*HIGHLIGHTS*/[|break|];
+// }

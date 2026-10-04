@@ -1,0 +1,11 @@
+error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+
+
+!!! error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+==== blockScopedBindingsInDownlevelGenerator.ts (0 errors) ====
+    function* a() {
+      for (const i of [1,2,3]) {
+        (() => i)()
+        yield i
+      }
+    }

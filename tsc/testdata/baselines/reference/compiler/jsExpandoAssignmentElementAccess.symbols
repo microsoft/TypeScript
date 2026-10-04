@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsExpandoAssignmentElementAccess.ts] ////
+
+=== repro.js ===
+var x = {};
+>x : Symbol(x, Decl(repro.js, 0, 3))
+
+x['if'] = 1;
+>x : Symbol(x, Decl(repro.js, 0, 3))
+>'if' : Symbol('if', Decl(repro.js, 0, 11))
+
+x['else'] = 1;
+>x : Symbol(x, Decl(repro.js, 0, 3))
+>'else' : Symbol('else', Decl(repro.js, 1, 12))
+

@@ -1,0 +1,37 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports31_inline_import_default(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @Filename: /person-code.ts
+export type Person = { x: string; }
+export function getPerson() : Person {
+  return null!
+}
+// @Filename: /code.ts
+import { getPerson } from "./person-code";
+export default {
+  person: getPerson()
+};`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "/code.ts")
+	f.VerifyCodeFixAvailable(t, []string{"Extract default export to variable", "Add satisfies and an inline type assertion with 'Person'", "Extract to variable and replace with 'newLocal as typeof newLocal'"})
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add satisfies and an inline type assertion with 'Person'",
+		NewFileContent: `import { getPerson, Person } from "./person-code";
+export default {
+  person: getPerson() satisfies Person as Person
+};`,
+		Index: 1,
+	})
+}

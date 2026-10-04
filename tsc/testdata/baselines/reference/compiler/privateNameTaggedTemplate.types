@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/privateNameTaggedTemplate.ts] ////
+
+=== privateNameTaggedTemplate.ts ===
+class Foo {
+>Foo : Foo
+
+  #x = 3;
+>#x : number
+>3 : 3
+
+  #y = null as any;
+>#y : any
+>null as any : any
+
+  func() {
+>func : () => void
+
+    console.log(this.#y`->>${this.#x}<<-`);
+>console.log(this.#y`->>${this.#x}<<-`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#y`->>${this.#x}<<-` : any
+>this.#y : any
+>this : this
+>`->>${this.#x}<<-` : string
+>this.#x : number
+>this : this
+  }
+}
+

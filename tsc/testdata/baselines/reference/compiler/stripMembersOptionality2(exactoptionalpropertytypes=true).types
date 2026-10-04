@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/stripMembersOptionality2.ts] ////
+
+=== stripMembersOptionality2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63291
+
+type WithObject1 = Required<{ a?: string | undefined }>;
+>WithObject1 : Required<{ a?: string | undefined; }>
+>a : string | undefined
+
+const obj1: WithObject1 = { a: undefined };
+>obj1 : Required<{ a?: string | undefined; }>
+>{ a: undefined } : { a: undefined; }
+>a : undefined
+>undefined : undefined
+
+type WithArray1 = Required<[(string | undefined)?]>;
+>WithArray1 : [string | undefined]
+
+const tup1: WithArray1 = [undefined];
+>tup1 : [string | undefined]
+>[undefined] : [undefined]
+>undefined : undefined
+
+type ToStringOrUnd<T> = { [P in keyof T]-?: string | undefined };
+>ToStringOrUnd : ToStringOrUnd<T>
+
+type WithObject2 = ToStringOrUnd<{ a: 1; b?: 2 }>;
+>WithObject2 : ToStringOrUnd<{ a: 1; b?: 2; }>
+>a : 1
+>b : 2 | undefined
+
+const obj2: WithObject2 = { a: "1", b: undefined };
+>obj2 : ToStringOrUnd<{ a: 1; b?: 2; }>
+>{ a: "1", b: undefined } : { a: string; b: undefined; }
+>a : string
+>"1" : "1"
+>b : undefined
+>undefined : undefined
+
+type WithArray2 = ToStringOrUnd<[1, 2?]>;
+>WithArray2 : [string | undefined, string | undefined]
+
+const tup2: WithArray2 = ["1", undefined];
+>tup2 : [string | undefined, string | undefined]
+>["1", undefined] : [string, undefined]
+>"1" : "1"
+>undefined : undefined
+

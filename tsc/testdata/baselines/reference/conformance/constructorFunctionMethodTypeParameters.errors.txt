@@ -1,0 +1,52 @@
+constructorFunctionMethodTypeParameters.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+constructorFunctionMethodTypeParameters.js(11,12): error TS2304: Cannot find name 'T'.
+constructorFunctionMethodTypeParameters.js(22,16): error TS2304: Cannot find name 'T'.
+constructorFunctionMethodTypeParameters.js(24,17): error TS2304: Cannot find name 'T'.
+constructorFunctionMethodTypeParameters.js(30,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== constructorFunctionMethodTypeParameters.js (5 errors) ====
+    /**
+     * @template {string} T
+     * @param {T} t
+     */
+    function Cls(t) {
+        this.t = t;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    
+    /**
+     * @template {string} V
+     * @param {T} t
+               ~
+!!! error TS2304: Cannot find name 'T'.
+     * @param {V} v
+     * @return {V}
+     */
+    Cls.prototype.topLevelComment = function (t, v) {
+        return v
+    };
+    
+    Cls.prototype.nestedComment =
+        /**
+         * @template {string} U
+         * @param {T} t
+                   ~
+!!! error TS2304: Cannot find name 'T'.
+         * @param {U} u
+         * @return {T}
+                    ~
+!!! error TS2304: Cannot find name 'T'.
+         */
+        function (t, u) {
+            return t
+        };
+    
+    var c = new Cls('a');
+            ~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    const s = c.topLevelComment('a', 'b');
+    const t = c.nestedComment('a', 'b');
+    
+    

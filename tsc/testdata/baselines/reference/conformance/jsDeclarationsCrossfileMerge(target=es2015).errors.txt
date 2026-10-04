@@ -1,0 +1,19 @@
+index.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+index.js(4,16): error TS2339: Property 'memberName' does not exist on type '() => void'.
+
+
+==== index.js (2 errors) ====
+    const m = require("./exporter");
+    
+    module.exports = m.default;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.memberName = "thing";
+                   ~~~~~~~~~~
+!!! error TS2339: Property 'memberName' does not exist on type '() => void'.
+    
+==== exporter.js (0 errors) ====
+    function validate() {}
+    
+    export default validate;
+    

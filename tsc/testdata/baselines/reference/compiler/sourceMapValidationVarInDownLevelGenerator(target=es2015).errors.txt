@@ -1,0 +1,8 @@
+error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+
+
+!!! error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+==== sourceMapValidationVarInDownLevelGenerator.ts (0 errors) ====
+    function * f() {
+        var x = 1, y;
+    }

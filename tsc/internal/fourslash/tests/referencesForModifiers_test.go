@@ -1,0 +1,28 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestReferencesForModifiers(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+[|/*declareModifier*/declare /*abstractModifier*/abstract class C1 {
+    [|/*staticModifier*/static a;|]
+    [|/*readonlyModifier*/readonly b;|]
+    [|/*publicModifier*/public c;|]
+    [|/*protectedModifier*/protected d;|]
+    [|/*privateModifier*/private e;|]
+}|]
+[|/*constModifier*/const enum E {
+}|]
+[|/*asyncModifier*/async function fn() {}|]
+[|/*exportModifier*/export /*defaultModifier*/default class C2 {}|]`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineFindAllReferences(t, "declareModifier", "abstractModifier", "staticModifier", "readonlyModifier", "publicModifier", "protectedModifier", "privateModifier", "constModifier", "asyncModifier", "exportModifier", "defaultModifier")
+}

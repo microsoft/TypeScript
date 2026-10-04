@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/symbolToNodeBoundaryNoStackOverflow.ts] ////
+
+=== symbolToNodeBoundaryNoStackOverflow.ts ===
+// Regression test for https://github.com/microsoft/TypeScript/issues/63441
+// In createAnonymousTypeNodeEx for an InstantiationExpressionType, when the
+// existing typeof node failed to be reused (e.g. its entity name isn't
+// accessible from the current scope), the recovery boundary's fallback path
+// re-entered typeToTypeNode with the same instantiation type, which would
+// try to reuse the same node again, recursing without bound.
+// The fix marks the type as visited around the reuse attempt so the inner
+// recursion bottoms out via the existing visitedTypes guard.
+
+export interface CustomNode<P> {
+>CustomNode : Symbol(CustomNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 0, 0))
+>P : Symbol(P, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 9, 28))
+
+    getNextNode: () => CustomNode<P>;
+>getNextNode : Symbol(CustomNode.getNextNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 9, 32))
+>CustomNode : Symbol(CustomNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 0, 0))
+>P : Symbol(P, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 9, 28))
+}
+
+export declare const createNode: () => {
+>createNode : Symbol(createNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 13, 20))
+
+    getNextNode: <T>() => CustomNode<T>;
+>getNextNode : Symbol(getNextNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 13, 40))
+>T : Symbol(T, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 14, 18))
+>CustomNode : Symbol(CustomNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 0, 0))
+>T : Symbol(T, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 14, 18))
+
+};
+
+function wrapNode<T>(getNode: () => CustomNode<T>) {
+>wrapNode : Symbol(wrapNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 15, 2))
+>T : Symbol(T, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 17, 18))
+>getNode : Symbol(getNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 17, 21))
+>CustomNode : Symbol(CustomNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 0, 0))
+>T : Symbol(T, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 17, 18))
+
+    return getNode;
+>getNode : Symbol(getNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 17, 21))
+}
+
+wrapNode(() => {
+>wrapNode : Symbol(wrapNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 15, 2))
+
+    const node = createNode();
+>node : Symbol(node, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 22, 9))
+>createNode : Symbol(createNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 13, 20))
+
+    return wrapNode<typeof node.getNextNode<any>>(node.getNextNode);
+>wrapNode : Symbol(wrapNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 15, 2))
+>node.getNextNode : Symbol(getNextNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 13, 40))
+>node : Symbol(node, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 22, 9))
+>getNextNode : Symbol(getNextNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 13, 40))
+>node.getNextNode : Symbol(getNextNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 13, 40))
+>node : Symbol(node, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 22, 9))
+>getNextNode : Symbol(getNextNode, Decl(symbolToNodeBoundaryNoStackOverflow.ts, 13, 40))
+
+});
+

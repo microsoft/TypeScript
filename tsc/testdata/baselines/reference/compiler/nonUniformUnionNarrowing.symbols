@@ -1,0 +1,230 @@
+//// [tests/cases/compiler/nonUniformUnionNarrowing.ts] ////
+
+=== nonUniformUnionNarrowing.ts ===
+enum E { A = 1, B = 2 }
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 0, 0))
+>A : Symbol(E.A, Decl(nonUniformUnionNarrowing.ts, 0, 8))
+>B : Symbol(E.B, Decl(nonUniformUnionNarrowing.ts, 0, 15))
+
+function f1(x: E | 1 | 2) {
+>f1 : Symbol(f1, Decl(nonUniformUnionNarrowing.ts, 0, 23))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 2, 12))
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 0, 0))
+
+    if (x === E.A) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 2, 12))
+>E.A : Symbol(E.A, Decl(nonUniformUnionNarrowing.ts, 0, 8))
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 0, 0))
+>A : Symbol(E.A, Decl(nonUniformUnionNarrowing.ts, 0, 8))
+
+        x;  // 1 | E.A
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 2, 12))
+    }
+    else {
+        x;  // 2 | E.B
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 2, 12))
+    }
+}
+
+function f1s(x: E | 1 | 2) {
+>f1s : Symbol(f1s, Decl(nonUniformUnionNarrowing.ts, 9, 1))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 11, 13))
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 0, 0))
+
+    switch (x) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 11, 13))
+
+        case E.A:
+>E.A : Symbol(E.A, Decl(nonUniformUnionNarrowing.ts, 0, 8))
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 0, 0))
+>A : Symbol(E.A, Decl(nonUniformUnionNarrowing.ts, 0, 8))
+
+            x;  // 1 | E.A
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 11, 13))
+
+            break;
+        default:
+            x;  // 2 | E.B
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 11, 13))
+    }
+}
+
+function f2(x: E | 1 | 2) {
+>f2 : Symbol(f2, Decl(nonUniformUnionNarrowing.ts, 19, 1))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 21, 12))
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 0, 0))
+
+    if (x === 1) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 21, 12))
+
+        x;  // 1 | E.A
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 21, 12))
+    }
+    else {
+        x;  // 2 | E.B
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 21, 12))
+    }
+}
+
+function f2s(x: E | 1 | 2) {
+>f2s : Symbol(f2s, Decl(nonUniformUnionNarrowing.ts, 28, 1))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 30, 13))
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 0, 0))
+
+    switch (x) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 30, 13))
+
+        case 1:
+            x;  // 1 | E.A
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 30, 13))
+
+            break;
+        default:
+            x;  // 2 | E.B
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 30, 13))
+    }
+}
+
+namespace N1 {
+>N1 : Symbol(N1, Decl(nonUniformUnionNarrowing.ts, 38, 1))
+
+    export enum E { A = 1, B = 2 }
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 40, 14))
+>A : Symbol(E.A, Decl(nonUniformUnionNarrowing.ts, 41, 19))
+>B : Symbol(E.B, Decl(nonUniformUnionNarrowing.ts, 41, 26))
+}
+namespace N2 {
+>N2 : Symbol(N2, Decl(nonUniformUnionNarrowing.ts, 42, 1))
+
+    export enum E { A = 1, B = 2 }
+>E : Symbol(E, Decl(nonUniformUnionNarrowing.ts, 43, 14))
+>A : Symbol(E.A, Decl(nonUniformUnionNarrowing.ts, 44, 19))
+>B : Symbol(E.B, Decl(nonUniformUnionNarrowing.ts, 44, 26))
+}
+
+function f3(x: N1.E | N2.E) {
+>f3 : Symbol(f3, Decl(nonUniformUnionNarrowing.ts, 45, 1))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 47, 12))
+>N1 : Symbol(N1, Decl(nonUniformUnionNarrowing.ts, 38, 1))
+>E : Symbol(N1.E, Decl(nonUniformUnionNarrowing.ts, 40, 14))
+>N2 : Symbol(N2, Decl(nonUniformUnionNarrowing.ts, 42, 1))
+>E : Symbol(N2.E, Decl(nonUniformUnionNarrowing.ts, 43, 14))
+
+    if (x === N1.E.A) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 47, 12))
+>N1.E.A : Symbol(N1.E.A, Decl(nonUniformUnionNarrowing.ts, 41, 19))
+>N1.E : Symbol(N1.E, Decl(nonUniformUnionNarrowing.ts, 40, 14))
+>N1 : Symbol(N1, Decl(nonUniformUnionNarrowing.ts, 38, 1))
+>E : Symbol(N1.E, Decl(nonUniformUnionNarrowing.ts, 40, 14))
+>A : Symbol(N1.E.A, Decl(nonUniformUnionNarrowing.ts, 41, 19))
+
+        x;  // N1.E.A | N2.E.A
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 47, 12))
+    }
+    else {
+        x;  // N1.E.B | N2.E.B
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 47, 12))
+    }
+}
+
+function f3s(x: N1.E | N2.E) {
+>f3s : Symbol(f3s, Decl(nonUniformUnionNarrowing.ts, 54, 1))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 56, 13))
+>N1 : Symbol(N1, Decl(nonUniformUnionNarrowing.ts, 38, 1))
+>E : Symbol(N1.E, Decl(nonUniformUnionNarrowing.ts, 40, 14))
+>N2 : Symbol(N2, Decl(nonUniformUnionNarrowing.ts, 42, 1))
+>E : Symbol(N2.E, Decl(nonUniformUnionNarrowing.ts, 43, 14))
+
+    switch (x) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 56, 13))
+
+        case N1.E.A:
+>N1.E.A : Symbol(N1.E.A, Decl(nonUniformUnionNarrowing.ts, 41, 19))
+>N1.E : Symbol(N1.E, Decl(nonUniformUnionNarrowing.ts, 40, 14))
+>N1 : Symbol(N1, Decl(nonUniformUnionNarrowing.ts, 38, 1))
+>E : Symbol(N1.E, Decl(nonUniformUnionNarrowing.ts, 40, 14))
+>A : Symbol(N1.E.A, Decl(nonUniformUnionNarrowing.ts, 41, 19))
+
+            x;  // N1.E.A | N2.E.A
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 56, 13))
+
+            break;
+        default:
+            x;  // N1.E.B | N2.E.B
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 56, 13))
+    }
+}
+
+const sym = Symbol();
+>sym : Symbol(sym, Decl(nonUniformUnionNarrowing.ts, 66, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+function f4(x: symbol | string) {
+>f4 : Symbol(f4, Decl(nonUniformUnionNarrowing.ts, 66, 21))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 68, 12))
+
+    if (x === sym) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 68, 12))
+>sym : Symbol(sym, Decl(nonUniformUnionNarrowing.ts, 66, 5))
+
+        x;  // symbol (not narrowed)
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 68, 12))
+    }
+}
+
+function f4s(x: symbol | string) {
+>f4s : Symbol(f4s, Decl(nonUniformUnionNarrowing.ts, 72, 1))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 74, 13))
+
+    switch (x) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 74, 13))
+
+        case sym:
+>sym : Symbol(sym, Decl(nonUniformUnionNarrowing.ts, 66, 5))
+
+            x;  // symbol (not narrowed)
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 74, 13))
+    }
+}
+
+declare enum EE { A, B }
+>EE : Symbol(EE, Decl(nonUniformUnionNarrowing.ts, 79, 1))
+>A : Symbol(EE.A, Decl(nonUniformUnionNarrowing.ts, 81, 17))
+>B : Symbol(EE.B, Decl(nonUniformUnionNarrowing.ts, 81, 20))
+
+function f6(x: EE | 1 | 2) {
+>f6 : Symbol(f6, Decl(nonUniformUnionNarrowing.ts, 81, 24))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 83, 12))
+>EE : Symbol(EE, Decl(nonUniformUnionNarrowing.ts, 79, 1))
+
+    if (x === 1) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 83, 12))
+
+        x;  // 1 | EE (computed enum compares to any number)
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 83, 12))
+    }
+    else {
+        x;  // 2
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 83, 12))
+    }
+}
+
+function f6s(x: EE | 1 | 2) {
+>f6s : Symbol(f6s, Decl(nonUniformUnionNarrowing.ts, 90, 1))
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 92, 13))
+>EE : Symbol(EE, Decl(nonUniformUnionNarrowing.ts, 79, 1))
+
+    switch (x) {
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 92, 13))
+
+        case 1:
+            x;  // 1 | EE (computed enum compares to any number)
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 92, 13))
+
+            break;
+        default:
+            x;  // 2
+>x : Symbol(x, Decl(nonUniformUnionNarrowing.ts, 92, 13))
+    }
+}
+

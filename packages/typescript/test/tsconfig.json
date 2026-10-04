@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig.dev.json",
+    "compilerOptions": {
+        // tinybench has errors under exactOptionalPropertyTypes
+        "skipLibCheck": true
+    },
+    "references": [
+        { "path": ".." }
+    ]
+}

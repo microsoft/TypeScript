@@ -1,0 +1,4 @@
+// @target: esnext
+
+using
+identifier;

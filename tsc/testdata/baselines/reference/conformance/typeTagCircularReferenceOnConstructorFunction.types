@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/typeTagCircularReferenceOnConstructorFunction.ts] ////
+
+=== bug27346.js ===
+/**
+ * @type {MyClass}
+ */
+function MyClass() { }
+>MyClass : { (): void; prototype: {}; }
+
+MyClass.prototype = {};
+>MyClass.prototype = {} : {}
+>MyClass.prototype : {}
+>MyClass : { (): void; prototype: {}; }
+>prototype : {}
+>{} : {}
+

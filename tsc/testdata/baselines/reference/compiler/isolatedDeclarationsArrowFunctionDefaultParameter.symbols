@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/isolatedDeclarationsArrowFunctionDefaultParameter.ts] ////
+
+=== isolatedDeclarationsArrowFunctionDefaultParameter.ts ===
+export const foo = (one: string = "DEFAULT", two: string): string => {
+>foo : Symbol(foo, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 0, 12))
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 0, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 0, 44))
+
+    return one + " " + two;
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 0, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 0, 44))
+
+};
+
+export const bar = (one: string | undefined = "DEFAULT", two: string): string => {
+>bar : Symbol(bar, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 4, 12))
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 4, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 4, 56))
+
+    return one + " " + two;
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 4, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 4, 56))
+
+};
+
+// Arrow function where the default parameter is the last one (should be optional)
+export const baz = (one: string, two: string | undefined = "DEFAULT"): string => {
+>baz : Symbol(baz, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 9, 12))
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 9, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 9, 32))
+
+    return one + " " + two;
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 9, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 9, 32))
+
+};
+
+// Arrow function where all parameters have defaults
+export const qux = (one: string = "DEFAULT", two: string = "DEFAULT"): string => {
+>qux : Symbol(qux, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 14, 12))
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 14, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 14, 44))
+
+    return one + " " + two;
+>one : Symbol(one, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 14, 20))
+>two : Symbol(two, Decl(isolatedDeclarationsArrowFunctionDefaultParameter.ts, 14, 44))
+
+};
+

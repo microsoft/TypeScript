@@ -1,0 +1,11 @@
+// === Document Symbols ===
+// === /navigationBarItemsSymbols2.ts ===
+// <|interface [|{| name: I, kind: Interface |}I|] {
+//     <|[|{| name: [Symbol.isRegExp], kind: Property |}[Symbol.isRegExp]|]: string;|>
+//     <|[|{| name: [Symbol.iterator], kind: Method |}[Symbol.iterator]|](): string;|>
+// }|>
+
+// === Details ===
+(Interface) I
+  (Property) [Symbol.isRegExp]
+  (Method) [Symbol.iterator]

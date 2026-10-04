@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/declarationEmitExpandoFunctionInNamespace.ts] ////
+
+=== declarationEmitExpandoFunctionInNamespace.ts ===
+namespace NS {
+>NS : Symbol(NS, Decl(declarationEmitExpandoFunctionInNamespace.ts, 0, 0))
+
+    export function f(): void {}
+>f : Symbol(f, Decl(declarationEmitExpandoFunctionInNamespace.ts, 0, 14))
+
+    f.a = "";
+>f.a : Symbol(f.a, Decl(declarationEmitExpandoFunctionInNamespace.ts, 1, 32))
+>f : Symbol(f, Decl(declarationEmitExpandoFunctionInNamespace.ts, 0, 14))
+>a : Symbol(f.a, Decl(declarationEmitExpandoFunctionInNamespace.ts, 1, 32))
+}
+
+namespace Outer {
+>Outer : Symbol(Outer, Decl(declarationEmitExpandoFunctionInNamespace.ts, 3, 1))
+
+    export namespace Inner {
+>Inner : Symbol(Inner, Decl(declarationEmitExpandoFunctionInNamespace.ts, 5, 17))
+
+        export function g(): void {}
+>g : Symbol(g, Decl(declarationEmitExpandoFunctionInNamespace.ts, 6, 28))
+
+        g.b = 0;
+>g.b : Symbol(g.b, Decl(declarationEmitExpandoFunctionInNamespace.ts, 7, 36))
+>g : Symbol(g, Decl(declarationEmitExpandoFunctionInNamespace.ts, 6, 28))
+>b : Symbol(g.b, Decl(declarationEmitExpandoFunctionInNamespace.ts, 7, 36))
+    }
+}
+

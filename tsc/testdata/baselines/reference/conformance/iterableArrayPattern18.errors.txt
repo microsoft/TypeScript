@@ -1,0 +1,23 @@
+iterableArrayPattern18.ts(17,5): error TS2740: Type 'FooIterator' is missing the following properties from type 'Bar[]': length, pop, push, concat, and 24 more.
+
+
+==== iterableArrayPattern18.ts (1 errors) ====
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    function fun([a, b]: Bar[]) { }
+    fun(new FooIterator);
+        ~~~~~~~~~~~~~~~
+!!! error TS2740: Type 'FooIterator' is missing the following properties from type 'Bar[]': length, pop, push, concat, and 24 more.

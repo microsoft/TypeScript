@@ -1,0 +1,19 @@
+// === findAllReferences ===
+// === /A.ts ===
+// import [|B|] from "./B";
+// let b = new [|B|]();
+// b.test();
+
+// === /B.ts ===
+// export default class /*FIND ALL REFS*/[|C|] {
+//     test() {
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /A.ts ===
+// import /*FIND ALL REFS*/[|B|] from "./B";
+// let b = new [|B|]();
+// b.test();

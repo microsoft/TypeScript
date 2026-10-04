@@ -1,0 +1,51 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTags1.ts ===
+// /**
+//  * Doc
+//  * @author Me <me@domain.tld>
+//  * @augments {C<T>} Augments it
+//  * @template T A template
+//  * @type {number | string} A type
+//  * @typedef {number | string} NumOrStr
+//  * @property {number} x The prop
+//  * @param {number} x The param
+//  * @returns The result
+//  * @see x (the parameter)
+//  */
+// function foo(x) {}
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(x: any): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 298,
+      "LSPosition": {
+        "line": 12,
+        "character": 9
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(x: any): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 9
+        },
+        "end": {
+          "line": 12,
+          "character": 12
+        }
+      }
+    }
+  }
+]

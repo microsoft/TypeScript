@@ -1,0 +1,12 @@
+/index.cjs(1,32): error TS4023: Exported variable '"api"' has or is using name 'Private' from external module "/node_modules/@types/pkg/index" but cannot be named.
+
+
+==== /index.cjs (1 errors) ====
+    Object.defineProperty(exports, "api", { value: require("pkg") });
+                                   ~~~~~
+!!! error TS4023: Exported variable '"api"' has or is using name 'Private' from external module "/node_modules/@types/pkg/index" but cannot be named.
+==== /node_modules/@types/pkg/index.d.ts (0 errors) ====
+    interface Private {}
+    declare const obj: { fn(x: Private): void };
+    export = obj;
+    

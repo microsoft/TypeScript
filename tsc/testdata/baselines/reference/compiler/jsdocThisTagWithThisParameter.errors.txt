@@ -1,0 +1,9 @@
+bug.js(2,12): error TS7006: Parameter 'this' implicitly has an 'any' type.
+
+
+==== bug.js (1 errors) ====
+    /** @this {object} */
+    function f(this) {}
+               ~~~~
+!!! error TS7006: Parameter 'this' implicitly has an 'any' type.
+    

@@ -1,0 +1,100 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespacePrivateTypes.ts ===
+// 
+// declare namespace API {
+//                   ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace API {
+// |     interface InternalConfig {
+// |         secret: string;
+// |         timeout: number;
+// |     }
+// |     function configure(config: InternalConfig): void;
+// |     namespace configure { }
+// |     let defaultConfig: InternalConfig;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace API
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     interface InternalConfig {
+//         secret: string;
+//         timeout: number;
+//     }
+//     function configure(config: InternalConfig): void;
+//     const defaultConfig: InternalConfig;
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 1,
+        "character": 21
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace API\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 21
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 1,
+        "character": 21
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace API {\n    interface InternalConfig {\n        secret: string;\n        timeout: number;\n    }\n    function configure(config: InternalConfig): void;\n    namespace configure { }\n    let defaultConfig: InternalConfig;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 21
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

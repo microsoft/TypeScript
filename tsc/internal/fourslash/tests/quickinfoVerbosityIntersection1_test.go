@@ -1,0 +1,32 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickinfoVerbosityIntersection1(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `{
+    type Foo = { a: "a" | "c" };
+    type Bar = { a: "a" | "b" };
+    const obj/*o1*/: Foo & Bar = { a: "a" };
+}
+{
+    type Foo = { a: "c" };
+    type Bar = { a: "b" };
+    const obj/*o2*/: Foo & Bar = { a: "" };
+}
+{
+    type Foo = { a: "c" };
+    type Bar = { a: "b" };
+    type Never = Foo & Bar;
+    const obj/*o3*/: Never = { a: "" };
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineHoverWithVerbosity(t, map[string][]int{"o1": {0, 1}, "o2": {0}, "o3": {0}})
+}

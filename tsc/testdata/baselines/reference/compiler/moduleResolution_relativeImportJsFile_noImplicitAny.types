@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/moduleResolution_relativeImportJsFile_noImplicitAny.ts] ////
+
+=== /src/a.ts ===
+import * as b from "./b";
+>b : any
+

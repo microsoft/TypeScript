@@ -1,0 +1,8 @@
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_11.ts ===
+// interface Foo {
+//    hel/*GOTO IMPL*/lo(): void;
+// }
+// 
+// var x = <Foo> { <|[|hello|]: () => {}|> };
+// var y = <Foo> (((({ <|[|hello|]: () => {}|> }))));

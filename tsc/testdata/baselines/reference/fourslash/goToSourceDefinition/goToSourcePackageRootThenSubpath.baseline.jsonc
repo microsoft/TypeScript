@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|work|]() {}|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { work } from "pkg";
+// work/*GOTO SOURCE DEF*/();

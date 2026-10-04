@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/emitEndOfFileJSDocComments.ts] ////
+
+=== emitEndOfFileJSDocComments.js ===
+/** @typedef {number} A */
+var unrelated;
+>unrelated : Symbol(unrelated, Decl(emitEndOfFileJSDocComments.js, 1, 3))
+
+/** @typedef {number} B */

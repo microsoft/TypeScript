@@ -1,0 +1,24 @@
+iterableArrayPattern17.ts(17,5): error TS2741: Property 'x' is missing in type 'FooIterator' but required in type 'Bar'.
+
+
+==== iterableArrayPattern17.ts (1 errors) ====
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    function fun(...[a, b]: Bar[]) { }
+    fun(new FooIterator);
+        ~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type 'FooIterator' but required in type 'Bar'.
+!!! related TS2728 iterableArrayPattern17.ts:1:13: 'x' is declared here.

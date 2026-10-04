@@ -1,0 +1,47 @@
+// === QuickInfo ===
+=== /a.js ===
+// class C {
+//     constructor() {
+//         this.prop = "";
+//     }
+//     declare prop: string;
+//     method() {
+//         this.prop.foo
+//                   ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 122,
+      "LSPosition": {
+        "line": 6,
+        "character": 21
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nany\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 18
+        },
+        "end": {
+          "line": 6,
+          "character": 21
+        }
+      }
+    }
+  }
+]
