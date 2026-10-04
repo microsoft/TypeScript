@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/declarationEmitPrivateMemberComments.ts] ////
+
+=== a.ts ===
+export class A {
+>A : A
+
+    /** Public property. */
+    a = 1;
+>a : number
+>1 : 1
+
+    /** Private property. */
+    private b = 1;
+>b : number
+>1 : 1
+
+    /** Private method. */
+    private c() {}
+>c : () => void
+
+    /** Private getter. */
+    private get d() { return 1; }
+>d : number
+>1 : 1
+
+    /** Private setter. */
+    private set d(value: number) {}
+>d : number
+>value : number
+
+    /** ECMAScript private property. */
+    #e = 1;
+>#e : number
+>1 : 1
+
+    constructor(
+        /** Private parameter property. */
+        private f: number,
+>f : number
+
+    ) {}
+}
+
+=== b.js ===
+export class B {
+>B : B
+
+    /** Public property. */
+    a = 1;
+>a : number
+>1 : 1
+
+    /** @private */
+    b = 1;
+>b : number
+>1 : 1
+
+    /** @private */
+    c() {}
+>c : () => void
+
+    /** @private */
+    get d() { return 1; }
+>d : number
+>1 : 1
+
+    /** @private */
+    set d(value) {}
+>d : number
+>value : number
+
+    /** ECMAScript private property. */
+    #e = 1;
+>#e : number
+>1 : 1
+}
+

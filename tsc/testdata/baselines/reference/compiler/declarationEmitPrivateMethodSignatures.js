@@ -29,13 +29,11 @@ interface A<T> {
     private a;
 }
 interface B {
-    /** Method documentation. */
     private a;
     private b;
     private c;
 }
 type C = {
-    /** Method documentation. */
     private a;
     private b;
 };

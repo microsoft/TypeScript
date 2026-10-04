@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/declarationEmitPrivateMemberComments.ts] ////
+
+=== a.ts ===
+export class A {
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+    /** Public property. */
+    a = 1;
+>a : Symbol(A.a, Decl(a.ts, 0, 16))
+
+    /** Private property. */
+    private b = 1;
+>b : Symbol(A.b, Decl(a.ts, 2, 10))
+
+    /** Private method. */
+    private c() {}
+>c : Symbol(A.c, Decl(a.ts, 5, 18))
+
+    /** Private getter. */
+    private get d() { return 1; }
+>d : Symbol(A.d, Decl(a.ts, 8, 18), Decl(a.ts, 11, 33))
+
+    /** Private setter. */
+    private set d(value: number) {}
+>d : Symbol(A.d, Decl(a.ts, 8, 18), Decl(a.ts, 11, 33))
+>value : Symbol(value, Decl(a.ts, 14, 18))
+
+    /** ECMAScript private property. */
+    #e = 1;
+>#e : Symbol(A.#e, Decl(a.ts, 14, 35))
+
+    constructor(
+        /** Private parameter property. */
+        private f: number,
+>f : Symbol(A.f, Decl(a.ts, 19, 16))
+
+    ) {}
+}
+
+=== b.js ===
+export class B {
+>B : Symbol(B, Decl(b.js, 0, 0))
+
+    /** Public property. */
+    a = 1;
+>a : Symbol(B.a, Decl(b.js, 0, 16))
+
+    /** @private */
+    b = 1;
+>b : Symbol(B.b, Decl(b.js, 2, 10))
+
+    /** @private */
+    c() {}
+>c : Symbol(B.c, Decl(b.js, 5, 10))
+
+    /** @private */
+    get d() { return 1; }
+>d : Symbol(B.d, Decl(b.js, 8, 10), Decl(b.js, 11, 25))
+
+    /** @private */
+    set d(value) {}
+>d : Symbol(B.d, Decl(b.js, 8, 10), Decl(b.js, 11, 25))
+>value : Symbol(value, Decl(b.js, 14, 10))
+
+    /** ECMAScript private property. */
+    #e = 1;
+>#e : Symbol(B.#e, Decl(b.js, 14, 19))
+}
+

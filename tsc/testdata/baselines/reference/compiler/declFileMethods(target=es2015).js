@@ -333,9 +333,7 @@ export declare class c1 {
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
-    /** This comment should appear for privateFoo*/
     private privateFoo;
-    /** This is comment for function signature*/
     private privateFooWithParameters;
     private privateFooWithRestParameters;
     private privateFooWithOverloads;
@@ -348,9 +346,7 @@ export declare class c1 {
     static staticFooWithRestParameters(a: string, ...rests: string[]): string;
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
-    /** This comment should appear for privateStaticFoo*/
     private static privateStaticFoo;
-    /** This is comment for function signature*/
     private static privateStaticFooWithParameters;
     private static privateStaticFooWithRestParameters;
     private static privateStaticFooWithOverloads;
@@ -377,9 +373,7 @@ declare class c2 {
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
-    /** This comment should appear for privateFoo*/
     private privateFoo;
-    /** This is comment for function signature*/
     private privateFooWithParameters;
     private privateFooWithRestParameters;
     private privateFooWithOverloads;
@@ -392,9 +386,7 @@ declare class c2 {
     static staticFooWithRestParameters(a: string, ...rests: string[]): string;
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
-    /** This comment should appear for privateStaticFoo*/
     private static privateStaticFoo;
-    /** This is comment for function signature*/
     private static privateStaticFooWithParameters;
     private static privateStaticFooWithRestParameters;
     private static privateStaticFooWithOverloads;
