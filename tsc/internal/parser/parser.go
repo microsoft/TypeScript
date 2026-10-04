@@ -4284,7 +4284,8 @@ func (p *Parser) isParenthesizedArrowFunctionExpression() core.Tristate {
 }
 
 func (p *Parser) nextIsParenthesizedArrowFunctionExpression() core.Tristate {
-	if p.token == ast.KindAsyncKeyword {
+	isAsync := p.token == ast.KindAsyncKeyword
+	if isAsync {
 		p.nextToken()
 		if p.hasPrecedingLineBreak() {
 			return core.TSFalse
@@ -4298,12 +4299,12 @@ func (p *Parser) nextIsParenthesizedArrowFunctionExpression() core.Tristate {
 	if first == ast.KindOpenParenToken {
 		if second == ast.KindCloseParenToken {
 			// Simple cases: "() =>", "(): ", and "() {".
-			// This is an arrow function with no parameters.
 			// The last one is not actually an arrow function,
 			// but this is probably what the user intended.
-			third := p.nextToken()
-			switch third {
-			case ast.KindEqualsGreaterThanToken, ast.KindColonToken, ast.KindOpenBraceToken:
+			switch p.nextToken() {
+			case ast.KindColonToken:
+				return core.IfElse(isAsync, core.TSUnknown, core.TSTrue)
+			case ast.KindEqualsGreaterThanToken, ast.KindOpenBraceToken:
 				return core.TSTrue
 			}
 			return core.TSFalse

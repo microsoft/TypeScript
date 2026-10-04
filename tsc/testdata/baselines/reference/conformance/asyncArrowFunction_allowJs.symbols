@@ -38,3 +38,41 @@ f(async () => {
 
 	return 0
 })
+
+const g = true;
+>g : Symbol(g, Decl(file.js, 28, 5))
+
+function async() {
+>async : Symbol(async, Decl(file.js, 28, 15))
+
+    return 1;
+}
+
+const f1 = g ? async() : 0;
+>f1 : Symbol(f1, Decl(file.js, 34, 5))
+>g : Symbol(g, Decl(file.js, 28, 5))
+>async : Symbol(async, Decl(file.js, 28, 15))
+
+/** @type {number | ((x: number) => number)} */
+const f2 = g ? async() : x => x;
+>f2 : Symbol(f2, Decl(file.js, 36, 5))
+>g : Symbol(g, Decl(file.js, 28, 5))
+>async : Symbol(async, Decl(file.js, 28, 15))
+>x : Symbol(x, Decl(file.js, 36, 24))
+>x : Symbol(x, Decl(file.js, 36, 24))
+
+const f3 = g ? g ? async() : 0 : 1;
+>f3 : Symbol(f3, Decl(file.js, 37, 5))
+>g : Symbol(g, Decl(file.js, 28, 5))
+>g : Symbol(g, Decl(file.js, 28, 5))
+>async : Symbol(async, Decl(file.js, 28, 15))
+
+/** @type {(x: number) => number} */
+const f4 = g ? x => async() : x => x;
+>f4 : Symbol(f4, Decl(file.js, 39, 5))
+>g : Symbol(g, Decl(file.js, 28, 5))
+>x : Symbol(x, Decl(file.js, 39, 14))
+>async : Symbol(async, Decl(file.js, 28, 15))
+>x : Symbol(x, Decl(file.js, 39, 29))
+>x : Symbol(x, Decl(file.js, 39, 29))
+
