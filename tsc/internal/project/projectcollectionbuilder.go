@@ -667,9 +667,11 @@ func (b *ProjectCollectionBuilder) didRequestFile(fileName tspath.RootedFilePath
 			if result.Value() != nil && result.Value().containsFile(path) {
 				if hasChanges {
 					b.cleanupInferredProject(logger)
-					if b.inferredProject.Value() != nil {
-						b.updateProgram(b.inferredProject, logger)
-					}
+				}
+				// Opening this file may have created the inferred project or changed its roots,
+				// even if the default project didn't change
+				if b.inferredProject.Value() != nil {
+					b.updateProgram(b.inferredProject, logger)
 				}
 				return
 			}
