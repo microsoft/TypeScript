@@ -1,0 +1,206 @@
+//// [tests/cases/compiler/unionOverloadSignatureOrder.ts] ////
+
+=== unionOverloadSignatureOrder.ts ===
+namespace Unprimed {
+>Unprimed : typeof Unprimed
+
+    interface Alpha {
+        foo(n: "str", opt?: boolean): string;
+>foo : (n: "str", opt?: boolean) => string
+>n : "str"
+>opt : boolean | undefined
+    }
+
+    interface Beta {
+        foo(n: "str", opt?: true): string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : "str"
+>opt : true | undefined
+>true : true
+
+        foo(n: string): number | string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : string
+    }
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Alpha | Beta
+
+    declare let betaAlpha: Beta | Alpha;
+>betaAlpha : Alpha | Beta
+
+    const alphaBetaResult: string = alphaBeta.foo("str");
+>alphaBetaResult : string
+>alphaBeta.foo("str") : string
+>alphaBeta.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>alphaBeta : Alpha | Beta
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>"str" : "str"
+
+    const betaAlphaResult: string = betaAlpha.foo("str");
+>betaAlphaResult : string
+>betaAlpha.foo("str") : string
+>betaAlpha.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>betaAlpha : Alpha | Beta
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>"str" : "str"
+}
+
+namespace Primed {
+>Primed : typeof Primed
+
+    interface Alpha {
+        foo(n: "str", opt?: boolean): string;
+>foo : (n: "str", opt?: boolean) => string
+>n : "str"
+>opt : boolean | undefined
+    }
+
+    type B = Beta["foo"];
+>B : { (n: "str", opt?: true): string; (n: string): number | string; }
+
+    interface Beta {
+        foo(n: "str", opt?: true): string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : "str"
+>opt : true | undefined
+>true : true
+
+        foo(n: string): number | string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : string
+    }
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Alpha | Beta
+
+    declare let betaAlpha: Beta | Alpha;
+>betaAlpha : Alpha | Beta
+
+    const alphaBetaResult: string = alphaBeta.foo("str");
+>alphaBetaResult : string
+>alphaBeta.foo("str") : string
+>alphaBeta.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>alphaBeta : Alpha | Beta
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>"str" : "str"
+
+    const betaAlphaResult: string = betaAlpha.foo("str");
+>betaAlphaResult : string
+>betaAlpha.foo("str") : string
+>betaAlpha.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>betaAlpha : Alpha | Beta
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; }
+>"str" : "str"
+}
+
+namespace MultipleOverloads {
+>MultipleOverloads : typeof MultipleOverloads
+
+    interface Alpha {
+        foo(type: "num", opts?: unknown): number;
+>foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; }
+>type : "num"
+>opts : unknown
+
+        foo(type: "str", opts?: unknown): string;
+>foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; }
+>type : "str"
+>opts : unknown
+
+        foo(type: string, opts?: unknown): number | string;
+>foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; }
+>type : string
+>opts : unknown
+    }
+
+    interface Beta {
+        foo(type: "num", opts?: { a?: string }): number;
+>foo : { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>type : "num"
+>opts : { a?: string; } | undefined
+>a : string | undefined
+
+        foo(type: "str", opts?: { b?: string }): string;
+>foo : { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>type : "str"
+>opts : { b?: string; } | undefined
+>b : string | undefined
+
+        foo(type: "num" | "str", opts?: unknown): number | string;
+>foo : { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>type : "num" | "str"
+>opts : unknown
+    }
+
+    declare let beta: Beta;
+>beta : Beta
+
+    beta.foo("str");
+>beta.foo("str") : string
+>beta.foo : { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>beta : Beta
+>foo : { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>"str" : "str"
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Alpha | Beta
+
+    const result: string = alphaBeta.foo("str");
+>result : string
+>alphaBeta.foo("str") : string
+>alphaBeta.foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>alphaBeta : Alpha | Beta
+>foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>"str" : "str"
+
+    alphaBeta.foo("other");
+>alphaBeta.foo("other") : never
+>alphaBeta.foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>alphaBeta : Alpha | Beta
+>foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>"other" : "other"
+
+    alphaBeta.foo("str", false);
+>alphaBeta.foo("str", false) : string
+>alphaBeta.foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>alphaBeta : Alpha | Beta
+>foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
+>"str" : "str"
+>false : false
+}
+
+namespace ReversedDeclarations {
+>ReversedDeclarations : typeof ReversedDeclarations
+
+    interface Beta {
+        foo(n: "str", opt?: true): string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : "str"
+>opt : true | undefined
+>true : true
+
+        foo(n: string): number | string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : string
+    }
+
+    interface Alpha {
+        foo(n: "str", opt?: boolean): string;
+>foo : (n: "str", opt?: boolean) => string
+>n : "str"
+>opt : boolean | undefined
+    }
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Alpha | Beta
+
+    const result: string = alphaBeta.foo("str");
+>result : string
+>alphaBeta.foo("str") : string
+>alphaBeta.foo : { (n: "str", opt?: true): string; (n: string): number | string; } | ((n: "str", opt?: boolean) => string)
+>alphaBeta : Alpha | Beta
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; } | ((n: "str", opt?: boolean) => string)
+>"str" : "str"
+}
+

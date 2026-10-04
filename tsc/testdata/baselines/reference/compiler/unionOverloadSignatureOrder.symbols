@@ -1,0 +1,214 @@
+//// [tests/cases/compiler/unionOverloadSignatureOrder.ts] ////
+
+=== unionOverloadSignatureOrder.ts ===
+namespace Unprimed {
+>Unprimed : Symbol(Unprimed, Decl(unionOverloadSignatureOrder.ts, 0, 0))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 0, 20))
+
+        foo(n: "str", opt?: boolean): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignatureOrder.ts, 1, 21))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 2, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignatureOrder.ts, 2, 21))
+    }
+
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 3, 5))
+
+        foo(n: "str", opt?: true): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 5, 20), Decl(unionOverloadSignatureOrder.ts, 6, 42))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 6, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignatureOrder.ts, 6, 21))
+
+        foo(n: string): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 5, 20), Decl(unionOverloadSignatureOrder.ts, 6, 42))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 7, 12))
+    }
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 10, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 0, 20))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 3, 5))
+
+    declare let betaAlpha: Beta | Alpha;
+>betaAlpha : Symbol(betaAlpha, Decl(unionOverloadSignatureOrder.ts, 11, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 3, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 0, 20))
+
+    const alphaBetaResult: string = alphaBeta.foo("str");
+>alphaBetaResult : Symbol(alphaBetaResult, Decl(unionOverloadSignatureOrder.ts, 13, 9))
+>alphaBeta.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 1, 21), Decl(unionOverloadSignatureOrder.ts, 5, 20), Decl(unionOverloadSignatureOrder.ts, 6, 42))
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 10, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 1, 21), Decl(unionOverloadSignatureOrder.ts, 5, 20), Decl(unionOverloadSignatureOrder.ts, 6, 42))
+
+    const betaAlphaResult: string = betaAlpha.foo("str");
+>betaAlphaResult : Symbol(betaAlphaResult, Decl(unionOverloadSignatureOrder.ts, 14, 9))
+>betaAlpha.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 1, 21), Decl(unionOverloadSignatureOrder.ts, 5, 20), Decl(unionOverloadSignatureOrder.ts, 6, 42))
+>betaAlpha : Symbol(betaAlpha, Decl(unionOverloadSignatureOrder.ts, 11, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 1, 21), Decl(unionOverloadSignatureOrder.ts, 5, 20), Decl(unionOverloadSignatureOrder.ts, 6, 42))
+}
+
+namespace Primed {
+>Primed : Symbol(Primed, Decl(unionOverloadSignatureOrder.ts, 15, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 17, 18))
+
+        foo(n: "str", opt?: boolean): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignatureOrder.ts, 18, 21))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 19, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignatureOrder.ts, 19, 21))
+    }
+
+    type B = Beta["foo"];
+>B : Symbol(B, Decl(unionOverloadSignatureOrder.ts, 20, 5))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 22, 25))
+
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 22, 25))
+
+        foo(n: "str", opt?: true): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 24, 20), Decl(unionOverloadSignatureOrder.ts, 25, 42))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 25, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignatureOrder.ts, 25, 21))
+
+        foo(n: string): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 24, 20), Decl(unionOverloadSignatureOrder.ts, 25, 42))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 26, 12))
+    }
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 29, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 17, 18))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 22, 25))
+
+    declare let betaAlpha: Beta | Alpha;
+>betaAlpha : Symbol(betaAlpha, Decl(unionOverloadSignatureOrder.ts, 30, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 22, 25))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 17, 18))
+
+    const alphaBetaResult: string = alphaBeta.foo("str");
+>alphaBetaResult : Symbol(alphaBetaResult, Decl(unionOverloadSignatureOrder.ts, 32, 9))
+>alphaBeta.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 18, 21), Decl(unionOverloadSignatureOrder.ts, 24, 20), Decl(unionOverloadSignatureOrder.ts, 25, 42))
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 29, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 18, 21), Decl(unionOverloadSignatureOrder.ts, 24, 20), Decl(unionOverloadSignatureOrder.ts, 25, 42))
+
+    const betaAlphaResult: string = betaAlpha.foo("str");
+>betaAlphaResult : Symbol(betaAlphaResult, Decl(unionOverloadSignatureOrder.ts, 33, 9))
+>betaAlpha.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 18, 21), Decl(unionOverloadSignatureOrder.ts, 24, 20), Decl(unionOverloadSignatureOrder.ts, 25, 42))
+>betaAlpha : Symbol(betaAlpha, Decl(unionOverloadSignatureOrder.ts, 30, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 18, 21), Decl(unionOverloadSignatureOrder.ts, 24, 20), Decl(unionOverloadSignatureOrder.ts, 25, 42))
+}
+
+namespace MultipleOverloads {
+>MultipleOverloads : Symbol(MultipleOverloads, Decl(unionOverloadSignatureOrder.ts, 34, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 36, 29))
+
+        foo(type: "num", opts?: unknown): number;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49))
+>type : Symbol(type, Decl(unionOverloadSignatureOrder.ts, 38, 12))
+>opts : Symbol(opts, Decl(unionOverloadSignatureOrder.ts, 38, 24))
+
+        foo(type: "str", opts?: unknown): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49))
+>type : Symbol(type, Decl(unionOverloadSignatureOrder.ts, 39, 12))
+>opts : Symbol(opts, Decl(unionOverloadSignatureOrder.ts, 39, 24))
+
+        foo(type: string, opts?: unknown): number | string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49))
+>type : Symbol(type, Decl(unionOverloadSignatureOrder.ts, 40, 12))
+>opts : Symbol(opts, Decl(unionOverloadSignatureOrder.ts, 40, 25))
+    }
+
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 41, 5))
+
+        foo(type: "num", opts?: { a?: string }): number;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56), Decl(unionOverloadSignatureOrder.ts, 45, 56))
+>type : Symbol(type, Decl(unionOverloadSignatureOrder.ts, 44, 12))
+>opts : Symbol(opts, Decl(unionOverloadSignatureOrder.ts, 44, 24))
+>a : Symbol(a, Decl(unionOverloadSignatureOrder.ts, 44, 33))
+
+        foo(type: "str", opts?: { b?: string }): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56), Decl(unionOverloadSignatureOrder.ts, 45, 56))
+>type : Symbol(type, Decl(unionOverloadSignatureOrder.ts, 45, 12))
+>opts : Symbol(opts, Decl(unionOverloadSignatureOrder.ts, 45, 24))
+>b : Symbol(b, Decl(unionOverloadSignatureOrder.ts, 45, 33))
+
+        foo(type: "num" | "str", opts?: unknown): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56), Decl(unionOverloadSignatureOrder.ts, 45, 56))
+>type : Symbol(type, Decl(unionOverloadSignatureOrder.ts, 46, 12))
+>opts : Symbol(opts, Decl(unionOverloadSignatureOrder.ts, 46, 32))
+    }
+
+    declare let beta: Beta;
+>beta : Symbol(beta, Decl(unionOverloadSignatureOrder.ts, 49, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 41, 5))
+
+    beta.foo("str");
+>beta.foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56), Decl(unionOverloadSignatureOrder.ts, 45, 56))
+>beta : Symbol(beta, Decl(unionOverloadSignatureOrder.ts, 49, 15))
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56), Decl(unionOverloadSignatureOrder.ts, 45, 56))
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 52, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 36, 29))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 41, 5))
+
+    const result: string = alphaBeta.foo("str");
+>result : Symbol(result, Decl(unionOverloadSignatureOrder.ts, 53, 9))
+>alphaBeta.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49), Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56) ... and 1 more)
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 52, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49), Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56) ... and 1 more)
+
+    alphaBeta.foo("other");
+>alphaBeta.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49), Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56) ... and 1 more)
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 52, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49), Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56) ... and 1 more)
+
+    alphaBeta.foo("str", false);
+>alphaBeta.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49), Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56) ... and 1 more)
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 52, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 37, 21), Decl(unionOverloadSignatureOrder.ts, 38, 49), Decl(unionOverloadSignatureOrder.ts, 39, 49), Decl(unionOverloadSignatureOrder.ts, 43, 20), Decl(unionOverloadSignatureOrder.ts, 44, 56) ... and 1 more)
+}
+
+namespace ReversedDeclarations {
+>ReversedDeclarations : Symbol(ReversedDeclarations, Decl(unionOverloadSignatureOrder.ts, 56, 1))
+
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 58, 32))
+
+        foo(n: "str", opt?: true): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 59, 20), Decl(unionOverloadSignatureOrder.ts, 60, 42))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 60, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignatureOrder.ts, 60, 21))
+
+        foo(n: string): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignatureOrder.ts, 59, 20), Decl(unionOverloadSignatureOrder.ts, 60, 42))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 61, 12))
+    }
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 62, 5))
+
+        foo(n: "str", opt?: boolean): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignatureOrder.ts, 64, 21))
+>n : Symbol(n, Decl(unionOverloadSignatureOrder.ts, 65, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignatureOrder.ts, 65, 21))
+    }
+
+    declare let alphaBeta: Alpha | Beta;
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 68, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignatureOrder.ts, 62, 5))
+>Beta : Symbol(Beta, Decl(unionOverloadSignatureOrder.ts, 58, 32))
+
+    const result: string = alphaBeta.foo("str");
+>result : Symbol(result, Decl(unionOverloadSignatureOrder.ts, 69, 9))
+>alphaBeta.foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 64, 21), Decl(unionOverloadSignatureOrder.ts, 59, 20), Decl(unionOverloadSignatureOrder.ts, 60, 42))
+>alphaBeta : Symbol(alphaBeta, Decl(unionOverloadSignatureOrder.ts, 68, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignatureOrder.ts, 64, 21), Decl(unionOverloadSignatureOrder.ts, 59, 20), Decl(unionOverloadSignatureOrder.ts, 60, 42))
+}
+
