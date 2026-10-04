@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/jsdoc/extendsTag11.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : A<T>
+
+    /** @param {T} value */
+    constructor(value) {
+>value : T
+
+        this.value = value;
+>this.value = value : T
+>this.value : any
+>this : this
+>value : any
+>value : T
+    }
+
+    /** @returns {typeof A} */
+    static extend() {
+>extend : () => typeof A
+
+        return this;
+>this : typeof A
+    }
+}
+
+/** @extends {A<string>} */
+class B extends A.extend() {}
+>B : B
+>A.extend() : A<string>
+>A.extend : () => typeof A
+>A : typeof A
+>extend : () => typeof A
+
+new B("ok");
+>new B("ok") : B
+>B : typeof B
+>"ok" : "ok"
+
+new B(1);
+>new B(1) : B
+>B : typeof B
+>1 : 1
+
+/** @extends {A<string>} */
+class C extends A.extend() {
+>C : C
+>A.extend() : A<string>
+>A.extend : () => typeof A
+>A : typeof A
+>extend : () => typeof A
+
+    constructor() {
+        super(1);
+>super(1) : void
+>super : typeof A
+>1 : 1
+    }
+}
+
+/**
+ * @param {number} required
+ * @returns {typeof A}
+ */
+function getA(required) {
+>getA : (required: number) => typeof A
+>required : number
+
+    return A;
+>A : typeof A
+}
+
+/** @extends {A<string>} */
+class D extends getA("wrong") {}
+>D : D
+>getA("wrong") : A<string>
+>getA : (required: number) => typeof A
+>"wrong" : "wrong"
+

@@ -98,3 +98,65 @@ func getAllJSDocTags(node *ast.Node) []*ast.Node {
 	}
 	return nil
 }
+
+func (c *Checker) getEffectiveBaseTypeNode(t *Type) *ast.Node {
+	baseTypeNode := getBaseTypeNodeOfClass(t)
+	if tag := c.tryGetMatchingJSDocAugmentsTag(t, baseTypeNode); tag != nil {
+		return tag.ClassName()
+	}
+	return baseTypeNode
+}
+
+func (c *Checker) tryGetMatchingJSDocAugmentsTag(t *Type, baseTypeNode *ast.Node) *ast.Node {
+	if baseTypeNode == nil || !ast.IsInJSFile(baseTypeNode) || len(baseTypeNode.TypeArguments()) >= 1 {
+		return nil
+	}
+	expression := ast.SkipParentheses(baseTypeNode.Expression())
+	if ast.IsCallExpression(expression) {
+		tag := ast.GetJSDocAugmentsTag(ast.GetClassLikeDeclarationOfSymbol(t.symbol))
+		if tag == nil || len(tag.ClassName().TypeArguments()) == 0 {
+			return nil
+		}
+		baseConstructorType := c.getBaseConstructorTypeOfClass(t)
+		if baseConstructorType.flags&TypeFlagsIntersection == 0 {
+			sourceType := c.getTypeFromTypeNode(tag.ClassName())
+			sourceSymbol := c.getMergedSymbol(getTargetType(sourceType).symbol)
+			baseSymbol := c.getMergedSymbol(c.getApparentType(baseConstructorType).symbol)
+			if sourceSymbol != nil && sourceSymbol == baseSymbol {
+				return tag
+			}
+		}
+	}
+	return nil
+}
+
+func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNode *ast.ExpressionWithTypeArgumentsNode, baseType *Type, baseConstructorType *Type) {
+	if !ast.IsInJSFile(node) {
+		return
+	}
+	tag := ast.GetJSDocAugmentsTag(node)
+	if tag == nil {
+		return
+	}
+	sourceTypeNode := tag.ClassName()
+	sourceType := c.getTypeFromTypeNode(sourceTypeNode)
+	sourceSymbol := c.getMergedSymbol(getTargetType(sourceType).symbol)
+	sourceName := getIdentifierFromEntityNameExpression(sourceTypeNode.Expression())
+	if sourceName != nil && ast.IsCallExpression(ast.SkipParentheses(baseTypeNode.Expression())) {
+		targetSymbol := c.getMergedSymbol(c.getApparentType(baseConstructorType).symbol)
+		if sourceSymbol != nil && targetSymbol != nil && sourceSymbol != targetSymbol {
+			declarationName := getIdentifierNameOfSymbolDeclaration(targetSymbol)
+			if declarationName != nil {
+				c.error(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), declarationName.Text())
+				return
+			}
+		}
+	}
+	if c.isTypeIdenticalTo(sourceType, baseType) {
+		return
+	}
+	targetName := getIdentifierFromEntityNameExpression(baseTypeNode.Expression())
+	if targetName != nil && sourceName != nil {
+		c.error(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), targetName.Text())
+	}
+}
