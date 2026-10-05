@@ -1347,12 +1347,12 @@ func (b *NodeBuilderImpl) moduleSpecifierResultForSymbol(result moduleSpecifierR
 }
 
 func (b *NodeBuilderImpl) rewriteContentMappedModuleSpecifier(specifier tspath.ModuleSpecifier) tspath.ModuleSpecifier {
-	if b.ctx.internalFlags&nodebuilder.InternalFlagsRewriteModuleSpecifiers != 0 {
+	if b.ctx.internalFlags&nodebuilder.InternalFlagsRewriteModuleSpecifiers != 0 && b.ch.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		rewrites := b.ctx.host.ContentMapperExtensionRewrites()
-		ignoreCase := b.ctx.host.CaseSensitivity().IsCaseInsensitive()
-		if core.ShouldRewriteModuleSpecifierWithExtensions(specifier.AsString(), b.ch.compilerOptions, rewrites, ignoreCase) {
-			rewritten, _ := core.RewriteExtension(specifier.AsString(), rewrites, ignoreCase)
-			return tspath.ToModuleSpecifier(rewritten)
+		caseSensitivity := b.ctx.host.CaseSensitivity()
+		if specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
+			rewritten, _ := specifier.RewriteExtension(rewrites, caseSensitivity)
+			return rewritten
 		}
 	}
 	return specifier

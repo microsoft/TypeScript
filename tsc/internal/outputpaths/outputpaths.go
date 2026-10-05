@@ -9,7 +9,7 @@ import (
 type OutputPathsHost interface {
 	CommonSourceDirectory() tspath.RootedDirectoryPath
 	ContentMapperExtensions() []string
-	ContentMapperExtensionRewrites() []core.ExtensionRewrite
+	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
 	CaseSensitivity() tspath.CaseSensitivity
 }
 
@@ -135,11 +135,11 @@ func GetOutputDeclarationFileNameWorker(inputFileName tspath.RootedFilePath, opt
 
 func GetExternalOutputFileName(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
 	outputPath := getOutputFileNameWithoutChangingExtension(inputFileName, options.OutDir, host)
-	rewritten, ok := core.RewriteExtension(outputPath.AsString(), host.ContentMapperExtensionRewrites(), host.CaseSensitivity().IsCaseInsensitive())
+	rewritten, ok := outputPath.RewriteExtension(host.ContentMapperExtensionRewrites(), host.CaseSensitivity())
 	if !ok {
 		return ""
 	}
-	return tspath.RootedFilePathFromNormalized(rewritten)
+	return rewritten
 }
 
 func GetOutputExtension(fileName string, jsx core.JsxEmit) string {
@@ -184,8 +184,8 @@ func getDeclarationEmitOutputFilePathForFileName(file tspath.RootedFilePath, opt
 }
 
 func ChangeToDeclarationExtension(path tspath.RootedFilePath, host OutputPathsHost) tspath.RootedFilePath {
-	if rewritten, ok := core.RewriteExtension(path.AsString(), host.ContentMapperExtensionRewrites(), host.CaseSensitivity().IsCaseInsensitive()); ok {
-		return changeToDeclarationExtension(tspath.RootedFilePathFromNormalized(rewritten))
+	if rewritten, ok := path.RewriteExtension(host.ContentMapperExtensionRewrites(), host.CaseSensitivity()); ok {
+		return changeToDeclarationExtension(rewritten)
 	}
 	if extension := path.LongestExtension(host.ContentMapperExtensions(), tspath.CaseSensitive); extension != "" {
 		return path.RemoveExtension(extension).AppendSuffix(".d" + extension + ".ts")

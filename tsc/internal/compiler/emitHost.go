@@ -118,7 +118,7 @@ func (host *emitHost) ContentMapperExtensions() []string {
 	return host.program.ContentMapperExtensions()
 }
 
-func (host *emitHost) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+func (host *emitHost) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return host.program.ContentMapperExtensionRewrites()
 }
 

@@ -19,11 +19,16 @@ func isDeclarationNameOfEnumOrNamespace(emitContext *printer.EmitContext, node *
 	return false
 }
 
-func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions, rewrites []core.ExtensionRewrite, ignoreCase bool) *ast.Expression {
-	if node == nil || !ast.IsStringLiteral(node) || !core.ShouldRewriteModuleSpecifierWithExtensions(node.Text(), compilerOptions, rewrites, ignoreCase) {
+func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions, rewrites []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity) *ast.Expression {
+	if node == nil || !ast.IsStringLiteral(node) || !compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		return node
 	}
-	updatedText, rewritten := core.RewriteExtension(node.Text(), rewrites, ignoreCase)
+	specifier := tspath.ToModuleSpecifier(node.Text())
+	if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
+		return node
+	}
+	updatedSpecifier, rewritten := specifier.RewriteExtension(rewrites, caseSensitivity)
+	updatedText := updatedSpecifier.AsString()
 	if !rewritten {
 		updatedText = tspath.ChangeExtension(node.Text(), outputpaths.GetOutputExtension(node.Text(), compilerOptions.Jsx))
 	}

@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type NodeFactory struct {
@@ -1297,7 +1298,7 @@ func (f *NodeFactory) NewAssignmentTargetWrapper(paramName *ast.IdentifierNode, 
 }
 
 // Allocates a new Call expression to the `__rewriteRelativeImportExtension` helper.
-func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool, extraExtensions []core.ExtensionRewrite, ignoreCase bool) *ast.Expression {
+func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool, extraExtensions []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity) *ast.Expression {
 	if len(extraExtensions) == 0 {
 		f.emitContext.RequestEmitHelper(rewriteRelativeImportExtensionsHelper)
 		var arguments []*ast.Expression
@@ -1328,7 +1329,7 @@ func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *as
 		))
 	}
 	arguments = append(arguments, f.NewObjectLiteralExpression(f.NewNodeList(properties), false))
-	if ignoreCase {
+	if caseSensitivity.IsCaseInsensitive() {
 		arguments = append(arguments, f.NewToken(ast.KindTrueKeyword))
 	}
 	return f.NewCallExpression(

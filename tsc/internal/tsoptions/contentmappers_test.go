@@ -76,13 +76,13 @@ func TestContentMapperExtensionRewritesPreserveLongestExtension(t *testing.T) {
 	)
 	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
 	rewrites := commandLine.ContentMapperExtensionRewrites()
-	assert.Assert(t, slices.IsSortedFunc(rewrites, func(a, b core.ExtensionRewrite) int {
+	assert.Assert(t, slices.IsSortedFunc(rewrites, func(a, b tspath.ExtensionRewrite) int {
 		return len(b.Source) - len(a.Source)
 	}))
 	for _, file := range []string{"./Widget.identity.y.z", "./Widget.unmapped.y.z"} {
-		rewritten, ok := core.RewriteExtension(file, rewrites, false)
+		rewritten, ok := tspath.ToModuleSpecifier(file).RewriteExtension(rewrites, tspath.CaseSensitive)
 		assert.Assert(t, !ok)
-		assert.Equal(t, rewritten, file)
+		assert.Equal(t, rewritten.AsString(), file)
 	}
 	assert.DeepEqual(t, slices.Collect(commandLine.GetOutputFileNames()), []tspath.RootedFilePath{
 		"/dist/Widget.d.mts",

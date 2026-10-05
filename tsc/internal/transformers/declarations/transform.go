@@ -33,7 +33,7 @@ type OutputPaths interface {
 // Used to be passed in the TransformationContext, which is now just an EmitContext
 type DeclarationEmitHost interface {
 	modulespecifiers.ModuleSpecifierGenerationHost
-	ContentMapperExtensionRewrites() []core.ExtensionRewrite
+	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
 	CaseSensitivity() tspath.CaseSensitivity
 	GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile
 
@@ -1604,18 +1604,15 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		return nil
 	}
 	tx.resultHasExternalModuleIndicator = tx.resultHasExternalModuleIndicator || (parent.Kind != ast.KindModuleDeclaration && parent.Kind != ast.KindImportType)
-	if ast.IsStringLiteral(input) && core.ShouldRewriteModuleSpecifierWithExtensions(
-		input.Text(),
-		tx.compilerOptions,
-		tx.host.ContentMapperExtensionRewrites(),
-		tx.host.CaseSensitivity().IsCaseInsensitive(),
-	) {
-		if rewritten, ok := core.RewriteExtension(
-			input.Text(),
-			tx.host.ContentMapperExtensionRewrites(),
-			tx.host.CaseSensitivity().IsCaseInsensitive(),
-		); ok {
-			result := tx.Factory().NewStringLiteral(rewritten, input.AsStringLiteral().TokenFlags)
+	if ast.IsStringLiteral(input) && tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
+		specifier := tspath.ToModuleSpecifier(input.Text())
+		rewrites := tx.host.ContentMapperExtensionRewrites()
+		caseSensitivity := tx.host.CaseSensitivity()
+		if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
+			return input
+		}
+		if rewritten, ok := specifier.RewriteExtension(rewrites, caseSensitivity); ok {
+			result := tx.Factory().NewStringLiteral(rewritten.AsString(), input.AsStringLiteral().TokenFlags)
 			tx.EmitContext().SetOriginal(result, input)
 			tx.EmitContext().AssignCommentAndSourceMapRanges(result, input)
 			return result

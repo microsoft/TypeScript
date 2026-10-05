@@ -166,7 +166,7 @@ func (r *aliasResolver) ContentMapperExtensions() []string {
 	return nil
 }
 
-func (r *aliasResolver) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+func (r *aliasResolver) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return nil
 }
 

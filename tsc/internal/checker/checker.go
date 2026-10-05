@@ -15516,8 +15516,9 @@ func (c *Checker) resolveExternalModule(
 
 		if errorNode != nil {
 			rewrites := c.program.ContentMapperExtensionRewrites()
-			ignoreCase := c.program.CaseSensitivity().IsCaseInsensitive()
-			_, mappedSpecifier := core.RewriteExtension(moduleReference, rewrites, ignoreCase)
+			caseSensitivity := c.program.CaseSensitivity()
+			specifier := tspath.ToModuleSpecifier(moduleReference)
+			_, mappedSpecifier := specifier.RewriteExtension(rewrites, caseSensitivity)
 			checkDeclarationRewrite := c.compilerOptions.GetEmitDeclarations() && mappedSpecifier &&
 				tspath.PathIsRelative(moduleReference) && !importingSourceFile.IsDeclarationFile
 			if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleReference) {
@@ -15560,10 +15561,10 @@ func (c *Checker) resolveExternalModule(
 				!tspath.IsDeclarationFileName(moduleReference) &&
 				(!ast.IsLiteralImportTypeNode(location) && !ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) ||
 					checkDeclarationRewrite) {
-				shouldRewrite := core.ShouldRewriteModuleSpecifierWithExtensions(moduleReference, c.compilerOptions, rewrites, ignoreCase)
+				shouldRewrite := specifier.ShouldRewriteExtension(rewrites, caseSensitivity)
 				mappedSource := false
 				if sourceFile.ContentMapper() != "" {
-					_, mappedSource = core.RewriteExtension(sourceFile.FileName().AsString(), rewrites, ignoreCase)
+					_, mappedSource = sourceFile.FileName().RewriteExtension(rewrites, caseSensitivity)
 				}
 				resolvedUsingRewritableExtension := resolvedModule.ResolvedUsingTsExtension ||
 					resolvedModule.ResolvedUsingExtraExtensions && sourceFile.ContentMapper() != "" && mappedSource
@@ -15584,7 +15585,7 @@ func (c *Checker) resolveExternalModule(
 				} else if resolvedUsingRewritableExtension && !shouldRewrite && (mappedSource || c.program.SourceFileMayBeEmitted(sourceFile, false)) {
 					extension := tspath.GetAnyExtensionFromPath(moduleReference, nil, tspath.CaseSensitive)
 					if mappedSource {
-						rewrite, _ := core.GetExtensionRewrite(sourceFile.FileName().AsString(), rewrites, ignoreCase)
+						rewrite, _ := sourceFile.FileName().GetExtensionRewrite(rewrites, caseSensitivity)
 						extension = rewrite.Source
 					}
 					c.error(

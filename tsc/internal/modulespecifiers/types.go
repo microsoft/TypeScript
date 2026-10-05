@@ -51,7 +51,7 @@ type ModuleSpecifierGenerationHost interface {
 	// GetFileIncludeReasons() any // !!! TODO: adapt new resolution cache model
 	CommonSourceDirectory() tspath.RootedDirectoryPath
 	ContentMapperExtensions() []string
-	ContentMapperExtensionRewrites() []core.ExtensionRewrite
+	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
 	GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath
 	CaseSensitivity() tspath.CaseSensitivity
 	BaseDirectory() tspath.RootedDirectoryPath

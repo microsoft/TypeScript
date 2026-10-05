@@ -132,7 +132,7 @@ func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensions() []string {
 	return h.contentMapperExtensions
 }
 
-func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return nil
 }
 

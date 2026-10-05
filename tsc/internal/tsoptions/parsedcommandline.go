@@ -73,7 +73,7 @@ type ParsedCommandLine struct {
 	filePaths                   *collections.Set[tspath.PathKey]
 	filePathsOnce               sync.Once
 
-	contentMapperExtensionRewrites     []core.ExtensionRewrite
+	contentMapperExtensionRewrites     []tspath.ExtensionRewrite
 	contentMapperExtensionRewritesOnce sync.Once
 
 	locale     locale.Locale
@@ -399,15 +399,15 @@ func (p *ParsedCommandLine) ContentMapperExtensions() []string {
 	})
 }
 
-func (p *ParsedCommandLine) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+func (p *ParsedCommandLine) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	p.contentMapperExtensionRewritesOnce.Do(func() {
 		p.contentMapperExtensionRewrites = p.computeContentMapperExtensionRewrites()
 	})
 	return p.contentMapperExtensionRewrites
 }
 
-func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []core.ExtensionRewrite {
-	var result []core.ExtensionRewrite
+func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
+	var result []tspath.ExtensionRewrite
 	hasNonIdentityMapping := false
 	ignoreCase := p.CaseSensitivity().IsCaseInsensitive()
 	for _, mapper := range p.ContentMappers() {
@@ -419,7 +419,7 @@ func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []core.Exten
 			} else {
 				hasNonIdentityMapping = true
 			}
-			result = append(result, core.ExtensionRewrite{Source: source, Target: target})
+			result = append(result, tspath.ExtensionRewrite{Source: source, Target: target})
 		}
 	}
 	if !hasNonIdentityMapping {
@@ -427,7 +427,7 @@ func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []core.Exten
 	}
 	// Identity entries prevent shorter mappings from claiming a longer registered extension.
 	// The runtime helper uses the first match, so emit the longest extensions first.
-	slices.SortStableFunc(result, func(a, b core.ExtensionRewrite) int {
+	slices.SortStableFunc(result, func(a, b tspath.ExtensionRewrite) int {
 		return len(b.Source) - len(a.Source)
 	})
 	return result

@@ -133,7 +133,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 		EmitResolver:                   emitResolver,
 		GetEmitModuleFormatOfFile:      host.GetEmitModuleFormatOfFile,
 		ContentMapperExtensionRewrites: host.ContentMapperExtensionRewrites(),
-		IgnoreCase:                     host.CaseSensitivity().IsCaseInsensitive(),
+		CaseSensitivity:                host.CaseSensitivity(),
 	}
 
 	// transform TypeScript syntax

@@ -12,7 +12,7 @@ import (
 type outputPathsHost struct {
 	commonSourceDirectory          tspath.RootedDirectoryPath
 	contentMapperExtensions        []string
-	contentMapperExtensionRewrites []core.ExtensionRewrite
+	contentMapperExtensionRewrites []tspath.ExtensionRewrite
 }
 
 func (h outputPathsHost) CommonSourceDirectory() tspath.RootedDirectoryPath {
@@ -23,7 +23,7 @@ func (h outputPathsHost) ContentMapperExtensions() []string {
 	return h.contentMapperExtensions
 }
 
-func (h outputPathsHost) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+func (h outputPathsHost) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return h.contentMapperExtensionRewrites
 }
 
@@ -36,7 +36,7 @@ func TestContentMapperOutputExtensionCaseInsensitivePaths(t *testing.T) {
 	host := outputPathsHost{
 		commonSourceDirectory:          "/src",
 		contentMapperExtensions:        []string{".y.z"},
-		contentMapperExtensionRewrites: []core.ExtensionRewrite{{Source: ".y.z", Target: ".mjs"}},
+		contentMapperExtensionRewrites: []tspath.ExtensionRewrite{{Source: ".y.z", Target: ".mjs"}},
 	}
 	options := &core.CompilerOptions{OutDir: "/dist"}
 	fileName := tspath.RootedFilePath("/src/Widget.Y.Z")

@@ -548,7 +548,7 @@ func (p *Program) GetContentMapper(file *ast.SourceFile) *contentmapper.Mapper {
 
 func (p *Program) ContentMapperExtensions() []string { return p.opts.Config.ContentMapperExtensions() }
 
-func (p *Program) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+func (p *Program) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return p.opts.Config.ContentMapperExtensionRewrites()
 }
 func (p *Program) CommandLine() *tsoptions.ParsedCommandLine { return p.opts.Config }

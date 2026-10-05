@@ -54,7 +54,7 @@ func (p *fakeProgram) ContentMapperExtensions() []string {
 	return nil
 }
 
-func (p *fakeProgram) ContentMapperExtensionRewrites() []core.ExtensionRewrite {
+func (p *fakeProgram) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return nil
 }
 

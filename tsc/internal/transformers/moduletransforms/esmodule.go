@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type ESModuleTransformer struct {
@@ -15,8 +16,8 @@ type ESModuleTransformer struct {
 	compilerOptions                *core.CompilerOptions
 	resolver                       binder.ReferenceResolver
 	getEmitModuleFormatOfFile      func(file ast.HasFileName) core.ModuleKind
-	contentMapperExtensionRewrites []core.ExtensionRewrite
-	ignoreCase                     bool
+	contentMapperExtensionRewrites []tspath.ExtensionRewrite
+	caseSensitivity                tspath.CaseSensitivity
 	currentSourceFile              *ast.SourceFile
 	importRequireStatements        *importRequireStatements
 	helperNameSubstitutions        map[string]*ast.IdentifierNode
@@ -29,7 +30,7 @@ type importRequireStatements struct {
 
 func NewESModuleTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	compilerOptions := opts.CompilerOptions
-	tx := &ESModuleTransformer{compilerOptions: compilerOptions, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile, contentMapperExtensionRewrites: opts.ContentMapperExtensionRewrites, ignoreCase: opts.IgnoreCase}
+	tx := &ESModuleTransformer{compilerOptions: compilerOptions, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile, contentMapperExtensionRewrites: opts.ContentMapperExtensionRewrites, caseSensitivity: opts.CaseSensitivity}
 	return tx.NewTransformer(tx.visit, opts.Context)
 }
 
@@ -106,7 +107,7 @@ func (tx *ESModuleTransformer) visitImportDeclaration(node *ast.ImportDeclaratio
 	if !tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		return node.AsNode()
 	}
-	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase)
+	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 	return tx.Factory().UpdateImportDeclaration(
 		node,
 		nil, /*modifiers*/
@@ -200,7 +201,7 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 		return node.AsNode()
 	}
 
-	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase)
+	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 	if tx.compilerOptions.Module > core.ModuleKindES2015 || node.ExportClause == nil || !ast.IsNamespaceExport(node.ExportClause) {
 		// Either ill-formed or don't need to be transformed.
 		return tx.Factory().UpdateExportDeclaration(
@@ -266,9 +267,9 @@ func (tx *ESModuleTransformer) visitImportOrRequireCall(node *ast.CallExpression
 
 	var argument *ast.Expression
 	if ast.IsStringLiteralLike(node.Arguments.Nodes[0]) {
-		argument = rewriteModuleSpecifier(tx.EmitContext(), node.Arguments.Nodes[0], tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase)
+		argument = rewriteModuleSpecifier(tx.EmitContext(), node.Arguments.Nodes[0], tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 	} else {
-		argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(node.Arguments.Nodes[0], tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.ignoreCase)
+		argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(node.Arguments.Nodes[0], tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 	}
 
 	var arguments []*ast.Expression
@@ -294,7 +295,7 @@ func (tx *ESModuleTransformer) createRequireCall(node *ast.Node /*ImportDeclarat
 
 	var args []*ast.Expression
 	if moduleName != nil {
-		args = append(args, rewriteModuleSpecifier(tx.EmitContext(), moduleName, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.ignoreCase))
+		args = append(args, rewriteModuleSpecifier(tx.EmitContext(), moduleName, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity))
 	}
 
 	if tx.compilerOptions.GetEmitModuleKind() == core.ModuleKindPreserve {
