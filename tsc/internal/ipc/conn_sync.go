@@ -28,15 +28,38 @@ type SyncConn struct {
 	// This ensures that concurrent calls from handler goroutines (e.g., project code
 	// spawning goroutines that invoke filesystem callbacks) don't corrupt the stream.
 	mu sync.Mutex
+
+	// inFlight holds the exchanges in progress, innermost last: true for a call to the client, false for a request from it.
+	inFlight []bool
+	changed  sync.Cond
 }
 
 // NewSyncConn creates a new sync connection with the given transport and handler.
 func NewSyncConn(rwc io.ReadWriteCloser, protocol Protocol, handler Handler) *SyncConn {
-	return &SyncConn{
+	c := &SyncConn{
 		rwc:      rwc,
 		protocol: protocol,
 		handler:  handler,
 	}
+	c.changed.L = &c.mu
+	return c
+}
+
+func (c *SyncConn) push(call bool) int {
+	for call && len(c.inFlight) > 0 && c.inFlight[len(c.inFlight)-1] {
+		c.changed.Wait()
+	}
+	c.inFlight = append(c.inFlight, call)
+	c.changed.Broadcast()
+	return len(c.inFlight)
+}
+
+func (c *SyncConn) pop(depth int) {
+	for len(c.inFlight) != depth {
+		c.changed.Wait()
+	}
+	c.inFlight = c.inFlight[:depth-1]
+	c.changed.Broadcast()
 }
 
 // SetCollectTiming enables or disables per-request server processing-time
@@ -84,11 +107,23 @@ func (c *SyncConn) Run(ctx context.Context) error {
 
 // handleRequest processes an incoming request.
 func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr error) {
+	c.mu.Lock()
+	depth := c.push(false)
+	c.mu.Unlock()
+	answered := false
+	answer := func() {
+		if !answered {
+			answered = true
+			c.pop(depth)
+		}
+	}
+
 	// Intercept the meta-requests for collected server timing before dispatching
 	// to the handler, so they are answered directly and not themselves recorded.
 	switch msg.Method {
 	case string(MethodGetServerTiming):
 		c.mu.Lock()
+		answer()
 		writeErr := c.protocol.WriteResponse(msg.ID, serverTimingSnapshot(c.timing))
 		c.mu.Unlock()
 		if writeErr != nil {
@@ -100,6 +135,7 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 			c.timing.reset()
 		}
 		c.mu.Lock()
+		answer()
 		writeErr := c.protocol.WriteResponse(msg.ID, nil)
 		c.mu.Unlock()
 		if writeErr != nil {
@@ -123,6 +159,7 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 			err = fmt.Errorf("panic: %v\n%s", r, stack)
 
 			c.mu.Lock()
+			answer()
 			writeErr := c.protocol.WriteError(msg.ID, &jsonrpc.ResponseError{
 				Code:    jsonrpc.CodeInternalError,
 				Message: err.Error(),
@@ -143,6 +180,7 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	answer()
 
 	var writeErr error
 	if err != nil {
@@ -175,6 +213,8 @@ func (c *SyncConn) Call(ctx context.Context, method string, params any) (json.Va
 	// 3. We need to ensure write/read pairs are atomic
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	call := c.push(true)
+	defer c.pop(call)
 
 	id := jsonrpc.NewIDString(method)
 
