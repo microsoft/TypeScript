@@ -8915,5 +8915,9 @@
     "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 18115
+    },
+    "A deferred import must specify a namespace binding.": {
+        "category": "Error",
+        "code": 18116
     }
 }

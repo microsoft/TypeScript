@@ -1,0 +1,47 @@
+b.ts(1,8): error TS18058: Default imports are not allowed in a deferred import.
+b.ts(5,8): error TS18116: A deferred import must specify a namespace binding.
+b.ts(6,8): error TS18116: A deferred import must specify a namespace binding.
+b.ts(6,23): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+c.js(2,8): error TS18116: A deferred import must specify a namespace binding.
+c.js(3,8): error TS18116: A deferred import must specify a namespace binding.
+c.js(3,23): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+d.js(1,8): error TS18116: A deferred import must specify a namespace binding.
+
+
+==== a.ts (0 errors) ====
+    export default function foo() {
+        console.log("foo from a");
+    }
+    
+==== b.ts (4 errors) ====
+    import defer foo from "./a";
+           ~~~~~~~~~
+!!! error TS18058: Default imports are not allowed in a deferred import.
+    
+    foo();
+    
+    import defer "./a.js";
+           ~~~~~
+!!! error TS18116: A deferred import must specify a namespace binding.
+    import defer "./a.js" with { type: "json" };
+           ~~~~~
+!!! error TS18116: A deferred import must specify a namespace binding.
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+    
+==== c.js (3 errors) ====
+    // @ts-check
+    import defer "./a.js";
+           ~~~~~
+!!! error TS18116: A deferred import must specify a namespace binding.
+    import defer "./a.js" with { type: "json" };
+           ~~~~~
+!!! error TS18116: A deferred import must specify a namespace binding.
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+    
+==== d.js (1 errors) ====
+    import defer "./a.js";
+           ~~~~~
+!!! error TS18116: A deferred import must specify a namespace binding.
+    
