@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference lib="es2018" />
 /// <reference lib="es2019.array" />
 /// <reference lib="es2019.object" />

@@ -94,7 +94,7 @@ func importLocalization(sourcePath string, handbackPath string, outputPath strin
 	if err != nil {
 		return fmt.Errorf("encode %s: %w", outputPath, err)
 	}
-	data = bytes.ReplaceAll(data, []byte("\n"), []byte("\r\n"))
+	data = append(data, '\n')
 	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
 		return err
 	}

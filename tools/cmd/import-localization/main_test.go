@@ -54,13 +54,13 @@ func TestImportLocalization(t *testing.T) {
 	assert.NilError(t, importLocalization(source, handback, output))
 	data, err := os.ReadFile(output)
 	assert.NilError(t, err)
-	assert.Equal(t, string(data), "{\r\n"+
-		"  \"ExistingOnly\": \"Keep this translation.\",\r\n"+
-		"  \"SameAsEnglish\": \"English.\",\r\n"+
-		"  \"StaleEnglish\": \"기존 번역\",\r\n"+
-		"  \"Translated\": \"새 번역]\",\r\n"+
-		"  \"Updated\": \"이전 번역\"\r\n"+
-		"}")
+	assert.Equal(t, string(data), "{\n"+
+		"  \"ExistingOnly\": \"Keep this translation.\",\n"+
+		"  \"SameAsEnglish\": \"English.\",\n"+
+		"  \"StaleEnglish\": \"기존 번역\",\n"+
+		"  \"Translated\": \"새 번역]\",\n"+
+		"  \"Updated\": \"이전 번역\"\n"+
+		"}\n")
 	assert.NilError(t, importLocalization(source, handback, output))
 	again, err := os.ReadFile(output)
 	assert.NilError(t, err)
