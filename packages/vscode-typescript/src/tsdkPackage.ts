@@ -24,8 +24,7 @@ export function createTypeScriptSDK(
     isCurrent: () => boolean,
     initializeConnection: (pipe?: string) => Promise<{ pipe: string; }>,
 ): TypeScriptSDK {
-    function importModule<K extends keyof APIModules>(exportPath: K): Promise<APIModules[K]>;
-    function importModule(exportPath: string): Promise<unknown>;
+    function importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
     function importModule(exportPath: string): Promise<unknown> {
         if (!packageJsonUri) {
             return Promise.reject(new Error("The selected TypeScript server does not provide a matching JavaScript API package."));

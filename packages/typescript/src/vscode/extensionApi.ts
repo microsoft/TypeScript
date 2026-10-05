@@ -46,6 +46,7 @@ export type LspMiddlewareTransformer<M extends LspMiddlewareMethod> = (
 ) => LspMiddlewareResult<M> | PromiseLike<LspMiddlewareResult<M>>;
 
 export interface APIModules {
+    [exportPath: string]: unknown;
     "unstable/async": typeof import("../api/async/api.ts");
     "unstable/sync": typeof import("../api/sync/api.ts");
     "unstable/fs": typeof import("../api/fs.ts");
@@ -87,8 +88,7 @@ export interface TypeScriptSDK {
      * Imports a module from the JavaScript API package matching this initialization's
      * language server. Export paths omit the leading "./".
      */
-    importModule<K extends keyof APIModules>(exportPath: K): Promise<APIModules[K]>;
-    importModule(exportPath: string): Promise<unknown>;
+    importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
     /** Opens an API pipe for this initialization. Rejects if the server has stopped or restarted. */
     initializeAPIConnection(pipe?: string): Promise<string>;
 }

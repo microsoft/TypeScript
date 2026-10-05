@@ -242,6 +242,8 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         checkType<Equal<typeof unknownModule, Promise<unknown>>>(true);
         const dynamicModule = connection.importModule(exportPath);
         checkType<Equal<typeof dynamicModule, Promise<unknown>>>(true);
+        // @ts-expect-error Module export paths must be strings despite the map's index signature.
+        connection.importModule(0);
         const { API } = await asyncModule;
         const pipe = await connection.initializeAPIConnection();
         checkType<Equal<typeof pipe, string>>(true);
