@@ -53,12 +53,13 @@ func main() {
 	locOutput := flag.String("loc", "", "path to the output loc_generated.go file")
 	locDir := flag.String("locdir", "", "directory to write locale .json.gz files")
 	locProject := flag.String("locproject", "", "path to the localization project file")
-	locSourceOutput := flag.String("locsource", "", "path to the localization source file")
+	locSourceOutput := flag.String("locsource", "", "path to the OneLoc source file; may be generated independently")
 	flag.Parse()
 
-	if *diagnosticsOutput == "" || *locOutput == "" || *locDir == "" || *locProject == "" || *locSourceOutput == "" {
+	sourceOnly := *locSourceOutput != "" && *diagnosticsOutput == "" && *locOutput == "" && *locDir == "" && *locProject == ""
+	if !sourceOnly && (*diagnosticsOutput == "" || *locOutput == "" || *locDir == "" || *locProject == "") {
 		flag.Usage()
-		return
+		os.Exit(1)
 	}
 
 	rawDiagnosticMessages := readRawMessages("diagnosticMessages.json")
@@ -67,6 +68,19 @@ func main() {
 	slices.SortFunc(diagnosticMessages, func(a *diagnosticMessage, b *diagnosticMessage) int {
 		return cmp.Compare(a.Code, b.Code)
 	})
+
+	if *locSourceOutput != "" {
+		locSource, err := generateLocalizationSource(diagnosticMessages)
+		if err != nil {
+			log.Fatalf("failed to generate localization source: %v", err)
+		}
+		if err := os.WriteFile(*locSourceOutput, locSource, 0o666); err != nil {
+			log.Fatalf("failed to write localization source: %v", err)
+		}
+	}
+	if sourceOnly {
+		return
+	}
 
 	// Collect known keys for filtering localizations.
 	knownKeys := make(map[string]bool, len(diagnosticMessages))
@@ -89,16 +103,12 @@ func main() {
 		return
 	}
 
-	locSource, err := generateLocalizationSource(diagnosticMessages)
-	if err != nil {
-		log.Fatalf("failed to generate localization source: %v", err)
-	}
-	if err := os.WriteFile(*locSourceOutput, locSource, 0o666); err != nil {
-		log.Fatalf("failed to write localization source: %v", err)
-	}
-
 	// Generate localizations file
-	localeNames := readLocaleNames(*locProject, *locSourceOutput, *locDir)
+	locSourcePath := *locSourceOutput
+	if locSourcePath == "" {
+		locSourcePath = "diagnosticMessages.generated.json"
+	}
+	localeNames := readLocaleNames(*locProject, locSourcePath, *locDir)
 	locBuf := generateLocalizations(knownKeys, *locDir, localeNames)
 
 	formatted, err = format.Source(locBuf.Bytes())

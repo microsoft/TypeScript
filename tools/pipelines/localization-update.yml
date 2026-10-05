@@ -49,7 +49,6 @@ jobs:
 
       - task: Cache@2
         displayName: Cache Go modules
-        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
         inputs:
           key: '"go-modules" | "$(Agent.OS)" | "$(GoVersion)" | **/go.mod,**/go.sum | go.work'
           path: $(Pipeline.Workspace)/go/pkg/mod
@@ -60,7 +59,21 @@ jobs:
           $PSNativeCommandUseErrorActionPreference = $true
           go -C ./tsc mod download
         displayName: Download Go modules
-        condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''), ne(variables['GO_MODULES_CACHE_HIT'], 'true'))
+        condition: and(succeeded(), ne(variables['GO_MODULES_CACHE_HIT'], 'true'))
+        env:
+          GOMODCACHE: $(Pipeline.Workspace)/go/pkg/mod
+
+      - pwsh: |
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
+          Push-Location tsc/internal/diagnostics
+          try {
+              go run generate.go -locsource diagnosticMessages.generated.json
+          }
+          finally {
+              Pop-Location
+          }
+        displayName: Generate OneLoc source
         env:
           GOMODCACHE: $(Pipeline.Workspace)/go/pkg/mod
 

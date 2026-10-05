@@ -51,6 +51,7 @@ dist
 /go.work.sum
 /tsc/cmd/tsc/tsc
 /tsc/tsc
+/tsc/internal/diagnostics/diagnosticMessages.generated.json
 
 # Native compiler outputs
 *.exe
