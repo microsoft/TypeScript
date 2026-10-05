@@ -1437,7 +1437,6 @@ async function runFormat() {
 
 const lineEndingExclusions = [
     ":(exclude)tsc/testdata/**",
-    ":(exclude)tools/loc/**/*.lcl",
 ];
 
 export const fixLineEndingsTask = task({

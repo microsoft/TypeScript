@@ -5,5 +5,3 @@
 
 # Preserve line-ending-sensitive fixtures exactly.
 tsc/testdata/** -text
-
-tools/loc/**/*.lcl -text
