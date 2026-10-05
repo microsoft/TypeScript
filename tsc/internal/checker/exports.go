@@ -220,12 +220,6 @@ func (c *Checker) GetEffectiveDeclarationFlags(n *ast.Node, flagsToCheck ast.Mod
 	return c.getEffectiveDeclarationFlags(n, flagsToCheck)
 }
 
-func (c *Checker) GetEffectiveDeclarationFlagsForEmit(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	return c.getEffectiveDeclarationFlags(node, flags)
-}
-
 func (c *Checker) GetBaseConstraintOfType(t *Type) *Type {
 	return c.getBaseConstraintOfType(t)
 }

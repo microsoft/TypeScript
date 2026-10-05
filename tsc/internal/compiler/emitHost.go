@@ -31,9 +31,8 @@ var _ EmitHost = (*emitHost)(nil)
 
 // NOTE: emitHost operations must be thread-safe
 type emitHost struct {
-	program                      *Program
-	getEmitResolver              func(*printer.EmitContext) printer.EmitResolver
-	getEffectiveDeclarationFlags func(*ast.Node, ast.ModifierFlags) ast.ModifierFlags
+	program         *Program
+	getEmitResolver func(*printer.EmitContext) printer.EmitResolver
 }
 
 func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
@@ -43,7 +42,6 @@ func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*
 		getEmitResolver: func(emitContext *printer.EmitContext) printer.EmitResolver {
 			return checker.GetEmitResolver(emitContext)
 		},
-		getEffectiveDeclarationFlags: checker.GetEffectiveDeclarationFlagsForEmit,
 	}, done
 }
 
@@ -89,10 +87,6 @@ func (host *emitHost) GetProjectReferenceFromSource(path tspath.PathKey) *tsopti
 
 func (host *emitHost) GetRedirectTargets(path tspath.PathKey) []tspath.RootedFilePath {
 	return host.program.GetRedirectTargets(path)
-}
-
-func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
-	return host.getEffectiveDeclarationFlags(node, flags)
 }
 
 func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
