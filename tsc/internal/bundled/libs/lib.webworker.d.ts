@@ -9632,7 +9632,7 @@ interface Request extends Body {
 
 declare var Request: {
     prototype: Request;
-    new(input: RequestInfo | WorkerLocation | URL, init?: RequestInit): Request;
+    new(input: RequestInfo | URL, init?: RequestInit): Request;
 };
 
 /**
@@ -10820,13 +10820,13 @@ interface URL {
 
 declare var URL: {
     prototype: URL;
-    new(url: string | WorkerLocation | URL, base?: string | URL | WorkerLocation): URL;
+    new(url: string | URL, base?: string | URL): URL;
     /**
      * The **`URL.canParse()`** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
      */
-    canParse(url: string | WorkerLocation | URL, base?: string | URL | WorkerLocation): boolean;
+    canParse(url: string | URL, base?: string | URL): boolean;
     /**
      * The **`createObjectURL()`** static method of the URL interface creates a string containing a blob URL pointing to the object given in the parameter.
      *
@@ -10838,7 +10838,7 @@ declare var URL: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
      */
-    parse(url: string | WorkerLocation | URL, base?: string | URL | WorkerLocation): URL | null;
+    parse(url: string | URL, base?: string | URL): URL | null;
     /**
      * The **`revokeObjectURL()`** static method of the URL interface releases an existing object URL which was previously created by calling URL.createObjectURL().
      *
@@ -14177,7 +14177,7 @@ interface WindowOrWorkerGlobalScope {
     createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
-    fetch(input: RequestInfo | WorkerLocation | URL, init?: RequestInit): Promise<Response>;
+    fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/queueMicrotask) */
     queueMicrotask(callback: VoidFunction): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/reportError) */
@@ -14603,8 +14603,8 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open)
      */
-    open(method: string, url: string | WorkerLocation | URL): void;
-    open(method: string, url: string | WorkerLocation | URL, async: boolean, username?: string | null, password?: string | null): void;
+    open(method: string, url: string | URL): void;
+    open(method: string, url: string | URL, async: boolean, username?: string | null, password?: string | null): void;
     /**
      * The XMLHttpRequest method **`overrideMimeType()`** specifies a MIME type other than the one provided by the server to be used instead when interpreting the data being transferred in a request.
      *
@@ -15350,7 +15350,7 @@ declare function clearTimeout(id: number | undefined): void;
 declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
-declare function fetch(input: RequestInfo | WorkerLocation | URL, init?: RequestInit): Promise<Response>;
+declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/queueMicrotask) */
 declare function queueMicrotask(callback: VoidFunction): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/reportError) */
