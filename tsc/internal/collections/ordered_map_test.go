@@ -3,12 +3,50 @@ package collections_test
 import (
 	"fmt"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"gotest.tools/v3/assert"
 )
+
+func TestOrderedMapEqualFunc(t *testing.T) {
+	t.Parallel()
+
+	zero := &collections.OrderedMap[int, string]{}
+	allocated := collections.NewOrderedMapWithSizeHint[int, string](0)
+	ordered := collections.NewOrderedMapFromList([]collections.MapEntry[int, string]{{Key: 1, Value: "a"}, {Key: 2, Value: "b"}})
+	reversed := collections.NewOrderedMapFromList([]collections.MapEntry[int, string]{{Key: 2, Value: "b"}, {Key: 1, Value: "a"}})
+	uppercase := collections.NewOrderedMapFromList([]collections.MapEntry[int, string]{{Key: 1, Value: "A"}, {Key: 2, Value: "B"}})
+	different := ordered.Clone()
+	different.Set(2, "c")
+	cleared := ordered.Clone()
+	cleared.Clear()
+
+	for _, test := range []struct {
+		name  string
+		a, b  *collections.OrderedMap[int, string]
+		equal bool
+	}{
+		{"nil", nil, nil, true},
+		{"nil versus empty", nil, zero, false},
+		{"empty allocation", zero, allocated, true},
+		{"cleared allocation", zero, cleared, true},
+		{"same", ordered, ordered, true},
+		{"clone", ordered, ordered.Clone(), true},
+		{"different order", ordered, reversed, false},
+		{"different values", ordered, different, false},
+		{"different length", zero, ordered, false},
+		{"custom equality", ordered, uppercase, true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(t, test.a.EqualFunc(test.b, strings.EqualFold), test.equal)
+			assert.Equal(t, test.b.EqualFunc(test.a, strings.EqualFold), test.equal)
+		})
+	}
+}
 
 func TestOrderedMap(t *testing.T) {
 	t.Parallel()

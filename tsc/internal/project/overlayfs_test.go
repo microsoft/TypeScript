@@ -19,14 +19,11 @@ func TestProcessChanges(t *testing.T) {
 			"/test1.ts": "// existing content",
 			"/test2.ts": "// existing content",
 			"/script":   "// extensionless content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive /* caseSensitivity */)
 		return newOverlayFS(
 			testFS,
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			lsproto.PositionEncodingKindUTF16,
-			func(fileName string) tspath.Path {
-				return tspath.Path(fileName)
-			},
 		)
 	}
 
@@ -357,12 +354,11 @@ func TestOverlayFSFileSystem(t *testing.T) {
 	t.Parallel()
 	host := vfstest.FromMap(map[string]string{
 		"/virtual": "host file",
-	}, false /* useCaseSensitiveFileNames */)
-	toPath := func(fileName string) tspath.Path { return tspath.Path(fileName) }
-	overlays := map[tspath.Path]*Overlay{
+	}, tspath.CaseInsensitive)
+	overlays := map[tspath.PathKey]*Overlay{
 		"/virtual/nested/file.ts": newOverlay("/virtual/nested/file.ts", "overlay", 1, core.ScriptKindTS),
 	}
-	fileSystem := newOverlayFS(host, overlays, lsproto.PositionEncodingKindUTF16, toPath)
+	fileSystem := newOverlayFS(host, overlays, lsproto.PositionEncodingKindUTF16)
 
 	assert.Assert(t, fileSystem.DirectoryExists("/virtual"))
 	assert.Assert(t, !fileSystem.FileExists("/virtual"))

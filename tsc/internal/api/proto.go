@@ -5,6 +5,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -13,10 +14,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
@@ -34,12 +37,21 @@ var (
 type Method string
 
 type (
-	SnapshotID  uint64
-	SymbolID    uint64
-	TypeID      uint32
-	SignatureID uint64
-	NodeHandle  string
+	SnapshotID          uint64
+	ModuleResolverID    uint64
+	SourceFileLeaseID   uint64
+	BuildOrchestratorID uint64
+	SymbolID            uint64
+	TypeID              uint32
+	SignatureID         uint64
+	NodeHandle          string
 )
+
+var nextBuildOrchestratorId atomic.Uint64
+
+func NewBuildOrchestratorID() BuildOrchestratorID {
+	return BuildOrchestratorID(nextBuildOrchestratorId.Add(1))
+}
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
 	return SymbolID(ast.GetSymbolId(symbol))
@@ -54,14 +66,26 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 }
 
 const (
-	MethodRelease Method = "release"
+	MethodRelease                Method = "release"
+	MethodReleaseSourceFile      Method = "releaseSourceFile"
+	MethodRetainSourceFile       Method = "retainSourceFile"
+	MethodGetCachedSourceFile    Method = "getCachedSourceFile"
+	MethodGetSymbolOfDeclaration Method = "getSymbolOfDeclaration"
 
-	MethodBatchRequests Method = "batchRequests"
-
+	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
+	MethodCreateBuildOrchestrator                        Method = "createBuildOrchestrator"
+	MethodDisposeBuildOrchestrator                       Method = "disposeBuildOrchestrator"
+	MethodBuild                                          Method = "build"
+	MethodBuildReferences                                Method = "buildReferences"
+	MethodCleanBuild                                     Method = "cleanBuild"
+	MethodCleanReferences                                Method = "cleanReferences"
+	MethodCreateModuleResolver                           Method = "createModuleResolver"
+	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
+	MethodResolveModuleName                              Method = "resolveModuleName"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
@@ -110,23 +134,27 @@ const (
 	MethodGetExportSymbolOfSymbol Method = "getExportSymbolOfSymbol"
 
 	// Type sub-property methods
-	MethodGetSymbolOfType              Method = "getSymbolOfType"
-	MethodGetTargetOfType              Method = "getTargetOfType"
-	MethodGetFreshTypeOfType           Method = "getFreshTypeOfType"
-	MethodGetRegularTypeOfType         Method = "getRegularTypeOfType"
-	MethodGetTypesOfType               Method = "getTypesOfType"
-	MethodGetTypeParametersOfType      Method = "getTypeParametersOfType"
-	MethodGetOuterTypeParametersOfType Method = "getOuterTypeParametersOfType"
-	MethodGetLocalTypeParametersOfType Method = "getLocalTypeParametersOfType"
-	MethodGetThisTypeOfType            Method = "getThisTypeOfType"
-	MethodGetAliasTypeArgumentsOfType  Method = "getAliasTypeArgumentsOfType"
-	MethodGetAliasSymbolOfType         Method = "getAliasSymbolOfType"
-	MethodGetObjectTypeOfType          Method = "getObjectTypeOfType"
-	MethodGetIndexTypeOfType           Method = "getIndexTypeOfType"
-	MethodGetCheckTypeOfType           Method = "getCheckTypeOfType"
-	MethodGetExtendsTypeOfType         Method = "getExtendsTypeOfType"
-	MethodGetBaseTypeOfType            Method = "getBaseTypeOfType"
-	MethodGetConstraintOfType          Method = "getConstraintOfType"
+	MethodGetSymbolOfType               Method = "getSymbolOfType"
+	MethodGetTargetOfType               Method = "getTargetOfType"
+	MethodGetFreshTypeOfType            Method = "getFreshTypeOfType"
+	MethodGetRegularTypeOfType          Method = "getRegularTypeOfType"
+	MethodGetTypesOfType                Method = "getTypesOfType"
+	MethodGetTypeParametersOfType       Method = "getTypeParametersOfType"
+	MethodGetOuterTypeParametersOfType  Method = "getOuterTypeParametersOfType"
+	MethodGetLocalTypeParametersOfType  Method = "getLocalTypeParametersOfType"
+	MethodGetThisTypeOfType             Method = "getThisTypeOfType"
+	MethodGetAliasTypeArgumentsOfType   Method = "getAliasTypeArgumentsOfType"
+	MethodGetAliasSymbolOfType          Method = "getAliasSymbolOfType"
+	MethodGetObjectTypeOfType           Method = "getObjectTypeOfType"
+	MethodGetIndexTypeOfType            Method = "getIndexTypeOfType"
+	MethodGetCheckTypeOfType            Method = "getCheckTypeOfType"
+	MethodGetExtendsTypeOfType          Method = "getExtendsTypeOfType"
+	MethodGetBaseTypeOfType             Method = "getBaseTypeOfType"
+	MethodGetConstraintOfType           Method = "getConstraintOfType"
+	MethodGetTypeParameterOfMappedType  Method = "getTypeParameterOfMappedType"
+	MethodGetConstraintTypeOfMappedType Method = "getConstraintTypeOfMappedType"
+	MethodGetNameTypeOfMappedType       Method = "getNameTypeOfMappedType"
+	MethodGetTemplateTypeOfMappedType   Method = "getTemplateTypeOfMappedType"
 
 	// Signature sub-property methods
 	MethodGetTypeParametersOfSignature Method = "getTypeParametersOfSignature"
@@ -163,7 +191,6 @@ const (
 	MethodGetPropertyOfType                 Method = "getPropertyOfType"
 	MethodGetTypeOfPropertyOfType           Method = "getTypeOfPropertyOfType"
 	MethodGetIndexInfoOfType                Method = "getIndexInfoOfType"
-	MethodGetIndexTypeOfTypeByKind          Method = "getIndexTypeOfTypeByKind"
 	MethodGetIndexInfosOfType               Method = "getIndexInfosOfType"
 	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
 	MethodGetDefaultFromTypeParameter       Method = "getDefaultFromTypeParameter"
@@ -178,6 +205,10 @@ const (
 	MethodGetAliasedSymbol                  Method = "getAliasedSymbol"
 	MethodGetImmediateAliasedSymbol         Method = "getImmediateAliasedSymbol"
 	MethodGetTargetSymbol                   Method = "getTargetSymbol"
+	MethodGetMergedSymbol                   Method = "getMergedSymbol"
+	MethodGetSymbolOfNode                   Method = "getSymbolOfNode"
+	MethodGetSymbolOfDeclarationForChecker  Method = "getSymbolOfDeclarationForChecker"
+	MethodGetParentOfSymbolForChecker       Method = "getParentOfSymbolForChecker"
 	MethodGetExportSymbolOfSymbolForChecker Method = "getExportSymbolOfSymbolForChecker"
 	MethodGetFullyQualifiedName             Method = "getFullyQualifiedName"
 	MethodGetExportsOfModule                Method = "getExportsOfModule"
@@ -240,10 +271,10 @@ const (
 
 // InitializeResponse is returned by the initialize method.
 type InitializeResponse struct {
-	// UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive.
-	UseCaseSensitiveFileNames bool `json:"useCaseSensitiveFileNames"`
+	// CaseSensitivity determines how the host file system compares paths.
+	CaseSensitivity tspath.CaseSensitivity `json:"caseSensitivity"`
 	// CurrentDirectory is the server's current working directory.
-	CurrentDirectory string `json:"currentDirectory"`
+	CurrentDirectory tspath.RootedDirectoryPath `json:"currentDirectory"`
 }
 
 // DocumentIdentifier identifies a document by either a file name (plain string) or a URI object.
@@ -266,6 +297,7 @@ type DocumentIdentifier struct {
 var _ json.UnmarshalerFrom = (*DocumentIdentifier)(nil)
 
 func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*d = DocumentIdentifier{}
 	// Try reading as a plain string first
 	tok, err := dec.ReadToken()
 	if err != nil {
@@ -273,27 +305,44 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 	switch tok.Kind() {
 	case '"':
+		if tok.String() == "" {
+			return errors.New("DocumentIdentifier: file name must not be empty")
+		}
 		d.FileName = tok.String()
 		return nil
 	case '{':
-		// Read the object fields
+		foundURI := false
 		for dec.PeekKind() != '}' {
 			key, err := dec.ReadToken()
 			if err != nil {
 				return err
 			}
-			isURI := key.String() == "uri"
-			val, err := dec.ReadToken()
-			if err != nil {
-				return err
+			if key.Kind() != '"' {
+				return fmt.Errorf("DocumentIdentifier: expected object field name, got %v", key.Kind())
 			}
-			if isURI {
+			if key.String() == "uri" {
+				if foundURI {
+					return fmt.Errorf("DocumentIdentifier: duplicate field %q", key.String())
+				}
+				val, err := dec.ReadToken()
+				if err != nil {
+					return err
+				}
+				if val.Kind() != '"' || val.String() == "" {
+					return errors.New("DocumentIdentifier: uri must be a non-empty string")
+				}
 				d.URI = lsproto.DocumentUri(val.String())
+				foundURI = true
+			} else if err := dec.SkipValue(); err != nil {
+				return err
 			}
 		}
 		// Consume the closing brace
 		if _, err := dec.ReadToken(); err != nil {
 			return err
+		}
+		if !foundURI {
+			return errors.New("DocumentIdentifier: object must contain uri")
 		}
 		return nil
 	default:
@@ -301,28 +350,21 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 }
 
-func (d DocumentIdentifier) ToFileName() string {
+func (d DocumentIdentifier) ToFileName(cwd tspath.RootedDirectoryPath) tspath.RootedFilePath {
 	if d.URI != "" {
 		return d.URI.FileName()
 	}
-	return d.FileName
+	return tspath.ToRootedFilePath(d.FileName, cwd)
 }
 
 // ToURI returns the document URI for this identifier. An explicitly provided URI
 // is returned as-is; a file name is first normalized to an absolute path against
 // cwd before being converted to a URI.
-func (d DocumentIdentifier) ToURI(cwd string) lsproto.DocumentUri {
+func (d DocumentIdentifier) ToURI(cwd tspath.RootedDirectoryPath) lsproto.DocumentUri {
 	if d.URI != "" {
 		return d.URI
 	}
-	return lsconv.FileNameToDocumentURI(tspath.GetNormalizedAbsolutePath(d.FileName, cwd))
-}
-
-func (d DocumentIdentifier) ToAbsoluteFileName(cwd string) string {
-	if d.URI != "" {
-		return d.URI.FileName()
-	}
-	return tspath.GetNormalizedAbsolutePath(d.FileName, cwd)
+	return lsconv.FileNameToDocumentURI(d.ToFileName(cwd))
 }
 
 func (d DocumentIdentifier) String() string {
@@ -397,6 +439,10 @@ func (e *EnsurePrograms) UnmarshalJSONFrom(dec *json.Decoder) error {
 // CreateSnapshotParams are the parameters for creating a new independent snapshot.
 type CreateSnapshotParams struct {
 	SnapshotRequestChangesParams
+	// UserPreferences configures language service behavior in the new snapshot.
+	UserPreferences *lsutil.UserPreferences `json:"userPreferences,omitempty"`
+	// PrepareAutoImports identifies the file whose auto-import indexes should be ready in the new snapshot.
+	PrepareAutoImports *DocumentIdentifier `json:"prepareAutoImports,omitempty"`
 	// FileNotifications describes host file system changes to invalidate while creating the snapshot.
 	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
@@ -406,16 +452,18 @@ type CreateSnapshotParams struct {
 }
 
 type CreateSnapshotProgramParams struct {
-	RootFiles       []DocumentIdentifier  `json:"rootFiles"`
-	CompilerOptions core.CompilerOptions  `json:"compilerOptions"`
-	Options         *CreateProgramOptions `json:"options,omitempty"`
+	RootFiles            []DocumentIdentifier          `json:"rootFiles"`
+	CompilerOptions      core.CompilerOptions          `json:"-"`
+	CompilerOptionsInput *tsoptions.RawCompilerOptions `json:"compilerOptions" nonnil:"true"`
+	Options              *CreateProgramOptions         `json:"options,omitempty"`
 }
 
 type ReconfigureSnapshotProgramParams struct {
-	Id              project.SyntheticProjectID `json:"id"`
-	RootFiles       []DocumentIdentifier       `json:"rootFiles"`
-	CompilerOptions core.CompilerOptions       `json:"compilerOptions"`
-	Options         *CreateProgramOptions      `json:"options,omitempty"`
+	Id                   project.SyntheticProjectID    `json:"id"`
+	RootFiles            []DocumentIdentifier          `json:"rootFiles"`
+	CompilerOptions      core.CompilerOptions          `json:"-"`
+	CompilerOptionsInput *tsoptions.RawCompilerOptions `json:"compilerOptions" nonnil:"true"`
+	Options              *CreateProgramOptions         `json:"options,omitempty"`
 }
 
 type UpdateSnapshotParams struct {
@@ -437,14 +485,76 @@ type LanguageServerSnapshotChanges struct {
 type CreateProgramOptions struct {
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
+	ModuleResolver               ModuleResolverID         `json:"moduleResolver,omitempty"`
+}
+
+type (
+	ModuleResolutionFallback string
+	ResolutionMode           core.ModuleKind
+)
+
+const (
+	ModuleResolutionFallbackResolve    ModuleResolutionFallback = "resolve"
+	ModuleResolutionFallbackUnresolved ModuleResolutionFallback = "unresolved"
+)
+
+type ModuleResolutionSpec struct {
+	Fallback ModuleResolutionFallback `json:"fallback"`
+	Entries  []*ModuleResolutionEntry `json:"entries" nonnil:"true"`
+}
+
+type ModuleResolutionEntry struct {
+	ModuleName          string                  `json:"moduleName"`
+	ContainingDirectory *DocumentIdentifier     `json:"containingDirectory,omitempty"`
+	ResolutionMode      *ResolutionMode         `json:"resolutionMode,omitempty"`
+	Result              *StaticModuleResolution `json:"result" nonnil:"true"`
+}
+
+type StaticModuleResolution struct {
+	ResolvedFileName *DocumentIdentifier `json:"resolvedFileName,omitempty"`
+	OriginalPath     *DocumentIdentifier `json:"originalPath,omitempty"`
+	PackageID        *PackageId          `json:"packageId,omitempty"`
+}
+
+type CreateModuleResolverParams struct {
+	CompilerOptions           core.CompilerOptions  `json:"compilerOptions"`
+	ModuleResolutions         *ModuleResolutionSpec `json:"moduleResolutions,omitempty"`
+	ResolveModuleNameCallback string                `json:"resolveModuleNameCallback,omitempty"`
+}
+
+type ReleaseModuleResolverParams struct {
+	Resolver ModuleResolverID `json:"resolver"`
+}
+
+type ResolveModuleNameParams struct {
+	Snapshot            SnapshotID         `json:"snapshot,omitempty"`
+	InProgressSnapshot  uint64             `json:"inProgressSnapshot,omitempty"`
+	Resolver            ModuleResolverID   `json:"resolver"`
+	ModuleName          string             `json:"moduleName"`
+	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+type ResolveModuleNameCallbackParams struct {
+	ModuleName          string          `json:"moduleName"`
+	ContainingDirectory string          `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode `json:"resolutionMode,omitempty"`
+	Snapshot            *SnapshotID     `json:"snapshot,omitempty"`
+	InProgressSnapshot  *uint64         `json:"inProgressSnapshot,omitempty"`
+}
+
+type ResolveModuleNameResult struct {
+	ResolvedModule *ResolvedModule `json:"resolvedModule,omitempty"`
+	// Trace is provided when compilerOptions.traceResolution is true.
+	Trace []string `json:"trace,omitempty"`
 }
 
 // ProjectFileChanges describes what source files changed within a single project.
 type ProjectFileChanges struct {
 	// ChangedFiles lists source file paths whose content differs.
-	ChangedFiles []tspath.Path `json:"changedFiles,omitempty"`
+	ChangedFiles []tspath.PathKey `json:"changedFiles,omitempty"`
 	// DeletedFiles lists source file paths removed from the project's program.
-	DeletedFiles []tspath.Path `json:"deletedFiles,omitempty"`
+	DeletedFiles []tspath.PathKey `json:"deletedFiles,omitempty"`
 }
 
 // SnapshotChanges describes what changed between a response base and a new
@@ -484,10 +594,23 @@ type OpenedFileOperationResult struct {
 var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodBatchRequests:                                  unmarshallerFor[BatchRequestsParams],
 	MethodRelease:                                        unmarshallerFor[ReleaseParams],
+	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
+	MethodRetainSourceFile:                               unmarshallerFor[RetainSourceFileParams],
+	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
+	MethodGetSymbolOfDeclaration:                         unmarshallerFor[GetSymbolOfDeclarationParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
+	MethodCreateBuildOrchestrator:                        unmarshallerFor[CreateBuildOrchestratorParams],
+	MethodDisposeBuildOrchestrator:                       unmarshallerFor[DisposeBuildOrchestratorParams],
+	MethodBuild:                                          unmarshallerFor[BuildParams],
+	MethodBuildReferences:                                unmarshallerFor[BuildParams],
+	MethodCleanBuild:                                     unmarshallerFor[CleanBuildParams],
+	MethodCleanReferences:                                unmarshallerFor[CleanBuildParams],
+	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
+	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
+	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -551,6 +674,10 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetExtendsTypeOfType:          unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseTypeOfType:             unmarshallerFor[GetTypePropertyParams],
 	MethodGetConstraintOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeParameterOfMappedType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetConstraintTypeOfMappedType: unmarshallerFor[GetTypePropertyParams],
+	MethodGetNameTypeOfMappedType:       unmarshallerFor[GetTypePropertyParams],
+	MethodGetTemplateTypeOfMappedType:   unmarshallerFor[GetTypePropertyParams],
 	MethodGetTrueTypeOfConditionalType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetFalseTypeOfConditionalType: unmarshallerFor[GetTypePropertyParams],
 
@@ -587,7 +714,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetPropertyOfType:                 unmarshallerFor[GetPropertyOfTypeParams],
 	MethodGetTypeOfPropertyOfType:           unmarshallerFor[GetPropertyOfTypeParams],
 	MethodGetIndexInfoOfType:                unmarshallerFor[GetIndexInfoOfTypeParams],
-	MethodGetIndexTypeOfTypeByKind:          unmarshallerFor[GetIndexInfoOfTypeParams],
 	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
 	MethodGetConstraintOfTypeParameter:      unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseConstraintOfType:           unmarshallerFor[CheckerTypeParams],
@@ -600,6 +726,10 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetImmediateAliasedSymbol:         unmarshallerFor[CheckerSymbolParams],
 	MethodGetTargetSymbol:                   unmarshallerFor[CheckerSymbolParams],
+	MethodGetMergedSymbol:                   unmarshallerFor[CheckerSymbolParams],
+	MethodGetSymbolOfNode:                   unmarshallerFor[CheckerNodeParams],
+	MethodGetSymbolOfDeclarationForChecker:  unmarshallerFor[CheckerNodeParams],
+	MethodGetParentOfSymbolForChecker:       unmarshallerFor[CheckerSymbolParams],
 	MethodGetExportSymbolOfSymbolForChecker: unmarshallerFor[CheckerSymbolParams],
 	MethodGetFullyQualifiedName:             unmarshallerFor[CheckerSymbolParams],
 	MethodGetExportsOfModule:                unmarshallerFor[CheckerSymbolParams],
@@ -689,9 +819,10 @@ func jsonValueToAny(value packagejson.JSONValue) any {
 }
 
 type TranspileOptions struct {
-	CompilerOptions   *core.CompilerOptions `json:"compilerOptions,omitempty"`
-	FileName          string                `json:"fileName,omitempty"`
-	ReportDiagnostics bool                  `json:"reportDiagnostics,omitempty"`
+	CompilerOptions      *core.CompilerOptions         `json:"-"`
+	CompilerOptionsInput *tsoptions.RawCompilerOptions `json:"compilerOptions,omitempty"`
+	FileName             string                        `json:"fileName,omitempty"`
+	ReportDiagnostics    bool                          `json:"reportDiagnostics,omitempty"`
 }
 
 type CreateSourceFileOptions struct {
@@ -792,17 +923,95 @@ type ReleaseParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 }
 
+type ReleaseSourceFileParams struct {
+	Lease SourceFileLeaseID `json:"lease"`
+}
+
+type SourceFileDescriptor struct {
+	FileName        tspath.RootedFilePath `json:"fileName"`
+	Path            tspath.PathKey        `json:"path"`
+	ContentHash     string                `json:"contentHash"`
+	ParseOptionsKey string                `json:"parseOptionsKey"`
+	ScriptKind      core.ScriptKind       `json:"scriptKind"`
+	NodeID          string                `json:"nodeId"`
+}
+
+type RetainSourceFileParams struct {
+	File SourceFileDescriptor `json:"file"`
+}
+
+type RetainSourceFileResponse struct {
+	Lease SourceFileLeaseID `json:"lease"`
+}
+
+// GetCachedSourceFileParams address an ordinary cached source file by its complete identity,
+// independent of any snapshot or lease.
+type GetCachedSourceFileParams struct {
+	File SourceFileDescriptor `json:"file"`
+}
+
+type GetSymbolOfDeclarationParams struct {
+	File  SourceFileDescriptor `json:"file"`
+	Index uint32               `json:"index"`
+}
+
 type ProfileParams struct {
 	Dir string `json:"dir"`
 }
 
 type ProfileResult struct {
-	File string `json:"file"`
+	File tspath.RootedFilePath `json:"file"`
+}
+
+type CreateBuildOrchestratorParams struct {
+	RootNames []string                   `json:"rootNames"`
+	Cwd       tspath.RootedDirectoryPath `json:"cwd,omitempty"`
+	// Only a subset of these options are exposed  the API
+	*core.BuildOptions    `json:"buildOptions,omitempty"`
+	*core.CompilerOptions `json:"compilerOptions,omitempty"`
+}
+
+type CreateBuildOrchestratorResponse struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type DisposeBuildOrchestratorParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type BuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             string              `json:"project,omitempty"`
+}
+
+type BuildResponse struct {
+	Status      tsc.ExitStatus        `json:"status"`
+	Diagnostics []*DiagnosticResponse `json:"diagnostics,omitempty"`
+	Statistics  tsc.Statistics        `json:"statistics"`
+}
+
+type CleanBuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             string              `json:"project,omitempty"`
+}
+
+type CleanBuildResponse struct {
+	Status       tsc.ExitStatus          `json:"status"`
+	Diagnostics  []*DiagnosticResponse   `json:"diagnostics,omitempty"`
+	Statistics   tsc.Statistics          `json:"statistics"`
+	FilesDeleted []tspath.RootedFilePath `json:"filesDeleted,omitempty"`
+}
+
+type BuildOrchestrator struct {
+	Build           func(project string) tsc.ExitStatus
+	BuildReferences func(project string) tsc.ExitStatus
+	CleanReferences func(project string) tsc.ExitStatus
 }
 
 type ConfigFileResponse struct {
-	FileNames         []string                 `json:"fileNames" nonnil:"true"`
+	FileNames         []tspath.RootedFilePath  `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
+	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
@@ -821,13 +1030,13 @@ type GetDefaultProjectForFileParams struct {
 }
 
 type ProjectResponse struct {
-	Id                project.ID          `json:"id"`
-	ConfigFileName    string              `json:"configFileName"`
-	CurrentDirectory  string              `json:"currentDirectory"`
-	Dirty             bool                `json:"dirty"`
-	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
+	Id                project.ID                 `json:"id"`
+	ConfigFileName    *tspath.RootedFilePath     `json:"configFileName,omitempty"`
+	CurrentDirectory  tspath.RootedDirectoryPath `json:"currentDirectory"`
+	Dirty             bool                       `json:"dirty"`
+	ParsedCommandLine *ConfigFileResponse        `json:"parsedCommandLine" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.fileNames.
-	RootFiles []string `json:"rootFiles" nonnil:"true"`
+	RootFiles []tspath.RootedFilePath `json:"rootFiles" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.options.
 	CompilerOptions *core.CompilerOptions `json:"compilerOptions" nonnil:"true"`
 }
@@ -855,33 +1064,8 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *Conf
 		ProjectReferences: parsedCommandLine.ProjectReferences(),
 		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
 		CompileOnSave:     compileOnSave,
-		Raw:               toProtocolJSONValue(parsedCommandLine.Raw),
+		Raw:               parsedCommandLine.Raw,
 		Errors:            errors,
-	}
-}
-
-func toProtocolJSONValue(value any) any {
-	switch value := value.(type) {
-	case core.WatchFileKind:
-		return int(value) - 1
-	case core.WatchDirectoryKind:
-		return int(value) - 1
-	case core.PollingKind:
-		return int(value) - 1
-	case *collections.OrderedMap[string, any]:
-		result := collections.NewOrderedMapWithSizeHint[string, any](value.Size())
-		for key, child := range value.Entries() {
-			result.Set(key, toProtocolJSONValue(child))
-		}
-		return result
-	case []any:
-		result := make([]any, len(value))
-		for i, child := range value {
-			result[i] = toProtocolJSONValue(child)
-		}
-		return result
-	default:
-		return value
 	}
 }
 
@@ -889,9 +1073,10 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 	if p == nil || p.CommandLine == nil {
 		panic("NewProjectResponse called with unloaded project")
 	}
-	configFileName := ""
+	var configFileName *tspath.RootedFilePath
 	if p.Kind == project.KindConfigured {
-		configFileName = p.ConfigFileName()
+		value := p.ConfigFileName()
+		configFileName = &value
 	}
 	return &ProjectResponse{
 		Id:                p.ID(),
@@ -943,40 +1128,55 @@ type GetSymbolsAtLocationsParams struct {
 }
 
 type SymbolResponse struct {
-	Id SymbolID `json:"id"`
-	// Project is the project in which the symbol was first observed. It is the
-	// default project for follow-up lookups whose results can vary by project.
-	Project          project.ID   `json:"project"`
-	Name             string       `json:"name"`
-	Flags            uint32       `json:"flags"`
-	CheckFlags       uint32       `json:"checkFlags"`
-	Declarations     []NodeHandle `json:"declarations,omitempty"`
-	ValueDeclaration NodeHandle   `json:"valueDeclaration,omitempty"`
-	Parent           SymbolID     `json:"parent,omitzero"`
-	ExportSymbol     SymbolID     `json:"exportSymbol,omitzero"`
+	Reference        SymbolReference         `json:"reference"`
+	Name             string                  `json:"name"`
+	Flags            uint32                  `json:"flags"`
+	CheckFlags       uint32                  `json:"checkFlags"`
+	Declarations     []NodeHandle            `json:"declarations,omitempty"`
+	ValueDeclaration NodeHandle              `json:"valueDeclaration,omitempty"`
+	Parent           *CompactSymbolReference `json:"parent,omitempty"`
+	ExportSymbol     *CompactSymbolReference `json:"exportSymbol,omitempty"`
 }
 
-func symbolHandles(symbols []*ast.Symbol) []SymbolID {
-	if len(symbols) == 0 {
-		return nil
-	}
-	handles := make([]SymbolID, len(symbols))
-	for i, t := range symbols {
-		handles[i] = SymbolHandle(t)
-	}
-	return handles
+type SymbolOwnerKind uint32
+
+const (
+	SymbolOwnerKindFile SymbolOwnerKind = iota
+	SymbolOwnerKindSnapshot
+)
+
+type SymbolOwner struct {
+	Kind     SymbolOwnerKind       `json:"kind"`
+	File     *SourceFileDescriptor `json:"file,omitempty"`
+	Snapshot SnapshotID            `json:"snapshot,omitzero"`
+	Project  project.ID            `json:"project,omitempty"`
+}
+
+// SymbolReference identifies a symbol and its server-resolvable owner.
+type SymbolReference struct {
+	SymbolOwner
+	Id SymbolID `json:"id"`
+}
+
+// CompactSymbolReference is embedded in other responses. It identifies a cached
+// symbol without repeating its owning file's full descriptor: File is the owning source file's
+// node ID, or empty for a symbol owned by the response's snapshot. When the client has not cached
+// the symbol, it fetches a full SymbolResponse through the corresponding property method.
+type CompactSymbolReference struct {
+	Id   SymbolID `json:"id"`
+	File string   `json:"file,omitempty"`
 }
 
 type GetTypeOfSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
 }
 
 type GetTypesOfSymbolsParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbols  []SymbolID `json:"symbols"`
+	Snapshot SnapshotID        `json:"snapshot"`
+	Project  project.ID        `json:"project"`
+	Symbols  []SymbolReference `json:"symbols"`
 }
 
 type TypeResponse struct {
@@ -1015,6 +1215,12 @@ type TypeResponse struct {
 	BaseType        TypeID `json:"baseType,omitzero"`
 	SubstConstraint TypeID `json:"substConstraint,omitzero"`
 
+	// MappedType data
+	TypeParameter  TypeID `json:"typeParameter,omitzero"`
+	ConstraintType TypeID `json:"constraintType,omitzero"`
+	NameType       TypeID `json:"nameType,omitzero"`
+	TemplateType   TypeID `json:"templateType,omitzero"`
+
 	// TemplateLiteralType text segments
 	Texts []string `json:"texts,omitempty"`
 
@@ -1032,11 +1238,11 @@ type TypeResponse struct {
 	IntrinsicName string `json:"intrinsicName,omitempty"`
 
 	// TypeAlias data
-	AliasTypeArguments []TypeID `json:"aliasTypeArguments,omitempty"`
-	AliasSymbol        SymbolID `json:"aliasSymbol,omitzero"`
+	AliasTypeArguments []TypeID                `json:"aliasTypeArguments,omitempty"`
+	AliasSymbol        *CompactSymbolReference `json:"aliasSymbol,omitempty"`
 
 	// Symbol associated with structured types
-	Symbol SymbolID `json:"symbol,omitzero"`
+	Symbol *CompactSymbolReference `json:"symbol,omitempty"`
 }
 
 func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
@@ -1045,15 +1251,8 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		Flags: uint32(t.Flags()),
 	}
 
-	if t.Symbol() != nil {
-		resp.Symbol = SymbolHandle(t.Symbol())
-	}
-
 	if t.Alias() != nil {
 		resp.AliasTypeArguments = typeHandles(t.Alias().TypeArguments())
-		if t.Alias().Symbol() != nil {
-			resp.AliasSymbol = SymbolHandle(t.Alias().Symbol())
-		}
 	}
 
 	switch flags := t.Flags(); {
@@ -1169,13 +1368,13 @@ type ConstantValueResponse struct {
 }
 
 type SignatureResponse struct {
-	Id             SignatureID `json:"id"`
-	Flags          uint32      `json:"flags"`
-	Declaration    NodeHandle  `json:"declaration,omitempty"`
-	TypeParameters []TypeID    `json:"typeParameters,omitempty"`
-	Parameters     []SymbolID  `json:"parameters,omitempty"`
-	ThisParameter  SymbolID    `json:"thisParameter,omitzero"`
-	Target         SignatureID `json:"target,omitzero"`
+	Id             SignatureID              `json:"id"`
+	Flags          uint32                   `json:"flags"`
+	Declaration    NodeHandle               `json:"declaration,omitempty"`
+	TypeParameters []TypeID                 `json:"typeParameters,omitempty"`
+	Parameters     []CompactSymbolReference `json:"parameters,omitempty"`
+	ThisParameter  *CompactSymbolReference  `json:"thisParameter,omitempty"`
+	Target         SignatureID              `json:"target,omitzero"`
 }
 
 type GetSourceFileParams struct {
@@ -1274,11 +1473,11 @@ type ResolvedTypeReferenceDirective struct {
 
 // SourceFileMetadata carries program-stored metadata about a single source file.
 type SourceFileMetadata struct {
-	IsDefaultLibrary      bool                `json:"isDefaultLibrary"`
-	IsFromExternalLibrary bool                `json:"isFromExternalLibrary"`
-	PackageJsonType       string              `json:"packageJsonType"`
-	PackageJsonDirectory  string              `json:"packageJsonDirectory"`
-	ImpliedNodeFormat     core.ResolutionMode `json:"impliedNodeFormat"`
+	IsDefaultLibrary      bool                       `json:"isDefaultLibrary"`
+	IsFromExternalLibrary bool                       `json:"isFromExternalLibrary"`
+	PackageJsonType       string                     `json:"packageJsonType"`
+	PackageJsonDirectory  tspath.RootedDirectoryPath `json:"packageJsonDirectory"`
+	ImpliedNodeFormat     core.ResolutionMode        `json:"impliedNodeFormat"`
 }
 
 type ResolveNameParams struct {
@@ -1312,9 +1511,7 @@ type GetTypePropertyParams struct {
 
 // GetSymbolPropertyParams is used for all symbol sub-property endpoints.
 type GetSymbolPropertyParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"objectId"`
+	Symbol SymbolReference `json:"symbol"`
 }
 
 // GetSignaturePropertyParams is used for all signature sub-property endpoints.
@@ -1340,10 +1537,10 @@ type GetContextualTypeForArgumentParams struct {
 
 // GetTypeOfSymbolAtLocationParams returns the narrowed type of a symbol at a specific location.
 type GetTypeOfSymbolAtLocationParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
-	Location NodeHandle `json:"location"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Location NodeHandle      `json:"location"`
 }
 
 // GetReferencesToSymbolInFileParams are the parameters for the getReferencesToSymbolInFile method.
@@ -1351,7 +1548,7 @@ type GetReferencesToSymbolInFileParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
 	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
-	Symbol   SymbolID           `json:"symbol"`
+	Symbol   SymbolReference    `json:"symbol"`
 }
 
 // GetReferencedSymbolsForNodeParams are the parameters for the getReferencedSymbolsForNode method.
@@ -1536,7 +1733,7 @@ const (
 
 type ImportAdderAction struct {
 	Kind                   ImportAdderActionKind `json:"kind"`
-	Symbol                 SymbolID              `json:"symbol,omitempty"`
+	Symbol                 *SymbolReference      `json:"symbol,omitempty"`
 	IsValidTypeOnlyUseSite *bool                 `json:"isValidTypeOnlyUseSite,omitempty"`
 }
 
@@ -1593,18 +1790,18 @@ type SelectedFilesEmitParams struct {
 }
 
 type EmitResponse struct {
-	EmitSkipped  bool                  `json:"emitSkipped"`
-	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
-	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
+	EmitSkipped  bool                    `json:"emitSkipped"`
+	Diagnostics  []*DiagnosticResponse   `json:"diagnostics" nonnil:"true"`
+	EmittedFiles []tspath.RootedFilePath `json:"emittedFiles" nonnil:"true"`
 	// EmittedFilesContents contains contents parallel to EmittedFiles when the
 	// source snapshot uses a full filesystem. It is empty for write-through emits.
 	EmittedFilesContents []string `json:"emittedFilesContents" nonnil:"true"`
 }
 
 type EmitOutputFile struct {
-	FileName       string  `json:"fileName"`
-	Text           string  `json:"text"`
-	SourceFileName *string `json:"sourceFileName,omitempty"`
+	FileName       tspath.RootedFilePath  `json:"fileName"`
+	Text           string                 `json:"text"`
+	SourceFileName *tspath.RootedFilePath `json:"sourceFileName,omitempty"`
 }
 
 type EmitOutputResponse struct {
@@ -1646,10 +1843,10 @@ type GetIndexInfoOfTypeParams struct {
 
 // GetMemberInModuleExportsParams are parameters for getMemberInModuleExports.
 type GetMemberInModuleExportsParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
-	Name     string     `json:"name"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Name     string          `json:"name"`
 }
 
 // CheckerNodeParams are parameters for checker methods that operate on a node location.
@@ -1661,9 +1858,9 @@ type CheckerNodeParams struct {
 
 // CheckerSymbolParams are parameters for checker methods that operate on a symbol.
 type CheckerSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  project.ID `json:"project"`
-	Symbol   SymbolID   `json:"symbol"`
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
 }
 
 // JSDocTagInfo is a single JSDoc tag, mirroring Strada's JSDocTagInfo but with the tag text
@@ -1718,8 +1915,8 @@ type GetProjectDiagnosticsParams struct {
 
 // DiagnosticResponse is the API response for a single diagnostic.
 type DiagnosticResponse struct {
-	// FileName is the path of the file this diagnostic belongs to, if any.
-	FileName string `json:"fileName,omitempty"`
+	// The file name of the file this diagnostic belongs to, if any.
+	FileName tspath.RootedFilePath `json:"fileName,omitempty"`
 	// Pos is the start position of the diagnostic in the source file.
 	Pos int `json:"pos"`
 	// End is the end position of the diagnostic in the source file.
