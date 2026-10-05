@@ -2673,12 +2673,12 @@ async function runPackNativePreviewPackages() {
 export const packVsixExtensions = task({
     name: "vscode-typescript:pack",
     hiddenFromTaskList: true,
-    dependencies: options.forRelease || usePublishedPlatformPackagesForVsix ? undefined : [buildNativePreviewPackages, cleanSignTempDirectory],
+    dependencies: options.forRelease || usePublishedPlatformPackagesForVsix ? undefined : [packNativePreviewPackages],
     run: runPackVsixExtensions,
 });
 
 /** @type {Map<string, Promise<string>>} */
-const publishedPlatformPackageLibDirs = new Map();
+const publishedPlatformPackageDirs = new Map();
 
 const getPublishedTypeScriptPackageDir = memoize(() => {
     const candidates = [
@@ -2729,11 +2729,11 @@ const getPackageLock = memoize(() => JSON.parse(fs.readFileSync(path.join(__dirn
 /**
  * @param {string} npmPackageName
  */
-async function getPublishedPlatformPackageLibDir(npmPackageName) {
-    let promise = publishedPlatformPackageLibDirs.get(npmPackageName);
+async function getPublishedPlatformPackageDir(npmPackageName) {
+    let promise = publishedPlatformPackageDirs.get(npmPackageName);
     if (!promise) {
-        promise = getPublishedPlatformPackageLibDirWorker(npmPackageName);
-        publishedPlatformPackageLibDirs.set(npmPackageName, promise);
+        promise = getPublishedPlatformPackageDirWorker(npmPackageName);
+        publishedPlatformPackageDirs.set(npmPackageName, promise);
     }
     return promise;
 }
@@ -2741,11 +2741,11 @@ async function getPublishedPlatformPackageLibDir(npmPackageName) {
 /**
  * @param {string} npmPackageName
  */
-async function getPublishedPlatformPackageLibDirWorker(npmPackageName) {
+async function getPublishedPlatformPackageDirWorker(npmPackageName) {
     const dest = path.join(builtPublishedPlatformPackages, "node_modules", ...npmPackageName.split("/"));
     const lib = path.join(dest, "lib");
     if (fs.existsSync(lib)) {
-        return lib;
+        return dest;
     }
 
     await fs.promises.mkdir(dest, { recursive: true });
@@ -2803,7 +2803,7 @@ async function getPublishedPlatformPackageLibDirWorker(npmPackageName) {
         throw new Error(`Published platform package ${npmPackageName}@${version} did not contain a lib directory.`);
     }
 
-    return lib;
+    return dest;
 }
 
 async function runPackVsixExtensions() {
@@ -2811,12 +2811,12 @@ async function runPackVsixExtensions() {
     await fs.promises.mkdir(builtVsix, { recursive: true });
     if (usePublishedPlatformPackagesForVsix) {
         checkPublishedPlatformPackagesForVsix();
-        publishedPlatformPackageLibDirs.clear();
+        publishedPlatformPackageDirs.clear();
         await rimraf(builtPublishedPlatformPackages);
     }
 
     const platforms = getPlatforms();
-    const extensions = platforms.flatMap(({ npmDir, npmPackageName, extensions }) => extensions.map(e => ({ npmDir, npmPackageName, ...e })));
+    const extensions = platforms.flatMap(({ npmTarball, npmPackageName, extensions }) => extensions.map(e => ({ npmTarball, npmPackageName, ...e })));
     if (!extensions.length) {
         console.log("No VSIX targets configured; skipping extension packaging.");
         return;
@@ -2848,30 +2848,39 @@ async function runPackVsixExtensions() {
 
     console.log("Version:", version);
 
-    await Promise.all(extensions.map(async ({ npmDir, npmPackageName, nodeOs, vscodeTarget, sourceDir, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
-        const npmLibDir = usePublishedPlatformPackagesForVsix
-            ? await getPublishedPlatformPackageLibDir(npmPackageName)
-            : path.join(npmDir, "lib");
-        const extensionLibDir = path.join(thisExtensionDir, "lib");
-        await fs.promises.mkdir(extensionLibDir, { recursive: true });
+    await Promise.all(extensions.map(async ({ npmTarball, npmPackageName, nodeOs, vscodeTarget, sourceDir, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
+        const nodeModules = path.join(thisExtensionDir, "node_modules");
+        const embeddedPlatformPackageDir = path.join(nodeModules, ...npmPackageName.split("/"));
+        const embeddedTypeScriptDir = path.join(nodeModules, "typescript");
 
         await cpWithoutNodeModulesOrTsconfig(sourceDir, thisExtensionDir);
-        await cpWithoutNodeModulesOrTsconfig(npmLibDir, extensionLibDir);
-        await cpWithoutNodeModulesOrTsconfig(
-            usePublishedPlatformPackagesForVsix ? getPublishedTypeScriptPackageDir() : mainNativePreviewPackage.npmDir,
-            path.join(extensionLibDir, "typescript"),
-        );
-        await fs.promises.chmod(path.join(extensionLibDir, nativePreviewExeName(nodeOs)), 0o755);
+        if (usePublishedPlatformPackagesForVsix) {
+            await cpRecursive(await getPublishedPlatformPackageDir(npmPackageName), embeddedPlatformPackageDir);
+            await cpRecursive(getPublishedTypeScriptPackageDir(), embeddedTypeScriptDir, p => !p.endsWith("/node_modules"));
+        }
+        else {
+            await fs.promises.mkdir(embeddedPlatformPackageDir, { recursive: true });
+            await fs.promises.mkdir(embeddedTypeScriptDir, { recursive: true });
+            await tar.x({ file: npmTarball, cwd: embeddedPlatformPackageDir, strip: 1 });
+            await tar.x({ file: mainNativePreviewPackage.npmTarball, cwd: embeddedTypeScriptDir, strip: 1 });
+        }
+        await fs.promises.chmod(path.join(embeddedPlatformPackageDir, "lib", nativePreviewExeName(nodeOs)), 0o755);
+        const embeddedTypeScriptPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedTypeScriptDir, "package.json"), "utf8"));
 
         const packageJsonPath = path.join(thisExtensionDir, "package.json");
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
         packageJson.version = version;
         packageJson.bundledTypeScriptVersion = usePublishedPlatformPackagesForVsix ? getPublishedTypeScriptVersion() : getVersion();
+        packageJson.dependencies = {
+            typescript: embeddedTypeScriptPackageJson.name === "typescript"
+                ? embeddedTypeScriptPackageJson.version
+                : `npm:${embeddedTypeScriptPackageJson.name}@${embeddedTypeScriptPackageJson.version}`,
+        };
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 4));
 
         await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));
 
-        await run("vsce", ["package", version, "--no-update-package-json", "--no-dependencies", "--out", vsixPath, "--target", vscodeTarget], {
+        await run("vsce", ["package", version, "--no-update-package-json", "--no-yarn", "--out", vsixPath, "--target", vscodeTarget], {
             cwd: thisExtensionDir,
             env: releasePackageEnv,
         });
