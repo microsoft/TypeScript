@@ -707,7 +707,8 @@ func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, op
 				candidate := c.getConstituentTypeForKeyType(t, c.getTypeOfExpression(value))
 				if candidate != nil {
 					if assumeTrue && operator == ast.KindEqualsEqualsEqualsToken || !assumeTrue && operator == ast.KindExclamationEqualsEqualsToken {
-						return c.addNullableConstituents(candidate, t)
+						// Nullable constituents have no key property; preserve them as the general path does.
+						return c.getUnionType([]*Type{candidate, c.filterType(t, func(t *Type) bool { return t.flags&TypeFlagsNullable != 0 })})
 					}
 					if propType := c.getTypeOfPropertyOfType(candidate, keyPropertyName); propType != nil && isUnitType(propType) {
 						return c.removeType(t, candidate)
@@ -720,13 +721,6 @@ func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, op
 	return c.narrowTypeByDiscriminant(t, access, func(t *Type) *Type {
 		return c.narrowTypeByEquality(t, operator, value, assumeTrue)
 	})
-}
-
-// Nullable constituents have no key property, so the general discriminant narrowing logic in
-// narrowTypeByDiscriminant always retains them in branches where the discriminant can match. Add
-// them back to a constituent selected through the key property map to produce the same result.
-func (c *Checker) addNullableConstituents(candidate *Type, t *Type) *Type {
-	return c.getUnionType([]*Type{candidate, c.filterType(t, func(t *Type) bool { return t.flags&TypeFlagsNullable != 0 })})
 }
 
 func (c *Checker) narrowTypeByDiscriminant(t *Type, access *ast.Node, narrowType func(t *Type) *Type) *Type {
@@ -1248,7 +1242,7 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.
 				return c.unknownType
 			}))
 			if candidate != c.unknownType {
-				return c.addNullableConstituents(candidate, t)
+				return candidate
 			}
 		}
 	}
