@@ -10,10 +10,10 @@ import (
 type ModeAwareCache[T any] map[ModeAwareCacheKey]T
 
 type moduleResolutionCacheKey struct {
-	containingDirectory string
+	containingDirectory tspath.RootedDirectoryPath
 	moduleName          string
 	resolutionMode      core.ResolutionMode
-	redirectConfigName  string
+	redirectConfigName  tspath.RootedFilePath
 }
 
 type moduleResolutionCache struct {
@@ -29,10 +29,10 @@ func (c *moduleResolutionCache) Set(key moduleResolutionCacheKey, value *Resolve
 }
 
 type typeRefDirectiveResolutionCacheKey struct {
-	containingDirectory             string
+	containingDirectory             tspath.RootedDirectoryPath
 	typeReferenceName               string
 	resolutionMode                  core.ResolutionMode
-	redirectConfigName              string
+	redirectConfigName              tspath.RootedFilePath
 	fromInferredTypesContainingFile bool
 }
 
@@ -62,7 +62,7 @@ func (c *parsedPatternsCache) Get(pathMappings *collections.OrderedMap[string, [
 
 type ResolutionData struct {
 	compilerOptions *core.CompilerOptions
-	typingsLocation string
+	typingsLocation tspath.RootedDirectoryPath
 	projectName     string
 	extraExtensions []string
 
@@ -78,7 +78,7 @@ func newResolutionData(opts ResolverOptions) *ResolutionData {
 		packageJsonInfoCache: opts.PackageJsonCache,
 	}
 	if data.packageJsonInfoCache == nil {
-		data.packageJsonInfoCache = packagejson.NewInfoCache(opts.Host.GetCurrentDirectory(), opts.Host.FS().UseCaseSensitiveFileNames())
+		data.packageJsonInfoCache = packagejson.NewInfoCache(opts.Host.FS().CaseSensitivity())
 	}
 	return data
 }
@@ -94,11 +94,11 @@ func (c *ResolutionData) Clone() *ResolutionData {
 	}
 }
 
-func (c *ResolutionData) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
+func (c *ResolutionData) PackageJsonCacheEntries(f func(key tspath.PathKey, value *packagejson.InfoCacheEntry) bool) {
 	c.packageJsonInfoCache.Range(f)
 }
 
-func getRedirectConfigName(redirect ResolvedProjectReference) string {
+func getRedirectConfigName(redirect ResolvedProjectReference) tspath.RootedFilePath {
 	if redirect == nil {
 		return ""
 	}

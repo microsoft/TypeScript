@@ -9,6 +9,11 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+    RootedPath,
+} from "../../ast/index.ts";
 import type { FileSystemCallbacks } from "../fs.ts";
 import {
     configureFileSystemCallbacks,
@@ -142,24 +147,72 @@ export class Client {
     ): void {
         if (!fs) return;
         for (const name of configuration.callbackNames) {
-            if (name === "writeFile") {
-                const callback = fs.writeFile;
-                if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
-
-                const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
-                connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    return encodeFileSystemCallbackResult(name, callback(arg.path, arg.data));
-                });
-
-                continue;
+            switch (name) {
+                case "readFile": {
+                    const callback = fs.readFile;
+                    if (typeof callback !== "function") throw new Error("Invalid readFile callback configuration");
+                    connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => {
+                        return encodeFileSystemCallbackResult(name, callback(fileName));
+                    });
+                    break;
+                }
+                case "fileExists": {
+                    const callback = fs.fileExists;
+                    if (typeof callback !== "function") throw new Error("Invalid fileExists callback configuration");
+                    connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => {
+                        return encodeFileSystemCallbackResult(name, callback(fileName));
+                    });
+                    break;
+                }
+                case "directoryExists": {
+                    const callback = fs.directoryExists;
+                    if (typeof callback !== "function") throw new Error("Invalid directoryExists callback configuration");
+                    connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => {
+                        return encodeFileSystemCallbackResult(name, callback(directoryName));
+                    });
+                    break;
+                }
+                case "getAccessibleEntries": {
+                    const callback = fs.getAccessibleEntries;
+                    if (typeof callback !== "function") throw new Error("Invalid getAccessibleEntries callback configuration");
+                    connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => {
+                        return encodeFileSystemCallbackResult(name, callback(directoryName));
+                    });
+                    break;
+                }
+                case "realpath": {
+                    const callback = fs.realpath;
+                    if (typeof callback !== "function") throw new Error("Invalid realpath callback configuration");
+                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
+                case "stat": {
+                    const callback = fs.stat;
+                    if (typeof callback !== "function") throw new Error("Invalid stat callback configuration");
+                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
+                case "writeFile": {
+                    const callback = fs.writeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
+                    connection.onRequest(new RequestType<{ path: RootedFilePath; data: string; }, unknown, void>(name), arg => {
+                        return encodeFileSystemCallbackResult(name, callback(arg.path, arg.data));
+                    });
+                    break;
+                }
+                case "removeFile": {
+                    const callback = fs.removeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid removeFile callback configuration");
+                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
             }
-
-            const callback = fs[name];
-            if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
-            const requestType = new RequestType<unknown, unknown, void>(name);
-            connection.onRequest(requestType, (arg: unknown) => {
-                return encodeFileSystemCallbackResult(name, callback(arg as string));
-            });
         }
     }
 

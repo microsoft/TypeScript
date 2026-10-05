@@ -11,7 +11,7 @@
         "verbatimModuleSyntax": true,
         "types": ["node"],
         "noUnusedLocals": true,
-        "noUnusedParameters": true,
+        "noUnusedParameters": true
     },
     "include": [
         "*.mts",

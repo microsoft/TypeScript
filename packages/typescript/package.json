@@ -41,6 +41,9 @@
         "./schemas/tsconfig.schema.json": "./schemas/tsconfig.schema.json",
         "./schemas/jsconfig.schema.json": "./schemas/jsconfig.schema.json",
         ".": "./lib/version.cjs",
+        "./unstable/vscode": {
+            "types": "./dist/vscode/extensionApi.d.ts"
+        },
         "./unstable/sync": {
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
@@ -52,6 +55,10 @@
         "./unstable/fs": {
             "@typescript/source": "./src/api/fs.ts",
             "default": "./dist/api/fs.js"
+        },
+        "./unstable/path": {
+            "@typescript/source": "./src/api/typedPaths.ts",
+            "default": "./dist/api/typedPaths.js"
         },
         "./unstable/proto": {
             "@typescript/source": "./src/api/proto.ts",

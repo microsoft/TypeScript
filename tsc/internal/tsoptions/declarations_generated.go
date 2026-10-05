@@ -104,6 +104,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 	{
 		Name:                    "generateCpuProfile",
 		Kind:                    CommandLineOptionTypeString,
+		PathKind:                CommandLineOptionPathKindFile,
 		IsFilePath:              true,
 		Category:                diagnostics.Compiler_Diagnostics,
 		Description:             diagnostics.Emit_a_v8_CPU_profile_of_the_compiler_run_for_debugging,
@@ -112,6 +113,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 	{
 		Name:        "generateTrace",
 		Kind:        CommandLineOptionTypeString,
+		PathKind:    CommandLineOptionPathKindDirectory,
 		IsFilePath:  true,
 		Category:    diagnostics.Compiler_Diagnostics,
 		Description: diagnostics.Generates_an_event_trace_and_a_list_of_types,
@@ -219,6 +221,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 	{
 		Name:        "pprofDir",
 		Kind:        CommandLineOptionTypeString,
+		PathKind:    CommandLineOptionPathKindDirectory,
 		IsFilePath:  true,
 		Category:    diagnostics.Command_line_Options,
 		Description: diagnostics.Generate_pprof_CPU_Slashmemory_profiles_to_the_given_directory,
@@ -270,6 +273,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:                     "project",
 		Kind:                     CommandLineOptionTypeString,
+		PathKind:                 CommandLineOptionPathKindFileOrDirectory,
 		ShortName:                "p",
 		IsFilePath:               true,
 		ShowInSimplifiedHelpView: true,
@@ -354,6 +358,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:                     "outFile",
 		Kind:                     CommandLineOptionTypeString,
+		PathKind:                 CommandLineOptionPathKindFile,
 		IsFilePath:               true,
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
@@ -362,6 +367,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:                     "outDir",
 		Kind:                     CommandLineOptionTypeString,
+		PathKind:                 CommandLineOptionPathKindDirectory,
 		IsFilePath:               true,
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
@@ -370,6 +376,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:                    "rootDir",
 		Kind:                    CommandLineOptionTypeString,
+		PathKind:                CommandLineOptionPathKindDirectory,
 		IsFilePath:              true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Specify_the_root_folder_within_your_source_files,
@@ -386,6 +393,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:                    "tsBuildInfoFile",
 		Kind:                    CommandLineOptionTypeString,
+		PathKind:                CommandLineOptionPathKindFile,
 		IsFilePath:              true,
 		Category:                diagnostics.Projects,
 		DefaultValueDescription: ".tsbuildinfo",
@@ -593,6 +601,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:        "baseUrl",
 		Kind:        CommandLineOptionTypeString,
+		PathKind:    CommandLineOptionPathKindDirectory,
 		IsFilePath:  true,
 		Category:    diagnostics.Modules,
 		Description: diagnostics.Specify_the_base_directory_to_resolve_non_relative_module_names,
@@ -705,12 +714,14 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:        "sourceRoot",
 		Kind:        CommandLineOptionTypeString,
+		PathKind:    CommandLineOptionPathKindSourceMapLocation,
 		Category:    diagnostics.Emit,
 		Description: diagnostics.Specify_the_root_path_for_debuggers_to_find_the_reference_source_code,
 	},
 	{
 		Name:        "mapRoot",
 		Kind:        CommandLineOptionTypeString,
+		PathKind:    CommandLineOptionPathKindSourceMapLocation,
 		Category:    diagnostics.Emit,
 		Description: diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
 	},
@@ -881,6 +892,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:        "declarationDir",
 		Kind:        CommandLineOptionTypeString,
+		PathKind:    CommandLineOptionPathKindDirectory,
 		IsFilePath:  true,
 		Category:    diagnostics.Emit,
 		Description: diagnostics.Specify_the_output_directory_for_generated_declaration_files,
@@ -979,11 +991,13 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Name:       "rootDirs",
 		Kind:       CommandLineOptionTypeString,
 		IsFilePath: true,
+		PathKind:   CommandLineOptionPathKindDirectory,
 	},
 	"typeRoots": {
 		Name:       "typeRoots",
 		Kind:       CommandLineOptionTypeString,
 		IsFilePath: true,
+		PathKind:   CommandLineOptionPathKindDirectory,
 	},
 	"types": {
 		Name: "types",
@@ -1010,20 +1024,24 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Kind: CommandLineOptionTypeObject,
 	},
 	"files": {
-		Name: "files",
-		Kind: CommandLineOptionTypeString,
+		Name:     "files",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindFileSpec,
 	},
 	"include": {
-		Name: "include",
-		Kind: CommandLineOptionTypeString,
+		Name:     "include",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindPathPattern,
 	},
 	"exclude": {
-		Name: "exclude",
-		Kind: CommandLineOptionTypeString,
+		Name:     "exclude",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindPathPattern,
 	},
 	"extends": {
-		Name: "extends",
-		Kind: CommandLineOptionTypeString,
+		Name:     "extends",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindConfigLocator,
 	},
 	"libFiles": {
 		Name: "libFiles",
@@ -1108,8 +1126,9 @@ var extendsOptionDeclaration = &CommandLineOption{
 	Kind:     CommandLineOptionTypeListOrElement,
 	Category: diagnostics.File_Management,
 	ElementOptions: commandLineOptionsToMap([]*CommandLineOption{{
-		Name: "extends",
-		Kind: CommandLineOptionTypeString,
+		Name:     "extends",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindConfigLocator,
 	}}),
 }
 

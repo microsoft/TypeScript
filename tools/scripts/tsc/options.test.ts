@@ -13,6 +13,7 @@ import {
     generateConfigSchema,
     generateOptionComparisons,
     generateOptions,
+    generatePrepareCompilerOptionsAPI,
     validateOptions,
 } from "./generate-options.ts";
 import {
@@ -65,7 +66,7 @@ test("API compiler options are generated directly from option metadata", () => {
             "maxNodeModuleJsDepth?: number | undefined;",
             "paths?: Record<string, string[]> | undefined;",
             "plugins?: PluginImport[] | undefined;",
-            "configFilePath?: string | undefined;",
+            "configFilePath?: RootedFilePath | undefined;",
         ]
     ) assert(source.includes(field), field);
     assert.match(source, /export interface PluginImport \{\s*name: string;/);
@@ -73,6 +74,22 @@ test("API compiler options are generated directly from option metadata", () => {
     const model = structuredClone(options);
     model.compilerOptions.push({ name: "newAPIOption", type: "Tristate" });
     assert.match(generateCompilerOptionsAPI(model), /newAPIOption\?: boolean \| undefined;/);
+});
+
+test("API compiler option path preparation is generated directly from option metadata", () => {
+    const source = generatePrepareCompilerOptionsAPI();
+    assert.match(source, /configFilePath: configFilePath === undefined \? undefined : toRootedFilePath\(configFilePath, currentDirectory\)/);
+    assert.match(source, /outDir: outDir === undefined \? undefined : toRootedDirectoryPath\(outDir, currentDirectory\)/);
+    assert.match(source, /project: project === undefined \? undefined : toRootedPath\(project, currentDirectory\)/);
+    assert.match(source, /rootDirs: rootDirs\?\.map\(value => toRootedDirectoryPath\(value, currentDirectory\)\)/);
+    assert.match(source, /baseUrl: baseUrl === undefined \? undefined : toRootedDirectoryPath\(baseUrl, currentDirectory\)/);
+    assert.match(source, /generateTrace: generateTrace === undefined \? undefined : toRootedDirectoryPath\(generateTrace, currentDirectory\)/);
+    assert.match(source, /outFile: outFile === undefined \? undefined : toRootedFilePath\(outFile, currentDirectory\)/);
+    assert.match(source, /pprofDir: pprofDir === undefined \? undefined : toRootedDirectoryPath\(pprofDir, currentDirectory\)/);
+
+    const model = structuredClone(options);
+    model.compilerOptions.push({ name: "newPathOption", type: "string", pathKind: "file" });
+    assert.match(generatePrepareCompilerOptionsAPI(model), /newPathOption: newPathOption === undefined \? undefined : toRootedFilePath\(newPathOption, currentDirectory\)/);
 });
 
 test("diagnostic references use checked message text and preserve Go names", () => {
