@@ -39,7 +39,7 @@ type DeclarationEmitHost interface {
 	GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) OutputPaths
 	SourceFileMayBeEmitted(file *ast.SourceFile, forceDtsEmit bool) bool
 	GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags
-	GetEmitResolver() printer.EmitResolver
+	GetEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver
 }
 
 type thisPropertyAssignmentKey struct {
@@ -99,7 +99,10 @@ type DeclarationTransformer struct {
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
 func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath tspath.RootedFilePath) *DeclarationTransformer {
-	resolver := host.GetEmitResolver()
+	if context == nil {
+		context = printer.NewEmitContext()
+	}
+	resolver := host.GetEmitResolver(context)
 	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), stripInternal: compilerOptions.StripInternal.IsTrue(), resolver: resolver}
 	tracker := NewSymbolTracker(host, resolver, state)
 	// TODO: Use new host GetOutputPathsFor method instead of passing in entrypoint paths (which will also better support bundled emit)
@@ -1274,7 +1277,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	tx.cjsExportAssignmentName = newId
 	var type_, initializer *ast.Node
 	if ast.IsPrimitiveLiteralValue(unwrapParenthesizedExpression(expression), true) {
-		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(assignment), tx.tracker)
+		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext().ParseNode(assignment), tx.tracker)
 	}
 	if initializer == nil {
 		type_ = tx.ensureType(assignment, false)
@@ -1490,7 +1493,7 @@ func (tx *DeclarationTransformer) transformCommonJSExportWorker(input *ast.Node,
 			tx.preserveJsDoc(statement, input)
 			tx.removeAllComments(assignment)
 			return tx.Factory().NewSyntaxList([]*ast.Node{statement, assignment})
-		} else if tx.host.GetEmitResolver().GetReferencedValueDeclaration(name) == input || tx.host.GetEmitResolver().GetReferencedValueDeclaration(name) == nil {
+		} else if tx.resolver.GetReferencedValueDeclaration(name) == input || tx.resolver.GetReferencedValueDeclaration(name) == nil {
 			// only inline to a export var if the `name` lookup points at this assignment or nothing - if it points at something else, we must use a temp name
 			// export var name: Type
 			tx.tracker.PushErrorFallbackNode(input)
@@ -1655,7 +1658,7 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 			if tx.inClassExpressionDeclaration {
 				jsFlags &^= nodebuilder.FlagsWriteClassExpressionAsTypeLiteral
 			}
-			res := tx.resolver.TryJSTypeNodeToTypeNode(tx.EmitContext(), node.Type(), tx.enclosingDeclaration, jsFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+			res := tx.resolver.TryJSTypeNodeToTypeNode(node.Type(), tx.enclosingDeclaration, jsFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 			if res != nil {
 				return res
 			}
@@ -1681,9 +1684,9 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 		flags &^= nodebuilder.FlagsWriteClassExpressionAsTypeLiteral
 	}
 	if ast.HasInferredType(node) {
-		typeNode = tx.resolver.CreateTypeOfDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+		typeNode = tx.resolver.CreateTypeOfDeclaration(node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 	} else if ast.IsFunctionLike(node) {
-		typeNode = tx.resolver.CreateReturnTypeOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+		typeNode = tx.resolver.CreateReturnTypeOfSignatureDeclaration(node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 	} else {
 		debug.AssertNever(node)
 	}
@@ -1965,7 +1968,6 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 	}
 
 	lateIndexes := tx.resolver.CreateLateBoundIndexSignatures(
-		tx.EmitContext(),
 		classNode,
 		tx.enclosingDeclaration,
 		declarationEmitNodeBuilderFlags,
@@ -2027,7 +2029,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 		varDecl := tx.Factory().NewVariableDeclaration(
 			newId,
 			nil,
-			tx.resolver.CreateTypeOfExpression(tx.EmitContext(), extendsClause.Expression(), input.AsNode(), declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker),
+			tx.resolver.CreateTypeOfExpression(extendsClause.Expression(), input.AsNode(), declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker),
 			nil,
 		)
 		var mods *ast.ModifierList
@@ -2374,7 +2376,7 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 	}
 
 	if data := node.FunctionLikeData(); data != nil && data.FullSignature != nil {
-		if nodes := tx.resolver.CreateTypeParametersOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker); nodes != nil {
+		if nodes := tx.resolver.CreateTypeParametersOfSignatureDeclaration(node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker); nodes != nil {
 			typeParameters = &ast.TypeParameterList{
 				Loc:   node.Loc,
 				Nodes: nodes,
@@ -2432,7 +2434,7 @@ func (tx *DeclarationTransformer) ensureNoInitializer(node *ast.Node) *ast.Node 
 		if !ast.IsPrimitiveLiteralValue(unwrappedInitializer, true) {
 			tx.tracker.ReportInferenceFallback(node)
 		}
-		return tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(node), tx.tracker)
+		return tx.resolver.CreateLiteralConstValue(tx.EmitContext().ParseNode(node), tx.tracker)
 	}
 	return nil
 }

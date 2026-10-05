@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
@@ -890,6 +891,7 @@ type Checker struct {
 	compareTypesAssignable                      TypeComparer
 	emitResolver                                *EmitResolver
 	emitResolverOnce                            sync.Once
+	emitResolverLinks                           EmitResolverLinks
 	_jsxNamespace                               string
 	_jsxFactoryEntity                           *ast.Node
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
@@ -32687,12 +32689,16 @@ func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
 	return c.getTypeOfNode(ast.GetReparsedNodeForNode(node))
 }
 
-func (c *Checker) GetEmitResolver() *EmitResolver {
+func (c *Checker) getDiagnosticsEmitResolver() *EmitResolver {
 	c.emitResolverOnce.Do(func() {
-		c.emitResolver = newEmitResolver(c)
+		c.emitResolver = newEmitResolver(c, printer.NewEmitContext())
 	})
 
 	return c.emitResolver
+}
+
+func (c *Checker) GetEmitResolver(emitContext *printer.EmitContext) *EmitResolver {
+	return newEmitResolver(c, emitContext)
 }
 
 func (c *Checker) GetAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {

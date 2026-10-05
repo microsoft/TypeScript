@@ -31,23 +31,39 @@ type DeclarationFileLinks struct {
 	aliasesMarked bool // if file has had alias visibility marked
 }
 
+type EmitResolverLinks struct {
+	jsxLinks             core.LinkStore[*ast.Node, JSXLinks]
+	declarationLinks     core.LinkStore[*ast.Node, DeclarationLinks]
+	declarationFileLinks core.LinkStore[*ast.Node, DeclarationFileLinks]
+}
+
 type EmitResolver struct {
 	checker                 *Checker
 	checkerMu               *sync.Mutex
+	emitContext             *printer.EmitContext
+	requestNodeBuilder      *NodeBuilder
+	links                   *EmitResolverLinks
 	isValueAliasDeclaration func(node *ast.Node) bool
 	aliasMarkingVisitor     func(node *ast.Node) bool
 	referenceResolver       binder.ReferenceResolver
-	jsxLinks                core.LinkStore[*ast.Node, JSXLinks]
-	declarationLinks        core.LinkStore[*ast.Node, DeclarationLinks]
-	declarationFileLinks    core.LinkStore[*ast.Node, DeclarationFileLinks]
 }
 
-func newEmitResolver(checker *Checker) *EmitResolver {
-	e := &EmitResolver{checker: checker}
+func newEmitResolver(checker *Checker, emitContext *printer.EmitContext) *EmitResolver {
+	if emitContext == nil {
+		panic("EmitResolver requires an EmitContext")
+	}
+	e := &EmitResolver{checker: checker, emitContext: emitContext, links: &checker.emitResolverLinks}
 	e.isValueAliasDeclaration = e.isValueAliasDeclarationWorker
 	e.aliasMarkingVisitor = e.aliasMarkingVisitorWorker
 	e.checkerMu = &checker.mu
 	return e
+}
+
+func (r *EmitResolver) nodeBuilder() *NodeBuilder {
+	if r.requestNodeBuilder == nil {
+		r.requestNodeBuilder = NewNodeBuilder(r.checker, r.emitContext)
+	}
+	return r.requestNodeBuilder
 }
 
 func (r *EmitResolver) GetJsxFactoryEntity(location *ast.Node) *ast.Node {
@@ -117,7 +133,7 @@ func (r *EmitResolver) isDeclarationVisible(node *ast.Node) bool {
 		return false
 	}
 
-	links := r.declarationLinks.Get(node)
+	links := r.links.declarationLinks.Get(node)
 	if links.isVisible == core.TSUnknown {
 		if r.determineIfDeclarationIsVisible(node) {
 			links.isVisible = core.TSTrue
@@ -236,10 +252,10 @@ func (r *EmitResolver) determineIfDeclarationIsVisible(node *ast.Node) bool {
 func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFile) {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	if r.declarationFileLinks.Get(file.AsNode()).aliasesMarked {
+	if r.links.declarationFileLinks.Get(file.AsNode()).aliasesMarked {
 		return
 	}
-	r.declarationFileLinks.Get(file.AsNode()).aliasesMarked = true
+	r.links.declarationFileLinks.Get(file.AsNode()).aliasesMarked = true
 	// TODO: Does this even *have* to be an upfront walk? If it's not possible for a
 	// import a = a.b.c statement to chain into exposing a statement in a sibling scope,
 	// it could at least be pushed into scope entry -  then it wouldn't need to be recursive.
@@ -293,7 +309,7 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 
 		var nextSymbol *ast.Symbol
 		for _, declaration := range exportSymbol.Declarations {
-			r.declarationLinks.Get(declaration).isVisible = core.TSTrue
+			r.links.declarationLinks.Get(declaration).isVisible = core.TSTrue
 
 			if ast.IsInternalModuleImportEqualsDeclaration(declaration) {
 				// Add the referenced top container visible
@@ -387,7 +403,7 @@ func (r *EmitResolver) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeA
 	var addVisibleAlias func(declaration *ast.Node, aliasingStatement *ast.Node)
 	if shouldComputeAliasToMakeVisible {
 		addVisibleAlias = func(declaration *ast.Node, aliasingStatement *ast.Node) {
-			r.declarationLinks.Get(declaration).isVisible = core.TSTrue
+			r.links.declarationLinks.Get(declaration).isVisible = core.TSTrue
 			if aliasesToMakeVisibleSet == nil {
 				aliasesToMakeVisibleSet = make(map[ast.NodeId]*ast.Node)
 			}
@@ -869,14 +885,14 @@ func (r *EmitResolver) GetReferencedExportContainer(node *ast.IdentifierNode, pr
 func (r *EmitResolver) SetReferencedImportDeclaration(node *ast.IdentifierNode, ref *ast.Declaration) {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	r.jsxLinks.Get(node).importRef = ref
+	r.links.jsxLinks.Get(node).importRef = ref
 }
 
 func (r *EmitResolver) GetReferencedImportDeclaration(node *ast.IdentifierNode) *ast.Declaration {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 	if !ast.IsParseTreeNode(node) {
-		return r.jsxLinks.Get(node).importRef
+		return r.links.jsxLinks.Get(node).importRef
 	}
 
 	symbol := r.checker.getReferencedValueOrAliasSymbol(node)
@@ -947,46 +963,43 @@ func (r *EmitResolver) GetReferencedMemberValueDeclaration(node *ast.Node) *ast.
 // and requires giving it access to a lot of context it's otherwise not required to have, which also further complicates the API
 // and likely reduces performance. There's probably some refactoring that could be done here to simplify this.
 
-func (r *EmitResolver) CreateReturnTypeOfSignatureDeclaration(emitContext *printer.EmitContext, signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	original := emitContext.ParseNode(signatureDeclaration)
+func (r *EmitResolver) CreateReturnTypeOfSignatureDeclaration(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	original := r.emitContext.ParseNode(signatureDeclaration)
 	if original == nil {
-		return emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
+		return r.emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.SerializeReturnTypeForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
+	return r.nodeBuilder().SerializeReturnTypeForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateTypeParametersOfSignatureDeclaration(emitContext *printer.EmitContext, signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
-	original := emitContext.ParseNode(signatureDeclaration)
+func (r *EmitResolver) CreateTypeParametersOfSignatureDeclaration(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
+	original := r.emitContext.ParseNode(signatureDeclaration)
 	if original == nil {
 		return nil
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.SerializeTypeParametersForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
+	return r.nodeBuilder().SerializeTypeParametersForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateTypeOfDeclaration(emitContext *printer.EmitContext, declaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	original := emitContext.ParseNode(declaration)
+func (r *EmitResolver) CreateTypeOfDeclaration(declaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	original := r.emitContext.ParseNode(declaration)
 	if original == nil {
-		return emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
+		return r.emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
 	// // Get type of the symbol if this is the valid symbol otherwise get type at location
 	symbol := r.checker.getSymbolOfDeclaration(declaration)
-	return requestNodeBuilder.SerializeTypeForDeclaration(declaration, symbol, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
+	return r.nodeBuilder().SerializeTypeForDeclaration(declaration, symbol, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext, node *ast.Node, tracker nodebuilder.SymbolTracker) *ast.Node {
-	node = emitContext.ParseNode(node)
+func (r *EmitResolver) CreateLiteralConstValue(node *ast.Node, tracker nodebuilder.SymbolTracker) *ast.Node {
+	node = r.emitContext.ParseNode(node)
 	r.checkerMu.Lock()
 	t := r.checker.getTypeOfSymbol(r.checker.getSymbolOfDeclaration(node))
 	r.checkerMu.Unlock()
@@ -998,14 +1011,13 @@ func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	if t.flags&TypeFlagsEnumLike != 0 {
 		r.checkerMu.Lock()
 		defer r.checkerMu.Unlock()
-		requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-		enumResult = requestNodeBuilder.SymbolToExpression(t.symbol, ast.SymbolFlagsValue, node, nodebuilder.FlagsNone, nodebuilder.InternalFlagsNone, tracker)
+		enumResult = r.nodeBuilder().SymbolToExpression(t.symbol, ast.SymbolFlagsValue, node, nodebuilder.FlagsNone, nodebuilder.InternalFlagsNone, tracker)
 		// What about regularTrueType/regularFalseType - since those aren't fresh, we never make initializers from them
 		// TODO: handle those if this function is ever used for more than initializers in declaration emit
 	} else if t == r.checker.trueType {
-		enumResult = emitContext.Factory.NewKeywordExpression(ast.KindTrueKeyword)
+		enumResult = r.emitContext.Factory.NewKeywordExpression(ast.KindTrueKeyword)
 	} else if t == r.checker.falseType {
-		enumResult = emitContext.Factory.NewKeywordExpression(ast.KindFalseKeyword)
+		enumResult = r.emitContext.Factory.NewKeywordExpression(ast.KindFalseKeyword)
 	}
 	if enumResult != nil {
 		return enumResult
@@ -1015,51 +1027,50 @@ func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	}
 	switch value := t.AsLiteralType().value.(type) {
 	case string:
-		return emitContext.Factory.NewStringLiteral(value, ast.TokenFlagsNone)
+		return r.emitContext.Factory.NewStringLiteral(value, ast.TokenFlagsNone)
 	case jsnum.Number:
 		if value.IsInf() {
 			if value > 0 {
-				return emitContext.Factory.NewIdentifier("Infinity")
+				return r.emitContext.Factory.NewIdentifier("Infinity")
 			}
-			return emitContext.Factory.NewPrefixUnaryExpression(ast.KindMinusToken, emitContext.Factory.NewIdentifier("Infinity"))
+			return r.emitContext.Factory.NewPrefixUnaryExpression(ast.KindMinusToken, r.emitContext.Factory.NewIdentifier("Infinity"))
 		}
 		if value.IsNaN() {
-			return emitContext.Factory.NewIdentifier("NaN")
+			return r.emitContext.Factory.NewIdentifier("NaN")
 		}
 		if value.Abs() != value {
 			// negative
-			return emitContext.Factory.NewPrefixUnaryExpression(
+			return r.emitContext.Factory.NewPrefixUnaryExpression(
 				ast.KindMinusToken,
-				emitContext.Factory.NewNumericLiteral(value.String()[1:], ast.TokenFlagsNone),
+				r.emitContext.Factory.NewNumericLiteral(value.String()[1:], ast.TokenFlagsNone),
 			)
 		}
-		return emitContext.Factory.NewNumericLiteral(value.String(), ast.TokenFlagsNone)
+		return r.emitContext.Factory.NewNumericLiteral(value.String(), ast.TokenFlagsNone)
 	case jsnum.PseudoBigInt:
-		return emitContext.Factory.NewBigIntLiteral(pseudoBigIntToString(value)+"n", ast.TokenFlagsNone)
+		return r.emitContext.Factory.NewBigIntLiteral(pseudoBigIntToString(value)+"n", ast.TokenFlagsNone)
 	case bool:
 		kind := ast.KindFalseKeyword
 		if value {
 			kind = ast.KindTrueKeyword
 		}
-		return emitContext.Factory.NewKeywordExpression(kind)
+		return r.emitContext.Factory.NewKeywordExpression(kind)
 	}
 	panic("unhandled literal const value kind")
 }
 
-func (r *EmitResolver) CreateTypeOfExpression(emitContext *printer.EmitContext, expression *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	expression = emitContext.ParseNode(expression)
+func (r *EmitResolver) CreateTypeOfExpression(expression *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	expression = r.emitContext.ParseNode(expression)
 	if expression == nil {
-		return emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
+		return r.emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.SerializeTypeForExpression(expression, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
+	return r.nodeBuilder().SerializeTypeForExpression(expression, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitContext, container *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
-	container = emitContext.ParseNode(container)
+func (r *EmitResolver) CreateLateBoundIndexSignatures(container *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
+	container = r.emitContext.ParseNode(container)
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
@@ -1072,7 +1083,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 		instanceInfos = r.checker.getIndexInfosOfIndexSymbol(instanceIndexSymbol, siblingSymbols)
 	}
 
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := r.nodeBuilder()
 
 	var result []*ast.Node
 	for i, infoList := range [][]*IndexInfo{staticInfos, instanceInfos} {
@@ -1111,13 +1122,13 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 							tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
 						}
 
-						mods := core.IfElse(isStatic, []*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}, nil)
+						mods := core.IfElse(isStatic, []*ast.Node{r.emitContext.Factory.NewModifier(ast.KindStaticKeyword)}, nil)
 						if info.isReadonly {
-							mods = append(mods, emitContext.Factory.NewModifier(ast.KindReadonlyKeyword))
+							mods = append(mods, r.emitContext.Factory.NewModifier(ast.KindReadonlyKeyword))
 						}
 
-						decl := emitContext.Factory.NewPropertyDeclaration(
-							core.IfElse(mods != nil, emitContext.Factory.NewModifierList(mods), nil),
+						decl := r.emitContext.Factory.NewPropertyDeclaration(
+							core.IfElse(mods != nil, r.emitContext.Factory.NewModifierList(mods), nil),
 							c.Name(),
 							c.QuestionToken(),
 							requestNodeBuilder.TypeToTypeNode(r.checker.getTypeOfSymbol(c.Symbol()), enclosingDeclaration, flags, internalFlags, tracker),
@@ -1130,10 +1141,10 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 			}
 			node := requestNodeBuilder.IndexInfoToIndexSignatureDeclaration(info, enclosingDeclaration, flags, internalFlags, tracker)
 			if node != nil && isStatic {
-				modNodes := []*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}
+				modNodes := []*ast.Node{r.emitContext.Factory.NewModifier(ast.KindStaticKeyword)}
 				modNodes = append(modNodes, node.ModifierNodes()...)
-				mods := emitContext.Factory.NewModifierList(modNodes)
-				node = emitContext.Factory.UpdateIndexSignatureDeclaration(
+				mods := r.emitContext.Factory.NewModifierList(modNodes)
+				node = r.emitContext.Factory.UpdateIndexSignatureDeclaration(
 					node.AsIndexSignatureDeclaration(),
 					mods,
 					node.ParameterList(),
@@ -1269,13 +1280,12 @@ func (r *EmitResolver) GetPropertiesOfContainerFunction(node *ast.Node) []*ast.S
 	return r.checker.getPropertiesOfType(r.checker.getTypeOfSymbol(s))
 }
 
-func (r *EmitResolver) TryJSTypeNodeToTypeNode(emitContext *printer.EmitContext, typeNode *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	typeNode = emitContext.ParseNode(typeNode)
+func (r *EmitResolver) TryJSTypeNodeToTypeNode(typeNode *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	typeNode = r.emitContext.ParseNode(typeNode)
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.TryJSTypeNodeToTypeNode(typeNode, enclosingDeclaration, flags, internalFlags, tracker)
+	return r.nodeBuilder().TryJSTypeNodeToTypeNode(typeNode, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
 // IsThisPropertyAssignmentDeclarationRedundant reports whether a JS `this.<name> = ...` expando

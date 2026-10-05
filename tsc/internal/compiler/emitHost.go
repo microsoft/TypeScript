@@ -31,15 +31,19 @@ var _ EmitHost = (*emitHost)(nil)
 
 // NOTE: emitHost operations must be thread-safe
 type emitHost struct {
-	program      *Program
-	emitResolver printer.EmitResolver
+	program                      *Program
+	getEmitResolver              func(*printer.EmitContext) printer.EmitResolver
+	getEffectiveDeclarationFlags func(*ast.Node, ast.ModifierFlags) ast.ModifierFlags
 }
 
 func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	return &emitHost{
-		program:      program,
-		emitResolver: checker.GetEmitResolver(),
+		program: program,
+		getEmitResolver: func(emitContext *printer.EmitContext) printer.EmitResolver {
+			return checker.GetEmitResolver(emitContext)
+		},
+		getEffectiveDeclarationFlags: checker.GetEffectiveDeclarationFlags,
 	}, done
 }
 
@@ -88,7 +92,7 @@ func (host *emitHost) GetRedirectTargets(path tspath.PathKey) []tspath.RootedFil
 }
 
 func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
-	return host.GetEmitResolver().GetEffectiveDeclarationFlags(node, flags)
+	return host.getEffectiveDeclarationFlags(node, flags)
 }
 
 func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
@@ -130,8 +134,8 @@ func (host *emitHost) WriteFile(fileName tspath.RootedFilePath, text string) err
 	return host.program.Host().FS().WriteFile(fileName, text)
 }
 
-func (host *emitHost) GetEmitResolver() printer.EmitResolver {
-	return host.emitResolver
+func (host *emitHost) GetEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver {
+	return host.getEmitResolver(emitContext)
 }
 
 func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {

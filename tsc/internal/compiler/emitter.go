@@ -117,7 +117,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
 	jsxTransformEnabled := options.GetJSXTransformEnabled() && sourceFile.LanguageVariant == core.LanguageVariantJSX
 
-	emitResolver := host.GetEmitResolver()
+	emitResolver := host.GetEmitResolver(emitContext)
 
 	var referenceResolver binder.ReferenceResolver
 	if importElisionEnabled || jsxTransformEnabled || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() {
