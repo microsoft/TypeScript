@@ -499,13 +499,13 @@ function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpres
 }
 
 /** @internal */
-function skipOuterExpressions<T extends Expression>(node: WrappedExpression<T>): T;
+export function skipOuterExpressions<T extends Expression>(node: WrappedExpression<T>): T;
 /** @internal */
-function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
+export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
 /** @internal */
-function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
+export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
 /** @internal */
-function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
+export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
     while (isOuterExpression(node, kinds)) {
         node = node.expression;
     }

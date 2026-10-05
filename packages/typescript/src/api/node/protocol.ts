@@ -13,7 +13,6 @@ export const HEADER_OFFSET_STRUCTURED_DATA = 36;
 export const HEADER_OFFSET_NODES = 40;
 export const HEADER_OFFSET_SOURCE_FILE_ID = 44;
 export const HEADER_OFFSET_SOURCE_FILE_LEASE = 52;
-export const HEADER_OFFSET_BINDER_DATA = 60;
 export const HEADER_SIZE = 64;
 
 export const NODE_LEN = 28;

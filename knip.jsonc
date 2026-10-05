@@ -1,5 +1,5 @@
 {
-    "$schema": "https://unpkg.com/knip@5/schema.json",
+    "$schema": "https://unpkg.com/knip@6/schema.json",
     "exclude": ["duplicates", "enumMembers"],
     "tags": ["-knipignore"],
     "includeEntryExports": false,
@@ -13,14 +13,14 @@
             "entry": [
                 "Herebyfile.mjs",
                 "tools/scripts/tsc/generate.ts",
-                "tsc/internal/lsp/lsproto/_generate/*.{mts,ts}",
+                "tools/scripts/**/*.test.{mts,ts}",
                 "tsc/internal/stringutil/_scripts/*.mts"
             ],
             "project": [
-                "tools/scripts/**/*.{mjs,ts}",
-                "tsc/internal/lsp/lsproto/_generate/*.{mts,ts}",
+                "tools/scripts/**/*.{mjs,mts,ts}",
                 "tsc/internal/stringutil/_scripts/*.mts"
             ],
+            "ignore": ["tools/scripts/lsp/metaModelSchema.mts"],
             "ignoreDependencies": [
                 "@dprint/json",
                 "@dprint/typescript",
@@ -51,7 +51,7 @@
                 "src/**/*.ts",
                 "test/**/*.ts"
             ],
-            "ignoreDependencies": ["@vscode/vsce"]
+            "ignoreDependencies": ["@vscode/vsce", "vscode-languageserver-protocol"]
         }
     }
 }

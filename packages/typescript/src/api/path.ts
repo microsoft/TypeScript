@@ -78,7 +78,7 @@ function getFileUrlVolumeSeparatorEnd(url: string, start: number) {
  *
  * @internal
  */
-function getRootLength(path: string): number {
+export function getRootLength(path: string): number {
     const rootLength = getEncodedRootLength(path);
     return rootLength < 0 ? ~rootLength : rootLength;
 }
