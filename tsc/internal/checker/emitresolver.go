@@ -42,7 +42,6 @@ type EmitResolver struct {
 	checkerMu               *sync.Mutex
 	emitContext             *printer.EmitContext
 	requestNodeBuilder      *NodeBuilder
-	links                   *EmitResolverLinks
 	isValueAliasDeclaration func(node *ast.Node) bool
 	aliasMarkingVisitor     func(node *ast.Node) bool
 	referenceResolver       binder.ReferenceResolver
@@ -52,7 +51,7 @@ func newEmitResolver(checker *Checker, emitContext *printer.EmitContext) *EmitRe
 	if emitContext == nil {
 		panic("EmitResolver requires an EmitContext")
 	}
-	e := &EmitResolver{checker: checker, emitContext: emitContext, links: &checker.emitResolverLinks}
+	e := &EmitResolver{checker: checker, emitContext: emitContext}
 	e.isValueAliasDeclaration = e.isValueAliasDeclarationWorker
 	e.aliasMarkingVisitor = e.aliasMarkingVisitorWorker
 	e.checkerMu = &checker.mu
@@ -133,7 +132,7 @@ func (r *EmitResolver) isDeclarationVisible(node *ast.Node) bool {
 		return false
 	}
 
-	links := r.links.declarationLinks.Get(node)
+	links := r.checker.emitResolverLinks.declarationLinks.Get(node)
 	if links.isVisible == core.TSUnknown {
 		if r.determineIfDeclarationIsVisible(node) {
 			links.isVisible = core.TSTrue
@@ -252,10 +251,10 @@ func (r *EmitResolver) determineIfDeclarationIsVisible(node *ast.Node) bool {
 func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFile) {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	if r.links.declarationFileLinks.Get(file.AsNode()).aliasesMarked {
+	if r.checker.emitResolverLinks.declarationFileLinks.Get(file.AsNode()).aliasesMarked {
 		return
 	}
-	r.links.declarationFileLinks.Get(file.AsNode()).aliasesMarked = true
+	r.checker.emitResolverLinks.declarationFileLinks.Get(file.AsNode()).aliasesMarked = true
 	// TODO: Does this even *have* to be an upfront walk? If it's not possible for a
 	// import a = a.b.c statement to chain into exposing a statement in a sibling scope,
 	// it could at least be pushed into scope entry -  then it wouldn't need to be recursive.
@@ -309,7 +308,7 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 
 		var nextSymbol *ast.Symbol
 		for _, declaration := range exportSymbol.Declarations {
-			r.links.declarationLinks.Get(declaration).isVisible = core.TSTrue
+			r.checker.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
 
 			if ast.IsInternalModuleImportEqualsDeclaration(declaration) {
 				// Add the referenced top container visible
@@ -403,7 +402,7 @@ func (r *EmitResolver) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeA
 	var addVisibleAlias func(declaration *ast.Node, aliasingStatement *ast.Node)
 	if shouldComputeAliasToMakeVisible {
 		addVisibleAlias = func(declaration *ast.Node, aliasingStatement *ast.Node) {
-			r.links.declarationLinks.Get(declaration).isVisible = core.TSTrue
+			r.checker.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
 			if aliasesToMakeVisibleSet == nil {
 				aliasesToMakeVisibleSet = make(map[ast.NodeId]*ast.Node)
 			}
@@ -885,14 +884,14 @@ func (r *EmitResolver) GetReferencedExportContainer(node *ast.IdentifierNode, pr
 func (r *EmitResolver) SetReferencedImportDeclaration(node *ast.IdentifierNode, ref *ast.Declaration) {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	r.links.jsxLinks.Get(node).importRef = ref
+	r.checker.emitResolverLinks.jsxLinks.Get(node).importRef = ref
 }
 
 func (r *EmitResolver) GetReferencedImportDeclaration(node *ast.IdentifierNode) *ast.Declaration {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 	if !ast.IsParseTreeNode(node) {
-		return r.links.jsxLinks.Get(node).importRef
+		return r.checker.emitResolverLinks.jsxLinks.Get(node).importRef
 	}
 
 	symbol := r.checker.getReferencedValueOrAliasSymbol(node)
@@ -1161,9 +1160,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(container *ast.Node, enclo
 
 func (r *EmitResolver) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
 	// node = emitContext.ParseNode(node)
-	r.checkerMu.Lock()
-	defer r.checkerMu.Unlock()
-	return r.checker.GetEffectiveDeclarationFlags(node, flags)
+	return r.checker.GetEffectiveDeclarationFlagsForEmit(node, flags)
 }
 
 func (r *EmitResolver) GetConstantValue(node *ast.Node) any {

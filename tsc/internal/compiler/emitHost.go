@@ -43,7 +43,7 @@ func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*
 		getEmitResolver: func(emitContext *printer.EmitContext) printer.EmitResolver {
 			return checker.GetEmitResolver(emitContext)
 		},
-		getEffectiveDeclarationFlags: checker.GetEffectiveDeclarationFlags,
+		getEffectiveDeclarationFlags: checker.GetEffectiveDeclarationFlagsForEmit,
 	}, done
 }
 
