@@ -697,6 +697,10 @@ func (s *Session) scheduleIdleCacheClean() {
 
 		go func() { runtime.GC() }()
 	})
+	// Must be stored so cancelIdleCacheClean/closeIdleCacheClean can find and
+	// stop this timer; otherwise it always runs to completion, making Close
+	// block for the full delay instead of returning promptly.
+	s.idleCacheCleanTimer = timer
 }
 
 func (s *Session) cancelIdleCacheClean() {
