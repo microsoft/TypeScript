@@ -117,6 +117,7 @@ type TypingsInstallResult struct {
 	TypingsFiles     []tspath.RootedFilePath
 	FilesToWatch     []tspath.RootedPath
 	CacheEntryPoints []CachedTypingEntryPoint
+	Discovery        *TypingsDiscovery
 }
 
 type CachedTypingEntryPoint struct {
@@ -138,8 +139,12 @@ func (ti *TypingsInstaller) discoverAndInstallTypings(ctx context.Context, reque
 	ti.init(ctx, request.FS, request.Logger)
 
 	cachedTypings := ti.resolveCachedTypings(request.FS)
+	cachedTypingPaths, newTypingNames, filesToWatch, discovery := discoverTypings(
+		request.FS, request.Logger, request.TypingsInfo, request.FileNames,
+		request.ProjectRootPath, cachedTypings, ti.typesRegistry,
+	)
 	makeResult := func(files []tspath.RootedFilePath, filesToWatch []tspath.RootedPath) *TypingsInstallResult {
-		result := &TypingsInstallResult{TypingsFiles: files, FilesToWatch: filesToWatch}
+		result := &TypingsInstallResult{TypingsFiles: files, FilesToWatch: filesToWatch, Discovery: discovery}
 		cachedTypings.Range(func(name string, typing *CachedTyping) bool {
 			if slices.Contains(files, typing.TypingsLocation) {
 				result.CacheEntryPoints = append(result.CacheEntryPoints, CachedTypingEntryPoint{
@@ -153,16 +158,6 @@ func (ti *TypingsInstaller) discoverAndInstallTypings(ctx context.Context, reque
 		})
 		return result
 	}
-	cachedTypingPaths, newTypingNames, filesToWatch := DiscoverTypings(
-		request.FS,
-		request.Logger,
-		request.TypingsInfo,
-		request.FileNames,
-		request.ProjectRootPath,
-		cachedTypings,
-		ti.typesRegistry,
-	)
-
 	requestId := ti.installRunCount.Add(1)
 	// install typings
 	if len(newTypingNames) > 0 {

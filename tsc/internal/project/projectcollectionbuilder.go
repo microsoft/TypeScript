@@ -566,7 +566,12 @@ func fileChangeSummaryAffectsTypingsWatch(
 		}
 	}
 	for uri := range summary.Deleted.Keys() {
-		if affectsWatch(uri) {
+		deletedPath := caseSensitivity.PathKey(uri.FileName().AsPath())
+		if affectsWatch(uri) || slices.ContainsFunc(filesToWatch, func(path tspath.RootedPath) bool {
+			return deletedPath.ContainsPath(caseSensitivity.PathKey(path))
+		}) || slices.ContainsFunc(typingsFiles, func(path tspath.RootedFilePath) bool {
+			return deletedPath.ContainsPath(caseSensitivity.PathKey(path.AsPath()))
+		}) {
 			return true
 		}
 	}
@@ -1074,7 +1079,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				// has not changed since the time the ATA request was dispatched; the change can still be
 				// applied to this project in its current state.
 				return ataChange.TypingsInfo.Equals(p.ComputeTypingsInfo()) &&
-					slices.Equal(ataChange.FileNames, p.ComputeTypingsFileNames())
+					p.typingsDiscoveryInputsEqual(ataChange.FileNames)
 			},
 			func(p *Project) {
 				p.installedTypingsInfo = ataChange.TypingsInfo
@@ -1124,6 +1129,12 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 		if ataChange.SnapshotID < b.ataInvalidationSnapshotID(projectID) {
 			if logger != nil {
 				logger.Logf("Ignoring stale ATA state for project %s", projectID)
+			}
+			continue
+		}
+		if ataChange.Discovery != nil && !ataChange.Discovery.IsCurrent(b.fs.fs, ataChange.TypingsInfo, ataChange.FileNames, ataChange.ProjectDirectory) {
+			if logger != nil {
+				logger.Logf("Ignoring ATA state with obsolete discovery inputs for project %s", projectID)
 			}
 			continue
 		}

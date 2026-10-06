@@ -35,6 +35,29 @@ func DiscoverTypings(
 	packageNameToTypingLocation *collections.SyncMap[string, *CachedTyping],
 	typesRegistry map[string]map[string]string,
 ) (cachedTypingPaths []tspath.RootedFilePath, newTypingNames []string, filesToWatch []tspath.RootedPath) {
+	cachedTypingPaths, newTypingNames, filesToWatch, _ = discoverTypings(fs, logger, typingsInfo, fileNames, projectRootPath, packageNameToTypingLocation, typesRegistry)
+	return
+}
+
+type TypingsDiscovery struct {
+	inferredTypings map[string]tspath.RootedFilePath
+}
+
+func (d *TypingsDiscovery) IsCurrent(fs vfs.FS, info *TypingsInfo, fileNames []tspath.RootedFilePath, projectDirectory tspath.RootedDirectoryPath) bool {
+	var logger *logging.LogTree
+	_, _, _, current := discoverTypings(fs, logger, info, fileNames, projectDirectory, &collections.SyncMap[string, *CachedTyping]{}, nil)
+	return maps.Equal(d.inferredTypings, current.inferredTypings)
+}
+
+func discoverTypings(
+	fs vfs.FS,
+	logger logging.Logger,
+	typingsInfo *TypingsInfo,
+	fileNames []tspath.RootedFilePath,
+	projectRootPath tspath.RootedDirectoryPath,
+	packageNameToTypingLocation *collections.SyncMap[string, *CachedTyping],
+	typesRegistry map[string]map[string]string,
+) (cachedTypingPaths []tspath.RootedFilePath, newTypingNames []string, filesToWatch []tspath.RootedPath, discovery *TypingsDiscovery) {
 	// A typing name to typing file path mapping
 	inferredTypings := map[string]tspath.RootedFilePath{}
 
@@ -50,12 +73,7 @@ func DiscoverTypings(
 
 	// Directories to search for package.json, bower.json and other typing information
 	if typingsInfo.CompilerOptions.Types == nil {
-		possibleSearchDirs := map[tspath.RootedDirectoryPath]bool{}
-		for _, fileName := range fileNames {
-			possibleSearchDirs[fileName.Directory()] = true
-		}
-		possibleSearchDirs[projectRootPath] = true
-		for searchDir := range possibleSearchDirs {
+		for _, searchDir := range discoveryDirectories(typingsInfo, fileNames, projectRootPath) {
 			filesToWatch = addTypingNamesAndGetFilesToWatch(fs, logger, inferredTypings, filesToWatch, searchDir, "bower.json", "bower_components")
 			filesToWatch = addTypingNamesAndGetFilesToWatch(fs, logger, inferredTypings, filesToWatch, searchDir, "package.json", "node_modules")
 		}
@@ -82,6 +100,8 @@ func DiscoverTypings(
 		delete(inferredTypings, excludeTypingName)
 		logger.Log(fmt.Sprintf("ATA:: Typing for %s is in exclude list, will be ignored.", excludeTypingName))
 	}
+	// Keep discovery demand independent of cache paths added by this or another install.
+	discovery = &TypingsDiscovery{inferredTypings: maps.Clone(inferredTypings)}
 
 	// Add the cached typing locations for inferred typings that are already installed
 	packageNameToTypingLocation.Range(func(name string, typing *CachedTyping) bool {
@@ -100,7 +120,35 @@ func DiscoverTypings(
 		}
 	}
 	logger.Log(fmt.Sprintf("ATA:: Finished typings discovery: cachedTypingsPaths: %v newTypingNames: %v, filesToWatch %v", cachedTypingPaths, newTypingNames, filesToWatch))
-	return cachedTypingPaths, newTypingNames, filesToWatch
+	return cachedTypingPaths, newTypingNames, filesToWatch, discovery
+}
+
+func discoveryDirectories(info *TypingsInfo, files []tspath.RootedFilePath, projectDirectory tspath.RootedDirectoryPath) []tspath.RootedDirectoryPath {
+	if info.CompilerOptions.Types != nil {
+		return nil
+	}
+	directories := collections.NewSetFromItems(projectDirectory)
+	for _, file := range files {
+		if file.HasJSFileExtension() {
+			directories.Add(file.Directory())
+		}
+	}
+	result := slices.Collect(maps.Keys(directories.Keys()))
+	slices.Sort(result)
+	return result
+}
+
+func DiscoveryInputsEqual(info *TypingsInfo, files, otherFiles []tspath.RootedFilePath, projectDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) bool {
+	directoryKeys := func(files []tspath.RootedFilePath) []tspath.PathKey {
+		keys := core.Map(discoveryDirectories(info, files, projectDirectory), func(dir tspath.RootedDirectoryPath) tspath.PathKey {
+			return caseSensitivity.PathKey(dir.AsPath())
+		})
+		slices.Sort(keys)
+		return slices.Compact(keys)
+	}
+	return slices.Equal(directoryKeys(files), directoryKeys(otherFiles)) &&
+		(info.TypeAcquisition.DisableFilenameBasedTypeAcquisition.IsTrue() ||
+			slices.Equal(typingNamesFromSourceFileNames(files), typingNamesFromSourceFileNames(otherFiles)))
 }
 
 func addInferredTyping(inferredTypings map[string]tspath.RootedFilePath, typingName string) {
@@ -133,23 +181,26 @@ func getTypingNamesFromSourceFileNames(
 	inferredTypings map[string]tspath.RootedFilePath,
 	fileNames []tspath.RootedFilePath,
 ) {
-	hasJsxFile := false
+	addInferredTypings(fs, logger, inferredTypings, typingNamesFromSourceFileNames(fileNames), "Inferred typings from file names")
+}
+
+func typingNamesFromSourceFileNames(fileNames []tspath.RootedFilePath) []string {
 	var fromFileNames []string
 	for _, fileName := range fileNames {
-		hasJsxFile = hasJsxFile || fileName.ExtensionIs(tspath.ExtensionJsx)
+		if !fileName.HasJSFileExtension() {
+			continue
+		}
+		if fileName.ExtensionIs(tspath.ExtensionJsx) {
+			fromFileNames = append(fromFileNames, "react")
+		}
 		inferredTypingName := tspath.RemoveFileExtension(tspath.ToFileNameLowerCase(fileName.BaseName()))
 		cleanedTypingName := removeMinAndVersionNumbers(inferredTypingName)
 		if typeName, ok := safeFileNameToTypeName[cleanedTypingName]; ok {
 			fromFileNames = append(fromFileNames, typeName)
 		}
 	}
-	if len(fromFileNames) > 0 {
-		addInferredTypings(fs, logger, inferredTypings, fromFileNames, "Inferred typings from file names")
-	}
-	if hasJsxFile {
-		logger.Log("ATA:: Inferred 'react' typings due to presence of '.jsx' extension")
-		addInferredTyping(inferredTypings, "react")
-	}
+	slices.Sort(fromFileNames)
+	return slices.Compact(fromFileNames)
 }
 
 /**

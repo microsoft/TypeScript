@@ -36,6 +36,18 @@ func TestTypingsWatchWithoutDiscoveryDirectories(t *testing.T) {
 	}
 }
 
+func TestTypingsWatchAncestorDeletion(t *testing.T) {
+	t.Parallel()
+	for _, path := range []tspath.RootedPath{"/workspace/project/bower.json", "/workspace/project/node_modules"} {
+		for _, deleted := range []string{"/workspace", "/workspace/project", "/workspace/project-other", "/workspace/other"} {
+			summary := FileChangeSummary{}
+			summary.Deleted.Add(lsproto.DocumentUri("file://" + deleted))
+			assert.Equal(t, fileChangeSummaryAffectsTypingsWatch(summary, []tspath.RootedPath{path}, nil, tspath.CaseInsensitive),
+				deleted == "/workspace" || deleted == "/workspace/project")
+		}
+	}
+}
+
 func TestSnapshot(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {

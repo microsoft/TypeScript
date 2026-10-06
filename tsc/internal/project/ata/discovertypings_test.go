@@ -15,6 +15,39 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestDiscoveryInputsEqual(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name            string
+		files           []tspath.RootedFilePath
+		otherFiles      []tspath.RootedFilePath
+		types           []string
+		disableNames    bool
+		caseSensitivity tspath.CaseSensitivity
+		equal           bool
+	}{
+		{name: "same directory", files: []tspath.RootedFilePath{"/project/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/b.js"}, equal: true},
+		{name: "different directories", files: []tspath.RootedFilePath{"/project/a/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/b/b.js"}},
+		{name: "filename typing", files: []tspath.RootedFilePath{"/project/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/jquery.js"}},
+		{name: "filename typing suffix", files: []tspath.RootedFilePath{"/project/jquery.js"}, otherFiles: []tspath.RootedFilePath{"/project/jquery.min.1.2.js"}, equal: true},
+		{name: "JSX typing", files: []tspath.RootedFilePath{"/project/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/a.jsx"}},
+		{name: "disabled filename typing", files: []tspath.RootedFilePath{"/project/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/jquery.jsx"}, disableNames: true, equal: true},
+		{name: "disabled manifest discovery", files: []tspath.RootedFilePath{"/project/a/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/b/b.js"}, types: []string{}, equal: true},
+		{name: "case insensitive directories", files: []tspath.RootedFilePath{"/project/A/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/a/b.js"}, equal: true},
+		{name: "case sensitive directories", files: []tspath.RootedFilePath{"/project/A/a.js"}, otherFiles: []tspath.RootedFilePath{"/project/a/b.js"}, caseSensitivity: tspath.CaseSensitive},
+		{name: "duplicate directory", files: []tspath.RootedFilePath{"/project/a.js", "/project/b.js"}, otherFiles: []tspath.RootedFilePath{"/project/c.js"}, equal: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			info := &ata.TypingsInfo{
+				CompilerOptions: &core.CompilerOptions{Types: test.types},
+				TypeAcquisition: &core.TypeAcquisition{DisableFilenameBasedTypeAcquisition: core.BoolToTristate(test.disableNames)},
+			}
+			assert.Equal(t, ata.DiscoveryInputsEqual(info, test.files, test.otherFiles, "/project", test.caseSensitivity), test.equal)
+		})
+	}
+}
+
 func TestDiscoverTypings(t *testing.T) {
 	t.Parallel()
 	t.Run("should use mappings from safe list", func(t *testing.T) {

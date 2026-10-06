@@ -2074,7 +2074,7 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 					if !slices.Equal(result.TypingsFiles, project.typingsFiles) ||
 						project.installedTypingsInfo == nil ||
 						!typingsInfo.Equals(*project.installedTypingsInfo) ||
-						!slices.Equal(fileNames, project.installedTypingsFileNames) ||
+						!project.typingsDiscoveryInputsEqual(project.installedTypingsFileNames) ||
 						!slices.Equal(result.FilesToWatch, project.installedTypingsFilesToWatch) ||
 						!slices.Equal(result.CacheEntryPoints, project.installedTypingCacheEntryPoints) {
 						s.pendingATAChangesMu.Lock()
@@ -2089,6 +2089,8 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 								TypingsFiles:           result.TypingsFiles,
 								TypingsFilesToWatch:    result.FilesToWatch,
 								TypingCacheEntryPoints: result.CacheEntryPoints,
+								Discovery:              result.Discovery,
+								ProjectDirectory:       request.ProjectRootPath,
 								Logs:                   logTree,
 							}
 						}

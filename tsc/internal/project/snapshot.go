@@ -428,6 +428,8 @@ type ATAStateChange struct {
 	// TypingsFilesToWatch is the new list of typing files to watch for changes.
 	TypingsFilesToWatch    []tspath.RootedPath
 	TypingCacheEntryPoints []ata.CachedTypingEntryPoint
+	Discovery              *ata.TypingsDiscovery
+	ProjectDirectory       tspath.RootedDirectoryPath
 	Logs                   *logging.LogTree
 }
 
@@ -501,7 +503,7 @@ func (s *Snapshot) Clone(
 	start := time.Now()
 	hadExcessiveWatchEvents := change.fileChanges.HasExcessiveWatchEvents()
 	var unfilteredFileChanges FileChangeSummary
-	if hadExcessiveWatchEvents {
+	if hadExcessiveWatchEvents || change.fileChanges.Deleted.Len() > 0 {
 		unfilteredFileChanges = change.fileChanges.Clone()
 	}
 	inferredContentMappers := s.inferredProjectContentMappers
@@ -528,6 +530,11 @@ func (s *Snapshot) Clone(
 	if hadExcessiveWatchEvents {
 		typingsWatchChanges = unfilteredFileChanges
 		typingsWatchChanges.InvalidateAll = typingsWatchChanges.InvalidateAll || change.fileChanges.InvalidateAll
+	} else if unfilteredFileChanges.Deleted.Len() > 0 {
+		typingsWatchChanges = typingsWatchChanges.Clone()
+		for uri := range unfilteredFileChanges.Deleted.Keys() {
+			typingsWatchChanges.Deleted.Add(uri)
+		}
 	}
 	typingCacheChanges := typingsWatchChanges
 	if typingsLocation := store.options.TypingsLocation; typingsLocation != "" {

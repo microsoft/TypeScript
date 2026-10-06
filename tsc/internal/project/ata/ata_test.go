@@ -396,6 +396,105 @@ func TestATA(t *testing.T) {
 		assert.Assert(t, typingsFile != nil, "jquery types should be available immediately after reopening")
 	})
 
+	for _, scenario := range []string{"equivalent roots", "equivalent roots after pending install", "first install manifest change", "first install bower change", "directory deletion"} {
+		t.Run("inferred project discovery reuse "+scenario, func(t *testing.T) {
+			t.Parallel()
+			const directory = "/user/username/projects/project"
+			const app = directory + "/app.js"
+			const other = directory + "/other.js"
+			manifest := directory + "/package.json"
+			if scenario == "directory deletion" || scenario == "first install bower change" {
+				manifest = directory + "/bower.json"
+			}
+			files := map[string]any{
+				app: "", other: "", manifest: `{"name":"test","dependencies":{"jquery":"^3.1.0"}}`,
+			}
+			session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+				PackageToFile: map[string]string{"jquery": `declare const $: { x: number }`},
+			})
+			ctx := context.Background()
+			uri := lsproto.DocumentUri("file://" + app)
+			installStarted := make(chan struct{}, 1)
+			releaseInstall := make(chan struct{})
+			var once sync.Once
+			release := func() { once.Do(func() { close(releaseInstall) }) }
+			defer release()
+			pendingInstall := scenario == "first install manifest change" || scenario == "first install bower change" || scenario == "equivalent roots after pending install"
+			if pendingInstall {
+				install := utils.NpmExecutor().NpmInstallFunc
+				utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
+					if slices.Contains(args, "@types/jquery@latest") {
+						installStarted <- struct{}{}
+						<-releaseInstall
+					}
+					return install(ctx, cwd, args)
+				}
+			}
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			if pendingInstall {
+				waitForInstall(t, installStarted)
+			} else {
+				session.WaitForBackgroundTasks()
+				_, err := session.GetLanguageService(ctx, uri)
+				assert.NilError(t, err)
+				session.WaitForBackgroundTasks()
+			}
+			session.DidCloseFile(ctx, uri)
+			snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+			assert.NilError(t, err)
+			assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+			snapshot.Deref()
+
+			switch scenario {
+			case "equivalent roots":
+				uri = lsproto.DocumentUri("file://" + other)
+			case "equivalent roots after pending install":
+				release()
+				session.WaitForBackgroundTasks()
+				snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				snapshot.Deref()
+				uri = lsproto.DocumentUri("file://" + other)
+			case "first install manifest change", "first install bower change":
+				assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(manifest), `{"name":"test"}`))
+				session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+					Uri: lsproto.DocumentUri("file://" + manifest), Type: lsproto.FileChangeTypeChanged,
+				}})
+				snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				snapshot.Deref()
+				release()
+				session.WaitForBackgroundTasks()
+				snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				snapshot.Deref()
+			case "directory deletion":
+				assert.NilError(t, utils.FS().Remove(tspath.RootedFilePathFromNormalized(manifest).AsPath()))
+				assert.NilError(t, utils.FS().Remove(app))
+				assert.NilError(t, utils.FS().Remove(other))
+				assert.NilError(t, utils.FS().Remove(directory))
+				session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+					Uri: "file://" + directory, Type: lsproto.FileChangeTypeDeleted,
+				}})
+				snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				snapshot.Deref()
+				assert.NilError(t, utils.FS().WriteFile(app, ""))
+				assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(manifest), `{"name":"test"}`))
+			}
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			inferred := session.Snapshot().ProjectCollection.InferredProject()
+			assert.Assert(t, inferred != nil && inferred.GetProgram() != nil)
+			hasTypings := inferred.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts") != nil
+			assert.Equal(t, hasTypings, strings.HasPrefix(scenario, "equivalent roots"), "initial reopened program must use only current discovery inputs")
+			session.WaitForBackgroundTasks()
+			ls, err := session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			hasTypings = ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts") != nil
+			assert.Equal(t, hasTypings, strings.HasPrefix(scenario, "equivalent roots"), "fresh ATA must preserve the corrected discovery demand")
+		})
+	}
+
 	t.Run("inferred project retains ATA result completed after closing last file", func(t *testing.T) {
 		t.Parallel()
 

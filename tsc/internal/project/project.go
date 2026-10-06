@@ -220,7 +220,7 @@ func (p *Project) inferredProjectATAState() *inferredProjectATAState {
 	snapshotID := p.installedTypingsSnapshotID
 	if p.installedTypingsInfo != nil &&
 		p.installedTypingsInfo.Equals(p.ComputeTypingsInfo()) &&
-		slices.Equal(p.installedTypingsFileNames, p.ComputeTypingsFileNames()) &&
+		p.typingsDiscoveryInputsEqual(p.installedTypingsFileNames) &&
 		p.ProgramLastUpdate > snapshotID {
 		snapshotID = p.ProgramLastUpdate
 	}
@@ -243,7 +243,7 @@ func (s *inferredProjectATAState) canApply(project *Project, fs *snapshotFSBuild
 		return false
 	}
 	if !s.installedTypingsInfo.Equals(project.ComputeTypingsInfo()) ||
-		!slices.Equal(s.installedTypingsFileNames, project.ComputeTypingsFileNames()) {
+		!project.typingsDiscoveryInputsEqual(s.installedTypingsFileNames) {
 		return false
 	}
 	for _, fileName := range s.typingsFiles {
@@ -273,7 +273,7 @@ func (s *inferredProjectATAState) canApplyWatchState(project *Project, watchEnab
 	return s != nil &&
 		s.installedTypingsInfo == nil &&
 		watchEnabled &&
-		slices.Equal(s.installedTypingsFileNames, project.ComputeTypingsFileNames())
+		project.typingsDiscoveryInputsEqual(s.installedTypingsFileNames)
 }
 
 func (s *inferredProjectATAState) applyWatchState(project *Project) {
@@ -792,7 +792,12 @@ func (p *Project) ShouldTriggerATA(snapshotID uint64) bool {
 	}
 
 	return !p.installedTypingsInfo.Equals(p.ComputeTypingsInfo()) ||
-		!slices.Equal(p.installedTypingsFileNames, p.ComputeTypingsFileNames())
+		!p.typingsDiscoveryInputsEqual(p.installedTypingsFileNames)
+}
+
+func (p *Project) typingsDiscoveryInputsEqual(fileNames []tspath.RootedFilePath) bool {
+	info := p.ComputeTypingsInfo()
+	return ata.DiscoveryInputsEqual(&info, fileNames, p.ComputeTypingsFileNames(), p.projectDirectory, p.host.FS().CaseSensitivity())
 }
 
 func (p *Project) ComputeTypingsInfo() ata.TypingsInfo {
