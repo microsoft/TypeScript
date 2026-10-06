@@ -29,6 +29,7 @@
     "files": [
         "bin",
         "lib",
+        "schemas",
         "dist",
         "vendor"
     ],
@@ -37,7 +38,12 @@
     },
     "exports": {
         "./package.json": "./package.json",
+        "./schemas/tsconfig.schema.json": "./schemas/tsconfig.schema.json",
+        "./schemas/jsconfig.schema.json": "./schemas/jsconfig.schema.json",
         ".": "./lib/version.cjs",
+        "./unstable/vscode": {
+            "types": "./dist/vscode/extensionApi.d.ts"
+        },
         "./unstable/sync": {
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
@@ -49,6 +55,10 @@
         "./unstable/fs": {
             "@typescript/source": "./src/api/fs.ts",
             "default": "./dist/api/fs.js"
+        },
+        "./unstable/path": {
+            "@typescript/source": "./src/api/typedPaths.ts",
+            "default": "./dist/api/typedPaths.js"
         },
         "./unstable/proto": {
             "@typescript/source": "./src/api/proto.ts",
@@ -96,9 +106,9 @@
         "#vscode-jsonrpc/node": "./vendor/vscode-jsonrpc/lib/node/main.js"
     },
     "scripts": {
-        "node": "node --experimental-strip-types --no-warnings --conditions @typescript/source",
-        "generate": "npm run generate:ast && npm run generate:encoder && npm run generate:sync",
-        "generate:ast": "node --experimental-strip-types --no-warnings ../../tools/scripts/tsc/generate-ts-ast.ts",
+        "node": "node --conditions @typescript/source",
+        "generate": "npm run node -- scripts/generate.ts",
+        "generate:ast": "node ../../tools/scripts/tsc/generate-ts-ast.ts",
         "generate:encoder": "npm run node -- ../../tools/scripts/tsc/generate-encoder.ts",
         "generate:sync": "npm run node -- scripts/generateSync.ts",
         "build": "tsc -b",
@@ -107,8 +117,8 @@
         "test": "npm run test:only"
     },
     "devDependencies": {
-        "@types/node": "^25.9.4",
-        "tinybench": "^6.0.2",
-        "vscode-jsonrpc": "^9.0.0"
+        "@types/node": "^22.20.1",
+        "tinybench": "^6.1.6",
+        "vscode-jsonrpc": "^9.0.2"
     }
 }

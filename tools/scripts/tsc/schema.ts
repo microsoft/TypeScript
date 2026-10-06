@@ -2,6 +2,7 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { repoRoot as ROOT } from "../gen/utils.mts";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Schema type definitions
@@ -1260,7 +1261,6 @@ export class SchemaAPI {
     }
 }
 
-const ROOT = path.resolve(import.meta.dirname!, "../../..");
 export const api = new SchemaAPI(JSON.parse(
     fs.readFileSync(path.join(ROOT, "tools/scripts/tsc/ast.json"), "utf-8"),
 ) as Schema);

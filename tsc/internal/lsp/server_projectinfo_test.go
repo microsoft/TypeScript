@@ -9,14 +9,25 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
+func expectedCodeActionKinds() []lsproto.CodeActionKind {
+	return []lsproto.CodeActionKind{
+		lsproto.CodeActionKindQuickFix,
+		"source.organizeImports.ts",
+		"source.removeUnusedImports.ts",
+		"source.sortImports.ts",
+		"source.fixAll.ts",
+	}
+}
+
 func initProjectInfoClient(t *testing.T, files map[string]string) *lsptestutil.LSPClient {
 	t.Helper()
 
-	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		switch req.Method {
@@ -39,14 +50,32 @@ func initProjectInfoClient(t *testing.T, files map[string]string) *lsptestutil.L
 	}, onServerRequest)
 	t.Cleanup(func() { _ = closeClient() })
 
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
 	return client
+}
+
+func TestInitializeCodeActionKinds(t *testing.T) {
+	t.Parallel()
+
+	client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
+		Err:                io.Discard,
+		Cwd:                "/home/projects",
+		FS:                 bundled.WrapFS(vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)),
+		DefaultLibraryPath: bundled.LibPath(),
+	}, nil)
+	t.Cleanup(func() { _ = closeClient() })
+
+	message, result, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
+		Capabilities: &lsproto.ClientCapabilities{},
+	})
+	assert.Assert(t, ok && message.AsResponse().Error == nil, "Initialize failed")
+	assert.DeepEqual(t, *result.Capabilities.CodeActionProvider.CodeActionOptions.CodeActionKinds, expectedCodeActionKinds())
 }
 
 func TestProjectInfoConfiguredProject(t *testing.T) {
@@ -62,11 +91,11 @@ func TestProjectInfoConfiguredProject(t *testing.T) {
 	})
 
 	uri := lsproto.DocumentUri("file:///home/projects/index.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: "export const x = 1;"},
 	})
 
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok, "expected a response")
@@ -86,11 +115,11 @@ func TestProjectInfoInferredProject(t *testing.T) {
 	})
 
 	uri := lsproto.DocumentUri("file:///home/projects/index.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: "export const x = 1;"},
 	})
 
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok, "expected a response")

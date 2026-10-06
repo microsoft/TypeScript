@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/myproject/core/src/file1.ts] *new* 
 export const coreConst = 10;
 //// [/myproject/core/tsconfig.json] *new* 

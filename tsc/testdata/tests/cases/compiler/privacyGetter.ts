@@ -1,5 +1,5 @@
 // @target: ES5, ES2015
-//@module: amd
+//@module: commonjs
 export namespace m1 {
     export class C1_public {
         private f1() {

@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
@@ -18,14 +19,16 @@ type StdioServerOptions struct {
 	In                 io.ReadCloser
 	Out                io.WriteCloser
 	Err                io.Writer
-	Cwd                string
-	DefaultLibraryPath string
+	Cwd                tspath.RootedDirectoryPath
+	DefaultLibraryPath tspath.RootedDirectoryPath
 	// PipePath, if set, listens on a named pipe (Windows) or Unix domain
 	// socket instead of using In/Out for communication.
 	PipePath string
 	// Callbacks specifies which filesystem operations should be delegated
 	// to the client (e.g., "readFile", "fileExists"). Empty means no callbacks.
 	Callbacks []string
+	// UseCaseSensitiveFileNames overrides the base filesystem's case sensitivity.
+	UseCaseSensitiveFileNames *bool
 	// Async enables JSON-RPC protocol with async connection handling.
 	// When false (default), uses MessagePack protocol with sync connection.
 	Async bool
@@ -76,14 +79,14 @@ func (s *StdioServer) Run(ctx context.Context) error {
 
 	fs := bundled.WrapFS(osvfs.FS())
 
-	// Wrap the base FS with callbackFS if callbacks are requested
+	// Wrap the base FS when callbacks or an explicit case-sensitivity setting are requested.
 	var callbackFS *callbackFS
-	if len(s.options.Callbacks) > 0 {
-		callbackFS = newCallbackFS(fs, s.options.Callbacks)
+	if len(s.options.Callbacks) > 0 || s.options.UseCaseSensitiveFileNames != nil {
+		callbackFS = newCallbackFS(fs, s.options.Callbacks, s.options.UseCaseSensitiveFileNames)
 		fs = callbackFS
 	}
 
-	projectSession := project.NewSession(&project.SessionInit{
+	sessionInit := &project.SessionInit{
 		BackgroundCtx: ctx,
 		Logger:        nil, // TODO: Add logging support
 		FS:            fs,
@@ -95,9 +98,9 @@ func (s *StdioServer) Run(ctx context.Context) error {
 			RunExternalCode:    s.options.RunExternalCode,
 		},
 		Spawner: s.options.ContentMapperSpawner,
-	})
+	}
 
-	session := NewSession(projectSession, &SessionOptions{
+	session := NewStandaloneSession(sessionInit, &SessionOptions{
 		UseBinaryResponses: !s.options.Async, // Only msgpack uses binary responses
 	})
 	defer session.Close()
@@ -126,6 +129,14 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	if callbackFS != nil {
 		callbackFS.SetConnection(ctx, conn)
 	}
+	session.SetConnection(conn)
 
-	return conn.Run(ctx)
+	return serverRunError(ctx, conn.Run(ctx))
+}
+
+func serverRunError(ctx context.Context, err error) error {
+	if ctx.Err() != nil {
+		return nil
+	}
+	return err
 }

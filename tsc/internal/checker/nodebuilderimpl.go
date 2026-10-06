@@ -41,9 +41,10 @@ type SerializedTypeEntry struct {
 }
 
 type CompositeTypeCacheIdentity struct {
-	typeId        TypeId
-	flags         nodebuilder.Flags
-	internalFlags nodebuilder.InternalFlags
+	typeId              TypeId
+	flags               nodebuilder.Flags
+	internalFlags       nodebuilder.InternalFlags
+	inferTypeParameters CacheHashKey
 }
 
 type NodeBuilderLinks struct {
@@ -52,8 +53,14 @@ type NodeBuilderLinks struct {
 }
 
 type NodeBuilderSymbolLinks struct {
-	specifierCache module.ModeAwareCache[string]
+	specifierCache module.ModeAwareCache[moduleSpecifierResult]
 }
+
+type moduleSpecifierResult struct {
+	specifier            tspath.ModuleSpecifier
+	importAttributesType *Type
+}
+
 type NodeBuilderContext struct {
 	host                            Host
 	tracker                         nodebuilder.SymbolTracker
@@ -588,7 +595,7 @@ func (b *NodeBuilderImpl) symbolToNode(symbol *ast.Symbol, meaning ast.SymbolFla
 			if nameType != nil && nameType.flags&(TypeFlagsEnumLiteral|TypeFlagsUniqueESSymbol) != 0 {
 				oldEnclosing := b.ctx.enclosingDeclaration
 				b.ctx.enclosingDeclaration = nameType.symbol.ValueDeclaration
-				result := b.f.NewComputedPropertyName(b.symbolToExpression(nameType.symbol, meaning))
+				result := b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.symbol, meaning))
 				b.ctx.enclosingDeclaration = oldEnclosing
 				return result
 			}
@@ -659,24 +666,20 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 		}
 		contextFile := ast.GetSourceFileOfNode(b.e.MostOriginal(b.ctx.enclosingDeclaration)) // TODO: Just use b.ctx.enclosingFile ? Or is the delayed lookup important for context moves?
 		targetFile := ast.GetSourceFileOfModule(chain[0])
-		var specifier string
-		var attributes *ast.Node
+		var specifierResult moduleSpecifierResult
+		var importModeOverride core.ResolutionMode
 		if b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext {
 			// An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
 			if targetFile != nil && contextFile != nil && b.ch.program.GetEmitModuleFormatOfFile(targetFile) == core.ModuleKindESNext && b.ch.program.GetEmitModuleFormatOfFile(targetFile) != b.ch.program.GetEmitModuleFormatOfFile(contextFile) {
-				specifier = b.getSpecifierForModuleSymbol(chain[0], core.ModuleKindESNext)
-				attributes = b.f.NewImportAttributes(
-					ast.KindWithKeyword,
-					b.f.NewNodeList([]*ast.Node{b.f.NewImportAttribute(b.newStringLiteral("resolution-mode"), b.newStringLiteral("import"))}),
-					false,
-				)
+				specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ModuleKindESNext)
+				importModeOverride = core.ModuleKindESNext
 			}
 		}
-		if len(specifier) == 0 {
-			specifier = b.getSpecifierForModuleSymbol(chain[0], core.ResolutionModeNone)
+		if len(specifierResult.specifier) == 0 {
+			specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ResolutionModeNone)
 		}
-		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifier, "/node_modules/") {
-			oldSpecifier := specifier
+		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
+			oldSpecifierResult := specifierResult
 
 			if b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext {
 				// We might be able to write a portable import type using a mode override; try specifier generation again, but with a different mode set
@@ -684,34 +687,27 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 				if b.ch.program.GetEmitModuleFormatOfFile(contextFile) == core.ModuleKindESNext {
 					swappedMode = core.ModuleKindCommonJS
 				}
-				specifier = b.getSpecifierForModuleSymbol(chain[0], swappedMode)
+				specifierResult = b.getSpecifierForModuleSymbol(chain[0], swappedMode)
 
-				if strings.Contains(specifier, "/node_modules/") {
+				if strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
 					// Still unreachable :(
-					specifier = oldSpecifier
+					specifierResult = oldSpecifierResult
 				} else {
-					modeStr := "require"
-					if swappedMode == core.ModuleKindESNext {
-						modeStr = "import"
-					}
-					attributes = b.f.NewImportAttributes(
-						ast.KindWithKeyword,
-						b.f.NewNodeList([]*ast.Node{b.f.NewImportAttribute(b.newStringLiteral("resolution-mode"), b.newStringLiteral(modeStr))}),
-						false,
-					)
+					importModeOverride = swappedMode
 				}
 			}
 
-			if attributes == nil {
+			if importModeOverride == core.ResolutionModeNone {
 				// If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
 				// since declaration files with these kinds of references are liable to fail when published :(
 				b.ctx.encounteredError = true
-				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifier, symbol.Name)
+				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifierResult.specifier.AsString(), symbol.Name)
 			}
 		}
 
-		lit := b.f.NewLiteralTypeNode(b.newStringLiteral(specifier))
-		b.ctx.approximateLength += len(specifier) + 10 // specifier + import("")
+		attributes := b.createImportAttributesForModuleSpecifier(specifierResult, importModeOverride)
+		lit := b.f.NewLiteralTypeNode(b.newStringLiteral(specifierResult.specifier.AsString()))
+		b.ctx.approximateLength += len(specifierResult.specifier) + 10 // specifier + import("")
 		if nonRootParts == nil || ast.IsEntityName(nonRootParts) {
 			if nonRootParts != nil {
 				// !!! TODO: smuggle type arguments out
@@ -851,7 +847,12 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 }
 
 func (b *NodeBuilderImpl) symbolToExpression(symbol *ast.Symbol, mask ast.SymbolFlags) *ast.Expression {
-	chain := b.lookupSymbolChain(symbol, mask, false)
+	b.ctx.tracker.TrackSymbol(symbol, b.ctx.enclosingDeclaration, mask)
+	return b.symbolToExpressionWorker(symbol, mask)
+}
+
+func (b *NodeBuilderImpl) symbolToExpressionWorker(symbol *ast.Symbol, mask ast.SymbolFlags) *ast.Expression {
+	chain := b.lookupSymbolChainWorker(symbol, mask, false)
 	return b.createExpressionFromSymbolChain(chain, len(chain)-1)
 }
 
@@ -868,9 +869,9 @@ func (b *NodeBuilderImpl) createExpressionFromSymbolChain(chain []*ast.Symbol, i
 	}
 
 	if startsWithSingleOrDoubleQuote(symbolName) && core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
-		specifier := b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)
-		b.ctx.approximateLength += 2 + len(specifier)
-		return b.newStringLiteral(specifier)
+		specifierResult := b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)
+		b.ctx.approximateLength += 2 + len(specifierResult.specifier)
+		return b.newStringLiteral(specifierResult.specifier.AsString())
 	}
 
 	if index == 0 || canUsePropertyAccess(symbolName) {
@@ -1101,7 +1102,7 @@ func (b *NodeBuilderImpl) getSymbolChain(symbol *ast.Symbol, meaning ast.SymbolF
 		if len(parents) > 0 {
 			parentSpecifiers := core.Map(parents, func(symbol *ast.Symbol) sortedSymbolNamePair {
 				if core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
-					return sortedSymbolNamePair{symbol, b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)}
+					return sortedSymbolNamePair{symbol, b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone).specifier.AsString()}
 				}
 				return sortedSymbolNamePair{symbol, ""}
 			})
@@ -1201,13 +1202,13 @@ func TryGetModuleSpecifierFromDeclaration(node *ast.Node) *ast.Node {
 func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindVariableDeclaration, ast.KindBindingElement:
-		requireCall := ast.FindAncestor(node.Initializer(), func(node *ast.Node) bool {
-			return ast.IsRequireCall(node, true /*requireStringLiteralLikeArgument*/)
+		moduleCall := ast.FindAncestor(node.Initializer(), func(node *ast.Node) bool {
+			return ast.IsRequireCall(node, true /*requireStringLiteralLikeArgument*/) || ast.IsImportCall(node)
 		})
-		if requireCall == nil {
+		if moduleCall == nil {
 			return nil
 		}
-		return requireCall.Arguments()[0]
+		return moduleCall.Arguments()[0]
 	case ast.KindImportDeclaration, ast.KindExportDeclaration, ast.KindJSDocImportTag:
 		return node.ModuleSpecifier()
 	case ast.KindImportEqualsDeclaration:
@@ -1246,7 +1247,17 @@ func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
 	}
 }
 
-func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overrideImportMode core.ResolutionMode) string {
+func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overrideImportMode core.ResolutionMode) moduleSpecifierResult {
+	enclosingDeclaration := b.e.MostOriginal(b.ctx.enclosingDeclaration)
+	var originalModuleSpecifier *ast.Node
+	if canHaveModuleSpecifier(enclosingDeclaration) {
+		originalModuleSpecifier = TryGetModuleSpecifierFromDeclaration(enclosingDeclaration)
+	}
+	var originalImportAttributesType *Type
+	if originalModuleSpecifier != nil {
+		originalImportAttributesType = b.ch.getImportAttributesTypeForModuleSpecifier(originalModuleSpecifier)
+	}
+
 	file := ast.GetDeclarationOfKind(symbol, ast.KindSourceFile)
 	if file == nil {
 		equivalentSymbol := core.FirstNonNil(symbol.Declarations, func(d *ast.Node) *ast.Symbol {
@@ -1258,22 +1269,24 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	}
 
 	if file == nil {
-		if ast.IsAmbientModuleSymbolName(symbol.Name) {
-			return stringutil.StripQuotes(symbol.Name)
+		if declaration := core.Find(symbol.Declarations, ast.IsModuleWithStringLiteralName); declaration != nil {
+			specifier := tspath.ToModuleSpecifier(declaration.Name().Text())
+			if originalImportAttributesType != nil && b.moduleSpecifierResolvesToSymbol(specifier, originalImportAttributesType, symbol) {
+				return moduleSpecifierResult{specifier: specifier, importAttributesType: originalImportAttributesType}
+			}
+			return moduleSpecifierResult{specifier: specifier, importAttributesType: b.ch.getTypeOfModuleImportAttributes(symbol)}
+		}
+		if specifier, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbol.Name); ok {
+			return moduleSpecifierResult{specifier: tspath.ToModuleSpecifier(specifier)}
 		}
 	}
 	if b.ctx.enclosingFile == nil {
-		if ast.IsAmbientModuleSymbolName(symbol.Name) {
-			return stringutil.StripQuotes(symbol.Name)
+		if specifier, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbol.Name); ok {
+			return moduleSpecifierResult{specifier: tspath.ToModuleSpecifier(specifier)}
 		}
-		return ast.GetSourceFileOfModule(symbol).FileName()
+		return moduleSpecifierResult{specifier: ast.GetSourceFileOfModule(symbol).FileName().AsModuleSpecifier()}
 	}
 
-	enclosingDeclaration := b.e.MostOriginal(b.ctx.enclosingDeclaration)
-	var originalModuleSpecifier *ast.Node
-	if canHaveModuleSpecifier(enclosingDeclaration) {
-		originalModuleSpecifier = TryGetModuleSpecifierFromDeclaration(enclosingDeclaration)
-	}
 	contextFile := b.ctx.enclosingFile
 	resolutionMode := overrideImportMode
 	if resolutionMode == core.ResolutionModeNone && originalModuleSpecifier != nil {
@@ -1281,14 +1294,14 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	} else if resolutionMode == core.ResolutionModeNone && contextFile != nil {
 		resolutionMode = b.ch.program.GetDefaultResolutionModeForFile(contextFile)
 	}
-	cacheKey := module.ModeAwareCacheKey{Name: string(contextFile.Path()), Mode: resolutionMode}
+	cacheKey := module.ModeAwareCacheKey{Name: string(contextFile.PathKey()), Mode: resolutionMode}
 	links := b.symbolLinks.Get(symbol)
 	if links.specifierCache == nil {
-		links.specifierCache = make(module.ModeAwareCache[string])
+		links.specifierCache = make(module.ModeAwareCache[moduleSpecifierResult])
 	}
 	result, ok := links.specifierCache[cacheKey]
 	if ok {
-		return result
+		return b.moduleSpecifierResultForSymbol(result, originalImportAttributesType, symbol)
 	}
 	// For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
 	// just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
@@ -1301,8 +1314,7 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	if resolutionMode == core.ResolutionModeESM {
 		endingPref = modulespecifiers.ImportModuleSpecifierEndingPreferenceJs
 	}
-
-	allSpecifiers := modulespecifiers.GetModuleSpecifiers(
+	moduleSpecifiersResult := modulespecifiers.GetModuleSpecifiers(
 		symbol,
 		b.ch,
 		specifierCompilerOptions,
@@ -1317,13 +1329,74 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 		},
 		false, /*forAutoImports*/
 	)
-	if len(allSpecifiers) == 0 {
-		links.specifierCache[cacheKey] = ""
-		return ""
+	debug.Assert(len(moduleSpecifiersResult.Specifiers) > 0)
+	result = moduleSpecifierResult{specifier: moduleSpecifiersResult.Specifiers[0]}
+	if moduleSpecifiersResult.AmbientModuleSymbol != nil {
+		result.importAttributesType = b.ch.getTypeOfModuleImportAttributes(moduleSpecifiersResult.AmbientModuleSymbol)
 	}
-	specifier := allSpecifiers[0]
-	links.specifierCache[cacheKey] = specifier
-	return specifier
+	links.specifierCache[cacheKey] = result
+	return b.moduleSpecifierResultForSymbol(result, originalImportAttributesType, symbol)
+}
+
+func (b *NodeBuilderImpl) moduleSpecifierResultForSymbol(result moduleSpecifierResult, importAttributesType *Type, symbol *ast.Symbol) moduleSpecifierResult {
+	if importAttributesType != nil && b.moduleSpecifierResolvesToSymbol(result.specifier, importAttributesType, symbol) {
+		result.importAttributesType = importAttributesType
+	}
+	return result
+}
+
+func (b *NodeBuilderImpl) moduleSpecifierResolvesToSymbol(specifier tspath.ModuleSpecifier, importAttributesType *Type, symbol *ast.Symbol) bool {
+	location := b.ctx.enclosingDeclaration
+	if location == nil && b.ctx.enclosingFile != nil {
+		location = b.ctx.enclosingFile.AsNode()
+	}
+	if location == nil {
+		return false
+	}
+	resolved := b.ch.resolveExternalModule(location, specifier.AsString(), nil, nil, false /*isForAugmentation*/, importAttributesType)
+	return resolved != nil && b.ch.getMergedSymbol(resolved) == b.ch.getMergedSymbol(symbol)
+}
+
+func (b *NodeBuilderImpl) createImportAttributesForModuleSpecifier(result moduleSpecifierResult, importModeOverride core.ResolutionMode) *ast.Node {
+	isEmptyAttributesType := result.importAttributesType == nil || b.ch.isEmptyObjectType(result.importAttributesType)
+	if isEmptyAttributesType && importModeOverride == core.ResolutionModeNone {
+		return nil
+	}
+
+	var properties []*ast.Symbol
+	if !isEmptyAttributesType {
+		properties = slices.Clone(b.ch.getPropertiesOfType(result.importAttributesType))
+	}
+	slices.SortFunc(properties, func(a, b *ast.Symbol) int { return strings.Compare(a.Name, b.Name) })
+	attributes := make([]*ast.Node, 0, len(properties)+1)
+	resolutionMode := ""
+	if importModeOverride != core.ResolutionModeNone {
+		resolutionMode = core.IfElse(importModeOverride == core.ResolutionModeESM, "import", "require")
+		attributes = append(attributes, b.f.NewImportAttribute(b.newStringLiteral("resolution-mode"), b.newStringLiteral(resolutionMode)))
+		b.ctx.approximateLength += len("resolution-mode") + len(resolutionMode) + 6 // `"resolution-mode": "value"`
+	}
+	for _, property := range properties {
+		name := property.Name
+		propertyType := b.ch.getTypeOfSymbol(property)
+		if propertyType.flags&TypeFlagsStringLiteral == 0 {
+			continue
+		}
+		value := getStringLiteralValue(propertyType)
+		var nameNode *ast.Node
+		if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+			nameNode = b.f.NewIdentifier(name)
+		} else {
+			nameNode = b.newStringLiteral(name)
+			b.ctx.approximateLength += 2
+		}
+		attributes = append(attributes, b.f.NewImportAttribute(nameNode, b.newStringLiteral(value)))
+		b.ctx.approximateLength += len(name) + len(value) + 4 // `name: "value"`
+	}
+	if len(attributes) == 0 {
+		return nil
+	}
+	b.ctx.approximateLength += 16 + 2*(len(attributes)-1) // `, { with: { , ... , } }`
+	return b.f.NewImportAttributes(ast.KindWithKeyword, b.f.NewNodeList(attributes), false)
 }
 
 func (b *NodeBuilderImpl) typeParameterToDeclarationWithConstraint(typeParameter *Type, constraintNode *ast.TypeNode) *ast.TypeParameterDeclarationNode {
@@ -2300,6 +2373,10 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 const MAX_REVERSE_MAPPED_NESTING_INSPECTION_DEPTH = 3
 
 func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Symbol) bool {
+	// Reverse mapped type placeholders are for display, not declaration emit.
+	if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
+		return false
+	}
 	// Use placeholders for reverse mapped types we've either
 	// (1) already descended into, or
 	// (2) are nested reverse mappings within a mapping over a non-anonymous type, or
@@ -2496,7 +2573,9 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
 	}
 	if nameType.flags&TypeFlagsUniqueESSymbol != 0 {
-		return b.f.NewComputedPropertyName(b.symbolToExpression(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
+		// The reference was tracked in the destination scope by trackComputedName.
+		// Reconstructing its spelling in the source scope must not paint that scope's declarations visible.
+		return b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
 	}
 	return nil
 }
@@ -2661,7 +2740,11 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 		typeElements = append(typeElements, b.signatureToSignatureDeclarationHelper(signature, ast.KindConstructSignature, nil))
 	}
 	for _, info := range resolvedType.indexInfos {
-		typeElements = slices.Concat(typeElements, b.indexInfoToObjectComputedNamesOrSignatureDeclaration(info, core.IfElse(resolvedType.objectFlags&ObjectFlagsReverseMapped != 0, b.createElidedInformationPlaceholder(), nil)))
+		var typeNode *ast.TypeNode
+		if resolvedType.objectFlags&ObjectFlagsReverseMapped != 0 && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier != 0 {
+			typeNode = b.createElidedInformationPlaceholder()
+		}
+		typeElements = slices.Concat(typeElements, b.indexInfoToObjectComputedNamesOrSignatureDeclaration(info, typeNode))
 	}
 
 	properties := resolvedType.properties
@@ -2776,7 +2859,8 @@ func getTypeAliasForTypeLiteral(c *Checker, t *Type) *ast.Symbol {
 }
 
 func (b *NodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, typeId TypeId) (bool, *ast.Symbol) {
-	isStaticMethodSymbol := symbol.Flags&ast.SymbolFlagsMethod != 0 && core.Some(symbol.Declarations, func(declaration *ast.Node) bool {
+	// `typeof C.name` can only be written when the member name is a valid identifier
+	isStaticMethodSymbol := symbol.Flags&ast.SymbolFlagsMethod != 0 && scanner.IsIdentifierText(symbol.Name, core.LanguageVariantStandard) && core.Some(symbol.Declarations, func(declaration *ast.Node) bool {
 		return ast.IsStatic(declaration) && !b.ch.isLateBindableIndexSignature(ast.GetNameOfDeclaration(declaration))
 	})
 	isNonLocalFunctionSymbol := false
@@ -2849,7 +2933,7 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				// in turn try to reuse the same node again. Mark the type as visited around the reuse
 				// attempt so the inner recursion bottoms out via the visitedTypes guard below.
 				if b.ctx.visitedTypes.Has(typeId) {
-					return b.createElidedInformationPlaceholder()
+					return b.createCyclicStructurePlaceholder()
 				}
 				b.ctx.visitedTypes.Add(typeId)
 				typeNode := b.tryReuseExistingNonParameterTypeNode(existing, t, nil, nil)
@@ -2859,7 +2943,7 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				}
 			}
 			if b.ctx.visitedTypes.Has(typeId) {
-				return b.createElidedInformationPlaceholder()
+				return b.createCyclicStructurePlaceholder()
 			}
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 		}
@@ -2889,13 +2973,18 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				// The specified symbol flags need to be reinterpreted as type flags
 				return b.symbolToTypeNode(typeAlias, ast.SymbolFlagsType, nil)
 			} else {
-				return b.createElidedInformationPlaceholder()
+				return b.createCyclicStructurePlaceholder()
 			}
 		} else {
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 		}
+	} else if t.objectFlags&ObjectFlagsReverseMapped != 0 && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
+		if b.ctx.visitedTypes.Has(typeId) {
+			return b.createCyclicStructurePlaceholder()
+		}
+		return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 	} else {
-		// Anonymous types without a symbol are never circular.
+		// Reverse mapped types use property and index signature placeholders for display.
 		return b.createTypeNodeFromObjectType(t)
 	}
 }
@@ -2920,15 +3009,19 @@ func (b *NodeBuilderImpl) getTypeFromTypeNode(node *ast.TypeNode, noMappedTypes 
 func (b *NodeBuilderImpl) typeToTypeNodeOrCircularityElision(t *Type) *ast.TypeNode {
 	if t.flags&TypeFlagsUnion != 0 {
 		if b.ctx.visitedTypes.Has(t.id) {
-			if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
-				b.ctx.encounteredError = true
-				b.ctx.tracker.ReportCyclicStructureError()
-			}
-			return b.createElidedInformationPlaceholder()
+			return b.createCyclicStructurePlaceholder()
 		}
 		return b.visitAndTransformType(t, (*NodeBuilderImpl).typeToTypeNode)
 	}
 	return b.typeToTypeNode(t)
+}
+
+func (b *NodeBuilderImpl) createCyclicStructurePlaceholder() *ast.TypeNode {
+	if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
+		b.ctx.encounteredError = true
+		b.ctx.tracker.ReportCyclicStructureError()
+	}
+	return b.createElidedInformationPlaceholder()
 }
 
 func (b *NodeBuilderImpl) conditionalTypeToTypeNode(_t *Type) *ast.TypeNode {
@@ -2992,7 +3085,7 @@ func (b *NodeBuilderImpl) getParentSymbolOfTypeParameter(typeParameter *TypePara
 	return b.ch.getSymbolOfNode(host)
 }
 
-func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
+func (b *NodeBuilderImpl) arrayOrTupleTypeToNode(t *Type) *ast.TypeNode {
 	var typeArguments []*Type = b.ch.getTypeArguments(t)
 	if t.Target() == b.ch.globalArrayType || t.Target() == b.ch.globalReadonlyArrayType {
 		if b.ctx.flags&nodebuilder.FlagsWriteArrayAsGenericType != 0 {
@@ -3009,7 +3102,8 @@ func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 		} else {
 			return b.f.NewTypeOperatorNode(ast.KindReadonlyKeyword, arrayType)
 		}
-	} else if t.Target().objectFlags&ObjectFlagsTuple != 0 {
+	} else {
+		debug.Assert(t.Target().objectFlags&ObjectFlagsTuple != 0)
 		typeArguments = core.SameMapIndex(typeArguments, func(arg *Type, i int) *Type {
 			isOptional := false
 			if i < len(t.Target().AsTupleType().elementInfos) {
@@ -3062,7 +3156,12 @@ func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 		b.ctx.encounteredError = true
 		return nil
 		// TODO: GH#18217
-	} else if b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0 && t.symbol.ValueDeclaration != nil && ast.IsClassLike(t.symbol.ValueDeclaration) && !b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
+	}
+}
+
+func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
+	var typeArguments []*Type = b.ch.getTypeArguments(t)
+	if b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0 && t.symbol.ValueDeclaration != nil && ast.IsClassLike(t.symbol.ValueDeclaration) && !b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
 		return b.createAnonymousTypeNode(t)
 	} else {
 		outerTypeParameters := t.Target().AsInterfaceType().OuterTypeParameters()
@@ -3135,10 +3234,26 @@ func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 }
 
 func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeBuilderImpl, t *Type) *ast.TypeNode) *ast.TypeNode {
+	if b.checkTruncationLength() {
+		return b.createElidedInformationPlaceholder()
+	}
+
 	typeId := t.id
+	isArrayOrTuple := b.ch.isArrayOrTupleType(t)
+	if isArrayOrTuple {
+		// Deferred and regular references share a cycle identity.
+		typeId = b.ch.createTypeReference(t.Target(), b.ch.getTypeArguments(t)).id
+	}
+	if b.ctx.visitedTypes.Has(typeId) {
+		return b.createCyclicStructurePlaceholder()
+	}
+
 	isConstructorObject := t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsClass != 0
 	var id *CompositeSymbolIdentity
 	switch {
+	case isArrayOrTuple:
+		// Do not bound finite container nesting by the shared Array symbol or tuple origin.
+		id = nil
 	case t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil:
 		id = &CompositeSymbolIdentity{false, 0, ast.GetNodeId(t.AsTypeReference().node)}
 	case t.flags&TypeFlagsConditional != 0:
@@ -3151,7 +3266,14 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	// Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
 	// of types allows us to catch circular references to instantiations of the same anonymous type
 
-	key := CompositeTypeCacheIdentity{typeId, b.ctx.flags, b.ctx.internalFlags}
+	key := CompositeTypeCacheIdentity{
+		typeId:        typeId,
+		flags:         b.ctx.flags,
+		internalFlags: b.ctx.internalFlags,
+	}
+	if len(b.ctx.inferTypeParameters) != 0 {
+		key.inferTypeParameters = getTypeListKey(b.ctx.inferTypeParameters)
+	}
 	// Don't rely on type cache if we're expanding a type, because we need to compute `canIncreaseExpansionDepth`.
 	canUseCache := b.ctx.maxExpansionDepth < 0
 	if canUseCache && b.ctx.enclosingDeclaration != nil && b.links.Has(b.ctx.enclosingDeclaration) {
@@ -3170,10 +3292,24 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 		}
 	}
 
+	if t.objectFlags&ObjectFlagsReverseMapped != 0 {
+		// Growing type arguments can prevent a reverse mapped type from repeating.
+		// Bound expansion by its mapped declaration as well as its type identity.
+		origin := CompositeSymbolIdentity{nodeId: ast.GetNodeId(t.AsReverseMappedType().mappedType.AsMappedType().declaration.AsNode())}
+		depth := b.ctx.symbolDepth[origin]
+		if depth >= 100 {
+			b.ctx.truncating = true
+			return b.createElidedInformationPlaceholder()
+		}
+		b.ctx.symbolDepth[origin] = depth + 1
+		defer func() { b.ctx.symbolDepth[origin] = depth }()
+	}
+
 	var depth int
 	if id != nil {
 		depth = b.ctx.symbolDepth[*id]
 		if depth > 10 {
+			b.ctx.truncating = true
 			return b.createElidedInformationPlaceholder()
 		}
 		b.ctx.symbolDepth[*id] = depth + 1
@@ -3222,14 +3358,6 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 }
 
 func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
-	// Push type onto typeStack for expansion depth tracking
-	if b.ctx.maxExpansionDepth >= 0 && t != nil {
-		b.ctx.typeStack = append(b.ctx.typeStack, t)
-		defer func() {
-			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
-		}()
-	}
-
 	inTypeAlias := b.ctx.flags & nodebuilder.FlagsInTypeAlias
 	b.ctx.flags &^= nodebuilder.FlagsInTypeAlias
 
@@ -3241,6 +3369,16 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 		b.ctx.approximateLength += 3
 		return b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
+	}
+
+	t = getNonDistributedTypeParameter(t)
+
+	// Push type onto typeStack for expansion depth tracking
+	if b.ctx.maxExpansionDepth >= 0 {
+		b.ctx.typeStack = append(b.ctx.typeStack, t)
+		defer func() {
+			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
+		}()
 	}
 
 	if b.ctx.flags&nodebuilder.FlagsNoTypeReduction == 0 {
@@ -3406,7 +3544,9 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 			b.ctx.depth--
 			return result
 		}
-		if t.AsTypeReference().node != nil {
+		if b.ch.isArrayOrTupleType(t) {
+			return b.visitAndTransformType(t, (*NodeBuilderImpl).arrayOrTupleTypeToNode)
+		} else if t.AsTypeReference().node != nil {
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).typeReferenceToTypeNode)
 		} else {
 			return b.typeReferenceToTypeNode(t)

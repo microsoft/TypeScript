@@ -173,6 +173,9 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 		}
 		node.Loc = core.NewTextRange(int(pos), int(end))
 		node.Flags = ast.NodeFlags(d.nodeField(i, NodeOffsetFlags))
+		if kind == uint32(ast.KindSourceFile) {
+			node.AsSourceFile().IsDeclarationFile = node.Flags&ast.NodeFlagsAmbient != 0
+		}
 		d.nodes[i] = node
 	}
 
@@ -259,15 +262,25 @@ func (d *astDecoder) decodeExtendedData_SourceFile(data uint32, childIndices []i
 	textIdx := readLE32(d.raw, extOff)
 	fileNameIdx := readLE32(d.raw, extOff+4)
 	pathIdx := readLE32(d.raw, extOff+8)
+	languageVariant := core.LanguageVariant(readLE32(d.raw, extOff+12))
+	scriptKind := core.ScriptKind(readLE32(d.raw, extOff+16))
 	text := d.getString(textIdx)
 	fileName := d.getString(fileNameIdx)
-	path := d.getString(pathIdx)
+	pathText := d.getString(pathIdx)
+	path, ok := tspath.TryPathKeyFromCanonical(pathText)
+	if !ok {
+		return nil, fmt.Errorf("invalid source file path %q", pathText)
+	}
+	typedFileName, ok := tspath.TryRootedFilePathFromNormalized(fileName)
+	if !ok {
+		return nil, fmt.Errorf("invalid source file name %q", fileName)
+	}
 
 	// Recover parse options from header.
 	parseOpts := readLE32(d.raw, HeaderOffsetParseOptions)
 	opts := ast.SourceFileParseOptions{
-		FileName: fileName,
-		Path:     tspath.Path(path),
+		FileName: typedFileName,
+		PathKey:  path,
 		ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
 			JSX:   parseOpts&1 != 0,
 			Force: parseOpts&2 != 0,
@@ -287,7 +300,11 @@ func (d *astDecoder) decodeExtendedData_SourceFile(data uint32, childIndices []i
 	if endOfFile == nil {
 		endOfFile = d.factory.NewToken(ast.KindEndOfFile)
 	}
-	return d.factory.NewSourceFile(opts, text, stmts, endOfFile), nil
+	node := d.factory.NewSourceFile(opts, text, stmts, endOfFile)
+	sourceFile := node.AsSourceFile()
+	sourceFile.LanguageVariant = languageVariant
+	sourceFile.ScriptKind = scriptKind
+	return node, nil
 }
 
 func (d *astDecoder) decodeExtendedData_TemplateHead(data uint32, childIndices []int, commonData uint8) (*ast.Node, error) {

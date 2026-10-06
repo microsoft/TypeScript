@@ -2,7 +2,7 @@
 // @allowJs: true
 // @checkJs: true
 // @target: esnext
-// @outFile: foo.js
+// @outDir: out
 // @declaration: true
 // @Filename: jsdocReadonlyDeclarations.js
 // @useDefineForClassFields: false

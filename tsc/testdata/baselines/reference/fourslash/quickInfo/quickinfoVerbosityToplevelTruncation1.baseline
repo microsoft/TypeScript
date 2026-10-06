@@ -99,7 +99,7 @@
 // |         nestedProp3: boolean;
 // |         nestedProp4: Date;
 // |     };
-// |     property20: () => void;
+// |     property20: ...;
 // | }
 // | ```
 // | 
@@ -171,7 +171,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\ninterface LargeInterface {\n    property1: string;\n    property2: number;\n    property3: boolean;\n    property4: Date;\n    property5: string[];\n    property6: number[];\n    property7: boolean[];\n    property8: {\n        [key: string]: unknown;\n    };\n    property9: string | null;\n    property10: number | null;\n    property11: boolean | null;\n    property12: Date | null;\n    property13: string | number;\n    property14: number | boolean;\n    property15: string | boolean;\n    property16: {\n        id: number;\n        name: string;\n    }[];\n    property17: {\n        key: string;\n        value: unknown;\n    }[];\n    property18: {\n        nestedProp1: string;\n        nestedProp2: number;\n    };\n    property19: {\n        nestedProp3: boolean;\n        nestedProp4: Date;\n    };\n    property20: () => void;\n}\n```\n"
+          "value": "```typescript\ninterface LargeInterface {\n    property1: string;\n    property2: number;\n    property3: boolean;\n    property4: Date;\n    property5: string[];\n    property6: number[];\n    property7: boolean[];\n    property8: {\n        [key: string]: unknown;\n    };\n    property9: string | null;\n    property10: number | null;\n    property11: boolean | null;\n    property12: Date | null;\n    property13: string | number;\n    property14: number | boolean;\n    property15: string | boolean;\n    property16: {\n        id: number;\n        name: string;\n    }[];\n    property17: {\n        key: string;\n        value: unknown;\n    }[];\n    property18: {\n        nestedProp1: string;\n        nestedProp2: number;\n    };\n    property19: {\n        nestedProp3: boolean;\n        nestedProp4: Date;\n    };\n    property20: ...;\n}\n```\n"
         },
         "range": {
           "start": {

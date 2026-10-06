@@ -521,7 +521,7 @@ type (
 	BlockOrExpression              = Node // Block | Expression
 	NodeBody                       = Node // Block | Expression | ModuleBlock | ModuleDeclaration
 	AccessExpression               = Node // PropertyAccessExpression | ElementAccessExpression
-	DeclarationName                = Node // Identifier | PrivateIdentifier | StringLiteral | NumericLiteral | BigIntLiteral | NoSubstitutionTemplateLiteral | ComputedPropertyName | BindingPattern | ElementAccessExpression
+	DeclarationName                = Node // Identifier | PrivateIdentifier | StringLiteral | NumericLiteral | BigIntLiteral | NoSubstitutionTemplateLiteral | ComputedPropertyName | BindingPattern | PropertyAccessExpression | ElementAccessExpression
 	ModuleName                     = Node // Identifier | StringLiteral
 	ModuleExportName               = Node // Identifier | StringLiteral
 	PropertyName                   = Node // Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral
@@ -650,7 +650,7 @@ func (node *Token) Clone(f NodeFactoryCoercible) *Node {
 
 func IsToken(node *Node) bool {
 	switch node.Kind {
-	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindNumericLiteral, KindBigIntLiteral, KindStringLiteral, KindJsxText, KindJsxTextAllWhiteSpaces, KindRegularExpressionLiteral, KindNoSubstitutionTemplateLiteral, KindTemplateHead, KindTemplateMiddle, KindTemplateTail, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindIdentifier, KindPrivateIdentifier, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFalseKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindImportKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindNullKeyword, KindReturnKeyword, KindSuperKeyword, KindSwitchKeyword, KindThisKeyword, KindThrowKeyword, KindTrueKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindVoidKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAnyKeyword, KindAsyncKeyword, KindAwaitKeyword, KindBooleanKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIntrinsicKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindNeverKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindNumberKeyword, KindObjectKeyword, KindSatisfiesKeyword, KindSetKeyword, KindStringKeyword, KindSymbolKeyword, KindTypeKeyword, KindUndefinedKeyword, KindUniqueKeyword, KindUnknownKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindBigIntKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword:
+	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindNumericLiteral, KindBigIntLiteral, KindStringLiteral, KindJsxText, KindJsxTextAllWhiteSpaces, KindRegularExpressionLiteral, KindNoSubstitutionTemplateLiteral, KindTemplateHead, KindTemplateMiddle, KindTemplateTail, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindIdentifier, KindPrivateIdentifier, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFalseKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindImportKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindNullKeyword, KindReturnKeyword, KindSuperKeyword, KindSwitchKeyword, KindThisKeyword, KindThrowKeyword, KindTrueKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindVoidKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAnyKeyword, KindAsyncKeyword, KindAwaitKeyword, KindBooleanKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIntrinsicKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindNeverKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindNumberKeyword, KindObjectKeyword, KindSatisfiesKeyword, KindSetKeyword, KindStringKeyword, KindSymbolKeyword, KindTypeKeyword, KindUndefinedKeyword, KindUniqueKeyword, KindUnknownKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindBigIntKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
 		return true
 	}
 	return false
@@ -2534,6 +2534,7 @@ func IsNotEmittedStatement(node *Node) bool {
 type NotEmittedTypeElement struct {
 	TypeElementBase
 	NodeBase
+	DeclarationBase
 }
 
 func (f *NodeFactory) NewNotEmittedTypeElement() *Node {
@@ -6734,6 +6735,7 @@ func IsJsxAttribute(node *Node) bool {
 type JsxSpreadAttribute struct {
 	ObjectLiteralElementBase
 	NodeBase
+	DeclarationBase
 	Expression *Expression
 }
 
@@ -8081,36 +8083,41 @@ type ModuleDeclaration struct {
 	LocalsContainerBase
 	BodyBase
 	CompositeBase
-	Keyword Kind
-	name    *ModuleName
+	Keyword    Kind
+	name       *ModuleName
+	Attributes *TypeLiteralNodeNode // Optional
 }
 
-func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind, name *ModuleName, body *ModuleBody) *Node {
+func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind, name *ModuleName, attributes *TypeLiteralNodeNode, body *ModuleBody) *Node {
 	data := &ModuleDeclaration{}
 	data.modifiers = modifiers
 	data.Keyword = keyword
 	data.name = name
+	data.Attributes = attributes
 	data.Body = body
 	return f.newNode(KindModuleDeclaration, data.AsNode(), data)
 }
 
-func (f *NodeFactory) UpdateModuleDeclaration(node *ModuleDeclaration, modifiers *ModifierList, keyword Kind, name *ModuleName, body *ModuleBody) *Node {
-	if modifiers != node.modifiers || keyword != node.Keyword || name != node.name || body != node.Body {
-		return updateNode(f.NewModuleDeclaration(modifiers, keyword, name, body), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateModuleDeclaration(node *ModuleDeclaration, modifiers *ModifierList, keyword Kind, name *ModuleName, attributes *TypeLiteralNodeNode, body *ModuleBody) *Node {
+	if modifiers != node.modifiers || keyword != node.Keyword || name != node.name || attributes != node.Attributes || body != node.Body {
+		return updateNode(f.NewModuleDeclaration(modifiers, keyword, name, attributes, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ModuleDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.Body)
+	return visitModifiers(v, node.modifiers) ||
+		visit(v, node.name) ||
+		visit(v, node.Attributes) ||
+		visit(v, node.Body)
 }
 
 func (node *ModuleDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateModuleDeclaration(node, v.visitModifiers(node.modifiers), node.Keyword, v.visitNode(node.name), v.visitNode(node.Body))
+	return v.Factory.UpdateModuleDeclaration(node, v.visitModifiers(node.modifiers), node.Keyword, v.visitNode(node.name), v.visitNode(node.Attributes), v.visitNode(node.Body))
 }
 
 func (node *ModuleDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewModuleDeclaration(node.Modifiers(), node.Keyword, node.name, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewModuleDeclaration(node.Modifiers(), node.Keyword, node.name, node.Attributes, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ModuleDeclaration) Name() *DeclarationName {
@@ -12767,7 +12774,7 @@ func IsJSDocNodeKind(kind Kind) bool {
 
 func IsImportPhaseModifierKind(kind Kind) bool {
 	switch kind {
-	case KindTypeKeyword, KindDeferKeyword:
+	case KindTypeKeyword, KindDeferKeyword, KindSourceKeyword:
 		return true
 	}
 	return false

@@ -44,13 +44,13 @@ func (r *serverProgressReporter) localize(msg *diagnostics.Message, args ...any)
 }
 
 func (r *serverProgressReporter) createWorkDoneProgress(token string) {
-	_ = sendClientRequestFireAndForget(r.server, lsproto.WindowWorkDoneProgressCreateInfo, &lsproto.WorkDoneProgressCreateParams{
+	_ = r.server.sendClientRequestFireAndForget(lsproto.WindowWorkDoneProgressCreateInfo, &lsproto.WorkDoneProgressCreateParams{
 		Token: lsproto.IntegerOrString{String: &token},
 	})
 }
 
 func (r *serverProgressReporter) sendProgress(token string, value lsproto.WorkDoneProgressBeginOrReportOrEnd) {
-	_ = sendNotification(r.server, lsproto.ProgressInfo, &lsproto.ProgressParams{
+	_ = r.server.sendNotification(lsproto.ProgressInfo, &lsproto.ProgressParams{
 		Token: lsproto.IntegerOrString{String: &token},
 		Value: value,
 	})

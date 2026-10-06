@@ -50,6 +50,88 @@ func (p *recordingContentMapperProcess) Close() error {
 	return p.ReadWriteCloser.Close()
 }
 
+func TestContentMapperProjectWithoutMappedFiles(t *testing.T) {
+	t.Parallel()
+	for _, hasMapper := range []bool{false, true} {
+		t.Run(fmt.Sprintf("hasMapper=%t", hasMapper), func(t *testing.T) {
+			t.Parallel()
+			config := `{"compilerOptions": {"noLib": true}}`
+			if hasMapper {
+				config = `{
+					"compilerOptions": { "noLib": true },
+					"contentMappers": [ { "package": "mapper", "extensions": [".box"] } ]
+				}`
+			}
+			files := map[string]any{
+				"/home/project/tsconfig.json":                    config,
+				"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.TransformingMapper),
+				"/home/project/main.ts":                          "export {};",
+			}
+			init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+				CurrentDirectory:   "/home/project",
+				DefaultLibraryPath: bundled.LibPath(),
+				PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+				RunExternalCode:    true,
+			}, nil)
+			spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()}
+			init.Spawner = spawner
+			session := project.NewSession(init)
+			defer session.Close()
+
+			ctx := context.Background()
+			session.DidOpenFile(ctx, "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+			languageService, err := session.GetLanguageService(ctx, "file:///home/project/main.ts")
+			assert.NilError(t, err)
+			// Access after freezing must not try to initialize using the cleared builder.
+			program := languageService.GetProgram()
+			mapperProject := program.ContentMapperProject()
+			assert.Equal(t, mapperProject != nil, hasMapper)
+			assert.Equal(t, program.ContentMapperProject(), mapperProject)
+			assert.Equal(t, spawner.spawns.Load(), int32(0))
+		})
+	}
+}
+
+func TestContentMapperParallelFileLoading(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{
+		"/home/project/tsconfig.json": `{
+			"compilerOptions": { "target": "es2020", "noLib": true },
+			"contentMappers": [ { "package": "mapper", "extensions": [".box"] } ]
+		}`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.TransformingMapper),
+		"/home/project/main.ts":                          "export {};",
+	}
+	// Parallel parsing reads the mapper project identity while another file initializes it.
+	const fileCount = 32
+	for i := range fileCount {
+		files[fmt.Sprintf("/home/project/file%d.box", i)] = "export const version = #{target};\n"
+	}
+	init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+
+	ctx := context.Background()
+	session.DidOpenFile(ctx, "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	languageService, err := session.GetLanguageService(ctx, "file:///home/project/main.ts")
+	assert.NilError(t, err)
+	mapperProject := languageService.GetProgram().ContentMapperProject()
+	assert.Assert(t, mapperProject != nil)
+	assert.Equal(t, languageService.GetProgram().ContentMapperProject(), mapperProject)
+	for i := range fileCount {
+		fileName := fmt.Sprintf("/home/project/file%d.box", i)
+		file := languageService.GetProgram().GetSourceFile(tspath.RootedFilePathFromAbsolute(fileName))
+		assert.Assert(t, file != nil, "expected %s to be loaded", fileName)
+		assert.Equal(t, file.Text(), "const __VERSION = \"1.0.0\";\nexport const version = 7;\n")
+	}
+}
+
 func TestContentMapperInProject(t *testing.T) {
 	t.Parallel()
 	files := map[string]any{
@@ -94,10 +176,6 @@ func TestContentMapperInProject(t *testing.T) {
 		calls := utils.Client().RegisterContentMapperExtensionsCalls()
 		assert.Assert(t, len(calls) > 0, "expected RegisterContentMapperExtensions to be called")
 		assert.DeepEqual(t, calls[len(calls)-1].Extensions, []string{".box"})
-		logs := utils.Logs()
-		assert.Assert(t, strings.Contains(logs, "Content mapper timings since previous snapshot adoption:"), logs)
-		assert.Assert(t, strings.Contains(logs, "mapper@1.0.0:"), logs)
-		assert.Assert(t, strings.Contains(logs, "Transforms: 1 ("), logs)
 	})
 
 	t.Run("untrusted workspace does not run the content mapper", func(t *testing.T) {
@@ -257,7 +335,7 @@ func TestContentMapperPackageManifestChangeReloadsConfig(t *testing.T) {
 	assert.Assert(t, configuredProject != nil)
 	mappers := configuredProject.CommandLine.ContentMappers()
 	assert.Equal(t, len(mappers), 1)
-	assert.Equal(t, mappers[0].PackageDirectory, "/home/mapper")
+	assert.Equal(t, mappers[0].PackageDirectory, tspath.RootedDirectoryPath("/home/mapper"))
 	session.WaitForBackgroundTasks()
 	assert.Assert(t, utils.WatchesFile(packageJsonPath), "expected the invalid mapper package manifest to be watched")
 	assert.Assert(t, slices.ContainsFunc(utils.Client().WatchFilesCalls(), func(call struct {
@@ -316,11 +394,11 @@ func TestContentMapperSupplementalFileClonedOnEdit(t *testing.T) {
 	oldCanonical := oldProgram.GetSourceFile("/home/project/app.box")
 	oldSupplemental := oldCanonical.SupplementalSourceFiles()
 	assert.Equal(t, len(oldSupplemental), 1)
-	assert.Equal(t, oldSupplemental[0].FileName(), "/home/project/app.box.0.ts")
-	assert.Equal(t, oldSupplemental[0].Path(), tspath.Path("/home/project/app.box.0.ts"))
+	assert.Equal(t, oldSupplemental[0].FileName().AsString(), "/home/project/app.box.0.ts")
+	assert.Equal(t, oldSupplemental[0].PathKey(), tspath.PathKey("/home/project/app.box.0.ts"))
 	assert.Equal(t, oldSupplemental[0].Hash, oldCanonical.Hash)
-	assert.Assert(t, oldProgram.GetSourceFileByPath(oldSupplemental[0].Path()) == oldSupplemental[0])
-	assert.Assert(t, oldProgram.FilesByPath()[oldSupplemental[0].Path()] == oldSupplemental[0])
+	assert.Assert(t, oldProgram.GetSourceFileByPath(oldSupplemental[0].PathKey()) == oldSupplemental[0])
+	assert.Assert(t, oldProgram.FilesByPath()[oldSupplemental[0].PathKey()] == oldSupplemental[0])
 
 	assert.NilError(t, utils.FS().WriteFile("/home/project/app.box", "declare const supplementalValue: string;\n"))
 	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
@@ -337,12 +415,12 @@ func TestContentMapperSupplementalFileClonedOnEdit(t *testing.T) {
 	newCanonical := newProgram.GetSourceFile("/home/project/app.box")
 	newSupplemental := newCanonical.SupplementalSourceFiles()
 	assert.Equal(t, len(newSupplemental), 1)
-	assert.Equal(t, newSupplemental[0].Path(), oldSupplemental[0].Path())
+	assert.Equal(t, newSupplemental[0].PathKey(), oldSupplemental[0].PathKey())
 	assert.Assert(t, newCanonical != oldCanonical)
 	assert.Assert(t, newSupplemental[0] != oldSupplemental[0])
 	assert.Equal(t, newSupplemental[0].Hash, newCanonical.Hash)
 	assert.Assert(t, newSupplemental[0].Hash != oldSupplemental[0].Hash)
-	assert.Assert(t, newProgram.FilesByPath()[newSupplemental[0].Path()] == newSupplemental[0])
+	assert.Assert(t, newProgram.FilesByPath()[newSupplemental[0].PathKey()] == newSupplemental[0])
 	assert.Assert(t, strings.Contains(newSupplemental[0].Text(), "supplementalValue: string"))
 	mainFile := newProgram.GetSourceFile("/home/project/main.ts")
 	diagnostics := newProgram.GetSemanticDiagnostics(ctx, mainFile)
@@ -386,7 +464,7 @@ func TestContentMapperModuleExtensionClonedOnUnrelatedEdit(t *testing.T) {
 	assert.NilError(t, err)
 	mappedFile := languageService.GetProgram().GetSourceFile("/home/project/app.box")
 	assert.Assert(t, mappedFile != nil)
-	assert.Equal(t, mappedFile.VirtualFileName(), "/home/project/app.box.mts")
+	assert.Equal(t, mappedFile.VirtualFileName().AsString(), "/home/project/app.box.mts")
 	assert.Assert(t, mappedFile.ParseOptions().ExternalModuleIndicatorOptions.Force)
 
 	session.DidChangeFile(ctx, mainURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
@@ -434,9 +512,13 @@ func TestContentMapperLocaleChange(t *testing.T) {
 
 	session := project.NewSession(init)
 	defer session.Close()
-	session.DidOpenFile(context.Background(), "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
-	_, err := session.GetLanguageService(context.Background(), "file:///home/project/main.ts")
+	ctx := locale.WithLocale(context.Background(), locale.Default)
+	localeReads := len(utils.Client().GetLocaleCalls())
+	session.DidOpenFile(ctx, "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	_, err := session.GetLanguageService(ctx, "file:///home/project/main.ts")
 	assert.NilError(t, err)
+	// Snapshot adoption reads the current locale for its background work; project construction should not.
+	assert.Equal(t, len(utils.Client().GetLocaleCalls()), localeReads+1)
 	assert.Equal(t, spawner.spawns.Load(), int32(1))
 
 	preferences := session.Config()
@@ -662,8 +744,8 @@ func TestContentMapperOpenFileExcludedByConfigChange(t *testing.T) {
 	boxURI := lsproto.DocumentUri("file:///home/project/src/app.box")
 	session.SetContentMapperContributions(ctx, project.ContentMapperContributions{
 		Mappers: []*contentmapper.Mapper{{
-			Definition:       contentmapper.Definition{Package: "test.extension", Extensions: []string{".box"}},
-			Manifest:         contentmapper.Manifest{Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions},
+			Package: "test.extension", Extensions: []string{".box"},
+			Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions,
 			PackageDirectory: "/home/project",
 			ContributionID:   "test.extension[0]",
 		}},
@@ -683,6 +765,13 @@ func TestContentMapperOpenFileExcludedByConfigChange(t *testing.T) {
 		Uri:  "file:///home/project/tsconfig.json",
 		Type: lsproto.FileChangeTypeChanged,
 	}})
+	session.WaitForBackgroundTasks()
+
+	// The background update removes app.box from the configured project, but inferred
+	// project cleanup is deferred until the next file open.
+	assert.Assert(t, session.Snapshot().GetDefaultProject(boxURI) == nil)
+	mainURI := lsproto.DocumentUri("file:///home/project/src/main.ts")
+	session.DidOpenFile(ctx, mainURI, 1, files["/home/project/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
 
 	languageService, err = session.GetLanguageService(ctx, boxURI)
 	assert.NilError(t, err)
@@ -851,8 +940,8 @@ func TestContentMapperInferredProjectUsesExtensionContributions(t *testing.T) {
 	assert.ErrorContains(t, err, "no project found", "configured mapper must not leak into inferred projects")
 	session.SetContentMapperContributions(ctx, project.ContentMapperContributions{
 		Mappers: []*contentmapper.Mapper{{
-			Definition:       contentmapper.Definition{Package: "test.extension", Extensions: []string{".box"}},
-			Manifest:         contentmapper.Manifest{Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions},
+			Package: "test.extension", Extensions: []string{".box"},
+			Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions,
 			PackageDirectory: "/home",
 			ContributionID:   "test.extension[0]",
 		}},
@@ -905,8 +994,8 @@ func TestContentMapperInferredProjectSurvivesTypingsInstall(t *testing.T) {
 	ctx := context.Background()
 	session.SetContentMapperContributions(ctx, project.ContentMapperContributions{
 		Mappers: []*contentmapper.Mapper{{
-			Definition:       contentmapper.Definition{Package: "test.extension", Extensions: []string{".box"}},
-			Manifest:         contentmapper.Manifest{Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions},
+			Package: "test.extension", Extensions: []string{".box"},
+			Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions,
 			PackageDirectory: "/home",
 			ContributionID:   "test.extension[0]",
 		}},
@@ -937,7 +1026,7 @@ func TestContentMapperInferredProjectSurvivesTypingsInstall(t *testing.T) {
 	assert.Assert(t, !strings.Contains(boxFile.Text(), "#{target}"), "expected loose app.box to be transformed after typings install: %q", boxFile.Text())
 	var typingsFile *ast.SourceFile
 	for _, file := range languageService.GetProgram().SourceFiles() {
-		if strings.HasSuffix(file.FileName(), "@types/jquery/index.d.ts") {
+		if strings.HasSuffix(file.FileName().AsString(), "@types/jquery/index.d.ts") {
 			typingsFile = file
 			break
 		}

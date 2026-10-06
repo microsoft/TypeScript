@@ -131,7 +131,7 @@ func TestContentMapperBuildDetectsNewPhysicalSupplementalFile(t *testing.T) {
 	testSys.writeFileNoError(supplementalFileName, "export {};\n")
 	result = execute.CommandLine(t.Context(), sys, args, testSys)
 	assert.Equal(t, result.Status, tsc.ExitStatusDiagnosticsPresent_OutputsGenerated)
-	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "TS100025"), testSys.currentWrite.String())
+	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "TS18069"), testSys.currentWrite.String())
 	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "conflicts with an existing file"), testSys.currentWrite.String())
 }
 
@@ -402,6 +402,42 @@ func TestContentMapperBuildWatchSymlinkedManifestChange(t *testing.T) {
 	updatedManifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1)
 	testSys.writeFileNoError(manifestTarget, updatedManifest)
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: manifestTarget}})
+	result.Watcher.DoCycle()
+
+	assert.Equal(t, spawner.spawns.Load(), int32(2))
+	assert.Equal(t, spawner.closes.Load(), int32(1))
+}
+
+func TestContentMapperWatchManifestChangeIgnoresCase(t *testing.T) {
+	t.Parallel()
+	const (
+		manifestTarget = "/home/src/workspaces/Mapper/package.json"
+		manifestEvent  = "/home/src/workspaces/mapper/package.json"
+	)
+	input := &tscInput{
+		ignoreCase: true,
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json": `{
+				"contentMappers": [{ "package": "mapper", "extensions": [".vue"] }]
+			}`,
+			"/home/src/workspaces/project/app.vue":             `export const app = 1;`,
+			"/home/src/workspaces/project/node_modules/mapper": vfstest.Symlink("/home/src/workspaces/Mapper"),
+			manifestTarget: contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+		},
+	}
+	testSys := newTestSys(input, false)
+	spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()}
+	sys := &recordingContentMapperSystem{TestSys: testSys, spawner: spawner}
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+
+	result := execute.CommandLine(ctx, sys, []string{"--watch", "--runExternalCode"}, testSys)
+	assert.Equal(t, spawner.spawns.Load(), int32(1))
+	assert.Equal(t, spawner.closes.Load(), int32(0))
+
+	updatedManifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1)
+	testSys.writeFileNoError(manifestEvent, updatedManifest)
+	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: manifestEvent}})
 	result.Watcher.DoCycle()
 
 	assert.Equal(t, spawner.spawns.Load(), int32(2))

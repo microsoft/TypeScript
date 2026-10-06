@@ -1,0 +1,157 @@
+//// [tests/cases/compiler/declarationEmitStaticMethodNonIdentifierNames.ts] ////
+
+=== declarationEmitStaticMethodNonIdentifierNames.ts ===
+declare const uniqueSym: unique symbol;
+>uniqueSym : unique symbol
+
+// none of these names can be written as `typeof Foo.<name>`
+export class Foo {
+>Foo : Foo
+
+    static #priv() { }
+>#priv : () => void
+
+    static getPriv() {
+>getPriv : () => () => void
+
+        return Foo.#priv;
+>Foo.#priv : () => void
+>Foo : typeof Foo
+    }
+
+    static "quoted-name"() { }
+>"quoted-name" : () => void
+
+    static getQuoted() {
+>getQuoted : () => () => void
+
+        return Foo["quoted-name"];
+>Foo["quoted-name"] : () => void
+>Foo : typeof Foo
+>"quoted-name" : "quoted-name"
+    }
+
+    static ["computed-name"]() { }
+>["computed-name"] : () => void
+>"computed-name" : "computed-name"
+
+    static getComputed() {
+>getComputed : () => () => void
+
+        return Foo["computed-name"];
+>Foo["computed-name"] : () => void
+>Foo : typeof Foo
+>"computed-name" : "computed-name"
+    }
+
+    static 1() { }
+>1 : () => void
+
+    static getNumeric() {
+>getNumeric : () => () => void
+
+        return Foo[1];
+>Foo[1] : () => void
+>Foo : typeof Foo
+>1 : 1
+    }
+
+    static [uniqueSym]() { }
+>[uniqueSym] : () => void
+>uniqueSym : unique symbol
+
+    static getUnique() {
+>getUnique : () => () => void
+
+        return Foo[uniqueSym];
+>Foo[uniqueSym] : () => void
+>Foo : typeof Foo
+>uniqueSym : unique symbol
+    }
+
+    // property types go through the same path
+    static privRef = Foo.#priv;
+>privRef : () => void
+>Foo.#priv : () => void
+>Foo : typeof Foo
+}
+
+// identifier names still use `typeof`
+export class Writable {
+>Writable : Writable
+
+    static normalName() { }
+>normalName : () => void
+
+    static getNormal() {
+>getNormal : () => () => void
+
+        return Writable.normalName;
+>Writable.normalName : () => void
+>Writable : typeof Writable
+>normalName : () => void
+    }
+
+    static $dollar() { }
+>$dollar : () => void
+
+    static getDollar() {
+>getDollar : () => () => void
+
+        return Writable.$dollar;
+>Writable.$dollar : () => void
+>Writable : typeof Writable
+>$dollar : () => void
+    }
+}
+
+export class Generic {
+>Generic : Generic
+
+    static #priv<T>(x: T): T { return x; }
+>#priv : <T>(x: T) => T
+>x : T
+>x : T
+
+    static getPriv() {
+>getPriv : () => <T>(x: T) => T
+
+        return Generic.#priv;
+>Generic.#priv : <T>(x: T) => T
+>Generic : typeof Generic
+    }
+}
+
+export class Recursive {
+>Recursive : Recursive
+
+    static #rec() { return Recursive.#rec; }
+>#rec : () => any
+>Recursive.#rec : () => any
+>Recursive : typeof Recursive
+
+    static getRec() {
+>getRec : () => () => any
+
+        return Recursive.#rec;
+>Recursive.#rec : () => any
+>Recursive : typeof Recursive
+    }
+}
+
+// instance members already fall back to a structural type
+export class Instance {
+>Instance : Instance
+
+    #priv() { }
+>#priv : () => void
+
+    getPriv() {
+>getPriv : () => () => void
+
+        return this.#priv;
+>this.#priv : () => void
+>this : this
+    }
+}
+

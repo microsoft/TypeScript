@@ -27,6 +27,13 @@ func TestTscCommandline(t *testing.T) {
 	}
 	testCases := []*tscInput{
 		{
+			subScenario: "global diagnostics produced during ordinary semantic checking",
+			files: FileMap{
+				"/home/src/workspaces/project/index.ts": `export function* values() { yield 1; }`,
+			},
+			commandLineArgs: []string{"index.ts", "--noEmit"},
+		},
+		{
 			subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
 			env: map[string]string{
 				"TS_TEST_TERMINAL_WIDTH": "120",
@@ -224,7 +231,7 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
 		},
 		{
-			subScenario: "Parse watch interval option",
+			subScenario: "Reject removed watch interval option",
 			files: FileMap{
 				"/home/src/workspaces/project/first.ts": `export const a = 1`,
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
@@ -238,7 +245,7 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},
 		{
-			subScenario:     "Parse watch interval option without tsconfig.json",
+			subScenario:     "Reject removed watch interval option without tsconfig.json",
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},
 		{
@@ -1095,9 +1102,6 @@ func TestTscExtends(t *testing.T) {
 							"@myscope/*": ["${configDir}/types/*"],
 						},
 					},
-					"watchOptions": {
-						"excludeFiles": ["${configDir}/main.ts"],
-					},
 				}`),
 				"/home/src/projects/myproject/tsconfig.json": stringtestutil.Dedent(`
 				{
@@ -1349,6 +1353,33 @@ func TestTscIgnoreConfig(t *testing.T) {
 
 func TestTscIncremental(t *testing.T) {
 	t.Parallel()
+	libWithReadonlyArray := strings.Replace(tscDefaultLibContent, "interface ReadonlyArray<T> {}", "interface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }", 1)
+	getRecursiveTypeTest := func(name string, source string) *tscInput {
+		return &tscInput{
+			subScenario: name + " after comment only edit",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts":      stringtestutil.Dedent(source),
+				tscLibPath + "/lib.es2026.full.d.ts":         libWithReadonlyArray,
+			},
+			edits: []*tscEdit{
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+				{
+					caption: "add another comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// another comment\n")
+					},
+				},
+				noChange,
+			},
+		}
+	}
 	getConstEnumTest := func(bdsContents string, changeEnumFile string, testSuffix string) *tscInput {
 		return &tscInput{
 			subScenario: "const enums" + testSuffix,
@@ -2269,6 +2300,224 @@ func TestTscIncremental(t *testing.T) {
 				`),
 			},
 			commandLineArgs: []string{"--noEmit"},
+		},
+		getRecursiveTypeTest("recursive mapped type", `
+			type Json = string | Json[];
+			type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+			declare function wrap<T>(value: T): Parsed<T>;
+			export const value = wrap({ items: [] as Json[] });
+		`),
+		getRecursiveTypeTest("recursive readonly mapped type", `
+			type Json = string | readonly Json[];
+			type Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;
+			declare function wrap<T>(value: T): Parsed<T>;
+			export const value = wrap({ items: [] as readonly Json[] });
+		`),
+		{
+			subScenario: "global diagnostics produced during semantic checking",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts":      `export function* values() { yield 1; }`,
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Like Strada, signature generation produces the missing-global diagnostic before semantic checking, so it is excluded from the file's semantic diagnostics.",
+				},
+				{
+					caption:      "no change",
+					edit:         noChange.edit,
+					expectedDiff: "Like Strada, the cached semantic diagnostics do not include the missing-global diagnostic produced during signature generation.",
+				},
+				{
+					caption: "delete build info to restore the semantic diagnostic",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "global diagnostics from function bodies after incremental edits",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts": stringtestutil.Dedent(`
+					export function values() {
+						// @ts-ignore
+						function* generator() { yield 1; }
+					}
+				`),
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "global diagnostics produced during unchecked javascript checking",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"allowJs": true, "noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.js":      `export function* values() { yield 1; }`,
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "enable javascript checking",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"allowJs": true`, `"allowJs": true, "checkJs": true`)
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "reverse mapped declaration consumption",
+			files: FileMap{
+				"/home/src/workspaces/project/producer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" }
+				}`,
+				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
+					declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;
+					declare const indexedInput: { [key: string]: { value: string } };
+					export const indexed = unwrap(indexedInput);
+					type Validator<T> = ((input: unknown) => T | undefined) | {
+						[K in keyof T]: Validator<T[K]>;
+					};
+					declare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;
+					declare const stringValidator: (input: unknown) => string | undefined;
+					export const deep = decode({ a: { b: { c: { d: stringValidator } } } });
+					interface NamedInput { leaf: typeof stringValidator }
+					declare const namedInput: { node: NamedInput };
+					export const named = decode(namedInput);
+				`),
+				"/home/src/workspaces/project/consumer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "noEmit": true },
+					"references": [{ "path": "../producer" }]
+				}`,
+				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					import { indexed, deep, named } from "../producer/dist/index.js";
+					const a: string = indexed["name"];
+					const b: string = deep.a.b.c.d;
+					const c: string = named.node.leaf;
+					type IsAny<T> = 0 extends (1 & T) ? true : false;
+					const notAny: false = null as unknown as
+						IsAny<typeof indexed[string] | typeof deep.a.b.c.d | typeof named.node.leaf>;
+					const invalidIndex: number = indexed["name"];
+					const invalidDeep: number = deep.a.b.c.d;
+					const invalidNamed: number = named.node.leaf;
+				`),
+			},
+			commandLineArgs: []string{"--build", "consumer"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the producer",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/producer/index.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "recursive tagged tuple after incremental edits",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"strict": true, "incremental": true, "noEmit": true, "module": "esnext", "moduleResolution": "bundler"}}`,
+				tscLibPath + "/lib.es2026.full.d.ts":         libWithReadonlyArray,
+				"/home/src/workspaces/project/doc.ts": stringtestutil.Dedent(`
+					type Doc =
+						| string
+						| { [k: string]: Doc }
+						| readonly ["array", Doc]
+						| readonly ["array", Doc, { length: number }]
+						| readonly ["array", Doc, { min?: number; max?: number }]
+						| readonly ["union", Doc, ...Doc[]];
+					export declare const doc: Doc;
+				`),
+				"/home/src/workspaces/project/consumer.ts": stringtestutil.Dedent(`
+					import { doc } from "./doc";
+					export const value = doc;
+				`),
+			},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the recursive type",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/doc.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+				{
+					caption: "add a union constituent",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/doc.ts", "| string", "| number\n    | string")
+					},
+				},
+				noChange,
+				{
+					caption: "verify the consumer type was not weakened",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/consumer.ts", "\nexport const invalid: number = value;\n")
+					},
+				},
+				noChange,
+				{
+					caption: "delete build info and check the edited source afresh",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "json module diagnostics are cleared after fixing the json file",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"strict": true,
+							"noEmit": true,
+							"incremental": true,
+							"resolveJsonModule": true,
+							"esModuleInterop": true
+						}
+					}`),
+				"/home/src/workspaces/project/data.json": `{ "title": "hello" }`,
+				"/home/src/workspaces/project/check.ts": stringtestutil.Dedent(`
+					import type data from "./data.json";
+
+					type Shape = { title: string };
+					type Covers<T extends Shape> = T;
+
+					export type Check = Covers<typeof data>;
+				`),
+			},
+			edits: []*tscEdit{
+				{
+					caption: "remove required property",
+					edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/data.json", `{}`)
+					},
+				},
+				{
+					caption: "restore required property",
+					edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/data.json", `{ "title": "fixed" }`)
+					},
+				},
+			},
 		},
 	}
 
@@ -4143,6 +4392,34 @@ func TestTscProjectReferences(t *testing.T) {
 					"references": [
 						{ "path": "../utils" },
 					],
+				}`),
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--p", "project"},
+		},
+		{
+			subScenario: "incremental nested triple-slash reference to composite project source",
+			files: FileMap{
+				"/home/src/workspaces/solution/utils/index.ts":   "interface ReferencedType {}",
+				"/home/src/workspaces/solution/utils/index.d.ts": "interface ReferencedType {}",
+				"/home/src/workspaces/solution/utils/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+				"/home/src/workspaces/solution/project/src/index.ts": `/// <reference path="../../utils/index.ts" />
+let value: ReferencedType;`,
+				"/home/src/workspaces/solution/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"disableSourceOfProjectReferenceRedirect": true,
+						"incremental": true
+					},
+					"files": ["src/index.ts"],
+					"references": [
+						{ "path": "../utils" }
+					]
 				}`),
 			},
 			cwd:             "/home/src/workspaces/solution",

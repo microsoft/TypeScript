@@ -14,7 +14,7 @@ func TestAutoImportPathsNodeModules(t *testing.T) {
 	const content = `// @Filename: tsconfig.json
 {
     "compilerOptions": {
-        "module": "amd",
+        "module": "commonjs",
         "moduleResolution": "node",
         "rootDir": "ts",
         "baseUrl": ".",

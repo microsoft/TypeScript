@@ -1,5 +1,5 @@
 // @filename: computedPropertyNames52.js
-// @outFile: computedPropertyNames52-emit.js
+// @outDir: out
 // @allowJs: true
 // @target: es5, es2015
 const array = [];

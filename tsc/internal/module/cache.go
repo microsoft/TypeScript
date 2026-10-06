@@ -1,20 +1,19 @@
 package module
 
 import (
-	"sync"
-
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type ModeAwareCache[T any] map[ModeAwareCacheKey]T
 
 type moduleResolutionCacheKey struct {
-	containingDirectory string
+	containingDirectory tspath.RootedDirectoryPath
 	moduleName          string
 	resolutionMode      core.ResolutionMode
-	redirectConfigName  string
+	redirectConfigName  tspath.RootedFilePath
 }
 
 type moduleResolutionCache struct {
@@ -30,10 +29,10 @@ func (c *moduleResolutionCache) Set(key moduleResolutionCacheKey, value *Resolve
 }
 
 type typeRefDirectiveResolutionCacheKey struct {
-	containingDirectory             string
+	containingDirectory             tspath.RootedDirectoryPath
 	typeReferenceName               string
 	resolutionMode                  core.ResolutionMode
-	redirectConfigName              string
+	redirectConfigName              tspath.RootedFilePath
 	fromInferredTypesContainingFile bool
 }
 
@@ -49,29 +48,57 @@ func (c *typeRefDirectiveResolutionCache) Set(key typeRefDirectiveResolutionCach
 	c.cache.Store(key, value)
 }
 
-type caches struct {
-	packageJsonInfoCache *packagejson.InfoCache
-
-	moduleResolutionCache           moduleResolutionCache
-	typeRefDirectiveResolutionCache typeRefDirectiveResolutionCache
-
-	// Cached representation for `core.CompilerOptions.paths`.
-	// Doesn't handle other path patterns like in `typesVersions`.
-	parsedPatternsForPathsOnce sync.Once
-	parsedPatternsForPaths     *ParsedPatterns
+type parsedPatternsCache struct {
+	cache collections.SyncMap[*collections.OrderedMap[string, []string], *ParsedPatterns]
 }
 
-func newCaches(
-	currentDirectory string,
-	useCaseSensitiveFileNames bool,
-	options *core.CompilerOptions,
-) caches {
-	return caches{
-		packageJsonInfoCache: packagejson.NewInfoCache(currentDirectory, useCaseSensitiveFileNames),
+func (c *parsedPatternsCache) Get(pathMappings *collections.OrderedMap[string, []string]) *ParsedPatterns {
+	patterns, ok := c.cache.Load(pathMappings)
+	if !ok {
+		patterns, _ = c.cache.LoadOrStore(pathMappings, TryParsePatterns(pathMappings))
+	}
+	return patterns
+}
+
+type ResolutionData struct {
+	compilerOptions *core.CompilerOptions
+	typingsLocation tspath.RootedDirectoryPath
+	projectName     string
+	extraExtensions []string
+
+	packageJsonInfoCache *packagejson.InfoCache
+}
+
+func newResolutionData(opts ResolverOptions) *ResolutionData {
+	data := &ResolutionData{
+		compilerOptions:      opts.CompilerOptions,
+		typingsLocation:      opts.TypingsLocation,
+		projectName:          opts.ProjectName,
+		extraExtensions:      opts.ExtraExtensions,
+		packageJsonInfoCache: opts.PackageJsonCache,
+	}
+	if data.packageJsonInfoCache == nil {
+		data.packageJsonInfoCache = packagejson.NewInfoCache(opts.Host.FS().CaseSensitivity())
+	}
+	return data
+}
+
+// Clone copies the package-json cache table without copying its entries.
+func (c *ResolutionData) Clone() *ResolutionData {
+	return &ResolutionData{
+		compilerOptions:      c.compilerOptions,
+		typingsLocation:      c.typingsLocation,
+		projectName:          c.projectName,
+		extraExtensions:      c.extraExtensions,
+		packageJsonInfoCache: c.packageJsonInfoCache.Clone(),
 	}
 }
 
-func getRedirectConfigName(redirect ResolvedProjectReference) string {
+func (c *ResolutionData) PackageJsonCacheEntries(f func(key tspath.PathKey, value *packagejson.InfoCacheEntry) bool) {
+	c.packageJsonInfoCache.Range(f)
+}
+
+func getRedirectConfigName(redirect ResolvedProjectReference) tspath.RootedFilePath {
 	if redirect == nil {
 		return ""
 	}

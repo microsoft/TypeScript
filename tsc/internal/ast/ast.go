@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/zeebo/xxh3"
@@ -944,6 +945,8 @@ func (n *Node) Attributes() *Node {
 		return n.AsJsxOpeningElement().Attributes
 	case KindJsxSelfClosingElement:
 		return n.AsJsxSelfClosingElement().Attributes
+	case KindModuleDeclaration:
+		return n.AsModuleDeclaration().Attributes
 	}
 	panic("Unhandled case in Node.Attributes: " + n.Kind.String())
 }
@@ -2051,7 +2054,7 @@ func (node *CallExpression) computeSubtreeFacts() SubtreeFacts {
 		propagateSubtreeFacts(node.QuestionDotToken) |
 		propagateEraseableSyntaxListSubtreeFacts(node.TypeArguments) |
 		propagateNodeListSubtreeFacts(node.Arguments, propagateSubtreeFacts) |
-		core.IfElse(node.Expression.Kind == KindImportKeyword, SubtreeContainsDynamicImport, SubtreeFactsNone)
+		core.IfElse(IsImportCall(node.AsNode()), SubtreeContainsDynamicImport, SubtreeFactsNone)
 }
 
 func (node *CallExpression) propagateSubtreeFacts() SubtreeFacts {
@@ -2132,44 +2135,28 @@ func (node *ExpressionWithTypeArguments) computeSubtreeFacts() SubtreeFacts {
 		propagateEraseableSyntaxListSubtreeFacts(node.TypeArguments)
 }
 
-func (node *ImportAttributesNode) GetResolutionModeOverride( /* !!! grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void*/ ) (core.ResolutionMode, bool) {
+func (node *ImportAttributesNode) GetResolutionModeOverride(grammarErrorOnNode func(node *Node, message *diagnostics.Message, args ...any) bool) (core.ResolutionMode, bool) {
 	if node == nil {
 		return core.ResolutionModeNone, false
 	}
 
 	attributes := node.AsImportAttributes().Attributes
 
-	if len(attributes.Nodes) != 1 {
-		// !!!
-		// grammarErrorOnNode?.(
-		//     node,
-		//     node.token === SyntaxKind.WithKeyword
-		//         ? Diagnostics.Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require
-		//         : Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require,
-		// );
+	attribute := core.Find(attributes.Nodes, func(attribute *Node) bool {
+		return attribute.Name().Text() == "resolution-mode"
+	})
+	if attribute == nil {
 		return core.ResolutionModeNone, false
 	}
 
-	elem := attributes.Nodes[0].AsImportAttribute()
-	if !IsStringLiteralLike(elem.Name()) {
-		return core.ResolutionModeNone, false
-	}
-	if elem.Name().Text() != "resolution-mode" {
-		// !!!
-		// grammarErrorOnNode?.(
-		//     elem.name,
-		//     node.token === SyntaxKind.WithKeyword
-		//         ? Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_attributes
-		//         : Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions,
-		// );
-		return core.ResolutionModeNone, false
-	}
+	elem := attribute.AsImportAttribute()
 	if !IsStringLiteralLike(elem.Value) {
 		return core.ResolutionModeNone, false
 	}
 	if elem.Value.Text() != "import" && elem.Value.Text() != "require" {
-		// !!!
-		// grammarErrorOnNode?.(elem.value, Diagnostics.resolution_mode_should_be_either_require_or_import);
+		if grammarErrorOnNode != nil {
+			grammarErrorOnNode(elem.Value, diagnostics.X_resolution_mode_should_be_either_require_or_import)
+		}
 		return core.ResolutionModeNone, false
 	}
 	if elem.Value.Text() == "import" {
@@ -2311,7 +2298,7 @@ type CommentDirective struct {
 
 type SourceFileMetaData struct {
 	PackageJsonType      string
-	PackageJsonDirectory string
+	PackageJsonDirectory tspath.RootedDirectoryPath
 	ImpliedNodeFormat    core.ResolutionMode
 }
 
@@ -2335,15 +2322,15 @@ func NewSourceFileDataKey[T any]() *SourceFileDataKey[T] {
 	return &SourceFileDataKey[T]{key: sourceFileDataKey(sourceFileDataKeyCounter.Add(1))}
 }
 
-func GetOrComputeSourceFileData[T any](file *SourceFile, key *SourceFileDataKey[T], compute func(*SourceFile) T) T {
-	cell := getSourceFileDataCell(file, key)
+func (file *SourceFile) GetOrComputeData[T any](key *SourceFileDataKey[T], compute func(*SourceFile) T) T {
+	cell := file.getDataCell(key)
 	cell.once.Do(func() {
 		cell.value = compute(file)
 	})
 	return cell.value
 }
 
-func getSourceFileDataCell[T any](file *SourceFile, key *SourceFileDataKey[T]) *sourceFileDataCell[T] {
+func (file *SourceFile) getDataCell[T any](key *SourceFileDataKey[T]) *sourceFileDataCell[T] {
 	if key == nil || key.key == 0 {
 		panic("invalid SourceFileDataKey; use NewSourceFileDataKey")
 	}
@@ -2368,8 +2355,8 @@ type CheckJsDirective struct {
 }
 
 type HasFileName interface {
-	FileName() string
-	Path() tspath.Path
+	FileName() tspath.RootedFilePath
+	PathKey() tspath.PathKey
 }
 
 type TokenCacheKey struct {
@@ -2384,7 +2371,7 @@ type SourceFile struct {
 	CompositeBase
 
 	// Fields set by NewSourceFile
-	fileName          string // For debugging convenience
+	fileName          tspath.RootedFilePath // For debugging convenience
 	parseOptions      SourceFileParseOptions
 	text              string
 	contentMapperInfo *ContentMapperSourceFileInfo
@@ -2458,9 +2445,6 @@ type SourceFile struct {
 }
 
 func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList, endOfFileToken *TokenNode) *Node {
-	if tspath.GetEncodedRootLength(opts.FileName) == 0 || opts.FileName != tspath.NormalizePath(opts.FileName) {
-		panic(fmt.Sprintf("fileName should be normalized and absolute: %q", opts.FileName))
-	}
 	data := &SourceFile{}
 	data.fileName = opts.FileName
 	data.parseOptions = opts
@@ -2487,7 +2471,7 @@ func (node *SourceFile) OriginalText() string {
 }
 
 // OriginalFileName returns the canonical filename associated with a supplemental source file, or FileName() otherwise.
-func (node *SourceFile) OriginalFileName() string {
+func (node *SourceFile) OriginalFileName() tspath.RootedFilePath {
 	if canonical := node.CanonicalSourceFile(); canonical != nil {
 		return canonical.FileName()
 	}
@@ -2502,6 +2486,11 @@ func (node *SourceFile) SpanMap() *spanmap.SpanMap {
 		return nil
 	}
 	return node.contentMapperInfo.SpanMap
+}
+
+// IsContentMapped reports whether this file was produced by a content mapper.
+func (node *SourceFile) IsContentMapped() bool {
+	return node.contentMapperInfo != nil
 }
 
 // ContentMapper returns the identity of the content mapper that produced this file, or "" if the file
@@ -2526,7 +2515,7 @@ func (node *SourceFile) ContentMapperTransformIdentity() string {
 	return node.contentMapperInfo.TransformIdentity
 }
 
-func (node *SourceFile) VirtualFileName() string {
+func (node *SourceFile) VirtualFileName() tspath.RootedFilePath {
 	if node.contentMapperInfo == nil {
 		return ""
 	}
@@ -2553,7 +2542,7 @@ type ContentMapperSourceFileInfo struct {
 	ContentMapper           string
 	TransformIdentity       string
 	ParseOptions            SourceFileParseOptions
-	VirtualFileName         string
+	VirtualFileName         tspath.RootedFilePath
 	OriginalText            string
 	SpanMap                 *spanmap.SpanMap
 	DiagnosticDirectives    []MappedDiagnosticDirective
@@ -2632,12 +2621,12 @@ func collectIdentifiersForSourceFile(sourceFile *SourceFile) collections.Set[str
 	return identifiers
 }
 
-func (node *SourceFile) FileName() string {
+func (node *SourceFile) FileName() tspath.RootedFilePath {
 	return node.parseOptions.FileName
 }
 
-func (node *SourceFile) Path() tspath.Path {
-	return node.parseOptions.Path
+func (node *SourceFile) PathKey() tspath.PathKey {
+	return node.parseOptions.PathKey
 }
 
 func (node *SourceFile) Imports() []*LiteralLikeNode {

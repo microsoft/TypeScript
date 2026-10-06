@@ -22,7 +22,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
@@ -47,7 +46,7 @@ func (l *LanguageService) ProvideCompletion(
 		triggerCharacter = context.TriggerCharacter
 	}
 	ctx = format.WithFormatCodeSettings(ctx, l.FormatOptions(), l.FormatOptions().NewLineCharacter)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, LSPPosition, spanmap.FeatureCompletion)
+	positions := l.converters.FromLSPPositionForSourceFile(file, LSPPosition, spanmap.FeatureCompletion)
 	if len(positions) == 0 || !positions[0].Fidelity.IsExact() {
 		// In a content-mapped file the cursor is outside a verbatim span, so any completion committed here
 		// could not be applied to the original text. Offer nothing rather than edits at a bogus location.
@@ -127,7 +126,7 @@ func ensureItemData(file *ast.SourceFile, pos int, list *lsproto.CompletionList)
 	for _, item := range list.Items {
 		if item.Data == nil {
 			item.Data = &lsproto.CompletionItemData{
-				FileName:              file.OriginalFileName(),
+				FileName:              file.OriginalFileName().AsString(),
 				Position:              int32(pos),
 				SupplementalFileIndex: supplementalFileIndex(file),
 				Name:                  item.Label,
@@ -310,7 +309,6 @@ type symbolOriginInfo struct {
 	kind              symbolOriginInfoKind
 	isDefaultExport   bool
 	isFromPackageJson bool
-	fileName          string
 	data              any
 }
 
@@ -1181,7 +1179,7 @@ func (l *LanguageService) getCompletionData(
 					}
 				}
 				if objectLikeContainer.Kind == ast.KindObjectLiteralExpression && preferences.IncludeCompletionsWithObjectLiteralMethodSnippets.IsTrue() {
-					displayName, _ := getCompletionEntryDisplayNameForSymbol(member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
+					displayName, _ := getCompletionEntryDisplayNameForSymbol(file, preferences, member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
 					if displayName != "" {
 						originalSortText := core.OrElse(symbolToSortTextMap[symbolId], SortTextLocationPriority)
 						symbolToSortTextMap[symbolId] = ObjectLiteralPropertySortText(originalSortText, displayName)
@@ -1201,7 +1199,7 @@ func (l *LanguageService) getCompletionData(
 	}
 
 	shouldOfferImportCompletions := func() bool {
-		if tspath.IsDynamicFileName(file.FileName()) {
+		if file.FileName().IsDynamic() {
 			return false
 		}
 		// If already typing an import statement, provide completions for it.
@@ -1243,7 +1241,7 @@ func (l *LanguageService) getCompletionData(
 			}
 		}
 
-		view, err := l.getPreparedAutoImportView(file)
+		view, err := l.getPreparedAutoImportView(file, typeChecker)
 		if err != nil {
 			return err
 		}
@@ -1251,7 +1249,7 @@ func (l *LanguageService) getCompletionData(
 			return nil
 		}
 
-		autoImports = view.GetCompletions(ctx, lowerCaseTokenText, usagePosition, isRightOfOpenTag, isTypeOnlyLocation)
+		autoImports = view.GetCompletions(lowerCaseTokenText, usagePosition, isRightOfOpenTag, isTypeOnlyLocation)
 		return nil
 	}
 
@@ -1976,6 +1974,8 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	for index, symbol := range data.symbols {
 		origin := data.symbolToOriginInfoMap[index]
 		name, needsConvertPropertyAccess := getCompletionEntryDisplayNameForSymbol(
+			file,
+			preferences,
 			symbol,
 			origin,
 			data.completionKind,
@@ -2060,7 +2060,9 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 				preferences,
 				isSnippet,
 			)
-			filterText = autoImport.Fix.Name
+			// The edit range covers the whole import statement typed so far, and clients match that text against the
+			// filter text, so it has to be the statement being inserted (as in Strada), not just the bare name.
+			filterText = insertText
 			sortText = SortTextLocationPriority
 		}
 
@@ -2589,12 +2591,13 @@ func (l *LanguageService) collectObjectLiteralMethodSymbols(ctx context.Context,
 		return nil
 	}
 
+	preferences := l.UserPreferences()
 	var methods []objectLiteralMethodSymbol
 	for _, member := range members {
 		if !isObjectLiteralMethodSymbol(member) {
 			continue
 		}
-		displayName, _ := getCompletionEntryDisplayNameForSymbol(member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
+		displayName, _ := getCompletionEntryDisplayNameForSymbol(file, preferences, member, nil /*origin*/, CompletionKindObjectPropertyDeclaration, false /*isJsxIdentifierExpected*/)
 		if displayName == "" {
 			continue
 		}
@@ -2850,10 +2853,10 @@ func createSnippetTabStopBody(factory *ast.NodeFactory, emitContext *printer.Emi
 }
 
 func (l *LanguageService) createImportAdder(ctx context.Context, typeChecker *checker.Checker, file *ast.SourceFile) (autoimport.ImportAdder, error) {
-	if tspath.IsDynamicFileName(file.FileName()) {
+	if file.FileName().IsDynamic() {
 		return nil, nil
 	}
-	view, err := l.getPreparedAutoImportView(file)
+	view, err := l.getPreparedAutoImportView(file, typeChecker)
 	if err != nil {
 		return nil, err
 	}
@@ -3152,6 +3155,8 @@ func shouldIncludeSymbol(
 }
 
 func getCompletionEntryDisplayNameForSymbol(
+	file *ast.SourceFile,
+	preferences lsutil.UserPreferences,
 	symbol *ast.Symbol,
 	origin *symbolOriginInfo,
 	completionKind CompletionKind,
@@ -3194,9 +3199,7 @@ func getCompletionEntryDisplayNameForSymbol(
 		}
 		return "", false
 	case CompletionKindObjectPropertyDeclaration:
-		// TODO: microsoft/TypeScript#18169
-		escapedName, _ := core.StringifyJson(name, "", "")
-		return escapedName, false
+		return quote(file, preferences, name), false
 	case CompletionKindPropertyAccess, CompletionKindGlobal:
 		// For a 'this.' completion it will be in a global context, but may have a non-identifier name.
 		// Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
@@ -3361,6 +3364,8 @@ func isContextTokenTypeLocation(contextToken *ast.Node) bool {
 			return parentKind == ast.KindTypeParameter
 		case ast.KindSatisfiesKeyword:
 			return parentKind == ast.KindSatisfiesExpression
+		case ast.KindOpenBracketToken, ast.KindCommaToken:
+			return parentKind == ast.KindTupleType
 		}
 	}
 	return false
@@ -5038,7 +5043,7 @@ func (l *LanguageService) createLSPCompletionItem(
 ) *lsproto.CompletionItem {
 	kind := getCompletionsSymbolKind(elementKind)
 	data := &lsproto.CompletionItemData{
-		FileName:              file.OriginalFileName(),
+		FileName:              file.OriginalFileName().AsString(),
 		Position:              int32(position),
 		SupplementalFileIndex: supplementalFileIndex(file),
 		Source:                source,
@@ -5484,12 +5489,13 @@ func (l *LanguageService) ResolveCompletionItem(
 	ctx context.Context,
 	item *lsproto.CompletionItem,
 	data *lsproto.CompletionItemData,
+	fileName tspath.RootedFilePath,
 ) (*lsproto.CompletionItem, error) {
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
 	}
 
-	program, file := l.tryGetProgramAndFile(data.FileName)
+	program, file := l.tryGetProgramAndFile(fileName)
 	if file == nil {
 		return nil, fmt.Errorf("file not found: %s", data.FileName)
 	}
@@ -5667,7 +5673,7 @@ func (l *LanguageService) getSymbolCompletionFromItemData(
 	// completion entry.
 	for index, symbol := range data.symbols {
 		origin := data.symbolToOriginInfoMap[index]
-		displayName, _ := getCompletionEntryDisplayNameForSymbol(symbol, origin, data.completionKind, data.isJsxIdentifierExpected)
+		displayName, _ := getCompletionEntryDisplayNameForSymbol(file, preferences, symbol, origin, data.completionKind, data.isJsxIdentifierExpected)
 		if displayName == itemData.Name &&
 			(itemData.Source == string(completionSourceClassMemberSnippet) && symbol.Flags&ast.SymbolFlagsClassMember != 0 ||
 				itemData.Source == string(completionSourceObjectLiteralMethodSnippet) && symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod) != 0 ||
@@ -6577,8 +6583,8 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 		quotePreference := lsutil.GetQuotePreference(file, l.UserPreferences())
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
-		if !tspath.IsDynamicFileName(file.FileName()) {
-			view, err := l.getPreparedAutoImportView(file)
+		if !file.FileName().IsDynamic() {
+			view, err := l.getPreparedAutoImportView(file, c)
 			if err != nil {
 				return nil, err
 			}
@@ -6686,7 +6692,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 			AdditionalTextEdits: additionalTextEdits,
 			InsertTextFormat:    core.IfElse(clientSupportsItemSnippet(ctx), new(lsproto.InsertTextFormatSnippet), nil),
 			Data: &lsproto.CompletionItemData{
-				FileName:              file.OriginalFileName(),
+				FileName:              file.OriginalFileName().AsString(),
 				Position:              int32(position),
 				SupplementalFileIndex: supplementalFileIndex(file),
 				Name:                  name,

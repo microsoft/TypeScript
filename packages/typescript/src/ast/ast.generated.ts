@@ -159,7 +159,8 @@ export type KeywordSyntaxKind =
     | SyntaxKind.BigIntKeyword
     | SyntaxKind.OverrideKeyword
     | SyntaxKind.OfKeyword
-    | SyntaxKind.DeferKeyword;
+    | SyntaxKind.DeferKeyword
+    | SyntaxKind.SourceKeyword;
 export type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
 export type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
 export type KeywordExpressionSyntaxKind = SyntaxKind.NullKeyword | SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword | SyntaxKind.ThisKeyword | SyntaxKind.SuperKeyword | SyntaxKind.ImportKeyword;
@@ -330,7 +331,8 @@ export type TokenSyntaxKind =
     | SyntaxKind.BigIntKeyword
     | SyntaxKind.OverrideKeyword
     | SyntaxKind.OfKeyword
-    | SyntaxKind.DeferKeyword;
+    | SyntaxKind.DeferKeyword
+    | SyntaxKind.SourceKeyword;
 export type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFile | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
 export type JSDocNodeSyntaxKind =
     | SyntaxKind.JSDocTypeExpression
@@ -369,7 +371,7 @@ export type JSDocNodeSyntaxKind =
     | SyntaxKind.JSDocThrowsTag
     | SyntaxKind.JSDocSatisfiesTag
     | SyntaxKind.JSDocImportTag;
-export type ImportPhaseModifierSyntaxKind = SyntaxKind.TypeKeyword | SyntaxKind.DeferKeyword;
+export type ImportPhaseModifierSyntaxKind = SyntaxKind.TypeKeyword | SyntaxKind.DeferKeyword | SyntaxKind.SourceKeyword;
 export type PostfixUnaryOperator = SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken;
 export type PrefixUnaryOperator = SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.TildeToken | SyntaxKind.ExclamationToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken;
 export type AssignmentOperator = SyntaxKind.EqualsToken | CompoundAssignmentOperator;
@@ -469,10 +471,10 @@ export interface TemplateLiteralLikeNodeBase extends LiteralLikeNodeBase {
     readonly rawText: string;
     readonly templateFlags: TokenFlags;
 }
-export interface TypeElementBase extends Node {
+export interface TypeElementBase extends DeclarationBase {
     readonly _typeElementBrand: any;
 }
-export interface ClassElementBase extends Node {
+export interface ClassElementBase extends DeclarationBase {
     readonly _classElementBrand: any;
 }
 export interface NamedMemberBase extends ModifiersBase {
@@ -480,7 +482,7 @@ export interface NamedMemberBase extends ModifiersBase {
     readonly name: PropertyName;
     readonly postfixToken?: QuestionToken | ExclamationToken;
 }
-export interface ObjectLiteralElementBase extends Node {
+export interface ObjectLiteralElementBase extends DeclarationBase {
     readonly _objectLiteralBrand: any;
 }
 export interface UnionOrIntersectionTypeNodeBase extends TypeNodeBase {
@@ -1268,6 +1270,7 @@ export interface ModuleDeclaration extends StatementBase, DeclarationBase, Modif
     readonly kind: SyntaxKind.ModuleDeclaration;
     readonly keyword: SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword;
     readonly name: ModuleName;
+    readonly attributes?: TypeLiteralNode;
     readonly body?: ModuleBody;
 }
 export interface ImportEqualsDeclaration extends StatementBase, DeclarationBase, ModifiersBase {
@@ -1342,7 +1345,7 @@ export type HeritageClauseElement = ExpressionWithTypeArguments | TypeReferenceN
 export type BlockOrExpression = Block | Expression;
 export type NodeBody = Block | Expression | ModuleBlock | ModuleDeclaration;
 export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
-export type DeclarationName = Identifier | PrivateIdentifier | StringLiteral | NumericLiteral | BigIntLiteral | NoSubstitutionTemplateLiteral | ComputedPropertyName | BindingPattern | ElementAccessExpression;
+export type DeclarationName = Identifier | PrivateIdentifier | StringLiteral | NumericLiteral | BigIntLiteral | NoSubstitutionTemplateLiteral | ComputedPropertyName | BindingPattern | PropertyAccessExpression | ElementAccessExpression;
 export type ModuleName = Identifier | StringLiteral;
 export type ModuleExportName = Identifier | StringLiteral;
 export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral;

@@ -350,9 +350,11 @@ type typeRenderer struct {
 	seen               map[*types.TypeName]bool
 	names              map[string]*types.TypeName
 	imports            map[string][]string
+	typeImports        map[string][]string
 	docs               map[types.Object]string
 	packages           map[string]*packages.Package
 	documentIdentifier *types.TypeName
+	rawCompilerOptions *types.TypeName
 }
 
 func newTypeRenderer(apiPackage *packages.Package) *typeRenderer {
@@ -361,6 +363,7 @@ func newTypeRenderer(apiPackage *packages.Package) *typeRenderer {
 		seen:           make(map[*types.TypeName]bool),
 		names:          make(map[string]*types.TypeName),
 		imports:        make(map[string][]string),
+		typeImports:    make(map[string][]string),
 		docs:           make(map[types.Object]string),
 		packages:       make(map[string]*packages.Package),
 	}
@@ -448,7 +451,7 @@ func (r *typeRenderer) typeString(t types.Type, allowNull bool) string {
 	case *types.Array:
 		result = arrayElement(r.typeString(t.Elem(), false)) + "[]"
 	case *types.Map:
-		result = fmt.Sprintf("Record<string, %s>", r.typeString(t.Elem(), true))
+		result = fmt.Sprintf("Record<%s, %s>", r.typeString(t.Key(), false), r.typeString(t.Elem(), true))
 	case *types.Interface:
 		result = "unknown"
 	case *types.Struct:
@@ -484,15 +487,41 @@ func basicType(t *types.Basic) string {
 
 func (r *typeRenderer) namedType(named *types.Named) string {
 	obj := named.Obj()
+	if obj.Name() == "error" && obj.Pkg() == nil {
+		return "string"
+	}
 	qualifiedName := obj.Pkg().Path() + "." + obj.Name()
 	switch qualifiedName {
 	case r.apiPackagePath + ".DocumentIdentifier":
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
+	case r.apiPackagePath + ".ResolutionMode":
+		return "ResolutionMode"
+	case r.apiPackagePath + ".EnsurePrograms":
+		return "EnsurePrograms"
+	case r.apiPackagePath + ".SymbolOwnerKind":
+		return r.importType("SymbolOwnerKind", "#enums/symbolOwnerKind")
+	case "github.com/microsoft/TypeScript/tsc/internal/project.ID":
+		r.importTypeOnly("PathKey", "../ast/index.ts")
+		return "ProjectId"
+	case "github.com/microsoft/TypeScript/tsc/internal/project.SyntheticProjectID":
+		return "SyntheticProjectId"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
+		return "unknown"
+	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":
+		return "unknown"
+	case "github.com/go-json-experiment/json/jsontext.Value": // multiple ways to refer to this type depending on `go` version
+		return "unknown"
+	case "encoding/json/jsontext.Value":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/core.Tristate":
 		return "boolean"
+	case "github.com/microsoft/TypeScript/tsc/internal/core.CompilerOptions":
+		return r.importTypeOnly("CompilerOptions", "./compilerOptions.generated.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/core.PluginImport":
+		return r.importTypeOnly("PluginImport", "./compilerOptions.generated.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.UserPreferences":
+		return r.importTypeOnly(obj.Name(), "./userPreferences.generated.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.JsxEmit":
 		return r.importType("JsxEmit", "#enums/jsxEmit")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleDetectionKind":
@@ -505,6 +534,23 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importType("NewLineKind", "#enums/newLineKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptTarget":
 		return r.importType("ScriptTarget", "#enums/scriptTarget")
+	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptKind":
+		return r.importType("ScriptKind", "#enums/scriptKind")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedPath":
+		return r.importTypeOnly("RootedPath", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedFilePath":
+		return r.importTypeOnly("RootedFilePath", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedDirectoryPath":
+		return r.importTypeOnly("RootedDirectoryPath", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.PathKey":
+		return r.importTypeOnly("PathKey", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.CaseSensitivity":
+		return r.importType("CaseSensitivity", "#enums/caseSensitivity")
+	case "github.com/microsoft/TypeScript/tsc/internal/tsoptions.RawCompilerOptions":
+		r.rawCompilerOptions = obj
+		compilerOptions := r.packages["github.com/microsoft/TypeScript/tsc/internal/core"].Types.Scope().Lookup("CompilerOptions").(*types.TypeName)
+		r.namedType(compilerOptions.Type().(*types.Named))
+		return "RawCompilerOptions"
 	case "github.com/microsoft/TypeScript/tsc/internal/collections.OrderedMap":
 		if named.TypeArgs().Len() != 2 {
 			return "Record<string, unknown>"
@@ -556,11 +602,14 @@ func (r *typeRenderer) inlineStruct(structType *types.Struct) string {
 	var fields []string
 	multiline := false
 	for i := range structType.NumFields() {
-		field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
-		if !include || deprecated || internal {
+		field, include, optional, nonnil, _, _ := jsonField(structType, i)
+		if !include {
 			continue
 		}
 		fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
+		if optional {
+			fieldType += " | undefined"
+		}
 		doc := r.docs[structType.Field(i)]
 		multiline = multiline || doc != ""
 		fields = append(fields, fmt.Sprintf("%s%s%s: %s", inlineDoc(doc), propertyName(field), optionalMarker(optional), fieldType))
@@ -588,28 +637,107 @@ func (r *typeRenderer) declarations() (string, error) {
 		writeDoc(&out, "", r.docs[r.documentIdentifier])
 		out.WriteString("export type DocumentIdentifier = string | { uri: string; };\n\n")
 	}
+	out.WriteString("export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;\n\n")
+	out.WriteString("export type EnsurePrograms = true | readonly ProjectId[];\n\n")
+	out.WriteString("export type InferredProjectId = string & { __inferredProjectIdBrand: any; };\n")
+	out.WriteString("export type ConfiguredProjectId = PathKey & { __configuredProjectIdBrand: any; };\n")
+	out.WriteString("export type SyntheticProjectId = string & { __syntheticProjectIdBrand: any; };\n")
+	out.WriteString("export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProjectId;\n\n")
 	for len(r.queued) > 0 {
 		named := r.queued[0]
 		r.queued = r.queued[1:]
 		structType := named.Underlying().(*types.Struct)
 		isParams := strings.HasSuffix(named.Obj().Name(), "Params")
 		writeDoc(&out, "", r.docs[named.Obj()])
-		fmt.Fprintf(&out, "export interface %s {\n", exportedName(named.Obj().Name()))
+		var embedded []string
+		for field := range structType.Fields() {
+			if field.Embedded() {
+				embedded = append(embedded, r.typeString(field.Type(), false))
+			}
+		}
+		fmt.Fprintf(&out, "export interface %s", exportedName(named.Obj().Name()))
+		if len(embedded) > 0 {
+			fmt.Fprintf(&out, " extends %s", strings.Join(embedded, ", "))
+		}
+		out.WriteString(" {\n")
 		for i := range structType.NumFields() {
-			field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
-			if !include || deprecated || internal {
+			if structType.Field(i).Embedded() {
+				continue
+			}
+			field, include, optional, nonnil, _, _ := jsonField(structType, i)
+			if !include {
 				continue
 			}
 			fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
 			if isParams && isArrayType(structType.Field(i).Type()) {
 				fieldType = "readonly " + fieldType
 			}
+			if optional {
+				fieldType += " | undefined"
+			}
 			writeDoc(&out, "    ", r.docs[structType.Field(i)])
 			fmt.Fprintf(&out, "    %s%s: %s;\n", propertyName(field), optionalMarker(optional), fieldType)
 		}
 		out.WriteString("}\n\n")
 	}
+	if r.rawCompilerOptions != nil {
+		compilerOptions := r.packages["github.com/microsoft/TypeScript/tsc/internal/core"].Types.Scope().Lookup("CompilerOptions").Type().Underlying().(*types.Struct)
+		writeDoc(&out, "", r.docs[r.rawCompilerOptions])
+		out.WriteString("export interface RawCompilerOptions {\n")
+		for i := range compilerOptions.NumFields() {
+			field, include, optional, nonnil, deprecated, internal := jsonField(compilerOptions, i)
+			if !include || deprecated || internal {
+				continue
+			}
+			fieldType := r.rawCompilerOptionType(compilerOptions.Field(i).Type(), !optional && !nonnil)
+			if optional {
+				fieldType += " | undefined"
+			}
+			writeDoc(&out, "    ", r.docs[compilerOptions.Field(i)])
+			fmt.Fprintf(&out, "    %s%s: %s;\n", propertyName(field), optionalMarker(optional), fieldType)
+		}
+		out.WriteString("}\n\n")
+	}
 	return strings.TrimRight(out.String(), "\n") + "\n", nil
+}
+
+func (r *typeRenderer) rawCompilerOptionType(t types.Type, allowNull bool) string {
+	t = types.Unalias(t)
+	switch t := t.(type) {
+	case *types.Pointer:
+		result := r.rawCompilerOptionType(t.Elem(), false)
+		if allowNull {
+			result += " | null"
+		}
+		return result
+	case *types.Slice:
+		result := arrayElement(r.rawCompilerOptionType(t.Elem(), false)) + "[]"
+		if allowNull {
+			result += " | null"
+		}
+		return result
+	case *types.Array:
+		return arrayElement(r.rawCompilerOptionType(t.Elem(), false)) + "[]"
+	case *types.Map:
+		result := fmt.Sprintf(
+			"Record<%s, %s>",
+			r.rawCompilerOptionType(t.Key(), false),
+			r.rawCompilerOptionType(t.Elem(), true),
+		)
+		if allowNull {
+			result += " | null"
+		}
+		return result
+	case *types.Named:
+		switch t.Obj().Pkg().Path() + "." + t.Obj().Name() {
+		case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedPath",
+			"github.com/microsoft/TypeScript/tsc/internal/tspath.RootedFilePath",
+			"github.com/microsoft/TypeScript/tsc/internal/tspath.RootedDirectoryPath",
+			"github.com/microsoft/TypeScript/tsc/internal/tspath.SourceMapLocation":
+			return "string"
+		}
+	}
+	return r.typeString(t, allowNull)
 }
 
 func writeDoc(out *bytes.Buffer, indent string, doc string) {
@@ -642,18 +770,51 @@ func (r *typeRenderer) importDeclarations() string {
 	for path := range r.imports {
 		paths = append(paths, path)
 	}
+	for path := range r.typeImports {
+		if _, ok := r.imports[path]; !ok {
+			paths = append(paths, path)
+		}
+	}
 	sort.Strings(paths)
 	for _, path := range paths {
-		names := r.imports[path]
-		sort.Strings(names)
-		fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+		if names := r.imports[path]; len(names) > 0 {
+			sort.Strings(names)
+			fmt.Fprintf(&out, "import { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
+		if names := r.typeImports[path]; len(names) > 0 {
+			sort.Strings(names)
+			fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
 	}
+	out.WriteString("\n")
+	for _, path := range paths {
+		if names := r.imports[path]; len(names) > 0 {
+			fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
+		if names := r.typeImports[path]; len(names) > 0 {
+			fmt.Fprintf(&out, "export type { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
+	}
+	out.WriteString("export * from \"./compilerOptions.generated.ts\";\n")
 	return out.String()
 }
 
 func (r *typeRenderer) importType(name string, path string) string {
+	if slices.Contains(r.typeImports[path], name) {
+		panic(fmt.Sprintf("%s from %s imported as both a type and a value", name, path))
+	}
 	if !slices.Contains(r.imports[path], name) {
 		r.imports[path] = append(r.imports[path], name)
+	}
+	return name
+}
+
+func (r *typeRenderer) importTypeOnly(name string, path string) string {
+	if slices.Contains(r.imports[path], name) {
+		panic(fmt.Sprintf("%s from %s imported as both a value and a type", name, path))
+	}
+	if !slices.Contains(r.typeImports[path], name) {
+		r.typeImports[path] = append(r.typeImports[path], name)
 	}
 	return name
 }
@@ -674,14 +835,15 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 	if !field.Exported() {
 		return "", false, false, false, false, false
 	}
-	tag := reflect.StructTag(structType.Tag(index)).Get("json")
-	noniltag := reflect.StructTag(structType.Tag(index)).Get("nonnil")
-	deprecatedtag := reflect.StructTag(structType.Tag(index)).Get("deprecated")
-	internaltag := reflect.StructTag(structType.Tag(index)).Get("internal")
+	structTag := reflect.StructTag(structType.Tag(index))
+	tag := structTag.Get("json")
+	noniltag := structTag.Get("nonnil")
+	deprecated = structTag.Get("deprecated") == "true"
+	internal = structTag.Get("internal") == "true"
 	parts := strings.Split(tag, ",")
 	name = parts[0]
 	if name == "-" {
-		return "", false, false, noniltag == "true", deprecatedtag == "true", internaltag == "true"
+		return "", false, false, noniltag == "true", deprecated, internal
 	}
 	if name == "" {
 		name = field.Name()
@@ -691,7 +853,7 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 			optional = true
 		}
 	}
-	return name, true, optional, noniltag == "true", deprecatedtag == "true", internaltag == "true"
+	return name, true, optional, noniltag == "true", deprecated, internal
 }
 
 func exportedName(value string) string {

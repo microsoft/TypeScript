@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
-	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
 
@@ -83,10 +82,10 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 }
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
-	if !c.valueSymbolLinks.Has(symbol) {
-		return nil
+	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
+		return links.nameType
 	}
-	return c.valueSymbolLinks.TryGet(symbol).nameType
+	return nil
 }
 
 func IsTypeUsableAsPropertyName(t *Type) bool {
@@ -105,6 +104,18 @@ func (c *Checker) GetMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getMergedSymbol(symbol)
 }
 
+func (c *Checker) GetSymbolOfNode(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfNode(node)
+}
+
+func (c *Checker) GetSymbolOfDeclaration(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfDeclaration(node)
+}
+
+func (c *Checker) GetParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getParentOfSymbol(symbol)
+}
+
 func (c *Checker) TryFindAmbientModule(moduleName string) *ast.Symbol {
 	return c.tryFindAmbientModule(moduleName, true /* withAugmentations */)
 }
@@ -113,12 +124,16 @@ func (c *Checker) GetImmediateAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getImmediateAliasedSymbol(symbol)
 }
 
+func (c *Checker) GetTargetSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getTargetSymbol(symbol)
+}
+
 func (c *Checker) GetTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 	return c.getTypeOnlyAliasDeclaration(symbol)
 }
 
-func (c *Checker) ResolveExternalModuleName(moduleSpecifier *ast.Node) *ast.Symbol {
-	return c.resolveExternalModuleName(moduleSpecifier, moduleSpecifier, true /*ignoreErrors*/)
+func (c *Checker) ResolveExternalModuleName(moduleSpecifier *ast.Node, importAttributesType *Type) *ast.Symbol {
+	return c.resolveExternalModuleName(moduleSpecifier, moduleSpecifier, true /*ignoreErrors*/, importAttributesType)
 }
 
 func (c *Checker) ResolveExternalModuleSymbol(moduleSymbol *ast.Symbol) *ast.Symbol {
@@ -181,6 +196,10 @@ func (c *Checker) GetTypeOfSymbol(symbol *ast.Symbol) *Type {
 	return c.getTypeOfSymbol(symbol)
 }
 
+func (c *Checker) GetNonMissingTypeOfSymbol(symbol *ast.Symbol) *Type {
+	return c.getNonMissingTypeOfSymbol(symbol)
+}
+
 func (c *Checker) GetConstraintOfTypeParameter(typeParameter *Type) *Type {
 	return c.getConstraintOfTypeParameter(typeParameter)
 }
@@ -195,10 +214,6 @@ func (c *Checker) GetFalseTypeOfConditionalType(t *Type) *Type {
 
 func (c *Checker) GetDefaultFromTypeParameter(typeParameter *Type) *Type {
 	return c.getDefaultFromTypeParameter(typeParameter)
-}
-
-func (c *Checker) GetResolutionModeOverride(node *ast.ImportAttributes, reportErrors bool) core.ResolutionMode {
-	return c.getResolutionModeOverride(node, reportErrors)
 }
 
 func (c *Checker) GetEffectiveDeclarationFlags(n *ast.Node, flagsToCheck ast.ModifierFlags) ast.ModifierFlags {
@@ -217,8 +232,16 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func IsTupleTypeTarget(t *Type) bool {
+	return isTupleType(t) && t.Target() == t
+}
+
 func (c *Checker) IsArrayType(t *Type) bool {
 	return c.isArrayType(t)
+}
+
+func (c *Checker) IsReadonlySymbol(symbol *ast.Symbol) bool {
+	return c.isReadonlySymbol(symbol)
 }
 
 func (c *Checker) GetReturnTypeOfSignature(sig *Signature) *Type {
@@ -256,6 +279,10 @@ func (c *Checker) GetTypeOfPropertyOfType(t *Type, name string) *Type {
 
 func (c *Checker) GetContextualTypeForArgumentAtIndex(node *ast.Node, argIndex int) *Type {
 	return c.getContextualTypeForArgumentAtIndex(node, argIndex)
+}
+
+func (c *Checker) GetAwaitedType(t *Type) *Type {
+	return c.getAwaitedType(t)
 }
 
 func (c *Checker) GetIndexSignaturesAtLocation(node *ast.Node) []*ast.Node {
@@ -324,6 +351,10 @@ func (c *Checker) GetIndexInfoOfType(t *Type, keyType *Type) *IndexInfo {
 	return c.getIndexInfoOfType(t, keyType)
 }
 
+func (c *Checker) GetIndexTypeOfType(t *Type, keyType *Type) *Type {
+	return c.getIndexTypeOfType(t, keyType)
+}
+
 func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 	return c.getIndexInfosOfType(t)
 }
@@ -374,4 +405,8 @@ func (c *Checker) GetWidenedType(t *Type) *Type {
 
 func (c *Checker) CompareSymbols(s1, s2 *ast.Symbol) int {
 	return c.compareSymbols(s1, s2)
+}
+
+func IsDistributedTypeParameter(t *Type) bool {
+	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isDistributed
 }

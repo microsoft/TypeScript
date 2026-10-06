@@ -58,7 +58,7 @@ console.log(a);`,
 			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, tc.content)
 			defer done()
-			f.VerifyOrganizeImports(t, tc.content, lsproto.CodeActionKindSourceSortImports, nil)
+			f.VerifyOrganizeImports(t, tc.content, lsproto.CodeActionKindSourceSortImportsTs, nil)
 		})
 	}
 }

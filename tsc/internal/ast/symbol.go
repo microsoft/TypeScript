@@ -3,6 +3,8 @@ package ast
 import (
 	"strings"
 	"sync/atomic"
+
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
 
 // Symbol
@@ -20,8 +22,29 @@ type Symbol struct {
 	ExportSymbol     *Symbol
 }
 
+// GetSourceFileOfSymbol returns the owning file of a published binder symbol, or
+// nil for a non-file-owned symbol, even if it borrows declarations from a file.
+// Ownership recovery walks only the first declaration's AST parents.
+func GetSourceFileOfSymbol(symbol *Symbol) *SourceFile {
+	debug.Assert(symbol != nil, "Expected a symbol")
+	if symbol.Flags&SymbolFlagsTransient != 0 {
+		return nil
+	}
+	if len(symbol.Declarations) == 0 {
+		// A class's implicit prototype has no declaration of its own.
+		debug.Assert(symbol.Flags&SymbolFlagsPrototype != 0, "File-bound symbol has no declarations")
+		debug.Assert(symbol.Parent != nil && symbol.Parent.Flags&SymbolFlagsClass != 0, "Prototype has no declaring class")
+		symbol = symbol.Parent
+		debug.Assert(symbol.Flags&SymbolFlagsTransient == 0, "Prototype parent is not file-bound")
+		debug.Assert(len(symbol.Declarations) != 0, "Prototype parent has no declarations")
+	}
+	file := GetSourceFileOfNode(symbol.Declarations[0])
+	debug.Assert(file != nil, "File-bound declaration has no source file")
+	return file
+}
+
 func (s *Symbol) IsExternalModule() bool {
-	return s.Flags&SymbolFlagsModule != 0 && len(s.Name) > 0 && s.Name[0] == '"'
+	return s.Flags&SymbolFlagsModule != 0 && IsAmbientModuleSymbolName(s.Name)
 }
 
 func (s *Symbol) IsStatic() bool {

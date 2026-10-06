@@ -77,9 +77,9 @@ func TestRegistryLifecycle(t *testing.T) {
 		projectBucket := singleBucket(t, stats.ProjectBuckets)
 		nodeModulesBucket := singleBucket(t, stats.NodeModulesBuckets)
 		assert.Equal(t, projectBucket.State.Dirty(), true)
-		assert.Equal(t, projectBucket.State.DirtyFile(), utils.ToPath(mainFile.FileName()))
+		assert.Equal(t, projectBucket.State.DirtyFile(), utils.PathKeyForPath(mainFile.FileName().AsPath()))
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false)
-		assert.Equal(t, nodeModulesBucket.State.DirtyFile(), tspath.Path(""))
+		assert.Equal(t, nodeModulesBucket.State.DirtyFile(), tspath.PathKey(""))
 
 		// Bucket should not recompute when requesting same file changed
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(context.Background(), mainFile.URI())
@@ -87,7 +87,7 @@ func TestRegistryLifecycle(t *testing.T) {
 		stats = autoImportStats(t, session)
 		projectBucket = singleBucket(t, stats.ProjectBuckets)
 		assert.Equal(t, projectBucket.State.Dirty(), true)
-		assert.Equal(t, projectBucket.State.DirtyFile(), utils.ToPath(mainFile.FileName()))
+		assert.Equal(t, projectBucket.State.DirtyFile(), utils.PathKeyForPath(mainFile.FileName().AsPath()))
 
 		// Bucket should recompute when other file has changed
 		session.DidChangeFile(context.Background(), secondaryFile.URI(), 1, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -189,14 +189,12 @@ export const bar = 2;`,
 	t.Run("node_modules buckets get deleted when no open files can reference them", func(t *testing.T) {
 		t.Parallel()
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
-			Root: monorepoProjectRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name:            "monorepo",
-				NodeModuleNames: []string{"pkg-root"},
-			},
+			Root:            monorepoProjectRoot,
+			Name:            "monorepo",
+			NodeModuleNames: []string{"pkg-root"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
-				{FileCount: 1, MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{Name: "package-a", NodeModuleNames: []string{"pkg-a"}}},
-				{FileCount: 1, MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{Name: "package-b", NodeModuleNames: []string{"pkg-b"}}},
+				{FileCount: 1, Name: "package-a", NodeModuleNames: []string{"pkg-a"}},
+				{FileCount: 1, Name: "package-b", NodeModuleNames: []string{"pkg-b"}},
 			},
 		})
 		session := fixture.Session()
@@ -250,17 +248,17 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		projectID := defaultProject.ID()
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// Simulate the user deleting node_modules: remove the directory from disk
 		// and notify the session of the deletion, which marks the node_modules
 		// bucket dirty.
-		nodeModulesDir := tspath.CombinePaths(project.Root(), "node_modules")
-		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir))
+		nodeModulesDir := project.Root().ResolveDirectory("node_modules")
+		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir.AsPath()))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodeModulesDir)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.PathToDocumentURI(nodeModulesDir.AsPath())},
 		})
 
 		// Re-preparing auto-imports must succeed and leave the registry prepared.
@@ -271,7 +269,7 @@ export const bar = 2;`,
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences),
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences),
 			"registry should be prepared after node_modules is deleted")
 		// The node_modules bucket should be removed entirely, not left behind as an
 		// empty bucket.
@@ -299,25 +297,25 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// In a single changeset, edit package.json AND delete node_modules. The
 		// package.json change must not prevent the now-missing node_modules bucket
 		// from being removed.
 		assert.NilError(t, sessionUtils.FS().WriteFile(packageJSON.FileName(), `{"name": "app", "dependencies": {}}`))
-		nodeModulesDir := tspath.CombinePaths(project.Root(), "node_modules")
-		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir))
+		nodeModulesDir := project.Root().ResolveDirectory("node_modules")
+		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir.AsPath()))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
 			{Type: lsproto.FileChangeTypeChanged, Uri: packageJSON.URI()},
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodeModulesDir)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.PathToDocumentURI(nodeModulesDir.AsPath())},
 		})
 
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(ctx, mainFile.URI())
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 0)
 	})
 
@@ -338,11 +336,11 @@ export const bar = 2;`,
 
 		// Delete just the package directory, leaving node_modules itself in place. The
 		// package's files are read transiently by the registry, so they are never tracked
-		// in diskFiles/diskDirectories; only the directory deletion event is reported, and
+		// in cacheFiles/cacheDirectories; only the directory deletion event is reported, and
 		// it must survive snapshotfs filtering to invalidate the bucket.
-		assert.NilError(t, sessionUtils.FS().Remove(nodePackage.Directory))
+		assert.NilError(t, sessionUtils.FS().Remove(nodePackage.Directory.AsPath()))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodePackage.Directory)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.PathToDocumentURI(nodePackage.Directory.AsPath())},
 		})
 
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(ctx, mainFile.URI())
@@ -358,19 +356,15 @@ export const bar = 2;`,
 		packageAIndex := tspath.CombinePaths(packageADir, "index.js")
 
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
-			Root: monorepoRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name:            "monorepo",
-				NodeModuleNames: []string{"pkg1", "pkg2", "pkg3"},
-				DependencyNames: []string{"pkg1"},
-			},
+			Root:            monorepoRoot,
+			Name:            "monorepo",
+			NodeModuleNames: []string{"pkg1", "pkg2", "pkg3"},
+			DependencyNames: []string{"pkg1"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
 				{
-					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name:            "a",
-						DependencyNames: []string{"pkg1", "pkg2"},
-					},
+					FileCount:       0,
+					Name:            "a",
+					DependencyNames: []string{"pkg1", "pkg2"},
 				},
 			},
 			ExtraFiles: []autoimporttestutil.TextFileSpec{
@@ -434,29 +428,23 @@ export const bar = 2;`,
 
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
 			Root: monorepoRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name: "monorepo",
-				// Both pkg-listed and pkg-unlisted exist in node_modules
-				NodeModuleNames: []string{"pkg-listed", "pkg-unlisted"},
-				// But only pkg-listed is in the root package.json dependencies
-				DependencyNames: []string{"pkg-listed"},
-			},
+			Name: "monorepo",
+			// Both pkg-listed and pkg-unlisted exist in node_modules
+			NodeModuleNames: []string{"pkg-listed", "pkg-unlisted"},
+			// But only pkg-listed is in the root package.json dependencies
+			DependencyNames: []string{"pkg-listed"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
 				{
 					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name: "a",
-						// package-a only lists pkg-listed in its package.json
-						DependencyNames: []string{"pkg-listed"},
-					},
+					Name:      "a",
+					// package-a only lists pkg-listed in its package.json
+					DependencyNames: []string{"pkg-listed"},
 				},
 				{
 					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name: "b",
-						// package-b also only lists pkg-listed in its package.json
-						DependencyNames: []string{"pkg-listed"},
-					},
+					Name:      "b",
+					// package-b also only lists pkg-listed in its package.json
+					DependencyNames: []string{"pkg-listed"},
 				},
 			},
 			ExtraFiles: []autoimporttestutil.TextFileSpec{
@@ -573,7 +561,7 @@ export declare const otherValue: string;`,
 		ctx := context.Background()
 
 		// Open project-a's index file and get initial auto-imports
-		projectAURI := lsconv.FileNameToDocumentURI(projectAIndex)
+		projectAURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(projectAIndex))
 		projectAContent := files[projectAIndex].(string)
 		session.DidOpenFile(ctx, projectAURI, 1, projectAContent, lsproto.LanguageKindTypeScript)
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, projectAURI)
@@ -587,7 +575,7 @@ export declare const otherValue: string;`,
 		assert.Assert(t, initialFileCount > 0, "bucket should have files initially")
 
 		// Open project-b's source file
-		projectBURI := lsconv.FileNameToDocumentURI(projectBSrcIndex)
+		projectBURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(projectBSrcIndex))
 		projectBContent := files[projectBSrcIndex].(string)
 		session.DidOpenFile(ctx, projectBURI, 1, projectBContent, lsproto.LanguageKindTypeScript)
 
@@ -700,7 +688,7 @@ export declare const otherValue: string;`,
 		}
 
 		session, _ := projecttestutil.SetupWithOptions(files, &project.SessionOptions{
-			CurrentDirectory:       monorepoRoot,
+			CurrentDirectory:       tspath.RootedDirectoryPathFromNormalized(monorepoRoot),
 			DefaultLibraryPath:     bundled.LibPath(),
 			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
 			WatchEnabled:           true,
@@ -711,7 +699,7 @@ export declare const otherValue: string;`,
 		ctx := context.Background()
 
 		// Open project-a's index file and build auto-imports
-		projectAURI := lsconv.FileNameToDocumentURI(projectAIndex)
+		projectAURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(projectAIndex))
 		projectAContent := files[projectAIndex].(string)
 		session.DidOpenFile(ctx, projectAURI, 1, projectAContent, lsproto.LanguageKindTypeScript)
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, projectAURI)
@@ -723,7 +711,7 @@ export declare const otherValue: string;`,
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false, "bucket should be clean initially")
 
 		// Modify project-b's source file (local workspace package)
-		projectBURI := lsconv.FileNameToDocumentURI(projectBSrcIndex)
+		projectBURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(projectBSrcIndex))
 		projectBContent := files[projectBSrcIndex].(string)
 		session.DidOpenFile(ctx, projectBURI, 1, projectBContent, lsproto.LanguageKindTypeScript)
 		session.DidChangeFile(ctx, projectBURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -749,7 +737,7 @@ export declare const otherValue: string;`,
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false, "bucket should be clean after rebuild")
 
 		// Now modify other-pkg (pnpm registry package, realpath inside node_modules/.pnpm)
-		otherPkgURI := lsconv.FileNameToDocumentURI(otherPkgIndex)
+		otherPkgURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(otherPkgIndex))
 		otherPkgContent := files[otherPkgIndex].(string)
 		session.DidOpenFile(ctx, otherPkgURI, 1, otherPkgContent, lsproto.LanguageKindTypeScript)
 		session.DidChangeFile(ctx, otherPkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -829,7 +817,7 @@ export const b = a;
 		session, _ := projecttestutil.Setup(files)
 		t.Cleanup(session.Close)
 		ctx := context.Background()
-		consumerAURI := lsconv.FileNameToDocumentURI(consumerA)
+		consumerAURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(consumerA))
 		session.DidOpenFile(ctx, consumerAURI, 1, files[consumerA].(string), lsproto.LanguageKindTypeScript)
 
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, consumerAURI)
@@ -865,11 +853,11 @@ export const b = a;
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		preferences := lsutil.NewDefaultUserPreferences()
 		preferences.IncludeCompletionsForModuleExports = core.TSTrue
 		preferences.IncludeCompletionsForImportStatements = core.TSTrue
-		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences)
+		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, preferences)
 		assert.Assert(t, isPrepared)
 
 		// Change the file exclude patterns preference
@@ -881,7 +869,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return false since exclude patterns changed
 		snapshot2 := session.Snapshot()
-		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, newPreferences)
 		assert.Assert(t, !isPrepared2)
 
 		// After GetCurrentLanguageServiceWithAutoImports, buckets should be rebuilt
@@ -890,7 +878,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return true now that buckets are rebuilt
 		snapshot3 := session.Snapshot()
-		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectID, newPreferences)
 		assert.Assert(t, isPrepared3, "IsPreparedForImportingFile should return true after bucket rebuild with new fileExcludePatterns")
 	})
 
@@ -943,7 +931,7 @@ export const b = a;
 		t.Cleanup(session.Close)
 
 		ctx := context.Background()
-		appURI := lsconv.FileNameToDocumentURI(appIndex)
+		appURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(appIndex))
 		session.DidOpenFile(ctx, appURI, 1, files[appIndex].(string), lsproto.LanguageKindTypeScript)
 
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, appURI)
@@ -1182,9 +1170,9 @@ func TestAutoImportEntrypointDirectorySearch(t *testing.T) {
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(indexURI)
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectID := defaultProject.ID()
 		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(
-			projectRoot+"/index.ts", projectPath, prefs,
+			tspath.RootedFilePathFromNormalized(projectRoot+"/index.ts"), projectID, prefs,
 		)
 		assert.Assert(t, !isPrepared, "registry should not be prepared after preference change")
 

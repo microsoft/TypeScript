@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
@@ -187,7 +188,7 @@ func (c *Checker) getAlternativeContainingModules(symbol *ast.Symbol, enclosingD
 				// Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
 				continue
 			}
-			resolvedModule := c.resolveExternalModuleName(enclosingDeclaration, importRef /*ignoreErrors*/, true)
+			resolvedModule := c.resolveExternalModuleName(enclosingDeclaration, importRef /*ignoreErrors*/, true, c.getImportAttributesTypeForModuleSpecifier(importRef))
 			if resolvedModule == nil {
 				continue
 			}
@@ -663,6 +664,17 @@ func (c *Checker) isAccessible(
 	}
 	if symbol == c.getMergedSymbol(symbolFromSymbolTable) {
 		likeSymbols = true
+	}
+	if !likeSymbols && resolvedAliasSymbol != nil && resolvedAliasSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+		var seenAliases collections.Set[*ast.Symbol]
+		for resolvedAliasSymbol.Flags&ast.SymbolFlagsAlias != 0 && !seenAliases.Has(resolvedAliasSymbol) {
+			seenAliases.Add(resolvedAliasSymbol)
+			resolvedAliasSymbol = c.getMergedSymbol(c.resolveAlias(resolvedAliasSymbol))
+			if symbol == resolvedAliasSymbol {
+				likeSymbols = true
+				break
+			}
+		}
 	}
 	if !likeSymbols {
 		return false

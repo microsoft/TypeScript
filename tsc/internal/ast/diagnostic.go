@@ -191,6 +191,30 @@ func NewDiagnosticFromSerialized(
 	}
 }
 
+func NewDiagnosticFromText(
+	file *SourceFile,
+	loc core.TextRange,
+	code int32,
+	category diagnostics.Category,
+	text string,
+	messageChain []*Diagnostic,
+	relatedInformation []*Diagnostic,
+	reportsUnnecessary bool,
+	reportsDeprecated bool,
+) *Diagnostic {
+	return &Diagnostic{
+		file:               file,
+		loc:                loc,
+		code:               code,
+		category:           category,
+		message:            diagnostics.NewAdHocMessage(text),
+		messageChain:       messageChain,
+		relatedInformation: relatedInformation,
+		reportsUnnecessary: reportsUnnecessary,
+		reportsDeprecated:  reportsDeprecated,
+	}
+}
+
 func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Message, args ...any) *Diagnostic {
 	return &Diagnostic{
 		file:               file,
@@ -234,8 +258,8 @@ func NewExternalDiagnostic(file *SourceFile, loc core.TextRange, source string, 
 type DiagnosticsCollection struct {
 	mu                       sync.Mutex
 	count                    int
-	fileDiagnostics          map[tspath.Path][]*Diagnostic
-	fileDiagnosticsSorted    collections.Set[tspath.Path]
+	fileDiagnostics          map[tspath.PathKey][]*Diagnostic
+	fileDiagnosticsSorted    collections.Set[tspath.PathKey]
 	nonFileDiagnostics       []*Diagnostic
 	nonFileDiagnosticsSorted bool
 	diagnosticIndex          map[diagnosticLocationKey]*Diagnostic
@@ -272,9 +296,9 @@ func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) *Diagnostic {
 	c.count++
 
 	if diagnostic.File() != nil {
-		path := diagnostic.File().Path()
+		path := diagnostic.File().PathKey()
 		if c.fileDiagnostics == nil {
-			c.fileDiagnostics = make(map[tspath.Path][]*Diagnostic)
+			c.fileDiagnostics = make(map[tspath.PathKey][]*Diagnostic)
 		}
 		c.fileDiagnostics[path] = append(c.fileDiagnostics[path], diagnostic)
 		c.fileDiagnosticsSorted.Delete(path)
@@ -286,15 +310,15 @@ func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) *Diagnostic {
 }
 
 type diagnosticLocationKey struct {
-	path tspath.Path
+	path tspath.PathKey
 	loc  core.TextRange
 	code int32
 }
 
 func getDiagnosticLocationKey(diagnostic *Diagnostic) diagnosticLocationKey {
-	var path tspath.Path
+	var path tspath.PathKey
 	if diagnostic.File() != nil {
-		path = diagnostic.File().Path()
+		path = diagnostic.File().PathKey()
 	}
 	return diagnosticLocationKey{
 		path: path,
@@ -342,7 +366,7 @@ func (c *DiagnosticsCollection) GetDiagnosticsForFile(file *SourceFile) []*Diagn
 }
 
 func (c *DiagnosticsCollection) getDiagnosticsForFileLocked(file *SourceFile) []*Diagnostic {
-	path := file.Path()
+	path := file.PathKey()
 	if !c.fileDiagnosticsSorted.Has(path) {
 		slices.SortStableFunc(c.fileDiagnostics[path], CompareDiagnostics)
 		c.fileDiagnosticsSorted.Add(path)
@@ -365,7 +389,7 @@ func (c *DiagnosticsCollection) GetDiagnostics() []*Diagnostic {
 
 func getDiagnosticPath(d *Diagnostic) string {
 	if d.File() != nil {
-		return d.File().FileName()
+		return d.File().FileName().AsString()
 	}
 	return ""
 }

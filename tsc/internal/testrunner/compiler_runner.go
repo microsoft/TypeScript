@@ -31,7 +31,7 @@ var (
 )
 
 // Posix-style path to sources under test
-var srcFolder = "/.src"
+var srcFolder = tspath.RootedDirectoryPathFromNormalized("/.src")
 
 type CompilerTestType int
 
@@ -107,18 +107,15 @@ var skippedTests = []string{
 	"mappedTypeUnionConstraintInferences.ts",
 	"lateBoundConstraintTypeChecksCorrectly.ts",
 	"keyofDoesntContainSymbols.ts",
-	"isolatedModulesOut.ts",
 	"noStrictGenericChecks.ts",
 	"noImplicitUseStrict_umd.ts",
 	"noImplicitUseStrict_system.ts",
 	"noImplicitUseStrict_es6.ts",
 	"noImplicitUseStrict_commonjs.ts",
-	"noImplicitUseStrict_amd.ts",
 	"noImplicitAnyIndexingSuppressed.ts",
 	"excessPropertyErrorsSuppressed.ts",
 	"moduleNoneDynamicImport.ts",
 	"moduleNoneErrors.ts",
-	"moduleNoneOutFile.ts",
 	"noErrorUsingImportExportModuleAugmentationInDeclarationFile1.ts",
 	"noErrorUsingImportExportModuleAugmentationInDeclarationFile2.ts",
 	"noErrorUsingImportExportModuleAugmentationInDeclarationFile3.ts",
@@ -148,37 +145,6 @@ func (r *CompilerBaselineRunner) cleanUpLocal(t *testing.T) {
 	}
 }
 
-// Set of compiler options for which we allow variations to be specified in the test file,
-// for instance `// @strict: true, false`.
-var compilerVaryBy map[string]struct{} = getCompilerVaryByMap()
-
-func getCompilerVaryByMap() map[string]struct{} {
-	varyByOptions := append(
-		core.Map(core.Filter(tsoptions.OptionsDeclarations, func(option *tsoptions.CommandLineOption) bool {
-			return !option.IsCommandLineOnly &&
-				(option.Kind == tsoptions.CommandLineOptionTypeBoolean || option.Kind == tsoptions.CommandLineOptionTypeEnum) &&
-				(option.AffectsProgramStructure ||
-					option.AffectsEmit ||
-					option.AffectsModuleResolution ||
-					option.AffectsBindDiagnostics ||
-					option.AffectsSemanticDiagnostics ||
-					option.AffectsSourceFile ||
-					option.AffectsDeclarationPath ||
-					option.AffectsBuildInfo)
-		}), func(option *tsoptions.CommandLineOption) string {
-			return option.Name
-		}),
-		// explicit variations that do not match above conditions
-		"noEmit",
-		"isolatedModules",
-	)
-	varyByMap := make(map[string]struct{})
-	for _, option := range varyByOptions {
-		varyByMap[strings.ToLower(option)] = struct{}{}
-	}
-	return varyByMap
-}
-
 func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 	test := getCompilerFileBasedTest(t, filename)
 	basename := tspath.GetBaseFileName(filename)
@@ -197,7 +163,7 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 
 func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName string, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
 	t.Parallel()
-	defer testutil.RecoverAndFail(t, "Panic on compiling test "+test.filename)
+	defer testutil.RecoverAndFail(t, "Panic on compiler test "+test.filename)
 
 	payload := makeUnitsFromTest(test.content, test.filename)
 	compilerTest := newCompilerTest(t, testName, test.filename, &payload, config)
@@ -222,7 +188,7 @@ type compilerFileBasedTest struct {
 }
 
 func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedTest {
-	content, ok := osvfs.FS().ReadFile(filename)
+	content, ok := osvfs.FS().ReadFile(tspath.RootedFilePathFromNormalized(filename))
 	if !ok {
 		panic("Could not read test file: " + filename)
 	}
@@ -240,7 +206,7 @@ type compilerTest struct {
 	filename         string
 	basename         string
 	configuredName   string // name with configuration description, e.g. `file`
-	currentDirectory string
+	currentDirectory tspath.RootedDirectoryPath
 	options          *core.CompilerOptions
 	harnessOptions   *harnessutil.HarnessOptions
 	result           *harnessutil.CompilationResult
@@ -265,7 +231,7 @@ func newCompilerTest(
 	basename := tspath.GetBaseFileName(filename)
 	configuredName := basename
 	if namedConfiguration != nil && namedConfiguration.Name != "" {
-		extname := tspath.GetAnyExtensionFromPath(basename, nil, false)
+		extname := tspath.GetAnyExtensionFromPath(basename, nil, tspath.CaseSensitive)
 		extensionlessBasename := basename[:len(basename)-len(extname)]
 		configuredName = fmt.Sprintf("%s(%s)%s", extensionlessBasename, namedConfiguration.Name, extname)
 	}
@@ -280,7 +246,10 @@ func newCompilerTest(
 	}
 
 	harnessConfig := testCaseContentWithConfig.configuration
-	currentDirectory := tspath.GetNormalizedAbsolutePath(harnessConfig["currentdirectory"], srcFolder)
+	currentDirectory := srcFolder
+	if rawCurrentDirectory := harnessConfig["currentdirectory"]; rawCurrentDirectory != "" {
+		currentDirectory = tspath.ToRootedDirectoryPath(rawCurrentDirectory, srcFolder)
+	}
 
 	units := testCaseContentWithConfig.testUnitData
 	var toBeCompiled []*harnessutil.TestFile
@@ -299,7 +268,7 @@ func newCompilerTest(
 		for _, unit := range units {
 			if slices.Contains(
 				tsConfig.ParsedConfig.FileNames,
-				tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory),
+				tspath.ToRootedFilePath(unit.name, currentDirectory),
 			) {
 				toBeCompiled = append(toBeCompiled, createHarnessTestFile(unit, currentDirectory))
 			} else {
@@ -309,7 +278,7 @@ func newCompilerTest(
 	} else {
 		baseUrl, ok := harnessConfig["baseurl"]
 		if ok && !tspath.IsRootedDiskPath(baseUrl) {
-			harnessConfig["baseurl"] = tspath.GetNormalizedAbsolutePath(baseUrl, currentDirectory)
+			harnessConfig["baseurl"] = tspath.ToRootedDirectoryPath(baseUrl, currentDirectory).AsString()
 		}
 
 		lastUnit := units[len(units)-1]
@@ -343,7 +312,7 @@ func newCompilerTest(
 	// compiler actually parses and reports positions against. Baseline that text (rather than the original
 	// foreign source) so the type, symbol, and error baselines line up with the compiler's positions.
 	for _, file := range core.Concatenate(toBeCompiled, otherFiles) {
-		if sf := result.Program.GetSourceFile(file.UnitName); sf != nil && sf.ContentMapper() != "" {
+		if sf := result.Program.GetSourceFile(tspath.ToRootedFilePath(file.UnitName, currentDirectory)); sf != nil && sf.ContentMapper() != "" {
 			file.Content = sf.Text()
 		}
 	}
@@ -373,10 +342,10 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string) {
 		// be rendered against the correct text; the squiggle renderer here assumes a single coordinate space.
 		if contentMapped := c.contentMappedFileNames(); len(contentMapped) > 0 {
 			files = core.Filter(files, func(f *harnessutil.TestFile) bool {
-				return !contentMapped[tspath.GetNormalizedAbsolutePath(f.UnitName, c.currentDirectory)]
+				return !contentMapped[f.UnitName]
 			})
 			diagnostics = core.Filter(diagnostics, func(d *ast.Diagnostic) bool {
-				return d.File() == nil || !contentMapped[d.File().FileName()]
+				return d.File() == nil || !contentMapped[d.File().FileName().AsString()]
 			})
 		}
 		tsbaseline.DoErrorBaseline(t, c.configuredName, files, diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{
@@ -423,7 +392,7 @@ func (c *compilerTest) contentMappedFileNames() map[string]bool {
 			if mapped == nil {
 				mapped = make(map[string]bool)
 			}
-			mapped[file.FileName()] = true
+			mapped[file.FileName().AsString()] = true
 		}
 	}
 	return mapped
@@ -451,7 +420,7 @@ func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string) {
 		}
 
 		defer testutil.RecoverAndFail(t, "Panic on creating js output for test "+c.filename)
-		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
+		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.CaseInsensitive)
 		header := tspath.GetPathFromPathComponents(headerComponents)
 		tsbaseline.DoJSEmitBaseline(
 			t,
@@ -471,7 +440,7 @@ func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string) {
 func (c *compilerTest) verifySourceMapOutput(t *testing.T, suiteName string) {
 	t.Run("sourcemap", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating source map output for test "+c.filename)
-		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
+		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.CaseInsensitive)
 		header := tspath.GetPathFromPathComponents(headerComponents)
 		tsbaseline.DoSourcemapBaseline(
 			t,
@@ -488,7 +457,7 @@ func (c *compilerTest) verifySourceMapOutput(t *testing.T, suiteName string) {
 func (c *compilerTest) verifySourceMapRecord(t *testing.T, suiteName string) {
 	t.Run("sourcemap record", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating source map record for test "+c.filename)
-		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
+		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.CaseInsensitive)
 		header := tspath.GetPathFromPathComponents(headerComponents)
 		tsbaseline.DoSourcemapRecordBaseline(
 			t,
@@ -511,11 +480,11 @@ func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string) {
 	allFiles := core.Filter(
 		core.Concatenate(c.toBeCompiled, c.otherFiles),
 		func(f *harnessutil.TestFile) bool {
-			return program.GetSourceFile(f.UnitName) != nil
+			return program.GetSourceFile(tspath.ToRootedFilePath(f.UnitName, c.currentDirectory)) != nil
 		},
 	)
 
-	headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
+	headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.CaseInsensitive)
 	header := tspath.GetPathFromPathComponents(headerComponents)
 	tsbaseline.DoTypeAndSymbolBaseline(
 		t,
@@ -545,9 +514,9 @@ func (c *compilerTest) verifyModuleResolution(t *testing.T, suiteName string) {
 	})
 }
 
-func createHarnessTestFile(unit *testUnit, currentDirectory string) *harnessutil.TestFile {
+func createHarnessTestFile(unit *testUnit, currentDirectory tspath.RootedDirectoryPath) *harnessutil.TestFile {
 	return &harnessutil.TestFile{
-		UnitName: tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory),
+		UnitName: tspath.ToRootedFilePath(unit.name, currentDirectory).AsString(),
 		Content:  unit.content,
 	}
 }
@@ -600,7 +569,7 @@ func (c *compilerTest) verifyParentPointers(t *testing.T) {
 			return false
 		}
 		for _, f := range c.result.Program.GetSourceFiles() {
-			if c.result.Program.IsSourceFileDefaultLibrary(f.Path()) {
+			if c.result.Program.IsSourceFileDefaultLibrary(f.PathKey()) {
 				continue
 			}
 			parent = f.AsNode()

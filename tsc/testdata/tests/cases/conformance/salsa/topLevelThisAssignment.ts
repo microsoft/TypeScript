@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-// @outFile: output.js
+// @outDir: out
 // @allowJs: true
 // @checkJs: true
 // @Filename: a.js

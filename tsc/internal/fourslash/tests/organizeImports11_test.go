@@ -71,7 +71,7 @@ export class MyClass {
     someFunction();
   }
 }`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

@@ -1,9 +1,12 @@
 package project
 
 import (
+	iofs "io/fs"
 	"maps"
+	"slices"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -23,7 +26,7 @@ type FileContent interface {
 
 type FileHandle interface {
 	FileContent
-	FileName() string
+	FileName() tspath.RootedFilePath
 	Version() int32
 	MatchesDiskText() bool
 	IsOverlay() bool
@@ -33,7 +36,7 @@ type FileHandle interface {
 }
 
 type fileBase struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	content  string
 	hash     xxh3.Uint128
 
@@ -43,7 +46,7 @@ type fileBase struct {
 	lineInfo     *sourcemap.ECMALineInfo
 }
 
-func (f *fileBase) FileName() string {
+func (f *fileBase) FileName() tspath.RootedFilePath {
 	return f.fileName
 }
 
@@ -70,48 +73,48 @@ func (f *fileBase) ECMALineInfo() *sourcemap.ECMALineInfo {
 	return f.lineInfo
 }
 
-type diskFile struct {
+type cachedFile struct {
 	fileBase
 	needsReload  bool
-	realpathPath tspath.Path
+	realpathPath tspath.PathKey
 }
 
-func newDiskFile(fileName string, content string) *diskFile {
-	return &diskFile{
-		fileBase: fileBase{
-			fileName: fileName,
-			content:  content,
-			hash:     xxh3.HashString128(content),
-		},
+func newCachedFile(fileName tspath.RootedFilePath, content string) *cachedFile {
+	return &cachedFile{
+		fileName: fileName,
+		content:  content,
+		hash:     xxh3.HashString128(content),
 	}
 }
 
-var _ FileHandle = (*diskFile)(nil)
+func NewCachedFileHandle(fileName tspath.RootedFilePath, content string) FileHandle {
+	return newCachedFile(fileName, content)
+}
 
-func (f *diskFile) Version() int32 {
+var _ FileHandle = (*cachedFile)(nil)
+
+func (f *cachedFile) Version() int32 {
 	return 0
 }
 
-func (f *diskFile) MatchesDiskText() bool {
+func (f *cachedFile) MatchesDiskText() bool {
 	return !f.needsReload
 }
 
-func (f *diskFile) IsOverlay() bool {
+func (f *cachedFile) IsOverlay() bool {
 	return false
 }
 
-func (f *diskFile) Kind() core.ScriptKind {
+func (f *cachedFile) Kind() core.ScriptKind {
 	return core.GetScriptKindFromFileName(f.fileName)
 }
 
-func (f *diskFile) Clone() *diskFile {
-	return &diskFile{
+func (f *cachedFile) Clone() *cachedFile {
+	return &cachedFile{
 		realpathPath: f.realpathPath,
-		fileBase: fileBase{
-			fileName: f.fileName,
-			content:  f.content,
-			hash:     f.hash,
-		},
+		fileName:     f.fileName,
+		content:      f.content,
+		hash:         f.hash,
 	}
 }
 
@@ -124,15 +127,13 @@ type Overlay struct {
 	matchesDiskText bool
 }
 
-func newOverlay(fileName string, content string, version int32, kind core.ScriptKind) *Overlay {
+func newOverlay(fileName tspath.RootedFilePath, content string, version int32, kind core.ScriptKind) *Overlay {
 	return &Overlay{
-		fileBase: fileBase{
-			fileName: fileName,
-			content:  content,
-			hash:     xxh3.HashString128(content),
-		},
-		version: version,
-		kind:    kind,
+		fileName: fileName,
+		content:  content,
+		hash:     xxh3.HashString128(content),
+		version:  version,
+		kind:     kind,
 	}
 }
 
@@ -144,7 +145,7 @@ func (o *Overlay) Text() string {
 	return o.content
 }
 
-func (o *Overlay) OriginalFileName() string { return o.FileName() }
+func (o *Overlay) OriginalFileName() tspath.RootedFilePath { return o.FileName() }
 
 // SpanMap and OriginalText satisfy lsconv.Script. An overlay holds the editor's raw text (for a
 // content-mapped file, that is the original foreign text, not the transformed output), so it never
@@ -160,7 +161,7 @@ func (o *Overlay) MatchesDiskText() bool {
 
 // !!! optimization: incorporate mtime
 func (o *Overlay) computeMatchesDiskText(fs vfs.FS) (matchesDiskText bool, exists bool) {
-	if tspath.IsDynamicFileName(o.fileName) {
+	if o.fileName.IsDynamic() {
 		return false, false
 	}
 	diskContent, ok := fs.ReadFile(o.fileName)
@@ -179,47 +180,235 @@ func (o *Overlay) Kind() core.ScriptKind {
 }
 
 type overlayFS struct {
-	toPath           func(string) tspath.Path
-	fs               vfs.FS
+	caseSensitivity  tspath.CaseSensitivity
+	host             vfs.FS
 	positionEncoding lsproto.PositionEncodingKind
 
-	mu       sync.RWMutex
-	overlays map[tspath.Path]*Overlay
+	mu                 sync.RWMutex
+	overlays           map[tspath.PathKey]*Overlay
+	overlayDirectories map[tspath.PathKey]map[tspath.PathKey]string
 }
 
-func newOverlayFS(fs vfs.FS, overlays map[tspath.Path]*Overlay, positionEncoding lsproto.PositionEncodingKind, toPath func(string) tspath.Path) *overlayFS {
+type LayeredFileSystem interface {
+	vfs.FS
+	FileHandleSource
+	Overlays() map[tspath.PathKey]*Overlay
+}
+
+type RebasableFileSystem interface {
+	vfs.FS
+	BaseFileSystem() vfs.FS
+	WithBaseFileSystem(base vfs.FS) LayeredFileSystem
+}
+
+func newOverlayFS(fs vfs.FS, overlays map[tspath.PathKey]*Overlay, positionEncoding lsproto.PositionEncodingKind) *overlayFS {
 	return &overlayFS{
-		fs:               fs,
-		positionEncoding: positionEncoding,
-		overlays:         overlays,
-		toPath:           toPath,
+		caseSensitivity:    fs.CaseSensitivity(),
+		host:               fs,
+		positionEncoding:   positionEncoding,
+		overlays:           overlays,
+		overlayDirectories: createOverlayDirectories(overlays),
 	}
 }
 
-func (fs *overlayFS) Overlays() map[tspath.Path]*Overlay {
+var (
+	_ vfs.FS            = (*overlayFS)(nil)
+	_ FileHandleSource  = (*overlayFS)(nil)
+	_ LayeredFileSystem = (*overlayFS)(nil)
+)
+
+func (fs *overlayFS) Overlays() map[tspath.PathKey]*Overlay {
 	fs.mu.RLock()
 	defer fs.mu.RUnlock()
 	return fs.overlays
 }
 
-func (fs *overlayFS) getFile(fileName string) FileHandle {
-	fs.mu.RLock()
-	overlays := fs.overlays
-	fs.mu.RUnlock()
-
-	path := fs.toPath(fileName)
-	if overlay, ok := overlays[path]; ok {
+func layerOverlayFileSystem(fileSystem vfs.FS, overlays map[tspath.PathKey]*Overlay, positionEncoding lsproto.PositionEncodingKind) LayeredFileSystem {
+	base := fileSystem
+	var layer RebasableFileSystem
+	if candidate, ok := fileSystem.(RebasableFileSystem); ok {
+		layer = candidate
+		base = candidate.BaseFileSystem()
+	}
+	if previous, ok := base.(*overlayFS); ok {
+		base = previous.host
+	}
+	overlay := newOverlayFS(base, overlays, positionEncoding)
+	if layer == nil {
 		return overlay
 	}
+	return layer.WithBaseFileSystem(overlay)
+}
 
-	content, ok := fs.fs.ReadFile(fileName)
+func (fs *overlayFS) GetFile(fileName tspath.RootedFilePath) FileHandle {
+	return fs.GetFileByPath(fileName, fs.caseSensitivity.PathKey(fileName.AsPath()))
+}
+
+func (fs *overlayFS) GetFileByPath(fileName tspath.RootedFilePath, path tspath.PathKey) FileHandle {
+	fs.mu.RLock()
+	overlay := fs.overlays[path]
+	_, directory := fs.overlayDirectories[path]
+	fs.mu.RUnlock()
+	if overlay != nil {
+		return overlay
+	}
+	if directory {
+		return nil
+	}
+
+	if source, ok := fs.host.(FileHandleSource); ok {
+		return source.GetFileByPath(fileName, path)
+	}
+	content, ok := fs.host.ReadFile(fileName)
 	if !ok {
 		return nil
 	}
-	return newDiskFile(fileName, content)
+	return newCachedFile(fileName, content)
 }
 
-func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, map[tspath.Path]*Overlay) {
+func (fs *overlayFS) CaseSensitivity() tspath.CaseSensitivity { return fs.caseSensitivity }
+
+func (fs *overlayFS) FileExists(fileName tspath.RootedFilePath) bool {
+	fs.mu.RLock()
+	path := fs.caseSensitivity.PathKey(fileName.AsPath())
+	_, file := fs.overlays[path]
+	_, directory := fs.overlayDirectories[path]
+	fs.mu.RUnlock()
+	return file || !directory && fs.host.FileExists(fileName)
+}
+
+func (fs *overlayFS) ReadFile(fileName tspath.RootedFilePath) (string, bool) {
+	if file := fs.GetFile(fileName); file != nil {
+		return file.Content(), true
+	}
+	return "", false
+}
+
+func (fs *overlayFS) WriteFile(path tspath.RootedFilePath, data string) error {
+	return fs.host.WriteFile(path, data)
+}
+
+func (fs *overlayFS) AppendFile(path tspath.RootedFilePath, data string) error {
+	return fs.host.AppendFile(path, data)
+}
+func (fs *overlayFS) Remove(path tspath.RootedPath) error { return fs.host.Remove(path) }
+func (fs *overlayFS) Chtimes(path tspath.RootedPath, atime time.Time, mtime time.Time) error {
+	return fs.host.Chtimes(path, atime, mtime)
+}
+
+func (fs *overlayFS) DirectoryExists(directoryName tspath.RootedDirectoryPath) bool {
+	fs.mu.RLock()
+	path := fs.caseSensitivity.PathKey(directoryName.AsPath())
+	_, file := fs.overlays[path]
+	_, directory := fs.overlayDirectories[path]
+	fs.mu.RUnlock()
+	return directory || !file && fs.host.DirectoryExists(directoryName)
+}
+
+func (fs *overlayFS) GetAccessibleEntries(directoryName tspath.RootedDirectoryPath) vfs.Entries {
+	fs.mu.RLock()
+	path := fs.caseSensitivity.PathKey(directoryName.AsPath())
+	_, file := fs.overlays[path]
+	directory := fs.overlayDirectories[path]
+	if directory != nil {
+		directory = maps.Clone(directory)
+	}
+	overlays := fs.overlays
+	fs.mu.RUnlock()
+	if file {
+		return vfs.Entries{}
+	}
+	hostEntries := fs.host.GetAccessibleEntries(directoryName)
+	entries := vfs.Entries{
+		Files:       slices.Clone(hostEntries.Files),
+		Directories: slices.Clone(hostEntries.Directories),
+		Symlinks:    maps.Clone(hostEntries.Symlinks),
+	}
+	equalName := func(left string, right string) bool {
+		return fs.caseSensitivity.GetComparer()(left, right) == 0
+	}
+	for childPath, childName := range directory {
+		entries.Files = slices.DeleteFunc(entries.Files, func(name string) bool { return equalName(name, childName) })
+		entries.Directories = slices.DeleteFunc(entries.Directories, func(name string) bool { return equalName(name, childName) })
+		for name := range entries.Symlinks {
+			if equalName(name, childName) {
+				delete(entries.Symlinks, name)
+			}
+		}
+		if _, ok := overlays[childPath]; ok {
+			entries.Files = append(entries.Files, childName)
+		} else {
+			entries.Directories = append(entries.Directories, childName)
+		}
+	}
+	return entries
+}
+
+func (fs *overlayFS) Stat(path tspath.RootedPath) vfs.FileInfo {
+	fs.mu.RLock()
+	canonicalPath := fs.caseSensitivity.PathKey(path)
+	overlay := fs.overlays[canonicalPath]
+	_, directory := fs.overlayDirectories[canonicalPath]
+	fs.mu.RUnlock()
+	if overlay != nil {
+		return overlayFileInfo{overlay: overlay}
+	}
+	if directory {
+		return overlayDirectoryInfo{name: path.BaseName()}
+	}
+	return fs.host.Stat(path)
+}
+
+func (fs *overlayFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
+	return fs.host.Realpath(path)
+}
+
+type overlayFileInfo struct {
+	overlay *Overlay
+}
+
+func (info overlayFileInfo) Name() string        { return info.overlay.FileName().BaseName() }
+func (info overlayFileInfo) Size() int64         { return int64(len(info.overlay.Content())) }
+func (info overlayFileInfo) Mode() iofs.FileMode { return 0o444 }
+func (info overlayFileInfo) ModTime() time.Time  { return time.Time{} }
+func (info overlayFileInfo) IsDir() bool         { return false }
+func (info overlayFileInfo) Sys() any            { return nil }
+
+type overlayDirectoryInfo struct {
+	name string
+}
+
+func (info overlayDirectoryInfo) Name() string        { return info.name }
+func (info overlayDirectoryInfo) Size() int64         { return 0 }
+func (info overlayDirectoryInfo) Mode() iofs.FileMode { return iofs.ModeDir | 0o555 }
+func (info overlayDirectoryInfo) ModTime() time.Time  { return time.Time{} }
+func (info overlayDirectoryInfo) IsDir() bool         { return true }
+func (info overlayDirectoryInfo) Sys() any            { return nil }
+
+func createOverlayDirectories(overlays map[tspath.PathKey]*Overlay) map[tspath.PathKey]map[tspath.PathKey]string {
+	overlayDirectories := make(map[tspath.PathKey]map[tspath.PathKey]string)
+	for path, overlay := range overlays {
+		childPath := path
+		child := overlay.FileName().AsPath()
+		for {
+			parentPath := childPath.Parent()
+			parent := child.Directory()
+			if childPath == parentPath {
+				break
+			}
+			if directory := overlayDirectories[parentPath]; directory != nil {
+				directory[childPath] = child.BaseName()
+			} else {
+				overlayDirectories[parentPath] = map[tspath.PathKey]string{childPath: child.BaseName()}
+			}
+			childPath = parentPath
+			child = parent.AsPath()
+		}
+	}
+	return overlayDirectories
+}
+
+func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, map[tspath.PathKey]*Overlay) {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 
@@ -307,7 +496,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 
 	// Process deduplicated events per file
 	for uri, events := range fileEventMap {
-		path := uri.Path(fs.fs.UseCaseSensitiveFileNames())
+		path := uri.PathKey(fs.caseSensitivity)
 		o := newOverlays[path]
 
 		if events.openChange != nil {
@@ -334,10 +523,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			continue
 		}
 
-		if events.closeChange != nil {
-			if o == nil {
-				panic("overlay not found for closed file: " + uri)
-			}
+		if events.closeChange != nil && o != nil {
 			result.Closed.Add(uri)
 			delete(newOverlays, path)
 			o = nil
@@ -347,7 +533,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			if o == nil {
 				result.Changed.Add(uri)
 			} else if o != nil && !events.saved {
-				if matchesDiskText, _ := o.computeMatchesDiskText(fs.fs); matchesDiskText != o.MatchesDiskText() {
+				if matchesDiskText, _ := o.computeMatchesDiskText(fs.host); matchesDiskText != o.MatchesDiskText() {
 					o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)
 					o.matchesDiskText = matchesDiskText
 					newOverlays[path] = o
@@ -355,18 +541,15 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			}
 		}
 
-		if len(events.changes) > 0 {
+		if len(events.changes) > 0 && o != nil {
 			result.Changed.Add(uri)
-			if o == nil {
-				panic("overlay not found for changed file: " + uri)
-			}
 			for _, change := range events.changes {
-				converters := lsconv.NewConverters(fs.positionEncoding, func(fileName string) *lsconv.LSPLineMap {
+				converters := lsconv.NewConverters(fs.positionEncoding, func(fileName tspath.RootedFilePath) *lsconv.LSPLineMap {
 					return o.LSPLineMap()
 				})
 				for _, textChange := range change.Changes {
 					if partialChange := textChange.Partial; partialChange != nil {
-						ranges := lsconv.FromLSPRange(converters, o, partialChange.Range, spanmap.FeatureAll)
+						ranges := converters.FromLSPRange(o, partialChange.Range, spanmap.FeatureAll)
 						debug.Assert(len(ranges) == 1, "expected exactly one range for partial change")
 						textChange := core.TextChange{TextRange: ranges[0].Span, NewText: partialChange.Text}
 						newContent := textChange.ApplyTo(o.content)
@@ -405,5 +588,6 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 	}
 
 	fs.overlays = newOverlays
+	fs.overlayDirectories = createOverlayDirectories(newOverlays)
 	return result, newOverlays
 }

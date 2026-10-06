@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitLateExpandoAliasAddsExports.ts] ////
+
+=== declarationEmitLateExpandoAliasAddsExports.ts ===
+function helper(): number { return 1; }
+>helper : Symbol(helper, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 0, 0))
+
+export function Host() {}
+>Host : Symbol(Host, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 0, 39))
+
+Host.first = 1;
+>Host.first : Symbol(Host.first, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 1, 25))
+>Host : Symbol(Host, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 0, 39))
+>first : Symbol(Host.first, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 1, 25))
+
+Host.second = 'two';
+>Host.second : Symbol(Host.second, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 2, 15))
+>Host : Symbol(Host, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 0, 39))
+>second : Symbol(Host.second, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 2, 15))
+
+Host.alias = helper;
+>Host.alias : Symbol(Host.alias, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 3, 20))
+>Host : Symbol(Host, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 0, 39))
+>alias : Symbol(Host.alias, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 3, 20))
+>helper : Symbol(helper, Decl(declarationEmitLateExpandoAliasAddsExports.ts, 0, 0))
+

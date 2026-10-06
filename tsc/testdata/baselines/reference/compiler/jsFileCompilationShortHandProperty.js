@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/jsFileCompilationShortHandProperty.ts] ////
+
+//// [a.js]
+function foo() {
+    var a = 10;
+    var b = "Hello";
+    return {
+        a,
+        b
+    };
+}
+
+
+//// [a.js]
+"use strict";
+function foo() {
+    var a = 10;
+    var b = "Hello";
+    return {
+        a,
+        b
+    };
+}

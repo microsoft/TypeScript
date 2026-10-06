@@ -210,7 +210,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		ast.KindGlobalKeyword,
 		ast.KindOverrideKeyword,
 		ast.KindOfKeyword,
-		ast.KindDeferKeyword:
+		ast.KindDeferKeyword,
+		ast.KindSourceKeyword:
 		return d.factory.NewToken(kind), nil
 	case ast.KindQualifiedName:
 		it := newChildIter(childIndices)
@@ -1062,8 +1063,9 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		it := newChildIter(childIndices)
 		modifiers := d.modifierListAt(it.nextIf(mask, 0))
 		name := d.nodeAt(it.nextIf(mask, 1))
-		body := d.nodeAt(it.nextIf(mask, 2))
-		return d.factory.NewModuleDeclaration(modifiers, keyword, name, body), nil
+		attributes := d.nodeAt(it.nextIf(mask, 2))
+		body := d.nodeAt(it.nextIf(mask, 3))
+		return d.factory.NewModuleDeclaration(modifiers, keyword, name, attributes, body), nil
 	case ast.KindImportEqualsDeclaration:
 		isTypeOnly := commonData&1 != 0
 		it := newChildIter(childIndices)
@@ -1094,6 +1096,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 			phaseModifier = ast.KindTypeKeyword
 		case 2:
 			phaseModifier = ast.KindDeferKeyword
+		case 3:
+			phaseModifier = ast.KindSourceKeyword
 		}
 		it := newChildIter(childIndices)
 		name := d.nodeAt(it.nextIf(mask, 0))

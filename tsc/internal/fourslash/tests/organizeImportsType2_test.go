@@ -28,7 +28,7 @@ type B = string;
 const C = "hello";
 export { A, C, type B };
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 	f.VerifyOrganizeImports(t,
@@ -37,7 +37,7 @@ type B = string;
 const C = "hello";
 export { A, type B, C };
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline,
 		},
@@ -48,7 +48,7 @@ type B = string;
 const C = "hello";
 export { type B, A, C };
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst,
 		},
@@ -59,7 +59,7 @@ type B = string;
 const C = "hello";
 export { A, C, type B };
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast,
 		},

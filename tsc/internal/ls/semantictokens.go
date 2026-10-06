@@ -160,7 +160,7 @@ func (l *LanguageService) ProvideSemanticTokens(ctx context.Context, documentURI
 func (l *LanguageService) ProvideSemanticTokensRange(ctx context.Context, documentURI lsproto.DocumentUri, rng lsproto.Range) (lsproto.SemanticTokensRangeResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
 
-	mappedRanges := lsconv.FromLSPRangeIntersectingForSourceFile(l.converters, file, rng, spanmap.FeatureSemanticTokens)
+	mappedRanges := l.converters.FromLSPRangeIntersectingForSourceFile(file, rng, spanmap.FeatureSemanticTokens)
 	tokens := make([]semanticToken, 0, len(mappedRanges))
 	var seen collections.Set[semanticToken]
 	for _, mapped := range mappedRanges {
@@ -200,7 +200,7 @@ func sortSemanticTokens(tokens []semanticToken, converters *lsconv.Converters) {
 		if result := cmp.Compare(aRange.Start.Character, bRange.Start.Character); result != 0 {
 			return result
 		}
-		if result := cmp.Compare(a.file.Path(), b.file.Path()); result != 0 {
+		if result := cmp.Compare(a.file.PathKey(), b.file.PathKey()); result != 0 {
 			return result
 		}
 		return cmp.Compare(a.node.Pos(), b.node.Pos())
@@ -253,7 +253,7 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 			inJSXElement = false
 		}
 
-		if ast.IsIdentifier(node) && node.Text() != "" && !inJSXElement && !isInImportClause(node) && !isInfinityOrNaNString(node.Text()) {
+		if (ast.IsIdentifier(node) || ast.IsPrivateIdentifier(node)) && node.Text() != "" && !inJSXElement && !isInImportClause(node) && !isInfinityOrNaNString(node.Text()) {
 			symbol := c.GetSymbolAtLocation(node)
 			if symbol != nil {
 				// Resolve aliases
@@ -302,13 +302,13 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 							tokenModifier |= tokenModifierLocal
 						}
 						declSourceFile := ast.GetSourceFileOfNode(decl)
-						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
+						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) {
 							tokenModifier |= tokenModifierDefaultLibrary
 						}
 					} else if symbol.Declarations != nil {
 						for _, decl := range symbol.Declarations {
 							declSourceFile := ast.GetSourceFileOfNode(decl)
-							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
+							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) {
 								tokenModifier |= tokenModifierDefaultLibrary
 								break
 							}
