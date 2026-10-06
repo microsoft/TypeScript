@@ -2,7 +2,6 @@ import {
     type APIModules,
     createTypeScriptModuleLoader,
     type TypeScriptSDK,
-    type Uri,
 } from "@typescript/typescript/unstable/vscode";
 import fs from "node:fs";
 import module from "node:module";
@@ -17,8 +16,8 @@ const loadedPackageManifests = new Map<string, string>();
 const acquiredPackageVersions = new Map<string, string>();
 
 export function acquireTypeScriptSDK(sdk: TypeScriptSDK): void {
-    if (!sdk.packageJsonUri) return;
-    const manifestPath = fs.realpathSync(sdk.packageJsonUri.fsPath);
+    if (!sdk.packageJsonPath) return;
+    const manifestPath = fs.realpathSync.native(sdk.packageJsonPath);
     if (acquiredPackageVersions.has(manifestPath)) return;
     const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
     const version = sdk.version === "(local)" || sdk.version === "unknown" ? manifest.version : sdk.version;
@@ -56,29 +55,29 @@ export function resolvePackageExecutable(packageJsonPath: string, platformPackag
 
 export function createTypeScriptSDK(
     version: string,
-    packageJsonUri: Uri | undefined,
+    packageJsonPath: string | undefined,
     openAPIPipe: (pipe?: string) => Promise<string>,
     isCurrent: () => boolean,
 ): TypeScriptSDK {
-    const loader = packageJsonUri ? createTypeScriptModuleLoader(packageJsonUri.fsPath) : undefined;
+    const loader = packageJsonPath ? createTypeScriptModuleLoader(packageJsonPath) : undefined;
     function importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
     async function importModule(exportPath: string): Promise<unknown> {
-        if (!loader || !packageJsonUri) {
+        if (!loader || !packageJsonPath) {
             throw new Error("The selected TypeScript server does not provide a matching JavaScript API package.");
         }
-        const manifest = await readAPIManifest(packageJsonUri.fsPath, version);
+        const manifest = await readAPIManifest(packageJsonPath, version);
         loadedPackageManifests.set(manifest.path, manifest.contents);
         return loader.importModule(exportPath);
     }
 
     return {
         version,
-        packageJsonUri,
+        packageJsonPath,
         isCurrent,
         importModule,
         async initializeAPIConnection(pipe?: string): Promise<string> {
-            if (packageJsonUri) {
-                await readAPIManifest(packageJsonUri.fsPath, version);
+            if (packageJsonPath) {
+                await readAPIManifest(packageJsonPath, version);
             }
             return openAPIPipe(pipe);
         },

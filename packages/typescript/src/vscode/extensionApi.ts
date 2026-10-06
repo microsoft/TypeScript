@@ -63,25 +63,6 @@ export interface APIModules {
     "unstable/ast/clone": typeof import("../ast/clone.ts");
 }
 
-/** Structurally compatible with VS Code's Uri, without a dependency on VS Code types. */
-export interface Uri {
-    readonly scheme: string;
-    readonly authority: string;
-    readonly path: string;
-    readonly query: string;
-    readonly fragment: string;
-    readonly fsPath: string;
-    with(change: {
-        scheme?: string | undefined;
-        authority?: string | undefined;
-        path?: string | undefined;
-        query?: string | undefined;
-        fragment?: string | undefined;
-    }): Uri;
-    toString(skipEncoding?: boolean): string;
-    toJSON(): unknown;
-}
-
 /**
  * The selected TypeScript installation and its module loader.
  * Restart TS Server offers to restart extensions if an acquired installation's
@@ -90,7 +71,7 @@ export interface Uri {
 export interface TypeScriptSDK extends TypeScriptModuleLoader {
     readonly version: string;
     /** The matching API package manifest; undefined for a bare executable without a companion package. */
-    readonly packageJsonUri: Uri | undefined;
+    readonly packageJsonPath: string | undefined;
     /**
      * Whether an initialized language server currently uses this installation.
      * False while stopped or restarting; true again after a same-installation restart.

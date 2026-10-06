@@ -118,7 +118,7 @@ export class SessionManager implements vscode.Disposable {
     private handleLanguageServerInitialized(exe: ExeInfo): void {
         this.sdk = createTypeScriptSDK(
             exe.version,
-            exe.apiPackageJsonPath ? vscode.Uri.file(exe.apiPackageJsonPath) : undefined,
+            exe.apiPackageJsonPath,
             pipe => this.initializeAPISession(exe, pipe),
             () => {
                 const client = this.currentSession?.client;

@@ -13,7 +13,7 @@ export interface TypeScriptModuleLoader {
 
 /**
  * Loads the selected installation's API modules in this process.
- * Pass the SDK's packageJsonUri.fsPath through your server's initialization options.
+ * Pass the SDK's packageJsonPath through your server's initialization options.
  * Restart this process after an in-place package upgrade to clear its module cache.
  */
 export function createTypeScriptModuleLoader(packageJsonPath: string): TypeScriptModuleLoader {
