@@ -70,6 +70,7 @@ func (h *affectedFilesHandler) removeDiagnosticsOfLibraryFiles() {
 }
 
 func (h *affectedFilesHandler) computeDtsSignature(file *ast.SourceFile) string {
+	defer signatureSemaphore.Acquire()()
 	var signature string
 	done := h.program.beginNestedEmit()
 	defer done()
@@ -146,10 +147,7 @@ func (h *affectedFilesHandler) collectReferencingFiles(file *ast.SourceFile, wg 
 			continue
 		}
 		wg.Queue(func() {
-			release := signatureSemaphore.Acquire()
-			changed := h.updateShapeSignature(currentFile, false)
-			release()
-			if changed {
+			if h.updateShapeSignature(currentFile, false) {
 				h.collectReferencingFiles(currentFile, wg, result)
 			}
 		})
