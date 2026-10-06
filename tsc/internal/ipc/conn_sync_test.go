@@ -421,7 +421,7 @@ func (p *syncFailingCallProtocol) WriteRequest(*jsonrpc.ID, string, any) error {
 	return p.callErr
 }
 
-func TestSyncConnCallbackWriteFailureStopsPump(t *testing.T) {
+func TestSyncConnCallbackWriteFailureStopsConnection(t *testing.T) {
 	t.Parallel()
 	for _, panics := range []bool{false, true} {
 		t.Run(map[bool]string{false: "error", true: "panic"}[panics], func(t *testing.T) {

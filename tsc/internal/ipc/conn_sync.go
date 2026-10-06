@@ -14,7 +14,7 @@ import (
 )
 
 // SyncConn manages bidirectional communication with synchronous request handling.
-// A single pump owns the protocol and completes nested exchanges in stack order.
+// Protocol operations are serialized, and nested exchanges complete in stack order.
 type SyncConn struct {
 	rwc      io.ReadWriteCloser
 	protocol Protocol
@@ -24,15 +24,15 @@ type SyncConn struct {
 	// request. Clients retrieve the collected data via a getServerTiming request.
 	timing *timingCollector
 
-	// Run or a standalone Call/Notify takes ownership of the pump. While a handler
-	// runs, the pump accepts operations from other goroutines; while a callback
-	// runs, only nested client requests can admit further operations.
-	owner      chan struct{}
-	operations chan syncOperation
-	handlers   sync.WaitGroup
-	closed     chan struct{}
-	closeOnce  sync.Once
-	terminal   error
+	// Run or a standalone Call/Notify acquires the protocol lock. While a
+	// handler runs, operations from other goroutines are accepted; while a
+	// callback runs, only nested client requests can admit further operations.
+	protocolLock chan struct{}
+	operations   chan syncOperation
+	handlers     sync.WaitGroup
+	closed       chan struct{}
+	closeOnce    sync.Once
+	terminal     error
 }
 
 type syncOperation struct {
@@ -57,14 +57,14 @@ type syncHandlerResult struct {
 // NewSyncConn creates a new sync connection with the given transport and handler.
 func NewSyncConn(rwc io.ReadWriteCloser, protocol Protocol, handler Handler) *SyncConn {
 	c := &SyncConn{
-		rwc:        rwc,
-		protocol:   protocol,
-		handler:    handler,
-		owner:      make(chan struct{}, 1),
-		operations: make(chan syncOperation),
-		closed:     make(chan struct{}),
+		rwc:          rwc,
+		protocol:     protocol,
+		handler:      handler,
+		protocolLock: make(chan struct{}, 1),
+		operations:   make(chan syncOperation),
+		closed:       make(chan struct{}),
 	}
-	c.owner <- struct{}{}
+	c.protocolLock <- struct{}{}
 	return c
 }
 
@@ -87,8 +87,8 @@ func (c *SyncConn) Run(ctx context.Context) (retErr error) {
 		return ctx.Err()
 	case <-c.closed:
 		return c.terminal
-	case <-c.owner:
-		ctx, release, err := c.ownPump(ctx)
+	case <-c.protocolLock:
+		ctx, release, err := c.setupRun(ctx)
 		defer release()
 		defer func() { c.close(retErr) }()
 		if err != nil {
@@ -124,7 +124,7 @@ func (c *SyncConn) run(ctx context.Context) error {
 				return err
 			}
 		} else {
-			// Responses are read by the pump's active callback exchange.
+			// Responses are read by the active callback exchange.
 			return errors.New("ipc: unexpected response message in sync connection")
 		}
 	}
@@ -278,13 +278,13 @@ func (c *SyncConn) submit(operation syncOperation) syncCallResult {
 		case result := <-operation.result:
 			return result
 		case <-operation.ctx.Done():
-			// The pump still drains an accepted exchange before admitting others.
+			// The accepted exchange is still drained before admitting others.
 			return syncCallResult{err: operation.ctx.Err()}
 		case <-c.closed:
 			return syncCallResult{err: c.terminal}
 		}
-	case <-c.owner:
-		ctx, release, err := c.ownPump(operation.ctx)
+	case <-c.protocolLock:
+		ctx, release, err := c.setupRun(operation.ctx)
 		defer release()
 		if err != nil {
 			return syncCallResult{err: err}
@@ -368,26 +368,26 @@ func (c *SyncConn) close(err error) {
 	})
 }
 
-// ownPump is called after taking the ownership token.
-func (c *SyncConn) ownPump(ctx context.Context) (context.Context, func(), error) {
-	ctx, cancel := context.WithCancel(ctx)
+// setupRun is called after acquiring the protocol lock.
+func (c *SyncConn) setupRun(ctx context.Context) (context.Context, func(), error) {
+	handlerCtx, cancelHandlers := context.WithCancel(ctx)
 	release := func() {
-		cancel()
+		cancelHandlers()
 		c.handlers.Wait()
-		c.owner <- struct{}{}
+		c.protocolLock <- struct{}{}
 	}
 	select {
 	case <-c.closed:
-		return ctx, release, c.terminal
+		return handlerCtx, release, c.terminal
 	default:
-		if err := ctx.Err(); err != nil {
-			return ctx, release, err
+		if err := handlerCtx.Err(); err != nil {
+			return handlerCtx, release, err
 		}
 	}
-	stop := context.AfterFunc(ctx, func() {
-		c.close(ctx.Err())
+	stop := context.AfterFunc(handlerCtx, func() {
+		c.close(handlerCtx.Err())
 	})
-	return ctx, func() {
+	return handlerCtx, func() {
 		stop()
 		release()
 	}, nil
