@@ -38,7 +38,6 @@ type DeclarationEmitHost interface {
 
 	GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) OutputPaths
 	SourceFileMayBeEmitted(file *ast.SourceFile, forceDtsEmit bool) bool
-	NewEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver
 }
 
 type thisPropertyAssignmentKey struct {
@@ -97,11 +96,11 @@ type DeclarationTransformer struct {
 }
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
-func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath tspath.RootedFilePath) *DeclarationTransformer {
-	if context == nil {
-		context = printer.NewEmitContext()
+func NewDeclarationTransformer(host DeclarationEmitHost, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions, declarationFilePath tspath.RootedFilePath) *DeclarationTransformer {
+	if resolver == nil || resolver.EmitContext() == nil {
+		panic("DeclarationTransformer requires an EmitResolver with an EmitContext")
 	}
-	resolver := host.NewEmitResolver(context)
+	context := resolver.EmitContext()
 	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), stripInternal: compilerOptions.StripInternal.IsTrue(), resolver: resolver}
 	tracker := NewSymbolTracker(host, resolver, state)
 	// TODO: Use new host GetOutputPathsFor method instead of passing in entrypoint paths (which will also better support bundled emit)

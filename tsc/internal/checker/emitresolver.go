@@ -58,6 +58,10 @@ func newEmitResolver(checker *Checker, emitContext *printer.EmitContext) *EmitRe
 	return e
 }
 
+func (r *EmitResolver) EmitContext() *printer.EmitContext {
+	return r.emitContext
+}
+
 func (r *EmitResolver) nodeBuilder() *NodeBuilder {
 	if r.requestNodeBuilder == nil {
 		r.requestNodeBuilder = NewNodeBuilder(r.checker, r.emitContext)

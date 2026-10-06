@@ -75,6 +75,7 @@ const (
 
 type EmitResolver interface {
 	binder.ReferenceResolver
+	EmitContext() *EmitContext
 	IsReferencedAliasDeclaration(node *ast.Node) bool
 	IsValueAliasDeclaration(node *ast.Node) bool
 	IsTopLevelValueImportEqualsWithEntityName(node *ast.Node) bool
