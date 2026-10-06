@@ -438,12 +438,12 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 
 	// nodeBuilderFlags for classified output (same as signatureHelpNodeBuilderFlags)
 	const classifiedNodeBuilderFlags = nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope | nodebuilder.FlagsWriteTypeParametersInQualifiedName
-	var emitContext *printer.EmitContext
+	var displayEmitContext *printer.EmitContext
 	getEmitContext := func() *printer.EmitContext {
-		if emitContext == nil {
-			emitContext = printer.NewEmitContext()
+		if displayEmitContext == nil {
+			displayEmitContext = printer.NewEmitContext()
 		}
-		return emitContext
+		return displayEmitContext
 	}
 
 	// writeTypeClassified writes a type to dpw with proper classification (punctuation, symbols, keywords).

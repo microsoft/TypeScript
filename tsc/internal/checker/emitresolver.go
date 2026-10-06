@@ -120,132 +120,7 @@ func (r *EmitResolver) IsDeclarationVisible(node *ast.Node) bool {
 	// Only lock on external API func to prevent deadlocks
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	return r.isDeclarationVisible(node)
-}
-
-func (r *EmitResolver) isDeclarationVisible(node *ast.Node) bool {
-	// node = r.emitContext.ParseNode(node)
-	if !ast.IsParseTreeNode(node) {
-		return false
-	}
-	if node == nil {
-		return false
-	}
-
-	links := r.checker.emitResolverLinks.declarationLinks.Get(node)
-	if links.isVisible == core.TSUnknown {
-		if r.determineIfDeclarationIsVisible(node) {
-			links.isVisible = core.TSTrue
-		} else {
-			links.isVisible = core.TSFalse
-		}
-	}
-	return links.isVisible == core.TSTrue
-}
-
-func (r *EmitResolver) determineIfDeclarationIsVisible(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindJSDocCallbackTag,
-		// ast.KindJSDocEnumTag, // !!! TODO: JSDoc @enum support?
-		ast.KindJSDocTypedefTag:
-		// Top-level jsdoc type aliases are considered exported
-		// First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
-		return node.Parent != nil && node.Parent.Parent != nil && node.Parent.Parent.Parent != nil && ast.IsSourceFile(node.Parent.Parent.Parent)
-	case ast.KindBindingElement:
-		return r.isDeclarationVisible(node.Parent.Parent)
-	case ast.KindVariableDeclaration,
-		ast.KindModuleDeclaration,
-		ast.KindClassDeclaration,
-		ast.KindInterfaceDeclaration,
-		ast.KindTypeAliasDeclaration,
-		ast.KindJSTypeAliasDeclaration,
-		ast.KindFunctionDeclaration,
-		ast.KindEnumDeclaration,
-		ast.KindImportEqualsDeclaration:
-		if ast.IsVariableDeclaration(node) {
-			if ast.IsBindingPattern(node.Name()) &&
-				len(node.Name().Elements()) == 0 {
-				// If the binding pattern is empty, this variable declaration is not visible
-				return false
-			}
-			// falls through
-		}
-		// External module augmentation is always visible
-		// A @typedef at top-level in an external module is always visible
-		if ast.IsExternalModuleAugmentation(node) || ast.IsImplicitlyExportedJSDocDeclaration(node) {
-			return true
-		}
-		parent := ast.GetDeclarationContainer(node)
-		// If the node is not exported or it is not ambient module element (except import declaration)
-		if r.checker.getCombinedModifierFlagsCached(node)&ast.ModifierFlagsExport == 0 &&
-			!(node.Kind != ast.KindImportEqualsDeclaration && parent.Kind != ast.KindSourceFile && parent.Flags&ast.NodeFlagsAmbient != 0) {
-			return ast.IsGlobalSourceFile(parent)
-		}
-		// Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-		return r.isDeclarationVisible(parent)
-
-	case ast.KindPropertyDeclaration,
-		ast.KindPropertySignature,
-		ast.KindGetAccessor,
-		ast.KindSetAccessor,
-		ast.KindMethodDeclaration,
-		ast.KindMethodSignature:
-		if r.checker.GetEffectiveDeclarationFlags(node, ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
-			// Private/protected properties/methods are not visible
-			return false
-		}
-		// Public properties/methods are visible if its parents are visible, so:
-		return r.isDeclarationVisible(node.Parent)
-
-	case ast.KindConstructor,
-		ast.KindConstructSignature,
-		ast.KindCallSignature,
-		ast.KindIndexSignature,
-		ast.KindParameter,
-		ast.KindModuleBlock,
-		ast.KindFunctionType,
-		ast.KindConstructorType,
-		ast.KindTypeLiteral,
-		ast.KindTypeReference,
-		ast.KindArrayType,
-		ast.KindTupleType,
-		ast.KindUnionType,
-		ast.KindIntersectionType,
-		ast.KindParenthesizedType,
-		ast.KindNamedTupleMember:
-		return r.isDeclarationVisible(node.Parent)
-
-	// Default binding, import specifier and namespace import is visible
-	// only on demand so by default it is not visible
-	case ast.KindImportClause,
-		ast.KindNamespaceImport,
-		ast.KindImportSpecifier:
-		return false
-
-	// Type parameters are always visible
-	case ast.KindTypeParameter:
-		return true
-	// Source file and namespace export are always visible
-	case ast.KindSourceFile,
-		ast.KindNamespaceExportDeclaration:
-		return true
-
-	// Export assignments do not create name bindings outside the module
-	case ast.KindExportAssignment:
-		return false
-
-	// An `export {X}` (without a module specifier) is itself a visible re-export of
-	// the named binding; it contributes to the symbol's external visibility.
-	case ast.KindExportSpecifier:
-		exportDecl := node.Parent.Parent
-		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier == nil {
-			return r.isDeclarationVisible(exportDecl.Parent)
-		}
-		return false
-
-	default:
-		return false
-	}
+	return r.checker.isDeclarationVisible(node)
 }
 
 func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFile) {
@@ -323,160 +198,10 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 	}
 }
 
-func getMeaningOfEntityNameReference(entityName *ast.Node) ast.SymbolFlags {
-	// get symbol of the first identifier of the entityName
-	if entityName.Parent.Kind == ast.KindTypeQuery ||
-		entityName.Parent.Kind == ast.KindExpressionWithTypeArguments && !ast.IsPartOfTypeNode(entityName.Parent) ||
-		entityName.Parent.Kind == ast.KindComputedPropertyName ||
-		entityName.Parent.Kind == ast.KindTypePredicate && entityName.Parent.AsTypePredicateNode().ParameterName == entityName ||
-		entityName.Parent.Kind == ast.KindBinaryExpression {
-		// Typeof value
-		return ast.SymbolFlagsValue | ast.SymbolFlagsExportValue
-	}
-	if entityName.Kind == ast.KindQualifiedName || entityName.Kind == ast.KindPropertyAccessExpression ||
-		entityName.Parent.Kind == ast.KindImportEqualsDeclaration ||
-		(entityName.Parent.Kind == ast.KindQualifiedName && entityName.Parent.AsQualifiedName().Left == entityName) ||
-		(entityName.Parent.Kind == ast.KindPropertyAccessExpression && entityName.Parent.Expression() == entityName) ||
-		(entityName.Parent.Kind == ast.KindElementAccessExpression && entityName.Parent.Expression() == entityName) {
-		// Left identifier from type reference or TypeAlias
-		// Entity name of the import declaration
-		return ast.SymbolFlagsNamespace
-	}
-	// Type Reference or TypeAlias entity = Identifier
-	return ast.SymbolFlagsType
-}
-
 func (r *EmitResolver) IsEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node) printer.SymbolAccessibilityResult {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	return r.isEntityNameVisible(entityName, enclosingDeclaration, true)
-}
-
-func (r *EmitResolver) isEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node, shouldComputeAliasToMakeVisible bool) printer.SymbolAccessibilityResult {
-	// node = r.emitContext.ParseNode(entityName)
-	if !ast.IsParseTreeNode(entityName) {
-		return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityNotAccessible}
-	}
-
-	meaning := getMeaningOfEntityNameReference(entityName)
-	firstIdentifier := ast.GetFirstIdentifier(entityName)
-
-	symbol := r.checker.resolveName(enclosingDeclaration, firstIdentifier.Text(), meaning, nil, false, false)
-
-	if symbol != nil && symbol.Flags&ast.SymbolFlagsTypeParameter != 0 && meaning&ast.SymbolFlagsType != 0 {
-		return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityAccessible}
-	}
-
-	if symbol == nil && ast.IsThisIdentifier(firstIdentifier) {
-		sym := r.checker.getSymbolOfDeclaration(r.checker.getThisContainer(firstIdentifier, false, false))
-		if r.isSymbolAccessible(sym, enclosingDeclaration, meaning, false).Accessibility == printer.SymbolAccessibilityAccessible {
-			return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityAccessible}
-		}
-	}
-
-	if symbol == nil {
-		return printer.SymbolAccessibilityResult{
-			Accessibility:   printer.SymbolAccessibilityNotResolved,
-			ErrorSymbolName: firstIdentifier.Text(),
-			ErrorNode:       firstIdentifier,
-		}
-	}
-
-	visible := r.hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible)
-	if visible != nil {
-		return *visible
-	}
-
-	return printer.SymbolAccessibilityResult{
-		Accessibility:   printer.SymbolAccessibilityNotAccessible,
-		ErrorSymbolName: firstIdentifier.Text(),
-		ErrorNode:       firstIdentifier,
-	}
-}
-
-func noopAddVisibleAlias(declaration *ast.Node, aliasingStatement *ast.Node) {}
-
-func (r *EmitResolver) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasToMakeVisible bool) *printer.SymbolAccessibilityResult {
-	var aliasesToMakeVisibleSet map[ast.NodeId]*ast.Node
-
-	var addVisibleAlias func(declaration *ast.Node, aliasingStatement *ast.Node)
-	if shouldComputeAliasToMakeVisible {
-		addVisibleAlias = func(declaration *ast.Node, aliasingStatement *ast.Node) {
-			r.checker.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
-			if aliasesToMakeVisibleSet == nil {
-				aliasesToMakeVisibleSet = make(map[ast.NodeId]*ast.Node)
-			}
-			aliasesToMakeVisibleSet[ast.GetNodeId(declaration)] = aliasingStatement
-		}
-	} else {
-		addVisibleAlias = noopAddVisibleAlias
-	}
-
-	for _, declaration := range symbol.Declarations {
-		if ast.IsIdentifier(declaration) {
-			continue
-		}
-		if !r.isDeclarationVisible(declaration) {
-			// Mark the unexported alias as visible if its parent is visible
-			// because these kind of aliases can be used to name types in declaration file
-			anyImportSyntax := getAnyImportSyntax(declaration)
-			if anyImportSyntax != nil &&
-				!ast.HasSyntacticModifier(anyImportSyntax, ast.ModifierFlagsExport) && // import clause without export
-				r.isDeclarationVisible(anyImportSyntax.Parent) {
-				addVisibleAlias(declaration, anyImportSyntax)
-				continue
-			}
-			if ast.IsVariableDeclaration(declaration) && ast.IsVariableStatement(declaration.Parent.Parent) &&
-				!ast.HasSyntacticModifier(declaration.Parent.Parent, ast.ModifierFlagsExport) && // unexported variable statement
-				r.isDeclarationVisible(declaration.Parent.Parent.Parent) {
-				addVisibleAlias(declaration, declaration.Parent.Parent)
-				continue
-			}
-			if ast.IsLateVisibilityPaintedStatement(declaration) && // unexported top-level statement
-				!ast.HasSyntacticModifier(declaration, ast.ModifierFlagsExport) &&
-				r.isDeclarationVisible(declaration.Parent) {
-				addVisibleAlias(declaration, declaration)
-				continue
-			}
-			if ast.IsBindingElement(declaration) {
-				if symbol.Flags&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && declaration.Parent != nil && declaration.Parent.Parent != nil && // exported import-like top-level JS require statement
-					ast.IsVariableDeclaration(declaration.Parent.Parent) &&
-					declaration.Parent.Parent.Parent.Parent != nil && ast.IsVariableStatement(declaration.Parent.Parent.Parent.Parent) &&
-					!ast.HasSyntacticModifier(declaration.Parent.Parent.Parent.Parent, ast.ModifierFlagsExport) &&
-					declaration.Parent.Parent.Parent.Parent.Parent != nil && // check if the thing containing the variable statement is visible (ie, the file)
-					r.isDeclarationVisible(declaration.Parent.Parent.Parent.Parent.Parent) {
-					addVisibleAlias(declaration, declaration.Parent.Parent.Parent.Parent)
-					continue
-				}
-				if symbol.Flags&ast.SymbolFlagsBlockScopedVariable != 0 {
-					rootDeclaration := ast.WalkUpBindingElementsAndPatterns(declaration)
-					if ast.IsParameterDeclaration(rootDeclaration) {
-						return nil
-					}
-					variableStatement := rootDeclaration.Parent.Parent
-					if !ast.IsVariableStatement(variableStatement) {
-						return nil
-					}
-					if ast.HasSyntacticModifier(variableStatement, ast.ModifierFlagsExport) {
-						continue // no alias to add, already exported
-					}
-					if !r.isDeclarationVisible(variableStatement.Parent) {
-						return nil // not visible
-					}
-					addVisibleAlias(declaration, variableStatement)
-					continue
-				}
-			}
-
-			// Declaration is not visible
-			return nil
-		}
-	}
-
-	return &printer.SymbolAccessibilityResult{
-		Accessibility:        printer.SymbolAccessibilityAccessible,
-		AliasesToMakeVisible: slices.Collect(maps.Values(aliasesToMakeVisibleSet)),
-	}
+	return r.checker.isEntityNameVisible(entityName, enclosingDeclaration, true)
 }
 
 func (r *EmitResolver) IsImplementationOfOverload(node *ast.SignatureDeclaration) bool {
@@ -586,7 +311,7 @@ func (r *EmitResolver) RequiresAddingImplicitUndefined(declaration *ast.Node, sy
 	}
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	return r.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
+	return r.checker.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
 }
 
 func (r *EmitResolver) RequiresAddingImplicitUndefinedUnsafe(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
@@ -594,61 +319,7 @@ func (r *EmitResolver) RequiresAddingImplicitUndefinedUnsafe(declaration *ast.No
 		return false
 	}
 	// NO LOCKING - only should be called in contexts that already have a checker lock
-	return r.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
-}
-
-func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
-	// node = r.emitContext.ParseNode(node)
-	if !ast.IsParseTreeNode(declaration) {
-		return false
-	}
-	switch declaration.Kind {
-	case ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindJSDocPropertyTag:
-		if symbol == nil {
-			symbol = r.checker.getSymbolOfDeclaration(declaration)
-		}
-		t := r.checker.getTypeOfSymbol(symbol)
-		r.checker.mappedSymbolLinks.Has(symbol)
-		return (symbol.Flags&ast.SymbolFlagsProperty != 0) && (symbol.Flags&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && r.checker.ReverseMappedSymbolLinks.Has(symbol) && r.checker.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(r.checker, t)
-	case ast.KindParameter, ast.KindJSDocParameterTag:
-		return r.requiresAddingImplicitUndefinedWorker(declaration, enclosingDeclaration)
-	default:
-		panic("Node cannot possibly require adding undefined")
-	}
-}
-
-func (r *EmitResolver) requiresAddingImplicitUndefinedWorker(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
-	return (r.isRequiredInitializedParameter(parameter, enclosingDeclaration) || r.isOptionalUninitializedParameterProperty(parameter)) && !r.declaredParameterTypeContainsUndefined(parameter)
-}
-
-func (r *EmitResolver) declaredParameterTypeContainsUndefined(parameter *ast.Node) bool {
-	// typeNode := getNonlocalEffectiveTypeAnnotationNode(parameter); // !!! JSDoc Support
-	typeNode := parameter.Type()
-	if typeNode == nil {
-		return false
-	}
-	t := r.checker.getTypeFromTypeNode(typeNode)
-	// allow error type here to avoid confusing errors that the annotation has to contain undefined when it does in cases like this:
-	//
-	// export function fn(x?: Unresolved | undefined): void {}
-	return r.checker.isErrorType(t) || r.checker.containsUndefinedType(t)
-}
-
-func (r *EmitResolver) isOptionalUninitializedParameterProperty(parameter *ast.Node) bool {
-	return r.checker.strictNullChecks &&
-		r.isOptionalParameter(parameter) &&
-		( /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil) && // !!! TODO: JSDoc support
-		ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier)
-}
-
-func (r *EmitResolver) isRequiredInitializedParameter(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
-	if !r.checker.strictNullChecks || r.isOptionalParameter(parameter) || /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil { // !!! TODO: JSDoc Support
-		return false
-	}
-	if ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier) {
-		return enclosingDeclaration != nil && ast.IsFunctionLikeDeclaration(enclosingDeclaration)
-	}
-	return true
+	return r.checker.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
 }
 
 func (r *EmitResolver) isOptionalParameter(node *ast.Node) bool {
@@ -1106,7 +777,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(container *ast.Node, enclo
 					return c.Name() != nil &&
 						ast.IsComputedPropertyName(c.Name()) &&
 						ast.IsEntityNameExpression(c.Name().Expression()) &&
-						r.isEntityNameVisible(c.Name().Expression(), enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
+						r.checker.isEntityNameVisible(c.Name().Expression(), enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
 				})
 				if allComponentComputedNamesSerializable {
 					for _, c := range info.components {
