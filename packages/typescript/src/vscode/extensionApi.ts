@@ -22,6 +22,7 @@ export interface ContentMapperManifest {
     readonly cwd?: ContentMapperUri | undefined;
     readonly compilerOptions?: readonly string[] | undefined;
     readonly dynamicConfig?: boolean | undefined;
+    readonly outputExtensions?: Readonly<Record<string, string>> | undefined;
 }
 
 export interface ContentMapperContribution {

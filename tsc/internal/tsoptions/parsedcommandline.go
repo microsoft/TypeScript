@@ -73,6 +73,9 @@ type ParsedCommandLine struct {
 	filePaths                   *collections.Set[tspath.PathKey]
 	filePathsOnce               sync.Once
 
+	contentMapperExtensionRewrites     []tspath.ExtensionRewrite
+	contentMapperExtensionRewritesOnce sync.Once
+
 	locale     locale.Locale
 	localeOnce sync.Once
 }
@@ -394,6 +397,54 @@ func (p *ParsedCommandLine) ContentMapperExtensions() []string {
 	return core.FlatMap(p.ContentMappers(), func(m *contentmapper.Mapper) []string {
 		return m.Definition.Extensions
 	})
+}
+
+func (p *ParsedCommandLine) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
+	p.contentMapperExtensionRewritesOnce.Do(func() {
+		p.contentMapperExtensionRewrites = p.computeContentMapperExtensionRewrites()
+	})
+	return p.contentMapperExtensionRewrites
+}
+
+func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
+	var result []tspath.ExtensionRewrite
+	hasNonIdentityMapping := false
+	ignoreCase := p.CaseSensitivity().IsCaseInsensitive()
+	for _, mapper := range p.ContentMappers() {
+		outputExtensions := mapper.EffectiveOutputExtensions()
+		for _, source := range mapper.Definition.Extensions {
+			target, ok := getContentMapperOutputExtension(outputExtensions, source, ignoreCase)
+			if !ok || target == source || ignoreCase && strings.EqualFold(target, source) {
+				target = source
+			} else {
+				hasNonIdentityMapping = true
+			}
+			result = append(result, tspath.ExtensionRewrite{Source: source, Target: target})
+		}
+	}
+	if !hasNonIdentityMapping {
+		return nil
+	}
+	// Identity entries prevent shorter mappings from claiming a longer registered extension.
+	// The runtime helper uses the first match, so emit the longest extensions first.
+	slices.SortStableFunc(result, func(a, b tspath.ExtensionRewrite) int {
+		return len(b.Source) - len(a.Source)
+	})
+	return result
+}
+
+func getContentMapperOutputExtension(outputExtensions map[string]string, sourceExtension string, ignoreCase bool) (string, bool) {
+	if output, ok := outputExtensions[sourceExtension]; ok {
+		return output, true
+	}
+	if ignoreCase {
+		for source, output := range outputExtensions {
+			if strings.EqualFold(source, sourceExtension) {
+				return output, true
+			}
+		}
+	}
+	return "", false
 }
 
 // GetContentMapperForFileName returns the configured content mapper whose extensions include fileName,

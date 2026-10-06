@@ -1326,6 +1326,36 @@ func TestContentMappersValidation(t *testing.T) {
 			expectedCode:   diagnostics.Content_mapper_file_extension_0_must_begin_with_a.Code(),
 		},
 		{
+			name:           "source extension contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue/foo"] }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "source extension contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue\\foo"] }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension key contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue/foo": ".js"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension key contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue\\foo": ".js"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension value contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue": ".js/foo"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension value contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue": ".js\\foo"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
 			name:           "built-in extension",
 			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
 			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
@@ -1481,6 +1511,43 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 				assert.Assert(t, found, "expected diagnostic %d, got errors: %v", test.expectedCode, parsed.Errors)
 			}
 		})
+	}
+}
+
+func TestContentMapperCompoundExtensionValidation(t *testing.T) {
+	t.Parallel()
+	for _, caseSensitivity := range []tspath.CaseSensitivity{tspath.CaseInsensitive, tspath.CaseSensitive} {
+		extensions := []string{".y.z", ".component.tsx.vue"}
+		for _, extension := range core.Flatten(tspath.AllSupportedExtensionsWithJson) {
+			extensions = append(extensions, ".component"+extension, ".component"+strings.ToUpper(extension))
+		}
+		for _, extension := range extensions {
+			t.Run(fmt.Sprintf("%s/caseSensitive=%t", extension, caseSensitivity.IsCaseSensitive()), func(t *testing.T) {
+				t.Parallel()
+				files := map[string]string{
+					"/tsconfig.json": fmt.Sprintf(`{ "contentMappers": [{ "package": "mapper", "extensions": [%q] }] }`, extension),
+					"/app.ts":        "export {};",
+					"/node_modules/mapper/package.json": `{
+						"name": "mapper",
+						"typescript": { "contentMapper": { "exec": ["mapper"] } }
+					}`,
+				}
+				fs := tsoptionstest.NewVFS(files, caseSensitivity)
+				config := testConfig{
+					jsonText: files["/tsconfig.json"], configFileName: "tsconfig.json", basePath: "/",
+					allFileList: files, existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+				}
+				parsed := getParsedWithJsonSourceFileApi(config, fs, config.basePath)
+				if extension == ".y.z" || extension == ".component.tsx.vue" {
+					assert.Equal(t, len(parsed.Errors), 0)
+					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
+				} else {
+					assert.Equal(t, len(parsed.Errors), 1)
+					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code())
+					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
+				}
+			})
+		}
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type chainedTransformer struct {
@@ -24,11 +25,13 @@ func (ch *chainedTransformer) visit(node *ast.Node) *ast.Node {
 }
 
 type TransformOptions struct {
-	Context                   *printer.EmitContext
-	CompilerOptions           *core.CompilerOptions
-	Resolver                  binder.ReferenceResolver
-	EmitResolver              printer.EmitResolver
-	GetEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind
+	Context                        *printer.EmitContext
+	CompilerOptions                *core.CompilerOptions
+	Resolver                       binder.ReferenceResolver
+	EmitResolver                   printer.EmitResolver
+	GetEmitModuleFormatOfFile      func(file ast.HasFileName) core.ModuleKind
+	ContentMapperExtensionRewrites []tspath.ExtensionRewrite
+	CaseSensitivity                tspath.CaseSensitivity
 }
 
 type TransformerFactory = func(opt *TransformOptions) *Transformer
