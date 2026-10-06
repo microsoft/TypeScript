@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -113,8 +114,14 @@ type TypingsInstallRequest struct {
 }
 
 type TypingsInstallResult struct {
-	TypingsFiles []tspath.RootedFilePath
-	FilesToWatch []tspath.RootedPath
+	TypingsFiles     []tspath.RootedFilePath
+	FilesToWatch     []tspath.RootedPath
+	CacheEntryPoints []CachedTypingEntryPoint
+}
+
+type CachedTypingEntryPoint struct {
+	PackageName string
+	FileName    tspath.RootedFilePath
 }
 
 func (ti *TypingsInstaller) InstallTypings(ctx context.Context, request *TypingsInstallRequest) (*TypingsInstallResult, error) {
@@ -130,41 +137,93 @@ func (ti *TypingsInstaller) InstallTypings(ctx context.Context, request *Typings
 func (ti *TypingsInstaller) discoverAndInstallTypings(ctx context.Context, request *TypingsInstallRequest) (*TypingsInstallResult, error) {
 	ti.init(ctx, request.FS, request.Logger)
 
+	cachedTypings := ti.resolveCachedTypings(request.FS)
+	makeResult := func(files []tspath.RootedFilePath, filesToWatch []tspath.RootedPath) *TypingsInstallResult {
+		result := &TypingsInstallResult{TypingsFiles: files, FilesToWatch: filesToWatch}
+		cachedTypings.Range(func(name string, typing *CachedTyping) bool {
+			if slices.Contains(files, typing.TypingsLocation) {
+				result.CacheEntryPoints = append(result.CacheEntryPoints, CachedTypingEntryPoint{
+					PackageName: name, FileName: typing.TypingsLocation,
+				})
+			}
+			return true
+		})
+		slices.SortFunc(result.CacheEntryPoints, func(a, b CachedTypingEntryPoint) int {
+			return strings.Compare(a.PackageName, b.PackageName)
+		})
+		return result
+	}
 	cachedTypingPaths, newTypingNames, filesToWatch := DiscoverTypings(
 		request.FS,
 		request.Logger,
 		request.TypingsInfo,
 		request.FileNames,
 		request.ProjectRootPath,
-		&ti.packageNameToTypingLocation,
+		cachedTypings,
 		ti.typesRegistry,
 	)
 
 	requestId := ti.installRunCount.Add(1)
 	// install typings
 	if len(newTypingNames) > 0 {
-		filteredTypings := ti.filterTypings(request.Logger, newTypingNames)
+		filteredTypings := ti.filterTypings(request.Logger, newTypingNames, cachedTypings)
 		if len(filteredTypings) != 0 {
-			typingsFiles, err := ti.installTypings(ctx, requestId, cachedTypingPaths, filteredTypings, request.Logger)
+			typingsFiles, err := ti.installTypings(ctx, requestId, cachedTypingPaths, filteredTypings, cachedTypings, request.Logger)
 			if err != nil {
 				return nil, err
 			}
-			return &TypingsInstallResult{
-				TypingsFiles: typingsFiles,
-				FilesToWatch: filesToWatch,
-			}, nil
+			return makeResult(typingsFiles, filesToWatch), nil
 		}
 		request.Logger.Log("ATA:: All typings are known to be missing or invalid - no need to install more typings")
 	} else {
 		request.Logger.Log("ATA:: No new typings were requested as a result of typings discovery")
 	}
 
-	return &TypingsInstallResult{
-		TypingsFiles: cachedTypingPaths,
-		FilesToWatch: filesToWatch,
-	}, nil
+	return makeResult(cachedTypingPaths, filesToWatch), nil
 	// !!! sheetal events to send
 	// this.event(response, "setTypings");
+}
+
+// Resolve cached entry points afresh: a package can change its types field
+// without changing its version or deleting the previously resolved file.
+func (ti *TypingsInstaller) resolveCachedTypings(fs vfs.FS) *collections.SyncMap[string, *CachedTyping] {
+	resolver := module.NewResolver(module.ResolverOptions{
+		Host:            &resolutionHost{fs: fs, currentDirectory: ti.typingsLocation},
+		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
+	})
+	result := &collections.SyncMap[string, *CachedTyping]{}
+	ti.packageNameToTypingLocation.Range(func(name string, typing *CachedTyping) bool {
+		if fileName := ti.typingToFileName(resolver, name); fileName != "" {
+			result.Store(name, &CachedTyping{TypingsLocation: fileName, Version: typing.Version})
+		}
+		return true
+	})
+	return result
+}
+
+func NewCachedTypingEntryPointValidator(fs vfs.FS, location tspath.RootedDirectoryPath) func([]CachedTypingEntryPoint) bool {
+	var resolver module.Resolver
+	resolved := map[string]tspath.RootedFilePath{}
+	return func(entries []CachedTypingEntryPoint) bool {
+		for _, entry := range entries {
+			fileName, ok := resolved[entry.PackageName]
+			if !ok {
+				if resolver == nil {
+					resolver = module.NewResolver(module.ResolverOptions{
+						Host:            &resolutionHost{fs: fs, currentDirectory: location},
+						CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
+					})
+				}
+				result, _, _ := resolver.ResolveModuleName(entry.PackageName, location.ResolveFile("index.d.ts"), core.ModuleKindNone, nil)
+				fileName = result.ResolvedFileName
+				resolved[entry.PackageName] = fileName
+			}
+			if fileName == "" || fs.CaseSensitivity().ComparePaths(fileName.AsPath(), entry.FileName.AsPath()) != 0 {
+				return false
+			}
+		}
+		return true
+	}
 }
 
 func (ti *TypingsInstaller) installTypings(
@@ -172,6 +231,7 @@ func (ti *TypingsInstaller) installTypings(
 	requestID int32,
 	currentlyCachedTypings []tspath.RootedFilePath,
 	filteredTypings []string,
+	cachedTypings *collections.SyncMap[string, *CachedTyping],
 	logger logging.Logger,
 ) ([]tspath.RootedFilePath, error) {
 	// !!! sheetal events to send
@@ -219,6 +279,7 @@ func (ti *TypingsInstaller) installTypings(
 			newVersion := semver.MustParse(useVersion)
 			newTyping := &CachedTyping{TypingsLocation: typingFile, Version: &newVersion}
 			ti.packageNameToTypingLocation.Store(packageName, newTyping)
+			cachedTypings.Store(packageName, newTyping)
 			installedTypingFiles = append(installedTypingFiles, typingFile)
 		}
 		logger.Log(fmt.Sprintf("ATA:: Installed typing files %v", installedTypingFiles))
@@ -331,6 +392,7 @@ func installNpmPackages(
 func (ti *TypingsInstaller) filterTypings(
 	logger logging.Logger,
 	typingsToInstall []string,
+	cachedTypings *collections.SyncMap[string, *CachedTyping],
 ) []string {
 	var result []string
 	for _, typing := range typingsToInstall {
@@ -351,7 +413,7 @@ func (ti *TypingsInstaller) filterTypings(
 			logger.Log(fmt.Sprintf("ATA:: '%s':: Entry for package '%s' does not exist in local types registry - skipping...", typing, typingKey))
 			continue
 		}
-		if typingLocation, ok := ti.packageNameToTypingLocation.Load(typingKey); ok && isTypingUpToDate(typingLocation, typesRegistryEntry) {
+		if typingLocation, ok := cachedTypings.Load(typingKey); ok && isTypingUpToDate(typingLocation, typesRegistryEntry) {
 			logger.Log(fmt.Sprintf("ATA:: '%s':: '%s' already has an up-to-date typing - skipping...", typing, typingKey))
 			continue
 		}

@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -34,11 +35,12 @@ const (
 )
 
 type ProjectCollectionBuilder struct {
-	sessionOptions          *SessionOptions
-	parseCache              *ParseCache
-	contentMappedParseCache *ContentMappedParseCache
-	extendedConfigCache     *ExtendedConfigCache
-	contentMapperHost       contentmapper.Host
+	sessionOptions                    *SessionOptions
+	cachedTypingEntryPointsAreCurrent func([]ata.CachedTypingEntryPoint) bool
+	parseCache                        *ParseCache
+	contentMappedParseCache           *ContentMappedParseCache
+	extendedConfigCache               *ExtendedConfigCache
+	contentMapperHost                 contentmapper.Host
 
 	ctx                                context.Context
 	fs                                 *snapshotFSBuilder
@@ -95,6 +97,7 @@ func newProjectCollectionBuilder(
 		inferredContentMappers:                   inferredContentMappers,
 		inferredContentMapperExtensions:          inferredContentMapperExtensions,
 		sessionOptions:                           sessionOptions,
+		cachedTypingEntryPointsAreCurrent:        ata.NewCachedTypingEntryPointValidator(fs.fs, sessionOptions.TypingsLocation),
 		parseCache:                               parseCache,
 		contentMappedParseCache:                  contentMappedParseCache,
 		extendedConfigCache:                      extendedConfigCache,
@@ -497,7 +500,7 @@ func (b *ProjectCollectionBuilder) DidChangeTypingsWatchInputs(summary FileChang
 				return fileChangeSummaryAffectsTypingsWatch(
 					summary,
 					project.installedTypingsFilesToWatch,
-					project.typingsFiles,
+					typingDiscoveryFiles(project.typingsFiles, project.installedTypingCacheEntryPoints),
 					b.fs.fs.CaseSensitivity(),
 				)
 			},
@@ -516,7 +519,7 @@ func (b *ProjectCollectionBuilder) DidChangeTypingsWatchInputs(summary FileChang
 	if b.inferredProjectATAState != nil && fileChangeSummaryAffectsTypingsWatch(
 		summary,
 		b.inferredProjectATAState.installedTypingsFilesToWatch,
-		b.inferredProjectATAState.typingsFiles,
+		typingDiscoveryFiles(b.inferredProjectATAState.typingsFiles, b.inferredProjectATAState.installedTypingCacheEntryPoints),
 		b.fs.fs.CaseSensitivity(),
 	) {
 		b.invalidateInferredProjectATAState("typings watch changes", logger)
@@ -532,7 +535,7 @@ func fileChangeSummaryAffectsTypingsWatch(
 	if summary.InvalidateAll {
 		return true
 	}
-	if len(filesToWatch) == 0 {
+	if len(filesToWatch) == 0 && len(typingsFiles) == 0 {
 		return false
 	}
 	affectsWatch := func(uri lsproto.DocumentUri) bool {
@@ -568,6 +571,45 @@ func fileChangeSummaryAffectsTypingsWatch(
 		}
 	}
 	return false
+}
+
+func typingDiscoveryFiles(files []tspath.RootedFilePath, entries []ata.CachedTypingEntryPoint) []tspath.RootedFilePath {
+	return core.Filter(files, func(file tspath.RootedFilePath) bool {
+		return !slices.ContainsFunc(entries, func(entry ata.CachedTypingEntryPoint) bool { return entry.FileName == file })
+	})
+}
+
+func (b *ProjectCollectionBuilder) DidChangeCachedTypingEntryPoints(summary FileChangeSummary, logger *logging.LogTree) {
+	// Cache outputs do not advance the discovery invalidation generation: a
+	// result delivered with an install's writes can already contain the new entry points.
+	affected := func(entries []ata.CachedTypingEntryPoint) bool {
+		var paths []tspath.RootedPath
+		for _, entry := range entries {
+			packageDirectory := b.sessionOptions.TypingsLocation.ResolveDirectory("node_modules/@types/" + entry.PackageName)
+			paths = append(paths, packageDirectory.AsPath(), b.fs.fs.Realpath(packageDirectory.AsPath()), entry.FileName.AsPath())
+		}
+		return fileChangeSummaryAffectsTypingsWatch(summary, paths, nil, b.fs.fs.CaseSensitivity()) &&
+			!b.cachedTypingEntryPointsAreCurrent(entries)
+	}
+	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		entry.ChangeIf(
+			func(project *Project) bool {
+				return project.installedTypingsInfo != nil &&
+					affected(project.installedTypingCacheEntryPoints)
+			},
+			func(project *Project) {
+				project.installedTypingsInfo = nil
+				project.setTypingsFiles(nil)
+				project.dirty = true
+				project.dirtyFilePath = ""
+			},
+		)
+		return true
+	})
+	if b.inferredProjectATAState != nil &&
+		affected(b.inferredProjectATAState.installedTypingCacheEntryPoints) {
+		b.clearInferredProjectATAState("cached typing entry points changed", logger)
+	}
 }
 
 func (b *ProjectCollectionBuilder) DidInvalidateTypingsWatchState(logger *logging.LogTree) {
@@ -1039,6 +1081,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				p.installedTypingsSnapshotID = ataChange.SnapshotID
 				p.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
 				p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
+				p.installedTypingCacheEntryPoints = slices.Clone(ataChange.TypingCacheEntryPoints)
 				p.setTypingsFiles(ataChange.TypingsFiles)
 				typingsWatchGlobs := getTypingsLocationsGlobs(
 					slices.Concat(ataChange.TypingsFilesToWatch, core.Map(ataChange.TypingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
@@ -1055,6 +1098,12 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 
 	for projectID, ataChange := range ataChanges {
 		logger.Embed(ataChange.Logs)
+		if !b.cachedTypingEntryPointsAreCurrent(ataChange.TypingCacheEntryPoints) {
+			if logger != nil {
+				logger.Logf("Ignoring ATA state with obsolete cached typing entry points for project %s", projectID)
+			}
+			continue
+		}
 		if ataChange.SnapshotID < installedTypingsSnapshotID(projectID) {
 			if logger != nil {
 				logger.Logf("Ignoring ATA state older than installed state for project %s", projectID)
@@ -1064,7 +1113,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 		if fileChangeSummaryAffectsTypingsWatch(
 			fileChanges,
 			slices.Concat(ataChange.TypingsFilesToWatch, core.Map(ataChange.FileNames, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
-			ataChange.TypingsFiles,
+			typingDiscoveryFiles(ataChange.TypingsFiles, ataChange.TypingCacheEntryPoints),
 			b.fs.fs.CaseSensitivity(),
 		) {
 			b.invalidateProjectATAState(projectID)
@@ -1093,12 +1142,13 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 					b.fs.fs.CaseSensitivity(),
 				)
 				b.inferredProjectATAState = &inferredProjectATAState{
-					installedTypingsInfo:         ataChange.TypingsInfo,
-					installedTypingsFileNames:    slices.Clone(ataChange.FileNames),
-					installedTypingsFilesToWatch: slices.Clone(ataChange.TypingsFilesToWatch),
-					typingsFiles:                 slices.Clone(ataChange.TypingsFiles),
-					typingsWatch:                 typingsWatch.Clone(typingsWatchGlobs),
-					snapshotID:                   ataChange.SnapshotID,
+					installedTypingsInfo:            ataChange.TypingsInfo,
+					installedTypingsFileNames:       slices.Clone(ataChange.FileNames),
+					installedTypingsFilesToWatch:    slices.Clone(ataChange.TypingsFilesToWatch),
+					installedTypingCacheEntryPoints: slices.Clone(ataChange.TypingCacheEntryPoints),
+					typingsFiles:                    slices.Clone(ataChange.TypingsFiles),
+					typingsWatch:                    typingsWatch.Clone(typingsWatchGlobs),
+					snapshotID:                      ataChange.SnapshotID,
 				}
 			}
 		} else if syntheticProjectID, ok := projectID.Synthetic(); ok {

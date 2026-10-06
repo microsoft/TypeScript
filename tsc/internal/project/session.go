@@ -2075,19 +2075,21 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 						project.installedTypingsInfo == nil ||
 						!typingsInfo.Equals(*project.installedTypingsInfo) ||
 						!slices.Equal(fileNames, project.installedTypingsFileNames) ||
-						!slices.Equal(result.FilesToWatch, project.installedTypingsFilesToWatch) {
+						!slices.Equal(result.FilesToWatch, project.installedTypingsFilesToWatch) ||
+						!slices.Equal(result.CacheEntryPoints, project.installedTypingCacheEntryPoints) {
 						s.pendingATAChangesMu.Lock()
 						projectID := project.ID()
 						pendingChange := s.pendingATAChanges[projectID]
 						updatedPendingChange := pendingChange == nil || pendingChange.SnapshotID <= newSnapshot.ID()
 						if updatedPendingChange {
 							s.pendingATAChanges[projectID] = &ATAStateChange{
-								SnapshotID:          newSnapshot.ID(),
-								TypingsInfo:         &typingsInfo,
-								FileNames:           fileNames,
-								TypingsFiles:        result.TypingsFiles,
-								TypingsFilesToWatch: result.FilesToWatch,
-								Logs:                logTree,
+								SnapshotID:             newSnapshot.ID(),
+								TypingsInfo:            &typingsInfo,
+								FileNames:              fileNames,
+								TypingsFiles:           result.TypingsFiles,
+								TypingsFilesToWatch:    result.FilesToWatch,
+								TypingCacheEntryPoints: result.CacheEntryPoints,
+								Logs:                   logTree,
 							}
 						}
 						s.pendingATAChangesMu.Unlock()

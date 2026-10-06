@@ -193,7 +193,8 @@ type Project struct {
 	installedTypingsFileNames []tspath.RootedFilePath
 	// installedTypingsFilesToWatch are discovery inputs whose changes require
 	// typings discovery to run again.
-	installedTypingsFilesToWatch []tspath.RootedPath
+	installedTypingsFilesToWatch    []tspath.RootedPath
+	installedTypingCacheEntryPoints []ata.CachedTypingEntryPoint
 	// ataInvalidationSnapshotID is the latest snapshot that invalidated this
 	// project's ATA discovery inputs.
 	ataInvalidationSnapshotID uint64
@@ -203,12 +204,13 @@ type Project struct {
 }
 
 type inferredProjectATAState struct {
-	installedTypingsInfo         *ata.TypingsInfo
-	installedTypingsFileNames    []tspath.RootedFilePath
-	installedTypingsFilesToWatch []tspath.RootedPath
-	typingsFiles                 []tspath.RootedFilePath
-	typingsWatch                 *WatchedFiles[PatternsAndIgnored]
-	snapshotID                   uint64
+	installedTypingsInfo            *ata.TypingsInfo
+	installedTypingsFileNames       []tspath.RootedFilePath
+	installedTypingsFilesToWatch    []tspath.RootedPath
+	installedTypingCacheEntryPoints []ata.CachedTypingEntryPoint
+	typingsFiles                    []tspath.RootedFilePath
+	typingsWatch                    *WatchedFiles[PatternsAndIgnored]
+	snapshotID                      uint64
 }
 
 func (p *Project) inferredProjectATAState() *inferredProjectATAState {
@@ -223,12 +225,13 @@ func (p *Project) inferredProjectATAState() *inferredProjectATAState {
 		snapshotID = p.ProgramLastUpdate
 	}
 	return &inferredProjectATAState{
-		installedTypingsInfo:         p.installedTypingsInfo,
-		installedTypingsFileNames:    slices.Clone(p.installedTypingsFileNames),
-		installedTypingsFilesToWatch: slices.Clone(p.installedTypingsFilesToWatch),
-		typingsFiles:                 slices.Clone(p.typingsFiles),
-		typingsWatch:                 p.typingsWatch,
-		snapshotID:                   snapshotID,
+		installedTypingsInfo:            p.installedTypingsInfo,
+		installedTypingsFileNames:       slices.Clone(p.installedTypingsFileNames),
+		installedTypingsFilesToWatch:    slices.Clone(p.installedTypingsFilesToWatch),
+		installedTypingCacheEntryPoints: slices.Clone(p.installedTypingCacheEntryPoints),
+		typingsFiles:                    slices.Clone(p.typingsFiles),
+		typingsWatch:                    p.typingsWatch,
+		snapshotID:                      snapshotID,
 	}
 }
 
@@ -236,7 +239,7 @@ func (s *inferredProjectATAState) canApply(project *Project, fs *snapshotFSBuild
 	if s == nil || s.installedTypingsInfo == nil {
 		return false
 	}
-	if !watchEnabled && len(s.installedTypingsFilesToWatch) > 0 {
+	if !watchEnabled && (len(s.installedTypingsFilesToWatch) > 0 || len(s.typingsFiles) > 0) {
 		return false
 	}
 	if !s.installedTypingsInfo.Equals(project.ComputeTypingsInfo()) ||
@@ -256,6 +259,7 @@ func (s *inferredProjectATAState) apply(project *Project) {
 	project.installedTypingsInfo = s.installedTypingsInfo
 	project.installedTypingsFileNames = slices.Clone(s.installedTypingsFileNames)
 	project.installedTypingsFilesToWatch = slices.Clone(s.installedTypingsFilesToWatch)
+	project.installedTypingCacheEntryPoints = slices.Clone(s.installedTypingCacheEntryPoints)
 	project.setTypingsFiles(slices.Clone(s.typingsFiles))
 	project.typingsWatch = s.typingsWatch
 	project.installedTypingsSnapshotID = s.snapshotID
@@ -276,8 +280,9 @@ func (s *inferredProjectATAState) applyWatchState(project *Project) {
 	project.installedTypingsFileNames = slices.Clone(s.installedTypingsFileNames)
 	project.installedTypingsFilesToWatch = slices.Concat(
 		slices.Clone(s.installedTypingsFilesToWatch),
-		core.Map(s.typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() }),
+		core.Map(typingDiscoveryFiles(s.typingsFiles, s.installedTypingCacheEntryPoints), func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() }),
 	)
+	project.installedTypingCacheEntryPoints = slices.Clone(s.installedTypingCacheEntryPoints)
 	project.typingsWatch = s.typingsWatch
 	project.installedTypingsSnapshotID = s.snapshotID
 }
@@ -533,12 +538,13 @@ func (p *Project) Clone() *Project {
 		moduleResolverFactory: p.moduleResolverFactory,
 		moduleResolverID:      p.moduleResolverID,
 
-		installedTypingsInfo:         p.installedTypingsInfo,
-		installedTypingsFileNames:    p.installedTypingsFileNames,
-		installedTypingsFilesToWatch: p.installedTypingsFilesToWatch,
-		typingsFiles:                 p.typingsFiles,
-		ataInvalidationSnapshotID:    p.ataInvalidationSnapshotID,
-		installedTypingsSnapshotID:   p.installedTypingsSnapshotID,
+		installedTypingsInfo:            p.installedTypingsInfo,
+		installedTypingsFileNames:       p.installedTypingsFileNames,
+		installedTypingsFilesToWatch:    p.installedTypingsFilesToWatch,
+		installedTypingCacheEntryPoints: p.installedTypingCacheEntryPoints,
+		typingsFiles:                    p.typingsFiles,
+		ataInvalidationSnapshotID:       p.ataInvalidationSnapshotID,
+		installedTypingsSnapshotID:      p.installedTypingsSnapshotID,
 	}
 }
 

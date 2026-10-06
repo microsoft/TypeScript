@@ -426,8 +426,9 @@ type ATAStateChange struct {
 	// TypingsFiles is the new list of typing files for the project.
 	TypingsFiles []tspath.RootedFilePath
 	// TypingsFilesToWatch is the new list of typing files to watch for changes.
-	TypingsFilesToWatch []tspath.RootedPath
-	Logs                *logging.LogTree
+	TypingsFilesToWatch    []tspath.RootedPath
+	TypingCacheEntryPoints []ata.CachedTypingEntryPoint
+	Logs                   *logging.LogTree
 }
 
 func (s *Snapshot) Clone(
@@ -528,6 +529,7 @@ func (s *Snapshot) Clone(
 		typingsWatchChanges = unfilteredFileChanges
 		typingsWatchChanges.InvalidateAll = typingsWatchChanges.InvalidateAll || change.fileChanges.InvalidateAll
 	}
+	typingCacheChanges := typingsWatchChanges
 	if typingsLocation := store.options.TypingsLocation; typingsLocation != "" {
 		typingsWatchChanges = typingsWatchChanges.withoutChangesWithin(typingsLocation.AsPath(), fs.fs.CaseSensitivity())
 		if realTypingsLocation := fs.fs.Realpath(typingsLocation.AsPath()); realTypingsLocation != typingsLocation.AsPath() {
@@ -598,6 +600,9 @@ func (s *Snapshot) Clone(
 	}
 	if !typingsWatchChanges.IsEmpty() {
 		projectCollectionBuilder.DidChangeTypingsWatchInputs(typingsWatchChanges, logger.Fork("DidChangeTypingsWatchInputs"))
+	}
+	if !typingCacheChanges.IsEmpty() {
+		projectCollectionBuilder.DidChangeCachedTypingEntryPoints(typingCacheChanges, logger.Fork("DidChangeCachedTypingEntryPoints"))
 	}
 	if len(change.ataChanges) != 0 {
 		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, typingsWatchChanges, logger.Fork("DidUpdateATAState"))

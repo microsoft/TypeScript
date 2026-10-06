@@ -14,6 +14,28 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestTypingsWatchWithoutDiscoveryDirectories(t *testing.T) {
+	t.Parallel()
+
+	const file = "/workspace/typings/jquery.d.ts"
+	for _, changeType := range []lsproto.FileChangeType{
+		lsproto.FileChangeTypeCreated, lsproto.FileChangeTypeChanged, lsproto.FileChangeTypeDeleted,
+	} {
+		summary := FileChangeSummary{}
+		uri := lsproto.DocumentUri("file://" + file)
+		switch changeType {
+		case lsproto.FileChangeTypeCreated:
+			summary.Created.Add(uri)
+		case lsproto.FileChangeTypeChanged:
+			summary.Changed.Add(uri)
+		case lsproto.FileChangeTypeDeleted:
+			summary.Deleted.Add(uri)
+		}
+		assert.Assert(t, fileChangeSummaryAffectsTypingsWatch(summary, nil, []tspath.RootedFilePath{file}, tspath.CaseInsensitive))
+		assert.Assert(t, !fileChangeSummaryAffectsTypingsWatch(summary, nil, nil, tspath.CaseInsensitive))
+	}
+}
+
 func TestSnapshot(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {

@@ -986,6 +986,88 @@ func TestATA(t *testing.T) {
 		assert.Assert(t, typingsFile == nil, "jquery types should not be reused after the manifest changes")
 	})
 
+	for _, variant := range []string{"regular", "symlinked cache", "symlinked package"} {
+		t.Run("cached typings entry point changes without manifest discovery "+variant, func(t *testing.T) {
+			t.Parallel()
+
+			packageDirectory := projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery"
+			switch variant {
+			case "symlinked cache":
+				packageDirectory = "/real/cache/node_modules/@types/jquery"
+			case "symlinked package":
+				packageDirectory = "/real/jquery"
+			}
+			manifest := packageDirectory + "/package.json"
+			indexFile := tspath.RootedFilePathFromNormalized(packageDirectory + "/index.d.ts")
+			newFile := tspath.RootedFilePathFromNormalized(packageDirectory + "/new.d.ts")
+			files := map[string]any{
+				"/user/username/projects/project/jquery.js": ``,
+				manifest:                         `{"name":"@types/jquery","types":"index.d.ts"}`,
+				packageDirectory + "/index.d.ts": `declare const oldEntry: number;`,
+				packageDirectory + "/new.d.ts":   `declare const newEntry: number;`,
+				projecttestutil.TestTypingsLocation + "/package.json":      `{"devDependencies":{"@types/jquery":"^1.3.0"}}`,
+				projecttestutil.TestTypingsLocation + "/package-lock.json": `{"dependencies":{"@types/jquery":{"version":"1.3.0"}}}`,
+			}
+			switch variant {
+			case "symlinked cache":
+				files[projecttestutil.TestTypingsLocation] = vfstest.Symlink("/real/cache")
+				for _, name := range []string{"package.json", "package-lock.json"} {
+					files["/real/cache/"+name] = files[projecttestutil.TestTypingsLocation+"/"+name]
+					delete(files, projecttestutil.TestTypingsLocation+"/"+name)
+				}
+			case "symlinked package":
+				files[projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery"] = vfstest.Symlink(packageDirectory)
+			}
+			session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+				TypesRegistry: []string{"jquery"},
+			})
+			ctx := context.Background()
+			session.DidChangeCompilerOptionsForInferredProjects(ctx, &core.CompilerOptions{
+				AllowJs: core.TSTrue,
+				Types:   []string{},
+			})
+			uri := lsproto.DocumentUri("file:///user/username/projects/project/jquery.js")
+			// Filename discovery acquires jquery without scanning manifests.
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			session.WaitForBackgroundTasks()
+			ls, err := session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			assert.Assert(t, ls.GetProgram().GetSourceFile(indexFile) != nil)
+			session.WaitForBackgroundTasks()
+			assert.Assert(t, utils.WatchesFile(strings.ToLower(manifest)))
+
+			assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(manifest), `{"name":"@types/jquery","types":"new.d.ts"}`))
+			session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+				Uri: lsproto.DocumentUri("file://" + manifest), Type: lsproto.FileChangeTypeChanged,
+			}})
+			_, err = session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+			ls, err = session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), newFile), "ATA should rediscover the current entry point")
+			assert.Assert(t, !slices.Contains(ls.GetProgram().CommandLine().FileNames(), indexFile), "ATA must remove the old entry point")
+			assert.Equal(t, len(utils.NpmExecutor().NpmInstallCalls()), 1, "changing a cached entry point should not reinstall an up-to-date package")
+
+			session.DidCloseFile(ctx, uri)
+			snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+			assert.NilError(t, err)
+			assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+			snapshot.Deref()
+			assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(manifest), `{"name":"@types/jquery","types":"index.d.ts"}`))
+			session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+				Uri: lsproto.DocumentUri("file://" + manifest), Type: lsproto.FileChangeTypeChanged,
+			}})
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			inferred := session.Snapshot().ProjectCollection.InferredProject()
+			assert.Assert(t, !slices.Contains(inferred.GetProgram().CommandLine().FileNames(), newFile), "dormant state must not restore the obsolete entry point")
+			session.WaitForBackgroundTasks()
+			ls, err = session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), indexFile))
+		})
+	}
+
 	t.Run("cached inferred typings survive an unbuilt replacement project", func(t *testing.T) {
 		t.Parallel()
 
@@ -1433,8 +1515,9 @@ func TestATA(t *testing.T) {
 		session.DidCloseFile(ctx, uri)
 		session.WaitForBackgroundTasks()
 		replacement := bundled.WrapFS(vfstest.FromMap(map[string]string{
-			"/user/username/projects/project/app.js":       "",
-			"/user/username/projects/project/package.json": `{"name":"test"}`,
+			"/user/username/projects/project/app.js":                                       "",
+			"/user/username/projects/project/package.json":                                 `{"name":"test"}`,
+			projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts": `declare const $: { x: number }`,
 		}, tspath.CaseInsensitive))
 		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
 			FileSystem:        replacement,
@@ -1442,11 +1525,17 @@ func TestATA(t *testing.T) {
 		})
 		assert.NilError(t, err)
 		snapshot.Deref()
-		session.DidOpenFile(ctx, uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
-
-		ls, err := session.GetLanguageService(ctx, uri)
+		snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, &project.APISnapshotRequest{
+			FileSystem: replacement,
+			OpenFiles: map[tspath.PathKey]tspath.RootedFilePath{
+				replacement.CaseSensitivity().PathKey(uri.FileName().AsPath()): uri.FileName(),
+			},
+		})
 		assert.NilError(t, err)
-		typingsFile := ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts")
+		defer snapshot.Deref()
+		inferred := snapshot.ProjectCollection.InferredProject()
+		assert.Assert(t, inferred != nil && inferred.GetProgram() != nil)
+		typingsFile := inferred.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts")
 		assert.Assert(t, typingsFile == nil, "jquery types should not be reused after replacing the filesystem")
 	})
 
