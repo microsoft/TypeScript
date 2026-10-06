@@ -1,15 +1,18 @@
 import {
     API,
     formatDiagnostics,
+    type FormatDiagnosticsHost,
     formatDiagnosticsWithColorAndContext,
 } from "@typescript/typescript/unstable/async";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import assert from "node:assert";
 import {
     describe,
     test,
 } from "node:test";
-import { areTestsFiltered } from "./testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "./testUtils.ts";
 
 describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
     test("formats diagnostics with a configured program host", async () => {
@@ -40,6 +43,15 @@ describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
             assert.ok(color.includes("~"), color);
             assert.ok(color.includes("\x1b["), color);
             assert.ok(color.endsWith("\r\n"), color);
+            for (const directory of ["/project", "/project/src/..", "\\project\\src\\.."]) {
+                const stringHost: FormatDiagnosticsHost = {
+                    getCurrentDirectory: () => directory,
+                    getCanonicalFileName: fileName => fileName,
+                    getNewLine: () => "\r\n",
+                };
+                assert.equal(formatDiagnostics(diagnostics, stringHost), plain);
+                assert.equal(formatDiagnosticsWithColorAndContext(diagnostics, stringHost), color);
+            }
             const doubled = formatDiagnosticsWithColorAndContext([diagnostics[0], diagnostics[0]], program);
             assert.equal(doubled, color + "\r\n" + color);
 

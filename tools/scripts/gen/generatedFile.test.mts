@@ -60,6 +60,11 @@ test("validate generates before building and selects the generation scope", asyn
             runTestAPI: action("test:api"),
             runTestBenchmarks: action("test:benchmarks"),
             runTestTools: action("test:tools"),
+            run: async (command: string, args: string[]) => {
+                assert.equal(command, "node");
+                assert.deepEqual(Array.from(args), ["--test", "./tools/scripts/tsc/options.test.ts"]);
+                calls.push("test:options");
+            },
             runSmokeTest: action("test:smoke"),
             runLint: action("lint"),
             runFormat: action("format"),
@@ -71,6 +76,7 @@ test("validate generates before building and selects the generation scope", asyn
         assert.ok(calls.indexOf("build") < calls.indexOf("test:tsc"));
         assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
         assert.equal(calls.includes("test:tools"), "all" in options);
+        assert.equal(calls.includes("test:options"), "all" in options);
         if ("all" in options) {
             assert.deepEqual(calls.filter(name => name.startsWith("generate")), ["generate"]);
         }
@@ -349,7 +355,7 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const generate = () => x("npx", ["hereby", "generate:go"], { throwOnError: true, nodeOptions: { cwd: root } });
     const first = await generate();
     assert.doesNotMatch(first.stdout, /\$ go generate|npm run --silent cache|\$ node .*generate-unicode-data/);
-    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/proto.generated.ts"], { cwd: root });
+    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/*.generated.ts", "packages/typescript/src/enums/*.ts", "packages/typescript/schemas/*.schema.json"], { cwd: root });
     const timestamps = files.map(file => fs.statSync(path.join(root, file)).mtimeMs);
     const current = await generate();
     assert.doesNotMatch(current.stdout, /Generated codegen outputs|Generated Unicode tables/);
@@ -358,7 +364,50 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const fallback = await x("go", ["-C", "./tsc", "generate", "./internal/diagnostics"], { throwOnError: true, nodeOptions: { cwd: root } });
     assert.equal(fallback.stdout.match(/codegen outputs are already up to date/g)?.length, 2);
     const nested = await x("npx", ["hereby", "generate:compileroptions"], { throwOnError: true, nodeOptions: { cwd: path.join(root, "tsc/internal/core") } });
-    assert.equal(nested.stdout.match(/codegen outputs are already up to date/g)?.length, 2);
+    assert.equal(nested.stdout.match(/codegen outputs are already up to date/g)?.length, 4);
+    assert.match(nested.stdout, /Enums are up to date/);
+});
+
+test("generate:go generates new option diagnostics before Go-dependent generators", async () => {
+    const root = path.resolve(import.meta.dirname, "../../..");
+    const generate = async () => {
+        const result = await x("npx", ["hereby", "generate:go"], { nodeOptions: { cwd: root } });
+        assert.equal(result.exitCode, 0, result.stdout + result.stderr);
+        return result;
+    };
+    await generate();
+    const metadataFile = path.join(root, "tools/scripts/tsc/options.ts");
+    const diagnosticsFile = path.join(root, "tsc/internal/diagnostics/diagnosticMessages.json");
+    const protocolFile = path.join(root, "packages/typescript/src/api/proto.generated.ts");
+    const originalMetadata = fs.readFileSync(metadataFile, "utf8");
+    const originalDiagnostics = fs.readFileSync(diagnosticsFile, "utf8");
+    const originalProtocol = fs.readFileSync(protocolFile, "utf8");
+    const messages: Record<string, { code: number; category: string; }> = JSON.parse(originalDiagnostics);
+    const message = "Codegen ordering probe";
+    assert.equal(messages[message], undefined);
+    messages[message] = { category: "Message", code: Math.max(...Object.values(messages).map(message => message.code)) + 1 };
+    const metadata = originalMetadata.replace(
+        'diagnostic("Print all of the files read during the compilation.")',
+        `diagnostic("${message}")`,
+    );
+    assert.notEqual(metadata, originalMetadata);
+    try {
+        fs.writeFileSync(diagnosticsFile, JSON.stringify(messages, null, 4) + "\n");
+        fs.writeFileSync(metadataFile, metadata);
+        // Exercise protocol generation too, rather than accepting its cached output.
+        fs.writeFileSync(protocolFile, originalProtocol + "\n");
+        const { stdout } = await generate();
+        assert.match(stdout, /All generated values match Go/);
+        assert.match(stdout, /\$ go -C \.\/tools run \.\/gen-proto/);
+        assert.equal(fs.readFileSync(protocolFile, "utf8"), originalProtocol);
+        assert.match(fs.readFileSync(path.join(root, "tsc/internal/tsoptions/declarations_generated.go"), "utf8"), /diagnostics\.Codegen_ordering_probe/);
+        assert.match(fs.readFileSync(path.join(root, "tsc/internal/diagnostics/diagnostics_generated.go"), "utf8"), /Codegen_ordering_probe/);
+    }
+    finally {
+        fs.writeFileSync(metadataFile, originalMetadata);
+        fs.writeFileSync(diagnosticsFile, originalDiagnostics);
+        await generate();
+    }
 });
 
 test("generate includes standalone generators without Go traversal", async () => {
@@ -387,12 +436,12 @@ test("generate includes standalone generators without Go traversal", async () =>
         fs.readFileSync(path.join(root, "packages/typescript/vendor/vscode-jsonrpc/package.json")),
         fs.readFileSync(path.join(root, "node_modules/vscode-jsonrpc/package.json")),
     );
-    const lspOutput = path.join(root, "tsc/internal/lsp/lsproto/lsp_generated.go");
-    const timestamp = fs.statSync(lspOutput).mtimeMs;
+    const lspOutputs = ["tsc/internal/lsp/lsproto/lsp_generated.go", "packages/typescript/src/vscode/protocol.generated.ts"].map(file => path.join(root, file));
+    const timestamps = lspOutputs.map(file => fs.statSync(file).mtimeMs);
     const current = await x("npx", ["hereby", "generate:lsp"], { throwOnError: true, nodeOptions: { cwd: root } });
     assert.match(current.stdout, /LSP bindings are up to date/);
     assert.doesNotMatch(current.stdout, /Using vscode-languageclient/);
-    assert.equal(fs.statSync(lspOutput).mtimeMs, timestamp);
+    assert.deepEqual(lspOutputs.map(file => fs.statSync(file).mtimeMs), timestamps);
 });
 
 test("localization and vendoring preserve current outputs", async context => {
@@ -778,6 +827,21 @@ test("enum generation skips unchanged outputs and Go verification", async () => 
     const regenerated = await generate();
     assert.match(regenerated.stdout, /All generated values match Go\./);
     assert.match((await generate()).stdout, /Enums are up to date\./);
+
+    const astSchema = path.join(root, "tools/scripts/tsc/ast.json");
+    const originalSchema = fs.readFileSync(astSchema, "utf8");
+    const goKinds = path.join(root, "tsc/internal/ast/kind_generated.go");
+    const goKindsTimestamp = fs.statSync(goKinds).mtimeMs;
+    try {
+        fs.writeFileSync(astSchema, originalSchema + "\n");
+        assert.match((await generate()).stdout, /All generated values match Go\./);
+        assert.equal(fs.statSync(goKinds).mtimeMs, goKindsTimestamp);
+        assert.match((await generate()).stdout, /Enums are up to date\./);
+    }
+    finally {
+        fs.writeFileSync(astSchema, originalSchema);
+        await generate();
+    }
 });
 
 test("AST generation forwards force to schema generators and the kind stringer", async () => {
@@ -816,6 +880,8 @@ test("package generation forwards force to AST, encoder, and sync generators", a
 test("API protocol generation caches formatted output and supports force", async context => {
     const root = path.resolve(import.meta.dirname, "../../..");
     const output = path.join(root, "packages/typescript/src/api/proto.generated.ts");
+    const compilerOptions = path.join(root, "packages/typescript/src/api/compilerOptions.generated.ts");
+    const compilerOptionsTimestamp = fs.statSync(compilerOptions).mtimeMs;
     const generate = (force = false) => x("npx", ["hereby", "generate:api", ...(force ? ["--force"] : [])], { throwOnError: true, nodeOptions: { cwd: root } });
     await generate();
     const timestamp = fs.statSync(output).mtimeMs;
@@ -848,6 +914,7 @@ test("API protocol generation caches formatted output and supports force", async
     fs.utimesSync(output, oldTime, oldTime);
     await generate(true);
     assert.notEqual(fs.statSync(output).mtimeMs, oldTime.getTime());
+    assert.equal(fs.statSync(compilerOptions).mtimeMs, compilerOptionsTimestamp, "Protocol generation must not regenerate compiler option definitions");
     assert.match((await generate()).stdout, /codegen outputs are already up to date/);
     fs.utimesSync(output, oldTime, oldTime);
     const nested = await x("go", ["-C", "./tsc", "generate", "./internal/api"], {

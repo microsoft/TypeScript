@@ -19,9 +19,8 @@ import (
 var _ compiler.CompilerHost = (*compilerHost)(nil)
 
 type compilerHost struct {
-	configFilePath   tspath.Path
-	currentDirectory string
-	sessionOptions   *SessionOptions
+	configFilePath tspath.PathKey
+	sessionOptions *SessionOptions
 
 	sourceFS           *sourceFS
 	configFileRegistry *ConfigFileRegistry
@@ -34,17 +33,15 @@ type compilerHost struct {
 }
 
 func newCompilerHost(
-	currentDirectory string,
 	project *Project,
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *compilerHost {
 	return &compilerHost{
-		configFilePath:   project.configFilePath,
-		currentDirectory: currentDirectory,
-		sessionOptions:   builder.sessionOptions,
+		configFilePath: project.configFilePath,
+		sessionOptions: builder.sessionOptions,
 
-		sourceFS: newSourceFS(true, builder.fs, builder.toPath),
+		sourceFS: newSourceFS(true, builder.fs),
 
 		project: project,
 		builder: builder,
@@ -73,7 +70,7 @@ func (c *compilerHost) ensureAlive() {
 }
 
 // DefaultLibraryPath implements compiler.CompilerHost.
-func (c *compilerHost) DefaultLibraryPath() string {
+func (c *compilerHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return c.sessionOptions.DefaultLibraryPath
 }
 
@@ -82,13 +79,8 @@ func (c *compilerHost) FS() vfs.FS {
 	return c.sourceFS
 }
 
-// GetCurrentDirectory implements compiler.CompilerHost.
-func (c *compilerHost) GetCurrentDirectory() string {
-	return c.currentDirectory
-}
-
 // GetResolvedProjectReference implements compiler.CompilerHost.
-func (c *compilerHost) GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine {
+func (c *compilerHost) GetResolvedProjectReference(fileName tspath.RootedFilePath, path tspath.PathKey) *tsoptions.ParsedCommandLine {
 	if c.builder == nil {
 		return c.configFileRegistry.GetConfig(path)
 	} else {
@@ -102,7 +94,7 @@ func (c *compilerHost) GetResolvedProjectReference(fileName string, path tspath.
 // and acquired immediately for the in-progress program.
 func (c *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
 	c.ensureAlive()
-	if fh := c.sourceFS.GetFileByPath(opts.FileName, opts.Path); fh != nil {
+	if fh := c.sourceFS.GetFileByPath(opts.FileName, opts.PathKey); fh != nil {
 		key := NewParseCacheKey(opts, fh.Hash(), fh.Kind())
 		return c.builder.parseCache.Acquire(key, fh)
 	}
@@ -112,7 +104,7 @@ func (c *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.Sourc
 // GetContentMappedSourceFile implements compiler.CompilerHost.
 func (c *compilerHost) GetContentMappedSourceFiles(parseOptions ast.SourceFileParseOptions, mapper *contentmapper.Mapper) (contentmapper.SourceFiles, error) {
 	c.ensureAlive()
-	fh := c.sourceFS.GetFileByPath(parseOptions.FileName, parseOptions.Path)
+	fh := c.sourceFS.GetFileByPath(parseOptions.FileName, parseOptions.PathKey)
 	if fh == nil {
 		return contentmapper.SourceFiles{}, nil
 	}

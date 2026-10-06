@@ -6,5 +6,5 @@ import (
 )
 
 type SourceFileMetaDataProvider interface {
-	GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData
+	GetSourceFileMetaData(path tspath.PathKey) *ast.SourceFileMetaData
 }

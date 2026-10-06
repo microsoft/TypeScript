@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -19,7 +20,7 @@ import (
 func initCompletionClient(t *testing.T, files map[string]string, prefs *lsutil.UserPreferences) *lsptestutil.LSPClient {
 	t.Helper()
 
-	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		switch req.Method {

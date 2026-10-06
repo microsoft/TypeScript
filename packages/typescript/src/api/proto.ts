@@ -1,3 +1,4 @@
+import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
@@ -6,20 +7,66 @@ import type {
     APIMethodInfo,
     CreateSnapshotParams as CoreCreateSnapshotParams,
     DocumentIdentifier,
+    ProjectId,
     SignatureResponse,
+    SourceFileDescriptor,
     SourceFileResponse,
-    SymbolResponse,
+    SymbolOwner as ProtocolSymbolOwner,
+    SymbolResponse as ProtocolSymbolResponse,
     TypeResponse,
 } from "./proto.generated.ts";
 export type { ConfigFileResponse as ParsedCommandLine, DiagnosticResponse as Diagnostic } from "./proto.generated.ts";
+export type { ProtocolSymbolResponse };
 
 export * from "./proto.generated.ts";
+export * from "./userPreferences.generated.ts";
+
+export interface FileSymbolOwner {
+    readonly kind: typeof SymbolOwnerKind.File;
+    readonly file: SourceFileDescriptor;
+    readonly snapshot?: never;
+    readonly project?: never;
+}
+
+export interface SnapshotSymbolOwner {
+    readonly kind: typeof SymbolOwnerKind.Snapshot;
+    readonly file?: never;
+    readonly snapshot: number;
+    readonly project: ProjectId;
+}
+
+export type SymbolOwner = FileSymbolOwner | SnapshotSymbolOwner;
+export type SymbolReference = SymbolOwner & { readonly id: number; };
+export type SymbolResponse = Omit<ProtocolSymbolResponse, "reference"> & {
+    readonly reference: SymbolReference;
+};
+
+export function validateSymbolOwner(owner: ProtocolSymbolOwner): asserts owner is SymbolOwner {
+    switch (owner.kind) {
+        case SymbolOwnerKind.File:
+            if (!owner.file || owner.snapshot !== undefined || owner.project !== undefined) {
+                throw new Error("Invalid file symbol owner");
+            }
+            return;
+        case SymbolOwnerKind.Snapshot:
+            if (owner.file !== undefined || owner.snapshot === undefined || owner.project === undefined) {
+                throw new Error("Invalid snapshot symbol owner");
+            }
+            return;
+        default:
+            throw new Error(`Invalid symbol owner kind '${owner.kind}'`);
+    }
+}
+
+export function validateSymbolResponse(response: ProtocolSymbolResponse): asserts response is SymbolResponse {
+    validateSymbolOwner(response.reference);
+}
 
 export type APIMethodsReturning<T> = { [K in keyof APIMethodInfo]: [T] extends [NonNullable<APIMethodInfo[K]["result"]>] ? [NonNullable<APIMethodInfo[K]["result"]>] extends [T] ? K : never : never; }[keyof APIMethodInfo];
 
 export type SourceFileResponseMethod = APIMethodsReturning<SourceFileResponse>;
-export type SymbolPropertyMethod = APIMethodsReturning<SymbolResponse>;
-export type SymbolsPropertyMethod = APIMethodsReturning<SymbolResponse[]>;
+export type SymbolPropertyMethod = APIMethodsReturning<ProtocolSymbolResponse>;
+export type SymbolsPropertyMethod = APIMethodsReturning<ProtocolSymbolResponse[]>;
 export type SignaturePropertyMethod = APIMethodsReturning<SignatureResponse>;
 export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, IntrinsicTypeMethod>;
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;

@@ -6,6 +6,7 @@ import { task } from "hereby";
 import assert from "node:assert";
 import crypto from "node:crypto";
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import url from "node:url";
@@ -347,6 +348,9 @@ async function runGenerateGo() {
     for (const generate of goGenerateActions) {
         await generate();
     }
+    // These generators load Go packages, so all generated Go sources must be current.
+    await runGenerateEnums();
+    await runGenerateAPI();
 }
 
 export const generateGo = task({
@@ -472,10 +476,27 @@ export const generateChecker = goGenerateTask("generate:checker", [
     stringerGenerator("tsc/internal/checker/types.go", "SignatureKind", "stringer_generated.go"),
 ]);
 
-export const generateCompilerOptions = goGenerateTask("generate:compileroptions", [
-    stringerGenerator("tsc/internal/core/compileroptions.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"),
-    stringerGenerator("tsc/internal/core/compileroptions.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"),
-]);
+async function runGenerateOptionDefinitions() {
+    const { default: generate } = await import("./tools/scripts/tsc/generate-options.ts");
+    await generate(!!options.force);
+}
+
+async function runGenerateCompilerOptions() {
+    await runGenerateOptionDefinitions();
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ModuleKind", "modulekind_stringer_generated.go", "ModuleKind"));
+    await runGoGenerator("generate:compileroptions", stringerGenerator("tsc/internal/core/options_generated.go", "ScriptTarget", "scripttarget_stringer_generated.go", "ScriptTarget"));
+}
+
+goGenerateActions.push(runGenerateCompilerOptions);
+export const generateCompilerOptions = task({
+    name: "generate:compileroptions",
+    description: "Generates compiler options and their dependent API files. Pass --force to regenerate unchanged files.",
+    run: async () => {
+        await runGenerateCompilerOptions();
+        await runGenerateEnums();
+        await runGenerateAPI();
+    },
+});
 
 export const generateLanguageVariant = goGenerateTask("generate:languagevariant", [
     stringerGenerator("tsc/internal/core/languagevariant.go", "LanguageVariant", "languagevariant_stringer_generated.go"),
@@ -592,32 +613,47 @@ export const generateExtensionTest = task({
 
 async function runGenerateLSP() {
     const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
-    const directory = path.join(__dirname, "tsc/internal/lsp/lsproto/_generate");
+    const directory = path.join(__dirname, "tools/scripts/lsp");
     const modelFiles = ["metaModel.json", "metaModelSchema.mts"].map(file => new GeneratedFile(path.join(directory, file), [path.join(directory, "fetchModel.mts"), path.join(__dirname, "package-lock.json")]));
     if (!modelFiles.every(file => file.isCurrent(!!options.force))) {
         for (const file of modelFiles) file.invalidate();
-        const { default: fetchModel } = await import("./tsc/internal/lsp/lsproto/_generate/fetchModel.mts");
+        const { default: fetchModel } = await import("./tools/scripts/lsp/fetchModel.mts");
         await fetchModel();
         for (const file of modelFiles) file.markCurrent();
     }
-    const output = new GeneratedFile(path.join(directory, "../lsp_generated.go"), [
+    const output = new GeneratedFile(path.join(__dirname, "tsc/internal/lsp/lsproto/lsp_generated.go"), [
         __filename,
         path.join(directory, "generate.mts"),
         ...modelFiles.map(file => file.fileName),
     ]);
-    if (output.isCurrent(!!options.force)) {
-        console.log("LSP bindings are up to date.");
-        return;
+    if (!output.isCurrent(!!options.force)) {
+        output.invalidate();
+        const { default: generate } = await import("./tools/scripts/lsp/generate.mts");
+        await generate();
+        output.markCurrent();
     }
-    output.invalidate();
-    const { default: generate } = await import("./tsc/internal/lsp/lsproto/_generate/generate.mts");
-    await generate();
-    output.markCurrent();
+    else {
+        console.log("LSP bindings are up to date.");
+    }
+    const typeScriptOutput = new GeneratedFile(path.join(__dirname, "packages/typescript/src/vscode/protocol.generated.ts"), [
+        __filename,
+        path.join(directory, "generate.mts"),
+        path.join(directory, "generateTypeScript.mts"),
+        path.join(directory, "typeScript.mts"),
+        path.join(__dirname, "packages/vscode-typescript/src/lspMiddleware.ts"),
+        ...modelFiles.map(file => file.fileName),
+    ]);
+    if (!typeScriptOutput.isCurrent(!!options.force)) {
+        typeScriptOutput.invalidate();
+        const { default: generate } = await import("./tools/scripts/lsp/generateTypeScript.mts");
+        await generate();
+        typeScriptOutput.markCurrent();
+    }
 }
 
 export const generateLSP = task({
     name: "generate:lsp",
-    description: "Generates LSP bindings from the pinned protocol model. Pass --force to regenerate unchanged files.",
+    description: "Generates Go LSP bindings and extension API types from the pinned protocol model. Pass --force to regenerate unchanged files.",
     run: runGenerateLSP,
 });
 
@@ -628,7 +664,7 @@ async function runGenerateEnums() {
 
 export const generateEnums = task({
     name: "generate:enums",
-    description: "Generates TypeScript enum files from Go source. Pass --force to regenerate unchanged files.",
+    description: "Generates TypeScript enums from metadata and Go source. Pass --force to regenerate unchanged files.",
     run: runGenerateEnums,
 });
 
@@ -655,7 +691,28 @@ export const generateSync = task({
     run: runGenerateSync,
 });
 
+async function runGeneratePreferences() {
+    await runGoGenerator("generate:preferences", {
+        file: "tsc/internal/ls/lsutil/userpreferences.go",
+        cwd: __dirname,
+        inputs: ["tools/userPreferences.schema.json", "tools/gen-preferences/*.go"],
+        exclude: ["**/*_test.go"],
+        envInputs: [],
+        outputs: [
+            "tsc/internal/ls/lsutil/userpreferences_generated.go",
+            "packages/typescript/src/api/userPreferences.generated.ts",
+        ],
+        commands: [
+            ["go", "-C", "./tools", "run", "./gen-preferences", "./userPreferences.schema.json", "../tsc/internal/ls/lsutil/userpreferences_generated.go", "../packages/typescript/src/api/userPreferences.generated.ts"],
+            ["dprint", "fmt", "tsc/internal/ls/lsutil/userpreferences_generated.go", "packages/typescript/src/api/userPreferences.generated.ts"],
+        ],
+    });
+}
+
+export const generatePreferences = goGenerateTask("generate:preferences", runGeneratePreferences);
+
 async function runGenerateAPI() {
+    await runGeneratePreferences();
     await runGoGenerator("generate:api", {
         file: "tsc/internal/api/proto.go",
         cwd: __dirname,
@@ -668,7 +725,7 @@ async function runGenerateAPI() {
             "tsc/internal/tspath/path.go",
             "tools/gen-proto/*.go",
         ],
-        exclude: ["**/*_test.go", "**/*_generated.go"],
+        exclude: ["**/*_test.go"],
         envInputs: [],
         outputs: ["packages/typescript/src/api/proto.generated.ts"],
         commands: [
@@ -678,7 +735,11 @@ async function runGenerateAPI() {
     });
 }
 
-export const generateAPI = goGenerateTask("generate:api", runGenerateAPI);
+export const generateAPI = task({
+    name: "generate:api",
+    description: "Generates API files. Pass --force to regenerate unchanged files.",
+    run: runGenerateAPI,
+});
 
 const vendorJsonrpcDir = "packages/typescript/vendor/vscode-jsonrpc";
 const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
@@ -718,10 +779,7 @@ const generateCompiler = task({
     name: "generate:compiler",
     hiddenFromTaskList: true,
     dependencies: [generateAST, generateLSP],
-    run: async () => {
-        await runGenerateGo();
-        await runGenerateEnums();
-    },
+    run: runGenerateGo,
 });
 
 export const generate = task({
@@ -964,7 +1022,7 @@ export const testCodegen = task({
     description: "Runs incremental codegen tests.",
     run: async () => {
         await run("go", ["-C", "tsc", "mod", "download"]);
-        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts"]);
+        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
     },
 });
 
@@ -1170,6 +1228,9 @@ export const validate = task({
         }
         if (options.all) {
             await runValidation("test:tools", runTestTools);
+            await runValidation("test:options", async () => {
+                await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
+            });
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);
@@ -1269,7 +1330,7 @@ export const checkVsceVersion = task({
 const scriptTsconfigs = [
     "./tools/scripts/gen/tsconfig.json",
     "./tools/scripts/tsc/tsconfig.json",
-    "./tsc/internal/lsp/lsproto/_generate/tsconfig.json",
+    "./tools/scripts/lsp/tsconfig.json",
 ];
 
 export const checkScripts = task({
@@ -1604,6 +1665,14 @@ function runCleanSignTempDirectory() {
 let signCount = 0;
 
 /**
+ * @param {string} value
+ */
+function assertMsbuildXmlValue(value) {
+    assert(value.length > 0 && !/[^\w./\\: -]/.test(value), `Unsupported MSBuild XML value: ${JSON.stringify(value)}`);
+    return value;
+}
+
+/**
  * @typedef {{
  *   SignFileRecordList: {
  *     SignFileList: { SrcPath: string; DstPath: string | null }[];
@@ -1615,11 +1684,10 @@ let signCount = 0;
  * @param {DDSignFileList} filelist
  */
 async function sign(filelist, unchangedOutputOkay = false) {
-    let data = JSON.stringify(filelist, undefined, 4);
-    console.log("filelist:", data);
+    console.log("filelist:", JSON.stringify(filelist, undefined, 4));
 
-    if (!process.env.MBSIGN_APPFOLDER) {
-        console.log(styleText("yellow", "Faking signing because MBSIGN_APPFOLDER is not set."));
+    if (!process.env.MICROBUILD_PLUGIN_DIRECTORY) {
+        console.log(styleText("yellow", "Faking signing because MICROBUILD_PLUGIN_DIRECTORY is not set."));
 
         // Fake signing for testing.
 
@@ -1659,6 +1727,7 @@ async function sign(filelist, unchangedOutputOkay = false) {
     }
 
     const signingWorkaround = true;
+    let signingFilelist = filelist;
 
     /** @type {{ source: string; target: string }[]} */
     const signingWorkaroundFiles = [];
@@ -1699,8 +1768,8 @@ async function sign(filelist, unchangedOutputOkay = false) {
             }),
         };
 
-        data = JSON.stringify(newFileList, undefined, 4);
-        console.log("new filelist:", data);
+        signingFilelist = newFileList;
+        console.log("new filelist:", JSON.stringify(signingFilelist, undefined, 4));
     }
 
     /** @type {Map<string, string>} */
@@ -1724,16 +1793,41 @@ async function sign(filelist, unchangedOutputOkay = false) {
     }
 
     const tmp = await getSignTempDir();
-    const filelistPath = path.resolve(tmp, `signing-filelist-${signCount++}.json`);
-    await fs.promises.writeFile(filelistPath, data);
+    const propsPath = path.resolve(tmp, `signing-items-${signCount++}.props`);
+    const signingItems = signingFilelist.SignFileRecordList.flatMap(record => record.SignFileList.map(file => ({ path: file.SrcPath, cert: record.Certs, macAppName: record.MacAppName })));
+    const items = signingItems.map(({ path: filePath, cert, macAppName }) =>
+        `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
+      <Authenticode>${assertMsbuildXmlValue(cert)}</Authenticode>
+      <StrongName>None</StrongName>${
+            macAppName ? `
+      <MacAppName>${assertMsbuildXmlValue(macAppName)}</MacAppName>` : ""
+        }
+    </FilesToSign>`
+    ).join("\n");
+    await fs.promises.writeFile(
+        propsPath,
+        `<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+${items}
+  </ItemGroup>
+</Project>
+`,
+    );
 
     try {
-        const dll = path.join(process.env.MBSIGN_APPFOLDER, "DDSignFiles.dll");
-        const filelistFlag = `/filelist:${filelistPath}`;
-        await run("dotnet", [dll, "--", filelistFlag]);
+        await run("dotnet", [
+            "build",
+            path.resolve("tools/signing/Sign.csproj"),
+            "--target:AfterBuild",
+            "--verbosity:normal",
+            "-p:SignType=real",
+            `-p:SignFilesDir=${path.resolve("built")}`,
+            `-p:FilesToSignPropsFile=${propsPath}`,
+            `-p:MicroBuildOverridePluginDirectory=${process.env.MICROBUILD_PLUGIN_DIRECTORY}`,
+        ]);
     }
     finally {
-        await fs.promises.unlink(filelistPath);
+        await fs.promises.unlink(propsPath);
     }
 
     if (signingWorkaround) {
@@ -2354,6 +2448,20 @@ async function testNativePreviewPackage(platforms) {
         await cpRecursive(hostPlatform.npmDir, platformPackageDir);
         await fs.promises.writeFile(sourceFile, 'export const value: string = "value";\n');
 
+        const require = createRequire(sourceFile);
+        const { stdout } = await runOutput("npm", ["pack", "--dry-run", "--json", mainPackageDir]);
+        /** @type {{ files: { path: string }[] }[]} */
+        const packed = JSON.parse(stdout);
+        for (const name of ["tsconfig", "jsconfig"]) {
+            const schemaPath = `schemas/${name}.schema.json`;
+            assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
+            assert.deepEqual(
+                await fs.promises.readFile(path.join(mainPackageDir, schemaPath)),
+                await fs.promises.readFile(path.join("packages/typescript", schemaPath)),
+            );
+            assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
+        }
+
         const binName = publishAsTypescript ? "tsc" : "tsgo";
         const binPath = path.join(mainPackageDir, "bin", binName);
         const { stdout: versionOutput } = await runOutput(process.execPath, [binPath, "--version"]);
@@ -2797,6 +2905,23 @@ async function runSignVsixExtensions() {
             },
         ],
     });
+
+    if (!process.env.MICROBUILD_PLUGIN_DIRECTORY) {
+        console.log("Skipping VSIX signature verification because signing was faked.");
+        return;
+    }
+
+    for (const { vsixPath, vsixManifestPath, vsixSignaturePath } of extensions) {
+        await run("vsce", [
+            "verify-signature",
+            "--packagePath",
+            vsixPath,
+            "--manifestPath",
+            vsixManifestPath,
+            "--signaturePath",
+            vsixSignaturePath,
+        ]);
+    }
 }
 
 async function runWriteVscodeTypeScriptReleaseManifest() {
