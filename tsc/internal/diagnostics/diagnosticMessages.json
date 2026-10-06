@@ -8915,5 +8915,9 @@
     "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 18115
+    },
+    "This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?": {
+        "category": "Error",
+        "code": 18116
     }
 }
