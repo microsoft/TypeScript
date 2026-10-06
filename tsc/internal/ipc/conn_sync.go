@@ -88,25 +88,17 @@ func (c *SyncConn) Run(ctx context.Context) (retErr error) {
 	case <-c.closed:
 		return c.terminal
 	case <-c.owner:
-		defer func() { c.owner <- struct{}{} }()
-	}
-	ctx, cancel := context.WithCancel(ctx)
-	defer func() {
-		c.close(retErr)
-		cancel()
-		c.handlers.Wait()
-	}()
-	select {
-	case <-c.closed:
-		return c.terminal
-	default:
-		if err := ctx.Err(); err != nil {
+		ctx, release, err := c.ownPump(ctx)
+		defer release()
+		defer func() { c.close(retErr) }()
+		if err != nil {
 			return err
 		}
+		return c.run(ctx)
 	}
-	stop := c.closeOnCancellation(ctx)
-	defer stop()
+}
 
+func (c *SyncConn) run(ctx context.Context) error {
 	for {
 		if ctx.Err() != nil {
 			return ctx.Err()
@@ -285,22 +277,11 @@ func (c *SyncConn) submit(operation syncOperation) syncCallResult {
 			return syncCallResult{err: c.terminal}
 		}
 	case <-c.owner:
-		ctx, cancel := context.WithCancel(operation.ctx)
-		defer func() {
-			cancel()
-			c.handlers.Wait()
-			c.owner <- struct{}{}
-		}()
-		select {
-		case <-c.closed:
-			return syncCallResult{err: c.terminal}
-		default:
-			if err := operation.ctx.Err(); err != nil {
-				return syncCallResult{err: err}
-			}
+		ctx, release, err := c.ownPump(operation.ctx)
+		defer release()
+		if err != nil {
+			return syncCallResult{err: err}
 		}
-		stop := c.closeOnCancellation(ctx)
-		defer stop()
 		if err := c.serveOperation(ctx, operation); err != nil {
 			c.close(err)
 		}
@@ -380,8 +361,27 @@ func (c *SyncConn) close(err error) {
 	})
 }
 
-func (c *SyncConn) closeOnCancellation(ctx context.Context) func() bool {
-	return context.AfterFunc(ctx, func() {
+// ownPump is called after taking the ownership token.
+func (c *SyncConn) ownPump(ctx context.Context) (context.Context, func(), error) {
+	ctx, cancel := context.WithCancel(ctx)
+	release := func() {
+		cancel()
+		c.handlers.Wait()
+		c.owner <- struct{}{}
+	}
+	select {
+	case <-c.closed:
+		return ctx, release, c.terminal
+	default:
+		if err := ctx.Err(); err != nil {
+			return ctx, release, err
+		}
+	}
+	stop := context.AfterFunc(ctx, func() {
 		c.close(ctx.Err())
 	})
+	return ctx, func() {
+		stop()
+		release()
+	}, nil
 }
