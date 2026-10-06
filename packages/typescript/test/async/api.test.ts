@@ -4994,7 +4994,7 @@ describe("readFile callback semantics", { concurrency }, () => {
             const callbacks: FileSystemCallbacks = { ...fs, realpath };
             await using api = new API({ cwd: "/", fs: callbacks });
 
-            using snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+            await using snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
             assert.ok(
                 (await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFileNames())
                     .includes(toRootedFilePath("/node_modules/pkg/index.d.ts", undefined)),
