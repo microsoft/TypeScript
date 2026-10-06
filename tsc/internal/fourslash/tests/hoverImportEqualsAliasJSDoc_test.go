@@ -20,6 +20,10 @@ func TestHoverImportEqualsAliasJSDoc(t *testing.T) {
     /** on the declaration */
     export interface Shape {}
     export function bare(): void;
+    /** on the declaration */
+    export function tagged(): void;
+    /** on the declaration */
+    export function plain(): void;
 }
 declare namespace b {
     /** on the alias */
@@ -30,13 +34,18 @@ declare namespace b {
     export import Shape = a.Shape;
     /** on the alias */
     export import bare = a.bare;
+    /** @deprecated on the alias */
+    export import tagged = a.tagged;
+    export import plain = a.plain;
 }
 b./*fn*/fn;
 b./*fnCall*/fn();
 b./*value*/value;
 let shape: b./*Shape*/Shape;
 b./*bare*/bare;
-b./*bareCall*/bare();`
+b./*bareCall*/bare();
+b./*tagged*/tagged;
+b./*plain*/plain;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineHover(t)
