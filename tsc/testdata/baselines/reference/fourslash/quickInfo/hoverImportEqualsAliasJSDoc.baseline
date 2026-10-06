@@ -8,6 +8,10 @@
 //     /** on the declaration */
 //     export interface Shape {}
 //     export function bare(): void;
+//     /** on the declaration */
+//     export function tagged(): void;
+//     /** on the declaration */
+//     export function plain(): void;
 // }
 // declare namespace b {
 //     /** on the alias */
@@ -18,6 +22,9 @@
 //     export import Shape = a.Shape;
 //     /** on the alias */
 //     export import bare = a.bare;
+//     /** @deprecated on the alias */
+//     export import tagged = a.tagged;
+//     export import plain = a.plain;
 // }
 // b.fn;
 //   ^^
@@ -67,12 +74,28 @@
 // | ```
 // | on the alias
 // | ----------------------------------------------------------------------
+// b.tagged;
+//   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.tagged(): void
+// | ```
+// | on the declaration
+// | ----------------------------------------------------------------------
+// b.plain;
+//   ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.plain(): void
+// | ```
+// | on the declaration
+// | ----------------------------------------------------------------------
 [
   {
     "marker": {
-      "Position": 496,
+      "Position": 735,
       "LSPosition": {
-        "line": 19,
+        "line": 26,
         "character": 2
       },
       "Name": "fn",
@@ -85,11 +108,11 @@
       },
       "range": {
         "start": {
-          "line": 19,
+          "line": 26,
           "character": 2
         },
         "end": {
-          "line": 19,
+          "line": 26,
           "character": 4
         }
       }
@@ -97,9 +120,9 @@
   },
   {
     "marker": {
-      "Position": 502,
+      "Position": 741,
       "LSPosition": {
-        "line": 20,
+        "line": 27,
         "character": 2
       },
       "Name": "fnCall",
@@ -112,11 +135,11 @@
       },
       "range": {
         "start": {
-          "line": 20,
+          "line": 27,
           "character": 2
         },
         "end": {
-          "line": 20,
+          "line": 27,
           "character": 4
         }
       }
@@ -124,9 +147,9 @@
   },
   {
     "marker": {
-      "Position": 510,
+      "Position": 749,
       "LSPosition": {
-        "line": 21,
+        "line": 28,
         "character": 2
       },
       "Name": "value",
@@ -139,11 +162,11 @@
       },
       "range": {
         "start": {
-          "line": 21,
+          "line": 28,
           "character": 2
         },
         "end": {
-          "line": 21,
+          "line": 28,
           "character": 7
         }
       }
@@ -151,9 +174,9 @@
   },
   {
     "marker": {
-      "Position": 530,
+      "Position": 769,
       "LSPosition": {
-        "line": 22,
+        "line": 29,
         "character": 13
       },
       "Name": "Shape",
@@ -166,11 +189,11 @@
       },
       "range": {
         "start": {
-          "line": 22,
+          "line": 29,
           "character": 13
         },
         "end": {
-          "line": 22,
+          "line": 29,
           "character": 18
         }
       },
@@ -179,9 +202,9 @@
   },
   {
     "marker": {
-      "Position": 539,
+      "Position": 778,
       "LSPosition": {
-        "line": 23,
+        "line": 30,
         "character": 2
       },
       "Name": "bare",
@@ -194,11 +217,11 @@
       },
       "range": {
         "start": {
-          "line": 23,
+          "line": 30,
           "character": 2
         },
         "end": {
-          "line": 23,
+          "line": 30,
           "character": 6
         }
       }
@@ -206,9 +229,9 @@
   },
   {
     "marker": {
-      "Position": 547,
+      "Position": 786,
       "LSPosition": {
-        "line": 24,
+        "line": 31,
         "character": 2
       },
       "Name": "bareCall",
@@ -221,12 +244,66 @@
       },
       "range": {
         "start": {
-          "line": 24,
+          "line": 31,
           "character": 2
         },
         "end": {
-          "line": 24,
+          "line": 31,
           "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 796,
+      "LSPosition": {
+        "line": 32,
+        "character": 2
+      },
+      "Name": "tagged",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.tagged(): void\n```\non the declaration"
+      },
+      "range": {
+        "start": {
+          "line": 32,
+          "character": 2
+        },
+        "end": {
+          "line": 32,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 806,
+      "LSPosition": {
+        "line": 33,
+        "character": 2
+      },
+      "Name": "plain",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.plain(): void\n```\non the declaration"
+      },
+      "range": {
+        "start": {
+          "line": 33,
+          "character": 2
+        },
+        "end": {
+          "line": 33,
+          "character": 7
         }
       }
     }
