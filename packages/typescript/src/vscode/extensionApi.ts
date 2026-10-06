@@ -48,19 +48,19 @@ export type LspMiddlewareTransformer<M extends LspMiddlewareMethod> = (
 ) => LspMiddlewareResult<M> | PromiseLike<LspMiddlewareResult<M>>;
 
 export interface APIModules {
+    "typescript/unstable/async": typeof import("../api/async/api.ts");
+    "typescript/unstable/sync": typeof import("../api/sync/api.ts");
+    "typescript/unstable/fs": typeof import("../api/fs.ts");
+    "typescript/unstable/path": typeof import("../api/typedPaths.ts");
+    "typescript/unstable/proto": typeof import("../api/proto.ts");
+    "typescript/unstable/ast": typeof import("../ast/index.ts");
+    "typescript/unstable/ast/is": typeof import("../ast/is.ts");
+    "typescript/unstable/ast/factory": typeof import("../ast/factory.generated.ts");
+    "typescript/unstable/ast/utils": typeof import("../ast/utils.ts");
+    "typescript/unstable/ast/scanner": typeof import("../ast/scanner.ts");
+    "typescript/unstable/ast/visitor": typeof import("../ast/visitor.ts");
+    "typescript/unstable/ast/clone": typeof import("../ast/clone.ts");
     [exportPath: string]: unknown;
-    "unstable/async": typeof import("../api/async/api.ts");
-    "unstable/sync": typeof import("../api/sync/api.ts");
-    "unstable/fs": typeof import("../api/fs.ts");
-    "unstable/path": typeof import("../api/typedPaths.ts");
-    "unstable/proto": typeof import("../api/proto.ts");
-    "unstable/ast": typeof import("../ast/index.ts");
-    "unstable/ast/is": typeof import("../ast/is.ts");
-    "unstable/ast/factory": typeof import("../ast/factory.generated.ts");
-    "unstable/ast/utils": typeof import("../ast/utils.ts");
-    "unstable/ast/scanner": typeof import("../ast/scanner.ts");
-    "unstable/ast/visitor": typeof import("../ast/visitor.ts");
-    "unstable/ast/clone": typeof import("../ast/clone.ts");
 }
 
 /**

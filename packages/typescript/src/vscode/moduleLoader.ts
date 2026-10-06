@@ -5,8 +5,7 @@ import type { APIModules } from "./extensionApi.ts";
 
 export interface TypeScriptModuleLoader {
     /**
-     * Imports a module from the selected API package. Export paths omit the leading
-     * "./", for example "unstable/async". Known keys retain their module types.
+     * Imports a module from the selected API package using the full package specifier.
      */
     importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
 }
@@ -20,9 +19,8 @@ export function createTypeScriptModuleLoader(packageJsonPath: string): TypeScrip
     function importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
     async function importModule(exportPath: string): Promise<unknown> {
         if (
-            !exportPath
-            || exportPath.startsWith(".")
-            || exportPath.startsWith("/")
+            !exportPath.startsWith("typescript/")
+            || exportPath.length === "typescript/".length
             || exportPath.includes("\\")
             || exportPath.split("/").includes("..")
         ) {
@@ -35,7 +33,7 @@ export function createTypeScriptModuleLoader(packageJsonPath: string): TypeScrip
             throw new Error(`TypeScript API package manifest at '${packageJsonPath}' does not contain a package name.`);
         }
         const require = createRequire(manifestPath);
-        const modulePath = require.resolve(`${manifest.name}/${exportPath}`);
+        const modulePath = require.resolve(`${manifest.name}/${exportPath.slice("typescript/".length)}`);
         return import(pathToFileURL(modulePath).href);
     }
 

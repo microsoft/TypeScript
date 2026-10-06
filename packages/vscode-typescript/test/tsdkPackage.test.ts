@@ -1,3 +1,4 @@
+import { createTypeScriptModuleLoader } from "@typescript/typescript/unstable/vscode";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
@@ -220,12 +221,12 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         fs.writeFileSync(path.join(root, "api.js"), 'export { version } from "./dependency.js";');
         fs.writeFileSync(path.join(root, "other.js"), 'export { version } from "./dependency.js";');
         const originalSDK = packageSDK(packageJsonPath, "1");
-        assert.equal((await originalSDK.importModule("unstable/test") as { version: number; }).version, 1);
+        assert.equal((await originalSDK.importModule("typescript/unstable/test") as { version: number; }).version, 1);
 
         writeManifest("2");
         fs.writeFileSync(path.join(root, "dependency.js"), "export const version = 2;");
-        await assert.rejects(originalSDK.importModule("unstable/test"), TypeScriptPackageChangedError);
-        await assert.rejects(originalSDK.importModule("unstable/other"), TypeScriptPackageChangedError);
+        await assert.rejects(originalSDK.importModule("typescript/unstable/test"), TypeScriptPackageChangedError);
+        await assert.rejects(originalSDK.importModule("typescript/unstable/other"), TypeScriptPackageChangedError);
 
         let pipes = 0;
         const sdk = createTypeScriptSDK(
@@ -237,7 +238,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
             },
             () => true,
         );
-        await assert.rejects(sdk.importModule("unstable/test"), TypeScriptPackageChangedError);
+        await assert.rejects(sdk.importModule("typescript/unstable/test"), TypeScriptPackageChangedError);
         await assert.rejects(sdk.initializeAPIConnection(), TypeScriptPackageChangedError);
         assert.equal(pipes, 0);
         const replacement = path.join(root, "replacement");
@@ -246,7 +247,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         for (const file of ["api.js", "other.js", "dependency.js"]) {
             fs.copyFileSync(path.join(root, file), path.join(replacement, file));
         }
-        assert.equal((await packageSDK(path.join(replacement, "package.json"), "2").importModule("unstable/test") as { version: number; }).version, 2);
+        assert.equal((await packageSDK(path.join(replacement, "package.json"), "2").importModule("typescript/unstable/test") as { version: number; }).version, 2);
     });
 
     test("imports an exported module relative to the selected package", async t => {
@@ -270,43 +271,46 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
             assert.fail("Loading an API module must not open a pipe.");
         }, () => true);
         assert.equal(sdk.packageJsonPath, packageJsonPath);
-        const loaded = await sdk.importModule("unstable/test");
+        const loaded = await sdk.importModule("typescript/unstable/test");
         assert.equal((loaded as { selected: boolean; }).selected, true);
-        assert.equal(await sdk.importModule("unstable/test"), loaded);
+        assert.equal(await sdk.importModule("typescript/unstable/test"), loaded);
+        const loader = createTypeScriptModuleLoader(packageJsonPath);
+        assert.equal(await loader.importModule("typescript/unstable/test"), loaded);
+        await assert.rejects(loader.importModule("unstable/test"), /Invalid TypeScript API module export path/);
     });
 
     type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
 
     function checkType<T extends true>(_equal: T): void {}
 
-    async function checkPublicTypes(connection: TypeScriptSDK, exportPath: string, knownExportPath: "unstable/async" | "unstable/ast"): Promise<void> {
-        const asyncModule = connection.importModule("unstable/async");
+    async function checkPublicTypes(connection: TypeScriptSDK, exportPath: string, knownExportPath: "typescript/unstable/async" | "typescript/unstable/ast"): Promise<void> {
+        const asyncModule = connection.importModule("typescript/unstable/async");
         checkType<Equal<typeof asyncModule, Promise<typeof import("@typescript/typescript/unstable/async")>>>(true);
-        const syncModule = connection.importModule("unstable/sync");
+        const syncModule = connection.importModule("typescript/unstable/sync");
         checkType<Equal<typeof syncModule, Promise<typeof import("@typescript/typescript/unstable/sync")>>>(true);
-        const fsModule = connection.importModule("unstable/fs");
+        const fsModule = connection.importModule("typescript/unstable/fs");
         checkType<Equal<typeof fsModule, Promise<typeof import("@typescript/typescript/unstable/fs")>>>(true);
-        const pathModule = connection.importModule("unstable/path");
+        const pathModule = connection.importModule("typescript/unstable/path");
         checkType<Equal<typeof pathModule, Promise<typeof import("@typescript/typescript/unstable/path")>>>(true);
-        const protoModule = connection.importModule("unstable/proto");
+        const protoModule = connection.importModule("typescript/unstable/proto");
         checkType<Equal<typeof protoModule, Promise<typeof import("@typescript/typescript/unstable/proto")>>>(true);
-        const astModule = connection.importModule("unstable/ast");
+        const astModule = connection.importModule("typescript/unstable/ast");
         checkType<Equal<typeof astModule, Promise<typeof import("@typescript/typescript/unstable/ast")>>>(true);
-        const isModule = connection.importModule("unstable/ast/is");
+        const isModule = connection.importModule("typescript/unstable/ast/is");
         checkType<Equal<typeof isModule, Promise<typeof import("@typescript/typescript/unstable/ast/is")>>>(true);
-        const factoryModule = connection.importModule("unstable/ast/factory");
+        const factoryModule = connection.importModule("typescript/unstable/ast/factory");
         checkType<Equal<typeof factoryModule, Promise<typeof import("@typescript/typescript/unstable/ast/factory")>>>(true);
-        const utilsModule = connection.importModule("unstable/ast/utils");
+        const utilsModule = connection.importModule("typescript/unstable/ast/utils");
         checkType<Equal<typeof utilsModule, Promise<typeof import("@typescript/typescript/unstable/ast/utils")>>>(true);
-        const scannerModule = connection.importModule("unstable/ast/scanner");
+        const scannerModule = connection.importModule("typescript/unstable/ast/scanner");
         checkType<Equal<typeof scannerModule, Promise<typeof import("@typescript/typescript/unstable/ast/scanner")>>>(true);
-        const visitorModule = connection.importModule("unstable/ast/visitor");
+        const visitorModule = connection.importModule("typescript/unstable/ast/visitor");
         checkType<Equal<typeof visitorModule, Promise<typeof import("@typescript/typescript/unstable/ast/visitor")>>>(true);
-        const cloneModule = connection.importModule("unstable/ast/clone");
+        const cloneModule = connection.importModule("typescript/unstable/ast/clone");
         checkType<Equal<typeof cloneModule, Promise<typeof import("@typescript/typescript/unstable/ast/clone")>>>(true);
         const knownModule = connection.importModule(knownExportPath);
         checkType<Equal<typeof knownModule, Promise<typeof import("@typescript/typescript/unstable/async") | typeof import("@typescript/typescript/unstable/ast")>>>(true);
-        const unknownModule = connection.importModule("unstable/future");
+        const unknownModule = connection.importModule("typescript/unstable/future");
         checkType<Equal<typeof unknownModule, Promise<unknown>>>(true);
         const dynamicModule = connection.importModule(exportPath);
         checkType<Equal<typeof dynamicModule, Promise<unknown>>>(true);
@@ -340,7 +344,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         assert.equal(sdk.packageJsonPath, undefined);
         assert.equal(await sdk.initializeAPIConnection("custom-pipe"), "custom-pipe");
         assert.equal(calls, 1);
-        await assert.rejects(sdk.importModule("unstable/async"), /does not provide a matching JavaScript API package/);
+        await assert.rejects(sdk.importModule("typescript/unstable/async"), /does not provide a matching JavaScript API package/);
     });
 
     test("SDK connection creation awaits the lifecycle scheduler's result", async () => {
@@ -369,7 +373,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         const packageJsonPath = path.join(root, "package.json");
         fs.writeFileSync(packageJsonPath, JSON.stringify({ name: "typescript-selected" }));
 
-        for (const exportPath of ["", "./unstable/async", "../async", "/unstable/async", "unstable\\async"]) {
+        for (const exportPath of ["", "unstable/async", "typescript/", "@typescript/typescript/unstable/async", "./unstable/async", "../async", "/unstable/async", "typescript/unstable\\async", "typescript/../async"]) {
             await assert.rejects(
                 packageSDK(packageJsonPath).importModule(exportPath),
                 new Error(`Invalid TypeScript API module export path '${exportPath}'.`),
@@ -383,7 +387,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         fs.writeFileSync(packageJsonPath, "{}");
 
         await assert.rejects(
-            packageSDK(packageJsonPath).importModule("unstable/async"),
+            packageSDK(packageJsonPath).importModule("typescript/unstable/async"),
             new Error(`TypeScript API package manifest at '${packageJsonPath}' does not contain a package name.`),
         );
     });
