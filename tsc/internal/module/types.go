@@ -92,9 +92,9 @@ type ResolvedModule struct {
 	Extension                    string
 	ResolvedUsingTsExtension     bool
 	ResolvedUsingExtraExtensions bool
-	PackageId                    PackageId
 	IsExternalLibraryImport      bool
 	IsCustomResolution           bool
+	PackageId                    PackageId
 	AlternateResult              tspath.RootedFilePath
 }
 
