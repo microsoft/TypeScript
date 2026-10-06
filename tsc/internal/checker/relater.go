@@ -678,6 +678,14 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 // and no required properties, call/construct signatures or index signatures
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
+		// Instantiating a class or interface doesn't change which properties are optional or
+		// whether there are signatures or index infos, so ask the target instead of resolving
+		// the members of the instantiation.
+		if t.objectFlags&ObjectFlagsReference != 0 {
+			if target := t.Target(); target != t && target.objectFlags&ObjectFlagsClassOrInterface != 0 {
+				return c.isWeakType(target)
+			}
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *ast.Symbol) bool {
 			return p.Flags&ast.SymbolFlagsOptional != 0
