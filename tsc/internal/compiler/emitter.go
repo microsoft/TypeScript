@@ -217,8 +217,7 @@ func (e *emitter) emitJSFile(emitResolver printer.EmitResolver, sourceFile *ast.
 		// !!!
 	}, emitContext)
 
-	e.printSourceFile(jsFilePath, sourceMapFilePath, sourceFile, printer, options, shouldEmitSourceMaps(options, sourceFile))
-	emitContext.Factory.ReleaseArenas()
+	e.printSourceFile(emitContext, jsFilePath, sourceMapFilePath, sourceFile, printer, options, shouldEmitSourceMaps(options, sourceFile))
 }
 
 func (e *emitter) emitDeclarationFile(emitResolver printer.EmitResolver, sourceFile *ast.SourceFile, declarationFilePath tspath.RootedFilePath, declarationMapPath tspath.RootedFilePath) {
@@ -291,7 +290,7 @@ func (e *emitter) emitDeclarationFile(emitResolver printer.EmitResolver, sourceF
 		MapRoot:    options.MapRoot,
 		// Explicitly do not pass through either inline option.
 	}
-	e.printSourceFile(declarationFilePath, declarationMapPath, sourceFile, printer, declarationMapOptions, shouldEmitSourceMaps(declarationMapOptions, sourceFile))
+	e.printSourceFile(emitContext, declarationFilePath, declarationMapPath, sourceFile, printer, declarationMapOptions, shouldEmitSourceMaps(declarationMapOptions, sourceFile))
 }
 
 type declarationMapSource struct {
@@ -313,7 +312,7 @@ func (s *declarationMapSource) FileName() tspath.RootedFilePath { return s.fileN
 func (s *declarationMapSource) Text() string                    { return s.text }
 func (s *declarationMapSource) ECMALineMap() []core.TextPos     { return s.lineMap }
 
-func (e *emitter) printSourceFile(jsFilePath tspath.RootedFilePath, sourceMapFilePath tspath.RootedFilePath, sourceFile *ast.SourceFile, printer_ *printer.Printer, mapOptions *core.CompilerOptions, shouldEmitSourceMaps bool) {
+func (e *emitter) printSourceFile(emitContext *printer.EmitContext, jsFilePath tspath.RootedFilePath, sourceMapFilePath tspath.RootedFilePath, sourceFile *ast.SourceFile, printer_ *printer.Printer, mapOptions *core.CompilerOptions, shouldEmitSourceMaps bool) {
 	// !!! sourceMapGenerator
 	options := e.host.Options()
 	var sourceMapGenerator *sourcemap.Generator
@@ -327,6 +326,7 @@ func (e *emitter) printSourceFile(jsFilePath tspath.RootedFilePath, sourceMapFil
 	}
 
 	printer_.Write(sourceFile.AsNode(), sourceFile, e.writer, sourceMapGenerator)
+	emitContext.Factory.ReleaseArenas()
 
 	sourceMapUrlPos := -1
 	if sourceMapGenerator != nil {
