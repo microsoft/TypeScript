@@ -42,8 +42,8 @@ declare const values: Record<Numeric, number>;
 >values : Record<number, number>
 
 export const known = values[1];
->known : number
->values[1] : number
+>known : number | undefined
+>values[1] : number | undefined
 >values : Record<number, number>
 >1 : 1
 
@@ -70,33 +70,33 @@ const plain: Record<number, number> = {};
 >{} : {}
 
 declare const keyValues: { [Key in Numeric]: Key };
->keyValues : { [x: number]: number; 1: 1; 2: 2; }
+>keyValues : { [x: number]: number; }
 
 export const literalValue = keyValues[1];
->literalValue : 1
->keyValues[1] : 1
->keyValues : { [x: number]: number; 1: 1; 2: 2; }
+>literalValue : number | undefined
+>keyValues[1] : number | undefined
+>keyValues : { [x: number]: number; }
 >1 : 1
 
 export const indexValue = keyValues[3];
 >indexValue : number | undefined
 >keyValues[3] : number | undefined
->keyValues : { [x: number]: number; 1: 1; 2: 2; }
+>keyValues : { [x: number]: number; }
 >3 : 3
 
 declare const remapped: { [Key in Big as `${Key}`]: Key };
->remapped : { [x: `${bigint}`]: bigint; 1: 1n; 2: 2n; }
+>remapped : { [x: `${bigint}`]: bigint; }
 
 export const bigKnown = remapped["1"];
->bigKnown : 1n
->remapped["1"] : 1n
->remapped : { [x: `${bigint}`]: bigint; 1: 1n; 2: 2n; }
+>bigKnown : bigint | undefined
+>remapped["1"] : bigint | undefined
+>remapped : { [x: `${bigint}`]: bigint; }
 >"1" : "1"
 
 export const bigOther = remapped["3"];
 >bigOther : bigint | undefined
 >remapped["3"] : bigint | undefined
->remapped : { [x: `${bigint}`]: bigint; 1: 1n; 2: 2n; }
+>remapped : { [x: `${bigint}`]: bigint; }
 >"3" : "3"
 
 type GenericNumeric<Key extends number> = Record<Key | number, string>;
@@ -106,8 +106,8 @@ declare const generic: GenericNumeric<1 | 2>;
 >generic : GenericNumeric<1 | 2>
 
 export const genericKnown = generic[1];
->genericKnown : string
->generic[1] : string
+>genericKnown : string | undefined
+>generic[1] : string | undefined
 >generic : GenericNumeric<1 | 2>
 >1 : 1
 

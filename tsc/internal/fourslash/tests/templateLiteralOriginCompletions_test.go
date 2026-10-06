@@ -58,6 +58,6 @@ if (choice === "dataDowncast") {
 	f.VerifyCompletions(t, "other", expected)
 	expected.Items.Exact = []fourslash.CompletionsExpectedItem{"DATADOWNCAST", "EDITINGDOWNCAST"}
 	f.VerifyCompletions(t, []string{"mapped", "uppercase"}, expected)
-	f.VerifyQuickInfoAt(t, "hover", "let choice: Choice (origin: \"dataDowncast\" | \"editingDowncast\" | `${string}Downcast`)", "")
+	f.VerifyQuickInfoAt(t, "hover", "let choice: \"dataDowncast\" | \"editingDowncast\" | `${string}Downcast`", "")
 	f.VerifyQuickInfoAt(t, "narrowed", `let choice: "dataDowncast"`, "")
 }

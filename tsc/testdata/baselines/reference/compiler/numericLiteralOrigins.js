@@ -80,13 +80,13 @@ export function widenBigint(value) { return value; }
 //// [numericLiteralOrigins.d.ts]
 type Numeric = 1 | 2 | number;
 type Big = 1n | 2n | bigint;
-export declare const known: number;
+export declare const known: number | undefined;
 export declare const other: number | undefined;
-export declare const literalValue: 1;
+export declare const literalValue: number | undefined;
 export declare const indexValue: number | undefined;
-export declare const bigKnown: 1n;
+export declare const bigKnown: bigint | undefined;
 export declare const bigOther: bigint | undefined;
-export declare const genericKnown: string;
+export declare const genericKnown: string | undefined;
 export declare const genericOther: string | undefined;
 interface NumericIndex {
     [key: Numeric]: string;

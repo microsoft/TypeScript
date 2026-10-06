@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/mappedStringLiteralOrigin.ts] ////
 
 //// [mappedStringLiteralOrigin.ts]
+// Literal origins are editor metadata, not additional mapped keys.
 type Keys = "a" | string;
 type LegacyKeys = "a" | (string & {});
 type Values = Record<Keys, number>;
@@ -102,22 +103,22 @@ export const filteredAccess = filtered.a;
 
 //// [mappedStringLiteralOrigin.d.ts]
 type Keys = "a" | string;
-export declare const known: number;
+export declare const known: number | undefined;
 export declare const other: number | undefined;
-export declare const legacyKnown: number;
+export declare const legacyKnown: number | undefined;
 export declare const legacyOther: number | undefined;
-export declare const literalValue: "a";
+export declare const literalValue: string | undefined;
 export declare const indexValue: string | undefined;
-export declare const remappedKnown: "a";
+export declare const remappedKnown: string | undefined;
 export declare const remappedOther: string | undefined;
 export declare const optionalKnown: number | undefined;
 export declare const requiredKnown: number;
 export declare const requiredOther: number | undefined;
-export declare const extendedKnown: number;
-export declare const extendedAdded: number;
+export declare const extendedKnown: number | undefined;
+export declare const extendedAdded: number | undefined;
 export declare const extendedIndex: number | undefined;
-export declare const genericKnown: number;
-export declare const genericAdded: number;
+export declare const genericKnown: number | undefined;
+export declare const genericAdded: number | undefined;
 export declare const genericOther: number | undefined;
 type OnlyKnown<Value> = {
     [Key in Keys as Key extends "a" ? Key : never]: Value;

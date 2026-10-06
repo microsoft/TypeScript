@@ -20,31 +20,31 @@ func TestReducedOriginInstantiation(t *testing.T) {
 			name:         "primitive",
 			typeText:     "\"fixed\" | string | `prefix${Value}`",
 			typeArgument: `"instantiated"`,
-			expected:     `string (origin: string | "fixed" | "prefixinstantiated")`,
+			expected:     `string | "fixed" | "prefixinstantiated"`,
 		},
 		{
 			name:         "optional primitive",
 			typeText:     "(\"fixed\" | string | `prefix${Value}`) | undefined",
 			typeArgument: `"instantiated"`,
-			expected:     `string | undefined (origin: string | "fixed" | "prefixinstantiated" | undefined)`,
+			expected:     `string | "fixed" | "prefixinstantiated" | undefined`,
 		},
 		{
 			name:         "string union",
 			typeText:     `"fixed" | string | Value`,
 			typeArgument: `"instantiated"`,
-			expected:     `string (origin: string | "fixed" | "instantiated")`,
+			expected:     `string | "fixed" | "instantiated"`,
 		},
 		{
 			name:         "number union",
 			typeText:     `1 | number | Value`,
 			typeArgument: `2`,
-			expected:     `number (origin: number | 1 | 2)`,
+			expected:     `number | 1 | 2`,
 		},
 		{
 			name:         "bigint union",
 			typeText:     `1n | bigint | Value`,
 			typeArgument: `2n`,
-			expected:     `bigint (origin: bigint | 1n | 2n)`,
+			expected:     `bigint | 1n | 2n`,
 		},
 	} {
 		t.Run(test.name, func(t *testing.T) {

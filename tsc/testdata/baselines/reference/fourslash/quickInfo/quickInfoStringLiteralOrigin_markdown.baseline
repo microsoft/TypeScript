@@ -6,7 +6,7 @@
 //                    ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | let value: string (origin: string | "a" | "b")
+// | let value: string | "a" | "b"
 // | ```
 // | Available choice.
 // | ----------------------------------------------------------------------
@@ -20,7 +20,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (alias) let value: string (origin: string | "a" | "b")
+// | (alias) let value: string | "a" | "b"
 // | ```
 // | Available choice.
 // | ----------------------------------------------------------------------
@@ -28,7 +28,7 @@
 //        ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (property) member: string | undefined (origin: string | "a" | "b" | undefined)
+// | (property) member: string | "a" | "b" | undefined
 // | ```
 // | Available choice.
 // | ----------------------------------------------------------------------
@@ -48,7 +48,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nlet value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+        "value": "```typescript\nlet value: string | \"a\" | \"b\"\n```\nAvailable choice."
       },
       "range": {
         "start": {
@@ -75,7 +75,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(alias) let value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+        "value": "```typescript\n(alias) let value: string | \"a\" | \"b\"\n```\nAvailable choice."
       },
       "range": {
         "start": {
@@ -102,7 +102,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) member: string | undefined (origin: string | \"a\" | \"b\" | undefined)\n```\nAvailable choice."
+        "value": "```typescript\n(property) member: string | \"a\" | \"b\" | undefined\n```\nAvailable choice."
       },
       "range": {
         "start": {

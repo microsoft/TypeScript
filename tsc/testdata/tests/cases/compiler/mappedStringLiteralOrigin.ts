@@ -4,6 +4,7 @@
 // @exactOptionalPropertyTypes: true, false
 // @declaration: true
 
+// Literal origins are editor metadata, not additional mapped keys.
 type Keys = "a" | string;
 type LegacyKeys = "a" | (string & {});
 type Values = Record<Keys, number>;

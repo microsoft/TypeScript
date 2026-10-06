@@ -21374,28 +21374,9 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 		// We have a { [P in keyof T]: X }
 		c.forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, include, false /*stringsOnly*/, addMemberForKeyType)
 	} else {
-		c.forEachMappedTypeKeyType(constraintType, addMemberForKeyType)
+		forEachType(c.getLowerBoundOfKeyType(constraintType), addMemberForKeyType)
 	}
 	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
-}
-
-func (c *Checker) forEachMappedTypeKeyType(t *Type, callback func(*Type)) {
-	if links := c.reducedTypeLinks.TryGet(t); links != nil {
-		c.forEachMappedTypeKeyType(links.origin, callback)
-		return
-	}
-	lowerBound := c.getLowerBoundOfKeyType(t)
-	if lowerBound != t {
-		c.forEachMappedTypeKeyType(lowerBound, callback)
-		return
-	}
-	if t.flags&TypeFlagsUnion != 0 {
-		for _, member := range t.Types() {
-			c.forEachMappedTypeKeyType(member, callback)
-		}
-		return
-	}
-	callback(t)
 }
 
 func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {
@@ -27535,7 +27516,7 @@ func (c *Checker) getIndexTypeForMappedType(t *Type, indexFlags IndexFlags) *Typ
 		// The 'T' in 'keyof T'
 		c.forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlagsStringOrNumberLiteralOrUnique, indexFlags&IndexFlagsStringsOnly != 0, addMemberForKeyType)
 	} else {
-		c.forEachMappedTypeKeyType(constraintType, addMemberForKeyType)
+		forEachType(c.getLowerBoundOfKeyType(constraintType), addMemberForKeyType)
 	}
 	// We had to pick apart the constraintType to potentially map/filter it - compare the final resulting list with the
 	// original constraintType, so we can return the union that preserves aliases/origin data if possible.

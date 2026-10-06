@@ -114,9 +114,7 @@ declare const values: Record<Choice, number>;
 
 export const known = values.dataDowncast;
 >known : Symbol(known, Decl(templateLiteralOriginReduction.ts, 21, 12))
->values.dataDowncast : Symbol(dataDowncast)
 >values : Symbol(values, Decl(templateLiteralOriginReduction.ts, 20, 13))
->dataDowncast : Symbol(dataDowncast)
 
 export const arbitrary = values.otherDowncast;
 >arbitrary : Symbol(arbitrary, Decl(templateLiteralOriginReduction.ts, 22, 12))
@@ -158,9 +156,7 @@ declare const upper: Record<UppercaseChoice, number>;
 
 export const uppercaseKnown = upper.DATA;
 >uppercaseKnown : Symbol(uppercaseKnown, Decl(templateLiteralOriginReduction.ts, 32, 12))
->upper.DATA : Symbol(DATA)
 >upper : Symbol(upper, Decl(templateLiteralOriginReduction.ts, 31, 13))
->DATA : Symbol(DATA)
 
 export const uppercaseOther = upper.OTHER;
 >uppercaseOther : Symbol(uppercaseOther, Decl(templateLiteralOriginReduction.ts, 33, 12))

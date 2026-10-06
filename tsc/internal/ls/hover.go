@@ -442,7 +442,12 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 
 	// writeTypeClassified writes a type to dpw with proper classification (punctuation, symbols, keywords).
 	// Falls back to flat text when vsCapability is false or when TypeToTypeNode fails.
-	writeTypeClassifiedWorker := func(t *checker.Type, enclosing *ast.Node, flags checker.TypeFormatFlags) {
+	writeTypeClassified := func(t *checker.Type, enclosing *ast.Node, flags checker.TypeFormatFlags) {
+		if includeLiteralOrigin {
+			if origin := c.GetLiteralTypeOrigin(t); origin != nil {
+				t = origin
+			}
+		}
 		flags |= checker.TypeFormatFlagsMultilineObjectLiterals
 		if !vsCapability {
 			dpw.Write(c.TypeToStringEx(t, enclosing, flags, vc))
@@ -462,19 +467,6 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		tempDpw := newDisplayPartsWriter(true)
 		p.Write(typeNode, sourceFile, tempDpw, nil)
 		dpw.WriteFrom(tempDpw)
-	}
-
-	writeTypeClassified := func(t *checker.Type, enclosing *ast.Node, flags checker.TypeFormatFlags) {
-		writeTypeClassifiedWorker(t, enclosing, flags)
-		if includeLiteralOrigin && !vc.Truncated {
-			if origin := c.GetLiteralTypeOrigin(t); origin != nil {
-				dpw.WritePunctuation(" (")
-				dpw.Write("origin")
-				dpw.WritePunctuation(": ")
-				writeTypeClassifiedWorker(origin, enclosing, flags)
-				dpw.WritePunctuation(")")
-			}
-		}
 	}
 
 	// writeSignatureClassified writes a signature to dpw with proper classification.

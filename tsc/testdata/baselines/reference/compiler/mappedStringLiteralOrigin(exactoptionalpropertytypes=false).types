@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/mappedStringLiteralOrigin.ts] ////
 
 === mappedStringLiteralOrigin.ts ===
+// Literal origins are editor metadata, not additional mapped keys.
 type Keys = "a" | string;
 >Keys : string
 
@@ -20,10 +21,10 @@ declare const legacy: LegacyValues;
 >legacy : LegacyValues
 
 export const known = values.a;
->known : number
->values.a : number
+>known : number | undefined
+>values.a : number | undefined
 >values : Values
->a : number
+>a : number | undefined
 
 export const other = values.other;
 >other : number | undefined
@@ -32,10 +33,10 @@ export const other = values.other;
 >other : number | undefined
 
 export const legacyKnown = legacy.a;
->legacyKnown : number
->legacy.a : number
+>legacyKnown : number | undefined
+>legacy.a : number | undefined
 >legacy : LegacyValues
->a : number
+>a : number | undefined
 
 export const legacyOther = legacy.other;
 >legacyOther : number | undefined
@@ -70,10 +71,10 @@ declare const keyValues: KeyValues;
 >keyValues : KeyValues
 
 export const literalValue = keyValues.a;
->literalValue : "a"
->keyValues.a : "a"
+>literalValue : string | undefined
+>keyValues.a : string | undefined
 >keyValues : KeyValues
->a : "a"
+>a : string | undefined
 
 export const indexValue = keyValues.other;
 >indexValue : string | undefined
@@ -88,10 +89,10 @@ declare const remapped: Remapped;
 >remapped : Remapped
 
 export const remappedKnown = remapped.get_a;
->remappedKnown : "a"
->remapped.get_a : "a"
+>remappedKnown : string | undefined
+>remapped.get_a : string | undefined
 >remapped : Remapped
->get_a : "a"
+>get_a : string | undefined
 
 export const remappedOther = remapped.get_other;
 >remappedOther : string | undefined
@@ -113,9 +114,9 @@ export const optionalKnown = optional.a;
 
 optional.a = 1;
 >optional.a = 1 : 1
->optional.a : any
+>optional.a : number | undefined
 >optional : OptionalValues
->a : any
+>a : number | undefined
 >1 : 1
 
 type RequiredValues = { -readonly [Key in keyof OptionalValues]-?: OptionalValues[Key] };
@@ -126,9 +127,9 @@ declare let required: RequiredValues;
 
 required.a = 1;
 >required.a = 1 : 1
->required.a : number
+>required.a : number | undefined
 >required : RequiredValues
->a : number
+>a : number | undefined
 >1 : 1
 
 export const requiredKnown = required.a;
@@ -150,16 +151,16 @@ declare const extended: Record<ExtendedKeys, number>;
 >extended : Record<ExtendedKeys, number>
 
 export const extendedKnown = extended.a;
->extendedKnown : number
->extended.a : number
+>extendedKnown : number | undefined
+>extended.a : number | undefined
 >extended : Record<ExtendedKeys, number>
->a : number
+>a : number | undefined
 
 export const extendedAdded = extended.b;
->extendedAdded : number
->extended.b : number
+>extendedAdded : number | undefined
+>extended.b : number | undefined
 >extended : Record<ExtendedKeys, number>
->b : number
+>b : number | undefined
 
 export const extendedIndex = extended[0];
 >extendedIndex : number | undefined
@@ -174,16 +175,16 @@ declare const generic: GenericValues<"a" | "b">;
 >generic : GenericValues<"a" | "b">
 
 export const genericKnown = generic.a;
->genericKnown : number
->generic.a : number
+>genericKnown : number | undefined
+>generic.a : number | undefined
 >generic : GenericValues<"a" | "b">
->a : number
+>a : number | undefined
 
 export const genericAdded = generic.b;
->genericAdded : number
->generic.b : number
+>genericAdded : number | undefined
+>generic.b : number | undefined
 >generic : GenericValues<"a" | "b">
->b : number
+>b : number | undefined
 
 export const genericOther = generic.other;
 >genericOther : number | undefined
@@ -205,9 +206,9 @@ export function knownValue<Value>(value: OnlyKnown<Value>): Value {
 >value : OnlyKnown<Value>
 
 	return value.a;
->value.a : Value
+>value.a : any
 >value : OnlyKnown<Value>
->a : Value
+>a : any
 }
 const filteredMissing: OnlyKnown<number> = {};
 >filteredMissing : OnlyKnown<number>

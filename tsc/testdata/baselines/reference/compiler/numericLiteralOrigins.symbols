@@ -58,7 +58,6 @@ declare const values: Record<Numeric, number>;
 export const known = values[1];
 >known : Symbol(known, Decl(numericLiteralOrigins.ts, 12, 12))
 >values : Symbol(values, Decl(numericLiteralOrigins.ts, 11, 13))
->1 : Symbol(1)
 
 export const other = values[3];
 >other : Symbol(other, Decl(numericLiteralOrigins.ts, 13, 12))
@@ -89,7 +88,6 @@ declare const keyValues: { [Key in Numeric]: Key };
 export const literalValue = keyValues[1];
 >literalValue : Symbol(literalValue, Decl(numericLiteralOrigins.ts, 18, 12))
 >keyValues : Symbol(keyValues, Decl(numericLiteralOrigins.ts, 17, 13))
->1 : Symbol(1)
 
 export const indexValue = keyValues[3];
 >indexValue : Symbol(indexValue, Decl(numericLiteralOrigins.ts, 19, 12))
@@ -105,7 +103,6 @@ declare const remapped: { [Key in Big as `${Key}`]: Key };
 export const bigKnown = remapped["1"];
 >bigKnown : Symbol(bigKnown, Decl(numericLiteralOrigins.ts, 22, 12))
 >remapped : Symbol(remapped, Decl(numericLiteralOrigins.ts, 21, 13))
->"1" : Symbol(1)
 
 export const bigOther = remapped["3"];
 >bigOther : Symbol(bigOther, Decl(numericLiteralOrigins.ts, 23, 12))
@@ -124,7 +121,6 @@ declare const generic: GenericNumeric<1 | 2>;
 export const genericKnown = generic[1];
 >genericKnown : Symbol(genericKnown, Decl(numericLiteralOrigins.ts, 26, 12))
 >generic : Symbol(generic, Decl(numericLiteralOrigins.ts, 25, 13))
->1 : Symbol(1)
 
 export const genericOther = generic[3];
 >genericOther : Symbol(genericOther, Decl(numericLiteralOrigins.ts, 27, 12))

@@ -1,8 +1,7 @@
-numericLiteralOrigins.ts(15,7): error TS2739: Type '{}' is missing the following properties from type 'Record<number, number>': 1, 2
 numericLiteralOrigins.ts(35,14): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== numericLiteralOrigins.ts (2 errors) ====
+==== numericLiteralOrigins.ts (1 errors) ====
     type Numeric = 1 | 2 | number;
     type Big = 1n | 2n | bigint;
     type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
@@ -18,8 +17,6 @@ numericLiteralOrigins.ts(35,14): error TS2322: Type 'string' is not assignable t
     export const known = values[1];
     export const other = values[3];
     const missing: Record<Numeric, number> = {};
-          ~~~~~~~
-!!! error TS2739: Type '{}' is missing the following properties from type 'Record<number, number>': 1, 2
     const present: Record<Numeric, number> = { 1: 1, 2: 2 };
     const plain: Record<number, number> = {};
     declare const keyValues: { [Key in Numeric]: Key };

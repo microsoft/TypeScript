@@ -80,10 +80,10 @@ declare const values: Record<Choice, number>;
 >values : Record<Choice, number>
 
 export const known = values.dataDowncast;
->known : number
->values.dataDowncast : number
+>known : number | undefined
+>values.dataDowncast : number | undefined
 >values : Record<Choice, number>
->dataDowncast : number
+>dataDowncast : number | undefined
 
 export const arbitrary = values.otherDowncast;
 >arbitrary : number | undefined
@@ -119,10 +119,10 @@ declare const upper: Record<UppercaseChoice, number>;
 >upper : Record<UppercaseChoice, number>
 
 export const uppercaseKnown = upper.DATA;
->uppercaseKnown : number
->upper.DATA : number
+>uppercaseKnown : number | undefined
+>upper.DATA : number | undefined
 >upper : Record<UppercaseChoice, number>
->DATA : number
+>DATA : number | undefined
 
 export const uppercaseOther = upper.OTHER;
 >uppercaseOther : number | undefined

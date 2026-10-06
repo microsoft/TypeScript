@@ -69,11 +69,11 @@ export declare function merge(value: Choice | OtherChoice | Pattern): `${string}
 export declare function withExtra(value: "downcast" | Choice): "downcast" | `${string}Downcast`;
 export declare function mapped(value: MappedChoice): MappedChoice;
 export declare function uppercase(value: UppercaseChoice): UppercaseChoice;
-export declare const known: number;
+export declare const known: number | undefined;
 export declare const arbitrary: number | undefined;
 export declare const plainLiteral: number | undefined;
 type Generic<Value extends string> = Value | Pattern;
 export declare const genericValue: Generic<"dataDowncast">;
-export declare const uppercaseKnown: number;
+export declare const uppercaseKnown: number | undefined;
 export declare const uppercaseOther: number | undefined;
 export {};

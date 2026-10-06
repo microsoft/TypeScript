@@ -5,7 +5,7 @@
 // export declare let value: Choice;
 //                    ^^^^^
 // | ----------------------------------------------------------------------
-// | let value: string (origin: string | "a" | "b")Available choice.
+// | let value: string | "a" | "b"Available choice.
 // | ----------------------------------------------------------------------
 // export declare const holder: {
 //     /** Available choice. */
@@ -16,12 +16,12 @@
 // value;
 // ^^^^^
 // | ----------------------------------------------------------------------
-// | (alias) let value: string (origin: string | "a" | "b")Available choice.
+// | (alias) let value: string | "a" | "b"Available choice.
 // | ----------------------------------------------------------------------
 // holder.member;
 //        ^^^^^^
 // | ----------------------------------------------------------------------
-// | (property) member: string | undefined (origin: string | "a" | "b" | undefined)Available choice.
+// | (property) member: string | "a" | "b" | undefinedAvailable choice.
 // | ----------------------------------------------------------------------
 
 
@@ -39,7 +39,7 @@
     "item": {
       "contents": {
         "kind": "plaintext",
-        "value": "let value: string (origin: string | \"a\" | \"b\")Available choice."
+        "value": "let value: string | \"a\" | \"b\"Available choice."
       },
       "range": {
         "start": {
@@ -66,7 +66,7 @@
     "item": {
       "contents": {
         "kind": "plaintext",
-        "value": "(alias) let value: string (origin: string | \"a\" | \"b\")Available choice."
+        "value": "(alias) let value: string | \"a\" | \"b\"Available choice."
       },
       "range": {
         "start": {
@@ -93,7 +93,7 @@
     "item": {
       "contents": {
         "kind": "plaintext",
-        "value": "(property) member: string | undefined (origin: string | \"a\" | \"b\" | undefined)Available choice."
+        "value": "(property) member: string | \"a\" | \"b\" | undefinedAvailable choice."
       },
       "range": {
         "start": {

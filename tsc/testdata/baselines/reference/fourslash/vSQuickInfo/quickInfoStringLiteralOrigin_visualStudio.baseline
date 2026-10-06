@@ -13,10 +13,6 @@
 // |       [local name] "value"
 // |       [punctuation] ": "
 // |       [keyword] "string"
-// |       [punctuation] " ("
-// |       [text] "origin"
-// |       [punctuation] ": "
-// |       [keyword] "string"
 // |       [whitespace] " "
 // |       [punctuation] "|"
 // |       [whitespace] " "
@@ -25,7 +21,6 @@
 // |       [punctuation] "|"
 // |       [whitespace] " "
 // |       [string] "\"b\""
-// |       [punctuation] ")"
 // |   ClassifiedTextElement
 // |     [text] "Available choice."
 // | ----------------------------------------------------------------------
@@ -49,10 +44,6 @@
 // |       [local name] "value"
 // |       [punctuation] ": "
 // |       [keyword] "string"
-// |       [punctuation] " ("
-// |       [text] "origin"
-// |       [punctuation] ": "
-// |       [keyword] "string"
 // |       [whitespace] " "
 // |       [punctuation] "|"
 // |       [whitespace] " "
@@ -61,7 +52,6 @@
 // |       [punctuation] "|"
 // |       [whitespace] " "
 // |       [string] "\"b\""
-// |       [punctuation] ")"
 // |   ClassifiedTextElement
 // |     [text] "Available choice."
 // | ----------------------------------------------------------------------
@@ -81,14 +71,6 @@
 // |       [whitespace] " "
 // |       [punctuation] "|"
 // |       [whitespace] " "
-// |       [keyword] "undefined"
-// |       [punctuation] " ("
-// |       [text] "origin"
-// |       [punctuation] ": "
-// |       [keyword] "string"
-// |       [whitespace] " "
-// |       [punctuation] "|"
-// |       [whitespace] " "
 // |       [string] "\"a\""
 // |       [whitespace] " "
 // |       [punctuation] "|"
@@ -98,7 +80,6 @@
 // |       [punctuation] "|"
 // |       [whitespace] " "
 // |       [keyword] "undefined"
-// |       [punctuation] ")"
 // |   ClassifiedTextElement
 // |     [text] "Available choice."
 // | ----------------------------------------------------------------------
@@ -118,7 +99,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nlet value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+        "value": "```typescript\nlet value: string | \"a\" | \"b\"\n```\nAvailable choice."
       },
       "range": {
         "start": {
@@ -154,26 +135,6 @@
                   {
                     "ClassificationTypeName": "local name",
                     "Text": "value",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": ": ",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "keyword",
-                    "Text": "string",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": " (",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "text",
-                    "Text": "origin",
                     "_vs_type": "ClassifiedTextRun"
                   },
                   {
@@ -225,11 +186,6 @@
                     "ClassificationTypeName": "string",
                     "Text": "\"b\"",
                     "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": ")",
-                    "_vs_type": "ClassifiedTextRun"
                   }
                 ],
                 "_vs_type": "ClassifiedTextElement"
@@ -265,7 +221,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(alias) let value: string (origin: string | \"a\" | \"b\")\n```\nAvailable choice."
+        "value": "```typescript\n(alias) let value: string | \"a\" | \"b\"\n```\nAvailable choice."
       },
       "range": {
         "start": {
@@ -329,26 +285,6 @@
                     "_vs_type": "ClassifiedTextRun"
                   },
                   {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": " (",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "text",
-                    "Text": "origin",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": ": ",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "keyword",
-                    "Text": "string",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
                     "ClassificationTypeName": "whitespace",
                     "Text": " ",
                     "_vs_type": "ClassifiedTextRun"
@@ -387,11 +323,6 @@
                     "ClassificationTypeName": "string",
                     "Text": "\"b\"",
                     "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": ")",
-                    "_vs_type": "ClassifiedTextRun"
                   }
                 ],
                 "_vs_type": "ClassifiedTextElement"
@@ -427,7 +358,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) member: string | undefined (origin: string | \"a\" | \"b\" | undefined)\n```\nAvailable choice."
+        "value": "```typescript\n(property) member: string | \"a\" | \"b\" | undefined\n```\nAvailable choice."
       },
       "range": {
         "start": {
@@ -501,46 +432,6 @@
                     "_vs_type": "ClassifiedTextRun"
                   },
                   {
-                    "ClassificationTypeName": "keyword",
-                    "Text": "undefined",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": " (",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "text",
-                    "Text": "origin",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": ": ",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "keyword",
-                    "Text": "string",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "whitespace",
-                    "Text": " ",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": "|",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "whitespace",
-                    "Text": " ",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
                     "ClassificationTypeName": "string",
                     "Text": "\"a\"",
                     "_vs_type": "ClassifiedTextRun"
@@ -583,11 +474,6 @@
                   {
                     "ClassificationTypeName": "keyword",
                     "Text": "undefined",
-                    "_vs_type": "ClassifiedTextRun"
-                  },
-                  {
-                    "ClassificationTypeName": "punctuation",
-                    "Text": ")",
                     "_vs_type": "ClassifiedTextRun"
                   }
                 ],
