@@ -1038,6 +1038,46 @@ import { value } from "pkg";`,
         assert.ok(callbackSnapshots[0] < 0);
     });
 
+    test("parallel module resolver callbacks keep nested answers with their requests", async () => {
+        const fileCount = 300;
+        const files: Record<string, string> = {};
+        for (let i = 0; i < fileCount; i++) {
+            const imports = [1, 2, 3].map(offset => (i + offset) % fileCount);
+            files[`/src/m${i}.ts`] = imports.map(j => `import { v${j} } from "./m${j}.js";`).join("\n")
+                + `\nexport const v${i}: number = 1;\nexport const use${i} = [${imports.map(j => `v${j}`).join(", ")}];`;
+        }
+        await using api = spawnAPI(files);
+        const compilerOptions = {
+            strict: true,
+            module: ModuleKind.Preserve,
+            moduleResolution: ModuleResolutionKind.Bundler,
+        };
+        const defaultResolver = await api.createModuleResolver(compilerOptions);
+        let callbackCount = 0;
+        const customResolver = await api.createModuleResolver(compilerOptions, {
+            resolveModuleName: async (moduleName, containingDirectory, resolutionMode, { snapshot }) => {
+                const expected = toRootedFilePath(
+                    moduleName.replace(/\.js$/, ".ts"),
+                    toRootedDirectoryPath(containingDirectory, undefined),
+                );
+                const answer = await defaultResolver.resolveModuleName(moduleName, containingDirectory, resolutionMode, { snapshot });
+                assert.equal(answer.resolvedModule?.resolvedFileName, expected);
+                callbackCount++;
+                return { resolvedFileName: expected };
+            },
+        });
+        const snapshot = await api.createSnapshot({
+            fileSystem: createFileSystemWithLib(Object.entries(files)),
+            createPrograms: [{
+                rootFiles: Object.keys(files),
+                compilerOptions,
+                options: { moduleResolver: customResolver },
+            }],
+        });
+        assert.equal(callbackCount, fileCount * 3);
+        assert.deepEqual(await snapshot.operation.createdPrograms[0].getSemanticDiagnostics(), []);
+    });
+
     test("module resolver callbacks can resolve against the in-progress snapshot filesystem", async () => {
         await using api = spawnAPI({
             "/src/index.ts": `import "layered";`,
