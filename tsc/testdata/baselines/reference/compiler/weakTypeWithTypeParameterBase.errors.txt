@@ -1,0 +1,39 @@
+weakTypeWithTypeParameterBase.ts(4,11): error TS2415: Class 'Weak' incorrectly extends base class 'T'.
+  'Weak' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'object'.
+weakTypeWithTypeParameterBase.ts(14,11): error TS2415: Class 'Inner<U>' incorrectly extends base class 'T'.
+  'Inner<U>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'object'.
+weakTypeWithTypeParameterBase.ts(21,7): error TS2741: Property 'req' is missing in type '{ other: number; }' but required in type 'makeGeneric.Inner<unknown>'.
+
+
+==== weakTypeWithTypeParameterBase.ts (3 errors) ====
+    declare function base<T>(): new () => T;
+    
+    function make<T extends object>() {
+        class Weak extends base<T>() {
+              ~~~~
+!!! error TS2415: Class 'Weak' incorrectly extends base class 'T'.
+!!! error TS2415:   'Weak' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'object'.
+            optional?: string;
+        }
+        return Weak;
+    }
+    
+    const C = make<() => void>();
+    const c: InstanceType<typeof C> = () => {};
+    
+    function makeGeneric<T extends object>() {
+        class Inner<U> extends base<T>() {
+              ~~~~~
+!!! error TS2415: Class 'Inner<U>' incorrectly extends base class 'T'.
+!!! error TS2415:   'Inner<U>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'object'.
+            u?: U;
+        }
+        return Inner;
+    }
+    
+    const I = makeGeneric<{ req: string }>();
+    const i: InstanceType<typeof I> = { other: 1 } as { other: number };
+          ~
+!!! error TS2741: Property 'req' is missing in type '{ other: number; }' but required in type 'makeGeneric.Inner<unknown>'.
+!!! related TS2728 weakTypeWithTypeParameterBase.ts:20:25: 'req' is declared here.
+    

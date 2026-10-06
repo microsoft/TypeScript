@@ -678,11 +678,11 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 // and no required properties, call/construct signatures or index signatures
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
-		// Instantiating a class or interface doesn't change which properties are optional or
-		// whether there are signatures or index infos, so ask the target instead of resolving
-		// the members of the instantiation.
+		// Unless a base type is a type parameter, instantiating a class or interface doesn't change
+		// which properties are optional or whether there are signatures or index infos, so ask the
+		// target instead of resolving the members of the instantiation.
 		if t.objectFlags&ObjectFlagsReference != 0 {
-			if target := t.Target(); target != t && target.objectFlags&ObjectFlagsClassOrInterface != 0 {
+			if target := t.Target(); target != t && target.objectFlags&ObjectFlagsClassOrInterface != 0 && !c.hasTypeParameterBase(target) {
 				return c.isWeakType(target)
 			}
 		}
@@ -696,6 +696,24 @@ func (c *Checker) isWeakType(t *Type) bool {
 	}
 	if t.flags&TypeFlagsIntersection != 0 {
 		return core.Every(t.Types(), c.isWeakType)
+	}
+	return false
+}
+
+// Reports whether a base type of t, or of one of its base classes or interfaces, is or includes a type
+// parameter, in which case instantiating t can change its members.
+func (c *Checker) hasTypeParameterBase(t *Type) bool {
+	return core.Some(c.getBaseTypes(t), c.isTypeParameterBase)
+}
+
+func (c *Checker) isTypeParameterBase(t *Type) bool {
+	switch {
+	case t.flags&TypeFlagsTypeParameter != 0:
+		return true
+	case t.flags&TypeFlagsIntersection != 0:
+		return core.Some(t.Types(), c.isTypeParameterBase)
+	case t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsReference != 0:
+		return c.hasTypeParameterBase(t.Target())
 	}
 	return false
 }
