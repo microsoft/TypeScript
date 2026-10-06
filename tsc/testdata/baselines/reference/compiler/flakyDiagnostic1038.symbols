@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/flakyDiagnostic1038.ts] ////
+
+=== flakyDiagnostic1038.ts ===
+export enum Values {
+>Values : Symbol(Values, Decl(flakyDiagnostic1038.ts, 0, 0))
+
+    [(function () {
+>[(function () {        declare namespace Nested {            declare const value: number;        }    }).name] : Symbol(Values[(function () {
+        declare namespace Nested {
+            declare const value: number;
+        }
+    }).name], Decl(flakyDiagnostic1038.ts, 0, 20))
+>(function () {        declare namespace Nested {            declare const value: number;        }    }).name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+
+        declare namespace Nested {
+>Nested : Symbol(Nested, Decl(flakyDiagnostic1038.ts, 1, 19))
+
+            declare const value: number;
+>value : Symbol(value, Decl(flakyDiagnostic1038.ts, 3, 25))
+        }
+    }).name] = 1,
+>name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+}

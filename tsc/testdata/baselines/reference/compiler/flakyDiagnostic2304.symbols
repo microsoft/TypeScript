@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/flakyDiagnostic2304.ts] ////
+
+=== flakyDiagnostic2304.ts ===
+export enum Values {
+>Values : Symbol(Values, Decl(flakyDiagnostic2304.ts, 0, 0))
+
+    [missing.value] = 1,
+>[missing.value] : Symbol(Values[missing.value], Decl(flakyDiagnostic2304.ts, 0, 20))
+}

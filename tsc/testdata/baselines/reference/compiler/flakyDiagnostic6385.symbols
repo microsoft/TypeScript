@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/flakyDiagnostic6385.ts] ////
+
+=== flakyDiagnostic6385.ts ===
+/** @deprecated */
+declare const oldValue: { value: number };
+>oldValue : Symbol(oldValue, Decl(flakyDiagnostic6385.ts, 1, 13))
+>value : Symbol(value, Decl(flakyDiagnostic6385.ts, 1, 25))
+
+export enum Values {
+>Values : Symbol(Values, Decl(flakyDiagnostic6385.ts, 1, 42))
+
+    [oldValue.value] = 1,
+>[oldValue.value] : Symbol(Values[oldValue.value], Decl(flakyDiagnostic6385.ts, 2, 20))
+>oldValue.value : Symbol(value, Decl(flakyDiagnostic6385.ts, 1, 25))
+>oldValue : Symbol(oldValue, Decl(flakyDiagnostic6385.ts, 1, 13))
+>value : Symbol(value, Decl(flakyDiagnostic6385.ts, 1, 25))
+}

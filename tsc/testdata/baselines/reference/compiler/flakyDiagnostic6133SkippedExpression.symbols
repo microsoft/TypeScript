@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/flakyDiagnostic6133SkippedExpression.ts] ////
+
+=== flakyDiagnostic6133SkippedExpression.ts ===
+const unused = { value: 1 };
+>unused : Symbol(unused, Decl(flakyDiagnostic6133SkippedExpression.ts, 0, 5))
+>value : Symbol(value, Decl(flakyDiagnostic6133SkippedExpression.ts, 0, 16))
+
+export enum Example {
+>Example : Symbol(Example, Decl(flakyDiagnostic6133SkippedExpression.ts, 0, 28))
+
+    [unused.value] = 0
+>[unused.value] : Symbol(Example[unused.value], Decl(flakyDiagnostic6133SkippedExpression.ts, 1, 21))
+>unused.value : Symbol(value, Decl(flakyDiagnostic6133SkippedExpression.ts, 0, 16))
+>unused : Symbol(unused, Decl(flakyDiagnostic6133SkippedExpression.ts, 0, 5))
+>value : Symbol(value, Decl(flakyDiagnostic6133SkippedExpression.ts, 0, 16))
+}
+

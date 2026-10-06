@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/flakyDiagnostic2322EnumComputedName.ts] ////
+
+=== flakyDiagnostic2322EnumComputedName.ts ===
+let target: number;
+>target : Symbol(target, Decl(flakyDiagnostic2322EnumComputedName.ts, 0, 3))
+
+enum E {
+>E : Symbol(E, Decl(flakyDiagnostic2322EnumComputedName.ts, 0, 19))
+
+    [(() => {
+>[(() => {        const text = (target = "value");        return text.length;    })()] : Symbol(E[(() => {
+        const text = (target = "value");
+        return text.length;
+    })()], Decl(flakyDiagnostic2322EnumComputedName.ts, 1, 8))
+
+        const text = (target = "value");
+>text : Symbol(text, Decl(flakyDiagnostic2322EnumComputedName.ts, 3, 13))
+>target : Symbol(target, Decl(flakyDiagnostic2322EnumComputedName.ts, 0, 3))
+
+        return text.length;
+>text.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(flakyDiagnostic2322EnumComputedName.ts, 3, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    })()]
+}
