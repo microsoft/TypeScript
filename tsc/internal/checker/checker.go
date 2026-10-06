@@ -697,6 +697,7 @@ type Checker struct {
 	ReverseMappedSymbolLinks                    core.LinkStore[*ast.Symbol, ReverseMappedSymbolLinks]
 	markedAssignmentSymbolLinks                 core.LinkStore[*ast.Symbol, MarkedAssignmentSymbolLinks]
 	symbolContainerLinks                        core.LinkStore[*ast.Symbol, ContainingSymbolLinks]
+	externalModuleContainers                    *externalModuleContainerIndex
 	sourceFileLinks                             core.LinkStore[*ast.SourceFile, SourceFileLinks]
 	regExpScanner                               *scanner.Scanner
 	patternForType                              map[*Type]*ast.Node
@@ -14634,8 +14635,12 @@ func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
 	c.mergedSymbols[source] = target
 }
 
+func (c *Checker) getResolvedTarget(symbol *ast.Symbol) *ast.Symbol {
+	return c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(symbol)))
+}
+
 func (c *Checker) getSymbolIfSameReference(s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol {
-	if c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s1))) == c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s2))) {
+	if c.getResolvedTarget(s1) == c.getResolvedTarget(s2) {
 		return s1
 	}
 	return nil
