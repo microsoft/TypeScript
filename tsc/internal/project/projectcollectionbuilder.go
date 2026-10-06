@@ -538,12 +538,14 @@ func fileChangeSummaryAffectsTypingsWatch(
 	if len(filesToWatch) == 0 && len(typingsFiles) == 0 {
 		return false
 	}
-	affectsWatch := func(uri lsproto.DocumentUri) bool {
+	watchedPaths := slices.Concat(filesToWatch, core.Map(typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() }))
+	affectsWatch := func(uri lsproto.DocumentUri, deleted bool) bool {
 		fileName := uri.FileName().AsPath()
-		return slices.ContainsFunc(slices.Concat(filesToWatch, core.Map(typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })), func(watchedPath tspath.RootedPath) bool {
+		fileNameKey := caseSensitivity.PathKey(fileName)
+		return slices.ContainsFunc(watchedPaths, func(watchedPath tspath.RootedPath) bool {
 			watchedPathKey := caseSensitivity.PathKey(watchedPath)
-			fileNameKey := caseSensitivity.PathKey(fileName)
-			if watchedPathKey == fileNameKey || watchedPathKey.ContainsPath(fileNameKey) {
+			if watchedPathKey == fileNameKey || watchedPathKey.ContainsPath(fileNameKey) ||
+				deleted && fileNameKey.ContainsPath(watchedPathKey) {
 				return true
 			}
 			switch watchedPath.BaseName() {
@@ -556,22 +558,17 @@ func fileChangeSummaryAffectsTypingsWatch(
 		})
 	}
 	for uri := range summary.Changed.Keys() {
-		if affectsWatch(uri) {
+		if affectsWatch(uri, false) {
 			return true
 		}
 	}
 	for uri := range summary.Created.Keys() {
-		if affectsWatch(uri) {
+		if affectsWatch(uri, false) {
 			return true
 		}
 	}
 	for uri := range summary.Deleted.Keys() {
-		deletedPath := caseSensitivity.PathKey(uri.FileName().AsPath())
-		if affectsWatch(uri) || slices.ContainsFunc(filesToWatch, func(path tspath.RootedPath) bool {
-			return deletedPath.ContainsPath(caseSensitivity.PathKey(path))
-		}) || slices.ContainsFunc(typingsFiles, func(path tspath.RootedFilePath) bool {
-			return deletedPath.ContainsPath(caseSensitivity.PathKey(path.AsPath()))
-		}) {
+		if affectsWatch(uri, true) {
 			return true
 		}
 	}

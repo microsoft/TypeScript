@@ -48,6 +48,39 @@ func TestTypingsWatchAncestorDeletion(t *testing.T) {
 	}
 }
 
+func TestTypingsWatchBatchAllocations(t *testing.T) { //nolint:paralleltest // allocation counting requires sequential execution
+	var events collections.Set[lsproto.DocumentUri]
+	for i := range 500 {
+		events.Add(lsproto.DocumentUri(fmt.Sprintf("file:///unrelated/file%d.js", i)))
+	}
+	var filesToWatch []tspath.RootedPath
+	var typingsFiles []tspath.RootedFilePath
+	for i := range 16 {
+		filesToWatch = append(filesToWatch, tspath.RootedFilePathFromNormalized(fmt.Sprintf("/workspace/package%d/package.json", i)).AsPath())
+		typingsFiles = append(typingsFiles, tspath.RootedFilePathFromNormalized(fmt.Sprintf("/workspace/package%d/index.d.ts", i)))
+	}
+	for _, kind := range []string{"changed", "created", "deleted"} { //nolint:paralleltest // allocation counting requires sequential execution
+		t.Run(kind, func(t *testing.T) {
+			summary := FileChangeSummary{}
+			switch kind {
+			case "changed":
+				summary.Changed = events
+			case "created":
+				summary.Created = events
+			case "deleted":
+				summary.Deleted = events
+			}
+			allocations := testing.AllocsPerRun(10, func() {
+				if fileChangeSummaryAffectsTypingsWatch(summary, filesToWatch, typingsFiles, tspath.CaseSensitive) {
+					t.Fatal("unrelated events must not affect the typings watch")
+				}
+			})
+			// URI decoding allocates once per event; building the watch list should not.
+			assert.Assert(t, allocations <= float64(events.Len()+4), "watch-list allocations must not scale with the event count: %v", allocations)
+		})
+	}
+}
+
 func TestSnapshot(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
