@@ -1923,7 +1923,7 @@ func (s *Session) handleCleanBuild(ctx context.Context, params *CleanBuildParams
 	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
 		return nil, fmt.Errorf("build orchestrator not found while cleaning %s", params.Project)
 	}
-	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(params.Project)
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(ctx, params.Project)
 	return &CleanBuildResponse{
 		Status:       result.Result.Status,
 		Diagnostics:  NewDiagnosticResponses(result.Errors),
@@ -1938,7 +1938,7 @@ func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildP
 	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
 		return nil, fmt.Errorf("build orchestrator not found while cleaning references for %s", params.Project)
 	}
-	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(params.Project)
+	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(ctx, params.Project)
 	return &CleanBuildResponse{
 		Status:       result.Result.Status,
 		Diagnostics:  NewDiagnosticResponses(result.Errors),

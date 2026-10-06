@@ -9,8 +9,10 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
@@ -75,6 +77,51 @@ func TestWatchCycleStopsWithCancelledContext(t *testing.T) {
 			after, ok = sys.FS().ReadFile("/home/src/workspaces/project/out/a.js")
 			assert.Assert(t, ok)
 			assert.Assert(t, strings.Contains(after, "a = 2"))
+		})
+	}
+}
+
+func TestBuildWatchSkipsReconciliationAfterCancellation(t *testing.T) {
+	t.Parallel()
+	for _, cancelConfig := range []bool{false, true} {
+		t.Run(fmt.Sprintf("cancelConfig=%t", cancelConfig), func(t *testing.T) {
+			t.Parallel()
+			const config = "/home/src/workspaces/project/tsconfig.json"
+			const source = "/home/src/workspaces/project/a.ts"
+			sys := newTestSys(&tscInput{
+				files: FileMap{
+					config: `{"compilerOptions":{"composite":true},"files":["a.ts"]}`,
+					source: `export const a = 1;`,
+				},
+			}, false)
+			ctx, cancel := context.WithCancel(t.Context())
+			defer cancel()
+			fs := &cancellingBuildFS{FS: sys.FS(), cancel: cancel}
+			wrapped := &cancellingBuildSystem{TestSys: sys, fs: fs}
+			orchestrator := build.NewOrchestrator(build.Options{
+				Sys:     wrapped,
+				Command: tsoptions.ParseBuildCommandLine([]string{"--watch"}, wrapped.FS(), sys.GetCurrentDirectory()),
+				Testing: sys,
+			})
+			result := orchestrator.Build(t.Context(), "")
+			assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+			assert.Assert(t, result.Result.Watcher != nil)
+			changed := tspath.RootedFilePath(source)
+			if cancelConfig {
+				changed = config
+				sys.writeFileNoError(config, `{"compilerOptions":{"composite":true,"strict":true},"files":["a.ts"]}`)
+			} else {
+				sys.writeFileNoError(source, `export const a = 2;`)
+			}
+			fs.cancelPath = changed
+			sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: changed.AsString()}})
+			sys.clearOutput()
+
+			orchestrator.DoCycle(ctx)
+
+			assert.Equal(t, ctx.Err(), context.Canceled)
+			assert.Equal(t, fs.postCancelDirectoryReads.Load(), int64(0))
+			assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Watching for file changes."))
 		})
 	}
 }

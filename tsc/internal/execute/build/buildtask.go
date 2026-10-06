@@ -807,7 +807,11 @@ func (t *BuildTask) updateTimeStamps(orchestrator *Orchestrator, emittedFiles []
 	updateTimeStamp(t.resolved.GetBuildInfoFileName())
 }
 
-func (t *BuildTask) cleanProject(orchestrator *Orchestrator, path tspath.PathKey) {
+func (t *BuildTask) cleanProject(ctx context.Context, orchestrator *Orchestrator, path tspath.PathKey) {
+	if ctx.Err() != nil {
+		t.result.exitStatus = tsc.ExitStatusCancelled
+		return
+	}
 	if t.resolved == nil {
 		t.reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.File_0_not_found, t.config))
 		t.result.exitStatus = tsc.ExitStatusDiagnosticsPresent_OutputsSkipped
@@ -818,18 +822,30 @@ func (t *BuildTask) cleanProject(orchestrator *Orchestrator, path tspath.PathKey
 		return orchestrator.caseSensitivity.PathKey(fileName.AsPath())
 	})...)
 	for outputFile := range t.resolved.GetOutputFileNames() {
-		t.cleanProjectOutput(orchestrator, outputFile, inputs)
+		if ctx.Err() != nil {
+			break
+		}
+		t.cleanProjectOutput(ctx, orchestrator, outputFile, inputs)
 	}
-	t.cleanProjectOutput(orchestrator, t.resolved.GetBuildInfoFileName(), inputs)
+	t.cleanProjectOutput(ctx, orchestrator, t.resolved.GetBuildInfoFileName(), inputs)
+	if ctx.Err() != nil {
+		t.result.exitStatus = tsc.ExitStatusCancelled
+	}
 }
 
-func (t *BuildTask) cleanProjectOutput(orchestrator *Orchestrator, outputFile tspath.RootedFilePath, inputs *collections.Set[tspath.PathKey]) {
+func (t *BuildTask) cleanProjectOutput(ctx context.Context, orchestrator *Orchestrator, outputFile tspath.RootedFilePath, inputs *collections.Set[tspath.PathKey]) {
+	if ctx.Err() != nil {
+		return
+	}
 	outputPath := orchestrator.caseSensitivity.PathKey(tspath.RootedPath(outputFile))
 	// If output name is same as input file name, do not delete and ignore the error
 	if inputs.Has(outputPath) {
 		return
 	}
 	if orchestrator.host.FS().FileExists(outputFile) {
+		if ctx.Err() != nil {
+			return
+		}
 		if !orchestrator.opts.Command.BuildOptions.Dry.IsTrue() {
 			err := orchestrator.host.FS().Remove(outputFile.AsPath())
 			if err != nil {

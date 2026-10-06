@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -25,16 +26,33 @@ import (
 
 type cancellingBuildFS struct {
 	vfs.FS
-	cancel context.CancelFunc
-	once   sync.Once
+	cancel                   context.CancelFunc
+	cancelPath               tspath.RootedFilePath
+	once                     sync.Once
+	cancelled                atomic.Bool
+	configReads              atomic.Int64
+	postCancelDirectoryReads atomic.Int64
 }
 
 func (f *cancellingBuildFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
 	content, ok := f.FS.ReadFile(path)
-	if path == "/home/src/workspaces/project/leaf/a.ts" {
-		f.once.Do(f.cancel)
+	if path.BaseName() == "tsconfig.json" {
+		f.configReads.Add(1)
+	}
+	if path == f.cancelPath {
+		f.once.Do(func() {
+			f.cancel()
+			f.cancelled.Store(true)
+		})
 	}
 	return content, ok
+}
+
+func (f *cancellingBuildFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	if f.cancelled.Load() {
+		f.postCancelDirectoryReads.Add(1)
+	}
+	return f.FS.DirectoryExists(path)
 }
 
 type cancellingBuildSystem struct {
@@ -48,39 +66,63 @@ func (s *cancellingBuildSystem) FS() vfs.FS {
 
 func TestBuildCancellationAcrossReferencesAndRetry(t *testing.T) {
 	t.Parallel()
-	sys := newTestSys(&tscInput{
-		files: FileMap{
-			"/home/src/workspaces/project/tsconfig.json":        `{"files":[],"references":[{"path":"./middle"}]}`,
-			"/home/src/workspaces/project/middle/tsconfig.json": `{"compilerOptions":{"composite":true},"references":[{"path":"../leaf"}]}`,
-			"/home/src/workspaces/project/middle/b.ts":          `import { a } from "../leaf/a"; export const b = a;`,
-			"/home/src/workspaces/project/leaf/tsconfig.json":   `{"compilerOptions":{"composite":true}}`,
-			"/home/src/workspaces/project/leaf/a.ts":            `export const a = 1;`,
-		},
-		commandLineArgs: []string{"--build", "--extendedDiagnostics"},
-	}, false)
-	ctx, cancel := context.WithCancel(t.Context())
-	defer cancel()
-	wrapped := &cancellingBuildSystem{
-		TestSys: sys,
-		fs:      &cancellingBuildFS{FS: sys.FS(), cancel: cancel},
-	}
-	orchestrator := build.NewOrchestrator(build.Options{
-		Sys:     wrapped,
-		Command: tsoptions.ParseBuildCommandLine([]string{"--extendedDiagnostics"}, wrapped.FS(), sys.GetCurrentDirectory()),
-		Testing: sys,
-	})
-	result := orchestrator.Build(ctx, "")
-	assert.Equal(t, result.Result.Status, tsc.ExitStatusCancelled)
-	assert.Equal(t, len(result.Errors), 0)
-	assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Total time:"))
-	assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
-	assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
+	for _, test := range []struct {
+		cancelPath  tspath.RootedFilePath
+		configReads int64
+	}{
+		{"", 0},
+		{"/home/src/workspaces/project/tsconfig.json", 1},
+		{"/home/src/workspaces/project/middle/tsconfig.json", 2},
+		{"/home/src/workspaces/project/leaf/a.ts", 3},
+	} {
+		for _, singleThreaded := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/singleThreaded=%t", test.cancelPath, singleThreaded), func(t *testing.T) {
+				t.Parallel()
+				sys := newTestSys(&tscInput{
+					files: FileMap{
+						"/home/src/workspaces/project/tsconfig.json":        `{"files":[],"references":[{"path":"./middle"}]}`,
+						"/home/src/workspaces/project/middle/tsconfig.json": `{"compilerOptions":{"composite":true},"references":[{"path":"../leaf"}]}`,
+						"/home/src/workspaces/project/middle/b.ts":          `import { a } from "../leaf/a"; export const b = a;`,
+						"/home/src/workspaces/project/leaf/tsconfig.json":   `{"compilerOptions":{"composite":true}}`,
+						"/home/src/workspaces/project/leaf/a.ts":            `export const a = 1;`,
+					},
+					commandLineArgs: []string{"--build", "--extendedDiagnostics"},
+				}, false)
+				ctx, cancel := context.WithCancel(t.Context())
+				defer cancel()
+				fs := &cancellingBuildFS{FS: sys.FS(), cancel: cancel, cancelPath: test.cancelPath}
+				wrapped := &cancellingBuildSystem{TestSys: sys, fs: fs}
+				if test.cancelPath == "" {
+					cancel()
+				}
+				args := []string{"--extendedDiagnostics"}
+				if singleThreaded {
+					args = append(args, "--singleThreaded")
+				}
+				orchestrator := build.NewOrchestrator(build.Options{
+					Sys:     wrapped,
+					Command: tsoptions.ParseBuildCommandLine(args, wrapped.FS(), sys.GetCurrentDirectory()),
+					Testing: sys,
+				})
+				result := orchestrator.Build(ctx, "")
+				assert.Equal(t, result.Result.Status, tsc.ExitStatusCancelled)
+				assert.Equal(t, len(result.Errors), 0)
+				assert.Equal(t, fs.configReads.Load(), test.configReads)
+				if test.configReads < 3 {
+					assert.Equal(t, len(orchestrator.Order()), 0)
+				}
+				assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Total time:"))
+				assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
+				assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
 
-	result = orchestrator.Build(t.Context(), "")
-	assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
-	assert.Equal(t, len(result.Errors), 0)
-	assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
-	assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
+				result = orchestrator.Build(t.Context(), "")
+				assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+				assert.Equal(t, len(result.Errors), 0)
+				assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
+				assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
+			})
+		}
+	}
 }
 
 func TestBuildCommandLine(t *testing.T) {
