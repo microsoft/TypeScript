@@ -1,0 +1,234 @@
+// === QuickInfo ===
+=== /hoverImportEqualsAliasJSDoc.ts ===
+// declare namespace a {
+//     /** on the declaration */
+//     export function fn(): void;
+//     /** on the declaration */
+//     export const value: number;
+//     /** on the declaration */
+//     export interface Shape {}
+//     export function bare(): void;
+// }
+// declare namespace b {
+//     /** on the alias */
+//     export import fn = a.fn;
+//     /** on the alias */
+//     export import value = a.value;
+//     /** on the alias */
+//     export import Shape = a.Shape;
+//     /** on the alias */
+//     export import bare = a.bare;
+// }
+// b.fn;
+//   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.fn(): void
+// | ```
+// | on the alias
+// | ----------------------------------------------------------------------
+// b.fn();
+//   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.fn(): void
+// | ```
+// | on the declaration
+// | ----------------------------------------------------------------------
+// b.value;
+//   ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) const a.value: number
+// | ```
+// | on the alias
+// | ----------------------------------------------------------------------
+// let shape: b.Shape;
+//              ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) interface a.Shape
+// | ```
+// | on the alias
+// | ----------------------------------------------------------------------
+// b.bare;
+//   ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.bare(): void
+// | ```
+// | on the alias
+// | ----------------------------------------------------------------------
+// b.bare();
+//   ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.bare(): void
+// | ```
+// | on the alias
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 496,
+      "LSPosition": {
+        "line": 19,
+        "character": 2
+      },
+      "Name": "fn",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.fn(): void\n```\non the alias"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 2
+        },
+        "end": {
+          "line": 19,
+          "character": 4
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 502,
+      "LSPosition": {
+        "line": 20,
+        "character": 2
+      },
+      "Name": "fnCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.fn(): void\n```\non the declaration"
+      },
+      "range": {
+        "start": {
+          "line": 20,
+          "character": 2
+        },
+        "end": {
+          "line": 20,
+          "character": 4
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 510,
+      "LSPosition": {
+        "line": 21,
+        "character": 2
+      },
+      "Name": "value",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) const a.value: number\n```\non the alias"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 2
+        },
+        "end": {
+          "line": 21,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 530,
+      "LSPosition": {
+        "line": 22,
+        "character": 13
+      },
+      "Name": "Shape",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) interface a.Shape\n```\non the alias"
+      },
+      "range": {
+        "start": {
+          "line": 22,
+          "character": 13
+        },
+        "end": {
+          "line": 22,
+          "character": 18
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 539,
+      "LSPosition": {
+        "line": 23,
+        "character": 2
+      },
+      "Name": "bare",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.bare(): void\n```\non the alias"
+      },
+      "range": {
+        "start": {
+          "line": 23,
+          "character": 2
+        },
+        "end": {
+          "line": 23,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 547,
+      "LSPosition": {
+        "line": 24,
+        "character": 2
+      },
+      "Name": "bareCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.bare(): void\n```\non the alias"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 2
+        },
+        "end": {
+          "line": 24,
+          "character": 6
+        }
+      }
+    }
+  }
+]
