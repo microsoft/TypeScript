@@ -205,6 +205,22 @@ func (c *SyncConn) handleNotification(ctx context.Context, msg *Message) error {
 }
 
 func (c *SyncConn) waitForHandler(ctx context.Context, msg *Message) (syncHandlerResult, error) {
+	results := c.startHandler(ctx, msg)
+	for {
+		select {
+		case <-ctx.Done():
+			return syncHandlerResult{}, ctx.Err()
+		case result := <-results:
+			return result, nil
+		case operation := <-c.operations:
+			if err := c.serveOperation(ctx, operation); err != nil {
+				return syncHandlerResult{}, err
+			}
+		}
+	}
+}
+
+func (c *SyncConn) startHandler(ctx context.Context, msg *Message) <-chan syncHandlerResult {
 	results := make(chan syncHandlerResult, 1)
 	c.handlers.Go(func() {
 		var result syncHandlerResult
@@ -228,19 +244,7 @@ func (c *SyncConn) waitForHandler(ctx context.Context, msg *Message) (syncHandle
 			c.timing.record(msg.Method, time.Since(start))
 		}
 	})
-
-	for {
-		select {
-		case <-ctx.Done():
-			return syncHandlerResult{}, ctx.Err()
-		case result := <-results:
-			return result, nil
-		case operation := <-c.operations:
-			if err := c.serveOperation(ctx, operation); err != nil {
-				return syncHandlerResult{}, err
-			}
-		}
-	}
+	return results
 }
 
 // Call sends a request to the client and waits for a response.
