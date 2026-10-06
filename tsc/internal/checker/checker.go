@@ -27038,7 +27038,7 @@ func (c *Checker) unionContainsType(union *Type, t *Type, matchSymbol bool) bool
 	case t.flags&TypeFlagsUniqueESSymbol != 0 && matchSymbol:
 		primitive = c.esSymbolType
 	}
-	return primitive != nil && core.Some(types, func(member *Type) bool { return member.flags&primitive.flags != 0 })
+	return primitive != nil && isSomeTypePrimitive(types, primitive)
 }
 
 func (c *Checker) getCrossProductIntersections(types []*Type, flags IntersectionFlags) []*Type {
@@ -27230,6 +27230,10 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 func containsType(types []*Type, t *Type) bool {
 	_, ok := slices.BinarySearchFunc(types, t, CompareTypes)
 	return ok
+}
+
+func isSomeTypePrimitive(types []*Type, primitive *Type) bool {
+	return core.Some(types, func(member *Type) bool { return member.flags&primitive.flags != 0 })
 }
 
 func insertType(types []*Type, t *Type) ([]*Type, bool) {

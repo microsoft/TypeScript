@@ -3031,7 +3031,7 @@ func (r *Relater) typeRelatedToSomeType(source *Type, target *Type, reportErrors
 			case source.flags&TypeFlagsBigIntLiteral != 0:
 				primitive = r.c.bigintType
 			}
-			if primitive != nil && core.Some(targetTypes, func(member *Type) bool { return member.flags&primitive.flags != 0 }) || alternateForm != nil && containsType(targetTypes, alternateForm) {
+			if primitive != nil && isSomeTypePrimitive(targetTypes, primitive) || alternateForm != nil && containsType(targetTypes, alternateForm) {
 				return TernaryTrue
 			}
 			return TernaryFalse
