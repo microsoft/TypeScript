@@ -32697,7 +32697,7 @@ func (c *Checker) getDiagnosticsEmitResolver() *EmitResolver {
 	return c.emitResolver
 }
 
-func (c *Checker) GetEmitResolver(emitContext *printer.EmitContext) *EmitResolver {
+func (c *Checker) NewEmitResolver(emitContext *printer.EmitContext) *EmitResolver {
 	return newEmitResolver(c, emitContext)
 }
 

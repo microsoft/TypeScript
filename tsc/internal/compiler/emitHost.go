@@ -2,8 +2,11 @@ package compiler
 
 import (
 	"context"
+	"sync"
+	"weak"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
@@ -32,16 +35,15 @@ var _ EmitHost = (*emitHost)(nil)
 // NOTE: emitHost operations must be thread-safe
 type emitHost struct {
 	program         *Program
-	getEmitResolver func(*printer.EmitContext) printer.EmitResolver
+	newEmitResolver func(*printer.EmitContext) *checker.EmitResolver
+	emitResolvers   sync.Map
 }
 
 func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	return &emitHost{
-		program: program,
-		getEmitResolver: func(emitContext *printer.EmitContext) printer.EmitResolver {
-			return checker.GetEmitResolver(emitContext)
-		},
+		program:         program,
+		newEmitResolver: checker.NewEmitResolver,
 	}, done
 }
 
@@ -129,7 +131,33 @@ func (host *emitHost) WriteFile(fileName tspath.RootedFilePath, text string) err
 }
 
 func (host *emitHost) GetEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver {
-	return host.getEmitResolver(emitContext)
+	key := weak.Make(emitContext)
+	if cached, ok := host.emitResolvers.Load(key); ok {
+		if resolver := cached.(weak.Pointer[checker.EmitResolver]).Value(); resolver != nil {
+			return resolver
+		}
+	}
+	host.emitResolvers.Range(func(cachedKey, cachedValue any) bool {
+		entryKey := cachedKey.(weak.Pointer[printer.EmitContext])
+		if entryKey.Value() == nil || cachedValue.(weak.Pointer[checker.EmitResolver]).Value() == nil {
+			host.emitResolvers.CompareAndDelete(cachedKey, cachedValue)
+		}
+		return true
+	})
+	resolver := host.newEmitResolver(emitContext)
+	resolverRef := weak.Make(resolver)
+	for {
+		cached, loaded := host.emitResolvers.LoadOrStore(key, resolverRef)
+		if !loaded {
+			return resolver
+		}
+		if existing := cached.(weak.Pointer[checker.EmitResolver]).Value(); existing != nil {
+			return existing
+		}
+		if host.emitResolvers.CompareAndSwap(key, cached, resolverRef) {
+			return resolver
+		}
+	}
 }
 
 func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {

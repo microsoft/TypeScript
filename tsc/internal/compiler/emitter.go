@@ -47,8 +47,9 @@ func (e *emitter) emit() {
 	if e.tr != nil {
 		defer e.tr.Push(tracing.PhaseEmit, "emit", map[string]any{"path": string(e.sourceFile.PathKey())}, true)()
 	}
-	e.emitJSFile(e.sourceFile, e.paths.JsFilePath(), e.paths.SourceMapFilePath())
-	e.emitDeclarationFile(e.sourceFile, e.paths.DeclarationFilePath(), e.paths.DeclarationMapPath())
+	emitContext := printer.NewEmitContext()
+	e.emitJSFile(emitContext, e.sourceFile, e.paths.JsFilePath(), e.paths.SourceMapFilePath())
+	e.emitDeclarationFile(emitContext, e.sourceFile, e.paths.DeclarationFilePath(), e.paths.DeclarationMapPath())
 	e.emitResult.Diagnostics = e.emitterDiagnostics.GetDiagnostics()
 }
 
@@ -178,7 +179,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 	return tx
 }
 
-func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath tspath.RootedFilePath, sourceMapFilePath tspath.RootedFilePath) {
+func (e *emitter) emitJSFile(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, jsFilePath tspath.RootedFilePath, sourceMapFilePath tspath.RootedFilePath) {
 	options := e.host.Options()
 
 	if sourceFile == nil || e.emitOnly != EmitAll && e.emitOnly != EmitOnlyJs || jsFilePath == "" {
@@ -193,9 +194,6 @@ func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath tspath.Roote
 	if e.tr != nil {
 		defer e.tr.Push(tracing.PhaseEmit, "emitJsFileOrBundle", map[string]any{"jsFilePath": jsFilePath}, true)()
 	}
-
-	emitContext, putEmitContext := printer.GetEmitContext()
-	defer putEmitContext()
 
 	sourceFile = e.runScriptTransformers(emitContext, sourceFile)
 
@@ -218,7 +216,7 @@ func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath tspath.Roote
 	e.printSourceFile(jsFilePath, sourceMapFilePath, sourceFile, printer, options, shouldEmitSourceMaps(options, sourceFile))
 }
 
-func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFilePath tspath.RootedFilePath, declarationMapPath tspath.RootedFilePath) {
+func (e *emitter) emitDeclarationFile(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, declarationFilePath tspath.RootedFilePath, declarationMapPath tspath.RootedFilePath) {
 	options := e.host.Options()
 
 	if sourceFile == nil || e.emitOnly == EmitOnlyJs || declarationFilePath == "" {
@@ -231,8 +229,6 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 		defer e.tr.Push(tracing.PhaseEmit, "emitDeclarationFileOrBundle", map[string]any{"declarationFilePath": declarationFilePath}, true)()
 	}
 
-	emitContext, putEmitContext := printer.GetEmitContext()
-	defer putEmitContext()
 	sourceFile, diags := e.runDeclarationTransformers(emitContext, sourceFile, declarationFilePath, declarationMapPath)
 
 	for _, elem := range diags {
