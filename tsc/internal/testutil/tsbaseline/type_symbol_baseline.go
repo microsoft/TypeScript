@@ -405,6 +405,13 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 			printer := printer.NewPrinter(printer.PrinterOptions{RemoveComments: true}, printer.PrintHandlers{}, ctx)
 			printer.Write(typeNode, walker.currentSourceFile, writer, nil)
 			typeString = writer.String()
+			origin := fileChecker.GetLiteralTypeOrigin(t)
+			if origin != nil {
+				originNode := builder.TypeToTypeNode(origin, node.Parent, nodebuilder.Flags(typeFormatFlags&checker.TypeFormatFlagsNodeBuilderFlagsMask)|nodebuilder.FlagsIgnoreErrors, nodebuilder.InternalFlagsAllowUnresolvedNames, nil)
+				writer.Clear()
+				printer.Write(originNode, walker.currentSourceFile, writer, nil)
+				typeString += " (origin: " + writer.String() + ")"
+			}
 		}
 		return &typeWriterResult{
 			line:       line,

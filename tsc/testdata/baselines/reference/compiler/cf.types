@@ -76,7 +76,7 @@ function f() {
 
         y++;
 >y++ : number
->y : number
+>y : number (origin: number | 20)
     }
     while (y>2) {
 >y>2 : boolean

@@ -43,35 +43,35 @@ export function templateLeft(value: {} & `prefix${string}`) { return value; }
 
 export function stringUnion(value: "literal" | (string & {})) { return value; }
 >stringUnion : (value: "literal" | (string & {})) => string
->value : string
->value : string
+>value : string (origin: string | "literal")
+>value : string (origin: string | "literal")
 
 export function numberUnion(value: 1 | (number & {})) { return value; }
 >numberUnion : (value: 1 | (number & {})) => number
->value : number
->value : number
+>value : number (origin: number | 1)
+>value : number (origin: number | 1)
 
 export function bigintUnion(value: 1n | (bigint & {})) { return value; }
 >bigintUnion : (value: 1n | (bigint & {})) => bigint
->value : bigint
->value : bigint
+>value : bigint (origin: bigint | 1n)
+>value : bigint (origin: bigint | 1n)
 
 export function templateUnion(value: "prefixValue" | (`prefix${string}` & {})) { return value; }
 >templateUnion : (value: "prefixValue" | (`prefix${string}` & {})) => `prefix${string}`
->value : `prefix${string}`
->value : `prefix${string}`
+>value : `prefix${string}` (origin: "prefixValue" | `prefix${string}`)
+>value : `prefix${string}` (origin: "prefixValue" | `prefix${string}`)
 
 type Choice = "a" | "b" | string;
->Choice : string
+>Choice : string (origin: string | "a" | "b")
 
 type OtherChoice = "c" | string;
->OtherChoice : string
+>OtherChoice : string (origin: string | "c")
 
 type NumericChoice = 1 | 2 | number;
->NumericChoice : number
+>NumericChoice : number (origin: number | 1 | 2)
 
 type BigIntChoice = 1n | 2n | bigint;
->BigIntChoice : bigint
+>BigIntChoice : bigint (origin: bigint | 1n | 2n)
 
 type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
 >Equal : Equal<Left, Right>
@@ -106,25 +106,25 @@ const intersectionIdentity: Equal<Choice & {}, string> = true;
 
 export function mergedChoices(value: Choice | OtherChoice | string) { return value; }
 >mergedChoices : (value: Choice | OtherChoice | string) => string
->value : string
->value : string
+>value : string (origin: string | "a" | "b" | "c")
+>value : string (origin: string | "a" | "b" | "c")
 
 export function mixedChoices(value: Choice | number) { return value; }
 >mixedChoices : (value: Choice | number) => string | number
->value : string | number
->value : string | number
+>value : string | number (origin: string | number | "a" | "b")
+>value : string | number (origin: string | number | "a" | "b")
 
 type GenericChoice<Value> = "a" | "b" | string;
->GenericChoice : string
+>GenericChoice : string (origin: string | "a" | "b")
 
 export function genericChoice<Value>(value: GenericChoice<Value>) { return value; }
 >genericChoice : <Value>(value: GenericChoice<Value>) => string
->value : string
->value : string
+>value : string (origin: string | "a" | "b")
+>value : string (origin: string | "a" | "b")
 
 export const instantiatedChoice = genericChoice<number>("other");
->instantiatedChoice : string
->genericChoice<number>("other") : string
+>instantiatedChoice : string (origin: string | "a" | "b")
+>genericChoice<number>("other") : string (origin: string | "a" | "b")
 >genericChoice : <Value>(value: GenericChoice<Value>) => string
 >"other" : "other"
 

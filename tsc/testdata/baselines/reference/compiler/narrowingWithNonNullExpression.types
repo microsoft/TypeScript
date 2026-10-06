@@ -18,7 +18,7 @@ m! && m[0];
 >0 : 0
 
 m?.[0]! && m[0];
->m?.[0]! && m[0] : string
+>m?.[0]! && m[0] : string (origin: string | "")
 >m?.[0]! : string
 >m?.[0] : string | undefined
 >m : RegExpMatchArray | null

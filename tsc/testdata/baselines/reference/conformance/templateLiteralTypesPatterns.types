@@ -561,13 +561,13 @@ var aa: '0' & `${number}`;
 // Remove string literals from unions with matching template literals
 
 let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
->t1 : "1foo" | `foo${string}`
+>t1 : "1foo" | `foo${string}` (origin: "1foo" | "foo1" | `foo${string}`)
 
 let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
->t2 : "1foo" | "xfoo" | `foo${string}`
+>t2 : "1foo" | "xfoo" | `foo${string}` (origin: "1foo" | "foo1" | "foofoo" | "foox" | "xfoo" | `foo${string}`)
 
 let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
->t3 : "xfoo" | `${number}foo` | `foo${string}`
+>t3 : "xfoo" | `${number}foo` | `foo${string}` (origin: "1foo" | "foo1" | "foofoo" | "foox" | "xfoo" | `${number}foo` | `foo${string}`)
 
 var bb: `${number}`;
 >bb : `${number}`
@@ -638,7 +638,7 @@ export abstract class BB {
 // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
 function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
 >conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | (`${string}Downcast` & {})) => void
->groupName : "downcast" | `${string}Downcast`
+>groupName : "downcast" | `${string}Downcast` (origin: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast`)
 
 conversionTest("testDowncast");
 >conversionTest("testDowncast") : void
@@ -647,7 +647,7 @@ conversionTest("testDowncast");
 
 function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
 >conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
->groupName : "downcast" | `${string}Downcast`
+>groupName : "downcast" | `${string}Downcast` (origin: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast`)
 
 conversionTest2("testDowncast");
 >conversionTest2("testDowncast") : void
@@ -656,7 +656,7 @@ conversionTest2("testDowncast");
 
 function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
 >conversionTest3 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
->groupName : "downcast" | `${string}Downcast`
+>groupName : "downcast" | `${string}Downcast` (origin: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast`)
 
 conversionTest3("testDowncast");
 >conversionTest3("testDowncast") : void
@@ -665,7 +665,7 @@ conversionTest3("testDowncast");
 
 function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
 >conversionTest4 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
->groupName : "downcast" | `${string}Downcast`
+>groupName : "downcast" | `${string}Downcast` (origin: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast`)
 
 conversionTest4("testDowncast");
 >conversionTest4("testDowncast") : void

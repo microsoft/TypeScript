@@ -2,11 +2,11 @@
 
 === stringOriginIndexSignatures.ts ===
 type Key = "known" | string;
->Key : string
+>Key : string (origin: string | "known")
 
 interface StringIndex {
     [key: Key]: number;
->key : string
+>key : string (origin: string | "known")
 }
 
 declare const indexed: StringIndex;
@@ -34,7 +34,7 @@ export const stringKey: keyof StringIndex = "other";
 
 interface SpecificIndices {
     [key: Key]: any;
->key : string
+>key : string (origin: string | "known")
 
     [key: number]: number;
 >key : number
@@ -137,7 +137,7 @@ export const clonedIndex: StringIndex = canonicalIndex;
 
 interface AnyIndex {
     [key: Key]: any;
->key : string
+>key : string (origin: string | "known")
 }
 interface ObjectValue {
     value: number;
@@ -154,31 +154,31 @@ declare const wrapped: String;
 >wrapped : String
 
 const primitive: Key = wrapped;
->primitive : string
+>primitive : string (origin: string | "known")
 >wrapped : String
 
 declare const unionValue: Key | number;
->unionValue : string | number
+>unionValue : string | number (origin: string | number | "known")
 
 export const unionAssignment: Key | number = "value";
->unionAssignment : string | number
+>unionAssignment : string | number (origin: string | number | "known")
 >"value" : "value"
 
 export const reducedUnion = typeof unionValue === "string" ? unionValue : "known";
->reducedUnion : string
->typeof unionValue === "string" ? unionValue : "known" : string
+>reducedUnion : string (origin: string | "known")
+>typeof unionValue === "string" ? unionValue : "known" : string (origin: string | "known")
 >typeof unionValue === "string" : boolean
 >typeof unionValue : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->unionValue : string | number
+>unionValue : string | number (origin: string | number | "known")
 >"string" : "string"
 >unionValue : string
 >"known" : "known"
 
 declare const intersected: { [key: Key]: { first: number } } & { [key: "other" | string]: { second: string } };
 >intersected : { [key: string]: { first: number; }; } & { [key: string]: { second: string; }; }
->key : string
+>key : string (origin: string | "known")
 >first : number
->key : string
+>key : string (origin: string | "other")
 >second : string
 
 export const mergedIndex = intersected["value"]!;

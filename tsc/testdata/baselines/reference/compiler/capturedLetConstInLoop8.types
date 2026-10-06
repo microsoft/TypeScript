@@ -26,7 +26,7 @@ function foo() {
 >x : number
 >1 : 1
 >++x : number
->x : number
+>x : number (origin: number | 2)
 
             ll1:
 >ll1 : any

@@ -3,10 +3,10 @@
 === mappedStringLiteralOrigin.ts ===
 // Literal origins are editor metadata, not additional mapped keys.
 type Keys = "a" | string;
->Keys : string
+>Keys : string (origin: string | "a")
 
 type LegacyKeys = "a" | (string & {});
->LegacyKeys : string
+>LegacyKeys : string (origin: string | "a")
 
 type Values = Record<Keys, number>;
 >Values : Values
@@ -71,16 +71,16 @@ declare const keyValues: KeyValues;
 >keyValues : KeyValues
 
 export const literalValue = keyValues.a;
->literalValue : string | undefined
->keyValues.a : string | undefined
+>literalValue : string | undefined (origin: string | "a" | undefined)
+>keyValues.a : string | undefined (origin: string | "a" | undefined)
 >keyValues : KeyValues
->a : string | undefined
+>a : string | undefined (origin: string | "a" | undefined)
 
 export const indexValue = keyValues.other;
->indexValue : string | undefined
->keyValues.other : string | undefined
+>indexValue : string | undefined (origin: string | "a" | undefined)
+>keyValues.other : string | undefined (origin: string | "a" | undefined)
 >keyValues : KeyValues
->other : string | undefined
+>other : string | undefined (origin: string | "a" | undefined)
 
 type Remapped = { [Key in Keys as `get_${Key}`]: Key };
 >Remapped : Remapped
@@ -89,16 +89,16 @@ declare const remapped: Remapped;
 >remapped : Remapped
 
 export const remappedKnown = remapped.get_a;
->remappedKnown : string | undefined
->remapped.get_a : string | undefined
+>remappedKnown : string | undefined (origin: string | "a" | undefined)
+>remapped.get_a : string | undefined (origin: string | "a" | undefined)
 >remapped : Remapped
->get_a : string | undefined
+>get_a : string | undefined (origin: string | "a" | undefined)
 
 export const remappedOther = remapped.get_other;
->remappedOther : string | undefined
->remapped.get_other : string | undefined
+>remappedOther : string | undefined (origin: string | "a" | undefined)
+>remapped.get_other : string | undefined (origin: string | "a" | undefined)
 >remapped : Remapped
->get_other : string | undefined
+>get_other : string | undefined (origin: string | "a" | undefined)
 
 type OptionalValues = { readonly [Key in Keys]?: number };
 >OptionalValues : OptionalValues
@@ -145,7 +145,7 @@ export const requiredOther = required.other;
 >other : number | undefined
 
 type ExtendedKeys = Keys | "b" | number;
->ExtendedKeys : ExtendedKeys
+>ExtendedKeys : ExtendedKeys (origin: string | number | "a" | "b")
 
 declare const extended: Record<ExtendedKeys, number>;
 >extended : Record<ExtendedKeys, number>

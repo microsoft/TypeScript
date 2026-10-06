@@ -5,16 +5,16 @@ type Pattern = `${string}Downcast`;
 >Pattern : `${string}Downcast`
 
 type Choice = "dataDowncast" | "editingDowncast" | Pattern;
->Choice : Choice
+>Choice : Choice (origin: "dataDowncast" | "editingDowncast" | `${string}Downcast`)
 
 type OtherChoice = "otherDowncast" | Pattern;
->OtherChoice : OtherChoice
+>OtherChoice : OtherChoice (origin: "otherDowncast" | `${string}Downcast`)
 
 type MappedChoice = "DATADOWNCAST" | "EDITINGDOWNCAST" | Uppercase<Pattern>;
->MappedChoice : MappedChoice
+>MappedChoice : MappedChoice (origin: "DATADOWNCAST" | "EDITINGDOWNCAST" | `${Uppercase<string>}DOWNCAST`)
 
 type UppercaseChoice = "DATA" | "EDITING" | Uppercase<string>;
->UppercaseChoice : UppercaseChoice
+>UppercaseChoice : UppercaseChoice (origin: "DATA" | "EDITING" | Uppercase<string>)
 
 type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
 >Equal : Equal<Left, Right>
@@ -45,35 +45,35 @@ const uppercaseIdentity: Equal<UppercaseChoice, Uppercase<string>> = true;
 
 export function choose(value: Choice) { return value; }
 >choose : (value: Choice) => Choice
->value : Choice
->value : Choice
+>value : Choice (origin: "dataDowncast" | "editingDowncast" | `${string}Downcast`)
+>value : Choice (origin: "dataDowncast" | "editingDowncast" | `${string}Downcast`)
 
 export function merge(value: Choice | OtherChoice | Pattern) { return value; }
 >merge : (value: Choice | OtherChoice | Pattern) => `${string}Downcast`
->value : `${string}Downcast`
->value : `${string}Downcast`
+>value : `${string}Downcast` (origin: "dataDowncast" | "editingDowncast" | "otherDowncast" | `${string}Downcast`)
+>value : `${string}Downcast` (origin: "dataDowncast" | "editingDowncast" | "otherDowncast" | `${string}Downcast`)
 
 export function withExtra(value: "downcast" | Choice) { return value; }
 >withExtra : (value: "downcast" | Choice) => "downcast" | `${string}Downcast`
->value : "downcast" | `${string}Downcast`
->value : "downcast" | `${string}Downcast`
+>value : "downcast" | `${string}Downcast` (origin: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast`)
+>value : "downcast" | `${string}Downcast` (origin: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast`)
 
 export function mapped(value: MappedChoice) { return value; }
 >mapped : (value: MappedChoice) => MappedChoice
->value : MappedChoice
->value : MappedChoice
+>value : MappedChoice (origin: "DATADOWNCAST" | "EDITINGDOWNCAST" | `${Uppercase<string>}DOWNCAST`)
+>value : MappedChoice (origin: "DATADOWNCAST" | "EDITINGDOWNCAST" | `${Uppercase<string>}DOWNCAST`)
 
 export function uppercase(value: UppercaseChoice) { return value; }
 >uppercase : (value: UppercaseChoice) => UppercaseChoice
->value : UppercaseChoice
->value : UppercaseChoice
+>value : UppercaseChoice (origin: "DATA" | "EDITING" | Uppercase<string>)
+>value : UppercaseChoice (origin: "DATA" | "EDITING" | Uppercase<string>)
 
 const invalid: Choice = "downcast";
->invalid : Choice
+>invalid : Choice (origin: "dataDowncast" | "editingDowncast" | `${string}Downcast`)
 >"downcast" : "downcast"
 
 const invalidUppercase: UppercaseChoice = "lowercase";
->invalidUppercase : UppercaseChoice
+>invalidUppercase : UppercaseChoice (origin: "DATA" | "EDITING" | Uppercase<string>)
 >"lowercase" : "lowercase"
 
 declare const values: Record<Choice, number>;
@@ -104,16 +104,16 @@ type Generic<Value extends string> = Value | Pattern;
 >Generic : Generic<Value>
 
 declare const generic: Generic<"dataDowncast">;
->generic : Generic<"dataDowncast">
+>generic : Generic<"dataDowncast"> (origin: "dataDowncast" | `${string}Downcast`)
 
 const genericIdentity: Equal<typeof generic, Pattern> = true;
 >genericIdentity : true
->generic : Generic<"dataDowncast">
+>generic : Generic<"dataDowncast"> (origin: "dataDowncast" | `${string}Downcast`)
 >true : true
 
 export const genericValue = generic;
->genericValue : Generic<"dataDowncast">
->generic : Generic<"dataDowncast">
+>genericValue : Generic<"dataDowncast"> (origin: "dataDowncast" | `${string}Downcast`)
+>generic : Generic<"dataDowncast"> (origin: "dataDowncast" | `${string}Downcast`)
 
 declare const upper: Record<UppercaseChoice, number>;
 >upper : Record<UppercaseChoice, number>

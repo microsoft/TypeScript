@@ -244,7 +244,7 @@ function f5b() {
 >x : number
 >10 : 10
 >x++ : number
->x : number
+>x : number (origin: number | 1 | 2)
 
         if (x === 1 || x === 2) {
 >x === 1 || x === 2 : boolean
@@ -396,7 +396,7 @@ function makeAdder(n?: number) {
 >n : number | undefined
 
     n ??= 0;
->n ??= 0 : number
+>n ??= 0 : number (origin: number | 0)
 >n : number | undefined
 >0 : 0
 

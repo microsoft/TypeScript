@@ -2,19 +2,19 @@
 
 === stringLiteralTypesInUnionTypes02.ts ===
 type T = string | "foo" | "bar" | "baz";
->T : string
+>T : string (origin: string | "bar" | "baz" | "foo")
 
 var x: "foo" | "bar" | "baz" | string = undefined;
->x : string
+>x : string (origin: string | "bar" | "baz" | "foo")
 >undefined : undefined
 
 var y: T = undefined;
->y : string
+>y : string (origin: string | "bar" | "baz" | "foo")
 >undefined : undefined
 
 if (x === "foo") {
 >x === "foo" : boolean
->x : string
+>x : string (origin: string | "bar" | "baz" | "foo")
 >"foo" : "foo"
 
     let a = x;
@@ -23,14 +23,14 @@ if (x === "foo") {
 }
 else if (x !== "bar") {
 >x !== "bar" : boolean
->x : string
+>x : string (origin: string | "bar" | "baz" | "foo")
 >"bar" : "bar"
 
     let b = x || y;
->b : string
->x || y : string
->x : string
->y : string
+>b : string (origin: string | "bar" | "baz" | "foo")
+>x || y : string (origin: string | "bar" | "baz" | "foo")
+>x : string (origin: string | "bar" | "baz" | "foo")
+>y : string (origin: string | "bar" | "baz" | "foo")
 }
 else {
     let c = x;
@@ -38,25 +38,25 @@ else {
 >x : "bar"
 
     let d = y;
->d : string
->y : string
+>d : string (origin: string | "bar" | "baz" | "foo")
+>y : string (origin: string | "bar" | "baz" | "foo")
 
     let e: (typeof x) | (typeof y) = c || d;
->e : string
+>e : string (origin: string | "bar" | "baz" | "foo")
 >x : "bar"
->y : string
->c || d : string
+>y : string (origin: string | "bar" | "baz" | "foo")
+>c || d : string (origin: string | "bar" | "baz" | "foo")
 >c : string
->d : string
+>d : string (origin: string | "bar" | "baz" | "foo")
 }
 
 x = y;
->x = y : string
->x : string
->y : string
+>x = y : string (origin: string | "bar" | "baz" | "foo")
+>x : string (origin: string | "bar" | "baz" | "foo")
+>y : string (origin: string | "bar" | "baz" | "foo")
 
 y = x;
->y = x : string
->y : string
->x : string
+>y = x : string (origin: string | "bar" | "baz" | "foo")
+>y : string (origin: string | "bar" | "baz" | "foo")
+>x : string (origin: string | "bar" | "baz" | "foo")
 
