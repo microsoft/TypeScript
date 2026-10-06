@@ -570,6 +570,7 @@ func (l *LanguageService) itemInfoForTypeParameters(candidateSignature *checker.
 			// Use a temporary writer for p.Write since the printer calls Clear() on its writer
 			tempDpw := newDisplayPartsWriter(vsCapability)
 			p.Write(paramNode, sourceFile, tempDpw, nil)
+			emitContext.Factory.ReleaseArenas()
 			paramLabel := tempDpw.String()
 			paramDpw.WriteFrom(tempDpw)
 
@@ -648,6 +649,7 @@ func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Sign
 			// Use a temporary writer for p.Write since the printer calls Clear() on its writer
 			tempDpw := newDisplayPartsWriter(vsCapability)
 			p.Write(paramNode, sourceFile, tempDpw, nil)
+			emitContext.Factory.ReleaseArenas()
 			paramLabel := tempDpw.String()
 			paramDpw.WriteFrom(tempDpw)
 
@@ -695,11 +697,13 @@ func (l *LanguageService) createSignatureHelpParameterFromLabel(parameter *ast.S
 }
 
 func (l *LanguageService) createSignatureHelpParameterForParameter(parameter *ast.Symbol, enclosingDeclaratipn *ast.Node, builder *checker.NodeBuilder, p *printer.Printer, sourceFile *ast.SourceFile, c *checker.Checker, docFormat lsproto.MarkupKind) signatureHelpParameter {
+	defer builder.EmitContext().Factory.ReleaseArenas()
 	display := p.Emit(builder.SymbolToParameterDeclaration(parameter, enclosingDeclaratipn, signatureHelpNodeBuilderFlags, nodebuilder.InternalFlagsNone, nil), sourceFile)
 	return l.createSignatureHelpParameterFromLabel(parameter, display, c, docFormat)
 }
 
 func createSignatureHelpParameterForTypeParameter(t *checker.Type, sourceFile *ast.SourceFile, enclosingDeclaration *ast.Node, builder *checker.NodeBuilder, p *printer.Printer) signatureHelpParameter {
+	defer builder.EmitContext().Factory.ReleaseArenas()
 	display := p.Emit(builder.TypeParameterToDeclaration(t, enclosingDeclaration, signatureHelpNodeBuilderFlags, nodebuilder.InternalFlagsNone, nil), sourceFile)
 	return signatureHelpParameter{
 		parameterInfo: &lsproto.ParameterInformation{

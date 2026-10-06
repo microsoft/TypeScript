@@ -455,6 +455,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			return
 		}
 		emitContext := getEmitContext()
+		defer emitContext.Factory.ReleaseArenas()
 		idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
 		nb := checker.NewNodeBuilderEx(c, emitContext, idToSymbol)
 		combinedFlags := nodebuilder.Flags(flags&checker.TypeFormatFlagsNodeBuilderFlagsMask) | classifiedNodeBuilderFlags
@@ -493,6 +494,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			}
 		}
 		emitContext := getEmitContext()
+		defer emitContext.Factory.ReleaseArenas()
 		idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
 		nb := checker.NewNodeBuilderEx(c, emitContext, idToSymbol)
 		combinedFlags := nodebuilder.Flags(flags&checker.TypeFormatFlagsNodeBuilderFlagsMask) | classifiedNodeBuilderFlags
