@@ -118,7 +118,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
 	jsxTransformEnabled := options.GetJSXTransformEnabled() && sourceFile.LanguageVariant == core.LanguageVariantJSX
 
-	emitResolver := host.GetEmitResolver(emitContext)
+	emitResolver := host.NewEmitResolver(emitContext)
 
 	var referenceResolver binder.ReferenceResolver
 	if importElisionEnabled || jsxTransformEnabled || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() {
@@ -214,6 +214,7 @@ func (e *emitter) emitJSFile(emitContext *printer.EmitContext, sourceFile *ast.S
 	}, emitContext)
 
 	e.printSourceFile(jsFilePath, sourceMapFilePath, sourceFile, printer, options, shouldEmitSourceMaps(options, sourceFile))
+	emitContext.Factory.ReleaseArenas()
 }
 
 func (e *emitter) emitDeclarationFile(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, declarationFilePath tspath.RootedFilePath, declarationMapPath tspath.RootedFilePath) {

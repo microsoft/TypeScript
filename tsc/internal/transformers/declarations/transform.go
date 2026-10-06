@@ -38,7 +38,7 @@ type DeclarationEmitHost interface {
 
 	GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) OutputPaths
 	SourceFileMayBeEmitted(file *ast.SourceFile, forceDtsEmit bool) bool
-	GetEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver
+	NewEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver
 }
 
 type thisPropertyAssignmentKey struct {
@@ -101,7 +101,7 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 	if context == nil {
 		context = printer.NewEmitContext()
 	}
-	resolver := host.GetEmitResolver(context)
+	resolver := host.NewEmitResolver(context)
 	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), stripInternal: compilerOptions.StripInternal.IsTrue(), resolver: resolver}
 	tracker := NewSymbolTracker(host, resolver, state)
 	// TODO: Use new host GetOutputPathsFor method instead of passing in entrypoint paths (which will also better support bundled emit)

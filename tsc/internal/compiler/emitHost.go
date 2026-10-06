@@ -2,8 +2,6 @@ package compiler
 
 import (
 	"context"
-	"sync"
-	"weak"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -36,7 +34,6 @@ var _ EmitHost = (*emitHost)(nil)
 type emitHost struct {
 	program         *Program
 	newEmitResolver func(*printer.EmitContext) *checker.EmitResolver
-	emitResolvers   sync.Map
 }
 
 func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
@@ -130,34 +127,8 @@ func (host *emitHost) WriteFile(fileName tspath.RootedFilePath, text string) err
 	return host.program.Host().FS().WriteFile(fileName, text)
 }
 
-func (host *emitHost) GetEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver {
-	key := weak.Make(emitContext)
-	if cached, ok := host.emitResolvers.Load(key); ok {
-		if resolver := cached.(weak.Pointer[checker.EmitResolver]).Value(); resolver != nil {
-			return resolver
-		}
-	}
-	host.emitResolvers.Range(func(cachedKey, cachedValue any) bool {
-		entryKey := cachedKey.(weak.Pointer[printer.EmitContext])
-		if entryKey.Value() == nil || cachedValue.(weak.Pointer[checker.EmitResolver]).Value() == nil {
-			host.emitResolvers.CompareAndDelete(cachedKey, cachedValue)
-		}
-		return true
-	})
-	resolver := host.newEmitResolver(emitContext)
-	resolverRef := weak.Make(resolver)
-	for {
-		cached, loaded := host.emitResolvers.LoadOrStore(key, resolverRef)
-		if !loaded {
-			return resolver
-		}
-		if existing := cached.(weak.Pointer[checker.EmitResolver]).Value(); existing != nil {
-			return existing
-		}
-		if host.emitResolvers.CompareAndSwap(key, cached, resolverRef) {
-			return resolver
-		}
-	}
+func (host *emitHost) NewEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver {
+	return host.newEmitResolver(emitContext)
 }
 
 func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
