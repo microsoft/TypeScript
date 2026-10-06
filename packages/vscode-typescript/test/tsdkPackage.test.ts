@@ -6,15 +6,16 @@ import test, { describe } from "node:test";
 import { resolvePackageExecutable } from "../src/tsdkPackage";
 
 const platformPackage = `typescript-${process.platform}-${process.arch}`;
+const nativePlatformPackage = `native-preview-${process.platform}-${process.arch}`;
 const exeSuffix = process.platform === "win32" ? ".exe" : "";
 const exeName = `tsc${exeSuffix}`;
 const nativeExeName = `tsgo${exeSuffix}`;
 
-function createPackage(root: string, relativePath: string): string {
+function createPackage(root: string, relativePath: string, packageJson: object = {}): string {
     const packagePath = path.join(root, relativePath);
     fs.mkdirSync(packagePath, { recursive: true });
     const packageJsonPath = path.join(packagePath, "package.json");
-    fs.writeFileSync(packageJsonPath, "{}");
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
     return packageJsonPath;
 }
 
@@ -75,9 +76,15 @@ describe("tsdk package resolution", { concurrency: true }, () => {
         platformPath: `node_modules/@typescript/${platformPackage}`,
     });
 
-    const nativePlatformPackage = `native-preview-${process.platform}-${process.arch}`;
-    testResolution("resolves the native-preview package", {
+    testResolution("resolves the @typescript/typescript native-preview package", {
         packagePath: "node_modules/@typescript/typescript",
+        platformPath: `node_modules/@typescript/${nativePlatformPackage}`,
+        platformPackage: nativePlatformPackage,
+        exeName: nativeExeName,
+    });
+
+    testResolution("resolves the @typescript/native-preview package", {
+        packagePath: "node_modules/@typescript/native-preview",
         platformPath: `node_modules/@typescript/${nativePlatformPackage}`,
         platformPackage: nativePlatformPackage,
         exeName: nativeExeName,
