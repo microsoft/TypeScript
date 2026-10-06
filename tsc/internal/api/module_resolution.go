@@ -188,7 +188,8 @@ func staticModuleResolutionToResolvedModule(staticResolution *StaticModuleResolu
 		return nil
 	}
 	result := &module.ResolvedModule{
-		ResolvedFileName: staticResolution.ResolvedFileName.ToFileName(currentDirectory),
+		ResolvedFileName:   staticResolution.ResolvedFileName.ToFileName(currentDirectory),
+		IsCustomResolution: true,
 	}
 	if staticResolution.OriginalPath != nil {
 		result.OriginalPath = staticResolution.OriginalPath.ToFileName(currentDirectory)

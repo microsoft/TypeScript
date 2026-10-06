@@ -15529,7 +15529,7 @@ func (c *Checker) resolveExternalModule(
 			c.error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.ResolvedFileName)
 		}
 
-		if errorNode != nil {
+		if errorNode != nil && !resolvedModule.IsCustomResolution {
 			if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleReference) {
 				if ast.FindAncestor(location, ast.IsEmittableImport) != nil {
 					tsExtension := tspath.TryExtractTSExtension(moduleReference)
