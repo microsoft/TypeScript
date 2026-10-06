@@ -1,94 +1,104 @@
 //// [tests/cases/compiler/declarationEmitAlternativeContainingModules.ts] ////
 
 //// [model.ts]
-export interface Model { value: string; }
-export function make(): Model { return { value: "" }; }
-
-//// [factory.ts]
-export { make } from "./model";
-
-//// [aliases.ts]
-export { Model as First, Model as Second } from "./model";
-
-//// [preferred.ts]
-export { Model, Model as Renamed } from "./model";
-
-//// [star.ts]
-export * from "./aliases";
-
-//// [direct.ts]
-import { make } from "./factory";
-export const direct = make();
-export const repeated = make();
-
-//// [renamed.ts]
-import { make } from "./factory";
-import * as aliases from "./aliases";
-export const renamed = make();
-
-//// [sameName.ts]
-import { make } from "./factory";
-import * as preferred from "./preferred";
-export const sameName = make();
+export interface Named { value: string; }
+export interface Aliased { value: string; }
+export interface Assigned { value: string; }
+export interface Ordered { value: string; }
+export interface Unlisted { value: string; }
+export function makeNamed(): Named { return { value: "" }; }
+export function makeAliased(): Aliased { return { value: "" }; }
+export function makeAssigned(): Assigned { return { value: "" }; }
+export function makeOrdered(): Ordered { return { value: "" }; }
+export function makeUnlisted(): Unlisted { return { value: "" }; }
 
 //// [starred.ts]
-import { make } from "./factory";
-import * as star from "./star";
-export const starred = make();
+export interface Starred { value: string; }
+export function makeStarred(): Starred { return { value: "" }; }
 
-//// [exported.ts]
-import { Model } from "./model";
-export = Model;
+//// [factory.ts]
+export { makeNamed, makeAliased, makeAssigned, makeOrdered, makeUnlisted } from "./internal/deep/model";
+export { makeStarred } from "./internal/deep/starred";
 
-//// [exportEquals.ts]
-import { make } from "./factory";
-import Model = require("./exported");
-export const exportEquals = make();
+//// [named.ts]
+export { Named } from "./internal/deep/model";
+
+//// [aliased.ts]
+export { Aliased as Alias } from "./internal/deep/model";
+
+//// [star.ts]
+export * from "./internal/deep/starred";
+
+//// [assigned.ts]
+import { Assigned } from "./internal/deep/model";
+export = Assigned;
+
+//// [orderedFirst.ts]
+export { Ordered } from "./internal/deep/model";
+
+//// [orderedSecond.ts]
+export { Ordered } from "./internal/deep/model";
 
 //// [index.ts]
-export { direct, repeated } from "./direct";
-export { renamed } from "./renamed";
-export { sameName } from "./sameName";
-export { starred } from "./starred";
-export { exportEquals } from "./exportEquals";
+import { makeNamed, makeAliased, makeStarred, makeAssigned, makeOrdered, makeUnlisted } from "./factory";
+export const named = makeNamed();
+export const repeated = makeNamed();
+export const aliased = makeAliased();
+export const starred = makeStarred();
+export const assigned = makeAssigned();
+export const ordered = makeOrdered();
+export const unlisted = makeUnlisted();
 
 
 
 
 //// [model.d.ts]
-export interface Model {
+export interface Named {
     value: string;
 }
-export declare function make(): Model;
-//// [factory.d.ts]
-export { make } from "./model";
-//// [aliases.d.ts]
-export { Model as First, Model as Second } from "./model";
-//// [preferred.d.ts]
-export { Model, Model as Renamed } from "./model";
-//// [star.d.ts]
-export * from "./aliases";
-//// [direct.d.ts]
-export declare const direct: import("./model").Model;
-export declare const repeated: import("./model").Model;
-//// [renamed.d.ts]
-import * as aliases from "./aliases";
-export declare const renamed: aliases.First;
-//// [sameName.d.ts]
-import * as preferred from "./preferred";
-export declare const sameName: preferred.Model;
+export interface Aliased {
+    value: string;
+}
+export interface Assigned {
+    value: string;
+}
+export interface Ordered {
+    value: string;
+}
+export interface Unlisted {
+    value: string;
+}
+export declare function makeNamed(): Named;
+export declare function makeAliased(): Aliased;
+export declare function makeAssigned(): Assigned;
+export declare function makeOrdered(): Ordered;
+export declare function makeUnlisted(): Unlisted;
 //// [starred.d.ts]
-import * as star from "./star";
-export declare const starred: star.First;
-//// [exported.d.ts]
-import { Model } from "./model";
-export = Model;
-//// [exportEquals.d.ts]
-import Model = require("./exported");
-export declare const exportEquals: Model;
+export interface Starred {
+    value: string;
+}
+export declare function makeStarred(): Starred;
+//// [factory.d.ts]
+export { makeNamed, makeAliased, makeAssigned, makeOrdered, makeUnlisted } from "./internal/deep/model";
+export { makeStarred } from "./internal/deep/starred";
+//// [named.d.ts]
+export { Named } from "./internal/deep/model";
+//// [aliased.d.ts]
+export { Aliased as Alias } from "./internal/deep/model";
+//// [star.d.ts]
+export * from "./internal/deep/starred";
+//// [assigned.d.ts]
+import { Assigned } from "./internal/deep/model";
+export = Assigned;
+//// [orderedFirst.d.ts]
+export { Ordered } from "./internal/deep/model";
+//// [orderedSecond.d.ts]
+export { Ordered } from "./internal/deep/model";
 //// [index.d.ts]
-export { direct, repeated } from "./direct";
-export { renamed } from "./renamed";
-export { sameName } from "./sameName";
-export { starred } from "./starred";
-export { exportEquals } from "./exportEquals";
+export declare const named: import("./named").Named;
+export declare const repeated: import("./named").Named;
+export declare const aliased: import("./aliased").Alias;
+export declare const starred: import("./star").Starred;
+export declare const assigned: import("./assigned");
+export declare const ordered: import("./orderedFirst").Ordered;
+export declare const unlisted: import("./internal/deep/model").Unlisted;
