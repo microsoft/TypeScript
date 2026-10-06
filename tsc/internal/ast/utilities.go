@@ -4220,7 +4220,20 @@ func IsExpandoInitializer(declaration *Node, initializer *Node) bool {
 }
 
 func GetContainingFunction(node *Node) *Node {
-	return FindAncestor(node.Parent, IsFunctionLike)
+	// Skip ComputedPropertyName so a yield/await inside a computed method name
+	// resolves to the outer function, not the method being named (avoids #62941
+	// infinite recursion via contextual typing of the method).
+	for node = node.Parent; node != nil; {
+		if node.Kind == KindComputedPropertyName {
+			node = node.Parent.Parent
+			continue
+		}
+		if IsFunctionLike(node) {
+			return node
+		}
+		node = node.Parent
+	}
+	return nil
 }
 
 func ImportFromModuleSpecifier(node *Node) *Node {

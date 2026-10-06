@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/yieldInComputedNameOfContextuallyTypedObjectNoCrash1.ts] ////
+
+=== yieldInComputedNameOfContextuallyTypedObjectNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62941
+
+function* g() {
+>g : () => Generator<number, void, unknown>
+
+  let x: any = {
+>x : any
+>{    *[yield 0]() {},  } : { [x: number]: () => Generator<never, void, unknown>; }
+
+    *[yield 0]() {},
+>[yield 0] : () => Generator<never, void, unknown>
+>yield 0 : any
+>0 : 0
+
+  };
+}
+
