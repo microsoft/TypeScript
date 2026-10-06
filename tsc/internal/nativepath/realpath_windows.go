@@ -3,6 +3,7 @@ package nativepath
 import (
 	"errors"
 	"os"
+	"path/filepath"
 	"syscall"
 
 	"golang.org/x/sys/windows"
@@ -11,11 +12,26 @@ import (
 // This implementation is based on what Node's fs.realpath.native does, via libuv: https://github.com/libuv/libuv/blob/ec5a4b54f7da7eeb01679005c615fee9633cdb3b/src/win/fs.c#L2937
 
 func Realpath(path string) (string, error) {
-	h, err := openMetadata(path)
-	if err != nil {
-		return "", err
+	var h windows.Handle
+	useExtendedPath := hasReservedPathComponent(path)
+	if len(path) < 248 || useExtendedPath {
+		var err error
+		h, err = openMetadata(path, useExtendedPath)
+		if err != nil {
+			return "", err
+		}
+		defer windows.CloseHandle(h) //nolint:errcheck
+	} else {
+		// For long paths, defer to os.Open to run the path through fixLongPath.
+		f, err := os.Open(path)
+		if err != nil {
+			return "", err
+		}
+		defer f.Close()
+
+		// Works on directories too since https://go.dev/cl/405275.
+		h = windows.Handle(f.Fd())
 	}
-	defer windows.CloseHandle(h) //nolint:errcheck
 
 	// based on https://github.com/golang/go/blob/f4e3ec3dbe3b8e04a058d266adf8e048bab563f2/src/os/file_windows.go#L389
 
@@ -46,21 +62,21 @@ func Realpath(path string) (string, error) {
 	return "", errors.New("GetFinalPathNameByHandle returned unexpected path: " + s)
 }
 
-func openMetadata(path string) (windows.Handle, error) {
+func openMetadata(path string, useExtendedPath bool) (windows.Handle, error) {
 	// based on https://github.com/microsoft/go-winio/blob/3c9576c9346a1892dee136329e7e15309e82fb4f/pkg/fs/resolve.go#L113
 
 	originalPath := path
-	path, err := windows.FullPath(path)
-	if err != nil {
-		return windows.InvalidHandle, err
-	}
-	// Use the extended path syntax so reserved components such as "con" are treated as file names.
-	switch {
-	case len(path) >= 4 && (path[:4] == `\\?\` || path[:4] == `\\.\`):
-	case len(path) >= 2 && path[:2] == `\\`:
-		path = `\\?\UNC\` + path[2:]
-	default:
-		path = `\\?\` + path
+	if useExtendedPath && (len(path) < 4 || (path[:4] != `\\?\` && path[:4] != `\\.\`)) {
+		var err error
+		path, err = windows.FullPath(path)
+		if err != nil {
+			return windows.InvalidHandle, err
+		}
+		if len(path) >= 2 && path[:2] == `\\` {
+			path = `\\?\UNC\` + path[2:]
+		} else {
+			path = `\\?\` + path
+		}
 	}
 
 	pathUTF16, err := windows.UTF16PtrFromString(path)
@@ -97,4 +113,32 @@ func openMetadata(path string) (windows.Handle, error) {
 		}
 	}
 	return h, nil
+}
+
+func hasReservedPathComponent(path string) bool {
+	componentStart := 0
+	for i := 0; i <= len(path); i++ {
+		if i == len(path) || path[i] == '\\' || path[i] == '/' {
+			component := path[componentStart:i]
+			if hasReservedNamePrefix(component) && !filepath.IsLocal(component) {
+				return true
+			}
+			componentStart = i + 1
+		}
+	}
+	return false
+}
+
+func hasReservedNamePrefix(name string) bool {
+	if len(name) < 3 {
+		return false
+	}
+	a := name[0] | 0x20
+	b := name[1] | 0x20
+	c := name[2] | 0x20
+	return a == 'c' && (b == 'o' && (c == 'n' || c == 'm')) ||
+		a == 'p' && b == 'r' && c == 'n' ||
+		a == 'a' && b == 'u' && c == 'x' ||
+		a == 'n' && b == 'u' && c == 'l' ||
+		a == 'l' && b == 'p' && c == 't'
 }
