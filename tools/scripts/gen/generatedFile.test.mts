@@ -66,6 +66,7 @@ test("validate generates before building and selects the generation scope", asyn
                 calls.push("test:options");
             },
             runSmokeTest: action("test:smoke"),
+            runKnip: action("knip"),
             runLint: action("lint"),
             runFormat: action("format"),
         }) as { dependencies: { run: () => Promise<void>; }[]; run: () => Promise<void>; };
@@ -77,6 +78,7 @@ test("validate generates before building and selects the generation scope", asyn
         assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
         assert.equal(calls.includes("test:tools"), "all" in options);
         assert.equal(calls.includes("test:options"), "all" in options);
+        assert.deepEqual(calls.slice(-3), ["knip", "lint", "format"]);
         if ("all" in options) {
             assert.deepEqual(calls.filter(name => name.startsWith("generate")), ["generate"]);
         }
