@@ -1,0 +1,11 @@
+/a.ts(1,43): error TS2694: Namespace '"/b"' has no exported member 'nope'.
+
+
+==== /b.ts (0 errors) ====
+    export const x = 1;
+    
+==== /a.ts (1 errors) ====
+    export function f(x: typeof import("./b").nope.x) {}
+                                              ~~~~
+!!! error TS2694: Namespace '"/b"' has no exported member 'nope'.
+    
