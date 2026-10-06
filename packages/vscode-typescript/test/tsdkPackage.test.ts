@@ -23,7 +23,7 @@ describe("same-client restart eligibility", () => {
 
     test("permits an unchanged installation, including bare executables", () => {
         assert.equal(isSameTypeScriptInstallation(installation, { ...installation }), true);
-        const bare = { path: installation.path, version: "(local)", isLocal: true };
+        const bare = { path: installation.path, version: "local", isLocal: true };
         assert.equal(isSameTypeScriptInstallation(bare, { ...bare }), true);
     });
 
@@ -336,7 +336,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
 
     test("bare executable SDKs connect without a package but reject module loading", async () => {
         let calls = 0;
-        const sdk = createTypeScriptSDK("(local)", undefined, async pipe => {
+        const sdk = createTypeScriptSDK("local", undefined, async pipe => {
             calls++;
             return pipe ?? "generated-pipe";
         }, () => true);

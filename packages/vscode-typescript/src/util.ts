@@ -55,7 +55,7 @@ export async function getBuiltinExePath(context: vscode.ExtensionContext): Promi
             await vscode.workspace.fs.stat(vscode.Uri.file(exe));
             return {
                 path: exe,
-                version: "(local)",
+                version: "local",
                 isLocal: true,
                 apiPackageJsonPath: context.asAbsolutePath(path.join("../../", "packages", "typescript", "package.json")),
             };
@@ -334,7 +334,7 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
         try {
             const exePath = vscode.Uri.joinPath(resolved, `${baseName}${process.platform === "win32" ? ".exe" : ""}`);
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: "(local)", isLocal: true };
+            return { path: withLongPathPrefix(exePath.fsPath), version: "local", isLocal: true };
         }
         catch {}
     }

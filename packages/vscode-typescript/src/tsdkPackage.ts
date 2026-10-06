@@ -20,7 +20,7 @@ export function acquireTypeScriptSDK(sdk: TypeScriptSDK): void {
     const manifestPath = fs.realpathSync.native(sdk.packageJsonPath);
     if (acquiredPackageVersions.has(manifestPath)) return;
     const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
-    const version = sdk.version === "(local)" || sdk.version === "unknown" ? manifest.version : sdk.version;
+    const version = sdk.version === "local" || sdk.version === "unknown" ? manifest.version : sdk.version;
     if (typeof version === "string") acquiredPackageVersions.set(manifestPath, version);
 }
 
@@ -93,7 +93,7 @@ async function readAPIManifest(packageJsonPath: string, expectedVersion: string)
     }
     const loadedManifest = loadedPackageManifests.get(manifestPath);
     const modulesChanged = loadedManifest !== undefined && loadedManifest !== contents;
-    const versionChanged = expectedVersion !== "(local)" && expectedVersion !== "unknown"
+    const versionChanged = expectedVersion !== "local" && expectedVersion !== "unknown"
         && "version" in packageJson && typeof packageJson.version === "string" && packageJson.version !== expectedVersion;
     if (modulesChanged || versionChanged) {
         throw new TypeScriptPackageChangedError(packageJsonPath);
