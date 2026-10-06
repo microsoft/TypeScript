@@ -44,7 +44,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "declaration":
 		allOptions.Declaration = ParseTristate(value)
 	case "declarationDir":
-		allOptions.DeclarationDir = ParseString(value)
+		allOptions.DeclarationDir = parseDirectoryName(value)
 	case "declarationMap":
 		allOptions.DeclarationMap = ParseTristate(value)
 	case "deduplicatePackages":
@@ -102,7 +102,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "locale":
 		allOptions.Locale = ParseString(value)
 	case "mapRoot":
-		allOptions.MapRoot = ParseString(value)
+		allOptions.MapRoot = tspath.ToSourceMapLocation(ParseString(value))
 	case "module":
 		allOptions.Module = floatOrInt32ToFlag[core.ModuleKind](value)
 	case "moduleResolution":
@@ -148,7 +148,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "noUncheckedSideEffectImports":
 		allOptions.NoUncheckedSideEffectImports = ParseTristate(value)
 	case "outDir":
-		allOptions.OutDir = ParseString(value)
+		allOptions.OutDir = parseDirectoryName(value)
 	case "paths":
 		allOptions.Paths = parseStringMap(value)
 	case "plugins":
@@ -165,7 +165,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "preserveSymlinks":
 		allOptions.PreserveSymlinks = ParseTristate(value)
 	case "project":
-		allOptions.Project = ParseString(value)
+		allOptions.Project = parseFileOrDirectoryName(value)
 	case "resolveJsonModule":
 		allOptions.ResolveJsonModule = ParseTristate(value)
 	case "resolvePackageJsonExports":
@@ -179,9 +179,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "reactNamespace":
 		allOptions.ReactNamespace = ParseString(value)
 	case "rootDir":
-		allOptions.RootDir = ParseString(value)
+		allOptions.RootDir = parseDirectoryName(value)
 	case "rootDirs":
-		allOptions.RootDirs = ParseStringArray(value)
+		allOptions.RootDirs = parseDirectoryNames(value)
 	case "skipLibCheck":
 		allOptions.SkipLibCheck = ParseTristate(value)
 	case "stableTypeOrdering":
@@ -205,7 +205,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "sourceMap":
 		allOptions.SourceMap = ParseTristate(value)
 	case "sourceRoot":
-		allOptions.SourceRoot = ParseString(value)
+		allOptions.SourceRoot = tspath.ToSourceMapLocation(ParseString(value))
 	case "suppressOutputPathCheck":
 		allOptions.SuppressOutputPathCheck = ParseTristate(value)
 	case "target":
@@ -213,9 +213,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "traceResolution":
 		allOptions.TraceResolution = ParseTristate(value)
 	case "tsBuildInfoFile":
-		allOptions.TsBuildInfoFile = ParseString(value)
+		allOptions.TsBuildInfoFile = parseFileName(value)
 	case "typeRoots":
-		allOptions.TypeRoots = ParseStringArray(value)
+		allOptions.TypeRoots = parseDirectoryNames(value)
 	case "types":
 		allOptions.Types = ParseStringArray(value)
 	case "useDefineForClassFields":
@@ -231,27 +231,27 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "alwaysStrict":
 		allOptions.AlwaysStrict = ParseTristate(value)
 	case "baseUrl":
-		allOptions.BaseUrl = ParseString(value)
+		allOptions.BaseUrl = parseDirectoryName(value)
 	case "downlevelIteration":
 		allOptions.DownlevelIteration = ParseTristate(value)
 	case "esModuleInterop":
 		allOptions.ESModuleInterop = ParseTristate(value)
 	case "outFile":
-		allOptions.OutFile = ParseString(value)
+		allOptions.OutFile = parseFileName(value)
 	case "configFilePath":
-		allOptions.ConfigFilePath = ParseString(value)
+		allOptions.ConfigFilePath = parseFileName(value)
 	case "noDtsResolution":
 		allOptions.NoDtsResolution = ParseTristate(value)
 	case "pathsBasePath":
-		allOptions.PathsBasePath = ParseString(value)
+		allOptions.PathsBasePath = parseDirectoryName(value)
 	case "diagnostics":
 		allOptions.Diagnostics = ParseTristate(value)
 	case "extendedDiagnostics":
 		allOptions.ExtendedDiagnostics = ParseTristate(value)
 	case "generateCpuProfile":
-		allOptions.GenerateCpuProfile = ParseString(value)
+		allOptions.GenerateCpuProfile = parseFileName(value)
 	case "generateTrace":
-		allOptions.GenerateTrace = ParseString(value)
+		allOptions.GenerateTrace = parseDirectoryName(value)
 	case "listEmittedFiles":
 		allOptions.ListEmittedFiles = ParseTristate(value)
 	case "listFiles":
@@ -281,7 +281,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "runExternalCode":
 		allOptions.RunExternalCode = ParseTristate(value)
 	case "pprofDir":
-		allOptions.PprofDir = ParseString(value)
+		allOptions.PprofDir = parseDirectoryName(value)
 	case "singleThreaded":
 		allOptions.SingleThreaded = ParseTristate(value)
 	case "quiet":
@@ -294,20 +294,24 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	return true
 }
 
-func getDefaultCompilerOptions(configFileName string) *core.CompilerOptions {
-	if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
-		return &core.CompilerOptions{
+func getDefaultCompilerOptions(configFileName tspath.RootedFilePath) *parsedCompilerOptions {
+	options := &core.CompilerOptions{}
+	if configFileName != "" && configFileName.BaseName() == "jsconfig.json" {
+		options = &core.CompilerOptions{
 			AllowJs:              core.TSTrue,
 			NoEmit:               core.TSTrue,
 			SkipLibCheck:         core.TSTrue,
 			MaxNodeModuleJsDepth: new(2),
 		}
 	}
-	return &core.CompilerOptions{}
+	return &parsedCompilerOptions{
+		CompilerOptions: options,
+		unresolvedPaths: make(unresolvedCompilerOptionPaths),
+	}
 }
 
-func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
-	if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
+func getDefaultTypeAcquisition(configFileName tspath.RootedFilePath) *core.TypeAcquisition {
+	if configFileName != "" && configFileName.BaseName() == "jsconfig.json" {
 		return &core.TypeAcquisition{
 			Enable: core.TSTrue,
 		}
@@ -1325,15 +1329,9 @@ func mergeCompilerOptionFields(targetOptions, sourceOptions *core.CompilerOption
 	}
 }
 
-func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
+func handleOptionConfigDirTemplateSubstitution(compilerOptions *parsedCompilerOptions, basePath tspath.RootedDirectoryPath) {
 	if compilerOptions == nil {
 		return
-	}
-	if startsWithConfigDirTemplate(compilerOptions.DeclarationDir) {
-		compilerOptions.DeclarationDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.DeclarationDir, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.OutDir) {
-		compilerOptions.OutDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.OutDir, basePath)
 	}
 	{
 		var paths *collections.OrderedMap[string, []string]
@@ -1347,33 +1345,21 @@ func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOpt
 			}
 		}
 	}
-	if startsWithConfigDirTemplate(compilerOptions.RootDir) {
-		compilerOptions.RootDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.RootDir, basePath)
+	for key, value := range compilerOptions.unresolvedPaths {
+		option := CommandLineCompilerOptionsMap.Get(key)
+		if option.Kind == CommandLineOptionTypeList {
+			value = core.Map(ParseStringArray(value), func(path string) any {
+				return getSubstitutedPathWithConfigDirTemplate(path, basePath)
+			})
+		} else {
+			value = getSubstitutedPathWithConfigDirTemplate(ParseString(value), basePath)
+		}
+		ParseCompilerOptions(key, value, compilerOptions.CompilerOptions)
 	}
-	if substitution := getSubstitutedStringArrayWithConfigDirTemplate(compilerOptions.RootDirs, basePath); substitution != nil {
-		compilerOptions.RootDirs = substitution
-	}
-	if startsWithConfigDirTemplate(compilerOptions.TsBuildInfoFile) {
-		compilerOptions.TsBuildInfoFile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.TsBuildInfoFile, basePath)
-	}
-	if substitution := getSubstitutedStringArrayWithConfigDirTemplate(compilerOptions.TypeRoots, basePath); substitution != nil {
-		compilerOptions.TypeRoots = substitution
-	}
-	if startsWithConfigDirTemplate(compilerOptions.BaseUrl) {
-		compilerOptions.BaseUrl = getSubstitutedPathWithConfigDirTemplate(compilerOptions.BaseUrl, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.OutFile) {
-		compilerOptions.OutFile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.OutFile, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.GenerateCpuProfile) {
-		compilerOptions.GenerateCpuProfile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.GenerateCpuProfile, basePath)
-	}
-	if startsWithConfigDirTemplate(compilerOptions.GenerateTrace) {
-		compilerOptions.GenerateTrace = getSubstitutedPathWithConfigDirTemplate(compilerOptions.GenerateTrace, basePath)
-	}
+	clear(compilerOptions.unresolvedPaths)
 }
 
-func serializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
+func serializeCompilerOptions(options *core.CompilerOptions, configFilePath tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) *collections.OrderedMap[string, any] {
 	result := collections.NewOrderedMapWithSizeHint[string, any](32)
 	if options.AllowJs == core.TSTrue || options.AllowJs == core.TSFalse {
 		result.Set("allowJs", options.AllowJs == core.TSTrue)
@@ -1418,7 +1404,7 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 		result.Set("declaration", options.Declaration == core.TSTrue)
 	}
 	if options.DeclarationDir != "" {
-		result.Set("declarationDir", serializeCompilerOptionPath(options.DeclarationDir, configFilePath, comparePathsOptions))
+		result.Set("declarationDir", serializeCompilerOptionPath(options.DeclarationDir.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.DeclarationMap == core.TSTrue || options.DeclarationMap == core.TSFalse {
 		result.Set("declarationMap", options.DeclarationMap == core.TSTrue)
@@ -1566,7 +1552,7 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 		result.Set("noUncheckedSideEffectImports", options.NoUncheckedSideEffectImports == core.TSTrue)
 	}
 	if options.OutDir != "" {
-		result.Set("outDir", serializeCompilerOptionPath(options.OutDir, configFilePath, comparePathsOptions))
+		result.Set("outDir", serializeCompilerOptionPath(options.OutDir.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.Paths != nil {
 		result.Set("paths", options.Paths)
@@ -1599,10 +1585,15 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 		result.Set("reactNamespace", options.ReactNamespace)
 	}
 	if options.RootDir != "" {
-		result.Set("rootDir", serializeCompilerOptionPath(options.RootDir, configFilePath, comparePathsOptions))
+		result.Set("rootDir", serializeCompilerOptionPath(options.RootDir.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.RootDirs != nil {
-		result.Set("rootDirs", serializeCompilerOptionPaths(options.RootDirs, configFilePath, comparePathsOptions))
+		result.Set("rootDirs", core.Map(options.RootDirs, func(value tspath.RootedDirectoryPath) string {
+			if value == "" {
+				return ""
+			}
+			return serializeCompilerOptionPath(value.AsPath(), configFilePath, caseSensitivity)
+		}))
 	}
 	if options.SkipLibCheck == core.TSTrue || options.SkipLibCheck == core.TSFalse {
 		result.Set("skipLibCheck", options.SkipLibCheck == core.TSTrue)
@@ -1649,10 +1640,15 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 		result.Set("traceResolution", options.TraceResolution == core.TSTrue)
 	}
 	if options.TsBuildInfoFile != "" {
-		result.Set("tsBuildInfoFile", serializeCompilerOptionPath(options.TsBuildInfoFile, configFilePath, comparePathsOptions))
+		result.Set("tsBuildInfoFile", serializeCompilerOptionPath(options.TsBuildInfoFile.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.TypeRoots != nil {
-		result.Set("typeRoots", serializeCompilerOptionPaths(options.TypeRoots, configFilePath, comparePathsOptions))
+		result.Set("typeRoots", core.Map(options.TypeRoots, func(value tspath.RootedDirectoryPath) string {
+			if value == "" {
+				return ""
+			}
+			return serializeCompilerOptionPath(value.AsPath(), configFilePath, caseSensitivity)
+		}))
 	}
 	if options.Types != nil {
 		result.Set("types", options.Types)
@@ -1676,7 +1672,7 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 		result.Set("alwaysStrict", options.AlwaysStrict == core.TSTrue)
 	}
 	if options.BaseUrl != "" {
-		result.Set("baseUrl", serializeCompilerOptionPath(options.BaseUrl, configFilePath, comparePathsOptions))
+		result.Set("baseUrl", serializeCompilerOptionPath(options.BaseUrl.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.DownlevelIteration == core.TSTrue || options.DownlevelIteration == core.TSFalse {
 		result.Set("downlevelIteration", options.DownlevelIteration == core.TSTrue)
@@ -1685,7 +1681,7 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 		result.Set("esModuleInterop", options.ESModuleInterop == core.TSTrue)
 	}
 	if options.OutFile != "" {
-		result.Set("outFile", serializeCompilerOptionPath(options.OutFile, configFilePath, comparePathsOptions))
+		result.Set("outFile", serializeCompilerOptionPath(options.OutFile.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.Diagnostics == core.TSTrue || options.Diagnostics == core.TSFalse {
 		result.Set("diagnostics", options.Diagnostics == core.TSTrue)
@@ -1694,10 +1690,10 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath stri
 		result.Set("extendedDiagnostics", options.ExtendedDiagnostics == core.TSTrue)
 	}
 	if options.GenerateCpuProfile != "" {
-		result.Set("generateCpuProfile", serializeCompilerOptionPath(options.GenerateCpuProfile, configFilePath, comparePathsOptions))
+		result.Set("generateCpuProfile", serializeCompilerOptionPath(options.GenerateCpuProfile.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.GenerateTrace != "" {
-		result.Set("generateTrace", serializeCompilerOptionPath(options.GenerateTrace, configFilePath, comparePathsOptions))
+		result.Set("generateTrace", serializeCompilerOptionPath(options.GenerateTrace.AsPath(), configFilePath, caseSensitivity))
 	}
 	if options.ExplainFiles == core.TSTrue || options.ExplainFiles == core.TSFalse {
 		result.Set("explainFiles", options.ExplainFiles == core.TSTrue)

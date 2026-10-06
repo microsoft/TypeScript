@@ -613,32 +613,47 @@ export const generateExtensionTest = task({
 
 async function runGenerateLSP() {
     const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
-    const directory = path.join(__dirname, "tsc/internal/lsp/lsproto/_generate");
+    const directory = path.join(__dirname, "tools/scripts/lsp");
     const modelFiles = ["metaModel.json", "metaModelSchema.mts"].map(file => new GeneratedFile(path.join(directory, file), [path.join(directory, "fetchModel.mts"), path.join(__dirname, "package-lock.json")]));
     if (!modelFiles.every(file => file.isCurrent(!!options.force))) {
         for (const file of modelFiles) file.invalidate();
-        const { default: fetchModel } = await import("./tsc/internal/lsp/lsproto/_generate/fetchModel.mts");
+        const { default: fetchModel } = await import("./tools/scripts/lsp/fetchModel.mts");
         await fetchModel();
         for (const file of modelFiles) file.markCurrent();
     }
-    const output = new GeneratedFile(path.join(directory, "../lsp_generated.go"), [
+    const output = new GeneratedFile(path.join(__dirname, "tsc/internal/lsp/lsproto/lsp_generated.go"), [
         __filename,
         path.join(directory, "generate.mts"),
         ...modelFiles.map(file => file.fileName),
     ]);
-    if (output.isCurrent(!!options.force)) {
-        console.log("LSP bindings are up to date.");
-        return;
+    if (!output.isCurrent(!!options.force)) {
+        output.invalidate();
+        const { default: generate } = await import("./tools/scripts/lsp/generate.mts");
+        await generate();
+        output.markCurrent();
     }
-    output.invalidate();
-    const { default: generate } = await import("./tsc/internal/lsp/lsproto/_generate/generate.mts");
-    await generate();
-    output.markCurrent();
+    else {
+        console.log("LSP bindings are up to date.");
+    }
+    const typeScriptOutput = new GeneratedFile(path.join(__dirname, "packages/typescript/src/vscode/protocol.generated.ts"), [
+        __filename,
+        path.join(directory, "generate.mts"),
+        path.join(directory, "generateTypeScript.mts"),
+        path.join(directory, "typeScript.mts"),
+        path.join(__dirname, "packages/vscode-typescript/src/lspMiddleware.ts"),
+        ...modelFiles.map(file => file.fileName),
+    ]);
+    if (!typeScriptOutput.isCurrent(!!options.force)) {
+        typeScriptOutput.invalidate();
+        const { default: generate } = await import("./tools/scripts/lsp/generateTypeScript.mts");
+        await generate();
+        typeScriptOutput.markCurrent();
+    }
 }
 
 export const generateLSP = task({
     name: "generate:lsp",
-    description: "Generates LSP bindings from the pinned protocol model. Pass --force to regenerate unchanged files.",
+    description: "Generates Go LSP bindings and extension API types from the pinned protocol model. Pass --force to regenerate unchanged files.",
     run: runGenerateLSP,
 });
 
@@ -1315,7 +1330,7 @@ export const checkVsceVersion = task({
 const scriptTsconfigs = [
     "./tools/scripts/gen/tsconfig.json",
     "./tools/scripts/tsc/tsconfig.json",
-    "./tsc/internal/lsp/lsproto/_generate/tsconfig.json",
+    "./tools/scripts/lsp/tsconfig.json",
 ];
 
 export const checkScripts = task({

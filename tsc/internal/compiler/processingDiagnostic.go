@@ -30,7 +30,7 @@ func (d *processingDiagnostic) asFileIncludeReason() *FileIncludeReason {
 }
 
 type includeExplainingDiagnostic struct {
-	file             tspath.Path
+	file             tspath.PathKey
 	diagnosticReason *FileIncludeReason
 	message          *diagnostics.Message
 	args             []string
@@ -92,7 +92,7 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 		if !seenReasons.AddIfAbsent(includeReason) {
 			return
 		}
-		includeDetails = append(includeDetails, includeReason.toDiagnostic(program, false))
+		includeDetails = append(includeDetails, includeReason.toDiagnostic(program, false, ""))
 		processRelatedInfo(includeReason)
 	}
 
@@ -104,7 +104,7 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 		for _, reason := range reasons {
 			processInclude(reason)
 		}
-		redirectInfo = program.includeProcessor.explainRedirectAndImpliedFormat(program, diag.file, func(fileName string) string { return fileName })
+		redirectInfo = program.includeProcessor.explainRedirectAndImpliedFormat(program, diag.file, func(fileName tspath.RootedFilePath) string { return fileName.AsString() })
 	}
 	if diag.diagnosticReason != nil {
 		processInclude(diag.diagnosticReason)

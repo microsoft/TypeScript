@@ -1,6 +1,7 @@
 import {
     type FileReference,
     type Node,
+    type PathKey,
     SyntaxKind,
 } from "../../ast/index.ts";
 export { modifierToFlag } from "../../ast/modifiers.ts";
