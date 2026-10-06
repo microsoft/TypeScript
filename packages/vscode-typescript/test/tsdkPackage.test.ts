@@ -4,10 +4,13 @@ import os from "node:os";
 import path from "node:path";
 import test, { describe } from "node:test";
 import {
+    acquireTypeScriptSDK,
     createTypeScriptSDK,
+    hasModifiedAcquiredTypeScriptInstallation,
     importPackageModule,
     isSameTypeScriptInstallation,
     resolvePackageExecutable,
+    TypeScriptPackageChangedError,
 } from "../src/tsdkPackage";
 
 const platformPackage = `typescript-${process.platform}-${process.arch}`;
@@ -164,6 +167,106 @@ describe("tsdk package resolution", { concurrency: true }, () => {
 });
 
 describe("TypeScript API module loading", { concurrency: true }, () => {
+    test("restart detection requires an acquired SDK at the same location and a changed version", async t => {
+        const root = createFixture(t);
+        const manifestPath = path.join(root, "package.json");
+        const uri: import("@typescript/typescript/unstable/vscode").Uri = {
+            scheme: "file",
+            authority: "",
+            path: manifestPath,
+            query: "",
+            fragment: "",
+            fsPath: manifestPath,
+            with() {
+                return this;
+            },
+            toString() {
+                return this.path;
+            },
+            toJSON() {
+                return { path: this.path };
+            },
+        };
+        const writeManifest = (version: string, extra = "") => fs.writeFileSync(manifestPath, JSON.stringify({ version, extra }));
+        writeManifest("1");
+        assert.equal(await hasModifiedAcquiredTypeScriptInstallation(manifestPath), false);
+        const sdk = createTypeScriptSDK("1", uri, async () => "pipe", () => true);
+        acquireTypeScriptSDK(sdk);
+        assert.equal(await hasModifiedAcquiredTypeScriptInstallation(manifestPath), false);
+        writeManifest("1", "metadata changed");
+        assert.equal(await hasModifiedAcquiredTypeScriptInstallation(manifestPath), false);
+        writeManifest("2");
+        assert.equal(await hasModifiedAcquiredTypeScriptInstallation(manifestPath), true);
+        acquireTypeScriptSDK(createTypeScriptSDK("2", uri, async () => "pipe", () => true));
+        assert.equal(await hasModifiedAcquiredTypeScriptInstallation(manifestPath), true);
+        const newPath = path.join(root, "other.json");
+        fs.writeFileSync(newPath, JSON.stringify({ version: "2" }));
+        assert.equal(await hasModifiedAcquiredTypeScriptInstallation(newPath), false);
+        assert.equal(await hasModifiedAcquiredTypeScriptInstallation(undefined), false);
+    });
+
+    test("rejects in-place package upgrades instead of returning cached modules or opening a mismatched pipe", async t => {
+        const root = createFixture(t);
+        const packageJsonPath = path.join(root, "package.json");
+        const writeManifest = (version: string) =>
+            fs.writeFileSync(
+                packageJsonPath,
+                JSON.stringify({
+                    name: "typescript-selected",
+                    version,
+                    type: "module",
+                    exports: { "./unstable/test": "./api.js", "./unstable/other": "./other.js" },
+                }),
+            );
+        writeManifest("1");
+        fs.writeFileSync(path.join(root, "dependency.js"), "export const version = 1;");
+        fs.writeFileSync(path.join(root, "api.js"), 'export { version } from "./dependency.js";');
+        fs.writeFileSync(path.join(root, "other.js"), 'export { version } from "./dependency.js";');
+        assert.equal((await importPackageModule(packageJsonPath, "unstable/test") as { version: number; }).version, 1);
+
+        writeManifest("2");
+        fs.writeFileSync(path.join(root, "dependency.js"), "export const version = 2;");
+        await assert.rejects(importPackageModule(packageJsonPath, "unstable/test"), TypeScriptPackageChangedError);
+        await assert.rejects(importPackageModule(packageJsonPath, "unstable/other"), TypeScriptPackageChangedError);
+
+        let pipes = 0;
+        const sdk = createTypeScriptSDK(
+            "2",
+            {
+                scheme: "file",
+                authority: "",
+                path: packageJsonPath,
+                query: "",
+                fragment: "",
+                fsPath: packageJsonPath,
+                with() {
+                    return this;
+                },
+                toString() {
+                    return this.path;
+                },
+                toJSON() {
+                    return { path: this.path };
+                },
+            },
+            async () => {
+                pipes++;
+                return "mismatched-pipe";
+            },
+            () => true,
+        );
+        await assert.rejects(sdk.importModule("unstable/test"), TypeScriptPackageChangedError);
+        await assert.rejects(sdk.initializeAPIConnection(), TypeScriptPackageChangedError);
+        assert.equal(pipes, 0);
+        const replacement = path.join(root, "replacement");
+        fs.mkdirSync(replacement);
+        fs.copyFileSync(packageJsonPath, path.join(replacement, "package.json"));
+        for (const file of ["api.js", "other.js", "dependency.js"]) {
+            fs.copyFileSync(path.join(root, file), path.join(replacement, file));
+        }
+        assert.equal((await importPackageModule(path.join(replacement, "package.json"), "unstable/test") as { version: number; }).version, 2);
+    });
+
     test("imports an exported module relative to the selected package", async t => {
         const root = createFixture(t);
         const packagePath = path.join(root, "selected-typescript");
@@ -198,14 +301,12 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
                 return { scheme: this.scheme, path: this.path };
             },
         };
-        let current = true;
-        const sdk = createTypeScriptSDK("selected", packageJsonUri, () => current, async () => {
+        const sdk = createTypeScriptSDK("selected", packageJsonUri, async () => {
             assert.fail("Loading an API module must not open a pipe.");
-        });
+        }, () => true);
         assert.equal(sdk.packageJsonUri, packageJsonUri);
         const loaded = await sdk.importModule("unstable/test");
         assert.equal((loaded as { selected: boolean; }).selected, true);
-        current = false;
         assert.equal(await sdk.importModule("unstable/test"), loaded);
     });
 
@@ -220,6 +321,8 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         checkType<Equal<typeof syncModule, Promise<typeof import("@typescript/typescript/unstable/sync")>>>(true);
         const fsModule = connection.importModule("unstable/fs");
         checkType<Equal<typeof fsModule, Promise<typeof import("@typescript/typescript/unstable/fs")>>>(true);
+        const pathModule = connection.importModule("unstable/path");
+        checkType<Equal<typeof pathModule, Promise<typeof import("@typescript/typescript/unstable/path")>>>(true);
         const protoModule = connection.importModule("unstable/proto");
         checkType<Equal<typeof protoModule, Promise<typeof import("@typescript/typescript/unstable/proto")>>>(true);
         const astModule = connection.importModule("unstable/ast");
@@ -265,10 +368,10 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
 
     test("bare executable SDKs connect without a package but reject module loading", async () => {
         let calls = 0;
-        const sdk = createTypeScriptSDK("(local)", undefined, () => true, async pipe => {
+        const sdk = createTypeScriptSDK("(local)", undefined, async pipe => {
             calls++;
-            return { pipe: pipe ?? "generated-pipe" };
-        });
+            return pipe ?? "generated-pipe";
+        }, () => true);
         assert.equal(calls, 0);
         assert.equal(sdk.packageJsonUri, undefined);
         assert.equal(await sdk.initializeAPIConnection("custom-pipe"), "custom-pipe");
@@ -276,23 +379,25 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         await assert.rejects(sdk.importModule("unstable/async"), /does not provide a matching JavaScript API package/);
     });
 
-    test("stale SDKs cannot create a connection to the replacement server", async () => {
-        let calls = 0;
-        const sdk = createTypeScriptSDK("1", undefined, () => false, async () => {
-            calls++;
-            return { pipe: "replacement-pipe" };
+    test("SDK connection creation awaits the lifecycle scheduler's result", async () => {
+        let finish!: (value: string) => void;
+        const ready = new Promise<string>(resolve => {
+            finish = resolve;
         });
-        await assert.rejects(sdk.initializeAPIConnection(), /no longer current/);
-        assert.equal(calls, 0);
+        const sdk = createTypeScriptSDK("1", undefined, () => ready, () => true);
+        const connection = sdk.initializeAPIConnection();
+        finish("restarted-pipe");
+        assert.equal(await connection, "restarted-pipe");
     });
 
-    test("a restart during pipe initialization rejects the result", async () => {
+    test("isCurrent is a synchronous live snapshot without opening a pipe", () => {
         let current = true;
-        const sdk = createTypeScriptSDK("1", undefined, () => current, async () => {
-            current = false;
-            return { pipe: "old-pipe" };
-        });
-        await assert.rejects(sdk.initializeAPIConnection(), /no longer current/);
+        const sdk = createTypeScriptSDK("1", undefined, async () => assert.fail("isCurrent must not open a pipe"), () => current);
+        assert.equal(sdk.isCurrent(), true);
+        current = false;
+        assert.equal(sdk.isCurrent(), false);
+        current = true;
+        assert.equal(sdk.isCurrent(), true);
     });
 
     test("rejects invalid export paths", async t => {

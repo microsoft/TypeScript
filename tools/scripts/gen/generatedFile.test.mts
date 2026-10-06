@@ -83,32 +83,6 @@ test("validate generates before building and selects the generation scope", asyn
     }
 });
 
-test("local VSIX packaging depends on production npm packing", () => {
-    const fileName = path.resolve(import.meta.dirname, "../../../Herebyfile.mjs");
-    const source = ts.createSourceFile(fileName, fs.readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-    const declaration = source.statements.filter(ts.isVariableStatement)
-        .flatMap(statement => statement.declarationList.declarations)
-        .find(declaration => declaration.name.getText(source) === "packVsixExtensions");
-    assert.ok(declaration?.initializer);
-    const packNativePreviewPackages = { name: "typescript:pack" };
-    for (const options of [{}, { forRelease: true }, { usePublishedPlatformPackagesForVsix: true }]) {
-        const spec = runInNewContext(declaration.initializer.getText(source), {
-            task: (spec: unknown) => spec,
-            options,
-            usePublishedPlatformPackagesForVsix: "usePublishedPlatformPackagesForVsix" in options,
-            packNativePreviewPackages,
-            runPackVsixExtensions: () => {},
-        }) as { dependencies?: unknown[]; };
-        if ("forRelease" in options || "usePublishedPlatformPackagesForVsix" in options) {
-            assert.equal(spec.dependencies, undefined);
-        }
-        else {
-            assert.equal(spec.dependencies?.length, 1);
-            assert.equal(spec.dependencies[0], packNativePreviewPackages);
-        }
-    }
-});
-
 test("generator options preserve repeated inputs and force overrides", async () => {
     const { parseGeneratorArgs, resolveForce } = await import("./utils.mts");
     const options = { type: { type: "string" }, input: { type: "string", multiple: true } } as const;

@@ -42,10 +42,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     const output = vscode.window.createOutputChannel("TypeScript 7", { log: true });
     context.subscriptions.push(output);
 
-    const languageServerInitializedEventEmitter = new vscode.EventEmitter<void>();
-    context.subscriptions.push(languageServerInitializedEventEmitter);
-
-    const sessionManager = new SessionManager(context, output, languageServerInitializedEventEmitter, telemetryReporter);
+    const sessionManager = new SessionManager(context, output, telemetryReporter);
     context.subscriptions.push(sessionManager);
     registerEnablementCommands(context, telemetryReporter, () => sessionManager.stop());
 

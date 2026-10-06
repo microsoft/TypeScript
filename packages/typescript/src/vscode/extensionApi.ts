@@ -50,6 +50,7 @@ export interface APIModules {
     "unstable/async": typeof import("../api/async/api.ts");
     "unstable/sync": typeof import("../api/sync/api.ts");
     "unstable/fs": typeof import("../api/fs.ts");
+    "unstable/path": typeof import("../api/typedPaths.ts");
     "unstable/proto": typeof import("../api/proto.ts");
     "unstable/ast": typeof import("../ast/index.ts");
     "unstable/ast/is": typeof import("../ast/is.ts");
@@ -79,17 +80,30 @@ export interface Uri {
     toJSON(): unknown;
 }
 
-/** The selected TypeScript installation, bound to one language server initialization. */
+/** The selected TypeScript installation. */
 export interface TypeScriptSDK {
     readonly version: string;
     /** The matching API package manifest; undefined for a bare executable without a companion package. */
     readonly packageJsonUri: Uri | undefined;
     /**
+     * Whether an initialized language server currently uses this installation.
+     * False while stopped or restarting; true again after a same-installation restart.
+     * This is a synchronous snapshot, not a guarantee for subsequent async operations
+     * or a check for changes on disk.
+     */
+    isCurrent(): boolean;
+    /**
      * Imports a module from the JavaScript API package matching this initialization's
      * language server. Export paths omit the leading "./".
+     * Restart TS Server offers to restart extensions if an acquired installation's
+     * version changed on disk, without first restarting the server.
      */
     importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
-    /** Opens an API pipe for this initialization. Rejects if the server has stopped or restarted. */
+    /**
+     * Opens an API pipe, waiting for scheduled server restarts to complete.
+     * Handles remain usable after restarts of the same installation. If a different
+     * installation is selected, use the SDK from the latest initialization event.
+     */
     initializeAPIConnection(pipe?: string): Promise<string>;
 }
 

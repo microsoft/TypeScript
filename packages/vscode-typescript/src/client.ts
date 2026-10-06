@@ -32,10 +32,7 @@ import { registerOnAutoInsertFeature } from "./languageFeatures/onAutoInsert";
 import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefinition";
 import type { LspMiddlewareRegistry } from "./lspMiddleware";
 import * as tr from "./telemetryReporting";
-import {
-    createTypeScriptSDK,
-    isSameTypeScriptInstallation,
-} from "./tsdkPackage";
+import { isSameTypeScriptInstallation } from "./tsdkPackage";
 import {
     contentMappersEnabled,
     ExeInfo,
@@ -66,7 +63,6 @@ function extractPatternFilters(registerOptions: ContentMapperRegisterOptions | u
 
 export class Client implements vscode.Disposable {
     private outputChannel: vscode.LogOutputChannel;
-    private initializedEventEmitter: vscode.EventEmitter<void>;
     private telemetryReporter: tr.TelemetryReporter;
 
     private documentSelector: Array<{ scheme: string; language: string; }>;
@@ -77,7 +73,6 @@ export class Client implements vscode.Disposable {
     private isStopping = false;
     private disposables: vscode.Disposable[] = [];
     isInitialized = false;
-    sdk: TypeScriptSDK | undefined;
 
     // Document filters for content-mapped file extensions, keyed by the server's registration ID. These
     // augment the static jsTs document selector so the extension's custom language-feature providers
@@ -92,12 +87,11 @@ export class Client implements vscode.Disposable {
 
     constructor(
         outputChannel: vscode.LogOutputChannel,
-        initializedEventEmitter: vscode.EventEmitter<void>,
+        private readonly onLanguageServerInitialized: (exe: ExeInfo) => void,
         telemetryReporter: tr.TelemetryReporter,
         private readonly lspMiddleware: LspMiddlewareRegistry,
     ) {
         this.outputChannel = outputChannel;
-        this.initializedEventEmitter = initializedEventEmitter;
         this.telemetryReporter = telemetryReporter;
         this.errorHandler = new ReportingErrorHandler(this.telemetryReporter, 5);
 
@@ -265,16 +259,8 @@ export class Client implements vscode.Disposable {
         );
         this.disposables.push(this.client.onDidChangeState(event => {
             this.isInitialized = event.newState === State.Running;
-            this.sdk = undefined;
             if (this.isInitialized) {
-                const sdk = createTypeScriptSDK(
-                    exe.version,
-                    exe.apiPackageJsonPath ? vscode.Uri.file(exe.apiPackageJsonPath) : undefined,
-                    () => this.sdk === sdk && this.isInitialized && !this.isStopping && !this.isDisposed,
-                    pipe => this.initializeAPISession(pipe),
-                );
-                this.sdk = sdk;
-                this.initializedEventEmitter.fire();
+                this.onLanguageServerInitialized(exe);
             }
         }));
 
@@ -411,7 +397,6 @@ export class Client implements vscode.Disposable {
         }
         this.isStopping = true;
         this.isInitialized = false;
-        this.sdk = undefined;
         for (const disposable of this.selectorScopedFeatures.splice(0)) {
             disposable.dispose();
         }
@@ -428,7 +413,6 @@ export class Client implements vscode.Disposable {
         this.isDisposed = true;
         this.isStopping = true;
         this.isInitialized = false;
-        this.sdk = undefined;
         for (const disposable of this.selectorScopedFeatures.splice(0)) {
             disposable.dispose();
         }
@@ -454,6 +438,7 @@ export class Client implements vscode.Disposable {
         if (!this.client) {
             throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
+        await this.client.start();
         return this.client.sendRequest<{ sessionId: string; pipe: string; }>("custom/initializeAPISession", { pipe });
     }
 
@@ -472,7 +457,6 @@ export class Client implements vscode.Disposable {
         }
 
         this.isInitialized = false;
-        this.sdk = undefined;
         this.outputChannel.appendLine(vscode.l10n.t("Restarting language server..."));
         try {
             await this.client.restart();
@@ -764,4 +748,3 @@ function sanitizeStderrLine(line: string): string {
     // Non-internal frames get fully redacted.
     return leadingWhitespace + "(REDACTED)";
 }
-import type { TypeScriptSDK } from "@typescript/typescript/unstable/vscode";
