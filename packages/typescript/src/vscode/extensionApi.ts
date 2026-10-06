@@ -1,4 +1,6 @@
+import type { TypeScriptModuleLoader } from "./moduleLoader.ts";
 import type { LspMiddlewareRequests } from "./protocol.generated.ts";
+export { createTypeScriptModuleLoader, type TypeScriptModuleLoader } from "./moduleLoader.ts";
 export type * from "./protocol.generated.ts";
 
 export interface Disposable {
@@ -80,8 +82,12 @@ export interface Uri {
     toJSON(): unknown;
 }
 
-/** The selected TypeScript installation. */
-export interface TypeScriptSDK {
+/**
+ * The selected TypeScript installation and its module loader.
+ * Restart TS Server offers to restart extensions if an acquired installation's
+ * version changed on disk, without first restarting the server.
+ */
+export interface TypeScriptSDK extends TypeScriptModuleLoader {
     readonly version: string;
     /** The matching API package manifest; undefined for a bare executable without a companion package. */
     readonly packageJsonUri: Uri | undefined;
@@ -92,13 +98,6 @@ export interface TypeScriptSDK {
      * or a check for changes on disk.
      */
     isCurrent(): boolean;
-    /**
-     * Imports a module from the JavaScript API package matching this initialization's
-     * language server. Export paths omit the leading "./".
-     * Restart TS Server offers to restart extensions if an acquired installation's
-     * version changed on disk, without first restarting the server.
-     */
-    importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
     /**
      * Opens an API pipe, waiting for scheduled server restarts to complete.
      * Handles remain usable after restarts of the same installation. If a different

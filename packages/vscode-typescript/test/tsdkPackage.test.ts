@@ -7,7 +7,6 @@ import {
     acquireTypeScriptSDK,
     createTypeScriptSDK,
     hasModifiedAcquiredTypeScriptInstallation,
-    importPackageModule,
     isSameTypeScriptInstallation,
     resolvePackageExecutable,
     TypeScriptPackageChangedError,
@@ -70,6 +69,27 @@ function createFixture(t: test.TestContext): string {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), "tsdk-package-"));
     t.after(() => fs.rmSync(root, { recursive: true, force: true }));
     return fs.realpathSync(root);
+}
+
+function packageSDK(packageJsonPath: string, version = "unknown"): TypeScriptSDK {
+    const uri: import("@typescript/typescript/unstable/vscode").Uri = {
+        scheme: "file",
+        authority: "",
+        path: packageJsonPath,
+        query: "",
+        fragment: "",
+        fsPath: packageJsonPath,
+        with() {
+            return this;
+        },
+        toString() {
+            return this.path;
+        },
+        toJSON() {
+            return { path: this.path };
+        },
+    };
+    return createTypeScriptSDK(version, uri, async () => "pipe", () => true);
 }
 
 interface ResolutionCase {
@@ -222,12 +242,13 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         fs.writeFileSync(path.join(root, "dependency.js"), "export const version = 1;");
         fs.writeFileSync(path.join(root, "api.js"), 'export { version } from "./dependency.js";');
         fs.writeFileSync(path.join(root, "other.js"), 'export { version } from "./dependency.js";');
-        assert.equal((await importPackageModule(packageJsonPath, "unstable/test") as { version: number; }).version, 1);
+        const originalSDK = packageSDK(packageJsonPath, "1");
+        assert.equal((await originalSDK.importModule("unstable/test") as { version: number; }).version, 1);
 
         writeManifest("2");
         fs.writeFileSync(path.join(root, "dependency.js"), "export const version = 2;");
-        await assert.rejects(importPackageModule(packageJsonPath, "unstable/test"), TypeScriptPackageChangedError);
-        await assert.rejects(importPackageModule(packageJsonPath, "unstable/other"), TypeScriptPackageChangedError);
+        await assert.rejects(originalSDK.importModule("unstable/test"), TypeScriptPackageChangedError);
+        await assert.rejects(originalSDK.importModule("unstable/other"), TypeScriptPackageChangedError);
 
         let pipes = 0;
         const sdk = createTypeScriptSDK(
@@ -264,7 +285,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         for (const file of ["api.js", "other.js", "dependency.js"]) {
             fs.copyFileSync(path.join(root, file), path.join(replacement, file));
         }
-        assert.equal((await importPackageModule(path.join(replacement, "package.json"), "unstable/test") as { version: number; }).version, 2);
+        assert.equal((await packageSDK(path.join(replacement, "package.json"), "2").importModule("unstable/test") as { version: number; }).version, 2);
     });
 
     test("imports an exported module relative to the selected package", async t => {
@@ -407,7 +428,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
 
         for (const exportPath of ["", "./unstable/async", "../async", "/unstable/async", "unstable\\async"]) {
             await assert.rejects(
-                importPackageModule(packageJsonPath, exportPath),
+                packageSDK(packageJsonPath).importModule(exportPath),
                 new Error(`Invalid TypeScript API module export path '${exportPath}'.`),
             );
         }
@@ -419,7 +440,7 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         fs.writeFileSync(packageJsonPath, "{}");
 
         await assert.rejects(
-            importPackageModule(packageJsonPath, "unstable/async"),
+            packageSDK(packageJsonPath).importModule("unstable/async"),
             new Error(`TypeScript API package manifest at '${packageJsonPath}' does not contain a package name.`),
         );
     });

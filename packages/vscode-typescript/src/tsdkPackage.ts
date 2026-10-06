@@ -1,12 +1,12 @@
-import type {
-    APIModules,
-    TypeScriptSDK,
-    Uri,
+import {
+    type APIModules,
+    createTypeScriptModuleLoader,
+    type TypeScriptSDK,
+    type Uri,
 } from "@typescript/typescript/unstable/vscode";
 import fs from "node:fs";
 import module from "node:module";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 import type { ExeInfo } from "./util";
 
 // Maps real package.json paths to their contents when API modules were first loaded.
@@ -60,12 +60,15 @@ export function createTypeScriptSDK(
     openAPIPipe: (pipe?: string) => Promise<string>,
     isCurrent: () => boolean,
 ): TypeScriptSDK {
+    const loader = packageJsonUri ? createTypeScriptModuleLoader(packageJsonUri.fsPath) : undefined;
     function importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
     async function importModule(exportPath: string): Promise<unknown> {
-        if (!packageJsonUri) {
+        if (!loader || !packageJsonUri) {
             throw new Error("The selected TypeScript server does not provide a matching JavaScript API package.");
         }
-        return importPackageModule(packageJsonUri.fsPath, exportPath, version);
+        const manifest = await readAPIManifest(packageJsonUri.fsPath, version);
+        loadedPackageManifests.set(manifest.path, manifest.contents);
+        return loader.importModule(exportPath);
     }
 
     return {
@@ -82,7 +85,7 @@ export function createTypeScriptSDK(
     };
 }
 
-async function readAPIManifest(packageJsonPath: string, expectedVersion?: string): Promise<{ path: string; contents: string; name: string; }> {
+async function readAPIManifest(packageJsonPath: string, expectedVersion: string): Promise<{ path: string; contents: string; }> {
     const manifestPath = await fs.promises.realpath(packageJsonPath);
     const contents = await fs.promises.readFile(manifestPath, "utf8");
     const packageJson: unknown = JSON.parse(contents);
@@ -91,28 +94,10 @@ async function readAPIManifest(packageJsonPath: string, expectedVersion?: string
     }
     const loadedManifest = loadedPackageManifests.get(manifestPath);
     const modulesChanged = loadedManifest !== undefined && loadedManifest !== contents;
-    const versionChanged = expectedVersion !== undefined && expectedVersion !== "(local)" && expectedVersion !== "unknown"
+    const versionChanged = expectedVersion !== "(local)" && expectedVersion !== "unknown"
         && "version" in packageJson && typeof packageJson.version === "string" && packageJson.version !== expectedVersion;
     if (modulesChanged || versionChanged) {
         throw new TypeScriptPackageChangedError(packageJsonPath);
     }
-    return { path: manifestPath, contents, name: packageJson.name };
-}
-
-export async function importPackageModule(packageJsonPath: string, exportPath: string, expectedVersion?: string): Promise<unknown> {
-    if (
-        !exportPath
-        || exportPath.startsWith(".")
-        || exportPath.startsWith("/")
-        || exportPath.includes("\\")
-        || exportPath.split("/").includes("..")
-    ) {
-        throw new Error(`Invalid TypeScript API module export path '${exportPath}'.`);
-    }
-
-    const manifest = await readAPIManifest(packageJsonPath, expectedVersion);
-    const require = module.createRequire(manifest.path);
-    const modulePath = require.resolve(`${manifest.name}/${exportPath}`);
-    loadedPackageManifests.set(manifest.path, manifest.contents);
-    return import(pathToFileURL(modulePath).href);
+    return { path: manifestPath, contents };
 }
