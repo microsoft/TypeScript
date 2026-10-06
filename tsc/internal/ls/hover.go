@@ -206,13 +206,21 @@ func (l *LanguageService) documentationLocationMapper(feature spanmap.Feature) d
 }
 
 // getDocumentationForSymbol tries each documentation source in turn (call-signature documentation,
-// declaration JSDoc, root-symbol JSDoc, alias target JSDoc) and returns the first non-empty result,
-// formatted for contentFormat. commentOnly restricts the result to the JSDoc summary, excluding the
-// @tag section.
+// an alias's own JSDoc, root-symbol JSDoc, declaration JSDoc, alias target JSDoc) and returns the
+// first non-empty result, formatted for contentFormat. At a call site the alias's own JSDoc is tried
+// after the declaration's instead. commentOnly restricts the result to the JSDoc summary, excluding
+// the @tag section.
 func getDocumentationForSymbol(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	documentation := documentationFromSignature(getMappedLocation, c, symbol, getCallOrNewExpression(node), node, contentFormat, commentOnly)
 	if documentation != "" {
 		return documentation
+	}
+
+	// For an alias, declaration is the target's, and the alias's own JSDoc comes before it. At a
+	// call site declaration is the resolved signature's instead, and that comes first.
+	aliasDocumentation := documentationFromAliasDeclaration(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
+	if aliasDocumentation != "" && getCallOrNewExpression(node) == nil {
+		return aliasDocumentation
 	}
 
 	documentation = documentationFromRootSymbols(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
@@ -223,6 +231,10 @@ func getDocumentationForSymbol(getMappedLocation documentationLocationMapper, c 
 	documentation = getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, node, contentFormat, commentOnly)
 	if documentation != "" {
 		return documentation
+	}
+
+	if aliasDocumentation != "" {
+		return aliasDocumentation
 	}
 
 	return documentationFromAlias(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
@@ -244,6 +256,15 @@ func documentationFromSignature(getMappedLocation documentationLocationMapper, c
 		return getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, location, contentFormat, commentOnly)
 	}
 	return ""
+}
+
+// documentationFromAliasDeclaration returns the JSDoc written on the alias itself, as on
+// `/** ... */ import x = a.x`.
+func documentationFromAliasDeclaration(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 {
+		return ""
+	}
+	return getDocumentationFromDeclaration(getMappedLocation, c, symbol, core.FirstOrNil(symbol.Declarations), node, contentFormat, commentOnly)
 }
 
 func documentationFromAlias(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
