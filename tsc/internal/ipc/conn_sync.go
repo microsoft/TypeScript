@@ -131,7 +131,7 @@ func (c *SyncConn) run(ctx context.Context) error {
 }
 
 // handleRequest processes an incoming request.
-func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr error) {
+func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) error {
 	// Intercept the meta-requests for collected server timing before dispatching
 	// to the handler, so they are answered directly and not themselves recorded.
 	switch msg.Method {
@@ -152,13 +152,21 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 		return nil
 	}
 
+	result, err := c.waitForHandler(ctx, msg)
+	if err != nil {
+		return err
+	}
+	return c.writeHandlerResponse(msg.ID, result)
+}
+
+func (c *SyncConn) writeHandlerResponse(id *jsonrpc.ID, result syncHandlerResult) (retErr error) {
 	// Response writes can panic as well as handlers.
 	defer func() {
 		if r := recover(); r != nil {
 			stack := string(debug.Stack())
 			err := fmt.Errorf("panic: %v\n%s", r, stack)
 
-			writeErr := c.protocol.WriteError(msg.ID, &jsonrpc.ResponseError{
+			writeErr := c.protocol.WriteError(id, &jsonrpc.ResponseError{
 				Code:    jsonrpc.CodeInternalError,
 				Message: err.Error(),
 			})
@@ -168,19 +176,14 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 		}
 	}()
 
-	result, err := c.waitForHandler(ctx, msg)
-	if err != nil {
-		return err
-	}
-
 	var writeErr error
 	if result.err != nil {
-		writeErr = c.protocol.WriteError(msg.ID, &jsonrpc.ResponseError{
+		writeErr = c.protocol.WriteError(id, &jsonrpc.ResponseError{
 			Code:    jsonrpc.CodeInternalError,
 			Message: result.err.Error(),
 		})
 	} else {
-		writeErr = c.protocol.WriteResponse(msg.ID, result.value)
+		writeErr = c.protocol.WriteResponse(id, result.value)
 	}
 
 	if writeErr != nil {
