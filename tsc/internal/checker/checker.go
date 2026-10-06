@@ -4317,7 +4317,20 @@ func (c *Checker) checkClassDeclaration(node *ast.Node) {
 	}
 	c.checkClassLikeDeclaration(node)
 	c.checkSourceElements(node.Members())
+	c.checkConstructorDeclaredProperties(node)
 	c.registerForUnusedIdentifiersCheck(node)
+}
+
+func (c *Checker) checkConstructorDeclaredProperties(node *ast.Node) {
+	if !ast.IsInJSFile(node) {
+		return
+	}
+	classType := c.getDeclaredTypeOfSymbol(c.getSymbolOfDeclaration(node))
+	for _, property := range c.getPropertiesOfType(classType) {
+		if kind, constructor := c.isConstructorDeclaredThisProperty(property); kind == thisAssignmentDeclarationConstructor && constructor.Parent == node {
+			c.getTypeOfSymbol(property)
+		}
+	}
 }
 
 func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
@@ -10316,6 +10329,7 @@ func (c *Checker) checkClassExpressionExternalHelpers(node *ast.ClassExpressionN
 
 func (c *Checker) checkClassExpressionDeferred(node *ast.Node) {
 	c.checkSourceElements(node.Members())
+	c.checkConstructorDeclaredProperties(node)
 	c.registerForUnusedIdentifiersCheck(node)
 }
 
@@ -24309,6 +24323,7 @@ func (c *Checker) getInferTypeParameters(node *ast.Node) []*Type {
 			result = append(result, c.getDeclaredTypeOfSymbol(symbol))
 		}
 	}
+	slices.SortFunc(result, CompareTypes)
 	return result
 }
 
