@@ -1504,7 +1504,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				oldProgram := project.Program
 				oldCheckerPool := project.checkerPool
 				project.host = newCompilerHost(project, b, logger.Fork("CompilerHost"))
-				result := project.CreateProgram()
+				result := project.CreateProgram(b.ctx)
 				var watchedFiles []tspath.RootedFilePath
 				for _, mapper := range project.CommandLine.ContentMappers() {
 					if mapper.Package != "" && mapper.ContributionID == "" && mapper.PackageDirectory != "" {

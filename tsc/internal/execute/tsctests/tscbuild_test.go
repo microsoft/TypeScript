@@ -1,22 +1,87 @@
 package tsctests
 
 import (
+	"context"
 	"fmt"
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type cancellingBuildFS struct {
+	vfs.FS
+	cancel context.CancelFunc
+	once   sync.Once
+}
+
+func (f *cancellingBuildFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	content, ok := f.FS.ReadFile(path)
+	if path == "/home/src/workspaces/project/leaf/a.ts" {
+		f.once.Do(f.cancel)
+	}
+	return content, ok
+}
+
+type cancellingBuildSystem struct {
+	*TestSys
+	fs vfs.FS
+}
+
+func (s *cancellingBuildSystem) FS() vfs.FS {
+	return s.fs
+}
+
+func TestBuildCancellationAcrossReferencesAndRetry(t *testing.T) {
+	t.Parallel()
+	sys := newTestSys(&tscInput{
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json":        `{"files":[],"references":[{"path":"./middle"}]}`,
+			"/home/src/workspaces/project/middle/tsconfig.json": `{"compilerOptions":{"composite":true},"references":[{"path":"../leaf"}]}`,
+			"/home/src/workspaces/project/middle/b.ts":          `import { a } from "../leaf/a"; export const b = a;`,
+			"/home/src/workspaces/project/leaf/tsconfig.json":   `{"compilerOptions":{"composite":true}}`,
+			"/home/src/workspaces/project/leaf/a.ts":            `export const a = 1;`,
+		},
+		commandLineArgs: []string{"--build", "--extendedDiagnostics"},
+	}, false)
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	wrapped := &cancellingBuildSystem{
+		TestSys: sys,
+		fs:      &cancellingBuildFS{FS: sys.FS(), cancel: cancel},
+	}
+	orchestrator := build.NewOrchestrator(build.Options{
+		Sys:     wrapped,
+		Command: tsoptions.ParseBuildCommandLine([]string{"--extendedDiagnostics"}, wrapped.FS(), sys.GetCurrentDirectory()),
+		Testing: sys,
+	})
+	result := orchestrator.Build(ctx, "")
+	assert.Equal(t, result.Result.Status, tsc.ExitStatusCancelled)
+	assert.Equal(t, len(result.Errors), 0)
+	assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Total time:"))
+	assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
+	assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
+
+	result = orchestrator.Build(t.Context(), "")
+	assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+	assert.Equal(t, len(result.Errors), 0)
+	assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
+	assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
+}
 
 func TestBuildCommandLine(t *testing.T) {
 	t.Parallel()

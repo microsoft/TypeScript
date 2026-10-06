@@ -1,6 +1,7 @@
 package build
 
 import (
+	"context"
 	"fmt"
 	"iter"
 	"slices"
@@ -101,9 +102,14 @@ func (t *BuildTask) refreshContentMapperProject(orchestrator *Orchestrator) {
 	}
 }
 
-func (t *BuildTask) waitOnUpstream() {
+func (t *BuildTask) waitOnUpstream(ctx context.Context) {
 	for _, upstream := range t.upStream {
-		<-upstream.task.done
+		select {
+		case <-ctx.Done():
+			return
+		case <-upstream.task.done:
+			continue
+		}
 	}
 }
 
@@ -144,15 +150,22 @@ func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.PathKey
 	t.result = nil
 }
 
-func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.PathKey) {
+func (t *BuildTask) buildProject(ctx context.Context, orchestrator *Orchestrator, path tspath.PathKey) {
+	defer t.unblockDownstream()
 	// Wait on upstream tasks to complete
-	t.waitOnUpstream()
+	t.waitOnUpstream(ctx)
+	if ctx.Err() != nil {
+		t.result.exitStatus = tsc.ExitStatusCancelled
+		return
+	}
 	if t.pending.Load() {
 		t.status = t.getUpToDateStatus(orchestrator, path)
 		t.reportUpToDateStatus(orchestrator)
 		if !t.handleStatusThatDoesntRequireBuild(orchestrator) {
-			t.compileAndEmit(orchestrator, path)
-			t.updateDownstream(orchestrator, path)
+			t.compileAndEmit(ctx, orchestrator, path)
+			if ctx.Err() == nil {
+				t.updateDownstream(orchestrator, path)
+			}
 		} else {
 			if t.resolved != nil {
 				for _, diagnostic := range t.resolved.GetConfigFileParsingDiagnostics() {
@@ -172,7 +185,6 @@ func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.PathKey
 			}
 		}
 	}
-	t.unblockDownstream()
 }
 
 func (t *BuildTask) updateDownstream(orchestrator *Orchestrator, path tspath.PathKey) {
@@ -220,7 +232,7 @@ func (t *BuildTask) updateDownstream(orchestrator *Orchestrator, path tspath.Pat
 	}
 }
 
-func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.PathKey) {
+func (t *BuildTask) compileAndEmit(ctx context.Context, orchestrator *Orchestrator, path tspath.PathKey) {
 	t.errors = nil
 	if orchestrator.opts.Command.BuildOptions.Verbose.IsTrue() {
 		t.result.reportStatus(ast.NewCompilerDiagnostic(diagnostics.Building_project_0, orchestrator.relativeFileName(t.config)))
@@ -249,16 +261,20 @@ func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.PathK
 	}
 	compileTimes.BuildInfoReadTime = orchestrator.opts.Sys.Now().Sub(buildInfoReadStart)
 	parseStart := orchestrator.opts.Sys.Now()
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, programErr := compiler.NewProgram(ctx, compiler.ProgramOptions{
 		Config: t.resolved,
 		Host:   compilerHost,
 	})
+	if programErr != nil {
+		t.result.exitStatus = tsc.ExitStatusCancelled
+		return
+	}
 	compileTimes.ParseTime = orchestrator.opts.Sys.Now().Sub(parseStart)
 	changesComputeStart := orchestrator.opts.Sys.Now()
 	t.result.program = incremental.NewProgram(program, oldProgram, orchestrator.host, orchestrator.opts.Sys.Now, orchestrator.opts.Testing != nil)
 	compileTimes.ChangesComputeTime = orchestrator.opts.Sys.Now().Sub(changesComputeStart)
 
-	result, statistics := tsc.EmitAndReportStatistics(tsc.EmitInput{
+	result, statistics := tsc.EmitAndReportStatistics(ctx, tsc.EmitInput{
 		Sys:                orchestrator.opts.Sys,
 		ProgramLike:        t.result.program,
 		Program:            program,
@@ -275,6 +291,9 @@ func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.PathK
 	})
 	t.result.exitStatus = result.Status
 	t.result.statistics = statistics
+	if ctx.Err() != nil {
+		return
+	}
 	t.packageJsons = t.result.program.PackageJsonLookupPaths()
 	if (!program.Options().NoEmitOnError.IsTrue() || len(result.Diagnostics) == 0) &&
 		(len(result.EmitResult.EmittedFiles) > 0 || t.status.kind != upToDateStatusTypeOutOfDateBuildInfoWithErrors) {

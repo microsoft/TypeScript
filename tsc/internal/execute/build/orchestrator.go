@@ -326,10 +326,13 @@ func (o *Orchestrator) start(ctx context.Context, project string, onlyReferences
 		}
 		order = order[:len(order)-1]
 	}
-	result := o.buildOrCleanOrder(order)
-	if o.opts.Command.CompilerOptions.Watch.IsTrue() {
+	result := o.buildOrCleanOrder(ctx, order)
+	if o.opts.Command.CompilerOptions.Watch.IsTrue() && ctx.Err() == nil {
 		o.Watch(ctx)
 		result.Result.Watcher = o
+	}
+	if ctx.Err() != nil {
+		result.Result.Status = tsc.ExitStatusCancelled
 	}
 	return result
 }
@@ -809,9 +812,12 @@ func (o *Orchestrator) addPackageJsonWatchDirs(desiredDirs *watchmanager.DirWatc
 	}
 }
 
-func (o *Orchestrator) DoCycle() {
+func (o *Orchestrator) DoCycle(ctx context.Context) {
 	o.wm.Lock()
 	defer o.wm.Unlock()
+	if ctx.Err() != nil {
+		return
+	}
 
 	changedPaths, overflow := o.wm.DrainEvents()
 	hasEvents := len(changedPaths) > 0 || overflow
@@ -851,7 +857,7 @@ func (o *Orchestrator) DoCycle() {
 		o.GenerateGraphReusingOldTasks()
 	}
 
-	o.buildOrClean()
+	o.buildOrClean(ctx)
 	o.updateWatch()
 	desiredDirs := o.computeDesiredWatches()
 	if err := o.wm.ReconcileWatches(desiredDirs); err != nil {
@@ -862,11 +868,14 @@ func (o *Orchestrator) DoCycle() {
 	o.resetCaches()
 }
 
-func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
-	return o.buildOrCleanOrder(o.order).Result
+func (o *Orchestrator) buildOrClean(ctx context.Context) tsc.CommandLineResult {
+	return o.buildOrCleanOrder(ctx, o.order).Result
 }
 
-func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask) *OrchestratorResult {
+func (o *Orchestrator) buildOrCleanOrder(ctx context.Context, order []*BuildTask) *OrchestratorResult {
+	if ctx.Err() != nil {
+		return &OrchestratorResult{Result: tsc.CommandLineResult{Status: tsc.ExitStatusCancelled}}
+	}
 	if !o.opts.Command.BuildOptions.Clean.IsTrue() && o.opts.Command.BuildOptions.Verbose.IsTrue() {
 		o.createBuilderStatusReporter(nil)(ast.NewCompilerDiagnostic(
 			diagnostics.Projects_in_this_build_Colon_0,
@@ -890,11 +899,15 @@ func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask) *OrchestratorResult
 			defer close(reported)
 			for _, task := range order {
 				<-task.built
-				task.report(o, task.path, buildResult)
+				if ctx.Err() == nil {
+					task.report(o, task.path, buildResult)
+				} else {
+					task.result = nil
+				}
 			}
 		}()
 		o.rangeTasks(order, func(path tspath.PathKey, task *BuildTask) {
-			o.buildOrCleanProject(task, path)
+			o.buildOrCleanProject(ctx, task, path)
 		})
 		<-reported
 	} else {
@@ -906,7 +919,11 @@ func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask) *OrchestratorResult
 		}
 		buildResult.Errors = o.errors
 	}
-	buildResult.report(o)
+	if ctx.Err() != nil {
+		buildResult.Result.Status = tsc.ExitStatusCancelled
+	} else {
+		buildResult.report(o)
+	}
 	return buildResult
 }
 
@@ -948,12 +965,12 @@ func (o *Orchestrator) rangeTasks(order []*BuildTask, f func(path tspath.PathKey
 	}
 }
 
-func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.PathKey) {
+func (o *Orchestrator) buildOrCleanProject(ctx context.Context, task *BuildTask, path tspath.PathKey) {
 	task.result = &taskResult{}
 	task.result.reportStatus = o.createBuilderStatusReporter(task)
 	task.result.diagnosticReporter = o.createDiagnosticReporter(task)
 	if !o.opts.Command.BuildOptions.Clean.IsTrue() {
-		task.buildProject(o, path)
+		task.buildProject(ctx, o, path)
 	} else {
 		task.cleanProject(o, path)
 	}

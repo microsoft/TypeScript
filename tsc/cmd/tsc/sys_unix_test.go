@@ -20,8 +20,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/osutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -45,6 +48,13 @@ func TestMain(m *testing.M) {
 			panic(err)
 		}
 		os.Args = append([]string{os.Args[0]}, commandLine...)
+		if os.Getenv("TSGO_ACTIVE_COMPILATION") != "" {
+			os.Exit(runWithSignals(func(ctx context.Context) int {
+				sys := newSystem()
+				sys.fs = &cancellableCompilerFS{FS: sys.fs, ctx: ctx}
+				return int(execute.CommandLine(ctx, sys, commandLine, nil).Status)
+			}))
+		}
 		os.Exit(runMain())
 	}
 	if mode := os.Getenv("TSGO_TERMINATION_HELPER"); mode != "" {
@@ -63,6 +73,19 @@ func TestMain(m *testing.M) {
 		}))
 	}
 	os.Exit(m.Run())
+}
+
+type cancellableCompilerFS struct {
+	vfs.FS
+	ctx context.Context
+}
+
+func (fs *cancellableCompilerFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	if strings.HasSuffix(path.AsString(), "/index.ts") {
+		fmt.Println("compiler-loading")
+		<-fs.ctx.Done()
+	}
+	return fs.FS.ReadFile(path)
 }
 
 func TestChildProcessCloseDoesNotWaitForLauncherDescendants(t *testing.T) {
@@ -131,6 +154,7 @@ func TestCommandLineTermination(t *testing.T) {
 		api             bool
 		syncAPI         bool
 		pipeAPI         bool
+		active          bool
 	}{
 		{name: "watch", args: "--watch --project tsconfig.json"},
 		{name: "buildWatch", args: "--build --watch tsconfig.json"},
@@ -143,6 +167,16 @@ func TestCommandLineTermination(t *testing.T) {
 		{name: "apiAsync", args: "--api --async", api: true},
 		{name: "apiSync", args: "--api", api: true, syncAPI: true},
 		{name: "apiWaitingForConnection", args: "--api --pipe", pipeAPI: true},
+		{name: "compileActive", args: "--project tsconfig.json --extendedDiagnostics", active: true},
+		{name: "incrementalActive", args: "--project tsconfig.json --incremental --extendedDiagnostics", active: true},
+		{name: "buildActive", args: "--build tsconfig.json --extendedDiagnostics", active: true},
+		{name: "watchActive", args: "--watch --project tsconfig.json --extendedDiagnostics", active: true},
+		{name: "buildWatchActive", args: "--build --watch tsconfig.json --extendedDiagnostics", active: true},
+		{name: "compileActiveProfile", args: "--project tsconfig.json --extendedDiagnostics", active: true, profiled: true},
+		{name: "incrementalActiveProfile", args: "--project tsconfig.json --incremental --extendedDiagnostics", active: true, profiled: true},
+		{name: "buildActiveProfile", args: "--build tsconfig.json --extendedDiagnostics", active: true, profiled: true},
+		{name: "watchActiveProfile", args: "--watch --project tsconfig.json --extendedDiagnostics", active: true, profiled: true},
+		{name: "buildWatchActiveProfile", args: "--build --watch tsconfig.json --extendedDiagnostics", active: true, profiled: true},
 	} {
 		for _, sig := range []syscall.Signal{syscall.SIGINT, syscall.SIGTERM} {
 			t.Run(fmt.Sprintf("%s/%s", test.name, sig), func(t *testing.T) {
@@ -170,6 +204,9 @@ func TestCommandLineTermination(t *testing.T) {
 				cmd := exec.Command(executable, "-test.run=^TestCommandLineTermination$")
 				cmd.Dir = projectDir
 				cmd.Env = append(os.Environ(), "TSGO_COMMAND_LINE_HELPER="+string(encodedArgs))
+				if test.active {
+					cmd.Env = append(cmd.Env, "TSGO_ACTIVE_COMPILATION=1")
+				}
 				if test.ignoreInterrupt {
 					cmd.Env = append(cmd.Env, "TSGO_IGNORE_INTERRUPT=1")
 				}
@@ -186,7 +223,9 @@ func TestCommandLineTermination(t *testing.T) {
 					}
 				})
 
-				if test.pipeAPI {
+				if test.active {
+					waitForWatchOutput(t, output.Name(), "compiler-loading")
+				} else if test.pipeAPI {
 					deadline := time.Now().Add(10 * time.Second)
 					for {
 						_, err := os.Stat(pipePath)
@@ -219,6 +258,11 @@ func TestCommandLineTermination(t *testing.T) {
 				}
 				assert.NilError(t, cmd.Process.Signal(sig))
 				status := waitForSignalExit(t, cmd)
+				if test.active {
+					text, readErr := os.ReadFile(output.Name())
+					assert.NilError(t, readErr)
+					assert.Assert(t, !strings.Contains(string(text), "Total time:"), "cancelled compilation reported completion")
+				}
 				if test.ignoreInterrupt && sig == syscall.SIGINT {
 					assert.Equal(t, status.ExitStatus(), 128+int(sig))
 				} else {

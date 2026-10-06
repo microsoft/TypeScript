@@ -43,9 +43,9 @@ type EmitInput struct {
 	Tracing            *tracing.Tracing
 }
 
-func EmitAndReportStatistics(input EmitInput) (CompileAndEmitResult, *Statistics) {
+func EmitAndReportStatistics(ctx context.Context, input EmitInput) (CompileAndEmitResult, *Statistics) {
 	var statistics *Statistics
-	result := EmitFilesAndReportErrors(input)
+	result := EmitFilesAndReportErrors(ctx, input)
 	if result.Status != ExitStatusSuccess {
 		// compile exited early
 		return result, nil
@@ -56,10 +56,19 @@ func EmitAndReportStatistics(input EmitInput) (CompileAndEmitResult, *Statistics
 		var memStats runtime.MemStats
 		// GC must be called twice to allow things to settle.
 		runtime.GC()
+		if ctx.Err() != nil {
+			return cancelledCompilation(input.CompileTimes), nil
+		}
 		runtime.GC()
+		if ctx.Err() != nil {
+			return cancelledCompilation(input.CompileTimes), nil
+		}
 		runtime.ReadMemStats(&memStats)
 
 		statistics = statisticsFromProgram(input, &memStats)
+		if ctx.Err() != nil {
+			return cancelledCompilation(input.CompileTimes), nil
+		}
 		statistics.Report(input.Writer, input.Testing)
 	}
 
@@ -71,9 +80,19 @@ func EmitAndReportStatistics(input EmitInput) (CompileAndEmitResult, *Statistics
 	return result, statistics
 }
 
-func EmitFilesAndReportErrors(input EmitInput) (result CompileAndEmitResult) {
+func cancelledCompilation(times *CompileTimes) CompileAndEmitResult {
+	return CompileAndEmitResult{
+		Status:     ExitStatusCancelled,
+		EmitResult: &compiler.EmitResult{EmitSkipped: true},
+		times:      times,
+	}
+}
+
+func EmitFilesAndReportErrors(ctx context.Context, input EmitInput) (result CompileAndEmitResult) {
 	result.times = input.CompileTimes
-	ctx := context.Background()
+	if ctx.Err() != nil {
+		return cancelledCompilation(input.CompileTimes)
+	}
 
 	allDiagnostics := compiler.GetDiagnosticsOfAnyProgram(
 		ctx,
@@ -111,6 +130,9 @@ func EmitFilesAndReportErrors(input EmitInput) (result CompileAndEmitResult) {
 			return diags
 		},
 	)
+	if ctx.Err() != nil {
+		return cancelledCompilation(input.CompileTimes)
+	}
 
 	emitResult := &compiler.EmitResult{EmitSkipped: true, Diagnostics: []*ast.Diagnostic{}}
 	if !input.ProgramLike.Options().ListFilesOnly.IsTrue() {
@@ -119,6 +141,9 @@ func EmitFilesAndReportErrors(input EmitInput) (result CompileAndEmitResult) {
 			WriteFile: input.WriteFile,
 		})
 		result.times.emitTime += input.Sys.Now().Sub(emitStart)
+	}
+	if ctx.Err() != nil {
+		return cancelledCompilation(input.CompileTimes)
 	}
 	if emitResult != nil {
 		allDiagnostics = append(allDiagnostics, emitResult.Diagnostics...)
@@ -129,10 +154,19 @@ func EmitFilesAndReportErrors(input EmitInput) (result CompileAndEmitResult) {
 
 	allDiagnostics = compiler.SortAndDeduplicateDiagnostics(allDiagnostics)
 	for _, diagnostic := range allDiagnostics {
+		if ctx.Err() != nil {
+			return cancelledCompilation(input.CompileTimes)
+		}
 		input.ReportDiagnostic(diagnostic)
 	}
+	if ctx.Err() != nil {
+		return cancelledCompilation(input.CompileTimes)
+	}
 
-	listFiles(input, emitResult)
+	listFiles(ctx, input, emitResult)
+	if ctx.Err() != nil {
+		return cancelledCompilation(input.CompileTimes)
+	}
 
 	input.ReportErrorSummary(allDiagnostics)
 	result.Diagnostics = allDiagnostics
@@ -141,7 +175,7 @@ func EmitFilesAndReportErrors(input EmitInput) (result CompileAndEmitResult) {
 	return result
 }
 
-func listFiles(input EmitInput, emitResult *compiler.EmitResult) {
+func listFiles(ctx context.Context, input EmitInput, emitResult *compiler.EmitResult) {
 	if input.Testing != nil {
 		input.Testing.OnListFilesStart(input.Writer)
 		defer input.Testing.OnListFilesEnd(input.Writer)
@@ -149,6 +183,9 @@ func listFiles(input EmitInput, emitResult *compiler.EmitResult) {
 	options := input.Program.Options()
 	if options.ListEmittedFiles.IsTrue() {
 		for _, file := range emitResult.EmittedFiles {
+			if ctx.Err() != nil {
+				return
+			}
 			fmt.Fprintln(input.Writer, "TSFILE:", file.AsString())
 		}
 	}
@@ -156,6 +193,9 @@ func listFiles(input EmitInput, emitResult *compiler.EmitResult) {
 		input.Program.ExplainFiles(input.Writer, input.Config.Locale(), input.Sys.GetCurrentDirectory())
 	} else if options.ListFiles.IsTrue() || options.ListFilesOnly.IsTrue() {
 		for _, file := range input.Program.GetSourceFiles() {
+			if ctx.Err() != nil {
+				return
+			}
 			fmt.Fprintln(input.Writer, file.FileName())
 		}
 	}
