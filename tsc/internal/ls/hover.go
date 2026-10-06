@@ -438,6 +438,13 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 
 	// nodeBuilderFlags for classified output (same as signatureHelpNodeBuilderFlags)
 	const classifiedNodeBuilderFlags = nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope | nodebuilder.FlagsWriteTypeParametersInQualifiedName
+	var emitContext *printer.EmitContext
+	getEmitContext := func() *printer.EmitContext {
+		if emitContext == nil {
+			emitContext = printer.NewEmitContext()
+		}
+		return emitContext
+	}
 
 	// writeTypeClassified writes a type to dpw with proper classification (punctuation, symbols, keywords).
 	// Falls back to flat text when vsCapability is false or when TypeToTypeNode fails.
@@ -447,7 +454,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			dpw.Write(c.TypeToStringEx(t, enclosing, flags, vc))
 			return
 		}
-		emitContext := printer.NewEmitContext()
+		emitContext := getEmitContext()
 		idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
 		nb := checker.NewNodeBuilderEx(c, emitContext, idToSymbol)
 		combinedFlags := nodebuilder.Flags(flags&checker.TypeFormatFlagsNodeBuilderFlagsMask) | classifiedNodeBuilderFlags
@@ -485,7 +492,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				sigOutput = ast.KindCallSignature
 			}
 		}
-		emitContext := printer.NewEmitContext()
+		emitContext := getEmitContext()
 		idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
 		nb := checker.NewNodeBuilderEx(c, emitContext, idToSymbol)
 		combinedFlags := nodebuilder.Flags(flags&checker.TypeFormatFlagsNodeBuilderFlagsMask) | classifiedNodeBuilderFlags
@@ -519,7 +526,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			return
 		}
 		attributes := declaration.AsModuleDeclaration().Attributes
-		emitContext := printer.NewEmitContext()
+		emitContext := getEmitContext()
 		emitContext.SetEmitFlags(attributes, printer.EFSingleLine)
 		p := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, emitContext)
 		tempDpw := newDisplayPartsWriter(vsCapability)
