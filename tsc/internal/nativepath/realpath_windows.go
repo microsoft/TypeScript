@@ -13,24 +13,33 @@ import (
 
 func Realpath(path string) (string, error) {
 	var h windows.Handle
-	useExtendedPath := hasReservedPathComponent(path)
-	if len(path) < 248 || useExtendedPath {
-		var err error
-		h, err = openMetadata(path, useExtendedPath)
-		if err != nil {
-			return "", err
-		}
-		defer windows.CloseHandle(h) //nolint:errcheck
+	var err error
+	closeHandle := false
+	if len(path) < 248 {
+		h, err = openMetadata(path, false)
+		closeHandle = err == nil
 	} else {
 		// For long paths, defer to os.Open to run the path through fixLongPath.
-		f, err := os.Open(path)
-		if err != nil {
-			return "", err
-		}
-		defer f.Close()
+		f, openErr := os.Open(path)
+		if openErr == nil {
+			defer f.Close()
 
-		// Works on directories too since https://go.dev/cl/405275.
-		h = windows.Handle(f.Fd())
+			// Works on directories too since https://go.dev/cl/405275.
+			h = windows.Handle(f.Fd())
+		} else {
+			err = openErr
+		}
+	}
+
+	if err != nil && hasReservedPathComponent(path) {
+		h, err = openMetadata(path, true)
+		closeHandle = err == nil
+	}
+	if err != nil {
+		return "", err
+	}
+	if closeHandle {
+		defer windows.CloseHandle(h) //nolint:errcheck
 	}
 
 	// based on https://github.com/golang/go/blob/f4e3ec3dbe3b8e04a058d266adf8e048bab563f2/src/os/file_windows.go#L389
