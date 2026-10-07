@@ -2861,6 +2861,8 @@ func isIgnoredJsxProperty(source *Type, sourceProp *ast.Symbol) bool {
 }
 
 func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
+	source = c.getOriginTarget(source)
+	target = c.getOriginTarget(target)
 	return source == target || source.flags&TypeFlagsNever != 0 || target.flags&TypeFlagsUnion != 0 && c.isTypeSubsetOfUnion(source, target)
 }
 
