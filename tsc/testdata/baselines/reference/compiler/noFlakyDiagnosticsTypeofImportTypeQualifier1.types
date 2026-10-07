@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsTypeofImportTypeQualifier1.ts] ////
+
+=== noFlakyDiagnosticsTypeofImportTypeQualifier1.ts ===
+export function f(x: typeof import("foo").sys.readDirectory) {}
+>f : (x: typeof import("foo").sys.readDirectory) => void
+>x : any
+>sys : any
+>readDirectory : any
+
