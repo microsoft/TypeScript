@@ -948,6 +948,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
+                owner.createSnapshotRebaser(() => snapshot),
                 undefined,
             );
             owner.activeSnapshots.set(snapshot.id, snapshot);
@@ -971,6 +972,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
+                owner.createSnapshotRebaser(() => snapshot),
                 undefined,
             );
             owner.activeSnapshots.set(snapshot.id, snapshot);
@@ -1012,6 +1014,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                         owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
                     owner.createSnapshotUpdater(() => snapshot),
+                    owner.createSnapshotRebaser(() => snapshot),
                     baseSnapshot,
                 );
                 owner.activeSnapshots.set(snapshot.id, snapshot);
@@ -1041,7 +1044,77 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                         owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
                     owner.createSnapshotUpdater(() => snapshot),
+                    owner.createSnapshotRebaser(() => snapshot),
                     baseSnapshot,
+                );
+                owner.activeSnapshots.set(snapshot.id, snapshot);
+                return snapshot;
+            },
+        );
+    }
+
+    private get rebaseSnapshot(): {
+        (sourceSnapshot: Snapshot, newSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot;
+        gen(sourceSnapshot: Snapshot, newSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "rebaseSnapshot",
+            function (sourceSnapshot: Snapshot, newSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot {
+                owner.ensureInitialized();
+                if (owner.activeSnapshots.get(sourceSnapshot.id) !== sourceSnapshot || sourceSnapshot.isDisposed()) {
+                    throw new Error("Cannot rebase an inactive snapshot");
+                }
+                if (owner.activeSnapshots.get(newSnapshot.id) !== newSnapshot || newSnapshot.isDisposed()) {
+                    throw new Error("Cannot rebase onto an inactive snapshot");
+                }
+                const data = owner.client.apiRequest("rebaseSnapshot", {
+                    snapshot: sourceSnapshot.id,
+                    newSnapshot: newSnapshot.id,
+                    changes: toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params)),
+                });
+                owner.sourceFileCache.retainForSnapshot(data.snapshot, newSnapshot.id, data.changes);
+                const snapshot = new Snapshot(
+                    data,
+                    owner.toPath!,
+                    owner,
+                    () => {
+                        owner.activeSnapshots.delete(snapshot.id);
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                    },
+                    owner.createSnapshotUpdater(() => snapshot),
+                    owner.createSnapshotRebaser(() => snapshot),
+                    newSnapshot,
+                );
+                owner.activeSnapshots.set(snapshot.id, snapshot);
+                return snapshot;
+            },
+            function* (sourceSnapshot: Snapshot, newSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                if (owner.activeSnapshots.get(sourceSnapshot.id) !== sourceSnapshot || sourceSnapshot.isDisposed()) {
+                    throw new Error("Cannot rebase an inactive snapshot");
+                }
+                if (owner.activeSnapshots.get(newSnapshot.id) !== newSnapshot || newSnapshot.isDisposed()) {
+                    throw new Error("Cannot rebase onto an inactive snapshot");
+                }
+                const data = yield* apiRequest("rebaseSnapshot", {
+                    snapshot: sourceSnapshot.id,
+                    newSnapshot: newSnapshot.id,
+                    changes: toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params)),
+                });
+                owner.sourceFileCache.retainForSnapshot(data.snapshot, newSnapshot.id, data.changes);
+                const snapshot = new Snapshot(
+                    data,
+                    owner.toPath!,
+                    owner,
+                    () => {
+                        owner.activeSnapshots.delete(snapshot.id);
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                    },
+                    owner.createSnapshotUpdater(() => snapshot),
+                    owner.createSnapshotRebaser(() => snapshot),
+                    newSnapshot,
                 );
                 owner.activeSnapshots.set(snapshot.id, snapshot);
                 return snapshot;
@@ -1084,6 +1157,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             return yield* owner.updateSnapshot.gen(getSnapshot(), params);
         };
         return update;
+    }
+
+    private createSnapshotRebaser(getSnapshot: () => Snapshot): SnapshotRebaser {
+        const rebase = ((newSnapshot: Snapshot, params?: CreateSnapshotParams) => this.rebaseSnapshot(getSnapshot(), newSnapshot, params)) as SnapshotRebaser;
+        const owner = this;
+        rebase.gen = function* (newSnapshot: Snapshot, params?: CreateSnapshotParams) {
+            return yield* owner.rebaseSnapshot.gen(getSnapshot(), newSnapshot, params);
+        };
+        return rebase;
     }
 
     /**
@@ -1132,6 +1214,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
+                owner.createSnapshotRebaser(() => snapshot),
                 baseSnapshot,
             );
             owner.activeSnapshots.set(snapshot.id, snapshot);
@@ -1166,6 +1249,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
+                owner.createSnapshotRebaser(() => snapshot),
                 baseSnapshot,
             );
             owner.activeSnapshots.set(snapshot.id, snapshot);
@@ -1608,6 +1692,7 @@ export class InternalAPI {
 }
 
 type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
+type SnapshotRebaser = ((newSnapshot: Snapshot, params?: CreateSnapshotParams) => Snapshot) & { gen(newSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
 
 export interface SnapshotOperation {
     readonly createdPrograms?: readonly Program<SyntheticProjectId>[] | undefined;
@@ -1679,18 +1764,20 @@ export class Snapshot {
     private snapshotRegistry: SnapshotObjectRegistry;
     private projectDataMap: Map<ProjectId, ProjectResponse>;
     private updateSnapshot: SnapshotUpdater;
+    private rebaseSnapshot: SnapshotRebaser;
     readonly internal: SnapshotInternalAPI;
 
     private get client(): Client {
         return this.api.client;
     }
 
-    constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot) {
+    constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, rebaseSnapshot: SnapshotRebaser, baseSnapshot?: Snapshot) {
         this.id = data.snapshot;
         this.api = api;
         this.toPath = toPath;
         this.onDispose = onDispose;
         this.updateSnapshot = updateSnapshot;
+        this.rebaseSnapshot = rebaseSnapshot;
         this.projectMap = new Map();
         const projectDataMap = new Map(baseSnapshot?.projectDataMap);
         for (const projectId of data.changes?.removedProjects ?? []) {
@@ -1755,6 +1842,35 @@ export class Snapshot {
             return yield* owner.updateSnapshot.gen(params);
         }
         return cacheGeneratorMethod(owner, "update", update, gen);
+    }
+
+    /**
+     * Creates a new snapshot with this snapshot's memory filesystem overlaid on
+     * `newSnapshot`, retaining the target's projects and language server state.
+     * Source entries take precedence; a full source filesystem remains total.
+     * Optional changes are applied after rebasing, including auto-import preparation.
+     * Neither input snapshot is modified, and retained file contents are not resent.
+     */
+    get rebase(): {
+        <const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(newSnapshot: Snapshot, params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
+        (newSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot;
+        gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(newSnapshot: Snapshot, params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
+        gen(newSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function rebase<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(newSnapshot: Snapshot, params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
+        function rebase(newSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot;
+        function rebase(newSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot {
+            owner.ensureNotDisposed();
+            return owner.rebaseSnapshot(newSnapshot, params);
+        }
+        function gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(newSnapshot: Snapshot, params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
+        function gen(newSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        function* gen(newSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            owner.ensureNotDisposed();
+            return yield* owner.rebaseSnapshot.gen(newSnapshot, params);
+        }
+        return cacheGeneratorMethod(owner, "rebase", rebase, gen);
     }
 
     /**

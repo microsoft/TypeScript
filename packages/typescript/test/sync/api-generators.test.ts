@@ -165,6 +165,7 @@ const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
     "API.fetchDeclarationSymbol",
     "API.initializeWorker",
+    "API.rebaseSnapshot",
     "API.updateSnapshot",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
@@ -1801,8 +1802,12 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             runParityBatch(api, cases);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 
-            const snapshotGeneratorAPI = spawnAPI(parityFiles);
-            const snapshotSyncAPI = spawnAPI(parityFiles);
+            const snapshotFiles = {
+                ...parityFiles,
+                "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["src/syntax.ts"] }),
+            };
+            const snapshotGeneratorAPI = spawnAPI(snapshotFiles);
+            const snapshotSyncAPI = spawnAPI(snapshotFiles);
             try {
                 const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
                 const syncBase = snapshotSyncAPI.createSnapshot({ openProject: "/tsconfig.json" });
@@ -1810,6 +1815,17 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 const syncUpdated = syncBase.update({});
                 assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
                 exercisedMethods.add("Snapshot.update");
+                const changes = {
+                    fileSystem: { kind: "layer", files: { "/src/syntax.ts": "export const fixed = true;" } },
+                } as const;
+                const generatorExtras = snapshotGeneratorAPI.batch(generatorUpdated.update.gen(changes))[0];
+                const syncExtras = syncUpdated.update(changes);
+                const rebaseChanges = { prepareAutoImports: "/src/syntax.ts", openFiles: ["/src/syntax.ts"] } as const;
+                const generatorRebased = snapshotGeneratorAPI.batch(generatorExtras.rebase.gen(generatorBase, rebaseChanges))[0];
+                const syncRebased = syncExtras.rebase(syncBase, rebaseChanges);
+                assertSnapshotsEquivalent(generatorRebased, syncRebased, "Snapshot.rebase");
+                assert.equal(generatorRebased.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/syntax.ts")!.text, "export const fixed = true;");
+                exercisedMethods.add("Snapshot.rebase");
             }
             finally {
                 snapshotGeneratorAPI.close();

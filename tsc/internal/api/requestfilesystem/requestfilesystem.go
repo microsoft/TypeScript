@@ -119,6 +119,35 @@ func HasFullFileSystem(fileSystem vfs.FS) bool {
 	return requestFileSystem != nil && requestFileSystem.kind == KindFull
 }
 
+func Rebase(fileSystem vfs.FS, base vfs.FS, fileChanges *project.FileChangeSummary) vfs.FS {
+	source := getRequestFileSystem(fileSystem)
+	if source == nil {
+		return base
+	}
+	paths := source.paths
+	kind := source.kind
+	baseFileSystem := base
+	if target := getRequestFileSystem(base); target != nil {
+		base = target.base
+		if source.kind == KindLayer {
+			paths = composeRequestPaths(target.paths, source.paths, requestFallbackAllowed, source.caseSensitivity)
+			kind = target.kind
+		}
+	}
+	result := &requestFileSystem{
+		kind:             kind,
+		base:             base,
+		currentDirectory: source.currentDirectory,
+		caseSensitivity:  source.caseSensitivity,
+		paths:            paths,
+	}
+	changed := addRebaseFileChanges(fileChanges, source, baseFileSystem, result)
+	if source.kind == KindFull && (!HasFullFileSystem(baseFileSystem) || changed) {
+		fileChanges.InvalidateAll = true
+	}
+	return result
+}
+
 func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentDirectory tspath.RootedDirectoryPath) (*requestFileSystem, error) {
 	if params.Kind != KindFull && params.Kind != KindLayer {
 		return nil, fmt.Errorf("unknown request filesystem kind %q", params.Kind)
@@ -198,7 +227,10 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		result.registerDirectory(directoryName)
 	}
 	for _, path := range params.RemovedPaths {
-		result.paths.ensure(result.caseSensitivity.PathKey(result.toAbsolutePath(path))).fallback = requestFallbackMissing
+		absolutePath := result.toAbsolutePath(path)
+		node := result.paths.ensure(result.caseSensitivity.PathKey(absolutePath))
+		node.fallback = requestFallbackMissing
+		node.fallbackPath = absolutePath
 	}
 	result.paths = composeRequestPaths(nil, result.paths, requestFallbackAllowed, result.caseSensitivity)
 	return &result, nil

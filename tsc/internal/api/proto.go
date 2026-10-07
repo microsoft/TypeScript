@@ -76,6 +76,7 @@ const (
 	MethodInitialize                                     Method = "initialize"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
+	MethodRebaseSnapshot                                 Method = "rebaseSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
 	MethodCreateBuildOrchestrator                        Method = "createBuildOrchestrator"
 	MethodDisposeBuildOrchestrator                       Method = "disposeBuildOrchestrator"
@@ -471,6 +472,12 @@ type UpdateSnapshotParams struct {
 	Changes  *CreateSnapshotParams `json:"changes,omitempty"`
 }
 
+type RebaseSnapshotParams struct {
+	Snapshot    SnapshotID            `json:"snapshot"`
+	NewSnapshot SnapshotID            `json:"newSnapshot"`
+	Changes     *CreateSnapshotParams `json:"changes,omitempty"`
+}
+
 type GetCurrentLanguageServerSnapshotParams struct {
 	BaseSnapshot SnapshotID                     `json:"baseSnapshot,omitempty"`
 	Changes      *LanguageServerSnapshotChanges `json:"changes,omitempty"`
@@ -601,6 +608,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
+	MethodRebaseSnapshot:                                 unmarshallerFor[RebaseSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
 	MethodCreateBuildOrchestrator:                        unmarshallerFor[CreateBuildOrchestratorParams],
 	MethodDisposeBuildOrchestrator:                       unmarshallerFor[DisposeBuildOrchestratorParams],

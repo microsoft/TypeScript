@@ -638,6 +638,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
             this.createSnapshotUpdater(() => snapshot),
+            this.createSnapshotRebaser(() => snapshot),
             undefined,
         );
         this.activeSnapshots.set(snapshot.id, snapshot);
@@ -669,7 +670,38 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
             this.createSnapshotUpdater(() => snapshot),
+            this.createSnapshotRebaser(() => snapshot),
             baseSnapshot,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+        return snapshot;
+    }
+
+    private async rebaseSnapshot(sourceSnapshot: Snapshot, newSnapshot: Snapshot, params?: CreateSnapshotParams): Promise<Snapshot> {
+        await this.ensureInitialized();
+        if (this.activeSnapshots.get(sourceSnapshot.id) !== sourceSnapshot || sourceSnapshot.isDisposed()) {
+            throw new Error("Cannot rebase an inactive snapshot");
+        }
+        if (this.activeSnapshots.get(newSnapshot.id) !== newSnapshot || newSnapshot.isDisposed()) {
+            throw new Error("Cannot rebase onto an inactive snapshot");
+        }
+        const data = await this.client.apiRequest("rebaseSnapshot", {
+            snapshot: sourceSnapshot.id,
+            newSnapshot: newSnapshot.id,
+            changes: toCreateSnapshotRequest(this.prepareCreateSnapshotParams(params)),
+        });
+        this.sourceFileCache.retainForSnapshot(data.snapshot, newSnapshot.id, data.changes);
+        const snapshot = new Snapshot(
+            data,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            this.createSnapshotRebaser(() => snapshot),
+            newSnapshot,
         );
         this.activeSnapshots.set(snapshot.id, snapshot);
         return snapshot;
@@ -712,6 +744,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return update;
     }
 
+    private createSnapshotRebaser(getSnapshot: () => Snapshot): SnapshotRebaser {
+        const rebase: SnapshotRebaser = (newSnapshot, params) => this.rebaseSnapshot(getSnapshot(), newSnapshot, params); // @sync: const rebase = ((newSnapshot: Snapshot, params?: CreateSnapshotParams) => this.rebaseSnapshot(getSnapshot(), newSnapshot, params)) as SnapshotRebaser;
+        // @sync-only-start
+        // const owner = this;
+        // rebase.gen = function* (newSnapshot: Snapshot, params?: CreateSnapshotParams) { return yield* owner.rebaseSnapshot.gen(getSnapshot(), newSnapshot, params); };
+        // @sync-only-end
+        return rebase;
+    }
+
     /**
      * Returns the language server's current canonical snapshot after atomically
      * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
@@ -752,6 +793,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
             this.createSnapshotUpdater(() => snapshot),
+            this.createSnapshotRebaser(() => snapshot),
             baseSnapshot,
         );
         this.activeSnapshots.set(snapshot.id, snapshot);
@@ -980,6 +1022,7 @@ export class InternalAPI {
 }
 
 type SnapshotUpdater = (params: CreateSnapshotParams) => Promise<Snapshot>; // @sync: type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
+type SnapshotRebaser = (newSnapshot: Snapshot, params?: CreateSnapshotParams) => Promise<Snapshot>; // @sync: type SnapshotRebaser = ((newSnapshot: Snapshot, params?: CreateSnapshotParams) => Snapshot) & { gen(newSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
 
 export interface SnapshotOperation {
     readonly createdPrograms?: readonly Program<SyntheticProjectId>[] | undefined;
@@ -1051,18 +1094,20 @@ export class Snapshot {
     private snapshotRegistry: SnapshotObjectRegistry;
     private projectDataMap: Map<ProjectId, ProjectResponse>;
     private updateSnapshot: SnapshotUpdater;
+    private rebaseSnapshot: SnapshotRebaser;
     readonly internal: SnapshotInternalAPI;
 
     private get client(): Client {
         return this.api.client;
     }
 
-    constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot) {
+    constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, rebaseSnapshot: SnapshotRebaser, baseSnapshot?: Snapshot) {
         this.id = data.snapshot;
         this.api = api;
         this.toPath = toPath;
         this.onDispose = onDispose;
         this.updateSnapshot = updateSnapshot;
+        this.rebaseSnapshot = rebaseSnapshot;
         this.projectMap = new Map();
         const projectDataMap = new Map(baseSnapshot?.projectDataMap);
         for (const projectId of data.changes?.removedProjects ?? []) {
@@ -1115,6 +1160,23 @@ export class Snapshot {
     update(params: CreateSnapshotParams): Promise<Snapshot> {
         this.ensureNotDisposed();
         return this.updateSnapshot(params);
+    }
+
+    /**
+     * Creates a new snapshot with this snapshot's memory filesystem overlaid on
+     * `newSnapshot`, retaining the target's projects and language server state.
+     * Source entries take precedence; a full source filesystem remains total.
+     * Optional changes are applied after rebasing, including auto-import preparation.
+     * Neither input snapshot is modified, and retained file contents are not resent.
+     */
+    rebase<
+        const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
+        const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
+    >(newSnapshot: Snapshot, params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
+    rebase(newSnapshot: Snapshot, params?: CreateSnapshotParams): Promise<Snapshot>;
+    rebase(newSnapshot: Snapshot, params?: CreateSnapshotParams): Promise<Snapshot> {
+        this.ensureNotDisposed();
+        return this.rebaseSnapshot(newSnapshot, params);
     }
 
     /**
