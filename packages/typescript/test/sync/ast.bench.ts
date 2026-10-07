@@ -143,7 +143,7 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
         }),
     });
 
-    const snapshot = api.createSnapshot({ openProject: configPath });
+    const snapshot = api.createSnapshot({ openProjects: [configPath] });
     const remoteSourceFile = snapshot.getConfiguredProject(configPath)!.program.getSourceFile(sourcePath)!;
     assert.ok(remoteSourceFile.statements);
     const remoteTree = remoteSourceFile.statements[0];

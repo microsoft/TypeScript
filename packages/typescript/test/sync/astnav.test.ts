@@ -111,7 +111,7 @@ describe("astnav", { concurrency: areTestsFiltered() }, () => {
             }),
         });
 
-        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sf = project.program.getSourceFile("/src/testFile.ts");
         assert.ok(sf, "Failed to get source file from API");

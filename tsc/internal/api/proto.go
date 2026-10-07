@@ -1035,10 +1035,6 @@ type ProjectResponse struct {
 	CurrentDirectory  tspath.RootedDirectoryPath `json:"currentDirectory"`
 	Dirty             bool                       `json:"dirty"`
 	ParsedCommandLine *ConfigFileResponse        `json:"parsedCommandLine" nonnil:"true"`
-	// Deprecated: Use parsedCommandLine.fileNames.
-	RootFiles []tspath.RootedFilePath `json:"rootFiles" nonnil:"true"`
-	// Deprecated: Use parsedCommandLine.options.
-	CompilerOptions *core.CompilerOptions `json:"compilerOptions" nonnil:"true"`
 }
 
 func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *ConfigFileResponse {
@@ -1084,8 +1080,6 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 		CurrentDirectory:  p.CurrentDirectory(),
 		Dirty:             p.IsDirty(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
-		RootFiles:         p.CommandLine.FileNames(),
-		CompilerOptions:   p.CommandLine.CompilerOptions(),
 	}
 }
 

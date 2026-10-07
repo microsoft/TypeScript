@@ -141,7 +141,6 @@ import type {
 } from "../proto.ts";
 import {
     resolveFileName,
-    toCreateSnapshotRequest,
     validateSymbolResponse,
 } from "../proto.ts";
 import {
@@ -936,7 +935,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         function createSnapshot(params?: CreateSnapshotParams): Snapshot {
             owner.ensureInitialized();
 
-            const requestParams = toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params));
+            const requestParams = owner.prepareCreateSnapshotParams(params);
             const data = owner.client.apiRequest("createSnapshot", requestParams);
 
             const snapshot = new Snapshot(
@@ -959,7 +958,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
             yield* owner.ensureInitialized.gen();
 
-            const requestParams = toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params));
+            const requestParams = owner.prepareCreateSnapshotParams(params);
             const data = yield* apiRequest("createSnapshot", requestParams);
 
             const snapshot = new Snapshot(
@@ -996,7 +995,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
                 const data = owner.client.apiRequest("updateSnapshot", {
                     snapshot: baseSnapshot.id,
-                    changes: toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params)),
+                    changes: owner.prepareCreateSnapshotParams(params),
                 });
                 if (data.snapshot === baseSnapshot.id) {
                     owner.client.apiRequest("release", { snapshot: data.snapshot });
@@ -1025,7 +1024,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
                 const data = yield* apiRequest("updateSnapshot", {
                     snapshot: baseSnapshot.id,
-                    changes: toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params)),
+                    changes: owner.prepareCreateSnapshotParams(params),
                 });
                 if (data.snapshot === baseSnapshot.id) {
                     yield* apiRequest("release", { snapshot: data.snapshot });
@@ -1049,8 +1048,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams | undefined {
-        if (!params) return undefined;
+    private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
+        params ??= {};
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -2569,10 +2568,6 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly currentDirectory: RootedDirectoryPath;
     readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
-    /** @deprecated Use `parsedCommandLine.options`. */
-    readonly compilerOptions: CompilerOptions;
-    /** @deprecated Use `parsedCommandLine.fileNames`. */
-    readonly rootFiles: readonly RootedFilePath[];
 
     readonly program: Program<Id>;
     readonly checker: Checker;
@@ -2589,49 +2584,11 @@ export class Project<Id extends ProjectId = ProjectId> {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
         this.parsedCommandLine = data.parsedCommandLine;
-        this.compilerOptions = this.parsedCommandLine.options;
-        this.rootFiles = this.parsedCommandLine.fileNames;
         this.snapshotId = snapshotId;
         this.program = new Program(snapshotId, this, toPath);
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
         this.checker = new Checker(snapshotId, this, objectRegistry);
         this.languageService = new LanguageService(snapshotId, this, objectRegistry);
-    }
-
-    /** @deprecated Use `languageService.getImportAdderEdits`. */
-    get getImportAdderEdits(): {
-        (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): readonly TextEdit[];
-        gen(file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getImportAdderEdits",
-            function (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): readonly TextEdit[] {
-                return owner.languageService.getImportAdderEdits(file, actions);
-            },
-            function* (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
-                return yield* owner.languageService.getImportAdderEdits.gen(file, actions);
-            },
-        );
-    }
-
-    /** @deprecated Use `languageService.getImportEditsForSymbols`. */
-    get getImportEditsForSymbols(): {
-        (file: DocumentIdentifier, symbols: readonly Symbol[], options?: GetImportEditsForSymbolsOptions): readonly TextEdit[];
-        gen(file: DocumentIdentifier, symbols: readonly Symbol[], options?: GetImportEditsForSymbolsOptions): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getImportEditsForSymbols",
-            function (file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): readonly TextEdit[] {
-                return owner.languageService.getImportEditsForSymbols(file, symbols, options);
-            },
-            function* (file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
-                return yield* owner.languageService.getImportEditsForSymbols.gen(file, symbols, options);
-            },
-        );
     }
 
     dispose(): void {
@@ -2915,7 +2872,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     getNewLine(): string {
-        return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
+        return this.project.parsedCommandLine.options.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
     }
 
     /** @internal */
@@ -2966,7 +2923,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     getCompilerOptions(): CompilerOptions {
-        return this.project.compilerOptions;
+        return this.project.parsedCommandLine.options;
     }
 
     get getSourceFile(): {
@@ -4539,60 +4496,6 @@ export class Checker {
                     symbol: symbol.reference,
                 });
                 return (data ?? []).map(h => new NodeHandle(h, owner.project));
-            },
-        );
-    }
-
-    /** @deprecated Use `project.languageService.getReferencedSymbolsForNode`. */
-    get getReferencedSymbolsForNode(): {
-        (node: Node, position: number): ReferencedSymbolEntry[];
-        gen(node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReferencedSymbolsForNode",
-            function (node: Node, position: number): ReferencedSymbolEntry[] {
-                return owner.project.languageService.getReferencedSymbolsForNode(node, position);
-            },
-            function* (node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]> {
-                return yield* owner.project.languageService.getReferencedSymbolsForNode.gen(node, position);
-            },
-        );
-    }
-
-    /** @deprecated Use `project.languageService.getSignatureUsage`. */
-    get getSignatureUsage(): {
-        (signatureDecl: Node): SignatureUsage[];
-        gen(signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSignatureUsage",
-            function (signatureDecl: Node): SignatureUsage[] {
-                return owner.project.languageService.getSignatureUsage(signatureDecl);
-            },
-            function* (signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]> {
-                return yield* owner.project.languageService.getSignatureUsage.gen(signatureDecl);
-            },
-        );
-    }
-
-    /** @deprecated Use `project.languageService.getCompletionsAtPosition`. */
-    get getCompletionsAtPosition(): {
-        (document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined;
-        gen(document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getCompletionsAtPosition",
-            function (document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined {
-                return owner.project.languageService.getCompletionsAtPosition(document, position, options);
-            },
-            function* (document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]> {
-                return yield* owner.project.languageService.getCompletionsAtPosition.gen(document, position, options);
             },
         );
     }

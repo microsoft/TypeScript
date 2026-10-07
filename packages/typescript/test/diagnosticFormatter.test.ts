@@ -22,7 +22,7 @@ describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
             "/project/index.ts": source,
         });
         try {
-            const snapshot = await api.createSnapshot({ openProject: "/project/tsconfig.json" });
+            const snapshot = await api.createSnapshot({ openProjects: ["/project/tsconfig.json"] });
             const program = snapshot.getConfiguredProject("/project/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/project/index.ts");
             assert.equal(diagnostics.length, 1);
@@ -100,7 +100,7 @@ describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
             "/workspace/index.ts": `const x: number = "oops";`,
         });
         try {
-            const snapshot = await api.createSnapshot({ openProject: "/workspace/tsconfig.json" });
+            const snapshot = await api.createSnapshot({ openProjects: ["/workspace/tsconfig.json"] });
             const program = snapshot.getConfiguredProject("/workspace/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/workspace/index.ts");
             const configDiagnostics = (await api.parseConfigFile("/workspace/tsconfig.json")).errors;

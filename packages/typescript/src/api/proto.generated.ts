@@ -471,10 +471,6 @@ export interface ProjectResponse {
     currentDirectory: RootedDirectoryPath;
     dirty: boolean;
     parsedCommandLine: ConfigFileResponse;
-    /** @deprecated Use parsedCommandLine.fileNames. */
-    rootFiles: RootedFilePath[];
-    /** @deprecated Use parsedCommandLine.options. */
-    compilerOptions: CompilerOptions;
 }
 
 export interface GetSymbolAtPositionParams {
