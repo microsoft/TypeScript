@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -18,9 +19,22 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type discoveryReadCountingFS struct {
+	vfs.FS
+	discoveryReads atomic.Int32
+}
+
+func (fs *discoveryReadCountingFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	if path == "/user/username/projects/project/bower_components/jquery/bower.json" {
+		fs.discoveryReads.Add(1)
+	}
+	return fs.FS.ReadFile(path)
+}
 
 func waitForInstall(t *testing.T, installStarted <-chan struct{}) {
 	t.Helper()
@@ -92,6 +106,32 @@ func TestATA(t *testing.T) {
 		t.Skip("bundled files are not embedded")
 	}
 
+	t.Run("applying ATA results does not repeat dependency discovery", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/user/username/projects/project/app.js":                             "",
+			"/user/username/projects/project/bower_components/jquery/bower.json": `{"name":"jquery"}`,
+		}
+		init, _ := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{"jquery": `declare const $: number;`},
+		})
+		fs := &discoveryReadCountingFS{FS: init.FS}
+		init.FS = fs
+		session := project.NewSession(init)
+		defer session.Close()
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		assert.Assert(t, fs.discoveryReads.Load() > 0, "the background installer must discover the Bower dependency")
+		fs.discoveryReads.Store(0)
+		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		defer snapshot.Deref()
+		assert.Assert(t, !snapshot.ProjectCollection.InferredProject().ShouldTriggerATA(snapshot.ID()), "the background result must be accepted")
+		assert.Equal(t, fs.discoveryReads.Load(), int32(0), "applying the background result must not rediscover dependency manifests")
+	})
+
 	t.Run("local module should not be picked up", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
@@ -126,6 +166,86 @@ func TestATA(t *testing.T) {
 		npmCalls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, len(npmCalls), 1)
 		assert.Equal(t, npmCalls[0].Args[2], "types-registry@latest")
+	})
+
+	t.Run("external package declaration created during installation invalidates the result", func(t *testing.T) {
+		t.Parallel()
+		const ownedTypes = "/user/username/projects/shared/foo.d.ts"
+		files := map[string]any{
+			"/user/username/projects/project/app.js":                                    "",
+			"/user/username/projects/project/package.json":                              `{"name":"test","dependencies":{"foo":"^1.0.0","jquery":"^3.1.0"}}`,
+			"/user/username/projects/project/node_modules/foo/package.json":             `{"name":"foo","types":"../../../shared/foo.d.ts"}`,
+			projecttestutil.TestTypingsLocation + "/node_modules/@types/foo/index.d.ts": `declare const fallback: number;`,
+			projecttestutil.TestTypingsLocation + "/package.json":                       `{"devDependencies":{"@types/foo":"^1.3.0"}}`,
+			projecttestutil.TestTypingsLocation + "/package-lock.json":                  `{"dependencies":{"@types/foo":{"version":"1.3.0"}}}`,
+		}
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{"foo": `declare const fallback: number;`, "jquery": `declare const $: number;`},
+		})
+		installStarted := make(chan struct{}, 1)
+		releaseInstall := make(chan struct{})
+		var once sync.Once
+		release := func() { once.Do(func() { close(releaseInstall) }) }
+		defer release()
+		install := utils.NpmExecutor().NpmInstallFunc
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
+			if slices.Contains(args, "@types/jquery@latest") {
+				installStarted <- struct{}{}
+				<-releaseInstall
+			}
+			return install(ctx, cwd, args)
+		}
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		waitForInstall(t, installStarted)
+		assert.NilError(t, utils.FS().WriteFile(ownedTypes, `declare const ownTypes: number;`))
+		release()
+		session.WaitForBackgroundTasks()
+		snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, snapshot.ProjectCollection.InferredProject().ShouldTriggerATA(snapshot.ID()), "the obsolete cached fallback must be rejected")
+		snapshot.Deref()
+		session.WaitForBackgroundTasks()
+		ls, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), ownedTypes))
+		assert.Assert(t, !slices.Contains(ls.GetProgram().CommandLine().FileNames(), projecttestutil.TestTypingsLocation+"/node_modules/@types/foo/index.d.ts"))
+	})
+
+	t.Run("cached scoped dependency survives subsequent ATA requests", func(t *testing.T) {
+		t.Parallel()
+		const manifest = "/user/username/projects/project/package.json"
+		files := map[string]any{
+			"/user/username/projects/project/app.js": "",
+			manifest:                                 `{"name":"test","dependencies":{"@a/b":"^1.0.0"}}`,
+		}
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"a__b":   `declare const scoped: number;`,
+				"jquery": `declare const $: number;`,
+			},
+		})
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		ls, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), projecttestutil.TestTypingsLocation+"/node_modules/@types/a__b/index.d.ts"))
+		session.WaitForBackgroundTasks()
+		assert.NilError(t, utils.FS().WriteFile(manifest, `{"name":"test","dependencies":{"@a/b":"^1.0.0","jquery":"^3.1.0"}}`))
+		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{Uri: "file://" + manifest, Type: lsproto.FileChangeTypeChanged}})
+		_, err = session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+		ls, err = session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+		assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery/index.d.ts"))
+		assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), projecttestutil.TestTypingsLocation+"/node_modules/@types/a__b/index.d.ts"), "an up-to-date scoped dependency must remain an acquired root")
+		calls := utils.NpmExecutor().NpmInstallCalls()
+		assert.Equal(t, len(calls), 3, "registry initialization and one install per new dependency")
+		assert.Assert(t, !slices.Contains(calls[2].Args, "@types/a__b@latest"), "the cached scoped dependency must not be reinstalled")
 	})
 
 	t.Run("configured projects", func(t *testing.T) {

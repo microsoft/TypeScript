@@ -1,12 +1,64 @@
 package ata
 
 import (
+	"context"
 	"fmt"
 	"sync/atomic"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
+	"github.com/microsoft/TypeScript/tsc/internal/semver"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type cacheReadCountingFS struct {
+	vfs.FS
+	unrelatedReads int
+}
+
+func (fs *cacheReadCountingFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	if path == "/cache/node_modules/@types/unrelated/package.json" {
+		fs.unrelatedReads++
+	}
+	return fs.FS.ReadFile(path)
+}
+
+func TestTypingsInstallerResolvesOnlyDemandedCacheEntries(t *testing.T) {
+	t.Parallel()
+	fs := &cacheReadCountingFS{FS: vfstest.FromMap(map[string]string{
+		"/cache/node_modules/@types/node/package.json":      `{"name":"@types/node","types":"new.d.ts"}`,
+		"/cache/node_modules/@types/node/index.d.ts":        "",
+		"/cache/node_modules/@types/node/new.d.ts":          "",
+		"/cache/node_modules/@types/unrelated/package.json": `{"name":"@types/unrelated","types":"index.d.ts"}`,
+		"/cache/node_modules/@types/unrelated/index.d.ts":   "",
+	}, tspath.CaseSensitive)}
+	ti := NewTypingsInstaller(&TypingsInstallerOptions{TypingsLocation: "/cache", ThrottleLimit: 1}, fs, nil)
+	ti.initOnce.Do(func() {})
+	version := semver.MustParse("1.3.0")
+	for _, name := range []string{"node", "unrelated"} {
+		ti.packageNameToTypingLocation.Store(name, &CachedTyping{
+			TypingsLocation: tspath.RootedFilePathFromNormalized("/cache/node_modules/@types/" + name + "/index.d.ts"), Version: &version,
+		})
+	}
+	ti.typesRegistry = map[string]map[string]string{"node": {"latest": "1.3.0"}, "unrelated": {"latest": "1.3.0"}}
+	var logger *logging.LogTree
+	result, err := ti.discoverAndInstallTypings(context.Background(), &TypingsInstallRequest{
+		TypingsInfo: &TypingsInfo{
+			CompilerOptions:   &core.CompilerOptions{Types: []string{}},
+			TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue, Include: []string{"node"}},
+			UnresolvedImports: &collections.Set[string]{},
+		},
+		ProjectRootPath: "/project", FS: fs, Logger: logger,
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, result.TypingsFiles, []tspath.RootedFilePath{"/cache/node_modules/@types/node/new.d.ts"})
+	assert.Equal(t, fs.unrelatedReads, 0, "resolving a demanded entry point must not resolve unrelated cached packages")
+}
 
 func TestInstallNpmPackages(t *testing.T) {
 	t.Parallel()

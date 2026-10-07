@@ -36,6 +36,7 @@ const (
 
 type ProjectCollectionBuilder struct {
 	sessionOptions                    *SessionOptions
+	hasTypingsInstaller               bool
 	cachedTypingEntryPointsAreCurrent func([]ata.CachedTypingEntryPoint) bool
 	parseCache                        *ParseCache
 	contentMappedParseCache           *ContentMappedParseCache
@@ -81,6 +82,7 @@ func newProjectCollectionBuilder(
 	inferredContentMappers []*contentmapper.Mapper,
 	inferredContentMapperExtensions []string,
 	sessionOptions *SessionOptions,
+	hasTypingsInstaller bool,
 	customConfigFileName string,
 	parseCache *ParseCache,
 	contentMappedParseCache *ContentMappedParseCache,
@@ -97,6 +99,7 @@ func newProjectCollectionBuilder(
 		inferredContentMappers:                   inferredContentMappers,
 		inferredContentMapperExtensions:          inferredContentMapperExtensions,
 		sessionOptions:                           sessionOptions,
+		hasTypingsInstaller:                      hasTypingsInstaller,
 		cachedTypingEntryPointsAreCurrent:        ata.NewCachedTypingEntryPointValidator(fs.fs, sessionOptions.TypingsLocation),
 		parseCache:                               parseCache,
 		contentMappedParseCache:                  contentMappedParseCache,
@@ -1129,9 +1132,10 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 			}
 			continue
 		}
-		if ataChange.Discovery != nil && !ataChange.Discovery.IsCurrent(b.fs.fs, ataChange.TypingsInfo, ataChange.FileNames, ataChange.ProjectDirectory) {
+		if slices.ContainsFunc(ataChange.TypingsFiles, func(file tspath.RootedFilePath) bool { return !b.fs.fs.FileExists(file) }) ||
+			slices.ContainsFunc(ataChange.MissingTypingFiles, b.fs.fs.FileExists) {
 			if logger != nil {
-				logger.Logf("Ignoring ATA state with obsolete discovery inputs for project %s", projectID)
+				logger.Logf("Ignoring ATA state with changed typing file availability for project %s", projectID)
 			}
 			continue
 		}
@@ -1851,6 +1855,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				}
 				project.dirty = false
 				project.dirtyFilePath = ""
+				b.prepareForTypingsInstallation(project)
 				b.releaseDroppedProjectReferences(oldProgram, result.Program, project.ID())
 				if oldCheckerPool != nil {
 					oldCheckerPool.Discard()
@@ -1881,6 +1886,11 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 			}
 			filesChanged = b.updateProgram(entry, logger) || filesChanged
 		} else {
+			project := entry.Value()
+			if !project.typingsDiscoveryInputsEqual(state.installedTypingsFileNames) ||
+				(state.installedTypingsInfo != nil && !state.installedTypingsInfo.Equals(project.ComputeTypingsInfo())) {
+				b.invalidateProjectATAState(projectID)
+			}
 			entry.ChangeIf(
 				func(project *Project) bool {
 					return state.canApplyWatchState(project, b.sessionOptions.WatchEnabled)
@@ -1892,6 +1902,34 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 		}
 	}
 	return filesChanged
+}
+
+func (b *ProjectCollectionBuilder) prepareForTypingsInstallation(project *Project) {
+	if !b.hasTypingsInstaller || !project.ShouldTriggerATA(b.newSnapshotID) {
+		return
+	}
+	info := project.ComputeTypingsInfo()
+	if project.installedTypingsInfo != nil && project.installedTypingsInfo.Equals(info) &&
+		project.typingsDiscoveryInputsEqual(project.installedTypingsFileNames) {
+		return
+	}
+	// Watch discovery inputs before the first install can finish or the
+	// project can close, so intervening changes invalidate its generation.
+	if len(project.installedTypingsFilesToWatch) != 0 &&
+		(!project.typingsDiscoveryInputsEqual(project.installedTypingsFileNames) ||
+			(project.installedTypingsInfo != nil && !project.installedTypingsInfo.Equals(info))) {
+		project.ataInvalidationSnapshotID = b.newSnapshotID
+		if _, inferred := project.ID().Inferred(); inferred {
+			b.inferredProjectATAInvalidationSnapshotID = b.newSnapshotID
+		}
+	}
+	project.installedTypingsInfo = nil
+	project.installedTypingsFileNames = project.ComputeTypingsFileNames()
+	project.installedTypingsFilesToWatch = ata.DiscoveryWatchInputs(&info, project.installedTypingsFileNames, project.projectDirectory)
+	project.typingsWatch = project.typingsWatch.Clone(getTypingsLocationsGlobs(
+		slices.Concat(project.installedTypingsFilesToWatch, core.Map(project.typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
+		b.sessionOptions.TypingsLocation, b.sessionOptions.CurrentDirectory, b.fs.fs.CaseSensitivity(),
+	))
 }
 
 func (b *ProjectCollectionBuilder) markFilesChanged(entry dirty.Value[*Project], paths []tspath.PathKey, changeType lsproto.FileChangeType, logger *logging.LogTree) {

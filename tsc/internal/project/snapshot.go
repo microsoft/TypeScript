@@ -428,8 +428,7 @@ type ATAStateChange struct {
 	// TypingsFilesToWatch is the new list of typing files to watch for changes.
 	TypingsFilesToWatch    []tspath.RootedPath
 	TypingCacheEntryPoints []ata.CachedTypingEntryPoint
-	Discovery              *ata.TypingsDiscovery
-	ProjectDirectory       tspath.RootedDirectoryPath
+	MissingTypingFiles     []tspath.RootedFilePath
 	Logs                   *logging.LogTree
 }
 
@@ -568,6 +567,7 @@ func (s *Snapshot) Clone(
 		inferredContentMappers,
 		inferredContentMapperExtensions,
 		store.options,
+		store.hasTypingsInstaller,
 		customConfigFileName,
 		store.parseCache,
 		store.contentMappedParseCache,

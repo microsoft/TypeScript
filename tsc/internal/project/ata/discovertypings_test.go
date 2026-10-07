@@ -50,6 +50,25 @@ func TestDiscoveryInputsEqual(t *testing.T) {
 
 func TestDiscoverTypings(t *testing.T) {
 	t.Parallel()
+	t.Run("should reuse cached scoped typings", func(t *testing.T) {
+		t.Parallel()
+		const typingFile = "/cache/node_modules/@types/a__b/index.d.ts"
+		fs := vfstest.FromMap(map[string]string{typingFile: ""}, tspath.CaseSensitive)
+		cache := &collections.SyncMap[string, *ata.CachedTyping]{}
+		version := semver.MustParse("1.3.0")
+		cache.Store("a__b", &ata.CachedTyping{TypingsLocation: typingFile, Version: &version})
+		var logger *logging.LogTree
+		paths, names, _ := ata.DiscoverTypings(
+			fs, logger, &ata.TypingsInfo{
+				CompilerOptions:   &core.CompilerOptions{Types: []string{}},
+				TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue, Include: []string{"@a/b"}},
+				UnresolvedImports: &collections.Set[string]{},
+			}, nil, "/project", cache, map[string]map[string]string{"a__b": {"latest": "1.3.0"}},
+		)
+		assert.DeepEqual(t, paths, []tspath.RootedFilePath{typingFile})
+		assert.Equal(t, len(names), 0)
+	})
+
 	t.Run("should use mappings from safe list", func(t *testing.T) {
 		t.Parallel()
 		logger := logging.NewLogTree("DiscoverTypings")

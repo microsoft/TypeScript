@@ -114,10 +114,10 @@ type TypingsInstallRequest struct {
 }
 
 type TypingsInstallResult struct {
-	TypingsFiles     []tspath.RootedFilePath
-	FilesToWatch     []tspath.RootedPath
-	CacheEntryPoints []CachedTypingEntryPoint
-	Discovery        *TypingsDiscovery
+	TypingsFiles       []tspath.RootedFilePath
+	FilesToWatch       []tspath.RootedPath
+	CacheEntryPoints   []CachedTypingEntryPoint
+	MissingTypingFiles []tspath.RootedFilePath
 }
 
 type CachedTypingEntryPoint struct {
@@ -138,13 +138,13 @@ func (ti *TypingsInstaller) InstallTypings(ctx context.Context, request *Typings
 func (ti *TypingsInstaller) discoverAndInstallTypings(ctx context.Context, request *TypingsInstallRequest) (*TypingsInstallResult, error) {
 	ti.init(ctx, request.FS, request.Logger)
 
-	cachedTypings := ti.resolveCachedTypings(request.FS)
-	cachedTypingPaths, newTypingNames, filesToWatch, discovery := discoverTypings(
-		request.FS, request.Logger, request.TypingsInfo, request.FileNames,
-		request.ProjectRootPath, cachedTypings, ti.typesRegistry,
+	inferredTypings, filesToWatch, missingTypingFiles := discoverTypingNames(
+		request.FS, request.Logger, request.TypingsInfo, request.FileNames, request.ProjectRootPath,
 	)
+	cachedTypings := ti.resolveCachedTypings(request.FS, inferredTypings)
+	cachedTypingPaths, newTypingNames := getCachedTypingPaths(inferredTypings, cachedTypings, ti.typesRegistry, request.Logger)
 	makeResult := func(files []tspath.RootedFilePath, filesToWatch []tspath.RootedPath) *TypingsInstallResult {
-		result := &TypingsInstallResult{TypingsFiles: files, FilesToWatch: filesToWatch, Discovery: discovery}
+		result := &TypingsInstallResult{TypingsFiles: files, FilesToWatch: filesToWatch, MissingTypingFiles: missingTypingFiles}
 		cachedTypings.Range(func(name string, typing *CachedTyping) bool {
 			if slices.Contains(files, typing.TypingsLocation) {
 				result.CacheEntryPoints = append(result.CacheEntryPoints, CachedTypingEntryPoint{
@@ -181,18 +181,23 @@ func (ti *TypingsInstaller) discoverAndInstallTypings(ctx context.Context, reque
 
 // Resolve cached entry points afresh: a package can change its types field
 // without changing its version or deleting the previously resolved file.
-func (ti *TypingsInstaller) resolveCachedTypings(fs vfs.FS) *collections.SyncMap[string, *CachedTyping] {
+func (ti *TypingsInstaller) resolveCachedTypings(fs vfs.FS, inferredTypings map[string]tspath.RootedFilePath) *collections.SyncMap[string, *CachedTyping] {
 	resolver := module.NewResolver(module.ResolverOptions{
 		Host:            &resolutionHost{fs: fs, currentDirectory: ti.typingsLocation},
 		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
 	})
 	result := &collections.SyncMap[string, *CachedTyping]{}
-	ti.packageNameToTypingLocation.Range(func(name string, typing *CachedTyping) bool {
-		if fileName := ti.typingToFileName(resolver, name); fileName != "" {
-			result.Store(name, &CachedTyping{TypingsLocation: fileName, Version: typing.Version})
+	for name, inferred := range inferredTypings {
+		if inferred != "" {
+			continue
 		}
-		return true
-	})
+		typingKey := module.MangleScopedPackageName(name)
+		if typing, ok := ti.packageNameToTypingLocation.Load(typingKey); ok {
+			if fileName := ti.typingToFileName(resolver, typingKey); fileName != "" {
+				result.Store(typingKey, &CachedTyping{TypingsLocation: fileName, Version: typing.Version})
+			}
+		}
+	}
 	return result
 }
 

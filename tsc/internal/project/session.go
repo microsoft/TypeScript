@@ -2089,8 +2089,7 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 								TypingsFiles:           result.TypingsFiles,
 								TypingsFilesToWatch:    result.FilesToWatch,
 								TypingCacheEntryPoints: result.CacheEntryPoints,
-								Discovery:              result.Discovery,
-								ProjectDirectory:       request.ProjectRootPath,
+								MissingTypingFiles:     result.MissingTypingFiles,
 								Logs:                   logTree,
 							}
 						}
