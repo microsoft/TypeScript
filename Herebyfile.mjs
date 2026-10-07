@@ -1328,6 +1328,7 @@ export const validate = task({
             await runValidation("test:api", runTestAPI);
         }
         if (options.all) {
+            await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:options", async () => {
                 await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
@@ -1369,29 +1370,32 @@ export const checkFormat = task({
 export const checkHerebyfile = task({
     name: "check:herebyfile",
     description: "Type-checks Herebyfile.mjs.",
-    run: () =>
-        run("node", [
-            "./node_modules/typescript/bin/tsc",
-            "--noEmit",
-            "--allowJs",
-            "--allowImportingTsExtensions",
-            "--checkJs",
-            "--target",
-            "es2022",
-            "--lib",
-            "es2024,esnext.array,esnext.collection,esnext.iterator",
-            "--module",
-            "nodenext",
-            "--moduleResolution",
-            "nodenext",
-            "--types",
-            "node",
-            "--strict",
-            "--esModuleInterop",
-            "--skipLibCheck",
-            "Herebyfile.mjs",
-        ]),
+    run: runCheckHerebyfile,
 });
+
+async function runCheckHerebyfile() {
+    await run("node", [
+        "./node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--allowJs",
+        "--allowImportingTsExtensions",
+        "--checkJs",
+        "--target",
+        "es2022",
+        "--lib",
+        "es2024,esnext.array,esnext.collection,esnext.iterator",
+        "--module",
+        "nodenext",
+        "--moduleResolution",
+        "nodenext",
+        "--types",
+        "node",
+        "--strict",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "Herebyfile.mjs",
+    ]);
+}
 
 export const checkVsceVersion = task({
     name: "check:vsce-version",
@@ -3121,7 +3125,7 @@ async function runPackVsixExtensions() {
  * @param {string} vsixPath
  * @param {string} extensionPath
  * @param {string} platformPackageName
- * @param {string} nodeOs
+ * @param {string | undefined} nodeOs
  * @param {string} vscodeTarget
  */
 async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nodeOs, vscodeTarget) {
@@ -3142,6 +3146,7 @@ async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nod
 
     const hostTarget = `${process.platform}-${process.arch === "arm" ? "armhf" : process.arch}`;
     if (vscodeTarget !== hostTarget) return;
+    assert(nodeOs);
 
     const directory = await fs.promises.mkdtemp(path.join(os.tmpdir(), "typescript-vsix-test-"));
     try {
