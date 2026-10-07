@@ -20,13 +20,13 @@ import {
     type Node,
     type SourceFile,
     SyntaxKind,
-} from "@typescript/typescript/unstable/ast";
-import { cloneNode } from "@typescript/typescript/unstable/ast/factory";
-import { toRootedFilePath } from "@typescript/typescript/unstable/path";
+} from "@typescript/typescript/ast";
+import { cloneNode } from "@typescript/typescript/ast/factory";
+import { toRootedFilePath } from "@typescript/typescript/path";
 import type {
     APIRequest,
     APIResponse,
-} from "@typescript/typescript/unstable/proto";
+} from "@typescript/typescript/proto";
 import {
     all,
     type AllAPIRequestGenerator,
@@ -62,7 +62,7 @@ import {
     type TypePredicate,
     type TypeReference,
     type UnionOrIntersectionType,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import assert from "node:assert";
 import {
     describe,

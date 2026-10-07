@@ -15,7 +15,7 @@ import {
     toRootedPath,
     tryPathKeyFromCanonical,
     tryRootedPathFromNormalized,
-} from "@typescript/typescript/unstable/path";
+} from "@typescript/typescript/path";
 import assert from "node:assert";
 import { test } from "node:test";
 import { parseNodeHandleFromCompiler } from "../src/api/node/node.ts";

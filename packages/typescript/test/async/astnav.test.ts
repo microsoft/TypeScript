@@ -1,6 +1,6 @@
-import { API } from "@typescript/typescript/unstable/async"; // @sync-skip
+import { API } from "@typescript/typescript/async"; // @sync-skip
 // @sync-only-start
-// import { API } from "@typescript/typescript/unstable/sync";
+// import { API } from "@typescript/typescript/sync";
 // @sync-only-end
 import {
     findNextToken,
@@ -8,11 +8,11 @@ import {
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import type {
     Node,
     SourceFile,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";

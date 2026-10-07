@@ -10,12 +10,12 @@ import {
     type Node,
     type SourceFile,
     SyntaxKind,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     API,
     type Project,
     type Snapshot,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import { writeFileSync } from "node:fs";
 import inspector from "node:inspector";
 import path from "node:path";

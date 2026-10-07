@@ -3,7 +3,7 @@ import type {
     LspMiddlewareMethod,
     LspMiddlewareResult,
     LspMiddlewareTransformer,
-} from "@typescript/typescript/unstable/vscode";
+} from "@typescript/typescript/vscode";
 import type {
     CancellationToken,
     Disposable,

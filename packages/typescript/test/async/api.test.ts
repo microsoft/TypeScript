@@ -41,7 +41,7 @@ import {
     SyntaxKind,
     tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     cloneNode,
     createArrayTypeNode,
@@ -58,8 +58,8 @@ import {
     createVariableDeclaration,
     createVariableDeclarationList,
     createVariableStatement,
-} from "@typescript/typescript/unstable/ast/factory";
-import { visitEachChild } from "@typescript/typescript/unstable/ast/visitor";
+} from "@typescript/typescript/ast/factory";
+import { visitEachChild } from "@typescript/typescript/ast/visitor";
 import {
     API,
     type BigIntLiteralType,
@@ -111,20 +111,20 @@ import {
     type TypeReference,
     type UnionOrIntersectionType,
     type UserPreferences,
-} from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/async"; // @sync: } from "@typescript/typescript/sync";
 import {
     createFileSystem,
     createFileSystemLayer,
     createFileSystemWithLib,
     type FileSystemCallbacks,
     serverFS,
-} from "@typescript/typescript/unstable/fs";
+} from "@typescript/typescript/fs";
 import {
     rootedDirectoryPathFromPath,
     rootedFilePathFromPath,
     toRootedDirectoryPath,
     toRootedFilePath,
-} from "@typescript/typescript/unstable/path";
+} from "@typescript/typescript/path";
 import assert from "node:assert";
 import { globSync } from "node:fs";
 import { resolve } from "node:path";
@@ -3582,7 +3582,7 @@ export class Cache {
         const sourceFile = await project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
 
-        let callNode: import("@typescript/typescript/unstable/ast").CallExpression | undefined;
+        let callNode: import("@typescript/typescript/ast").CallExpression | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isCallExpression(node)) {
                 const text = sourceFile.text.slice(node.pos, node.end).trim();
@@ -4850,7 +4850,7 @@ foo(42);
         // statement[1] = foo(42); which is an ExpressionStatement -> CallExpression
         const callStmt = sourceFile.statements[1];
         assert.ok(callStmt);
-        let numLiteral: import("@typescript/typescript/unstable/ast").Expression | undefined;
+        let numLiteral: import("@typescript/typescript/ast").Expression | undefined;
         callStmt.forEachChild(function visit(node) {
             if (isCallExpression(node)) {
                 // First argument
@@ -4902,7 +4902,7 @@ export function check(x: string | number) {
         const funcDecl = sourceFile.statements[0];
         assert.ok(funcDecl);
         // Walk to find the first "return x" — inside the if, x should be narrowed to string
-        let firstReturnX: import("@typescript/typescript/unstable/ast").Node | undefined;
+        let firstReturnX: import("@typescript/typescript/ast").Node | undefined;
         funcDecl.forEachChild(function visit(node) {
             if (isReturnStatement(node) && !firstReturnX) {
                 // The expression of the return statement is the identifier "x"
@@ -4938,7 +4938,7 @@ export const obj = { name };
 
         // Find the shorthand property assignment { name }
         // statement[1] = export const obj = { name };
-        let shorthandNode: import("@typescript/typescript/unstable/ast").Node | undefined;
+        let shorthandNode: import("@typescript/typescript/ast").Node | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isShorthandPropertyAssignment(node)) {
                 shorthandNode = node;
@@ -6861,7 +6861,7 @@ export type Exported = number;
         assert.notEqual(localSymbol.id, exportedSymbol.id);
         assert.strictEqual(await project.checker.getExportSymbolOfSymbol(localSymbol), exportedSymbol);
 
-        let call: import("@typescript/typescript/unstable/ast").CallExpression | undefined;
+        let call: import("@typescript/typescript/ast").CallExpression | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isCallExpression(node) && sourceFile.text.slice(node.expression.pos, node.expression.end).trim() === "consume") {
                 call = node;
@@ -7769,7 +7769,7 @@ describe("Checker - isContextSensitive", { concurrency }, () => {
         const sourceFile = await project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         // Find the arrow function node
-        let arrowFn: import("@typescript/typescript/unstable/ast").Node | undefined;
+        let arrowFn: import("@typescript/typescript/ast").Node | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (node.kind === SyntaxKind.ArrowFunction) {
                 arrowFn = node;
@@ -8058,7 +8058,7 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(sourceFile);
 
         // Find the regex literal node
-        let regexNode: import("@typescript/typescript/unstable/ast").Node | undefined;
+        let regexNode: import("@typescript/typescript/ast").Node | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (node.kind === SyntaxKind.RegularExpressionLiteral) {
                 regexNode = node;
@@ -8231,7 +8231,7 @@ describe("modifierFlags", { concurrency }, () => {
         const sourceFile = await project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
-        let fnNode: import("@typescript/typescript/unstable/ast").FunctionDeclaration | undefined;
+        let fnNode: import("@typescript/typescript/ast").FunctionDeclaration | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isFunctionDeclaration(node)) {
                 fnNode = node;
@@ -8255,7 +8255,7 @@ describe("modifierFlags", { concurrency }, () => {
         const sourceFile = await project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
-        let fnNode: import("@typescript/typescript/unstable/ast").FunctionDeclaration | undefined;
+        let fnNode: import("@typescript/typescript/ast").FunctionDeclaration | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isFunctionDeclaration(node)) {
                 fnNode = node;
@@ -8280,7 +8280,7 @@ describe("Checker - getResolvedSymbol", { concurrency }, () => {
         assert.ok(sourceFile);
 
         // Find the 'x' identifier in `const y = x`
-        let refNode: import("@typescript/typescript/unstable/ast").Identifier | undefined;
+        let refNode: import("@typescript/typescript/ast").Identifier | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isIdentifier(node) && node.text === "x") {
                 // We want the reference, not the declaration - take the last one
@@ -8308,7 +8308,7 @@ describe("VariableDeclarationList - BlockScoped flags", { concurrency }, () => {
         const sourceFile = await project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
-        let declList: import("@typescript/typescript/unstable/ast").Node | undefined;
+        let declList: import("@typescript/typescript/ast").Node | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isVariableDeclarationList(node)) {
                 declList = node;
@@ -8330,7 +8330,7 @@ describe("VariableDeclarationList - BlockScoped flags", { concurrency }, () => {
         const sourceFile = await project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
-        let declList: import("@typescript/typescript/unstable/ast").Node | undefined;
+        let declList: import("@typescript/typescript/ast").Node | undefined;
         sourceFile.forEachChild(function visit(node) {
             if (isVariableDeclarationList(node)) {
                 declList = node;
@@ -8353,9 +8353,9 @@ describe("AST roundtrips", { concurrency }, () => {
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = await project.program.getSourceFile("/src/index.ts");
         assert(sourceFile);
-        const param = (sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").FunctionDeclaration).parameters[0];
+        const param = (sourceFile.statements[0] as import("@typescript/typescript/ast").FunctionDeclaration).parameters[0];
         assert(param);
-        const type = param.type as import("@typescript/typescript/unstable/ast").TypeOperatorNode;
+        const type = param.type as import("@typescript/typescript/ast").TypeOperatorNode;
         assert(type);
         assert.equal(type.kind, SyntaxKind.TypeOperator);
         assert.equal(type.operator, SyntaxKind.ReadonlyKeyword);
@@ -8373,9 +8373,9 @@ describe("AST roundtrips", { concurrency }, () => {
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = await project.program.getSourceFile("/src/index.ts");
         assert(sourceFile);
-        const stmt = sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
-        const object = stmt.declarationList.declarations[0].initializer as import("@typescript/typescript/unstable/ast").ObjectLiteralExpression;
-        const assignment = object.properties[0] as import("@typescript/typescript/unstable/ast").SpreadAssignment;
+        const stmt = sourceFile.statements[0] as import("@typescript/typescript/ast").VariableStatement;
+        const object = stmt.declarationList.declarations[0].initializer as import("@typescript/typescript/ast").ObjectLiteralExpression;
+        const assignment = object.properties[0] as import("@typescript/typescript/ast").SpreadAssignment;
         assert(assignment);
         assert.equal(assignment.kind, SyntaxKind.SpreadAssignment);
         const expr = assignment.expression;
@@ -8396,13 +8396,13 @@ describe("AST roundtrips", { concurrency }, () => {
         const sourceFile = await project.program.getSourceFile("/src/index.ts");
         assert(sourceFile);
         {
-            const stmt = sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
+            const stmt = sourceFile.statements[0] as import("@typescript/typescript/ast").VariableStatement;
             const list = stmt.declarationList;
             assert(list.flags & NodeFlags.Const);
         }
         const cloned = getSynthesizedDeepClone(sourceFile);
         {
-            const stmt = cloned.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
+            const stmt = cloned.statements[0] as import("@typescript/typescript/ast").VariableStatement;
             const list = stmt.declarationList;
             assert(list.flags & NodeFlags.Const);
         }

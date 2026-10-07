@@ -21,7 +21,7 @@ import type {
     StringLiteralLikeNode,
     TypeElement,
     VariableStatement,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     getCombinedModifierFlags,
     getNameOfDeclaration,
@@ -37,11 +37,11 @@ import {
     NodeFlags,
     SyntaxKind,
     TokenFlags,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
-} from "@typescript/typescript/unstable/ast/clone";
+} from "@typescript/typescript/ast/clone";
 import {
     cloneNode,
     createBinaryExpression,
@@ -57,17 +57,17 @@ import {
     createStringLiteral,
     createToken,
     NodeObject,
-} from "@typescript/typescript/unstable/ast/factory";
+} from "@typescript/typescript/ast/factory";
 import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "@typescript/typescript/unstable/ast/visitor";
+} from "@typescript/typescript/ast/visitor";
 import {
     API,
     Checker,
     TypeFlags,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import assert from "node:assert";
 import {
     describe,

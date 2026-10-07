@@ -1,6 +1,6 @@
-import type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
+import type { ExtensionAPI } from "@typescript/typescript/vscode";
 import * as vscode from "vscode";
-export type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
+export type { ExtensionAPI } from "@typescript/typescript/vscode";
 
 import {
     registerEnablementCommands,

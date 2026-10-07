@@ -2938,7 +2938,7 @@ async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nod
             const require = createRequire(process.cwd() + "/extension/node_modules/typescript/package.json");
             const manifest = require("./package.json");
             for (const mode of ["async", "sync"]) {
-                const { API } = await import(pathToFileURL(require.resolve(manifest.name + "/unstable/" + mode)).href);
+                const { API } = await import(pathToFileURL(require.resolve(manifest.name + "/" + mode)).href);
                 const api = new API();
                 try {
                     assert.ok(await api.parseConfigFile(process.cwd() + "/tsconfig.json"));

@@ -1,13 +1,13 @@
 import {
     API as AsyncAPI,
     type Project as AsyncProject,
-} from "@typescript/typescript/unstable/async";
+} from "@typescript/typescript/async";
 import {
     all,
     API as SyncAPI,
     defer,
     type Project as SyncProject,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

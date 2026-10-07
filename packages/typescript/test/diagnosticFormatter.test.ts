@@ -3,7 +3,7 @@ import {
     formatDiagnostics,
     type FormatDiagnosticsHost,
     formatDiagnosticsWithColorAndContext,
-} from "@typescript/typescript/unstable/async";
+} from "@typescript/typescript/async";
 import assert from "node:assert";
 import {
     describe,

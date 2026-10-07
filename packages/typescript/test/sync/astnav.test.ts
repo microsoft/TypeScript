@@ -12,12 +12,12 @@ import {
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import type {
     Node,
     SourceFile,
-} from "@typescript/typescript/unstable/ast";
-import { API } from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/ast";
+import { API } from "@typescript/typescript/sync";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";

@@ -9,18 +9,18 @@ import type {
     Block,
     Identifier,
     Node,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     isBlock,
     isIdentifier,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     createBlock,
     createExpressionStatement,
     createIdentifier,
     createIfStatement,
-} from "@typescript/typescript/unstable/ast/factory";
-import { API } from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/ast/factory";
+import { API } from "@typescript/typescript/sync";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
