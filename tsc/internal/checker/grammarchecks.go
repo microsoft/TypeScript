@@ -2110,7 +2110,10 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 		if node.Name() != nil {
 			return c.grammarErrorOnNode(&node.Node, diagnostics.Default_imports_are_not_allowed_in_a_deferred_import)
 		}
-		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
+		if node.NamedBindings == nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.A_deferred_import_must_specify_a_namespace_binding)
+		}
+		if node.NamedBindings.Kind == ast.KindNamedImports {
 			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
 		}
 		if c.moduleKind.SupportsDeferredImports() {
