@@ -32,6 +32,6 @@ for (let num of array) {
     
     sum += num;
 >sum += num : number
->sum : number (origin: number | 0)
+>sum : number
 >num : number
 }

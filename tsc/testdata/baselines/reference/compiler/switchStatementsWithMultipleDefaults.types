@@ -28,7 +28,7 @@ switch (x) {
 }
 
 switch (x) {
->x : number (origin: number | 1 | 2 | 3)
+>x : number
 
     default:    // No issues.
         break;

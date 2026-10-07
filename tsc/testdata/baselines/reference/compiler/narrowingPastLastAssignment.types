@@ -244,7 +244,7 @@ function f5b() {
 >x : number
 >10 : 10
 >x++ : number
->x : number (origin: number | 1 | 2)
+>x : number
 
         if (x === 1 || x === 2) {
 >x === 1 || x === 2 : boolean

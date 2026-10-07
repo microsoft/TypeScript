@@ -27,7 +27,8 @@ type PlainUnion = string | number;
 declare let ordinary/*ordinary*/: PlainUnion;
 if (value === "a") {
     value/*narrowed*/;
-}`
+}
+value/*joined*/;`
 	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 	f.VerifyQuickInfoAt(t, "variable", `let value: string | "a" | "b"`, "")
@@ -42,6 +43,7 @@ if (value === "a") {
 	f.VerifyQuickInfoAt(t, "merged", `let merged: string | "a" | "b" | "c"`, "")
 	f.VerifyQuickInfoAt(t, "ordinary", "let ordinary: PlainUnion", "")
 	f.VerifyQuickInfoAt(t, "narrowed", `let value: "a"`, "")
+	f.VerifyQuickInfoAt(t, "joined", `let value: string | "a" | "b"`, "")
 }
 
 func TestQuickInfoStringLiteralOriginFormats(t *testing.T) {

@@ -2788,14 +2788,14 @@ namespace Harness {
 >result : { filename: string; file: WriterAggregator; }[]
 >push : (...items: { filename: string; file: WriterAggregator; }[]) => number
 >{ filename: p, file: this.fileCollection[p] } : { filename: string; file: any; }
->filename : string (origin: string | "0.js")
->p : string (origin: string | "0.js")
+>filename : string
+>p : string
 >file : any
 >this.fileCollection[p] : any
 >this.fileCollection : {}
 >this : this
 >fileCollection : {}
->p : string (origin: string | "0.js")
+>p : string
                         }
                     }
                 }

@@ -49,7 +49,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 >y : number
 >++x, --y : number
 >++x : number
->x : number (origin: number | 1)
+>x : number
 >--y : number
 >y : number
 

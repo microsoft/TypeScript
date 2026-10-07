@@ -24,7 +24,9 @@ declare let plainNumber/*plainNumber*/: number;
 declare let plainBigint/*plainBigint*/: bigint;
 declare let unrelated/*unrelated*/: number | 1n;
 if (numeric === 1) numeric/*narrowed*/;
-if (big === 1n) big/*narrowedBig*/;`
+if (big === 1n) big/*narrowedBig*/;
+numeric/*joined*/;
+big/*joinedBig*/;`
 	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 	f.VerifyQuickInfoAt(t, "numeric", "let numeric: number | 1 | 2", "")
@@ -38,4 +40,6 @@ if (big === 1n) big/*narrowedBig*/;`
 	f.VerifyQuickInfoAt(t, "unrelated", "let unrelated: number | 1n", "")
 	f.VerifyQuickInfoAt(t, "narrowed", "let numeric: 1", "")
 	f.VerifyQuickInfoAt(t, "narrowedBig", "let big: 1n", "")
+	f.VerifyQuickInfoAt(t, "joined", "let numeric: number | 1 | 2", "")
+	f.VerifyQuickInfoAt(t, "joinedBig", "let big: bigint | 1n | 2n", "")
 }
