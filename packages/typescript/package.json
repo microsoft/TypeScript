@@ -42,7 +42,8 @@
         "./schemas/jsconfig.schema.json": "./schemas/jsconfig.schema.json",
         ".": "./lib/version.cjs",
         "./unstable/vscode": {
-            "types": "./dist/vscode/extensionApi.d.ts"
+            "@typescript/source": "./src/vscode/extensionApi.ts",
+            "default": "./dist/vscode/extensionApi.js"
         },
         "./unstable/sync": {
             "@typescript/source": "./src/api/sync/api.ts",

@@ -3,7 +3,6 @@ package printer
 import (
 	"maps"
 	"slices"
-	"sync"
 	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -46,26 +45,6 @@ func NewEmitContext() *EmitContext {
 	c := &EmitContext{}
 	c.Factory = NewNodeFactory(c)
 	return c
-}
-
-var emitContextPool = sync.Pool{
-	New: func() any {
-		return NewEmitContext()
-	},
-}
-
-func GetEmitContext() (*EmitContext, func()) {
-	c := emitContextPool.Get().(*EmitContext)
-	return c, func() {
-		c.Reset()
-		emitContextPool.Put(c)
-	}
-}
-
-func (c *EmitContext) Reset() {
-	*c = EmitContext{
-		Factory: c.Factory,
-	}
 }
 
 func (c *EmitContext) onCreate(node *ast.Node) {

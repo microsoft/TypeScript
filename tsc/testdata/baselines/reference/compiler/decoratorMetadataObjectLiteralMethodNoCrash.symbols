@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/decoratorMetadataObjectLiteralMethodNoCrash.ts] ////
+
+=== decoratorMetadataObjectLiteralMethodNoCrash.ts ===
+declare function dec(...args: any[]): any;
+>dec : Symbol(dec, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 0, 0))
+>args : Symbol(args, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 0, 21))
+
+const o = {
+>o : Symbol(o, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 2, 5))
+
+    m(@dec x: string) {}
+>m : Symbol(m, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 2, 11))
+>dec : Symbol(dec, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 0, 0))
+>x : Symbol(x, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 3, 6))
+
+};
+
+class C {
+>C : Symbol(C, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 4, 2))
+
+    @dec
+>dec : Symbol(dec, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 0, 0))
+
+    prop!: number;
+>prop : Symbol(C.prop, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 6, 9))
+
+    method() {
+>method : Symbol(C.method, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 8, 18))
+
+        return {
+            m(@dec x: string) {},
+>m : Symbol(m, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 11, 16))
+>dec : Symbol(dec, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 0, 0))
+>x : Symbol(x, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 12, 14))
+
+            set s(@dec v: number) {}
+>s : Symbol(s, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 12, 33))
+>dec : Symbol(dec, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 0, 0))
+>v : Symbol(v, Decl(decoratorMetadataObjectLiteralMethodNoCrash.ts, 13, 18))
+
+        };
+    }
+}
+

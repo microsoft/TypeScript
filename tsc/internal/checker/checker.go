@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
@@ -888,8 +889,7 @@ type Checker struct {
 	isStringIndexSignatureOnlyType              func(*Type) bool
 	markNodeAssignments                         func(*ast.Node) bool
 	compareTypesAssignable                      TypeComparer
-	emitResolver                                *EmitResolver
-	emitResolverOnce                            sync.Once
+	emitResolverLinks                           EmitResolverLinks
 	_jsxNamespace                               string
 	_jsxFactoryEntity                           *ast.Node
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
@@ -4317,7 +4317,20 @@ func (c *Checker) checkClassDeclaration(node *ast.Node) {
 	}
 	c.checkClassLikeDeclaration(node)
 	c.checkSourceElements(node.Members())
+	c.checkConstructorDeclaredProperties(node)
 	c.registerForUnusedIdentifiersCheck(node)
+}
+
+func (c *Checker) checkConstructorDeclaredProperties(node *ast.Node) {
+	if !ast.IsInJSFile(node) {
+		return
+	}
+	classType := c.getDeclaredTypeOfSymbol(c.getSymbolOfDeclaration(node))
+	for _, property := range c.getPropertiesOfType(classType) {
+		if kind, constructor := c.isConstructorDeclaredThisProperty(property); kind == thisAssignmentDeclarationConstructor && constructor.Parent == node {
+			c.getTypeOfSymbol(property)
+		}
+	}
 }
 
 func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
@@ -6085,8 +6098,17 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 				globalDisposableType := c.getGlobalDisposableType()
 				if globalDisposableType != c.emptyObjectType {
 					optionalDisposableType := c.getUnionType([]*Type{globalDisposableType, c.nullType, c.undefinedType})
-					c.checkTypeAssignableTo(c.widenTypeForVariableLikeDeclaration(initializerType, node, false), optionalDisposableType, initializer,
-						diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined)
+					widenedInitializerType := c.widenTypeForVariableLikeDeclaration(initializerType, node, false)
+					var diags []*ast.Diagnostic
+					if !c.checkTypeAssignableToEx(widenedInitializerType, optionalDisposableType, initializer,
+						diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined, &diags) {
+						globalAsyncDisposableType := c.getGlobalAsyncDisposableType()
+						optionalAsyncDisposableType := c.getUnionType([]*Type{globalAsyncDisposableType, c.nullType, c.undefinedType})
+						if globalAsyncDisposableType != c.emptyObjectType && c.isTypeAssignableTo(widenedInitializerType, optionalAsyncDisposableType) {
+							diags[0].AddMessageChain(ast.NewDiagnosticChain(nil, diagnostics.This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using))
+						}
+						c.addDiagnostic(diags[0])
+					}
 				}
 			}
 		}
@@ -10307,6 +10329,7 @@ func (c *Checker) checkClassExpressionExternalHelpers(node *ast.ClassExpressionN
 
 func (c *Checker) checkClassExpressionDeferred(node *ast.Node) {
 	c.checkSourceElements(node.Members())
+	c.checkConstructorDeclaredProperties(node)
 	c.registerForUnusedIdentifiersCheck(node)
 }
 
@@ -15506,7 +15529,7 @@ func (c *Checker) resolveExternalModule(
 			c.error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.ResolvedFileName)
 		}
 
-		if errorNode != nil {
+		if errorNode != nil && !resolvedModule.IsCustomResolution {
 			if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleReference) {
 				if ast.FindAncestor(location, ast.IsEmittableImport) != nil {
 					tsExtension := tspath.TryExtractTSExtension(moduleReference)
@@ -24300,6 +24323,7 @@ func (c *Checker) getInferTypeParameters(node *ast.Node) []*Type {
 			result = append(result, c.getDeclaredTypeOfSymbol(symbol))
 		}
 	}
+	slices.SortFunc(result, CompareTypes)
 	return result
 }
 
@@ -28814,7 +28838,8 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 		if ast.IsPropertyAccessOrQualifiedName(location) {
 			topProp := location
 			for ast.IsPropertyAccessOrQualifiedName(topProp) {
-				if ast.IsPartOfTypeNode(topProp) {
+				// Names in an import type's qualifier (`ns.y` in `typeof import("./b").ns.y`) are exports of the imported module, not references to this file's imports
+				if ast.IsPartOfTypeNode(topProp) || isImportTypeQualifierPart(topProp) != nil {
 					return
 				}
 				topProp = topProp.Parent
@@ -32686,12 +32711,8 @@ func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
 	return c.getTypeOfNode(ast.GetReparsedNodeForNode(node))
 }
 
-func (c *Checker) GetEmitResolver() *EmitResolver {
-	c.emitResolverOnce.Do(func() {
-		c.emitResolver = newEmitResolver(c)
-	})
-
-	return c.emitResolver
+func (c *Checker) NewEmitResolver(emitContext *printer.EmitContext) *EmitResolver {
+	return newEmitResolver(c, emitContext)
 }
 
 func (c *Checker) GetAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {

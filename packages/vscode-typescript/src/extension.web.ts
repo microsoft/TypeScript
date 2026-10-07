@@ -23,6 +23,8 @@ declare global {
     }
 }
 
+const wasmPackagePath = ["node_modules", "@typescript", "typescript-wasip1-wasm", "lib"] as const;
+
 class WasmMessageReader extends AbstractMessageReader {
     private readonly decoder = new TextDecoder();
     private buffer = new Uint8Array();
@@ -113,7 +115,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         nightlyExtension?.extensionUri,
         async extensionUri => {
             try {
-                await vscode.workspace.fs.stat(vscode.Uri.joinPath(extensionUri, "lib", "tsc.wasm"));
+                await vscode.workspace.fs.stat(vscode.Uri.joinPath(extensionUri, ...wasmPackagePath, "tsc.wasm"));
                 return true;
             }
             catch {
@@ -121,6 +123,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             }
         },
     );
+    const modulePackageUri = vscode.Uri.joinPath(moduleExtensionUri, ...wasmPackagePath);
     context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider("bundled", {
         async provideTextDocumentContent(uri) {
             const prefix = "/libs/";
@@ -131,7 +134,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             if (!fileName || fileName.includes("/")) {
                 throw new Error(`Unsupported bundled TypeScript path: ${uri.toString()}`);
             }
-            const contents = await vscode.workspace.fs.readFile(vscode.Uri.joinPath(moduleExtensionUri, "lib", fileName));
+            const contents = await vscode.workspace.fs.readFile(vscode.Uri.joinPath(modulePackageUri, fileName));
             return new TextDecoder().decode(contents);
         },
     }));
@@ -140,7 +143,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const stderrDecoder = new TextDecoder();
     const serverOptions = async (): Promise<MessageTransports> => {
         const wasm = await Wasm.load();
-        const module = wasm.compile(vscode.Uri.joinPath(moduleExtensionUri, "lib", "tsc.wasm"));
+        const module = wasm.compile(vscode.Uri.joinPath(modulePackageUri, "tsc.wasm"));
         const mountPoints = (vscode.workspace.workspaceFolders ?? []).map(folder => ({
             kind: "vscodeFileSystem" as const,
             uri: folder.uri,
