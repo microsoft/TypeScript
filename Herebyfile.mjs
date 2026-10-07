@@ -1034,6 +1034,17 @@ export const buildAPI = task({
     },
 });
 
+async function runCheckAPIDeclarations() {
+    await run("node", ["./node_modules/typescript/bin/tsc", "-p", "packages/typescript/tsconfig.dist.json"]);
+}
+
+export const checkAPIDeclarations = task({
+    name: "check:api-declarations",
+    description: "Type-checks the emitted @typescript/typescript declaration files.",
+    dependencies: [buildAPI],
+    run: runCheckAPIDeclarations,
+});
+
 async function runBuildAPITests(generateSources = true) {
     if (generateSources) await runGenerateSync();
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
@@ -1221,6 +1232,7 @@ export const validate = task({
 
         await runValidation("test:tsc", runTests);
         await runValidation("test:extension", runTestExtension);
+        await runValidation("check:api-declarations", runCheckAPIDeclarations);
         if (options.api || options.all) {
             if (!options.all) await runGenerateEnums();
             await runBuildAPITests(!options.all);
@@ -2343,6 +2355,7 @@ async function runBuildNativePreviewPackages() {
 
     // Build JS API and copy dist into the package.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
+    await runCheckAPIDeclarations();
     await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
 
     // Validate that .d.ts files contain no external imports (all imports must start with "." or "#").
