@@ -36,6 +36,11 @@ import { TypeFlags } from "#enums/typeFlags";
 import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
+    Client,
+    type ClientSocketOptions,
+    type ClientSpawnOptions,
+} from "#syncClient";
+import {
     type __String,
     type CallLikeExpression,
     type Declaration,
@@ -73,8 +78,8 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
     LSPConnectionOptions,
+    SyncAPIOptions as APIOptions,
 } from "../options.ts";
 import {
     canonicalize,
@@ -154,11 +159,6 @@ import type {
     TimingCollector,
     TimingInfo,
 } from "../timing.ts";
-import {
-    Client,
-    type ClientSocketOptions,
-    type ClientSpawnOptions,
-} from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
     AssertsThisTypePredicate,

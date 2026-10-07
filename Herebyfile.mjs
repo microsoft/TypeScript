@@ -1,6 +1,7 @@
 // @ts-check
 
 import AdmZip from "adm-zip";
+import binaryen from "binaryen";
 import chokidar from "chokidar";
 import { task } from "hereby";
 import assert from "node:assert";
@@ -1002,7 +1003,15 @@ async function runTestTools() {
 
 async function runTestAPI() {
     // Running the package script doesn't work on Windows; some path escaping isn't done correctly and the test runner runs no tests.
-    await run("node", ["--conditions", "@typescript/source", "--test", "./test/**/*.test.ts"], { cwd: "./packages/typescript" });
+    await run(
+        "node",
+        ["--conditions", "@typescript/source", "--test", "./test/*.test.ts", "./test/async/**/*.test.ts", "./test/sync/**/*.test.ts"],
+        { cwd: "./packages/typescript" },
+    );
+}
+
+async function runTestAPIBrowser() {
+    await run("node", ["--conditions", "@typescript/source", "--test", "./test/browser/**/*.test.ts"], { cwd: "./packages/typescript" });
 }
 
 async function runTestAPIBenchmarks() {
@@ -1036,13 +1045,97 @@ export const buildAPI = task({
 
 async function runBuildAPITests(generateSources = true) {
     if (generateSources) await runGenerateSync();
+    await runBuildWasi();
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
 }
+
+/**
+ * @param {string} out
+ * @param {string[]} [extraFlags]
+ */
+async function buildWasiFile(out, extraFlags = []) {
+    out = path.resolve(out);
+    await fs.promises.mkdir(path.dirname(out), { recursive: true });
+    await run("go", ["build", "-buildmode=c-shared", ...extraFlags, "-o", out, "./cmd/tsc"], {
+        cwd: "./tsc",
+        env: { GOOS: "wasip1", GOARCH: "wasm" },
+    });
+    patchWasiFile(out);
+}
+
+/**
+ * @param {string} file
+ */
+function patchWasiFile(file) {
+    const module = binaryen.readBinary(fs.readFileSync(file));
+    try {
+        module.setFeatures(
+            binaryen.Features.MutableGlobals
+                | binaryen.Features.NontrappingFPToInt
+                | binaryen.Features.BulkMemory
+                | binaryen.Features.BulkMemoryOpt
+                | binaryen.Features.SignExt,
+        );
+
+        const initialize = binaryen.getExportInfo(module.getExport("_initialize")).value;
+        const cliStart = binaryen.getExportInfo(module.getExport("__typescript_cli_start")).value;
+        // Go emits either a WASI command or reactor entrypoint, but the API binary needs both.
+        // Hide the standard reactor export from command hosts and synthesize a command entrypoint
+        // that initializes the runtime before entering the real Go CLI.
+        module.addFunction(
+            "__typescript_command_start",
+            binaryen.none,
+            binaryen.none,
+            [],
+            module.block(null, [
+                module.call(initialize, [], binaryen.none),
+                module.call(cliStart, [], binaryen.none),
+            ]),
+        );
+        module.removeExport("_initialize");
+        module.removeExport("__typescript_cli_start");
+        module.addFunctionExport(initialize, "typescript_initialize");
+        module.addFunctionExport("__typescript_command_start", "_start");
+
+        if (!module.validate()) {
+            throw new Error("patched WebAssembly module is invalid");
+        }
+        fs.writeFileSync(file, module.emitBinary());
+    }
+    finally {
+        module.dispose();
+    }
+}
+
+/**
+ * @param {string[]} [extraFlags]
+ */
+async function runBuildWasi(extraFlags = []) {
+    const packageDir = "./packages/typescript-wasip1-wasm";
+    await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
+    await buildWasiFile(path.join(packageDir, "lib", "tsc.wasm"), extraFlags);
+    const libDir = path.join(packageDir, "lib");
+    await generateLibs(libDir);
+    const libFiles = (await fs.promises.readdir(libDir))
+        .filter(file => file === "lib.d.ts" || file.startsWith("lib.") && file.endsWith(".d.ts"))
+        .sort();
+    await fs.promises.writeFile(
+        path.join(libDir, "libFiles.json"),
+        JSON.stringify(libFiles, undefined, 4) + "\n",
+    );
+}
+
+export const buildWasi = task({
+    name: "build:wasip1",
+    description: "Builds the @typescript/typescript-wasip1-wasm package.",
+    dependencies: [lib],
+    run: runBuildWasi,
+});
 
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
-    dependencies: [generateEnums, generateAPI],
+    dependencies: [generateEnums, generateAPI, lib],
     run: runBuildAPITests,
 });
 
@@ -1060,6 +1153,13 @@ export const testAPIBenchmarks = task({
     run: runTestAPIBenchmarks,
 });
 
+export const testAPIBrowser = task({
+    name: "test:api:browser",
+    description: "Runs the @typescript/typescript browser API tests.",
+    dependencies: [buildAPITests],
+    run: runTestAPIBrowser,
+});
+
 export const testAll = task({
     name: "test:all",
     description: "Runs compiler, extension, benchmark, tools, and API tests. Codegen tests are opt-in via test:codegen.",
@@ -1072,6 +1172,7 @@ export const testAll = task({
         await runTestTools();
         await runTestAPI();
         await runTestAPIBenchmarks();
+        await runTestAPIBrowser();
     },
 });
 
@@ -1227,6 +1328,7 @@ export const validate = task({
             await runValidation("test:api", runTestAPI);
         }
         if (options.all) {
+            await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:options", async () => {
                 await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
@@ -1268,29 +1370,32 @@ export const checkFormat = task({
 export const checkHerebyfile = task({
     name: "check:herebyfile",
     description: "Type-checks Herebyfile.mjs.",
-    run: () =>
-        run("node", [
-            "./node_modules/typescript/bin/tsc",
-            "--noEmit",
-            "--allowJs",
-            "--allowImportingTsExtensions",
-            "--checkJs",
-            "--target",
-            "es2022",
-            "--lib",
-            "es2024,esnext.array,esnext.collection,esnext.iterator",
-            "--module",
-            "nodenext",
-            "--moduleResolution",
-            "nodenext",
-            "--types",
-            "node",
-            "--strict",
-            "--esModuleInterop",
-            "--skipLibCheck",
-            "Herebyfile.mjs",
-        ]),
+    run: runCheckHerebyfile,
 });
+
+async function runCheckHerebyfile() {
+    await run("node", [
+        "./node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--allowJs",
+        "--allowImportingTsExtensions",
+        "--checkJs",
+        "--target",
+        "es2022",
+        "--lib",
+        "es2024,esnext.array,esnext.collection,esnext.iterator",
+        "--module",
+        "nodenext",
+        "--moduleResolution",
+        "nodenext",
+        "--types",
+        "node",
+        "--strict",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "Herebyfile.mjs",
+    ]);
+}
 
 export const checkVsceVersion = task({
     name: "check:vsce-version",
@@ -1912,6 +2017,12 @@ const mainNativePreviewPackage = {
     npmTarball: path.join(builtNpm, publishAsTypescript ? "typescript.tgz" : "native-preview.tgz"),
 };
 
+const wasip1Package = {
+    npmPackageName: "@typescript/typescript-wasip1-wasm",
+    npmDir: path.join(builtNpm, "typescript-wasip1-wasm"),
+    npmTarball: path.join(builtNpm, "typescript-wasip1-wasm.tgz"),
+};
+
 const typescriptMacEntitlements = [
     "com.apple.security.cs.allow-dyld-environment-variables",
     "com.apple.security.cs.disable-library-validation",
@@ -1935,7 +2046,7 @@ ${entries}
  * @typedef {"Microsoft400" | "LinuxSign" | "MacDeveloperHarden" | "8020" | "VSCodePublisher"} Cert
  * @typedef {`${OS | "alpine"}-${Exclude<Arch, "arm"> | "armhf"}`} VSCodeTarget
  * @typedef {{ name: string; sourceDir: string }} VsixExtensionPackage
- * @typedef {{ nodeOs: string; vscodeTarget: string; sourceDir: string; extensionDir: string; vsixPath: string; vsixManifestPath: string; vsixSignaturePath: string }} VsixExtension
+ * @typedef {{ nodeOs?: string; vscodeTarget: VSCodeTarget | "web"; sourceDir: string; extensionDir: string; vsixPath: string; vsixManifestPath: string; vsixSignaturePath: string }} VsixExtension
  * @typedef {{ GOOS: string; GOARCH: string }} GoDistTarget
  * @typedef {{ os: OS; arch: Arch; cert?: Cert; vsix?: boolean; alpine?: boolean }} Platform
  */
@@ -1946,6 +2057,36 @@ const vsixExtensionPackages = [
     ...(produceNativePreviewVsix ? [{ name: "native-preview", sourceDir: extensionDir }] : []),
     ...(produceTypeScriptNightlyVsix ? [{ name: "vscode-typescript-nightly", sourceDir: nightlyExtensionDir }] : []),
 ];
+
+/**
+ * @param {string} packageName
+ * @param {string} sourceDir
+ * @param {VSCodeTarget | "web"} vscodeTarget
+ * @param {string} [nodeOs]
+ * @returns {VsixExtension}
+ */
+function createVsixExtension(packageName, sourceDir, vscodeTarget, nodeOs) {
+    const extensionDir = path.join(builtVsix, `${packageName}-${vscodeTarget}`);
+    return {
+        nodeOs,
+        vscodeTarget,
+        sourceDir,
+        extensionDir,
+        vsixPath: extensionDir + ".vsix",
+        vsixManifestPath: extensionDir + ".manifest",
+        vsixSignaturePath: extensionDir + ".signature.p7s",
+    };
+}
+
+function getLocalWebVsixExtensions() {
+    if (options.forRelease) {
+        return [];
+    }
+    return [
+        createVsixExtension("native-preview", extensionDir, "web"),
+        createVsixExtension("vscode-typescript-nightly", nightlyExtensionDir, "web"),
+    ];
+}
 
 /**
  * npm package platforms supported by the native release.
@@ -2070,29 +2211,13 @@ const getPlatforms = memoize(() => {
         /** @type {VsixExtension[]} */
         let extensions = [];
         if (produceAnyVsix && vsix) {
-            /** @type {string[]} */
+            /** @type {VSCodeTarget[]} */
             const vscodeTargets = [`${os}-${arch === "arm" ? "armhf" : arch}`];
             if (alpine) {
                 vscodeTargets.push(`alpine-${arch === "arm" ? "armhf" : arch}`);
             }
 
-            extensions = vscodeTargets.flatMap(vscodeTarget =>
-                vsixExtensionPackages.map(({ name: packageName, sourceDir }) => {
-                    const extensionDir = path.join(builtVsix, `${packageName}-${vscodeTarget}`);
-                    const vsixPath = extensionDir + ".vsix";
-                    const vsixManifestPath = extensionDir + ".manifest";
-                    const vsixSignaturePath = extensionDir + ".signature.p7s";
-                    return {
-                        nodeOs: os,
-                        vscodeTarget,
-                        sourceDir,
-                        extensionDir,
-                        vsixPath,
-                        vsixManifestPath,
-                        vsixSignaturePath,
-                    };
-                })
-            );
+            extensions = vscodeTargets.flatMap(vscodeTarget => vsixExtensionPackages.map(({ name: packageName, sourceDir }) => createVsixExtension(packageName, sourceDir, vscodeTarget, os)));
         }
 
         return {
@@ -2279,6 +2404,13 @@ async function runBuildNativePreviewPackages() {
     const platforms = getPlatforms();
 
     const inputDir = "./packages/typescript";
+    await Promise.all([
+        fs.promises.rm(path.join(inputDir, "dist", "tsc.wasm"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.js"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.js.map"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.d.ts"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.d.ts.map"), { force: true }),
+    ]);
 
     const inputPackageJson = JSON.parse(fs.readFileSync(path.join(inputDir, "package.json"), "utf8"));
     inputPackageJson.version = getVersion();
@@ -2330,7 +2462,7 @@ async function runBuildNativePreviewPackages() {
 
     // Copy package contents excluding node_modules and dist (dist is copied separately after build).
     // The package.json "files" field controls what npm pack actually includes.
-    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
+    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.split("/").includes("dist"));
     if (publishAsTypescript) {
         await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
         await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
@@ -2341,7 +2473,7 @@ async function runBuildNativePreviewPackages() {
     await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
     await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
 
-    // Build JS API and copy dist into the package.
+    // Build the JS API and copy dist into the main package.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
 
@@ -2369,9 +2501,31 @@ async function runBuildNativePreviewPackages() {
         throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
     }
 
+    const wasmInputDir = "./packages/typescript-wasip1-wasm";
     const extraFlags = options.respectGoEnv
         ? []
         : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined);
+    const wasmPackageJson = JSON.parse(fs.readFileSync(path.join(wasmInputDir, "package.json"), "utf8"));
+    wasmPackageJson.version = getVersion();
+    wasmPackageJson.gitHead = inputPackageJson.gitHead;
+    wasmPackageJson.publishConfig = {
+        access: "public",
+        tag: getPublishTag(),
+    };
+    wasmPackageJson.files = [...new Set([...(wasmPackageJson.files ?? []), "NOTICE.txt"])];
+    delete wasmPackageJson.private;
+    delete wasmPackageJson.scripts;
+    stripSourceConditions(wasmPackageJson);
+
+    await runBuildWasi(extraFlags);
+    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.split("/").includes("dist"));
+    await cpRecursive(path.join(wasmInputDir, "dist"), path.join(wasip1Package.npmDir, "dist"));
+    await fs.promises.writeFile(
+        path.join(wasip1Package.npmDir, "package.json"),
+        JSON.stringify(wasmPackageJson, undefined, 4),
+    );
+    await fs.promises.copyFile("LICENSE.txt", path.join(wasip1Package.npmDir, "LICENSE"));
+    await fs.promises.copyFile("NOTICE.txt", path.join(wasip1Package.npmDir, "NOTICE.txt"));
 
     const platformBuilders = platforms.map(({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => async () => {
         const packageJson = {
@@ -2440,18 +2594,24 @@ async function testNativePreviewPackage(platforms) {
     const nodeModules = path.join(testRoot, "node_modules");
     const mainPackageDir = path.join(nodeModules, ...mainNativePreviewPackage.npmPackageName.split("/"));
     const platformPackageDir = path.join(nodeModules, ...hostPlatform.npmPackageName.split("/"));
+    const wasmPackageDir = path.join(nodeModules, ...wasip1Package.npmPackageName.split("/"));
     const sourceFile = path.join(testRoot, "index.ts");
 
     await rimraf(testRoot);
     try {
         await cpRecursive(mainNativePreviewPackage.npmDir, mainPackageDir);
         await cpRecursive(hostPlatform.npmDir, platformPackageDir);
+        await cpRecursive(wasip1Package.npmDir, wasmPackageDir);
         await fs.promises.writeFile(sourceFile, 'export const value: string = "value";\n');
 
         const require = createRequire(sourceFile);
         const { stdout } = await runOutput("npm", ["pack", "--dry-run", "--json", mainPackageDir]);
         /** @type {{ files: { path: string }[] }[]} */
         const packed = JSON.parse(stdout);
+        assert(
+            packed[0].files.some(file => file.path === "dist/wasm/index.js"),
+            "Main package is missing the WASM host entrypoint",
+        );
         for (const name of ["tsconfig", "jsconfig"]) {
             const schemaPath = `schemas/${name}.schema.json`;
             assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
@@ -2462,6 +2622,23 @@ async function testNativePreviewPackage(platforms) {
             assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
         }
 
+        const wasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "package.json"), "utf8"));
+        assert.equal(wasmPackageJson.peerDependencies, undefined, "WASI artifact package must not depend on the main package");
+        const libFiles = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "lib", "libFiles.json"), "utf8"));
+        const expectedLibFiles = (await fs.promises.readdir(path.join(wasmPackageDir, "lib")))
+            .filter(file => file === "lib.d.ts" || file.startsWith("lib.") && file.endsWith(".d.ts"))
+            .sort();
+        assert.deepEqual(libFiles, expectedLibFiles);
+
+        const { stdout: wasmPackOutput } = await runOutput("npm", ["pack", "--dry-run", "--json", wasmPackageDir]);
+        /** @type {{ files: { path: string }[] }[]} */
+        const wasmPacked = JSON.parse(wasmPackOutput);
+        const wasmFiles = new Set(wasmPacked[0].files.map(file => file.path));
+        assert(wasmFiles.has("dist/index.js"), "WASI artifact package is missing its URL helper");
+        assert(wasmFiles.has("lib/libFiles.json"), "WASI artifact package is missing its library file list");
+        assert(!wasmFiles.has("dist/transport.js"), "WASI artifact package contains the reactor transport");
+        assert(!wasmFiles.has("dist/wasi.js"), "WASI artifact package contains the reactor host");
+
         const binName = publishAsTypescript ? "tsc" : "tsgo";
         const binPath = path.join(mainPackageDir, "bin", binName);
         const { stdout: versionOutput } = await runOutput(process.execPath, [binPath, "--version"]);
@@ -2471,6 +2648,8 @@ async function testNativePreviewPackage(platforms) {
         assert(!listFilesOutput.includes("bundled:///"), "Packaged compiler listed an embedded library path");
 
         const expectedLib = path.resolve(platformPackageDir, "lib", "lib.es5.d.ts");
+        const expectedWasmLib = path.resolve(wasmPackageDir, "lib", "lib.es5.d.ts");
+        assert(fs.existsSync(expectedWasmLib), `Expected WASM package to contain ${expectedWasmLib}`);
         const listedFiles = listFilesOutput
             .split(/\r?\n/)
             .filter(Boolean)
@@ -2645,14 +2824,14 @@ async function runPackNativePreviewPackages() {
     }
 
     const platforms = getPlatforms();
-    await Promise.all([mainNativePreviewPackage, ...platforms].map(async ({ npmDir, npmTarball }) => {
+    await Promise.all([mainNativePreviewPackage, wasip1Package, ...platforms].map(async ({ npmDir, npmTarball }) => {
         const { stdout } = await runOutput("npm", ["pack", "--json", npmDir]);
         const filename = JSON.parse(stdout)[0].filename.replace("@", "").replace("/", "-");
         await fs.promises.rename(filename, npmTarball);
     }));
 
-    // npm packages need to be published in dependency order: platform packages
-    // first, then the main package that references them as optionalDependencies.
+    // Publish platform packages before the main package that references them as
+    // optionalDependencies. The independent WASI artifact package is published last.
     const publishManifest = {
         stages: [
             platforms.map(p => ({
@@ -2661,6 +2840,11 @@ async function runPackNativePreviewPackages() {
             [
                 {
                     filename: path.basename(mainNativePreviewPackage.npmTarball),
+                },
+            ],
+            [
+                {
+                    filename: path.basename(wasip1Package.npmTarball),
                 },
             ],
         ],
@@ -2816,7 +3000,14 @@ async function runPackVsixExtensions() {
     }
 
     const platforms = getPlatforms();
-    const extensions = platforms.flatMap(({ npmTarball, npmPackageName, extensions }) => extensions.map(e => ({ npmTarball, npmPackageName, ...e })));
+    const extensions = [
+        ...platforms.flatMap(({ npmTarball, npmPackageName, extensions }) => extensions.map(e => ({ npmTarball, npmPackageName, ...e }))),
+        ...getLocalWebVsixExtensions().map(e => ({
+            npmTarball: wasip1Package.npmTarball,
+            npmPackageName: wasip1Package.npmPackageName,
+            ...e,
+        })),
+    ];
     if (!extensions.length) {
         console.log("No VSIX targets configured; skipping extension packaging.");
         return;
@@ -2825,6 +3016,9 @@ async function runPackVsixExtensions() {
     // We don't use vscode:prepublish, as that would run the build for each package below.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     await run("npm", ["run", "bundle:release"], { cwd: extensionDir, env: releasePackageEnv });
+    if (extensions.some(extension => extension.vscodeTarget === "web")) {
+        await run("npm", ["run", "bundle:release:web"], { cwd: extensionDir, env: releasePackageEnv });
+    }
 
     let version = "0.0.0";
     if (options.forRelease) {
@@ -2850,33 +3044,63 @@ async function runPackVsixExtensions() {
     console.log("Version:", version);
 
     await Promise.all(extensions.map(async ({ npmTarball, npmPackageName, nodeOs, vscodeTarget, sourceDir, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
-        const nodeModules = path.join(thisExtensionDir, "node_modules");
-        const embeddedPlatformPackageDir = path.join(nodeModules, ...npmPackageName.split("/"));
-        const embeddedTypeScriptDir = path.join(nodeModules, "typescript");
-
         await cpWithoutNodeModulesOrTsconfig(sourceDir, thisExtensionDir);
-        if (usePublishedPlatformPackagesForVsix) {
-            await cpRecursive(await getPublishedPlatformPackageDir(npmPackageName), embeddedPlatformPackageDir);
-            await cpRecursive(getPublishedTypeScriptPackageDir(), embeddedTypeScriptDir, p => !p.endsWith("/node_modules"));
+        let packageJsonDependencies;
+        if (vscodeTarget === "web") {
+            assert(npmTarball);
+            assert(npmPackageName);
+            const embeddedWasmPackageDir = path.join(thisExtensionDir, "node_modules", ...npmPackageName.split("/"));
+            await fs.promises.mkdir(embeddedWasmPackageDir, { recursive: true });
+            await tar.x({ file: npmTarball, cwd: embeddedWasmPackageDir, strip: 1 });
+            const embeddedWasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedWasmPackageDir, "package.json"), "utf8"));
+            packageJsonDependencies = {
+                [npmPackageName]: embeddedWasmPackageJson.version,
+            };
         }
         else {
-            await fs.promises.mkdir(embeddedPlatformPackageDir, { recursive: true });
-            await fs.promises.mkdir(embeddedTypeScriptDir, { recursive: true });
-            await tar.x({ file: npmTarball, cwd: embeddedPlatformPackageDir, strip: 1 });
-            await tar.x({ file: mainNativePreviewPackage.npmTarball, cwd: embeddedTypeScriptDir, strip: 1 });
+            assert(npmTarball);
+            assert(npmPackageName);
+            assert(nodeOs);
+            const nodeModules = path.join(thisExtensionDir, "node_modules");
+            const embeddedPlatformPackageDir = path.join(nodeModules, ...npmPackageName.split("/"));
+            const embeddedTypeScriptDir = path.join(nodeModules, "typescript");
+
+            if (usePublishedPlatformPackagesForVsix) {
+                await cpRecursive(await getPublishedPlatformPackageDir(npmPackageName), embeddedPlatformPackageDir);
+                await cpRecursive(getPublishedTypeScriptPackageDir(), embeddedTypeScriptDir, p => !p.endsWith("/node_modules"));
+            }
+            else {
+                await fs.promises.mkdir(embeddedPlatformPackageDir, { recursive: true });
+                await fs.promises.mkdir(embeddedTypeScriptDir, { recursive: true });
+                await tar.x({ file: npmTarball, cwd: embeddedPlatformPackageDir, strip: 1 });
+                await tar.x({ file: mainNativePreviewPackage.npmTarball, cwd: embeddedTypeScriptDir, strip: 1 });
+            }
+            await fs.promises.chmod(path.join(embeddedPlatformPackageDir, "lib", nativePreviewExeName(nodeOs)), 0o755);
+            const embeddedTypeScriptPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedTypeScriptDir, "package.json"), "utf8"));
+            packageJsonDependencies = {
+                typescript: embeddedTypeScriptPackageJson.name === "typescript"
+                    ? embeddedTypeScriptPackageJson.version
+                    : `npm:${embeddedTypeScriptPackageJson.name}@${embeddedTypeScriptPackageJson.version}`,
+            };
         }
-        await fs.promises.chmod(path.join(embeddedPlatformPackageDir, "lib", nativePreviewExeName(nodeOs)), 0o755);
-        const embeddedTypeScriptPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedTypeScriptDir, "package.json"), "utf8"));
 
         const packageJsonPath = path.join(thisExtensionDir, "package.json");
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
         packageJson.version = version;
         packageJson.bundledTypeScriptVersion = usePublishedPlatformPackagesForVsix ? getPublishedTypeScriptVersion() : getVersion();
-        packageJson.dependencies = {
-            typescript: embeddedTypeScriptPackageJson.name === "typescript"
-                ? embeddedTypeScriptPackageJson.version
-                : `npm:${embeddedTypeScriptPackageJson.name}@${embeddedTypeScriptPackageJson.version}`,
-        };
+        if (vscodeTarget === "web") {
+            delete packageJson.main;
+            packageJson.files = /** @type {string[]} */ (packageJson.files ?? []).filter(file => file !== "dist/extension.bundle.js" && file !== "node_modules/typescript");
+            if (sourceDir !== nightlyExtensionDir) {
+                packageJson.browser = "./dist/extension.web.bundle.js";
+                packageJson.extensionDependencies = [
+                    ...(packageJson.extensionDependencies ?? []),
+                    "ms-vscode.wasm-wasi-core",
+                ];
+                packageJson.files.push("dist/extension.web.bundle.js");
+            }
+        }
+        packageJson.dependencies = packageJsonDependencies;
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 4));
 
         await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));
@@ -2901,12 +3125,13 @@ async function runPackVsixExtensions() {
  * @param {string} vsixPath
  * @param {string} extensionPath
  * @param {string} platformPackageName
- * @param {string} nodeOs
+ * @param {string | undefined} nodeOs
  * @param {string} vscodeTarget
  */
 async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nodeOs, vscodeTarget) {
     const zip = new AdmZip(vsixPath);
-    for (const packageName of ["typescript", platformPackageName]) {
+    const packageNames = vscodeTarget === "web" ? [platformPackageName] : ["typescript", platformPackageName];
+    for (const packageName of packageNames) {
         const packagePath = path.join(extensionPath, "node_modules", ...packageName.split("/"));
         const files = await fs.promises.readdir(packagePath, { recursive: true, withFileTypes: true });
         for (const file of files) {
@@ -2921,6 +3146,7 @@ async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nod
 
     const hostTarget = `${process.platform}-${process.arch === "arm" ? "armhf" : process.arch}`;
     if (vscodeTarget !== hostTarget) return;
+    assert(nodeOs);
 
     const directory = await fs.promises.mkdtemp(path.join(os.tmpdir(), "typescript-vsix-test-"));
     try {
