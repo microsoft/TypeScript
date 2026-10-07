@@ -70,10 +70,11 @@ var (
 )
 
 type requestPathNode struct {
-	entry       requestEntry
-	fallback    requestFallback
-	children    map[tspath.PathKey]*requestPathNode
-	hasSymlinks bool
+	entry        requestEntry
+	fallback     requestFallback
+	fallbackPath tspath.RootedPath
+	children     map[tspath.PathKey]*requestPathNode
+	hasSymlinks  bool
 }
 
 func (node *requestPathNode) replacesSubtree() bool {
@@ -185,6 +186,7 @@ func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallba
 	result.children = maps.Clone(result.children)
 	if overlay.fallback != requestFallbackInherit || overlay.replacesSubtree() {
 		result.fallback = fallback
+		result.fallbackPath = overlay.fallbackPath
 	}
 	previousDirectory, _ := result.entry.(*requestDirectory)
 	overlayDirectory, _ := overlay.entry.(*requestDirectory)

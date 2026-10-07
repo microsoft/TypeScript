@@ -47,6 +47,7 @@ export interface APIMethodInfo {
     initialize: APIMethod<null, InitializeResponse>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
+    rebaseSnapshot: APIMethod<RebaseSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
     createBuildOrchestrator: APIMethod<CreateBuildOrchestratorParams, CreateBuildOrchestratorResponse>;
     disposeBuildOrchestrator: APIMethod<DisposeBuildOrchestratorParams, unknown>;
@@ -330,6 +331,12 @@ export interface CreateSnapshotResponse {
 
 export interface UpdateSnapshotParams {
     snapshot: number;
+    changes?: CreateSnapshotParams | undefined;
+}
+
+export interface RebaseSnapshotParams {
+    snapshot: number;
+    newSnapshot: number;
     changes?: CreateSnapshotParams | undefined;
 }
 
@@ -1312,6 +1319,7 @@ export interface BatchRequest {
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
+        | "rebaseSnapshot"
         | "release"
         | "releaseModuleResolver"
         | "releaseSourceFile"
@@ -1494,6 +1502,7 @@ export interface BatchResponse {
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
+        | "rebaseSnapshot"
         | "release"
         | "releaseModuleResolver"
         | "releaseSourceFile"

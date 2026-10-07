@@ -1,6 +1,9 @@
 package requestfilesystem
 
 import (
+	"maps"
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -25,6 +28,99 @@ func (s *requestFileSystem) ExpandFileChanges(summary project.FileChangeSummary)
 	expand(&summary.Created)
 	expand(&summary.Deleted)
 	return summary
+}
+
+func addRebaseFileChanges(summary *project.FileChangeSummary, source *requestFileSystem, baseFS vfs.FS, rebased *requestFileSystem) bool {
+	baseRequestFS := getRequestFileSystem(baseFS)
+	changed := false
+	addChange := func(path tspath.RootedPath, kind lsproto.FileChangeType) {
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(path))
+		if kind == lsproto.FileChangeTypeDeleted {
+			if baseFS.FileExists(tspath.RootedFilePathFromPath(path)) || baseFS.DirectoryExists(tspath.RootedDirectoryPathFromPath(path)) {
+				summary.Deleted.Add(uri)
+				changed = true
+			}
+		} else if kind == lsproto.FileChangeTypeCreated {
+			summary.Created.Add(uri)
+			changed = true
+		} else if baseFS.FileExists(tspath.RootedFilePathFromPath(path)) {
+			summary.Changed.Add(uri)
+			changed = true
+		} else {
+			summary.Created.Add(uri)
+			changed = true
+		}
+	}
+	addChangeAndAliases := func(path tspath.RootedPath, kind lsproto.FileChangeType) {
+		addChange(path, kind)
+		if baseRequestFS != nil {
+			for _, alias := range baseRequestFS.aliasesForPath(path) {
+				addChange(alias, kind)
+			}
+		}
+	}
+	var visit func(*requestPathNode)
+	visit = func(node *requestPathNode) {
+		for path, child := range node.children {
+			_, isFile := child.entry.(*requestFile)
+			if child.fallback == requestFallbackMissing && child.fallbackPath != "" && !isFile {
+				previousFallback := requestFallbackAllowed
+				if baseRequestFS != nil {
+					_, previousFallback = baseRequestFS.paths.lookup(path)
+				}
+				if previousFallback != requestFallbackMissing {
+					addChangeAndAliases(child.fallbackPath, lsproto.FileChangeTypeDeleted)
+				}
+			}
+			switch entry := child.entry.(type) {
+			case *requestFile:
+				if previous, ok := baseFS.ReadFile(entry.fileName); !ok || previous != entry.content {
+					addChangeAndAliases(entry.fileName.AsPath(), lsproto.FileChangeTypeChanged)
+				}
+			case *requestDirectory:
+				if entry.listing != nil {
+					previous := baseFS.GetAccessibleEntries(entry.directoryName)
+					current := rebased.GetAccessibleEntries(entry.directoryName)
+					if !slices.Equal(previous.Files, current.Files) || !slices.Equal(previous.Directories, current.Directories) || !maps.Equal(previous.Symlinks, current.Symlinks) {
+						addChangeAndAliases(entry.directoryName.AsPath(), lsproto.FileChangeTypeDeleted)
+						addChangeAndAliases(entry.directoryName.AsPath(), lsproto.FileChangeTypeCreated)
+					}
+				}
+				if source.kind == KindFull {
+					previous := baseFS.GetAccessibleEntries(entry.directoryName)
+					for _, name := range previous.Files {
+						fileName := entry.directoryName.ResolveFile(name)
+						if !rebased.FileExists(fileName) {
+							addChangeAndAliases(fileName.AsPath(), lsproto.FileChangeTypeDeleted)
+						}
+					}
+					for _, name := range previous.Directories {
+						directoryName := entry.directoryName.ResolveDirectory(name)
+						if !rebased.DirectoryExists(directoryName) {
+							addChangeAndAliases(directoryName.AsPath(), lsproto.FileChangeTypeDeleted)
+						}
+					}
+				}
+			case *requestSymlink:
+				if baseRequestFS != nil {
+					previous, _ := baseRequestFS.paths.lookup(path)
+					if previous != nil {
+						if previousLink, ok := previous.entry.(*requestSymlink); ok && *previousLink == *entry {
+							break
+						}
+					}
+				}
+				addChangeAndAliases(entry.linkName, lsproto.FileChangeTypeDeleted)
+				addChangeAndAliases(entry.linkName, lsproto.FileChangeTypeCreated)
+			}
+			visit(child)
+		}
+	}
+	visit(source.paths)
+	if summary.Changed.Len()+summary.Created.Len()+summary.Deleted.Len() > 0 {
+		summary.IncludesWatchChangeOutsideNodeModules = true
+	}
+	return changed
 }
 
 func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, fileSystem *requestFileSystem, currentDirectory tspath.RootedDirectoryPath) {

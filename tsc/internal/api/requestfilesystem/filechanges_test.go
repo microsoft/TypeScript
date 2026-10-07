@@ -9,6 +9,61 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestRebaseFileChangesMatchLayerUpdate(t *testing.T) {
+	t.Parallel()
+	base, err := newRequestFileSystem(&RequestFileSystem{
+		Kind: KindFull,
+		Files: map[string]string{
+			"/removed/nested/file.ts": "removed",
+			"/replaced.ts":            "old",
+			"/dir/old.ts":             "old listing",
+			"/target/old.ts":          "old target",
+		},
+		Symlinks: map[string]RequestSymlink{
+			"/alias": {Target: "/removed"},
+			"/link":  {Target: "/target/old.ts"},
+		},
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
+	assert.NilError(t, err)
+	for name, params := range map[string]*RequestFileSystem{
+		"files and tombstones": {
+			Kind:         KindLayer,
+			Files:        map[string]string{"/replaced.ts": "new", "/created.ts": "created"},
+			RemovedPaths: []string{"/removed", "/missing", "/replaced.ts"},
+		},
+		"listings and symlinks": {
+			Kind:        KindLayer,
+			Directories: map[string]RequestDirectoryEntries{"/dir": {}},
+			Symlinks:    map[string]RequestSymlink{"/link": {Target: "/elsewhere"}, "/new": {Target: "/host", Host: true}},
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			source, sourceErr := newRequestFileSystem(params, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
+			assert.NilError(t, sourceErr)
+			var expected, actual project.FileChangeSummary
+			_, updateErr := NewForUpdate(params, base, "/", &expected)
+			assert.NilError(t, updateErr)
+			Rebase(source, base, &actual)
+			assert.DeepEqual(t, actual, expected)
+		})
+	}
+}
+
+func TestRebaseFileChangesPreserveTombstoneCasing(t *testing.T) {
+	t.Parallel()
+	host := vfstest.FromMap(map[string]string{"C:/Repo/Removed/index.ts": "old"}, tspath.CaseInsensitive)
+	source, err := newRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{"C:/Repo/Removed"},
+	}, host, "C:/Repo")
+	assert.NilError(t, err)
+	var summary project.FileChangeSummary
+	Rebase(source, host, &summary)
+	assert.Assert(t, summary.Deleted.Has("file:///c%3A/Repo/Removed"))
+	assert.Equal(t, summary.Deleted.Len(), 1)
+}
+
 func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 	t.Parallel()
 
