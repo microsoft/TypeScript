@@ -121,8 +121,8 @@ func (s *SymbolTrackerImpl) ReportNonSerializableProperty(propertyName string) {
 
 // ReportNonlocalAugmentation implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportNonlocalAugmentation(containingFile *ast.SourceFile, parentSymbol *ast.Symbol, augmentingSymbol *ast.Symbol) {
-	primaryDeclaration := core.Find(parentSymbol.Declarations, func(d *ast.Node) bool { return ast.GetSourceFileOfNode(d) == containingFile })
-	augmentingDeclarations := core.Filter(augmentingSymbol.Declarations, func(d *ast.Node) bool { return ast.GetSourceFileOfNode(d) != containingFile })
+	primaryDeclaration := core.Find(parentSymbol.Declarations(), func(d *ast.Node) bool { return ast.GetSourceFileOfNode(d) == containingFile })
+	augmentingDeclarations := core.Filter(augmentingSymbol.Declarations(), func(d *ast.Node) bool { return ast.GetSourceFileOfNode(d) != containingFile })
 	if primaryDeclaration != nil && len(augmentingDeclarations) > 0 {
 		for _, augmentations := range augmentingDeclarations {
 			diag := createDiagnosticForNode(augmentations, diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized)
@@ -187,7 +187,7 @@ func (s *SymbolTrackerImpl) errorDeclarationNameWithFallback() string {
 
 // TrackSymbol implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {
-	if symbol.Flags&ast.SymbolFlagsTypeParameter != 0 {
+	if symbol.Flags()&ast.SymbolFlagsTypeParameter != 0 {
 		return false
 	}
 	// When watching for a class expression symbol, record its usage without

@@ -32,7 +32,7 @@ func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclarat
 			return true
 		}
 		// Skip recording type parameters as they dont contribute to late painted statements
-		if symbol.Flags&ast.SymbolFlagsTypeParameter == 0 {
+		if symbol.Flags()&ast.SymbolFlagsTypeParameter == 0 {
 			this.context.trackedSymbols = append(this.context.trackedSymbols, &TrackedSymbolArgs{symbol, enclosingDeclaration, meaning})
 		}
 	}

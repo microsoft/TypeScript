@@ -51,11 +51,11 @@ func GetSymbolTable(data *SymbolTable) SymbolTable {
 }
 
 func GetMembers(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.Members)
+	return GetSymbolTable(&symbol.members)
 }
 
 func GetExports(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.Exports)
+	return GetSymbolTable(&symbol.exports)
 }
 
 func GetLocals(container *Node) SymbolTable {
@@ -2567,7 +2567,7 @@ func IsParameterLike(node *Node) bool {
 }
 
 func GetDeclarationOfKind(symbol *Symbol, kind Kind) *Node {
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		if declaration.Kind == kind {
 			return declaration
 		}
@@ -2689,8 +2689,8 @@ func IsNonLocalAlias(symbol *Symbol, excludes SymbolFlags) bool {
 	if symbol == nil {
 		return false
 	}
-	return symbol.Flags&(SymbolFlagsAlias|excludes) == SymbolFlagsAlias ||
-		symbol.Flags&SymbolFlagsAlias != 0 && symbol.Flags&SymbolFlagsAssignment != 0
+	return symbol.Flags()&(SymbolFlagsAlias|excludes) == SymbolFlagsAlias ||
+		symbol.Flags()&SymbolFlagsAlias != 0 && symbol.Flags()&SymbolFlagsAssignment != 0
 }
 
 // An alias symbol is created by one of the following declarations:
@@ -3023,7 +3023,7 @@ func IsExclusivelyTypeOnlyImportOrExport(node *Node) bool {
 }
 
 func GetClassLikeDeclarationOfSymbol(symbol *Symbol) *Node {
-	return core.Find(symbol.Declarations, IsClassLike)
+	return core.Find(symbol.Declarations(), IsClassLike)
 }
 
 func IsCallLikeExpression(node *Node) bool {
@@ -3642,7 +3642,7 @@ func IsExternalModuleAugmentation(node *Node) bool {
 }
 
 func GetSourceFileOfModule(module *Symbol) *SourceFile {
-	declaration := module.ValueDeclaration
+	declaration := module.ValueDeclaration()
 	if declaration == nil {
 		declaration = GetNonAugmentationDeclaration(module)
 	}
@@ -3650,7 +3650,7 @@ func GetSourceFileOfModule(module *Symbol) *SourceFile {
 }
 
 func GetNonAugmentationDeclaration(symbol *Symbol) *Node {
-	return core.Find(symbol.Declarations, func(d *Node) bool {
+	return core.Find(symbol.Declarations(), func(d *Node) bool {
 		return !IsExternalModuleAugmentation(d) && !IsGlobalScopeAugmentation(d)
 	})
 }

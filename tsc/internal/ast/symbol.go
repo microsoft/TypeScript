@@ -7,60 +7,80 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
 
-// Symbol
-
+// Symbol stores binding information. Its accessors expose the stored values
+// without copying declaration slices or symbol tables.
 type Symbol struct {
-	Flags            SymbolFlags
-	CheckFlags       CheckFlags // Non-zero only in transient symbols created by Checker
-	Name             string
-	Declarations     []*Node
-	ValueDeclaration *Node
-	Members          SymbolTable
-	Exports          SymbolTable
+	flags            SymbolFlags
+	checkFlags       CheckFlags // Non-zero only in transient symbols created by Checker
+	name             string
+	declarations     []*Node
+	valueDeclaration *Node
+	members          SymbolTable
+	exports          SymbolTable
 	id               atomic.Uint64
-	Parent           *Symbol
-	ExportSymbol     *Symbol
+	parent           *Symbol
+	exportSymbol     *Symbol
 }
+
+func (s *Symbol) Flags() SymbolFlags      { return s.flags }
+func (s *Symbol) CheckFlags() CheckFlags  { return s.checkFlags }
+func (s *Symbol) Name() string            { return s.name }
+func (s *Symbol) Declarations() []*Node   { return s.declarations }
+func (s *Symbol) ValueDeclaration() *Node { return s.valueDeclaration }
+func (s *Symbol) Members() SymbolTable    { return s.members }
+func (s *Symbol) Exports() SymbolTable    { return s.exports }
+func (s *Symbol) Parent() *Symbol         { return s.parent }
+func (s *Symbol) ExportSymbol() *Symbol   { return s.exportSymbol }
+
+func (s *Symbol) SetFlags(value SymbolFlags)      { s.flags = value }
+func (s *Symbol) SetCheckFlags(value CheckFlags)  { s.checkFlags = value }
+func (s *Symbol) SetName(value string)            { s.name = value }
+func (s *Symbol) SetDeclarations(value []*Node)   { s.declarations = value }
+func (s *Symbol) SetValueDeclaration(value *Node) { s.valueDeclaration = value }
+func (s *Symbol) SetMembers(value SymbolTable)    { s.members = value }
+func (s *Symbol) SetExports(value SymbolTable)    { s.exports = value }
+func (s *Symbol) SetParent(value *Symbol)         { s.parent = value }
+func (s *Symbol) SetExportSymbol(value *Symbol)   { s.exportSymbol = value }
 
 // GetSourceFileOfSymbol returns the owning file of a published binder symbol, or
 // nil for a non-file-owned symbol, even if it borrows declarations from a file.
 // Ownership recovery walks only the first declaration's AST parents.
 func GetSourceFileOfSymbol(symbol *Symbol) *SourceFile {
 	debug.Assert(symbol != nil, "Expected a symbol")
-	if symbol.Flags&SymbolFlagsTransient != 0 {
+	if symbol.Flags()&SymbolFlagsTransient != 0 {
 		return nil
 	}
-	if len(symbol.Declarations) == 0 {
+	if len(symbol.Declarations()) == 0 {
 		// A class's implicit prototype has no declaration of its own.
-		debug.Assert(symbol.Flags&SymbolFlagsPrototype != 0, "File-bound symbol has no declarations")
-		debug.Assert(symbol.Parent != nil && symbol.Parent.Flags&SymbolFlagsClass != 0, "Prototype has no declaring class")
-		symbol = symbol.Parent
-		debug.Assert(symbol.Flags&SymbolFlagsTransient == 0, "Prototype parent is not file-bound")
-		debug.Assert(len(symbol.Declarations) != 0, "Prototype parent has no declarations")
+		debug.Assert(symbol.Flags()&SymbolFlagsPrototype != 0, "File-bound symbol has no declarations")
+		debug.Assert(symbol.Parent() != nil && symbol.Parent().Flags()&SymbolFlagsClass != 0, "Prototype has no declaring class")
+		symbol = symbol.Parent()
+		debug.Assert(symbol.Flags()&SymbolFlagsTransient == 0, "Prototype parent is not file-bound")
+		debug.Assert(len(symbol.Declarations()) != 0, "Prototype parent has no declarations")
 	}
-	file := GetSourceFileOfNode(symbol.Declarations[0])
+	file := GetSourceFileOfNode(symbol.Declarations()[0])
 	debug.Assert(file != nil, "File-bound declaration has no source file")
 	return file
 }
 
 func (s *Symbol) IsExternalModule() bool {
-	return s.Flags&SymbolFlagsModule != 0 && IsAmbientModuleSymbolName(s.Name)
+	return s.Flags()&SymbolFlagsModule != 0 && IsAmbientModuleSymbolName(s.Name())
 }
 
 func (s *Symbol) IsStatic() bool {
-	if s.ValueDeclaration == nil {
+	if s.ValueDeclaration() == nil {
 		return false
 	}
-	modifierFlags := s.ValueDeclaration.ModifierFlags()
+	modifierFlags := s.ValueDeclaration().ModifierFlags()
 	return modifierFlags&ModifierFlagsStatic != 0
 }
 
 // See comment on `declareModuleMember` in `binder.go`.
 func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
-	if s.ExportSymbol != nil {
-		return s.Flags | s.ExportSymbol.Flags
+	if s.ExportSymbol() != nil {
+		return s.Flags() | s.ExportSymbol().Flags()
 	}
-	return s.Flags
+	return s.Flags()
 }
 
 // SymbolTable
@@ -93,10 +113,10 @@ const (
 )
 
 func SymbolName(symbol *Symbol) string {
-	if symbol.ValueDeclaration != nil && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration) {
-		return symbol.ValueDeclaration.Name().Text()
+	if symbol.ValueDeclaration() != nil && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration()) {
+		return symbol.ValueDeclaration().Name().Text()
 	}
-	return symbol.Name
+	return symbol.Name()
 }
 
 // EscapeAllInternalSymbolNames replaces internal symbol name markers ("\xFE") with "__".

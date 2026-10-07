@@ -141,14 +141,14 @@ func (e *Export) IsUnresolvedAlias() bool {
 }
 
 func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
-	if symbol.Parent != nil && checker.IsExternalModuleSymbol(symbol.Parent) {
-		if moduleID, moduleFileName, ok := tryGetModuleIDAndFileNameOfModuleSymbol(symbol.Parent); ok {
-			return extractFirstExport(symbol, ch, moduleID, moduleFileName, ast.GetSourceFileOfModule(symbol.Parent))
+	if symbol.Parent() != nil && checker.IsExternalModuleSymbol(symbol.Parent()) {
+		if moduleID, moduleFileName, ok := tryGetModuleIDAndFileNameOfModuleSymbol(symbol.Parent()); ok {
+			return extractFirstExport(symbol, ch, moduleID, moduleFileName, ast.GetSourceFileOfModule(symbol.Parent()))
 		}
 		return nil
 	}
 
-	declaration := core.FirstOrNil(symbol.Declarations)
+	declaration := core.FirstOrNil(symbol.Declarations())
 	if declaration == nil {
 		return nil
 	}
@@ -169,7 +169,7 @@ func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
 	if export := tryGetModuleExport(ast.InternalSymbolNameExportEquals, target, moduleSymbol, ch, moduleID, moduleFileName, file); export != nil {
 		return export
 	}
-	return tryGetModuleExport(symbol.Name, target, moduleSymbol, ch, moduleID, moduleFileName, file)
+	return tryGetModuleExport(symbol.Name(), target, moduleSymbol, ch, moduleID, moduleFileName, file)
 }
 
 func tryGetModuleExport(exportName string, target *ast.Symbol, moduleSymbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName tspath.RootedFilePath, file *ast.SourceFile) *Export {
@@ -183,6 +183,6 @@ func tryGetModuleExport(exportName string, target *ast.Symbol, moduleSymbol *ast
 func extractFirstExport(symbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName tspath.RootedFilePath, file *ast.SourceFile) *Export {
 	var exports []*Export
 	extractor := newSymbolExtractor("", ch, tspath.CaseInsensitive, nil)
-	extractor.extractFromSymbol(symbol.Name, symbol, moduleID, moduleFileName, file, &exports)
+	extractor.extractFromSymbol(symbol.Name(), symbol, moduleID, moduleFileName, file, &exports)
 	return core.FirstOrNil(exports)
 }

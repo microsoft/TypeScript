@@ -278,7 +278,7 @@ func (l *LanguageService) getFromAllDeclarations(nodeTest func(*ast.Node) bool, 
 		var symbolDecls []*ast.Node
 		if ast.CanHaveSymbol(decl) {
 			if symbol := decl.Symbol(); symbol != nil {
-				for _, d := range symbol.Declarations {
+				for _, d := range symbol.Declarations() {
 					if nodeTest(d) {
 					outer:
 						for _, c := range getChildrenFromNonJSDocNode(d, sourceFile) {
