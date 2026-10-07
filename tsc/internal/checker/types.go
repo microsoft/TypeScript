@@ -705,8 +705,12 @@ func (t *Type) ObjectFlags() ObjectFlags {
 }
 
 type ReducedTypeLinks struct {
+	// The reduced type used for checking and ordinary printing, without literal-origin metadata.
 	target *Type
+	// The union before literal reduction, whose members may themselves have literal origins.
 	origin *Type
+	// The flattened, deduplicated origin union for display, or nil until GetLiteralTypeOrigin computes it.
+	literalOrigin *Type
 }
 
 // Casts for concrete struct types

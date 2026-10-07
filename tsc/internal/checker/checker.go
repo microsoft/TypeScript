@@ -26345,6 +26345,9 @@ func (c *Checker) GetLiteralTypeOrigin(t *Type) *Type {
 	if links == nil {
 		return nil
 	}
+	if links.literalOrigin != nil {
+		return links.literalOrigin
+	}
 	var members []*Type
 	var seen collections.Set[*Type]
 	var collect func(*Type)
@@ -26364,7 +26367,8 @@ func (c *Checker) GetLiteralTypeOrigin(t *Type) *Type {
 	}
 	collect(links.origin)
 	members, _ = c.addTypesToUnion(members)
-	return c.newUnionType(ObjectFlagsNone, members)
+	links.literalOrigin = c.newUnionType(ObjectFlagsNone, members)
+	return links.literalOrigin
 }
 
 func (c *Checker) getOriginTarget(t *Type) *Type {
