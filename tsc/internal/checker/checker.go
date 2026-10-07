@@ -26138,6 +26138,17 @@ func (c *Checker) getUnionType(types []*Type) *Type {
 	return c.getUnionTypeEx(types, UnionReductionLiteral, nil /*alias*/, nil /*origin*/)
 }
 
+func (c *Checker) getUnionTypeWithLiteralOrigins(types []*Type, unionReduction UnionReduction) *Type {
+	types = core.SameMap(types, func(t *Type) *Type {
+		return core.Coalesce(c.GetLiteralTypeOrigin(t), t)
+	})
+	// A single origin union must still undergo reduction instead of taking getUnionTypeEx's identity fast path.
+	if len(types) == 1 && types[0].flags&TypeFlagsUnion != 0 {
+		types = types[0].Types()
+	}
+	return c.getUnionTypeEx(types, unionReduction, nil, nil)
+}
+
 // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
 // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
 // of other types. Subtype reduction is expensive for large union types and is possible only when union
