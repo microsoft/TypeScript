@@ -946,6 +946,7 @@ func (b *Binder) setCommonJSModuleIndicator(node *ast.Node) bool {
 
 func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
 	name := node.Name()
+	b.checkStrictModeEvalOrArguments(node, name)
 	switch node.Kind {
 	case ast.KindClassDeclaration:
 		b.bindBlockScopedDeclaration(node, ast.SymbolFlagsClass, ast.SymbolFlagsClassExcludes)
@@ -1463,7 +1464,7 @@ func (b *Binder) checkStrictModeEvalOrArguments(contextNode *ast.Node, name *ast
 
 func (b *Binder) getStrictModeEvalOrArgumentsMessage(node *ast.Node) *diagnostics.Message {
 	// Provide specialized messages to help the user understand why we think they're in strict mode
-	if ast.GetContainingClass(node) != nil {
+	if ast.IsClassLike(node) || ast.GetContainingClass(node) != nil {
 		return diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode
 	}
 	if b.file.ExternalModuleIndicator != nil {
