@@ -1,13 +1,12 @@
-error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 flakyDiagnostic2304.ts(2,5): error TS1164: Computed property names are not allowed in enums.
+flakyDiagnostic2304.ts(2,6): error TS2304: Cannot find name 'missing'.
 
 
-!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2304 flakyDiagnostic2304.ts:2:6: Cannot find name 'missing'.
-==== flakyDiagnostic2304.ts (1 errors) ====
+==== flakyDiagnostic2304.ts (2 errors) ====
     export enum Values {
         [missing.value] = 1,
         ~~~~~~~~~~~~~~~
 !!! error TS1164: Computed property names are not allowed in enums.
+         ~~~~~~~
+!!! error TS2304: Cannot find name 'missing'.
     }

@@ -5233,6 +5233,9 @@ func (c *Checker) checkEnumMember(node *ast.Node) {
 	if ast.IsPrivateIdentifier(node.Name()) {
 		c.error(node, diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier)
 	}
+	if ast.IsComputedPropertyName(node.Name()) {
+		c.checkExpression(node.Name().Expression())
+	}
 	if node.Initializer() != nil {
 		c.checkExpression(node.Initializer())
 	}
@@ -28787,13 +28790,7 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 					return
 				}
 			}
-			// Computed property names on enum members are a grammar error and are never checked
-			// (checkEnumMember only checks the member initializer, not the name), so resolving
-			// identifiers in them here would report a spurious "Cannot find name" diagnostic.
 			if computedName != nil {
-				if ast.IsEnumMember(computedName.Parent) {
-					return
-				}
 				if isInvalidComputedPropertyName(computedName) {
 					return
 				}

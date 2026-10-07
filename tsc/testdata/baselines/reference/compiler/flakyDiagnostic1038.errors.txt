@@ -1,19 +1,20 @@
-error TS-1: Pre-emit (1) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 flakyDiagnostic1038.ts(2,5): error TS1164: Computed property names are not allowed in enums.
+flakyDiagnostic1038.ts(3,9): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+flakyDiagnostic1038.ts(4,13): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 
 
-!!! error TS-1: Pre-emit (1) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS1235 flakyDiagnostic1038.ts:3:9: A namespace declaration is only allowed at the top level of a namespace or module.
-!!! related TS1038 flakyDiagnostic1038.ts:4:13: A 'declare' modifier cannot be used in an already ambient context.
-==== flakyDiagnostic1038.ts (1 errors) ====
+==== flakyDiagnostic1038.ts (3 errors) ====
     export enum Values {
         [(function () {
         ~~~~~~~~~~~~~~~
             declare namespace Nested {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~
+!!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
                 declare const value: number;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
             }
     ~~~~~~~~~
         }).name] = 1,
