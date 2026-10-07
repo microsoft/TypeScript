@@ -44,6 +44,7 @@ const (
 	UpdateReasonDidCloseFile
 	UpdateReasonDidChangeCompilerOptionsForInferredProjects
 	UpdateReasonRequestedLanguageServicePendingChanges
+	UpdateReasonATADiscovery
 	UpdateReasonRequestedLanguageServiceProjectNotLoaded
 	UpdateReasonRequestedLanguageServiceForFileNotOpen
 	UpdateReasonRequestedLanguageServiceProjectDirty
@@ -136,6 +137,8 @@ type Session struct {
 	snapshot         *Snapshot
 	snapshotMu       sync.RWMutex
 	snapshotUpdateMu sync.Mutex
+	// Protected by snapshotMu; watch deltas must register in snapshot order.
+	watchUpdatesDone <-chan struct{}
 
 	// scheduledSnapshotUpdateCancel is the cancelation function for a scheduled
 	// snapshot update. Snapshot updates are scheduled and debounced after file closes.
@@ -1411,10 +1414,17 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.PathKe
 		oldSnapshot.Deref()
 		contentMapperTimings = s.takeContentMapperTimingDelta()
 	}
+	var previousWatchUpdatesDone <-chan struct{}
+	var watchUpdatesDone chan struct{}
+	if s.options.WatchEnabled {
+		previousWatchUpdatesDone = s.watchUpdatesDone
+		watchUpdatesDone = make(chan struct{})
+		s.watchUpdatesDone = watchUpdatesDone
+	}
 	s.snapshotMu.Unlock()
 
 	// Enqueue ATA updates if needed
-	if s.typingsInstaller != nil && !s.Config().IsATADisabled() {
+	if len(change.ataDiscoveryChanges) == 0 && s.typingsInstaller != nil && !s.Config().IsATADisabled() {
 		s.triggerATAForUpdatedProjects(newSnapshot)
 	}
 
@@ -1430,10 +1440,26 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.PathKe
 			s.logContentMapperTimings(contentMapperTimings)
 			s.logger.Log("")
 		}
+		var watchError error
 		if s.options.WatchEnabled {
-			if err := s.updateWatches(oldSnapshot, newSnapshot); err != nil && s.options.LoggingEnabled {
-				s.logger.Log(err)
+			if previousWatchUpdatesDone != nil {
+				select {
+				case <-previousWatchUpdatesDone:
+					// The preceding snapshot's registrations are complete.
+				case <-ctx.Done():
+					watchError = ctx.Err()
+				}
 			}
+			if watchError == nil {
+				watchError = s.updateWatches(oldSnapshot, newSnapshot)
+			}
+			if watchError != nil && s.options.LoggingEnabled {
+				s.logger.Log(watchError)
+			}
+			close(watchUpdatesDone)
+		}
+		if change.watchUpdatesDone != nil {
+			change.watchUpdatesDone <- watchError
 		}
 		_ = s.updateContentMapperRegistrations(ctx, newSnapshot)
 		s.publishProgramDiagnostics(oldSnapshot, newSnapshot)
@@ -2037,6 +2063,33 @@ func (s *Session) publishGlobalDiagnostics(ctx context.Context) {
 	}
 }
 
+func (s *Session) publishATADiscovery(ctx context.Context, projectID ID, change *ATAStateChange) error {
+	s.snapshotUpdateMu.Lock()
+	if err := ctx.Err(); err != nil {
+		s.snapshotUpdateMu.Unlock()
+		return err
+	}
+	snapshot := s.Snapshot()
+	watchesDone := make(chan error, 1)
+	snapshotChange := SnapshotChange{
+		reason:              UpdateReasonATADiscovery,
+		ataDiscoveryChanges: map[ID]*ATAStateChange{projectID: change},
+		watchUpdatesDone:    watchesDone,
+		fileSystemOverride:  snapshot.fileSystemOverride,
+	}
+	if snapshot.fileSystemOverride {
+		snapshotChange.fs = snapshot.fs.fs
+	}
+	s.updateSnapshot(ctx, snapshot.overlays(), snapshotChange, false)
+	s.snapshotUpdateMu.Unlock()
+	select {
+	case err := <-watchesDone:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
 func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.ShouldTriggerATA(newSnapshot.ID()) {
@@ -2055,6 +2108,17 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 					ProjectRootPath: project.projectDirectory,
 					FS:              s.fs,
 					Logger:          logTree,
+					OnDiscovery: func(filesToWatch []tspath.RootedPath) error {
+						filesToWatch = slices.Clone(filesToWatch)
+						slices.Sort(filesToWatch)
+						filesToWatch = slices.Compact(filesToWatch)
+						return s.publishATADiscovery(ctx, project.ID(), &ATAStateChange{
+							SnapshotID:          newSnapshot.ID(),
+							TypingsInfo:         &typingsInfo,
+							FileNames:           fileNames,
+							TypingsFilesToWatch: filesToWatch,
+						})
+					},
 				}
 
 				projectDisplayName := project.DisplayName(s.options.CurrentDirectory)

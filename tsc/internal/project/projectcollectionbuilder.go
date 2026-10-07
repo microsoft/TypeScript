@@ -1044,7 +1044,7 @@ func (b *ProjectCollectionBuilder) ensureProjectTree(
 	}
 }
 
-func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAStateChange, fileChanges FileChangeSummary, logger *logging.LogTree) {
+func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAStateChange, fileChanges FileChangeSummary, watchOnly bool, logger *logging.LogTree) {
 	installedTypingsSnapshotID := func(projectID ID) uint64 {
 		if _, inferred := projectID.Inferred(); inferred {
 			if state := b.inferredProjectATAState; state != nil {
@@ -1082,27 +1082,37 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 					p.typingsDiscoveryInputsEqual(ataChange.FileNames)
 			},
 			func(p *Project) {
-				p.installedTypingsInfo = ataChange.TypingsInfo
+				if !watchOnly {
+					p.installedTypingsInfo = ataChange.TypingsInfo
+					p.installedTypingCacheEntryPoints = slices.Clone(ataChange.TypingCacheEntryPoints)
+					p.setTypingsFiles(ataChange.TypingsFiles)
+					p.dirty = true
+					p.dirtyFilePath = ""
+				}
 				p.installedTypingsSnapshotID = ataChange.SnapshotID
 				p.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
-				p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
-				p.installedTypingCacheEntryPoints = slices.Clone(ataChange.TypingCacheEntryPoints)
-				p.setTypingsFiles(ataChange.TypingsFiles)
+				if watchOnly {
+					p.installedTypingsFilesToWatch = slices.Concat(p.installedTypingsFilesToWatch, ataChange.TypingsFilesToWatch)
+					slices.Sort(p.installedTypingsFilesToWatch)
+					p.installedTypingsFilesToWatch = slices.Compact(p.installedTypingsFilesToWatch)
+				} else {
+					p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
+				}
 				typingsWatchGlobs := getTypingsLocationsGlobs(
-					slices.Concat(ataChange.TypingsFilesToWatch, core.Map(ataChange.TypingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
+					slices.Concat(p.installedTypingsFilesToWatch, core.Map(p.typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
 					b.sessionOptions.TypingsLocation,
 					b.sessionOptions.CurrentDirectory,
 					b.fs.fs.CaseSensitivity(),
 				)
 				p.typingsWatch = p.typingsWatch.Clone(typingsWatchGlobs)
-				p.dirty = true
-				p.dirtyFilePath = ""
 			},
 		)
 	}
 
 	for projectID, ataChange := range ataChanges {
-		logger.Embed(ataChange.Logs)
+		if ataChange.Logs != nil {
+			logger.Embed(ataChange.Logs)
+		}
 		if !b.cachedTypingEntryPointsAreCurrent(ataChange.TypingCacheEntryPoints) {
 			if logger != nil {
 				logger.Logf("Ignoring ATA state with obsolete cached typing entry points for project %s", projectID)
@@ -1143,25 +1153,36 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 			if inferred := b.inferredProject.Value(); inferred != nil && inferred.Program != nil {
 				updateProject(b.inferredProject, ataChange)
 			} else {
+				state := &inferredProjectATAState{}
+				if watchOnly && b.inferredProjectATAState != nil {
+					*state = *b.inferredProjectATAState
+				}
+				if !watchOnly {
+					state.installedTypingsInfo = ataChange.TypingsInfo
+					state.typingsFiles = slices.Clone(ataChange.TypingsFiles)
+					state.installedTypingCacheEntryPoints = slices.Clone(ataChange.TypingCacheEntryPoints)
+				}
+				state.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
+				if watchOnly {
+					state.installedTypingsFilesToWatch = slices.Concat(state.installedTypingsFilesToWatch, ataChange.TypingsFilesToWatch)
+					slices.Sort(state.installedTypingsFilesToWatch)
+					state.installedTypingsFilesToWatch = slices.Compact(state.installedTypingsFilesToWatch)
+				} else {
+					state.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
+				}
+				state.snapshotID = ataChange.SnapshotID
 				typingsWatch := newTypingsWatch(b)
 				if b.inferredProjectATAState != nil && b.inferredProjectATAState.typingsWatch != nil {
 					typingsWatch = b.inferredProjectATAState.typingsWatch
 				}
 				typingsWatchGlobs := getTypingsLocationsGlobs(
-					slices.Concat(ataChange.TypingsFilesToWatch, core.Map(ataChange.TypingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
+					slices.Concat(state.installedTypingsFilesToWatch, core.Map(state.typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
 					b.sessionOptions.TypingsLocation,
 					b.sessionOptions.CurrentDirectory,
 					b.fs.fs.CaseSensitivity(),
 				)
-				b.inferredProjectATAState = &inferredProjectATAState{
-					installedTypingsInfo:            ataChange.TypingsInfo,
-					installedTypingsFileNames:       slices.Clone(ataChange.FileNames),
-					installedTypingsFilesToWatch:    slices.Clone(ataChange.TypingsFilesToWatch),
-					installedTypingCacheEntryPoints: slices.Clone(ataChange.TypingCacheEntryPoints),
-					typingsFiles:                    slices.Clone(ataChange.TypingsFiles),
-					typingsWatch:                    typingsWatch.Clone(typingsWatchGlobs),
-					snapshotID:                      ataChange.SnapshotID,
-				}
+				state.typingsWatch = typingsWatch.Clone(typingsWatchGlobs)
+				b.inferredProjectATAState = state
 			}
 		} else if syntheticProjectID, ok := projectID.Synthetic(); ok {
 			if project, loaded := b.syntheticProjects.Load(syntheticProjectID); loaded {

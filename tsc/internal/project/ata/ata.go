@@ -111,6 +111,8 @@ type TypingsInstallRequest struct {
 	ProjectRootPath tspath.RootedDirectoryPath
 	FS              vfs.FS
 	Logger          logging.Logger
+	// OnDiscovery publishes watch inputs before reading their manifests.
+	OnDiscovery func([]tspath.RootedPath) error
 }
 
 type TypingsInstallResult struct {
@@ -138,9 +140,19 @@ func (ti *TypingsInstaller) InstallTypings(ctx context.Context, request *Typings
 func (ti *TypingsInstaller) discoverAndInstallTypings(ctx context.Context, request *TypingsInstallRequest) (*TypingsInstallResult, error) {
 	ti.init(ctx, request.FS, request.Logger)
 
-	inferredTypings, filesToWatch, missingTypingFiles := discoverTypingNames(
-		request.FS, request.Logger, request.TypingsInfo, request.FileNames, request.ProjectRootPath,
+	inferredTypings, filesToWatch, missingTypingFiles, err := discoverTypingNames(
+		request.FS, request.Logger, request.TypingsInfo, request.FileNames, request.ProjectRootPath, request.OnDiscovery,
 	)
+	if err != nil {
+		return nil, err
+	}
+	slices.Sort(filesToWatch)
+	filesToWatch = slices.Compact(filesToWatch)
+	if request.OnDiscovery != nil {
+		if err := request.OnDiscovery(filesToWatch); err != nil {
+			return nil, err
+		}
+	}
 	cachedTypings := ti.resolveCachedTypings(request.FS, inferredTypings)
 	cachedTypingPaths, newTypingNames := getCachedTypingPaths(inferredTypings, cachedTypings, ti.typesRegistry, request.Logger)
 	makeResult := func(files []tspath.RootedFilePath, filesToWatch []tspath.RootedPath) *TypingsInstallResult {

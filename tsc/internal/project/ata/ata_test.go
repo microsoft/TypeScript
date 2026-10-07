@@ -1205,6 +1205,107 @@ func TestATA(t *testing.T) {
 		assert.Assert(t, typingsFile == nil, "jquery types should not be reused after the manifest changes")
 	})
 
+	for _, state := range []string{"installed", "install pending"} {
+		for _, variant := range []string{"package", "manifest", "dependency directory", "bower package"} {
+			t.Run("real-path manifest change invalidates dormant ATA "+variant+" "+state, func(t *testing.T) {
+				t.Parallel()
+				const directory = "/user/username/projects/project"
+				const realManifest = "/vendor/foo/package.json"
+				packageDirectory := directory + "/node_modules/foo"
+				rootManifest := directory + "/package.json"
+				dependencyManifest := packageDirectory + "/package.json"
+				if variant == "bower package" {
+					packageDirectory = directory + "/bower_components/foo"
+					rootManifest = directory + "/bower.json"
+					dependencyManifest = packageDirectory + "/bower.json"
+				}
+				files := map[string]any{
+					directory + "/app.js": "",
+					rootManifest:          `{"dependencies":{"foo":"1.0.0"}}`,
+					realManifest:          `{"name":"foo"}`,
+				}
+				switch variant {
+				case "package":
+					files[packageDirectory] = vfstest.Symlink("/vendor/foo")
+					files["/vendor/foo/index.d.ts"] = "declare const ownTypes: number;"
+				case "manifest":
+					files[dependencyManifest] = vfstest.Symlink(realManifest)
+					files[packageDirectory+"/index.d.ts"] = "declare const ownTypes: number;"
+				case "dependency directory":
+					files[directory+"/node_modules"] = vfstest.Symlink("/vendor")
+					files["/vendor/foo/index.d.ts"] = "declare const ownTypes: number;"
+				case "bower package":
+					files[packageDirectory] = vfstest.Symlink("/vendor/foo")
+					files["/vendor/foo/bower.json"] = files[realManifest]
+					delete(files, realManifest)
+					files["/vendor/foo/index.d.ts"] = "declare const ownTypes: number;"
+				}
+				manifest := tspath.RootedFilePathFromNormalized(realManifest)
+				if variant == "bower package" {
+					manifest = "/vendor/foo/bower.json"
+				}
+				session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+					PackageToFile: map[string]string{"foo": "declare const fallback: number;"},
+				})
+				installStarted := make(chan struct{}, 1)
+				releaseInstall := make(chan struct{})
+				var once sync.Once
+				release := func() { once.Do(func() { close(releaseInstall) }) }
+				defer release()
+				if state == "install pending" {
+					install := utils.NpmExecutor().NpmInstallFunc
+					utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
+						if slices.Contains(args, "@types/foo@latest") {
+							installStarted <- struct{}{}
+							<-releaseInstall
+						}
+						return install(ctx, cwd, args)
+					}
+				}
+				ctx := context.Background()
+				uri := lsproto.DocumentUri("file://" + directory + "/app.js")
+				fallback := tspath.RootedFilePathFromNormalized(projecttestutil.TestTypingsLocation + "/node_modules/@types/foo/index.d.ts")
+				session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+				if state == "install pending" {
+					waitForInstall(t, installStarted)
+					assert.Assert(t, utils.WatchesFile(manifest.AsString()), "real-path watches must be registered before installation starts")
+				} else {
+					session.WaitForBackgroundTasks()
+					ls, err := session.GetLanguageService(ctx, uri)
+					assert.NilError(t, err)
+					assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), fallback))
+					session.WaitForBackgroundTasks()
+				}
+				session.DidCloseFile(ctx, uri)
+				snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+				snapshot.Deref()
+				assert.NilError(t, utils.FS().WriteFile(manifest, `{"name":"foo","types":"index.d.ts"}`))
+				session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+					Uri: lsproto.DocumentUri("file://" + manifest.AsString()), Type: lsproto.FileChangeTypeChanged,
+				}})
+				snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				snapshot.Deref()
+				release()
+				session.WaitForBackgroundTasks()
+				snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				snapshot.Deref()
+				session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+				inferred := session.Snapshot().ProjectCollection.InferredProject()
+				assert.Assert(t, !slices.Contains(inferred.GetProgram().CommandLine().FileNames(), fallback),
+					"a real-path manifest event must discard the obsolete fallback before reopening")
+				session.WaitForBackgroundTasks()
+				ls, err := session.GetLanguageService(ctx, uri)
+				assert.NilError(t, err)
+				assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), tspath.RootedFilePathFromNormalized(packageDirectory+"/index.d.ts")))
+				assert.Assert(t, utils.WatchesFile(manifest.AsString()), "the real discovery manifest must be watched")
+			})
+		}
+	}
+
 	for _, variant := range []string{"regular", "symlinked cache", "symlinked package"} {
 		t.Run("cached typings entry point changes without manifest discovery "+variant, func(t *testing.T) {
 			t.Parallel()

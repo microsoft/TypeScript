@@ -409,8 +409,10 @@ type SnapshotChange struct {
 	contentMapperContributions         *ContentMapperContributions
 	newConfig                          *lsutil.UserPreferences
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
-	ataChanges map[ID]*ATAStateChange
-	apiRequest *APISnapshotRequest
+	ataChanges          map[ID]*ATAStateChange
+	ataDiscoveryChanges map[ID]*ATAStateChange
+	watchUpdatesDone    chan<- error
+	apiRequest          *APISnapshotRequest
 	// cleanFileCache triggers cleaning of cached files not referenced by any open project.
 	cleanFileCache bool
 }
@@ -496,6 +498,8 @@ func (s *Snapshot) Clone(
 			logger.Logf("Reason: DidChangeConfigFile - %v", getDetails())
 		case UpdateReasonDidChangeContentMapperContributions:
 			logger.Logf("Reason: DidChangeContentMapperContributions - %v", getDetails())
+		case UpdateReasonATADiscovery:
+			logger.Log("Reason: ATADiscovery")
 		}
 	}
 
@@ -605,6 +609,9 @@ func (s *Snapshot) Clone(
 	if !change.fileChanges.IsEmpty() {
 		projectCollectionBuilder.DidChangeFiles(change.fileChanges, logger.Fork("DidChangeFiles"))
 	}
+	if len(change.ataDiscoveryChanges) != 0 {
+		projectCollectionBuilder.DidUpdateATAState(change.ataDiscoveryChanges, typingsWatchChanges, true, logger.Fork("DidDiscoverATAWatchInputs"))
+	}
 	if !typingsWatchChanges.IsEmpty() {
 		projectCollectionBuilder.DidChangeTypingsWatchInputs(typingsWatchChanges, logger.Fork("DidChangeTypingsWatchInputs"))
 	}
@@ -612,7 +619,7 @@ func (s *Snapshot) Clone(
 		projectCollectionBuilder.DidChangeCachedTypingEntryPoints(typingCacheChanges, logger.Fork("DidChangeCachedTypingEntryPoints"))
 	}
 	if len(change.ataChanges) != 0 {
-		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, typingsWatchChanges, logger.Fork("DidUpdateATAState"))
+		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, typingsWatchChanges, false, logger.Fork("DidUpdateATAState"))
 	}
 
 	var apiError error

@@ -2,6 +2,7 @@ package ata
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync/atomic"
 	"testing"
@@ -19,6 +20,74 @@ import (
 type cacheReadCountingFS struct {
 	vfs.FS
 	unrelatedReads int
+}
+
+type discoveryWatchCheckingFS struct {
+	vfs.FS
+	t            *testing.T
+	watched      collections.Set[tspath.PathKey]
+	checkedReads int
+}
+
+func (fs *discoveryWatchCheckingFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	realPath := fs.FS.Realpath(path.AsPath())
+	if fs.CaseSensitivity().ComparePaths(path.AsPath(), realPath) != 0 {
+		assert.Assert(fs.t, fs.watched.Has(fs.CaseSensitivity().PathKey(realPath)), "real discovery inputs must be published before reading them")
+		fs.checkedReads++
+	}
+	return fs.FS.ReadFile(path)
+}
+
+func TestTypingsInstallerPublishesDiscoveryWatchesBeforeReadingManifests(t *testing.T) {
+	t.Parallel()
+	fs := &discoveryWatchCheckingFS{
+		t: t,
+		FS: vfstest.FromMap(map[string]any{
+			"/project/package.json":        vfstest.Symlink("/vendor/project/package.json"),
+			"/vendor/project/package.json": `{"dependencies":{"foo":"1.0.0"}}`,
+			"/project/node_modules/foo":    vfstest.Symlink("/vendor/foo"),
+			"/vendor/foo/package.json":     `{"name":"foo","types":"index.d.ts"}`,
+			"/vendor/foo/index.d.ts":       "",
+		}, tspath.CaseInsensitive),
+	}
+	ti := NewTypingsInstaller(&TypingsInstallerOptions{TypingsLocation: "/cache", ThrottleLimit: 1}, fs, nil)
+	ti.initOnce.Do(func() {})
+	var logger *logging.LogTree
+	result, err := ti.discoverAndInstallTypings(context.Background(), &TypingsInstallRequest{
+		TypingsInfo: &TypingsInfo{
+			CompilerOptions: &core.CompilerOptions{},
+			TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue},
+		},
+		ProjectRootPath: "/project", FS: fs, Logger: logger,
+		OnDiscovery: func(inputs []tspath.RootedPath) error {
+			for _, input := range inputs {
+				fs.watched.Add(fs.CaseSensitivity().PathKey(input))
+			}
+			return nil
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, fs.checkedReads, 2)
+	assert.DeepEqual(t, result.TypingsFiles, []tspath.RootedFilePath{"/project/node_modules/foo/index.d.ts"})
+}
+
+func TestTypingsInstallerPropagatesDiscoveryPublicationErrors(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
+	ti := NewTypingsInstaller(&TypingsInstallerOptions{TypingsLocation: "/cache", ThrottleLimit: 1}, fs, nil)
+	ti.initOnce.Do(func() {})
+	var logger *logging.LogTree
+	publicationError := errors.New("watch publication failed")
+	result, err := ti.discoverAndInstallTypings(context.Background(), &TypingsInstallRequest{
+		TypingsInfo: &TypingsInfo{
+			CompilerOptions: &core.CompilerOptions{},
+			TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue},
+		},
+		ProjectRootPath: "/project", FS: fs, Logger: logger,
+		OnDiscovery: func([]tspath.RootedPath) error { return publicationError },
+	})
+	assert.ErrorIs(t, err, publicationError)
+	assert.Assert(t, result == nil)
 }
 
 func (fs *cacheReadCountingFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
