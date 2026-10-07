@@ -10,7 +10,8 @@ import (
 
 // workspace/symbol used to crash when an open file got kicked out of its tsconfig project
 // and then another file from that project was opened. The orphaned file ends up in a fresh
-// inferred project, and nothing was building a program for it.
+// inferred project, and nothing was building a program for it. Before that, the orphaned
+// file's symbols were missing because loading project trees didn't refresh the inferred project.
 func TestWorkspaceSymbolNewInferredProject(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
@@ -33,16 +34,22 @@ export const e = 1;
 	defer done()
 
 	// e.ts isn't listed in tsconfig.json, it only gets pulled in by the import in a.ts.
-	// Once that import is gone, e.ts has nowhere to live. workspace/symbol only refreshes
-	// the tsconfig project, so e.ts doesn't get its inferred project just yet.
+	// Once that import is gone, e.ts should move to the inferred project.
 	f.GoToFile(t, "/home/src/projects/p/a.ts")
 	f.Replace(t, 0, len(`import "./e";`), "")
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{Pattern: "b", Includes: new([]*lsproto.SymbolInformation{})},
+		{Pattern: "e", Includes: new([]*lsproto.SymbolInformation{{
+			Name: "e",
+			Kind: lsproto.SymbolKindVariable,
+			Location: lsproto.Location{
+				Uri:   "file:///home/src/projects/p/e.ts",
+				Range: lsproto.Range{Start: lsproto.Position{Line: 0, Character: 13}, End: lsproto.Position{Line: 0, Character: 14}},
+			},
+		}})},
 	})
 
 	// The tsconfig project is already up to date, so opening b.ts takes the fast path.
-	// That's also when the inferred project for e.ts gets created.
 	f.GoToFile(t, "/home/src/projects/p/b.ts")
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{Pattern: "b", Includes: new([]*lsproto.SymbolInformation{})},

@@ -667,11 +667,9 @@ func (b *ProjectCollectionBuilder) didRequestFile(fileName tspath.RootedFilePath
 			if result.Value() != nil && result.Value().containsFile(path) {
 				if hasChanges {
 					b.cleanupInferredProject(logger)
-				}
-				// Opening this file may have created the inferred project or changed its roots,
-				// even if the default project didn't change
-				if b.inferredProject.Value() != nil {
-					b.updateProgram(b.inferredProject, logger)
+					if b.inferredProject.Value() != nil {
+						b.updateProgram(b.inferredProject, logger)
+					}
 				}
 				return
 			}
@@ -761,6 +759,13 @@ func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *Pr
 		})
 	}
 	wg.RunAndWait()
+
+	// Updated configured projects may have moved open files in or out of the inferred project.
+	// Callers iterate over all language service projects, so the inferred one needs a program too.
+	b.cleanupInferredProject(logger)
+	if b.inferredProject.Value() != nil {
+		b.updateProgram(b.inferredProject, logger)
+	}
 
 	if logger != nil {
 		elapsed := time.Since(startTime)
