@@ -2823,6 +2823,7 @@ async function runPackVsixExtensions() {
     }
 
     // We don't use vscode:prepublish, as that would run the build for each package below.
+    await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     await run("npm", ["run", "bundle:release"], { cwd: extensionDir, env: releasePackageEnv });
 
     let version = "0.0.0";
@@ -2884,6 +2885,7 @@ async function runPackVsixExtensions() {
             cwd: thisExtensionDir,
             env: releasePackageEnv,
         });
+        await testVsixPackage(vsixPath, thisExtensionDir, npmPackageName, nodeOs, vscodeTarget);
 
         if (options.forRelease) {
             await run("vsce", ["generate-manifest", "--packagePath", vsixPath, "--out", vsixManifestPath], {
@@ -2893,6 +2895,63 @@ async function runPackVsixExtensions() {
             await fs.promises.cp(vsixManifestPath, vsixSignaturePath);
         }
     }));
+}
+
+/**
+ * @param {string} vsixPath
+ * @param {string} extensionPath
+ * @param {string} platformPackageName
+ * @param {string} nodeOs
+ * @param {string} vscodeTarget
+ */
+async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nodeOs, vscodeTarget) {
+    const zip = new AdmZip(vsixPath);
+    for (const packageName of ["typescript", platformPackageName]) {
+        const packagePath = path.join(extensionPath, "node_modules", ...packageName.split("/"));
+        const files = await fs.promises.readdir(packagePath, { recursive: true, withFileTypes: true });
+        for (const file of files) {
+            if (!file.isFile()) continue;
+            const filePath = path.join(file.parentPath, file.name);
+            const archivePath = `extension/node_modules/${packageName}/${path.relative(packagePath, filePath).replace(/\\/g, "/")}`;
+            const entry = zip.getEntry(archivePath);
+            assert(entry, `VSIX is missing ${archivePath}`);
+            assert.deepEqual(entry.getData(), await fs.promises.readFile(filePath), `VSIX changed ${archivePath}`);
+        }
+    }
+
+    const hostTarget = `${process.platform}-${process.arch === "arm" ? "armhf" : process.arch}`;
+    if (vscodeTarget !== hostTarget) return;
+
+    const directory = await fs.promises.mkdtemp(path.join(os.tmpdir(), "typescript-vsix-test-"));
+    try {
+        zip.extractAllTo(directory);
+        const platformPath = path.join(directory, "extension", "node_modules", ...platformPackageName.split("/"));
+        await fs.promises.chmod(path.join(platformPath, "lib", nativePreviewExeName(nodeOs)), 0o755);
+        await fs.promises.writeFile(path.join(directory, "tsconfig.json"), '{"files": []}\n');
+        await run(process.execPath, [
+            "--input-type=module",
+            "--eval",
+            `
+            import assert from "node:assert/strict";
+            import { createRequire } from "node:module";
+            import { pathToFileURL } from "node:url";
+            const require = createRequire(process.cwd() + "/extension/node_modules/typescript/package.json");
+            const manifest = require("./package.json");
+            for (const mode of ["async", "sync"]) {
+                const { API } = await import(pathToFileURL(require.resolve(manifest.name + "/unstable/" + mode)).href);
+                const api = new API();
+                try {
+                    assert.ok(await api.parseConfigFile(process.cwd() + "/tsconfig.json"));
+                } finally {
+                    await api.close();
+                }
+            }
+        `,
+        ], { cwd: directory });
+    }
+    finally {
+        await fs.promises.rm(directory, { recursive: true, force: true });
+    }
 }
 
 export const signVsixExtensions = task({
