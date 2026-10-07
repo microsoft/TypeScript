@@ -39,17 +39,14 @@ exports.mount = mount;
 function f(xs) {
     for (const x of xs) {
         const mount = x;
-        exports.mount = mount;
         console.log(mount);
     }
     for (const x in xs) {
         const mount = x;
-        exports.mount = mount;
         console.log(mount);
     }
     for (let x = 0; x < xs.length; x++) {
         const mount = xs[x];
-        exports.mount = mount;
         console.log(mount);
     }
 }

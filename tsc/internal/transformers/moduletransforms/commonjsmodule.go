@@ -1337,7 +1337,7 @@ func (tx *CommonJSModuleTransformer) visitForStatement(node *ast.ForStatement) *
 		tx.discardedValueVisitor.VisitNode(node.Initializer),
 		tx.Visitor().VisitNode(node.Condition),
 		tx.discardedValueVisitor.VisitNode(node.Incrementor),
-		tx.EmitContext().VisitIterationBody(node.Statement, tx.topLevelNestedVisitor),
+		tx.EmitContext().VisitIterationBody(node.Statement, tx.Visitor()),
 	)
 }
 
@@ -1347,7 +1347,7 @@ func (tx *CommonJSModuleTransformer) visitForInOrOfStatement(node *ast.ForInOrOf
 		node.AwaitModifier,
 		tx.discardedValueVisitor.VisitNode(node.Initializer),
 		tx.Visitor().VisitNode(node.Expression),
-		tx.EmitContext().VisitIterationBody(node.Statement, tx.topLevelNestedVisitor),
+		tx.EmitContext().VisitIterationBody(node.Statement, tx.Visitor()),
 	)
 }
 
