@@ -8139,7 +8139,7 @@ describe("Program - selected file emit", { concurrency }, () => {
     });
 });
 
-describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => {
+describe("LanguageService - formatNodeForInsertion", { concurrency }, () => {
     test("formats a synthesized statement with correct indentation for insertion inside a function body", async () => {
         const files = {
             "/tsconfig.json": "{}",
@@ -8148,6 +8148,7 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => 
         await using api = spawnAPI(files);
 
         const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const languageService = snapshot.getConfiguredProject("/tsconfig.json")!.languageService;
 
         const node = createVariableStatement(
             undefined,
@@ -8160,7 +8161,7 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => 
         const sourceText = files["/src/index.ts"];
         const insertionPos = sourceText.indexOf("\n    console.log") + 1;
 
-        const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
+        const formatted = await languageService.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
         assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
         assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation, got: ${JSON.stringify(formatted)}`);
     });
@@ -8173,6 +8174,7 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => 
         await using api = spawnAPI(files);
 
         const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const languageService = snapshot.getConfiguredProject("/tsconfig.json")!.languageService;
 
         const node = createVariableStatement(
             undefined,
@@ -8182,7 +8184,7 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => 
             ),
         );
 
-        const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", 0);
+        const formatted = await languageService.formatNodeForInsertion(node, "/src/index.ts", 0);
         assert.ok(formatted.includes("const y = 42;"), `Expected 'const y = 42;' in formatted output, got: ${JSON.stringify(formatted)}`);
         assert.ok(!formatted.startsWith(" "), `Expected no leading spaces at top level, got: ${JSON.stringify(formatted)}`);
     });
@@ -8197,6 +8199,7 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => 
         await using api = spawnAPI(files);
 
         const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const languageService = snapshot.getConfiguredProject("/tsconfig.json")!.languageService;
 
         const node = createVariableStatement(
             undefined,
@@ -8210,7 +8213,7 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", { concurrency }, () => 
         const sourceText = files["/src/index.ts"];
         const insertionPos = sourceText.indexOf("\n    console.log") + 1;
 
-        const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
+        const formatted = await languageService.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
         // The node should be indented to match the function body (4 spaces)
         assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
         assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation (UTF-16 offset correctly converted), got: ${JSON.stringify(formatted)}`);

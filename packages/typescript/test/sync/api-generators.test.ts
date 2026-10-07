@@ -157,9 +157,9 @@ const exercisedMethods = new Set<string>();
 const publicGeneratorExemptions = new Map<string, string>([
     ["API.fromLSPConnection", "requires an existing LSP API session"],
     ["API.getCurrentLanguageServerSnapshot", "requires an existing LSP API session"],
-    ["InternalAPI.startCPUProfile", "writes a CPU profile and changes process-global profiling state"],
-    ["InternalAPI.stopCPUProfile", "requires a matching active CPU profile"],
-    ["InternalAPI.saveHeapProfile", "writes a potentially large heap profile to disk"],
+    ["DebugHandlers.startCPUProfile", "writes a CPU profile and changes process-global profiling state"],
+    ["DebugHandlers.stopCPUProfile", "requires a matching active CPU profile"],
+    ["DebugHandlers.saveHeapProfile", "writes a potentially large heap profile to disk"],
 ]);
 const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
@@ -1609,6 +1609,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("LanguageService", "getReferencedSymbolsForNode", languageService.getReferencedSymbolsForNode, assertDeepEquivalent, combineDeclaration.name!, combineDeclaration.name!.end),
                 parityCase("LanguageService", "getSignatureUsage", languageService.getSignatureUsage, assertDeepEquivalent, combineDeclaration),
                 parityCase("LanguageService", "getCompletionsAtPosition", languageService.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
+                parityCase("LanguageService", "formatNodeForInsertion", languageService.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
 
                 parityCase("Program", "getSourceFile", program.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
                 parityCase("Program", "getModeForUsageLocation", program.getModeForUsageLocation, assertDeepEquivalent, "/src/index.ts", importSpecifier),
@@ -1736,7 +1737,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
                 parityCase("Printer", "printNode", printer.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
                 parityCase("Printer", "printFile", printer.printFile, assertDeepEquivalent, indexFile, { preserveSourceNewlines: true }),
-                parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent, project),
 
@@ -1832,7 +1832,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             assertPublicGeneratorCoverage([
                 { name: "API", value: api },
                 { name: "API", value: api.constructor as object, own: true },
-                { name: "InternalAPI", value: api.internal },
+                { name: "DebugHandlers", value: api.debug },
                 { name: "Snapshot", value: snapshot },
                 { name: "ModuleResolver", value: moduleResolver },
                 { name: "Project", value: project },
@@ -1840,7 +1840,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 { name: "Program", value: program },
                 { name: "Checker", value: checker },
                 { name: "Printer", value: printer },
-                { name: "SnapshotInternalAPI", value: snapshot.internal },
                 { name: "NodeHandle", value: nodeHandle },
                 { name: "Symbol", value: combineSymbol },
                 { name: "Type", value: interfaceType },

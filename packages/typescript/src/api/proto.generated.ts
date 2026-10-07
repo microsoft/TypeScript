@@ -184,6 +184,7 @@ export interface APIMethodInfo {
     getReferencedSymbolsForNode: APIMethod<GetReferencedSymbolsForNodeParams, ReferencedSymbolEntry[] | null>;
     getSignatureUsages: APIMethod<GetSignatureUsagesParams, SignatureUsageResponse[] | null>;
     getCompletionsAtPosition: APIMethod<GetCompletionsAtPositionParams, CompletionInfoResponse | null>;
+    formatNodeForInsertion: APIMethod<FormatNodeForInsertionParams, string>;
     getSyntacticDiagnostics: APIMethod<GetDiagnosticsParams, DiagnosticResponse[] | null>;
     getBindDiagnostics: APIMethod<GetDiagnosticsParams, DiagnosticResponse[] | null>;
     getSemanticDiagnostics: APIMethod<GetDiagnosticsParams, DiagnosticResponse[] | null>;
@@ -193,7 +194,6 @@ export interface APIMethodInfo {
     getGlobalDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getConfigFileParsingDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     printNode: APIMethod<PrintNodeParams, string>;
-    formatNodeForInsertion: APIMethod<FormatNodeForInsertionParams, string>;
     emit: APIMethod<EmitParams, EmitResponse>;
     emitToString: APIMethod<EmitParams, EmitOutputResponse>;
     getJavaScriptEmit: APIMethod<SelectedFilesEmitParams, EmitOutputResponse>;
@@ -998,6 +998,18 @@ export interface CompletionInfoResponse {
     entries: CompletionEntryResponse[];
 }
 
+/** FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method. */
+export interface FormatNodeForInsertionParams {
+    snapshot: number;
+    project: ProjectId;
+    /** target file where the node will be inserted */
+    file: DocumentIdentifier;
+    /** UTF-16 code-unit offset of the insertion position in the target file */
+    position: number;
+    /** base64-encoded binary AST data for the synthesized node */
+    data: string;
+}
+
 /** GetDiagnosticsParams are parameters for per-file diagnostic methods. */
 export interface GetDiagnosticsParams {
     snapshot: number;
@@ -1044,18 +1056,6 @@ export interface PrintNodeParams {
     preserveSourceNewlines?: boolean | undefined;
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
-}
-
-/** FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method. */
-export interface FormatNodeForInsertionParams {
-    snapshot: number;
-    project: ProjectId;
-    /** target file where the node will be inserted */
-    file: DocumentIdentifier;
-    /** UTF-16 code-unit offset of the insertion position in the target file */
-    position: number;
-    /** base64-encoded binary AST data for the synthesized node */
-    data: string;
 }
 
 export interface EmitParams {

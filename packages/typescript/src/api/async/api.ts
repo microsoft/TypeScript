@@ -360,13 +360,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private activeBuildOrchestrators: Set<BuildOrchestrator> = new Set();
     private activeSourceFileLeases: Map<number, RetainedSourceFile> = new Map();
     readonly printer: Printer;
-    readonly internal: InternalAPI;
+    readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
-        this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
+        this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);
     }
 
     /**
@@ -950,7 +950,7 @@ export class RetainedSourceFile {
     }
 }
 
-export class InternalAPI {
+export class DebugHandlers {
     private client: Client;
     private ensureInitialized: EnsureInitialized;
 
@@ -1050,7 +1050,6 @@ export class Snapshot {
     private snapshotRegistry: SnapshotObjectRegistry;
     private projectDataMap: Map<ProjectId, ProjectResponse>;
     private updateSnapshot: SnapshotUpdater;
-    readonly internal: SnapshotInternalAPI;
 
     private get client(): Client {
         return this.api.client;
@@ -1082,8 +1081,6 @@ export class Snapshot {
             createdPrograms: data.operation.createdPrograms?.map(projectId => this.requireProject(projectId).program),
             openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
         };
-
-        this.internal = new SnapshotInternalAPI(this.id, api.client);
     }
 
     getProjects(): readonly Project[] {
@@ -1668,6 +1665,27 @@ export class LanguageService {
                 symbol: e.symbol ? this.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
             })),
         };
+    }
+
+    /**
+     * Format a synthesized node with the correct indentation for insertion at a
+     * specific position in an existing source file.
+     *
+     * @param node The synthesized AST node to format.
+     * @param file The target file where the node will be inserted.
+     * @param position The UTF-16 code-unit offset in the target file for insertion.
+     * @returns The formatted text of the node, indented for the insertion position.
+     */
+    async formatNodeForInsertion(node: Node, file: DocumentIdentifier, position: number): Promise<string> {
+        const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest("formatNodeForInsertion", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            position,
+            data: base64,
+        });
     }
 }
 
@@ -3128,45 +3146,6 @@ export class Printer {
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,
             terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-        });
-    }
-}
-
-export class SnapshotInternalAPI {
-    private snapshotId: number;
-    private client: Client;
-
-    constructor(snapshotId: number, client: Client) {
-        this.snapshotId = snapshotId;
-        this.client = client;
-    }
-
-    /**
-     * Format a synthesized node with the correct indentation for insertion at a
-     * specific position in an existing source file.
-     *
-     * @param node The synthesized AST node to format.
-     * @param file The target file where the node will be inserted.
-     * @param position The UTF-16 code-unit offset in the target file for insertion.
-     * @returns The formatted text of the node, indented for the insertion position.
-     */
-    async formatNodeForInsertion(node: Node, file: DocumentIdentifier, position: number): Promise<string> {
-        const data = await this.client.apiRequest("getDefaultProjectForFile", {
-            snapshot: this.snapshotId,
-            file,
-        });
-        if (!data) {
-            throw new Error(`No project found for file: ${typeof file === "string" ? file : file.uri}`);
-        }
-
-        const encoded = encodeNode(node);
-        const base64 = uint8ArrayToBase64(encoded);
-        return this.client.apiRequest("formatNodeForInsertion", {
-            snapshot: this.snapshotId,
-            project: data.id,
-            file,
-            position,
-            data: base64,
         });
     }
 }
