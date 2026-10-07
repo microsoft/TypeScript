@@ -1097,6 +1097,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				if !watchOnly {
 					p.installedTypingsInfo = ataChange.TypingsInfo
 					p.installedTypingCacheEntryPoints = slices.Clone(ataChange.TypingCacheEntryPoints)
+					p.installedMissingTypingFiles = slices.Clone(ataChange.MissingTypingFiles)
 					p.setTypingsFiles(ataChange.TypingsFiles)
 					p.dirty = true
 					p.dirtyFilePath = ""
@@ -1168,6 +1169,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 					state.installedTypingsInfo = ataChange.TypingsInfo
 					state.typingsFiles = slices.Clone(ataChange.TypingsFiles)
 					state.installedTypingCacheEntryPoints = slices.Clone(ataChange.TypingCacheEntryPoints)
+					state.installedMissingTypingFiles = slices.Clone(ataChange.MissingTypingFiles)
 				}
 				state.installedTypingsFileNames = slices.Clone(ataChange.FileNames)
 				if watchOnly {

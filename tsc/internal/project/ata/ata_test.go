@@ -213,6 +213,91 @@ func TestATA(t *testing.T) {
 		assert.Assert(t, !slices.Contains(ls.GetProgram().CommandLine().FileNames(), projecttestutil.TestTypingsLocation+"/node_modules/@types/foo/index.d.ts"))
 	})
 
+	for _, applyWhileClosed := range []bool{false, true} {
+		name := "live"
+		if applyWhileClosed {
+			name = "dormant"
+		}
+		t.Run("external package declaration created while closed invalidates "+name+" fallback", func(t *testing.T) {
+			t.Parallel()
+			const ownedTypes = "/user/username/projects/shared/foo.d.ts"
+			const fallback = projecttestutil.TestTypingsLocation + "/node_modules/@types/foo/index.d.ts"
+			files := map[string]any{
+				"/user/username/projects/project/app.js":                        "",
+				"/user/username/projects/project/package.json":                  `{"name":"test","dependencies":{"foo":"^1.0.0","jquery":"^3.1.0"}}`,
+				"/user/username/projects/project/node_modules/foo/package.json": `{"name":"foo","types":"../../../shared/foo.d.ts"}`,
+				fallback: `declare const fallback: number;`,
+				projecttestutil.TestTypingsLocation + "/package.json":      `{"devDependencies":{"@types/foo":"^1.3.0"}}`,
+				projecttestutil.TestTypingsLocation + "/package-lock.json": `{"dependencies":{"@types/foo":{"version":"1.3.0"}}}`,
+			}
+			init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{
+				PackageToFile: map[string]string{"foo": `declare const fallback: number;`, "jquery": `declare const $: number;`},
+			})
+			init.Options.CurrentDirectory = "/user/username/projects/project"
+			session := project.NewSession(init)
+			defer session.Close()
+			installStarted := make(chan struct{}, 1)
+			releaseInstall := make(chan struct{})
+			var once sync.Once
+			release := func() { once.Do(func() { close(releaseInstall) }) }
+			defer release()
+			install := utils.NpmExecutor().NpmInstallFunc
+			utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
+				if slices.Contains(args, "@types/jquery@latest") {
+					installStarted <- struct{}{}
+					<-releaseInstall
+				}
+				return install(ctx, cwd, args)
+			}
+			ctx := context.Background()
+			uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+			closeFile := func() {
+				session.DidCloseFile(ctx, uri)
+				snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+				assert.NilError(t, err)
+				assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+				snapshot.Deref()
+			}
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			waitForInstall(t, installStarted)
+			if applyWhileClosed {
+				closeFile()
+			}
+			release()
+			session.WaitForBackgroundTasks()
+			snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+			assert.NilError(t, err)
+			if applyWhileClosed {
+				assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+			}
+			snapshot.Deref()
+			assert.Assert(t, utils.WatchesFile(ownedTypes))
+			if !applyWhileClosed {
+				ls, serviceErr := session.GetLanguageService(ctx, uri)
+				assert.NilError(t, serviceErr)
+				assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), fallback))
+				session.WaitForBackgroundTasks()
+				closeFile()
+				session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+				assert.Assert(t, slices.Contains(session.Snapshot().ProjectCollection.InferredProject().GetProgram().CommandLine().FileNames(), fallback),
+					"an unchanged missing declaration must allow immediate fallback reuse")
+				session.WaitForBackgroundTasks()
+				closeFile()
+			}
+
+			assert.NilError(t, utils.FS().WriteFile(ownedTypes, `declare const ownTypes: number;`))
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			inferred := session.Snapshot().ProjectCollection.InferredProject()
+			assert.Assert(t, !slices.Contains(inferred.GetProgram().CommandLine().FileNames(), fallback),
+				"a newly available package declaration must prevent fallback reuse without a delivered watch event")
+			session.WaitForBackgroundTasks()
+			ls, err := session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), ownedTypes))
+			assert.Assert(t, !slices.Contains(ls.GetProgram().CommandLine().FileNames(), fallback))
+		})
+	}
+
 	t.Run("cached scoped dependency survives subsequent ATA requests", func(t *testing.T) {
 		t.Parallel()
 		const manifest = "/user/username/projects/project/package.json"

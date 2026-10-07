@@ -195,6 +195,7 @@ type Project struct {
 	// typings discovery to run again.
 	installedTypingsFilesToWatch    []tspath.RootedPath
 	installedTypingCacheEntryPoints []ata.CachedTypingEntryPoint
+	installedMissingTypingFiles     []tspath.RootedFilePath
 	// ataInvalidationSnapshotID is the latest snapshot that invalidated this
 	// project's ATA discovery inputs.
 	ataInvalidationSnapshotID uint64
@@ -208,6 +209,7 @@ type inferredProjectATAState struct {
 	installedTypingsFileNames       []tspath.RootedFilePath
 	installedTypingsFilesToWatch    []tspath.RootedPath
 	installedTypingCacheEntryPoints []ata.CachedTypingEntryPoint
+	installedMissingTypingFiles     []tspath.RootedFilePath
 	typingsFiles                    []tspath.RootedFilePath
 	typingsWatch                    *WatchedFiles[PatternsAndIgnored]
 	snapshotID                      uint64
@@ -229,6 +231,7 @@ func (p *Project) inferredProjectATAState() *inferredProjectATAState {
 		installedTypingsFileNames:       slices.Clone(p.installedTypingsFileNames),
 		installedTypingsFilesToWatch:    slices.Clone(p.installedTypingsFilesToWatch),
 		installedTypingCacheEntryPoints: slices.Clone(p.installedTypingCacheEntryPoints),
+		installedMissingTypingFiles:     slices.Clone(p.installedMissingTypingFiles),
 		typingsFiles:                    slices.Clone(p.typingsFiles),
 		typingsWatch:                    p.typingsWatch,
 		snapshotID:                      snapshotID,
@@ -251,7 +254,7 @@ func (s *inferredProjectATAState) canApply(project *Project, fs *snapshotFSBuild
 			return false
 		}
 	}
-	return true
+	return !slices.ContainsFunc(s.installedMissingTypingFiles, fs.fs.FileExists)
 }
 
 func (s *inferredProjectATAState) apply(project *Project) {
@@ -260,6 +263,7 @@ func (s *inferredProjectATAState) apply(project *Project) {
 	project.installedTypingsFileNames = slices.Clone(s.installedTypingsFileNames)
 	project.installedTypingsFilesToWatch = slices.Clone(s.installedTypingsFilesToWatch)
 	project.installedTypingCacheEntryPoints = slices.Clone(s.installedTypingCacheEntryPoints)
+	project.installedMissingTypingFiles = slices.Clone(s.installedMissingTypingFiles)
 	project.setTypingsFiles(slices.Clone(s.typingsFiles))
 	project.typingsWatch = s.typingsWatch
 	project.installedTypingsSnapshotID = s.snapshotID
@@ -283,6 +287,7 @@ func (s *inferredProjectATAState) applyWatchState(project *Project) {
 		core.Map(typingDiscoveryFiles(s.typingsFiles, s.installedTypingCacheEntryPoints), func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() }),
 	)
 	project.installedTypingCacheEntryPoints = slices.Clone(s.installedTypingCacheEntryPoints)
+	project.installedMissingTypingFiles = slices.Clone(s.installedMissingTypingFiles)
 	project.typingsWatch = s.typingsWatch
 	project.installedTypingsSnapshotID = s.snapshotID
 }
@@ -542,6 +547,7 @@ func (p *Project) Clone() *Project {
 		installedTypingsFileNames:       p.installedTypingsFileNames,
 		installedTypingsFilesToWatch:    p.installedTypingsFilesToWatch,
 		installedTypingCacheEntryPoints: p.installedTypingCacheEntryPoints,
+		installedMissingTypingFiles:     p.installedMissingTypingFiles,
 		typingsFiles:                    p.typingsFiles,
 		ataInvalidationSnapshotID:       p.ataInvalidationSnapshotID,
 		installedTypingsSnapshotID:      p.installedTypingsSnapshotID,
