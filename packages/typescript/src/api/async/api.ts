@@ -960,7 +960,6 @@ export class DebugHandlers {
     private client: Client;
     private ensureInitialized: EnsureInitialized;
 
-    /** @internal */
     constructor(client: Client, ensureInitialized: EnsureInitialized) {
         this.client = client;
         this.ensureInitialized = ensureInitialized;
@@ -1544,7 +1543,6 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly program: Program<Id>;
     readonly checker: Checker;
     readonly languageService: LanguageService;
-    private snapshotId: number;
 
     constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
@@ -1556,7 +1554,6 @@ export class Project<Id extends ProjectId = ProjectId> {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
         this.parsedCommandLine = data.parsedCommandLine;
-        this.snapshotId = snapshotId;
         this.program = new Program(snapshotId, this, toPath);
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
         this.checker = new Checker(snapshotId, this, objectRegistry);
