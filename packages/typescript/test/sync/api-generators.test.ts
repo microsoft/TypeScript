@@ -416,6 +416,7 @@ function observeRequestBatches(
     requestBatches: string[][],
     context: TestContext,
 ): void {
+    // @ts-ignore -- Internal client transport is exercised by source tests.
     const client = api["client"];
     const batchRequests = client.batchRequests.bind(client);
     context.mock.method(client, "batchRequests", (requests: readonly APIRequest[]) => {
@@ -1596,6 +1597,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProjects: string[]; }], Snapshot>, assertSnapshotsEquivalent, { openProjects: ["/tsconfig.json"] }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
+                // @ts-ignore -- Internal API exercised by source tests.
                 parityCase("API", "createBuildOrchestrator", api.createBuildOrchestrator, assertBuildOrchestratorsEquivalent, ["/tsconfig.json"], { cwd: "/" }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName!);

@@ -481,6 +481,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return "\n";
     }
 
+    /** @internal */
     async createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Promise<BuildOrchestrator> {
         await this.ensureInitialized();
         const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
@@ -1758,8 +1759,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     /**
      * Returns the source file for an already-canonical path.
-     *
-     * @internal
      */
     getSourceFileByPath(path: PathKey): Promise<SourceFile | undefined> {
         // The wire format is a string, but the cache key remains the supplied

@@ -589,6 +589,7 @@ describe("API", { concurrency }, () => {
         const symbol = await request;
         assert.ok(symbol);
         assert.strictEqual(cache.symbolsByDeclarationNodeIndex.get(index), symbol);
+        // @ts-ignore -- Internal symbol identity is exercised by source tests.
         assert.strictEqual(cache.symbolsById.get(symbol.reference.id), symbol);
         assert.equal(cache.declarationSymbolRequests.has(index), false);
         api.clearSourceFileCache();
@@ -1617,6 +1618,7 @@ describe("BuildOrchestrator", () => {
         const { api: disposableApi } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
         const options = await api.parseCommandLine([]);
+        // @ts-ignore -- Internal API exercised by source tests.
         await using orchestrator = await api.createBuildOrchestrator(
             ["/a/tsconfig.json"],
             { cwd: "/", ...options },
@@ -1634,10 +1636,12 @@ describe("BuildOrchestrator", () => {
     test("api.close disposes all build orchestrators", async () => {
         const { api } = spawnAPIWithFS({ ...files });
         const options = await api.parseCommandLine([]);
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator1 = await api.createBuildOrchestrator(
             ["/a/tsconfig.json"],
             { cwd: "/", ...options },
         );
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator2 = await api.createBuildOrchestrator(
             ["/b/tsconfig.json"],
             { cwd: "/", ...options },
@@ -1671,6 +1675,7 @@ describe("BuildOrchestrator", () => {
                 traceResolution: false,
             },
         };
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/a/tsconfig.json", "/b/tsconfig.json"],
             defaultOptions,
@@ -1691,6 +1696,7 @@ describe("BuildOrchestrator", () => {
             "/a/src/index.ts": source,
         });
         await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/a/tsconfig.json"],
             { cwd: "/" },
@@ -1717,6 +1723,7 @@ describe("BuildOrchestrator", () => {
         const { api: disposableApi } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
         const options = await api.parseCommandLine([]);
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/c/tsconfig.json"],
             { cwd: "/", ...options },
@@ -1787,6 +1794,7 @@ describe("BuildOrchestrator", () => {
             "/a/dist/index.js": `export const a = 1;`,
         });
         await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/a/tsconfig.json"],
             { cwd: "/" },
@@ -1808,6 +1816,7 @@ describe("BuildOrchestrator", () => {
     test("rebuilds projects after multiple file system changes", async () => {
         const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/a/tsconfig.json", "/b/tsconfig.json"],
             { cwd: "/" },
@@ -1837,6 +1846,7 @@ describe("BuildOrchestrator", () => {
     test("clean removes build outputs", async () => {
         const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/c/tsconfig.json"],
             { cwd: "/" },
@@ -1855,6 +1865,7 @@ describe("BuildOrchestrator", () => {
     test("builds and cleans selected projects after file system changes", async () => {
         const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
         await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/c/tsconfig.json"],
             { cwd: "/" },
@@ -1898,6 +1909,7 @@ describe("BuildOrchestrator", () => {
         });
         await using api = disposableApi;
         const options = await api.parseCommandLine([]);
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/c/tsconfig.json"],
             { cwd: "/" },
@@ -1914,6 +1926,7 @@ describe("BuildOrchestrator", () => {
             ...files,
         });
         await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/c/tsconfig.json"],
             { cwd: "/" },
@@ -1953,6 +1966,7 @@ describe("BuildOrchestrator", () => {
             path => writes.push(path),
         );
         await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
         const orchestrator = await api.createBuildOrchestrator(
             ["/c/tsconfig.json", "/d/tsconfig.json"],
             { cwd: "/" },
@@ -2311,6 +2325,7 @@ describe("LanguageService - imports", { concurrency }, () => {
             () =>
                 project.languageService.getImportAdderEdits("/src/index.ts", [{
                     kind: "importSymbol",
+                    // @ts-ignore -- Internal symbol identity is exercised by source tests.
                     symbol: { ...symbol, reference: { ...symbol.reference, id: 999_999_999 } },
                 } as unknown as ImportAdderAction]),
             /symbol handle \d+ not found/,

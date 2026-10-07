@@ -580,6 +580,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return "\n";
     }
 
+    /** @internal */
     get createBuildOrchestrator(): {
         (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator;
         gen(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]>;
@@ -2988,8 +2989,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     /**
      * Returns the source file for an already-canonical path.
-     *
-     * @internal
      */
     get getSourceFileByPath(): {
         (path: PathKey): SourceFile | undefined;
