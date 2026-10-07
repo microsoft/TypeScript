@@ -4,6 +4,8 @@
 // @exactOptionalPropertyTypes: true, false
 // @declaration: true
 
+// @filename: a.ts
+
 declare const a1: unique symbol;
 
 const a2: [number, string][] = Iterator.zip([
@@ -66,8 +68,6 @@ declare const a23: I1;
 const a24: { a: number; b: string; }[] = Iterator.zipKeyed(a23).toArray();
 
 Iterator.zip([[1]], { mode: "invalid" });
-
-Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [true] });
 
 Iterator.zip([[1]], { mode: "shortest", padding: [1] });
 
@@ -270,4 +270,97 @@ Iterator.zipKeyed(null);
 Iterator.zipKeyed(a107, { mode: "invalid" });
 Iterator.zipKeyed(a107, { mode: "shortest", padding: {} });
 Iterator.zipKeyed(a107, { mode: "longest", padding: 0 });
-Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: "invalid" } });
+const a138: [number | boolean, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [true] }).toArray();
+const a139: { a: number | string; b: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: { a: "a" } }).toArray();
+
+declare const a140: boolean[];
+const a141: [number | boolean | undefined, string | boolean | undefined][] = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a140 }).toArray();
+const a142 = Iterator.zip(a12, { mode: "longest", padding: new Set([false]) }).toArray();
+const a143: (number | boolean | undefined)[][] = a142;
+const a144: (number | undefined)[][] = a142;
+const a145: (number | boolean | undefined)[][] = Iterator.zip([[1], [2, 3]], { mode: "longest", padding: new Set([false]) }).toArray();
+
+declare const a146: { a: boolean; } | { b: string; };
+const a147 = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: a146 }).toArray();
+const a148: { a: number | boolean | undefined; b: number | string | undefined; }[] = a147;
+const a149: { a: number | undefined; b: number | undefined; }[] = a147;
+declare const a150: [boolean] | [string, string];
+const a151: [number | boolean | string, number | string | undefined][] = Iterator.zip([[1], [2, 3]], { mode: "longest", padding: a150 }).toArray();
+
+declare const a152: { mode: "longest"; padding?: { a: boolean; }; };
+const a153 = Iterator.zipKeyed({ a: [1] }, a152).toArray();
+const a154: { a: number | boolean | undefined; }[] = a153;
+const a155: { a: number | boolean; }[] = a153;
+declare const a156: { mode: "shortest"; } | { mode: "longest"; padding: [boolean]; } | undefined;
+const a157: [number | boolean | undefined][] = Iterator.zip([[1]], a156).toArray();
+const a158: [number][] = Iterator.zip([[1]], { mode: undefined }).toArray();
+const a159: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: undefined }).toArray();
+
+const a160: { a: number | { b: string; }; [a1]: boolean | string; }[] = Iterator.zipKeyed({ a: [1], [a1]: [true, false] }, {
+    mode: "longest",
+    padding: { a: { b: "a" }, [a1]: "a" },
+}).toArray();
+const a161: { "0": number | boolean; }[] = Iterator.zipKeyed({ "0": [1] }, { mode: "longest", padding: { 0: false } }).toArray();
+const a162: { 0: number | boolean; }[] = Iterator.zipKeyed({ 0: [1] }, { mode: "longest", padding: { "0": false } }).toArray();
+const a163 = Iterator.zipKeyed({ 0: [1] }, { mode: "longest", padding: { "01": false } }).toArray();
+const a164: { 0: number | undefined; }[] = a163;
+const a165: { 0: number; }[] = a163;
+
+declare const a166: Record<number, boolean>;
+const a167 = Iterator.zipKeyed({ NaN: [1], Infinity: [2], "-Infinity": [3] }, { mode: "longest", padding: a166 }).toArray();
+const a168: { NaN: number | boolean | undefined; Infinity: number | boolean | undefined; "-Infinity": number | boolean | undefined; }[] = a167;
+const a169: { NaN: number | undefined; Infinity: number | undefined; "-Infinity": number | undefined; }[] = a167;
+const a170 = Iterator.zipKeyed(a58, { mode: "longest", padding: { a: false } }).toArray();
+const a171: Record<string, number | boolean | undefined>[] = a170;
+const a172: Record<string, number | undefined>[] = a170;
+
+const a173: [number | undefined, string | undefined][] = Iterator.zip<[Iterable<number>, Iterable<string>]>([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
+const a174: (number | undefined)[][] = Iterator.zip<Iterable<number>>(a12, { mode: "longest", padding: [0] }).toArray();
+const a175: { a: number | undefined; }[] = Iterator.zipKeyed<{ a: Iterable<number>; }>({ a: [1] }, { mode: "longest", padding: { a: 0 } }).toArray();
+const a176: [number | boolean][] = Iterator.zip<[Iterable<number>], [boolean]>([[1]], { mode: "longest", padding: [false] }).toArray();
+const a177: { a: number | boolean; }[] = Iterator.zipKeyed<{ a: Iterable<number>; }, { a: boolean; }>({ a: [1] }, { mode: "longest", padding: { a: false } }).toArray();
+Iterator.zipKeyed<{ a: Iterable<number>; }>({ a: [1] }, { mode: "longest", padding: 0 });
+Iterator.zipKeyed<{}>({}, { mode: "longest", padding: 0 });
+Iterator.zipKeyed<{ a: Iterable<number>; }, {}>({ a: [1] }, { mode: "longest", padding: 0 });
+
+// @filename: b.ts
+
+export function f1<T extends Record<string, Iterable<unknown>>>(a: T) {
+    return Iterator.zipKeyed(a);
+}
+
+export function f2<T extends Record<string, Iterable<unknown>>>(a: T) {
+    return Iterator.zipKeyed(a, { mode: "longest" });
+}
+
+export function f3<T extends Record<string, Iterable<unknown>>>(a: T) {
+    return Iterator.zipKeyed(a, { mode: "longest", padding: {} });
+}
+
+export function f4<T extends object>(a: T) {
+    return Iterator.zipKeyed(a);
+}
+
+export function f5<T, U>(a: Iterable<T>, b: U) {
+    return Iterator.zipKeyed({ a }, { mode: "longest", padding: { a: b } });
+}
+
+export function f6<T extends readonly (Iterable<unknown> | Iterator<unknown>)[]>(a: T) {
+    return Iterator.zip(a);
+}
+
+export function f7<T, U extends object>(a: Iterable<T>, b: U) {
+    return Iterator.zipKeyed({ a }, { mode: "longest", padding: b });
+}
+
+export const a = f1({ a: [1], b: ["a"] }).toArray();
+export const b = f2({ a: [1], b: ["a"] }).toArray();
+export const c = f3({ a: [1], b: ["a"] }).toArray();
+export const d = f4({ a: [1], b: ["a"] }).toArray();
+export const e = f5([1], false).toArray();
+export const f = f6([[1], ["a"]] as const).toArray();
+export const g = f7([1], { a: false }).toArray();
+export const h = Iterator.zip;
+export const i = Iterator.zipKeyed;
+export const j = h([[1], ["a"]], { mode: "longest", padding: [false, false] }).toArray();
+export const k = i({ a: [1], b: [2, 3] }, { mode: "longest", padding: { a: false } }).toArray();

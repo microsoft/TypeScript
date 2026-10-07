@@ -18,14 +18,14 @@ and limitations under the License.
 
 export {};
 
-interface IteratorZipShortestOptions {
+type IteratorZipShortestOptions = {
     /**
      * Stops when any input is exhausted.
      */
-    mode?: "shortest";
-}
+    mode?: "shortest" | undefined;
+};
 
-interface IteratorZipLongestOptions<T> {
+type IteratorZipLongestOptions<T> = {
     /**
      * Continues until every input is exhausted.
      */
@@ -34,16 +34,16 @@ interface IteratorZipLongestOptions<T> {
     /**
      * Values used when an input is exhausted before the others.
      */
-    padding?: T;
-}
+    padding?: (T & object) | undefined;
+};
 
-interface IteratorZipStrictOptions {
+type IteratorZipStrictOptions = {
     /**
      * Requires every input to yield the same number of values.
      * If not, a `TypeError` will be thrown when an input is exhausted before others.
      */
     mode: "strict";
-}
+};
 
 type IteratorZipOptions<T> =
     | IteratorZipShortestOptions
@@ -54,18 +54,21 @@ type IteratorInput<T> = (Iterable<T> | Iterator<T>) & object;
 
 type IteratorYield<T> = T extends IteratorInput<infer U> ? U : never;
 
-type IteratorZipPadding<T> = {
+type IteratorZipKey<K extends PropertyKey> = K extends number ? K | `${K}` | (number extends K ? "NaN" | "Infinity" | "-Infinity" : never)
+    : K extends `${infer N extends number}` ? `${N}` extends K ? K | N : K : K;
+
+type IteratorZipDefaultPadding<T> = {
     readonly [K in keyof T]?: IteratorYield<T[K]> | undefined;
 };
 
 type IteratorZipPaddingKeys<T> = keyof {
-    [K in keyof T as {} extends Pick<T, K> ? never : K]: unknown;
+    [K in keyof T as {} extends Pick<T, K> ? never : IteratorZipKey<K>]: unknown;
 };
 
 type IteratorZipValue<T, K extends PropertyKey, TExtra, TPadding> =
     | IteratorYield<T>
-    | (K extends keyof TPadding ? TPadding[K] : never)
-    | (K extends IteratorZipPaddingKeys<TPadding> ? never : TExtra);
+    | (TPadding extends unknown ? TPadding[IteratorZipKey<K> & keyof TPadding] | (K extends "NaN" | "Infinity" | "-Infinity" ? TPadding[number & keyof TPadding] : never) : never)
+    | (IteratorZipKey<K> extends IteratorZipPaddingKeys<TPadding> ? never : TExtra);
 
 type IteratorZipResult<T, TExtra = never, TPadding = {}> = {
     -readonly [K in keyof T]: IteratorZipValue<T[K], K, TExtra, TPadding>;
@@ -116,8 +119,8 @@ declare global {
          * @param options Controls how differing input lengths are handled.
          */
         zip<T extends readonly IteratorInput<unknown>[] | []>(iterables: T, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorZipResult<T>, undefined, unknown>;
-        zip<T extends readonly IteratorInput<unknown>[] | [], TPadding extends readonly unknown[] | []>(iterables: T, options: IteratorZipLongestOptions<TPadding> & { padding: TPadding & NoInfer<IteratorZipPadding<T>>; }): IteratorObject<IteratorZipResult<T, undefined, TPadding>, undefined, unknown>;
-        zip<T extends readonly IteratorInput<unknown>[] | []>(iterables: T, options: IteratorZipOptions<NoInfer<IteratorZipPadding<T>>>): IteratorObject<IteratorZipResult<T, undefined>, undefined, unknown>;
+        zip<T extends readonly IteratorInput<unknown>[] | [], TPadding extends readonly unknown[] | []>(iterables: T, options: IteratorZipLongestOptions<TPadding> & { padding: TPadding; }): IteratorObject<IteratorZipResult<T, undefined, TPadding>, undefined, unknown>;
+        zip<T extends readonly IteratorInput<unknown>[] | [], TPadding extends readonly unknown[] | [] = IteratorZipDefaultPadding<T>>(iterables: T, options?: IteratorZipOptions<TPadding>): IteratorObject<IteratorZipResult<T, undefined, Partial<TPadding>>, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are arrays containing values yielded at the same position by each input iterator or iterable.
@@ -125,7 +128,7 @@ declare global {
          * @param options Controls how differing input lengths are handled.
          */
         zip<T extends IteratorInput<unknown>>(iterables: Iterable<T> & object, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorYield<T>[], undefined, unknown>;
-        zip<T extends IteratorInput<unknown>>(iterables: Iterable<T> & object, options: IteratorZipOptions<NoInfer<Iterable<IteratorYield<T> | undefined> & object>>): IteratorObject<(IteratorYield<T> | undefined)[], undefined, unknown>;
+        zip<T extends IteratorInput<unknown>, TPadding = IteratorYield<T>>(iterables: Iterable<T> & object, options?: IteratorZipOptions<Iterable<TPadding> & object>): IteratorObject<(IteratorYield<T> | TPadding | undefined)[], undefined, unknown>;
 
         /**
          * Creates an iterator whose values are objects containing values yielded at the same position by each iterator or iterable in the input object.
@@ -133,8 +136,8 @@ declare global {
          * @param options Controls how differing input lengths are handled.
          */
         zipKeyed<T extends object>(iterables: T & IteratorZipKeyedInput<T>, options?: IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<IteratorZipKeyedResult<T>, undefined, unknown>;
-        zipKeyed<T extends object, TPadding extends object>(iterables: T & IteratorZipKeyedInput<T>, options: IteratorZipLongestOptions<TPadding> & { padding: TPadding & NoInfer<IteratorZipPadding<T>>; }): IteratorObject<IteratorZipKeyedResult<T, undefined, TPadding>, undefined, unknown>;
-        zipKeyed<T extends object>(iterables: T & IteratorZipKeyedInput<T>, options: IteratorZipOptions<NoInfer<IteratorZipPadding<T> & object>>): IteratorObject<IteratorZipKeyedResult<T, undefined>, undefined, unknown>;
+        zipKeyed<T extends object, TPadding>(iterables: T & IteratorZipKeyedInput<T>, options: IteratorZipLongestOptions<TPadding> & { padding: TPadding; }): IteratorObject<IteratorZipKeyedResult<T, undefined, TPadding>, undefined, unknown>;
+        zipKeyed<T extends object, TPadding = IteratorZipDefaultPadding<T>>(iterables: T & IteratorZipKeyedInput<T>, options?: IteratorZipOptions<TPadding>): IteratorObject<IteratorZipKeyedResult<T, undefined, Partial<TPadding>>, undefined, unknown>;
 
         /**
          * Accepts objects whose types include inherited or non-enumerable properties.

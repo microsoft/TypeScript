@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/iteratorZip.ts] ////
 
-//// [iteratorZip.ts]
+//// [a.ts]
 declare const a1: unique symbol;
 
 const a2: [number, string][] = Iterator.zip([
@@ -63,8 +63,6 @@ declare const a23: I1;
 const a24: { a: number; b: string; }[] = Iterator.zipKeyed(a23).toArray();
 
 Iterator.zip([[1]], { mode: "invalid" });
-
-Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [true] });
 
 Iterator.zip([[1]], { mode: "shortest", padding: [1] });
 
@@ -267,10 +265,102 @@ Iterator.zipKeyed(null);
 Iterator.zipKeyed(a107, { mode: "invalid" });
 Iterator.zipKeyed(a107, { mode: "shortest", padding: {} });
 Iterator.zipKeyed(a107, { mode: "longest", padding: 0 });
-Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: "invalid" } });
+const a138: [number | boolean, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [true] }).toArray();
+const a139: { a: number | string; b: number | undefined; }[] = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: { a: "a" } }).toArray();
+
+declare const a140: boolean[];
+const a141: [number | boolean | undefined, string | boolean | undefined][] = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a140 }).toArray();
+const a142 = Iterator.zip(a12, { mode: "longest", padding: new Set([false]) }).toArray();
+const a143: (number | boolean | undefined)[][] = a142;
+const a144: (number | undefined)[][] = a142;
+const a145: (number | boolean | undefined)[][] = Iterator.zip([[1], [2, 3]], { mode: "longest", padding: new Set([false]) }).toArray();
+
+declare const a146: { a: boolean; } | { b: string; };
+const a147 = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: a146 }).toArray();
+const a148: { a: number | boolean | undefined; b: number | string | undefined; }[] = a147;
+const a149: { a: number | undefined; b: number | undefined; }[] = a147;
+declare const a150: [boolean] | [string, string];
+const a151: [number | boolean | string, number | string | undefined][] = Iterator.zip([[1], [2, 3]], { mode: "longest", padding: a150 }).toArray();
+
+declare const a152: { mode: "longest"; padding?: { a: boolean; }; };
+const a153 = Iterator.zipKeyed({ a: [1] }, a152).toArray();
+const a154: { a: number | boolean | undefined; }[] = a153;
+const a155: { a: number | boolean; }[] = a153;
+declare const a156: { mode: "shortest"; } | { mode: "longest"; padding: [boolean]; } | undefined;
+const a157: [number | boolean | undefined][] = Iterator.zip([[1]], a156).toArray();
+const a158: [number][] = Iterator.zip([[1]], { mode: undefined }).toArray();
+const a159: { a: number | undefined; }[] = Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: undefined }).toArray();
+
+const a160: { a: number | { b: string; }; [a1]: boolean | string; }[] = Iterator.zipKeyed({ a: [1], [a1]: [true, false] }, {
+    mode: "longest",
+    padding: { a: { b: "a" }, [a1]: "a" },
+}).toArray();
+const a161: { "0": number | boolean; }[] = Iterator.zipKeyed({ "0": [1] }, { mode: "longest", padding: { 0: false } }).toArray();
+const a162: { 0: number | boolean; }[] = Iterator.zipKeyed({ 0: [1] }, { mode: "longest", padding: { "0": false } }).toArray();
+const a163 = Iterator.zipKeyed({ 0: [1] }, { mode: "longest", padding: { "01": false } }).toArray();
+const a164: { 0: number | undefined; }[] = a163;
+const a165: { 0: number; }[] = a163;
+
+declare const a166: Record<number, boolean>;
+const a167 = Iterator.zipKeyed({ NaN: [1], Infinity: [2], "-Infinity": [3] }, { mode: "longest", padding: a166 }).toArray();
+const a168: { NaN: number | boolean | undefined; Infinity: number | boolean | undefined; "-Infinity": number | boolean | undefined; }[] = a167;
+const a169: { NaN: number | undefined; Infinity: number | undefined; "-Infinity": number | undefined; }[] = a167;
+const a170 = Iterator.zipKeyed(a58, { mode: "longest", padding: { a: false } }).toArray();
+const a171: Record<string, number | boolean | undefined>[] = a170;
+const a172: Record<string, number | undefined>[] = a170;
+
+const a173: [number | undefined, string | undefined][] = Iterator.zip<[Iterable<number>, Iterable<string>]>([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
+const a174: (number | undefined)[][] = Iterator.zip<Iterable<number>>(a12, { mode: "longest", padding: [0] }).toArray();
+const a175: { a: number | undefined; }[] = Iterator.zipKeyed<{ a: Iterable<number>; }>({ a: [1] }, { mode: "longest", padding: { a: 0 } }).toArray();
+const a176: [number | boolean][] = Iterator.zip<[Iterable<number>], [boolean]>([[1]], { mode: "longest", padding: [false] }).toArray();
+const a177: { a: number | boolean; }[] = Iterator.zipKeyed<{ a: Iterable<number>; }, { a: boolean; }>({ a: [1] }, { mode: "longest", padding: { a: false } }).toArray();
+Iterator.zipKeyed<{ a: Iterable<number>; }>({ a: [1] }, { mode: "longest", padding: 0 });
+Iterator.zipKeyed<{}>({}, { mode: "longest", padding: 0 });
+Iterator.zipKeyed<{ a: Iterable<number>; }, {}>({ a: [1] }, { mode: "longest", padding: 0 });
+
+//// [b.ts]
+export function f1<T extends Record<string, Iterable<unknown>>>(a: T) {
+    return Iterator.zipKeyed(a);
+}
+
+export function f2<T extends Record<string, Iterable<unknown>>>(a: T) {
+    return Iterator.zipKeyed(a, { mode: "longest" });
+}
+
+export function f3<T extends Record<string, Iterable<unknown>>>(a: T) {
+    return Iterator.zipKeyed(a, { mode: "longest", padding: {} });
+}
+
+export function f4<T extends object>(a: T) {
+    return Iterator.zipKeyed(a);
+}
+
+export function f5<T, U>(a: Iterable<T>, b: U) {
+    return Iterator.zipKeyed({ a }, { mode: "longest", padding: { a: b } });
+}
+
+export function f6<T extends readonly (Iterable<unknown> | Iterator<unknown>)[]>(a: T) {
+    return Iterator.zip(a);
+}
+
+export function f7<T, U extends object>(a: Iterable<T>, b: U) {
+    return Iterator.zipKeyed({ a }, { mode: "longest", padding: b });
+}
+
+export const a = f1({ a: [1], b: ["a"] }).toArray();
+export const b = f2({ a: [1], b: ["a"] }).toArray();
+export const c = f3({ a: [1], b: ["a"] }).toArray();
+export const d = f4({ a: [1], b: ["a"] }).toArray();
+export const e = f5([1], false).toArray();
+export const f = f6([[1], ["a"]] as const).toArray();
+export const g = f7([1], { a: false }).toArray();
+export const h = Iterator.zip;
+export const i = Iterator.zipKeyed;
+export const j = h([[1], ["a"]], { mode: "longest", padding: [false, false] }).toArray();
+export const k = i({ a: [1], b: [2, 3] }, { mode: "longest", padding: { a: false } }).toArray();
 
 
-//// [iteratorZip.js]
+//// [a.js]
 "use strict";
 const a2 = Iterator.zip([
     [1, 2],
@@ -309,7 +399,6 @@ const a21 = Iterator.zipKeyed({ a: [1], b: ["a"] }, {
 const a22 = Iterator.zipKeyed({ a: [1], b: ["a"] }, a8).toArray();
 const a24 = Iterator.zipKeyed(a23).toArray();
 Iterator.zip([[1]], { mode: "invalid" });
-Iterator.zip([[1], ["a"]], { mode: "longest", padding: [true] });
 Iterator.zip([[1]], { mode: "shortest", padding: [1] });
 Iterator.zip(0);
 Iterator.zipKeyed({ a: 0 });
@@ -444,10 +533,82 @@ Iterator.zipKeyed(null);
 Iterator.zipKeyed(a107, { mode: "invalid" });
 Iterator.zipKeyed(a107, { mode: "shortest", padding: {} });
 Iterator.zipKeyed(a107, { mode: "longest", padding: 0 });
-Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: "invalid" } });
+const a138 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [true] }).toArray();
+const a139 = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: { a: "a" } }).toArray();
+const a141 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a140 }).toArray();
+const a142 = Iterator.zip(a12, { mode: "longest", padding: new Set([false]) }).toArray();
+const a143 = a142;
+const a144 = a142;
+const a145 = Iterator.zip([[1], [2, 3]], { mode: "longest", padding: new Set([false]) }).toArray();
+const a147 = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: a146 }).toArray();
+const a148 = a147;
+const a149 = a147;
+const a151 = Iterator.zip([[1], [2, 3]], { mode: "longest", padding: a150 }).toArray();
+const a153 = Iterator.zipKeyed({ a: [1] }, a152).toArray();
+const a154 = a153;
+const a155 = a153;
+const a157 = Iterator.zip([[1]], a156).toArray();
+const a158 = Iterator.zip([[1]], { mode: undefined }).toArray();
+const a159 = Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: undefined }).toArray();
+const a160 = Iterator.zipKeyed({ a: [1], [a1]: [true, false] }, {
+    mode: "longest",
+    padding: { a: { b: "a" }, [a1]: "a" },
+}).toArray();
+const a161 = Iterator.zipKeyed({ "0": [1] }, { mode: "longest", padding: { 0: false } }).toArray();
+const a162 = Iterator.zipKeyed({ 0: [1] }, { mode: "longest", padding: { "0": false } }).toArray();
+const a163 = Iterator.zipKeyed({ 0: [1] }, { mode: "longest", padding: { "01": false } }).toArray();
+const a164 = a163;
+const a165 = a163;
+const a167 = Iterator.zipKeyed({ NaN: [1], Infinity: [2], "-Infinity": [3] }, { mode: "longest", padding: a166 }).toArray();
+const a168 = a167;
+const a169 = a167;
+const a170 = Iterator.zipKeyed(a58, { mode: "longest", padding: { a: false } }).toArray();
+const a171 = a170;
+const a172 = a170;
+const a173 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
+const a174 = Iterator.zip(a12, { mode: "longest", padding: [0] }).toArray();
+const a175 = Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: 0 } }).toArray();
+const a176 = Iterator.zip([[1]], { mode: "longest", padding: [false] }).toArray();
+const a177 = Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: { a: false } }).toArray();
+Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: 0 });
+Iterator.zipKeyed({}, { mode: "longest", padding: 0 });
+Iterator.zipKeyed({ a: [1] }, { mode: "longest", padding: 0 });
+//// [b.js]
+export function f1(a) {
+    return Iterator.zipKeyed(a);
+}
+export function f2(a) {
+    return Iterator.zipKeyed(a, { mode: "longest" });
+}
+export function f3(a) {
+    return Iterator.zipKeyed(a, { mode: "longest", padding: {} });
+}
+export function f4(a) {
+    return Iterator.zipKeyed(a);
+}
+export function f5(a, b) {
+    return Iterator.zipKeyed({ a }, { mode: "longest", padding: { a: b } });
+}
+export function f6(a) {
+    return Iterator.zip(a);
+}
+export function f7(a, b) {
+    return Iterator.zipKeyed({ a }, { mode: "longest", padding: b });
+}
+export const a = f1({ a: [1], b: ["a"] }).toArray();
+export const b = f2({ a: [1], b: ["a"] }).toArray();
+export const c = f3({ a: [1], b: ["a"] }).toArray();
+export const d = f4({ a: [1], b: ["a"] }).toArray();
+export const e = f5([1], false).toArray();
+export const f = f6([[1], ["a"]]).toArray();
+export const g = f7([1], { a: false }).toArray();
+export const h = Iterator.zip;
+export const i = Iterator.zipKeyed;
+export const j = h([[1], ["a"]], { mode: "longest", padding: [false, false] }).toArray();
+export const k = i({ a: [1], b: [2, 3] }, { mode: "longest", padding: { a: false } }).toArray();
 
 
-//// [iteratorZip.d.ts]
+//// [a.d.ts]
 declare const a1: unique symbol;
 declare const a2: [number, string][];
 declare const a3: [number, string][];
@@ -782,3 +943,221 @@ declare const a134: {};
 declare const a135: Record<PropertyKey, unknown>[];
 declare const a136: unknown;
 declare const a137: never[];
+declare const a138: [number | boolean, string | undefined][];
+declare const a139: {
+    a: number | string;
+    b: number | undefined;
+}[];
+declare const a140: boolean[];
+declare const a141: [number | boolean | undefined, string | boolean | undefined][];
+declare const a142: (number | boolean | undefined)[][];
+declare const a143: (number | boolean | undefined)[][];
+declare const a144: (number | undefined)[][];
+declare const a145: (number | boolean | undefined)[][];
+declare const a146: {
+    a: boolean;
+} | {
+    b: string;
+};
+declare const a147: ({
+    a: number | boolean | undefined;
+    b: string | number | undefined;
+} & {})[];
+declare const a148: {
+    a: number | boolean | undefined;
+    b: number | string | undefined;
+}[];
+declare const a149: {
+    a: number | undefined;
+    b: number | undefined;
+}[];
+declare const a150: [boolean] | [string, string];
+declare const a151: [number | boolean | string, number | string | undefined][];
+declare const a152: {
+    mode: "longest";
+    padding?: {
+        a: boolean;
+    };
+};
+declare const a153: ({
+    a: number | boolean | undefined;
+} & {})[];
+declare const a154: {
+    a: number | boolean | undefined;
+}[];
+declare const a155: {
+    a: number | boolean;
+}[];
+declare const a156: {
+    mode: "shortest";
+} | {
+    mode: "longest";
+    padding: [boolean];
+} | undefined;
+declare const a157: [number | boolean | undefined][];
+declare const a158: [number][];
+declare const a159: {
+    a: number | undefined;
+}[];
+declare const a160: {
+    a: number | {
+        b: string;
+    };
+    [a1]: boolean | string;
+}[];
+declare const a161: {
+    "0": number | boolean;
+}[];
+declare const a162: {
+    0: number | boolean;
+}[];
+declare const a163: ({
+    0: number | undefined;
+} & {})[];
+declare const a164: {
+    0: number | undefined;
+}[];
+declare const a165: {
+    0: number;
+}[];
+declare const a166: Record<number, boolean>;
+declare const a167: ({
+    NaN: number | boolean | undefined;
+    Infinity: number | boolean | undefined;
+    "-Infinity": number | boolean | undefined;
+} & {})[];
+declare const a168: {
+    NaN: number | boolean | undefined;
+    Infinity: number | boolean | undefined;
+    "-Infinity": number | boolean | undefined;
+}[];
+declare const a169: {
+    NaN: number | undefined;
+    Infinity: number | undefined;
+    "-Infinity": number | undefined;
+}[];
+declare const a170: ({
+    [x: string]: number | boolean | undefined;
+} & {})[];
+declare const a171: Record<string, number | boolean | undefined>[];
+declare const a172: Record<string, number | undefined>[];
+declare const a173: [number | undefined, string | undefined][];
+declare const a174: (number | undefined)[][];
+declare const a175: {
+    a: number | undefined;
+}[];
+declare const a176: [number | boolean][];
+declare const a177: {
+    a: number | boolean;
+}[];
+//// [b.d.ts]
+export declare function f1<T extends Record<string, Iterable<unknown>>>(a: T): IteratorObject<T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); } & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends T[K] & undefined ? never : K : never]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); }, undefined, unknown>;
+export declare function f2<T extends Record<string, Iterable<unknown>>>(a: T): IteratorObject<T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }> extends infer T_2 ? T_2 extends Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }> ? T_2 extends unknown ? T_2[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof T_2] | (K extends "-Infinity" | "Infinity" | "NaN" ? T_2[number & keyof T_2] : never) : never : never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }> as {} extends Pick<Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }>, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); } & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends T[K] & undefined ? never : K : never]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }> extends infer T_2 ? T_2 extends Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }> ? T_2 extends unknown ? T_2[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof T_2] | (K extends "-Infinity" | "Infinity" | "NaN" ? T_2[number & keyof T_2] : never) : never : never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }> as {} extends Pick<Partial<{ readonly [K_1 in keyof T]?: (T[K_1] extends infer T_2 ? T_2 extends T[K_1] ? T_2 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }>, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); }, undefined, unknown>;
+export declare function f3<T extends Record<string, Iterable<unknown>>>(a: T): IteratorObject<T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : undefined); } & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends T[K] & undefined ? never : K : never]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : undefined); }, undefined, unknown>;
+export declare function f4<T extends object>(a: T): IteratorObject<T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); } & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends T[K] & undefined ? never : K : never]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); }, undefined, unknown>;
+export declare function f5<T, U>(a: Iterable<T>, b: U): IteratorObject<{
+    a: T | U;
+} & {}, undefined, unknown>;
+export declare function f6<T extends readonly (Iterable<unknown> | Iterator<unknown>)[]>(a: T): IteratorObject<{ -readonly [K in keyof T]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); }, undefined, unknown>;
+export declare function f7<T, U extends object>(a: Iterable<T>, b: U): IteratorObject<{
+    a: T | (U extends unknown ? U["a" & keyof U] : never) | ("a" extends keyof { [K in keyof U as {} extends Pick<U, K> ? never : K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K]: unknown; } ? never : undefined);
+} & {}, undefined, unknown>;
+export declare const a: ({
+    a: number;
+    b: string;
+} & {})[];
+export declare const b: ({
+    a: number | undefined;
+    b: string | undefined;
+} & {})[];
+export declare const c: ({
+    a: number | undefined;
+    b: string | undefined;
+} & {})[];
+export declare const d: ({
+    a: number;
+    b: string;
+} & {})[];
+export declare const e: ({
+    a: number | boolean;
+} & {})[];
+export declare const f: [1, "a"][];
+export declare const g: ({
+    a: number | boolean;
+} & {})[];
+export declare const h: {
+    (iterables: readonly [], options?: {
+        mode: "longest";
+        padding?: (Iterable<unknown> & object) | undefined;
+    } | {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }): IteratorObject<never, undefined, unknown>;
+    <T extends readonly ((Iterable<unknown> | Iterator<unknown, any, any>) & object)[] | []>(iterables: T, options?: {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }): IteratorObject<{ -readonly [K in keyof T]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); }, undefined, unknown>;
+    <T extends readonly ((Iterable<unknown> | Iterator<unknown, any, any>) & object)[] | [], TPadding extends readonly unknown[] | []>(iterables: T, options: {
+        mode: "longest";
+        padding?: (TPadding & object) | undefined;
+    } & {
+        padding: TPadding;
+    }): IteratorObject<{ -readonly [K in keyof T]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (TPadding extends unknown ? TPadding[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof TPadding] | (K extends "-Infinity" | "Infinity" | "NaN" ? TPadding[number & keyof TPadding] : never) : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof TPadding as {} extends Pick<TPadding, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); }, undefined, unknown>;
+    <T extends readonly ((Iterable<unknown> | Iterator<unknown, any, any>) & object)[] | [], TPadding extends readonly unknown[] | [] = { readonly [K in keyof T]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }>(iterables: T, options?: ({
+        mode: "longest";
+        padding?: (TPadding & object) | undefined;
+    } | {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }) | undefined): IteratorObject<{ -readonly [K in keyof T]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (Partial<TPadding> extends infer T_2 ? T_2 extends Partial<TPadding> ? T_2 extends unknown ? T_2[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof T_2] | (K extends "-Infinity" | "Infinity" | "NaN" ? T_2[number & keyof T_2] : never) : never : never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof Partial<TPadding> as {} extends Pick<Partial<TPadding>, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); }, undefined, unknown>;
+    <T extends (Iterable<unknown> | Iterator<unknown, any, any>) & object>(iterables: Iterable<T> & object, options?: {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }): IteratorObject<(T extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never)[], undefined, unknown>;
+    <T extends (Iterable<unknown> | Iterator<unknown, any, any>) & object, TPadding = T extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never>(iterables: Iterable<T> & object, options?: ({
+        mode: "longest";
+        padding?: (Iterable<TPadding> & object) | undefined;
+    } | {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }) | undefined): IteratorObject<(TPadding | (T extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never) | undefined)[], undefined, unknown>;
+};
+export declare const i: {
+    <T extends object>(iterables: T & { [K in T extends unknown ? keyof T : never]?: ((Iterable<unknown> | Iterator<unknown, any, any>) & object) | undefined; }, options?: {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }): IteratorObject<T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); } & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends T[K] & undefined ? never : K : never]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (K extends "-Infinity" | "Infinity" | "NaN" ? never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends never ? never : never); }, undefined, unknown>;
+    <T extends object, TPadding>(iterables: T & { [K in T extends unknown ? keyof T : never]?: ((Iterable<unknown> | Iterator<unknown, any, any>) & object) | undefined; }, options: {
+        mode: "longest";
+        padding?: (TPadding & object) | undefined;
+    } & {
+        padding: TPadding;
+    }): IteratorObject<T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (TPadding extends unknown ? TPadding[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof TPadding] | (K extends "-Infinity" | "Infinity" | "NaN" ? TPadding[number & keyof TPadding] : never) : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof TPadding as {} extends Pick<TPadding, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); } & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends T[K] & undefined ? never : K : never]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (TPadding extends unknown ? TPadding[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof TPadding] | (K extends "-Infinity" | "Infinity" | "NaN" ? TPadding[number & keyof TPadding] : never) : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof TPadding as {} extends Pick<TPadding, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); }, undefined, unknown>;
+    <T extends object, TPadding = { readonly [K in keyof T]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | undefined; }>(iterables: T & { [K in T extends unknown ? keyof T : never]?: ((Iterable<unknown> | Iterator<unknown, any, any>) & object) | undefined; }, options?: ({
+        mode: "longest";
+        padding?: (TPadding & object) | undefined;
+    } | {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }) | undefined): IteratorObject<T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (Partial<TPadding> extends infer T_2 ? T_2 extends Partial<TPadding> ? T_2 extends unknown ? T_2[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof T_2] | (K extends "-Infinity" | "Infinity" | "NaN" ? T_2[number & keyof T_2] : never) : never : never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof Partial<TPadding> as {} extends Pick<Partial<TPadding>, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); } & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends T[K] & undefined ? never : K : never]?: (T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends (Iterable<infer U> | Iterator<infer U, any, any>) & object ? U : never : never : never) | (Partial<TPadding> extends infer T_2 ? T_2 extends Partial<TPadding> ? T_2 extends unknown ? T_2[(K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) & keyof T_2] | (K extends "-Infinity" | "Infinity" | "NaN" ? T_2[number & keyof T_2] : never) : never : never : never) | ((K extends number ? `${K}` | K | (number extends K ? "-Infinity" | "Infinity" | "NaN" : never) : K extends `${infer N extends number}` ? `${N}` extends K ? N | K : K : K) extends keyof { [K_1 in keyof Partial<TPadding> as {} extends Pick<Partial<TPadding>, K_1> ? never : K_1 extends number ? `${K_1}` | K_1 | (number extends K_1 ? "-Infinity" | "Infinity" | "NaN" : never) : K_1 extends `${infer N extends number}` ? `${N}` extends K_1 ? N | K_1 : K_1 : K_1]: unknown; } ? never : undefined); }, undefined, unknown>;
+    <T extends object>(iterables: T & ([T] extends [{ [K in T extends unknown ? keyof T : never]?: ((Iterable<unknown> | Iterator<unknown, any, any>) & object) | undefined; }] ? never : unknown), options?: {
+        mode: "longest";
+        padding?: object | undefined;
+    } | {
+        mode?: "shortest" | undefined;
+    } | {
+        mode: "strict";
+    }): IteratorObject<Record<PropertyKey, unknown>, undefined, unknown>;
+};
+export declare const j: [number | boolean, string | boolean][];
+export declare const k: ({
+    a: number | boolean;
+    b: number | undefined;
+} & {})[];
