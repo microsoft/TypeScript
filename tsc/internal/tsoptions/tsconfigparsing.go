@@ -1527,6 +1527,9 @@ func ForEachTsConfigPropArray[T any](tsConfigSourceFile *ast.SourceFile, propKey
 }
 
 func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+	if config.ConfigFile == nil {
+		return nil
+	}
 	return ForEachTsConfigPropArray(config.ConfigFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Diagnostic {
 		if ast.IsArrayLiteralExpression(property.Initializer) {
 			value := property.Initializer.Elements()

@@ -8916,8 +8916,12 @@
         "category": "Error",
         "code": 18115
     },
-    "A deferred import must specify a namespace binding.": {
+    "This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?": {
         "category": "Error",
         "code": 18116
+    },
+    "A deferred import must specify a namespace binding.": {
+        "category": "Error",
+        "code": 18117
     }
 }

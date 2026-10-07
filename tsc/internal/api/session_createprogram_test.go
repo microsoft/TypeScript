@@ -279,3 +279,40 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, ensured.Projects[0].Dirty, false)
 }
+
+func TestCreateProgramReportsNonCompositeProjectReference(t *testing.T) {
+	t.Parallel()
+
+	const root = "/home/projects/p/src/index.ts"
+	const referenced = "/home/projects/p/lib/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		root:                        `export const x = 1;`,
+		referenced:                  `{ "compilerOptions": { "strict": true } }`,
+		"/home/projects/p/lib/a.ts": `export const a = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:       []DocumentIdentifier{{FileName: root}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			Options: &CreateProgramOptions{
+				ProjectReferences: []*core.ProjectReference{{Path: referenced, OriginalPath: "../lib"}},
+			},
+		}},
+	})
+	assert.NilError(t, err)
+	projectID := (*response.Operation.CreatedPrograms)[0].AsID()
+	diagnostics, err := session.handleGetProgramDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
+		Snapshot: response.Snapshot,
+		Project:  projectID,
+	})
+	assert.NilError(t, err)
+	codes := make([]int32, 0, len(diagnostics))
+	for _, diagnostic := range diagnostics {
+		codes = append(codes, diagnostic.Code)
+	}
+	assert.DeepEqual(t, codes, []int32{6306})
+}
