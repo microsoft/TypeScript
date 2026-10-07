@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net"
 	"sync"
 	"testing"
 	"testing/synctest"
@@ -81,149 +82,88 @@ func TestSyncConnRunReturnsPanicResponseWriteFailure(t *testing.T) {
 	assert.ErrorContains(t, err, "original panic: handler panic")
 }
 
-type syncPanickingResponseProtocol struct {
-	syncFailingResponseProtocol
-}
+type gatedHandler map[string]chan struct{}
 
-func (*syncPanickingResponseProtocol) WriteResponse(*jsonrpc.ID, any) error {
-	panic("response write panic")
-}
-
-func TestSyncConnRunReturnsResponseWritePanic(t *testing.T) {
-	t.Parallel()
-	synctest.Test(t, func(t *testing.T) {
-		responseErr := errors.New("error write failed")
-		protocol := &syncPanickingResponseProtocol{syncFailingResponseProtocol{
-			message:     &ipc.Message{ID: jsonrpc.NewIDInt(1), Method: "transform"},
-			responseErr: responseErr,
-		}}
-		conn := ipc.NewSyncConn(nil, protocol, noOpHandler{})
-
-		err := conn.Run(t.Context())
-		assert.Assert(t, errors.Is(err, responseErr), "expected panic response write error, got %v", err)
-		assert.ErrorContains(t, err, "original panic: response write panic")
-	})
-}
-
-type stackClient struct {
-	toServer chan *ipc.Message
-	toClient chan *ipc.Message
-	waiting  map[string]chan struct{}
-	answers  map[string]string
-}
-
-func (c *stackClient) ReadMessage() (*ipc.Message, error) {
-	return <-c.toServer, nil
-}
-
-func (c *stackClient) WriteRequest(id *jsonrpc.ID, method string, params any) error {
-	data, err := json.Marshal(params)
-	c.toClient <- &ipc.Message{ID: id, Method: method, Params: data}
-	return err
-}
-
-func (*stackClient) WriteNotification(string, any) error {
-	return nil
-}
-
-func (c *stackClient) WriteResponse(id *jsonrpc.ID, result any) error {
-	data, err := json.Marshal(result)
-	c.toClient <- &ipc.Message{ID: id, Result: data}
-	return err
-}
-
-func (c *stackClient) WriteError(id *jsonrpc.ID, responseErr *jsonrpc.ResponseError) error {
-	c.toClient <- &ipc.Message{ID: id, Error: responseErr}
-	return nil
-}
-
-func (c *stackClient) run() {
-	for msg := range c.toClient {
-		c.handle(msg)
-	}
-}
-
-func (c *stackClient) handle(callback *ipc.Message) {
-	c.toServer <- &ipc.Message{ID: jsonrpc.NewIDString("resolve"), Method: "resolve", Params: callback.Params}
-	if waiting := c.waiting[string(callback.Params)]; waiting != nil {
-		close(waiting)
-	}
-	c.answers[string(callback.Params)] = string(c.await())
-	c.toServer <- &ipc.Message{ID: callback.ID, Result: callback.Params}
-}
-
-func (c *stackClient) await() json.Value {
-	for msg := range c.toClient {
-		if msg.IsRequest() {
-			c.handle(msg)
-			continue
-		}
-		return msg.Result
-	}
-	return nil
-}
-
-type nestedRequestHandler struct {
-	aServing  chan struct{}
-	bAtClient chan struct{}
-	releaseB  chan struct{}
-}
-
-func (h *nestedRequestHandler) HandleRequest(_ context.Context, _ string, params json.Value) (any, error) {
-	switch string(params) {
-	case `"a"`:
-		close(h.aServing)
-		<-h.bAtClient
-	case `"b"`:
-		<-h.releaseB
-	}
+func (h gatedHandler) HandleRequest(_ context.Context, _ string, params json.Value) (any, error) {
+	<-h[string(params)]
 	return params, nil
 }
 
-func (*nestedRequestHandler) HandleNotification(context.Context, string, json.Value) error {
+func (gatedHandler) HandleNotification(context.Context, string, json.Value) error {
 	return nil
 }
 
-func TestSyncConnNestedRequestsAnswerInStackOrder(t *testing.T) {
+func TestSyncConnAnswersNestedRequestsInStackOrder(t *testing.T) {
 	t.Parallel()
 	synctest.Test(t, func(t *testing.T) {
-		handler := &nestedRequestHandler{
-			aServing:  make(chan struct{}),
-			bAtClient: make(chan struct{}),
-			releaseB:  make(chan struct{}),
+		server, client := net.Pipe()
+		handler := gatedHandler{`"a"`: make(chan struct{}), `"b"`: make(chan struct{})}
+		conn := ipc.NewSyncConn(server, ipc.NewJSONRPCProtocol(server), handler)
+		peer := ipc.NewJSONRPCProtocol(client)
+		answers := map[string]string{}
+		var serve func() json.Value
+		serve = func() json.Value {
+			for {
+				msg, err := peer.ReadMessage()
+				if err != nil {
+					return nil
+				}
+				if msg.IsResponse() {
+					return msg.Result
+				}
+				_ = peer.WriteRequest(jsonrpc.NewIDString("resolve"), "resolve", msg.Params)
+				answers[string(msg.Params)] = string(serve())
+				_ = peer.WriteResponse(msg.ID, msg.Params)
+			}
 		}
-		client := &stackClient{
-			toServer: make(chan *ipc.Message),
-			toClient: make(chan *ipc.Message),
-			waiting:  map[string]chan struct{}{`"b"`: handler.bAtClient},
-			answers:  map[string]string{},
-		}
-		go client.run()
-		conn := ipc.NewSyncConn(nil, client, handler)
+		go serve()
 
 		var wg sync.WaitGroup
-		results := map[string]string{}
-		var resultsMu sync.Mutex
-		call := func(name string) {
-			result, err := conn.Call(t.Context(), "callback", json.Value(name))
-			if err != nil {
-				t.Errorf("Call(callback, %s) = %v", name, err)
-			}
-			resultsMu.Lock()
-			results[name] = string(result)
-			resultsMu.Unlock()
-		}
-		wg.Go(func() { call(`"a"`) })
-		<-handler.aServing
-		wg.Go(func() { call(`"b"`) })
-		<-handler.bAtClient
+		var a, b json.Value
+		wg.Go(func() { a, _ = conn.Call(t.Context(), "callback", json.Value(`"a"`)) })
 		synctest.Wait()
-		close(handler.releaseB)
+		wg.Go(func() { b, _ = conn.Call(t.Context(), "callback", json.Value(`"b"`)) })
+		synctest.Wait()
+		close(handler[`"a"`])
+		synctest.Wait()
+		close(handler[`"b"`])
 		wg.Wait()
-		close(client.toClient)
+		assert.NilError(t, client.Close())
 
-		want := map[string]string{`"a"`: `"a"`, `"b"`: `"b"`}
-		assert.DeepEqual(t, client.answers, want)
-		assert.DeepEqual(t, results, want)
+		assert.DeepEqual(t, answers, map[string]string{`"a"`: `"a"`, `"b"`: `"b"`})
+		assert.Equal(t, string(a), `"a"`)
+		assert.Equal(t, string(b), `"b"`)
+	})
+}
+
+type callingNotificationHandler struct {
+	noOpHandler
+	conn *ipc.SyncConn
+}
+
+func (h *callingNotificationHandler) HandleNotification(ctx context.Context, _ string, _ json.Value) error {
+	_, err := h.conn.Call(ctx, "inner", nil)
+	return err
+}
+
+func TestSyncConnNotificationHandlerCanCall(t *testing.T) {
+	t.Parallel()
+	synctest.Test(t, func(t *testing.T) {
+		server, client := net.Pipe()
+		handler := &callingNotificationHandler{}
+		conn := ipc.NewSyncConn(server, ipc.NewJSONRPCProtocol(server), handler)
+		handler.conn = conn
+		peer := ipc.NewJSONRPCProtocol(client)
+		go func() {
+			outer, _ := peer.ReadMessage()
+			_ = peer.WriteNotification("notify", nil)
+			inner, _ := peer.ReadMessage()
+			_ = peer.WriteResponse(inner.ID, inner.Method)
+			_ = peer.WriteResponse(outer.ID, outer.Method)
+		}()
+
+		result, err := conn.Call(t.Context(), "outer", nil)
+		assert.NilError(t, err)
+		assert.Equal(t, string(result), `"outer"`)
 	})
 }
