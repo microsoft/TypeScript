@@ -588,12 +588,7 @@ func (b *ProjectCollectionBuilder) DidChangeCachedTypingEntryPoints(summary File
 	// Cache outputs do not advance the discovery invalidation generation: a
 	// result delivered with an install's writes can already contain the new entry points.
 	affected := func(entries []ata.CachedTypingEntryPoint) bool {
-		var paths []tspath.RootedPath
-		for _, entry := range entries {
-			packageDirectory := b.sessionOptions.TypingsLocation.ResolveDirectory("node_modules/@types/" + entry.PackageName)
-			paths = append(paths, packageDirectory.AsPath(), b.fs.fs.Realpath(packageDirectory.AsPath()), entry.FileName.AsPath())
-		}
-		return fileChangeSummaryAffectsTypingsWatch(summary, paths, nil, b.fs.fs.CaseSensitivity()) &&
+		return fileChangeSummaryAffectsTypingsWatch(summary, b.cachedTypingWatchInputs(entries), nil, b.fs.fs.CaseSensitivity()) &&
 			!b.cachedTypingEntryPointsAreCurrent(entries)
 	}
 	b.forEachProject(func(entry dirty.Value[*Project]) bool {
@@ -615,6 +610,23 @@ func (b *ProjectCollectionBuilder) DidChangeCachedTypingEntryPoints(summary File
 		affected(b.inferredProjectATAState.installedTypingCacheEntryPoints) {
 		b.clearInferredProjectATAState("cached typing entry points changed", logger)
 	}
+}
+
+func (b *ProjectCollectionBuilder) cachedTypingWatchInputs(entries []ata.CachedTypingEntryPoint) []tspath.RootedPath {
+	var paths []tspath.RootedPath
+	for _, entry := range entries {
+		directory := b.sessionOptions.TypingsLocation.ResolveDirectory("node_modules/@types/" + entry.PackageName)
+		paths = append(paths, directory.AsPath(), b.fs.fs.Realpath(directory.AsPath()),
+			b.fs.fs.Realpath(directory.ResolveFile("package.json").AsPath()), entry.FileName.AsPath())
+	}
+	return paths
+}
+
+func (b *ProjectCollectionBuilder) typingsWatchGlobs(filesToWatch []tspath.RootedPath, typingsFiles []tspath.RootedFilePath, entries []ata.CachedTypingEntryPoint) PatternsAndIgnored {
+	return getTypingsLocationsGlobs(
+		slices.Concat(filesToWatch, core.Map(typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() }), b.cachedTypingWatchInputs(entries)),
+		b.sessionOptions.TypingsLocation, b.sessionOptions.CurrentDirectory, b.fs.fs.CaseSensitivity(),
+	)
 }
 
 func (b *ProjectCollectionBuilder) DidInvalidateTypingsWatchState(logger *logging.LogTree) {
@@ -1098,12 +1110,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				} else {
 					p.installedTypingsFilesToWatch = slices.Clone(ataChange.TypingsFilesToWatch)
 				}
-				typingsWatchGlobs := getTypingsLocationsGlobs(
-					slices.Concat(p.installedTypingsFilesToWatch, core.Map(p.typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
-					b.sessionOptions.TypingsLocation,
-					b.sessionOptions.CurrentDirectory,
-					b.fs.fs.CaseSensitivity(),
-				)
+				typingsWatchGlobs := b.typingsWatchGlobs(p.installedTypingsFilesToWatch, p.typingsFiles, p.installedTypingCacheEntryPoints)
 				p.typingsWatch = p.typingsWatch.Clone(typingsWatchGlobs)
 			},
 		)
@@ -1175,12 +1182,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[ID]*ATAState
 				if b.inferredProjectATAState != nil && b.inferredProjectATAState.typingsWatch != nil {
 					typingsWatch = b.inferredProjectATAState.typingsWatch
 				}
-				typingsWatchGlobs := getTypingsLocationsGlobs(
-					slices.Concat(state.installedTypingsFilesToWatch, core.Map(state.typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
-					b.sessionOptions.TypingsLocation,
-					b.sessionOptions.CurrentDirectory,
-					b.fs.fs.CaseSensitivity(),
-				)
+				typingsWatchGlobs := b.typingsWatchGlobs(state.installedTypingsFilesToWatch, state.typingsFiles, state.installedTypingCacheEntryPoints)
 				state.typingsWatch = typingsWatch.Clone(typingsWatchGlobs)
 				b.inferredProjectATAState = state
 			}
@@ -1896,10 +1898,14 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 		b.inferredProjectATAState = nil
 		if entry.ChangeIf(
 			func(project *Project) bool {
-				return state.canApply(project, b.fs, b.sessionOptions.WatchEnabled)
+				return state.canApply(project, b.fs, b.sessionOptions.WatchEnabled) &&
+					b.cachedTypingEntryPointsAreCurrent(state.installedTypingCacheEntryPoints)
 			},
 			func(project *Project) {
 				state.apply(project)
+				project.typingsWatch = project.typingsWatch.Clone(b.typingsWatchGlobs(
+					project.installedTypingsFilesToWatch, project.typingsFiles, project.installedTypingCacheEntryPoints,
+				))
 			},
 		) {
 			if logger != nil {
@@ -1947,9 +1953,8 @@ func (b *ProjectCollectionBuilder) prepareForTypingsInstallation(project *Projec
 	project.installedTypingsInfo = nil
 	project.installedTypingsFileNames = project.ComputeTypingsFileNames()
 	project.installedTypingsFilesToWatch = ata.DiscoveryWatchInputs(&info, project.installedTypingsFileNames, project.projectDirectory)
-	project.typingsWatch = project.typingsWatch.Clone(getTypingsLocationsGlobs(
-		slices.Concat(project.installedTypingsFilesToWatch, core.Map(project.typingsFiles, func(path tspath.RootedFilePath) tspath.RootedPath { return path.AsPath() })),
-		b.sessionOptions.TypingsLocation, b.sessionOptions.CurrentDirectory, b.fs.fs.CaseSensitivity(),
+	project.typingsWatch = project.typingsWatch.Clone(b.typingsWatchGlobs(
+		project.installedTypingsFilesToWatch, project.typingsFiles, project.installedTypingCacheEntryPoints,
 	))
 }
 

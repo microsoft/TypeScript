@@ -1306,7 +1306,7 @@ func TestATA(t *testing.T) {
 		}
 	}
 
-	for _, variant := range []string{"regular", "symlinked cache", "symlinked package"} {
+	for _, variant := range []string{"regular", "symlinked cache", "symlinked package", "symlinked manifest"} {
 		t.Run("cached typings entry point changes without manifest discovery "+variant, func(t *testing.T) {
 			t.Parallel()
 
@@ -1337,10 +1337,18 @@ func TestATA(t *testing.T) {
 				}
 			case "symlinked package":
 				files[projecttestutil.TestTypingsLocation+"/node_modules/@types/jquery"] = vfstest.Symlink(packageDirectory)
+			case "symlinked manifest":
+				target := "/real/jquery/package.json"
+				files[target] = files[manifest]
+				files[manifest] = vfstest.Symlink(target)
+				manifest = target
 			}
-			session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{
 				TypesRegistry: []string{"jquery"},
 			})
+			init.Options.CurrentDirectory = "/user/username/projects/project"
+			session := project.NewSession(init)
+			defer session.Close()
 			ctx := context.Background()
 			session.DidChangeCompilerOptionsForInferredProjects(ctx, &core.CompilerOptions{
 				AllowJs: core.TSTrue,
@@ -1385,6 +1393,21 @@ func TestATA(t *testing.T) {
 			ls, err = session.GetLanguageService(ctx, uri)
 			assert.NilError(t, err)
 			assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), indexFile))
+
+			session.DidCloseFile(ctx, uri)
+			snapshot, err = session.APIUpdate(ctx, project.FileChangeSummary{}, nil)
+			assert.NilError(t, err)
+			assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
+			snapshot.Deref()
+			assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(manifest), `{"name":"@types/jquery","types":"new.d.ts"}`))
+			session.DidOpenFile(ctx, uri, 1, "", lsproto.LanguageKindJavaScript)
+			inferred = session.Snapshot().ProjectCollection.InferredProject()
+			assert.Assert(t, !slices.Contains(inferred.GetProgram().CommandLine().FileNames(), indexFile),
+				"restoring dormant state must validate the entry point even without a delivered watch event")
+			session.WaitForBackgroundTasks()
+			ls, err = session.GetLanguageService(ctx, uri)
+			assert.NilError(t, err)
+			assert.Assert(t, slices.Contains(ls.GetProgram().CommandLine().FileNames(), newFile))
 		})
 	}
 
