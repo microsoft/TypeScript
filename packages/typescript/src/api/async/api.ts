@@ -884,8 +884,13 @@ function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescripto
     };
 }
 
+/** Returns whether a node is backed by a remote compiler response. */
+export function isRemoteNode(node: Node): boolean {
+    return node instanceof RemoteNode;
+}
+
 function getRemoteSourceFile(node: Node): RemoteSourceFile | undefined {
-    if (!(node instanceof RemoteNode)) return undefined;
+    if (!isRemoteNode(node)) return undefined;
     const file = node.getSourceFile();
     return file instanceof RemoteSourceFile && file.api ? file : undefined;
 }
