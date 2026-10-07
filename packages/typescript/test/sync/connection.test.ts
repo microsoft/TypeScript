@@ -24,6 +24,7 @@ import {
     fileURLToPath,
     pathToFileURL,
 } from "node:url";
+import { SyncRpcChannel } from "../../src/api/syncChannel.ts";
 
 async function waitForRemoved(path: string): Promise<void> {
     for (let i = 0; i < 100 && existsSync(path); i++) {
@@ -100,6 +101,35 @@ test("an unconnected synchronous API server can shut down", {
         await waitForRemoved(endpoint + ".out");
     }
     finally {
+        if (child.exitCode === null) {
+            child.kill();
+        }
+        await childExit;
+    }
+});
+
+test("synchronous FIFO channels use blocking descriptors", {
+    timeout: 10_000,
+    skip: process.platform !== "linux",
+}, async () => {
+    const endpoint = path.join(tmpdir(), `tsgo-api-test-${randomUUID()}`);
+    const child = spawn(getExePath(), ["--api", "--transport", `sync=${endpoint}`], {
+        stdio: ["ignore", "ignore", "pipe"],
+    });
+    const childExit = once(child, "exit");
+    let channel: SyncRpcChannel | undefined;
+    try {
+        channel = new SyncRpcChannel({ pipe: endpoint });
+        for (const fd of [channel["readFd"], channel["writeFd"]]) {
+            const info = readFileSync(`/proc/self/fdinfo/${fd}`, "utf8");
+            const flags = /^flags:\s+([0-7]+)$/m.exec(info);
+            assert.ok(flags);
+            assert.equal(Number.parseInt(flags[1], 8) & constants.O_NONBLOCK, 0);
+        }
+        assert.equal(channel.requestSync("echo", "blocking FIFOs"), "blocking FIFOs");
+    }
+    finally {
+        channel?.close();
         if (child.exitCode === null) {
             child.kill();
         }

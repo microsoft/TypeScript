@@ -92,7 +92,7 @@ process.on("exit", () => {
 
 /**
  * The protocol is unversioned; both sides (this JS channel and the Go
- * server must be built from the same tree.
+ * server) must be built from the same tree.
  *
  * This class is **not** thread-safe. All calls must originate from a
  * single thread — do not share an instance across worker threads.
@@ -251,11 +251,16 @@ export class SyncRpcChannel {
                 flag: "wx",
                 mode: 0o600,
             });
-            const readFd = probeReadFd;
-            const writeFd = probeWriteFd;
-            probeReadFd = undefined;
-            probeWriteFd = undefined;
-            return { readFd, writeFd };
+            // Keep the probes open until both blocking descriptors are connected.
+            const readFd = openSync(outPath, constants.O_RDONLY);
+            try {
+                const writeFd = openSync(inPath, constants.O_WRONLY);
+                return { readFd, writeFd };
+            }
+            catch (error) {
+                closeSync(readFd);
+                throw error;
+            }
         }
         finally {
             if (probeReadFd !== undefined) closeSync(probeReadFd);
