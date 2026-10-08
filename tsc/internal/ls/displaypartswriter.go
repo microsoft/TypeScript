@@ -169,7 +169,7 @@ func classificationForSymbol(symbol *ast.Symbol) lsproto.ClassificationTypeName 
 	if symbol == nil {
 		return lsproto.ClassificationTypeNameText
 	}
-	flags := symbol.Flags
+	flags := symbol.Flags()
 	switch {
 	case flags&ast.SymbolFlagsVariable != 0:
 		if isFirstDeclarationOfSymbolParameter(symbol) {
@@ -209,7 +209,7 @@ func classificationForSymbol(symbol *ast.Symbol) lsproto.ClassificationTypeName 
 
 // isFirstDeclarationOfSymbolParameter checks if the symbol's first declaration is a parameter.
 func isFirstDeclarationOfSymbolParameter(symbol *ast.Symbol) bool {
-	declarations := symbol.Declarations
+	declarations := symbol.Declarations()
 	if len(declarations) == 0 {
 		return false
 	}
