@@ -234,13 +234,12 @@ func (c *Checker) getVariableDeclarationOfObjectLiteral(symbol *ast.Symbol, mean
 		return nil
 	}
 	firstDecl := symbol.Declarations[0]
-	if firstDecl.Parent == nil {
-		return nil
+	if ast.IsObjectLiteralExpression(firstDecl) {
+		if declaration := getAssignedValueDeclaration(firstDecl); declaration != nil && ast.IsVariableDeclaration(declaration) {
+			return c.getSymbolOfDeclaration(declaration)
+		}
 	}
-	if !ast.IsVariableDeclaration(firstDecl.Parent) {
-		return nil
-	}
-	if ast.IsObjectLiteralExpression(firstDecl) && firstDecl == firstDecl.Parent.Initializer() || ast.IsTypeLiteralNode(firstDecl) && firstDecl == firstDecl.Parent.Type() {
+	if ast.IsTypeLiteralNode(firstDecl) && firstDecl.Parent != nil && ast.IsVariableDeclaration(firstDecl.Parent) && firstDecl == firstDecl.Parent.Type() {
 		return c.getSymbolOfDeclaration(firstDecl.Parent)
 	}
 	return nil

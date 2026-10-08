@@ -29,7 +29,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const arrow: () => () => typeof arrow
+// | const arrow: () => typeof arrow
 // | ```
 // | 
 // | (verbosity level: 2)
@@ -37,7 +37,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const arrow: () => () => typeof arrow
+// | const arrow: () => typeof arrow
 // | ```
 // | 
 // | (verbosity level: 1)
@@ -45,7 +45,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const arrow: () => () => typeof arrow
+// | const arrow: () => typeof arrow
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -55,7 +55,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const named: () => () => typeof named
+// | const named: () => typeof named
 // | ```
 // | 
 // | (verbosity level: 2)
@@ -63,7 +63,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const named: () => () => typeof named
+// | const named: () => typeof named
 // | ```
 // | 
 // | (verbosity level: 1)
@@ -71,7 +71,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const named: () => () => typeof named
+// | const named: () => typeof named
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -81,7 +81,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | function recur(): () => typeof recur
+// | function recur(): typeof recur
 // | ```
 // | 
 // | (verbosity level: 2)
@@ -89,7 +89,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | function recur(): () => typeof recur
+// | function recur(): typeof recur
 // | ```
 // | 
 // | (verbosity level: 1)
@@ -97,7 +97,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | function recur(): () => typeof recur
+// | function recur(): typeof recur
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -107,7 +107,7 @@
 // ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const generic: <number>(value: number) => <T>(value: number) => typeof generic
+// | const generic: <number>(value: number) => <T>(value: T) => typeof generic
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -117,7 +117,7 @@
 // ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const specialized: <string>(value: string) => <T>(value: string) => typeof generic
+// | const specialized: <string>(value: string) => <T>(value: T) => typeof generic
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -127,7 +127,7 @@
 //               ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | let narrowed: () => () => typeof arrow
+// | let narrowed: () => typeof arrow
 // | ```
 // | 
 // | (verbosity level: 2)
@@ -135,7 +135,7 @@
 //               ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | let narrowed: () => () => typeof arrow
+// | let narrowed: () => typeof arrow
 // | ```
 // | 
 // | (verbosity level: 1)
@@ -143,7 +143,7 @@
 //               ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | let narrowed: () => () => typeof arrow
+// | let narrowed: () => typeof arrow
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -211,6 +211,22 @@
 // | function overloaded(value: number): typeof overloaded
 // | ```
 // | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: number): typeof overloaded
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: number): typeof overloaded
+// | ```
+// | 
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 // const object = { recur() { return object.recur; } };
@@ -218,7 +234,7 @@
 //        ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) recur(): () => ...
+// | (method) recur(): (typeof object)["recur"]
 // | ```
 // | 
 // | (verbosity level: 2)
@@ -226,7 +242,7 @@
 //        ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) recur(): () => ...
+// | (method) recur(): (typeof object)["recur"]
 // | ```
 // | 
 // | (verbosity level: 1)
@@ -234,7 +250,7 @@
 //        ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) recur(): () => ...
+// | (method) recur(): (typeof object)["recur"]
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -269,7 +285,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const first: () => () => () => typeof second
+// | const first: () => () => typeof first
 // | ```
 // | 
 // | (verbosity level: 2)
@@ -277,7 +293,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const first: () => () => () => typeof second
+// | const first: () => () => typeof first
 // | ```
 // | 
 // | (verbosity level: 1)
@@ -285,7 +301,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const first: () => () => () => typeof second
+// | const first: () => () => typeof first
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -295,7 +311,7 @@
 // ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | function genericFunction<number>(value: number): <T>(value: number) => typeof genericFunction
+// | function genericFunction<number>(value: number): <T>(value: T) => typeof genericFunction
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -306,10 +322,7 @@
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const callable: () => {
-// |     (): typeof callable;
-// |     property: number;
-// | }
+// | const callable: () => typeof callable
 // | ```
 // | 
 // | (verbosity level: 2)
@@ -317,10 +330,7 @@
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const callable: () => {
-// |     (): typeof callable;
-// |     property: number;
-// | }
+// | const callable: () => typeof callable
 // | ```
 // | 
 // | (verbosity level: 1)
@@ -328,10 +338,7 @@
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const callable: () => {
-// |     (): typeof callable;
-// |     property: number;
-// | }
+// | const callable: () => typeof callable
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -414,17 +421,17 @@
 // |         nested<T>(inner: T): {
 // |             outer: T;
 // |             inner: T;
-// |             next: ...;
+// |             next: typeof scoped;
 // |         };
 // |         sibling<T>(inner: T): {
 // |             outer: T;
 // |             inner: T;
-// |             next: ...;
+// |             next: typeof scoped;
 // |         };
 // |     };
 // |     second<T>(value: T): {
 // |         value: T;
-// |         next: ...;
+// |         next: typeof scoped;
 // |     };
 // | }
 // | ```
@@ -448,10 +455,21 @@
 // |         outer: number;
 // |         inner: T;
 // |         next: {
-// |             first<T>(outer: number): ...;
+// |             first<T>(outer: T): {
+// |                 nested<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |                 sibling<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |             };
 // |             second<T>(value: T): {
 // |                 value: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |         };
 // |     };
@@ -459,10 +477,21 @@
 // |         outer: number;
 // |         inner: T;
 // |         next: {
-// |             first<T>(outer: number): ...;
+// |             first<T>(outer: T): {
+// |                 nested<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |                 sibling<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |             };
 // |             second<T>(value: T): {
 // |                 value: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |         };
 // |     };
@@ -483,17 +512,17 @@
 // |             nested<T>(inner: T): {
 // |                 outer: T;
 // |                 inner: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |             sibling<T>(inner: T): {
 // |                 outer: T;
 // |                 inner: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |         };
 // |         second<T>(value: T): {
 // |             value: T;
-// |             next: ...;
+// |             next: typeof scoped;
 // |         };
 // |     };
 // | }
@@ -513,17 +542,17 @@
 // |             nested<T>(inner: T): {
 // |                 outer: T;
 // |                 inner: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |             sibling<T>(inner: T): {
 // |                 outer: T;
 // |                 inner: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |         };
 // |         second<T>(value: T): {
 // |             value: T;
-// |             next: ...;
+// |             next: typeof scoped;
 // |         };
 // |     };
 // | }
@@ -542,15 +571,18 @@
 // |             nested<T>(inner: T): {
 // |                 outer: T;
 // |                 inner: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |             sibling<T>(inner: T): {
 // |                 outer: T;
 // |                 inner: T;
-// |                 next: ...;
+// |                 next: typeof scoped;
 // |             };
 // |         };
-// |         second<T>(value: string): ...;
+// |         second<T>(value: T): {
+// |             value: T;
+// |             next: typeof scoped;
+// |         };
 // |     };
 // | }
 // | ```
@@ -578,28 +610,52 @@
 // |         outer: number;
 // |         inner: U;
 // |         owner: {
-// |             make<T>(outer: number): ...;
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |             };
 // |         };
 // |     };
 // |     constrained<U extends number = number>(inner: U): {
 // |         outer: number;
 // |         inner: U;
 // |         owner: {
-// |             make<T>(outer: number): ...;
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): ...;
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): ...;
+// |             };
 // |         };
 // |     };
-// |     copied<U>(inner: U): {
-// |         outer: number;
-// |         inner: U;
-// |         owner: typeof nestedOwner;
-// |     };
-// |     rest<U>(values_0: U): {
-// |         outer: number;
-// |         inner: U;
-// |         owner: {
-// |             make<T>(outer: number): ...;
-// |         };
-// |     };
+// |     copied<U>(inner: U): ...;
+// |     rest<U>(values_0: U): ...;
 // | }
 // | ```
 // | 
@@ -617,12 +673,12 @@
 // |             nested<U>(inner: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |             constrained<U extends T = T>(inner: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |             copied<U>(inner: U): {
 // |                 outer: T;
@@ -632,7 +688,7 @@
 // |             rest<U>(values_0: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |         };
 // |     };
@@ -649,28 +705,52 @@
 // |         outer: string;
 // |         inner: U;
 // |         owner: {
-// |             make<T>(outer: string): ...;
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |             };
 // |         };
 // |     };
 // |     constrained<U>(inner: U): {
 // |         outer: string;
 // |         inner: U;
 // |         owner: {
-// |             make<T>(outer: string): ...;
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): ...;
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): ...;
+// |             };
 // |         };
 // |     };
-// |     copied<U>(inner: U): {
-// |         outer: string;
-// |         inner: U;
-// |         owner: typeof nestedOwner;
-// |     };
-// |     rest<U>(values_0: U): {
-// |         outer: string;
-// |         inner: U;
-// |         owner: {
-// |             make<T>(outer: string): ...;
-// |         };
-// |     };
+// |     copied<U>(inner: U): ...;
+// |     rest<U>(values_0: U): ...;
 // | }
 // | ```
 // | 
@@ -688,12 +768,12 @@
 // |             nested<U>(inner: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |             constrained<U extends T = T>(inner: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |             copied<U>(inner: U): {
 // |                 outer: T;
@@ -703,7 +783,7 @@
 // |             rest<U>(values_0: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |         };
 // |     };
@@ -737,12 +817,12 @@
 // |             nested<U>(inner: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |             constrained<U extends T = T>(inner: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |             copied<U>(inner: U): {
 // |                 outer: T;
@@ -752,7 +832,7 @@
 // |             rest<U>(values_0: U): {
 // |                 outer: T;
 // |                 inner: U;
-// |                 owner: ...;
+// |                 owner: typeof nestedOwner;
 // |             };
 // |         };
 // |     };
@@ -917,7 +997,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst arrow: () => () => typeof arrow\n```\n"
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
         },
         "range": {
           "start": {
@@ -947,7 +1027,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst arrow: () => () => typeof arrow\n```\n"
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
         },
         "range": {
           "start": {
@@ -977,7 +1057,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst arrow: () => () => typeof arrow\n```\n"
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
         },
         "range": {
           "start": {
@@ -1007,7 +1087,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst named: () => () => typeof named\n```\n"
+          "value": "```typescript\nconst named: () => typeof named\n```\n"
         },
         "range": {
           "start": {
@@ -1037,7 +1117,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst named: () => () => typeof named\n```\n"
+          "value": "```typescript\nconst named: () => typeof named\n```\n"
         },
         "range": {
           "start": {
@@ -1067,7 +1147,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst named: () => () => typeof named\n```\n"
+          "value": "```typescript\nconst named: () => typeof named\n```\n"
         },
         "range": {
           "start": {
@@ -1097,7 +1177,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nfunction recur(): () => typeof recur\n```\n"
+          "value": "```typescript\nfunction recur(): typeof recur\n```\n"
         },
         "range": {
           "start": {
@@ -1127,7 +1207,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nfunction recur(): () => typeof recur\n```\n"
+          "value": "```typescript\nfunction recur(): typeof recur\n```\n"
         },
         "range": {
           "start": {
@@ -1157,7 +1237,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nfunction recur(): () => typeof recur\n```\n"
+          "value": "```typescript\nfunction recur(): typeof recur\n```\n"
         },
         "range": {
           "start": {
@@ -1187,7 +1267,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst generic: <number>(value: number) => <T>(value: number) => typeof generic\n```\n"
+          "value": "```typescript\nconst generic: <number>(value: number) => <T>(value: T) => typeof generic\n```\n"
         },
         "range": {
           "start": {
@@ -1217,7 +1297,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst specialized: <string>(value: string) => <T>(value: string) => typeof generic\n```\n"
+          "value": "```typescript\nconst specialized: <string>(value: string) => <T>(value: T) => typeof generic\n```\n"
         },
         "range": {
           "start": {
@@ -1247,7 +1327,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nlet narrowed: () => () => typeof arrow\n```\n"
+          "value": "```typescript\nlet narrowed: () => typeof arrow\n```\n"
         },
         "range": {
           "start": {
@@ -1277,7 +1357,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nlet narrowed: () => () => typeof arrow\n```\n"
+          "value": "```typescript\nlet narrowed: () => typeof arrow\n```\n"
         },
         "range": {
           "start": {
@@ -1307,7 +1387,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nlet narrowed: () => () => typeof arrow\n```\n"
+          "value": "```typescript\nlet narrowed: () => typeof arrow\n```\n"
         },
         "range": {
           "start": {
@@ -1535,6 +1615,66 @@
   },
   {
     "marker": {
+      "Position": 632,
+      "LSPosition": {
+        "line": 20,
+        "character": 10
+      },
+      "Name": "numberCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: number): typeof overloaded\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 0
+          },
+          "end": {
+            "line": 20,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 632,
+      "LSPosition": {
+        "line": 20,
+        "character": 10
+      },
+      "Name": "numberCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: number): typeof overloaded\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 0
+          },
+          "end": {
+            "line": 20,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
       "Position": 702,
       "LSPosition": {
         "line": 22,
@@ -1547,7 +1687,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) recur(): () => ...\n```\n"
+          "value": "```typescript\n(method) recur(): (typeof object)[\"recur\"]\n```\n"
         },
         "range": {
           "start": {
@@ -1577,7 +1717,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) recur(): () => ...\n```\n"
+          "value": "```typescript\n(method) recur(): (typeof object)[\"recur\"]\n```\n"
         },
         "range": {
           "start": {
@@ -1607,7 +1747,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) recur(): () => ...\n```\n"
+          "value": "```typescript\n(method) recur(): (typeof object)[\"recur\"]\n```\n"
         },
         "range": {
           "start": {
@@ -1727,7 +1867,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst first: () => () => () => typeof second\n```\n"
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
         },
         "range": {
           "start": {
@@ -1757,7 +1897,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst first: () => () => () => typeof second\n```\n"
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
         },
         "range": {
           "start": {
@@ -1787,7 +1927,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst first: () => () => () => typeof second\n```\n"
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
         },
         "range": {
           "start": {
@@ -1817,7 +1957,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nfunction genericFunction<number>(value: number): <T>(value: number) => typeof genericFunction\n```\n"
+          "value": "```typescript\nfunction genericFunction<number>(value: number): <T>(value: T) => typeof genericFunction\n```\n"
         },
         "range": {
           "start": {
@@ -1847,7 +1987,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst callable: () => {\n    (): typeof callable;\n    property: number;\n}\n```\n"
+          "value": "```typescript\nconst callable: () => typeof callable\n```\n"
         },
         "range": {
           "start": {
@@ -1877,7 +2017,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst callable: () => {\n    (): typeof callable;\n    property: number;\n}\n```\n"
+          "value": "```typescript\nconst callable: () => typeof callable\n```\n"
         },
         "range": {
           "start": {
@@ -1907,7 +2047,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst callable: () => {\n    (): typeof callable;\n    property: number;\n}\n```\n"
+          "value": "```typescript\nconst callable: () => typeof callable\n```\n"
         },
         "range": {
           "start": {
@@ -2147,7 +2287,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst scoped: {\n    first<T>(outer: T): {\n        nested<T>(inner: T): {\n            outer: T;\n            inner: T;\n            next: ...;\n        };\n        sibling<T>(inner: T): {\n            outer: T;\n            inner: T;\n            next: ...;\n        };\n    };\n    second<T>(value: T): {\n        value: T;\n        next: ...;\n    };\n}\n```\n"
+          "value": "```typescript\nconst scoped: {\n    first<T>(outer: T): {\n        nested<T>(inner: T): {\n            outer: T;\n            inner: T;\n            next: typeof scoped;\n        };\n        sibling<T>(inner: T): {\n            outer: T;\n            inner: T;\n            next: typeof scoped;\n        };\n    };\n    second<T>(value: T): {\n        value: T;\n        next: typeof scoped;\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2177,7 +2317,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) first<number>(outer: number): {\n    nested<T>(inner: T): {\n        outer: number;\n        inner: T;\n        next: {\n            first<T>(outer: number): ...;\n            second<T>(value: T): {\n                value: T;\n                next: ...;\n            };\n        };\n    };\n    sibling<T>(inner: T): {\n        outer: number;\n        inner: T;\n        next: {\n            first<T>(outer: number): ...;\n            second<T>(value: T): {\n                value: T;\n                next: ...;\n            };\n        };\n    };\n}\n```\n"
+          "value": "```typescript\n(method) first<number>(outer: number): {\n    nested<T>(inner: T): {\n        outer: number;\n        inner: T;\n        next: {\n            first<T>(outer: T): {\n                nested<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n                sibling<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n            };\n            second<T>(value: T): {\n                value: T;\n                next: typeof scoped;\n            };\n        };\n    };\n    sibling<T>(inner: T): {\n        outer: number;\n        inner: T;\n        next: {\n            first<T>(outer: T): {\n                nested<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n                sibling<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n            };\n            second<T>(value: T): {\n                value: T;\n                next: typeof scoped;\n            };\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2207,7 +2347,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) nested<string>(inner: string): {\n    outer: number;\n    inner: string;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: ...;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: ...;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: ...;\n        };\n    };\n}\n```\n"
+          "value": "```typescript\n(method) nested<string>(inner: string): {\n    outer: number;\n    inner: string;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: typeof scoped;\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2237,7 +2377,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) sibling<boolean>(inner: boolean): {\n    outer: number;\n    inner: boolean;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: ...;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: ...;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: ...;\n        };\n    };\n}\n```\n"
+          "value": "```typescript\n(method) sibling<boolean>(inner: boolean): {\n    outer: number;\n    inner: boolean;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: typeof scoped;\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2267,7 +2407,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) second<string>(value: string): {\n    value: string;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: ...;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: ...;\n            };\n        };\n        second<T>(value: string): ...;\n    };\n}\n```\n"
+          "value": "```typescript\n(method) second<string>(value: string): {\n    value: string;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: typeof scoped;\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2297,7 +2437,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst nestedNumber: {\n    nested<U>(inner: U): {\n        outer: number;\n        inner: U;\n        owner: {\n            make<T>(outer: number): ...;\n        };\n    };\n    constrained<U extends number = number>(inner: U): {\n        outer: number;\n        inner: U;\n        owner: {\n            make<T>(outer: number): ...;\n        };\n    };\n    copied<U>(inner: U): {\n        outer: number;\n        inner: U;\n        owner: typeof nestedOwner;\n    };\n    rest<U>(values_0: U): {\n        outer: number;\n        inner: U;\n        owner: {\n            make<T>(outer: number): ...;\n        };\n    };\n}\n```\n"
+          "value": "```typescript\nconst nestedNumber: {\n    nested<U>(inner: U): {\n        outer: number;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n            };\n        };\n    };\n    constrained<U extends number = number>(inner: U): {\n        outer: number;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): ...;\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): ...;\n            };\n        };\n    };\n    copied<U>(inner: U): ...;\n    rest<U>(values_0: U): ...;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2327,7 +2467,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) nested<boolean>(inner: boolean): {\n    outer: number;\n    inner: boolean;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n        };\n    };\n}\n```\n"
+          "value": "```typescript\n(method) nested<boolean>(inner: boolean): {\n    outer: number;\n    inner: boolean;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2357,7 +2497,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) make<string>(outer: string): {\n    nested<U>(inner: U): {\n        outer: string;\n        inner: U;\n        owner: {\n            make<T>(outer: string): ...;\n        };\n    };\n    constrained<U>(inner: U): {\n        outer: string;\n        inner: U;\n        owner: {\n            make<T>(outer: string): ...;\n        };\n    };\n    copied<U>(inner: U): {\n        outer: string;\n        inner: U;\n        owner: typeof nestedOwner;\n    };\n    rest<U>(values_0: U): {\n        outer: string;\n        inner: U;\n        owner: {\n            make<T>(outer: string): ...;\n        };\n    };\n}\n```\n"
+          "value": "```typescript\n(method) make<string>(outer: string): {\n    nested<U>(inner: U): {\n        outer: string;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n            };\n        };\n    };\n    constrained<U>(inner: U): {\n        outer: string;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): ...;\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): ...;\n            };\n        };\n    };\n    copied<U>(inner: U): ...;\n    rest<U>(values_0: U): ...;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2387,7 +2527,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) constrained<2>(inner: 2): {\n    outer: number;\n    inner: 2;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n        };\n    };\n}\n```\n"
+          "value": "```typescript\n(method) constrained<2>(inner: 2): {\n    outer: number;\n    inner: 2;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -2447,7 +2587,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\n(method) rest<boolean>(values_0: boolean): {\n    outer: number;\n    inner: boolean;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: ...;\n            };\n        };\n    };\n}\n```\n"
+          "value": "```typescript\n(method) rest<boolean>(values_0: boolean): {\n    outer: number;\n    inner: boolean;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {

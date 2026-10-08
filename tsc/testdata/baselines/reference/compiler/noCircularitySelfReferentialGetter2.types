@@ -70,7 +70,7 @@ const Category = object({
 >Category : ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>
 >object({  name: string(),  get parent() {    return optional(Category);  },}) : ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>
 >object : <T extends ZodShape>(shape: T) => ZodObject<T>
->{  name: string(),  get parent() {    return optional(Category);  },} : { name: ZodString; readonly parent: ZodOptional<ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>>; }
+>{  name: string(),  get parent() {    return optional(Category);  },} : { name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }
 
   name: string(),
 >name : ZodString
