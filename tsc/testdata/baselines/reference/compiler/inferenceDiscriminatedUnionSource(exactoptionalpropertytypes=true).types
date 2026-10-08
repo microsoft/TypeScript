@@ -1,0 +1,431 @@
+//// [tests/cases/compiler/inferenceDiscriminatedUnionSource.ts] ////
+
+=== inferenceDiscriminatedUnionSource.ts ===
+type Ok<T> = { ok: true; value: T };
+>Ok : Ok<T>
+>ok : true
+>true : true
+>value : T
+
+type Err<E> = { ok: false; value: E };
+>Err : Err<E>
+>ok : false
+>false : false
+>value : E
+
+declare function ok<const T>(value: T): Ok<T>;
+>ok : <const T>(value: T) => Ok<T>
+>value : T
+
+declare function okInline<const T>(value: T): { ok: true; value: T };
+>okInline : <const T>(value: T) => { ok: true; value: T; }
+>value : T
+>ok : true
+>true : true
+>value : T
+
+type ErrShape = { ok: false; value: string };
+>ErrShape : ErrShape
+>ok : false
+>false : false
+>value : string
+
+type OkShape = { ok: true; value: string[] };
+>OkShape : OkShape
+>ok : true
+>true : true
+>value : string[]
+
+export function aliasTarget(): ErrShape | OkShape { return ok([]); }
+>aliasTarget : () => ErrShape | OkShape
+>ok([]) : Ok<[]>
+>ok : <const T>(value: T) => Ok<T>
+>[] : []
+
+export function inlineTarget(): ErrShape | OkShape { return okInline([]); }
+>inlineTarget : () => ErrShape | OkShape
+>okInline([]) : { ok: true; value: []; }
+>okInline : <const T>(value: T) => { ok: true; value: T; }
+>[] : []
+
+export function inlineTargetReversed(): OkShape | ErrShape { return okInline([]); }
+>inlineTargetReversed : () => OkShape | ErrShape
+>okInline([]) : { ok: true; value: []; }
+>okInline : <const T>(value: T) => { ok: true; value: T; }
+>[] : []
+
+declare function on<T>(handler: (e: { kind: "a"; value: T }) => void): T;
+>on : <T>(handler: (e: { kind: "a"; value: T; }) => void) => T
+>handler : (e: { kind: "a"; value: T; }) => void
+>e : { kind: "a"; value: T; }
+>kind : "a"
+>value : T
+
+const r1 = on((e: { kind: "a"; value: string } | { kind: "b"; value: number }) => {});
+>r1 : string
+>on((e: { kind: "a"; value: string } | { kind: "b"; value: number }) => {}) : string
+>on : <T>(handler: (e: { kind: "a"; value: T; }) => void) => T
+>(e: { kind: "a"; value: string } | { kind: "b"; value: number }) => {} : (e: { kind: "a"; value: string; } | { kind: "b"; value: number; }) => void
+>e : { kind: "a"; value: string; } | { kind: "b"; value: number; }
+>kind : "a"
+>value : string
+>kind : "b"
+>value : number
+
+const r2 = on((e: { kind: "b"; value: number } | { kind: "a"; value: string }) => {});
+>r2 : string
+>on((e: { kind: "b"; value: number } | { kind: "a"; value: string }) => {}) : string
+>on : <T>(handler: (e: { kind: "a"; value: T; }) => void) => T
+>(e: { kind: "b"; value: number } | { kind: "a"; value: string }) => {} : (e: { kind: "b"; value: number; } | { kind: "a"; value: string; }) => void
+>e : { kind: "b"; value: number; } | { kind: "a"; value: string; }
+>kind : "b"
+>value : number
+>kind : "a"
+>value : string
+
+declare function pick<T>(x: { kind: "a"; value: T }): T;
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>x : { kind: "a"; value: T; }
+>kind : "a"
+>value : T
+
+declare const u1: { kind: "b"; value: number } | { kind: "a"; value: string };
+>u1 : { kind: "b"; value: number; } | { kind: "a"; value: string; }
+>kind : "b"
+>value : number
+>kind : "a"
+>value : string
+
+const r3 = pick(u1);
+>r3 : string
+>pick(u1) : string
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>u1 : { kind: "b"; value: number; } | { kind: "a"; value: string; }
+
+declare const u2: { kind: string; value: number } | { kind: "a"; value: string };
+>u2 : { kind: string; value: number; } | { kind: "a"; value: string; }
+>kind : string
+>value : number
+>kind : "a"
+>value : string
+
+const r4 = pick(u2);
+>r4 : number
+>pick(u2) : number
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>u2 : { kind: string; value: number; } | { kind: "a"; value: string; }
+
+declare const broadTag: { kind: number; value: number } | { kind: "a"; value: string };
+>broadTag : { kind: number; value: number; } | { kind: "a"; value: string; }
+>kind : number
+>value : number
+>kind : "a"
+>value : string
+
+const broadResult = pick(broadTag);
+>broadResult : number
+>pick(broadTag) : number
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>broadTag : { kind: number; value: number; } | { kind: "a"; value: string; }
+
+declare const u3: { value: number } | { kind: "a"; value: string };
+>u3 : { value: number; } | { kind: "a"; value: string; }
+>value : number
+>kind : "a"
+>value : string
+
+const r5 = pick(u3);
+>r5 : number
+>pick(u3) : number
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>u3 : { value: number; } | { kind: "a"; value: string; }
+
+declare function two<T>(x: { kind: "a"; sub: 1; value: T }): T;
+>two : <T>(x: { kind: "a"; sub: 1; value: T; }) => T
+>x : { kind: "a"; sub: 1; value: T; }
+>kind : "a"
+>sub : 1
+>value : T
+
+declare const u4: { kind: "a"; sub: 2; value: string } | { kind: "b"; sub: 1; value: number };
+>u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
+>kind : "a"
+>sub : 2
+>value : string
+>kind : "b"
+>sub : 1
+>value : number
+
+const r6 = two(u4);
+>r6 : unknown
+>two(u4) : unknown
+>two : <T>(x: { kind: "a"; sub: 1; value: T; }) => T
+>u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
+
+declare function twoReversed<T>(x: { sub: 1; kind: "a"; value: T }): T;
+>twoReversed : <T>(x: { sub: 1; kind: "a"; value: T; }) => T
+>x : { sub: 1; kind: "a"; value: T; }
+>sub : 1
+>kind : "a"
+>value : T
+
+const r6Reversed = twoReversed(u4);
+>r6Reversed : unknown
+>twoReversed(u4) : unknown
+>twoReversed : <T>(x: { sub: 1; kind: "a"; value: T; }) => T
+>u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
+
+enum K { A, B }
+>K : K
+>A : K.A
+>B : K.B
+
+declare function enumTag<T>(x: { kind: K.A; value: T }): T;
+>enumTag : <T>(x: { kind: K.A; value: T; }) => T
+>x : { kind: K.A; value: T; }
+>kind : K.A
+>K : any
+>value : T
+
+declare const u5: { kind: K.B; value: number } | { kind: K.A; value: string };
+>u5 : { kind: K.B; value: number; } | { kind: K.A; value: string; }
+>kind : K.B
+>K : any
+>value : number
+>kind : K.A
+>K : any
+>value : string
+
+const r7 = enumTag(u5);
+>r7 : string
+>enumTag(u5) : string
+>enumTag : <T>(x: { kind: K.A; value: T; }) => T
+>u5 : { kind: K.B; value: number; } | { kind: K.A; value: string; }
+
+declare function boolTag<T>(x: { ok: boolean; value: T }): T;
+>boolTag : <T>(x: { ok: boolean; value: T; }) => T
+>x : { ok: boolean; value: T; }
+>ok : boolean
+>value : T
+
+declare const u6: Err<number> | Ok<string>;
+>u6 : Err<number> | Ok<string>
+
+const r8 = boolTag(u6);
+>r8 : number
+>boolTag(u6) : number
+>boolTag : <T>(x: { ok: boolean; value: T; }) => T
+>u6 : Err<number> | Ok<string>
+
+declare function wrap<const T>(value: T): { result: Ok<T> };
+>wrap : <const T>(value: T) => { result: Ok<T>; }
+>value : T
+>result : Ok<T>
+
+export function nested(): { result: ErrShape | OkShape } { return wrap([]); }
+>nested : () => { result: ErrShape | OkShape; }
+>result : ErrShape | OkShape
+>wrap([]) : { result: Ok<[]>; }
+>wrap : <const T>(value: T) => { result: Ok<T>; }
+>[] : []
+
+export function f(): Ok<string[]> | Err<string> {
+>f : () => Ok<string[]> | Err<string>
+
+    return ok([]);
+>ok([]) : Ok<[]>
+>ok : <const T>(value: T) => Ok<T>
+>[] : []
+}
+
+type Success<T> = { kind: "success"; value: T };
+>Success : Success<T>
+>kind : "success"
+>value : T
+
+type Failure<E> = { kind: "failure"; value: E };
+>Failure : Failure<E>
+>kind : "failure"
+>value : E
+
+declare function success<const T>(value: T): Success<T>;
+>success : <const T>(value: T) => Success<T>
+>value : T
+
+export function withStringTag(): Success<string[]> | Failure<string> {
+>withStringTag : () => Success<string[]> | Failure<string>
+
+    return success([]);
+>success([]) : Success<[]>
+>success : <const T>(value: T) => Success<T>
+>[] : []
+}
+
+type Accepted<T> = { kind: 1; value: T };
+>Accepted : Accepted<T>
+>kind : 1
+>value : T
+
+type Rejected<E> = { kind: 0; value: E };
+>Rejected : Rejected<E>
+>kind : 0
+>value : E
+
+declare function accepted<const T>(value: T): Accepted<T>;
+>accepted : <const T>(value: T) => Accepted<T>
+>value : T
+
+export function withNumberTag(): Accepted<string[]> | Rejected<string> {
+>withNumberTag : () => Accepted<string[]> | Rejected<string>
+
+    return accepted([]);
+>accepted([]) : Accepted<[]>
+>accepted : <const T>(value: T) => Accepted<T>
+>[] : []
+}
+
+declare function unmatched<T>(): { kind: "other"; value: T };
+>unmatched : <T>() => { kind: "other"; value: T; }
+>kind : "other"
+>value : T
+
+export function withUnmatchedTag(): Success<string[]> | Failure<number[]> {
+>withUnmatchedTag : () => Success<string[]> | Failure<number[]>
+
+    return unmatched();
+>unmatched() : { kind: "other"; value: unknown; }
+>unmatched : <T>() => { kind: "other"; value: T; }
+}
+
+type OptionalOk<T> = { ok?: true; value: T };
+>OptionalOk : OptionalOk<T>
+>ok : true | undefined
+>true : true
+>value : T
+
+type MaybeErr<E> = { ok?: false; value: E };
+>MaybeErr : MaybeErr<E>
+>ok : false | undefined
+>false : false
+>value : E
+
+declare function optionalOk<const T>(value: T): OptionalOk<T>;
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>value : T
+
+export function optionalTarget(): OptionalOk<string[]> | Err<string> {
+>optionalTarget : () => OptionalOk<string[]> | Err<string>
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<[]>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+export function optionalSource(): Ok<string[]> | MaybeErr<string> {
+>optionalSource : () => Ok<string[]> | MaybeErr<string>
+
+    return ok([]);
+>ok([]) : Ok<[]>
+>ok : <const T>(value: T) => Ok<T>
+>[] : []
+}
+
+export function bothOptional(): OptionalOk<string[]> | MaybeErr<string> {
+>bothOptional : () => OptionalOk<string[]> | MaybeErr<string>
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<readonly []>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+export function missingSourceTag(): OptionalOk<string[]> | { value: string } {
+>missingSourceTag : () => OptionalOk<string[]> | { value: string; }
+>value : string
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<[]>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+type ExplicitOptionalOk<T> = { ok?: true | undefined; value: T };
+>ExplicitOptionalOk : ExplicitOptionalOk<T>
+>ok : true | undefined
+>true : true
+>value : T
+
+type UnionOk<T> = { ok: true | undefined; value: T };
+>UnionOk : UnionOk<T>
+>ok : true | undefined
+>true : true
+>value : T
+
+declare function explicitOptionalOk<const T>(value: T): ExplicitOptionalOk<T>;
+>explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
+>value : T
+
+declare function unionOk<const T>(value: T): UnionOk<T>;
+>unionOk : <const T>(value: T) => UnionOk<T>
+>value : T
+
+export function explicitUndefined(): ExplicitOptionalOk<string[]> | Err<string> {
+>explicitUndefined : () => ExplicitOptionalOk<string[]> | Err<string>
+
+    return explicitOptionalOk([]);
+>explicitOptionalOk([]) : ExplicitOptionalOk<[]>
+>explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
+>[] : []
+}
+
+export function requiredUnionTag(): UnionOk<string[]> | Err<string> {
+>requiredUnionTag : () => UnionOk<string[]> | Err<string>
+
+    return unionOk([]);
+>unionOk([]) : UnionOk<[]>
+>unionOk : <const T>(value: T) => UnionOk<T>
+>[] : []
+}
+
+type AlwaysUndefinedErr<E> = { ok: undefined; value: E };
+>AlwaysUndefinedErr : AlwaysUndefinedErr<E>
+>ok : undefined
+>value : E
+
+type UndefinedOk<T> = { ok: undefined; value: T };
+>UndefinedOk : UndefinedOk<T>
+>ok : undefined
+>value : T
+
+declare function undefinedOk<const T>(value: T): UndefinedOk<T>;
+>undefinedOk : <const T>(value: T) => UndefinedOk<T>
+>value : T
+
+export function undefinedSource(): OptionalOk<string[]> | AlwaysUndefinedErr<string> {
+>undefinedSource : () => OptionalOk<string[]> | AlwaysUndefinedErr<string>
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<[]>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+export function undefinedTarget(): UndefinedOk<string[]> | MaybeErr<string> {
+>undefinedTarget : () => UndefinedOk<string[]> | MaybeErr<string>
+
+    return undefinedOk([]);
+>undefinedOk([]) : UndefinedOk<[]>
+>undefinedOk : <const T>(value: T) => UndefinedOk<T>
+>[] : []
+}
+
+export function explicitUndefinedOverlap(): ExplicitOptionalOk<string[]> | AlwaysUndefinedErr<string> {
+>explicitUndefinedOverlap : () => ExplicitOptionalOk<string[]> | AlwaysUndefinedErr<string>
+
+    return explicitOptionalOk([]);
+>explicitOptionalOk([]) : ExplicitOptionalOk<readonly []>
+>explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
+>[] : []
+}
+

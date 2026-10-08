@@ -249,8 +249,26 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	case target.flags&TypeFlagsUnionOrIntersection != 0:
 		c.inferToMultipleTypes(n, source, target.Types(), target.flags)
 	case source.flags&TypeFlagsUnion != 0:
-		// Source is a union or intersection type, infer from each constituent type
+		// Infer from each source union constituent, excluding incompatible fixed discriminants.
+		discriminants := c.getInferenceDiscriminants(source, target)
+	inferConstituents:
 		for _, sourceType := range source.Types() {
+			if len(discriminants) != 0 && sourceType.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 {
+				for _, targetProp := range discriminants {
+					sourceProp := c.getPropertyOfType(sourceType, targetProp.Name)
+					if sourceProp == nil {
+						continue
+					}
+					// Two optional tags always overlap through absence.
+					if sourceProp.Flags&ast.SymbolFlagsOptional != 0 && targetProp.Flags&ast.SymbolFlagsOptional != 0 {
+						continue
+					}
+					propType := c.getNonMissingTypeOfSymbol(sourceProp)
+					if isLiteralType(propType) && !c.areTypesComparable(propType, c.getNonMissingTypeOfSymbol(targetProp)) {
+						continue inferConstituents
+					}
+				}
+			}
 			c.inferFromTypes(n, sourceType, target)
 		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
@@ -1191,6 +1209,16 @@ func (c *Checker) replaceIndexedAccess(instantiable *Type, t *Type, replacement 
 	// map type.objectType to `[TReplacement]`
 	// thus making the indexed access `[TReplacement][0]` or `TReplacement`
 	return c.instantiateType(instantiable, newTypeMapper([]*Type{t.AsIndexedAccessType().indexType, t.AsIndexedAccessType().objectType}, []*Type{c.getNumberLiteralType(0), c.createTupleType([]*Type{replacement})}))
+}
+
+func (c *Checker) getInferenceDiscriminants(source *Type, target *Type) []*ast.Symbol {
+	if target.flags&TypeFlagsObject == 0 {
+		return nil
+	}
+	literalProps := core.Filter(c.getPropertiesOfType(target), func(prop *ast.Symbol) bool {
+		return isLiteralType(c.getNonMissingTypeOfSymbol(prop))
+	})
+	return c.findDiscriminantProperties(literalProps, source)
 }
 
 func (c *Checker) typesDefinitelyUnrelated(source *Type, target *Type) bool {
