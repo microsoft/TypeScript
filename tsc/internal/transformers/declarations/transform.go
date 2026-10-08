@@ -5,6 +5,7 @@ import (
 	"iter"
 	"slices"
 	"strings"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -2847,7 +2848,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	declarationData.Symbol = host
 	containerData := synthesizedNamespace.LocalsContainerData()
 	containerData.Locals = make(ast.SymbolTable, 0)
-	containerData.Locals[localName.Text()] = symbol
+	containerData.Locals[unique.Make(localName.Text())] = symbol
 
 	oldEnclosing := tx.enclosingDeclaration
 	tx.enclosingDeclaration = synthesizedNamespace
@@ -3020,7 +3021,7 @@ func extractExpandoHostParams(node *ast.Node) (typeParameters *ast.TypeParameter
 
 func (tx *DeclarationTransformer) tryGetPropertyName(node *ast.Node) string {
 	if ast.IsElementAccessExpression(node) {
-		return tx.resolver.GetElementAccessExpressionName(node.AsElementAccessExpression())
+		return tx.resolver.GetElementAccessExpressionName(node.AsElementAccessExpression()).Value()
 	}
 	if ast.IsPropertyAccessExpression(node) {
 		return node.Name().Text()

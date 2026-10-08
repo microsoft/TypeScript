@@ -4,6 +4,7 @@ import (
 	"maps"
 	"slices"
 	"sync"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -172,7 +173,7 @@ func (r *EmitResolver) aliasMarkingVisitorWorker(node *ast.Node) bool {
 func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 	var exportSymbol *ast.Symbol
 	if node.Kind != ast.KindStringLiteral && node.Parent != nil && (ast.IsExportAssignment(node.Parent) || isCommonJSModuleExports(node.Parent)) {
-		exportSymbol = r.checker.resolveName(node, node.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias /*nameNotFoundMessage*/, nil /*isUse*/, false, false)
+		exportSymbol = r.checker.resolveName(node, unique.Make(node.Text()), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias /*nameNotFoundMessage*/, nil /*isUse*/, false, false)
 	} else if node.Parent.Kind == ast.KindExportSpecifier {
 		exportSymbol = r.checker.getTargetOfExportSpecifier(node.Parent, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, false)
 	}
@@ -193,7 +194,7 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 				// Add the referenced top container visible
 				internalModuleReference := declaration.AsImportEqualsDeclaration().ModuleReference
 				firstIdentifier := ast.GetFirstIdentifier(internalModuleReference)
-				importSymbol := r.checker.resolveName(declaration, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias /*nameNotFoundMessage*/, nil /*isUse*/, false, false)
+				importSymbol := r.checker.resolveName(declaration, unique.Make(firstIdentifier.Text()), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias /*nameNotFoundMessage*/, nil /*isUse*/, false, false)
 				nextSymbol = importSymbol
 			}
 		}
@@ -298,7 +299,7 @@ func (r *EmitResolver) IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node)
 		r.checkerMu.Lock()
 		defer r.checkerMu.Unlock()
 		// Exactly `Symbol.something` and `Symbol` either does not resolve or definitely resolves to the global Symbol
-		return r.checker.getResolvedSymbol(node.Expression()) == r.checker.getGlobalSymbol("Symbol", ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*diagnostic*/)
+		return r.checker.getResolvedSymbol(node.Expression()) == r.checker.getGlobalSymbol(unique.Make("Symbol"), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*diagnostic*/)
 	}
 	if node.Expression().Expression().Kind != ast.KindIdentifier || node.Expression().Expression().Text() != "globalThis" || node.Expression().Name().Text() != "Symbol" {
 		return false
@@ -607,13 +608,13 @@ func (r *EmitResolver) IsNameResolvable(location *ast.Node, name string) bool {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
-	symbol := r.checker.resolveName(location, name, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+	symbol := r.checker.resolveName(location, unique.Make(name), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
 	return symbol != nil
 }
 
-func (r *EmitResolver) GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string {
+func (r *EmitResolver) GetElementAccessExpressionName(expression *ast.ElementAccessExpression) ast.SymbolName {
 	if !ast.IsParseTreeNode(expression.AsNode()) {
-		return ""
+		return ast.EmptySymbolName
 	}
 
 	r.checkerMu.Lock()
@@ -791,7 +792,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(container *ast.Node, enclo
 						}
 
 						firstIdentifier := ast.GetFirstIdentifier(c.Name().Expression())
-						name := r.checker.resolveName(firstIdentifier, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
+						name := r.checker.resolveName(firstIdentifier, unique.Make(firstIdentifier.Text()), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
 						if name != nil {
 							tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
 						}

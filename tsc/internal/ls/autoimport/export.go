@@ -64,7 +64,7 @@ func (m ModuleID) AsModuleSpecifier() (tspath.ModuleSpecifier, bool) {
 
 type ExportID struct {
 	ModuleID   ModuleID
-	ExportName string
+	ExportName ast.SymbolName
 }
 
 type ExportSyntax int
@@ -97,10 +97,10 @@ type Export struct {
 	UnresolvedModuleSpecifier tspath.ModuleSpecifier
 	Syntax                    ExportSyntax
 	Flags                     ast.SymbolFlags
-	localName                 string
+	localName                 ast.SymbolName
 	// through is the name of the module symbol's export that this export was found on,
-	// either 'export=', InternalSymbolNameExportStar, or empty string.
-	through string
+	// either 'export=', InternalSymbolNameExportStar, or unset.
+	through ast.SymbolName
 
 	// Checker-set fields
 
@@ -115,8 +115,8 @@ type Export struct {
 	PackageName string
 }
 
-func (e *Export) Name() string {
-	if e.localName != "" {
+func (e *Export) Name() ast.SymbolName {
+	if e.localName != (ast.SymbolName{}) && e.localName != ast.EmptySymbolName {
 		return e.localName
 	}
 	if e.ExportName == ast.InternalSymbolNameExportEquals {
@@ -172,7 +172,7 @@ func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
 	return tryGetModuleExport(symbol.Name(), target, moduleSymbol, ch, moduleID, moduleFileName, file)
 }
 
-func tryGetModuleExport(exportName string, target *ast.Symbol, moduleSymbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName tspath.RootedFilePath, file *ast.SourceFile) *Export {
+func tryGetModuleExport(exportName ast.SymbolName, target *ast.Symbol, moduleSymbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName tspath.RootedFilePath, file *ast.SourceFile) *Export {
 	exported := ch.TryGetMemberInModuleExportsAndProperties(exportName, moduleSymbol)
 	if exported != nil && ch.GetMergedSymbol(ch.SkipAlias(exported)) == target {
 		return extractFirstExport(exported, ch, moduleID, moduleFileName, file)

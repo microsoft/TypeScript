@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -395,7 +396,7 @@ func skipPastExportOrImportSpecifierOrUnion(symbol *ast.Symbol, node *ast.Node, 
 				return nil
 			}
 			// Assertions for GH#21814. We should be handling SourceFile symbols in `getReferencedSymbolsForModule` instead of getting here.
-			panic(fmt.Sprintf("Unexpected symbol at %s: %s", node.Kind.String(), symbol.Name()))
+			panic(fmt.Sprintf("Unexpected symbol at %s: %s", node.Kind.String(), symbol.Name().Value()))
 		}
 		if decl.Parent.Kind == ast.KindTypeLiteral && decl.Parent.Parent.Kind == ast.KindUnionType {
 			return checker.GetPropertyOfType(checker.GetTypeFromTypeNode(decl.Parent.Parent), symbol.Name())
@@ -1393,7 +1394,7 @@ func (l *LanguageService) getReferencesForStringLiteral(
 
 func isStringLiteralPropertyReference(node *ast.StringLiteralLike, checker *checker.Checker) bool {
 	if ast.IsPropertySignatureDeclaration(node.Parent) {
-		return checker.GetPropertyOfType(checker.GetTypeAtLocation(node.Parent.Parent), node.Text()) != nil
+		return checker.GetPropertyOfType(checker.GetTypeAtLocation(node.Parent.Parent), unique.Make(node.Text())) != nil
 	}
 	return false
 }
@@ -1964,8 +1965,8 @@ func (state *refState) createSearch(location *ast.Node, symbol *ast.Symbol, comi
 				s = symbol
 			}
 		}
-		symbolName := ast.SymbolName(s)
-		if moduleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbolName); ok {
+		symbolName := ast.SymbolNameText(s)
+		if moduleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(unique.Make(symbolName)); ok {
 			text = moduleName
 		} else {
 			text = symbolName

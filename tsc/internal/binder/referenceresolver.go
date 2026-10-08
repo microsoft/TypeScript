@@ -1,6 +1,8 @@
 package binder
 
 import (
+	"unique"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -11,19 +13,19 @@ type ReferenceResolver interface {
 	GetReferencedImportDeclaration(node *ast.IdentifierNode) *ast.Declaration
 	GetReferencedValueDeclaration(node *ast.IdentifierNode) *ast.Declaration
 	GetReferencedValueDeclarations(node *ast.IdentifierNode) []*ast.Declaration
-	GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string
+	GetElementAccessExpressionName(expression *ast.ElementAccessExpression) ast.SymbolName
 	GetReferencedMemberValueDeclaration(node *ast.Node) *ast.Declaration
 }
 
 type ReferenceResolverHooks struct {
-	ResolveName                            func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
+	ResolveName                            func(location *ast.Node, name ast.SymbolName, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
 	GetResolvedSymbol                      func(*ast.Node) *ast.Symbol
 	GetMergedSymbol                        func(*ast.Symbol) *ast.Symbol
 	GetParentOfSymbol                      func(*ast.Symbol) *ast.Symbol
 	GetSymbolOfDeclaration                 func(*ast.Declaration) *ast.Symbol
 	GetTypeOnlyAliasDeclaration            func(symbol *ast.Symbol, include ast.SymbolFlags) *ast.Declaration
 	GetExportSymbolOfValueSymbolIfExported func(*ast.Symbol) *ast.Symbol
-	GetElementAccessExpressionName         func(*ast.ElementAccessExpression) (string, bool)
+	GetElementAccessExpressionName         func(*ast.ElementAccessExpression) (ast.SymbolName, bool)
 }
 
 var _ ReferenceResolver = &referenceResolver{}
@@ -92,7 +94,7 @@ func (r *referenceResolver) getReferencedValueSymbol(reference *ast.IdentifierNo
 	}
 
 	if r.hooks.ResolveName != nil {
-		return r.hooks.ResolveName(location, reference.Text(), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+		return r.hooks.ResolveName(location, unique.Make(reference.Text()), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
 	}
 
 	if r.resolver == nil {
@@ -101,7 +103,7 @@ func (r *referenceResolver) getReferencedValueSymbol(reference *ast.IdentifierNo
 		}
 	}
 
-	return r.resolver.Resolve(location, reference.Text(), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+	return r.resolver.Resolve(location, unique.Make(reference.Text()), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
 }
 
 func (r *referenceResolver) isTypeOnlyAliasDeclaration(symbol *ast.Symbol) bool {
@@ -237,7 +239,7 @@ func (r *referenceResolver) GetReferencedValueDeclarations(node *ast.IdentifierN
 	return declarations
 }
 
-func (r *referenceResolver) GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string {
+func (r *referenceResolver) GetElementAccessExpressionName(expression *ast.ElementAccessExpression) ast.SymbolName {
 	if expression != nil {
 		if r.hooks.GetElementAccessExpressionName != nil {
 			if name, ok := r.hooks.GetElementAccessExpressionName(expression); ok {
@@ -245,7 +247,7 @@ func (r *referenceResolver) GetElementAccessExpressionName(expression *ast.Eleme
 			}
 		}
 	}
-	return ""
+	return ast.EmptySymbolName
 }
 
 func (r *referenceResolver) GetReferencedMemberValueDeclaration(node *ast.Node) *ast.Declaration {
