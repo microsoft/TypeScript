@@ -197,10 +197,6 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 	return quickInfo, documentation, vsDocumentation, quickInfoRuns
 }
 
-// getDocumentationForSymbol tries each documentation source in turn (call-signature documentation,
-// declaration JSDoc, root-symbol JSDoc, alias target JSDoc) and returns the first non-empty result,
-// formatted for contentFormat. commentOnly restricts the result to the JSDoc summary, excluding the
-// @tag section.
 type documentationLocationMapper func(*ast.SourceFile, core.TextRange) (lsproto.Location, spanmap.Fidelity)
 
 func (l *LanguageService) documentationLocationMapper(feature spanmap.Feature) documentationLocationMapper {
@@ -209,6 +205,10 @@ func (l *LanguageService) documentationLocationMapper(feature spanmap.Feature) d
 	}
 }
 
+// getDocumentationForSymbol tries each documentation source in turn (call-signature documentation,
+// declaration JSDoc, root-symbol JSDoc, alias target JSDoc) and returns the first non-empty result,
+// formatted for contentFormat. commentOnly restricts the result to the JSDoc summary, excluding the
+// @tag section.
 func getDocumentationForSymbol(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	documentation := documentationFromSignature(getMappedLocation, c, symbol, getCallOrNewExpression(node), node, contentFormat, commentOnly)
 	if documentation != "" {

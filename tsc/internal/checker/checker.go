@@ -699,6 +699,7 @@ type Checker struct {
 	ReverseMappedSymbolLinks                    core.LinkStore[*ast.Symbol, ReverseMappedSymbolLinks]
 	markedAssignmentSymbolLinks                 core.LinkStore[*ast.Symbol, MarkedAssignmentSymbolLinks]
 	symbolContainerLinks                        core.LinkStore[*ast.Symbol, ContainingSymbolLinks]
+	externalModuleContainers                    *externalModuleContainerIndex
 	sourceFileLinks                             core.LinkStore[*ast.SourceFile, SourceFileLinks]
 	regExpScanner                               *scanner.Scanner
 	patternForType                              map[*Type]*ast.Node
@@ -5233,6 +5234,9 @@ func (c *Checker) checkEnumDeclaration(node *ast.Node) {
 func (c *Checker) checkEnumMember(node *ast.Node) {
 	if ast.IsPrivateIdentifier(node.Name()) {
 		c.error(node, diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier)
+	}
+	if ast.IsComputedPropertyName(node.Name()) {
+		c.checkExpression(node.Name().Expression())
 	}
 	if node.Initializer() != nil {
 		c.checkExpression(node.Initializer())
@@ -14643,8 +14647,12 @@ func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
 	c.mergedSymbols[source] = target
 }
 
+func (c *Checker) getResolvedTarget(symbol *ast.Symbol) *ast.Symbol {
+	return c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(symbol)))
+}
+
 func (c *Checker) getSymbolIfSameReference(s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol {
-	if c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s1))) == c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s2))) {
+	if c.getResolvedTarget(s1) == c.getResolvedTarget(s2) {
 		return s1
 	}
 	return nil
@@ -28792,13 +28800,7 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 					return
 				}
 			}
-			// Computed property names on enum members are a grammar error and are never checked
-			// (checkEnumMember only checks the member initializer, not the name), so resolving
-			// identifiers in them here would report a spurious "Cannot find name" diagnostic.
 			if computedName != nil {
-				if ast.IsEnumMember(computedName.Parent) {
-					return
-				}
 				if isInvalidComputedPropertyName(computedName) {
 					return
 				}
