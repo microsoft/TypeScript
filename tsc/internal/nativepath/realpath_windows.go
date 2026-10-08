@@ -31,6 +31,9 @@ func Realpath(path string) (string, error) {
 		}
 	}
 
+	// Reserved DOS device names like "con" are interpreted as devices in the normal namespace, even
+	// when used as path components. Avoid scanning every path; on failure, detect this rare case and
+	// retry with the extended path syntax, which treats the components literally.
 	if err != nil && hasReservedPathComponent(path) {
 		h, err = openMetadata(path, true)
 		closeHandle = err == nil
