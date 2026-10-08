@@ -1,13 +1,13 @@
 import {
     API as AsyncAPI,
     type Project as AsyncProject,
-} from "@typescript/typescript/unstable/async";
+} from "@typescript/typescript/async";
 import {
     all,
     API as SyncAPI,
     defer,
     type Project as SyncProject,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -357,7 +357,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
     function createSyncContext(): SyncContext {
         const api = new SyncAPI({ cwd: repoRoot });
-        const snapshot = api.createSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
+        const snapshot = api.createSnapshot({ openProjects: ["tsc/testdata/fixtures/compiler/tsconfig.json"] });
         const project = snapshot.getProjects()[0];
         project.checker.getSymbolAtPosition("core.ts", 0);
         return { api, project };
@@ -365,7 +365,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
     async function createAsyncContext(): Promise<AsyncContext> {
         const api = new AsyncAPI({ cwd: repoRoot });
-        const snapshot = await api.createSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
+        const snapshot = await api.createSnapshot({ openProjects: ["tsc/testdata/fixtures/compiler/tsconfig.json"] });
         const project = snapshot.getProjects()[0];
         await project.checker.getSymbolAtPosition("core.ts", 0);
         return { api, project };
@@ -373,7 +373,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
     function createGeneratorContext(): SyncContext {
         const api = new SyncAPI({ cwd: repoRoot });
-        const [snapshot] = api.batch(api.createSnapshot.gen({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }));
+        const [snapshot] = api.batch(api.createSnapshot.gen({ openProjects: ["tsc/testdata/fixtures/compiler/tsconfig.json"] }));
         const project = snapshot.getProjects()[0];
         api.batch(project.checker.getSymbolAtPosition.gen("core.ts", 0));
         return { api, project };

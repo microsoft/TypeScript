@@ -1,0 +1,14 @@
+main.ts(4,5): error TS1164: Computed property names are not allowed in enums.
+
+
+==== key.ts (0 errors) ====
+    export const key = "member";
+    
+==== main.ts (1 errors) ====
+    import { key } from "./key";
+    
+    export enum Example {
+        [key] = 0,
+        ~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+    }

@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/malformedSuperDestructuringInDecoratedClassStaticBlock.ts] ////
+
+=== malformedSuperDestructuringInDecoratedClassStaticBlock.ts ===
+
+(@c
+class extends B{static{[super.x 0]=[1];}});
+

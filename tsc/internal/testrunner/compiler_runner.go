@@ -1,6 +1,7 @@
 package testrunner
 
 import (
+	"flag"
 	"fmt"
 	"math/rand/v2"
 	"os"
@@ -126,9 +127,13 @@ var skippedTests = []string{
 func (r *CompilerBaselineRunner) RunTests(t *testing.T) {
 	r.cleanUpLocal(t)
 	files := r.EnumerateTestFiles()
+	filter := compilerTestFileFilter(flag.Lookup("test.run").Value.String())
 
 	for _, filename := range files {
 		if slices.Contains(skippedTests, tspath.GetBaseFileName(filename)) {
+			continue
+		}
+		if !filter(tspath.GetBaseFileName(filename)) {
 			continue
 		}
 		r.runTest(t, filename)
