@@ -265,7 +265,7 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 		for _, exported := range c.getExportsOfSymbol(container) {
 			index.add(c.getResolvedTarget(exported), container)
 		}
-		if exportEquals := container.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
+		if exportEquals := container.Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
 			index.add(c.getResolvedTarget(exportEquals), container)
 		}
 	}
