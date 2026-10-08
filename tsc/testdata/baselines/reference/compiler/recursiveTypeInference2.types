@@ -128,7 +128,7 @@ const Tree = object({
 >Tree : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
 >object({  name: string(),  get children() {    return array(Tree).default([])  },}) : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
 >object : <T extends Shape>(shape: T) => ZodObject<Writeable<T>>
->{  name: string(),  get children() {    return array(Tree).default([])  },} : { name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
+>{  name: string(),  get children() {    return array(Tree).default([])  },} : { name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }
 
   name: string(),
 >name : ZodString
@@ -140,11 +140,11 @@ const Tree = object({
 
     return array(Tree).default([])
 >array(Tree).default([]) : ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>
->array(Tree).default : { (def: { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; (def: () => { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
+>array(Tree).default : { (def: { name: string; children: typeof def; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; (def: () => { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
 >array(Tree) : ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>
 >array : <T extends $ZodType>(element: T) => ZodArray<T>
 >Tree : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
->default : { (def: { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; (def: () => { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
+>default : { (def: { name: string; children: typeof def; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; (def: () => { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
 >[] : never[]
 
   },

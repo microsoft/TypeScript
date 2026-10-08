@@ -70,14 +70,14 @@ function foo5() {
 >foo5 : () => void
 
     let x = () => y;
->x : () => () => any
->() => y : () => () => any
->y : () => () => any
+>x : () => () => typeof x
+>() => y : () => () => typeof x
+>y : () => () => typeof y
 
     let y = () => x;
->y : () => () => any
->() => x : () => () => any
->x : () => () => any
+>y : () => () => typeof y
+>() => x : () => () => typeof y
+>x : () => () => typeof x
 }
 
 function foo6() {

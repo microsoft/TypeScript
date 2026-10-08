@@ -2,25 +2,25 @@
 
 === local.ts ===
 export function localArrow() {
->localArrow : () => () => any
+>localArrow : () => () => typeof inner
 
     const inner = () => inner;
->inner : () => any
->() => inner : () => any
->inner : () => any
+>inner : () => typeof inner
+>() => inner : () => typeof inner
+>inner : () => typeof inner
 
     return inner;
->inner : () => any
+>inner : () => typeof inner
 }
 export function localDeclaration() {
->localDeclaration : () => () => any
+>localDeclaration : () => () => typeof inner
 
     function inner() { return inner; }
->inner : () => any
->inner : () => any
+>inner : () => typeof inner
+>inner : () => typeof inner
 
     return inner;
->inner : () => any
+>inner : () => typeof inner
 }
 export function localInstantiation() {
 >localInstantiation : () => () => () => any
@@ -36,12 +36,12 @@ export function localInstantiation() {
 >inner : <T>() => any
 }
 export const object = {
->object : { self(): any; }
->{    self() { return object; }} : { self(): { self(): any; }; }
+>object : { self(): typeof object; }
+>{    self() { return object; }} : { self(): typeof object; }
 
     self() { return object; }
->self : () => { self(): any; }
->object : { self(): any; }
+>self : () => { self(): typeof object; }
+>object : { self(): typeof object; }
 
 };
 export const annotatedObject: { self(): typeof annotatedObject } = {
@@ -88,11 +88,11 @@ export function local(): Recursive {
 >local : () => Recursive
 
     const inner = () => inner;
->inner : () => any
->() => inner : () => any
->inner : () => any
+>inner : () => typeof inner
+>() => inner : () => typeof inner
+>inner : () => typeof inner
 
     return inner;
->inner : () => any
+>inner : () => typeof inner
 }
 

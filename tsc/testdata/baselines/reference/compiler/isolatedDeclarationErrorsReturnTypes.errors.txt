@@ -1,11 +1,7 @@
-isolatedDeclarationErrorsReturnTypes.ts(2,14): error TS5088: The inferred type of 'recursiveArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 isolatedDeclarationErrorsReturnTypes.ts(2,31): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsReturnTypes.ts(3,49): error TS9039: Type containing private name 'recursiveDeclaration' can't be used with --isolatedDeclarations.
-isolatedDeclarationErrorsReturnTypes.ts(4,14): error TS5088: The inferred type of 'recursiveObject' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 isolatedDeclarationErrorsReturnTypes.ts(4,40): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
-isolatedDeclarationErrorsReturnTypes.ts(5,14): error TS5088: The inferred type of 'recursiveTuple' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 isolatedDeclarationErrorsReturnTypes.ts(5,32): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
-isolatedDeclarationErrorsReturnTypes.ts(6,14): error TS5088: The inferred type of 'recursiveNamed' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 isolatedDeclarationErrorsReturnTypes.ts(6,56): error TS9039: Type containing private name 'self' can't be used with --isolatedDeclarations.
 isolatedDeclarationErrorsReturnTypes.ts(25,45): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsReturnTypes.ts(28,41): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
@@ -40,11 +36,9 @@ isolatedDeclarationErrorsReturnTypes.ts(181,85): error TS9007: Function must hav
 isolatedDeclarationErrorsReturnTypes.ts(182,68): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrorsReturnTypes.ts (40 errors) ====
+==== isolatedDeclarationErrorsReturnTypes.ts (36 errors) ====
     // Function Variables
     export const recursiveArrow = () => recursiveArrow;
-                 ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'recursiveArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
                                   ~~~~~~~~~~~~~~~~~~~~
 !!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:2:14: Add a type annotation to the variable recursiveArrow.
@@ -54,22 +48,16 @@ isolatedDeclarationErrorsReturnTypes.ts(182,68): error TS9007: Function must hav
 !!! error TS9039: Type containing private name 'recursiveDeclaration' can't be used with --isolatedDeclarations.
 !!! related TS9031 isolatedDeclarationErrorsReturnTypes.ts:3:17: Add a return type to the function declaration.
     export const recursiveObject = { next: () => recursiveObject };
-                 ~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'recursiveObject' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
                                            ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:4:14: Add a type annotation to the variable recursiveObject.
 !!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:4:40: Add a return type to the function expression.
     export const recursiveTuple = [() => recursiveTuple] as const;
-                 ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'recursiveTuple' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
                                    ~~~~~~~~~~~~~~~~~~~~
 !!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:5:14: Add a type annotation to the variable recursiveTuple.
 !!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:5:32: Add a return type to the function expression.
     export const recursiveNamed = function self() { return self; };
-                 ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'recursiveNamed' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
                                                            ~~~~
 !!! error TS9039: Type containing private name 'self' can't be used with --isolatedDeclarations.
 !!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:6:40: Add a return type to the function expression.

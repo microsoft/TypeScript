@@ -448,8 +448,119 @@ export const inferredCopy = inferred;
 const inferredValue = inferredCopy.next(1).second("text").value;
 
 
+//// [script.d.ts]
+declare const scriptArrow: () => typeof scriptArrow;
+declare const scriptExpression: () => typeof scriptExpression;
+declare function scriptDeclaration(): typeof scriptDeclaration;
+//// [exported.d.ts]
+export declare const arrow: () => typeof arrow;
+export declare const expression: () => typeof expression;
+export declare function declaration(): typeof declaration;
+export declare const annotated: () => typeof annotated;
+export declare const first: () => typeof second;
+export declare const second: () => typeof first;
+export declare const generic: <T>(value: T) => typeof generic;
+export declare const finite: () => () => number;
+export declare const wrapped: {
+    arrow: typeof arrow;
+};
+export declare const tuple: readonly [typeof arrow];
+export declare const named: () => typeof named;
+export declare const broad: unknown;
+export declare const contextual: () => unknown;
+export declare const specialized: (value: number) => typeof generic;
+export declare const annotatedParameter: (value: string | number) => typeof annotatedParameter;
+export declare const renamedParameter: (other: number | string) => typeof renamedParameter;
+export declare const optionalParameter: (value?: string) => typeof optionalParameter;
+export declare const restParameter: (...values: string[]) => typeof restParameter;
+export declare const nestedReturn: () => () => typeof nestedReturn;
+export declare const finiteObject: {
+    call: (value: string) => {
+        value: string;
+    };
+};
+export declare const finiteTuple: readonly [(value: number) => readonly [number]];
+export declare const nestedGeneric: <T>(value: T) => {
+    call: (other: T) => readonly [T, T];
+};
+export declare const instantiatedNested: {
+    call: (other: string) => readonly [string, string];
+};
+export declare const objectReturn: () => {
+    call: typeof objectReturn;
+};
+export declare const tupleReturn: () => readonly [typeof tupleReturn];
+export declare const shadowed: (shadowed: number) => typeof import("./exported").shadowed;
 //// [consumer.d.ts]
 export {};
+//// [recursiveStructures.d.ts]
+export declare const object: {
+    value: number;
+    next: () => typeof object;
+};
+export declare const method: {
+    value: number;
+    next(): typeof method;
+};
+export declare const accessor: {
+    value: number;
+    readonly next: typeof accessor;
+};
+export declare const tuple: readonly [() => typeof tuple];
+export declare const tupleObject: readonly [{
+    readonly next: () => typeof tupleObject;
+}];
+export declare const array: (() => typeof array)[];
+export declare const first: {
+    next: () => {
+        next: () => typeof first;
+    };
+};
+export declare const second: {
+    next: () => {
+        next: () => typeof second;
+    };
+};
+export declare const nested: {
+    inner: {
+        next(): {
+            next(): (typeof nested)["inner"];
+        };
+    };
+};
+export declare const shadowed: {
+    next: (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"];
+};
+export declare const memberTuple: readonly [() => (typeof memberTuple)[0]];
+export declare const memberArray: (() => (typeof memberArray)[0])[];
+export declare const quoted: {
+    "a-b": () => (typeof quoted)["a-b"];
+};
+export declare const numeric: {
+    0: () => (typeof numeric)[0];
+};
+export declare const key: unique symbol;
+export declare const computed: {
+    [key]: () => (typeof computed)[typeof key];
+};
+export declare const union: {
+    next: () => typeof union;
+} | undefined;
+export declare const specialized: {
+    value: string;
+    next: () => typeof specialized;
+};
+export declare const broad: unknown;
+export declare const indexed: {
+    [key: string]: typeof indexed;
+};
+export declare const mapped: {
+    next: typeof mapped;
+};
+export declare const viaAnnotation: {
+    value: string;
+    next: () => typeof viaAnnotation;
+};
 //// [recursiveAnnotations.d.ts]
 declare const object: {
     next: typeof object;
@@ -468,3 +579,377 @@ declare const mapped: {
 };
 declare const union: typeof union | undefined;
 declare const conditional: true extends false ? never : typeof conditional;
+//// [namedReferences.d.ts]
+export type Link<T> = {
+    value: T;
+    next: Link<T>;
+};
+export type Callable<T> = {
+    (value: T): Callable<T>;
+    link: Link<T>;
+};
+export type Wrapped = ({
+    next: Wrapped;
+});
+export declare const link: Link<string>;
+export declare const callable: Callable<number>;
+export declare const nextLink: Link<string>;
+export declare const nextCallable: Callable<number>;
+export declare const parenthesized: () => typeof parenthesized;
+export declare const asserted: () => typeof asserted;
+export declare const widened: () => unknown;
+export declare const hiddenAlias: {
+    value: string;
+    next: typeof hiddenAlias;
+};
+export declare const siblingHiddenAliases: {
+    first: {
+        value: string;
+        next: (typeof siblingHiddenAliases)["first"];
+    };
+    second: {
+        value: string;
+        next: (typeof siblingHiddenAliases)["second"];
+    };
+};
+export declare const methodKey: unique symbol;
+export declare class Methods {
+    static recur(): (typeof Methods)["recur"];
+    static "a-b"(): (typeof Methods)["a-b"];
+    static [methodKey](): (typeof Methods)[typeof methodKey];
+    recur(): Methods["recur"];
+}
+export declare function overloaded(value: string): typeof overloaded;
+export declare function overloaded(value: number): typeof overloaded;
+//// [signatureScopes.d.ts]
+export declare const scoped: {
+    first<T>(outer: T): {
+        nested<T_1>(inner: T_1): {
+            outer: T;
+            inner: T_1;
+            next: typeof scoped;
+        };
+        sibling<T_1>(inner: T_1): {
+            outer: T;
+            inner: T_1;
+            next: typeof scoped;
+        };
+    };
+    second<T>(value: T): {
+        value: T;
+        next: typeof scoped;
+    };
+};
+export declare const numberScope: {
+    nested<T>(inner: T): {
+        outer: number;
+        inner: T;
+        next: {
+            first<T_1>(outer: T_1): {
+                nested<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+                sibling<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+            };
+            second<T_1>(value: T_1): {
+                value: T_1;
+                next: typeof scoped;
+            };
+        };
+    };
+    sibling<T>(inner: T): {
+        outer: number;
+        inner: T;
+        next: {
+            first<T_1>(outer: T_1): {
+                nested<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+                sibling<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+            };
+            second<T_1>(value: T_1): {
+                value: T_1;
+                next: typeof scoped;
+            };
+        };
+    };
+};
+export declare const stringScope: {
+    nested<T>(inner: T): {
+        outer: string;
+        inner: T;
+        next: {
+            first<T_1>(outer: T_1): {
+                nested<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+                sibling<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+            };
+            second<T_1>(value: T_1): {
+                value: T_1;
+                next: typeof scoped;
+            };
+        };
+    };
+    sibling<T>(inner: T): {
+        outer: string;
+        inner: T;
+        next: {
+            first<T_1>(outer: T_1): {
+                nested<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+                sibling<T_2>(inner: T_2): {
+                    outer: T_1;
+                    inner: T_2;
+                    next: typeof scoped;
+                };
+            };
+            second<T_1>(value: T_1): {
+                value: T_1;
+                next: typeof scoped;
+            };
+        };
+    };
+};
+export declare const nestedOwner: {
+    make<T>(outer: T): {
+        nested<U>(inner: U): {
+            outer: T;
+            inner: U;
+            owner: typeof nestedOwner;
+        };
+        constrained<U extends T = T>(inner: U): {
+            outer: T;
+            inner: U;
+            owner: typeof nestedOwner;
+        };
+        copied<U>(inner: U): {
+            outer: T;
+            inner: U;
+            owner: typeof nestedOwner;
+        };
+        rest<U>(values_0: U): {
+            outer: T;
+            inner: U;
+            owner: typeof nestedOwner;
+        };
+    };
+};
+export declare const nestedNumber: {
+    nested<U>(inner: U): {
+        outer: number;
+        inner: U;
+        owner: {
+            make<T>(outer: T): {
+                nested<U_1>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                constrained<U_1 extends T = T>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                copied<U_1>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                rest<U_1>(values_0: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+            };
+        };
+    };
+    constrained<U extends number = number>(inner: U): {
+        outer: number;
+        inner: U;
+        owner: {
+            make<T>(outer: T): {
+                nested<U_1>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                constrained<U_1 extends T = T>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                copied<U_1>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                rest<U_1>(values_0: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+            };
+        };
+    };
+    copied<U>(inner: U): {
+        outer: number;
+        inner: U;
+        owner: typeof nestedOwner;
+    };
+    rest<U>(values_0: U): {
+        outer: number;
+        inner: U;
+        owner: {
+            make<T>(outer: T): {
+                nested<U_1>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                constrained<U_1 extends T = T>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                copied<U_1>(inner: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+                rest<U_1>(values_0: U_1): {
+                    outer: T;
+                    inner: U_1;
+                    owner: typeof nestedOwner;
+                };
+            };
+        };
+    };
+};
+export declare const nestedString: {
+    outer: string;
+    inner: number;
+    owner: {
+        make<T>(outer: T): {
+            nested<U>(inner: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+            constrained<U extends T = T>(inner: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+            copied<U>(inner: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+            rest<U>(values_0: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+        };
+    };
+};
+export declare const nestedBoolean: {
+    outer: boolean;
+    inner: string;
+    owner: {
+        make<T>(outer: T): {
+            nested<U>(inner: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+            constrained<U extends T = T>(inner: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+            copied<U>(inner: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+            rest<U>(values_0: U): {
+                outer: T;
+                inner: U;
+                owner: typeof nestedOwner;
+            };
+        };
+    };
+};
+export declare const reused: {
+    first<T>(...values: [T]): {
+        value: T;
+        next: typeof reused;
+    };
+    second<T>(value: T): {
+        value: T;
+        next: typeof reused;
+    };
+    shadowed<T>(reused: T): {
+        value: T;
+        next: typeof reused;
+    };
+};
+export declare const copy: {
+    first<T>(values_0: T): {
+        value: T;
+        next: typeof reused;
+    };
+    second<T>(value: T): {
+        value: T;
+        next: typeof reused;
+    };
+    shadowed<T>(reused: T): {
+        value: T;
+        next: typeof reused;
+    };
+};
+export type Inferred<T> = T extends (value: infer U) => infer R ? {
+    [K in keyof R]: (value: U) => R[K];
+} : never;
+export declare const inferred: Inferred<(value: number) => {
+    next: typeof reused;
+}>;
+export declare const inferredCopy: {
+    next: (value: number) => {
+        first<T>(values_0: T): {
+            value: T;
+            next: typeof reused;
+        };
+        second<T>(value: T): {
+            value: T;
+            next: typeof reused;
+        };
+        shadowed<T>(reused: T): {
+            value: T;
+            next: typeof reused;
+        };
+    };
+};

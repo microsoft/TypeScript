@@ -172,7 +172,7 @@ const Category = z.object({
 >z.object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
->{  name: z.string(),  get subcategories() {    return z.array(Category);  },} : { name: $ZodString; readonly subcategories: $ZodArray<$ZodObject<{ name: $ZodString; readonly subcategories: $ZodArray<$ZodObject<any>>; }>>; }
+>{  name: z.string(),  get subcategories() {    return z.array(Category);  },} : { name: $ZodString; readonly subcategories: $ZodArray<$ZodObject<any>>; }
 
   name: z.string(),
 >name : $ZodString
@@ -217,7 +217,7 @@ const User = z.object({
 >z.object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
->{  email: z.string(),  get posts() {    return z.array(Post);  },} : { email: $ZodString; readonly posts: $ZodArray<$ZodObject<{ title: $ZodString; readonly author: $ZodObject<{ email: $ZodString; readonly posts: $ZodArray<$ZodObject<any>>; }>; }>>; }
+>{  email: z.string(),  get posts() {    return z.array(Post);  },} : { email: $ZodString; readonly posts: $ZodArray<$ZodObject<{ title: $ZodString; readonly author: $ZodObject<any>; }>>; }
 
   email: z.string(),
 >email : $ZodString
@@ -244,7 +244,7 @@ const Post = z.object({
 >z.object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
->{  title: z.string(),  get author() {    return User;  },} : { title: $ZodString; readonly author: $ZodObject<{ email: $ZodString; readonly posts: $ZodArray<$ZodObject<{ title: $ZodString; readonly author: $ZodObject<any>; }>>; }>; }
+>{  title: z.string(),  get author() {    return User;  },} : { title: $ZodString; readonly author: $ZodObject<{ email: $ZodString; readonly posts: $ZodArray<$ZodObject<any>>; }>; }
 
   title: z.string(),
 >title : $ZodString
@@ -289,7 +289,7 @@ const Activity = z.object({
 >z.object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
->{  name: z.string(),  get subactivities() {    return z.nullable(z.array(Activity));  },} : { name: $ZodString; readonly subactivities: $ZodNullable<$ZodArray<$ZodObject<{ name: $ZodString; readonly subactivities: $ZodNullable<$ZodArray<$ZodObject<any>>>; }>>>; }
+>{  name: z.string(),  get subactivities() {    return z.nullable(z.array(Activity));  },} : { name: $ZodString; readonly subactivities: $ZodNullable<$ZodArray<$ZodObject<any>>>; }
 
   name: z.string(),
 >name : $ZodString
@@ -325,7 +325,7 @@ const Node1 = z.object({
 >z.object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
->{  name: z.string(),  get children() {    return z.optional(NodeArray);  },} : { name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<{ name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }>>>; }
+>{  name: z.string(),  get children() {    return z.optional(NodeArray);  },} : { name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }
 
   name: z.string(),
 >name : $ZodString

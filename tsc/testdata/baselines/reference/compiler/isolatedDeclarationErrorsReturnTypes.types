@@ -12,22 +12,22 @@ export function recursiveDeclaration() { return recursiveDeclaration; }
 >recursiveDeclaration : () => typeof recursiveDeclaration
 
 export const recursiveObject = { next: () => recursiveObject };
->recursiveObject : { next: () => any; }
->{ next: () => recursiveObject } : { next: () => { next: () => any; }; }
->next : () => { next: () => any; }
->() => recursiveObject : () => { next: () => any; }
->recursiveObject : { next: () => any; }
+>recursiveObject : { next: () => typeof recursiveObject; }
+>{ next: () => recursiveObject } : { next: () => typeof recursiveObject; }
+>next : () => { next: (typeof recursiveObject)["next"]; }
+>() => recursiveObject : () => { next: (typeof recursiveObject)["next"]; }
+>recursiveObject : { next: () => typeof recursiveObject; }
 
 export const recursiveTuple = [() => recursiveTuple] as const;
 >recursiveTuple : readonly [() => any]
 >[() => recursiveTuple] as const : readonly [() => any]
 >[() => recursiveTuple] : readonly [() => any]
->() => recursiveTuple : () => readonly [any]
+>() => recursiveTuple : () => readonly [(typeof recursiveTuple)[0]]
 >recursiveTuple : readonly [() => any]
 
 export const recursiveNamed = function self() { return self; };
->recursiveNamed : () => typeof self
->function self() { return self; } : () => typeof self
+>recursiveNamed : () => typeof recursiveNamed
+>function self() { return self; } : () => typeof recursiveNamed
 >self : () => typeof recursiveNamed
 >self : () => typeof recursiveNamed
 
