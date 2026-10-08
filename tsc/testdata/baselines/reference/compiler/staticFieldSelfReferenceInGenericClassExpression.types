@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/staticFieldSelfReferenceInGenericClassExpression.ts] ////
+
+=== staticFieldSelfReferenceInGenericClassExpression.ts ===
+function id<T>(x: T): T {
+>id : <T>(x: T) => T
+>x : T
+
+    return x;
+>x : T
+}
+
+const Foo = id(class {
+>Foo : typeof (Anonymous class)
+>id(class {    static readonly foo = id(42);}) : typeof (Anonymous class)
+>id : <T>(x: T) => T
+>class {    static readonly foo = id(42);} : typeof (Anonymous class)
+
+    static readonly foo = id(42);
+>foo : 42
+>id(42) : 42
+>id : <T>(x: T) => T
+>42 : 42
+
+});
+
+const Ok = class {
+>Ok : typeof Ok
+>class {    static readonly foo = id(42);} : typeof Ok
+
+    static readonly foo = id(42);
+>foo : 42
+>id(42) : 42
+>id : <T>(x: T) => T
+>42 : 42
+
+};
+
+class Circular {
+>Circular : Circular
+
+    static foo = Circular.foo;
+>foo : any
+>Circular.foo : any
+>Circular : typeof Circular
+>foo : any
+}

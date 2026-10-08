@@ -31186,7 +31186,7 @@ func (c *Checker) isExcludedMappedPropertyName(t *Type, propertyNameType *Type) 
 
 func (c *Checker) getTypeOfConcretePropertyOfContextualType(t *Type, name string) *Type {
 	prop := c.getPropertyOfType(t, name)
-	if prop == nil || c.isCircularMappedProperty(prop) {
+	if prop == nil || c.isCircularProperty(prop) {
 		return nil
 	}
 	return c.removeMissingType(c.getTypeOfSymbol(prop), prop.Flags&ast.SymbolFlagsOptional != 0)
@@ -31209,12 +31209,9 @@ func (c *Checker) getTypeFromIndexInfosOfContextualType(t *Type, name string, na
 	return indexInfo.valueType
 }
 
-func (c *Checker) isCircularMappedProperty(symbol *ast.Symbol) bool {
-	if symbol.CheckFlags&ast.CheckFlagsMapped != 0 {
-		links := c.valueSymbolLinks.Get(symbol)
-		return links.resolvedType == nil && c.findResolutionCycleStartIndex(symbol, TypeSystemPropertyNameType) >= 0
-	}
-	return false
+func (c *Checker) isCircularProperty(symbol *ast.Symbol) bool {
+	links := c.valueSymbolLinks.Get(symbol)
+	return links.resolvedType == nil && c.findResolutionCycleStartIndex(symbol, TypeSystemPropertyNameType) >= 0
 }
 
 func (c *Checker) appendContextualPropertyTypeConstituent(types []*Type, t *Type) []*Type {
