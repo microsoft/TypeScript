@@ -247,18 +247,20 @@ export class SyncRpcChannel {
                 throw new Error("SyncRpcChannel: timed out connecting to FIFOs");
             }
 
-            writeFileSync(prefix + ".ready", "", {
-                flag: "wx",
-                mode: 0o600,
-            });
             // Keep the probes open until both blocking descriptors are connected.
             const readFd = openSync(outPath, constants.O_RDONLY);
+            let writeFd: number | undefined;
             try {
-                const writeFd = openSync(inPath, constants.O_WRONLY);
+                writeFd = openSync(inPath, constants.O_WRONLY);
+                writeFileSync(prefix + ".ready", "", {
+                    flag: "wx",
+                    mode: 0o600,
+                });
                 return { readFd, writeFd };
             }
             catch (error) {
                 closeSync(readFd);
+                if (writeFd !== undefined) closeSync(writeFd);
                 throw error;
             }
         }

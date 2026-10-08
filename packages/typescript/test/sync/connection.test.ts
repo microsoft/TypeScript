@@ -17,6 +17,8 @@ import {
     readFileSync,
     statSync,
 } from "node:fs";
+import fs from "node:fs";
+import { syncBuiltinESMExports } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -108,16 +110,27 @@ test("an unconnected synchronous API server can shut down", {
     }
 });
 
-test("synchronous FIFO channels use blocking descriptors", {
+test("synchronous FIFO channels open blocking descriptors before signaling readiness", {
     timeout: 10_000,
     skip: process.platform !== "linux",
-}, async () => {
+}, async t => {
     const endpoint = path.join(tmpdir(), `tsgo-api-test-${randomUUID()}`);
     const child = spawn(getExePath(), ["--api", "--transport", `sync=${endpoint}`], {
         stdio: ["ignore", "ignore", "pipe"],
     });
     const childExit = once(child, "exit");
     let channel: SyncRpcChannel | undefined;
+    const originalOpenSync = fs.openSync;
+    const open = t.mock.method(fs, "openSync", (file: fs.PathLike, flags: string | number, mode?: fs.Mode) => {
+        if (
+            (file === endpoint + ".out" && flags === constants.O_RDONLY)
+            || (file === endpoint + ".in" && flags === constants.O_WRONLY)
+        ) {
+            assert.equal(existsSync(endpoint + ".ready"), false);
+        }
+        return originalOpenSync(file, flags, mode);
+    });
+    syncBuiltinESMExports();
     try {
         channel = new SyncRpcChannel({ pipe: endpoint });
         for (const fd of [channel["readFd"], channel["writeFd"]]) {
@@ -129,7 +142,55 @@ test("synchronous FIFO channels use blocking descriptors", {
         assert.equal(channel.requestSync("echo", "blocking FIFOs"), "blocking FIFOs");
     }
     finally {
+        open.mock.restore();
+        syncBuiltinESMExports();
         channel?.close();
+        if (child.exitCode === null) {
+            child.kill();
+        }
+        await childExit;
+    }
+});
+
+test("synchronous FIFO channels close final descriptors when readiness signaling fails", {
+    timeout: 10_000,
+    skip: process.platform === "win32",
+}, async t => {
+    const endpoint = path.join(tmpdir(), `tsgo-api-test-${randomUUID()}`);
+    const child = spawn(getExePath(), ["--api", "--transport", `sync=${endpoint}`], {
+        stdio: ["ignore", "ignore", "pipe"],
+    });
+    const childExit = once(child, "exit");
+    const descriptors: number[] = [];
+    const originalOpenSync = fs.openSync;
+    const originalWriteFileSync = fs.writeFileSync;
+    const open = t.mock.method(fs, "openSync", (file: fs.PathLike, flags: string | number, mode?: fs.Mode) => {
+        const fd = originalOpenSync(file, flags, mode);
+        if (
+            (file === endpoint + ".out" && flags === constants.O_RDONLY)
+            || (file === endpoint + ".in" && flags === constants.O_WRONLY)
+        ) {
+            descriptors.push(fd);
+        }
+        return fd;
+    });
+    const failure = new Error("Failed to signal FIFO readiness");
+    const write = t.mock.method(fs, "writeFileSync", (...args: Parameters<typeof fs.writeFileSync>) => {
+        if (args[0] === endpoint + ".ready") throw failure;
+        return originalWriteFileSync(...args);
+    });
+    syncBuiltinESMExports();
+    try {
+        assert.throws(() => new SyncRpcChannel({ pipe: endpoint }), error => error === failure);
+        assert.equal(descriptors.length, 2);
+        for (const fd of descriptors) {
+            assert.throws(() => fs.fstatSync(fd), { code: "EBADF" });
+        }
+    }
+    finally {
+        open.mock.restore();
+        write.mock.restore();
+        syncBuiltinESMExports();
         if (child.exitCode === null) {
             child.kill();
         }
