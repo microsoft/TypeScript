@@ -1,0 +1,67 @@
+//// [tests/cases/conformance/importSource/importSource16.ts] ////
+
+=== index.mts ===
+import source a from "./missing.wasm";
+>a : AbstractModuleSource
+
+import source b from "missing";
+>b : AbstractModuleSource
+
+import source c from "./a.txt";
+>c : AbstractModuleSource
+
+import source d from "./a.js";
+>d : AbstractModuleSource
+
+import source e from "./a.d.ts";
+>e : AbstractModuleSource
+
+import source f from "./a.ts";
+>f : AbstractModuleSource
+
+export { a, b, c, d, e, f };
+>a : AbstractModuleSource
+>b : AbstractModuleSource
+>c : AbstractModuleSource
+>d : AbstractModuleSource
+>e : AbstractModuleSource
+>f : AbstractModuleSource
+
+const sources: AbstractModuleSource[] = [a, b, c, d, e, f];
+>sources : AbstractModuleSource[]
+>[a, b, c, d, e, f] : AbstractModuleSource[]
+>a : AbstractModuleSource
+>b : AbstractModuleSource
+>c : AbstractModuleSource
+>d : AbstractModuleSource
+>e : AbstractModuleSource
+>f : AbstractModuleSource
+
+export const g = import.source("./missing.wasm");
+>g : Promise<AbstractModuleSource>
+>import.source("./missing.wasm") : Promise<AbstractModuleSource>
+>source : any
+>"./missing.wasm" : "./missing.wasm"
+
+export const h = import.source("missing");
+>h : Promise<AbstractModuleSource>
+>import.source("missing") : Promise<AbstractModuleSource>
+>source : any
+>"missing" : "missing"
+
+export const i = import.source("./a.txt");
+>i : Promise<AbstractModuleSource>
+>import.source("./a.txt") : Promise<AbstractModuleSource>
+>source : any
+>"./a.txt" : "./a.txt"
+
+export function load(path: string): Promise<AbstractModuleSource> {
+>load : (path: string) => Promise<AbstractModuleSource>
+>path : string
+
+    return import.source(path);
+>import.source(path) : Promise<AbstractModuleSource>
+>source : any
+>path : string
+}
+

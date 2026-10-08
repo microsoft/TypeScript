@@ -57,7 +57,7 @@ type NodeBuilderSymbolLinks struct {
 }
 
 type moduleSpecifierResult struct {
-	specifier            string
+	specifier            tspath.ModuleSpecifier
 	importAttributesType *Type
 }
 
@@ -678,7 +678,7 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 		if len(specifierResult.specifier) == 0 {
 			specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ResolutionModeNone)
 		}
-		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifierResult.specifier, "/node_modules/") {
+		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
 			oldSpecifierResult := specifierResult
 
 			if b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext {
@@ -689,7 +689,7 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 				}
 				specifierResult = b.getSpecifierForModuleSymbol(chain[0], swappedMode)
 
-				if strings.Contains(specifierResult.specifier, "/node_modules/") {
+				if strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
 					// Still unreachable :(
 					specifierResult = oldSpecifierResult
 				} else {
@@ -701,12 +701,12 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 				// If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
 				// since declaration files with these kinds of references are liable to fail when published :(
 				b.ctx.encounteredError = true
-				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifierResult.specifier, symbol.Name)
+				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifierResult.specifier.AsString(), symbol.Name)
 			}
 		}
 
 		attributes := b.createImportAttributesForModuleSpecifier(specifierResult, importModeOverride)
-		lit := b.f.NewLiteralTypeNode(b.newStringLiteral(specifierResult.specifier))
+		lit := b.f.NewLiteralTypeNode(b.newStringLiteral(specifierResult.specifier.AsString()))
 		b.ctx.approximateLength += len(specifierResult.specifier) + 10 // specifier + import("")
 		if nonRootParts == nil || ast.IsEntityName(nonRootParts) {
 			if nonRootParts != nil {
@@ -871,7 +871,7 @@ func (b *NodeBuilderImpl) createExpressionFromSymbolChain(chain []*ast.Symbol, i
 	if startsWithSingleOrDoubleQuote(symbolName) && core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
 		specifierResult := b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)
 		b.ctx.approximateLength += 2 + len(specifierResult.specifier)
-		return b.newStringLiteral(specifierResult.specifier)
+		return b.newStringLiteral(specifierResult.specifier.AsString())
 	}
 
 	if index == 0 || canUsePropertyAccess(symbolName) {
@@ -1102,7 +1102,7 @@ func (b *NodeBuilderImpl) getSymbolChain(symbol *ast.Symbol, meaning ast.SymbolF
 		if len(parents) > 0 {
 			parentSpecifiers := core.Map(parents, func(symbol *ast.Symbol) sortedSymbolNamePair {
 				if core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
-					return sortedSymbolNamePair{symbol, b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone).specifier}
+					return sortedSymbolNamePair{symbol, b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone).specifier.AsString()}
 				}
 				return sortedSymbolNamePair{symbol, ""}
 			})
@@ -1270,21 +1270,21 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 
 	if file == nil {
 		if declaration := core.Find(symbol.Declarations, ast.IsModuleWithStringLiteralName); declaration != nil {
-			specifier := declaration.Name().Text()
+			specifier := tspath.ToModuleSpecifier(declaration.Name().Text())
 			if originalImportAttributesType != nil && b.moduleSpecifierResolvesToSymbol(specifier, originalImportAttributesType, symbol) {
 				return moduleSpecifierResult{specifier: specifier, importAttributesType: originalImportAttributesType}
 			}
 			return moduleSpecifierResult{specifier: specifier, importAttributesType: b.ch.getTypeOfModuleImportAttributes(symbol)}
 		}
 		if specifier, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbol.Name); ok {
-			return moduleSpecifierResult{specifier: specifier}
+			return moduleSpecifierResult{specifier: tspath.ToModuleSpecifier(specifier)}
 		}
 	}
 	if b.ctx.enclosingFile == nil {
 		if specifier, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbol.Name); ok {
-			return moduleSpecifierResult{specifier: specifier}
+			return moduleSpecifierResult{specifier: tspath.ToModuleSpecifier(specifier)}
 		}
-		return moduleSpecifierResult{specifier: ast.GetSourceFileOfModule(symbol).FileName()}
+		return moduleSpecifierResult{specifier: ast.GetSourceFileOfModule(symbol).FileName().AsModuleSpecifier()}
 	}
 
 	contextFile := b.ctx.enclosingFile
@@ -1294,7 +1294,7 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	} else if resolutionMode == core.ResolutionModeNone && contextFile != nil {
 		resolutionMode = b.ch.program.GetDefaultResolutionModeForFile(contextFile)
 	}
-	cacheKey := module.ModeAwareCacheKey{Name: string(contextFile.Path()), Mode: resolutionMode}
+	cacheKey := module.ModeAwareCacheKey{Name: string(contextFile.PathKey()), Mode: resolutionMode}
 	links := b.symbolLinks.Get(symbol)
 	if links.specifierCache == nil {
 		links.specifierCache = make(module.ModeAwareCache[moduleSpecifierResult])
@@ -1345,7 +1345,7 @@ func (b *NodeBuilderImpl) moduleSpecifierResultForSymbol(result moduleSpecifierR
 	return result
 }
 
-func (b *NodeBuilderImpl) moduleSpecifierResolvesToSymbol(specifier string, importAttributesType *Type, symbol *ast.Symbol) bool {
+func (b *NodeBuilderImpl) moduleSpecifierResolvesToSymbol(specifier tspath.ModuleSpecifier, importAttributesType *Type, symbol *ast.Symbol) bool {
 	location := b.ctx.enclosingDeclaration
 	if location == nil && b.ctx.enclosingFile != nil {
 		location = b.ctx.enclosingFile.AsNode()
@@ -1353,7 +1353,7 @@ func (b *NodeBuilderImpl) moduleSpecifierResolvesToSymbol(specifier string, impo
 	if location == nil {
 		return false
 	}
-	resolved := b.ch.resolveExternalModule(location, specifier, nil, nil, false /*isForAugmentation*/, importAttributesType)
+	resolved := b.ch.resolveExternalModule(location, specifier.AsString(), nil, nil, false /*isForAugmentation*/, importAttributesType)
 	return resolved != nil && b.ch.getMergedSymbol(resolved) == b.ch.getMergedSymbol(symbol)
 }
 
@@ -2153,8 +2153,7 @@ func (b *NodeBuilderImpl) isTriviallySerializableComputedName(e *ast.Node) bool 
 	if !shapeGood {
 		return false
 	}
-	// TODO: going through emit resolver here is weird. Relayer these APIs.
-	return b.ch.GetEmitResolver().isEntityNameVisible(e.Name().Expression(), b.ctx.enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
+	return b.ch.isEntityNameVisible(e.Name().Expression(), b.ctx.enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
 }
 
 func (b *NodeBuilderImpl) indexInfoToObjectComputedNamesOrSignatureDeclaration(indexInfo *IndexInfo, typeNode *ast.TypeNode) []*ast.Node {
@@ -2285,8 +2284,7 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 		}
 	}
 
-	// !!! TODO: JSDoc, getEmitResolver call is unfortunate layering for the helper - hoist it into checker
-	requiresAddingUndefined := declaration != nil && (ast.IsParameterDeclaration(declaration) || ast.IsPropertySignatureDeclaration(declaration) || ast.IsPropertyDeclaration(declaration)) && b.ch.GetEmitResolver().requiresAddingImplicitUndefined(declaration, symbol, b.ctx.enclosingDeclaration)
+	requiresAddingUndefined := declaration != nil && (ast.IsParameterDeclaration(declaration) || ast.IsPropertySignatureDeclaration(declaration) || ast.IsPropertyDeclaration(declaration)) && b.ch.requiresAddingImplicitUndefined(declaration, symbol, b.ctx.enclosingDeclaration)
 	addUndefinedForParameter := requiresAddingUndefined && (ast.IsParameterDeclaration(declaration) /*|| ast.IsJSDocParameterTag(declaration)*/)
 	if addUndefinedForParameter {
 		t = b.ch.getOptionalType(t, false)

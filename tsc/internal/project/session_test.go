@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strings"
 	"testing"
+	"testing/synctest"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -53,7 +55,7 @@ func TestSession(t *testing.T) {
 			snapshot = session.Snapshot()
 			assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 
-			configuredProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json"))
+			configuredProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/ts/p1/tsconfig.json"))
 			assert.Assert(t, configuredProject != nil)
 
 			// Get language service to access the program
@@ -75,7 +77,7 @@ func TestSession(t *testing.T) {
 			assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 
 			// Should have both configured project (for tsconfig.json) and inferred project
-			configuredProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json"))
+			configuredProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/ts/p1/tsconfig.json"))
 			inferredProject := snapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, configuredProject != nil)
 			assert.Assert(t, inferredProject != nil)
@@ -678,7 +680,7 @@ func TestSession(t *testing.T) {
 					}
 
 					session, utils := projecttestutil.SetupWithOptions(files, &project.SessionOptions{
-						CurrentDirectory:   workspaceDir,
+						CurrentDirectory:   tspath.RootedDirectoryPathFromNormalized(workspaceDir),
 						DefaultLibraryPath: bundled.LibPath(),
 						TypingsLocation:    projecttestutil.TestTypingsLocation,
 						PositionEncoding:   lsproto.PositionEncodingKindUTF8,
@@ -1526,7 +1528,7 @@ export const value = content;`,
 		defer session.Close()
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///src/index.ts")
-		configPath := tspath.Path("/src/tsconfig.json")
+		configPath := tspath.PathKey("/src/tsconfig.json")
 		session.DidOpenFile(ctx, uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(ctx, uri)
 		assert.NilError(t, err)
@@ -1724,7 +1726,7 @@ export const value = content;`,
 		jsURI := lsproto.DocumentUri("file:///home/projects/TS/p1/app.js")
 		defaultProject := snapshot.GetDefaultProject(jsURI)
 		assert.Assert(t, defaultProject != nil, "JS file should have a default project")
-		assert.Equal(t, defaultProject.ConfigFileName(), "/home/projects/TS/p1/jsconfig.json", "JS file should belong to jsconfig.json project, not tsconfig.json")
+		assert.Equal(t, defaultProject.ConfigFileName().AsString(), "/home/projects/TS/p1/jsconfig.json", "JS file should belong to jsconfig.json project, not tsconfig.json")
 
 		// Open the TS file - it should be assigned to tsconfig.json project
 		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
@@ -1733,6 +1735,39 @@ export const value = content;`,
 		tsURI := lsproto.DocumentUri("file:///home/projects/TS/p1/index.ts")
 		defaultTSProject := snapshot.GetDefaultProject(tsURI)
 		assert.Assert(t, defaultTSProject != nil, "TS file should have a default project")
-		assert.Equal(t, defaultTSProject.ConfigFileName(), "/home/projects/TS/p1/tsconfig.json", "TS file should belong to tsconfig.json project")
+		assert.Equal(t, defaultTSProject.ConfigFileName().AsString(), "/home/projects/TS/p1/tsconfig.json", "TS file should belong to tsconfig.json project")
+	})
+}
+
+// TestSessionCloseDoesNotBlockOnIdleCacheCleanTimer guards against a
+// regression where the idle disk cache clean timer was never stored on the
+// session, so Close could never find and cancel it, and would instead block
+// until the timer's full delay elapsed.
+func TestSessionCloseDoesNotBlockOnIdleCacheCleanTimer(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	files := map[string]any{
+		"/home/projects/TS/p1/tsconfig.json": `{
+			"compilerOptions": { "noLib": true }
+		}`,
+		"/home/projects/TS/p1/src/index.ts": `export const x = 1;`,
+	}
+
+	synctest.Test(t, func(t *testing.T) {
+		session, _ := projecttestutil.Setup(files)
+
+		// DidOpenFile schedules the idle cache clean timer.
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 1, files["/home/projects/TS/p1/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		synctest.Wait()
+
+		start := time.Now()
+		session.Close()
+		// Close must return without needing the fake clock to advance past
+		// the idle cache clean delay; if it does, the timer leaked.
+		elapsed := time.Since(start)
+		assert.Assert(t, elapsed < 5*time.Second, "Close took %v, want well under the idle cache clean delay", elapsed)
 	})
 }

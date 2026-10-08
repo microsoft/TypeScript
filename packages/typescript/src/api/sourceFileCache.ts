@@ -1,6 +1,7 @@
-import type { Path } from "../ast/index.ts";
+import type { PathKey } from "../ast/index.ts";
 import type { RemoteSourceFile } from "./node/node.ts";
 import type {
+    ProjectId,
     SnapshotChanges,
     SourceFileDescriptor,
 } from "./proto.ts";
@@ -8,7 +9,7 @@ import type {
 /**
  * Builds a composite ref key from a snapshot ID and project ID.
  */
-function snapshotRefKey(snapshotId: number, projectId: string): string {
+function snapshotRefKey(snapshotId: number, projectId: ProjectId): string {
     return `snapshot:${snapshotId}:${projectId}`;
 }
 
@@ -70,11 +71,11 @@ export interface CachedSourceFile<TSymbol> {
  */
 export class SourceFileCache<TSymbol> {
     /** Map from path to all cached versions of that file */
-    private cache: Map<Path, CachedSourceFile<TSymbol>[]> = new Map();
+    private cache: Map<PathKey, CachedSourceFile<TSymbol>[]> = new Map();
     /** Map from snapshotId to (projectId → Set of paths fetched through that project) */
-    private snapshotProjectPaths: Map<number, Map<string, Set<Path>>> = new Map();
+    private snapshotProjectPaths: Map<number, Map<ProjectId, Set<PathKey>>> = new Map();
     /** Map from direct lease ID to its retained path */
-    private leasePaths: Map<number, Path> = new Map();
+    private leasePaths: Map<number, PathKey> = new Map();
     /** Map from source-file node ID to its record, for resolving compact symbol references */
     private recordsByNodeId: Map<string, CachedSourceFile<TSymbol>> = new Map();
 
@@ -87,7 +88,7 @@ export class SourceFileCache<TSymbol> {
      * A given (snapshot, project) pair always parses a file the same way, so there is
      * at most one matching entry per ref.
      */
-    getRetained(path: Path, snapshotId: number, projectId: string): RemoteSourceFile | undefined {
+    getRetained(path: PathKey, snapshotId: number, projectId: ProjectId): RemoteSourceFile | undefined {
         const entries = this.cache.get(path);
         if (!entries) return undefined;
         const key = snapshotRefKey(snapshotId, projectId);
@@ -99,7 +100,7 @@ export class SourceFileCache<TSymbol> {
         return this.find(file)?.file;
     }
 
-    getOrCreateRecord(file: SourceFileDescriptor, snapshotId: number, projectId: string): CachedSourceFile<TSymbol> {
+    getOrCreateRecord(file: SourceFileDescriptor, snapshotId: number, projectId: ProjectId): CachedSourceFile<TSymbol> {
         let entries = this.cache.get(file.path);
         if (!entries) {
             entries = [];
@@ -125,7 +126,7 @@ export class SourceFileCache<TSymbol> {
     }
 
     /** Retain an existing record for a snapshot/project that reused one of its cached objects. */
-    retainRecord(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: string): void {
+    retainRecord(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: ProjectId): void {
         if (this.recordsByNodeId.get(record.descriptor.nodeId) !== record) {
             throw new Error(`Source file record '${record.descriptor.fileName}' is no longer cached`);
         }
@@ -158,7 +159,7 @@ export class SourceFileCache<TSymbol> {
      * Store a source file in the cache and retain it for the given (snapshot, project) pair.
      * Returns the cached file — which may be an existing entry if the hash matches.
      */
-    set(file: RemoteSourceFile, snapshotId: number, projectId: string): RemoteSourceFile {
+    set(file: RemoteSourceFile, snapshotId: number, projectId: ProjectId): RemoteSourceFile {
         const result = this.setWithRef(file, snapshotRefKey(snapshotId, projectId));
         this.trackPath(snapshotId, projectId, file.path);
         return result;
@@ -204,7 +205,7 @@ export class SourceFileCache<TSymbol> {
         return record;
     }
 
-    private retainRecordForSnapshot(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: string): void {
+    private retainRecordForSnapshot(record: CachedSourceFile<TSymbol>, snapshotId: number, projectId: ProjectId): void {
         record.refs.add(snapshotRefKey(snapshotId, projectId));
         this.trackPath(snapshotId, projectId, record.descriptor.path);
     }
@@ -228,16 +229,16 @@ export class SourceFileCache<TSymbol> {
         const prevProjectMap = this.snapshotProjectPaths.get(previousSnapshotId);
         if (!prevProjectMap) return;
 
-        const removedProjects = new Set<string>(changes?.removedProjects ?? []);
+        const removedProjects = new Set<ProjectId>(changes?.removedProjects ?? []);
         const changedProjects = changes?.changedProjects ?? {};
 
         for (const [projectId, paths] of prevProjectMap) {
             if (removedProjects.has(projectId)) continue;
 
             const projectChanges = changedProjects[projectId];
-            let invalidPaths: Set<string> | undefined;
+            let invalidPaths: Set<PathKey> | undefined;
             if (projectChanges) {
-                invalidPaths = new Set<string>();
+                invalidPaths = new Set<PathKey>();
                 for (const p of projectChanges.changedFiles ?? []) invalidPaths.add(p);
                 for (const p of projectChanges.deletedFiles ?? []) invalidPaths.add(p);
             }
@@ -283,7 +284,7 @@ export class SourceFileCache<TSymbol> {
         this.leasePaths.delete(leaseId);
     }
 
-    private releaseRef(path: Path, ref: string): void {
+    private releaseRef(path: PathKey, ref: string): void {
         const entries = this.cache.get(path);
         if (!entries) return;
         for (let i = entries.length - 1; i >= 0; i--) {
@@ -300,10 +301,10 @@ export class SourceFileCache<TSymbol> {
         }
     }
 
-    private trackPath(snapshotId: number, projectId: string, path: Path): void {
+    private trackPath(snapshotId: number, projectId: ProjectId, path: PathKey): void {
         let projectMap = this.snapshotProjectPaths.get(snapshotId);
         if (!projectMap) {
-            projectMap = new Map();
+            projectMap = new Map<ProjectId, Set<PathKey>>();
             this.snapshotProjectPaths.set(snapshotId, projectMap);
         }
         let paths = projectMap.get(projectId);
@@ -339,7 +340,7 @@ export class SourceFileCache<TSymbol> {
     /**
      * Check if a path is in the cache.
      */
-    has(path: Path): boolean {
+    has(path: PathKey): boolean {
         return this.cache.has(path);
     }
 }

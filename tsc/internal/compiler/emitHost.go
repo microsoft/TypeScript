@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
@@ -21,25 +22,25 @@ type EmitHost interface {
 	declarations.DeclarationEmitHost
 	Options() *core.CompilerOptions
 	SourceFiles() []*ast.SourceFile
-	UseCaseSensitiveFileNames() bool
-	GetCurrentDirectory() string
-	CommonSourceDirectory() string
-	IsEmitBlocked(file string) bool
+	CaseSensitivity() tspath.CaseSensitivity
+	BaseDirectory() tspath.RootedDirectoryPath
+	CommonSourceDirectory() tspath.RootedDirectoryPath
+	IsEmitBlocked(file tspath.RootedFilePath) bool
 }
 
 var _ EmitHost = (*emitHost)(nil)
 
 // NOTE: emitHost operations must be thread-safe
 type emitHost struct {
-	program      *Program
-	emitResolver printer.EmitResolver
+	program         *Program
+	newEmitResolver func(*printer.EmitContext) *checker.EmitResolver
 }
 
 func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	return &emitHost{
-		program:      program,
-		emitResolver: checker.GetEmitResolver(),
+		program:         program,
+		newEmitResolver: checker.NewEmitResolver,
 	}, done
 }
 
@@ -59,36 +60,32 @@ func (host *emitHost) GetEmitModuleFormatOfFile(file ast.HasFileName) core.Modul
 	return host.program.GetEmitModuleFormatOfFile(file)
 }
 
-func (host *emitHost) FileExists(path string) bool {
+func (host *emitHost) FileExists(path tspath.RootedFilePath) bool {
 	return host.program.FileExists(path)
 }
 
-func (host *emitHost) GetGlobalTypingsCacheLocation() string {
+func (host *emitHost) GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
 	return host.program.GetGlobalTypingsCacheLocation()
 }
 
-func (host *emitHost) GetNearestAncestorDirectoryWithPackageJson(dirname string) string {
+func (host *emitHost) GetNearestAncestorDirectoryWithPackageJson(dirname tspath.RootedDirectoryPath) tspath.RootedDirectoryPath {
 	return host.program.GetNearestAncestorDirectoryWithPackageJson(dirname)
 }
 
-func (host *emitHost) GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheEntry {
+func (host *emitHost) GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry {
 	return host.program.GetPackageJsonInfo(pkgJsonPath)
 }
 
-func (host *emitHost) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) string {
+func (host *emitHost) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) tspath.RootedFilePath {
 	return host.program.GetSourceOfProjectReferenceIfOutputIncluded(file)
 }
 
-func (host *emitHost) GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
+func (host *emitHost) GetProjectReferenceFromSource(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference {
 	return host.program.GetProjectReferenceFromSource(path)
 }
 
-func (host *emitHost) GetRedirectTargets(path tspath.Path) []string {
+func (host *emitHost) GetRedirectTargets(path tspath.PathKey) []tspath.RootedFilePath {
 	return host.program.GetRedirectTargets(path)
-}
-
-func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
-	return host.GetEmitResolver().GetEffectiveDeclarationFlags(node, flags)
 }
 
 func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
@@ -106,27 +103,32 @@ func (host *emitHost) GetSourceFileFromReference(origin *ast.SourceFile, ref *as
 
 func (host *emitHost) Options() *core.CompilerOptions { return host.program.Options() }
 func (host *emitHost) SourceFiles() []*ast.SourceFile { return host.program.SourceFiles() }
-func (host *emitHost) GetCurrentDirectory() string    { return host.program.GetCurrentDirectory() }
-func (host *emitHost) CommonSourceDirectory() string  { return host.program.CommonSourceDirectory() }
+func (host *emitHost) BaseDirectory() tspath.RootedDirectoryPath {
+	return host.program.BaseDirectory()
+}
+
+func (host *emitHost) CommonSourceDirectory() tspath.RootedDirectoryPath {
+	return host.program.CommonSourceDirectory()
+}
 
 func (host *emitHost) ContentMapperExtensions() []string {
 	return host.program.ContentMapperExtensions()
 }
 
-func (host *emitHost) UseCaseSensitiveFileNames() bool {
-	return host.program.UseCaseSensitiveFileNames()
+func (host *emitHost) CaseSensitivity() tspath.CaseSensitivity {
+	return host.program.CaseSensitivity()
 }
 
-func (host *emitHost) IsEmitBlocked(file string) bool {
+func (host *emitHost) IsEmitBlocked(file tspath.RootedFilePath) bool {
 	return host.program.IsEmitBlocked(file)
 }
 
-func (host *emitHost) WriteFile(fileName string, text string) error {
+func (host *emitHost) WriteFile(fileName tspath.RootedFilePath, text string) error {
 	return host.program.Host().FS().WriteFile(fileName, text)
 }
 
-func (host *emitHost) GetEmitResolver() printer.EmitResolver {
-	return host.emitResolver
+func (host *emitHost) NewEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver {
+	return host.newEmitResolver(emitContext)
 }
 
 func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {

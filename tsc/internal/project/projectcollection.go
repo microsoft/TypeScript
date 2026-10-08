@@ -13,13 +13,13 @@ import (
 )
 
 type ProjectCollection struct {
-	toPath             func(fileName string) tspath.Path
+	caseSensitivity    tspath.CaseSensitivity
 	configFileRegistry *ConfigFileRegistry
 	// fileDefaultProjects is a map of file paths to the ID of the default project
 	// for that file. This map
 	// contains quick lookups for only the associations discovered during the latest
 	// snapshot update.
-	fileDefaultProjects map[tspath.Path]ID
+	fileDefaultProjects map[tspath.PathKey]ID
 	// configuredProjects is the set of loaded projects associated with a tsconfig
 	// file, keyed by the config file path.
 	configuredProjects map[ConfiguredProjectID]*Project
@@ -27,7 +27,7 @@ type ProjectCollection struct {
 	syntheticProjects map[SyntheticProjectID]*Project
 	// openFiles is the set of open file paths associated with the snapshot that owns
 	// this project collection.
-	openFiles collections.Set[tspath.Path]
+	openFiles collections.Set[tspath.PathKey]
 	// inferredProject is a fallback project that is used when no configured
 	// project can be found for an open file.
 	inferredProject *Project
@@ -44,12 +44,13 @@ type ProjectCollection struct {
 // other, and it is carried across snapshots so API-opened resources stay loaded.
 type APIState struct {
 	// openProjects is the ref-counted set of projects to keep open for API
-	// clients, keyed by config file path.
-	openProjects map[tspath.Path]int
+	// clients, keyed by config file path. The value is the number of outstanding
+	// API opens.
+	openProjects map[tspath.PathKey]int
 	// openFiles is the ref-counted set of files to keep open for API clients,
 	// keyed by file path. Files with no configured project are loaded into the
 	// inferred project.
-	openFiles map[tspath.Path]apiOpenedFile
+	openFiles map[tspath.PathKey]apiOpenedFile
 }
 
 func (s APIState) clone() APIState {
@@ -65,14 +66,14 @@ func (s APIState) equals(other APIState) bool {
 
 // apiOpenedFile tracks a file kept open by API clients along with its ref count.
 type apiOpenedFile struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	refCount int
 }
 
 func (c *ProjectCollection) ConfigFileRegistry() *ConfigFileRegistry { return c.configFileRegistry }
 
-func (c *ProjectCollection) ConfiguredProject(path tspath.Path) *Project {
-	return c.configuredProjects[ConfiguredProjectID(path)]
+func (c *ProjectCollection) ConfiguredProject(path tspath.PathKey) *Project {
+	return c.configuredProjects[ConfiguredProjectIDFromPathKey(path)]
 }
 
 func (c *ProjectCollection) GetProject(id ID) *Project {
@@ -162,7 +163,7 @@ func (c *ProjectCollection) InferredProject() *Project {
 
 // GetLanguageServiceProjectsContainingFile does not consider synthetic projects
 // (ones created by API via createProgram)
-func (c *ProjectCollection) GetLanguageServiceProjectsContainingFile(path tspath.Path) []ls.Project {
+func (c *ProjectCollection) GetLanguageServiceProjectsContainingFile(path tspath.PathKey) []ls.Project {
 	var projects []ls.Project
 	for _, project := range c.ConfiguredProjects() {
 		if project.containsFile(path) {
@@ -199,8 +200,8 @@ func (c *ProjectCollection) GetOpenConfiguredProjects() *collections.Set[Configu
 	return c.openConfiguredProjects
 }
 
-func openFilePaths(overlays map[tspath.Path]*Overlay) collections.Set[tspath.Path] {
-	openFiles := collections.Set[tspath.Path]{M: make(map[tspath.Path]struct{}, len(overlays))}
+func openFilePaths(overlays map[tspath.PathKey]*Overlay) collections.Set[tspath.PathKey] {
+	openFiles := collections.Set[tspath.PathKey]{M: make(map[tspath.PathKey]struct{}, len(overlays))}
 	for path := range overlays {
 		openFiles.Add(path)
 	}
@@ -208,7 +209,7 @@ func openFilePaths(overlays map[tspath.Path]*Overlay) collections.Set[tspath.Pat
 }
 
 // !!! result could be cached
-func (c *ProjectCollection) GetDefaultProject(path tspath.Path) *Project {
+func (c *ProjectCollection) GetDefaultProject(path tspath.PathKey) *Project {
 	if result, ok := c.fileDefaultProjects[path]; ok {
 		if _, ok := result.Inferred(); ok {
 			return c.inferredProject
@@ -262,16 +263,16 @@ func (c *ProjectCollection) GetDefaultProject(path tspath.Path) *Project {
 	return firstConfiguredProject
 }
 
-func (c *ProjectCollection) findDefaultConfiguredProject(path tspath.Path) *Project {
+func (c *ProjectCollection) findDefaultConfiguredProject(path tspath.PathKey) *Project {
 	if configFileName := c.configFileRegistry.GetConfigFileName(path); configFileName != "" {
 		return c.findDefaultConfiguredProjectWorker(path, configFileName, nil, nil)
 	}
 	return nil
 }
 
-func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path, configFileName string, visited *collections.SyncSet[*Project], fallback *Project) *Project {
-	configFilePath := c.toPath(configFileName)
-	project, ok := c.configuredProjects[ConfiguredProjectID(configFilePath)]
+func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.PathKey, configFileName tspath.RootedFilePath, visited *collections.SyncSet[*Project], fallback *Project) *Project {
+	configFilePath := c.caseSensitivity.PathKey(configFileName.AsPath())
+	project, ok := c.configuredProjects[ConfiguredProjectIDFromPathKey(configFilePath)]
 	if !ok {
 		return nil
 	}
@@ -287,8 +288,8 @@ func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path,
 				return nil
 			}
 			// A referenced project may not be loaded if `disableReferencedProjectLoad` is true.
-			return core.MapNonNil(project.CommandLine.ResolvedProjectReferencePaths(), func(configFileName string) *Project {
-				return c.configuredProjects[ConfiguredProjectID(c.toPath(configFileName))]
+			return core.MapNonNil(project.CommandLine.ResolvedProjectReferencePaths(), func(configFileName tspath.RootedFilePath) *Project {
+				return c.configuredProjects[ConfiguredProjectIDFromPathKey(c.caseSensitivity.PathKey(configFileName.AsPath()))]
 			})
 		},
 		func(project *Project) (isResult bool, stop bool) {
@@ -328,7 +329,7 @@ func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path,
 // clone creates a shallow copy of the project collection.
 func (c *ProjectCollection) clone() *ProjectCollection {
 	return &ProjectCollection{
-		toPath:              c.toPath,
+		caseSensitivity:     c.caseSensitivity,
 		configFileRegistry:  c.configFileRegistry,
 		configuredProjects:  c.configuredProjects,
 		syntheticProjects:   c.syntheticProjects,
@@ -346,15 +347,14 @@ func (c *ProjectCollection) clone() *ProjectCollection {
 // direct inclusions of the file in different projects, indicating that the caller may want to perform
 // additional logic to determine the best project.
 func findDefaultConfiguredProjectFromProgramInclusion(
-	fileName string,
-	path tspath.Path,
-	projectPaths []tspath.Path,
-	getProject func(tspath.Path) *Project,
-) (result tspath.Path, multipleCandidates bool) {
+	path tspath.PathKey,
+	projectPaths []tspath.PathKey,
+	getProject func(tspath.PathKey) *Project,
+) (result tspath.PathKey, multipleCandidates bool) {
 	var (
-		containingProjects                       []tspath.Path
-		firstConfiguredProject                   tspath.Path
-		firstNonSourceOfProjectReferenceRedirect tspath.Path
+		containingProjects                       []tspath.PathKey
+		firstConfiguredProject                   tspath.PathKey
+		firstNonSourceOfProjectReferenceRedirect tspath.PathKey
 		multipleDirectInclusions                 bool
 	)
 

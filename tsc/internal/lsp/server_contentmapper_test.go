@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -64,7 +65,7 @@ export const title = "Profile";
 		}
 	}
 
-	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
 	client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
 		Err:                io.Discard,
 		Cwd:                "/home/project",

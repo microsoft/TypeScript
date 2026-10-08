@@ -126,7 +126,7 @@ func ensureItemData(file *ast.SourceFile, pos int, list *lsproto.CompletionList)
 	for _, item := range list.Items {
 		if item.Data == nil {
 			item.Data = &lsproto.CompletionItemData{
-				FileName:              file.OriginalFileName(),
+				FileName:              file.OriginalFileName().AsString(),
 				Position:              int32(pos),
 				SupplementalFileIndex: supplementalFileIndex(file),
 				Name:                  item.Label,
@@ -309,7 +309,6 @@ type symbolOriginInfo struct {
 	kind              symbolOriginInfoKind
 	isDefaultExport   bool
 	isFromPackageJson bool
-	fileName          string
 	data              any
 }
 
@@ -1200,7 +1199,7 @@ func (l *LanguageService) getCompletionData(
 	}
 
 	shouldOfferImportCompletions := func() bool {
-		if tspath.IsDynamicFileName(file.FileName()) {
+		if file.FileName().IsDynamic() {
 			return false
 		}
 		// If already typing an import statement, provide completions for it.
@@ -2854,7 +2853,7 @@ func createSnippetTabStopBody(factory *ast.NodeFactory, emitContext *printer.Emi
 }
 
 func (l *LanguageService) createImportAdder(ctx context.Context, typeChecker *checker.Checker, file *ast.SourceFile) (autoimport.ImportAdder, error) {
-	if tspath.IsDynamicFileName(file.FileName()) {
+	if file.FileName().IsDynamic() {
 		return nil, nil
 	}
 	view, err := l.getPreparedAutoImportView(file, typeChecker)
@@ -5044,7 +5043,7 @@ func (l *LanguageService) createLSPCompletionItem(
 ) *lsproto.CompletionItem {
 	kind := getCompletionsSymbolKind(elementKind)
 	data := &lsproto.CompletionItemData{
-		FileName:              file.OriginalFileName(),
+		FileName:              file.OriginalFileName().AsString(),
 		Position:              int32(position),
 		SupplementalFileIndex: supplementalFileIndex(file),
 		Source:                source,
@@ -5490,12 +5489,13 @@ func (l *LanguageService) ResolveCompletionItem(
 	ctx context.Context,
 	item *lsproto.CompletionItem,
 	data *lsproto.CompletionItemData,
+	fileName tspath.RootedFilePath,
 ) (*lsproto.CompletionItem, error) {
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
 	}
 
-	program, file := l.tryGetProgramAndFile(data.FileName)
+	program, file := l.tryGetProgramAndFile(fileName)
 	if file == nil {
 		return nil, fmt.Errorf("file not found: %s", data.FileName)
 	}
@@ -6166,6 +6166,7 @@ func getJSDocParameterCompletions(
 		}
 	}
 	paramIndex := -1
+	var emitContext *printer.EmitContext
 	return core.MapNonNil(fun.Parameters(), func(param *ast.ParameterDeclarationNode) *CompletionItem {
 		paramIndex++
 		if paramIndex < paramTagCount {
@@ -6176,6 +6177,7 @@ func getJSDocParameterCompletions(
 			tabstopCounter := 1
 			paramName := param.Name().Text()
 			displayText := getJSDocParamAnnotation(
+				&emitContext,
 				paramName,
 				param.Initializer(),
 				param.AsParameterDeclaration().DotDotDotToken,
@@ -6190,6 +6192,7 @@ func getJSDocParameterCompletions(
 			var snippetText string
 			if isSnippet {
 				snippetText = getJSDocParamAnnotation(
+					&emitContext,
 					paramName,
 					param.Initializer(),
 					param.AsParameterDeclaration().DotDotDotToken,
@@ -6222,6 +6225,7 @@ func getJSDocParameterCompletions(
 			// Destructuring parameter; do it positionally
 			paramPath := fmt.Sprintf("param%d", paramIndex)
 			displayTextResult := generateJSDocParamTagsForDestructuring(
+				&emitContext,
 				paramPath,
 				param.Name(),
 				param.Initializer(),
@@ -6235,6 +6239,7 @@ func getJSDocParameterCompletions(
 			var snippetText string
 			if isSnippet {
 				snippetTextResult := generateJSDocParamTagsForDestructuring(
+					&emitContext,
 					paramPath,
 					param.Name(),
 					param.Initializer(),
@@ -6267,6 +6272,7 @@ func getJSDocParameterCompletions(
 }
 
 func getJSDocParamAnnotation(
+	emitContext **printer.EmitContext,
 	paramName string,
 	initializer *ast.Expression,
 	dotDotDotToken *ast.TokenNode,
@@ -6310,7 +6316,9 @@ func getJSDocParamAnnotation(
 						nil, /*idToSymbol*/
 					)
 					if typeNode != nil {
-						emitContext := printer.NewEmitContext()
+						if *emitContext == nil {
+							*emitContext = printer.NewEmitContext()
+						}
 						// !!! snippet p
 						p := printer.NewPrinter(printer.PrinterOptions{
 							RemoveComments: true,
@@ -6318,8 +6326,8 @@ func getJSDocParamAnnotation(
 							// Module: options.Module,
 							// ModuleResolution: options.ModuleResolution,
 							// Target: options.Target,
-						}, printer.PrintHandlers{}, emitContext)
-						emitContext.SetEmitFlags(typeNode, printer.EFSingleLine)
+						}, printer.PrintHandlers{}, *emitContext)
+						(*emitContext).SetEmitFlags(typeNode, printer.EFSingleLine)
 						t = p.Emit(typeNode, file)
 					}
 				}
@@ -6358,6 +6366,7 @@ func getJSDocParamNameWithInitializer(paramName string, initializer *ast.Express
 }
 
 func generateJSDocParamTagsForDestructuring(
+	emitContext **printer.EmitContext,
 	path string,
 	pattern *ast.BindingPatternNode,
 	initializer *ast.Expression,
@@ -6371,6 +6380,7 @@ func generateJSDocParamTagsForDestructuring(
 	tabstopCounter := 1
 	if !isJS {
 		return []string{getJSDocParamAnnotation(
+			emitContext,
 			path,
 			initializer,
 			dotDotDotToken,
@@ -6384,6 +6394,7 @@ func generateJSDocParamTagsForDestructuring(
 		)}
 	}
 	return jsDocParamPatternWorker(
+		emitContext,
 		path,
 		pattern,
 		initializer,
@@ -6398,6 +6409,7 @@ func generateJSDocParamTagsForDestructuring(
 }
 
 func jsDocParamPatternWorker(
+	emitContext **printer.EmitContext,
 	path string,
 	pattern *ast.BindingPatternNode,
 	initializer *ast.Expression,
@@ -6412,6 +6424,7 @@ func jsDocParamPatternWorker(
 	if ast.IsObjectBindingPattern(pattern) && dotDotDotToken == nil {
 		childCounter := *counter
 		rootParam := getJSDocParamAnnotation(
+			emitContext,
 			path,
 			initializer,
 			dotDotDotToken,
@@ -6426,6 +6439,7 @@ func jsDocParamPatternWorker(
 		var childTags []string
 		for _, element := range pattern.Elements() {
 			elementTags := jsDocParamElementWorker(
+				emitContext,
 				path,
 				element,
 				initializer,
@@ -6450,6 +6464,7 @@ func jsDocParamPatternWorker(
 	}
 	return []string{
 		getJSDocParamAnnotation(
+			emitContext,
 			path,
 			initializer,
 			dotDotDotToken,
@@ -6467,6 +6482,7 @@ func jsDocParamPatternWorker(
 // Assumes binding element is inside object binding pattern.
 // We can't deeply annotate an array binding pattern.
 func jsDocParamElementWorker(
+	emitContext **printer.EmitContext,
 	path string,
 	element *ast.BindingElementNode,
 	initializer *ast.Expression,
@@ -6491,6 +6507,7 @@ func jsDocParamElementWorker(
 		paramName := fmt.Sprintf("%s.%s", path, propertyName)
 		return []string{
 			getJSDocParamAnnotation(
+				emitContext,
 				paramName,
 				element.Initializer(),
 				element.AsBindingElement().DotDotDotToken,
@@ -6509,6 +6526,7 @@ func jsDocParamElementWorker(
 			return nil
 		}
 		return jsDocParamPatternWorker(
+			emitContext,
 			fmt.Sprintf("%s.%s", path, propertyName),
 			element.Name(),
 			element.Initializer(),
@@ -6583,7 +6601,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 		quotePreference := lsutil.GetQuotePreference(file, l.UserPreferences())
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
-		if !tspath.IsDynamicFileName(file.FileName()) {
+		if !file.FileName().IsDynamic() {
 			view, err := l.getPreparedAutoImportView(file, c)
 			if err != nil {
 				return nil, err
@@ -6692,7 +6710,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 			AdditionalTextEdits: additionalTextEdits,
 			InsertTextFormat:    core.IfElse(clientSupportsItemSnippet(ctx), new(lsproto.InsertTextFormatSnippet), nil),
 			Data: &lsproto.CompletionItemData{
-				FileName:              file.OriginalFileName(),
+				FileName:              file.OriginalFileName().AsString(),
 				Position:              int32(position),
 				SupplementalFileIndex: supplementalFileIndex(file),
 				Name:                  name,

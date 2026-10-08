@@ -107,6 +107,18 @@ func (c *Checker) GetMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getMergedSymbol(symbol)
 }
 
+func (c *Checker) GetSymbolOfNode(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfNode(node)
+}
+
+func (c *Checker) GetSymbolOfDeclaration(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfDeclaration(node)
+}
+
+func (c *Checker) GetParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getParentOfSymbol(symbol)
+}
+
 func (c *Checker) TryFindAmbientModule(moduleName string) *ast.Symbol {
 	return c.tryFindAmbientModule(moduleName, true /* withAugmentations */)
 }
@@ -392,7 +404,7 @@ func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return c.GetEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
+	return c.requiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
 }
 
 func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {

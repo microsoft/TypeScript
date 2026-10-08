@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/importElisionTypeofImportTypeQualifier.ts] ////
+
+=== /b.ts ===
+export namespace ns { export const y = 1; }
+>ns : typeof ns
+>y : 1
+>1 : 1
+
+=== /c.ts ===
+export namespace ns { export const y = 2; }
+>ns : typeof ns
+>y : 2
+>2 : 2
+
+=== /a.ts ===
+import { ns } from "./c";
+>ns : typeof ns
+
+export function f(x: typeof import("./b").ns.y) {}
+>f : (x: typeof import("./b").ns.y) => void
+>x : 1
+>ns : any
+>y : any
+
