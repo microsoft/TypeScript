@@ -3,6 +3,7 @@ package checker
 import (
 	"cmp"
 	"slices"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -892,7 +893,7 @@ func (c *Checker) getClassExpressionNameTable(location *ast.Node) ast.SymbolTabl
 	if len(nameText) == 0 || classSymbol == nil {
 		return nil
 	}
-	table := ast.SymbolTable{nameText: classSymbol}
+	table := ast.SymbolTable{unique.Make(nameText): classSymbol}
 	if c.classExpressionNameTables == nil {
 		c.classExpressionNameTables = make(map[ast.NodeId]ast.SymbolTable)
 	}

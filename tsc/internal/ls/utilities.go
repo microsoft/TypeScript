@@ -5,6 +5,7 @@ import (
 	"iter"
 	"slices"
 	"strings"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -960,7 +961,7 @@ func getParentSymbolsOfPropertyAccess(location *ast.Node, symbol *ast.Symbol, ch
 // @param cb a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
 //
 //	The value of previousIterationSymbol is undefined when the function is first called.
-func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName string, checker *checker.Checker, cb func(base *ast.Symbol) *ast.Symbol) *ast.Symbol {
+func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName ast.SymbolName, checker *checker.Checker, cb func(base *ast.Symbol) *ast.Symbol) *ast.Symbol {
 	var seen collections.Set[*ast.Symbol]
 	var recur func(*ast.Symbol) *ast.Symbol
 	recur = func(symbol *ast.Symbol) *ast.Symbol {
@@ -995,7 +996,7 @@ func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName string, ch
 
 func getPropertySymbolFromBindingElement(checker *checker.Checker, bindingElement *ast.Node) *ast.Symbol {
 	if typeOfPattern := checker.GetTypeAtLocation(bindingElement.Parent); typeOfPattern != nil {
-		return checker.GetPropertyOfType(typeOfPattern, bindingElement.Name().Text())
+		return checker.GetPropertyOfType(typeOfPattern, unique.Make(bindingElement.Name().Text()))
 	}
 	return nil
 }

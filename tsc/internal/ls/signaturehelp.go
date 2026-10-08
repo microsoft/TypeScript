@@ -319,7 +319,7 @@ func (l *LanguageService) createSignatureHelpItems(ctx context.Context, candidat
 	// "\xFEtype". There is no meaningful name to show, so render the signature with
 	// no prefix (as we already do when there is no call target symbol) rather than
 	// leaking the internal name.
-	if callTargetSymbol != nil && !strings.HasPrefix(callTargetSymbol.Name(), ast.InternalSymbolNamePrefix) {
+	if callTargetSymbol != nil && !strings.HasPrefix(callTargetSymbol.Name().Value(), ast.InternalSymbolNamePrefix) {
 		if useFullPrefix {
 			callTargetDisplayParts.WriteString(c.SymbolToStringEx(callTargetSymbol, sourceFile.AsNode(), ast.SymbolFlagsNone, checker.SymbolFormatFlagsUseAliasDefinedOutsideCurrentScope))
 		} else {

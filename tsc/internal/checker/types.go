@@ -271,8 +271,8 @@ type AliasSymbolLinks struct {
 // Links for module symbols
 
 type ModuleSymbolLinks struct {
-	resolvedExports       ast.SymbolTable      // Resolved exports of module or combined early- and late-bound static members of a class.
-	typeOnlyExportStarMap map[string]*ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+	resolvedExports       ast.SymbolTable              // Resolved exports of module or combined early- and late-bound static members of a class.
+	typeOnlyExportStarMap map[ast.SymbolName]*ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
 	exportsChecked        bool
 }
 
@@ -461,8 +461,8 @@ func (links *TypeNodeLinks) setOuterTypeParameters(c *Checker, types []*Type) {
 }
 
 type ComputedNameNodeLinks struct {
-	hasName *bool  // If the node has a computable name
-	name    string // Resolved name associated with the type of the node
+	hasName *bool          // If the node has a computable name
+	name    ast.SymbolName // Resolved name associated with the type of the node
 }
 
 // Links for enum members
@@ -1098,7 +1098,7 @@ func (t *LiteralType) String() string {
 
 type UniqueESSymbolType struct {
 	TypeBase
-	name string
+	name ast.SymbolName
 }
 
 // ConstrainedType (type with computed base constraint)
@@ -1380,7 +1380,7 @@ type UnionType struct {
 	resolvedReducedType *Type
 	regularType         *Type
 	origin              *Type           // Denormalized union, intersection, or index type in which union originates
-	keyPropertyName     string          // Property with unique unit type that exists in every object/intersection in union type
+	keyPropertyName     ast.SymbolName  // Property with unique unit type that exists in every object/intersection in union type
 	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
 }
 
@@ -1660,7 +1660,7 @@ const (
 type TypePredicate struct {
 	kind           TypePredicateKind
 	parameterIndex int32
-	parameterName  string
+	parameterName  ast.SymbolName
 	t              *Type
 }
 
@@ -1676,7 +1676,7 @@ func (typePredicate *TypePredicate) ParameterIndex() int32 {
 	return typePredicate.parameterIndex
 }
 
-func (typePredicate *TypePredicate) ParameterName() string {
+func (typePredicate *TypePredicate) ParameterName() ast.SymbolName {
 	return typePredicate.parameterName
 }
 

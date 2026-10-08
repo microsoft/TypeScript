@@ -14,6 +14,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
@@ -2903,7 +2904,7 @@ func (s *Session) handleResolveName(ctx context.Context, params *ResolveNamePara
 		return nil, err
 	}
 
-	symbol := setup.checker.ResolveName(params.Name, location, ast.SymbolFlags(params.Meaning), params.ExcludeGlobals)
+	symbol := setup.checker.ResolveName(unique.Make(params.Name), location, ast.SymbolFlags(params.Meaning), params.ExcludeGlobals)
 	if symbol == nil {
 		return nil, nil
 	}
@@ -3482,7 +3483,7 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 					return order
 				}
 			}
-			if order := cmp.Compare(left.Name(), right.Name()); order != 0 {
+			if order := cmp.Compare(left.Name().Value(), right.Name().Value()); order != 0 {
 				return order
 			}
 			return cmp.Compare(ast.GetSymbolId(left), ast.GetSymbolId(right))
@@ -4314,7 +4315,7 @@ func (s *Session) handleGetTypePredicateOfSignature(ctx context.Context, params 
 	resp := &TypePredicateResponse{
 		Kind:           int32(pred.Kind()),
 		ParameterIndex: pred.ParameterIndex(),
-		ParameterName:  pred.ParameterName(),
+		ParameterName:  pred.ParameterName().Value(),
 	}
 	if pred.Type() != nil {
 		resp.Type = setup.sd.newTypeResponse(setup.projectID, pred.Type(), setup.checker)
@@ -4600,7 +4601,7 @@ func (s *Session) handleGetPropertyOfType(ctx context.Context, params *GetProper
 		return nil, err
 	}
 
-	prop := setup.checker.GetPropertyOfType(t, params.Name)
+	prop := setup.checker.GetPropertyOfType(t, unique.Make(params.Name))
 	if prop == nil {
 		return nil, nil
 	}
@@ -4621,7 +4622,7 @@ func (s *Session) handleGetTypeOfPropertyOfType(ctx context.Context, params *Get
 		return nil, err
 	}
 
-	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeOfPropertyOfType(t, params.Name), setup.checker), nil
+	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeOfPropertyOfType(t, unique.Make(params.Name)), setup.checker), nil
 }
 
 // handleGetConstantValue returns the constant value of an enum member or const enum access.
@@ -4892,7 +4893,7 @@ func (s *Session) handleGetMemberInModuleExports(ctx context.Context, params *Ge
 		return nil, nil
 	}
 
-	member := setup.checker.TryGetMemberInModuleExports(params.Name, symbol)
+	member := setup.checker.TryGetMemberInModuleExports(unique.Make(params.Name), symbol)
 	if member == nil {
 		return nil, nil
 	}

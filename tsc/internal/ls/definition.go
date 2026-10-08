@@ -3,6 +3,7 @@ package ls
 import (
 	"context"
 	"slices"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -340,7 +341,7 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 				}
 				var result []*ast.Node
 				for _, unionType := range types {
-					if prop := c.GetPropertyOfType(unionType, name); prop != nil {
+					if prop := c.GetPropertyOfType(unionType, unique.Make(name)); prop != nil {
 						result = append(result, prop.Declarations()...)
 					}
 				}
@@ -485,9 +486,9 @@ func getSymbolForOverriddenMember(typeChecker *checker.Checker, node *ast.Node) 
 	}
 	name := ast.GetTextOfPropertyName(classElement.Name())
 	if ast.HasStaticModifier(classElement) {
-		return typeChecker.GetPropertyOfType(typeChecker.GetTypeOfSymbol(base), name)
+		return typeChecker.GetPropertyOfType(typeChecker.GetTypeOfSymbol(base), unique.Make(name))
 	}
-	return typeChecker.GetPropertyOfType(typeChecker.GetDeclaredTypeOfSymbol(base), name)
+	return typeChecker.GetPropertyOfType(typeChecker.GetDeclaredTypeOfSymbol(base), unique.Make(name))
 }
 
 func getTypeOfSymbolAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) *checker.Type {

@@ -261,7 +261,7 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 
 	var newProperties []*ast.Node
 	for _, symbol := range elements {
-		if !scanner.IsIdentifierText(symbol.Name(), core.LanguageVariantStandard) {
+		if !scanner.IsIdentifierText(symbol.Name().Value(), core.LanguageVariantStandard) {
 			continue
 		}
 		// skip symbols that already have a variable declaration
@@ -275,7 +275,7 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 			continue
 		}
 
-		varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(symbol.Name()), nil, typeNode, nil)
+		varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(symbol.Name().Value()), nil, typeNode, nil)
 		exportToken := factory.NewToken(ast.KindExportKeyword)
 		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsNone)
 		varStmt := factory.NewVariableStatement(factory.NewModifierList([]*ast.Node{exportToken}), varDeclList)
@@ -1409,7 +1409,7 @@ func (f *isolatedDeclarationsFixer) addSymbolToExistingImport(sym *ast.Symbol) {
 			// Add to existing named imports
 			existingElements := importClause.NamedBindings.AsNamedImports().Elements.Nodes
 			factory := f.changeTracker.NodeFactory
-			newSpecifier := factory.NewImportSpecifier(false, nil, factory.NewIdentifier(symbolName))
+			newSpecifier := factory.NewImportSpecifier(false, nil, factory.NewIdentifier(symbolName.Value()))
 			newElements := append(existingElements, newSpecifier.AsNode())
 			newNamedImports := factory.NewNamedImports(factory.NewNodeList(newElements))
 			newImportClause := factory.UpdateImportClause(importClause, importClause.PhaseModifier, importClause.Name(), newNamedImports)
