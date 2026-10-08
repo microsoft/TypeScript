@@ -1101,8 +1101,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
-	case string(MethodFormatNodeForInsertion):
-		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	case string(MethodEmit):
 		return s.handleEmit(ctx, parsed.(*EmitParams))
 	case string(MethodEmitToString):
@@ -1241,6 +1239,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSignatureUsages(ctx, parsed.(*GetSignatureUsagesParams))
 	case string(MethodGetCompletionsAtPosition):
 		return s.handleGetCompletionsAtPosition(ctx, parsed.(*GetCompletionsAtPositionParams))
+	case string(MethodFormatNodeForInsertion):
+		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}

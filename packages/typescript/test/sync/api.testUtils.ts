@@ -1,7 +1,7 @@
 import {
     API,
     type APIOptions,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import { fileURLToPath } from "node:url";
 import { createVirtualFileSystem } from "../testUtils.ts";
 

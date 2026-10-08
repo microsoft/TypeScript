@@ -75,9 +75,9 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	assert.DeepEqual(t, *response.Operation.CreatedPrograms, []project.SyntheticProjectID{syntheticProjectID(1), syntheticProjectID(2)})
 	assert.Assert(t, response.Projects[0].ConfigFileName == nil)
 	assert.Assert(t, response.Projects[1].ConfigFileName == nil)
-	assert.DeepEqual(t, response.Projects[0].RootFiles, []tspath.RootedFilePath{fileA, fileB})
-	assert.Equal(t, response.Projects[0].CompilerOptions.Strict, core.TSTrue)
-	assert.DeepEqual(t, response.Projects[1].RootFiles, []tspath.RootedFilePath{fileB})
+	assert.DeepEqual(t, response.Projects[0].ParsedCommandLine.FileNames, []tspath.RootedFilePath{fileA, fileB})
+	assert.Equal(t, response.Projects[0].ParsedCommandLine.Options.Strict, core.TSTrue)
+	assert.DeepEqual(t, response.Projects[1].ParsedCommandLine.FileNames, []tspath.RootedFilePath{fileB})
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
@@ -170,8 +170,8 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, reconfigured.Projects[0].Id, project.ID(programID))
-	assert.DeepEqual(t, reconfigured.Projects[0].RootFiles, []tspath.RootedFilePath{"/home/projects/p/b.ts"})
-	assert.Equal(t, reconfigured.Projects[0].CompilerOptions.Strict, core.TSTrue)
+	assert.DeepEqual(t, reconfigured.Projects[0].ParsedCommandLine.FileNames, []tspath.RootedFilePath{"/home/projects/p/b.ts"})
+	assert.Equal(t, reconfigured.Projects[0].ParsedCommandLine.Options.Strict, core.TSTrue)
 }
 
 func TestReconfigureSyntheticProgramValidation(t *testing.T) {
