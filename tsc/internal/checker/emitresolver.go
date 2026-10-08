@@ -102,7 +102,7 @@ func (r *EmitResolver) IsLateBound(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return symbol.CheckFlags&ast.CheckFlagsLate != 0
+	return symbol.CheckFlags()&ast.CheckFlagsLate != 0
 }
 
 func (r *EmitResolver) GetEnumMemberValue(node *ast.Node) evaluator.Result {
@@ -186,7 +186,7 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 		visited[ast.GetSymbolId(exportSymbol)] = struct{}{}
 
 		var nextSymbol *ast.Symbol
-		for _, declaration := range exportSymbol.Declarations {
+		for _, declaration := range exportSymbol.Declarations() {
 			r.checker.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
 
 			if ast.IsInternalModuleImportEqualsDeclaration(declaration) {
@@ -272,8 +272,8 @@ func (r *EmitResolver) IsImportRequiredByAugmentation(decl *ast.ImportDeclaratio
 	for s := range maps.Values(exports) {
 		merged := r.checker.getMergedSymbol(s)
 		if merged != s {
-			if len(merged.Declarations) > 0 {
-				for _, d := range merged.Declarations {
+			if len(merged.Declarations()) > 0 {
+				for _, d := range merged.Declarations() {
 					declFile := ast.GetSourceFileOfNode(d)
 					if declFile == importTarget {
 						return true
@@ -355,7 +355,7 @@ func (r *EmitResolver) IsExpandoFunctionDeclarationUnsafe(node *ast.Node) bool {
 	// this is substantially different from strada, but so is expando property checking
 	props := r.GetPropertiesOfContainerFunction(node)
 	for _, p := range props {
-		if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
+		if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration()) {
 			return true
 		}
 	}
@@ -381,7 +381,7 @@ func (r *EmitResolver) IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclarati
 }
 
 func isConstEnumOrConstEnumOnlyModule(s *ast.Symbol) bool {
-	return isConstEnumSymbol(s) || s.Flags&ast.SymbolFlagsConstEnumOnlyModule != 0
+	return isConstEnumSymbol(s) || s.Flags()&ast.SymbolFlagsConstEnumOnlyModule != 0
 }
 
 func (r *EmitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
@@ -456,8 +456,8 @@ func (r *EmitResolver) isAliasResolvedToValue(symbol *ast.Symbol, excludeTypeOnl
 	if symbol == nil {
 		return false
 	}
-	if symbol.ValueDeclaration != nil {
-		if container := ast.GetSourceFileOfNode(symbol.ValueDeclaration); container != nil {
+	if symbol.ValueDeclaration() != nil {
+		if container := ast.GetSourceFileOfNode(symbol.ValueDeclaration()); container != nil {
 			fileSymbol := c.getSymbolOfDeclaration(container.AsNode())
 			// Ensures cjs export assignment is setup, since this symbol may point at, and merge with, the file itself.
 			// If we don't, the merge may not have yet occurred, and the flags check below will be missing flags that
@@ -862,13 +862,13 @@ func (r *EmitResolver) GetTypeReferenceSerializationKind(typeName *ast.Node, loc
 	if ast.IsQualifiedName(typeName) {
 		rootValueSymbol := r.checker.resolveEntityName(ast.GetFirstIdentifier(typeName), ast.SymbolFlagsValue, true, true, location)
 
-		if rootValueSymbol != nil && len(rootValueSymbol.Declarations) > 0 {
-			isTypeOnly = core.Every(rootValueSymbol.Declarations, ast.IsTypeOnlyImportOrExportDeclaration)
+		if rootValueSymbol != nil && len(rootValueSymbol.Declarations()) > 0 {
+			isTypeOnly = core.Every(rootValueSymbol.Declarations(), ast.IsTypeOnlyImportOrExportDeclaration)
 		}
 	}
 	valueSymbol := r.checker.resolveEntityName(typeName, ast.SymbolFlagsValue, true, true, location)
 	resolvedValueSymbol := valueSymbol
-	if valueSymbol != nil && valueSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if valueSymbol != nil && valueSymbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		resolvedValueSymbol = r.checker.resolveAlias(valueSymbol)
 	}
 
@@ -877,7 +877,7 @@ func (r *EmitResolver) GetTypeReferenceSerializationKind(typeName *ast.Node, loc
 	// Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
 	typeSymbol := r.checker.resolveEntityName(typeName, ast.SymbolFlagsType, true, true, location)
 	resolvedTypeSymbol := typeSymbol
-	if typeSymbol != nil && typeSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if typeSymbol != nil && typeSymbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		resolvedTypeSymbol = r.checker.resolveAlias(typeSymbol)
 	}
 	// In case the value symbol can't be resolved (e.g. because of missing declarations), use type symbol for reachability check.
@@ -982,23 +982,23 @@ func (r *EmitResolver) IsThisPropertyAssignmentDeclarationRedundant(node *ast.No
 	defer r.checkerMu.Unlock()
 
 	s := r.checker.getSymbolOfDeclaration(node)
-	if s == nil || s.Parent == nil {
+	if s == nil || s.Parent() == nil {
 		return false
 	}
-	parentType := r.checker.getDeclaredTypeOfSymbol(s.Parent)
+	parentType := r.checker.getDeclaredTypeOfSymbol(s.Parent())
 	if parentType == nil {
 		return false
 	}
 	for _, base := range r.checker.getBaseTypes(parentType) {
-		baseProp := r.checker.getPropertyOfType(base, s.Name)
+		baseProp := r.checker.getPropertyOfType(base, s.Name())
 		if baseProp == nil {
 			continue
 		}
-		if baseProp.Flags&(ast.SymbolFlagsAccessor|ast.SymbolFlagsMethod|ast.SymbolFlagsFunction) != 0 {
+		if baseProp.Flags()&(ast.SymbolFlagsAccessor|ast.SymbolFlagsMethod|ast.SymbolFlagsFunction) != 0 {
 			return true
 		}
 		if r.checker.isReadonlySymbol(baseProp) == r.checker.isReadonlySymbol(s) &&
-			(s.Flags&ast.SymbolFlagsOptional) == (baseProp.Flags&ast.SymbolFlagsOptional) &&
+			(s.Flags()&ast.SymbolFlagsOptional) == (baseProp.Flags()&ast.SymbolFlagsOptional) &&
 			r.checker.isTypeIdenticalTo(r.checker.getTypeOfSymbol(s), r.checker.getTypeOfSymbol(baseProp)) {
 			return true
 		}

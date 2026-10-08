@@ -30,7 +30,7 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 	// and it doesn't already exists in the symbol table.
 	copySymbol := func(symbol *ast.Symbol, meaning ast.SymbolFlags) {
 		if symbol.CombinedLocalAndExportSymbolFlags()&meaning != 0 {
-			id := symbol.Name
+			id := symbol.Name()
 			// We will copy all symbol regardless of its reserved name because
 			// symbolsToArray will check whether the key is a reserved name and
 			// it will not copy symbol with reserved name to the array
@@ -54,7 +54,7 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 				// Similar condition as in `resolveNameHelper`
 				if ast.GetDeclarationOfKind(symbol, ast.KindExportSpecifier) == nil &&
 					ast.GetDeclarationOfKind(symbol, ast.KindNamespaceExport) == nil &&
-					symbol.Name != ast.InternalSymbolNameDefault {
+					symbol.Name() != ast.InternalSymbolNameDefault {
 					copySymbol(symbol, meaning)
 				}
 			}
@@ -84,9 +84,9 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 				}
 				fallthrough
 			case ast.KindModuleDeclaration:
-				copyLocallyVisibleExportSymbols(c.getSymbolOfDeclaration(location).Exports, meaning&ast.SymbolFlagsModuleMember)
+				copyLocallyVisibleExportSymbols(c.getSymbolOfDeclaration(location).Exports(), meaning&ast.SymbolFlagsModuleMember)
 			case ast.KindEnumDeclaration:
-				copySymbols(c.getSymbolOfDeclaration(location).Exports, meaning&ast.SymbolFlagsEnumMember)
+				copySymbols(c.getSymbolOfDeclaration(location).Exports(), meaning&ast.SymbolFlagsEnumMember)
 			case ast.KindClassExpression:
 				className := location.AsClassExpression().Name()
 				if className != nil {
@@ -216,11 +216,11 @@ func (c *Checker) GetAllPossiblePropertiesOfTypes(types []*Type) []*ast.Symbol {
 	for _, memberType := range types {
 		augmentedProps := c.getAugmentedPropertiesOfType(memberType)
 		for _, p := range augmentedProps {
-			if _, ok := props[p.Name]; !ok {
-				prop := c.createUnionOrIntersectionProperty(unionType, p.Name, false /*skipObjectFunctionPropertyAugment*/)
+			if _, ok := props[p.Name()]; !ok {
+				prop := c.createUnionOrIntersectionProperty(unionType, p.Name(), false /*skipObjectFunctionPropertyAugment*/)
 				// May be undefined if the property is private
 				if prop != nil {
-					props[p.Name] = prop
+					props[p.Name()] = prop
 				}
 			}
 		}
@@ -284,8 +284,8 @@ func (c *Checker) getAugmentedPropertiesOfType(t *Type) []*ast.Symbol {
 	}
 	if functionType != nil {
 		for _, p := range c.getPropertiesOfType(functionType) {
-			if _, ok := propsByName[p.Name]; !ok {
-				propsByName[p.Name] = p
+			if _, ok := propsByName[p.Name()]; !ok {
+				propsByName[p.Name()] = p
 			}
 		}
 	}
@@ -393,7 +393,7 @@ func (c *Checker) runWithoutResolvedSignatureCaching[T any](node *ast.Node, fn f
 }
 
 func (c *Checker) SkipAlias(symbol *ast.Symbol) *ast.Symbol {
-	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		return c.GetAliasedSymbol(symbol)
 	}
 	return symbol
@@ -419,15 +419,15 @@ func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol 
 }
 
 func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
-	if symbol.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+	if symbol.CheckFlags()&ast.CheckFlagsSynthetic != 0 {
 		return core.MapNonNil(
 			c.valueSymbolLinks.Get(symbol).containingType.Types(),
 			func(t *Type) *ast.Symbol {
-				return c.getPropertyOfType(t, symbol.Name)
+				return c.getPropertyOfType(t, symbol.Name())
 			},
 		)
 	}
-	if symbol.Flags&ast.SymbolFlagsTransient != 0 {
+	if symbol.Flags()&ast.SymbolFlagsTransient != 0 {
 		if c.spreadLinks.Has(symbol) {
 			leftSpread := c.spreadLinks.Get(symbol).leftSpread
 			rightSpread := c.spreadLinks.Get(symbol).rightSpread
@@ -469,7 +469,7 @@ func (c *Checker) tryGetTarget(symbol *ast.Symbol) *ast.Symbol {
 }
 
 func (c *Checker) GetExportSymbolOfSymbol(symbol *ast.Symbol) *ast.Symbol {
-	return c.getMergedSymbol(core.IfElse(symbol.ExportSymbol != nil, symbol.ExportSymbol, symbol))
+	return c.getMergedSymbol(core.IfElse(symbol.ExportSymbol() != nil, symbol.ExportSymbol(), symbol))
 }
 
 func (c *Checker) GetExportSpecifierLocalTargetSymbol(node *ast.Node) *ast.Symbol {
@@ -587,7 +587,7 @@ func (c *Checker) GetReferencesToSymbolInFile(
 	sourceFile *ast.SourceFile,
 	symbol *ast.Symbol,
 ) []*ast.Node {
-	identifierText := symbol.Name
+	identifierText := symbol.Name()
 	var result []*ast.Node
 	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
@@ -884,9 +884,9 @@ func (c *Checker) GetConstantValue(node *ast.Node) any {
 			nil,   /*location*/
 		)
 	}
-	if symbol != nil && symbol.Flags&ast.SymbolFlagsEnumMember != 0 {
+	if symbol != nil && symbol.Flags()&ast.SymbolFlagsEnumMember != 0 {
 		// inline property\index accesses only for const enums
-		member := symbol.ValueDeclaration
+		member := symbol.ValueDeclaration()
 		if ast.IsEnumConst(member.Parent) {
 			return c.getEnumMemberValue(member).Value
 		}
@@ -1005,14 +1005,14 @@ func isKnownGenericTypeName(name string) bool {
 }
 
 func (c *Checker) GetFirstTypeArgumentFromKnownType(t *Type) *Type {
-	if t.objectFlags&ObjectFlagsReference != 0 && t.symbol != nil && isKnownGenericTypeName(t.symbol.Name) {
-		symbol := c.getGlobalSymbol(t.symbol.Name, ast.SymbolFlagsType, nil)
+	if t.objectFlags&ObjectFlagsReference != 0 && t.symbol != nil && isKnownGenericTypeName(t.symbol.Name()) {
+		symbol := c.getGlobalSymbol(t.symbol.Name(), ast.SymbolFlagsType, nil)
 		if symbol != nil && symbol == t.Target().symbol {
 			return core.FirstOrNil(c.getTypeArguments(t))
 		}
 	}
-	if t.alias != nil && isKnownGenericTypeName(t.alias.symbol.Name) {
-		symbol := c.getGlobalSymbol(t.alias.symbol.Name, ast.SymbolFlagsType, nil)
+	if t.alias != nil && isKnownGenericTypeName(t.alias.symbol.Name()) {
+		symbol := c.getGlobalSymbol(t.alias.symbol.Name(), ast.SymbolFlagsType, nil)
 		if symbol != nil && symbol == t.alias.symbol {
 			return core.FirstOrNil(t.alias.typeArguments)
 		}
@@ -1124,7 +1124,7 @@ func (c *Checker) IsLibSymbolForHoverVerbosity(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return false
 	}
-	for _, decl := range symbol.Declarations {
+	for _, decl := range symbol.Declarations() {
 		sf := ast.GetSourceFileOfNode(decl)
 		if sf != nil && c.program.IsSourceFileDefaultLibrary(sf.PathKey()) {
 			return true

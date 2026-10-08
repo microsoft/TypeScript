@@ -605,9 +605,9 @@ func (t *typeTracer) buildTypeDescriptor(typ TracedType, recursionIdentityMap ma
 
 	// Symbol name - escape the internal symbol name prefix for valid JSON
 	if sym := aliasSymbol; sym != nil {
-		desc.SymbolName = ast.EscapeAllInternalSymbolNames(sym.Name)
+		desc.SymbolName = ast.EscapeAllInternalSymbolNames(sym.Name())
 	} else if symbol != nil {
-		desc.SymbolName = ast.EscapeAllInternalSymbolNames(symbol.Name)
+		desc.SymbolName = ast.EscapeAllInternalSymbolNames(symbol.Name())
 	}
 
 	// Tuple flag
@@ -711,8 +711,8 @@ func (t *typeTracer) buildTypeDescriptor(typ TracedType, recursionIdentityMap ma
 	if firstDeclSymbol == nil {
 		firstDeclSymbol = symbol
 	}
-	if firstDeclSymbol != nil && len(firstDeclSymbol.Declarations) > 0 {
-		desc.FirstDeclaration = getLocation(firstDeclSymbol.Declarations[0])
+	if firstDeclSymbol != nil && len(firstDeclSymbol.Declarations()) > 0 {
+		desc.FirstDeclaration = getLocation(firstDeclSymbol.Declarations()[0])
 	}
 
 	// Display text

@@ -298,7 +298,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				var name *ast.Node
 				if sym != nil {
 					type_ = b.ch.getDeclaredTypeOfSymbol(sym)
-					if sym.Flags&ast.SymbolFlagsTypeParameter != 0 {
+					if sym.Flags()&ast.SymbolFlagsTypeParameter != 0 {
 						name = b.typeParameterToName(type_).AsNode()
 					}
 				}
@@ -337,7 +337,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
 		}
 		sym = b.ch.resolveEntityName(leftmost, meaning, true, true, nil)
-		if b.ctx.enclosingDeclaration != nil && !(sym != nil && sym.Flags&ast.SymbolFlagsTypeParameter != 0) {
+		if b.ctx.enclosingDeclaration != nil && !(sym != nil && sym.Flags()&ast.SymbolFlagsTypeParameter != 0) {
 			sym = b.ch.getExportSymbolOfValueSymbolIfExported(sym)
 			// Some declarations may be transplanted to a new location.
 			// When this happens we need to make sure that the name has the same meaning at both locations
@@ -365,12 +365,12 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 
 		if sym != nil {
 			// If a parameter is resolvable in the current context it is also visible, so no need to go to symbol accesibility
-			if sym.Flags&ast.SymbolFlagsFunctionScopedVariable != 0 && sym.ValueDeclaration != nil {
-				if ast.IsPartOfParameterDeclaration(sym.ValueDeclaration) || ast.IsJSDocParameterTag(sym.ValueDeclaration) {
+			if sym.Flags()&ast.SymbolFlagsFunctionScopedVariable != 0 && sym.ValueDeclaration() != nil {
+				if ast.IsPartOfParameterDeclaration(sym.ValueDeclaration()) || ast.IsJSDocParameterTag(sym.ValueDeclaration()) {
 					return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
 				}
 			}
-			if sym.Flags&ast.SymbolFlagsTypeParameter == 0 /* Type parameters are visible in the current context if they are are resolvable */ && !ast.IsDeclarationName(node) &&
+			if sym.Flags()&ast.SymbolFlagsTypeParameter == 0 /* Type parameters are visible in the current context if they are are resolvable */ && !ast.IsDeclarationName(node) &&
 				b.ch.IsSymbolAccessible(sym, enclosingDeclaration, meaning, false).Accessibility != printer.SymbolAccessibilityAccessible {
 				b.ctx.tracker.ReportInferenceFallback(node)
 				introducesError = true
@@ -421,7 +421,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if s == nil {
 			return nil // ???
 		}
-		if s.Flags&ast.SymbolFlagsTypeParameter != 0 {
+		if s.Flags()&ast.SymbolFlagsTypeParameter != 0 {
 			declaredType := b.ch.getDeclaredTypeOfSymbol(s)
 			if b.ctx.mapper != nil && getMappedType(declaredType, b.ctx.mapper) != declaredType {
 				return nil // refers to type parameter remapped by context (TODO improvement: just return the remapped param name?)

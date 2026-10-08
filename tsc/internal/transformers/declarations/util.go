@@ -156,7 +156,7 @@ func shouldEmitFunctionProperties(input *ast.FunctionDeclaration) bool {
 	if input.Body != nil {
 		return true
 	}
-	return !core.Every(input.Symbol.Declarations, func(decl *ast.Node) bool {
+	return !core.Every(input.Symbol.Declarations(), func(decl *ast.Node) bool {
 		return !ast.IsFunctionDeclaration(decl) || decl.AsFunctionDeclaration().Body == nil
 	})
 }

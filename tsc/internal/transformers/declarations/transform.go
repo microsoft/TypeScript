@@ -118,8 +118,8 @@ func NewDeclarationTransformer(host DeclarationEmitHost, resolver printer.EmitRe
 		}
 		props := resolver.GetPropertiesOfContainerFunction(node)
 		for _, p := range props {
-			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
-				errorTarget := p.ValueDeclaration
+			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration()) {
+				errorTarget := p.ValueDeclaration()
 				if ast.IsBinaryExpression(errorTarget) {
 					errorTarget = errorTarget.AsBinaryExpression().Left
 				}
@@ -354,8 +354,8 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	combinedStatements.Loc = statements.Loc // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
 		if ast.IsInJSFile(node.AsNode()) {
-			if exportEquals := node.Symbol.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations) > 1 {
-				for _, node := range exportEquals.Declarations {
+			if exportEquals := node.Symbol.Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations()) > 1 {
+				for _, node := range exportEquals.Declarations() {
 					tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Multiple_module_exports_assignments_cannot_be_serialized_for_declaration_emit))
 				}
 			}
@@ -1088,7 +1088,7 @@ func (tx *DeclarationTransformer) transformConstructSignatureDeclaration(input *
 }
 
 func (tx *DeclarationTransformer) omitPrivateMethodType(input *ast.Node) *ast.Node {
-	if input.Symbol() != nil && len(input.Symbol().Declarations) > 0 && input.Symbol().Declarations[0] != input {
+	if input.Symbol() != nil && len(input.Symbol().Declarations()) > 0 && input.Symbol().Declarations()[0] != input {
 		return nil
 	}
 	var result *ast.Node
@@ -1562,7 +1562,7 @@ func (tx *DeclarationTransformer) wrapInCJSExportNamespace(content *ast.Node) *a
 
 func isCommonJSAliasExport(node *ast.Node) bool {
 	if ast.IsBinaryExpression(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
-		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations) == 1 {
+		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations()) == 1 {
 			return true
 		}
 	}
@@ -2728,7 +2728,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	left := node.Left
 
 	symbol := node.Symbol
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAssignment == 0 {
+	if symbol == nil || symbol.Flags()&ast.SymbolFlagsAssignment == 0 {
 		return
 	}
 

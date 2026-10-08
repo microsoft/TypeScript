@@ -425,7 +425,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 		// which are two elements in pt.Elements but only one symbol in targetProps.
 		targetDeclCount := 0
 		for _, prop := range targetProps {
-			targetDeclCount += len(prop.Declarations)
+			targetDeclCount += len(prop.Declarations())
 		}
 		if len(pt.Elements) != targetDeclCount {
 			return false
@@ -434,13 +434,13 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 			var targetProp *ast.Symbol
 			elemSymbol := e.Name.Parent.Symbol()
 			if elemSymbol != nil {
-				targetProp = b.ch.getPropertyOfType(undefinedStripped, elemSymbol.Name)
+				targetProp = b.ch.getPropertyOfType(undefinedStripped, elemSymbol.Name())
 			}
 			if targetProp == nil {
 				// Name lookup failed or returned no result; search target properties
 				// for one whose declaration name node matches the one we have
 				for _, prop := range targetProps {
-					if prop.ValueDeclaration != nil && prop.ValueDeclaration.Name() == e.Name {
+					if prop.ValueDeclaration() != nil && prop.ValueDeclaration().Name() == e.Name {
 						targetProp = prop
 						break
 					}
@@ -452,7 +452,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 					return false
 				}
 			}
-			targetIsOptional := targetProp.Flags&ast.SymbolFlagsOptional != 0
+			targetIsOptional := targetProp.Flags()&ast.SymbolFlagsOptional != 0
 			if e.Optional != targetIsOptional {
 				if reportErrors {
 					b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
@@ -612,7 +612,7 @@ func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseud
 	}
 	for i, p := range params {
 		targetParam := targetSig.parameters[i]
-		if p.Optional != b.ch.isOptionalParameter(targetParam.ValueDeclaration) {
+		if p.Optional != b.ch.isOptionalParameter(targetParam.ValueDeclaration()) {
 			if reportErrors {
 				b.ctx.tracker.ReportInferenceFallback(p.Name.Parent)
 			}
