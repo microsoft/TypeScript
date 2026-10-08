@@ -3,7 +3,6 @@ package ls
 import (
 	"context"
 	"slices"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -358,7 +357,7 @@ func getSearchesFromDirectImports(
 
 	isNameMatch := func(name string) bool {
 		// Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
-		return unique.Make(name) == exportSymbol.Name() || exportKind != ExportKindNamed && unique.Make(name) == ast.InternalSymbolNameDefault
+		return ast.MakeSymbolName(name) == exportSymbol.Name() || exportKind != ExportKindNamed && ast.MakeSymbolName(name) == ast.InternalSymbolNameDefault
 	}
 
 	// `import x = require("./x")` or `import * as x from "./x"`.
@@ -386,7 +385,7 @@ func getSearchesFromDirectImports(
 				singleReferences = append(singleReferences, propertyName)
 				// If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
 				// But do rename `foo` in ` { default as foo }` if that's the original export name.
-				if !isForRename || unique.Make(name.Text()) == exportSymbol.Name() {
+				if !isForRename || ast.MakeSymbolName(name.Text()) == exportSymbol.Name() {
 					// Search locally for `bar`.
 					addSearch(name, checker.GetSymbolAtLocation(name))
 				}
@@ -416,7 +415,7 @@ func getSearchesFromDirectImports(
 		if ast.IsImportTypeNode(decl) {
 			if qualifier := decl.AsImportTypeNode().Qualifier; qualifier != nil {
 				firstIdentifier := ast.GetFirstIdentifier(qualifier)
-				if unique.Make(firstIdentifier.Text()) == exportSymbol.Name() {
+				if ast.MakeSymbolName(firstIdentifier.Text()) == exportSymbol.Name() {
 					singleReferences = append(singleReferences, firstIdentifier)
 				}
 			} else if exportKind == ExportKindExportEquals {
@@ -449,7 +448,7 @@ func getSearchesFromDirectImports(
 			// `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals.
 			// If a default import has the same name as the default export, allow to rename it.
 			// Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-			if name := importClause.Name(); name != nil && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || unique.Make(name.Text()) == symbolNameNoDefault(exportSymbol)) {
+			if name := importClause.Name(); name != nil && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || ast.MakeSymbolName(name.Text()) == symbolNameNoDefault(exportSymbol)) {
 				defaultImportAlias := checker.GetSymbolAtLocation(name)
 				addSearch(name, defaultImportAlias)
 			}
@@ -707,7 +706,7 @@ func symbolNameNoDefault(symbol *ast.Symbol) ast.SymbolName {
 	for _, decl := range symbol.Declarations() {
 		name := ast.GetNameOfDeclaration(decl)
 		if name != nil && ast.IsIdentifier(name) {
-			return unique.Make(name.Text())
+			return ast.MakeSymbolName(name.Text())
 		}
 	}
 	return ast.EmptySymbolName

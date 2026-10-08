@@ -4,7 +4,6 @@ import (
 	"maps"
 	"slices"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -595,7 +594,7 @@ func (c *Checker) GetReferencesToSymbolInFile(
 			continue
 		}
 		id := token.AsIdentifier()
-		if unique.Make(id.Text) != identifierText {
+		if ast.MakeSymbolName(id.Text) != identifierText {
 			continue
 		}
 		refSymbol := c.GetSymbolAtLocation(token)
@@ -1028,7 +1027,7 @@ func (c *Checker) GetPropertySymbolsFromContextualType(node *ast.Node, contextua
 		return nil
 	}
 	if contextualType.flags&TypeFlagsUnion == 0 {
-		if symbol := c.getPropertyOfType(contextualType, unique.Make(name)); symbol != nil {
+		if symbol := c.getPropertyOfType(contextualType, ast.MakeSymbolName(name)); symbol != nil {
 			return []*ast.Symbol{symbol}
 		}
 		return nil
@@ -1040,17 +1039,17 @@ func (c *Checker) GetPropertySymbolsFromContextualType(node *ast.Node, contextua
 		})
 	}
 	discriminatedPropertySymbols := core.MapNonNil(filteredTypes, func(t *Type) *ast.Symbol {
-		return c.getPropertyOfType(t, unique.Make(name))
+		return c.getPropertyOfType(t, ast.MakeSymbolName(name))
 	})
 	if unionSymbolOk && (len(discriminatedPropertySymbols) == 0 || len(discriminatedPropertySymbols) == len(contextualType.Types())) {
-		if symbol := c.getPropertyOfType(contextualType, unique.Make(name)); symbol != nil {
+		if symbol := c.getPropertyOfType(contextualType, ast.MakeSymbolName(name)); symbol != nil {
 			return []*ast.Symbol{symbol}
 		}
 	}
 	if len(filteredTypes) == 0 && len(discriminatedPropertySymbols) == 0 {
 		// Bad discriminant -- do again without discriminating
 		return core.MapNonNil(contextualType.Types(), func(t *Type) *ast.Symbol {
-			return c.getPropertyOfType(t, unique.Make(name))
+			return c.getPropertyOfType(t, ast.MakeSymbolName(name))
 		})
 	}
 	// by eliminating duplicates we might even end up with a single symbol
@@ -1071,7 +1070,7 @@ func (c *Checker) GetPropertySymbolOfDestructuringAssignment(location *ast.Node)
 	if ast.IsArrayLiteralOrObjectLiteralDestructuringPattern(location.Parent.Parent) {
 		// Get the type of the object or array literal and then look for property of given name in the type
 		if typeOfObjectLiteral := c.getTypeOfAssignmentPattern(location.Parent.Parent); typeOfObjectLiteral != nil {
-			return c.getPropertyOfType(typeOfObjectLiteral, unique.Make(location.Text()))
+			return c.getPropertyOfType(typeOfObjectLiteral, ast.MakeSymbolName(location.Text()))
 		}
 	}
 	return nil
