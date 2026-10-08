@@ -8,7 +8,6 @@ import (
 )
 
 func TestJsDocPropertyDescription4(t *testing.T) {
-	t.Skip("Known failing fourslash test")
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface MultipleExample {
