@@ -256,7 +256,7 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 	sym := symbol
 	if !preferences.ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown() && sym.Flags&ast.SymbolFlagsAlias != 0 {
 		importSpecifier := core.Find(sym.Declarations, ast.IsImportSpecifier)
-		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName == nil {
+		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName() == nil {
 			sym = ch.GetAliasedSymbol(sym)
 		}
 	}
@@ -378,11 +378,11 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 	if useAliasesForRename && entry.kind != entryKindRange && (ast.IsIdentifier(originalNode) || ast.IsStringLiteralLike(originalNode)) {
 		node := ast.GetReparsedNodeForNode(entry.node)
 		kind := entry.kind
-		parent := node.Parent
+		parent := node.Parent()
 		name := originalNode.Text()
 		isShorthandAssignment := ast.IsShorthandPropertyAssignment(parent)
 		switch {
-		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken == nil):
+		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken() == nil):
 			if kind == entryKindSearchedLocalFoundProperty {
 				return name + ": " + newText
 			}
@@ -392,8 +392,8 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 			// In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
 			// For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
 			if isShorthandAssignment {
-				grandParent := parent.Parent
-				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent) && ast.IsModuleExportsAccessExpression(grandParent.Parent.AsBinaryExpression().Left) {
+				grandParent := parent.Parent()
+				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent()) && ast.IsModuleExportsAccessExpression(grandParent.Parent().AsBinaryExpression().Left()) {
 					return name + ": " + newText
 				}
 				return newText + ": " + name
@@ -402,8 +402,8 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		case ast.IsImportSpecifier(parent) && parent.PropertyName() == nil:
 			// If the original symbol was using this alias, just rename the alias.
 			var originalSymbol *ast.Symbol
-			if ast.IsExportSpecifier(originalNode.Parent) {
-				originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent)
+			if ast.IsExportSpecifier(originalNode.Parent()) {
+				originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent())
 			} else {
 				originalSymbol = ch.GetSymbolAtLocation(originalNode)
 			}
@@ -421,7 +421,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 	}
 
 	// If the node is a numerical indexing literal, then add quotes around the property access.
-	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsAccessExpression(entry.node.Parent) {
+	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsAccessExpression(entry.node.Parent()) {
 		quote := getQuoteFromPreference(quotePreference)
 		return quote + newText + quote
 	}

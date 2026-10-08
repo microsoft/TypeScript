@@ -101,7 +101,7 @@ func getOwnOrInheritedDelta(n *ast.Node, options lsutil.FormatCodeSettings, sour
 
 		previousLine = line
 		child = n
-		n = n.Parent
+		n = n.Parent()
 	}
 	return 0
 }
@@ -309,7 +309,7 @@ func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 			// pair here, we're already done and we can ignore it.
 			parent := astnav.FindPrecedingToken(w.sourceFile, tokenInfo.Loc.End())
 			if parent != nil {
-				parent = parent.Parent
+				parent = parent.Parent()
 			}
 			if parent == nil {
 				parent = w.previousParent
@@ -1233,7 +1233,7 @@ func getFirstNonDecoratorTokenOfNode(node *ast.Node) ast.Kind {
 	case ast.KindSetAccessor:
 		return ast.KindSetKeyword
 	case ast.KindMethodDeclaration:
-		if node.AsMethodDeclaration().AsteriskToken != nil {
+		if node.AsMethodDeclaration().AsteriskToken() != nil {
 			return ast.KindAsteriskToken
 		}
 		fallthrough

@@ -96,7 +96,7 @@ func getAccessorNameVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibil
 			diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2,
 			diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1,
 		)
-	} else if node.Parent.Kind == ast.KindClassDeclaration {
+	} else if node.Parent().Kind == ast.KindClassDeclaration {
 		return selectDiagnosticBasedOnModuleName(
 			symbolAccessibilityResult,
 			diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named,
@@ -120,7 +120,7 @@ func getMethodNameVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilit
 			diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2,
 			diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_private_name_1,
 		)
-	} else if node.Parent.Kind == ast.KindClassDeclaration {
+	} else if node.Parent().Kind == ast.KindClassDeclaration {
 		return selectDiagnosticBasedOnModuleName(
 			symbolAccessibilityResult,
 			diagnostics.Public_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named,
@@ -144,7 +144,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 	} else if ast.IsConstructSignatureDeclaration(node) || ast.IsCallSignatureDeclaration(node) || ast.IsMethodDeclaration(node) || ast.IsMethodSignatureDeclaration(node) || ast.IsFunctionDeclaration(node) || ast.IsIndexSignatureDeclaration(node) {
 		return wrapFallbackErrorDiagnosticSelector(node, getReturnTypeVisibilityDiagnosticMessage)
 	} else if ast.IsParameterDeclaration(node) {
-		if ast.IsParameterPropertyDeclaration(node, node.Parent) && ast.HasSyntacticModifier(node.Parent, ast.ModifierFlagsPrivate) {
+		if ast.IsParameterPropertyDeclaration(node, node.Parent()) && ast.HasSyntacticModifier(node.Parent(), ast.ModifierFlagsPrivate) {
 			return wrapSimpleDiagnosticSelector(node, getVariableDeclarationTypeVisibilityDiagnosticMessage)
 		}
 		return wrapSimpleDiagnosticSelector(node, getParameterDeclarationTypeVisibilityDiagnosticMessage)
@@ -155,12 +155,12 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 		return func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			var diagnosticMessage *diagnostics.Message
 			// Heritage clause is written by user so it can always be named
-			if ast.IsClassDeclaration(node.Parent.Parent) {
+			if ast.IsClassDeclaration(node.Parent().Parent()) {
 				// Class or Interface implemented/extended is inaccessible
-				if ast.IsHeritageClause(node.Parent) && node.Parent.AsHeritageClause().Token == ast.KindImplementsKeyword {
+				if ast.IsHeritageClause(node.Parent()) && node.Parent().AsHeritageClause().Token == ast.KindImplementsKeyword {
 					diagnosticMessage = diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1
 				} else {
-					if node.Parent.Parent.Name() != nil {
+					if node.Parent().Parent().Name() != nil {
 						diagnosticMessage = diagnostics.X_extends_clause_of_exported_class_0_has_or_is_using_private_name_1
 					} else {
 						diagnosticMessage = diagnostics.X_extends_clause_of_exported_class_has_or_is_using_private_name_0
@@ -174,7 +174,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 			return &SymbolAccessibilityDiagnostic{
 				diagnosticMessage: diagnosticMessage,
 				errorNode:         node,
-				typeName:          ast.GetNameOfDeclaration(node.Parent.Parent),
+				typeName:          ast.GetNameOfDeclaration(node.Parent().Parent()),
 			}
 		}
 	} else if ast.IsImportEqualsDeclaration(node) {
@@ -232,7 +232,7 @@ func getVariableDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbo
 		// This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
 		// The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
 	} else if node.Kind == ast.KindPropertyDeclaration || node.Kind == ast.KindPropertyAccessExpression || node.Kind == ast.KindElementAccessExpression || node.Kind == ast.KindBinaryExpression || node.Kind == ast.KindPropertySignature ||
-		(node.Kind == ast.KindParameter && ast.HasSyntacticModifier(node.Parent, ast.ModifierFlagsPrivate)) {
+		(node.Kind == ast.KindParameter && ast.HasSyntacticModifier(node.Parent(), ast.ModifierFlagsPrivate)) {
 		// TODO(jfreeman): Deal with computed properties in error reporting.
 		if ast.IsStatic(node) {
 			return selectDiagnosticBasedOnModuleName(
@@ -241,7 +241,7 @@ func getVariableDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbo
 				diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2,
 				diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1,
 			)
-		} else if node.Parent.Kind == ast.KindClassDeclaration || node.Kind == ast.KindParameter {
+		} else if node.Parent().Kind == ast.KindClassDeclaration || node.Kind == ast.KindParameter {
 			return selectDiagnosticBasedOnModuleName(
 				symbolAccessibilityResult,
 				diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named,
@@ -328,7 +328,7 @@ func getReturnTypeVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilit
 				diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1,
 				diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0,
 			)
-		} else if node.Parent.Kind == ast.KindClassDeclaration {
+		} else if node.Parent().Kind == ast.KindClassDeclaration {
 			return selectDiagnosticBasedOnModuleName(
 				symbolAccessibilityResult,
 				diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named,
@@ -356,7 +356,7 @@ func getReturnTypeVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilit
 }
 
 func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilityResult printer.SymbolAccessibilityResult) *diagnostics.Message {
-	switch node.Parent.Kind {
+	switch node.Parent().Kind {
 	case ast.KindConstructor:
 		return selectDiagnosticBasedOnModuleName(
 			symbolAccessibilityResult,
@@ -390,14 +390,14 @@ func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symb
 		)
 
 	case ast.KindMethodDeclaration, ast.KindMethodSignature:
-		if ast.IsStatic(node.Parent) {
+		if ast.IsStatic(node.Parent()) {
 			return selectDiagnosticBasedOnModuleName(
 				symbolAccessibilityResult,
 				diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named,
 				diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2,
 				diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1,
 			)
-		} else if node.Parent.Parent.Kind == ast.KindClassDeclaration {
+		} else if node.Parent().Parent().Kind == ast.KindClassDeclaration {
 			return selectDiagnosticBasedOnModuleName(
 				symbolAccessibilityResult,
 				diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named,
@@ -429,13 +429,13 @@ func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symb
 		)
 
 	default:
-		panic("Unknown parent for parameter: " + node.Parent.Kind.String())
+		panic("Unknown parent for parameter: " + node.Parent().Kind.String())
 	}
 }
 
 func getTypeParameterConstraintVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilityResult printer.SymbolAccessibilityResult) *diagnostics.Message {
 	// Type parameter constraints are named by user so we should always be able to name it
-	switch node.Parent.Kind {
+	switch node.Parent().Kind {
 	case ast.KindClassDeclaration:
 		return diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1
 	case ast.KindInterfaceDeclaration:
@@ -447,9 +447,9 @@ func getTypeParameterConstraintVisibilityDiagnosticMessage(node *ast.Node, symbo
 	case ast.KindCallSignature:
 		return diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1
 	case ast.KindMethodDeclaration, ast.KindMethodSignature:
-		if ast.IsStatic(node.Parent) {
+		if ast.IsStatic(node.Parent()) {
 			return diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1
-		} else if node.Parent.Parent.Kind == ast.KindClassDeclaration {
+		} else if node.Parent().Parent().Kind == ast.KindClassDeclaration {
 			return diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1
 		} else {
 			return diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1
@@ -464,7 +464,7 @@ func getTypeParameterConstraintVisibilityDiagnosticMessage(node *ast.Node, symbo
 		return diagnostics.Type_parameter_0_of_exported_type_alias_has_or_is_using_private_name_1
 
 	default:
-		panic("This is unknown parent for type parameter: " + node.Parent.Kind.String())
+		panic("This is unknown parent for type parameter: " + node.Parent().Kind.String())
 	}
 }
 
@@ -661,7 +661,7 @@ func createExpressionErrorEx(node *ast.Node, diagnosticMessage *diagnostics.Mess
 	if !ast.IsExportAssignment(parentDeclaration) && parentDeclaration.Name() != nil {
 		targetStr = scanner.GetTextOfNode(parentDeclaration.Name())
 	}
-	parent := ast.FindAncestorOrQuit(node.Parent, isParentForIDDIagnostic)
+	parent := ast.FindAncestorOrQuit(node.Parent(), isParentForIDDIagnostic)
 
 	if parentDeclaration == parent {
 		if diagnosticMessage == nil {
@@ -682,8 +682,8 @@ func createExpressionErrorEx(node *ast.Node, diagnosticMessage *diagnostics.Mess
 
 func createGetIsolatedDeclarationErrors(resolver printer.EmitResolver) func(node *ast.Node) *ast.Diagnostic {
 	createParameterError := func(node *ast.Node) *ast.Diagnostic {
-		if ast.IsSetAccessorDeclaration(node.Parent) {
-			return createAccessorTypeError(node.Parent)
+		if ast.IsSetAccessorDeclaration(node.Parent()) {
+			return createAccessorTypeError(node.Parent())
 		}
 		addUndefined := resolver.RequiresAddingImplicitUndefinedUnsafe(node, nil, nil) // skip checker lock - node builder will already have one
 		if !addUndefined && node.Initializer() != nil {

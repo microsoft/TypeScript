@@ -22,9 +22,9 @@ func (ch *nullishCoalescingTransformer) visit(node *ast.Node) *ast.Node {
 }
 
 func (ch *nullishCoalescingTransformer) visitBinaryExpression(node *ast.BinaryExpression) *ast.Node {
-	switch node.OperatorToken.Kind {
+	switch node.OperatorToken().Kind {
 	case ast.KindQuestionQuestionToken:
-		left := ch.Visitor().VisitNode(node.Left)
+		left := ch.Visitor().VisitNode(node.Left())
 		right := left
 		if !transformers.IsSimpleCopiableExpression(left) {
 			right = ch.Factory().NewTempVariable()
@@ -36,7 +36,7 @@ func (ch *nullishCoalescingTransformer) visitBinaryExpression(node *ast.BinaryEx
 			ch.Factory().NewToken(ast.KindQuestionToken),
 			right,
 			ch.Factory().NewToken(ast.KindColonToken),
-			ch.Visitor().VisitNode(node.Right),
+			ch.Visitor().VisitNode(node.Right()),
 		)
 	default:
 		return ch.Visitor().VisitEachChild(node.AsNode())

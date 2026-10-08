@@ -290,10 +290,6 @@
                         "$ref": "#/definitions/member"
                     }
                 },
-                "arena": {
-                    "type": "boolean",
-                    "description": "Whether this node uses an object arena for allocation."
-                },
                 "handWrittenVisitor": {
                     "type": "boolean",
                     "description": "Whether this node's ForEachChild and VisitEachChild functions are hand-written rather than generated."

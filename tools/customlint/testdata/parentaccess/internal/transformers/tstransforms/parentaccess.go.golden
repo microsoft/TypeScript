@@ -6,6 +6,8 @@
 		return nil
 	}
 	
+	func (n *Node) SetParent(parent *Node) {}
+	
 	type WithField struct {
 		Parent *Node
 	}
@@ -19,6 +21,12 @@
 	func badFieldAccess(w *WithField) {
 		_ = w.Parent
 		      ~~~~~~
+!!! forbidparentaccess: Transformers are run on nodes with potentially unset .Parent pointers, do not use them in transformers. Track context in the transform itself, instead.
+	}
+	
+	func badSet(n *Node) {
+		n.SetParent(nil)
+		  ~~~~~~~~~
 !!! forbidparentaccess: Transformers are run on nodes with potentially unset .Parent pointers, do not use them in transformers. Track context in the transform itself, instead.
 	}
 	

@@ -872,7 +872,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 
 		for index, entry := range moduleNames {
 			moduleName := entry.Text()
-			if moduleName == "" || ast.IsSourcePhaseImport(entry.Parent) {
+			if moduleName == "" || ast.IsSourcePhaseImport(entry.Parent()) {
 				continue
 			}
 
@@ -945,8 +945,8 @@ func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *a
 	defer p.factoryMu.Unlock()
 	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
 	importDecl := p.factory.NewImportDeclaration(nil, nil, externalHelpersModuleReference, nil)
-	externalHelpersModuleReference.Parent = importDecl
-	importDecl.Parent = file.AsNode()
+	externalHelpersModuleReference.SetParent(importDecl)
+	importDecl.SetParent(file.AsNode())
 	return externalHelpersModuleReference
 }
 
@@ -1035,26 +1035,26 @@ func getDefaultResolutionModeForFile(fileName tspath.RootedFilePath, meta ast.So
 }
 
 func getModeForUsageLocation(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage *ast.StringLiteralLike, options *core.CompilerOptions) core.ResolutionMode {
-	if ast.IsImportDeclaration(usage.Parent) || usage.Parent.Kind == ast.KindJSImportDeclaration || ast.IsExportDeclaration(usage.Parent) || ast.IsJSDocImportTag(usage.Parent) {
-		isTypeOnly := ast.IsExclusivelyTypeOnlyImportOrExport(usage.Parent)
+	if ast.IsImportDeclaration(usage.Parent()) || usage.Parent().Kind == ast.KindJSImportDeclaration || ast.IsExportDeclaration(usage.Parent()) || ast.IsJSDocImportTag(usage.Parent()) {
+		isTypeOnly := ast.IsExclusivelyTypeOnlyImportOrExport(usage.Parent())
 		if isTypeOnly {
 			var override core.ResolutionMode
 			var ok bool
-			switch usage.Parent.Kind {
+			switch usage.Parent().Kind {
 			case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
-				override, ok = usage.Parent.AsImportDeclaration().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsImportDeclaration().Attributes().GetResolutionModeOverride(nil)
 			case ast.KindExportDeclaration:
-				override, ok = usage.Parent.AsExportDeclaration().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsExportDeclaration().Attributes().GetResolutionModeOverride(nil)
 			case ast.KindJSDocImportTag:
-				override, ok = usage.Parent.AsJSDocImportTag().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsJSDocImportTag().Attributes().GetResolutionModeOverride(nil)
 			}
 			if ok {
 				return override
 			}
 		}
 	}
-	if ast.IsLiteralTypeNode(usage.Parent) && ast.IsImportTypeNode(usage.Parent.Parent) {
-		if override, ok := usage.Parent.Parent.AsImportTypeNode().Attributes.GetResolutionModeOverride(nil); ok {
+	if ast.IsLiteralTypeNode(usage.Parent()) && ast.IsImportTypeNode(usage.Parent().Parent()) {
+		if override, ok := usage.Parent().Parent().AsImportTypeNode().Attributes().GetResolutionModeOverride(nil); ok {
 			return override
 		}
 	}
@@ -1073,11 +1073,11 @@ func importSyntaxAffectsModuleResolution(options *core.CompilerOptions) bool {
 }
 
 func getEmitSyntaxForUsageLocationWorker(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage *ast.Node, options *core.CompilerOptions) core.ResolutionMode {
-	if ast.IsRequireCall(usage.Parent, false /*requireStringLiteralLikeArgument*/) || ast.IsExternalModuleReference(usage.Parent) && ast.IsImportEqualsDeclaration(usage.Parent.Parent) {
+	if ast.IsRequireCall(usage.Parent(), false /*requireStringLiteralLikeArgument*/) || ast.IsExternalModuleReference(usage.Parent()) && ast.IsImportEqualsDeclaration(usage.Parent().Parent()) {
 		return core.ModuleKindCommonJS
 	}
 	fileEmitMode := ast.GetEmitModuleFormatOfFileWorker(fileName, options, meta)
-	if call := ast.WalkUpParenthesizedExpressions(usage.Parent); ast.IsImportCall(call) {
+	if call := ast.WalkUpParenthesizedExpressions(usage.Parent()); ast.IsImportCall(call) {
 		if ast.IsSourcePhaseImportCall(call) {
 			return core.ModuleKindESNext
 		}

@@ -146,7 +146,7 @@ func isNotForContext(context *FormattingContext) bool {
 func isBinaryOpContext(context *FormattingContext) bool {
 	switch context.contextNode.Kind {
 	case ast.KindBinaryExpression:
-		return context.contextNode.AsBinaryExpression().OperatorToken.Kind != ast.KindCommaToken
+		return context.contextNode.AsBinaryExpression().OperatorToken().Kind != ast.KindCommaToken
 	case ast.KindConditionalExpression,
 		ast.KindConditionalType,
 		ast.KindAsExpression,
@@ -337,7 +337,7 @@ func isAfterCodeBlockContext(context *FormattingContext) bool {
 		ast.KindSwitchStatement:
 		return true
 	case ast.KindBlock:
-		blockParent := context.currentTokenParent.Parent
+		blockParent := context.currentTokenParent.Parent()
 		// In a codefix scenario, we can't rely on parents being set. So just always return true.
 		if blockParent == nil || blockParent.Kind != ast.KindArrowFunction && blockParent.Kind != ast.KindFunctionExpression {
 			return true
@@ -421,7 +421,7 @@ func isJsxExpressionContext(context *FormattingContext) bool {
 }
 
 func isNextTokenParentJsxAttribute(context *FormattingContext) bool {
-	return context.nextTokenParent.Kind == ast.KindJsxAttribute || (context.nextTokenParent.Kind == ast.KindJsxNamespacedName && context.nextTokenParent.Parent.Kind == ast.KindJsxAttribute)
+	return context.nextTokenParent.Kind == ast.KindJsxAttribute || (context.nextTokenParent.Kind == ast.KindJsxNamespacedName && context.nextTokenParent.Parent().Kind == ast.KindJsxAttribute)
 }
 
 func isJsxAttributeContext(context *FormattingContext) bool {
@@ -453,7 +453,7 @@ func isEndOfDecoratorContextOnSameLine(context *FormattingContext) bool {
 
 func nodeIsInDecoratorContext(node *ast.Node) bool {
 	for node != nil && ast.IsExpression(node) {
-		node = node.Parent
+		node = node.Parent()
 	}
 	return node != nil && node.Kind == ast.KindDecorator
 }

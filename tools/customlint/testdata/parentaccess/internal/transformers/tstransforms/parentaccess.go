@@ -6,6 +6,8 @@ func (n *Node) Parent() *Node {
 	return nil
 }
 
+func (n *Node) SetParent(parent *Node) {}
+
 type WithField struct {
 	Parent *Node
 }
@@ -16,4 +18,8 @@ func badCall(n *Node) {
 
 func badFieldAccess(w *WithField) {
 	_ = w.Parent
+}
+
+func badSet(n *Node) {
+	n.SetParent(nil)
 }

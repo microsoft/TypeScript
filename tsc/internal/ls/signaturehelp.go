@@ -793,7 +793,7 @@ func getCandidateOrTypeInfo(info *argumentListInfo, c *checker.Checker, sourceFi
 		called := info.invocation.typeArgsInvocation.called.AsNode()
 		container := called
 		if ast.IsIdentifier(called) {
-			container = called.Parent
+			container = called.Parent()
 		}
 
 		if onlyUseSyntacticOwners && !containsPrecedingToken(startingToken, sourceFile, container) {
@@ -854,23 +854,23 @@ func containsPrecedingToken(startingToken *ast.Node, sourceFile *ast.SourceFile,
 	// case, the preceding token we want is actually higher up the tree—almost definitely the
 	// next parent, but theoretically the situation with missing nodes might be happening on
 	// multiple nested levels.
-	currentParent := startingToken.Parent
+	currentParent := startingToken.Parent()
 	for currentParent != nil {
 		precedingToken := astnav.FindPrecedingTokenEx(sourceFile, pos, currentParent, true /*excludeJSDoc*/)
 		if precedingToken != nil {
 			return RangeContainsRange(container.Loc, precedingToken.Loc)
 		}
-		currentParent = currentParent.Parent
+		currentParent = currentParent.Parent()
 	}
 	return false
 }
 
 func getContainingArgumentInfo(node *ast.Node, sourceFile *ast.SourceFile, checker *checker.Checker, isManuallyInvoked bool, position int) *argumentListInfo {
 	var firstArgumentInfo *argumentListInfo
-	for n := node; !ast.IsSourceFile(n) && (isManuallyInvoked || !ast.IsBlock(n)); n = n.Parent {
+	for n := node; !ast.IsSourceFile(n) && (isManuallyInvoked || !ast.IsBlock(n)); n = n.Parent() {
 		// If the node is not a subspan of its parent, this is a big problem.
 		// There have been crashes that might be caused by this violation.
-		debug.Assert(RangeContainsRange(n.Parent.Loc, n.Loc), "Not a subspan. Child: ", n.KindString(), ", parent: ", n.Parent.KindString())
+		debug.Assert(RangeContainsRange(n.Parent().Loc, n.Loc), "Not a subspan. Child: ", n.KindString(), ", parent: ", n.Parent().KindString())
 		argumentInfo := getImmediatelyContainingArgumentOrContextualParameterInfo(n, position, sourceFile, checker)
 		if argumentInfo != nil {
 			// For contextual invocations (e.g., arrow functions with contextual types),
@@ -928,7 +928,7 @@ type argumentListInfo struct {
 // Returns relevant information for the argument list and the current argument if we are
 // in the argument of an invocation; returns undefined otherwise.
 func getImmediatelyContainingArgumentInfo(node *ast.Node, position int, sourceFile *ast.SourceFile, c *checker.Checker) *argumentListInfo {
-	parent := node.Parent
+	parent := node.Parent()
 	if ast.IsCallOrNewExpression(parent) {
 		// There are 3 cases to handle:
 		//   1. The token introduces a list, and should begin a signature help session
@@ -973,25 +973,25 @@ func getImmediatelyContainingArgumentInfo(node *ast.Node, position int, sourceFi
 			return getArgumentListInfoForTemplate(parent.AsTaggedTemplateExpression(), 0, sourceFile)
 		}
 		return nil
-	} else if isTemplateHead(node) && parent.Parent.Kind == ast.KindTaggedTemplateExpression {
+	} else if isTemplateHead(node) && parent.Parent().Kind == ast.KindTaggedTemplateExpression {
 		templateExpression := parent.AsTemplateExpression()
-		tagExpression := templateExpression.Parent.AsTaggedTemplateExpression()
+		tagExpression := templateExpression.Parent().AsTaggedTemplateExpression()
 
 		argumentIndex := 1
 		if isInsideTemplateLiteral(node, position, sourceFile) {
 			argumentIndex = 0
 		}
 		return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile)
-	} else if ast.IsTemplateSpan(parent) && isTaggedTemplateExpression(parent.Parent.Parent) {
+	} else if ast.IsTemplateSpan(parent) && isTaggedTemplateExpression(parent.Parent().Parent()) {
 		templateSpan := parent
-		tagExpression := parent.Parent.Parent
+		tagExpression := parent.Parent().Parent()
 
 		// If we're just after a template tail, don't show signature help.
 		if isTemplateTail(node) && !isInsideTemplateLiteral(node, position, sourceFile) {
 			return nil
 		}
 
-		spanIndex := ast.IndexOfNode(templateSpan.Parent.AsTemplateExpression().TemplateSpans.Nodes, templateSpan)
+		spanIndex := ast.IndexOfNode(templateSpan.Parent().AsTemplateExpression().TemplateSpans().Nodes, templateSpan)
 		argumentIndex := getArgumentIndexForTemplatePiece(spanIndex, node, position, sourceFile)
 
 		return getArgumentListInfoForTemplate(tagExpression.AsTaggedTemplateExpression(), argumentIndex, sourceFile)
@@ -1060,7 +1060,7 @@ func getAdjustedNode(node *ast.Node) *ast.Node {
 	case ast.KindOpenParenToken, ast.KindCommaToken:
 		return node
 	default:
-		return ast.FindAncestor(node.Parent, func(n *ast.Node) bool {
+		return ast.FindAncestor(node.Parent(), func(n *ast.Node) bool {
 			if ast.IsParameterDeclaration(n) {
 				return true
 			} else if ast.IsBindingElement(n) || ast.IsObjectBindingPattern(n) || ast.IsArrayBindingPattern(n) {
@@ -1079,7 +1079,7 @@ type contextualSignatureLocationInfo struct {
 }
 
 func getSpreadElementCount(node *ast.SpreadElement, c *checker.Checker) int {
-	spreadType := c.GetTypeAtLocation(node.Expression)
+	spreadType := c.GetTypeAtLocation(node.Expression())
 	if checker.IsTupleType(spreadType) {
 		tupleType := spreadType.Target().AsTupleType()
 		if tupleType == nil {
@@ -1103,11 +1103,11 @@ func getSpreadElementCount(node *ast.SpreadElement, c *checker.Checker) int {
 }
 
 func getArgumentIndex(node *ast.Node, arguments *ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
-	return getArgumentIndexOrCount(getTokenFromNodeList(arguments, node.Parent, sourceFile), node, c)
+	return getArgumentIndexOrCount(getTokenFromNodeList(arguments, node.Parent(), sourceFile), node, c)
 }
 
 func getArgumentCount(node *ast.Node, arguments *ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
-	return getArgumentIndexOrCount(getTokenFromNodeList(arguments, node.Parent, sourceFile), nil, c)
+	return getArgumentIndexOrCount(getTokenFromNodeList(arguments, node.Parent(), sourceFile), nil, c)
 }
 
 func getArgumentIndexOrCount(arguments []*ast.Node, node *ast.Node, c *checker.Checker) int {
@@ -1224,7 +1224,7 @@ func getArgumentOrParameterListAndIndex(node *ast.Node, sourceFile *ast.SourceFi
 	if node.Kind == ast.KindLessThanToken || node.Kind == ast.KindOpenParenToken {
 		// Find the list that starts right *after* the < or ( token.
 		// If the user has just opened a list, consider this item 0.
-		list := getChildListThatStartsWithOpenerToken(node.Parent, node)
+		list := getChildListThatStartsWithOpenerToken(node.Parent(), node)
 		return &argumentOrParameterListAndIndex{
 			list:          list,
 			argumentIndex: 0,
@@ -1254,13 +1254,13 @@ func getChildListThatStartsWithOpenerToken(parent *ast.Node, openerToken *ast.No
 		if openerToken.Kind == ast.KindLessThanToken {
 			return parentCallExpression.TypeArgumentList()
 		}
-		return parentCallExpression.Arguments
+		return parentCallExpression.Arguments()
 	} else if ast.IsNewExpression(parent) {
 		parentNewExpression := parent.AsNewExpression()
 		if openerToken.Kind == ast.KindLessThanToken {
 			return parentNewExpression.TypeArgumentList()
 		}
-		return parentNewExpression.Arguments
+		return parentNewExpression.Arguments()
 	}
 	return nil
 }
@@ -1309,8 +1309,8 @@ func tryGetParameterInfo(startingToken *ast.Node, sourceFile *ast.SourceFile, c 
 func chooseBetterSymbol(s *ast.Symbol) *ast.Symbol {
 	if s.Name == ast.InternalSymbolNameType {
 		for _, d := range s.Declarations {
-			if ast.IsFunctionTypeNode(d) && ast.CanHaveSymbol(d.Parent) {
-				return d.Parent.Symbol()
+			if ast.IsFunctionTypeNode(d) && ast.CanHaveSymbol(d.Parent()) {
+				return d.Parent().Symbol()
 			}
 		}
 	}
@@ -1318,7 +1318,7 @@ func chooseBetterSymbol(s *ast.Symbol) *ast.Symbol {
 }
 
 func getContextualSignatureLocationInfo(node *ast.Node, sourceFile *ast.SourceFile, c *checker.Checker) *contextualSignatureLocationInfo {
-	parent := node.Parent
+	parent := node.Parent()
 	switch parent.Kind {
 	case ast.KindParenthesizedExpression, ast.KindMethodDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction:
 		info := getArgumentOrParameterListInfo(node, sourceFile, c)
@@ -1366,15 +1366,15 @@ func getContextualSignatureLocationInfo(node *ast.Node, sourceFile *ast.SourceFi
 }
 
 func getHighestBinary(b *ast.BinaryExpression) *ast.BinaryExpression {
-	if ast.IsBinaryExpression(b.Parent) {
-		return getHighestBinary(b.Parent.AsBinaryExpression())
+	if ast.IsBinaryExpression(b.Parent()) {
+		return getHighestBinary(b.Parent().AsBinaryExpression())
 	}
 	return b
 }
 
 func countBinaryExpressionParameters(b *ast.BinaryExpression) int {
-	if ast.IsBinaryExpression(b.Left) {
-		return countBinaryExpressionParameters(b.Left.AsBinaryExpression()) + 1
+	if ast.IsBinaryExpression(b.Left()) {
+		return countBinaryExpressionParameters(b.Left().AsBinaryExpression()) + 1
 	}
 	return 2
 }
@@ -1406,8 +1406,8 @@ func getTokenFromNodeList(nodeList *ast.NodeList, nodeListParent *ast.Node, sour
 func getArgumentListInfoForTemplate(tagExpression *ast.TaggedTemplateExpression, argumentIndex int, sourceFile *ast.SourceFile) *argumentListInfo {
 	// argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
 	argumentCount := 1
-	if !isNoSubstitutionTemplateLiteral(tagExpression.Template) {
-		argumentCount = len(tagExpression.Template.AsTemplateExpression().TemplateSpans.Nodes) + 1
+	if !isNoSubstitutionTemplateLiteral(tagExpression.Template()) {
+		argumentCount = len(tagExpression.Template().AsTemplateExpression().TemplateSpans().Nodes) + 1
 	}
 	if argumentIndex != 0 {
 		debug.Assert(argumentIndex < argumentCount)
@@ -1422,7 +1422,7 @@ func getArgumentListInfoForTemplate(tagExpression *ast.TaggedTemplateExpression,
 }
 
 func getApplicableRangeForTaggedTemplate(taggedTemplate *ast.TaggedTemplateExpression, sourceFile *ast.SourceFile) core.TextRange {
-	template := taggedTemplate.Template
+	template := taggedTemplate.Template()
 	applicableSpanStart := scanner.GetTokenPosOfNode(template, sourceFile, false)
 	applicableSpanEnd := template.End()
 
@@ -1435,9 +1435,9 @@ func getApplicableRangeForTaggedTemplate(taggedTemplate *ast.TaggedTemplateExpre
 	// This is because a Missing node has no width. However, what we actually want is to include trivia
 	// leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
 	if template.Kind == ast.KindTemplateExpression {
-		templateSpans := template.AsTemplateExpression().TemplateSpans
+		templateSpans := template.AsTemplateExpression().TemplateSpans()
 		lastSpan := templateSpans.Nodes[len(templateSpans.Nodes)-1]
-		if lastSpan.AsTemplateSpan().Literal.End()-lastSpan.AsTemplateSpan().Literal.Pos() == 0 {
+		if lastSpan.AsTemplateSpan().Literal().End()-lastSpan.AsTemplateSpan().Literal().Pos() == 0 {
 			applicableSpanEnd = scanner.SkipTrivia(sourceFile.Text(), applicableSpanEnd)
 		}
 	}

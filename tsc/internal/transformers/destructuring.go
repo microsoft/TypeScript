@@ -205,12 +205,12 @@ func (f *flattener) flattenDestructuringAssignment(node *ast.Node, needsValue bo
 	location := node.Loc
 	var value *ast.Node
 	if ast.IsDestructuringAssignment(node) {
-		value = node.AsBinaryExpression().Right
-		for ast.IsEmptyArrayLiteral(node.AsBinaryExpression().Left) || ast.IsEmptyObjectLiteral(node.AsBinaryExpression().Left) {
+		value = node.AsBinaryExpression().Right()
+		for ast.IsEmptyArrayLiteral(node.AsBinaryExpression().Left()) || ast.IsEmptyObjectLiteral(node.AsBinaryExpression().Left()) {
 			if ast.IsDestructuringAssignment(value) {
 				node = value
 				location = node.Loc
-				value = node.AsBinaryExpression().Right
+				value = node.AsBinaryExpression().Right()
 			} else {
 				return f.tx.Visitor().VisitNode(value)
 			}
@@ -349,7 +349,7 @@ func (f *flattener) flattenObjectBindingOrAssignmentPattern(parent *ast.Node, pa
 				}
 				rhsValue := f.createDestructuringPropertyAccess(value, propertyName)
 				if ast.IsComputedPropertyName(propertyName) {
-					computedTempVariables = append(computedTempVariables, rhsValue.AsElementAccessExpression().ArgumentExpression)
+					computedTempVariables = append(computedTempVariables, rhsValue.AsElementAccessExpression().ArgumentExpression())
 				}
 				f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc, false)
 			}
@@ -466,15 +466,15 @@ func GetInitializerOfBindingOrAssignmentElement(bindingElement *ast.Node) *ast.N
 	if ast.IsPropertyAssignment(bindingElement) {
 		initializer := bindingElement.Initializer()
 		if ast.IsAssignmentExpression(initializer, true) {
-			return initializer.AsBinaryExpression().Right
+			return initializer.AsBinaryExpression().Right()
 		}
 		return nil
 	}
 	if ast.IsShorthandPropertyAssignment(bindingElement) {
-		return bindingElement.AsShorthandPropertyAssignment().ObjectAssignmentInitializer
+		return bindingElement.AsShorthandPropertyAssignment().ObjectAssignmentInitializer()
 	}
 	if ast.IsAssignmentExpression(bindingElement, true) {
-		return bindingElement.AsBinaryExpression().Right
+		return bindingElement.AsBinaryExpression().Right()
 	}
 	if ast.IsSpreadElement(bindingElement) {
 		return GetInitializerOfBindingOrAssignmentElement(bindingElement.Expression())

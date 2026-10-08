@@ -345,7 +345,7 @@ func isHoistedVariable(node *ast.VariableDeclarationNode) bool {
 func (c *EmitContext) isHoistedVariableStatement(node *ast.Statement) bool {
 	return c.isCustomPrologue(node) &&
 		ast.IsVariableStatement(node) &&
-		core.Every(node.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes, isHoistedVariable)
+		core.Every(node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes, isHoistedVariable)
 }
 
 //
@@ -822,26 +822,26 @@ func (c *EmitContext) addDefaultValueAssignmentsIfNeeded(nodeList *ast.Parameter
 func (c *EmitContext) addDefaultValueAssignmentIfNeeded(parameter *ast.ParameterDeclaration) *ast.Node {
 	// A rest parameter cannot have a binding pattern or an initializer,
 	// so let's just ignore it.
-	if parameter.DotDotDotToken != nil {
+	if parameter.DotDotDotToken() != nil {
 		return parameter.AsNode()
 	} else if ast.IsBindingPattern(parameter.Name()) {
 		return c.addDefaultValueAssignmentForBindingPattern(parameter)
-	} else if parameter.Initializer != nil {
-		return c.addDefaultValueAssignmentForInitializer(parameter, parameter.Name(), parameter.Initializer)
+	} else if parameter.Initializer() != nil {
+		return c.addDefaultValueAssignmentForInitializer(parameter, parameter.Name(), parameter.Initializer())
 	}
 	return parameter.AsNode()
 }
 
 func (c *EmitContext) addDefaultValueAssignmentForBindingPattern(parameter *ast.ParameterDeclaration) *ast.Node {
 	var initNode *ast.Node
-	if parameter.Initializer != nil {
+	if parameter.Initializer() != nil {
 		initNode = c.Factory.NewConditionalExpression(
 			c.Factory.NewStrictEqualityExpression(
 				c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
 				c.Factory.NewVoidZeroExpression(),
 			),
 			c.Factory.NewToken(ast.KindQuestionToken),
-			parameter.Initializer,
+			parameter.Initializer(),
 			c.Factory.NewToken(ast.KindColonToken),
 			c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
 		)
@@ -853,17 +853,17 @@ func (c *EmitContext) addDefaultValueAssignmentForBindingPattern(parameter *ast.
 		c.Factory.NewVariableDeclarationList(c.Factory.NewNodeList([]*ast.Node{c.Factory.NewVariableDeclaration(
 			parameter.Name(),
 			nil,
-			parameter.Type,
+			parameter.Type(),
 			initNode,
 		)}), ast.NodeFlagsNone),
 	))
 	return c.Factory.UpdateParameterDeclaration(
 		parameter,
 		parameter.Modifiers(),
-		parameter.DotDotDotToken,
+		parameter.DotDotDotToken(),
 		c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
-		parameter.QuestionToken,
-		parameter.Type,
+		parameter.QuestionToken(),
+		parameter.Type(),
 		nil,
 	)
 }
@@ -889,10 +889,10 @@ func (c *EmitContext) addDefaultValueAssignmentForInitializer(parameter *ast.Par
 	return c.Factory.UpdateParameterDeclaration(
 		parameter,
 		parameter.Modifiers(),
-		parameter.DotDotDotToken,
+		parameter.DotDotDotToken(),
 		parameter.Name(),
-		parameter.QuestionToken,
-		parameter.Type,
+		parameter.QuestionToken(),
+		parameter.Type(),
 		nil,
 	)
 }

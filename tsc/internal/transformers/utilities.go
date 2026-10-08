@@ -78,30 +78,30 @@ func IsIdentifierReference(name *ast.IdentifierNode, parent *ast.Node) bool {
 		// only an `Initializer()` child that can be `Identifier` would be an instance of `IdentifierReference`
 		return parent.Initializer() == name
 	case ast.KindShorthandPropertyAssignment:
-		return parent.AsShorthandPropertyAssignment().ObjectAssignmentInitializer == name
+		return parent.AsShorthandPropertyAssignment().ObjectAssignmentInitializer() == name
 	case ast.KindForStatement:
 		return parent.Initializer() == name ||
-			parent.AsForStatement().Condition == name ||
-			parent.AsForStatement().Incrementor == name
+			parent.AsForStatement().Condition() == name ||
+			parent.AsForStatement().Incrementor() == name
 	case ast.KindForInStatement,
 		ast.KindForOfStatement:
 		return parent.Initializer() == name ||
 			parent.Expression() == name
 	case ast.KindImportEqualsDeclaration:
-		return parent.AsImportEqualsDeclaration().ModuleReference == name
+		return parent.AsImportEqualsDeclaration().ModuleReference() == name
 	case ast.KindArrowFunction:
 		return parent.Body() == name
 	case ast.KindConditionalExpression:
-		return parent.AsConditionalExpression().Condition == name ||
-			parent.AsConditionalExpression().WhenTrue == name ||
-			parent.AsConditionalExpression().WhenFalse == name
+		return parent.AsConditionalExpression().Condition() == name ||
+			parent.AsConditionalExpression().WhenTrue() == name ||
+			parent.AsConditionalExpression().WhenFalse() == name
 	case ast.KindCallExpression, ast.KindNewExpression:
 		return parent.Expression() == name ||
 			slices.Contains(parent.Arguments(), name)
 	case ast.KindTaggedTemplateExpression:
-		return parent.AsTaggedTemplateExpression().Tag == name
+		return parent.AsTaggedTemplateExpression().Tag() == name
 	case ast.KindImportAttribute:
-		return parent.AsImportAttribute().Value == name
+		return parent.AsImportAttribute().Value() == name
 	case ast.KindJsxOpeningElement, ast.KindJsxClosingElement:
 		return parent.TagName() == name
 	default:
@@ -117,14 +117,14 @@ func convertBindingElementToArrayAssignmentElement(emitContext *printer.EmitCont
 		return elision
 	}
 	expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
-	if element.DotDotDotToken != nil {
+	if element.DotDotDotToken() != nil {
 		spread := emitContext.Factory.NewSpreadElement(expression)
 		emitContext.SetOriginal(spread, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(spread, element.AsNode())
 		return spread
 	}
-	if element.Initializer != nil {
-		assignment := emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
+	if element.Initializer() != nil {
+		assignment := emitContext.Factory.NewAssignmentExpression(expression, element.Initializer())
 		emitContext.SetOriginal(assignment, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
 		return assignment
@@ -133,24 +133,24 @@ func convertBindingElementToArrayAssignmentElement(emitContext *printer.EmitCont
 }
 
 func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitContext, element *ast.BindingElement) *ast.ObjectLiteralElement {
-	if element.DotDotDotToken != nil {
+	if element.DotDotDotToken() != nil {
 		spread := emitContext.Factory.NewSpreadAssignment(element.Name())
 		emitContext.SetOriginal(spread, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(spread, element.AsNode())
 		return spread
 	}
-	if element.PropertyName != nil {
+	if element.PropertyName() != nil {
 		expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
-		if element.Initializer != nil {
-			expression = emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
+		if element.Initializer() != nil {
+			expression = emitContext.Factory.NewAssignmentExpression(expression, element.Initializer())
 		}
-		assignment := emitContext.Factory.NewPropertyAssignment(nil /*modifiers*/, element.PropertyName, nil /*postfixToken*/, nil /*typeNode*/, expression)
+		assignment := emitContext.Factory.NewPropertyAssignment(nil /*modifiers*/, element.PropertyName(), nil /*postfixToken*/, nil /*typeNode*/, expression)
 		emitContext.SetOriginal(assignment, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
 		return assignment
 	}
 	var equalsToken *ast.TokenNode
-	if element.Initializer != nil {
+	if element.Initializer() != nil {
 		equalsToken = emitContext.Factory.NewToken(ast.KindEqualsToken)
 	}
 	assignment := emitContext.Factory.NewShorthandPropertyAssignment(
@@ -159,7 +159,7 @@ func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitCon
 		nil, /*postfixToken*/
 		nil, /*typeNode*/
 		equalsToken,
-		element.Initializer,
+		element.Initializer(),
 	)
 	emitContext.SetOriginal(assignment, element.AsNode())
 	emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
@@ -179,11 +179,11 @@ func ConvertBindingPatternToAssignmentPattern(emitContext *printer.EmitContext, 
 
 func convertBindingElementToObjectAssignmentPattern(emitContext *printer.EmitContext, element *ast.BindingPattern) *ast.Expression {
 	var properties []*ast.ObjectLiteralElement
-	for _, element := range element.Elements.Nodes {
+	for _, element := range element.Elements().Nodes {
 		properties = append(properties, convertBindingElementToObjectAssignmentElement(emitContext, element.AsBindingElement()))
 	}
 	propertyList := emitContext.Factory.NewNodeList(properties)
-	propertyList.Loc = element.Elements.Loc
+	propertyList.Loc = element.Elements().Loc
 	object := emitContext.Factory.NewObjectLiteralExpression(propertyList, false /*multiLine*/)
 	emitContext.SetOriginal(object, element.AsNode())
 	emitContext.AssignCommentAndSourceMapRanges(object, element.AsNode())
@@ -192,11 +192,11 @@ func convertBindingElementToObjectAssignmentPattern(emitContext *printer.EmitCon
 
 func convertBindingElementToArrayAssignmentPattern(emitContext *printer.EmitContext, element *ast.BindingPattern) *ast.Expression {
 	var elements []*ast.Expression
-	for _, element := range element.Elements.Nodes {
+	for _, element := range element.Elements().Nodes {
 		elements = append(elements, convertBindingElementToArrayAssignmentElement(emitContext, element.AsBindingElement()))
 	}
 	elementList := emitContext.Factory.NewNodeList(elements)
-	elementList.Loc = element.Elements.Loc
+	elementList.Loc = element.Elements().Loc
 	object := emitContext.Factory.NewArrayLiteralExpression(elementList, false /*multiLine*/)
 	emitContext.SetOriginal(object, element.AsNode())
 	emitContext.AssignCommentAndSourceMapRanges(object, element.AsNode())
@@ -211,11 +211,11 @@ func convertBindingNameToAssignmentElementTarget(emitContext *printer.EmitContex
 }
 
 func ConvertVariableDeclarationToAssignmentExpression(emitContext *printer.EmitContext, element *ast.VariableDeclaration) *ast.Expression {
-	if element.Initializer == nil {
+	if element.Initializer() == nil {
 		return nil
 	}
 	expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
-	assignment := emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
+	assignment := emitContext.Factory.NewAssignmentExpression(expression, element.Initializer())
 	emitContext.SetOriginal(assignment, element.AsNode())
 	emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
 	return assignment
@@ -284,7 +284,7 @@ func findSuperStatementIndexPathWorker(statements []*ast.Statement, start int, i
 		if GetSuperCallFromStatement(statement) != nil {
 			return append(indices, i)
 		} else if ast.IsTryStatement(statement) {
-			if result := findSuperStatementIndexPathWorker(statement.AsTryStatement().TryBlock.Statements(), 0, indices); result != nil {
+			if result := findSuperStatementIndexPathWorker(statement.AsTryStatement().TryBlock().Statements(), 0, indices); result != nil {
 				return append(result, i)
 			}
 		}

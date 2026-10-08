@@ -87,8 +87,8 @@ func (r *referenceResolver) getReferencedValueSymbol(reference *ast.IdentifierNo
 	}
 
 	location := reference
-	if startInDeclarationContainer && reference.Parent != nil && ast.IsDeclaration(reference.Parent) && reference.Parent.Name() == reference {
-		location = ast.GetDeclarationContainer(reference.Parent)
+	if startInDeclarationContainer && reference.Parent() != nil && ast.IsDeclaration(reference.Parent()) && reference.Parent().Name() == reference {
+		location = ast.GetDeclarationContainer(reference.Parent())
 	}
 
 	if r.hooks.ResolveName != nil {
@@ -119,10 +119,10 @@ func (r *referenceResolver) isTypeOnlyAliasDeclaration(symbol *ast.Symbol) bool 
 				if node.IsTypeOnly() {
 					return true
 				}
-				node = node.Parent
+				node = node.Parent()
 				continue
 			case ast.KindNamedImports, ast.KindNamedExports:
-				node = node.Parent
+				node = node.Parent()
 				continue
 			}
 			break
@@ -153,7 +153,7 @@ func (r *referenceResolver) GetReferencedExportContainer(node *ast.IdentifierNod
 	// declaration, we need to start resolution at the declaration's container.
 	// Otherwise, we could incorrectly resolve the export as the
 	// declaration if it contains an exported member with the same name.
-	startInDeclarationContainer := node.Parent != nil && (node.Parent.Kind == ast.KindModuleDeclaration || node.Parent.Kind == ast.KindEnumDeclaration) && node == node.Parent.Name()
+	startInDeclarationContainer := node.Parent() != nil && (node.Parent().Kind == ast.KindModuleDeclaration || node.Parent().Kind == ast.KindEnumDeclaration) && node == node.Parent().Name()
 	if symbol := r.getReferencedValueSymbol(node, startInDeclarationContainer); symbol != nil {
 		if symbol.Flags&ast.SymbolFlagsExportValue != 0 {
 			// If we reference an exported entity within the same module declaration, then whether
@@ -180,7 +180,7 @@ func (r *referenceResolver) GetReferencedExportContainer(node *ast.IdentifierNod
 			isMatchingContainer := func(n *ast.Node) bool {
 				return (n.Kind == ast.KindModuleDeclaration || n.Kind == ast.KindEnumDeclaration) && r.getSymbolOfDeclaration(n) == parentSymbol
 			}
-			return ast.FindAncestor(node.Parent, isMatchingContainer)
+			return ast.FindAncestor(node.Parent(), isMatchingContainer)
 		}
 	}
 

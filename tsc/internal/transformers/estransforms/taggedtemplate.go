@@ -69,8 +69,8 @@ func (tx *taggedTemplateTransformer) visitTaggedTemplateExpression(node *ast.Tag
 }
 
 func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.TaggedTemplateExpression) *ast.Node {
-	tag := tx.Visitor().VisitNode(node.Tag)
-	template := node.Template
+	tag := tx.Visitor().VisitNode(node.Tag())
+	template := node.Template()
 
 	if !hasInvalidEscape(template) {
 		return tx.Visitor().VisitEachChild(node.AsNode())
@@ -88,13 +88,13 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.T
 		rawStrings = append(rawStrings, getRawLiteral(f, template))
 	} else {
 		te := template.AsTemplateExpression()
-		cookedStrings = append(cookedStrings, createTemplateCooked(f, te.Head.TemplateLiteralLikeData()))
-		rawStrings = append(rawStrings, getRawLiteral(f, te.Head))
-		for _, span := range te.TemplateSpans.Nodes {
+		cookedStrings = append(cookedStrings, createTemplateCooked(f, te.Head().TemplateLiteralLikeData()))
+		rawStrings = append(rawStrings, getRawLiteral(f, te.Head()))
+		for _, span := range te.TemplateSpans().Nodes {
 			ts := span.AsTemplateSpan()
-			cookedStrings = append(cookedStrings, createTemplateCooked(f, ts.Literal.TemplateLiteralLikeData()))
-			rawStrings = append(rawStrings, getRawLiteral(f, ts.Literal))
-			templateArguments = append(templateArguments, tx.Visitor().VisitNode(ts.Expression))
+			cookedStrings = append(cookedStrings, createTemplateCooked(f, ts.Literal().TemplateLiteralLikeData()))
+			rawStrings = append(rawStrings, getRawLiteral(f, ts.Literal()))
+			templateArguments = append(templateArguments, tx.Visitor().VisitNode(ts.Expression()))
 		}
 	}
 
@@ -163,11 +163,11 @@ func hasInvalidEscape(template *ast.Node) bool {
 		return template.TemplateLiteralLikeData().TemplateFlags&ast.TokenFlagsContainsInvalidEscape != 0
 	}
 	te := template.AsTemplateExpression()
-	if te.Head.TemplateLiteralLikeData().TemplateFlags&ast.TokenFlagsContainsInvalidEscape != 0 {
+	if te.Head().TemplateLiteralLikeData().TemplateFlags&ast.TokenFlagsContainsInvalidEscape != 0 {
 		return true
 	}
-	for _, span := range te.TemplateSpans.Nodes {
-		if span.AsTemplateSpan().Literal.TemplateLiteralLikeData().TemplateFlags&ast.TokenFlagsContainsInvalidEscape != 0 {
+	for _, span := range te.TemplateSpans().Nodes {
+		if span.AsTemplateSpan().Literal().TemplateLiteralLikeData().TemplateFlags&ast.TokenFlagsContainsInvalidEscape != 0 {
 			return true
 		}
 	}

@@ -84,9 +84,9 @@ func (tx *LegacyDecoratorsTransformer) visitPropertyAccessExpression(node *ast.P
 	// Visit the expression but not the name, since property access names should not be substituted.
 	// Strada's onSubstituteNode only fires for EmitHint.Expression, which excludes the
 	// .name of PropertyAccessExpression.
-	expression := tx.Visitor().VisitNode(node.Expression)
-	if expression != node.Expression {
-		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name(), node.Flags)
+	expression := tx.Visitor().VisitNode(node.Expression())
+	if expression != node.Expression() {
+		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken(), node.Name(), node.Flags)
 	}
 	return node.AsNode()
 }
@@ -129,11 +129,11 @@ func (tx *LegacyDecoratorsTransformer) visitParamerDeclaration(node *ast.Paramet
 	updated := tx.Factory().UpdateParameterDeclaration(
 		node,
 		elideModifiers(tx.Factory(), node.Modifiers()),
-		node.DotDotDotToken,
+		node.DotDotDotToken(),
 		tx.Visitor().VisitNode(node.Name()),
 		nil,
 		nil,
-		tx.Visitor().VisitNode(node.Initializer),
+		tx.Visitor().VisitNode(node.Initializer()),
 	)
 	if updated != node.AsNode() {
 		// While we emit the source map for the node after skipping decorators and modifiers,
@@ -153,7 +153,7 @@ func (tx *LegacyDecoratorsTransformer) visitParamerDeclaration(node *ast.Paramet
 func (tx *LegacyDecoratorsTransformer) visitPropertyNameOfClassElement(member *ast.Node) *ast.Node {
 	name := member.Name()
 	if ast.IsComputedPropertyName(name) && ast.HasDecorators(member) {
-		expression := tx.Visitor().VisitNode(name.AsComputedPropertyName().Expression)
+		expression := tx.Visitor().VisitNode(name.AsComputedPropertyName().Expression())
 		innerExpression := ast.SkipPartiallyEmittedExpressions(expression)
 		if !transformers.IsSimpleInlineableExpression(innerExpression) {
 			generatedName := tx.Factory().NewGeneratedNameForNode(name)
@@ -179,7 +179,7 @@ func (tx *LegacyDecoratorsTransformer) visitPropertyDeclaration(node *ast.Proper
 			tx.visitPropertyNameOfClassElement(node.AsNode()),
 			nil,
 			nil,
-			tx.Visitor().VisitNode(node.Initializer),
+			tx.Visitor().VisitNode(node.Initializer()),
 		),
 		node.AsNode(),
 	)
@@ -192,10 +192,10 @@ func (tx *LegacyDecoratorsTransformer) visitGetAccessorDeclaration(node *ast.Get
 			tx.Visitor().VisitModifiers(node.Modifiers()),
 			tx.visitPropertyNameOfClassElement(node.AsNode()),
 			nil,
-			tx.Visitor().VisitNodes(node.Parameters),
+			tx.Visitor().VisitNodes(node.Parameters()),
 			nil,
 			nil,
-			tx.Visitor().VisitNode(node.Body),
+			tx.Visitor().VisitNode(node.Body()),
 		),
 		node.AsNode(),
 	)
@@ -208,10 +208,10 @@ func (tx *LegacyDecoratorsTransformer) visitSetAccessorDeclaration(node *ast.Set
 			tx.Visitor().VisitModifiers(node.Modifiers()),
 			tx.visitPropertyNameOfClassElement(node.AsNode()),
 			nil,
-			tx.Visitor().VisitNodes(node.Parameters),
+			tx.Visitor().VisitNodes(node.Parameters()),
 			nil,
 			nil,
-			tx.Visitor().VisitNode(node.Body),
+			tx.Visitor().VisitNode(node.Body()),
 		),
 		node.AsNode(),
 	)
@@ -222,14 +222,14 @@ func (tx *LegacyDecoratorsTransformer) visitMethodDeclaration(node *ast.MethodDe
 		tx.Factory().UpdateMethodDeclaration(
 			node,
 			tx.Visitor().VisitModifiers(node.Modifiers()),
-			node.AsteriskToken,
+			node.AsteriskToken(),
 			tx.visitPropertyNameOfClassElement(node.AsNode()),
 			nil,
 			nil,
-			tx.Visitor().VisitNodes(node.Parameters),
+			tx.Visitor().VisitNodes(node.Parameters()),
 			nil,
 			nil,
-			tx.Visitor().VisitNode(node.Body),
+			tx.Visitor().VisitNode(node.Body()),
 		),
 		node.AsNode(),
 	)
@@ -240,10 +240,10 @@ func (tx *LegacyDecoratorsTransformer) visitConstructorDeclaration(node *ast.Con
 		node,
 		tx.Visitor().VisitModifiers(node.Modifiers()),
 		nil,
-		tx.Visitor().VisitNodes(node.Parameters),
+		tx.Visitor().VisitNodes(node.Parameters()),
 		nil,
 		nil,
-		tx.Visitor().VisitNode(node.Body),
+		tx.Visitor().VisitNode(node.Body()),
 	)
 }
 
@@ -254,8 +254,8 @@ func (tx *LegacyDecoratorsTransformer) visitClassExpression(node *ast.ClassExpre
 		tx.Visitor().VisitModifiers(node.Modifiers()),
 		node.Name(),
 		nil,
-		tx.Visitor().VisitNodes(node.HeritageClauses),
-		tx.Visitor().VisitNodes(node.Members),
+		tx.Visitor().VisitNodes(node.HeritageClauses()),
+		tx.Visitor().VisitNodes(node.Members()),
 	)
 }
 
@@ -282,8 +282,8 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithoutClassDeco
 	//      ${members}
 	//  }
 	modifiers := tx.Visitor().VisitModifiers(node.Modifiers())
-	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses)
-	initialMembers := tx.Visitor().VisitNodes(node.Members)
+	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses())
+	initialMembers := tx.Visitor().VisitNodes(node.Members())
 	members, decorationStatements := tx.transformDecoratorsOfClassElements(node, initialMembers)
 
 	if name == nil && len(decorationStatements) > 0 {
@@ -432,8 +432,8 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 	//  ... = class ${name} ${heritageClauses} {
 	//      ${members}
 	//  }
-	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses)
-	members := tx.Visitor().VisitNodes(node.Members)
+	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses())
+	members := tx.Visitor().VisitNodes(node.Members())
 
 	members, decorationStatements := tx.transformDecoratorsOfClassElements(node, members)
 
@@ -523,7 +523,7 @@ func (tx *LegacyDecoratorsTransformer) hasInternalStaticReference(node *ast.Clas
 		}
 		return n.ForEachChild(isOrContainsStaticSelfReference)
 	}
-	for _, member := range node.Members.Nodes {
+	for _, member := range node.Members().Nodes {
 		if member.ForEachChild(isOrContainsStaticSelfReference) {
 			return true
 		}
@@ -628,10 +628,10 @@ func parameterDecoratorsContainPrivateIdentifierInExpression(parameterDecorators
 }
 
 func hasClassElementWithDecoratorContainingPrivateIdentifierInExpression(node *ast.ClassDeclaration) bool {
-	if node.Members == nil || len(node.Members.Nodes) == 0 {
+	if node.Members() == nil || len(node.Members().Nodes) == 0 {
 		return false
 	}
-	for _, member := range node.Members.Nodes {
+	for _, member := range node.Members().Nodes {
 		if !ast.CanHaveDecorators(member) {
 			continue
 		}
@@ -708,7 +708,7 @@ func getAllDecoratorsOfAccessors(accessor *ast.Node, parent *ast.ClassDeclaratio
 	if accessor.Body() == nil {
 		return nil
 	}
-	decls := ast.GetAllAccessorDeclarations(parent.Members.Nodes, accessor)
+	decls := ast.GetAllAccessorDeclarations(parent.Members().Nodes, accessor)
 	var firstAccessorWithDecorators *ast.Node
 	if ast.HasDecorators(decls.FirstAccessor) {
 		firstAccessorWithDecorators = decls.FirstAccessor
@@ -847,11 +847,11 @@ func isDecoratedClassElement(member *ast.Node, isStaticElement bool, parent *ast
 *                 the class.
  */
 func getDecoratedClassElements(node *ast.ClassDeclaration, isStatic bool) []*ast.Node {
-	if node.Members == nil || len(node.Members.Nodes) == 0 {
+	if node.Members() == nil || len(node.Members().Nodes) == 0 {
 		return nil
 	}
 	var members []*ast.Node
-	for _, member := range node.Members.Nodes {
+	for _, member := range node.Members().Nodes {
 		if isDecoratedClassElement(member, isStatic, node) {
 			members = append(members, member)
 		}
@@ -1026,10 +1026,10 @@ func (tx *LegacyDecoratorsTransformer) getExpressionForPropertyName(member *ast.
 	if ast.IsPrivateIdentifier(name) {
 		return tx.Factory().NewIdentifier("")
 	} else if ast.IsComputedPropertyName(name) {
-		if generateNameForComputedPropertyName && !transformers.IsSimpleInlineableExpression(name.AsComputedPropertyName().Expression) {
+		if generateNameForComputedPropertyName && !transformers.IsSimpleInlineableExpression(name.AsComputedPropertyName().Expression()) {
 			return tx.Factory().NewGeneratedNameForNode(name)
 		}
-		return name.AsComputedPropertyName().Expression
+		return name.AsComputedPropertyName().Expression()
 	} else if ast.IsIdentifier(name) {
 		return tx.Factory().NewStringLiteral(name.Text(), ast.TokenFlagsNone)
 	} else {

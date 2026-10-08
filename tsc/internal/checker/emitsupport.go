@@ -35,9 +35,9 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 		ast.KindJSDocTypedefTag:
 		// Top-level jsdoc type aliases are considered exported
 		// First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
-		return node.Parent != nil && node.Parent.Parent != nil && node.Parent.Parent.Parent != nil && ast.IsSourceFile(node.Parent.Parent.Parent)
+		return node.Parent() != nil && node.Parent().Parent() != nil && node.Parent().Parent().Parent() != nil && ast.IsSourceFile(node.Parent().Parent().Parent())
 	case ast.KindBindingElement:
-		return c.isDeclarationVisible(node.Parent.Parent)
+		return c.isDeclarationVisible(node.Parent().Parent())
 	case ast.KindVariableDeclaration,
 		ast.KindModuleDeclaration,
 		ast.KindClassDeclaration,
@@ -80,7 +80,7 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 			return false
 		}
 		// Public properties/methods are visible if its parents are visible, so:
-		return c.isDeclarationVisible(node.Parent)
+		return c.isDeclarationVisible(node.Parent())
 
 	case ast.KindConstructor,
 		ast.KindConstructSignature,
@@ -98,7 +98,7 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 		ast.KindIntersectionType,
 		ast.KindParenthesizedType,
 		ast.KindNamedTupleMember:
-		return c.isDeclarationVisible(node.Parent)
+		return c.isDeclarationVisible(node.Parent())
 
 	// Default binding, import specifier and namespace import is visible
 	// only on demand so by default it is not visible
@@ -122,9 +122,9 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 	// An `export {X}` (without a module specifier) is itself a visible re-export of
 	// the named binding; it contributes to the symbol's external visibility.
 	case ast.KindExportSpecifier:
-		exportDecl := node.Parent.Parent
-		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier == nil {
-			return c.isDeclarationVisible(exportDecl.Parent)
+		exportDecl := node.Parent().Parent()
+		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier() == nil {
+			return c.isDeclarationVisible(exportDecl.Parent())
 		}
 		return false
 
@@ -135,19 +135,19 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 
 func getMeaningOfEntityNameReference(entityName *ast.Node) ast.SymbolFlags {
 	// get symbol of the first identifier of the entityName
-	if entityName.Parent.Kind == ast.KindTypeQuery ||
-		entityName.Parent.Kind == ast.KindExpressionWithTypeArguments && !ast.IsPartOfTypeNode(entityName.Parent) ||
-		entityName.Parent.Kind == ast.KindComputedPropertyName ||
-		entityName.Parent.Kind == ast.KindTypePredicate && entityName.Parent.AsTypePredicateNode().ParameterName == entityName ||
-		entityName.Parent.Kind == ast.KindBinaryExpression {
+	if entityName.Parent().Kind == ast.KindTypeQuery ||
+		entityName.Parent().Kind == ast.KindExpressionWithTypeArguments && !ast.IsPartOfTypeNode(entityName.Parent()) ||
+		entityName.Parent().Kind == ast.KindComputedPropertyName ||
+		entityName.Parent().Kind == ast.KindTypePredicate && entityName.Parent().AsTypePredicateNode().ParameterName() == entityName ||
+		entityName.Parent().Kind == ast.KindBinaryExpression {
 		// Typeof value
 		return ast.SymbolFlagsValue | ast.SymbolFlagsExportValue
 	}
 	if entityName.Kind == ast.KindQualifiedName || entityName.Kind == ast.KindPropertyAccessExpression ||
-		entityName.Parent.Kind == ast.KindImportEqualsDeclaration ||
-		(entityName.Parent.Kind == ast.KindQualifiedName && entityName.Parent.AsQualifiedName().Left == entityName) ||
-		(entityName.Parent.Kind == ast.KindPropertyAccessExpression && entityName.Parent.Expression() == entityName) ||
-		(entityName.Parent.Kind == ast.KindElementAccessExpression && entityName.Parent.Expression() == entityName) {
+		entityName.Parent().Kind == ast.KindImportEqualsDeclaration ||
+		(entityName.Parent().Kind == ast.KindQualifiedName && entityName.Parent().AsQualifiedName().Left() == entityName) ||
+		(entityName.Parent().Kind == ast.KindPropertyAccessExpression && entityName.Parent().Expression() == entityName) ||
+		(entityName.Parent().Kind == ast.KindElementAccessExpression && entityName.Parent().Expression() == entityName) {
 		// Left identifier from type reference or TypeAlias
 		// Entity name of the import declaration
 		return ast.SymbolFlagsNamespace
@@ -225,30 +225,30 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 			anyImportSyntax := getAnyImportSyntax(declaration)
 			if anyImportSyntax != nil &&
 				!ast.HasSyntacticModifier(anyImportSyntax, ast.ModifierFlagsExport) && // import clause without export
-				c.isDeclarationVisible(anyImportSyntax.Parent) {
+				c.isDeclarationVisible(anyImportSyntax.Parent()) {
 				addVisibleAlias(declaration, anyImportSyntax)
 				continue
 			}
-			if ast.IsVariableDeclaration(declaration) && ast.IsVariableStatement(declaration.Parent.Parent) &&
-				!ast.HasSyntacticModifier(declaration.Parent.Parent, ast.ModifierFlagsExport) && // unexported variable statement
-				c.isDeclarationVisible(declaration.Parent.Parent.Parent) {
-				addVisibleAlias(declaration, declaration.Parent.Parent)
+			if ast.IsVariableDeclaration(declaration) && ast.IsVariableStatement(declaration.Parent().Parent()) &&
+				!ast.HasSyntacticModifier(declaration.Parent().Parent(), ast.ModifierFlagsExport) && // unexported variable statement
+				c.isDeclarationVisible(declaration.Parent().Parent().Parent()) {
+				addVisibleAlias(declaration, declaration.Parent().Parent())
 				continue
 			}
 			if ast.IsLateVisibilityPaintedStatement(declaration) && // unexported top-level statement
 				!ast.HasSyntacticModifier(declaration, ast.ModifierFlagsExport) &&
-				c.isDeclarationVisible(declaration.Parent) {
+				c.isDeclarationVisible(declaration.Parent()) {
 				addVisibleAlias(declaration, declaration)
 				continue
 			}
 			if ast.IsBindingElement(declaration) {
-				if symbol.Flags&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && declaration.Parent != nil && declaration.Parent.Parent != nil && // exported import-like top-level JS require statement
-					ast.IsVariableDeclaration(declaration.Parent.Parent) &&
-					declaration.Parent.Parent.Parent.Parent != nil && ast.IsVariableStatement(declaration.Parent.Parent.Parent.Parent) &&
-					!ast.HasSyntacticModifier(declaration.Parent.Parent.Parent.Parent, ast.ModifierFlagsExport) &&
-					declaration.Parent.Parent.Parent.Parent.Parent != nil && // check if the thing containing the variable statement is visible (ie, the file)
-					c.isDeclarationVisible(declaration.Parent.Parent.Parent.Parent.Parent) {
-					addVisibleAlias(declaration, declaration.Parent.Parent.Parent.Parent)
+				if symbol.Flags&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && declaration.Parent() != nil && declaration.Parent().Parent() != nil && // exported import-like top-level JS require statement
+					ast.IsVariableDeclaration(declaration.Parent().Parent()) &&
+					declaration.Parent().Parent().Parent().Parent() != nil && ast.IsVariableStatement(declaration.Parent().Parent().Parent().Parent()) &&
+					!ast.HasSyntacticModifier(declaration.Parent().Parent().Parent().Parent(), ast.ModifierFlagsExport) &&
+					declaration.Parent().Parent().Parent().Parent().Parent() != nil && // check if the thing containing the variable statement is visible (ie, the file)
+					c.isDeclarationVisible(declaration.Parent().Parent().Parent().Parent().Parent()) {
+					addVisibleAlias(declaration, declaration.Parent().Parent().Parent().Parent())
 					continue
 				}
 				if symbol.Flags&ast.SymbolFlagsBlockScopedVariable != 0 {
@@ -256,14 +256,14 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 					if ast.IsParameterDeclaration(rootDeclaration) {
 						return nil
 					}
-					variableStatement := rootDeclaration.Parent.Parent
+					variableStatement := rootDeclaration.Parent().Parent()
 					if !ast.IsVariableStatement(variableStatement) {
 						return nil
 					}
 					if ast.HasSyntacticModifier(variableStatement, ast.ModifierFlagsExport) {
 						continue // no alias to add, already exported
 					}
-					if !c.isDeclarationVisible(variableStatement.Parent) {
+					if !c.isDeclarationVisible(variableStatement.Parent()) {
 						return nil // not visible
 					}
 					addVisibleAlias(declaration, variableStatement)

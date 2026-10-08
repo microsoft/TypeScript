@@ -200,7 +200,7 @@ func canUseOriginalText(node *ast.LiteralLikeNode, flags getLiteralTextFlags) bo
 	// A synthetic node has no original text, nor does a node without a parent as we would be unable to find the
 	// containing SourceFile. We also cannot use the original text if the literal was unterminated and the caller has
 	// requested proper termination of unterminated literals
-	if ast.NodeIsSynthesized(node) || node.Parent == nil || flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
+	if ast.NodeIsSynthesized(node) || node.Parent() == nil || flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
 		return false
 	}
 
@@ -426,8 +426,8 @@ func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *a
 
 	previousNode = emitContext.MostOriginal(previousNode)
 	nextNode = emitContext.MostOriginal(nextNode)
-	parent := previousNode.Parent
-	if parent == nil || parent != nextNode.Parent {
+	parent := previousNode.Parent()
+	if parent == nil || parent != nextNode.Parent() {
 		return false
 	}
 
@@ -441,7 +441,7 @@ func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *a
 }
 
 func getContainingNodeArray(node *ast.Node) *ast.NodeList {
-	parent := node.Parent
+	parent := node.Parent()
 	if parent == nil {
 		return nil
 	}
@@ -458,23 +458,23 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		}
 
 	case ast.KindParameter:
-		return node.Parent.FunctionLikeData().Parameters
+		return node.Parent().FunctionLikeData().Parameters()
 	case ast.KindTemplateLiteralTypeSpan:
-		return node.Parent.AsTemplateLiteralTypeNode().TemplateSpans
+		return node.Parent().AsTemplateLiteralTypeNode().TemplateSpans()
 	case ast.KindTemplateSpan:
-		return node.Parent.AsTemplateExpression().TemplateSpans
+		return node.Parent().AsTemplateExpression().TemplateSpans()
 	case ast.KindDecorator:
-		if canHaveDecorators(node.Parent) {
-			if modifiers := node.Parent.Modifiers(); modifiers != nil {
+		if canHaveDecorators(node.Parent()) {
+			if modifiers := node.Parent().Modifiers(); modifiers != nil {
 				return &modifiers.NodeList
 			}
 		}
 		return nil
 	case ast.KindHeritageClause:
-		if ast.IsClassLike(node.Parent) {
-			return node.Parent.ClassLikeData().HeritageClauses
+		if ast.IsClassLike(node.Parent()) {
+			return node.Parent().ClassLikeData().HeritageClauses()
 		} else {
-			return node.Parent.AsInterfaceDeclaration().HeritageClauses
+			return node.Parent().AsInterfaceDeclaration().HeritageClauses()
 		}
 	}
 
@@ -492,9 +492,9 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 			return parent.MemberList()
 		}
 	case ast.KindUnionType:
-		return parent.AsUnionTypeNode().Types
+		return parent.AsUnionTypeNode().Types()
 	case ast.KindIntersectionType:
-		return parent.AsIntersectionTypeNode().Types
+		return parent.AsIntersectionTypeNode().Types()
 	case ast.KindArrayLiteralExpression, ast.KindTupleType, ast.KindNamedImports, ast.KindNamedExports:
 		return parent.ElementList()
 	case ast.KindObjectLiteralExpression, ast.KindJsxAttributes:
@@ -503,17 +503,17 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		p := parent.AsCallExpression()
 		switch {
 		case ast.IsTypeNode(node):
-			return p.TypeArguments
-		case node != p.Expression:
-			return p.Arguments
+			return p.TypeArguments()
+		case node != p.Expression():
+			return p.Arguments()
 		}
 	case ast.KindNewExpression:
 		p := parent.AsNewExpression()
 		switch {
 		case ast.IsTypeNode(node):
-			return p.TypeArguments
-		case node != p.Expression:
-			return p.Arguments
+			return p.TypeArguments()
+		case node != p.Expression():
+			return p.Arguments()
 		}
 	case ast.KindJsxElement, ast.KindJsxFragment:
 		if ast.IsJsxChild(node) {
@@ -526,7 +526,7 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	case ast.KindBlock, ast.KindModuleBlock, ast.KindCaseClause, ast.KindDefaultClause:
 		return parent.StatementList()
 	case ast.KindCaseBlock:
-		return parent.AsCaseBlock().Clauses
+		return parent.AsCaseBlock().Clauses()
 	case ast.KindClassDeclaration, ast.KindClassExpression:
 		if ast.IsClassElement(node) {
 			return parent.MemberList()
@@ -566,11 +566,11 @@ func canHaveDecorators(node *ast.Node) bool {
 
 func originalNodesHaveSameParent(emitContext *EmitContext, nodeA *ast.Node, nodeB *ast.Node) bool {
 	nodeA = emitContext.MostOriginal(nodeA)
-	if nodeA.Parent != nil {
+	if nodeA.Parent() != nil {
 		// For performance, do not call `MostOriginal` for `nodeB` if `nodeA` doesn't even
 		// have a parent node.
 		nodeB = emitContext.MostOriginal(nodeB)
-		return nodeA.Parent == nodeB.Parent
+		return nodeA.Parent() == nodeB.Parent()
 	}
 	return false
 }
@@ -625,7 +625,7 @@ func isNewExpressionWithoutArguments(node *ast.Node) bool {
 func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
 	return node.Kind == ast.KindBinaryExpression &&
-		node.AsBinaryExpression().OperatorToken.Kind == token
+		node.AsBinaryExpression().OperatorToken().Kind == token
 }
 
 func mixingBinaryOperatorsRequiresParentheses(a ast.Kind, b ast.Kind) bool {

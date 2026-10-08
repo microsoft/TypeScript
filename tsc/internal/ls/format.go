@@ -262,7 +262,7 @@ func getRangeOfEnclosingComment(
 ) *ast.CommentRange {
 	jsdoc := ast.FindAncestor(tokenAtPosition, (*ast.Node).IsJSDoc)
 	if jsdoc != nil {
-		tokenAtPosition = jsdoc.Parent
+		tokenAtPosition = jsdoc.Parent()
 	}
 	tokenStart := astnav.GetStartOfNode(tokenAtPosition, file, false /*includeJSDoc*/)
 	if tokenStart <= position && position < tokenAtPosition.End() {

@@ -21,7 +21,7 @@ func GetFunctionFlags(node *Node) FunctionFlags {
 	flags := FunctionFlagsNormal
 	switch node.Kind {
 	case KindFunctionDeclaration, KindFunctionExpression, KindMethodDeclaration:
-		if data.AsteriskToken != nil {
+		if data.AsteriskToken() != nil {
 			flags |= FunctionFlagsGenerator
 		}
 		fallthrough
@@ -30,7 +30,7 @@ func GetFunctionFlags(node *Node) FunctionFlags {
 			flags |= FunctionFlagsAsync
 		}
 	}
-	if data.Body == nil {
+	if data.Body() == nil {
 		flags |= FunctionFlagsInvalid
 	}
 	return flags

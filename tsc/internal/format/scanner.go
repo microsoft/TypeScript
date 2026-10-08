@@ -109,8 +109,8 @@ func shouldRescanGreaterThanToken(node *ast.Node) bool {
 }
 
 func shouldRescanJsxIdentifier(node *ast.Node) bool {
-	if node.Parent != nil {
-		switch node.Parent.Kind {
+	if node.Parent() != nil {
+		switch node.Parent().Kind {
 		case ast.KindJsxAttribute,
 			ast.KindJsxOpeningElement,
 			ast.KindJsxClosingElement,
@@ -129,11 +129,11 @@ func shouldRescanJsxIdentifier(node *ast.Node) bool {
 func isLeftmostJsxTagName(node *ast.Node) bool {
 	return ast.FindAncestorOrQuit(node, func(n *ast.Node) ast.FindAncestorResult {
 		switch {
-		case n.Parent == nil:
+		case n.Parent() == nil:
 			return ast.FindAncestorQuit
 		case ast.IsJsxTagName(n):
 			return ast.FindAncestorTrue
-		case ast.IsPropertyAccessExpression(n.Parent) && n.Parent.Expression() == n:
+		case ast.IsPropertyAccessExpression(n.Parent()) && n.Parent().Expression() == n:
 			return ast.FindAncestorFalse
 		default:
 			return ast.FindAncestorQuit
@@ -162,7 +162,7 @@ func shouldRescanTemplateToken(container *ast.Node) bool {
 }
 
 func shouldRescanJsxAttributeValue(node *ast.Node) bool {
-	return node.Parent != nil && ast.IsJsxAttribute(node.Parent) && node.Parent.Initializer() == node
+	return node.Parent() != nil && ast.IsJsxAttribute(node.Parent()) && node.Parent().Initializer() == node
 }
 
 func startsWithSlashToken(t ast.Kind) bool {

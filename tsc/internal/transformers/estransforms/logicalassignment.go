@@ -23,7 +23,7 @@ func (ch *logicalAssignmentTransformer) visit(node *ast.Node) *ast.Node {
 
 func (ch *logicalAssignmentTransformer) visitBinaryExpression(node *ast.BinaryExpression) *ast.Node {
 	var nonAssignmentOperator ast.Kind
-	switch node.OperatorToken.Kind {
+	switch node.OperatorToken().Kind {
 	case ast.KindBarBarEqualsToken:
 		nonAssignmentOperator = ast.KindBarBarToken
 	case ast.KindAmpersandAmpersandEqualsToken:
@@ -34,9 +34,9 @@ func (ch *logicalAssignmentTransformer) visitBinaryExpression(node *ast.BinaryEx
 		return ch.Visitor().VisitEachChild(node.AsNode())
 	}
 
-	left := ast.SkipParentheses(ch.Visitor().VisitNode(node.Left))
+	left := ast.SkipParentheses(ch.Visitor().VisitNode(node.Left()))
 	assignmentTarget := left
-	right := ast.SkipParentheses(ch.Visitor().VisitNode(node.Right))
+	right := ast.SkipParentheses(ch.Visitor().VisitNode(node.Right()))
 
 	if ast.IsAccessExpression(left) {
 		propertyAccessTargetSimpleCopiable := transformers.IsSimpleCopiableExpression(left.Expression())
@@ -65,15 +65,15 @@ func (ch *logicalAssignmentTransformer) visitBinaryExpression(node *ast.BinaryEx
 				ast.NodeFlagsNone,
 			)
 		} else {
-			elementAccessArgumentSimpleCopiable := transformers.IsSimpleCopiableExpression(left.AsElementAccessExpression().ArgumentExpression)
-			elementAccessArgument := left.AsElementAccessExpression().ArgumentExpression
+			elementAccessArgumentSimpleCopiable := transformers.IsSimpleCopiableExpression(left.AsElementAccessExpression().ArgumentExpression())
+			elementAccessArgument := left.AsElementAccessExpression().ArgumentExpression()
 			argumentExpr := elementAccessArgument
 			if !elementAccessArgumentSimpleCopiable {
 				elementAccessArgument = ch.Factory().NewTempVariable()
 				ch.EmitContext().AddVariableDeclaration(elementAccessArgument)
 				argumentExpr = ch.Factory().NewAssignmentExpression(
 					elementAccessArgument,
-					left.AsElementAccessExpression().ArgumentExpression,
+					left.AsElementAccessExpression().ArgumentExpression(),
 				)
 			}
 

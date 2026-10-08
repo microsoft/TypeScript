@@ -190,9 +190,9 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) *as
 }
 
 func (tx *usingDeclarationTransformer) visitBlock(node *ast.Block) *ast.Node {
-	usingKind := getUsingKindOfStatements(node.Statements.Nodes)
+	usingKind := getUsingKindOfStatements(node.Statements().Nodes)
 	if usingKind != usingKindNone {
-		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Nodes)
+		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements().Nodes)
 		envBinding := tx.createEnvBinding()
 		statements := make([]*ast.Statement, 0, len(prologue)+2)
 		statements = append(statements, core.FirstResult(tx.Visitor().VisitSlice(prologue))...)
@@ -202,14 +202,14 @@ func (tx *usingDeclarationTransformer) visitBlock(node *ast.Block) *ast.Node {
 			usingKind == usingKindAsync,
 		)...)
 		statementList := tx.Factory().NewNodeList(statements)
-		statementList.Loc = node.Statements.Loc
+		statementList.Loc = node.Statements().Loc
 		return tx.Factory().UpdateBlock(node, statementList, node.MultiLine)
 	}
 	return tx.Visitor().VisitEachChild(node.AsNode())
 }
 
 func (tx *usingDeclarationTransformer) visitForStatement(node *ast.ForStatement) *ast.Node {
-	if node.Initializer != nil && isUsingVariableDeclarationList(node.Initializer) {
+	if node.Initializer() != nil && isUsingVariableDeclarationList(node.Initializer()) {
 		// given:
 		//
 		//  for (using x = expr; cond; incr) { ... }
@@ -224,13 +224,13 @@ func (tx *usingDeclarationTransformer) visitForStatement(node *ast.ForStatement)
 		// before handing the shallow transformation back to the visitor for an in-depth transformation.
 		return tx.Visitor().VisitNode(
 			tx.Factory().NewBlock(tx.Factory().NewNodeList([]*ast.Statement{
-				tx.Factory().NewVariableStatement(nil /*modifiers*/, node.Initializer),
+				tx.Factory().NewVariableStatement(nil /*modifiers*/, node.Initializer()),
 				tx.Factory().UpdateForStatement(
 					node,
 					nil, /*initializer*/
-					node.Condition,
-					node.Incrementor,
-					node.Statement,
+					node.Condition(),
+					node.Incrementor(),
+					node.Statement(),
 				),
 			}), false /*multiLine*/),
 		)
@@ -239,7 +239,7 @@ func (tx *usingDeclarationTransformer) visitForStatement(node *ast.ForStatement)
 }
 
 func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfStatement) *ast.Node {
-	if isUsingVariableDeclarationList(node.Initializer) {
+	if isUsingVariableDeclarationList(node.Initializer()) {
 		// given:
 		//
 		//  for (using x of y) { ... }
@@ -252,8 +252,8 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfSt
 		//  }
 		//
 		// before handing the shallow transformation back to the visitor for an in-depth transformation.
-		forInitializer := node.Initializer.AsVariableDeclarationList()
-		forDecl := core.FirstOrNil(forInitializer.Declarations.Nodes)
+		forInitializer := node.Initializer().AsVariableDeclarationList()
+		forDecl := core.FirstOrNil(forInitializer.Declarations().Nodes)
 		if forDecl == nil {
 			forDecl = tx.Factory().NewVariableDeclaration(tx.Factory().NewTempVariable(), nil, nil, nil)
 		}
@@ -267,20 +267,20 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfSt
 		)
 		usingVarStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, usingVarList)
 		var statement *ast.Statement
-		if ast.IsBlock(node.Statement) {
-			statements := make([]*ast.Statement, 0, len(node.Statement.Statements())+1)
+		if ast.IsBlock(node.Statement()) {
+			statements := make([]*ast.Statement, 0, len(node.Statement().Statements())+1)
 			statements = append(statements, usingVarStatement)
-			statements = append(statements, node.Statement.Statements()...)
+			statements = append(statements, node.Statement().Statements()...)
 			statement = tx.Factory().UpdateBlock(
-				node.Statement.AsBlock(),
+				node.Statement().AsBlock(),
 				tx.Factory().NewNodeList(statements),
-				node.Statement.AsBlock().MultiLine,
+				node.Statement().AsBlock().MultiLine,
 			)
 		} else {
 			statement = tx.Factory().NewBlock(
 				tx.Factory().NewNodeList([]*ast.Statement{
 					usingVarStatement,
-					node.Statement,
+					node.Statement(),
 				}),
 				true, /*multiLine*/
 			)
@@ -288,14 +288,14 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfSt
 		return tx.Visitor().VisitNode(
 			tx.Factory().UpdateForInOrOfStatement(
 				node,
-				node.AwaitModifier,
+				node.AwaitModifier(),
 				tx.Factory().NewVariableDeclarationList(
 					tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
 						tx.Factory().NewVariableDeclaration(temp, nil /*exclamationToken*/, nil /*type*/, nil),
 					}),
 					ast.NodeFlagsConst,
 				),
-				node.Expression,
+				node.Expression(),
 				statement,
 			),
 		)
@@ -340,9 +340,9 @@ func (tx *usingDeclarationTransformer) transformUsingDeclarations(statementsIn [
 		usingKind := getUsingKind(statement)
 		if usingKind != usingKindNone {
 			varStatement := statement.AsVariableStatement()
-			declarationList := varStatement.DeclarationList
+			declarationList := varStatement.DeclarationList()
 			var declarations []*ast.VariableDeclarationNode
-			for _, declaration := range declarationList.AsVariableDeclarationList().Declarations.Nodes {
+			for _, declaration := range declarationList.AsVariableDeclarationList().Declarations().Nodes {
 				if !ast.IsIdentifier(declaration.Name()) {
 					// Since binding patterns are a grammar error, we reset `declarations` so we don't process this as a `using`.
 					declarations = nil
@@ -431,7 +431,7 @@ func (tx *usingDeclarationTransformer) hoistExportDefault(node *ast.ExportAssign
 	tx.hoistBindingIdentifier(tx.defaultExportBinding /*isExport*/, true, tx.Factory().NewIdentifier("default"), node.AsNode())
 
 	// give a class or function expression an assigned name, if needed.
-	expression := node.Expression
+	expression := node.Expression()
 	innerExpression := ast.SkipOuterExpressions(expression, ast.OEKAll)
 	if isNamedEvaluation(tx.EmitContext(), innerExpression) {
 		innerExpression = transformNamedEvaluation(tx.EmitContext(), innerExpression /*ignoreEmptyStringLiteral*/, false, "default")
@@ -470,7 +470,7 @@ func (tx *usingDeclarationTransformer) hoistExportEquals(node *ast.ExportAssignm
 	tx.EmitContext().AddVariableDeclaration(tx.exportEqualsBinding)
 
 	// give a class or function expression an assigned name, if needed.
-	assignment := tx.Factory().NewAssignmentExpression(tx.exportEqualsBinding, node.Expression)
+	assignment := tx.Factory().NewAssignmentExpression(tx.exportEqualsBinding, node.Expression())
 	return tx.Factory().NewExpressionStatement(assignment)
 }
 
@@ -563,7 +563,7 @@ func (tx *usingDeclarationTransformer) hoistVariableStatement(node *ast.Variable
 	// NOTE: `node` has already been visited
 	var expressions []*ast.Expression
 	isExported := ast.HasSyntacticModifier(node.AsNode(), ast.ModifierFlagsExport)
-	for _, variable := range node.DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
+	for _, variable := range node.DeclarationList().AsVariableDeclarationList().Declarations().Nodes {
 		tx.hoistBindingElement(variable, isExported, variable)
 		if variable.Initializer() != nil {
 			expressions = append(expressions, tx.hoistInitializedVariable(variable.AsVariableDeclaration()))
@@ -581,7 +581,7 @@ func (tx *usingDeclarationTransformer) hoistVariableStatement(node *ast.Variable
 
 func (tx *usingDeclarationTransformer) hoistInitializedVariable(node *ast.VariableDeclaration) *ast.Expression {
 	// NOTE: `node` has already been visited
-	if node.Initializer == nil {
+	if node.Initializer() == nil {
 		panic("Expected initializer")
 	}
 	var target *ast.Expression
@@ -592,7 +592,7 @@ func (tx *usingDeclarationTransformer) hoistInitializedVariable(node *ast.Variab
 		target = transformers.ConvertBindingPatternToAssignmentPattern(tx.EmitContext(), node.Name().AsBindingPattern())
 	}
 
-	assignment := tx.Factory().NewAssignmentExpression(target, node.Initializer)
+	assignment := tx.Factory().NewAssignmentExpression(target, node.Initializer())
 	tx.EmitContext().SetOriginal(assignment, node.AsNode())
 	tx.EmitContext().SetCommentRange(assignment, node.Loc)
 	tx.EmitContext().SetSourceMapRange(assignment, node.Loc)
@@ -774,7 +774,7 @@ func getUsingKindOfVariableDeclarationList(node *ast.VariableDeclarationList) us
 }
 
 func getUsingKindOfVariableStatement(node *ast.VariableStatement) usingKind {
-	return getUsingKindOfVariableDeclarationList(node.DeclarationList.AsVariableDeclarationList())
+	return getUsingKindOfVariableDeclarationList(node.DeclarationList().AsVariableDeclarationList())
 }
 
 func getUsingKind(statement *ast.Node) usingKind {

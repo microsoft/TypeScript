@@ -121,7 +121,7 @@ func FormatOnOpeningCurly(ctx context.Context, sourceFile *ast.SourceFile, posit
 	if openingCurly == nil {
 		return nil
 	}
-	curlyBraceRange := openingCurly.Parent
+	curlyBraceRange := openingCurly.Parent()
 	outermostNode := findOutermostNodeWithinListLevel(curlyBraceRange)
 	/**
 	 * We limit the span to end at the opening curly to handle the case where

@@ -267,10 +267,10 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 	position int,
 	typeChecker *checker.Checker,
 ) *stringLiteralCompletions {
-	parent := walkUpParentheses(node.Parent)
+	parent := walkUpParentheses(node.Parent())
 	switch parent.Kind {
 	case ast.KindLiteralType:
-		grandparent := walkUpParentheses(parent.Parent)
+		grandparent := walkUpParentheses(parent.Parent())
 		if grandparent.Kind == ast.KindImportType {
 			return l.getStringLiteralCompletionsFromModuleNames(
 				file,
@@ -281,7 +281,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		}
 		return fromUnionableLiteralType(grandparent, parent, position, typeChecker)
 	case ast.KindPropertyAssignment:
-		if ast.IsObjectLiteralExpression(parent.Parent) && parent.Name() == node {
+		if ast.IsObjectLiteralExpression(parent.Parent()) && parent.Name() == node {
 			// Get quoted name of properties of the object literal expression
 			// i.e. interface ConfigFiles {
 			//          'jspm:dev': string
@@ -295,10 +295,10 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			//          '/*completion position*/'
 			//      });
 			return &stringLiteralCompletions{
-				fromProperties: stringLiteralCompletionsForObjectLiteral(typeChecker, parent.Parent),
+				fromProperties: stringLiteralCompletionsForObjectLiteral(typeChecker, parent.Parent()),
 			}
 		}
-		if ast.FindAncestor(parent.Parent, ast.IsCallLikeExpression) != nil {
+		if ast.FindAncestor(parent.Parent(), ast.IsCallLikeExpression) != nil {
 			uniques := &collections.Set[string]{}
 			stringLiteralTypes := append(
 				getStringLiteralTypes(typeChecker.GetContextualType(node, checker.ContextFlagsNone), uniques, typeChecker),
@@ -311,7 +311,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		}
 	case ast.KindElementAccessExpression:
 		expression := parent.Expression()
-		argumentExpression := parent.AsElementAccessExpression().ArgumentExpression
+		argumentExpression := parent.AsElementAccessExpression().ArgumentExpression()
 		if node == ast.SkipParentheses(argumentExpression) {
 			// Get all names of properties on the expression
 			// i.e. interface A {
@@ -329,7 +329,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		if !isRequireCallArgument(node) && !ast.IsImportCall(parent) {
 			var argumentNode *ast.Node
 			if parent.Kind == ast.KindJsxAttribute {
-				argumentNode = parent.Parent
+				argumentNode = parent.Parent()
 			} else {
 				argumentNode = node
 			}
@@ -361,7 +361,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		//      export * from "/*completion position*/";
 		return l.getStringLiteralCompletionsFromModuleNames(file, node, l.GetProgram(), typeChecker)
 	case ast.KindCaseClause:
-		tracker := newCaseClauseTracker(typeChecker, parent.Parent.AsCaseBlock().Clauses.Nodes)
+		tracker := newCaseClauseTracker(typeChecker, parent.Parent().AsCaseBlock().Clauses().Nodes)
 		contextualTypes := fromContextualType(checker.ContextFlagsIgnoreNodeInferences, node, typeChecker)
 		if contextualTypes == nil {
 			return nil
@@ -381,12 +381,12 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		if propertyName := specifier.PropertyName(); propertyName != nil && node != propertyName {
 			return nil // Don't complete in `export { "..." as "|" } from`
 		}
-		namedImportsOrExports := specifier.Parent
+		namedImportsOrExports := specifier.Parent()
 		var moduleSpecifier *ast.Node
 		if namedImportsOrExports.Kind == ast.KindNamedImports {
-			moduleSpecifier = namedImportsOrExports.Parent.Parent
+			moduleSpecifier = namedImportsOrExports.Parent().Parent()
 		} else {
-			moduleSpecifier = namedImportsOrExports.Parent
+			moduleSpecifier = namedImportsOrExports.Parent()
 		}
 		if moduleSpecifier == nil {
 			return nil
@@ -409,8 +409,8 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			},
 		}
 	case ast.KindBinaryExpression:
-		if parent.AsBinaryExpression().OperatorToken.Kind == ast.KindInKeyword {
-			t := typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Right)
+		if parent.AsBinaryExpression().OperatorToken().Kind == ast.KindInKeyword {
+			t := typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Right())
 			properties := getPropertiesForCompletion(t, typeChecker)
 			return &stringLiteralCompletions{
 				fromProperties: &completionsFromProperties{
@@ -477,7 +477,7 @@ func fromUnionableLiteralType(
 		ast.KindNewExpression,
 		ast.KindTaggedTemplateExpression,
 		ast.KindTypeReference:
-		typeArgument := ast.FindAncestor(parent, func(n *ast.Node) bool { return n.Parent == grandparent })
+		typeArgument := ast.FindAncestor(parent, func(n *ast.Node) bool { return n.Parent() == grandparent })
 		if typeArgument != nil {
 			t := typeChecker.GetTypeArgumentConstraint(typeArgument)
 			return &stringLiteralCompletions{
@@ -495,8 +495,8 @@ func fromUnionableLiteralType(
 		//          bar: string;
 		//      }
 		//      let x: Foo["/*completion position*/"]
-		indexType := grandparent.AsIndexedAccessTypeNode().IndexType
-		objectType := grandparent.AsIndexedAccessTypeNode().ObjectType
+		indexType := grandparent.AsIndexedAccessTypeNode().IndexType()
+		objectType := grandparent.AsIndexedAccessTypeNode().ObjectType()
 		if !indexType.Loc.ContainsInclusive(position) {
 			return nil
 		}
@@ -506,7 +506,7 @@ func fromUnionableLiteralType(
 		}
 	case ast.KindUnionType:
 		result := fromUnionableLiteralType(
-			walkUpParentheses(grandparent.Parent),
+			walkUpParentheses(grandparent.Parent()),
 			parent,
 			position,
 			typeChecker,
@@ -1943,15 +1943,15 @@ func getStringLiteralTypes(t *checker.Type, uniques *collections.Set[string], ty
 }
 
 func getAlreadyUsedTypesInStringLiteralUnion(union *ast.UnionTypeNodeNode, current *ast.LiteralTypeNodeNode) []string {
-	typesList := union.AsUnionTypeNode().Types
+	typesList := union.AsUnionTypeNode().Types()
 	if typesList == nil {
 		return nil
 	}
 	var values []string
 	for _, typeNode := range typesList.Nodes {
 		if typeNode != current && ast.IsLiteralTypeNode(typeNode) &&
-			ast.IsStringLiteral(typeNode.AsLiteralTypeNode().Literal) {
-			values = append(values, typeNode.AsLiteralTypeNode().Literal.Text())
+			ast.IsStringLiteral(typeNode.AsLiteralTypeNode().Literal()) {
+			values = append(values, typeNode.AsLiteralTypeNode().Literal().Text())
 		}
 	}
 	return values
@@ -1966,8 +1966,8 @@ func hasIndexSignature(t *checker.Type, typeChecker *checker.Checker) bool {
 //	require(""
 //	require("")
 func isRequireCallArgument(node *ast.Node) bool {
-	return ast.IsCallExpression(node.Parent) && len(node.Parent.Arguments()) > 0 && node.Parent.Arguments()[0] == node &&
-		ast.IsIdentifier(node.Parent.Expression()) && node.Parent.Expression().Text() == "require"
+	return ast.IsCallExpression(node.Parent()) && len(node.Parent().Arguments()) > 0 && node.Parent().Arguments()[0] == node &&
+		ast.IsIdentifier(node.Parent().Expression()) && node.Parent().Expression().Text() == "require"
 }
 
 func kindModifiersFromExtension(extension string) lsutil.ScriptElementKindModifier {
@@ -2013,7 +2013,7 @@ func getStringLiteralCompletionsFromSignature(
 	uniques := collections.Set[string]{}
 	var editingArgument *ast.Node
 	if ast.IsJsxOpeningLikeElement(call) {
-		editingArgument = ast.FindAncestor(arg.Parent, ast.IsJsxAttribute)
+		editingArgument = ast.FindAncestor(arg.Parent(), ast.IsJsxAttribute)
 		if editingArgument == nil {
 			panic("Expected jsx opening-like element to have a jsx attribute as ancestor.")
 		}

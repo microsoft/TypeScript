@@ -281,13 +281,13 @@ func (t *Tracker) TryInsertTypeAnnotation(sourceFile *ast.SourceFile, node *ast.
 	} else {
 		switch node.Kind {
 		case ast.KindVariableDeclaration:
-			endNode = node.AsVariableDeclaration().ExclamationToken
+			endNode = node.AsVariableDeclaration().ExclamationToken()
 		case ast.KindPropertySignature:
-			endNode = node.AsPropertySignatureDeclaration().PostfixToken
+			endNode = node.AsPropertySignatureDeclaration().PostfixToken()
 		case ast.KindPropertyDeclaration:
-			endNode = node.AsPropertyDeclaration().PostfixToken
+			endNode = node.AsPropertyDeclaration().PostfixToken()
 		case ast.KindParameter:
-			endNode = node.AsParameterDeclaration().QuestionToken
+			endNode = node.AsParameterDeclaration().QuestionToken()
 		}
 		if endNode == nil {
 			endNode = node.Name()
@@ -322,7 +322,7 @@ func (t *Tracker) InsertModifierBefore(sourceFile *ast.SourceFile, modifier ast.
 	pos := astnav.GetStartOfNode(before, sourceFile, false)
 	token := t.NewToken(modifier)
 	token.Loc = core.NewTextRange(pos, pos)
-	token.Parent = before.Parent
+	token.SetParent(before.Parent())
 	t.InsertNodeAt(sourceFile, core.TextPos(pos), token, NodeOptions{Suffix: " "})
 }
 
@@ -402,7 +402,7 @@ func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *as
 		endPos := core.TextPos(after.End())
 		semicolon := t.NewToken(ast.KindSemicolonToken)
 		semicolon.Loc = core.NewTextRange(after.End(), after.End())
-		semicolon.Parent = after.Parent
+		semicolon.SetParent(after.Parent())
 		t.ReplaceRange(
 			sourceFile,
 			core.NewTextRange(int(endPos), int(endPos)),
@@ -491,7 +491,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		separatorToken := t.NewToken(separator)
 		separatorString := scanner.TokenToString(separator)
 		separatorToken.Loc = core.NewTextRange(end, end+len(separatorString))
-		separatorToken.Parent = after.Parent
+		separatorToken.SetParent(after.Parent())
 		endPos := core.TextPos(end)
 		t.ReplaceRange(sourceFile, core.NewTextRange(int(endPos), int(endPos)), separatorToken, NodeOptions{})
 		// use the same indentation as 'after' item
@@ -522,7 +522,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 // InsertImportSpecifierAtIndex inserts a new import specifier at the specified index in a NamedImports list
 func (t *Tracker) InsertImportSpecifierAtIndex(sourceFile *ast.SourceFile, newSpecifier *ast.Node, namedImports *ast.Node, index int) {
 	namedImportsNode := namedImports.AsNamedImports()
-	elements := namedImportsNode.Elements.Nodes
+	elements := namedImportsNode.Elements().Nodes
 
 	var prevSpecifier *ast.Node
 	if index > 0 && index-1 < len(elements) {
@@ -535,7 +535,7 @@ func (t *Tracker) InsertImportSpecifierAtIndex(sourceFile *ast.SourceFile, newSp
 			sourceFile,
 			elements[0],
 			newSpecifier,
-			!positionsAreOnSameLine(astnav.GetStartOfNode(elements[0], sourceFile, false), astnav.GetStartOfNode(namedImports.Parent.Parent, sourceFile, false), sourceFile),
+			!positionsAreOnSameLine(astnav.GetStartOfNode(elements[0], sourceFile, false), astnav.GetStartOfNode(namedImports.Parent().Parent(), sourceFile, false), sourceFile),
 			LeadingTriviaOptionNone,
 		)
 	}
@@ -706,7 +706,7 @@ func (t *Tracker) getOptionsForInsertNodeBefore(before *ast.Node, inserted *ast.
 			return NodeOptions{Suffix: ", "}
 		}
 		return NodeOptions{}
-	} else if (before.Kind == ast.KindStringLiteral && before.Parent != nil && before.Parent.Kind == ast.KindImportDeclaration) || before.Kind == ast.KindNamedImports {
+	} else if (before.Kind == ast.KindStringLiteral && before.Parent() != nil && before.Parent().Kind == ast.KindImportDeclaration) || before.Kind == ast.KindNamedImports {
 		return NodeOptions{Suffix: ", "}
 	} else if before.Kind == ast.KindImportSpecifier {
 		suffix := ","
@@ -798,7 +798,7 @@ func rangeContainsRangeExclusive(outer *ast.Node, inner *ast.Node) bool {
 }
 
 func isSeparator(node *ast.Node, candidate *ast.Node) bool {
-	return candidate != nil && node.Parent != nil && (candidate.Kind == ast.KindCommaToken || (candidate.Kind == ast.KindSemicolonToken && node.Parent.Kind == ast.KindObjectLiteralExpression))
+	return candidate != nil && node.Parent() != nil && (candidate.Kind == ast.KindCommaToken || (candidate.Kind == ast.KindSemicolonToken && node.Parent().Kind == ast.KindObjectLiteralExpression))
 }
 
 func findIndentationColumn(text string, lineStart, memberStart, tabSize int) int {

@@ -132,7 +132,7 @@ func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker Checker
 		}
 
 		possibleContainer := ast.FindAncestor(d, ast.IsModuleWithStringLiteralName)
-		if possibleContainer == nil || possibleContainer.Parent == nil || !ast.IsSourceFile(possibleContainer.Parent) {
+		if possibleContainer == nil || possibleContainer.Parent() == nil || !ast.IsSourceFile(possibleContainer.Parent()) {
 			continue
 		}
 

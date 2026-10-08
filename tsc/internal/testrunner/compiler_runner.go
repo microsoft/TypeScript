@@ -179,6 +179,7 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	compilerTest.verifyModuleResolution(t, r.testSuitName)
 	compilerTest.verifyUnionOrdering(t)
 	compilerTest.verifyParentPointers(t)
+	compilerTest.verifyNodeArenas()
 }
 
 type compilerFileBasedTest struct {
@@ -546,6 +547,15 @@ func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
 	})
 }
 
+// verifyNodeArenas checks that checking and emitting did not leave a reference in a parsed
+// node that nothing keeps alive. It only does anything when the tests run with
+// TSGO_ASTVERIFY=1.
+func (c *compilerTest) verifyNodeArenas() {
+	for _, f := range c.result.Program.GetSourceFiles() {
+		f.VerifyArena()
+	}
+}
+
 func (c *compilerTest) verifyParentPointers(t *testing.T) {
 	t.Run("source file parent pointers", func(t *testing.T) {
 		var parent *ast.Node
@@ -554,14 +564,14 @@ func (c *compilerTest) verifyParentPointers(t *testing.T) {
 			if n == nil {
 				return false
 			}
-			assert.Assert(t, n.Parent != nil, "parent node does not exist")
+			assert.Assert(t, n.Parent() != nil, "parent node does not exist")
 			elab := ""
 			if !ast.NodeIsSynthesized(n) {
 				elab += ast.GetSourceFileOfNode(n).Text()[n.Loc.Pos():n.Loc.End()]
 			} else {
 				elab += "!synthetic! no text available"
 			}
-			assert.Assert(t, n.Parent == parent, "parent node does not match traversed parent: "+n.Kind.String()+": "+elab)
+			assert.Assert(t, n.Parent() == parent, "parent node does not match traversed parent: "+n.Kind.String()+": "+elab)
 			oldParent := parent
 			parent = n
 			n.ForEachChild(verifier)

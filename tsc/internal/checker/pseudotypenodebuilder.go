@@ -57,8 +57,8 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 			for _, n := range errorNodes {
 				b.ctx.tracker.ReportInferenceFallback(n)
 			}
-		} else if ast.IsEntityNameExpression(node) && ast.IsDeclaration(node.Parent) {
-			b.ctx.tracker.ReportInferenceFallback(node.Parent)
+		} else if ast.IsEntityNameExpression(node) && ast.IsDeclaration(node.Parent()) {
+			b.ctx.tracker.ReportInferenceFallback(node.Parent())
 		} else {
 			b.ctx.tracker.ReportInferenceFallback(node)
 		}
@@ -66,18 +66,18 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 			return b.serializeReturnTypeForSignature(b.ch.getSignatureFromDeclaration(node), false)
 		}
 		// use symbol type from parent declaration to automatically handle expression type widening without duplicating logic
-		if ast.IsReturnStatement(node.Parent) {
+		if ast.IsReturnStatement(node.Parent()) {
 			enclosing := ast.GetContainingFunction(node)
 			if ast.IsAccessor(enclosing) {
 				return b.serializeTypeForDeclaration(enclosing, nil, nil, false)
 			}
 			return b.serializeReturnTypeForSignature(b.ch.getSignatureFromDeclaration(enclosing), false)
 		}
-		if ast.IsArrowFunction(node.Parent) && node.Parent.AsArrowFunction().Body == node {
-			return b.serializeReturnTypeForSignature(b.ch.getSignatureFromDeclaration(node.Parent), false)
+		if ast.IsArrowFunction(node.Parent()) && node.Parent().AsArrowFunction().Body() == node {
+			return b.serializeReturnTypeForSignature(b.ch.getSignatureFromDeclaration(node.Parent()), false)
 		}
-		if ast.IsDeclaration(node.Parent) {
-			return b.serializeTypeForDeclaration(node.Parent, nil, nil, false)
+		if ast.IsDeclaration(node.Parent()) {
+			return b.serializeTypeForDeclaration(node.Parent(), nil, nil, false)
 		}
 		// This might be effectively unreachable. If it's not, it may need more widening rules to mirror checker behavior for whatever expressions are serialized here
 		ty := b.ch.getTypeOfExpression(node)
@@ -118,7 +118,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		var appendTypeNode func(node *ast.Node)
 		appendTypeNode = func(node *ast.Node) {
 			if ast.IsUnionTypeNode(node) {
-				for _, node := range node.AsUnionTypeNode().Types.Nodes {
+				for _, node := range node.AsUnionTypeNode().Types().Nodes {
 					appendTypeNode(node)
 				}
 				return
@@ -215,7 +215,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		// something a true syntactic ID emitter couldn't possibly know (since the signature could
 		// be from across files). This can't *really* happen in any cases ID doesn't already error on, though.
 		// Just something to keep in mind if the ID checker keeps growing.
-		isConst := b.ch.isConstContext(elements[0].Name.Parent.Parent)
+		isConst := b.ch.isConstContext(elements[0].Name.Parent().Parent())
 		newElements := make([]*ast.Node, 0, len(elements))
 
 		// Member types are serialized within an object type literal, so set the
@@ -302,7 +302,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				)
 			}
 			if b.ctx.enclosingFile == ast.GetSourceFileOfNode(e.Name) {
-				b.e.SetCommentRange(newProp, e.Name.Parent.Loc)
+				b.e.SetCommentRange(newProp, e.Name.Parent().Loc)
 			}
 			newElements = append(newElements, newProp)
 			if cleanup != nil {
@@ -345,12 +345,12 @@ func (b *NodeBuilderImpl) pseudoParameterToNode(p *pseudochecker.PseudoParameter
 		nil,
 		dotDotDot,
 		// matches strada behavior of always reserializing param names from scratch
-		b.parameterToParameterDeclarationName(p.Name.Parent.Symbol(), p.Name.Parent),
+		b.parameterToParameterDeclarationName(p.Name.Parent().Symbol(), p.Name.Parent()),
 		questionMark,
 		b.pseudoTypeToNode(p.Type),
 		nil,
 	)
-	if original := p.Name.Parent; ast.IsParameterDeclaration(original) {
+	if original := p.Name.Parent(); ast.IsParameterDeclaration(original) {
 		b.setCommentRange(parameter, original)
 	}
 	return parameter
@@ -432,7 +432,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 		}
 		for _, e := range pt.Elements {
 			var targetProp *ast.Symbol
-			elemSymbol := e.Name.Parent.Symbol()
+			elemSymbol := e.Name.Parent().Symbol()
 			if elemSymbol != nil {
 				targetProp = b.ch.getPropertyOfType(undefinedStripped, elemSymbol.Name)
 			}
@@ -447,7 +447,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 				}
 				if targetProp == nil {
 					if reportErrors {
-						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent())
 					}
 					return false
 				}
@@ -455,7 +455,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 			targetIsOptional := targetProp.Flags&ast.SymbolFlagsOptional != 0
 			if e.Optional != targetIsOptional {
 				if reportErrors {
-					b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+					b.ctx.tracker.ReportInferenceFallback(e.Name.Parent())
 				}
 				return false
 			}
@@ -472,7 +472,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 								b.ctx.tracker.ReportInferenceFallback(n)
 							}
 						} else if !isStructuralPseudoType(d.Type) {
-							b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+							b.ctx.tracker.ReportInferenceFallback(e.Name.Parent())
 						}
 					}
 					return false
@@ -484,7 +484,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 					// Target property type doesn't have a single call signature; can't validate
 					continue
 				}
-				paramEq := b.pseudoParametersEquivalentToParameters(d.Parameters, targetSig, reportErrors, e.Name.Parent)
+				paramEq := b.pseudoParametersEquivalentToParameters(d.Parameters, targetSig, reportErrors, e.Name.Parent())
 				if !paramEq {
 					return false
 				}
@@ -492,13 +492,13 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 				if targetPredicate != nil {
 					if !b.pseudoReturnTypeMatchesPredicate(d.ReturnType, targetPredicate) {
 						if reportErrors {
-							b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+							b.ctx.tracker.ReportInferenceFallback(e.Name.Parent())
 						}
 						return false
 					}
 				} else if !b.pseudoTypeEquivalentToType(d.ReturnType, b.ch.getReturnTypeOfSignature(targetSig), false, false) {
 					if reportErrors {
-						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent())
 					}
 					return false
 				}
@@ -506,7 +506,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 				d := e.AsPseudoGetAccessor()
 				if !b.pseudoTypeEquivalentToType(d.Type, propType, false, false) {
 					if reportErrors {
-						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent())
 					}
 					return false
 				}
@@ -515,7 +515,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 				writeType := b.ch.getWriteTypeOfSymbol(targetProp)
 				if !b.pseudoTypeEquivalentToType(d.Parameter.Type, writeType, false, false) {
 					if reportErrors {
-						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent())
 					}
 					return false
 				}
@@ -593,7 +593,7 @@ func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseud
 		paramType := b.ch.getTypeOfParameter(targetParam)
 		if !b.pseudoTypeEquivalentToType(params[0].Type, paramType, params[0].Optional, false) {
 			if reportErrors {
-				b.ctx.tracker.ReportInferenceFallback(params[0].Name.Parent)
+				b.ctx.tracker.ReportInferenceFallback(params[0].Name.Parent())
 			}
 			return false
 		}
@@ -614,14 +614,14 @@ func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseud
 		targetParam := targetSig.parameters[i]
 		if p.Optional != b.ch.isOptionalParameter(targetParam.ValueDeclaration) {
 			if reportErrors {
-				b.ctx.tracker.ReportInferenceFallback(p.Name.Parent)
+				b.ctx.tracker.ReportInferenceFallback(p.Name.Parent())
 			}
 			return false
 		}
 		paramType := b.ch.getTypeOfParameter(targetParam)
 		if !b.pseudoTypeEquivalentToType(p.Type, paramType, p.Optional, false) {
 			if reportErrors {
-				b.ctx.tracker.ReportInferenceFallback(p.Name.Parent)
+				b.ctx.tracker.ReportInferenceFallback(p.Name.Parent())
 			}
 			return false
 		}
@@ -652,35 +652,35 @@ func (b *NodeBuilderImpl) pseudoReturnTypeMatchesPredicate(rt *pseudochecker.Pse
 	}
 	tp := node.AsTypePredicateNode()
 	// Check asserts modifier matches
-	isAsserts := tp.AssertsModifier != nil
+	isAsserts := tp.AssertsModifier() != nil
 	predicateIsAsserts := predicate.kind == TypePredicateKindAssertsThis || predicate.kind == TypePredicateKindAssertsIdentifier
 	if isAsserts != predicateIsAsserts {
 		return false
 	}
 	// Check this vs identifier matches
-	isThis := ast.IsThisTypeNode(tp.ParameterName)
+	isThis := ast.IsThisTypeNode(tp.ParameterName())
 	predicateIsThis := predicate.kind == TypePredicateKindThis || predicate.kind == TypePredicateKindAssertsThis
 	if isThis != predicateIsThis {
 		return false
 	}
 	// For identifier predicates, check parameter name matches
 	if !isThis {
-		if tp.ParameterName.Text() != predicate.parameterName {
+		if tp.ParameterName().Text() != predicate.parameterName {
 			return false
 		}
 	}
 	// Check the narrowed type, if any
 	if predicate.t != nil {
-		if tp.Type == nil {
+		if tp.Type() == nil {
 			return false
 		}
-		predicateTypeFromNode := b.ch.getTypeFromTypeNode(tp.Type)
+		predicateTypeFromNode := b.ch.getTypeFromTypeNode(tp.Type())
 		if predicateTypeFromNode != predicate.t {
 			if b.ch.compareTypesIdentical(predicateTypeFromNode, predicate.t) != TernaryTrue {
 				return false
 			}
 		}
-	} else if tp.Type != nil {
+	} else if tp.Type() != nil {
 		return false
 	}
 	return true

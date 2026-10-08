@@ -234,14 +234,14 @@ func (c *Checker) getVariableDeclarationOfObjectLiteral(symbol *ast.Symbol, mean
 		return nil
 	}
 	firstDecl := symbol.Declarations[0]
-	if firstDecl.Parent == nil {
+	if firstDecl.Parent() == nil {
 		return nil
 	}
-	if !ast.IsVariableDeclaration(firstDecl.Parent) {
+	if !ast.IsVariableDeclaration(firstDecl.Parent()) {
 		return nil
 	}
-	if ast.IsObjectLiteralExpression(firstDecl) && firstDecl == firstDecl.Parent.Initializer() || ast.IsTypeLiteralNode(firstDecl) && firstDecl == firstDecl.Parent.Type() {
-		return c.getSymbolOfDeclaration(firstDecl.Parent)
+	if ast.IsObjectLiteralExpression(firstDecl) && firstDecl == firstDecl.Parent().Initializer() || ast.IsTypeLiteralNode(firstDecl) && firstDecl == firstDecl.Parent().Type() {
+		return c.getSymbolOfDeclaration(firstDecl.Parent())
 	}
 	return nil
 }
@@ -285,34 +285,34 @@ func (c *Checker) getContainersOfSymbol(symbol *ast.Symbol, enclosingDeclaration
 	}
 	var candidates []*ast.Symbol
 	for _, d := range symbol.Declarations {
-		if !ast.IsAmbientModule(d) && d.Parent != nil {
+		if !ast.IsAmbientModule(d) && d.Parent() != nil {
 			// direct children of a module
-			if hasNonGlobalAugmentationExternalModuleSymbol(d.Parent) {
-				sym := c.getSymbolOfDeclaration(d.Parent)
+			if hasNonGlobalAugmentationExternalModuleSymbol(d.Parent()) {
+				sym := c.getSymbolOfDeclaration(d.Parent())
 				if sym != nil && !slices.Contains(candidates, sym) {
 					candidates = append(candidates, sym)
 				}
 				continue
 			}
 			// export ='d member of an ambient module
-			if ast.IsModuleBlock(d.Parent) && d.Parent.Parent != nil && c.resolveExternalModuleSymbol(c.getSymbolOfDeclaration(d.Parent.Parent), false) == symbol {
-				sym := c.getSymbolOfDeclaration(d.Parent.Parent)
+			if ast.IsModuleBlock(d.Parent()) && d.Parent().Parent() != nil && c.resolveExternalModuleSymbol(c.getSymbolOfDeclaration(d.Parent().Parent()), false) == symbol {
+				sym := c.getSymbolOfDeclaration(d.Parent().Parent())
 				if sym != nil && !slices.Contains(candidates, sym) {
 					candidates = append(candidates, sym)
 				}
 				continue
 			}
 		}
-		if ast.IsClassExpression(d) && ast.IsBinaryExpression(d.Parent) && d.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken && ast.IsAccessExpression(d.Parent.AsBinaryExpression().Left) && ast.IsEntityNameExpression(d.Parent.AsBinaryExpression().Left.Expression()) {
-			if ast.IsModuleExportsAccessExpression(d.Parent.AsBinaryExpression().Left) || ast.IsExportsIdentifier(d.Parent.AsBinaryExpression().Left.Expression()) {
+		if ast.IsClassExpression(d) && ast.IsBinaryExpression(d.Parent()) && d.Parent().AsBinaryExpression().OperatorToken().Kind == ast.KindEqualsToken && ast.IsAccessExpression(d.Parent().AsBinaryExpression().Left()) && ast.IsEntityNameExpression(d.Parent().AsBinaryExpression().Left().Expression()) {
+			if ast.IsModuleExportsAccessExpression(d.Parent().AsBinaryExpression().Left()) || ast.IsExportsIdentifier(d.Parent().AsBinaryExpression().Left().Expression()) {
 				sym := c.getSymbolOfDeclaration(ast.GetSourceFileOfNode(d).AsNode())
 				if sym != nil && !slices.Contains(candidates, sym) {
 					candidates = append(candidates, sym)
 				}
 				continue
 			}
-			c.checkExpressionCached(d.Parent.AsBinaryExpression().Left.Expression())
-			sym := c.symbolNodeLinks.Get(d.Parent.AsBinaryExpression().Left.Expression()).resolvedSymbol
+			c.checkExpressionCached(d.Parent().AsBinaryExpression().Left().Expression())
+			sym := c.symbolNodeLinks.Get(d.Parent().AsBinaryExpression().Left().Expression()).resolvedSymbol
 			if sym != nil && !slices.Contains(candidates, sym) {
 				candidates = append(candidates, sym)
 			}
@@ -614,7 +614,7 @@ func isUMDExportSymbol(symbol *ast.Symbol) bool {
 }
 
 func isNamespaceReexportDeclaration(node *ast.Node) bool {
-	return ast.IsNamespaceExport(node) && node.Parent.ModuleSpecifier() != nil
+	return ast.IsNamespaceExport(node) && node.Parent().ModuleSpecifier() != nil
 }
 
 func (c *Checker) getCandidateListForSymbol(
@@ -758,7 +758,7 @@ func (c *Checker) someSymbolTableInScope(
 	enclosingDeclaration *ast.Node,
 	callback func(symbolTable ast.SymbolTable, tableId symbolTableID, ignoreQualification bool, isLocalNameLookup bool, scopeNode *ast.Node) bool,
 ) bool {
-	for location := enclosingDeclaration; location != nil; location = location.Parent {
+	for location := enclosingDeclaration; location != nil; location = location.Parent() {
 		// Locals of a source file are not in scope (because they get merged into the global symbol table)
 		if canHaveLocals(location) && location.Locals() != nil && !ast.IsGlobalSourceFile(location) {
 			if callback(location.Locals(), symbolTableIDFromLocals(location.AsNode()), false, true, location) {
