@@ -135,7 +135,7 @@ func ParseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptK
 	p := getParser()
 	defer putParser(p)
 	p.initializeState(opts, sourceText, scriptKind)
-	p.factory.StartParse(sourceText)
+	p.factory.StartParse(sourceText, (*parseProgress)(p))
 	p.nextToken()
 	var result *ast.SourceFile
 	if p.scriptKind == core.ScriptKindJSON {
@@ -143,8 +143,17 @@ func ParseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptK
 	} else {
 		result = p.parseSourceFileWorker()
 	}
+	p.factory.FinishParse()
 	result.VerifyArena()
 	return result
+}
+
+// parseProgress reports how much of the source text a parser has scanned, which the arena
+// of the file's nodes uses to judge how much more memory the file will need.
+type parseProgress Parser
+
+func (p *parseProgress) Progress() (done int, total int) {
+	return p.scanner.TokenFullStart(), len(p.sourceText)
 }
 
 // nodeSliceArena allocates the element slices of node lists from the parser's node factory.

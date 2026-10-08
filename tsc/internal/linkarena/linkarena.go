@@ -158,10 +158,12 @@ type Arena struct {
 	chunkBase unsafe.Pointer
 	chunkSize uintptr
 	pagesLeft int
-	// The number of bytes the owner still expects to allocate, used to size chunks.
+	// The number of bytes the owner is still expected to allocate, used to size chunks.
 	hint int
-	// The number of pages in the most recent chunk allocated beyond the hint.
-	grown int
+	// When set, the expectation is derived from the owner's progress each time the arena
+	// grows. done is the furthest progress reported so far.
+	progress Progress
+	done     int
 
 	// Every chunk of the arena, and their address ranges in sorted order.
 	chunks []unsafe.Pointer
@@ -187,6 +189,25 @@ func NewArena(sizeHint int) *Arena {
 		a.verify = &verifyState{}
 	}
 	return a
+}
+
+// Progress reports how far the owner of an arena is through the work it allocates for.
+type Progress interface {
+	// Progress returns how much of the owner's input has been consumed and the size of the
+	// whole input, in the same unit.
+	Progress() (done int, total int)
+}
+
+// TrackProgress makes the arena derive how much more its owner will allocate from the
+// owner's progress: the rest of the input is taken to need as much memory per unit as the
+// part consumed so far. The estimate given to NewArena then only sizes the first chunk. The
+// owner must pass nil when it is finished, because the arena outlives it.
+func (a *Arena) TrackProgress(progress Progress) {
+	a.progress = progress
+	a.done = 0
+	if progress == nil {
+		a.hint = 0
+	}
 }
 
 // Alloc returns size bytes of zeroed memory aligned to 8 bytes. size must not exceed
@@ -223,19 +244,30 @@ func (a *Arena) allocSlow(size uintptr) unsafe.Pointer {
 
 // grow adds a chunk to the arena.
 func (a *Arena) grow() {
-	// Chunks are as large as the owner's estimate allows, so that little is left unused when
-	// the estimate is right. Beyond the estimate, chunk sizes double.
-	n := 1
-	if a.hint >= pageSize {
-		n = min(a.hint>>pageShift, maxChunkPages)
-		n = 1 << (bitLen(uint(n)) - 1)
-	} else {
-		if a.grown > 0 {
-			n = min(a.grown*2, maxChunkPages)
+	// The unused end of an arena's last chunk stays allocated for as long as the arena, so a
+	// chunk is never larger than what the owner is still expected to allocate.
+	if a.progress != nil && a.size > 0 {
+		done, total := a.progress.Progress()
+		// Owners that work speculatively can report less progress than they did before.
+		a.done = max(a.done, done)
+		if a.done > 0 {
+			// Only whether the largest chunk is still warranted matters.
+			expected := float64(a.size) * float64(max(total-a.done, 0)) / float64(a.done)
+			a.hint = int(min(expected, maxChunkPages*pageSize))
 		}
-		a.grown = n
 	}
-	a.hint -= n << pageShift
+	n := 1
+	switch {
+	case a.hint >= pageSize:
+		n = a.hint >> pageShift
+	case a.progress == nil:
+		// Nothing is known about what is to come: grow by at most a quarter of what the
+		// arena holds, which keeps large arenas from growing a page at a time.
+		n = max(a.size>>(pageShift+2), 1)
+	}
+	// Chunks come in sizes of 1, 2, 4 and 8 pages.
+	n = 1 << (bitLen(uint(min(n, maxChunkPages))) - 1)
+	a.hint = max(a.hint-n<<pageShift, 0)
 	base := newChunk(a, n)
 	a.chunks = append(a.chunks, base)
 	r := addrRange{lo: uintptr(base), hi: uintptr(base) + uintptr(n)<<pageShift}

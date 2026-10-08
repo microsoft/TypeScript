@@ -129,13 +129,22 @@ func newParseArena(sourceText string, sizeHint int) *linkarena.Arena {
 }
 
 // StartParse readies the factory for building the syntax tree of sourceText in a new arena.
-// Until the factory is reset, every node placed in a node list must have been created by it.
-func (f *NodeFactory) StartParse(sourceText string) {
-	// A syntax tree takes several times the size of its text. A low estimate costs little:
-	// the arena grows in small steps once the estimate is used up.
+// progress reports how much of the text has been parsed; the arena uses it to avoid holding
+// much more memory than the tree turns out to need. FinishParse must be called when the tree
+// is complete. Until the factory is reset, every node placed in a node list must have been
+// created by it.
+func (f *NodeFactory) StartParse(sourceText string, progress linkarena.Progress) {
+	// A syntax tree takes several times the size of its text. This first estimate only
+	// decides the size of the first chunk, and a low one costs little.
 	f.arena = newParseArena(sourceText, len(sourceText)*5)
+	f.arena.TrackProgress(progress)
 	f.parsing = true
 	f.sourceText = sourceText
+}
+
+// FinishParse ends what StartParse began.
+func (f *NodeFactory) FinishParse() {
+	f.arena.TrackProgress(nil)
 }
 
 // StartLazyJSDocParse readies the factory for parsing a JSDoc comment of file on demand.

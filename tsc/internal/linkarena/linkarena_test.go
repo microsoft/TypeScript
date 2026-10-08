@@ -42,14 +42,17 @@ func eventually(t *testing.T, what string, done func() bool) {
 func TestChunksArePageAligned(t *testing.T) {
 	t.Parallel()
 	// The assumption the whole package rests on; see pageSize.
-	a := NewArena(0)
-	for range 200 {
-		a.grow()
-	}
 	sizes := map[uintptr]bool{}
-	for _, r := range a.ranges {
-		assert.Equal(t, r.lo&pageMask, uintptr(0))
-		sizes[r.hi-r.lo] = true
+	for _, hint := range []int{0, 2 * pageSize, 4 * pageSize, 8 * pageSize} {
+		a := NewArena(0)
+		for range 50 {
+			a.hint = hint
+			a.grow()
+		}
+		for _, r := range a.ranges {
+			assert.Equal(t, r.lo&pageMask, uintptr(0))
+			sizes[r.hi-r.lo] = true
+		}
 	}
 	assert.Equal(t, len(sizes), 4)
 }
@@ -97,13 +100,94 @@ func TestChunkSizes(t *testing.T) {
 		}
 		return a.Size()
 	}
-	// Without an estimate chunks double; with one, little is left unused when it was right.
+	// Page headers and the unused ends of pages.
+	overhead := func(allocated int) int { return allocated/50 + 2*pageSize }
 	assert.Equal(t, sizeAfter(0, 64), pageSize)
-	assert.Assert(t, sizeAfter(0, 1<<20) < 1<<20+1<<17)
-	for _, hint := range []int{3000, 20000, 100000, 1 << 20} {
-		size := sizeAfter(hint, hint)
-		assert.Assert(t, size < hint+hint/50+2*pageSize, "hint %d: %d bytes of chunks", hint, size)
+	for _, allocated := range []int{3000, 20000, 100000, 1 << 20} {
+		// An estimate that is right leaves little unused.
+		size := sizeAfter(allocated+allocated/50, allocated)
+		assert.Assert(t, size < allocated+overhead(allocated), "%d bytes of chunks for %d", size, allocated)
+		// Past the estimate, or without one, a chunk is at most a quarter of what the arena
+		// held before it.
+		for _, hint := range []int{0, allocated / 2} {
+			size := sizeAfter(hint, allocated)
+			assert.Assert(t, size < allocated+allocated/4+overhead(allocated), "hint %d: %d bytes of chunks for %d", hint, size, allocated)
+		}
 	}
+	// Large arenas grow by the largest chunks, with or without an estimate.
+	for _, hint := range []int{0, 1 << 20} {
+		a := NewArena(hint)
+		for range (1 << 20) / 64 {
+			a.Alloc(64)
+		}
+		assert.Assert(t, len(a.chunks) < 40, "hint %d: %d chunks", hint, len(a.chunks))
+	}
+}
+
+// progress is an owner that allocates bytesPerUnit for every unit of its input.
+type progress struct {
+	done, total int
+}
+
+func (p *progress) Progress() (int, int) { return p.done, p.total }
+
+func TestTrackProgress(t *testing.T) {
+	t.Parallel()
+	const bytesPerUnit = 640
+	run := func(units int, hint int, density func(unit int) int) (size int, allocated int, chunks int) {
+		p := &progress{total: units}
+		a := NewArena(hint)
+		a.TrackProgress(p)
+		for ; p.done < units; p.done++ {
+			for range density(p.done) / 64 {
+				a.Alloc(64)
+				allocated += 64
+			}
+		}
+		a.TrackProgress(nil)
+		return a.Size(), allocated, len(a.chunks)
+	}
+	even := func(int) int { return bytesPerUnit }
+	for _, units := range []int{1, 10, 100, 1000, 10000} {
+		// The first estimate is half of what turns out to be needed, as it is for a parser.
+		size, allocated, chunks := run(units, units*bytesPerUnit/2, even)
+		assert.Assert(t, size < allocated+allocated/50+2*pageSize, "%d units: %d bytes of chunks for %d", units, size, allocated)
+		// Most of a large arena still comes in the largest chunks.
+		assert.Assert(t, chunks <= size/(maxChunkPages*pageSize)+6, "%d units: %d chunks for %d bytes", units, chunks, size)
+	}
+
+	// Input that needs less memory towards its end than at its start is overestimated, by
+	// at most one chunk.
+	size, allocated, _ := run(1000, 0, func(unit int) int {
+		if unit < 500 {
+			return bytesPerUnit
+		}
+		return 0
+	})
+	assert.Assert(t, size < allocated+allocated/50+(maxChunkPages+1)*pageSize, "%d bytes of chunks for %d", size, allocated)
+
+	// Progress that goes backwards does not raise the estimate.
+	p := &progress{done: 900, total: 1000}
+	a := NewArena(0)
+	a.TrackProgress(p)
+	for range 90 * pageSize / 64 {
+		a.Alloc(64)
+	}
+	before := a.Size()
+	p.done = 10
+	for range pageSize / 64 {
+		a.Alloc(64)
+	}
+	assert.Assert(t, a.Size()-before <= 2*pageSize, "grew by %d bytes", a.Size()-before)
+
+	// While progress is tracked and nothing more is expected, the arena grows a page at a
+	// time.
+	p.done = p.total
+	before = a.Size()
+	for range 4 * pageSize / 64 {
+		a.Alloc(64)
+	}
+	assert.Assert(t, a.Size()-before <= 5*pageSize, "grew by %d bytes", a.Size()-before)
 }
 
 func TestLinks(t *testing.T) {
