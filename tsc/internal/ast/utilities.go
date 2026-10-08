@@ -51,11 +51,11 @@ func GetSymbolTable(data *SymbolTable) SymbolTable {
 }
 
 func GetMembers(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.members)
+	return GetSymbolTable(&symbol.data.members)
 }
 
 func GetExports(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.exports)
+	return GetSymbolTable(&symbol.data.exports)
 }
 
 func GetLocals(container *Node) SymbolTable {

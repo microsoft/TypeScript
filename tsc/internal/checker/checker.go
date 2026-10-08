@@ -667,6 +667,7 @@ type Checker struct {
 	diagnostics                                 ast.DiagnosticsCollection
 	suggestionDiagnostics                       ast.DiagnosticsCollection
 	symbolArena                                 core.Arena[ast.Symbol]
+	symbolWithDataArena                         core.Arena[ast.SymbolWithData]
 	signatureArena                              core.Arena[Signature]
 	indexInfoArena                              core.Arena[IndexInfo]
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
@@ -1795,7 +1796,7 @@ var primitiveTypeAliasSuggestions = sync.OnceValue(func() map[string]*ast.Symbol
 		{"bigint", "BigInt"},
 		{"symbol", "Symbol"},
 	} {
-		sym := &ast.Symbol{}
+		sym := ast.NewSymbol()
 		sym.SetFlags(ast.SymbolFlagsTypeAlias | ast.SymbolFlagsTransient)
 		sym.SetName(e.primitive)
 		result[e.builtin] = sym
@@ -14336,9 +14337,17 @@ func (c *Checker) hasParseDiagnostics(sourceFile *ast.SourceFile) bool {
 
 func (c *Checker) newSymbol(flags ast.SymbolFlags, name string) *ast.Symbol {
 	c.SymbolCount++
-	result := c.symbolArena.New()
+	result := c.symbolWithDataArena.New().Initialize()
 	result.SetFlags(flags | ast.SymbolFlagsTransient)
 	result.SetName(name)
+	return result
+}
+
+func (c *Checker) newSharedDataSymbol(symbol *ast.Symbol) *ast.Symbol {
+	c.SymbolCount++
+	result := c.symbolArena.New()
+	result.SetFlags(symbol.Flags() | ast.SymbolFlagsTransient)
+	result.SetSymbolData(symbol)
 	return result
 }
 
@@ -21172,13 +21181,9 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 		symbol = links.target
 		m = c.combineTypeMappers(links.mapper, m)
 	}
-	// Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
-	// also transient so that we can just store data on it directly.
-	result := c.newSymbol(symbol.Flags(), symbol.Name())
+	// Create a new transient symbol that shares the underlying data with the original symbol.
+	result := c.newSharedDataSymbol(symbol)
 	result.SetCheckFlags(ast.CheckFlagsInstantiated | symbol.CheckFlags()&(ast.CheckFlagsReadonly|ast.CheckFlagsLate|ast.CheckFlagsOptionalParameter|ast.CheckFlagsRestParameter))
-	result.SetDeclarations(symbol.Declarations())
-	result.SetParent(symbol.Parent())
-	result.SetValueDeclaration(symbol.ValueDeclaration())
 	resultLinks := c.valueSymbolLinks.Get(result)
 	resultLinks.target = symbol
 	resultLinks.mapper = m

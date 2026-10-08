@@ -17,7 +17,7 @@ func TestSymbolFieldsArePrivate(t *testing.T) {
 
 func TestSymbolAccessors(t *testing.T) {
 	t.Parallel()
-	symbol := &ast.Symbol{}
+	symbol := ast.NewSymbol()
 	assert.Equal(t, symbol.Flags(), ast.SymbolFlagsNone)
 	assert.Equal(t, symbol.CheckFlags(), ast.CheckFlags(0))
 	assert.Equal(t, symbol.Name(), "")
@@ -30,10 +30,10 @@ func TestSymbolAccessors(t *testing.T) {
 
 	declaration := &ast.Node{}
 	otherDeclaration := &ast.Node{}
-	member := &ast.Symbol{}
-	export := &ast.Symbol{}
-	parent := &ast.Symbol{}
-	exportSymbol := &ast.Symbol{}
+	member := ast.NewSymbol()
+	export := ast.NewSymbol()
+	parent := ast.NewSymbol()
+	exportSymbol := ast.NewSymbol()
 	declarations := []*ast.Node{declaration}
 	members := ast.SymbolTable{"member": member}
 	exports := ast.SymbolTable{"export": export}
@@ -90,9 +90,9 @@ func TestSymbolAccessors(t *testing.T) {
 
 func TestSymbolTableInitialization(t *testing.T) {
 	t.Parallel()
-	symbol := &ast.Symbol{}
-	member := &ast.Symbol{}
-	export := &ast.Symbol{}
+	symbol := ast.NewSymbol()
+	member := ast.NewSymbol()
+	export := ast.NewSymbol()
 
 	members := ast.GetMembers(symbol)
 	members["member"] = member

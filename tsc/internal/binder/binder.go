@@ -73,7 +73,7 @@ type Binder struct {
 	seenParseError          bool
 	symbolCount             int
 	notConstEnumOnlyModules collections.Set[*ast.Symbol]
-	symbolArena             core.Arena[ast.Symbol]
+	symbolWithDataArena     core.Arena[ast.SymbolWithData]
 	flowNodeArena           core.Arena[ast.FlowNode]
 	flowListArena           core.Arena[ast.FlowList]
 	singleDeclarationsArena core.Arena[*ast.Node]
@@ -130,7 +130,7 @@ func bindSourceFile(file *ast.SourceFile) {
 
 func (b *Binder) newSymbol(flags ast.SymbolFlags, name string) *ast.Symbol {
 	b.symbolCount++
-	result := b.symbolArena.New()
+	result := b.symbolWithDataArena.New().Initialize()
 	result.SetFlags(flags)
 	result.SetName(name)
 	return result

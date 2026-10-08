@@ -7,40 +7,69 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
 
-// Symbol stores binding information. Its accessors expose the stored values
-// without copying declaration slices or symbol tables.
+// Symbol stores flags, checkFlags, and id uniquely for every symbol instance, but may share
+// symbolData with other symbols. This is done so that instantiated symbols in the checker can
+// all share the same underlying symbolData. Every Symbol needs its data field initialized either
+// through SymbolWithData.Initialize or by explicitly setting it with Symbol.SetSymbolData.
 type Symbol struct {
-	flags            SymbolFlags
-	checkFlags       CheckFlags // Non-zero only in transient symbols created by Checker
+	flags      SymbolFlags
+	checkFlags CheckFlags // Non-zero only in transient symbols created by Checker
+	id         atomic.Uint64
+	data       *symbolData
+}
+
+// Every symbol references a symbolData structure that may be shared with other symbols.
+type symbolData struct {
 	name             string
 	declarations     []*Node
 	valueDeclaration *Node
 	members          SymbolTable
 	exports          SymbolTable
-	id               atomic.Uint64
 	parent           *Symbol
 	exportSymbol     *Symbol
 }
 
 func (s *Symbol) Flags() SymbolFlags      { return s.flags }
 func (s *Symbol) CheckFlags() CheckFlags  { return s.checkFlags }
-func (s *Symbol) Name() string            { return s.name }
-func (s *Symbol) Declarations() []*Node   { return s.declarations }
-func (s *Symbol) ValueDeclaration() *Node { return s.valueDeclaration }
-func (s *Symbol) Members() SymbolTable    { return s.members }
-func (s *Symbol) Exports() SymbolTable    { return s.exports }
-func (s *Symbol) Parent() *Symbol         { return s.parent }
-func (s *Symbol) ExportSymbol() *Symbol   { return s.exportSymbol }
+func (s *Symbol) Name() string            { return s.data.name }
+func (s *Symbol) Declarations() []*Node   { return s.data.declarations }
+func (s *Symbol) ValueDeclaration() *Node { return s.data.valueDeclaration }
+func (s *Symbol) Members() SymbolTable    { return s.data.members }
+func (s *Symbol) Exports() SymbolTable    { return s.data.exports }
+func (s *Symbol) Parent() *Symbol         { return s.data.parent }
+func (s *Symbol) ExportSymbol() *Symbol   { return s.data.exportSymbol }
 
 func (s *Symbol) SetFlags(value SymbolFlags)      { s.flags = value }
 func (s *Symbol) SetCheckFlags(value CheckFlags)  { s.checkFlags = value }
-func (s *Symbol) SetName(value string)            { s.name = value }
-func (s *Symbol) SetDeclarations(value []*Node)   { s.declarations = value }
-func (s *Symbol) SetValueDeclaration(value *Node) { s.valueDeclaration = value }
-func (s *Symbol) SetMembers(value SymbolTable)    { s.members = value }
-func (s *Symbol) SetExports(value SymbolTable)    { s.exports = value }
-func (s *Symbol) SetParent(value *Symbol)         { s.parent = value }
-func (s *Symbol) SetExportSymbol(value *Symbol)   { s.exportSymbol = value }
+func (s *Symbol) SetName(value string)            { s.data.name = value }
+func (s *Symbol) SetDeclarations(value []*Node)   { s.data.declarations = value }
+func (s *Symbol) SetValueDeclaration(value *Node) { s.data.valueDeclaration = value }
+func (s *Symbol) SetMembers(value SymbolTable)    { s.data.members = value }
+func (s *Symbol) SetExports(value SymbolTable)    { s.data.exports = value }
+func (s *Symbol) SetParent(value *Symbol)         { s.data.parent = value }
+func (s *Symbol) SetExportSymbol(value *Symbol)   { s.data.exportSymbol = value }
+
+// SymbolWithData is a helper structure that contains both a Symbol and its associated symbolData.
+type SymbolWithData struct {
+	s Symbol
+	d symbolData
+}
+
+// Initializes a SymbolWithData instance and returns the embedded Symbol.
+func (sd *SymbolWithData) Initialize() *Symbol {
+	sd.s.data = &sd.d
+	return &sd.s
+}
+
+func NewSymbol() *Symbol {
+	return (&SymbolWithData{}).Initialize()
+}
+
+// Initializes a Symbol's data field with the data from another Symbol. This allows multiple
+// symbols to share the same underlying symbolData.
+func (s *Symbol) SetSymbolData(other *Symbol) {
+	s.data = other.data
+}
 
 // GetSourceFileOfSymbol returns the owning file of a published binder symbol, or
 // nil for a non-file-owned symbol, even if it borrows declarations from a file.

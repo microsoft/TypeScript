@@ -59,7 +59,7 @@ func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 	t.Parallel()
 	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)
 	class := sourceFile.Statements.Nodes[0]
-	symbol := &ast.Symbol{}
+	symbol := ast.NewSymbol()
 	symbol.SetFlags(ast.SymbolFlagsClass | ast.SymbolFlagsTransient)
 	symbol.SetName("C")
 	symbol.SetDeclarations([]*ast.Node{class})
