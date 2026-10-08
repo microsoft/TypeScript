@@ -1344,9 +1344,9 @@ func getReferenceAtPosition(sourceFile *ast.SourceFile, position int, program *c
 
 	if resolution := program.GetResolvedModuleFromModuleSpecifier(sourceFile, node); resolution != nil {
 		verifiedFileName := resolution.ResolvedFileName
-		fileName := resolution.ResolvedFileName
+		fileName := verifiedFileName
 		if fileName == "" {
-			fileName = tspath.ResolvePath(tspath.GetDirectoryPath(sourceFile.FileName()), node.Text())
+			fileName = sourceFile.FileName().Directory().ResolveFile(node.Text())
 		}
 		return &refInfo{
 			file:       program.GetSourceFile(fileName),

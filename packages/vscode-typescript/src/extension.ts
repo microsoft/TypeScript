@@ -1,10 +1,11 @@
+import type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
 import * as vscode from "vscode";
+export type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
 
 import {
     registerEnablementCommands,
     updateUseTsgoSetting,
 } from "./commands";
-import type { ContentMapperContribution } from "./contentMapperContributions";
 import {
     aiConnectionString,
     getExplicitConfigTarget,
@@ -24,12 +25,6 @@ import { createTelemetryReporter } from "./telemetryReporting";
 
 import assert from "node:assert";
 
-export interface ExtensionAPI {
-    onLanguageServerInitialized: vscode.Event<void>;
-    initializeAPIConnection(pipe?: string): Promise<string>;
-    registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable;
-}
-
 export async function activate(context: vscode.ExtensionContext): Promise<ExtensionAPI | undefined> {
     await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
 
@@ -47,10 +42,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     const output = vscode.window.createOutputChannel("TypeScript 7", { log: true });
     context.subscriptions.push(output);
 
-    const languageServerInitializedEventEmitter = new vscode.EventEmitter<void>();
-    context.subscriptions.push(languageServerInitializedEventEmitter);
-
-    const sessionManager = new SessionManager(context, output, languageServerInitializedEventEmitter, telemetryReporter);
+    const sessionManager = new SessionManager(context, output, telemetryReporter);
     context.subscriptions.push(sessionManager);
     registerEnablementCommands(context, telemetryReporter, () => sessionManager.stop());
 
@@ -62,13 +54,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     });
     context.subscriptions.push(onDidChangeExtensions);
 
-    function onLanguageServerInitialized(listener: () => void): vscode.Disposable {
-        if (sessionManager.currentSession?.client.isInitialized) {
-            listener();
-        }
-        return languageServerInitializedEventEmitter.event(listener);
-    }
-
     async function startNativeServer(): Promise<void> {
         await sessionManager.start(context);
         warnAboutTsServerPlugins(context, output);
@@ -78,12 +63,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }
 
     const api: ExtensionAPI = {
-        onLanguageServerInitialized: onLanguageServerInitialized,
-        async initializeAPIConnection(pipe?: string): Promise<string> {
-            return sessionManager.initializeAPIConnection(pipe);
-        },
+        onLanguageServerInitialized: sessionManager.onLanguageServerInitialized,
         registerContentMappers(contributorId, contributions): vscode.Disposable {
             return sessionManager.registerContentMappers(contributorId, contributions);
+        },
+        registerLspMiddleware(method, transformer): vscode.Disposable {
+            return sessionManager.registerLspMiddleware(method, transformer);
         },
     };
 

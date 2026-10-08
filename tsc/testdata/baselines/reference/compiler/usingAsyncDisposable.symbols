@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/usingAsyncDisposable.ts] ////
+
+=== usingAsyncDisposable.ts ===
+declare const asyncDisposable: AsyncDisposable;
+>asyncDisposable : Symbol(asyncDisposable, Decl(usingAsyncDisposable.ts, 0, 13))
+>AsyncDisposable : Symbol(AsyncDisposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+declare const optionalAsyncDisposable: AsyncDisposable | null | undefined;
+>optionalAsyncDisposable : Symbol(optionalAsyncDisposable, Decl(usingAsyncDisposable.ts, 1, 13))
+>AsyncDisposable : Symbol(AsyncDisposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+declare const disposable: Disposable;
+>disposable : Symbol(disposable, Decl(usingAsyncDisposable.ts, 2, 13))
+>Disposable : Symbol(Disposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+declare const both: AsyncDisposable & Disposable;
+>both : Symbol(both, Decl(usingAsyncDisposable.ts, 3, 13))
+>AsyncDisposable : Symbol(AsyncDisposable, Decl(lib.esnext.disposable.d.ts, --, --))
+>Disposable : Symbol(Disposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+using asyncResource = asyncDisposable;
+>asyncResource : Symbol(asyncResource, Decl(usingAsyncDisposable.ts, 5, 5))
+>asyncDisposable : Symbol(asyncDisposable, Decl(usingAsyncDisposable.ts, 0, 13))
+
+using optionalAsyncResource = optionalAsyncDisposable;
+>optionalAsyncResource : Symbol(optionalAsyncResource, Decl(usingAsyncDisposable.ts, 6, 5))
+>optionalAsyncDisposable : Symbol(optionalAsyncDisposable, Decl(usingAsyncDisposable.ts, 1, 13))
+
+using syncResource = disposable;
+>syncResource : Symbol(syncResource, Decl(usingAsyncDisposable.ts, 7, 5))
+>disposable : Symbol(disposable, Decl(usingAsyncDisposable.ts, 2, 13))
+
+using eitherResource = both;
+>eitherResource : Symbol(eitherResource, Decl(usingAsyncDisposable.ts, 8, 5))
+>both : Symbol(both, Decl(usingAsyncDisposable.ts, 3, 13))
+
+await using awaitedAsyncResource = asyncDisposable;
+>awaitedAsyncResource : Symbol(awaitedAsyncResource, Decl(usingAsyncDisposable.ts, 10, 11))
+>asyncDisposable : Symbol(asyncDisposable, Decl(usingAsyncDisposable.ts, 0, 13))
+
+export {};
+

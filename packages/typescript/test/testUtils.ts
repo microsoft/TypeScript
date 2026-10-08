@@ -4,9 +4,16 @@ import {
     serverFS,
 } from "../src/api/fs.ts";
 import {
-    createGetCanonicalFileName,
+    canonicalize,
+    CaseSensitivity,
     getPathComponents,
+    toRootedFilePath,
 } from "../src/api/path.ts";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+    RootedPath,
+} from "../src/ast/index.ts";
 
 export function areTestsFiltered(): boolean {
     return process.execArgv.some(arg => arg === "--test-name-pattern" || arg.startsWith("--test-name-pattern="));
@@ -26,18 +33,18 @@ interface VFile {
 type VNode = VDirectory | VFile;
 
 interface TestFileSystem extends FileSystemCallbacks {
-    directoryExists(directoryName: string): boolean;
-    fileExists(fileName: string): boolean;
-    getAccessibleEntries(directoryName: string): FileSystemEntries | typeof serverFS.useOS;
-    readFile(fileName: string): any;
+    directoryExists(directoryName: RootedDirectoryPath): boolean;
+    fileExists(fileName: RootedFilePath): boolean;
+    getAccessibleEntries(directoryName: RootedDirectoryPath): FileSystemEntries | typeof serverFS.useOS;
+    readFile(fileName: RootedFilePath): any;
     realpath: typeof serverFS.identity;
     stat: typeof serverFS.fakeStat;
-    writeFile(path: string, data: string): void;
-    removeFile(path: string): void;
+    writeFile(path: RootedFilePath, data: string): void;
+    removeFile(path: RootedPath): void;
 }
 
 export interface CreateVirtualFileSystemOptions {
-    useCaseSensitiveFileNames?: boolean | undefined;
+    caseSensitivity?: CaseSensitivity | undefined;
 }
 
 function createVDirectory(name: string): VDirectory {
@@ -52,12 +59,13 @@ export function createVirtualFileSystem(
     files: Record<string, string>,
     options: CreateVirtualFileSystemOptions = {},
 ): TestFileSystem {
-    const getCanonicalFileName = createGetCanonicalFileName(options.useCaseSensitiveFileNames !== false);
+    const caseSensitivity = options.caseSensitivity ?? CaseSensitivity.Sensitive;
     const root = createVDirectory("");
     const content = new Map<string, string>();
 
-    for (const [filePath, data] of Object.entries(files)) {
-        const key = getCanonicalFileName(filePath);
+    for (const [rawFilePath, data] of Object.entries(files)) {
+        const filePath = toRootedFilePath(rawFilePath, undefined);
+        const key = getKey(filePath);
         if (content.has(key)) {
             throw new Error(`Duplicate virtual filesystem path: ${filePath}`);
         }
@@ -76,15 +84,22 @@ export function createVirtualFileSystem(
         removeFile,
     };
 
-    function getSegmentKey(segment: string): string {
-        return getCanonicalFileName(segment);
+    function getKey(path: RootedPath): string {
+        return canonicalize(path, caseSensitivity);
     }
 
-    function getNodeFromPath(path: string): VNode | undefined {
+    function getSegmentKey(segment: string): string {
+        return canonicalize(segment, caseSensitivity);
+    }
+
+    function getNodeFromPath(path: RootedPath): VNode | undefined {
         if (!path || path === "/") {
             return root;
         }
-        const segments = getPathComponents(path).slice(1);
+        return getNodeFromSegments(getPathComponents(path).slice(1));
+    }
+
+    function getNodeFromSegments(segments: readonly string[]): VNode | undefined {
         let current: VNode = root;
         for (const segment of segments) {
             if (current.type !== "directory") {
@@ -114,7 +129,7 @@ export function createVirtualFileSystem(
         return current;
     }
 
-    function addToTree(path: string): void {
+    function addToTree(path: RootedFilePath): void {
         const segments = getPathComponents(path).slice(1);
         if (segments.length === 0) {
             throw new Error(`Invalid file path: "${path}"`);
@@ -126,32 +141,32 @@ export function createVirtualFileSystem(
         dirNode.children[key] = { type: "file", name: existing?.name ?? filename };
     }
 
-    function writeFile(path: string, data: string): void {
-        content.set(getCanonicalFileName(path), data);
+    function writeFile(path: RootedFilePath, data: string): void {
+        content.set(getKey(path), data);
         addToTree(path);
     }
 
-    function removeFile(path: string): void {
-        content.delete(getCanonicalFileName(path));
+    function removeFile(path: RootedPath): void {
+        content.delete(getKey(path));
         const segments = getPathComponents(path).slice(1);
         if (segments.length === 0) return;
         const filename = segments.pop()!;
-        const dirNode = getNodeFromPath("/" + segments.join("/"));
+        const dirNode = getNodeFromSegments(segments);
         if (dirNode && dirNode.type === "directory") {
             delete dirNode.children[getSegmentKey(filename)];
         }
     }
 
-    function directoryExists(directoryName: string): boolean {
+    function directoryExists(directoryName: RootedDirectoryPath): boolean {
         const node = getNodeFromPath(directoryName);
         return !!node && node.type === "directory";
     }
 
-    function fileExists(fileName: string): boolean {
-        return content.has(getCanonicalFileName(fileName));
+    function fileExists(fileName: RootedFilePath): boolean {
+        return content.has(getKey(fileName));
     }
 
-    function getAccessibleEntries(directoryName: string): FileSystemEntries | typeof serverFS.useOS {
+    function getAccessibleEntries(directoryName: RootedDirectoryPath): FileSystemEntries | typeof serverFS.useOS {
         const node = getNodeFromPath(directoryName);
         if (!node || node.type !== "directory") {
             return serverFS.useOS;
@@ -169,7 +184,7 @@ export function createVirtualFileSystem(
         return { files: fileEntries, directories, symlinks: undefined };
     }
 
-    function readFile(fileName: string): any {
-        return content.get(getCanonicalFileName(fileName)) ?? serverFS.useOS;
+    function readFile(fileName: RootedFilePath): any {
+        return content.get(getKey(fileName)) ?? serverFS.useOS;
     }
 }

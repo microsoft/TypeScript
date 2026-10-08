@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -72,11 +73,11 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(response.Projects), 2)
 	assert.DeepEqual(t, *response.Operation.CreatedPrograms, []project.SyntheticProjectID{syntheticProjectID(1), syntheticProjectID(2)})
-	assert.Equal(t, response.Projects[0].ConfigFileName, "")
-	assert.Equal(t, response.Projects[1].ConfigFileName, "")
-	assert.DeepEqual(t, response.Projects[0].RootFiles, []string{fileA, fileB})
+	assert.Assert(t, response.Projects[0].ConfigFileName == nil)
+	assert.Assert(t, response.Projects[1].ConfigFileName == nil)
+	assert.DeepEqual(t, response.Projects[0].RootFiles, []tspath.RootedFilePath{fileA, fileB})
 	assert.Equal(t, response.Projects[0].CompilerOptions.Strict, core.TSTrue)
-	assert.DeepEqual(t, response.Projects[1].RootFiles, []string{fileB})
+	assert.DeepEqual(t, response.Projects[1].RootFiles, []tspath.RootedFilePath{fileB})
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
@@ -109,7 +110,7 @@ func TestCreateSnapshotPreservesWindowsRootDriveLetterCase(t *testing.T) {
 	assert.NilError(t, err)
 	program, err := snapshot.getProgram(response.Projects[0].Id)
 	assert.NilError(t, err)
-	assert.Equal(t, program.GetSourceFile(fileName).FileName(), fileName)
+	assert.Equal(t, program.GetSourceFile(fileName).FileName(), tspath.RootedFilePathFromNormalized(fileName))
 }
 
 func TestSnapshotOperationResponseOmitsUnrequestedFields(t *testing.T) {
@@ -169,7 +170,7 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, reconfigured.Projects[0].Id, project.ID(programID))
-	assert.DeepEqual(t, reconfigured.Projects[0].RootFiles, []string{"/home/projects/p/b.ts"})
+	assert.DeepEqual(t, reconfigured.Projects[0].RootFiles, []tspath.RootedFilePath{"/home/projects/p/b.ts"})
 	assert.Equal(t, reconfigured.Projects[0].CompilerOptions.Strict, core.TSTrue)
 }
 
@@ -277,4 +278,41 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, ensured.Projects[0].Dirty, false)
+}
+
+func TestCreateProgramReportsNonCompositeProjectReference(t *testing.T) {
+	t.Parallel()
+
+	const root = "/home/projects/p/src/index.ts"
+	const referenced = "/home/projects/p/lib/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		root:                        `export const x = 1;`,
+		referenced:                  `{ "compilerOptions": { "strict": true } }`,
+		"/home/projects/p/lib/a.ts": `export const a = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:       []DocumentIdentifier{{FileName: root}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			Options: &CreateProgramOptions{
+				ProjectReferences: []*core.ProjectReference{{Path: referenced, OriginalPath: "../lib"}},
+			},
+		}},
+	})
+	assert.NilError(t, err)
+	projectID := (*response.Operation.CreatedPrograms)[0].AsID()
+	diagnostics, err := session.handleGetProgramDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
+		Snapshot: response.Snapshot,
+		Project:  projectID,
+	})
+	assert.NilError(t, err)
+	codes := make([]int32, 0, len(diagnostics))
+	for _, diagnostic := range diagnostics {
+		codes = append(codes, diagnostic.Code)
+	}
+	assert.DeepEqual(t, codes, []int32{6306})
 }

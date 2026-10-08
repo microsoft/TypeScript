@@ -48,8 +48,8 @@
         "**/testdata",
         "packages/vscode-typescript/l10n/**",
         "tsc/internal/bundled/libs/**",
-        "tsc/internal/lsp/lsproto/_generate/*.json",
-        "tsc/internal/lsp/lsproto/_generate/metaModelSchema.mts",
+        "tools/scripts/lsp/*.json",
+        "tools/scripts/lsp/metaModelSchema.mts",
         // Needs to be LF to have a working shebang.
         "packages/typescript/bin/tsc",
         "tsc/internal/bundled/source/**",

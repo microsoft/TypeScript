@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/malformedObjectDestructuringAssignmentClassFields.ts] ////
+
+=== malformedObjectDestructuringAssignmentClassFields.ts ===
+({x(A.#}=
+>x : Symbol(x, Decl(malformedObjectDestructuringAssignmentClassFields.ts, 0, 2))
+>A : Symbol(A, Decl(malformedObjectDestructuringAssignmentClassFields.ts, 0, 4))
+> : Symbol((Missing), Decl(malformedObjectDestructuringAssignmentClassFields.ts, 0, 5))
+

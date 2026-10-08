@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
@@ -11,14 +12,14 @@ import (
 func TestGetPathComponentsForWatching(t *testing.T) {
 	t.Parallel()
 
-	assert.DeepEqual(t, getPathComponentsForWatching("/project", ""), []string{"/", "project"})
-	assert.DeepEqual(t, getPathComponentsForWatching("C:\\project", ""), []string{"C:/", "project"})
-	assert.DeepEqual(t, getPathComponentsForWatching("//server/share/project/tsconfig.json", ""), []string{"//server/share", "project", "tsconfig.json"})
-	assert.DeepEqual(t, getPathComponentsForWatching(`\\server\share\project\tsconfig.json`, ""), []string{"//server/share", "project", "tsconfig.json"})
-	assert.DeepEqual(t, getPathComponentsForWatching("C:\\Users", ""), []string{"C:/Users"})
-	assert.DeepEqual(t, getPathComponentsForWatching("C:\\Users\\andrew\\project", ""), []string{"C:/Users/andrew", "project"})
-	assert.DeepEqual(t, getPathComponentsForWatching("/home", ""), []string{"/home"})
-	assert.DeepEqual(t, getPathComponentsForWatching("/home/andrew/project", ""), []string{"/home/andrew", "project"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/project", "")), []string{"/", "project"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("C:\\project", "")), []string{"C:/", "project"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("//server/share/project/tsconfig.json", "")), []string{"//server/share", "project", "tsconfig.json"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath(`\\server\share\project\tsconfig.json`, "")), []string{"//server/share", "project", "tsconfig.json"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("C:\\Users", "")), []string{"C:/Users"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("C:\\Users\\andrew\\project", "")), []string{"C:/Users/andrew", "project"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/home", "")), []string{"/home"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/home/andrew/project", "")), []string{"/home/andrew", "project"})
 }
 
 func TestNilWatchedFilesClone(t *testing.T) {
@@ -29,23 +30,64 @@ func TestNilWatchedFilesClone(t *testing.T) {
 	assert.Assert(t, result == nil, "clone on a nil `WatchedFiles` should return nil")
 }
 
+func TestResolutionLookupWatcherPreservesDirectorySpelling(t *testing.T) {
+	t.Parallel()
+
+	caseSensitivity := tspath.CaseInsensitive
+	fileName := tspath.RootedFilePath("/External/Dir/file.ts")
+	var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+	files.Store(caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
+
+	result := createResolutionLookupGlobMapper(
+		tspath.RootedDirectoryPath("/workspace"),
+		tspath.RootedDirectoryPath("/lib"),
+		tspath.RootedDirectoryPath("/current"),
+		caseSensitivity,
+	)(&files)
+
+	assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{
+		tspath.RootedDirectoryPath("/External/Dir"),
+	})
+	watcher := newRecursiveDirectoryWatcher(result.directoriesOutsideWorkspace[0], lsproto.WatchKindCreate, true)
+	assert.Equal(t, string(*watcher.GlobPattern.RelativePattern.BaseUri.URI), "file:///External/Dir")
+}
+
+func TestResolutionLookupWatcherPreservesNodeModulesSpelling(t *testing.T) {
+	t.Parallel()
+
+	caseSensitivity := tspath.CaseInsensitive
+	fileName := tspath.RootedFilePath("/External/Node_Modules/pkg/index.d.ts")
+	var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+	files.Store(caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
+
+	result := createResolutionLookupGlobMapper(
+		tspath.RootedDirectoryPath("/workspace"),
+		tspath.RootedDirectoryPath("/lib"),
+		tspath.RootedDirectoryPath("/current"),
+		caseSensitivity,
+	)(&files)
+
+	assert.DeepEqual(t, result.patternsInsideWorkspace, []string{"/External/Node_Modules/**/*"})
+}
+
 func TestResolutionLookupWatcherPreservesIncludedDirectorySpelling(t *testing.T) {
 	t.Parallel()
 
-	var files collections.SyncMap[tspath.Path, string]
-	for _, fileName := range []string{
-		"/Workspace/src/index.ts",
-		"/Project/src/index.ts",
-		"/Lib/lib.d.ts",
+	caseSensitivity := tspath.CaseInsensitive
+	var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+	for _, fileName := range []tspath.RootedFilePath{
+		tspath.RootedFilePath("/Workspace/src/index.ts"),
+		tspath.RootedFilePath("/Project/src/index.ts"),
+		tspath.RootedFilePath("/Lib/lib.d.ts"),
 	} {
-		files.Store(tspath.ToPath(fileName, "/", false), fileName)
+		files.Store(caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
 	}
 
 	result := createResolutionLookupGlobMapper(
-		"/Workspace",
-		"/Lib",
-		"/Project",
-		false,
+		tspath.RootedDirectoryPath("/Workspace"),
+		tspath.RootedDirectoryPath("/Lib"),
+		tspath.RootedDirectoryPath("/Project"),
+		caseSensitivity,
 	)(&files)
 
 	assert.DeepEqual(t, result.patternsInsideWorkspace, []string{
@@ -55,53 +97,36 @@ func TestResolutionLookupWatcherPreservesIncludedDirectorySpelling(t *testing.T)
 	})
 }
 
-func TestResolutionLookupWatcherPreservesNodeModulesSpelling(t *testing.T) {
-	t.Parallel()
-
-	var files collections.SyncMap[tspath.Path, string]
-	fileName := "/External/Node_Modules/pkg/index.ts"
-	files.Store(tspath.ToPath(fileName, "/", false), fileName)
-
-	result := createResolutionLookupGlobMapper(
-		"/Workspace",
-		"/Lib",
-		"/Project",
-		false,
-	)(&files)
-
-	assert.DeepEqual(t, result.patternsInsideWorkspace, []string{"/External/Node_Modules/**/*"})
-}
-
 func TestResolutionLookupWatcherAggregatesUsingHostCaseSensitivity(t *testing.T) {
 	t.Parallel()
 
 	for _, test := range []struct {
-		name                      string
-		useCaseSensitiveFileNames bool
+		name            string
+		caseSensitivity tspath.CaseSensitivity
 	}{
-		{"case sensitive", true},
-		{"case insensitive", false},
+		{"case sensitive", tspath.CaseSensitive},
+		{"case insensitive", tspath.CaseInsensitive},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			var files collections.SyncMap[tspath.Path, string]
-			for _, fileName := range []string{
+			var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+			for _, fileName := range []tspath.RootedFilePath{
 				"/External/Lib/src/a.ts",
 				"/external/LIB/test/b.ts",
 			} {
-				files.Store(tspath.ToPath(fileName, "/", test.useCaseSensitiveFileNames), fileName)
+				files.Store(test.caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
 			}
 
 			result := createResolutionLookupGlobMapper(
 				"/Workspace",
 				"/Lib",
 				"/Project",
-				test.useCaseSensitiveFileNames,
+				test.caseSensitivity,
 			)(&files)
 
-			if test.useCaseSensitiveFileNames {
-				assert.DeepEqual(t, result.directoriesOutsideWorkspace, []string{
+			if test.caseSensitivity == tspath.CaseSensitive {
+				assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{
 					"/External/Lib/src",
 					"/external/LIB/test",
 				})

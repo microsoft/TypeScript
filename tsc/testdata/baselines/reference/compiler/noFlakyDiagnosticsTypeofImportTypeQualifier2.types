@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsTypeofImportTypeQualifier2.ts] ////
+
+=== /b.ts ===
+export const x = 1;
+>x : 1
+>1 : 1
+
+=== /a.ts ===
+export function f(x: typeof import("./b").nope.x) {}
+>f : (x: typeof import("./b").nope.x) => void
+>x : any
+>nope : any
+>x : any
+

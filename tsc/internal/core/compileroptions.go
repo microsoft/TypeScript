@@ -87,8 +87,8 @@ func (options *CompilerOptions) GetAllowImportingTsExtensions() bool {
 	return options.AllowImportingTsExtensions.IsTrue() || options.RewriteRelativeImportExtensions.IsTrue()
 }
 
-func (options *CompilerOptions) AllowImportingTsExtensionsFrom(fileName string) bool {
-	return options.GetAllowImportingTsExtensions() || tspath.IsDeclarationFileName(fileName)
+func (options *CompilerOptions) AllowImportingTsExtensionsFrom(fileName tspath.RootedFilePath) bool {
+	return options.GetAllowImportingTsExtensions() || fileName.IsDeclarationFile()
 }
 
 func (options *CompilerOptions) GetResolveJsonModule() bool {
@@ -126,13 +126,13 @@ func (options *CompilerOptions) GetStrictOptionValue(value Tristate) bool {
 	return options.Strict != TSFalse
 }
 
-func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (result []string, fromConfig bool) {
+func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory tspath.RootedDirectoryPath) (result []tspath.RootedDirectoryPath, fromConfig bool) {
 	if options.TypeRoots != nil {
 		return options.TypeRoots, true
 	}
-	var baseDir string
+	var baseDir tspath.RootedDirectoryPath
 	if options.ConfigFilePath != "" {
-		baseDir = tspath.GetDirectoryPath(options.ConfigFilePath)
+		baseDir = options.ConfigFilePath.Directory()
 	} else {
 		baseDir = currentDirectory
 		if baseDir == "" {
@@ -142,9 +142,9 @@ func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (
 		}
 	}
 
-	typeRoots := make([]string, 0, strings.Count(baseDir, "/"))
-	tspath.ForEachAncestorDirectory(baseDir, func(dir string) (any, bool) {
-		typeRoots = append(typeRoots, tspath.CombinePaths(dir, "node_modules", "@types"))
+	typeRoots := make([]tspath.RootedDirectoryPath, 0, strings.Count(baseDir.AsString(), "/"))
+	baseDir.ForEachAncestorDirectory(func(dir tspath.RootedDirectoryPath) (any, bool) {
+		typeRoots = append(typeRoots, dir.ResolveDirectory("node_modules/@types"))
 		return nil, false
 	})
 	return typeRoots, false
@@ -190,7 +190,11 @@ func (options *CompilerOptions) HasJsonModuleEmitEnabled() bool {
 	return true
 }
 
-func (options *CompilerOptions) GetPathsBasePath(currentDirectory string) string {
+func (options *CompilerOptions) GetEffectiveRootDirs() []tspath.RootedDirectoryPath {
+	return options.RootDirs
+}
+
+func (options *CompilerOptions) GetPathsBasePath(currentDirectory tspath.RootedDirectoryPath) tspath.RootedDirectoryPath {
 	if options.Paths.Size() == 0 {
 		return ""
 	}
@@ -208,6 +212,14 @@ func (moduleKind ModuleKind) SupportsImportAttributes() bool {
 	return ModuleKindNode18 <= moduleKind && moduleKind <= ModuleKindNodeNext ||
 		moduleKind == ModuleKindPreserve ||
 		moduleKind == ModuleKindESNext
+}
+
+func (moduleKind ModuleKind) SupportsDeferredImports() bool {
+	return moduleKind == ModuleKindESNext || moduleKind == ModuleKindPreserve
+}
+
+func (moduleKind ModuleKind) SupportsSourcePhaseImports() bool {
+	return moduleKind == ModuleKindESNext || moduleKind == ModuleKindNodeNext || moduleKind == ModuleKindPreserve
 }
 
 type ResolutionMode = ModuleKind // ModuleKindNone | ModuleKindCommonJS | ModuleKindESNext
