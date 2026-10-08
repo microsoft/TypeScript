@@ -27,10 +27,10 @@ class C {
 >x : string
 
     protected foo() { return this.foo; }
->foo : () => any
->this.foo : () => any
+>foo : () => C["foo"]
+>this.foo : () => C["foo"]
 >this : this
->foo : () => any
+>foo : () => C["foo"]
 
     protected static x: string;
 >x : string
@@ -53,17 +53,17 @@ class C {
 >x : string
 
     protected static foo() { return this.foo; }
->foo : () => typeof C.foo
->this.foo : () => typeof C.foo
+>foo : () => (typeof C)["foo"]
+>this.foo : () => (typeof C)["foo"]
 >this : typeof C
->foo : () => typeof C.foo
+>foo : () => (typeof C)["foo"]
 
     protected static bar() { this.foo(); }
 >bar : () => void
->this.foo() : () => typeof C.foo
->this.foo : () => typeof C.foo
+>this.foo() : () => (typeof C)["foo"]
+>this.foo : () => (typeof C)["foo"]
 >this : typeof C
->foo : () => typeof C.foo
+>foo : () => (typeof C)["foo"]
 }
 
 // added level of function nesting

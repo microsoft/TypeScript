@@ -1,7 +1,0 @@
-functionExpressionReturningItself.ts(1,5): error TS5088: The inferred type of 'x' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-
-
-==== functionExpressionReturningItself.ts (1 errors) ====
-    var x = function somefn() { return somefn; };
-        ~
-!!! error TS5088: The inferred type of 'x' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.

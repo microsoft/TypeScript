@@ -4,27 +4,27 @@
 // https://github.com/microsoft/TypeScript/issues/11584
 
 function example<T1>() {
->example : <T1>() => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>example : <T1>() => { foo: <T2>(t2: T2) => typeof x; bar: (t1: T1) => typeof x; }
 
   let x = {
->x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
->{    foo: <T2>(t2: T2) => x,    bar: (t1: T1) => x,  } : { foo: <T2>(t2: T2) => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }; bar: (t1: T1) => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }; }
+>x : { foo: <T2>(t2: T2) => typeof x; bar: (t1: T1) => typeof x; }
+>{    foo: <T2>(t2: T2) => x,    bar: (t1: T1) => x,  } : { foo: <T2>(t2: T2) => typeof x; bar: (t1: T1) => typeof x; }
 
     foo: <T2>(t2: T2) => x,
->foo : <T2>(t2: T2) => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
-><T2>(t2: T2) => x : <T2>(t2: T2) => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>foo : <T2>(t2: T2) => { foo: (typeof x)["foo"]; bar: (t1: T1) => typeof x; }
+><T2>(t2: T2) => x : <T2>(t2: T2) => { foo: (typeof x)["foo"]; bar: (t1: T1) => typeof x; }
 >t2 : T2
->x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>x : { foo: <T2>(t2: T2) => typeof x; bar: (t1: T1) => typeof x; }
 
     bar: (t1: T1) => x,
->bar : (t1: T1) => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
->(t1: T1) => x : (t1: T1) => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>bar : (t1: T1) => { foo: <T2>(t2: T2) => typeof x; bar: (typeof x)["bar"]; }
+>(t1: T1) => x : (t1: T1) => { foo: <T2>(t2: T2) => typeof x; bar: (typeof x)["bar"]; }
 >t1 : T1
->x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>x : { foo: <T2>(t2: T2) => typeof x; bar: (t1: T1) => typeof x; }
 
   };
   return x;
->x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>x : { foo: <T2>(t2: T2) => typeof x; bar: (t1: T1) => typeof x; }
 }
 
 example<number>().foo("hello").bar(1);

@@ -23,12 +23,12 @@ alias/*aliasUse*/();
 	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 	f.VerifyQuickInfoAt(t, "arrow", "const arrow: () => typeof arrow", "")
-	f.VerifyQuickInfoAt(t, "use", "const arrow: () => () => typeof arrow", "")
-	f.VerifyQuickInfoAt(t, "self", "function self(): () => typeof broad", "")
-	f.VerifyQuickInfoAt(t, "object", "const object: {\n    next: () => ...;\n}", "")
+	f.VerifyQuickInfoAt(t, "use", "const arrow: () => typeof arrow", "")
+	f.VerifyQuickInfoAt(t, "self", "function self(): typeof self", "")
+	f.VerifyQuickInfoAt(t, "object", "const object: {\n    next: () => typeof object;\n}", "")
 	f.VerifyQuickInfoAt(t, "tuple", "const tuple: readonly [() => ...]", "")
 	f.VerifyQuickInfoAt(t, "reference", "const arrow: () => typeof arrow", "")
-	f.VerifyQuickInfoAt(t, "aliasUse", "const alias: () => () => typeof arrow", "")
+	f.VerifyQuickInfoAt(t, "aliasUse", "const alias: () => typeof arrow", "")
 	f.VerifyNoErrors(t)
 }
 
@@ -119,7 +119,7 @@ copy.shadowed/*reusedShadowed*/(1);`
 		"declaration": {0, 1, 2}, "call": {0, 1, 2}, "namedCall": {0, 1, 2},
 		"functionCall": {0, 1, 2}, "genericCall": {0}, "specializedCall": {0},
 		"narrowedCall": {0, 1, 2}, "broadCall": {0, 1, 2},
-		"stringCall": {0, 1, 2}, "numberCall": {0}, "methodCall": {0, 1, 2},
+		"stringCall": {0, 1, 2}, "numberCall": {0, 1, 2}, "methodCall": {0, 1, 2},
 		"firstDeclaration": {0, 1, 2}, "firstCall": {0, 1, 2},
 		"genericFunctionCall": {0}, "callableCall": {0, 1, 2},
 		"producerDeclaration": {0, 1, 2}, "producerCall": {0, 1, 2},
