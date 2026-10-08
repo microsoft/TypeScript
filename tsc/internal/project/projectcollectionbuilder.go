@@ -760,6 +760,13 @@ func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *Pr
 	}
 	wg.RunAndWait()
 
+	// Updated configured projects may have moved open files in or out of the inferred project.
+	// Callers iterate over all language service projects, so the inferred one needs a program too.
+	b.cleanupInferredProject(logger)
+	if b.inferredProject.Value() != nil {
+		b.updateProgram(b.inferredProject, logger)
+	}
+
 	if logger != nil {
 		elapsed := time.Since(startTime)
 		logger.Log(fmt.Sprintf("Completed project tree request for %v in %v", projectTreeRequest.Projects(), elapsed))

@@ -1,4 +1,6 @@
+import type { TypeScriptModuleLoader } from "./moduleLoader.ts";
 import type { LspMiddlewareRequests } from "./protocol.generated.ts";
+export { createTypeScriptModuleLoader, type TypeScriptModuleLoader } from "./moduleLoader.ts";
 export type * from "./protocol.generated.ts";
 
 export interface Disposable {
@@ -45,9 +47,53 @@ export type LspMiddlewareTransformer<M extends LspMiddlewareMethod> = (
     context: LspMiddlewareContext<M>,
 ) => LspMiddlewareResult<M> | PromiseLike<LspMiddlewareResult<M>>;
 
-export interface ExtensionAPI {
-    onLanguageServerInitialized: Event<void>;
+export interface APIModules {
+    "typescript/async": typeof import("../api/async/api.ts");
+    "typescript/sync": typeof import("../api/sync/api.ts");
+    "typescript/fs": typeof import("../api/fs.ts");
+    "typescript/path": typeof import("../api/typedPaths.ts");
+    "typescript/proto": typeof import("../api/proto.ts");
+    "typescript/ast": typeof import("../ast/index.ts");
+    "typescript/ast/is": typeof import("../ast/is.ts");
+    "typescript/ast/factory": typeof import("../ast/factory.generated.ts");
+    "typescript/ast/utils": typeof import("../ast/utils.ts");
+    "typescript/ast/scanner": typeof import("../ast/scanner.ts");
+    "typescript/ast/visitor": typeof import("../ast/visitor.ts");
+    "typescript/ast/clone": typeof import("../ast/clone.ts");
+    [exportPath: string]: unknown;
+}
+
+/**
+ * The selected TypeScript installation and its module loader.
+ * Restart TS Server offers to restart extensions if an acquired installation's
+ * version changed on disk, without first restarting the server.
+ */
+export interface TypeScriptSDK extends TypeScriptModuleLoader {
+    readonly version: string;
+    /** The matching API package manifest; undefined for a bare executable without a companion package. */
+    readonly packageJsonPath: string | undefined;
+    /**
+     * Whether an initialized language server currently uses this installation.
+     * False while stopped or restarting; true again after a same-installation restart.
+     * This is a synchronous snapshot, not a guarantee for subsequent async operations
+     * or a check for changes on disk.
+     */
+    isCurrent(): boolean;
+    /**
+     * Opens an API pipe, waiting for scheduled server restarts to complete.
+     * Handles remain usable after restarts of the same installation. If a different
+     * installation is selected, use the SDK from the latest initialization event.
+     */
     initializeAPIConnection(pipe?: string): Promise<string>;
+}
+
+export interface ExtensionAPI {
+    /**
+     * Fires after each language server initialization. Existing API connections
+     * should be discarded and recreated when this fires. Newly registered listeners
+     * are invoked immediately if the server is already initialized.
+     */
+    onLanguageServerInitialized: Event<TypeScriptSDK>;
     registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): Disposable;
 
     /**

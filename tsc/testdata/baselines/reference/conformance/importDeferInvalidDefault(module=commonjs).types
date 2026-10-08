@@ -20,3 +20,17 @@ foo();
 >foo() : void
 >foo : () => void
 
+import defer "./a.js";
+import defer "./a.js" with { type: "json" };
+>type : any
+
+=== c.js ===
+// @ts-check
+import defer "./a.js";
+import defer "./a.js" with { type: "json" };
+>type : any
+
+=== d.js ===
+
+import defer "./a.js";
+

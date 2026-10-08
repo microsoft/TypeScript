@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
-	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
@@ -897,12 +896,11 @@ func (c *Checker) GetConstantValue(node *ast.Node) any {
 }
 
 func (c *Checker) getResolvedSignatureWorker(node *ast.Node, checkMode CheckMode, argumentCount int) (*Signature, []*Signature) {
-	parsedNode := printer.NewEmitContext().ParseNode(node)
 	c.apparentArgumentCount = &argumentCount
 	candidatesOutArray := &[]*Signature{}
 	var res *Signature
-	if parsedNode != nil {
-		res = c.getResolvedSignature(parsedNode, candidatesOutArray, checkMode)
+	if node != nil && ast.IsParseTreeNode(node) {
+		res = c.getResolvedSignature(node, candidatesOutArray, checkMode)
 	}
 	c.apparentArgumentCount = nil
 	return res, *candidatesOutArray

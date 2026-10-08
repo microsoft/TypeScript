@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"cmp"
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -36,8 +37,7 @@ func (c *Checker) IsAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclarat
 		accessibleSymbolChain := c.getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning /*useOnlyExternalAliasing*/, false)
 		if len(accessibleSymbolChain) > 0 {
 			hadAccessibleChain = symbol
-			// TODO: going through emit resolver here is weird. Relayer these APIs.
-			hasAccessibleDeclarations := c.GetEmitResolver().hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible)
+			hasAccessibleDeclarations := c.hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible)
 			if hasAccessibleDeclarations != nil {
 				return hasAccessibleDeclarations
 			}
@@ -207,21 +207,82 @@ func (c *Checker) getAlternativeContainingModules(symbol *ast.Symbol, enclosingD
 	if links.extendedContainers != nil {
 		return *links.extendedContainers
 	}
-	// No results from files already being imported by this file - expand search (expensive, but not location-specific, so cached)
-	otherFiles := c.program.SourceFiles()
-	for _, file := range otherFiles {
+	// No results from files already being imported by this file - expand search (not location-specific, so cached)
+	results = c.getExternalModuleContainers(symbol)
+	links.extendedContainers = &results
+	return results
+}
+
+type externalModuleContainerIndex struct {
+	complete           bool
+	containersByTarget map[*ast.Symbol][]*ast.Symbol
+	moduleOrder        map[*ast.Symbol]int
+}
+
+func (index *externalModuleContainerIndex) add(target *ast.Symbol, container *ast.Symbol) {
+	// Modules are indexed one at a time, so a repeat of this container is always the last entry.
+	if existing := index.containersByTarget[target]; len(existing) == 0 || existing[len(existing)-1] != container {
+		index.containersByTarget[target] = append(existing, container)
+	}
+}
+
+func (c *Checker) getExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
+	if c.externalModuleContainers == nil {
+		c.buildExternalModuleContainerIndex()
+	}
+	index := c.externalModuleContainers
+	if !index.complete {
+		// Re-entered from an alias resolved while building the index; answer this query without it.
+		return c.scanExternalModuleContainers(symbol)
+	}
+	containers := index.containersByTarget[c.getResolvedTarget(symbol)]
+	parent := c.getParentOfSymbol(symbol)
+	parentOrder, parentIsModule := index.moduleOrder[parent]
+	if !parentIsModule {
+		return containers
+	}
+	// The parent module contains the symbol even when the symbol is absent from its exports.
+	if at, found := slices.BinarySearchFunc(containers, parentOrder, func(container *ast.Symbol, order int) int {
+		return cmp.Compare(index.moduleOrder[container], order)
+	}); !found {
+		return slices.Insert(slices.Clone(containers), at, parent)
+	}
+	return containers
+}
+
+func (c *Checker) buildExternalModuleContainerIndex() {
+	index := &externalModuleContainerIndex{
+		containersByTarget: make(map[*ast.Symbol][]*ast.Symbol),
+		moduleOrder:        make(map[*ast.Symbol]int, len(c.program.SourceFiles())),
+	}
+	c.externalModuleContainers = index
+	for _, file := range c.program.SourceFiles() {
 		if !ast.IsExternalModule(file) {
 			continue
 		}
-		sym := c.getSymbolOfDeclaration(file.AsNode())
-		ref := c.getAliasForSymbolInContainer(sym, symbol)
-		if ref == nil {
+		container := c.getSymbolOfDeclaration(file.AsNode())
+		index.moduleOrder[container] = len(index.moduleOrder)
+		for _, exported := range c.getExportsOfSymbol(container) {
+			index.add(c.getResolvedTarget(exported), container)
+		}
+		if exportEquals := container.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
+			index.add(c.getResolvedTarget(exportEquals), container)
+		}
+	}
+	index.complete = true
+}
+
+func (c *Checker) scanExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
+	var containers []*ast.Symbol
+	for _, file := range c.program.SourceFiles() {
+		if !ast.IsExternalModule(file) {
 			continue
 		}
-		results = append(results, sym)
+		if container := c.getSymbolOfDeclaration(file.AsNode()); c.getAliasForSymbolInContainer(container, symbol) != nil {
+			containers = append(containers, container)
+		}
 	}
-	links.extendedContainers = &results
-	return results
+	return containers
 }
 
 func (c *Checker) getVariableDeclarationOfObjectLiteral(symbol *ast.Symbol, meaning ast.SymbolFlags) *ast.Symbol {
