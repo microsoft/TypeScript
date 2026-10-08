@@ -299,7 +299,7 @@ func (r *EmitResolver) IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node)
 		r.checkerMu.Lock()
 		defer r.checkerMu.Unlock()
 		// Exactly `Symbol.something` and `Symbol` either does not resolve or definitely resolves to the global Symbol
-		return r.checker.getResolvedSymbol(node.Expression()) == r.checker.getGlobalSymbol(unique.Make("Symbol"), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*diagnostic*/)
+		return r.checker.getResolvedSymbol(node.Expression()) == r.checker.getGlobalSymbol(ast.SymbolNameSymbol, ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*diagnostic*/)
 	}
 	if node.Expression().Expression().Kind != ast.KindIdentifier || node.Expression().Expression().Text() != "globalThis" || node.Expression().Name().Text() != "Symbol" {
 		return false
@@ -604,11 +604,11 @@ func (r *EmitResolver) GetReferencedValueDeclarations(node *ast.IdentifierNode) 
 }
 
 // IsNameResolvable returns `true` if the given `name` resolves to any symbol at `location`
-func (r *EmitResolver) IsNameResolvable(location *ast.Node, name string) bool {
+func (r *EmitResolver) IsNameResolvable(location *ast.Node, name ast.SymbolName) bool {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
-	symbol := r.checker.resolveName(location, unique.Make(name), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+	symbol := r.checker.resolveName(location, name, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
 	return symbol != nil
 }
 

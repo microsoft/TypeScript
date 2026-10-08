@@ -133,10 +133,10 @@ func (c *Checker) GetExportsOfModule(symbol *ast.Symbol) []*ast.Symbol {
 	return symbolsToArray(c.getExportsOfModule(symbol))
 }
 
-func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb func(*ast.Symbol, string)) {
+func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb func(*ast.Symbol, ast.SymbolName)) {
 	for key, exportedSymbol := range c.getExportsOfModule(moduleSymbol) {
-		if !isReservedMemberName(key.Value()) {
-			cb(exportedSymbol, key.Value())
+		if !isReservedMemberName(key) {
+			cb(exportedSymbol, key)
 		}
 	}
 
@@ -157,7 +157,7 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	}
 	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).members {
 		if c.isNamedMember(symbol, name) {
-			cb(symbol, name.Value())
+			cb(symbol, name)
 		}
 	}
 }
@@ -825,13 +825,13 @@ func (c *Checker) IsTypeInvalidDueToUnionDiscriminant(contextualType *Type, obj 
 				nameType = c.getLiteralTypeFromPropertyName(propertyName)
 			}
 		}
-		var name string
+		name := ast.EmptySymbolName
 		if nameType != nil && isTypeUsableAsPropertyName(nameType) {
-			name = getPropertyNameFromType(nameType).Value()
+			name = getPropertyNameFromType(nameType)
 		}
 		var expected *Type
-		if name != "" {
-			expected = c.getTypeOfPropertyOfType(contextualType, unique.Make(name))
+		if name != ast.EmptySymbolName {
+			expected = c.getTypeOfPropertyOfType(contextualType, name)
 		}
 		return expected != nil && isLiteralType(expected) && !c.isTypeAssignableTo(c.getTypeOfNode(property), expected)
 	})
@@ -978,26 +978,26 @@ func (c *Checker) GetContextualTypeForArrayLiteralAtPosition(contextualArrayType
 }
 
 var knownGenericTypeNames = map[ast.SymbolName]struct{}{
-	unique.Make("Array"):            {},
-	unique.Make("ArrayLike"):        {},
-	unique.Make("ReadonlyArray"):    {},
-	unique.Make("Promise"):          {},
-	unique.Make("PromiseLike"):      {},
-	unique.Make("Iterable"):         {},
-	unique.Make("IterableIterator"): {},
-	unique.Make("AsyncIterable"):    {},
-	unique.Make("Set"):              {},
-	unique.Make("WeakSet"):          {},
-	unique.Make("ReadonlySet"):      {},
-	unique.Make("Map"):              {},
-	unique.Make("WeakMap"):          {},
-	unique.Make("ReadonlyMap"):      {},
-	unique.Make("Partial"):          {},
-	unique.Make("Required"):         {},
-	unique.Make("Readonly"):         {},
-	unique.Make("Pick"):             {},
-	unique.Make("Omit"):             {},
-	unique.Make("NonNullable"):      {},
+	ast.SymbolNameArray:            {},
+	ast.SymbolNameArrayLike:        {},
+	ast.SymbolNameReadonlyArray:    {},
+	ast.SymbolNamePromise:          {},
+	ast.SymbolNamePromiseLike:      {},
+	ast.SymbolNameIterable:         {},
+	ast.SymbolNameIterableIterator: {},
+	ast.SymbolNameAsyncIterable:    {},
+	ast.SymbolNameSet:              {},
+	ast.SymbolNameWeakSet:          {},
+	ast.SymbolNameReadonlySet:      {},
+	ast.SymbolNameMap:              {},
+	ast.SymbolNameWeakMap:          {},
+	ast.SymbolNameReadonlyMap:      {},
+	ast.SymbolNamePartial:          {},
+	ast.SymbolNameRequired:         {},
+	ast.SymbolNameReadonly:         {},
+	ast.SymbolNamePick:             {},
+	ast.SymbolNameOmit:             {},
+	ast.SymbolNameNonNullable:      {},
 }
 
 func isKnownGenericTypeName(name ast.SymbolName) bool {

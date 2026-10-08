@@ -33,7 +33,7 @@ func (r *NameResolver) Resolve(location *ast.Node, name ast.SymbolName, meaning 
 	var withinDeferredContext bool
 	var grandparent *ast.Node
 	originalLocation := location // needed for did-you-mean error reporting, which gathers candidates starting from the original location
-	nameIsConst := name == unique.Make("const")
+	nameIsConst := name == ast.SymbolNameConst
 loop:
 	for location != nil {
 		if nameIsConst && ast.IsConstAssertion(location) {
@@ -236,12 +236,12 @@ loop:
 				}
 			}
 		case ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindFunctionDeclaration:
-			if meaning&ast.SymbolFlagsVariable != 0 && name == unique.Make("arguments") {
+			if meaning&ast.SymbolFlagsVariable != 0 && name == ast.SymbolNameArguments {
 				result = r.argumentsSymbol()
 				break loop
 			}
 		case ast.KindFunctionExpression:
-			if meaning&ast.SymbolFlagsVariable != 0 && name == unique.Make("arguments") {
+			if meaning&ast.SymbolFlagsVariable != 0 && name == ast.SymbolNameArguments {
 				result = r.argumentsSymbol()
 				break loop
 			}
@@ -445,7 +445,7 @@ func (r *NameResolver) argumentsSymbol() *ast.Symbol {
 	if r.ArgumentsSymbol == nil {
 		// Default implementation synthesizes a transient symbol for `arguments`
 		r.ArgumentsSymbol = ast.NewSymbol()
-		r.ArgumentsSymbol.SetName(unique.Make("arguments"))
+		r.ArgumentsSymbol.SetName(ast.SymbolNameArguments)
 		r.ArgumentsSymbol.SetFlags(ast.SymbolFlagsProperty | ast.SymbolFlagsTransient)
 	}
 	return r.ArgumentsSymbol
