@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
@@ -122,6 +123,79 @@ func TestBuildCancellationAcrossReferencesAndRetry(t *testing.T) {
 				assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
 			})
 		}
+	}
+}
+
+type cancellingBuildStatusFS struct {
+	vfs.FS
+	cancel      context.CancelFunc
+	phase       string
+	sourceStats int
+	sourceReads int
+	timestamps  int
+}
+
+func (f *cancellingBuildStatusFS) Stat(path tspath.RootedPath) vfs.FileInfo {
+	info := f.FS.Stat(path)
+	if strings.HasSuffix(path.AsString(), ".ts") {
+		f.sourceStats++
+		if f.phase == "stat" {
+			f.cancel()
+		}
+	}
+	return info
+}
+
+func (f *cancellingBuildStatusFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	text, ok := f.FS.ReadFile(path)
+	if strings.HasSuffix(path.AsString(), ".ts") {
+		f.sourceReads++
+		if f.phase == "hash" {
+			f.cancel()
+		}
+	}
+	return text, ok
+}
+
+func (f *cancellingBuildStatusFS) Chtimes(path tspath.RootedPath, aTime, mTime time.Time) error {
+	f.timestamps++
+	return f.FS.Chtimes(path, aTime, mTime)
+}
+
+func TestBuildStatusStopsOnCancellation(t *testing.T) {
+	t.Parallel()
+	for _, phase := range []string{"stat", "hash"} {
+		t.Run(phase, func(t *testing.T) {
+			t.Parallel()
+			sys := newTestSys(&tscInput{
+				files: FileMap{
+					"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"composite":true,"noCheck":true,"noLib":true},"files":["a.ts","b.ts","globals.d.ts"]}`,
+					"/home/src/workspaces/project/a.ts":          `export const a = 1;`,
+					"/home/src/workspaces/project/b.ts":          `export const b = 2;`,
+					"/home/src/workspaces/project/globals.d.ts":  tscDefaultLibContent,
+				},
+			}, false)
+			args := []string{"--build", "--singleThreaded", "--verbose", "--extendedDiagnostics"}
+			result := execute.CommandLine(t.Context(), sys, args, sys)
+			assert.Equal(t, result.Status, tsc.ExitStatusSuccess)
+			for _, file := range []tspath.RootedPath{"/home/src/workspaces/project/a.ts", "/home/src/workspaces/project/b.ts"} {
+				assert.NilError(t, sys.FS().Chtimes(file, time.Time{}, sys.Now().Add(time.Hour)))
+			}
+			ctx, cancel := context.WithCancel(t.Context())
+			defer cancel()
+			fs := &cancellingBuildStatusFS{FS: sys.FS(), cancel: cancel, phase: phase}
+			wrapped := &cancellingBuildSystem{TestSys: sys, fs: fs}
+			sys.clearOutput()
+
+			result = execute.CommandLine(ctx, wrapped, args, sys)
+
+			assert.Equal(t, result.Status, tsc.ExitStatusCancelled)
+			assert.Equal(t, fs.sourceStats, 1)
+			assert.Equal(t, fs.sourceReads, core.IfElse(phase == "hash", 1, 0))
+			assert.Equal(t, fs.timestamps, 0)
+			assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Updating output timestamps"))
+			assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Total time:"))
+		})
 	}
 }
 
