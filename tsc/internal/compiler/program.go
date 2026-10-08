@@ -2228,7 +2228,10 @@ func (p *Program) IsMissingPath(path tspath.PathKey) bool {
 	return p.missingFiles.Has(path)
 }
 
-func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale, currentDirectory tspath.RootedDirectoryPath) {
+func (p *Program) ExplainFiles(ctx context.Context, w io.Writer, locale locale.Locale, currentDirectory tspath.RootedDirectoryPath) {
+	if ctx.Err() != nil {
+		return
+	}
 	toRelativeFileName := func(fileName tspath.RootedFilePath) string {
 		if relativePath, ok := p.caseSensitivity.RelativePathFromDirectory(currentDirectory, fileName); ok {
 			return relativePath.AsString()
@@ -2236,35 +2239,58 @@ func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale, currentDirecto
 		return fileName.AsString()
 	}
 	filesExplained := 0
-	explainFile := func(file ast.HasFileName) {
+	explainFile := func(file ast.HasFileName) bool {
+		if ctx.Err() != nil {
+			return false
+		}
 		fmt.Fprintln(w, toRelativeFileName(file.FileName()))
 		for _, reason := range p.fileIncludeReasons[file.PathKey()] {
+			if ctx.Err() != nil {
+				return false
+			}
 			fmt.Fprintln(w, "  ", reason.toDiagnostic(p, true, currentDirectory).Localize(locale))
 		}
+		if ctx.Err() != nil {
+			return false
+		}
 		for _, diag := range p.includeProcessor.explainRedirectAndImpliedFormat(p, file.PathKey(), toRelativeFileName) {
+			if ctx.Err() != nil {
+				return false
+			}
 			fmt.Fprintln(w, "  ", diag.Localize(locale))
 		}
 		filesExplained++
+		return true
 	}
 
-	redirectFiles := slices.Collect(maps.Values(p.redirectFilesByPath))
+	redirectFiles := make([]*redirectsFile, 0, len(p.redirectFilesByPath))
+	for _, file := range p.redirectFilesByPath {
+		if ctx.Err() != nil {
+			return
+		}
+		redirectFiles = append(redirectFiles, file)
+	}
 	slices.SortFunc(redirectFiles, func(a, b *redirectsFile) int {
 		return a.index - b.index
 	})
 
 	files := p.GetSourceFiles()
 	sourceFileIndex := 0
-	explainSourceFiles := func(endIndex int) {
+	explainSourceFiles := func(endIndex int) bool {
 		for filesExplained < endIndex {
-			explainFile(files[sourceFileIndex])
+			if !explainFile(files[sourceFileIndex]) {
+				return false
+			}
 			sourceFileIndex++
 		}
+		return true
 	}
 
 	for _, redirectFile := range redirectFiles {
 		// Explain all sourceFiles till we reach this redirectFile index
-		explainSourceFiles(redirectFile.index)
-		explainFile(redirectFile)
+		if !explainSourceFiles(redirectFile.index) || !explainFile(redirectFile) {
+			return
+		}
 	}
 
 	// Explain any remaining sourceFiles

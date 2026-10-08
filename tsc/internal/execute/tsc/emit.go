@@ -190,7 +190,7 @@ func listFiles(ctx context.Context, input EmitInput, emitResult *compiler.EmitRe
 		}
 	}
 	if options.ExplainFiles.IsTrue() {
-		input.Program.ExplainFiles(input.Writer, input.Config.Locale(), input.Sys.GetCurrentDirectory())
+		input.Program.ExplainFiles(ctx, input.Writer, input.Config.Locale(), input.Sys.GetCurrentDirectory())
 	} else if options.ListFiles.IsTrue() || options.ListFilesOnly.IsTrue() {
 		for _, file := range input.Program.GetSourceFiles() {
 			if ctx.Err() != nil {
