@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -381,7 +382,7 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	} else if len(s2.Declarations()) != 0 {
 		return 1
 	}
-	if r := strings.Compare(s1.Name(), s2.Name()); r != 0 {
+	if r := strings.Compare(s1.Name().Value(), s2.Name().Value()); r != 0 {
 		return r
 	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
@@ -641,7 +642,7 @@ func compareTypeNames(t1, t2 *Type) int {
 	if s2 == nil {
 		return -1
 	}
-	if c := strings.Compare(s1.Name(), s2.Name()); c != 0 {
+	if c := strings.Compare(s1.Name().Value(), s2.Name().Value()); c != 0 {
 		return c
 	}
 	// Keep distinct same-named declarations together before comparing alias arguments or structure.
@@ -926,12 +927,12 @@ func isTypeUsableAsPropertyName(t *Type) bool {
 /**
  * Gets the symbolic name for a member from its type.
  */
-func getPropertyNameFromType(t *Type) string {
+func getPropertyNameFromType(t *Type) ast.SymbolName {
 	switch {
 	case t.flags&TypeFlagsStringLiteral != 0:
-		return t.AsLiteralType().value.(string)
+		return unique.Make(t.AsLiteralType().value.(string))
 	case t.flags&TypeFlagsNumberLiteral != 0:
-		return t.AsLiteralType().value.(jsnum.Number).String()
+		return unique.Make(t.AsLiteralType().value.(jsnum.Number).String())
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name
 	}
@@ -1016,14 +1017,14 @@ func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
 }
 
 func IsKnownSymbol(symbol *ast.Symbol) bool {
-	return isLateBoundName(symbol.Name())
+	return isLateBoundName(symbol.Name().Value())
 }
 
 func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return false
 	}
-	return strings.HasPrefix(symbol.Name(), ast.InternalSymbolNamePrefix+"#")
+	return strings.HasPrefix(symbol.Name().Value(), ast.InternalSymbolNamePrefix+"#")
 }
 
 func isLateBoundName(name string) bool {
@@ -1333,31 +1334,31 @@ type FeatureMapEntry struct {
 	props []string
 }
 
-var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
-	return map[string][]FeatureMapEntry{
-		"Array": {
+var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
+	return map[ast.SymbolName][]FeatureMapEntry{
+		unique.Make("Array"): {
 			{lib: "es2015", props: []string{"find", "findIndex", "fill", "copyWithin", "entries", "keys", "values"}},
 			{lib: "es2016", props: []string{"includes"}},
 			{lib: "es2019", props: []string{"flat", "flatMap"}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Iterator": {
+		unique.Make("Iterator"): {
 			{lib: "es2015", props: []string{}},
 		},
-		"IteratorConstructor": {
+		unique.Make("IteratorConstructor"): {
 			{lib: "es2026", props: []string{"concat"}},
 		},
-		"RawJSON": {
+		unique.Make("RawJSON"): {
 			{lib: "es2026", props: []string{}},
 		},
-		"JSON": {
+		unique.Make("JSON"): {
 			{lib: "es2026", props: []string{"isRawJSON", "rawJSON"}},
 		},
-		"AsyncIterator": {
+		unique.Make("AsyncIterator"): {
 			{lib: "es2015", props: []string{}},
 		},
-		"ArrayBuffer": {
+		unique.Make("ArrayBuffer"): {
 			{lib: "es2024", props: []string{
 				"maxByteLength",
 				"resizable",
@@ -1367,7 +1368,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"transferToFixedLength",
 			}},
 		},
-		"Atomics": {
+		unique.Make("Atomics"): {
 			{lib: "es2017", props: []string{
 				"add",
 				"and",
@@ -1386,7 +1387,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"waitAsync",
 			}},
 		},
-		"SharedArrayBuffer": {
+		unique.Make("SharedArrayBuffer"): {
 			{lib: "es2017", props: []string{
 				"byteLength",
 				"slice",
@@ -1397,59 +1398,59 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"grow",
 			}},
 		},
-		"AsyncIterable": {
+		unique.Make("AsyncIterable"): {
 			{lib: "es2018", props: []string{}},
 		},
-		"AsyncIterableIterator": {
+		unique.Make("AsyncIterableIterator"): {
 			{lib: "es2018", props: []string{}},
 		},
-		"AsyncGenerator": {
+		unique.Make("AsyncGenerator"): {
 			{lib: "es2018", props: []string{}},
 		},
-		"AsyncGeneratorFunction": {
+		unique.Make("AsyncGeneratorFunction"): {
 			{lib: "es2018", props: []string{}},
 		},
-		"RegExp": {
+		unique.Make("RegExp"): {
 			{lib: "es2015", props: []string{"flags", "sticky", "unicode"}},
 			{lib: "es2018", props: []string{"dotAll"}},
 			{lib: "es2024", props: []string{"unicodeSets"}},
 		},
-		"RegExpConstructor": {
+		unique.Make("RegExpConstructor"): {
 			{lib: "es2025", props: []string{"escape"}},
 		},
-		"Reflect": {
+		unique.Make("Reflect"): {
 			{lib: "es2015", props: []string{"apply", "construct", "defineProperty", "deleteProperty", "get", "getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"}},
 		},
-		"ArrayConstructor": {
+		unique.Make("ArrayConstructor"): {
 			{lib: "es2015", props: []string{"from", "of"}},
 			{lib: "es2026", props: []string{"fromAsync"}},
 		},
-		"ObjectConstructor": {
+		unique.Make("ObjectConstructor"): {
 			{lib: "es2015", props: []string{"assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"}},
 			{lib: "es2017", props: []string{"values", "entries", "getOwnPropertyDescriptors"}},
 			{lib: "es2019", props: []string{"fromEntries"}},
 			{lib: "es2022", props: []string{"hasOwn"}},
 			{lib: "es2024", props: []string{"groupBy"}},
 		},
-		"NumberConstructor": {
+		unique.Make("NumberConstructor"): {
 			{lib: "es2015", props: []string{"isFinite", "isInteger", "isNaN", "isSafeInteger", "parseFloat", "parseInt"}},
 		},
-		"Math": {
+		unique.Make("Math"): {
 			{lib: "es2015", props: []string{"clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"}},
 			{lib: "es2025", props: []string{"f16round"}},
 			{lib: "es2026", props: []string{"sumPrecise"}},
 		},
-		"Map": {
+		unique.Make("Map"): {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
 		},
-		"MapConstructor": {
+		unique.Make("MapConstructor"): {
 			{lib: "es2024", props: []string{"groupBy"}},
 		},
-		"Set": {
+		unique.Make("Set"): {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 			{lib: "es2025", props: []string{
 				"union",
@@ -1461,28 +1462,28 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"isDisjointFrom",
 			}},
 		},
-		"PromiseConstructor": {
+		unique.Make("PromiseConstructor"): {
 			{lib: "es2015", props: []string{"all", "race", "reject", "resolve"}},
 			{lib: "es2020", props: []string{"allSettled"}},
 			{lib: "es2021", props: []string{"any"}},
 			{lib: "es2024", props: []string{"withResolvers"}},
 			{lib: "es2025", props: []string{"try"}},
 		},
-		"Symbol": {
+		unique.Make("Symbol"): {
 			{lib: "es2015", props: []string{"for", "keyFor"}},
 			{lib: "es2019", props: []string{"description"}},
 		},
-		"WeakMap": {
+		unique.Make("WeakMap"): {
 			{lib: "es2015", props: []string{}},
 			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
 		},
-		"WeakSet": {
+		unique.Make("WeakSet"): {
 			{lib: "es2015", props: []string{}},
 		},
-		"String": {
+		unique.Make("String"): {
 			{lib: "es2015", props: []string{"codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"}},
 			{lib: "es2017", props: []string{"padStart", "padEnd"}},
 			{lib: "es2019", props: []string{"trimStart", "trimEnd", "trimLeft", "trimRight"}},
@@ -1491,33 +1492,33 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2024", props: []string{"isWellFormed", "toWellFormed"}},
 		},
-		"StringConstructor": {
+		unique.Make("StringConstructor"): {
 			{lib: "es2015", props: []string{"fromCodePoint", "raw"}},
 		},
-		"DateTimeFormat": {
+		unique.Make("DateTimeFormat"): {
 			{lib: "es2017", props: []string{"formatToParts"}},
 		},
-		"Promise": {
+		unique.Make("Promise"): {
 			{lib: "es2015", props: []string{}},
 			{lib: "es2018", props: []string{"finally"}},
 		},
-		"RegExpMatchArray": {
+		unique.Make("RegExpMatchArray"): {
 			{lib: "es2018", props: []string{"groups"}},
 		},
-		"RegExpExecArray": {
+		unique.Make("RegExpExecArray"): {
 			{lib: "es2018", props: []string{"groups"}},
 		},
-		"Intl": {
+		unique.Make("Intl"): {
 			{lib: "es2018", props: []string{"PluralRules"}},
 			{lib: "es2020", props: []string{"RelativeTimeFormat", "Locale", "DisplayNames"}},
 			{lib: "es2021", props: []string{"ListFormat", "DateTimeFormat"}},
 			{lib: "es2022", props: []string{"Segmenter"}},
 			{lib: "es2025", props: []string{"DurationFormat"}},
 		},
-		"NumberFormat": {
+		unique.Make("NumberFormat"): {
 			{lib: "es2018", props: []string{"formatToParts"}},
 		},
-		"SymbolConstructor": {
+		unique.Make("SymbolConstructor"): {
 			{lib: "es2020", props: []string{"matchAll"}},
 			{lib: "esnext", props: []string{
 				"metadata",
@@ -1525,82 +1526,82 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"asyncDispose",
 			}},
 		},
-		"DataView": {
+		unique.Make("DataView"): {
 			{lib: "es2020", props: []string{"setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"}},
 			{lib: "es2025", props: []string{"setFloat16", "getFloat16"}},
 		},
-		"BigInt": {
+		unique.Make("BigInt"): {
 			{lib: "es2020", props: []string{}},
 		},
-		"RelativeTimeFormat": {
+		unique.Make("RelativeTimeFormat"): {
 			{lib: "es2020", props: []string{"format", "formatToParts", "resolvedOptions"}},
 		},
-		"Int8Array": {
+		unique.Make("Int8Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Uint8Array": {
+		unique.Make("Uint8Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 			{lib: "es2026", props: []string{"toBase64", "setFromBase64", "toHex", "setFromHex"}},
 		},
-		"Uint8ClampedArray": {
+		unique.Make("Uint8ClampedArray"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Int16Array": {
+		unique.Make("Int16Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Uint16Array": {
+		unique.Make("Uint16Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Int32Array": {
+		unique.Make("Int32Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Uint32Array": {
+		unique.Make("Uint32Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Float16Array": {
+		unique.Make("Float16Array"): {
 			{lib: "es2025", props: []string{}},
 		},
-		"Float32Array": {
+		unique.Make("Float32Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Float64Array": {
+		unique.Make("Float64Array"): {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"BigInt64Array": {
+		unique.Make("BigInt64Array"): {
 			{lib: "es2020", props: []string{}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"BigUint64Array": {
+		unique.Make("BigUint64Array"): {
 			{lib: "es2020", props: []string{}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Error": {
+		unique.Make("Error"): {
 			{lib: "es2022", props: []string{"cause"}},
 		},
-		"ErrorConstructor": {
+		unique.Make("ErrorConstructor"): {
 			{lib: "es2026", props: []string{"isError"}},
 		},
-		"Uint8ArrayConstructor": {
+		unique.Make("Uint8ArrayConstructor"): {
 			{lib: "es2026", props: []string{"fromBase64", "fromHex"}},
 		},
-		"DisposableStack": {
+		unique.Make("DisposableStack"): {
 			{lib: "esnext", props: []string{}},
 		},
-		"AsyncDisposableStack": {
+		unique.Make("AsyncDisposableStack"): {
 			{lib: "esnext", props: []string{}},
 		},
-		"Date": {
+		unique.Make("Date"): {
 			{lib: "esnext", props: []string{"toTemporalInstant"}},
 		},
 	}
@@ -1620,7 +1621,7 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 	case ast.IsElementAccessExpression(expr):
 		baseStr := tryGetPropertyAccessOrIdentifierToString(expr.Expression())
 		if baseStr != "" && ast.IsPropertyName(expr.AsElementAccessExpression().ArgumentExpression) {
-			return baseStr + "." + ast.GetPropertyNameForPropertyNameNode(expr.AsElementAccessExpression().ArgumentExpression)
+			return baseStr + "." + ast.GetPropertyNameForPropertyNameNode(expr.AsElementAccessExpression().ArgumentExpression).Value()
 		}
 	case ast.IsIdentifier(expr):
 		return expr.Text()
@@ -1690,7 +1691,7 @@ func introducesArgumentsExoticObject(node *ast.Node) bool {
 func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	var result []*ast.Symbol
 	for id, symbol := range symbols {
-		if !isReservedMemberName(id) {
+		if !isReservedMemberName(id.Value()) {
 			result = append(result, symbol)
 		}
 	}

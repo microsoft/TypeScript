@@ -3,6 +3,7 @@ package ls
 import (
 	"slices"
 	"strings"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -190,7 +191,7 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.
 	case ast.IsBindingElement(node) && ast.IsObjectBindingPattern(node.Parent):
 		if name := node.PropertyNameOrName(); ast.IsIdentifier(name) {
 			if objectType := c.GetTypeAtLocation(node.Parent); objectType != nil {
-				if prop := c.GetPropertyOfType(objectType, name.Text()); prop != nil {
+				if prop := c.GetPropertyOfType(objectType, unique.Make(name.Text())); prop != nil {
 					for _, d := range prop.Declarations() {
 						if jsdoc := getJSDoc(d); jsdoc != nil {
 							return jsdoc

@@ -8,6 +8,7 @@ import (
 	"maps"
 	"slices"
 	"strings"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -396,8 +397,8 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			return nil
 		}
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
-		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) string {
-			return n.PropertyNameOrName().Text()
+		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) ast.SymbolName {
+			return unique.Make(n.PropertyNameOrName().Text())
 		})...)
 		uniques := core.Filter(exports, func(e *ast.Symbol) bool {
 			return e.Name() != ast.InternalSymbolNameDefault && !existing.Has(e.Name())
@@ -518,11 +519,12 @@ func fromUnionableLiteralType(
 		switch {
 		case result.fromProperties != nil:
 			result := result.fromProperties
+			alreadyUsedNames := collections.NewSetFromItems(core.Map(alreadyUsedTypes, unique.Make[string])...)
 			return &stringLiteralCompletions{
 				fromProperties: &completionsFromProperties{
 					symbols: core.Filter(
 						result.symbols,
-						func(s *ast.Symbol) bool { return !slices.Contains(alreadyUsedTypes, s.Name()) },
+						func(s *ast.Symbol) bool { return !alreadyUsedNames.Has(s.Name()) },
 					),
 					hasIndexSignature: result.hasIndexSignature,
 				},
@@ -929,7 +931,7 @@ func getAmbientModuleName(symbol *ast.Symbol) string {
 	if declaration != nil && ast.IsModuleWithStringLiteralName(declaration) {
 		return declaration.Name().Text()
 	}
-	return stringutil.StripQuotes(symbol.Name())
+	return stringutil.StripQuotes(symbol.Name().Value())
 }
 
 func (l *LanguageService) getCompletionEntriesFromTypings(
@@ -2028,7 +2030,7 @@ func getStringLiteralCompletionsFromSignature(
 		}
 		t := typeChecker.GetTypeParameterAtPosition(candidate, argumentInfo.argumentIndex)
 		if ast.IsJsxOpeningLikeElement(call) {
-			propType := typeChecker.GetTypeOfPropertyOfType(t, editingArgument.AsJsxAttribute().Name().Text())
+			propType := typeChecker.GetTypeOfPropertyOfType(t, unique.Make(editingArgument.AsJsxAttribute().Name().Text()))
 			if propType != nil {
 				t = propType
 			}
@@ -2089,7 +2091,7 @@ func (l *LanguageService) stringLiteralCompletionDetails(
 	case completion.fromProperties != nil:
 		properties := completion.fromProperties
 		for _, symbol := range properties.symbols {
-			if symbol.Name() == name {
+			if symbol.Name() == unique.Make(name) {
 				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, position, docFormat)
 			}
 		}

@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -581,7 +582,7 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 				AutoImportFix: &lsproto.AutoImportFix{
 					Kind:            lsproto.AutoImportFixKindJsdocTypeImport,
 					ModuleSpecifier: moduleSpecifier.AsString(),
-					Name:            export.Name(),
+					Name:            export.Name().Value(),
 					UsagePosition:   usagePosition,
 				},
 				ModuleSpecifierKind: moduleSpecifierKind,
@@ -595,10 +596,11 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 	addAsTypeOnly := getAddAsTypeOnly(isValidTypeOnlyUseSite, export, v.program.Options())
 
 	name := export.Name()
-	startsWithUpper := unicode.IsUpper(rune(name[0]))
+	nameText := name.Value()
+	startsWithUpper := unicode.IsUpper(rune(nameText[0]))
 	if forJSX && !startsWithUpper {
 		if export.IsRenameable() {
-			name = fmt.Sprintf("%c%s", unicode.ToUpper(rune(name[0])), name[1:])
+			name = unique.Make(fmt.Sprintf("%c%s", unicode.ToUpper(rune(nameText[0])), nameText[1:]))
 		} else {
 			return nil
 		}
@@ -609,7 +611,7 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 			Kind:            lsproto.AutoImportFixKindAddNew,
 			ImportKind:      importKind,
 			ModuleSpecifier: moduleSpecifier.AsString(),
-			Name:            name,
+			Name:            name.Value(),
 			UseRequire:      v.shouldUseRequire(),
 			AddAsTypeOnly:   addAsTypeOnly,
 		},
@@ -652,7 +654,7 @@ func (v *View) tryUseExistingNamespaceImport(export *Export, usagePosition *lspr
 		return &Fix{
 			AutoImportFix: &lsproto.AutoImportFix{
 				Kind:            lsproto.AutoImportFixKindUseNamespace,
-				Name:            export.Name(),
+				Name:            export.Name().Value(),
 				ModuleSpecifier: existingImport.moduleSpecifier,
 				ImportKind:      lsproto.ImportKindNamespace,
 				AddAsTypeOnly:   lsproto.AddAsTypeOnlyAllowed,
@@ -722,7 +724,7 @@ func (v *View) tryAddToExistingImport(
 				fix := &Fix{
 					AutoImportFix: &lsproto.AutoImportFix{
 						Kind:            lsproto.AutoImportFixKindAddToExisting,
-						Name:            export.Name(),
+						Name:            export.Name().Value(),
 						ImportKind:      importKind,
 						ImportIndex:     int32(existingImport.index),
 						ModuleSpecifier: existingImport.moduleSpecifier,
@@ -773,7 +775,7 @@ func (v *View) tryAddToExistingImport(
 		fix := &Fix{
 			AutoImportFix: &lsproto.AutoImportFix{
 				Kind:            lsproto.AutoImportFixKindAddToExisting,
-				Name:            export.Name(),
+				Name:            export.Name().Value(),
 				ImportKind:      importKind,
 				ImportIndex:     int32(existingImport.index),
 				ModuleSpecifier: existingImport.moduleSpecifier,

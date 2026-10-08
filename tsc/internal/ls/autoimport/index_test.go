@@ -1,7 +1,12 @@
 package autoimport
 
 import (
+	"slices"
+	"strings"
 	"testing"
+	"unique"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 
 	"gotest.tools/v3/assert"
 )
@@ -11,7 +16,22 @@ type testEntry struct {
 	package_ string
 }
 
-func (e *testEntry) Name() string { return e.name }
+func (e *testEntry) Name() ast.SymbolName { return unique.Make(e.name) }
+
+func TestIndexFind(t *testing.T) {
+	t.Parallel()
+	idx := &Index[*testEntry]{}
+	lower := &testEntry{name: "fooBar"}
+	upper := &testEntry{name: "FooBar"}
+	idx.insertAsWords(lower)
+	idx.insertAsWords(upper)
+
+	assert.Assert(t, slices.Equal(idx.Find(strings.Clone("fooBar"), true), []*testEntry{lower}))
+	assert.Assert(t, slices.Equal(idx.Find("FooBar", true), []*testEntry{upper}))
+	assert.Assert(t, slices.Equal(idx.Find("FOOBAR", false), []*testEntry{lower, upper}))
+	assert.Equal(t, len(idx.Find("FOOBAR", true)), 0)
+	assert.Assert(t, slices.Equal(idx.SearchWordPrefix("fb"), []*testEntry{lower, upper}))
+}
 
 func TestIndexClone(t *testing.T) {
 	t.Parallel()

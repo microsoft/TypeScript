@@ -3,6 +3,7 @@ package ast
 import (
 	"strings"
 	"sync/atomic"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
@@ -20,7 +21,7 @@ type Symbol struct {
 
 // Every symbol references a symbolData structure that may be shared with other symbols.
 type symbolData struct {
-	name             string
+	name             SymbolName
 	declarations     []*Node
 	valueDeclaration *Node
 	members          SymbolTable
@@ -31,7 +32,7 @@ type symbolData struct {
 
 func (s *Symbol) Flags() SymbolFlags      { return s.flags }
 func (s *Symbol) CheckFlags() CheckFlags  { return s.checkFlags }
-func (s *Symbol) Name() string            { return s.data.name }
+func (s *Symbol) Name() SymbolName        { return s.data.name }
 func (s *Symbol) Declarations() []*Node   { return s.data.declarations }
 func (s *Symbol) ValueDeclaration() *Node { return s.data.valueDeclaration }
 func (s *Symbol) Members() SymbolTable    { return s.data.members }
@@ -41,7 +42,7 @@ func (s *Symbol) ExportSymbol() *Symbol   { return s.data.exportSymbol }
 
 func (s *Symbol) SetFlags(value SymbolFlags)      { s.flags = value }
 func (s *Symbol) SetCheckFlags(value CheckFlags)  { s.checkFlags = value }
-func (s *Symbol) SetName(value string)            { s.data.name = value }
+func (s *Symbol) SetName(value SymbolName)        { s.data.name = value }
 func (s *Symbol) SetDeclarations(value []*Node)   { s.data.declarations = value }
 func (s *Symbol) SetValueDeclaration(value *Node) { s.data.valueDeclaration = value }
 func (s *Symbol) SetMembers(value SymbolTable)    { s.data.members = value }
@@ -58,6 +59,7 @@ type SymbolWithData struct {
 // Initializes a SymbolWithData instance and returns the embedded Symbol.
 func (sd *SymbolWithData) Initialize() *Symbol {
 	sd.s.data = &sd.d
+	sd.d.name = EmptySymbolName
 	return &sd.s
 }
 
@@ -112,40 +114,46 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 	return s.Flags()
 }
 
-// SymbolTable
+// SymbolName is an interned name used for symbol identity and lookup.
+// Its zero value denotes an unset name and must not be passed to Value.
+type SymbolName = unique.Handle[string]
 
-type SymbolTable map[string]*Symbol
+// EmptySymbolName is a valid empty name, distinct from an unset zero handle.
+var EmptySymbolName = unique.Make("")
+
+type SymbolTable map[SymbolName]*Symbol
 
 const InternalSymbolNamePrefix = "\xFE" // Invalid UTF8 sequence, will never occur as IdentifierName
 
-const (
-	InternalSymbolNameCall                    = InternalSymbolNamePrefix + "call"                    // Call signatures
-	InternalSymbolNameConstructor             = InternalSymbolNamePrefix + "constructor"             // Constructor implementations
-	InternalSymbolNameNew                     = InternalSymbolNamePrefix + "new"                     // Constructor signatures
-	InternalSymbolNameIndex                   = InternalSymbolNamePrefix + "index"                   // Index signatures
-	InternalSymbolNameExportStar              = InternalSymbolNamePrefix + "export"                  // Module export * declarations
-	InternalSymbolNameGlobal                  = InternalSymbolNamePrefix + "global"                  // Global self-reference
-	InternalSymbolNameMissing                 = InternalSymbolNamePrefix + "missing"                 // Indicates missing symbol
-	InternalSymbolNameType                    = InternalSymbolNamePrefix + "type"                    // Anonymous type literal symbol
-	InternalSymbolNameObject                  = InternalSymbolNamePrefix + "object"                  // Anonymous object literal declaration
-	InternalSymbolNameJSXAttributes           = InternalSymbolNamePrefix + "jsxAttributes"           // Anonymous JSX attributes object literal declaration
-	InternalSymbolNameClass                   = InternalSymbolNamePrefix + "class"                   // Unnamed class expression
-	InternalSymbolNameFunction                = InternalSymbolNamePrefix + "function"                // Unnamed function expression
-	InternalSymbolNameComputed                = InternalSymbolNamePrefix + "computed"                // Computed property name declaration with dynamic name
-	InternalSymbolNameAssignmentDeclaration   = InternalSymbolNamePrefix + "assignment"              // Assignment declarations
-	InternalSymbolNameInstantiationExpression = InternalSymbolNamePrefix + "instantiationExpression" // Instantiation expressions
-	InternalSymbolNameImportAttributes        = InternalSymbolNamePrefix + "importAttributes"
-	InternalSymbolNameExportEquals            = "export=" // Export assignment symbol
-	InternalSymbolNameDefault                 = "default" // Default export symbol (technically not wholly internal, but included here for usability)
-	InternalSymbolNameThis                    = "this"
-	InternalSymbolNameModuleExports           = "module.exports"
+var (
+	InternalSymbolNameCall                    = unique.Make(InternalSymbolNamePrefix + "call")                    // Call signatures
+	InternalSymbolNameConstructor             = unique.Make(InternalSymbolNamePrefix + "constructor")             // Constructor implementations
+	InternalSymbolNameNew                     = unique.Make(InternalSymbolNamePrefix + "new")                     // Constructor signatures
+	InternalSymbolNameIndex                   = unique.Make(InternalSymbolNamePrefix + "index")                   // Index signatures
+	InternalSymbolNameExportStar              = unique.Make(InternalSymbolNamePrefix + "export")                  // Module export * declarations
+	InternalSymbolNameGlobal                  = unique.Make(InternalSymbolNamePrefix + "global")                  // Global self-reference
+	InternalSymbolNameMissing                 = unique.Make(InternalSymbolNamePrefix + "missing")                 // Indicates missing symbol
+	InternalSymbolNameType                    = unique.Make(InternalSymbolNamePrefix + "type")                    // Anonymous type literal symbol
+	InternalSymbolNameObject                  = unique.Make(InternalSymbolNamePrefix + "object")                  // Anonymous object literal declaration
+	InternalSymbolNameJSXAttributes           = unique.Make(InternalSymbolNamePrefix + "jsxAttributes")           // Anonymous JSX attributes object literal declaration
+	InternalSymbolNameClass                   = unique.Make(InternalSymbolNamePrefix + "class")                   // Unnamed class expression
+	InternalSymbolNameFunction                = unique.Make(InternalSymbolNamePrefix + "function")                // Unnamed function expression
+	InternalSymbolNameComputed                = unique.Make(InternalSymbolNamePrefix + "computed")                // Computed property name declaration with dynamic name
+	InternalSymbolNameAssignmentDeclaration   = unique.Make(InternalSymbolNamePrefix + "assignment")              // Assignment declarations
+	InternalSymbolNameInstantiationExpression = unique.Make(InternalSymbolNamePrefix + "instantiationExpression") // Instantiation expressions
+	InternalSymbolNameImportAttributes        = unique.Make(InternalSymbolNamePrefix + "importAttributes")
+	InternalSymbolNameExportEquals            = unique.Make("export=") // Export assignment symbol
+	InternalSymbolNameDefault                 = unique.Make("default") // Default export symbol (technically not wholly internal, but included here for usability)
+	InternalSymbolNameThis                    = unique.Make("this")
+	InternalSymbolNameModuleExports           = unique.Make("module.exports")
 )
 
-func SymbolName(symbol *Symbol) string {
+// SymbolNameText returns a display name, preserving private identifier spelling.
+func SymbolNameText(symbol *Symbol) string {
 	if symbol.ValueDeclaration() != nil && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration()) {
 		return symbol.ValueDeclaration().Name().Text()
 	}
-	return symbol.Name()
+	return symbol.Name().Value()
 }
 
 // EscapeAllInternalSymbolNames replaces internal symbol name markers ("\xFE") with "__".
@@ -153,7 +161,8 @@ func EscapeAllInternalSymbolNames(name string) string {
 	return strings.ReplaceAll(name, InternalSymbolNamePrefix, "__")
 }
 
-func EscapeInternalSymbolName(name string) string {
+func EscapeInternalSymbolName(symbolName SymbolName) string {
+	name := symbolName.Value()
 	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
 		return "__" + rest
 	}
@@ -164,7 +173,8 @@ func EscapeInternalSymbolName(name string) string {
 // form. Internal names (prefixed with the "\xFE" sentinel) become "__"-prefixed,
 // and user names that already begin with "__" gain an extra leading underscore
 // so they can be distinguished from internal names.
-func EscapeSymbolName(name string) string {
+func EscapeSymbolName(symbolName SymbolName) string {
+	name := symbolName.Value()
 	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
 		return "__" + rest
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"math"
 	"slices"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -229,7 +230,7 @@ func getSourceDefCheckerInfo(
 	isPropertyName := node.Parent != nil && ast.IsAccessExpression(node.Parent) && node.Parent.Name() == node
 	if len(declarations) == 0 && isPropertyName {
 		if left := node.Parent.Expression(); left != nil {
-			if prop := c.GetPropertyOfType(c.GetTypeAtLocation(left), node.Text()); prop != nil {
+			if prop := c.GetPropertyOfType(c.GetTypeAtLocation(left), unique.Make(node.Text())); prop != nil {
 				declarations = prop.Declarations()
 			}
 		}

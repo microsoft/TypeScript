@@ -4,6 +4,7 @@ import (
 	"maps"
 	"slices"
 	"strings"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -134,8 +135,8 @@ func (c *Checker) GetExportsOfModule(symbol *ast.Symbol) []*ast.Symbol {
 
 func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb func(*ast.Symbol, string)) {
 	for key, exportedSymbol := range c.getExportsOfModule(moduleSymbol) {
-		if !isReservedMemberName(key) {
-			cb(exportedSymbol, key)
+		if !isReservedMemberName(key.Value()) {
+			cb(exportedSymbol, key.Value())
 		}
 	}
 
@@ -156,16 +157,16 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	}
 	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).members {
 		if c.isNamedMember(symbol, name) {
-			cb(symbol, name)
+			cb(symbol, name.Value())
 		}
 	}
 }
 
-func (c *Checker) IsValidPropertyAccess(node *ast.Node, propertyName string) bool {
+func (c *Checker) IsValidPropertyAccess(node *ast.Node, propertyName ast.SymbolName) bool {
 	return c.isValidPropertyAccess(node, propertyName)
 }
 
-func (c *Checker) isValidPropertyAccess(node *ast.Node, propertyName string) bool {
+func (c *Checker) isValidPropertyAccess(node *ast.Node, propertyName ast.SymbolName) bool {
 	switch node.Kind {
 	case ast.KindPropertyAccessExpression:
 		return c.isValidPropertyAccessWithType(node, node.Expression().Kind == ast.KindSuperKeyword, propertyName, c.getWidenedType(c.checkExpression(node.Expression())))
@@ -177,7 +178,7 @@ func (c *Checker) isValidPropertyAccess(node *ast.Node, propertyName string) boo
 	panic("Unexpected node kind in isValidPropertyAccess: " + node.Kind.String())
 }
 
-func (c *Checker) isValidPropertyAccessWithType(node *ast.Node, isSuper bool, propertyName string, t *Type) bool {
+func (c *Checker) isValidPropertyAccessWithType(node *ast.Node, isSuper bool, propertyName ast.SymbolName, t *Type) bool {
 	// Short-circuiting for improved performance.
 	if IsTypeAny(t) {
 		return true
@@ -292,7 +293,7 @@ func (c *Checker) getAugmentedPropertiesOfType(t *Type) []*ast.Symbol {
 	return c.getNamedMembers(propsByName, nil)
 }
 
-func (c *Checker) TryGetMemberInModuleExportsAndProperties(memberName string, moduleSymbol *ast.Symbol) *ast.Symbol {
+func (c *Checker) TryGetMemberInModuleExportsAndProperties(memberName ast.SymbolName, moduleSymbol *ast.Symbol) *ast.Symbol {
 	symbol := c.TryGetMemberInModuleExports(memberName, moduleSymbol)
 	if symbol != nil {
 		return symbol
@@ -310,7 +311,7 @@ func (c *Checker) TryGetMemberInModuleExportsAndProperties(memberName string, mo
 	return nil
 }
 
-func (c *Checker) TryGetMemberInModuleExports(memberName string, moduleSymbol *ast.Symbol) *ast.Symbol {
+func (c *Checker) TryGetMemberInModuleExports(memberName ast.SymbolName, moduleSymbol *ast.Symbol) *ast.Symbol {
 	symbolTable := c.getExportsOfModule(moduleSymbol)
 	return symbolTable[memberName]
 }
@@ -504,7 +505,7 @@ func (c *Checker) GetShorthandAssignmentValueSymbol(location *ast.Node) *ast.Sym
 * @param parameterName a name of the parameter to get the symbols for.
 * @return a tuple of two symbols
  */
-func (c *Checker) GetSymbolsOfParameterPropertyDeclaration(parameter *ast.Node /*ParameterPropertyDeclaration*/, parameterName string) (*ast.Symbol, *ast.Symbol) {
+func (c *Checker) GetSymbolsOfParameterPropertyDeclaration(parameter *ast.Node /*ParameterPropertyDeclaration*/, parameterName ast.SymbolName) (*ast.Symbol, *ast.Symbol) {
 	constructorDeclaration := parameter.Parent
 	classDeclaration := parameter.Parent.Parent
 
@@ -589,12 +590,12 @@ func (c *Checker) GetReferencesToSymbolInFile(
 ) []*ast.Node {
 	identifierText := symbol.Name()
 	var result []*ast.Node
-	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
+	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText.Value(), sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
 			continue
 		}
 		id := token.AsIdentifier()
-		if id.Text != identifierText {
+		if unique.Make(id.Text) != identifierText {
 			continue
 		}
 		refSymbol := c.GetSymbolAtLocation(token)
@@ -826,11 +827,11 @@ func (c *Checker) IsTypeInvalidDueToUnionDiscriminant(contextualType *Type, obj 
 		}
 		var name string
 		if nameType != nil && isTypeUsableAsPropertyName(nameType) {
-			name = getPropertyNameFromType(nameType)
+			name = getPropertyNameFromType(nameType).Value()
 		}
 		var expected *Type
 		if name != "" {
-			expected = c.getTypeOfPropertyOfType(contextualType, name)
+			expected = c.getTypeOfPropertyOfType(contextualType, unique.Make(name))
 		}
 		return expected != nil && isLiteralType(expected) && !c.isTypeAssignableTo(c.getTypeOfNode(property), expected)
 	})
@@ -976,30 +977,30 @@ func (c *Checker) GetContextualTypeForArrayLiteralAtPosition(contextualArrayType
 	)
 }
 
-var knownGenericTypeNames = map[string]struct{}{
-	"Array":            {},
-	"ArrayLike":        {},
-	"ReadonlyArray":    {},
-	"Promise":          {},
-	"PromiseLike":      {},
-	"Iterable":         {},
-	"IterableIterator": {},
-	"AsyncIterable":    {},
-	"Set":              {},
-	"WeakSet":          {},
-	"ReadonlySet":      {},
-	"Map":              {},
-	"WeakMap":          {},
-	"ReadonlyMap":      {},
-	"Partial":          {},
-	"Required":         {},
-	"Readonly":         {},
-	"Pick":             {},
-	"Omit":             {},
-	"NonNullable":      {},
+var knownGenericTypeNames = map[ast.SymbolName]struct{}{
+	unique.Make("Array"):            {},
+	unique.Make("ArrayLike"):        {},
+	unique.Make("ReadonlyArray"):    {},
+	unique.Make("Promise"):          {},
+	unique.Make("PromiseLike"):      {},
+	unique.Make("Iterable"):         {},
+	unique.Make("IterableIterator"): {},
+	unique.Make("AsyncIterable"):    {},
+	unique.Make("Set"):              {},
+	unique.Make("WeakSet"):          {},
+	unique.Make("ReadonlySet"):      {},
+	unique.Make("Map"):              {},
+	unique.Make("WeakMap"):          {},
+	unique.Make("ReadonlyMap"):      {},
+	unique.Make("Partial"):          {},
+	unique.Make("Required"):         {},
+	unique.Make("Readonly"):         {},
+	unique.Make("Pick"):             {},
+	unique.Make("Omit"):             {},
+	unique.Make("NonNullable"):      {},
 }
 
-func isKnownGenericTypeName(name string) bool {
+func isKnownGenericTypeName(name ast.SymbolName) bool {
 	_, exists := knownGenericTypeNames[name]
 	return exists
 }
@@ -1027,7 +1028,7 @@ func (c *Checker) GetPropertySymbolsFromContextualType(node *ast.Node, contextua
 		return nil
 	}
 	if contextualType.flags&TypeFlagsUnion == 0 {
-		if symbol := c.getPropertyOfType(contextualType, name); symbol != nil {
+		if symbol := c.getPropertyOfType(contextualType, unique.Make(name)); symbol != nil {
 			return []*ast.Symbol{symbol}
 		}
 		return nil
@@ -1039,17 +1040,17 @@ func (c *Checker) GetPropertySymbolsFromContextualType(node *ast.Node, contextua
 		})
 	}
 	discriminatedPropertySymbols := core.MapNonNil(filteredTypes, func(t *Type) *ast.Symbol {
-		return c.getPropertyOfType(t, name)
+		return c.getPropertyOfType(t, unique.Make(name))
 	})
 	if unionSymbolOk && (len(discriminatedPropertySymbols) == 0 || len(discriminatedPropertySymbols) == len(contextualType.Types())) {
-		if symbol := c.getPropertyOfType(contextualType, name); symbol != nil {
+		if symbol := c.getPropertyOfType(contextualType, unique.Make(name)); symbol != nil {
 			return []*ast.Symbol{symbol}
 		}
 	}
 	if len(filteredTypes) == 0 && len(discriminatedPropertySymbols) == 0 {
 		// Bad discriminant -- do again without discriminating
 		return core.MapNonNil(contextualType.Types(), func(t *Type) *ast.Symbol {
-			return c.getPropertyOfType(t, name)
+			return c.getPropertyOfType(t, unique.Make(name))
 		})
 	}
 	// by eliminating duplicates we might even end up with a single symbol
@@ -1070,7 +1071,7 @@ func (c *Checker) GetPropertySymbolOfDestructuringAssignment(location *ast.Node)
 	if ast.IsArrayLiteralOrObjectLiteralDestructuringPattern(location.Parent.Parent) {
 		// Get the type of the object or array literal and then look for property of given name in the type
 		if typeOfObjectLiteral := c.getTypeOfAssignmentPattern(location.Parent.Parent); typeOfObjectLiteral != nil {
-			return c.getPropertyOfType(typeOfObjectLiteral, location.Text())
+			return c.getPropertyOfType(typeOfObjectLiteral, unique.Make(location.Text()))
 		}
 	}
 	return nil

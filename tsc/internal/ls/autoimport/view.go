@@ -181,17 +181,17 @@ func (v *View) GetCompletions(prefix string, position lsproto.Position, forJSX b
 
 	type exportGroupKey struct {
 		target                     ExportID
-		name                       string
+		name                       ast.SymbolName
 		ambientModuleOrPackageName string
 	}
 	grouped := make(map[exportGroupKey][]*Export, len(results))
 outer:
 	for _, e := range results {
 		name := e.Name()
-		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+		if !scanner.IsIdentifierText(name.Value(), core.LanguageVariantStandard) {
 			continue
 		}
-		if forJSX && !(unicode.IsUpper(rune(name[0])) || e.IsRenameable()) {
+		if forJSX && !(unicode.IsUpper(rune(name.Value()[0])) || e.IsRenameable()) {
 			continue
 		}
 		target := e.ExportID

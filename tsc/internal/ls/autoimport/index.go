@@ -4,13 +4,15 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
+	"unique"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
 // Named is a constraint for types that can provide their name.
 type Named interface {
-	Name() string
+	Name() ast.SymbolName
 }
 
 // Index stores entries with an index mapping uppercase letters to entries whose name
@@ -36,10 +38,11 @@ func (idx *Index[T]) Find(name string, caseSensitive bool) []T {
 	}
 
 	var results []T
+	nameKey := unique.Make(name)
 	for _, entryIndex := range candidates {
 		entry := idx.entries[entryIndex]
 		entryName := entry.Name()
-		if (caseSensitive && entryName == name) || (!caseSensitive && strings.EqualFold(entryName, name)) {
+		if (caseSensitive && entryName == nameKey) || (!caseSensitive && strings.EqualFold(entryName.Value(), name)) {
 			results = append(results, entry)
 		}
 	}
@@ -85,7 +88,7 @@ func (idx *Index[T]) SearchWordPrefix(prefix string) []T {
 	for _, starts := range [][]int{nameStarts, wordStarts} {
 		for _, i := range starts {
 			entry := idx.entries[i]
-			if containsCharsInOrder(entry.Name(), prefix) {
+			if containsCharsInOrder(entry.Name().Value(), prefix) {
 				results = append(results, entry)
 			}
 		}
@@ -116,7 +119,7 @@ func (idx *Index[T]) insertAsWords(value T) {
 		idx.index = make(map[rune][]int)
 	}
 
-	name := value.Name()
+	name := value.Name().Value()
 	if len(name) == 0 {
 		panic("Cannot index entry with empty name")
 	}
