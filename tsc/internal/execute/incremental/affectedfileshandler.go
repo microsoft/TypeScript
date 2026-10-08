@@ -15,9 +15,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-// Starting every signature at once raises peak memory without finishing sooner.
-var signatureSemaphore = core.NewLimitedSemaphore(runtime.GOMAXPROCS(0))
-
 type dtsMayChange map[tspath.PathKey]FileEmitKind
 
 func (c dtsMayChange) addFileToAffectedFilesPendingEmit(filePath tspath.PathKey, emitKind FileEmitKind) {
@@ -70,7 +67,6 @@ func (h *affectedFilesHandler) removeDiagnosticsOfLibraryFiles() {
 }
 
 func (h *affectedFilesHandler) computeDtsSignature(file *ast.SourceFile) string {
-	defer signatureSemaphore.Acquire()()
 	var signature string
 	done := h.program.beginNestedEmit()
 	defer done()
@@ -367,7 +363,9 @@ func collectAllAffectedFiles(ctx context.Context, program *Program) {
 	}
 
 	handler := affectedFilesHandler{ctx: ctx, program: program}
-	wg := core.NewWorkGroup(handler.program.program.SingleThreaded())
+	// Starting every signature at once raises peak memory without finishing sooner.
+	concurrency := core.IfElse(program.program.SingleThreaded(), 1, runtime.GOMAXPROCS(0))
+	wg := core.NewWorkGroup(concurrency)
 	var result collections.SyncSet[*ast.SourceFile]
 	program.snapshot.changedFilesSet.Range(func(file tspath.PathKey) bool {
 		wg.Queue(func() {
@@ -383,7 +381,7 @@ func collectAllAffectedFiles(ctx context.Context, program *Program) {
 
 	// For all the affected files, get all the files that would need to change their dts or js files,
 	// update their diagnostics
-	wg = core.NewWorkGroup(program.program.SingleThreaded())
+	wg = core.NewWorkGroup(concurrency)
 	emitKind := GetFileEmitKind(program.snapshot.options)
 	result.Range(func(file *ast.SourceFile) bool {
 		// remove the cached semantic diagnostics and handle dts emit and js emit if needed

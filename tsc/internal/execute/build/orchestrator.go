@@ -260,7 +260,7 @@ func (o *Orchestrator) GenerateGraphReusingOldTasks() {
 func (o *Orchestrator) GenerateGraph(oldTasks *collections.SyncMap[tspath.PathKey, *BuildTask]) {
 	projects := o.opts.Command.ResolvedProjectPaths()
 	// Parse all config files in parallel
-	wg := core.NewWorkGroup(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue()))
 	o.createBuildTasks(oldTasks, projects, wg)
 	wg.RunAndWait()
 
@@ -940,7 +940,7 @@ func (o *Orchestrator) rangeTasks(order []*BuildTask, f func(path tspath.PathKey
 	if numRoutines == 1 {
 		runTask()
 	} else {
-		wg := core.NewWorkGroup(false)
+		wg := core.NewWorkGroup(0)
 		for range numRoutines {
 			wg.Queue(runTask)
 		}
