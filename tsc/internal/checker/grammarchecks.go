@@ -996,7 +996,7 @@ func (c *Checker) checkGrammarForInvalidExclamationToken(postfixToken *ast.Token
 }
 
 func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExpression, inDestructuring bool) bool {
-	seen := make(map[string]DeclarationMeaning)
+	seen := make(map[ast.SymbolName]DeclarationMeaning)
 
 	var properties []*ast.Node
 	if node.Properties != nil {
@@ -1111,9 +1111,9 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 				continue
 			}
 
-			existingKind := seen[effectiveName.Value()]
+			existingKind := seen[effectiveName]
 			if existingKind == 0 {
-				seen[effectiveName.Value()] = currentKind
+				seen[effectiveName] = currentKind
 			} else {
 				if (currentKind&DeclarationMeaningMethod != 0) && (existingKind&DeclarationMeaningMethod != 0) {
 					c.grammarErrorOnNode(name, diagnostics.Duplicate_identifier_0, scanner.GetTextOfNode(name))
@@ -1121,7 +1121,7 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 					c.grammarErrorOnNode(name, diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name, scanner.GetTextOfNode(name))
 				} else if (currentKind&DeclarationMeaningGetOrSetAccessor != 0) && (existingKind&DeclarationMeaningGetOrSetAccessor != 0) {
 					if existingKind != DeclarationMeaningGetOrSetAccessor && currentKind != existingKind {
-						seen[effectiveName.Value()] = currentKind | existingKind
+						seen[effectiveName] = currentKind | existingKind
 					} else {
 						return c.grammarErrorOnNode(name, diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name)
 					}

@@ -39,6 +39,25 @@ func TestSymbolNameInterning(t *testing.T) {
 	assert.Assert(t, new(ast.SymbolWithData).Initialize().Name() == unique.Make(""))
 }
 
+func TestPreinternedSymbolNames(t *testing.T) {
+	t.Parallel()
+	for text, name := range map[string]ast.SymbolName{
+		"":          ast.EmptySymbolName,
+		"prototype": ast.SymbolNamePrototype,
+		"Symbol":    ast.SymbolNameSymbol,
+		"JSX":       ast.SymbolNameJSX,
+		"iterator":  ast.SymbolNameIteratorProperty,
+		"Iterator":  ast.SymbolNameIterator,
+		"unknown":   ast.SymbolNameUnknown,
+	} {
+		t.Run(text, func(t *testing.T) {
+			t.Parallel()
+			assert.Assert(t, name == unique.Make(strings.Clone(text)))
+			assert.Equal(t, name.Value(), text)
+		})
+	}
+}
+
 func TestSymbolFieldsArePrivate(t *testing.T) {
 	t.Parallel()
 	for field := range reflect.TypeFor[ast.Symbol]().Fields() {

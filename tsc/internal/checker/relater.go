@@ -667,7 +667,7 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 		if target.symbol != nil && len(target.symbol.Declarations()) != 0 {
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(target.symbol.Declarations()[0], diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature))
 		}
-		if ast.GetFunctionFlags(node)&ast.FunctionFlagsAsync == 0 && c.getTypeOfPropertyOfType(sourceReturn, unique.Make("then")) == nil && c.checkTypeRelatedTo(c.createPromiseType(sourceReturn), targetReturn, relation, nil /*errorNode*/) {
+		if ast.GetFunctionFlags(node)&ast.FunctionFlagsAsync == 0 && c.getTypeOfPropertyOfType(sourceReturn, ast.SymbolNameThen) == nil && c.checkTypeRelatedTo(c.createPromiseType(sourceReturn), targetReturn, relation, nil /*errorNode*/) {
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(node, diagnostics.Did_you_mean_to_mark_this_function_as_async))
 		}
 		c.reportDiagnostic(diagnostic, diagnosticOutput)
@@ -723,7 +723,7 @@ func (c *Checker) isKnownProperty(targetType *Type, name ast.SymbolName, isCompa
 		// we should remove this exception.
 		if c.getPropertyOfObjectType(targetType, name) != nil ||
 			c.getApplicableIndexInfoForName(targetType, name) != nil ||
-			isLateBoundName(name.Value()) && c.getIndexInfoOfType(targetType, c.stringType) != nil ||
+			isLateBoundName(name) && c.getIndexInfoOfType(targetType, c.stringType) != nil ||
 			isComparingJsxAttributes && isHyphenatedJsxName(name.Value()) {
 			// For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
 			return true
@@ -1615,7 +1615,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 			}
 			if related == TernaryFalse {
 				if reportErrors {
-					errorReporter(diagnostics.Types_of_parameters_0_and_1_are_incompatible, c.getParameterNameAtPosition(source, i), c.getParameterNameAtPosition(target, i))
+					errorReporter(diagnostics.Types_of_parameters_0_and_1_are_incompatible, c.getParameterNameAtPosition(source, i).Value(), c.getParameterNameAtPosition(target, i).Value())
 				}
 				return TernaryFalse
 			}
@@ -1961,10 +1961,10 @@ func (c *Checker) isInstantiatedGenericParameter(signature *Signature, pos int) 
 	return t != nil && c.isGenericType(t)
 }
 
-func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) string {
+func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) ast.SymbolName {
 	paramCount := len(signature.parameters) - core.IfElse(signatureHasRestParameter(signature), 1, 0)
 	if pos < paramCount {
-		return signature.parameters[pos].Name().Value()
+		return signature.parameters[pos].Name()
 	}
 	restParameter := signature.parameters[paramCount]
 	restType := c.getTypeOfSymbol(restParameter)
@@ -1972,26 +1972,24 @@ func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) stri
 		index := pos - paramCount
 		return c.getTupleElementLabel(restType.TargetTupleType().elementInfos[index], restParameter, index)
 	}
-	return restParameter.Name().Value()
+	return restParameter.Name()
 }
 
-func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol *ast.Symbol, index int) string {
+func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol *ast.Symbol, index int) ast.SymbolName {
 	if elementInfo.labeledDeclaration != nil {
-		return elementInfo.labeledDeclaration.Name().Text()
+		return unique.Make(elementInfo.labeledDeclaration.Name().Text())
 	}
 	if restSymbol != nil && restSymbol.ValueDeclaration() != nil && ast.IsParameterDeclaration(restSymbol.ValueDeclaration()) {
 		return c.getTupleElementLabelFromBindingElement(restSymbol.ValueDeclaration(), index, elementInfo.flags)
 	}
-	var rootName string
+	rootName := ast.SymbolNameArg
 	if restSymbol != nil {
-		rootName = restSymbol.Name().Value()
-	} else {
-		rootName = "arg"
+		rootName = restSymbol.Name()
 	}
-	return rootName + "_" + strconv.Itoa(index)
+	return unique.Make(rootName.Value() + "_" + strconv.Itoa(index))
 }
 
-func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index int, elementFlags ElementFlags) string {
+func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index int, elementFlags ElementFlags) ast.SymbolName {
 	if node.Name() != nil {
 		switch node.Name().Kind {
 		case ast.KindIdentifier:
@@ -2009,9 +2007,9 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 				//   (x: number, y: number, ...z: number[], z_1: number) => ...
 				// which preserves rest elements of z but gives distinct numbers to fixed elements of 'z'
 				if elementFlags&ElementFlagsVariable != 0 {
-					return name
+					return unique.Make(name)
 				}
-				return name + "_" + strconv.Itoa(index)
+				return unique.Make(name + "_" + strconv.Itoa(index))
 			}
 			// given
 			//   (...[x]: [number]) => ...
@@ -2025,9 +2023,9 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 			//   (x_0: number) => ...
 			// which which numbers fixed elements of 'x' whose tuple element type is variable
 			if elementFlags&ElementFlagsFixed != 0 {
-				return name
+				return unique.Make(name)
 			}
-			return name + "_n"
+			return unique.Make(name + "_n")
 		case ast.KindArrayBindingPattern:
 			if hasDotDotDotToken(node) {
 				elements := node.Name().Elements()
@@ -2045,7 +2043,7 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 			}
 		}
 	}
-	return "arg_" + strconv.Itoa(index)
+	return unique.Make("arg_" + strconv.Itoa(index))
 }
 
 func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
@@ -4287,7 +4285,7 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 	numericNamesOnly := isTupleType(source) && isTupleType(target)
 	for _, targetProp := range excludeProperties(properties, excludedProperties) {
 		name := targetProp.Name()
-		if targetProp.Flags()&ast.SymbolFlagsPrototype == 0 && (!numericNamesOnly || isNumericLiteralName(name.Value()) || name == unique.Make("length")) && (!optionalsOnly || targetProp.Flags()&ast.SymbolFlagsOptional != 0) {
+		if targetProp.Flags()&ast.SymbolFlagsPrototype == 0 && (!numericNamesOnly || isNumericLiteralName(name.Value()) || name == ast.SymbolNameLength) && (!optionalsOnly || targetProp.Flags()&ast.SymbolFlagsOptional != 0) {
 			sourceProp := r.c.getPropertyOfType(source, name)
 			if sourceProp != nil && sourceProp != targetProp {
 				related := r.propertyRelatedTo(source, target, sourceProp, targetProp, r.c.getNonMissingTypeOfSymbol, reportErrors, intersectionState, r.relation == r.c.comparableRelation)

@@ -967,7 +967,7 @@ func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
 	// Note: we check for this here because this class may be merging into a module.  The
 	// module might have an exported variable called 'prototype'.  We can't allow that as
 	// that would clash with the built-in 'prototype' for the class.
-	prototypeSymbol := b.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsPrototype, unique.Make("prototype"))
+	prototypeSymbol := b.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsPrototype, ast.SymbolNamePrototype)
 	symbolExport := ast.GetExports(symbol)[prototypeSymbol.Name()]
 	if symbolExport != nil {
 		b.errorOnNode(symbolExport.Declarations()[0], diagnostics.Duplicate_identifier_0, ast.SymbolNameText(prototypeSymbol))
@@ -1613,8 +1613,8 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 			}
 		}
 		if b.file.CommonJSModuleIndicator != nil {
-			b.declareCommonJSVariable(unique.Make("module"))
-			b.declareCommonJSVariable(unique.Make("exports"))
+			b.declareCommonJSVariable(ast.SymbolNameModule)
+			b.declareCommonJSVariable(ast.SymbolNameExports)
 		}
 	}
 	if ast.IsSourceFile(node) && ast.IsExternalOrCommonJSModule(node.AsSourceFile()) || ast.IsAmbientModule(node) {
@@ -1631,13 +1631,13 @@ func (b *Binder) declareCommonJSVariable(name ast.SymbolName) {
 		symbol := b.newSymbol(ast.SymbolFlagsFunctionScopedVariable|ast.SymbolFlagsModuleExports, name)
 		symbol.SetDeclarations(b.newSingleDeclaration(b.file.AsNode()))
 		symbol.SetValueDeclaration(symbol.Declarations()[0])
-		if name == unique.Make("module") {
-			exportsProperty := b.newSymbol(ast.SymbolFlagsModuleExports|ast.SymbolFlagsProperty, unique.Make("exports"))
+		if name == ast.SymbolNameModule {
+			exportsProperty := b.newSymbol(ast.SymbolFlagsModuleExports|ast.SymbolFlagsProperty, ast.SymbolNameExports)
 			exportsProperty.SetDeclarations(symbol.Declarations())
 			exportsProperty.SetValueDeclaration(symbol.ValueDeclaration())
 			exportsProperty.SetParent(symbol)
 			symbol.SetMembers(make(ast.SymbolTable, 1))
-			symbol.Members()[unique.Make("exports")] = exportsProperty
+			symbol.Members()[ast.SymbolNameExports] = exportsProperty
 		}
 		locals[name] = symbol
 	}

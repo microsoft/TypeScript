@@ -1017,7 +1017,7 @@ func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
 }
 
 func IsKnownSymbol(symbol *ast.Symbol) bool {
-	return isLateBoundName(symbol.Name().Value())
+	return isLateBoundName(symbol.Name())
 }
 
 func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool {
@@ -1027,7 +1027,8 @@ func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool {
 	return strings.HasPrefix(symbol.Name().Value(), ast.InternalSymbolNamePrefix+"#")
 }
 
-func isLateBoundName(name string) bool {
+func isLateBoundName(symbolName ast.SymbolName) bool {
+	name := symbolName.Value()
 	return len(name) >= 2 && name[0] == '\xfe' && name[1] == '@'
 }
 
@@ -1336,29 +1337,29 @@ type FeatureMapEntry struct {
 
 var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
 	return map[ast.SymbolName][]FeatureMapEntry{
-		unique.Make("Array"): {
+		ast.SymbolNameArray: {
 			{lib: "es2015", props: []string{"find", "findIndex", "fill", "copyWithin", "entries", "keys", "values"}},
 			{lib: "es2016", props: []string{"includes"}},
 			{lib: "es2019", props: []string{"flat", "flatMap"}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Iterator"): {
+		ast.SymbolNameIterator: {
 			{lib: "es2015", props: []string{}},
 		},
-		unique.Make("IteratorConstructor"): {
+		ast.SymbolNameIteratorConstructor: {
 			{lib: "es2026", props: []string{"concat"}},
 		},
-		unique.Make("RawJSON"): {
+		ast.SymbolNameRawJSON: {
 			{lib: "es2026", props: []string{}},
 		},
-		unique.Make("JSON"): {
+		ast.SymbolNameJSON: {
 			{lib: "es2026", props: []string{"isRawJSON", "rawJSON"}},
 		},
-		unique.Make("AsyncIterator"): {
+		ast.SymbolNameAsyncIterator: {
 			{lib: "es2015", props: []string{}},
 		},
-		unique.Make("ArrayBuffer"): {
+		ast.SymbolNameArrayBuffer: {
 			{lib: "es2024", props: []string{
 				"maxByteLength",
 				"resizable",
@@ -1368,7 +1369,7 @@ var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
 				"transferToFixedLength",
 			}},
 		},
-		unique.Make("Atomics"): {
+		ast.SymbolNameAtomics: {
 			{lib: "es2017", props: []string{
 				"add",
 				"and",
@@ -1387,7 +1388,7 @@ var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
 				"waitAsync",
 			}},
 		},
-		unique.Make("SharedArrayBuffer"): {
+		ast.SymbolNameSharedArrayBuffer: {
 			{lib: "es2017", props: []string{
 				"byteLength",
 				"slice",
@@ -1398,59 +1399,59 @@ var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
 				"grow",
 			}},
 		},
-		unique.Make("AsyncIterable"): {
+		ast.SymbolNameAsyncIterable: {
 			{lib: "es2018", props: []string{}},
 		},
-		unique.Make("AsyncIterableIterator"): {
+		ast.SymbolNameAsyncIterableIterator: {
 			{lib: "es2018", props: []string{}},
 		},
-		unique.Make("AsyncGenerator"): {
+		ast.SymbolNameAsyncGenerator: {
 			{lib: "es2018", props: []string{}},
 		},
-		unique.Make("AsyncGeneratorFunction"): {
+		ast.SymbolNameAsyncGeneratorFunction: {
 			{lib: "es2018", props: []string{}},
 		},
-		unique.Make("RegExp"): {
+		ast.SymbolNameRegExp: {
 			{lib: "es2015", props: []string{"flags", "sticky", "unicode"}},
 			{lib: "es2018", props: []string{"dotAll"}},
 			{lib: "es2024", props: []string{"unicodeSets"}},
 		},
-		unique.Make("RegExpConstructor"): {
+		ast.SymbolNameRegExpConstructor: {
 			{lib: "es2025", props: []string{"escape"}},
 		},
-		unique.Make("Reflect"): {
+		ast.SymbolNameReflect: {
 			{lib: "es2015", props: []string{"apply", "construct", "defineProperty", "deleteProperty", "get", "getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"}},
 		},
-		unique.Make("ArrayConstructor"): {
+		ast.SymbolNameArrayConstructor: {
 			{lib: "es2015", props: []string{"from", "of"}},
 			{lib: "es2026", props: []string{"fromAsync"}},
 		},
-		unique.Make("ObjectConstructor"): {
+		ast.SymbolNameObjectConstructor: {
 			{lib: "es2015", props: []string{"assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"}},
 			{lib: "es2017", props: []string{"values", "entries", "getOwnPropertyDescriptors"}},
 			{lib: "es2019", props: []string{"fromEntries"}},
 			{lib: "es2022", props: []string{"hasOwn"}},
 			{lib: "es2024", props: []string{"groupBy"}},
 		},
-		unique.Make("NumberConstructor"): {
+		ast.SymbolNameNumberConstructor: {
 			{lib: "es2015", props: []string{"isFinite", "isInteger", "isNaN", "isSafeInteger", "parseFloat", "parseInt"}},
 		},
-		unique.Make("Math"): {
+		ast.SymbolNameMath: {
 			{lib: "es2015", props: []string{"clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"}},
 			{lib: "es2025", props: []string{"f16round"}},
 			{lib: "es2026", props: []string{"sumPrecise"}},
 		},
-		unique.Make("Map"): {
+		ast.SymbolNameMap: {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
 		},
-		unique.Make("MapConstructor"): {
+		ast.SymbolNameMapConstructor: {
 			{lib: "es2024", props: []string{"groupBy"}},
 		},
-		unique.Make("Set"): {
+		ast.SymbolNameSet: {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 			{lib: "es2025", props: []string{
 				"union",
@@ -1462,28 +1463,28 @@ var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
 				"isDisjointFrom",
 			}},
 		},
-		unique.Make("PromiseConstructor"): {
+		ast.SymbolNamePromiseConstructor: {
 			{lib: "es2015", props: []string{"all", "race", "reject", "resolve"}},
 			{lib: "es2020", props: []string{"allSettled"}},
 			{lib: "es2021", props: []string{"any"}},
 			{lib: "es2024", props: []string{"withResolvers"}},
 			{lib: "es2025", props: []string{"try"}},
 		},
-		unique.Make("Symbol"): {
+		ast.SymbolNameSymbol: {
 			{lib: "es2015", props: []string{"for", "keyFor"}},
 			{lib: "es2019", props: []string{"description"}},
 		},
-		unique.Make("WeakMap"): {
+		ast.SymbolNameWeakMap: {
 			{lib: "es2015", props: []string{}},
 			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
 		},
-		unique.Make("WeakSet"): {
+		ast.SymbolNameWeakSet: {
 			{lib: "es2015", props: []string{}},
 		},
-		unique.Make("String"): {
+		ast.SymbolNameString: {
 			{lib: "es2015", props: []string{"codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"}},
 			{lib: "es2017", props: []string{"padStart", "padEnd"}},
 			{lib: "es2019", props: []string{"trimStart", "trimEnd", "trimLeft", "trimRight"}},
@@ -1492,33 +1493,33 @@ var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2024", props: []string{"isWellFormed", "toWellFormed"}},
 		},
-		unique.Make("StringConstructor"): {
+		ast.SymbolNameStringConstructor: {
 			{lib: "es2015", props: []string{"fromCodePoint", "raw"}},
 		},
-		unique.Make("DateTimeFormat"): {
+		ast.SymbolNameDateTimeFormat: {
 			{lib: "es2017", props: []string{"formatToParts"}},
 		},
-		unique.Make("Promise"): {
+		ast.SymbolNamePromise: {
 			{lib: "es2015", props: []string{}},
 			{lib: "es2018", props: []string{"finally"}},
 		},
-		unique.Make("RegExpMatchArray"): {
+		ast.SymbolNameRegExpMatchArray: {
 			{lib: "es2018", props: []string{"groups"}},
 		},
-		unique.Make("RegExpExecArray"): {
+		ast.SymbolNameRegExpExecArray: {
 			{lib: "es2018", props: []string{"groups"}},
 		},
-		unique.Make("Intl"): {
+		ast.SymbolNameIntl: {
 			{lib: "es2018", props: []string{"PluralRules"}},
 			{lib: "es2020", props: []string{"RelativeTimeFormat", "Locale", "DisplayNames"}},
 			{lib: "es2021", props: []string{"ListFormat", "DateTimeFormat"}},
 			{lib: "es2022", props: []string{"Segmenter"}},
 			{lib: "es2025", props: []string{"DurationFormat"}},
 		},
-		unique.Make("NumberFormat"): {
+		ast.SymbolNameNumberFormat: {
 			{lib: "es2018", props: []string{"formatToParts"}},
 		},
-		unique.Make("SymbolConstructor"): {
+		ast.SymbolNameSymbolConstructor: {
 			{lib: "es2020", props: []string{"matchAll"}},
 			{lib: "esnext", props: []string{
 				"metadata",
@@ -1526,82 +1527,82 @@ var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
 				"asyncDispose",
 			}},
 		},
-		unique.Make("DataView"): {
+		ast.SymbolNameDataView: {
 			{lib: "es2020", props: []string{"setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"}},
 			{lib: "es2025", props: []string{"setFloat16", "getFloat16"}},
 		},
-		unique.Make("BigInt"): {
+		ast.SymbolNameBigInt: {
 			{lib: "es2020", props: []string{}},
 		},
-		unique.Make("RelativeTimeFormat"): {
+		ast.SymbolNameRelativeTimeFormat: {
 			{lib: "es2020", props: []string{"format", "formatToParts", "resolvedOptions"}},
 		},
-		unique.Make("Int8Array"): {
+		ast.SymbolNameInt8Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Uint8Array"): {
+		ast.SymbolNameUint8Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 			{lib: "es2026", props: []string{"toBase64", "setFromBase64", "toHex", "setFromHex"}},
 		},
-		unique.Make("Uint8ClampedArray"): {
+		ast.SymbolNameUint8ClampedArray: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Int16Array"): {
+		ast.SymbolNameInt16Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Uint16Array"): {
+		ast.SymbolNameUint16Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Int32Array"): {
+		ast.SymbolNameInt32Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Uint32Array"): {
+		ast.SymbolNameUint32Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Float16Array"): {
+		ast.SymbolNameFloat16Array: {
 			{lib: "es2025", props: []string{}},
 		},
-		unique.Make("Float32Array"): {
+		ast.SymbolNameFloat32Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Float64Array"): {
+		ast.SymbolNameFloat64Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("BigInt64Array"): {
+		ast.SymbolNameBigInt64Array: {
 			{lib: "es2020", props: []string{}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("BigUint64Array"): {
+		ast.SymbolNameBigUint64Array: {
 			{lib: "es2020", props: []string{}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		unique.Make("Error"): {
+		ast.SymbolNameError: {
 			{lib: "es2022", props: []string{"cause"}},
 		},
-		unique.Make("ErrorConstructor"): {
+		ast.SymbolNameErrorConstructor: {
 			{lib: "es2026", props: []string{"isError"}},
 		},
-		unique.Make("Uint8ArrayConstructor"): {
+		ast.SymbolNameUint8ArrayConstructor: {
 			{lib: "es2026", props: []string{"fromBase64", "fromHex"}},
 		},
-		unique.Make("DisposableStack"): {
+		ast.SymbolNameDisposableStack: {
 			{lib: "esnext", props: []string{}},
 		},
-		unique.Make("AsyncDisposableStack"): {
+		ast.SymbolNameAsyncDisposableStack: {
 			{lib: "esnext", props: []string{}},
 		},
-		unique.Make("Date"): {
+		ast.SymbolNameDate: {
 			{lib: "esnext", props: []string{"toTemporalInstant"}},
 		},
 	}
@@ -1675,7 +1676,8 @@ func getAnyImportSyntax(node *ast.Node) *ast.Node {
 // A reserved member name consists of the byte 0xFE (which is an invalid UTF-8 encoding) followed by one or more
 // characters where the first character is not '@' or '#'. The '@' character indicates that the name is denoted by
 // a well known ES Symbol instance and the '#' character indicates that the name is a PrivateIdentifier.
-func isReservedMemberName(name string) bool {
+func isReservedMemberName(symbolName ast.SymbolName) bool {
+	name := symbolName.Value()
 	return len(name) >= 2 && name[0] == '\xFE' && name[1] != '@' && name[1] != '#'
 }
 
@@ -1691,7 +1693,7 @@ func introducesArgumentsExoticObject(node *ast.Node) bool {
 func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	var result []*ast.Symbol
 	for id, symbol := range symbols {
-		if !isReservedMemberName(id.Value()) {
+		if !isReservedMemberName(id) {
 			result = append(result, symbol)
 		}
 	}

@@ -3,6 +3,7 @@ package autoimport
 import (
 	"slices"
 	"unicode"
+	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -78,14 +79,18 @@ const (
 )
 
 func (v *View) Search(query string, kind QueryKind) []*Export {
+	var queryName ast.SymbolName
+	if kind != QueryKindWordPrefix {
+		queryName = unique.Make(query)
+	}
 	searchFn := func(bucket *RegistryBucket) []*Export {
 		switch kind {
 		case QueryKindWordPrefix:
 			return bucket.Index.SearchWordPrefix(query)
 		case QueryKindExactMatch:
-			return bucket.Index.Find(query, true)
+			return bucket.Index.Find(queryName, true)
 		case QueryKindCaseInsensitiveMatch:
-			return bucket.Index.Find(query, false)
+			return bucket.Index.Find(queryName, false)
 		default:
 			panic("unreachable")
 		}

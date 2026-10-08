@@ -584,7 +584,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			return nil
 		}
 		// Similarly, skip past the symbol for 'export ='
-		if importedSymbol.Name() == unique.Make("export=") {
+		if importedSymbol.Name() == ast.InternalSymbolNameExportEquals {
 			importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker)
 			if importedSymbol == nil {
 				return nil

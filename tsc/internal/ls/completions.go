@@ -4252,15 +4252,15 @@ func isSnippetScope(scopeNode *ast.Node) bool {
 func isProbablyGlobalType(t *checker.Type, file *ast.SourceFile, typeChecker *checker.Checker) bool {
 	// The type of `self` and `window` is the same in lib.dom.d.ts, but `window` does not exist in
 	// lib.webworker.d.ts, so checking against `self` is also a check against `window` when it exists.
-	selfSymbol := typeChecker.GetGlobalSymbol(unique.Make("self"), ast.SymbolFlagsValue, nil /*diagnostic*/)
+	selfSymbol := typeChecker.GetGlobalSymbol(ast.SymbolNameSelf, ast.SymbolFlagsValue, nil /*diagnostic*/)
 	if selfSymbol != nil && typeChecker.GetTypeOfSymbolAtLocation(selfSymbol, file.AsNode()) == t {
 		return true
 	}
-	globalSymbol := typeChecker.GetGlobalSymbol(unique.Make("global"), ast.SymbolFlagsValue, nil /*diagnostic*/)
+	globalSymbol := typeChecker.GetGlobalSymbol(ast.SymbolNameGlobal, ast.SymbolFlagsValue, nil /*diagnostic*/)
 	if globalSymbol != nil && typeChecker.GetTypeOfSymbolAtLocation(globalSymbol, file.AsNode()) == t {
 		return true
 	}
-	globalThisSymbol := typeChecker.GetGlobalSymbol(unique.Make("globalThis"), ast.SymbolFlagsValue, nil /*diagnostic*/)
+	globalThisSymbol := typeChecker.GetGlobalSymbol(ast.SymbolNameGlobalThis, ast.SymbolFlagsValue, nil /*diagnostic*/)
 	if globalThisSymbol != nil && typeChecker.GetTypeOfSymbolAtLocation(globalThisSymbol, file.AsNode()) == t {
 		return true
 	}

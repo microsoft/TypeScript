@@ -52,16 +52,16 @@ var JsxNames = struct {
 	IntrinsicClassAttributes               ast.SymbolName
 	LibraryManagedAttributes               ast.SymbolName
 }{
-	JSX:                                    unique.Make("JSX"),
-	IntrinsicElements:                      unique.Make("IntrinsicElements"),
-	ElementClass:                           unique.Make("ElementClass"),
-	ElementAttributesPropertyNameContainer: unique.Make("ElementAttributesProperty"),
-	ElementChildrenAttributeNameContainer:  unique.Make("ElementChildrenAttribute"),
-	Element:                                unique.Make("Element"),
-	ElementType:                            unique.Make("ElementType"),
-	IntrinsicAttributes:                    unique.Make("IntrinsicAttributes"),
-	IntrinsicClassAttributes:               unique.Make("IntrinsicClassAttributes"),
-	LibraryManagedAttributes:               unique.Make("LibraryManagedAttributes"),
+	JSX:                                    ast.SymbolNameJSX,
+	IntrinsicElements:                      ast.SymbolNameIntrinsicElements,
+	ElementClass:                           ast.SymbolNameElementClass,
+	ElementAttributesPropertyNameContainer: ast.SymbolNameElementAttributesProperty,
+	ElementChildrenAttributeNameContainer:  ast.SymbolNameElementChildrenAttribute,
+	Element:                                ast.SymbolNameElement,
+	ElementType:                            ast.SymbolNameElementType,
+	IntrinsicAttributes:                    ast.SymbolNameIntrinsicAttributes,
+	IntrinsicClassAttributes:               ast.SymbolNameIntrinsicClassAttributes,
+	LibraryManagedAttributes:               ast.SymbolNameLibraryManagedAttributes,
 }
 
 var ReactNames = struct {
@@ -308,7 +308,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 		containingElement := node.Parent.Parent // Containing JSXElement
 		childrenPropName := c.getJsxElementChildrenPropertyName(c.getJsxNamespaceAt(node))
 		if childrenPropName == ast.InternalSymbolNameMissing {
-			childrenPropName = unique.Make("children")
+			childrenPropName = ast.SymbolNameChildren
 		}
 		childrenNameType := c.getStringLiteralType(childrenPropName.Value())
 		childrenTargetType := c.getIndexedAccessType(target, childrenNameType)
@@ -487,10 +487,10 @@ func (c *Checker) getSuggestedSymbolForNonexistentJSXAttribute(name ast.SymbolNa
 	properties := c.getPropertiesOfType(containingType)
 	var jsxSpecific *ast.Symbol
 	switch name {
-	case unique.Make("for"):
-		jsxSpecific = core.Find(properties, func(x *ast.Symbol) bool { return x.Name() == unique.Make("htmlFor") })
-	case unique.Make("class"):
-		jsxSpecific = core.Find(properties, func(x *ast.Symbol) bool { return x.Name() == unique.Make("className") })
+	case ast.SymbolNameFor:
+		jsxSpecific = core.Find(properties, func(x *ast.Symbol) bool { return x.Name() == ast.SymbolNameHtmlFor })
+	case ast.SymbolNameClass:
+		jsxSpecific = core.Find(properties, func(x *ast.Symbol) bool { return x.Name() == ast.SymbolNameClassName })
 	}
 	if jsxSpecific != nil {
 		return jsxSpecific
@@ -950,7 +950,7 @@ func (c *Checker) getJsxPropsTypeFromClassType(sig *Signature, context *ast.Node
 	case ast.EmptySymbolName:
 		attributesType = c.getReturnTypeOfSignature(sig)
 	default:
-		attributesType = c.getJsxPropsTypeForSignatureFromMember(sig, forcedLookupLocation.Value())
+		attributesType = c.getJsxPropsTypeForSignatureFromMember(sig, forcedLookupLocation)
 		if attributesType == nil && len(context.Attributes().Properties()) != 0 {
 			// There is no property named 'props' on this instance type
 			c.error(context, diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, forcedLookupLocation.Value())
@@ -987,7 +987,7 @@ func (c *Checker) getJsxPropsTypeFromClassType(sig *Signature, context *ast.Node
 	return apparentAttributesType
 }
 
-func (c *Checker) getJsxPropsTypeForSignatureFromMember(sig *Signature, forcedLookupLocation string) *Type {
+func (c *Checker) getJsxPropsTypeForSignatureFromMember(sig *Signature, forcedLookupLocation ast.SymbolName) *Type {
 	if sig.composite != nil {
 		// JSX Elements using the legacy `props`-field based lookup (eg, react class components) need to treat the `props` member as an input
 		// instead of an output position when resolving the signature. We need to go back to the input signatures of the composite signature,
@@ -1000,7 +1000,7 @@ func (c *Checker) getJsxPropsTypeForSignatureFromMember(sig *Signature, forcedLo
 			if IsTypeAny(instance) {
 				return instance
 			}
-			propType := c.getTypeOfPropertyOfType(instance, unique.Make(forcedLookupLocation))
+			propType := c.getTypeOfPropertyOfType(instance, forcedLookupLocation)
 			if propType == nil {
 				return nil
 			}
@@ -1013,7 +1013,7 @@ func (c *Checker) getJsxPropsTypeForSignatureFromMember(sig *Signature, forcedLo
 	if IsTypeAny(instanceType) {
 		return instanceType
 	}
-	return c.getTypeOfPropertyOfType(instanceType, unique.Make(forcedLookupLocation))
+	return c.getTypeOfPropertyOfType(instanceType, forcedLookupLocation)
 }
 
 func (c *Checker) getJsxManagedAttributesFromLocatedAttributes(context *ast.Node, ns *ast.Symbol, attributesType *Type) *Type {
@@ -1078,7 +1078,7 @@ func (c *Checker) getJsxElementPropertiesName(jsxNamespace *ast.Symbol) ast.Symb
 func (c *Checker) getJsxElementChildrenPropertyName(jsxNamespace *ast.Symbol) ast.SymbolName {
 	if c.compilerOptions.Jsx == core.JsxEmitReactJSX || c.compilerOptions.Jsx == core.JsxEmitReactJSXDev {
 		// In these JsxEmit modes the children property is fixed to 'children'
-		return unique.Make("children")
+		return ast.SymbolNameChildren
 	}
 	return c.getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer, jsxNamespace)
 }
@@ -1178,7 +1178,7 @@ func (c *Checker) createSignatureForJSXIntrinsic(node *ast.Node, result *Type) *
 	}
 	// returnNode := typeSymbol && c.nodeBuilder.symbolToEntityName(typeSymbol, ast.SymbolFlagsType, node)
 	// declaration := factory.createFunctionTypeNode(nil, []ParameterDeclaration{factory.createParameterDeclaration(nil, nil /*dotDotDotToken*/, "props", nil /*questionToken*/, c.nodeBuilder.typeToTypeNode(result, node))}, ifElse(returnNode != nil, factory.createTypeReferenceNode(returnNode, nil /*typeArguments*/), factory.createKeywordTypeNode(ast.KindAnyKeyword)))
-	parameterSymbol := c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, unique.Make("props"))
+	parameterSymbol := c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, ast.SymbolNameProps)
 	c.valueSymbolLinks.Get(parameterSymbol).resolvedType = result
 	return c.newSignature(SignatureFlagsNone, nil, nil, nil, []*ast.Symbol{parameterSymbol}, elementType, nil, 1)
 }

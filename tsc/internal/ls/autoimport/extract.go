@@ -453,7 +453,7 @@ func getSyntax(symbol *ast.Symbol) ExportSyntax {
 
 func isUnusableName(name ast.SymbolName) bool {
 	return name == (ast.SymbolName{}) || name == ast.EmptySymbolName ||
-		name == unique.Make("_default") ||
+		name == ast.SymbolNameUnderscoreDefault ||
 		name == ast.InternalSymbolNameExportStar ||
 		name == ast.InternalSymbolNameDefault ||
 		name == ast.InternalSymbolNameExportEquals

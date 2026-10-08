@@ -1193,7 +1193,7 @@ func (tx *DeclarationTransformer) tryGetNameOfAssignedExpression(unwrapped *ast.
 		nameText = unwrapped.Text()
 	}
 	if nameText != "" && nameText != "default" {
-		if tx.resolver.IsNameResolvable(tx.enclosingDeclaration, nameText) {
+		if tx.resolver.IsNameResolvable(tx.enclosingDeclaration, unique.Make(nameText)) {
 			// create a unique name that shares the same text as its' base
 			nameNode = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 		} else {
@@ -2788,7 +2788,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	exportName := tx.Factory().NewIdentifier(property)
 	localName := tx.tryGetNameOfAssignedExpression(node.AsNode())
-	if localName == nil && !tx.resolver.IsNameResolvable(tx.enclosingDeclaration, property) && !ast.IsNonContextualKeyword(scanner.StringToToken(exportName.Text())) {
+	if localName == nil && !tx.resolver.IsNameResolvable(tx.enclosingDeclaration, unique.Make(property)) && !ast.IsNonContextualKeyword(scanner.StringToToken(exportName.Text())) {
 		// use exportName as localName if there won't be any conflicts or keyword issues
 		localName = exportName
 	}

@@ -4,7 +4,6 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -23,11 +22,12 @@ type Index[T Named] struct {
 	index   map[rune][]int
 }
 
-func (idx *Index[T]) Find(name string, caseSensitive bool) []T {
-	if len(idx.entries) == 0 || len(name) == 0 {
+func (idx *Index[T]) Find(name ast.SymbolName, caseSensitive bool) []T {
+	if len(idx.entries) == 0 || name == ast.EmptySymbolName {
 		return nil
 	}
-	firstRune := core.FirstResult(utf8.DecodeRuneInString(name))
+	nameText := name.Value()
+	firstRune := core.FirstResult(utf8.DecodeRuneInString(nameText))
 	if firstRune == utf8.RuneError {
 		return nil
 	}
@@ -38,11 +38,10 @@ func (idx *Index[T]) Find(name string, caseSensitive bool) []T {
 	}
 
 	var results []T
-	nameKey := unique.Make(name)
 	for _, entryIndex := range candidates {
 		entry := idx.entries[entryIndex]
 		entryName := entry.Name()
-		if (caseSensitive && entryName == nameKey) || (!caseSensitive && strings.EqualFold(entryName.Value(), name)) {
+		if (caseSensitive && entryName == name) || (!caseSensitive && strings.EqualFold(entryName.Value(), nameText)) {
 			results = append(results, entry)
 		}
 	}

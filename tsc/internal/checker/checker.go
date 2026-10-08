@@ -360,11 +360,11 @@ const (
 )
 
 var intrinsicTypeKinds = map[ast.SymbolName]IntrinsicTypeKind{
-	unique.Make("Uppercase"):    IntrinsicTypeKindUppercase,
-	unique.Make("Lowercase"):    IntrinsicTypeKindLowercase,
-	unique.Make("Capitalize"):   IntrinsicTypeKindCapitalize,
-	unique.Make("Uncapitalize"): IntrinsicTypeKindUncapitalize,
-	unique.Make("NoInfer"):      IntrinsicTypeKindNoInfer,
+	ast.SymbolNameUppercase:    IntrinsicTypeKindUppercase,
+	ast.SymbolNameLowercase:    IntrinsicTypeKindLowercase,
+	ast.SymbolNameCapitalize:   IntrinsicTypeKindCapitalize,
+	ast.SymbolNameUncapitalize: IntrinsicTypeKindUncapitalize,
+	ast.SymbolNameNoInfer:      IntrinsicTypeKindNoInfer,
 }
 
 type MappedTypeModifiers uint32
@@ -965,14 +965,14 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.reverseMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.reverseHomomorphicMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.iterationTypesCache = make(map[IterationTypesKey]IterationTypes)
-	c.undefinedSymbol = c.newSymbol(ast.SymbolFlagsProperty, unique.Make("undefined"))
-	c.argumentsSymbol = c.newSymbol(ast.SymbolFlagsProperty, unique.Make("arguments"))
-	c.requireSymbol = c.newSymbol(ast.SymbolFlagsProperty, unique.Make("require"))
-	c.unknownSymbol = c.newSymbol(ast.SymbolFlagsProperty, unique.Make("unknown"))
+	c.undefinedSymbol = c.newSymbol(ast.SymbolFlagsProperty, ast.SymbolNameUndefined)
+	c.argumentsSymbol = c.newSymbol(ast.SymbolFlagsProperty, ast.SymbolNameArguments)
+	c.requireSymbol = c.newSymbol(ast.SymbolFlagsProperty, ast.SymbolNameRequire)
+	c.unknownSymbol = c.newSymbol(ast.SymbolFlagsProperty, ast.SymbolNameUnknown)
 	c.unresolvedSymbols = make(ast.SymbolTable)
 	c.errorTypes = make(map[CacheHashKey]*Type)
 	c.moduleSymbols = make(map[*ast.Node]*ast.Symbol)
-	c.globalThisSymbol = c.newSymbolEx(ast.SymbolFlagsModule, unique.Make("globalThis"), ast.CheckFlagsReadonly)
+	c.globalThisSymbol = c.newSymbolEx(ast.SymbolFlagsModule, ast.SymbolNameGlobalThis, ast.CheckFlagsReadonly)
 	c.globalThisSymbol.SetExports(c.globals)
 	c.globals[c.globalThisSymbol.Name()] = c.globalThisSymbol
 	c.resolveName = c.createNameResolver().Resolve
@@ -1051,7 +1051,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.markerSuperTypeForCheck = c.newTypeParameter(nil)
 	c.markerSubTypeForCheck = c.newTypeParameter(nil)
 	c.markerSubTypeForCheck.AsTypeParameter().constraint = c.markerSuperTypeForCheck
-	c.noTypePredicate = &TypePredicate{kind: TypePredicateKindIdentifier, parameterIndex: 0, parameterName: unique.Make("<<unresolved>>"), t: c.anyType}
+	c.noTypePredicate = &TypePredicate{kind: TypePredicateKindIdentifier, parameterIndex: 0, parameterName: ast.SymbolNameUnresolved, t: c.anyType}
 	c.anySignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.anyType, nil, 0)
 	c.unknownSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.errorType, nil, 0)
 	c.resolvingSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.anyType, nil, 0)
@@ -1073,57 +1073,57 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.identityRelation = &Relation{}
 	c.enumRelation = make(map[EnumRelationKey]RelationComparisonResult)
 	c.moduleImportAttributesTypes = make(map[*ast.Symbol]*Type)
-	c.getGlobalESSymbolType = c.getGlobalTypeResolver(unique.Make("Symbol"), 0 /*arity*/, false /*reportErrors*/)
-	c.getGlobalBigIntType = c.getGlobalTypeResolver(unique.Make("BigInt"), 0 /*arity*/, false /*reportErrors*/)
-	c.getGlobalImportMetaType = c.getGlobalTypeResolver(unique.Make("ImportMeta"), 0 /*arity*/, true /*reportErrors*/)
-	c.getGlobalImportAttributesType = c.getGlobalTypeResolver(unique.Make("ImportAttributes"), 0 /*arity*/, false /*reportErrors*/)
-	c.getGlobalImportAttributesTypeChecked = c.getGlobalTypeResolver(unique.Make("ImportAttributes"), 0 /*arity*/, true /*reportErrors*/)
-	c.getGlobalNonNullableTypeAliasOrNil = c.getGlobalTypeAliasResolver(unique.Make("NonNullable"), 1 /*arity*/, false /*reportErrors*/)
-	c.getGlobalExtractSymbol = c.getGlobalTypeAliasResolver(unique.Make("Extract"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalDisposableType = c.getGlobalTypeResolver(unique.Make("Disposable"), 0 /*arity*/, true /*reportErrors*/)
-	c.getGlobalAsyncDisposableType = c.getGlobalTypeResolver(unique.Make("AsyncDisposable"), 0 /*arity*/, true /*reportErrors*/)
-	c.getGlobalAwaitedSymbol = c.getGlobalTypeAliasResolver(unique.Make("Awaited"), 1 /*arity*/, true /*reportErrors*/)
-	c.getGlobalAwaitedSymbolOrNil = c.getGlobalTypeAliasResolver(unique.Make("Awaited"), 1 /*arity*/, false /*reportErrors*/)
-	c.getGlobalNaNSymbolOrNil = c.getGlobalValueSymbolResolver(unique.Make("NaN"), false /*reportErrors*/)
-	c.getGlobalRecordSymbol = c.getGlobalTypeAliasResolver(unique.Make("Record"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalTemplateStringsArrayType = c.getGlobalTypeResolver(unique.Make("TemplateStringsArray"), 0 /*arity*/, true /*reportErrors*/)
-	c.getGlobalESSymbolConstructorSymbolOrNil = c.getGlobalValueSymbolResolver(unique.Make("Symbol"), false /*reportErrors*/)
-	c.getGlobalESSymbolConstructorTypeSymbolOrNil = c.getGlobalTypeSymbolResolver(unique.Make("SymbolConstructor"), false /*reportErrors*/)
-	c.getGlobalImportCallOptionsType = c.getGlobalTypeResolver(unique.Make("ImportCallOptions"), 0 /*arity*/, false /*reportErrors*/)
-	c.getGlobalImportCallOptionsTypeChecked = c.getGlobalTypeResolver(unique.Make("ImportCallOptions"), 0 /*arity*/, true /*reportErrors*/)
-	c.getGlobalPromiseType = c.getGlobalTypeResolver(unique.Make("Promise"), 1 /*arity*/, false /*reportErrors*/)
-	c.getGlobalPromiseTypeChecked = c.getGlobalTypeResolver(unique.Make("Promise"), 1 /*arity*/, true /*reportErrors*/)
-	c.getGlobalPromiseLikeType = c.getGlobalTypeResolver(unique.Make("PromiseLike"), 1 /*arity*/, true /*reportErrors*/)
-	c.getGlobalAbstractModuleSourceType = c.getGlobalTypeResolver(unique.Make("AbstractModuleSource"), 0 /*arity*/, true /*reportErrors*/)
-	c.getGlobalPromiseConstructorSymbol = c.getGlobalValueSymbolResolver(unique.Make("Promise"), true /*reportErrors*/)
-	c.getGlobalPromiseConstructorSymbolOrNil = c.getGlobalValueSymbolResolver(unique.Make("Promise"), false /*reportErrors*/)
-	c.getGlobalOmitSymbol = c.getGlobalTypeAliasResolver(unique.Make("Omit"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalNoInferSymbolOrNil = c.getGlobalTypeAliasResolver(unique.Make("NoInfer"), 1 /*arity*/, false /*reportErrors*/)
-	c.getGlobalIteratorType = c.getGlobalTypeResolver(unique.Make("Iterator"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalIterableType = c.getGlobalTypeResolver(unique.Make("Iterable"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalIterableTypeChecked = c.getGlobalTypeResolver(unique.Make("Iterable"), 3 /*arity*/, true /*reportErrors*/)
-	c.getGlobalIterableIteratorType = c.getGlobalTypeResolver(unique.Make("IterableIterator"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalIterableIteratorTypeChecked = c.getGlobalTypeResolver(unique.Make("IterableIterator"), 3 /*arity*/, true /*reportErrors*/)
-	c.getGlobalIteratorObjectType = c.getGlobalTypeResolver(unique.Make("IteratorObject"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalGeneratorType = c.getGlobalTypeResolver(unique.Make("Generator"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalAsyncIteratorType = c.getGlobalTypeResolver(unique.Make("AsyncIterator"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalAsyncIterableType = c.getGlobalTypeResolver(unique.Make("AsyncIterable"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalAsyncIterableTypeChecked = c.getGlobalTypeResolver(unique.Make("AsyncIterable"), 3 /*arity*/, true /*reportErrors*/)
-	c.getGlobalAsyncIterableIteratorType = c.getGlobalTypeResolver(unique.Make("AsyncIterableIterator"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalAsyncIterableIteratorTypeChecked = c.getGlobalTypeResolver(unique.Make("AsyncIterableIterator"), 3 /*arity*/, true /*reportErrors*/)
-	c.getGlobalAsyncIteratorObjectType = c.getGlobalTypeResolver(unique.Make("AsyncIteratorObject"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalAsyncGeneratorType = c.getGlobalTypeResolver(unique.Make("AsyncGenerator"), 3 /*arity*/, false /*reportErrors*/)
-	c.getGlobalIteratorYieldResultType = c.getGlobalTypeResolver(unique.Make("IteratorYieldResult"), 1 /*arity*/, false /*reportErrors*/)
-	c.getGlobalIteratorReturnResultType = c.getGlobalTypeResolver(unique.Make("IteratorReturnResult"), 1 /*arity*/, false /*reportErrors*/)
-	c.getGlobalTypedPropertyDescriptorType = c.getGlobalTypeResolver(unique.Make("TypedPropertyDescriptor"), 1 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassDecoratorContextType = c.getGlobalTypeResolver(unique.Make("ClassDecoratorContext"), 1 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassMethodDecoratorContextType = c.getGlobalTypeResolver(unique.Make("ClassMethodDecoratorContext"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassGetterDecoratorContextType = c.getGlobalTypeResolver(unique.Make("ClassGetterDecoratorContext"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassSetterDecoratorContextType = c.getGlobalTypeResolver(unique.Make("ClassSetterDecoratorContext"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassAccessorDecoratorContextType = c.getGlobalTypeResolver(unique.Make("ClassAccessorDecoratorContext"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassAccessorDecoratorTargetType = c.getGlobalTypeResolver(unique.Make("ClassAccessorDecoratorTarget"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassAccessorDecoratorResultType = c.getGlobalTypeResolver(unique.Make("ClassAccessorDecoratorResult"), 2 /*arity*/, true /*reportErrors*/)
-	c.getGlobalClassFieldDecoratorContextType = c.getGlobalTypeResolver(unique.Make("ClassFieldDecoratorContext"), 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalESSymbolType = c.getGlobalTypeResolver(ast.SymbolNameSymbol, 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalBigIntType = c.getGlobalTypeResolver(ast.SymbolNameBigInt, 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalImportMetaType = c.getGlobalTypeResolver(ast.SymbolNameImportMeta, 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalImportAttributesType = c.getGlobalTypeResolver(ast.SymbolNameImportAttributes, 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalImportAttributesTypeChecked = c.getGlobalTypeResolver(ast.SymbolNameImportAttributes, 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalNonNullableTypeAliasOrNil = c.getGlobalTypeAliasResolver(ast.SymbolNameNonNullable, 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalExtractSymbol = c.getGlobalTypeAliasResolver(ast.SymbolNameExtract, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalDisposableType = c.getGlobalTypeResolver(ast.SymbolNameDisposable, 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAsyncDisposableType = c.getGlobalTypeResolver(ast.SymbolNameAsyncDisposable, 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAwaitedSymbol = c.getGlobalTypeAliasResolver(ast.SymbolNameAwaited, 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAwaitedSymbolOrNil = c.getGlobalTypeAliasResolver(ast.SymbolNameAwaited, 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalNaNSymbolOrNil = c.getGlobalValueSymbolResolver(ast.SymbolNameNaN, false /*reportErrors*/)
+	c.getGlobalRecordSymbol = c.getGlobalTypeAliasResolver(ast.SymbolNameRecord, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalTemplateStringsArrayType = c.getGlobalTypeResolver(ast.SymbolNameTemplateStringsArray, 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalESSymbolConstructorSymbolOrNil = c.getGlobalValueSymbolResolver(ast.SymbolNameSymbol, false /*reportErrors*/)
+	c.getGlobalESSymbolConstructorTypeSymbolOrNil = c.getGlobalTypeSymbolResolver(ast.SymbolNameSymbolConstructor, false /*reportErrors*/)
+	c.getGlobalImportCallOptionsType = c.getGlobalTypeResolver(ast.SymbolNameImportCallOptions, 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalImportCallOptionsTypeChecked = c.getGlobalTypeResolver(ast.SymbolNameImportCallOptions, 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalPromiseType = c.getGlobalTypeResolver(ast.SymbolNamePromise, 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalPromiseTypeChecked = c.getGlobalTypeResolver(ast.SymbolNamePromise, 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalPromiseLikeType = c.getGlobalTypeResolver(ast.SymbolNamePromiseLike, 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAbstractModuleSourceType = c.getGlobalTypeResolver(ast.SymbolNameAbstractModuleSource, 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalPromiseConstructorSymbol = c.getGlobalValueSymbolResolver(ast.SymbolNamePromise, true /*reportErrors*/)
+	c.getGlobalPromiseConstructorSymbolOrNil = c.getGlobalValueSymbolResolver(ast.SymbolNamePromise, false /*reportErrors*/)
+	c.getGlobalOmitSymbol = c.getGlobalTypeAliasResolver(ast.SymbolNameOmit, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalNoInferSymbolOrNil = c.getGlobalTypeAliasResolver(ast.SymbolNameNoInfer, 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIteratorType = c.getGlobalTypeResolver(ast.SymbolNameIterator, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIterableType = c.getGlobalTypeResolver(ast.SymbolNameIterable, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIterableTypeChecked = c.getGlobalTypeResolver(ast.SymbolNameIterable, 3 /*arity*/, true /*reportErrors*/)
+	c.getGlobalIterableIteratorType = c.getGlobalTypeResolver(ast.SymbolNameIterableIterator, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIterableIteratorTypeChecked = c.getGlobalTypeResolver(ast.SymbolNameIterableIterator, 3 /*arity*/, true /*reportErrors*/)
+	c.getGlobalIteratorObjectType = c.getGlobalTypeResolver(ast.SymbolNameIteratorObject, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalGeneratorType = c.getGlobalTypeResolver(ast.SymbolNameGenerator, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalAsyncIteratorType = c.getGlobalTypeResolver(ast.SymbolNameAsyncIterator, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalAsyncIterableType = c.getGlobalTypeResolver(ast.SymbolNameAsyncIterable, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalAsyncIterableTypeChecked = c.getGlobalTypeResolver(ast.SymbolNameAsyncIterable, 3 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAsyncIterableIteratorType = c.getGlobalTypeResolver(ast.SymbolNameAsyncIterableIterator, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalAsyncIterableIteratorTypeChecked = c.getGlobalTypeResolver(ast.SymbolNameAsyncIterableIterator, 3 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAsyncIteratorObjectType = c.getGlobalTypeResolver(ast.SymbolNameAsyncIteratorObject, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalAsyncGeneratorType = c.getGlobalTypeResolver(ast.SymbolNameAsyncGenerator, 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIteratorYieldResultType = c.getGlobalTypeResolver(ast.SymbolNameIteratorYieldResult, 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIteratorReturnResultType = c.getGlobalTypeResolver(ast.SymbolNameIteratorReturnResult, 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalTypedPropertyDescriptorType = c.getGlobalTypeResolver(ast.SymbolNameTypedPropertyDescriptor, 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassDecoratorContextType = c.getGlobalTypeResolver(ast.SymbolNameClassDecoratorContext, 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassMethodDecoratorContextType = c.getGlobalTypeResolver(ast.SymbolNameClassMethodDecoratorContext, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassGetterDecoratorContextType = c.getGlobalTypeResolver(ast.SymbolNameClassGetterDecoratorContext, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassSetterDecoratorContextType = c.getGlobalTypeResolver(ast.SymbolNameClassSetterDecoratorContext, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassAccessorDecoratorContextType = c.getGlobalTypeResolver(ast.SymbolNameClassAccessorDecoratorContext, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassAccessorDecoratorTargetType = c.getGlobalTypeResolver(ast.SymbolNameClassAccessorDecoratorTarget, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassAccessorDecoratorResultType = c.getGlobalTypeResolver(ast.SymbolNameClassAccessorDecoratorResult, 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassFieldDecoratorContextType = c.getGlobalTypeResolver(ast.SymbolNameClassFieldDecoratorContext, 2 /*arity*/, true /*reportErrors*/)
 	c.initializeClosures()
 	c.initializeIterationResolvers()
 	c.initializeChecker()
@@ -1273,7 +1273,7 @@ func (c *Checker) initializeClosures() {
 
 func (c *Checker) initializeIterationResolvers() {
 	c.syncIterationTypesResolver = &IterationTypesResolver{
-		iteratorSymbolName:                   unique.Make("iterator"),
+		iteratorSymbolName:                   ast.SymbolNameIteratorProperty,
 		getGlobalIteratorType:                c.getGlobalIteratorType,
 		getGlobalIterableType:                c.getGlobalIterableType,
 		getGlobalIterableTypeChecked:         c.getGlobalIterableTypeChecked,
@@ -1290,7 +1290,7 @@ func (c *Checker) initializeIterationResolvers() {
 		mustHaveAValueDiagnostic:      diagnostics.The_type_returned_by_the_0_method_of_an_iterator_must_have_a_value_property,
 	}
 	c.asyncIterationTypesResolver = &IterationTypesResolver{
-		iteratorSymbolName:                   unique.Make("asyncIterator"),
+		iteratorSymbolName:                   ast.SymbolNameAsyncIteratorProperty,
 		getGlobalIteratorType:                c.getGlobalAsyncIteratorType,
 		getGlobalIterableType:                c.getGlobalAsyncIterableType,
 		getGlobalIterableTypeChecked:         c.getGlobalAsyncIterableTypeChecked,
@@ -1315,7 +1315,7 @@ func (c *Checker) initializeChecker() {
 	for _, file := range c.files {
 		if !ast.IsExternalOrCommonJSModule(file) {
 			// It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
-			if fileGlobalThisSymbol := file.Locals[unique.Make("globalThis")]; fileGlobalThisSymbol != nil {
+			if fileGlobalThisSymbol := file.Locals[ast.SymbolNameGlobalThis]; fileGlobalThisSymbol != nil {
 				for _, d := range fileGlobalThisSymbol.Declarations() {
 					c.addDiagnostic(NewDiagnosticForNode(d, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, "globalThis"))
 				}
@@ -1358,31 +1358,31 @@ func (c *Checker) initializeChecker() {
 	}
 	c.addUndefinedToGlobalsOrErrorOnRedeclaration()
 	c.valueSymbolLinks.Get(c.undefinedSymbol).resolvedType = c.undefinedWideningType
-	c.valueSymbolLinks.Get(c.argumentsSymbol).resolvedType = c.getGlobalType(unique.Make("IArguments"), 0 /*arity*/, true /*reportErrors*/)
+	c.valueSymbolLinks.Get(c.argumentsSymbol).resolvedType = c.getGlobalType(ast.SymbolNameIArguments, 0 /*arity*/, true /*reportErrors*/)
 	c.valueSymbolLinks.Get(c.unknownSymbol).resolvedType = c.errorType
 	c.valueSymbolLinks.Get(c.globalThisSymbol).resolvedType = c.newObjectType(ObjectFlagsAnonymous, c.globalThisSymbol)
 	// Initialize special types
-	c.globalArrayType = c.getGlobalType(unique.Make("Array"), 1 /*arity*/, true /*reportErrors*/)
-	c.globalObjectType = c.getGlobalType(unique.Make("Object"), 0 /*arity*/, true /*reportErrors*/)
-	c.globalFunctionType = c.getGlobalType(unique.Make("Function"), 0 /*arity*/, true /*reportErrors*/)
-	c.globalCallableFunctionType = c.getGlobalStrictFunctionType(unique.Make("CallableFunction"))
-	c.globalNewableFunctionType = c.getGlobalStrictFunctionType(unique.Make("NewableFunction"))
-	c.globalStringType = c.getGlobalType(unique.Make("String"), 0 /*arity*/, true /*reportErrors*/)
-	c.globalNumberType = c.getGlobalType(unique.Make("Number"), 0 /*arity*/, true /*reportErrors*/)
-	c.globalBooleanType = c.getGlobalType(unique.Make("Boolean"), 0 /*arity*/, true /*reportErrors*/)
-	c.globalRegExpType = c.getGlobalType(unique.Make("RegExp"), 0 /*arity*/, true /*reportErrors*/)
+	c.globalArrayType = c.getGlobalType(ast.SymbolNameArray, 1 /*arity*/, true /*reportErrors*/)
+	c.globalObjectType = c.getGlobalType(ast.SymbolNameObject, 0 /*arity*/, true /*reportErrors*/)
+	c.globalFunctionType = c.getGlobalType(ast.SymbolNameFunction, 0 /*arity*/, true /*reportErrors*/)
+	c.globalCallableFunctionType = c.getGlobalStrictFunctionType(ast.SymbolNameCallableFunction)
+	c.globalNewableFunctionType = c.getGlobalStrictFunctionType(ast.SymbolNameNewableFunction)
+	c.globalStringType = c.getGlobalType(ast.SymbolNameString, 0 /*arity*/, true /*reportErrors*/)
+	c.globalNumberType = c.getGlobalType(ast.SymbolNameNumber, 0 /*arity*/, true /*reportErrors*/)
+	c.globalBooleanType = c.getGlobalType(ast.SymbolNameBoolean, 0 /*arity*/, true /*reportErrors*/)
+	c.globalRegExpType = c.getGlobalType(ast.SymbolNameRegExp, 0 /*arity*/, true /*reportErrors*/)
 	c.anyArrayType = c.createArrayType(c.anyType)
 	c.autoArrayType = c.createArrayType(c.autoType)
 	if c.autoArrayType == c.emptyObjectType {
 		// autoArrayType is used as a marker, so even if global Array type is not defined, it needs to be a unique type
 		c.autoArrayType = c.newAnonymousType(nil, nil, nil, nil, nil)
 	}
-	c.globalReadonlyArrayType = c.getGlobalType(unique.Make("ReadonlyArray"), 1 /*arity*/, false /*reportErrors*/)
+	c.globalReadonlyArrayType = c.getGlobalType(ast.SymbolNameReadonlyArray, 1 /*arity*/, false /*reportErrors*/)
 	if c.globalReadonlyArrayType == c.emptyGenericType {
 		c.globalReadonlyArrayType = c.globalArrayType
 	}
 	c.anyReadonlyArrayType = c.createTypeFromGenericGlobalType(c.globalReadonlyArrayType, []*Type{c.anyType})
-	c.globalThisType = c.getGlobalType(unique.Make("ThisType"), 1 /*arity*/, false /*reportErrors*/)
+	c.globalThisType = c.getGlobalType(ast.SymbolNameThisType, 1 /*arity*/, false /*reportErrors*/)
 	// Now merge global ambient module declarations
 	for _, symbol := range ambientModuleSymbols {
 		c.mergeGlobalSymbol(symbol)
@@ -1673,15 +1673,15 @@ func (c *Checker) checkAndReportErrorForUsingTypeAsNamespace(errorLocation *ast.
 }
 
 func (c *Checker) checkAndReportErrorForExportingPrimitiveType(errorLocation *ast.Node, name ast.SymbolName) bool {
-	if isPrimitiveTypeName(name.Value()) && errorLocation.Parent.Kind == ast.KindExportSpecifier {
+	if isPrimitiveTypeName(name) && errorLocation.Parent.Kind == ast.KindExportSpecifier {
 		c.error(errorLocation, diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, name.Value())
 		return true
 	}
 	return false
 }
 
-func isPrimitiveTypeName(s string) bool {
-	return s == "any" || s == "string" || s == "number" || s == "boolean" || s == "never" || s == "unknown"
+func isPrimitiveTypeName(s ast.SymbolName) bool {
+	return s == ast.SymbolNameAny || s == ast.SymbolNameStringKeyword || s == ast.SymbolNameNumberKeyword || s == ast.SymbolNameBooleanKeyword || s == ast.SymbolNameNever || s == ast.SymbolNameUnknown
 }
 
 func (c *Checker) checkAndReportErrorForUsingNamespaceAsTypeOrValue(errorLocation *ast.Node, name ast.SymbolName, meaning ast.SymbolFlags) bool {
@@ -1707,7 +1707,7 @@ func (c *Checker) checkAndReportErrorForUsingNamespaceAsTypeOrValue(errorLocatio
 
 func (c *Checker) checkAndReportErrorForUsingTypeAsValue(errorLocation *ast.Node, name ast.SymbolName, meaning ast.SymbolFlags) bool {
 	if meaning&ast.SymbolFlagsValue != 0 {
-		if isPrimitiveTypeName(name.Value()) {
+		if isPrimitiveTypeName(name) {
 			grandparent := errorLocation.Parent.Parent
 			if grandparent != nil && grandparent.Parent != nil && ast.IsHeritageClause(grandparent) {
 				heritageKind := grandparent.AsHeritageClause().Token
@@ -1733,10 +1733,10 @@ func (c *Checker) checkAndReportErrorForUsingTypeAsValue(errorLocation *ast.Node
 				if isExportAssignmentExpressionName(errorLocation) {
 					return true
 				}
-				if isES2015OrLaterConstructorName(name.Value()) {
+				if isES2015OrLaterConstructorName(name) {
 					c.error(errorLocation, diagnostics.X_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later, name.Value())
 				} else if c.maybeMappedType(errorLocation, symbol) {
-					c.error(errorLocation, diagnostics.X_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0, name.Value(), core.IfElse(name == unique.Make("K"), "P", "K"))
+					c.error(errorLocation, diagnostics.X_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0, name.Value(), core.IfElse(name == ast.SymbolNameK, "P", "K"))
 				} else {
 					c.error(errorLocation, diagnostics.X_0_only_refers_to_a_type_but_is_being_used_as_a_value_here, name.Value())
 				}
@@ -1747,8 +1747,8 @@ func (c *Checker) checkAndReportErrorForUsingTypeAsValue(errorLocation *ast.Node
 	return false
 }
 
-func isES2015OrLaterConstructorName(s string) bool {
-	return s == "Promise" || s == "Symbol" || s == "Map" || s == "WeakMap" || s == "Set" || s == "WeakSet"
+func isES2015OrLaterConstructorName(s ast.SymbolName) bool {
+	return s == ast.SymbolNamePromise || s == ast.SymbolNameSymbol || s == ast.SymbolNameMap || s == ast.SymbolNameWeakMap || s == ast.SymbolNameSet || s == ast.SymbolNameWeakSet
 }
 
 func (c *Checker) maybeMappedType(node *ast.Node, symbol *ast.Symbol) bool {
@@ -2609,7 +2609,7 @@ func (c *Checker) resolveJSDocMemberName(name *ast.Node) *ast.Symbol {
 			if symbol := c.resolveJSDocMemberName(name.AsQualifiedName().Left); symbol != nil {
 				var t *Type
 				if symbol.Flags()&ast.SymbolFlagsValue != 0 {
-					proto := c.getPropertyOfType(c.getTypeOfSymbol(symbol), unique.Make("prototype"))
+					proto := c.getPropertyOfType(c.getTypeOfSymbol(symbol), ast.SymbolNamePrototype)
 					if proto != nil {
 						t = c.getTypeOfSymbol(proto)
 					}
@@ -3235,7 +3235,7 @@ func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkP
 			symbol := c.getSymbolOfDeclaration(member)
 			isStatic := ast.HasStaticModifier(member)
 			// In non-ambient contexts, check that static members are not named 'prototype'.
-			if !nodeInAmbientContext && isStatic && symbol != nil && symbol.Name() == unique.Make("prototype") {
+			if !nodeInAmbientContext && isStatic && symbol != nil && symbol.Name() == ast.SymbolNamePrototype {
 				c.error(member.Name(), diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1, symbol.Name().Value(), c.symbolToString(c.getSymbolOfDeclaration(node)))
 			}
 			// Check that this object type declaration doesn't contain multiple declarations of the same property,
@@ -4475,7 +4475,7 @@ func (c *Checker) checkClassForStaticPropertyNameConflicts(node *ast.Node) {
 		if isStaticMember && memberNameNode != nil {
 			memberName, _ := c.getEffectivePropertyNameForPropertyNameNode(memberNameNode)
 			switch memberName {
-			case unique.Make("name"), unique.Make("length"), unique.Make("caller"), unique.Make("arguments"):
+			case ast.SymbolNameName, ast.SymbolNameLength, ast.SymbolNameCaller, ast.SymbolNameArguments:
 				c.error(
 					memberNameNode,
 					diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1,
@@ -5626,7 +5626,7 @@ func (c *Checker) getImportAttributesTypeForModuleSpecifier(moduleSpecifier *ast
 		return c.getTypeFromImportAttributes(ast.GetImportAttributes(parent.Parent))
 	case ast.IsImportCall(parent) && len(parent.Arguments()) > 1:
 		options := parent.Arguments()[1]
-		return c.getTypeOfPropertyOfType(c.checkExpressionCached(options), unique.Make("with"))
+		return c.getTypeOfPropertyOfType(c.checkExpressionCached(options), ast.SymbolNameWith)
 	}
 	return nil
 }
@@ -6735,21 +6735,21 @@ func (c *Checker) getIterationTypesOfIteratorFast(t *Type, r *IterationTypesReso
 
 func (c *Checker) getIterationTypesOfIteratorSlow(t *Type, r *IterationTypesResolver, errorNode *ast.Node, diagnosticOutput *[]*ast.Diagnostic) IterationTypes {
 	return c.combineIterationTypes([]IterationTypes{
-		c.getIterationTypesOfMethod(t, r, unique.Make("next"), errorNode, diagnosticOutput),
-		c.getIterationTypesOfMethod(t, r, unique.Make("return"), errorNode, diagnosticOutput),
-		c.getIterationTypesOfMethod(t, r, unique.Make("throw"), errorNode, diagnosticOutput),
+		c.getIterationTypesOfMethod(t, r, ast.SymbolNameNext, errorNode, diagnosticOutput),
+		c.getIterationTypesOfMethod(t, r, ast.SymbolNameReturn, errorNode, diagnosticOutput),
+		c.getIterationTypesOfMethod(t, r, ast.SymbolNameThrow, errorNode, diagnosticOutput),
 	})
 }
 
 func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesResolver, methodName ast.SymbolName, errorNode *ast.Node, diagnosticOutput *[]*ast.Diagnostic) IterationTypes {
 	method := c.getPropertyOfType(t, methodName)
 	// Ignore 'return' or 'throw' if they are missing.
-	if method == nil && methodName != unique.Make("next") {
+	if method == nil && methodName != ast.SymbolNameNext {
 		return IterationTypes{}
 	}
 	var methodType *Type
-	if method != nil && !(methodName == unique.Make("next") && method.Flags()&ast.SymbolFlagsOptional != 0) {
-		if methodName == unique.Make("next") {
+	if method != nil && !(methodName == ast.SymbolNameNext && method.Flags()&ast.SymbolFlagsOptional != 0) {
+		if methodName == ast.SymbolNameNext {
 			methodType = c.getTypeOfSymbol(method)
 		} else {
 			methodType = c.getTypeWithFacts(c.getTypeOfSymbol(method), TypeFactsNEUndefinedOrNull)
@@ -6765,7 +6765,7 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 	}
 	if len(methodSignatures) == 0 {
 		if errorNode != nil {
-			diagnostic := core.IfElse(methodName == unique.Make("next"), resolver.mustHaveANextMethodDiagnostic, resolver.mustBeAMethodDiagnostic)
+			diagnostic := core.IfElse(methodName == ast.SymbolNameNext, resolver.mustHaveANextMethodDiagnostic, resolver.mustBeAMethodDiagnostic)
 			c.reportDiagnostic(NewDiagnosticForNode(errorNode, diagnostic, methodName.Value()), diagnosticOutput)
 		}
 		return IterationTypes{}
@@ -6786,7 +6786,7 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 			typeParameters := core.IfElse(isGeneratorMethod, globalGeneratorType, globalIteratorType).AsInterfaceType().TypeParameters()
 			mapper := methodType.Mapper()
 			var nextType *Type
-			if methodName == unique.Make("next") {
+			if methodName == ast.SymbolNameNext {
 				nextType = getMappedType(typeParameters[2], mapper)
 			}
 			return IterationTypes{getMappedType(typeParameters[0], mapper), getMappedType(typeParameters[1], mapper), nextType}
@@ -6796,7 +6796,7 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 	var methodParameterTypes []*Type
 	var methodReturnTypes []*Type
 	for _, signature := range methodSignatures {
-		if methodName != unique.Make("throw") && len(signature.parameters) != 0 {
+		if methodName != ast.SymbolNameThrow && len(signature.parameters) != 0 {
 			methodParameterTypes = append(methodParameterTypes, c.getTypeAtPosition(signature, 0))
 		}
 		methodReturnTypes = append(methodReturnTypes, c.getReturnTypeOfSignature(signature))
@@ -6805,17 +6805,17 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 	// `return()` method, respectively.
 	var returnTypes []*Type
 	var nextType *Type
-	if methodName != unique.Make("throw") {
+	if methodName != ast.SymbolNameThrow {
 		var methodParameterType *Type
 		if methodParameterTypes != nil {
 			methodParameterType = c.getUnionType(methodParameterTypes)
 		} else {
 			methodParameterType = c.unknownType
 		}
-		if methodName == unique.Make("next") {
+		if methodName == ast.SymbolNameNext {
 			// The value of `next(value)` is *not* awaited by async generators
 			nextType = methodParameterType
-		} else if methodName == unique.Make("return") {
+		} else if methodName == ast.SymbolNameReturn {
 			// The value of `return(value)` *is* awaited by async generators
 			resolvedMethodParameterType := core.OrElse(resolver.resolveIterationType(methodParameterType, errorNode), c.anyType)
 			returnTypes = append(returnTypes, resolvedMethodParameterType)
@@ -6865,12 +6865,12 @@ func (c *Checker) getIterationTypesOfIteratorResult(t *Type) IterationTypes {
 	yieldIteratorResult := c.filterType(t, c.isYieldIteratorResult)
 	var yieldType *Type
 	if yieldIteratorResult != c.neverType {
-		yieldType = c.getTypeOfPropertyOfType(yieldIteratorResult, unique.Make("value") /* as __String */)
+		yieldType = c.getTypeOfPropertyOfType(yieldIteratorResult, ast.SymbolNameValue /* as __String */)
 	}
 	returnIteratorResult := c.filterType(t, c.isReturnIteratorResult)
 	var returnType *Type
 	if returnIteratorResult != c.neverType {
-		returnType = c.getTypeOfPropertyOfType(returnIteratorResult, unique.Make("value") /* as __String */)
+		returnType = c.getTypeOfPropertyOfType(returnIteratorResult, ast.SymbolNameValue /* as __String */)
 	}
 	if yieldType == nil && returnType == nil {
 		return IterationTypes{}
@@ -6895,7 +6895,7 @@ func (c *Checker) isIteratorResult(t *Type, kind IterationTypeKind) bool {
 	// > [done] is the result status of an iterator `next` method call. If the end of the iterator was reached `done` is `true`.
 	// > If the end was not reached `done` is `false` and a value is available.
 	// > If a `done` property (either own or inherited) does not exist, it is consider to have the value `false`.
-	doneType := core.OrElse(c.getTypeOfPropertyOfType(t, unique.Make("done")), c.falseType)
+	doneType := core.OrElse(c.getTypeOfPropertyOfType(t, ast.SymbolNameDone), c.falseType)
 	return c.isTypeAssignableTo(core.IfElse(kind == IterationTypeKindYield, c.falseType, c.trueType), doneType)
 }
 
@@ -6919,7 +6919,7 @@ func (c *Checker) getIterationDiagnosticDetails(use IterationUse, inputType *Typ
 	if yieldType != nil {
 		return diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher, false
 	}
-	if inputType.symbol != nil && isES2015OrLaterIterable(inputType.symbol.Name().Value()) {
+	if inputType.symbol != nil && isES2015OrLaterIterable(inputType.symbol.Name()) {
 		return diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher, true
 	}
 	if allowsStrings {
@@ -6928,9 +6928,9 @@ func (c *Checker) getIterationDiagnosticDetails(use IterationUse, inputType *Typ
 	return diagnostics.Type_0_is_not_an_array_type, true
 }
 
-func isES2015OrLaterIterable(n string) bool {
+func isES2015OrLaterIterable(n ast.SymbolName) bool {
 	switch n {
-	case "Float32Array", "Float64Array", "Int16Array", "Int32Array", "Int8Array", "NodeList", "Uint16Array", "Uint32Array", "Uint8Array", "Uint8ClampedArray":
+	case ast.SymbolNameFloat32Array, ast.SymbolNameFloat64Array, ast.SymbolNameInt16Array, ast.SymbolNameInt32Array, ast.SymbolNameInt8Array, ast.SymbolNameNodeList, ast.SymbolNameUint16Array, ast.SymbolNameUint32Array, ast.SymbolNameUint8Array, ast.SymbolNameUint8ClampedArray:
 		return true
 	}
 	return false
@@ -7892,8 +7892,8 @@ func (c *Checker) getUniqueTypeParameters(context *InferenceContext, typeParamet
 	for _, tp := range typeParameters {
 		name := tp.symbol.Name()
 		if hasTypeParameterByName(context.inferredTypeParameters, name) || hasTypeParameterByName(result, name) {
-			newName := getUniqueTypeParameterName(core.Concatenate(context.inferredTypeParameters, result), name.Value())
-			symbol := c.newSymbol(ast.SymbolFlagsTypeParameter, unique.Make(newName))
+			newName := getUniqueTypeParameterName(core.Concatenate(context.inferredTypeParameters, result), name)
+			symbol := c.newSymbol(ast.SymbolFlagsTypeParameter, newName)
 			newTypeParameter := c.newTypeParameter(symbol)
 			newTypeParameter.AsTypeParameter().target = tp
 			oldTypeParameters = append(oldTypeParameters, tp)
@@ -7918,14 +7918,15 @@ func hasTypeParameterByName(typeParameters []*Type, name ast.SymbolName) bool {
 	})
 }
 
-func getUniqueTypeParameterName(typeParameters []*Type, baseName string) string {
-	for len(baseName) > 1 && baseName[len(baseName)-1] >= '0' && baseName[len(baseName)-1] <= '9' {
-		baseName = baseName[:len(baseName)-1]
+func getUniqueTypeParameterName(typeParameters []*Type, baseName ast.SymbolName) ast.SymbolName {
+	baseText := baseName.Value()
+	for len(baseText) > 1 && baseText[len(baseText)-1] >= '0' && baseText[len(baseText)-1] <= '9' {
+		baseText = baseText[:len(baseText)-1]
 	}
 	index := 1
 	for {
-		augmentedName := baseName + strconv.Itoa(index)
-		if !hasTypeParameterByName(typeParameters, unique.Make(augmentedName)) {
+		augmentedName := unique.Make(baseText + strconv.Itoa(index))
+		if !hasTypeParameterByName(typeParameters, augmentedName) {
 			return augmentedName
 		}
 		index++
@@ -8503,7 +8504,7 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 				}
 			}
 		}
-		importAttributesType = c.getTypeOfPropertyOfType(optionsType, unique.Make("with"))
+		importAttributesType = c.getTypeOfPropertyOfType(optionsType, ast.SymbolNameWith)
 	}
 	if ast.IsSourcePhaseImportCall(node) {
 		return c.createPromiseReturnType(node, c.getGlobalAbstractModuleSourceType())
@@ -8603,7 +8604,7 @@ func (c *Checker) isSymbolOrSymbolForCall(node *ast.Node) bool {
 	if globalESSymbol == nil {
 		return false
 	}
-	return globalESSymbol == c.resolveName(left, unique.Make("Symbol"), ast.SymbolFlagsValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
+	return globalESSymbol == c.resolveName(left, ast.SymbolNameSymbol, ast.SymbolFlagsValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
 }
 
 /**
@@ -11899,7 +11900,7 @@ func hasCommonDomTypeName(t *Type) bool {
 		return false
 	}
 	name := t.symbol.Name()
-	return name == unique.Make("EventTarget") || name == unique.Make("Node") || name == unique.Make("Element") || strings.HasPrefix(name.Value(), "HTML") && strings.HasSuffix(name.Value(), "Element")
+	return name == ast.SymbolNameEventTarget || name == ast.SymbolNameNode || name == ast.SymbolNameElement || strings.HasPrefix(name.Value(), "HTML") && strings.HasSuffix(name.Value(), "Element")
 }
 
 func (c *Checker) checkAndReportErrorForExtendingInterface(errorLocation *ast.Node) bool {
@@ -14104,8 +14105,8 @@ func (c *Checker) isReadonlyAssignmentDeclaration(node *ast.Node) bool {
 		return false
 	}
 	propertyDescriptorType := c.checkExpressionCached(node.Arguments()[2])
-	if valueType := c.getTypeOfPropertyOfType(propertyDescriptorType, unique.Make("value")); valueType != nil {
-		if writableProp := c.getPropertyOfType(propertyDescriptorType, unique.Make("writable")); writableProp != nil {
+	if valueType := c.getTypeOfPropertyOfType(propertyDescriptorType, ast.SymbolNameValue); valueType != nil {
+		if writableProp := c.getPropertyOfType(propertyDescriptorType, ast.SymbolNameWritable); writableProp != nil {
 			var writableType *Type
 			if writableProp.ValueDeclaration() != nil && ast.IsPropertyAssignment(writableProp.ValueDeclaration()) {
 				writableType = c.checkExpression(writableProp.ValueDeclaration().Initializer())
@@ -14116,7 +14117,7 @@ func (c *Checker) isReadonlyAssignmentDeclaration(node *ast.Node) bool {
 		}
 		return true
 	}
-	return c.getTypeOfPropertyOfType(propertyDescriptorType, unique.Make("set")) == nil
+	return c.getTypeOfPropertyOfType(propertyDescriptorType, ast.SymbolNameSetProperty) == nil
 }
 
 func (c *Checker) isReadonlySymbol(symbol *ast.Symbol) bool {
@@ -15159,7 +15160,7 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symb
 		}
 		// It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member
 		// So we check a bit more,
-		if c.resolveExportByName(moduleSymbol, unique.Make("__esModule"), nil /*sourceNode*/, dontResolveAlias) != nil {
+		if c.resolveExportByName(moduleSymbol, ast.SymbolNameESModule, nil /*sourceNode*/, dontResolveAlias) != nil {
 			// If there is an `__esModule` specified in the declaration (meaning someone explicitly added it or wrote it in their code),
 			// it definitely is a module and does not have a synthetic default
 			return false
@@ -15175,7 +15176,7 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symb
 	}
 
 	// JS files have a synthetic default if they do not contain ES2015+ module syntax (export = is not valid in js) _and_ do not have an __esModule marker
-	return (file.AsSourceFile().ExternalModuleIndicator == nil || file.AsSourceFile().ExternalModuleIndicator == file) && c.resolveExportByName(moduleSymbol, unique.Make("__esModule"), nil /*sourceNode*/, dontResolveAlias) == nil
+	return (file.AsSourceFile().ExternalModuleIndicator == nil || file.AsSourceFile().ExternalModuleIndicator == file) && c.resolveExportByName(moduleSymbol, ast.SymbolNameESModule, nil /*sourceNode*/, dontResolveAlias) == nil
 }
 
 func (c *Checker) getEmitSyntaxForModuleSpecifierExpression(usage *ast.Node) core.ResolutionMode {
@@ -16994,7 +16995,7 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 		return c.reportCircularityError(symbol)
 	}
 	if symbol.Flags()&ast.SymbolFlagsModuleExports != 0 {
-		if symbol.Name() == unique.Make("exports") {
+		if symbol.Name() == ast.SymbolNameExports {
 			return c.getTypeOfSymbol(c.resolveExternalModuleSymbol(symbol.ValueDeclaration().Symbol(), false /*dontResolveAlias*/))
 		}
 		return c.newAnonymousType(symbol, symbol.Members(), nil, nil, nil)
@@ -18582,15 +18583,15 @@ func (c *Checker) containsSameNamedThisProperty(thisProperty *ast.Node, expressi
 
 func (c *Checker) getTypeFromPropertyDescriptor(node *ast.Node) *Type {
 	objectLiteralType := c.checkExpressionCached(node)
-	if valueType := c.getTypeOfPropertyOfType(objectLiteralType, unique.Make("value")); valueType != nil {
+	if valueType := c.getTypeOfPropertyOfType(objectLiteralType, ast.SymbolNameValue); valueType != nil {
 		return valueType
 	}
-	if getFunc := c.getTypeOfPropertyOfType(objectLiteralType, unique.Make("get")); getFunc != nil {
+	if getFunc := c.getTypeOfPropertyOfType(objectLiteralType, ast.SymbolNameGetProperty); getFunc != nil {
 		if getSig := c.getSingleCallSignature(getFunc); getSig != nil {
 			return c.getReturnTypeOfSignature(getSig)
 		}
 	}
-	if setFunc := c.getTypeOfPropertyOfType(objectLiteralType, unique.Make("set")); setFunc != nil {
+	if setFunc := c.getTypeOfPropertyOfType(objectLiteralType, ast.SymbolNameSetProperty); setFunc != nil {
 		if setSig := c.getSingleCallSignature(setFunc); setSig != nil {
 			return c.getTypeOfFirstParameterOfSignature(setSig)
 		}
@@ -19427,7 +19428,7 @@ func (c *Checker) getApplicableIndexInfo(t *Type, keyType *Type) *IndexInfo {
 }
 
 func (c *Checker) getApplicableIndexInfoForName(t *Type, name ast.SymbolName) *IndexInfo {
-	if isLateBoundName(name.Value()) {
+	if isLateBoundName(name) {
 		return c.getApplicableIndexInfo(t, c.esSymbolType)
 	}
 	return c.getApplicableIndexInfo(t, c.getStringLiteralType(name.Value()))
@@ -21654,26 +21655,26 @@ func (c *Checker) combineUnionOrIntersectionParameters(left *Signature, right *S
 		combinedParamType := c.getUnionOrIntersectionType([]*Type{longestParamType, shorterParamType}, !isUnion, UnionReductionLiteral)
 		isRestParam := eitherHasEffectiveRest && !needsExtraRestElement && i == (longestCount-1)
 		isOptional := i >= c.getMinArgumentCount(longest) && i >= c.getMinArgumentCount(shorter)
-		var leftName, rightName string
+		leftName, rightName := ast.EmptySymbolName, ast.EmptySymbolName
 		if i < leftCount {
 			leftName = c.getParameterNameAtPosition(left, i)
 		}
 		if i < rightCount {
 			rightName = c.getParameterNameAtPosition(right, i)
 		}
-		var paramName string
+		paramName := ast.EmptySymbolName
 		switch {
 		case leftName == rightName:
 			paramName = leftName
-		case leftName == "":
+		case leftName == ast.EmptySymbolName:
 			paramName = rightName
-		case rightName == "":
+		case rightName == ast.EmptySymbolName:
 			paramName = leftName
 		}
-		if paramName == "" {
-			paramName = "arg" + strconv.Itoa(i)
+		if paramName == ast.EmptySymbolName {
+			paramName = unique.Make("arg" + strconv.Itoa(i))
 		}
-		paramSymbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable|core.IfElse(isOptional && !isRestParam, ast.SymbolFlagsOptional, 0), unique.Make(paramName),
+		paramSymbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable|core.IfElse(isOptional && !isRestParam, ast.SymbolFlagsOptional, 0), paramName,
 			core.IfElse(isRestParam, ast.CheckFlagsRestParameter, core.IfElse(isOptional, ast.CheckFlagsOptionalParameter, 0)))
 		links := c.valueSymbolLinks.Get(paramSymbol)
 		if isRestParam {
@@ -21684,7 +21685,7 @@ func (c *Checker) combineUnionOrIntersectionParameters(left *Signature, right *S
 		params[i] = paramSymbol
 	}
 	if needsExtraRestElement {
-		restParamSymbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, unique.Make("args"), ast.CheckFlagsRestParameter)
+		restParamSymbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, ast.SymbolNameArgs, ast.CheckFlagsRestParameter)
 		links := c.valueSymbolLinks.Get(restParamSymbol)
 		links.resolvedType = c.createArrayType(c.getTypeAtPosition(shorter, longestCount))
 		if shorter == right {
@@ -21943,7 +21944,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name a
 				}
 			} else if isUnion {
 				var indexInfo *IndexInfo
-				if !isLateBoundName(name.Value()) {
+				if !isLateBoundName(name) {
 					indexInfo = c.getApplicableIndexInfoForName(t, name)
 				}
 				if indexInfo != nil {
@@ -22550,7 +22551,7 @@ func (c *Checker) isDeclarationContainedBy(symbol *ast.Symbol, container *ast.Sy
 }
 
 func (c *Checker) isNamedMember(symbol *ast.Symbol, id ast.SymbolName) bool {
-	return !isReservedMemberName(id.Value()) && c.symbolIsValue(symbol)
+	return !isReservedMemberName(id) && c.symbolIsValue(symbol)
 }
 
 func (c *Checker) symbolIsValue(symbol *ast.Symbol) bool {
@@ -24072,11 +24073,11 @@ func (c *Checker) isEmptyLiteralType(t *Type) bool {
 }
 
 func (c *Checker) isTupleLikeType(t *Type) bool {
-	if isTupleType(t) || c.getPropertyOfType(t, unique.Make("0")) != nil {
+	if isTupleType(t) || c.getPropertyOfType(t, ast.SymbolNameZero) != nil {
 		return true
 	}
 	if c.isArrayLikeType(t) {
-		if lengthType := c.getTypeOfPropertyOfType(t, unique.Make("length")); lengthType != nil {
+		if lengthType := c.getTypeOfPropertyOfType(t, ast.SymbolNameLength); lengthType != nil {
 			return everyType(lengthType, func(t *Type) bool { return t.flags&TypeFlagsNumberLiteral != 0 })
 		}
 	}
@@ -24394,7 +24395,7 @@ func (c *Checker) getDeclaredTypeOfTypeAlias(symbol *ast.Symbol) *Type {
 				links.instantiations = make(map[CacheHashKey]*Type)
 				links.instantiations[getTypeListKey(typeParameters)] = t
 			}
-			if t == c.intrinsicMarkerType && symbol.Name() == unique.Make("BuiltinIteratorReturn") {
+			if t == c.intrinsicMarkerType && symbol.Name() == ast.SymbolNameBuiltinIteratorReturn {
 				t = c.getBuiltinIteratorReturnType()
 			}
 		} else {
@@ -25222,9 +25223,9 @@ func (c *Checker) getGlobalStrictFunctionType(name ast.SymbolName) *Type {
 func (c *Checker) getGlobalImportMetaExpressionType() *Type {
 	if c.deferredGlobalImportMetaExpressionType == nil {
 		// Create a synthetic type `ImportMetaExpression { meta: MetaProperty }`
-		symbol := c.newSymbol(ast.SymbolFlagsNone, unique.Make("ImportMetaExpression"))
+		symbol := c.newSymbol(ast.SymbolFlagsNone, ast.SymbolNameImportMetaExpression)
 		importMetaType := c.getGlobalImportMetaType()
-		metaPropertySymbol := c.newSymbolEx(ast.SymbolFlagsProperty, unique.Make("meta"), ast.CheckFlagsReadonly)
+		metaPropertySymbol := c.newSymbolEx(ast.SymbolFlagsProperty, ast.SymbolNameMeta, ast.CheckFlagsReadonly)
 		metaPropertySymbol.SetParent(symbol)
 		c.valueSymbolLinks.Get(metaPropertySymbol).resolvedType = importMetaType
 		members := createSymbolTable([]*ast.Symbol{metaPropertySymbol})
@@ -25336,7 +25337,7 @@ func (c *Checker) createTupleTargetType(elementInfos []TupleElementInfo, readonl
 		}
 	}
 	fixedLength := len(members)
-	lengthSymbol := c.newSymbolEx(ast.SymbolFlagsProperty, unique.Make("length"), core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
+	lengthSymbol := c.newSymbolEx(ast.SymbolFlagsProperty, ast.SymbolNameLength, core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 	if combinedFlags&ElementFlagsVariable != 0 {
 		c.valueSymbolLinks.Get(lengthSymbol).resolvedType = c.numberType
 	} else {
@@ -28283,7 +28284,7 @@ func (c *Checker) expandSignatureParametersWithTupleMembers(signature *Signature
 		case flags&ElementFlagsOptional != 0:
 			checkFlags = ast.CheckFlagsOptionalParameter
 		}
-		symbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, unique.Make(associatedNames[i]), checkFlags)
+		symbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, associatedNames[i], checkFlags)
 		links := c.valueSymbolLinks.Get(symbol)
 		if flags&ElementFlagsRest != 0 {
 			links.resolvedType = c.createArrayType(t)
@@ -28295,10 +28296,10 @@ func (c *Checker) expandSignatureParametersWithTupleMembers(signature *Signature
 	return expanded
 }
 
-func (c *Checker) getUniqAssociatedNamesFromTupleType(t *TypeReference, restSymbol *ast.Symbol) []string {
+func (c *Checker) getUniqAssociatedNamesFromTupleType(t *TypeReference, restSymbol *ast.Symbol) []ast.SymbolName {
 	elementInfos := t.TargetTupleType().elementInfos
-	names := make([]string, len(elementInfos))
-	counters := make(map[string]int)
+	names := make([]ast.SymbolName, len(elementInfos))
+	counters := make(map[ast.SymbolName]int)
 	for i, info := range elementInfos {
 		names[i] = c.getTupleElementLabel(info, restSymbol, i)
 		// count duplicates using negative values
@@ -28314,7 +28315,7 @@ func (c *Checker) getUniqAssociatedNamesFromTupleType(t *TypeReference, restSymb
 				counters[name] = 0
 			}
 			counters[name]++
-			candidateName := name + "_" + strconv.Itoa(counters[name])
+			candidateName := unique.Make(name.Value() + "_" + strconv.Itoa(counters[name]))
 			if counters[candidateName] == 0 {
 				names[i] = candidateName
 				break
@@ -29482,7 +29483,7 @@ func (c *Checker) getPromisedTypeOfPromiseEx(t *Type, errorNode *ast.Node, thisT
 	if c.allTypesAssignableToKind(c.getBaseConstraintOrType(t), TypeFlagsPrimitive|TypeFlagsNever) {
 		return nil
 	}
-	thenFunction := c.getTypeOfPropertyOfType(t, unique.Make("then"))
+	thenFunction := c.getTypeOfPropertyOfType(t, ast.SymbolNameThen)
 	// TODO: GH#18217
 	if IsTypeAny(thenFunction) {
 		return nil
@@ -30724,7 +30725,7 @@ func (c *Checker) getLegacyDecoratorCallSignature(decorator *ast.Node) *Signatur
 			// For a class decorator, the `target` is the type of the class (e.g. the
 			// "static" or "constructor" side of the class).
 			targetType := c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
-			targetParam := c.newParameter(unique.Make("target"), targetType)
+			targetParam := c.newParameter(ast.SymbolNameTarget, targetType)
 			links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam}, c.getUnionType([]*Type{targetType, c.voidType}))
 		case ast.KindParameter:
 			if !ast.IsConstructorDeclaration(node.Parent) && !(ast.IsMethodDeclaration(node.Parent) || ast.IsSetAccessorDeclaration(node.Parent) && ast.IsClassLike(node.Parent.Parent)) {
@@ -30747,9 +30748,9 @@ func (c *Checker) getLegacyDecoratorCallSignature(decorator *ast.Node) *Signatur
 				keyType = c.getClassElementPropertyKeyType(node.Parent)
 			}
 			indexType := c.getNumberLiteralType(jsnum.Number(index))
-			targetParam := c.newParameter(unique.Make("target"), targetType)
-			keyParam := c.newParameter(unique.Make("propertyKey"), keyType)
-			indexParam := c.newParameter(unique.Make("parameterIndex"), indexType)
+			targetParam := c.newParameter(ast.SymbolNameTarget, targetType)
+			keyParam := c.newParameter(ast.SymbolNamePropertyKey, keyType)
+			indexParam := c.newParameter(ast.SymbolNameParameterIndex, indexType)
 			links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam, keyParam, indexParam}, c.voidType)
 		case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindPropertyDeclaration:
 			if !ast.IsClassLike(node.Parent) {
@@ -30758,9 +30759,9 @@ func (c *Checker) getLegacyDecoratorCallSignature(decorator *ast.Node) *Signatur
 			// A method or accessor declaration decorator will have either two or three arguments (see
 			// `PropertyDecorator` and `MethodDecorator` in core.d.ts).
 			targetType := c.getParentTypeOfClassElement(node)
-			targetParam := c.newParameter(unique.Make("target"), targetType)
+			targetParam := c.newParameter(ast.SymbolNameTarget, targetType)
 			keyType := c.getClassElementPropertyKeyType(node)
-			keyParam := c.newParameter(unique.Make("propertyKey"), keyType)
+			keyParam := c.newParameter(ast.SymbolNamePropertyKey, keyType)
 			returnType := c.voidType
 			if !ast.IsPropertyDeclaration(node) {
 				returnType = c.newTypedPropertyDescriptorType(c.getTypeOfNode(node))
@@ -30768,7 +30769,7 @@ func (c *Checker) getLegacyDecoratorCallSignature(decorator *ast.Node) *Signatur
 			hasPropDesc := !ast.IsPropertyDeclaration(node) || ast.HasAccessorModifier(node)
 			if hasPropDesc {
 				descriptorType := c.newTypedPropertyDescriptorType(c.getTypeOfNode(node))
-				descriptorParam := c.newParameter(unique.Make("descriptor"), descriptorType)
+				descriptorParam := c.newParameter(ast.SymbolNameDescriptor, descriptorType)
 				links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam, keyParam, descriptorParam}, c.getUnionType([]*Type{returnType, c.voidType}))
 			} else {
 				links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam, keyParam}, c.getUnionType([]*Type{returnType, c.voidType}))
@@ -30996,9 +30997,9 @@ func (c *Checker) getClassMemberDecoratorContextOverrideType(nameType *Type, isP
 		return overrideType
 	}
 	members := make(ast.SymbolTable)
-	members[unique.Make("name")] = c.newProperty(unique.Make("name"), nameType)
-	members[unique.Make("private")] = c.newProperty(unique.Make("private"), core.IfElse(isPrivate, c.trueType, c.falseType))
-	members[unique.Make("static")] = c.newProperty(unique.Make("static"), core.IfElse(isStatic, c.trueType, c.falseType))
+	members[ast.SymbolNameName] = c.newProperty(ast.SymbolNameName, nameType)
+	members[ast.SymbolNamePrivate] = c.newProperty(ast.SymbolNamePrivate, core.IfElse(isPrivate, c.trueType, c.falseType))
+	members[ast.SymbolNameStatic] = c.newProperty(ast.SymbolNameStatic, core.IfElse(isStatic, c.trueType, c.falseType))
 	overrideType := c.newAnonymousType(nil, members, nil, nil, nil)
 	c.cachedTypes[key] = overrideType
 	return overrideType
@@ -31041,16 +31042,16 @@ func (c *Checker) newClassAccessorDecoratorResultType(thisType *Type, valueType 
 }
 
 func (c *Checker) newClassFieldDecoratorInitializerMutatorType(thisType *Type, valueType *Type) *Type {
-	thisParam := c.newParameter(unique.Make("this"), thisType)
-	valueParam := c.newParameter(unique.Make("value"), valueType)
+	thisParam := c.newParameter(ast.InternalSymbolNameThis, thisType)
+	valueParam := c.newParameter(ast.SymbolNameValue, valueType)
 	return c.newFunctionType(nil, thisParam, []*ast.Symbol{valueParam}, valueType)
 }
 
 // Creates a call signature for an ES Decorator. This method is used by the semantics of
 // `getESDecoratorCallSignature`, which you should probably be using instead.
 func (c *Checker) newESDecoratorCallSignature(targetType *Type, contextType *Type, nonOptionalReturnType *Type) *Signature {
-	targetParam := c.newParameter(unique.Make("target"), targetType)
-	contextParam := c.newParameter(unique.Make("context"), contextType)
+	targetParam := c.newParameter(ast.SymbolNameTarget, targetType)
+	contextParam := c.newParameter(ast.SymbolNameContext, contextType)
 	returnType := c.getUnionType([]*Type{nonOptionalReturnType, c.voidType})
 	return c.newCallSignature(nil, nil /*thisParameter*/, []*ast.Symbol{targetParam, contextParam}, returnType)
 }
@@ -31066,7 +31067,7 @@ func (c *Checker) newGetterFunctionType(t *Type) *Type {
 }
 
 func (c *Checker) newSetterFunctionType(t *Type) *Type {
-	valueParam := c.newParameter(unique.Make("value"), t)
+	valueParam := c.newParameter(ast.SymbolNameValue, t)
 	return c.newFunctionType(nil, nil /*thisParameter*/, []*ast.Symbol{valueParam}, c.voidType)
 }
 
@@ -31699,7 +31700,7 @@ func (c *Checker) isFunctionObjectType(t *Type) bool {
 	// We do a quick check for a "bind" property before performing the more expensive subtype
 	// check. This gives us a quicker out in the common case where an object type is not a function.
 	resolved := c.resolveStructuredTypeMembers(t)
-	return len(resolved.signatures) != 0 || resolved.members[unique.Make("bind")] != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
+	return len(resolved.signatures) != 0 || resolved.members[ast.SymbolNameBind] != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
 }
 
 func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {
@@ -32006,7 +32007,7 @@ func (c *Checker) isThenableType(t *Type) bool {
 		// primitive types cannot be considered "thenable" since they are not objects.
 		return false
 	}
-	thenFunction := c.getTypeOfPropertyOfType(t, unique.Make("then"))
+	thenFunction := c.getTypeOfPropertyOfType(t, ast.SymbolNameThen)
 	return thenFunction != nil && len(c.getSignaturesOfType(c.getTypeWithFacts(thenFunction, TypeFactsNEUndefinedOrNull), SignatureKindCall)) != 0
 }
 
@@ -32195,7 +32196,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 			// member should more exactly be the kind of (declarationless) symbol we want.
 			// (See #44364 and #45031 for relevant implementation PRs)
 			if metaProp.KeywordToken == ast.KindImportKeyword && node.Text() == "meta" {
-				return c.getGlobalImportMetaExpressionType().AsObjectType().members[unique.Make("meta")]
+				return c.getGlobalImportMetaExpressionType().AsObjectType().members[ast.SymbolNameMeta]
 			}
 			// no other meta properties are valid syntax, thus no others should have symbols
 			return nil
