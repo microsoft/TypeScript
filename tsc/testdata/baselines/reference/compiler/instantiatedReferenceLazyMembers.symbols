@@ -1,0 +1,259 @@
+//// [tests/cases/compiler/instantiatedReferenceLazyMembers.ts] ////
+
+=== instantiatedReferenceLazyMembers.ts ===
+// Member lookups and shape queries on instantiated class and interface
+// references, including base types whose shape depends on the instantiation.
+
+interface Base<T> {
+>Base : Symbol(Base, Decl(instantiatedReferenceLazyMembers.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 3, 15))
+
+    value: T;
+>value : Symbol(Base.value, Decl(instantiatedReferenceLazyMembers.ts, 3, 19))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 3, 15))
+
+    shared: string;
+>shared : Symbol(Base.shared, Decl(instantiatedReferenceLazyMembers.ts, 4, 13))
+}
+interface Derived<T> extends Base<T[]> {
+>Derived : Symbol(Derived, Decl(instantiatedReferenceLazyMembers.ts, 6, 1))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 7, 18))
+>Base : Symbol(Base, Decl(instantiatedReferenceLazyMembers.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 7, 18))
+
+    shared: "derived";
+>shared : Symbol(Derived.shared, Decl(instantiatedReferenceLazyMembers.ts, 7, 40))
+}
+declare const derived: Derived<number>;
+>derived : Symbol(derived, Decl(instantiatedReferenceLazyMembers.ts, 10, 13))
+>Derived : Symbol(Derived, Decl(instantiatedReferenceLazyMembers.ts, 6, 1))
+
+const derived1 = derived.value;
+>derived1 : Symbol(derived1, Decl(instantiatedReferenceLazyMembers.ts, 11, 5))
+>derived.value : Symbol(Base.value, Decl(instantiatedReferenceLazyMembers.ts, 3, 19))
+>derived : Symbol(derived, Decl(instantiatedReferenceLazyMembers.ts, 10, 13))
+>value : Symbol(Base.value, Decl(instantiatedReferenceLazyMembers.ts, 3, 19))
+
+const derived2 = derived.shared;
+>derived2 : Symbol(derived2, Decl(instantiatedReferenceLazyMembers.ts, 12, 5))
+>derived.shared : Symbol(Derived.shared, Decl(instantiatedReferenceLazyMembers.ts, 7, 40))
+>derived : Symbol(derived, Decl(instantiatedReferenceLazyMembers.ts, 10, 13))
+>shared : Symbol(Derived.shared, Decl(instantiatedReferenceLazyMembers.ts, 7, 40))
+
+derived.missing;
+>derived : Symbol(derived, Decl(instantiatedReferenceLazyMembers.ts, 10, 13))
+
+class Box<T> {
+>Box : Symbol(Box, Decl(instantiatedReferenceLazyMembers.ts, 13, 16))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 15, 10))
+
+    private secret!: T;
+>secret : Symbol(Box.secret, Decl(instantiatedReferenceLazyMembers.ts, 15, 14))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 15, 10))
+
+    contents!: T;
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceLazyMembers.ts, 16, 23))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 15, 10))
+}
+declare const box: Box<string>;
+>box : Symbol(box, Decl(instantiatedReferenceLazyMembers.ts, 19, 13))
+>Box : Symbol(Box, Decl(instantiatedReferenceLazyMembers.ts, 13, 16))
+
+const box1 = box.contents;
+>box1 : Symbol(box1, Decl(instantiatedReferenceLazyMembers.ts, 20, 5))
+>box.contents : Symbol(Box.contents, Decl(instantiatedReferenceLazyMembers.ts, 16, 23))
+>box : Symbol(box, Decl(instantiatedReferenceLazyMembers.ts, 19, 13))
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceLazyMembers.ts, 16, 23))
+
+box.secret;
+>box.secret : Symbol(Box.secret, Decl(instantiatedReferenceLazyMembers.ts, 15, 14))
+>box : Symbol(box, Decl(instantiatedReferenceLazyMembers.ts, 19, 13))
+>secret : Symbol(Box.secret, Decl(instantiatedReferenceLazyMembers.ts, 15, 14))
+
+// Tagged<"b"> reduces to never, Tagged<"a"> doesn't.
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceLazyMembers.ts, 21, 11))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 24, 12))
+>kind : Symbol(kind, Decl(instantiatedReferenceLazyMembers.ts, 24, 18))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 24, 12))
+>kind : Symbol(kind, Decl(instantiatedReferenceLazyMembers.ts, 24, 32))
+
+declare const other: { other: number };
+>other : Symbol(other, Decl(instantiatedReferenceLazyMembers.ts, 25, 13))
+>other : Symbol(other, Decl(instantiatedReferenceLazyMembers.ts, 25, 22))
+
+interface Weak<T extends string> extends Tagged<T> {
+>Weak : Symbol(Weak, Decl(instantiatedReferenceLazyMembers.ts, 25, 39))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 27, 15))
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceLazyMembers.ts, 21, 11))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 27, 15))
+
+    opt?: number;
+>opt : Symbol(Weak.opt, Decl(instantiatedReferenceLazyMembers.ts, 27, 52))
+}
+const weak1: Weak<"b"> = other;
+>weak1 : Symbol(weak1, Decl(instantiatedReferenceLazyMembers.ts, 30, 5))
+>Weak : Symbol(Weak, Decl(instantiatedReferenceLazyMembers.ts, 25, 39))
+>other : Symbol(other, Decl(instantiatedReferenceLazyMembers.ts, 25, 13))
+
+const weak2: Weak<"a"> = other;
+>weak2 : Symbol(weak2, Decl(instantiatedReferenceLazyMembers.ts, 31, 5))
+>Weak : Symbol(Weak, Decl(instantiatedReferenceLazyMembers.ts, 25, 39))
+>other : Symbol(other, Decl(instantiatedReferenceLazyMembers.ts, 25, 13))
+
+type Callable<T> = { (): void; kind: T } & { kind: "a" };
+>Callable : Symbol(Callable, Decl(instantiatedReferenceLazyMembers.ts, 31, 31))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 33, 14))
+>kind : Symbol(kind, Decl(instantiatedReferenceLazyMembers.ts, 33, 30))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 33, 14))
+>kind : Symbol(kind, Decl(instantiatedReferenceLazyMembers.ts, 33, 44))
+
+interface Fn<T extends string> extends Callable<T> {}
+>Fn : Symbol(Fn, Decl(instantiatedReferenceLazyMembers.ts, 33, 57))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 34, 13))
+>Callable : Symbol(Callable, Decl(instantiatedReferenceLazyMembers.ts, 31, 31))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 34, 13))
+
+declare const neverFn: Fn<"b">;
+>neverFn : Symbol(neverFn, Decl(instantiatedReferenceLazyMembers.ts, 35, 13))
+>Fn : Symbol(Fn, Decl(instantiatedReferenceLazyMembers.ts, 33, 57))
+
+neverFn.bind;
+>neverFn : Symbol(neverFn, Decl(instantiatedReferenceLazyMembers.ts, 35, 13))
+
+declare const fn: Fn<"a">;
+>fn : Symbol(fn, Decl(instantiatedReferenceLazyMembers.ts, 37, 13))
+>Fn : Symbol(Fn, Decl(instantiatedReferenceLazyMembers.ts, 33, 57))
+
+const fn1 = fn.bind;
+>fn1 : Symbol(fn1, Decl(instantiatedReferenceLazyMembers.ts, 38, 5))
+>fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(instantiatedReferenceLazyMembers.ts, 37, 13))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+interface Dict<T extends string> extends Tagged<T> {
+>Dict : Symbol(Dict, Decl(instantiatedReferenceLazyMembers.ts, 38, 20))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 40, 15))
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceLazyMembers.ts, 21, 11))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 40, 15))
+
+    [key: string]: unknown;
+>key : Symbol(key, Decl(instantiatedReferenceLazyMembers.ts, 41, 5))
+}
+declare const dict: Dict<"b">;
+>dict : Symbol(dict, Decl(instantiatedReferenceLazyMembers.ts, 43, 13))
+>Dict : Symbol(Dict, Decl(instantiatedReferenceLazyMembers.ts, 38, 20))
+
+const dict1: { [key: string]: number } = dict;
+>dict1 : Symbol(dict1, Decl(instantiatedReferenceLazyMembers.ts, 44, 5))
+>key : Symbol(key, Decl(instantiatedReferenceLazyMembers.ts, 44, 16))
+>dict : Symbol(dict, Decl(instantiatedReferenceLazyMembers.ts, 43, 13))
+
+interface Wrap<T extends { a?: string }> extends T {}
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceLazyMembers.ts, 44, 46))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 46, 15))
+>a : Symbol(a, Decl(instantiatedReferenceLazyMembers.ts, 46, 26))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 46, 15))
+
+const wrap1: Wrap<{ a?: string; b: number }> = other;
+>wrap1 : Symbol(wrap1, Decl(instantiatedReferenceLazyMembers.ts, 47, 5))
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceLazyMembers.ts, 44, 46))
+>a : Symbol(a, Decl(instantiatedReferenceLazyMembers.ts, 47, 19))
+>b : Symbol(b, Decl(instantiatedReferenceLazyMembers.ts, 47, 31))
+>other : Symbol(other, Decl(instantiatedReferenceLazyMembers.ts, 25, 13))
+
+type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+>Two : Symbol(Two, Decl(instantiatedReferenceLazyMembers.ts, 47, 53))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 49, 9))
+>U : Symbol(U, Decl(instantiatedReferenceLazyMembers.ts, 49, 17))
+>x : Symbol(x, Decl(instantiatedReferenceLazyMembers.ts, 49, 20))
+>U : Symbol(U, Decl(instantiatedReferenceLazyMembers.ts, 49, 17))
+>y : Symbol(y, Decl(instantiatedReferenceLazyMembers.ts, 49, 25))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 49, 9))
+>U : Symbol(U, Decl(instantiatedReferenceLazyMembers.ts, 49, 17))
+>U : Symbol(U, Decl(instantiatedReferenceLazyMembers.ts, 49, 42))
+>x : Symbol(x, Decl(instantiatedReferenceLazyMembers.ts, 49, 45))
+>U : Symbol(U, Decl(instantiatedReferenceLazyMembers.ts, 49, 42))
+>y : Symbol(y, Decl(instantiatedReferenceLazyMembers.ts, 49, 50))
+>U : Symbol(U, Decl(instantiatedReferenceLazyMembers.ts, 49, 42))
+
+interface Overloads<T> extends Two<T> {}
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceLazyMembers.ts, 49, 67))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 50, 20))
+>Two : Symbol(Two, Decl(instantiatedReferenceLazyMembers.ts, 47, 53))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 50, 20))
+
+declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+>pipe : Symbol(pipe, Decl(instantiatedReferenceLazyMembers.ts, 50, 40))
+>A : Symbol(A, Decl(instantiatedReferenceLazyMembers.ts, 51, 22))
+>B : Symbol(B, Decl(instantiatedReferenceLazyMembers.ts, 51, 38))
+>f : Symbol(f, Decl(instantiatedReferenceLazyMembers.ts, 51, 42))
+>args : Symbol(args, Decl(instantiatedReferenceLazyMembers.ts, 51, 46))
+>A : Symbol(A, Decl(instantiatedReferenceLazyMembers.ts, 51, 22))
+>B : Symbol(B, Decl(instantiatedReferenceLazyMembers.ts, 51, 38))
+>args : Symbol(args, Decl(instantiatedReferenceLazyMembers.ts, 51, 66))
+>A : Symbol(A, Decl(instantiatedReferenceLazyMembers.ts, 51, 22))
+>B : Symbol(B, Decl(instantiatedReferenceLazyMembers.ts, 51, 38))
+
+declare const merged: Overloads<string>;
+>merged : Symbol(merged, Decl(instantiatedReferenceLazyMembers.ts, 52, 13))
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceLazyMembers.ts, 49, 67))
+
+const piped1: number = pipe(merged);
+>piped1 : Symbol(piped1, Decl(instantiatedReferenceLazyMembers.ts, 53, 5))
+>pipe : Symbol(pipe, Decl(instantiatedReferenceLazyMembers.ts, 50, 40))
+>merged : Symbol(merged, Decl(instantiatedReferenceLazyMembers.ts, 52, 13))
+
+declare const distinct: Overloads<number>;
+>distinct : Symbol(distinct, Decl(instantiatedReferenceLazyMembers.ts, 54, 13))
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceLazyMembers.ts, 49, 67))
+
+const piped2: number = pipe(distinct);
+>piped2 : Symbol(piped2, Decl(instantiatedReferenceLazyMembers.ts, 55, 5))
+>pipe : Symbol(pipe, Decl(instantiatedReferenceLazyMembers.ts, 50, 40))
+>distinct : Symbol(distinct, Decl(instantiatedReferenceLazyMembers.ts, 54, 13))
+
+interface Tree<T> extends Array<Tree<T>> {
+>Tree : Symbol(Tree, Decl(instantiatedReferenceLazyMembers.ts, 55, 38))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 57, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Tree : Symbol(Tree, Decl(instantiatedReferenceLazyMembers.ts, 55, 38))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 57, 15))
+
+    value: T;
+>value : Symbol(Tree.value, Decl(instantiatedReferenceLazyMembers.ts, 57, 42))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 57, 15))
+}
+declare const tree: Tree<string>;
+>tree : Symbol(tree, Decl(instantiatedReferenceLazyMembers.ts, 60, 13))
+>Tree : Symbol(Tree, Decl(instantiatedReferenceLazyMembers.ts, 55, 38))
+
+const tree1 = tree.map(child => child.value);
+>tree1 : Symbol(tree1, Decl(instantiatedReferenceLazyMembers.ts, 61, 5))
+>tree.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>tree : Symbol(tree, Decl(instantiatedReferenceLazyMembers.ts, 60, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>child : Symbol(child, Decl(instantiatedReferenceLazyMembers.ts, 61, 23))
+>child.value : Symbol(Tree.value, Decl(instantiatedReferenceLazyMembers.ts, 57, 42))
+>child : Symbol(child, Decl(instantiatedReferenceLazyMembers.ts, 61, 23))
+>value : Symbol(Tree.value, Decl(instantiatedReferenceLazyMembers.ts, 57, 42))
+
+interface CallableBox<T> {
+>CallableBox : Symbol(CallableBox, Decl(instantiatedReferenceLazyMembers.ts, 61, 45))
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 63, 22))
+
+    (): T;
+>T : Symbol(T, Decl(instantiatedReferenceLazyMembers.ts, 63, 22))
+}
+declare const boxOrCallable: CallableBox<string> | Box<string>;
+>boxOrCallable : Symbol(boxOrCallable, Decl(instantiatedReferenceLazyMembers.ts, 66, 13))
+>CallableBox : Symbol(CallableBox, Decl(instantiatedReferenceLazyMembers.ts, 61, 45))
+>Box : Symbol(Box, Decl(instantiatedReferenceLazyMembers.ts, 13, 16))
+
+if (typeof boxOrCallable === "function") {
+>boxOrCallable : Symbol(boxOrCallable, Decl(instantiatedReferenceLazyMembers.ts, 66, 13))
+
+    boxOrCallable;
+>boxOrCallable : Symbol(boxOrCallable, Decl(instantiatedReferenceLazyMembers.ts, 66, 13))
+}
+

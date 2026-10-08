@@ -1,0 +1,193 @@
+//// [tests/cases/compiler/instantiatedReferenceLazyMembers.ts] ////
+
+=== instantiatedReferenceLazyMembers.ts ===
+// Member lookups and shape queries on instantiated class and interface
+// references, including base types whose shape depends on the instantiation.
+
+interface Base<T> {
+    value: T;
+>value : T
+
+    shared: string;
+>shared : string
+}
+interface Derived<T> extends Base<T[]> {
+    shared: "derived";
+>shared : "derived"
+}
+declare const derived: Derived<number>;
+>derived : Derived<number>
+
+const derived1 = derived.value;
+>derived1 : number[]
+>derived.value : number[]
+>derived : Derived<number>
+>value : number[]
+
+const derived2 = derived.shared;
+>derived2 : "derived"
+>derived.shared : "derived"
+>derived : Derived<number>
+>shared : "derived"
+
+derived.missing;
+>derived.missing : any
+>derived : Derived<number>
+>missing : any
+
+class Box<T> {
+>Box : Box<T>
+
+    private secret!: T;
+>secret : T
+
+    contents!: T;
+>contents : T
+}
+declare const box: Box<string>;
+>box : Box<string>
+
+const box1 = box.contents;
+>box1 : string
+>box.contents : string
+>box : Box<string>
+>contents : string
+
+box.secret;
+>box.secret : string
+>box : Box<string>
+>secret : string
+
+// Tagged<"b"> reduces to never, Tagged<"a"> doesn't.
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Tagged<T>
+>kind : T
+>kind : "a"
+
+declare const other: { other: number };
+>other : { other: number; }
+>other : number
+
+interface Weak<T extends string> extends Tagged<T> {
+    opt?: number;
+>opt : number | undefined
+}
+const weak1: Weak<"b"> = other;
+>weak1 : Weak<"b">
+>other : { other: number; }
+
+const weak2: Weak<"a"> = other;
+>weak2 : Weak<"a">
+>other : { other: number; }
+
+type Callable<T> = { (): void; kind: T } & { kind: "a" };
+>Callable : Callable<T>
+>kind : T
+>kind : "a"
+
+interface Fn<T extends string> extends Callable<T> {}
+declare const neverFn: Fn<"b">;
+>neverFn : Fn<"b">
+
+neverFn.bind;
+>neverFn.bind : any
+>neverFn : Fn<"b">
+>bind : any
+
+declare const fn: Fn<"a">;
+>fn : Fn<"a">
+
+const fn1 = fn.bind;
+>fn1 : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>fn : Fn<"a">
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+
+interface Dict<T extends string> extends Tagged<T> {
+    [key: string]: unknown;
+>key : string
+}
+declare const dict: Dict<"b">;
+>dict : Dict<"b">
+
+const dict1: { [key: string]: number } = dict;
+>dict1 : { [key: string]: number; }
+>key : string
+>dict : Dict<"b">
+
+interface Wrap<T extends { a?: string }> extends T {}
+>a : string | undefined
+
+const wrap1: Wrap<{ a?: string; b: number }> = other;
+>wrap1 : Wrap<{ a?: string; b: number; }>
+>a : string | undefined
+>b : number
+>other : { other: number; }
+
+type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+>Two : Two<T>
+>x : U
+>y : T
+>x : U
+>y : string
+
+interface Overloads<T> extends Two<T> {}
+declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>f : (...args: A) => B
+>args : A
+>args : A
+
+declare const merged: Overloads<string>;
+>merged : Overloads<string>
+
+const piped1: number = pipe(merged);
+>piped1 : number
+>pipe(merged) : <U>(x: U, y: string) => U
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>merged : Overloads<string>
+
+declare const distinct: Overloads<number>;
+>distinct : Overloads<number>
+
+const piped2: number = pipe(distinct);
+>piped2 : number
+>pipe(distinct) : (x: unknown, y: string) => unknown
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>distinct : Overloads<number>
+
+interface Tree<T> extends Array<Tree<T>> {
+    value: T;
+>value : T
+}
+declare const tree: Tree<string>;
+>tree : Tree<string>
+
+const tree1 = tree.map(child => child.value);
+>tree1 : string[]
+>tree.map(child => child.value) : string[]
+>tree.map : <U>(callbackfn: (value: Tree<string>, index: number, array: Tree<string>[]) => U, thisArg?: any) => U[]
+>tree : Tree<string>
+>map : <U>(callbackfn: (value: Tree<string>, index: number, array: Tree<string>[]) => U, thisArg?: any) => U[]
+>child => child.value : (child: Tree<string>) => string
+>child : Tree<string>
+>child.value : string
+>child : Tree<string>
+>value : string
+
+interface CallableBox<T> {
+    (): T;
+}
+declare const boxOrCallable: CallableBox<string> | Box<string>;
+>boxOrCallable : Box<string> | CallableBox<string>
+
+if (typeof boxOrCallable === "function") {
+>typeof boxOrCallable === "function" : boolean
+>typeof boxOrCallable : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>boxOrCallable : Box<string> | CallableBox<string>
+>"function" : "function"
+
+    boxOrCallable;
+>boxOrCallable : CallableBox<string>
+}
+
