@@ -2,6 +2,61 @@
 
 === isolatedDeclarationErrorsReturnTypes.ts ===
 // Function Variables
+export const recursiveArrow = () => recursiveArrow;
+>recursiveArrow : () => typeof recursiveArrow
+>() => recursiveArrow : () => typeof recursiveArrow
+>recursiveArrow : () => typeof recursiveArrow
+
+export function recursiveDeclaration() { return recursiveDeclaration; }
+>recursiveDeclaration : () => typeof recursiveDeclaration
+>recursiveDeclaration : () => typeof recursiveDeclaration
+
+export const recursiveObject = { next: () => recursiveObject };
+>recursiveObject : { next: () => any; }
+>{ next: () => recursiveObject } : { next: () => { next: () => any; }; }
+>next : () => { next: () => any; }
+>() => recursiveObject : () => { next: () => any; }
+>recursiveObject : { next: () => any; }
+
+export const recursiveTuple = [() => recursiveTuple] as const;
+>recursiveTuple : readonly [() => any]
+>[() => recursiveTuple] as const : readonly [() => any]
+>[() => recursiveTuple] : readonly [() => any]
+>() => recursiveTuple : () => readonly [any]
+>recursiveTuple : readonly [() => any]
+
+export const recursiveNamed = function self() { return self; };
+>recursiveNamed : () => typeof self
+>function self() { return self; } : () => typeof self
+>self : () => typeof recursiveNamed
+>self : () => typeof recursiveNamed
+
+export const annotatedRecursiveArrow: () => typeof annotatedRecursiveArrow = () => annotatedRecursiveArrow;
+>annotatedRecursiveArrow : () => typeof annotatedRecursiveArrow
+>annotatedRecursiveArrow : () => typeof annotatedRecursiveArrow
+>() => annotatedRecursiveArrow : () => () => typeof annotatedRecursiveArrow
+>annotatedRecursiveArrow : () => typeof annotatedRecursiveArrow
+
+export const annotatedRecursiveObject: { next: () => typeof annotatedRecursiveObject } = {
+>annotatedRecursiveObject : { next: () => typeof annotatedRecursiveObject; }
+>next : () => typeof annotatedRecursiveObject
+>annotatedRecursiveObject : { next: () => typeof annotatedRecursiveObject; }
+>{    next: () => annotatedRecursiveObject,} : { next: () => { next: () => typeof annotatedRecursiveObject; }; }
+
+    next: () => annotatedRecursiveObject,
+>next : () => { next: () => typeof annotatedRecursiveObject; }
+>() => annotatedRecursiveObject : () => { next: () => typeof annotatedRecursiveObject; }
+>annotatedRecursiveObject : { next: () => typeof annotatedRecursiveObject; }
+
+};
+export type RecursiveLink<T> = { value: T; next: RecursiveLink<T> };
+>RecursiveLink : RecursiveLink<T>
+>value : T
+>next : RecursiveLink<T>
+
+export declare const recursiveLink: RecursiveLink<string>;
+>recursiveLink : RecursiveLink<string>
+
 export const fnExpressionConstVariable = function foo() { return 0;}
 >fnExpressionConstVariable : () => number
 >function foo() { return 0;} : () => number

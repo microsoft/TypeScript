@@ -4,6 +4,18 @@
 // @target: ESNext
 
 // Function Variables
+export const recursiveArrow = () => recursiveArrow;
+export function recursiveDeclaration() { return recursiveDeclaration; }
+export const recursiveObject = { next: () => recursiveObject };
+export const recursiveTuple = [() => recursiveTuple] as const;
+export const recursiveNamed = function self() { return self; };
+export const annotatedRecursiveArrow: () => typeof annotatedRecursiveArrow = () => annotatedRecursiveArrow;
+export const annotatedRecursiveObject: { next: () => typeof annotatedRecursiveObject } = {
+    next: () => annotatedRecursiveObject,
+};
+export type RecursiveLink<T> = { value: T; next: RecursiveLink<T> };
+export declare const recursiveLink: RecursiveLink<string>;
+
 export const fnExpressionConstVariable = function foo() { return 0;}
 export const fnArrowConstVariable = () => "S";
 
